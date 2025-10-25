@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(flutter pub:*)",
+      "Bash(where:*)",
+      "Bash(powershell -Command \"cd ''C:\\Users\\goldb\\OneDrive\\Рабочий стол\\Projects\\IOT_App''; flutter pub get\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\Users\\goldb\\OneDrive\\Рабочий стол\\Projects\\IOT_App\\install_flutter.ps1\")",
+      "Bash(powershell -Command \"C:\\src\\flutter\\bin\\flutter.bat --version\")",
+      "Bash(powershell -Command \"cd ''C:\\Users\\goldb\\OneDrive\\Рабочий стол\\Projects\\IOT_App''; C:\\src\\flutter\\bin\\flutter.bat pub get\")",
+      "Bash(powershell -Command \"cd ''C:\\Users\\goldb\\OneDrive\\Рабочий стол\\Projects\\IOT_App''; C:\\src\\flutter\\bin\\flutter.bat run -d windows\")",
+      "Bash(powershell -Command \"cd ''C:\\Users\\goldb\\OneDrive\\Рабочий стол\\Projects\\IOT_App''; C:\\src\\flutter\\bin\\flutter.bat run -d chrome\")",
+      "Bash(powershell -Command \"cd ''C:\\Users\\goldb\\OneDrive\\Рабочий стол\\Projects\\IOT_App''; C:\\src\\flutter\\bin\\flutter.bat run -d chrome --web-port=8080\")",
+      "Bash(powershell -Command \"cd ''C:\\Users\\goldb\\OneDrive\\Рабочий стол\\Projects\\IOT_App''; C:\\src\\flutter\\bin\\flutter.bat run -d web-server --web-port=8080\")",
+      "Bash(powershell -Command \"cd 'C:\\Users\\goldb\\OneDrive\\Рабочий стол\\Projects\\IOT_App'; C:\\src\\flutter\\bin\\flutter.bat devices\":*)",
+      "Bash(powershell -Command \"cd ''C:\\Users\\goldb\\OneDrive\\Рабочий стол\\Projects\\IOT_App''; C:\\src\\flutter\\bin\\flutter.bat emulators\")",
+      "Bash(powershell -Command \"cd ''C:\\Users\\goldb\\OneDrive\\Рабочий стол\\Projects\\IOT_App''; C:\\src\\flutter\\bin\\flutter.bat emulators --launch Medium_Phone_API_36.1\")",
+      "Bash(powershell -Command \"cd ''C:\\Users\\goldb\\OneDrive\\Рабочий стол\\Projects\\IOT_App''; C:\\src\\flutter\\bin\\flutter.bat run\")"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
