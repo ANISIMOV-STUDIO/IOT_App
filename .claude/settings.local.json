@@ -22,7 +22,9 @@
       "Bash(powershell -Command \"where.exe dart\")",
       "Bash(powershell -Command:*)",
       "Bash(timeout /t 15)",
-      "Read(//c/Projects/IOT_App/android/**)"
+      "Read(//c/Projects/IOT_App/android/**)",
+      "Read(//c/Users/goldb/OneDrive/Рабочий стол/Projects/test_project_temp/android/gradle/wrapper/**)",
+      "Read(//c/Users/goldb/OneDrive/Рабочий стол/Projects/test_project_temp/android/**)"
     ],
     "deny": [],
     "ask": []
