@@ -14,7 +14,9 @@
       "Bash(powershell -Command \"cd 'C:\\Users\\goldb\\OneDrive\\Рабочий стол\\Projects\\IOT_App'; C:\\src\\flutter\\bin\\flutter.bat devices\":*)",
       "Bash(powershell -Command \"cd ''C:\\Users\\goldb\\OneDrive\\Рабочий стол\\Projects\\IOT_App''; C:\\src\\flutter\\bin\\flutter.bat emulators\")",
       "Bash(powershell -Command \"cd ''C:\\Users\\goldb\\OneDrive\\Рабочий стол\\Projects\\IOT_App''; C:\\src\\flutter\\bin\\flutter.bat emulators --launch Medium_Phone_API_36.1\")",
-      "Bash(powershell -Command \"cd ''C:\\Users\\goldb\\OneDrive\\Рабочий стол\\Projects\\IOT_App''; C:\\src\\flutter\\bin\\flutter.bat run\")"
+      "Bash(powershell -Command \"cd ''C:\\Users\\goldb\\OneDrive\\Рабочий стол\\Projects\\IOT_App''; C:\\src\\flutter\\bin\\flutter.bat run\")",
+      "Bash(timeout /t 30)",
+      "Bash(powershell -Command \"cd ''C:\\Users\\goldb\\OneDrive\\Рабочий стол\\Projects\\IOT_App''; C:\\src\\flutter\\bin\\flutter.bat run -d emulator-5554\")"
     ],
     "deny": [],
     "ask": []
