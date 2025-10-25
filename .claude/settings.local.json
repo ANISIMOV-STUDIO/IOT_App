@@ -20,7 +20,9 @@
       "Bash(powershell -Command \"cd ''C:\\Users\\goldb\\OneDrive\\Рабочий стол\\Projects\\IOT_App''; C:\\src\\flutter\\bin\\flutter.bat clean\")",
       "Bash(powershell -Command \"Start-Sleep -Seconds 30; cd ''C:\\Users\\goldb\\OneDrive\\Рабочий стол\\Projects\\IOT_App''; C:\\src\\flutter\\bin\\flutter.bat run\")",
       "Bash(powershell -Command \"where.exe dart\")",
-      "Bash(powershell -Command:*)"
+      "Bash(powershell -Command:*)",
+      "Bash(timeout /t 15)",
+      "Read(//c/Projects/IOT_App/android/**)"
     ],
     "deny": [],
     "ask": []
