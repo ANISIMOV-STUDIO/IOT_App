@@ -184,8 +184,8 @@ class _CircularSliderPainter extends CustomPainter {
     // Background circle
     final bgPaint = Paint()
       ..color = enabled
-          ? AppTheme.textHint.withOpacity(0.2)
-          : AppTheme.textHint.withOpacity(0.1)
+          ? AppTheme.textHint.withValues(alpha: 0.2)
+          : AppTheme.textHint.withValues(alpha: 0.1)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 20
       ..strokeCap = StrokeCap.round;

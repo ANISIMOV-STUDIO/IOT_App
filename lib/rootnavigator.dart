@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 //Screens
-import 'package:iot/screens/home.dart';
-import 'package:iot/screens/controls.dart';
-import 'package:iot/screens/settings.dart';
+import 'package:hvac_control/screens/home.dart';
+import 'package:hvac_control/screens/controls.dart';
+import 'package:hvac_control/screens/settings.dart';
 
 //icons
 import 'package:line_icons/line_icons.dart';

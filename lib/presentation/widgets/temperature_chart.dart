@@ -69,13 +69,13 @@ class TemperatureChart extends StatelessWidget {
         verticalInterval: readings.length / 6,
         getDrawingHorizontalLine: (value) {
           return FlLine(
-            color: Colors.grey.withOpacity(0.2),
+            color: Colors.grey.withValues(alpha: 0.2),
             strokeWidth: 1,
           );
         },
         getDrawingVerticalLine: (value) {
           return FlLine(
-            color: Colors.grey.withOpacity(0.2),
+            color: Colors.grey.withValues(alpha: 0.2),
             strokeWidth: 1,
           );
         },
@@ -131,7 +131,7 @@ class TemperatureChart extends StatelessWidget {
       borderData: FlBorderData(
         show: true,
         border: Border.all(
-          color: Colors.grey.withOpacity(0.2),
+          color: Colors.grey.withValues(alpha: 0.2),
         ),
       ),
       minX: 0,
@@ -149,7 +149,7 @@ class TemperatureChart extends StatelessWidget {
           dotData: const FlDotData(show: false),
           belowBarData: BarAreaData(
             show: true,
-            color: AppTheme.primaryColor.withOpacity(0.1),
+            color: AppTheme.primaryColor.withValues(alpha: 0.1),
           ),
         ),
         // Target temperature line

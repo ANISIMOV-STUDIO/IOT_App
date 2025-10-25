@@ -91,8 +91,8 @@ class _ModeButton extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           color: isSelected && enabled
-              ? color.withOpacity(0.2)
-              : Colors.grey.withOpacity(0.1),
+              ? color.withValues(alpha: 0.2)
+              : Colors.grey.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isSelected && enabled ? color : Colors.transparent,

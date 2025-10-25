@@ -36,7 +36,7 @@ class DeviceButton extends StatelessWidget {
                       style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
-                          color: Colors.white.withOpacity(0.9)),
+                          color: Colors.white.withValues(alpha: 0.9)),
                     ),
                     Text(
                       area,
@@ -57,7 +57,7 @@ class DeviceButton extends StatelessWidget {
                         child: CupertinoSwitch(
                           value: power,
                           onChanged: onChange,
-                          activeColor: Colors.greenAccent.shade400,
+                          activeTrackColor: Colors.greenAccent.shade400,
                           thumbColor: Colors.white,
                         ),
                       )

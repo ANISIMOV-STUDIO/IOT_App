@@ -3,7 +3,6 @@
 /// Data model for Temperature Reading with JSON serialization
 library;
 
-import 'dart:convert';
 import '../../domain/entities/temperature_reading.dart';
 
 class TemperatureReadingModel extends TemperatureReading {

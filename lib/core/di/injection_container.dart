@@ -3,6 +3,7 @@
 /// This file sets up all dependencies using get_it service locator
 library;
 
+import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 
 // Data
@@ -70,7 +71,7 @@ Future<void> init() async {
   try {
     await sl<HvacRepository>().connect();
   } catch (e) {
-    print('Failed to connect to repository: $e');
+    debugPrint('Failed to connect to repository: $e');
     // If MQTT fails, app will show error state
     // User can still see the UI
   }

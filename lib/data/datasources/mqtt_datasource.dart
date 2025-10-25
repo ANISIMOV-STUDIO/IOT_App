@@ -6,6 +6,7 @@ library;
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import '../../core/utils/constants.dart';
@@ -50,17 +51,17 @@ class MqttDatasource {
     try {
       await _client!.connect();
     } on NoConnectionException catch (e) {
-      print('MQTT connection exception: $e');
+      debugPrint('MQTT connection exception: $e');
       _client!.disconnect();
       rethrow;
     } on SocketException catch (e) {
-      print('MQTT socket exception: $e');
+      debugPrint('MQTT socket exception: $e');
       _client!.disconnect();
       rethrow;
     }
 
     if (_client!.connectionStatus!.state == MqttConnectionState.connected) {
-      print('MQTT connected to $brokerHost:$brokerPort');
+      debugPrint('MQTT connected to $brokerHost:$brokerPort');
 
       // Subscribe to topics
       _subscribeToTopics();
@@ -68,7 +69,7 @@ class MqttDatasource {
       // Listen to messages
       _client!.updates!.listen(_onMessage);
     } else {
-      print('MQTT connection failed: ${_client!.connectionStatus}');
+      debugPrint('MQTT connection failed: ${_client!.connectionStatus}');
       _client!.disconnect();
       throw Exception('MQTT connection failed');
     }
@@ -93,7 +94,7 @@ class MqttDatasource {
     // Subscribe to all unit states
     _client!.subscribe(AppConstants.mqttTopicUnitState, MqttQos.atLeastOnce);
 
-    print('MQTT subscribed to topics');
+    debugPrint('MQTT subscribed to topics');
   }
 
   /// Handle incoming MQTT messages
@@ -105,7 +106,7 @@ class MqttDatasource {
         payload.payload.message,
       );
 
-      print('MQTT message received: $topic -> $payloadString');
+      debugPrint('MQTT message received: $topic -> $payloadString');
 
       try {
         if (topic == AppConstants.mqttTopicUnits) {
@@ -114,7 +115,7 @@ class MqttDatasource {
           _handleUnitStateMessage(payloadString);
         }
       } catch (e) {
-        print('Error parsing MQTT message: $e');
+        debugPrint('Error parsing MQTT message: $e');
       }
     }
   }
@@ -203,20 +204,20 @@ class MqttDatasource {
       builder.payload!,
     );
 
-    print('MQTT command sent: $topic -> $payload');
+    debugPrint('MQTT command sent: $topic -> $payload');
   }
 
   // Callbacks
   void _onConnected() {
-    print('MQTT connected callback');
+    debugPrint('MQTT connected callback');
   }
 
   void _onDisconnected() {
-    print('MQTT disconnected callback');
+    debugPrint('MQTT disconnected callback');
   }
 
   void _onSubscribed(String topic) {
-    print('MQTT subscribed to: $topic');
+    debugPrint('MQTT subscribed to: $topic');
   }
 
   void _onPong() {

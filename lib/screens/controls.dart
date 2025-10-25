@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:iot/utils/device_button.dart';
+import 'package:hvac_control/utils/device_button.dart';
 
 //gradient text
 import 'package:simple_gradient_text/simple_gradient_text.dart';
@@ -94,7 +94,7 @@ class _ControlState extends State<Control> {
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
-        // ignore: use_build_context_synchronously
+        if (!mounted) return data;
         QuickAlert.show(
           context: context,
           type: QuickAlertType.success,
@@ -199,8 +199,8 @@ class _ControlState extends State<Control> {
                   decoration: BoxDecoration(
                       shape: BoxShape.rectangle,
                       color: apiConnectionStatus
-                          ? Colors.greenAccent.withOpacity(0.19)
-                          : Colors.redAccent.withOpacity(0.19),
+                          ? Colors.greenAccent.withValues(alpha: 0.19)
+                          : Colors.redAccent.withValues(alpha: 0.19),
                       // border:
                       //     Border.all(width: 0.99, color: Colors.greenAccent),
                       borderRadius: BorderRadius.circular(20)),
@@ -212,8 +212,8 @@ class _ControlState extends State<Control> {
                             Icon(Icons.bolt_rounded,
                                 size: 60,
                                 color: apiConnectionStatus
-                                    ? Colors.greenAccent.withOpacity(0.9)
-                                    : Colors.redAccent.withOpacity(0.9)),
+                                    ? Colors.greenAccent.withValues(alpha: 0.9)
+                                    : Colors.redAccent.withValues(alpha: 0.9)),
                             Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -227,8 +227,8 @@ class _ControlState extends State<Control> {
                                       fontSize: 25,
                                       fontWeight: FontWeight.w700,
                                       color: apiConnectionStatus
-                                          ? Colors.greenAccent.withOpacity(0.9)
-                                          : Colors.redAccent.withOpacity(0.9)),
+                                          ? Colors.greenAccent.withValues(alpha: 0.9)
+                                          : Colors.redAccent.withValues(alpha: 0.9)),
                                 ),
                                 Text(
                                   apiConnectionStatus
@@ -238,8 +238,8 @@ class _ControlState extends State<Control> {
                                     fontSize: 12,
                                     fontWeight: FontWeight.w500,
                                     color: apiConnectionStatus
-                                        ? Colors.greenAccent.withOpacity(0.9)
-                                        : Colors.redAccent.withOpacity(0.9),
+                                        ? Colors.greenAccent.withValues(alpha: 0.9)
+                                        : Colors.redAccent.withValues(alpha: 0.9),
                                   ),
                                 ),
                               ],

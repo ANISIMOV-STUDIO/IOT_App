@@ -38,8 +38,8 @@ class HvacUnitCard extends StatelessWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                modeColor.withOpacity(0.1),
-                modeColor.withOpacity(0.05),
+                modeColor.withValues(alpha: 0.1),
+                modeColor.withValues(alpha: 0.05),
               ],
             ),
           ),
