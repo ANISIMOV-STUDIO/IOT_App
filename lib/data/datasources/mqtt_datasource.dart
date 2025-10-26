@@ -11,6 +11,7 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import '../../core/utils/constants.dart';
 import '../models/hvac_unit_model.dart';
+import '../models/temperature_reading_model.dart';
 
 class MqttDatasource {
   MqttServerClient? _client;
@@ -18,8 +19,35 @@ class MqttDatasource {
   final Map<String, StreamController<HvacUnitModel>> _unitControllers = {};
   final Map<String, HvacUnitModel> _unitsCache = {};
 
+  // Temperature history storage (unitId -> list of readings)
+  final Map<String, List<TemperatureReadingModel>> _temperatureHistory = {};
+  static const int _maxHistorySize = 288; // 24 hours at 5-minute intervals
+
+  // Auto-retry configuration
+  bool _autoRetry = true;
+  int _retryCount = 0;
+  static const int _maxRetries = 5;
+  static const List<int> _retryDelays = [2, 5, 10, 30, 60]; // seconds
+  Timer? _retryTimer;
+
+  // Connection parameters (saved for retry)
+  String? _lastHost;
+  int? _lastPort;
+  String? _lastClientId;
+
   bool get isConnected =>
       _client?.connectionStatus?.state == MqttConnectionState.connected;
+
+  bool get autoRetry => _autoRetry;
+
+  set autoRetry(bool value) {
+    _autoRetry = value;
+    if (!value) {
+      _retryTimer?.cancel();
+      _retryTimer = null;
+      _retryCount = 0;
+    }
+  }
 
   /// Connect to MQTT broker
   Future<void> connect({
@@ -31,6 +59,30 @@ class MqttDatasource {
     final brokerPort = port ?? AppConstants.mqttBrokerPort;
     final mqttClientId = clientId ?? AppConstants.mqttClientId;
 
+    // Save connection parameters for retry
+    _lastHost = brokerHost;
+    _lastPort = brokerPort;
+    _lastClientId = mqttClientId;
+
+    try {
+      await _attemptConnection(brokerHost, brokerPort, mqttClientId);
+      // Reset retry count on successful connection
+      _retryCount = 0;
+    } catch (e) {
+      debugPrint('Connection failed: $e');
+      if (_autoRetry && _retryCount < _maxRetries) {
+        _scheduleRetry();
+      }
+      rethrow;
+    }
+  }
+
+  /// Attempt to connect to MQTT broker
+  Future<void> _attemptConnection(
+    String brokerHost,
+    int brokerPort,
+    String mqttClientId,
+  ) async {
     _client = MqttServerClient.withPort(brokerHost, mqttClientId, brokerPort);
 
     _client!.logging(on: false);
@@ -75,8 +127,53 @@ class MqttDatasource {
     }
   }
 
+  /// Schedule automatic retry
+  void _scheduleRetry() {
+    if (!_autoRetry || _retryCount >= _maxRetries) return;
+
+    _retryTimer?.cancel();
+
+    final delaySeconds = _retryDelays[_retryCount.clamp(0, _retryDelays.length - 1)];
+    debugPrint('Scheduling retry ${_retryCount + 1}/$_maxRetries in $delaySeconds seconds...');
+
+    _retryTimer = Timer(Duration(seconds: delaySeconds), () async {
+      _retryCount++;
+      debugPrint('Retry attempt $_retryCount/$_maxRetries');
+
+      try {
+        await _attemptConnection(_lastHost!, _lastPort!, _lastClientId!);
+        _retryCount = 0; // Reset on success
+        debugPrint('Reconnection successful!');
+      } catch (e) {
+        debugPrint('Retry failed: $e');
+        if (_retryCount < _maxRetries) {
+          _scheduleRetry();
+        } else {
+          debugPrint('Max retries reached. Giving up.');
+        }
+      }
+    });
+  }
+
+  /// Manually retry connection
+  Future<void> retryConnection() async {
+    if (_lastHost == null || _lastPort == null || _lastClientId == null) {
+      throw Exception('No previous connection parameters available');
+    }
+
+    _retryCount = 0;
+    _retryTimer?.cancel();
+
+    debugPrint('Manual retry requested...');
+    await _attemptConnection(_lastHost!, _lastPort!, _lastClientId!);
+  }
+
   /// Disconnect from MQTT broker
   Future<void> disconnect() async {
+    _retryTimer?.cancel();
+    _retryTimer = null;
+    _retryCount = 0;
+
     _client?.disconnect();
     await _unitsController.close();
     for (var controller in _unitControllers.values) {
@@ -142,6 +239,9 @@ class MqttDatasource {
     // Update cache
     _unitsCache[unit.id] = unit;
 
+    // Save temperature reading to history
+    _addTemperatureReading(unit.id, unit.currentTemp);
+
     // Emit to specific unit stream
     if (_unitControllers.containsKey(unit.id)) {
       _unitControllers[unit.id]!.add(unit);
@@ -149,6 +249,76 @@ class MqttDatasource {
 
     // Emit to units list stream
     _unitsController.add(_unitsCache.values.toList());
+  }
+
+  /// Add temperature reading to history
+  void _addTemperatureReading(String unitId, double temperature) {
+    if (!_temperatureHistory.containsKey(unitId)) {
+      _temperatureHistory[unitId] = [];
+    }
+
+    final reading = TemperatureReadingModel(
+      timestamp: DateTime.now(),
+      temperature: temperature,
+    );
+
+    _temperatureHistory[unitId]!.add(reading);
+
+    // Keep only the latest readings (24 hours)
+    if (_temperatureHistory[unitId]!.length > _maxHistorySize) {
+      _temperatureHistory[unitId]!.removeAt(0);
+    }
+  }
+
+  /// Get temperature history for a unit
+  List<TemperatureReadingModel> getTemperatureHistory(
+    String unitId, {
+    int hours = 24,
+  }) {
+    if (!_temperatureHistory.containsKey(unitId)) {
+      // If no history, generate some initial data based on current unit
+      if (_unitsCache.containsKey(unitId)) {
+        return _generateInitialHistory(unitId, hours);
+      }
+      return [];
+    }
+
+    final now = DateTime.now();
+    final cutoffTime = now.subtract(Duration(hours: hours));
+
+    return _temperatureHistory[unitId]!
+        .where((reading) => reading.timestamp.isAfter(cutoffTime))
+        .toList();
+  }
+
+  /// Generate initial history data for units without history
+  List<TemperatureReadingModel> _generateInitialHistory(
+    String unitId,
+    int hours,
+  ) {
+    final unit = _unitsCache[unitId];
+    if (unit == null) return [];
+
+    final readings = <TemperatureReadingModel>[];
+    final now = DateTime.now();
+
+    // Generate readings for the past hours (every 5 minutes)
+    for (int i = hours * 12; i >= 0; i--) {
+      final time = now.subtract(Duration(minutes: i * 5));
+      // Simulate gradual temperature change
+      final progress = 1.0 - (i / (hours * 12));
+      final temp = unit.currentTemp - (unit.currentTemp - unit.targetTemp) * progress;
+
+      readings.add(TemperatureReadingModel(
+        timestamp: time,
+        temperature: temp,
+      ));
+    }
+
+    // Cache this initial history
+    _temperatureHistory[unitId] = readings;
+
+    return readings;
   }
 
   /// Get all units stream

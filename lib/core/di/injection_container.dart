@@ -6,6 +6,10 @@ library;
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 
+// Core
+import '../services/mqtt_settings_service.dart';
+import '../config/env_config.dart';
+
 // Data
 import '../../data/datasources/mqtt_datasource.dart';
 import '../../data/repositories/mock_hvac_repository.dart';
@@ -24,17 +28,35 @@ import '../../presentation/bloc/hvac_detail/hvac_detail_bloc.dart';
 
 final sl = GetIt.instance;
 
-/// Toggle between Mock and MQTT implementation
-/// Set to true to use MQTT, false to use Mock data
-const bool useMqtt = false;
-
 /// Initialize all dependencies
 Future<void> init() async {
+  // Print environment configuration
+  EnvConfig.printConfig();
+
+  //! Core - Services
+  // Initialize MQTT settings from environment or UI
+  final settingsService = MqttSettingsService();
+  sl.registerLazySingleton(() => settingsService);
+
+  // Load environment settings if not already set
+  if (EnvConfig.mqttBrokerHost != 'localhost' ||
+      EnvConfig.mqttUsername != null) {
+    settingsService.updateSettings(MqttSettings(
+      host: EnvConfig.mqttBrokerHost,
+      port: EnvConfig.mqttBrokerPort,
+      clientId: EnvConfig.mqttClientId,
+      username: EnvConfig.mqttUsername,
+      password: EnvConfig.mqttPassword,
+      useSsl: EnvConfig.mqttUseSsl,
+    ));
+  }
+
   //! Features - HVAC
   // Bloc
   sl.registerFactory(
     () => HvacListBloc(
       getAllUnits: sl(),
+      repository: sl(),
     ),
   );
 
@@ -54,14 +76,18 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetTemperatureHistory(sl()));
 
   // Repository
+  final useMqtt = EnvConfig.useMqtt;
+
   if (useMqtt) {
-    // MQTT Implementation (Phase 5)
+    // MQTT Implementation
+    debugPrint('Initializing MQTT mode...');
     sl.registerLazySingleton<MqttDatasource>(() => MqttDatasource());
     sl.registerLazySingleton<HvacRepository>(
       () => HvacRepositoryImpl(sl()),
     );
   } else {
     // Mock Implementation (for testing)
+    debugPrint('Initializing Mock mode...');
     sl.registerLazySingleton<HvacRepository>(
       () => MockHvacRepository(),
     );

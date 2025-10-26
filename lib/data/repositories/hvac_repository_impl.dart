@@ -45,10 +45,9 @@ class HvacRepositoryImpl implements HvacRepository {
     String unitId, {
     int hours = 24,
   }) async {
-    // TODO: Implement real temperature history from backend
-    // For now, return empty list
-    // In real implementation, this would be a separate MQTT topic or REST API call
-    return [];
+    // Get history from datasource (locally cached)
+    final models = datasource.getTemperatureHistory(unitId, hours: hours);
+    return models.map((model) => model.toEntity()).toList();
   }
 
   @override
@@ -66,5 +65,10 @@ class HvacRepositoryImpl implements HvacRepository {
       mode: mode,
       fanSpeed: fanSpeed,
     );
+  }
+
+  /// Retry connection manually
+  Future<void> retryConnection() async {
+    await datasource.retryConnection();
   }
 }

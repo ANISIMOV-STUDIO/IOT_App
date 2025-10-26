@@ -3,19 +3,23 @@ library;
 
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../domain/repositories/hvac_repository.dart';
 import '../../../domain/usecases/get_all_units.dart';
 import 'hvac_list_event.dart';
 import 'hvac_list_state.dart';
 
 class HvacListBloc extends Bloc<HvacListEvent, HvacListState> {
   final GetAllUnits getAllUnits;
+  final HvacRepository repository;
   StreamSubscription? _unitsSubscription;
 
   HvacListBloc({
     required this.getAllUnits,
+    required this.repository,
   }) : super(const HvacListInitial()) {
     on<LoadHvacUnitsEvent>(_onLoadHvacUnits);
     on<RefreshHvacUnitsEvent>(_onRefreshHvacUnits);
+    on<RetryConnectionEvent>(_onRetryConnection);
   }
 
   Future<void> _onLoadHvacUnits(
@@ -61,6 +65,20 @@ class HvacListBloc extends Bloc<HvacListEvent, HvacListState> {
       }
     } catch (e) {
       emit(HvacListError(e.toString()));
+    }
+  }
+
+  Future<void> _onRetryConnection(
+    RetryConnectionEvent event,
+    Emitter<HvacListState> emit,
+  ) async {
+    emit(const HvacListLoading());
+
+    try {
+      await repository.connect();
+      add(const LoadHvacUnitsEvent());
+    } catch (e) {
+      emit(HvacListError('Connection failed: ${e.toString()}'));
     }
   }
 

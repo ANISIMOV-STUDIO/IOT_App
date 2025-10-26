@@ -19,3 +19,8 @@ class LoadHvacUnitsEvent extends HvacListEvent {
 class RefreshHvacUnitsEvent extends HvacListEvent {
   const RefreshHvacUnitsEvent();
 }
+
+/// Retry connection
+class RetryConnectionEvent extends HvacListEvent {
+  const RetryConnectionEvent();
+}
