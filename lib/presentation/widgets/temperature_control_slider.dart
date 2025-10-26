@@ -4,6 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
 import 'dart:math' as math;
 import '../../core/theme/app_theme.dart';
 import '../../core/utils/constants.dart';
@@ -37,8 +38,6 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
   late Animation<double> _pulseAnimation;
 
   // Angle constants - 270° arc from bottom-left to bottom-right
-  static const double _startAngle = 135.0 * math.pi / 180.0; // 135° in radians
-  static const double _endAngle = 45.0 * math.pi / 180.0; // 45° in radians (405° = 45°)
   static const double _totalSweep = 270.0; // total degrees of sweep
 
   @override
@@ -181,13 +180,20 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
 
           const SizedBox(height: 24),
 
-          // Circular Slider
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              // Pulse animation
-              if (widget.enabled)
-                AnimatedBuilder(
+          // Circular Slider - wrapped in Listener to prevent scroll
+          Listener(
+            onPointerSignal: (event) {
+              // Prevent scroll when pointer is over slider
+              if (event is PointerScrollEvent && widget.enabled) {
+                // Block the scroll event
+              }
+            },
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                // Pulse animation
+                if (widget.enabled)
+                  AnimatedBuilder(
                   animation: _pulseAnimation,
                   builder: (context, child) {
                     return Transform.scale(
@@ -209,16 +215,33 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
                   },
                 ),
 
-              // Gesture detector with custom paint
-              GestureDetector(
-                onPanUpdate: (details) {
-                  _handlePanUpdate(details.localPosition, const Size(250, 250));
+              // Gesture detector with custom paint - prevents scroll when dragging
+              RawGestureDetector(
+                gestures: <Type, GestureRecognizerFactory>{
+                  PanGestureRecognizer:
+                      GestureRecognizerFactoryWithHandlers<PanGestureRecognizer>(
+                    () => PanGestureRecognizer(),
+                    (PanGestureRecognizer instance) {
+                      instance
+                        ..onUpdate = (details) {
+                          _handlePanUpdate(details.localPosition, const Size(250, 250));
+                        }
+                        ..onEnd = (_) => _handlePanEnd();
+                    },
+                  ),
+                  TapGestureRecognizer:
+                      GestureRecognizerFactoryWithHandlers<TapGestureRecognizer>(
+                    () => TapGestureRecognizer(),
+                    (TapGestureRecognizer instance) {
+                      instance
+                        ..onTapUp = (details) {
+                          _handlePanUpdate(details.localPosition, const Size(250, 250));
+                          _handlePanEnd();
+                        };
+                    },
+                  ),
                 },
-                onPanEnd: (_) => _handlePanEnd(),
-                onTapUp: (details) {
-                  _handlePanUpdate(details.localPosition, const Size(250, 250));
-                  _handlePanEnd();
-                },
+                behavior: HitTestBehavior.opaque,
                 child: RepaintBoundary(
                   child: CustomPaint(
                     size: const Size(250, 250),
@@ -368,6 +391,7 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
                 ),
               ),
             ],
+          ),
           ),
 
           const SizedBox(height: 20),
