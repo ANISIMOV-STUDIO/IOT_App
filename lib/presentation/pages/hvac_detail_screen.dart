@@ -108,12 +108,13 @@ class _HvacDetailView extends StatelessWidget {
                   TemperatureControlSlider(
                     currentTemp: unit.currentTemp,
                     targetTemp: unit.targetTemp,
+                    mode: unit.mode,
+                    enabled: unit.power,
                     onChanged: (value) {
                       context.read<HvacDetailBloc>().add(
                             UpdateTargetTempEvent(value),
                           );
                     },
-                    enabled: unit.power,
                   ),
                   const SizedBox(height: 24),
 
@@ -138,6 +139,7 @@ class _HvacDetailView extends StatelessWidget {
                           );
                     },
                     enabled: unit.power,
+                    mode: unit.mode,
                   ),
                   const SizedBox(height: 24),
 
@@ -146,6 +148,7 @@ class _HvacDetailView extends StatelessWidget {
                     TemperatureChart(
                       readings: state.history,
                       targetTemp: unit.targetTemp,
+                      mode: unit.mode,
                     ),
                 ],
               ),

@@ -1,125 +1,401 @@
 /// Fan Speed Control
 ///
-/// Widget for controlling fan speed
+/// Modern segmented control for fan speed with animations
 library;
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../core/theme/app_theme.dart';
-import '../../core/utils/constants.dart';
 
 class FanSpeedControl extends StatelessWidget {
   final String selectedSpeed;
   final ValueChanged<String> onSpeedChanged;
   final bool enabled;
+  final String mode;
 
   const FanSpeedControl({
     super.key,
     required this.selectedSpeed,
     required this.onSpeedChanged,
     this.enabled = true,
+    this.mode = 'auto',
   });
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Fan Speed',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            const SizedBox(height: 16),
-            Wrap(
-              spacing: 12,
-              runSpacing: 12,
-              children: FanSpeed.values.map((speed) {
-                final isSelected =
-                    selectedSpeed.toLowerCase() == speed.name.toLowerCase();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final speedIndex = _getSpeedIndex(selectedSpeed);
+    final modeColor = AppTheme.getModeColor(mode);
 
-                return _SpeedButton(
-                  label: speed.displayName,
-                  isSelected: isSelected,
-                  enabled: enabled,
-                  onTap: () {
-                    if (enabled) {
-                      onSpeedChanged(speed.name);
-                    }
-                  },
-                );
-              }).toList(),
+    void handleValueChanged(int? value) {
+      if (value != null) {
+        onSpeedChanged(_getSpeedName(value));
+      }
+    }
+
+    return Container(
+      decoration: AppTheme.glassmorphicCard(
+        isDark: isDark,
+        borderRadius: 24,
+      ),
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Fan Speed',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: -0.5,
+                        ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    enabled ? 'Adjust airflow intensity' : 'Device is off',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: isDark
+                              ? AppTheme.darkTextHint
+                              : AppTheme.lightTextHint,
+                        ),
+                  ),
+                ],
+              ),
+              if (enabled)
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        modeColor,
+                        modeColor.withOpacity(0.7),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: modeColor.withOpacity(0.3),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        _getSpeedIcon(selectedSpeed),
+                        color: Colors.white,
+                        size: 14,
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        selectedSpeed.toUpperCase(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 24),
+
+          // Cupertino Sliding Segmented Control
+          Container(
+            decoration: BoxDecoration(
+              color: isDark
+                  ? AppTheme.darkSurface.withOpacity(0.5)
+                  : AppTheme.lightSurface,
+              borderRadius: BorderRadius.circular(16),
             ),
-          ],
-        ),
+            padding: const EdgeInsets.all(4),
+            child: AbsorbPointer(
+              absorbing: !enabled,
+              child: Opacity(
+                opacity: enabled ? 1.0 : 0.5,
+                child: CupertinoSlidingSegmentedControl<int>(
+                  groupValue: speedIndex,
+                  onValueChanged: handleValueChanged,
+                  backgroundColor: Colors.transparent,
+                  thumbColor: modeColor,
+                  children: _buildSegments(isDark),
+                ),
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 20),
+
+          // Speed indicator
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            transitionBuilder: (child, animation) {
+              return FadeTransition(
+                opacity: animation,
+                child: SlideTransition(
+                  position: Tween<Offset>(
+                    begin: const Offset(0, 0.1),
+                    end: Offset.zero,
+                  ).animate(animation),
+                  child: child,
+                ),
+              );
+            },
+            child: _buildSpeedIndicator(selectedSpeed, isDark, modeColor, context),
+          ),
+        ],
       ),
     );
   }
-}
 
-class _SpeedButton extends StatelessWidget {
-  final String label;
-  final bool isSelected;
-  final bool enabled;
-  final VoidCallback onTap;
+  Map<int, Widget> _buildSegments(bool isDark) {
+    return {
+      0: _buildSegmentItem(
+        'Low',
+        Icons.air_rounded,
+        selectedSpeed == 'low',
+        isDark,
+        0.3,
+      ),
+      1: _buildSegmentItem(
+        'Med',
+        Icons.air_rounded,
+        selectedSpeed == 'medium',
+        isDark,
+        0.6,
+      ),
+      2: _buildSegmentItem(
+        'High',
+        Icons.air_rounded,
+        selectedSpeed == 'high',
+        isDark,
+        1.0,
+      ),
+      3: _buildSegmentItem(
+        'Auto',
+        Icons.autorenew_rounded,
+        selectedSpeed == 'auto',
+        isDark,
+        0.8,
+      ),
+    };
+  }
 
-  const _SpeedButton({
-    required this.label,
-    required this.isSelected,
-    required this.enabled,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: enabled ? onTap : null,
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 12,
-        ),
-        decoration: BoxDecoration(
-          color: isSelected && enabled
-              ? AppTheme.secondaryColor.withValues(alpha: 0.2)
-              : Colors.grey.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: isSelected && enabled
-                ? AppTheme.secondaryColor
-                : Colors.transparent,
-            width: 2,
-          ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.air,
-              color: isSelected && enabled
-                  ? AppTheme.secondaryColor
-                  : enabled
-                      ? AppTheme.textSecondary
-                      : AppTheme.textHint,
-              size: 20,
-            ),
-            const SizedBox(width: 8),
-            Text(
-              label,
-              style: TextStyle(
-                color: isSelected && enabled
-                    ? AppTheme.secondaryColor
-                    : enabled
-                        ? AppTheme.textPrimary
-                        : AppTheme.textSecondary,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+  Widget _buildSegmentItem(
+    String label,
+    IconData icon,
+    bool isSelected,
+    bool isDark,
+    double intensity,
+  ) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              if (isSelected)
+                ...List.generate(
+                  (intensity * 3).round(),
+                  (index) => Positioned(
+                    child: Icon(
+                      Icons.circle,
+                      color: Colors.white.withOpacity(0.2 - index * 0.05),
+                      size: 28 + index * 4.0,
+                    ),
+                  ),
+                ),
+              Icon(
+                icon,
+                color: isSelected
+                    ? Colors.white
+                    : (isDark
+                        ? AppTheme.darkTextSecondary
+                        : AppTheme.lightTextSecondary),
+                size: 18,
               ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: TextStyle(
+              color: isSelected
+                  ? Colors.white
+                  : (isDark
+                      ? AppTheme.darkTextSecondary
+                      : AppTheme.lightTextSecondary),
+              fontSize: 11,
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+              letterSpacing: 0.5,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
+  }
+
+  Widget _buildSpeedIndicator(String speed, bool isDark, Color modeColor, BuildContext context) {
+    final descriptions = {
+      'low': 'Gentle airflow for quiet operation',
+      'medium': 'Balanced airflow and noise level',
+      'high': 'Maximum airflow for rapid cooling/heating',
+      'auto': 'Automatically adjusts based on temperature',
+    };
+
+    final powerLevels = {
+      'low': 0.3,
+      'medium': 0.6,
+      'high': 1.0,
+      'auto': 0.75,
+    };
+
+    return Container(
+      key: ValueKey(speed),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: isDark
+            ? AppTheme.darkSurface.withOpacity(0.3)
+            : AppTheme.lightSurface.withOpacity(0.5),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: modeColor.withOpacity(0.3),
+          width: 1,
+        ),
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      modeColor,
+                      modeColor.withOpacity(0.7),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(
+                  _getSpeedIcon(speed),
+                  color: Colors.white,
+                  size: 20,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  descriptions[speed] ?? 'Select a speed',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: isDark
+                            ? AppTheme.darkTextSecondary
+                            : AppTheme.lightTextSecondary,
+                        fontWeight: FontWeight.w500,
+                      ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          // Power level indicator
+          Row(
+            children: [
+              Text(
+                'Power',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: isDark
+                          ? AppTheme.darkTextHint
+                          : AppTheme.lightTextHint,
+                    ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(4),
+                  child: LinearProgressIndicator(
+                    value: powerLevels[speed] ?? 0.5,
+                    minHeight: 6,
+                    backgroundColor: isDark
+                        ? AppTheme.darkBorder.withOpacity(0.3)
+                        : AppTheme.lightBorder.withOpacity(0.5),
+                    valueColor: AlwaysStoppedAnimation<Color>(modeColor),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Text(
+                '${((powerLevels[speed] ?? 0.5) * 100).toInt()}%',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: modeColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  IconData _getSpeedIcon(String speed) {
+    switch (speed.toLowerCase()) {
+      case 'low':
+        return Icons.air_rounded;
+      case 'medium':
+        return Icons.air_rounded;
+      case 'high':
+        return Icons.air_rounded;
+      case 'auto':
+        return Icons.autorenew_rounded;
+      default:
+        return Icons.air_rounded;
+    }
+  }
+
+  int _getSpeedIndex(String speed) {
+    switch (speed.toLowerCase()) {
+      case 'low':
+        return 0;
+      case 'medium':
+        return 1;
+      case 'high':
+        return 2;
+      case 'auto':
+        return 3;
+      default:
+        return 3;
+    }
+  }
+
+  String _getSpeedName(int index) {
+    switch (index) {
+      case 0:
+        return 'low';
+      case 1:
+        return 'medium';
+      case 2:
+        return 'high';
+      case 3:
+        return 'auto';
+      default:
+        return 'auto';
+    }
   }
 }

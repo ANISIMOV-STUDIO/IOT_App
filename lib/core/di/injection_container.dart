@@ -8,6 +8,7 @@ import 'package:get_it/get_it.dart';
 
 // Core
 import '../services/mqtt_settings_service.dart';
+import '../services/theme_service.dart';
 import '../config/env_config.dart';
 
 // Data
@@ -34,6 +35,9 @@ Future<void> init() async {
   EnvConfig.printConfig();
 
   //! Core - Services
+  // Initialize theme service
+  sl.registerLazySingleton(() => ThemeService());
+
   // Initialize MQTT settings from environment or UI
   final settingsService = MqttSettingsService();
   sl.registerLazySingleton(() => settingsService);
