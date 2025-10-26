@@ -4,12 +4,12 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/di/injection_container.dart';
-import '../../core/services/mqtt_settings_service.dart';
 import '../../core/services/theme_service.dart';
 import '../../core/services/language_service.dart';
 import '../../generated/l10n/app_localizations.dart';
-import '../widgets/mqtt_settings_dialog.dart';
+import '../bloc/auth/auth_bloc.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -19,14 +19,12 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  late final MqttSettingsService _settingsService;
   late final ThemeService _themeService;
   late final LanguageService _languageService;
 
   @override
   void initState() {
     super.initState();
-    _settingsService = sl<MqttSettingsService>();
     _themeService = sl<ThemeService>();
     _languageService = sl<LanguageService>();
   }
@@ -38,11 +36,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       appBar: AppBar(
         title: Text(l10n.settings),
       ),
-      body: ListenableBuilder(
-        listenable: _settingsService,
-        builder: (context, child) {
-          final settings = _settingsService.settings;
-          return ListView(
+      body: ListView(
             children: [
               // Appearance Section
               Padding(
@@ -147,34 +141,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               const Divider(),
 
-              // MQTT Settings Section
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-                child: Text(
-                  l10n.connection.toUpperCase(),
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.5,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                ),
-              ),
-              ListTile(
-                leading: const Icon(Icons.router_rounded),
-                title: Text(l10n.mqttBroker),
-                subtitle: Text(
-                  '${settings.host}:${settings.port}${settings.useSsl ? ' (SSL)' : ''}',
-                ),
-                trailing: const Icon(Icons.edit_rounded),
-                onTap: () => _showMqttSettings(context),
-              ),
-              if (settings.username != null)
-                ListTile(
-                  leading: const Icon(Icons.person_rounded),
-                  title: Text(l10n.username),
-                  subtitle: Text(settings.username!),
-                ),
-              const Divider(),
 
               // About Section
               Padding(
@@ -207,33 +173,63 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   );
                 },
               ),
+              const Divider(),
+
+              // Account Section
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                child: Text(
+                  'ACCOUNT',
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.5,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                ),
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.logout_rounded,
+                  color: Theme.of(context).colorScheme.error,
+                ),
+                title: Text(
+                  l10n.logout,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.error,
+                  ),
+                ),
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (dialogContext) => AlertDialog(
+                      title: Text(l10n.logout),
+                      content: const Text('Are you sure you want to logout?'),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(dialogContext).pop();
+                          },
+                          child: Text(l10n.cancel),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(dialogContext).pop();
+                            context.read<AuthBloc>().add(const LogoutEvent());
+                          },
+                          style: TextButton.styleFrom(
+                            foregroundColor: Theme.of(context).colorScheme.error,
+                          ),
+                          child: Text(l10n.logout),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 20),
             ],
-          );
-        },
       ),
     );
-  }
-
-  Future<void> _showMqttSettings(BuildContext context) async {
-    final l10n = AppLocalizations.of(context)!;
-    final result = await showDialog<MqttSettings>(
-      context: context,
-      builder: (context) => MqttSettingsDialog(
-        initialSettings: _settingsService.settings,
-      ),
-    );
-
-    if (result != null && mounted) {
-      _settingsService.updateSettings(result);
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(l10n.settingsSaved),
-            duration: const Duration(seconds: 3),
-          ),
-        );
-      }
-    }
   }
 
   String _getThemeModeText(BuildContext context, ThemeMode mode) {

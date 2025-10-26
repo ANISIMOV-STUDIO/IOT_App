@@ -14,6 +14,7 @@ import '../bloc/hvac_list/hvac_list_state.dart';
 import '../widgets/hvac_unit_card.dart';
 import 'hvac_detail_screen.dart';
 import 'device_management_screen.dart';
+import 'qr_scanner_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -135,6 +136,20 @@ class HomeScreen extends StatelessWidget {
       elevation: 0,
       backgroundColor: isDark ? AppTheme.darkBackground : AppTheme.lightBackground,
       actions: [
+        IconButton(
+          icon: const Icon(Icons.qr_code_scanner_rounded),
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => BlocProvider.value(
+                  value: context.read<HvacListBloc>(),
+                  child: const QrScannerScreen(),
+                ),
+              ),
+            );
+          },
+          tooltip: l10n.scanQrCode,
+        ),
         IconButton(
           icon: const Icon(Icons.device_hub_rounded),
           onPressed: () {

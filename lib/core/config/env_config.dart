@@ -45,7 +45,7 @@ class EnvConfig {
   }
 
   static bool get useMqtt {
-    const mode = String.fromEnvironment('USE_MQTT', defaultValue: 'false');
+    const mode = String.fromEnvironment('USE_MQTT', defaultValue: 'true');
     return mode.toLowerCase() == 'true';
   }
 

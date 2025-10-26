@@ -14,7 +14,9 @@ import 'core/services/theme_service.dart';
 import 'core/services/language_service.dart';
 import 'presentation/bloc/hvac_list/hvac_list_bloc.dart';
 import 'presentation/bloc/hvac_list/hvac_list_event.dart';
+import 'presentation/bloc/auth/auth_bloc.dart';
 import 'presentation/pages/responsive_shell.dart';
+import 'presentation/pages/login_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -57,10 +59,38 @@ class HvacControlApp extends StatelessWidget {
           ],
           supportedLocales: LanguageService.supportedLocales,
 
-          home: BlocProvider(
-            create: (context) => di.sl<HvacListBloc>()
-              ..add(const LoadHvacUnitsEvent()),
-            child: const ResponsiveShell(),
+          home: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => di.sl<AuthBloc>()
+                  ..add(const CheckAuthStatusEvent()),
+              ),
+              BlocProvider(
+                create: (context) => di.sl<HvacListBloc>()
+                  ..add(const LoadHvacUnitsEvent()),
+              ),
+            ],
+            child: BlocListener<AuthBloc, AuthState>(
+              listener: (context, state) {
+                // Handle auth state changes globally if needed
+              },
+              child: BlocBuilder<AuthBloc, AuthState>(
+                builder: (context, state) {
+                  if (state is AuthAuthenticated) {
+                    return const ResponsiveShell();
+                  } else if (state is AuthUnauthenticated || state is AuthError) {
+                    return const LoginScreen();
+                  } else {
+                    // Loading or initial state
+                    return const Scaffold(
+                      body: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  }
+                },
+              ),
+            ),
           ),
         );
       },

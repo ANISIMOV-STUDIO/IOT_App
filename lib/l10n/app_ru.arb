@@ -86,5 +86,26 @@
   "deviceRemoved": "Устройство успешно удалено",
   "cancel": "Отмена",
   "add": "Добавить",
-  "mqttModeRequired": "Для управления устройствами требуется режим MQTT"
+  "mqttModeRequired": "Для управления устройствами требуется режим MQTT",
+
+  "login": "Войти",
+  "register": "Регистрация",
+  "loginSubtitle": "С возвращением! Войдите, чтобы продолжить",
+  "registerSubtitle": "Создайте аккаунт, чтобы начать",
+  "email": "Электронная почта",
+  "password": "Пароль",
+  "fullName": "Полное имя",
+  "emailRequired": "Электронная почта обязательна",
+  "invalidEmail": "Пожалуйста, введите корректный email",
+  "passwordRequired": "Пароль обязателен",
+  "passwordTooShort": "Пароль должен быть не менее 6 символов",
+  "nameRequired": "Имя обязательно",
+  "nameTooShort": "Имя должно быть не менее 2 символов",
+  "dontHaveAccount": "Нет аккаунта? Зарегистрируйтесь",
+  "alreadyHaveAccount": "Уже есть аккаунт? Войдите",
+  "scanQrCode": "Сканировать QR-код",
+  "enterMacManually": "Или введите MAC-адрес вручную",
+  "logout": "Выйти",
+
+  "skipAuth": "Продолжить без регистрации"
 }

@@ -3,6 +3,8 @@ library;
 
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../core/services/api_service.dart';
+import '../../../core/di/injection_container.dart';
 import '../../../domain/repositories/hvac_repository.dart';
 import '../../../domain/usecases/get_all_units.dart';
 import 'hvac_list_event.dart';
@@ -20,6 +22,8 @@ class HvacListBloc extends Bloc<HvacListEvent, HvacListState> {
     on<LoadHvacUnitsEvent>(_onLoadHvacUnits);
     on<RefreshHvacUnitsEvent>(_onRefreshHvacUnits);
     on<RetryConnectionEvent>(_onRetryConnection);
+    on<AddDeviceEvent>(_onAddDevice);
+    on<RemoveDeviceEvent>(_onRemoveDevice);
   }
 
   Future<void> _onLoadHvacUnits(
@@ -79,6 +83,44 @@ class HvacListBloc extends Bloc<HvacListEvent, HvacListState> {
       add(const LoadHvacUnitsEvent());
     } catch (e) {
       emit(HvacListError('Connection failed: ${e.toString()}'));
+    }
+  }
+
+  Future<void> _onAddDevice(
+    AddDeviceEvent event,
+    Emitter<HvacListState> emit,
+  ) async {
+    try {
+      final apiService = sl<ApiService>();
+
+      // Call API to add device
+      await apiService.post('/devices', body: {
+        'mac_address': event.macAddress,
+        'name': event.name,
+        'location': event.location,
+      });
+
+      // Refresh the device list
+      add(const RefreshHvacUnitsEvent());
+    } catch (e) {
+      emit(HvacListError('Failed to add device: ${e.toString()}'));
+    }
+  }
+
+  Future<void> _onRemoveDevice(
+    RemoveDeviceEvent event,
+    Emitter<HvacListState> emit,
+  ) async {
+    try {
+      final apiService = sl<ApiService>();
+
+      // Call API to remove device
+      await apiService.delete('/devices/${event.deviceId}');
+
+      // Refresh the device list
+      add(const RefreshHvacUnitsEvent());
+    } catch (e) {
+      emit(HvacListError('Failed to remove device: ${e.toString()}'));
     }
   }
 

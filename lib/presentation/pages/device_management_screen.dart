@@ -6,10 +6,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../core/di/injection_container.dart';
 import '../../core/theme/app_theme.dart';
-import '../../core/config/env_config.dart';
-import '../../data/datasources/mqtt_datasource.dart';
 import '../../generated/l10n/app_localizations.dart';
 import '../bloc/hvac_list/hvac_list_bloc.dart';
 import '../bloc/hvac_list/hvac_list_event.dart';
@@ -23,16 +20,9 @@ class DeviceManagementScreen extends StatefulWidget {
 }
 
 class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
-  MqttDatasource? _mqttDatasource;
-  bool _isMqttMode = false;
-
   @override
   void initState() {
     super.initState();
-    _isMqttMode = EnvConfig.useMqtt;
-    if (_isMqttMode) {
-      _mqttDatasource = sl<MqttDatasource>();
-    }
   }
 
   @override
@@ -70,16 +60,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                 color: Colors.transparent,
                 child: InkWell(
                   borderRadius: BorderRadius.circular(16),
-                  onTap: _isMqttMode
-                      ? () => _showAddDeviceDialog(context)
-                      : () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(l10n.mqttModeRequired),
-                              backgroundColor: const Color(0xFFEF4444),
-                            ),
-                          );
-                        },
+                  onTap: () => _showAddDeviceDialog(context),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 24,
@@ -227,21 +208,12 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                                 Icons.delete_outline_rounded,
                                 color: Color(0xFFEF4444),
                               ),
-                              onPressed: _isMqttMode
-                                  ? () => _confirmRemoveDevice(
-                                        context,
-                                        unit.id,
-                                        unit.name,
-                                        unit.macAddress,
-                                      )
-                                  : () {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                          content: Text(l10n.mqttModeRequired),
-                                          backgroundColor: const Color(0xFFEF4444),
-                                        ),
-                                      );
-                                    },
+                              onPressed: () => _confirmRemoveDevice(
+                                context,
+                                unit.id,
+                                unit.name,
+                                unit.macAddress,
+                              ),
                             ),
                           ),
                         ),
@@ -359,12 +331,15 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
               }
 
               try {
-                await _mqttDatasource!.addDevice(
-                  macAddress: mac,
-                  name: name,
-                  location: locationController.text.isEmpty
-                      ? null
-                      : locationController.text.trim(),
+                // Add device using REST API via bloc
+                context.read<HvacListBloc>().add(
+                  AddDeviceEvent(
+                    macAddress: mac,
+                    name: name,
+                    location: locationController.text.isEmpty
+                        ? null
+                        : locationController.text.trim(),
+                  ),
                 );
 
                 if (context.mounted) {
@@ -375,9 +350,6 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                       backgroundColor: AppTheme.successColor,
                     ),
                   );
-
-                  // Refresh devices list
-                  context.read<HvacListBloc>().add(const LoadHvacUnitsEvent());
                 }
               } catch (e) {
                 if (context.mounted) {
@@ -443,10 +415,8 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
 
     if (confirmed == true) {
       try {
-        await _mqttDatasource!.removeDevice(
-          unitId: unitId,
-          macAddress: macAddress,
-        );
+        // Remove device using REST API via bloc
+        bloc.add(RemoveDeviceEvent(deviceId: unitId));
 
         scaffoldMessenger.showSnackBar(
           SnackBar(
@@ -454,9 +424,6 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
             backgroundColor: AppTheme.successColor,
           ),
         );
-
-        // Refresh devices list
-        bloc.add(const LoadHvacUnitsEvent());
       } catch (e) {
         scaffoldMessenger.showSnackBar(
           SnackBar(

@@ -270,4 +270,61 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mqttModeRequired => '设备管理需要MQTT模式';
+
+  @override
+  String get login => '登录';
+
+  @override
+  String get register => '注册';
+
+  @override
+  String get loginSubtitle => '欢迎回来！登录以继续';
+
+  @override
+  String get registerSubtitle => '创建账户以开始';
+
+  @override
+  String get email => '电子邮箱';
+
+  @override
+  String get password => '密码';
+
+  @override
+  String get fullName => '全名';
+
+  @override
+  String get emailRequired => '电子邮箱为必填项';
+
+  @override
+  String get invalidEmail => '请输入有效的电子邮箱';
+
+  @override
+  String get passwordRequired => '密码为必填项';
+
+  @override
+  String get passwordTooShort => '密码至少需要6个字符';
+
+  @override
+  String get nameRequired => '姓名为必填项';
+
+  @override
+  String get nameTooShort => '姓名至少需要2个字符';
+
+  @override
+  String get dontHaveAccount => '没有账户？立即注册';
+
+  @override
+  String get alreadyHaveAccount => '已有账户？立即登录';
+
+  @override
+  String get scanQrCode => '扫描二维码';
+
+  @override
+  String get enterMacManually => '或手动输入MAC地址';
+
+  @override
+  String get logout => '退出登录';
+
+  @override
+  String get skipAuth => '无需注册继续';
 }

@@ -24,3 +24,29 @@ class RefreshHvacUnitsEvent extends HvacListEvent {
 class RetryConnectionEvent extends HvacListEvent {
   const RetryConnectionEvent();
 }
+
+/// Add a new device
+class AddDeviceEvent extends HvacListEvent {
+  final String macAddress;
+  final String name;
+  final String? location;
+
+  const AddDeviceEvent({
+    required this.macAddress,
+    required this.name,
+    this.location,
+  });
+
+  @override
+  List<Object?> get props => [macAddress, name, location];
+}
+
+/// Remove a device
+class RemoveDeviceEvent extends HvacListEvent {
+  final String deviceId;
+
+  const RemoveDeviceEvent({required this.deviceId});
+
+  @override
+  List<Object?> get props => [deviceId];
+}

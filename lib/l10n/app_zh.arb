@@ -86,5 +86,26 @@
   "deviceRemoved": "设备删除成功",
   "cancel": "取消",
   "add": "添加",
-  "mqttModeRequired": "设备管理需要MQTT模式"
+  "mqttModeRequired": "设备管理需要MQTT模式",
+
+  "login": "登录",
+  "register": "注册",
+  "loginSubtitle": "欢迎回来！登录以继续",
+  "registerSubtitle": "创建账户以开始",
+  "email": "电子邮箱",
+  "password": "密码",
+  "fullName": "全名",
+  "emailRequired": "电子邮箱为必填项",
+  "invalidEmail": "请输入有效的电子邮箱",
+  "passwordRequired": "密码为必填项",
+  "passwordTooShort": "密码至少需要6个字符",
+  "nameRequired": "姓名为必填项",
+  "nameTooShort": "姓名至少需要2个字符",
+  "dontHaveAccount": "没有账户？立即注册",
+  "alreadyHaveAccount": "已有账户？立即登录",
+  "scanQrCode": "扫描二维码",
+  "enterMacManually": "或手动输入MAC地址",
+  "logout": "退出登录",
+
+  "skipAuth": "无需注册继续"
 }

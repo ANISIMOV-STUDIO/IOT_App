@@ -447,5 +447,100 @@
   "mqttModeRequired": "MQTT mode is required for device management",
   "@mqttModeRequired": {
     "description": "Error message when trying to manage devices without MQTT"
+  },
+
+  "login": "Sign In",
+  "@login": {
+    "description": "Login button text"
+  },
+
+  "register": "Sign Up",
+  "@register": {
+    "description": "Register button text"
+  },
+
+  "loginSubtitle": "Welcome back! Sign in to continue",
+  "@loginSubtitle": {
+    "description": "Login screen subtitle"
+  },
+
+  "registerSubtitle": "Create an account to get started",
+  "@registerSubtitle": {
+    "description": "Register screen subtitle"
+  },
+
+  "email": "Email",
+  "@email": {
+    "description": "Email field label"
+  },
+
+  "password": "Password",
+  "@password": {
+    "description": "Password field label"
+  },
+
+  "fullName": "Full Name",
+  "@fullName": {
+    "description": "Name field label"
+  },
+
+  "emailRequired": "Email is required",
+  "@emailRequired": {
+    "description": "Email validation error"
+  },
+
+  "invalidEmail": "Please enter a valid email",
+  "@invalidEmail": {
+    "description": "Invalid email error"
+  },
+
+  "passwordRequired": "Password is required",
+  "@passwordRequired": {
+    "description": "Password validation error"
+  },
+
+  "passwordTooShort": "Password must be at least 6 characters",
+  "@passwordTooShort": {
+    "description": "Password too short error"
+  },
+
+  "nameRequired": "Name is required",
+  "@nameRequired": {
+    "description": "Name validation error"
+  },
+
+  "nameTooShort": "Name must be at least 2 characters",
+  "@nameTooShort": {
+    "description": "Name too short error"
+  },
+
+  "dontHaveAccount": "Don't have an account? Sign up",
+  "@dontHaveAccount": {
+    "description": "Switch to register text"
+  },
+
+  "alreadyHaveAccount": "Already have an account? Sign in",
+  "@alreadyHaveAccount": {
+    "description": "Switch to login text"
+  },
+
+  "scanQrCode": "Scan QR Code",
+  "@scanQrCode": {
+    "description": "Scan QR code button"
+  },
+
+  "enterMacManually": "Or enter MAC address manually",
+  "@enterMacManually": {
+    "description": "Manual MAC entry option"
+  },
+
+  "logout": "Logout",
+  "@logout": {
+    "description": "Logout button"
+  },
+
+  "skipAuth": "Continue without registration",
+  "@skipAuth": {
+    "description": "Skip authentication button"
   }
 }

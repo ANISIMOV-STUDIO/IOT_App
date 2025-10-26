@@ -276,4 +276,61 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get mqttModeRequired =>
       'Для управления устройствами требуется режим MQTT';
+
+  @override
+  String get login => 'Войти';
+
+  @override
+  String get register => 'Регистрация';
+
+  @override
+  String get loginSubtitle => 'С возвращением! Войдите, чтобы продолжить';
+
+  @override
+  String get registerSubtitle => 'Создайте аккаунт, чтобы начать';
+
+  @override
+  String get email => 'Электронная почта';
+
+  @override
+  String get password => 'Пароль';
+
+  @override
+  String get fullName => 'Полное имя';
+
+  @override
+  String get emailRequired => 'Электронная почта обязательна';
+
+  @override
+  String get invalidEmail => 'Пожалуйста, введите корректный email';
+
+  @override
+  String get passwordRequired => 'Пароль обязателен';
+
+  @override
+  String get passwordTooShort => 'Пароль должен быть не менее 6 символов';
+
+  @override
+  String get nameRequired => 'Имя обязательно';
+
+  @override
+  String get nameTooShort => 'Имя должно быть не менее 2 символов';
+
+  @override
+  String get dontHaveAccount => 'Нет аккаунта? Зарегистрируйтесь';
+
+  @override
+  String get alreadyHaveAccount => 'Уже есть аккаунт? Войдите';
+
+  @override
+  String get scanQrCode => 'Сканировать QR-код';
+
+  @override
+  String get enterMacManually => 'Или введите MAC-адрес вручную';
+
+  @override
+  String get logout => 'Выйти';
+
+  @override
+  String get skipAuth => 'Продолжить без регистрации';
 }
