@@ -75,35 +75,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           tooltip: l10n.toggleTheme,
                         ),
                       ),
-                      RadioListTile<ThemeMode>(
-                        title: Text(l10n.light),
-                        value: ThemeMode.light,
+                      RadioGroup<ThemeMode>(
                         groupValue: _themeService.themeMode,
                         onChanged: (value) {
                           if (value != null) {
                             _themeService.setThemeMode(value);
                           }
                         },
-                      ),
-                      RadioListTile<ThemeMode>(
-                        title: Text(l10n.dark),
-                        value: ThemeMode.dark,
-                        groupValue: _themeService.themeMode,
-                        onChanged: (value) {
-                          if (value != null) {
-                            _themeService.setThemeMode(value);
-                          }
-                        },
-                      ),
-                      RadioListTile<ThemeMode>(
-                        title: Text(l10n.system),
-                        value: ThemeMode.system,
-                        groupValue: _themeService.themeMode,
-                        onChanged: (value) {
-                          if (value != null) {
-                            _themeService.setThemeMode(value);
-                          }
-                        },
+                        child: Column(
+                          children: [
+                            RadioListTile<ThemeMode>(
+                              title: Text(l10n.light),
+                              value: ThemeMode.light,
+                            ),
+                            RadioListTile<ThemeMode>(
+                              title: Text(l10n.dark),
+                              value: ThemeMode.dark,
+                            ),
+                            RadioListTile<ThemeMode>(
+                              title: Text(l10n.system),
+                              value: ThemeMode.system,
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   );
@@ -123,35 +117,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         title: Text(l10nInner.language),
                         subtitle: Text(_languageService.currentLanguage.nativeName),
                       ),
-                      RadioListTile<AppLanguage>(
-                        title: Text(l10nInner.english),
-                        value: AppLanguage.english,
+                      RadioGroup<AppLanguage>(
                         groupValue: _languageService.currentLanguage,
                         onChanged: (value) {
                           if (value != null) {
                             _languageService.setLanguage(value);
                           }
                         },
-                      ),
-                      RadioListTile<AppLanguage>(
-                        title: Text(l10nInner.russian),
-                        value: AppLanguage.russian,
-                        groupValue: _languageService.currentLanguage,
-                        onChanged: (value) {
-                          if (value != null) {
-                            _languageService.setLanguage(value);
-                          }
-                        },
-                      ),
-                      RadioListTile<AppLanguage>(
-                        title: Text(l10nInner.chinese),
-                        value: AppLanguage.chinese,
-                        groupValue: _languageService.currentLanguage,
-                        onChanged: (value) {
-                          if (value != null) {
-                            _languageService.setLanguage(value);
-                          }
-                        },
+                        child: Column(
+                          children: [
+                            RadioListTile<AppLanguage>(
+                              title: Text(l10nInner.english),
+                              value: AppLanguage.english,
+                            ),
+                            RadioListTile<AppLanguage>(
+                              title: Text(l10nInner.russian),
+                              value: AppLanguage.russian,
+                            ),
+                            RadioListTile<AppLanguage>(
+                              title: Text(l10nInner.chinese),
+                              value: AppLanguage.chinese,
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   );

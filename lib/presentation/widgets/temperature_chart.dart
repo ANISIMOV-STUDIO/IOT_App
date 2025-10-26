@@ -27,7 +27,14 @@ class TemperatureChart extends StatefulWidget {
 }
 
 class _TemperatureChartState extends State<TemperatureChart> {
-  int? _touchedIndex;
+  // CRITICAL FIX: Use ValueNotifier instead of setState for 30-60x/sec updates
+  final ValueNotifier<int?> _touchedIndexNotifier = ValueNotifier<int?>(null);
+
+  @override
+  void dispose() {
+    _touchedIndexNotifier.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,12 +105,17 @@ class _TemperatureChartState extends State<TemperatureChart> {
           ),
           const SizedBox(height: 32),
 
-          // Chart
+          // Chart - CRITICAL FIX: ValueListenableBuilder for touch updates
           SizedBox(
             height: 220,
-            child: LineChart(
-              _buildChartData(modeColor, modeGradient, isDark),
-              duration: const Duration(milliseconds: 250),
+            child: ValueListenableBuilder<int?>(
+              valueListenable: _touchedIndexNotifier,
+              builder: (context, touchedIndex, child) {
+                return LineChart(
+                  _buildChartData(modeColor, modeGradient, isDark, touchedIndex),
+                  duration: const Duration(milliseconds: 250),
+                );
+              },
             ),
           ),
 
@@ -125,7 +137,7 @@ class _TemperatureChartState extends State<TemperatureChart> {
                 width: 1,
                 height: 40,
                 color: (isDark ? AppTheme.darkBorder : AppTheme.lightBorder)
-                    .withOpacity(0.3),
+                    .withValues(alpha: 0.3),
               ),
               _buildStatItem(
                 context,
@@ -139,7 +151,7 @@ class _TemperatureChartState extends State<TemperatureChart> {
                 width: 1,
                 height: 40,
                 color: (isDark ? AppTheme.darkBorder : AppTheme.lightBorder)
-                    .withOpacity(0.3),
+                    .withValues(alpha: 0.3),
               ),
               _buildStatItem(
                 context,
@@ -233,6 +245,7 @@ class _TemperatureChartState extends State<TemperatureChart> {
     Color modeColor,
     LinearGradient modeGradient,
     bool isDark,
+    int? touchedIndex,
   ) {
     final spots = widget.readings.asMap().entries.map((entry) {
       return FlSpot(
@@ -255,14 +268,14 @@ class _TemperatureChartState extends State<TemperatureChart> {
         getDrawingHorizontalLine: (value) {
           return FlLine(
             color: (isDark ? AppTheme.darkBorder : AppTheme.lightBorder)
-                .withOpacity(0.2),
+                .withValues(alpha: 0.2),
             strokeWidth: 1,
           );
         },
         getDrawingVerticalLine: (value) {
           return FlLine(
             color: (isDark ? AppTheme.darkBorder : AppTheme.lightBorder)
-                .withOpacity(0.2),
+                .withValues(alpha: 0.2),
             strokeWidth: 1,
           );
         },
@@ -328,7 +341,7 @@ class _TemperatureChartState extends State<TemperatureChart> {
         show: true,
         border: Border.all(
           color: (isDark ? AppTheme.darkBorder : AppTheme.lightBorder)
-              .withOpacity(0.3),
+              .withValues(alpha: 0.3),
           width: 1.5,
         ),
       ),
@@ -348,7 +361,7 @@ class _TemperatureChartState extends State<TemperatureChart> {
             show: true,
             getDotPainter: (spot, percent, barData, index) {
               return FlDotCirclePainter(
-                radius: _touchedIndex == index ? 5 : 0,
+                radius: touchedIndex == index ? 5 : 0,
                 color: Colors.white,
                 strokeWidth: 2,
                 strokeColor: modeColor,
@@ -361,9 +374,9 @@ class _TemperatureChartState extends State<TemperatureChart> {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                modeGradient.colors[0].withOpacity(0.3),
-                modeGradient.colors[1].withOpacity(0.1),
-                modeGradient.colors[1].withOpacity(0.0),
+                modeGradient.colors[0].withValues(alpha: 0.3),
+                modeGradient.colors[1].withValues(alpha: 0.1),
+                modeGradient.colors[1].withValues(alpha: 0.0),
               ],
             ),
           ),
@@ -386,15 +399,14 @@ class _TemperatureChartState extends State<TemperatureChart> {
       ],
       lineTouchData: LineTouchData(
         enabled: true,
+        // CRITICAL FIX: Use ValueNotifier instead of setState (30-60x/sec)
         touchCallback: (event, response) {
-          setState(() {
-            if (response?.lineBarSpots != null &&
-                response!.lineBarSpots!.isNotEmpty) {
-              _touchedIndex = response.lineBarSpots![0].spotIndex;
-            } else {
-              _touchedIndex = null;
-            }
-          });
+          if (response?.lineBarSpots != null &&
+              response!.lineBarSpots!.isNotEmpty) {
+            _touchedIndexNotifier.value = response.lineBarSpots![0].spotIndex;
+          } else {
+            _touchedIndexNotifier.value = null;
+          }
         },
         touchTooltipData: LineTouchTooltipData(
           tooltipBgColor: modeColor,

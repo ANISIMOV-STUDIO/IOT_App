@@ -119,11 +119,11 @@ class _ResponsiveShellState extends State<ResponsiveShell>
                       end: Alignment.bottomCenter,
                       colors: [
                         (isDark ? AppTheme.darkBorder : AppTheme.lightBorder)
-                            .withOpacity(0.1),
+                            .withValues(alpha: 0.1),
                         (isDark ? AppTheme.darkBorder : AppTheme.lightBorder)
-                            .withOpacity(0.3),
+                            .withValues(alpha: 0.3),
                         (isDark ? AppTheme.darkBorder : AppTheme.lightBorder)
-                            .withOpacity(0.1),
+                            .withValues(alpha: 0.1),
                       ],
                     ),
                   ),
@@ -149,7 +149,7 @@ class _ResponsiveShellState extends State<ResponsiveShell>
         color: isDark ? AppTheme.darkSurface : Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(isDark ? 0.3 : 0.1),
+            color: Colors.black.withValues(alpha:isDark ? 0.3 : 0.1),
             blurRadius: 20,
             offset: const Offset(0, -4),
           ),
@@ -197,7 +197,7 @@ class _ResponsiveShellState extends State<ResponsiveShell>
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF6366F1).withOpacity(0.3),
+                  color: const Color(0xFF6366F1).withValues(alpha: 0.3),
                   blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),
@@ -316,7 +316,7 @@ class _ModernNavButtonState extends State<_ModernNavButton>
             boxShadow: widget.isSelected
                 ? [
                     BoxShadow(
-                      color: widget.item.gradient.colors[0].withOpacity(0.3),
+                      color: widget.item.gradient.colors[0].withValues(alpha: 0.3),
                       blurRadius: 8,
                       offset: const Offset(0, 2),
                     ),
@@ -416,13 +416,13 @@ class _ModernRailButtonState extends State<_ModernRailButton>
             color: widget.isSelected
                 ? null
                 : (widget.isDark
-                    ? AppTheme.darkSurface.withOpacity(0.5)
+                    ? AppTheme.darkSurface.withValues(alpha: 0.5)
                     : AppTheme.lightSurface),
             borderRadius: BorderRadius.circular(16),
             boxShadow: widget.isSelected
                 ? [
                     BoxShadow(
-                      color: widget.item.gradient.colors[0].withOpacity(0.4),
+                      color: widget.item.gradient.colors[0].withValues(alpha: 0.4),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),

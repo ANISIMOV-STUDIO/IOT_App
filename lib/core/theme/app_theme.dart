@@ -68,23 +68,21 @@ class AppTheme {
         secondary: accentColor,
         tertiary: secondaryColor,
         error: errorColor,
-        surface: lightSurface,
-        background: lightBackground,
+        surface: lightBackground,
         onPrimary: Colors.white,
         onSecondary: Colors.white,
         onSurface: lightTextPrimary,
-        onBackground: lightTextPrimary,
       ),
       scaffoldBackgroundColor: lightBackground,
 
       // App Bar Theme
-      appBarTheme: AppBarTheme(
+      appBarTheme: const AppBarTheme(
         elevation: 0,
         centerTitle: false,
         scrolledUnderElevation: 0,
         backgroundColor: Colors.transparent,
         foregroundColor: lightTextPrimary,
-        titleTextStyle: const TextStyle(
+        titleTextStyle: TextStyle(
           fontSize: 24,
           fontWeight: FontWeight.bold,
           color: lightTextPrimary,
@@ -96,11 +94,11 @@ class AppTheme {
       cardTheme: CardThemeData(
         color: lightCard,
         elevation: 0,
-        shadowColor: Colors.black.withOpacity(0.05),
+        shadowColor: Colors.black.withValues(alpha: 0.05),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
           side: BorderSide(
-            color: lightBorder.withOpacity(0.5),
+            color: lightBorder.withValues(alpha: 0.5),
             width: 1,
           ),
         ),
@@ -135,11 +133,11 @@ class AppTheme {
         fillColor: lightSurface,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: lightBorder),
+          borderSide: const BorderSide(color: lightBorder),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: lightBorder),
+          borderSide: const BorderSide(color: lightBorder),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -199,7 +197,7 @@ class AppTheme {
 
       // Divider Theme
       dividerTheme: DividerThemeData(
-        color: lightBorder.withOpacity(0.5),
+        color: lightBorder.withValues(alpha: 0.5),
         thickness: 1,
         space: 1,
       ),
@@ -216,23 +214,21 @@ class AppTheme {
         secondary: accentColor,
         tertiary: secondaryColor,
         error: errorColor,
-        surface: darkSurface,
-        background: darkBackground,
+        surface: darkBackground,
         onPrimary: darkBackground,
         onSecondary: darkBackground,
         onSurface: darkTextPrimary,
-        onBackground: darkTextPrimary,
       ),
       scaffoldBackgroundColor: darkBackground,
 
       // App Bar Theme
-      appBarTheme: AppBarTheme(
+      appBarTheme: const AppBarTheme(
         elevation: 0,
         centerTitle: false,
         scrolledUnderElevation: 0,
         backgroundColor: Colors.transparent,
         foregroundColor: darkTextPrimary,
-        titleTextStyle: const TextStyle(
+        titleTextStyle: TextStyle(
           fontSize: 24,
           fontWeight: FontWeight.bold,
           color: darkTextPrimary,
@@ -242,13 +238,13 @@ class AppTheme {
 
       // Card Theme with glassmorphism effect
       cardTheme: CardThemeData(
-        color: darkCard.withOpacity(0.7),
+        color: darkCard.withValues(alpha: 0.7),
         elevation: 0,
-        shadowColor: Colors.black.withOpacity(0.3),
+        shadowColor: Colors.black.withValues(alpha: 0.3),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
           side: BorderSide(
-            color: darkBorder.withOpacity(0.3),
+            color: darkBorder.withValues(alpha: 0.3),
             width: 1,
           ),
         ),
@@ -283,11 +279,11 @@ class AppTheme {
         fillColor: darkSurface,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: darkBorder),
+          borderSide: const BorderSide(color: darkBorder),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: darkBorder),
+          borderSide: const BorderSide(color: darkBorder),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -347,7 +343,7 @@ class AppTheme {
 
       // Divider Theme
       dividerTheme: DividerThemeData(
-        color: darkBorder.withOpacity(0.3),
+        color: darkBorder.withValues(alpha: 0.3),
         thickness: 1,
         space: 1,
       ),
@@ -435,12 +431,12 @@ class AppTheme {
   /// Get subtle shadow for cards (light theme)
   static List<BoxShadow> get cardShadow => [
         BoxShadow(
-          color: Colors.black.withOpacity(0.04),
+          color: Colors.black.withValues(alpha: 0.04),
           blurRadius: 10,
           offset: const Offset(0, 2),
         ),
         BoxShadow(
-          color: Colors.black.withOpacity(0.02),
+          color: Colors.black.withValues(alpha: 0.02),
           blurRadius: 20,
           offset: const Offset(0, 4),
         ),
@@ -453,18 +449,18 @@ class AppTheme {
     double borderRadius = 20,
   }) {
     return BoxDecoration(
-      color: color ?? (isDark ? darkCard.withOpacity(0.5) : lightCard),
+      color: color ?? (isDark ? darkCard.withValues(alpha: 0.5) : lightCard),
       borderRadius: BorderRadius.circular(borderRadius),
       border: Border.all(
         color: isDark
-            ? Colors.white.withOpacity(0.1)
-            : Colors.black.withOpacity(0.05),
+            ? Colors.white.withValues(alpha: 0.1)
+            : Colors.black.withValues(alpha: 0.05),
         width: 1,
       ),
       boxShadow: isDark
           ? [
               BoxShadow(
-                color: Colors.black.withOpacity(0.2),
+                color: Colors.black.withValues(alpha: 0.2),
                 blurRadius: 20,
                 offset: const Offset(0, 8),
               ),

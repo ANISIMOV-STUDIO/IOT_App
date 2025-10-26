@@ -112,7 +112,7 @@ class _ModeSelectorState extends State<ModeSelector>
                           boxShadow: [
                             BoxShadow(
                               color: AppTheme.getModeColor(widget.selectedMode)
-                                  .withOpacity(0.4),
+                                  .withValues(alpha: 0.4),
                               blurRadius: 12,
                               offset: const Offset(0, 4),
                             ),
@@ -135,7 +135,7 @@ class _ModeSelectorState extends State<ModeSelector>
           Container(
             decoration: BoxDecoration(
               color: isDark
-                  ? AppTheme.darkSurface.withOpacity(0.5)
+                  ? AppTheme.darkSurface.withValues(alpha: 0.5)
                   : AppTheme.lightSurface,
               borderRadius: BorderRadius.circular(16),
             ),
@@ -269,11 +269,11 @@ class _ModeSelectorState extends State<ModeSelector>
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: isDark
-            ? AppTheme.darkSurface.withOpacity(0.3)
-            : AppTheme.lightSurface.withOpacity(0.5),
+            ? AppTheme.darkSurface.withValues(alpha: 0.3)
+            : AppTheme.lightSurface.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: AppTheme.getModeColor(mode).withOpacity(0.3),
+          color: AppTheme.getModeColor(mode).withValues(alpha: 0.3),
           width: 1,
         ),
       ),

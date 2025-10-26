@@ -64,6 +64,13 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
     if (widget.targetTemp != oldWidget.targetTemp) {
       _currentValue = widget.targetTemp;
     }
+
+    // CRITICAL FIX: Stop animation when disabled to save 60 FPS + battery
+    if (!widget.enabled && oldWidget.enabled) {
+      _pulseController.stop();
+    } else if (widget.enabled && !oldWidget.enabled) {
+      _pulseController.repeat(reverse: true);
+    }
   }
 
   @override
@@ -114,7 +121,7 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        color: modeColor.withOpacity(0.3),
+                        color: modeColor.withValues(alpha: 0.3),
                         blurRadius: 8,
                         offset: const Offset(0, 2),
                       ),
@@ -146,10 +153,11 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
 
           const SizedBox(height: 24),
 
-          // Circular Slider
-          Stack(
-            alignment: Alignment.center,
-            children: [
+          // Circular Slider - RepaintBoundary isolates repaints
+          RepaintBoundary(
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
               // Animated pulse effect
               if (widget.enabled)
                 AnimatedBuilder(
@@ -164,8 +172,8 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
                           shape: BoxShape.circle,
                           gradient: RadialGradient(
                             colors: [
-                              modeColor.withOpacity(0.1),
-                              modeColor.withOpacity(0.0),
+                              modeColor.withValues(alpha: 0.1),
+                              modeColor.withValues(alpha: 0.0),
                             ],
                           ),
                         ),
@@ -263,8 +271,8 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
                     maxValue: AppConstants.maxTemperature,
                     gradient: widget.enabled ? modeGradient : null,
                     trackColor: isDark
-                        ? AppTheme.darkBorder.withOpacity(0.3)
-                        : AppTheme.lightBorder.withOpacity(0.5),
+                        ? AppTheme.darkBorder.withValues(alpha: 0.3)
+                        : AppTheme.lightBorder.withValues(alpha: 0.5),
                     isDark: isDark,
                   ),
                   child: SizedBox(
@@ -360,16 +368,16 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
                             ),
                             decoration: BoxDecoration(
                               color: isDark
-                                  ? AppTheme.darkSurface.withOpacity(0.5)
-                                  : AppTheme.lightSurface.withOpacity(0.8),
+                                  ? AppTheme.darkSurface.withValues(alpha: 0.5)
+                                  : AppTheme.lightSurface.withValues(alpha: 0.8),
                               borderRadius: BorderRadius.circular(20),
                               border: Border.all(
                                 color: widget.enabled
-                                    ? modeColor.withOpacity(0.3)
+                                    ? modeColor.withValues(alpha: 0.3)
                                     : (isDark
                                             ? AppTheme.darkBorder
                                             : AppTheme.lightBorder)
-                                        .withOpacity(0.3),
+                                        .withValues(alpha: 0.3),
                                 width: 1.5,
                               ),
                             ),
@@ -410,7 +418,8 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
                 ),
               ),
                 ),
-            ],
+              ],
+            ),
           ),
 
           const SizedBox(height: 20),
@@ -430,7 +439,7 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
                 width: 1,
                 height: 40,
                 color: (isDark ? AppTheme.darkBorder : AppTheme.lightBorder)
-                    .withOpacity(0.3),
+                    .withValues(alpha: 0.3),
               ),
               _buildRangeIndicator(
                 context,
@@ -551,7 +560,7 @@ class _CircularSliderPainter extends CustomPainter {
 
       // Shadow layer for depth
       final shadowPaint = Paint()
-        ..color = Colors.black.withOpacity(0.2)
+        ..color = Colors.black.withValues(alpha: 0.2)
         ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
 
       canvas.drawCircle(Offset(thumbX, thumbY + 2), 16, shadowPaint);

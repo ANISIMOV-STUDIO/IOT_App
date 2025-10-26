@@ -3,8 +3,10 @@
 /// Modern card widget with gradients, glassmorphism, and animations
 library;
 
-import 'package:flutter/material.dart';
 import 'dart:ui';
+
+import 'package:flutter/material.dart';
+
 import '../../core/theme/app_theme.dart';
 import '../../domain/entities/hvac_unit.dart';
 import '../../generated/l10n/app_localizations.dart';
@@ -63,11 +65,14 @@ class _HvacUnitCardState extends State<HvacUnitCard>
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final l10n = AppLocalizations.of(context)!;
+    // CRITICAL FIX: Cache gradients once per build instead of 20+ times
     final modeGradient = AppTheme.getModeGradient(widget.unit.mode, isDark: isDark);
     final modeIcon = AppTheme.getModeIcon(widget.unit.mode);
     final modeColor = AppTheme.getModeColor(widget.unit.mode);
 
-    return ScaleTransition(
+    // CRITICAL FIX: RepaintBoundary isolates card repaints
+    return RepaintBoundary(
+      child: ScaleTransition(
       scale: _scaleAnimation,
       child: GestureDetector(
         onTapDown: _handleTapDown,
@@ -83,12 +88,12 @@ class _HvacUnitCardState extends State<HvacUnitCard>
                     end: Alignment.bottomRight,
                     colors: isDark
                         ? [
-                            modeColor.withOpacity(0.15),
-                            modeColor.withOpacity(0.05),
+                            modeColor.withValues(alpha: 0.15),
+                            modeColor.withValues(alpha: 0.05),
                           ]
                         : [
-                            modeColor.withOpacity(0.1),
-                            modeColor.withOpacity(0.03),
+                            modeColor.withValues(alpha: 0.1),
+                            modeColor.withValues(alpha: 0.03),
                           ],
                   )
                 : null,
@@ -97,16 +102,16 @@ class _HvacUnitCardState extends State<HvacUnitCard>
                 : null,
             border: Border.all(
               color: widget.unit.power
-                  ? modeColor.withOpacity(isDark ? 0.3 : 0.2)
+                  ? modeColor.withValues(alpha: isDark ? 0.3 : 0.2)
                   : (isDark ? AppTheme.darkBorder : AppTheme.lightBorder)
-                      .withOpacity(0.5),
+                      .withValues(alpha: 0.5),
               width: 1.5,
             ),
             boxShadow: [
               BoxShadow(
                 color: widget.unit.power
-                    ? modeColor.withOpacity(isDark ? 0.2 : 0.15)
-                    : Colors.black.withOpacity(isDark ? 0.3 : 0.05),
+                    ? modeColor.withValues(alpha: isDark ? 0.2 : 0.15)
+                    : Colors.black.withValues(alpha: isDark ? 0.3 : 0.05),
                 blurRadius: 20,
                 offset: const Offset(0, 8),
               ),
@@ -114,17 +119,34 @@ class _HvacUnitCardState extends State<HvacUnitCard>
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(24),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(
-                sigmaX: isDark ? 10 : 0,
-                sigmaY: isDark ? 10 : 0,
-              ),
-              child: Container(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
+            // PERFORMANCE FIX: Only use expensive BackdropFilter in dark mode
+            child: isDark
+                ? BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                    child: _buildCardContent(context, isDark, l10n, modeGradient, modeIcon, modeColor),
+                  )
+                : _buildCardContent(context, isDark, l10n, modeGradient, modeIcon, modeColor),
+          ),
+        ),
+      ),
+      ),
+    );
+  }
+
+  Widget _buildCardContent(
+    BuildContext context,
+    bool isDark,
+    AppLocalizations l10n,
+    LinearGradient modeGradient,
+    IconData modeIcon,
+    Color modeColor,
+  ) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
                     // Header: Name and Power Status
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -152,7 +174,7 @@ class _HvacUnitCardState extends State<HvacUnitCard>
                                 ? LinearGradient(
                                     colors: [
                                       AppTheme.successColor,
-                                      AppTheme.successColor.withOpacity(0.8),
+                                      AppTheme.successColor.withValues(alpha: 0.8),
                                     ],
                                   )
                                 : LinearGradient(
@@ -165,7 +187,7 @@ class _HvacUnitCardState extends State<HvacUnitCard>
                             boxShadow: widget.unit.power
                                 ? [
                                     BoxShadow(
-                                      color: AppTheme.successColor.withOpacity(0.4),
+                                      color: AppTheme.successColor.withValues(alpha: 0.4),
                                       blurRadius: 8,
                                       offset: const Offset(0, 2),
                                     ),
@@ -343,8 +365,8 @@ class _HvacUnitCardState extends State<HvacUnitCard>
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
                                   color: isDark
-                                      ? AppTheme.darkBorder.withOpacity(0.5)
-                                      : AppTheme.lightBorder.withOpacity(0.5),
+                                      ? AppTheme.darkBorder.withValues(alpha: 0.5)
+                                      : AppTheme.lightBorder.withValues(alpha: 0.5),
                                 ),
                               ),
                               child: Row(
@@ -404,12 +426,7 @@ class _HvacUnitCardState extends State<HvacUnitCard>
                         ],
                       ),
                     ],
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
+        ],
       ),
     );
   }

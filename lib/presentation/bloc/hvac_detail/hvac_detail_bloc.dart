@@ -68,14 +68,13 @@ class HvacDetailBloc extends Bloc<HvacDetailEvent, HvacDetailState> {
   ) async {
     if (state is! HvacDetailLoaded) return;
 
-    final currentState = state as HvacDetailLoaded;
-    emit(currentState.copyWith(isUpdating: true));
-
     try {
+      // Don't emit intermediate state - reduces rebuilds from 2 to 1
       await updateUnit(
         unitId: unitId,
         power: event.power,
       );
+      // State will update via subscription in _unitSubscription
     } catch (e) {
       emit(HvacDetailError(e.toString()));
     }
@@ -87,10 +86,8 @@ class HvacDetailBloc extends Bloc<HvacDetailEvent, HvacDetailState> {
   ) async {
     if (state is! HvacDetailLoaded) return;
 
-    final currentState = state as HvacDetailLoaded;
-    emit(currentState.copyWith(isUpdating: true));
-
     try {
+      // Don't emit intermediate state - reduces rebuilds
       await updateUnit(
         unitId: unitId,
         targetTemp: event.targetTemp,
@@ -106,10 +103,8 @@ class HvacDetailBloc extends Bloc<HvacDetailEvent, HvacDetailState> {
   ) async {
     if (state is! HvacDetailLoaded) return;
 
-    final currentState = state as HvacDetailLoaded;
-    emit(currentState.copyWith(isUpdating: true));
-
     try {
+      // Don't emit intermediate state - reduces rebuilds
       await updateUnit(
         unitId: unitId,
         mode: event.mode,
@@ -125,10 +120,8 @@ class HvacDetailBloc extends Bloc<HvacDetailEvent, HvacDetailState> {
   ) async {
     if (state is! HvacDetailLoaded) return;
 
-    final currentState = state as HvacDetailLoaded;
-    emit(currentState.copyWith(isUpdating: true));
-
     try {
+      // Don't emit intermediate state - reduces rebuilds
       await updateUnit(
         unitId: unitId,
         fanSpeed: event.fanSpeed,

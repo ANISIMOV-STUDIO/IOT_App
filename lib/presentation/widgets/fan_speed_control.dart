@@ -83,13 +83,13 @@ class FanSpeedControl extends StatelessWidget {
                     gradient: LinearGradient(
                       colors: [
                         modeColor,
-                        modeColor.withOpacity(0.7),
+                        modeColor.withValues(alpha: 0.7),
                       ],
                     ),
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
-                        color: modeColor.withOpacity(0.3),
+                        color: modeColor.withValues(alpha: 0.3),
                         blurRadius: 8,
                         offset: const Offset(0, 2),
                       ),
@@ -124,7 +124,7 @@ class FanSpeedControl extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               color: isDark
-                  ? AppTheme.darkSurface.withOpacity(0.5)
+                  ? AppTheme.darkSurface.withValues(alpha: 0.5)
                   : AppTheme.lightSurface,
               borderRadius: BorderRadius.circular(16),
             ),
@@ -224,7 +224,7 @@ class FanSpeedControl extends StatelessWidget {
                   (index) => Positioned(
                     child: Icon(
                       Icons.circle,
-                      color: Colors.white.withOpacity(0.2 - index * 0.05),
+                      color: Colors.white.withValues(alpha: 0.2 - index * 0.05),
                       size: 24 + index * 3.0,
                     ),
                   ),
@@ -280,11 +280,11 @@ class FanSpeedControl extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: isDark
-            ? AppTheme.darkSurface.withOpacity(0.3)
-            : AppTheme.lightSurface.withOpacity(0.5),
+            ? AppTheme.darkSurface.withValues(alpha: 0.3)
+            : AppTheme.lightSurface.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: modeColor.withOpacity(0.3),
+          color: modeColor.withValues(alpha: 0.3),
           width: 1,
         ),
       ),
@@ -298,7 +298,7 @@ class FanSpeedControl extends StatelessWidget {
                   gradient: LinearGradient(
                     colors: [
                       modeColor,
-                      modeColor.withOpacity(0.7),
+                      modeColor.withValues(alpha: 0.7),
                     ],
                   ),
                   borderRadius: BorderRadius.circular(8),
@@ -343,8 +343,8 @@ class FanSpeedControl extends StatelessWidget {
                     value: powerLevels[speed] ?? 0.5,
                     minHeight: 6,
                     backgroundColor: isDark
-                        ? AppTheme.darkBorder.withOpacity(0.3)
-                        : AppTheme.lightBorder.withOpacity(0.5),
+                        ? AppTheme.darkBorder.withValues(alpha: 0.3)
+                        : AppTheme.lightBorder.withValues(alpha: 0.5),
                     valueColor: AlwaysStoppedAnimation<Color>(modeColor),
                   ),
                 ),

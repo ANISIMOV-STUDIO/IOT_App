@@ -81,6 +81,7 @@ class HomeScreen extends StatelessWidget {
                       (context, index) {
                         final unit = units[index];
                         return HvacUnitCard(
+                          key: ValueKey(unit.id), // PERFORMANCE: Preserve state
                           unit: unit,
                           onTap: () {
                             Navigator.of(context).push(
@@ -194,7 +195,7 @@ class HomeScreen extends StatelessWidget {
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFFEF4444).withOpacity(0.3),
+                      color: const Color(0xFFEF4444).withValues(alpha: 0.3),
                       blurRadius: 20,
                       offset: const Offset(0, 8),
                     ),
@@ -233,7 +234,7 @@ class HomeScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFF6366F1).withOpacity(0.3),
+                      color: const Color(0xFF6366F1).withValues(alpha: 0.3),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),
@@ -303,9 +304,9 @@ class HomeScreen extends StatelessWidget {
                   gradient: LinearGradient(
                     colors: [
                       (isDark ? AppTheme.darkTextHint : AppTheme.lightTextHint)
-                          .withOpacity(0.3),
+                          .withValues(alpha: 0.3),
                       (isDark ? AppTheme.darkTextHint : AppTheme.lightTextHint)
-                          .withOpacity(0.1),
+                          .withValues(alpha: 0.1),
                     ],
                   ),
                   shape: BoxShape.circle,
