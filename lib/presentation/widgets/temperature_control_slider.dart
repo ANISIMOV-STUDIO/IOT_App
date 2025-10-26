@@ -35,6 +35,7 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
   late double _currentValue;
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
+  bool _isDragging = false;
 
   @override
   void initState() {
@@ -176,9 +177,38 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
               // Custom Circular Slider with scroll blocking
               GestureDetector(
                 behavior: HitTestBehavior.translucent,
-                onVerticalDragUpdate: widget.enabled ? (_) {} : null, // Block vertical scroll
+                onVerticalDragUpdate: _isDragging && widget.enabled ? (_) {} : null, // Block vertical scroll only when dragging
                 child: GestureDetector(
-                  onPanUpdate: widget.enabled
+                  onPanDown: widget.enabled
+                      ? (details) {
+                          // Check if touch is near the thumb
+                          final RenderBox box = context.findRenderObject() as RenderBox;
+                          final center = Offset(box.size.width / 2, 250 / 2);
+                          final radius = math.min(box.size.width, 250) / 2 - 20;
+
+                          // Calculate current thumb position
+                          final progress = (_currentValue - AppConstants.minTemperature) /
+                              (AppConstants.maxTemperature - AppConstants.minTemperature);
+                          const startAngle = -math.pi * 3 / 4;
+                          const sweepAngle = math.pi * 3 / 2;
+                          final thumbAngle = startAngle + sweepAngle * progress;
+                          final thumbX = center.dx + radius * math.cos(thumbAngle);
+                          final thumbY = center.dy + radius * math.sin(thumbAngle);
+
+                          // Check if touch is within thumb area (expanded for easier touch)
+                          final touchPosition = details.localPosition;
+                          final distanceToThumb = math.sqrt(
+                            math.pow(touchPosition.dx - thumbX, 2) +
+                            math.pow(touchPosition.dy - thumbY, 2)
+                          );
+
+                          // Allow drag if within 40px of thumb (generous touch area)
+                          setState(() {
+                            _isDragging = distanceToThumb <= 40;
+                          });
+                        }
+                      : null,
+                  onPanUpdate: widget.enabled && _isDragging
                       ? (details) {
                           final RenderBox box = context.findRenderObject() as RenderBox;
                           final center = Offset(box.size.width / 2, 250 / 2);
@@ -210,8 +240,20 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
                           }
                         }
                       : null,
-                  onPanEnd: widget.enabled
-                      ? (_) => widget.onChanged(_currentValue)
+                  onPanEnd: widget.enabled && _isDragging
+                      ? (_) {
+                          widget.onChanged(_currentValue);
+                          setState(() {
+                            _isDragging = false;
+                          });
+                        }
+                      : null,
+                  onPanCancel: widget.enabled
+                      ? () {
+                          setState(() {
+                            _isDragging = false;
+                          });
+                        }
                       : null,
                   child: CustomPaint(
                   size: const Size(250, 250),
