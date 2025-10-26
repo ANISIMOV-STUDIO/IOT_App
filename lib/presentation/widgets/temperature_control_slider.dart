@@ -233,11 +233,10 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
                       GestureRecognizerFactoryWithHandlers<TapGestureRecognizer>(
                     () => TapGestureRecognizer(),
                     (TapGestureRecognizer instance) {
-                      instance
-                        ..onTapUp = (details) {
-                          _handlePanUpdate(details.localPosition, const Size(250, 250));
-                          _handlePanEnd();
-                        };
+                      instance.onTapUp = (details) {
+                        _handlePanUpdate(details.localPosition, const Size(250, 250));
+                        _handlePanEnd();
+                      };
                     },
                   ),
                 },

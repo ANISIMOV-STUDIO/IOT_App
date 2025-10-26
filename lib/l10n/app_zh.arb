@@ -69,5 +69,22 @@
   "username": "用户名",
   "settingsSaved": "设置已保存。请重启应用以应用更改。",
   "aboutApp": "关于",
-  "appDescription": "跨平台HVAC管理应用，集成MQTT。"
+  "appDescription": "跨平台HVAC管理应用，集成MQTT。",
+
+  "deviceManagement": "设备管理",
+  "addDevice": "添加设备",
+  "macAddress": "MAC地址",
+  "deviceName": "设备名称",
+  "livingRoom": "客厅",
+  "location": "位置",
+  "optional": "可选",
+  "fillRequiredFields": "请填写所有必填字段",
+  "deviceAdded": "设备添加成功",
+  "removeDevice": "删除设备",
+  "confirmRemoveDevice": "您确定要删除 {name} 吗？",
+  "remove": "删除",
+  "deviceRemoved": "设备删除成功",
+  "cancel": "取消",
+  "add": "添加",
+  "mqttModeRequired": "设备管理需要MQTT模式"
 }

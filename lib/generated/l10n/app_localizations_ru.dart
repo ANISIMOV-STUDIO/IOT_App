@@ -224,4 +224,56 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get appDescription =>
       'Кросс-платформенное приложение для управления HVAC с интеграцией MQTT.';
+
+  @override
+  String get deviceManagement => 'Управление устройствами';
+
+  @override
+  String get addDevice => 'Добавить устройство';
+
+  @override
+  String get macAddress => 'MAC-адрес';
+
+  @override
+  String get deviceName => 'Имя устройства';
+
+  @override
+  String get livingRoom => 'Гостиная';
+
+  @override
+  String get location => 'Расположение';
+
+  @override
+  String get optional => 'Необязательно';
+
+  @override
+  String get fillRequiredFields =>
+      'Пожалуйста, заполните все обязательные поля';
+
+  @override
+  String get deviceAdded => 'Устройство успешно добавлено';
+
+  @override
+  String get removeDevice => 'Удалить устройство';
+
+  @override
+  String confirmRemoveDevice(String name) {
+    return 'Вы уверены, что хотите удалить $name?';
+  }
+
+  @override
+  String get remove => 'Удалить';
+
+  @override
+  String get deviceRemoved => 'Устройство успешно удалено';
+
+  @override
+  String get cancel => 'Отмена';
+
+  @override
+  String get add => 'Добавить';
+
+  @override
+  String get mqttModeRequired =>
+      'Для управления устройствами требуется режим MQTT';
 }

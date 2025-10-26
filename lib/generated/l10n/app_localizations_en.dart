@@ -222,4 +222,54 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get appDescription =>
       'Cross-platform HVAC management application with MQTT integration.';
+
+  @override
+  String get deviceManagement => 'Device Management';
+
+  @override
+  String get addDevice => 'Add Device';
+
+  @override
+  String get macAddress => 'MAC Address';
+
+  @override
+  String get deviceName => 'Device Name';
+
+  @override
+  String get livingRoom => 'Living Room';
+
+  @override
+  String get location => 'Location';
+
+  @override
+  String get optional => 'Optional';
+
+  @override
+  String get fillRequiredFields => 'Please fill in all required fields';
+
+  @override
+  String get deviceAdded => 'Device added successfully';
+
+  @override
+  String get removeDevice => 'Remove Device';
+
+  @override
+  String confirmRemoveDevice(String name) {
+    return 'Are you sure you want to remove $name?';
+  }
+
+  @override
+  String get remove => 'Remove';
+
+  @override
+  String get deviceRemoved => 'Device removed successfully';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get add => 'Add';
+
+  @override
+  String get mqttModeRequired => 'MQTT mode is required for device management';
 }

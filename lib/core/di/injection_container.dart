@@ -92,10 +92,12 @@ Future<void> init() async {
   // Repository
   final useMqtt = EnvConfig.useMqtt;
 
+  // Always register MqttDatasource (needed for device management)
+  sl.registerLazySingleton<MqttDatasource>(() => MqttDatasource());
+
   if (useMqtt) {
     // MQTT Implementation
     debugPrint('Initializing MQTT mode...');
-    sl.registerLazySingleton<MqttDatasource>(() => MqttDatasource());
     sl.registerLazySingleton<HvacRepository>(
       () => HvacRepositoryImpl(sl()),
     );

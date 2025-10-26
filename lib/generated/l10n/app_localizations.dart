@@ -513,6 +513,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cross-platform HVAC management application with MQTT integration.'**
   String get appDescription;
+
+  /// Device management screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Device Management'**
+  String get deviceManagement;
+
+  /// Add device button label
+  ///
+  /// In en, this message translates to:
+  /// **'Add Device'**
+  String get addDevice;
+
+  /// MAC address label
+  ///
+  /// In en, this message translates to:
+  /// **'MAC Address'**
+  String get macAddress;
+
+  /// Device name label
+  ///
+  /// In en, this message translates to:
+  /// **'Device Name'**
+  String get deviceName;
+
+  /// Example room name
+  ///
+  /// In en, this message translates to:
+  /// **'Living Room'**
+  String get livingRoom;
+
+  /// Location label
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get location;
+
+  /// Optional field hint
+  ///
+  /// In en, this message translates to:
+  /// **'Optional'**
+  String get optional;
+
+  /// Validation error for empty required fields
+  ///
+  /// In en, this message translates to:
+  /// **'Please fill in all required fields'**
+  String get fillRequiredFields;
+
+  /// Success message when device is added
+  ///
+  /// In en, this message translates to:
+  /// **'Device added successfully'**
+  String get deviceAdded;
+
+  /// Remove device dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Remove Device'**
+  String get removeDevice;
+
+  /// Confirmation message for removing device
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to remove {name}?'**
+  String confirmRemoveDevice(String name);
+
+  /// Remove button label
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get remove;
+
+  /// Success message when device is removed
+  ///
+  /// In en, this message translates to:
+  /// **'Device removed successfully'**
+  String get deviceRemoved;
+
+  /// Cancel button label
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// Add button label
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get add;
+
+  /// Error message when trying to manage devices without MQTT
+  ///
+  /// In en, this message translates to:
+  /// **'MQTT mode is required for device management'**
+  String get mqttModeRequired;
 }
 
 class _AppLocalizationsDelegate

@@ -16,6 +16,7 @@ class HvacUnitModel extends HvacUnit {
     required super.mode,
     required super.fanSpeed,
     required super.timestamp,
+    super.macAddress,
   });
 
   /// Create from JSON
@@ -29,6 +30,7 @@ class HvacUnitModel extends HvacUnit {
       mode: json['mode'] as String,
       fanSpeed: json['fanSpeed'] as String,
       timestamp: DateTime.parse(json['timestamp'] as String),
+      macAddress: json['macAddress'] as String?,
     );
   }
 
@@ -48,6 +50,7 @@ class HvacUnitModel extends HvacUnit {
       'mode': mode,
       'fanSpeed': fanSpeed,
       'timestamp': timestamp.toIso8601String(),
+      if (macAddress != null) 'macAddress': macAddress,
     };
   }
 
@@ -67,6 +70,7 @@ class HvacUnitModel extends HvacUnit {
       mode: entity.mode,
       fanSpeed: entity.fanSpeed,
       timestamp: entity.timestamp,
+      macAddress: entity.macAddress,
     );
   }
 
@@ -81,6 +85,7 @@ class HvacUnitModel extends HvacUnit {
       mode: mode,
       fanSpeed: fanSpeed,
       timestamp: timestamp,
+      macAddress: macAddress,
     );
   }
 }

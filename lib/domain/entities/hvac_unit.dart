@@ -14,6 +14,7 @@ class HvacUnit extends Equatable {
   final String mode; // cooling, heating, fan, auto
   final String fanSpeed; // low, medium, high, auto
   final DateTime timestamp;
+  final String? macAddress; // MAC address of the device
 
   const HvacUnit({
     required this.id,
@@ -24,6 +25,7 @@ class HvacUnit extends Equatable {
     required this.mode,
     required this.fanSpeed,
     required this.timestamp,
+    this.macAddress,
   });
 
   /// Create a copy with updated fields
@@ -36,6 +38,7 @@ class HvacUnit extends Equatable {
     String? mode,
     String? fanSpeed,
     DateTime? timestamp,
+    String? macAddress,
   }) {
     return HvacUnit(
       id: id ?? this.id,
@@ -46,6 +49,7 @@ class HvacUnit extends Equatable {
       mode: mode ?? this.mode,
       fanSpeed: fanSpeed ?? this.fanSpeed,
       timestamp: timestamp ?? this.timestamp,
+      macAddress: macAddress ?? this.macAddress,
     );
   }
 
@@ -59,6 +63,7 @@ class HvacUnit extends Equatable {
         mode,
         fanSpeed,
         timestamp,
+        macAddress,
       ];
 
   @override

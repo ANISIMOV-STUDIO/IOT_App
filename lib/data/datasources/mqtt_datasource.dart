@@ -377,6 +377,108 @@ class MqttDatasource {
     debugPrint('MQTT command sent: $topic -> $payload');
   }
 
+  /// Add a new HVAC device by MAC address
+  Future<void> addDevice({
+    required String macAddress,
+    required String name,
+    String? location,
+  }) async {
+    if (_client == null || !isConnected) {
+      throw Exception('MQTT not connected');
+    }
+
+    // Validate MAC address format
+    final macRegex = RegExp(r'^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$');
+    if (!macRegex.hasMatch(macAddress)) {
+      throw ArgumentError('Invalid MAC address format');
+    }
+
+    // Normalize MAC address (remove : or - and convert to uppercase)
+    final normalizedMac = macAddress.replaceAll(RegExp(r'[:-]'), '').toUpperCase();
+
+    final deviceConfig = {
+      'action': 'add',
+      'mac': normalizedMac,
+      'name': name,
+      'location': location ?? 'Unknown',
+      'timestamp': DateTime.now().toIso8601String(),
+    };
+
+    const topic = 'hvac/devices/config';
+    final payload = json.encode(deviceConfig);
+
+    final builder = MqttClientPayloadBuilder();
+    builder.addString(payload);
+
+    _client!.publishMessage(
+      topic,
+      MqttQos.atLeastOnce,
+      builder.payload!,
+    );
+
+    debugPrint('Device add command sent: $topic -> $payload');
+  }
+
+  /// Remove an HVAC device by MAC address or unit ID
+  Future<void> removeDevice({
+    String? macAddress,
+    String? unitId,
+  }) async {
+    if (_client == null || !isConnected) {
+      throw Exception('MQTT not connected');
+    }
+
+    if (macAddress == null && unitId == null) {
+      throw ArgumentError('Either macAddress or unitId must be provided');
+    }
+
+    String identifier;
+    String identifierType;
+
+    if (macAddress != null) {
+      // Validate MAC address format
+      final macRegex = RegExp(r'^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$');
+      if (!macRegex.hasMatch(macAddress)) {
+        throw ArgumentError('Invalid MAC address format');
+      }
+      identifier = macAddress.replaceAll(RegExp(r'[:-]'), '').toUpperCase();
+      identifierType = 'mac';
+    } else {
+      identifier = unitId!;
+      identifierType = 'id';
+    }
+
+    final deviceConfig = {
+      'action': 'remove',
+      identifierType: identifier,
+      'timestamp': DateTime.now().toIso8601String(),
+    };
+
+    const topic = 'hvac/devices/config';
+    final payload = json.encode(deviceConfig);
+
+    final builder = MqttClientPayloadBuilder();
+    builder.addString(payload);
+
+    _client!.publishMessage(
+      topic,
+      MqttQos.atLeastOnce,
+      builder.payload!,
+    );
+
+    // Remove from local cache if removing by unitId
+    if (unitId != null) {
+      _unitsCache.remove(unitId);
+      _unitControllers[unitId]?.close();
+      _unitControllers.remove(unitId);
+      _temperatureHistory.remove(unitId);
+      // Update units stream
+      _unitsController.add(_unitsCache.values.toList());
+    }
+
+    debugPrint('Device remove command sent: $topic -> $payload');
+  }
+
   // Callbacks
   void _onConnected() {
     debugPrint('MQTT connected callback');

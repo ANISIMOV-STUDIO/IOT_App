@@ -362,5 +362,90 @@
   "appDescription": "Cross-platform HVAC management application with MQTT integration.",
   "@appDescription": {
     "description": "Application description"
+  },
+
+  "deviceManagement": "Device Management",
+  "@deviceManagement": {
+    "description": "Device management screen title"
+  },
+
+  "addDevice": "Add Device",
+  "@addDevice": {
+    "description": "Add device button label"
+  },
+
+  "macAddress": "MAC Address",
+  "@macAddress": {
+    "description": "MAC address label"
+  },
+
+  "deviceName": "Device Name",
+  "@deviceName": {
+    "description": "Device name label"
+  },
+
+  "livingRoom": "Living Room",
+  "@livingRoom": {
+    "description": "Example room name"
+  },
+
+  "location": "Location",
+  "@location": {
+    "description": "Location label"
+  },
+
+  "optional": "Optional",
+  "@optional": {
+    "description": "Optional field hint"
+  },
+
+  "fillRequiredFields": "Please fill in all required fields",
+  "@fillRequiredFields": {
+    "description": "Validation error for empty required fields"
+  },
+
+  "deviceAdded": "Device added successfully",
+  "@deviceAdded": {
+    "description": "Success message when device is added"
+  },
+
+  "removeDevice": "Remove Device",
+  "@removeDevice": {
+    "description": "Remove device dialog title"
+  },
+
+  "confirmRemoveDevice": "Are you sure you want to remove {name}?",
+  "@confirmRemoveDevice": {
+    "description": "Confirmation message for removing device",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+
+  "remove": "Remove",
+  "@remove": {
+    "description": "Remove button label"
+  },
+
+  "deviceRemoved": "Device removed successfully",
+  "@deviceRemoved": {
+    "description": "Success message when device is removed"
+  },
+
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button label"
+  },
+
+  "add": "Add",
+  "@add": {
+    "description": "Add button label"
+  },
+
+  "mqttModeRequired": "MQTT mode is required for device management",
+  "@mqttModeRequired": {
+    "description": "Error message when trying to manage devices without MQTT"
   }
 }

@@ -220,4 +220,54 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get appDescription => '跨平台HVAC管理应用，集成MQTT。';
+
+  @override
+  String get deviceManagement => '设备管理';
+
+  @override
+  String get addDevice => '添加设备';
+
+  @override
+  String get macAddress => 'MAC地址';
+
+  @override
+  String get deviceName => '设备名称';
+
+  @override
+  String get livingRoom => '客厅';
+
+  @override
+  String get location => '位置';
+
+  @override
+  String get optional => '可选';
+
+  @override
+  String get fillRequiredFields => '请填写所有必填字段';
+
+  @override
+  String get deviceAdded => '设备添加成功';
+
+  @override
+  String get removeDevice => '删除设备';
+
+  @override
+  String confirmRemoveDevice(String name) {
+    return '您确定要删除 $name 吗？';
+  }
+
+  @override
+  String get remove => '删除';
+
+  @override
+  String get deviceRemoved => '设备删除成功';
+
+  @override
+  String get cancel => '取消';
+
+  @override
+  String get add => '添加';
+
+  @override
+  String get mqttModeRequired => '设备管理需要MQTT模式';
 }

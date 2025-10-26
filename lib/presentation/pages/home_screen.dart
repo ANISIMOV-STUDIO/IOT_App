@@ -13,6 +13,7 @@ import '../bloc/hvac_list/hvac_list_event.dart';
 import '../bloc/hvac_list/hvac_list_state.dart';
 import '../widgets/hvac_unit_card.dart';
 import 'hvac_detail_screen.dart';
+import 'device_management_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -133,6 +134,23 @@ class HomeScreen extends StatelessWidget {
       pinned: true,
       elevation: 0,
       backgroundColor: isDark ? AppTheme.darkBackground : AppTheme.lightBackground,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.device_hub_rounded),
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => BlocProvider.value(
+                  value: context.read<HvacListBloc>(),
+                  child: const DeviceManagementScreen(),
+                ),
+              ),
+            );
+          },
+          tooltip: l10n.deviceManagement,
+        ),
+        const SizedBox(width: 8),
+      ],
       flexibleSpace: FlexibleSpaceBar(
         titlePadding: const EdgeInsets.only(left: 20, bottom: 16),
         title: Column(
