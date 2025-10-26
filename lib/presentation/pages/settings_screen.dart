@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import '../../core/di/injection_container.dart';
 import '../../core/services/mqtt_settings_service.dart';
 import '../../core/services/theme_service.dart';
+import '../../core/services/language_service.dart';
 import '../widgets/mqtt_settings_dialog.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -19,12 +20,14 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   late final MqttSettingsService _settingsService;
   late final ThemeService _themeService;
+  late final LanguageService _languageService;
 
   @override
   void initState() {
     super.initState();
     _settingsService = sl<MqttSettingsService>();
     _themeService = sl<ThemeService>();
+    _languageService = sl<LanguageService>();
   }
 
   @override
@@ -97,6 +100,53 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         onChanged: (value) {
                           if (value != null) {
                             _themeService.setThemeMode(value);
+                          }
+                        },
+                      ),
+                    ],
+                  );
+                },
+              ),
+              const Divider(),
+
+              // Language Section
+              ListenableBuilder(
+                listenable: _languageService,
+                builder: (context, child) {
+                  return Column(
+                    children: [
+                      ListTile(
+                        leading: const Icon(Icons.language_rounded),
+                        title: const Text('Language'),
+                        subtitle: Text(_languageService.currentLanguage.nativeName),
+                      ),
+                      RadioListTile<AppLanguage>(
+                        title: Text(AppLanguage.english.nativeName),
+                        value: AppLanguage.english,
+                        groupValue: _languageService.currentLanguage,
+                        onChanged: (value) {
+                          if (value != null) {
+                            _languageService.setLanguage(value);
+                          }
+                        },
+                      ),
+                      RadioListTile<AppLanguage>(
+                        title: Text(AppLanguage.russian.nativeName),
+                        value: AppLanguage.russian,
+                        groupValue: _languageService.currentLanguage,
+                        onChanged: (value) {
+                          if (value != null) {
+                            _languageService.setLanguage(value);
+                          }
+                        },
+                      ),
+                      RadioListTile<AppLanguage>(
+                        title: Text(AppLanguage.chinese.nativeName),
+                        value: AppLanguage.chinese,
+                        groupValue: _languageService.currentLanguage,
+                        onChanged: (value) {
+                          if (value != null) {
+                            _languageService.setLanguage(value);
                           }
                         },
                       ),

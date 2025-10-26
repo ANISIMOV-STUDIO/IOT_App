@@ -1,0 +1,316 @@
+{
+  "@@locale": "en",
+
+  "appTitle": "HVAC Control",
+  "@appTitle": {
+    "description": "Application title"
+  },
+
+  "home": "Home",
+  "@home": {
+    "description": "Home tab label"
+  },
+
+  "settings": "Settings",
+  "@settings": {
+    "description": "Settings tab label"
+  },
+
+  "hvacControl": "HVAC Control",
+  "@hvacControl": {
+    "description": "Main screen title"
+  },
+
+  "activeDevices": "{count} of {total} active",
+  "@activeDevices": {
+    "description": "Active devices count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+
+  "connectionError": "Connection Error",
+  "@connectionError": {
+    "description": "Connection error title"
+  },
+
+  "retryConnection": "Retry Connection",
+  "@retryConnection": {
+    "description": "Retry connection button"
+  },
+
+  "noDevicesFound": "No Devices Found",
+  "@noDevicesFound": {
+    "description": "No devices found message"
+  },
+
+  "checkMqttSettings": "Check your MQTT connection settings\nand make sure devices are online",
+  "@checkMqttSettings": {
+    "description": "MQTT connection help text"
+  },
+
+  "loadingDevices": "Loading devices...",
+  "@loadingDevices": {
+    "description": "Loading devices message"
+  },
+
+  "power": "Power",
+  "@power": {
+    "description": "Power label"
+  },
+
+  "on": "On",
+  "@on": {
+    "description": "On state"
+  },
+
+  "off": "Off",
+  "@off": {
+    "description": "Off state"
+  },
+
+  "temperature": "Temperature",
+  "@temperature": {
+    "description": "Temperature label"
+  },
+
+  "adjustTargetTemperature": "Adjust target temperature",
+  "@adjustTargetTemperature": {
+    "description": "Temperature slider description"
+  },
+
+  "deviceIsOff": "Device is off",
+  "@deviceIsOff": {
+    "description": "Device off message"
+  },
+
+  "target": "Target",
+  "@target": {
+    "description": "Target temperature label"
+  },
+
+  "current": "Current: {temp}°C",
+  "@current": {
+    "description": "Current temperature",
+    "placeholders": {
+      "temp": {
+        "type": "String"
+      }
+    }
+  },
+
+  "min": "Min",
+  "@min": {
+    "description": "Minimum label"
+  },
+
+  "max": "Max",
+  "@max": {
+    "description": "Maximum label"
+  },
+
+  "operatingMode": "Operating Mode",
+  "@operatingMode": {
+    "description": "Operating mode title"
+  },
+
+  "selectHvacMode": "Select HVAC operating mode",
+  "@selectHvacMode": {
+    "description": "Mode selector description"
+  },
+
+  "cooling": "Cooling",
+  "@cooling": {
+    "description": "Cooling mode"
+  },
+
+  "heating": "Heating",
+  "@heating": {
+    "description": "Heating mode"
+  },
+
+  "auto": "Auto",
+  "@auto": {
+    "description": "Auto mode"
+  },
+
+  "fan": "Fan",
+  "@fan": {
+    "description": "Fan mode"
+  },
+
+  "coolDownToTarget": "Cool down to target temperature",
+  "@coolDownToTarget": {
+    "description": "Cooling mode description"
+  },
+
+  "heatUpToTarget": "Heat up to target temperature",
+  "@heatUpToTarget": {
+    "description": "Heating mode description"
+  },
+
+  "autoAdjustTemperature": "Automatically adjust temperature",
+  "@autoAdjustTemperature": {
+    "description": "Auto mode description"
+  },
+
+  "circulateAir": "Circulate air without heating/cooling",
+  "@circulateAir": {
+    "description": "Fan mode description"
+  },
+
+  "fanSpeed": "Fan Speed",
+  "@fanSpeed": {
+    "description": "Fan speed title"
+  },
+
+  "adjustAirflow": "Adjust airflow intensity",
+  "@adjustAirflow": {
+    "description": "Fan speed description"
+  },
+
+  "low": "Low",
+  "@low": {
+    "description": "Low speed"
+  },
+
+  "medium": "Med",
+  "@medium": {
+    "description": "Medium speed"
+  },
+
+  "high": "High",
+  "@high": {
+    "description": "High speed"
+  },
+
+  "gentleAirflow": "Gentle airflow for quiet operation",
+  "@gentleAirflow": {
+    "description": "Low speed description"
+  },
+
+  "balancedAirflow": "Balanced airflow and noise level",
+  "@balancedAirflow": {
+    "description": "Medium speed description"
+  },
+
+  "maximumAirflow": "Maximum airflow for rapid cooling/heating",
+  "@maximumAirflow": {
+    "description": "High speed description"
+  },
+
+  "autoAdjustSpeed": "Automatically adjusts based on temperature",
+  "@autoAdjustSpeed": {
+    "description": "Auto speed description"
+  },
+
+  "powerLevel": "Power",
+  "@powerLevel": {
+    "description": "Power level label"
+  },
+
+  "temperatureHistory": "Temperature History",
+  "@temperatureHistory": {
+    "description": "Temperature history title"
+  },
+
+  "last24Hours": "Last 24 hours",
+  "@last24Hours": {
+    "description": "Last 24 hours label"
+  },
+
+  "average": "Average",
+  "@average": {
+    "description": "Average label"
+  },
+
+  "appearance": "Appearance",
+  "@appearance": {
+    "description": "Appearance section title"
+  },
+
+  "theme": "Theme",
+  "@theme": {
+    "description": "Theme label"
+  },
+
+  "light": "Light",
+  "@light": {
+    "description": "Light theme"
+  },
+
+  "dark": "Dark",
+  "@dark": {
+    "description": "Dark theme"
+  },
+
+  "system": "System",
+  "@system": {
+    "description": "System theme"
+  },
+
+  "language": "Language",
+  "@language": {
+    "description": "Language label"
+  },
+
+  "english": "English",
+  "@english": {
+    "description": "English language"
+  },
+
+  "russian": "Русский",
+  "@russian": {
+    "description": "Russian language"
+  },
+
+  "chinese": "中文",
+  "@chinese": {
+    "description": "Chinese language"
+  },
+
+  "connection": "Connection",
+  "@connection": {
+    "description": "Connection section title"
+  },
+
+  "mqttSettings": "MQTT Settings",
+  "@mqttSettings": {
+    "description": "MQTT settings label"
+  },
+
+  "configureMqtt": "Configure MQTT broker connection",
+  "@configureMqtt": {
+    "description": "MQTT settings description"
+  },
+
+  "about": "About",
+  "@about": {
+    "description": "About section title"
+  },
+
+  "version": "Version",
+  "@version": {
+    "description": "Version label"
+  },
+
+  "hvacUnit": "HVAC Unit",
+  "@hvacUnit": {
+    "description": "HVAC unit title"
+  },
+
+  "error": "Error: {message}",
+  "@error": {
+    "description": "Error message",
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  }
+}
