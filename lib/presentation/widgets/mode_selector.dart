@@ -219,27 +219,28 @@ class _ModeSelectorState extends State<ModeSelector>
     bool isDark,
   ) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 6),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
             icon,
             color: isSelected
                 ? Colors.white
                 : (isDark ? AppTheme.darkTextSecondary : AppTheme.lightTextSecondary),
-            size: 20,
+            size: 18,
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 2),
           Text(
             label,
             style: TextStyle(
               color: isSelected
                   ? Colors.white
                   : (isDark ? AppTheme.darkTextSecondary : AppTheme.lightTextSecondary),
-              fontSize: 11,
+              fontSize: 10,
               fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-              letterSpacing: 0.5,
+              letterSpacing: 0.3,
             ),
           ),
         ],

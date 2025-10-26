@@ -173,44 +173,47 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
                   },
                 ),
 
-              // Custom Circular Slider
+              // Custom Circular Slider with scroll blocking
               GestureDetector(
-                onPanUpdate: widget.enabled
-                    ? (details) {
-                        final RenderBox box = context.findRenderObject() as RenderBox;
-                        final center = Offset(box.size.width / 2, 250 / 2);
-                        final position = details.localPosition - center;
-                        final angle = math.atan2(position.dy, position.dx);
+                behavior: HitTestBehavior.translucent,
+                onVerticalDragUpdate: widget.enabled ? (_) {} : null, // Block vertical scroll
+                child: GestureDetector(
+                  onPanUpdate: widget.enabled
+                      ? (details) {
+                          final RenderBox box = context.findRenderObject() as RenderBox;
+                          final center = Offset(box.size.width / 2, 250 / 2);
+                          final position = details.localPosition - center;
+                          final angle = math.atan2(position.dy, position.dx);
 
-                        // Convert angle to temperature (135° to 405° range)
-                        double normalizedAngle = angle + math.pi / 2;
-                        if (normalizedAngle < 0) normalizedAngle += 2 * math.pi;
+                          // Convert angle to temperature (135° to 405° range)
+                          double normalizedAngle = angle + math.pi / 2;
+                          if (normalizedAngle < 0) normalizedAngle += 2 * math.pi;
 
-                        // Map to 270° range starting at 135°
-                        const startAngle = 3 * math.pi / 4;
-                        const endAngle = startAngle + 3 * math.pi / 2;
+                          // Map to 270° range starting at 135°
+                          const startAngle = 3 * math.pi / 4;
+                          const endAngle = startAngle + 3 * math.pi / 2;
 
-                        if (normalizedAngle >= startAngle || normalizedAngle <= endAngle - 2 * math.pi) {
-                          double tempAngle = normalizedAngle;
-                          if (tempAngle < startAngle) tempAngle += 2 * math.pi;
+                          if (normalizedAngle >= startAngle || normalizedAngle <= endAngle - 2 * math.pi) {
+                            double tempAngle = normalizedAngle;
+                            if (tempAngle < startAngle) tempAngle += 2 * math.pi;
 
-                          final progress = (tempAngle - startAngle) / (3 * math.pi / 2);
-                          final newTemp = AppConstants.minTemperature +
-                              (AppConstants.maxTemperature - AppConstants.minTemperature) * progress;
+                            final progress = (tempAngle - startAngle) / (3 * math.pi / 2);
+                            final newTemp = AppConstants.minTemperature +
+                                (AppConstants.maxTemperature - AppConstants.minTemperature) * progress;
 
-                          setState(() {
-                            _currentValue = newTemp.clamp(
-                              AppConstants.minTemperature,
-                              AppConstants.maxTemperature,
-                            );
-                          });
+                            setState(() {
+                              _currentValue = newTemp.clamp(
+                                AppConstants.minTemperature,
+                                AppConstants.maxTemperature,
+                              );
+                            });
+                          }
                         }
-                      }
-                    : null,
-                onPanEnd: widget.enabled
-                    ? (_) => widget.onChanged(_currentValue)
-                    : null,
-                child: CustomPaint(
+                      : null,
+                  onPanEnd: widget.enabled
+                      ? (_) => widget.onChanged(_currentValue)
+                      : null,
+                  child: CustomPaint(
                   size: const Size(250, 250),
                   painter: _CircularSliderPainter(
                     value: _currentValue,
@@ -364,6 +367,7 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
                   ),
                 ),
               ),
+                ),
             ],
           ),
 

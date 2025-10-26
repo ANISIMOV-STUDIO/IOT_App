@@ -47,32 +47,37 @@ class FanSpeedControl extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    l10n.fanSpeed,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: -0.5,
-                        ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    enabled ? l10n.adjustAirflow : l10n.deviceIsOff,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: isDark
-                              ? AppTheme.darkTextHint
-                              : AppTheme.lightTextHint,
-                        ),
-                  ),
-                ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l10n.fanSpeed,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: -0.5,
+                          ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      enabled ? l10n.adjustAirflow : l10n.deviceIsOff,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: isDark
+                                ? AppTheme.darkTextHint
+                                : AppTheme.lightTextHint,
+                          ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                  ],
+                ),
               ),
+              const SizedBox(width: 8),
               if (enabled)
                 Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
+                    horizontal: 10,
+                    vertical: 5,
                   ),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
@@ -81,7 +86,7 @@ class FanSpeedControl extends StatelessWidget {
                         modeColor.withOpacity(0.7),
                       ],
                     ),
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
                         color: modeColor.withOpacity(0.3),
@@ -96,16 +101,16 @@ class FanSpeedControl extends StatelessWidget {
                       Icon(
                         _getSpeedIcon(selectedSpeed),
                         color: Colors.white,
-                        size: 14,
+                        size: 12,
                       ),
-                      const SizedBox(width: 6),
+                      const SizedBox(width: 4),
                       Text(
                         selectedSpeed.toUpperCase(),
                         style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 11,
+                          fontSize: 10,
                           fontWeight: FontWeight.bold,
-                          letterSpacing: 0.5,
+                          letterSpacing: 0.3,
                         ),
                       ),
                     ],
@@ -205,9 +210,10 @@ class FanSpeedControl extends StatelessWidget {
     double intensity,
   ) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 3),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Stack(
             alignment: Alignment.center,
@@ -219,7 +225,7 @@ class FanSpeedControl extends StatelessWidget {
                     child: Icon(
                       Icons.circle,
                       color: Colors.white.withOpacity(0.2 - index * 0.05),
-                      size: 28 + index * 4.0,
+                      size: 24 + index * 3.0,
                     ),
                   ),
                 ),
@@ -230,11 +236,11 @@ class FanSpeedControl extends StatelessWidget {
                     : (isDark
                         ? AppTheme.darkTextSecondary
                         : AppTheme.lightTextSecondary),
-                size: 18,
+                size: 16,
               ),
             ],
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 2),
           Text(
             label,
             style: TextStyle(
@@ -243,9 +249,9 @@ class FanSpeedControl extends StatelessWidget {
                   : (isDark
                       ? AppTheme.darkTextSecondary
                       : AppTheme.lightTextSecondary),
-              fontSize: 11,
+              fontSize: 10,
               fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-              letterSpacing: 0.5,
+              letterSpacing: 0.3,
             ),
           ),
         ],
