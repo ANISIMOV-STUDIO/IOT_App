@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 import '../../core/theme/app_theme.dart';
 import '../../domain/entities/hvac_unit.dart';
+import '../../generated/l10n/app_localizations.dart';
 
 class HvacUnitCard extends StatefulWidget {
   final HvacUnit unit;
@@ -61,6 +62,7 @@ class _HvacUnitCardState extends State<HvacUnitCard>
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
     final modeGradient = AppTheme.getModeGradient(widget.unit.mode, isDark: isDark);
     final modeIcon = AppTheme.getModeIcon(widget.unit.mode);
     final modeColor = AppTheme.getModeColor(widget.unit.mode);
@@ -171,7 +173,7 @@ class _HvacUnitCardState extends State<HvacUnitCard>
                                 : null,
                           ),
                           child: Text(
-                            widget.unit.power ? 'ON' : 'OFF',
+                            widget.unit.power ? l10n.on.toUpperCase() : l10n.off.toUpperCase(),
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 11,
@@ -237,7 +239,7 @@ class _HvacUnitCardState extends State<HvacUnitCard>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Current',
+                                'Current', // Uses implicit current temp label
                                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                       color: isDark
                                           ? AppTheme.darkTextHint
@@ -318,7 +320,7 @@ class _HvacUnitCardState extends State<HvacUnitCard>
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              'Target',
+                              l10n.target,
                               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                     color: isDark
                                         ? AppTheme.darkTextHint
@@ -389,7 +391,7 @@ class _HvacUnitCardState extends State<HvacUnitCard>
                           ),
                           const SizedBox(width: 6),
                           Text(
-                            'Fan: ${widget.unit.fanSpeed.toUpperCase()}',
+                            '${l10n.fan}: ${widget.unit.fanSpeed.toUpperCase()}',
                             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                   color: isDark
                                       ? AppTheme.darkTextHint

@@ -6,6 +6,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/di/injection_container.dart';
+import '../../generated/l10n/app_localizations.dart';
 import '../bloc/hvac_detail/hvac_detail_bloc.dart';
 import '../bloc/hvac_detail/hvac_detail_event.dart';
 import '../bloc/hvac_detail/hvac_detail_state.dart';
@@ -37,6 +38,7 @@ class _HvacDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         title: BlocBuilder<HvacDetailBloc, HvacDetailState>(
@@ -44,7 +46,7 @@ class _HvacDetailView extends StatelessWidget {
             if (state is HvacDetailLoaded) {
               return Text(state.unit.name);
             }
-            return const Text('HVAC Unit');
+            return Text(l10n.hvacUnit);
           },
         ),
       ),
@@ -68,7 +70,7 @@ class _HvacDetailView extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'Error: ${state.message}',
+                    l10n.error(state.message),
                     style: Theme.of(context).textTheme.titleLarge,
                     textAlign: TextAlign.center,
                   ),
@@ -88,8 +90,8 @@ class _HvacDetailView extends StatelessWidget {
                   // Power Switch
                   Card(
                     child: SwitchListTile(
-                      title: const Text('Power'),
-                      subtitle: Text(unit.power ? 'On' : 'Off'),
+                      title: Text(l10n.power),
+                      subtitle: Text(unit.power ? l10n.on : l10n.off),
                       value: unit.power,
                       onChanged: (value) {
                         context.read<HvacDetailBloc>().add(

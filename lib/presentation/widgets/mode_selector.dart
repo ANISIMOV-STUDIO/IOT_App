@@ -6,6 +6,7 @@ library;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../core/theme/app_theme.dart';
+import '../../generated/l10n/app_localizations.dart';
 
 class ModeSelector extends StatefulWidget {
   final String selectedMode;
@@ -56,6 +57,7 @@ class _ModeSelectorState extends State<ModeSelector>
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
     final selectedModeValue = _getModeIndex(widget.selectedMode);
 
     return Container(
@@ -74,7 +76,7 @@ class _ModeSelectorState extends State<ModeSelector>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Operating Mode',
+                    l10n.operatingMode,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                           letterSpacing: -0.5,
@@ -83,8 +85,8 @@ class _ModeSelectorState extends State<ModeSelector>
                   const SizedBox(height: 4),
                   Text(
                     widget.enabled
-                        ? 'Select HVAC operating mode'
-                        : 'Device is off',
+                        ? l10n.selectHvacMode
+                        : l10n.deviceIsOff,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: isDark
                               ? AppTheme.darkTextHint
@@ -181,27 +183,28 @@ class _ModeSelectorState extends State<ModeSelector>
   }
 
   Map<int, Widget> _buildSegments(bool isDark) {
+    final l10n = AppLocalizations.of(context)!;
     return {
       0: _buildSegmentItem(
-        'Cooling',
+        l10n.cooling,
         Icons.ac_unit_rounded,
         widget.selectedMode == 'cooling',
         isDark,
       ),
       1: _buildSegmentItem(
-        'Heating',
+        l10n.heating,
         Icons.local_fire_department_rounded,
         widget.selectedMode == 'heating',
         isDark,
       ),
       2: _buildSegmentItem(
-        'Auto',
+        l10n.auto,
         Icons.autorenew_rounded,
         widget.selectedMode == 'auto',
         isDark,
       ),
       3: _buildSegmentItem(
-        'Fan',
+        l10n.fan,
         Icons.air_rounded,
         widget.selectedMode == 'fan',
         isDark,
@@ -245,11 +248,12 @@ class _ModeSelectorState extends State<ModeSelector>
   }
 
   Widget _buildModeDescription(String mode, bool isDark) {
+    final l10n = AppLocalizations.of(context)!;
     final descriptions = {
-      'cooling': 'Cool down to target temperature',
-      'heating': 'Heat up to target temperature',
-      'auto': 'Automatically adjust temperature',
-      'fan': 'Circulate air without heating/cooling',
+      'cooling': l10n.coolDownToTarget,
+      'heating': l10n.heatUpToTarget,
+      'auto': l10n.autoAdjustTemperature,
+      'fan': l10n.circulateAir,
     };
 
     final icons = {

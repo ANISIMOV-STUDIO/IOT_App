@@ -6,6 +6,9 @@ library;
 import 'package:flutter/material.dart';
 import '../../core/utils/responsive_helper.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/di/injection_container.dart';
+import '../../core/services/language_service.dart';
+import '../../generated/l10n/app_localizations.dart';
 import 'home_screen.dart';
 import 'settings_screen.dart';
 
@@ -22,24 +25,27 @@ class _ResponsiveShellState extends State<ResponsiveShell>
   late AnimationController _fadeController;
   late Animation<double> _fadeAnimation;
 
-  final List<_NavigationItem> _destinations = const [
-    _NavigationItem(
-      icon: Icons.home_outlined,
-      selectedIcon: Icons.home_rounded,
-      label: 'Home',
-      gradient: LinearGradient(
-        colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+  List<_NavigationItem> _getDestinations(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return [
+      _NavigationItem(
+        icon: Icons.home_outlined,
+        selectedIcon: Icons.home_rounded,
+        label: l10n.home,
+        gradient: const LinearGradient(
+          colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+        ),
       ),
-    ),
-    _NavigationItem(
-      icon: Icons.settings_outlined,
-      selectedIcon: Icons.settings_rounded,
-      label: 'Settings',
-      gradient: LinearGradient(
-        colors: [Color(0xFF10B981), Color(0xFF059669)],
+      _NavigationItem(
+        icon: Icons.settings_outlined,
+        selectedIcon: Icons.settings_rounded,
+        label: l10n.settings,
+        gradient: const LinearGradient(
+          colors: [Color(0xFF10B981), Color(0xFF059669)],
+        ),
       ),
-    ),
-  ];
+    ];
+  }
 
   @override
   void initState() {
@@ -84,54 +90,60 @@ class _ResponsiveShellState extends State<ResponsiveShell>
 
   @override
   Widget build(BuildContext context) {
-    final useBottomNav = ResponsiveHelper.shouldUseBottomNav(context);
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return ListenableBuilder(
+      listenable: sl<LanguageService>(),
+      builder: (context, child) {
+        final useBottomNav = ResponsiveHelper.shouldUseBottomNav(context);
+        final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    if (useBottomNav) {
-      // Mobile layout with modern BottomNavigationBar
-      return Scaffold(
-        body: FadeTransition(
-          opacity: _fadeAnimation,
-          child: _getSelectedPage(),
-        ),
-        bottomNavigationBar: _buildModernBottomNav(isDark),
-      );
-    } else {
-      // Desktop layout with modern NavigationRail
-      return Scaffold(
-        body: Row(
-          children: [
-            _buildModernNavigationRail(isDark),
-            Container(
-              width: 1,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    (isDark ? AppTheme.darkBorder : AppTheme.lightBorder)
-                        .withOpacity(0.1),
-                    (isDark ? AppTheme.darkBorder : AppTheme.lightBorder)
-                        .withOpacity(0.3),
-                    (isDark ? AppTheme.darkBorder : AppTheme.lightBorder)
-                        .withOpacity(0.1),
-                  ],
+        if (useBottomNav) {
+          // Mobile layout with modern BottomNavigationBar
+          return Scaffold(
+            body: FadeTransition(
+              opacity: _fadeAnimation,
+              child: _getSelectedPage(),
+            ),
+            bottomNavigationBar: _buildModernBottomNav(isDark),
+          );
+        } else {
+          // Desktop layout with modern NavigationRail
+          return Scaffold(
+            body: Row(
+              children: [
+                _buildModernNavigationRail(isDark),
+                Container(
+                  width: 1,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        (isDark ? AppTheme.darkBorder : AppTheme.lightBorder)
+                            .withOpacity(0.1),
+                        (isDark ? AppTheme.darkBorder : AppTheme.lightBorder)
+                            .withOpacity(0.3),
+                        (isDark ? AppTheme.darkBorder : AppTheme.lightBorder)
+                            .withOpacity(0.1),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
+                Expanded(
+                  child: FadeTransition(
+                    opacity: _fadeAnimation,
+                    child: _getSelectedPage(),
+                  ),
+                ),
+              ],
             ),
-            Expanded(
-              child: FadeTransition(
-                opacity: _fadeAnimation,
-                child: _getSelectedPage(),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
+          );
+        }
+      },
+    );
   }
 
   Widget _buildModernBottomNav(bool isDark) {
+    final destinations = _getDestinations(context);
     return Container(
       decoration: BoxDecoration(
         color: isDark ? AppTheme.darkSurface : Colors.white,
@@ -148,7 +160,7 @@ class _ResponsiveShellState extends State<ResponsiveShell>
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: _destinations.asMap().entries.map((entry) {
+            children: destinations.asMap().entries.map((entry) {
               final index = entry.key;
               final item = entry.value;
               final isSelected = _selectedIndex == index;
@@ -167,6 +179,7 @@ class _ResponsiveShellState extends State<ResponsiveShell>
   }
 
   Widget _buildModernNavigationRail(bool isDark) {
+    final destinations = _getDestinations(context);
     return Container(
       width: 80,
       color: isDark ? AppTheme.darkSurface : Colors.white,
@@ -198,7 +211,7 @@ class _ResponsiveShellState extends State<ResponsiveShell>
           ),
           const SizedBox(height: 32),
           // Navigation items
-          ..._destinations.asMap().entries.map((entry) {
+          ...destinations.asMap().entries.map((entry) {
             final index = entry.key;
             final item = entry.value;
             final isSelected = _selectedIndex == index;

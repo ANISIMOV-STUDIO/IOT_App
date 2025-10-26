@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/utils/responsive_helper.dart';
 import '../../core/theme/app_theme.dart';
+import '../../generated/l10n/app_localizations.dart';
 import '../bloc/hvac_list/hvac_list_bloc.dart';
 import '../bloc/hvac_list/hvac_list_event.dart';
 import '../bloc/hvac_list/hvac_list_state.dart';
@@ -19,12 +20,13 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: isDark ? AppTheme.darkBackground : AppTheme.lightBackground,
       body: CustomScrollView(
         slivers: [
-          _buildModernAppBar(context, isDark),
+          _buildModernAppBar(context, isDark, l10n),
           BlocBuilder<HvacListBloc, HvacListState>(
             builder: (context, state) {
               if (state is HvacListLoading) {
@@ -36,7 +38,7 @@ class HomeScreen extends StatelessWidget {
                         const CircularProgressIndicator(),
                         const SizedBox(height: 16),
                         Text(
-                          'Loading devices...',
+                          l10n.loadingDevices,
                           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                 color: isDark
                                     ? AppTheme.darkTextSecondary
@@ -123,7 +125,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildModernAppBar(BuildContext context, bool isDark) {
+  Widget _buildModernAppBar(BuildContext context, bool isDark, AppLocalizations l10n) {
     return SliverAppBar(
       expandedHeight: 120,
       floating: false,
@@ -137,7 +139,7 @@ class HomeScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'HVAC Control',
+              l10n.hvacControl,
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -151,7 +153,7 @@ class HomeScreen extends StatelessWidget {
                 if (state is HvacListLoaded) {
                   final activeCount = state.units.where((u) => u.power).length;
                   return Text(
-                    '$activeCount of ${state.units.length} active',
+                    l10n.activeDevices(activeCount, state.units.length),
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
@@ -206,7 +208,7 @@ class HomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               Text(
-                'Connection Error',
+                AppLocalizations.of(context)!.connectionError,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -253,16 +255,16 @@ class HomeScreen extends StatelessWidget {
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
-                        children: const [
-                          Icon(
+                        children: [
+                          const Icon(
                             Icons.refresh_rounded,
                             color: Colors.white,
                             size: 20,
                           ),
-                          SizedBox(width: 8),
+                          const SizedBox(width: 8),
                           Text(
-                            'Retry Connection',
-                            style: TextStyle(
+                            AppLocalizations.of(context)!.retryConnection,
+                            style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
@@ -318,14 +320,14 @@ class HomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               Text(
-                'No Devices Found',
+                AppLocalizations.of(context)!.noDevicesFound,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
               ),
               const SizedBox(height: 12),
               Text(
-                'Check your MQTT connection settings\nand make sure devices are online',
+                AppLocalizations.of(context)!.checkMqttSettings,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: isDark
                           ? AppTheme.darkTextSecondary
