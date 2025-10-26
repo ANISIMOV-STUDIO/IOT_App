@@ -8,6 +8,7 @@ import '../../core/di/injection_container.dart';
 import '../../core/services/mqtt_settings_service.dart';
 import '../../core/services/theme_service.dart';
 import '../../core/services/language_service.dart';
+import '../../generated/l10n/app_localizations.dart';
 import '../widgets/mqtt_settings_dialog.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -32,9 +33,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: Text(l10n.settings),
       ),
       body: ListenableBuilder(
         listenable: _settingsService,
@@ -46,7 +48,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
                 child: Text(
-                  'APPEARANCE',
+                  l10n.appearance.toUpperCase(),
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                         letterSpacing: 1.5,
@@ -65,16 +67,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               ? Icons.dark_mode_rounded
                               : Icons.light_mode_rounded,
                         ),
-                        title: const Text('Theme'),
-                        subtitle: Text(_getThemeModeText(_themeService.themeMode)),
+                        title: Text(l10n.theme),
+                        subtitle: Text(_getThemeModeText(context, _themeService.themeMode)),
                         trailing: IconButton(
                           icon: const Icon(Icons.brightness_6_rounded),
                           onPressed: () => _themeService.toggleTheme(),
-                          tooltip: 'Toggle Theme',
+                          tooltip: l10n.toggleTheme,
                         ),
                       ),
                       RadioListTile<ThemeMode>(
-                        title: const Text('Light'),
+                        title: Text(l10n.light),
                         value: ThemeMode.light,
                         groupValue: _themeService.themeMode,
                         onChanged: (value) {
@@ -84,7 +86,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         },
                       ),
                       RadioListTile<ThemeMode>(
-                        title: const Text('Dark'),
+                        title: Text(l10n.dark),
                         value: ThemeMode.dark,
                         groupValue: _themeService.themeMode,
                         onChanged: (value) {
@@ -94,7 +96,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         },
                       ),
                       RadioListTile<ThemeMode>(
-                        title: const Text('System'),
+                        title: Text(l10n.system),
                         value: ThemeMode.system,
                         groupValue: _themeService.themeMode,
                         onChanged: (value) {
@@ -113,15 +115,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ListenableBuilder(
                 listenable: _languageService,
                 builder: (context, child) {
+                  final l10nInner = AppLocalizations.of(context)!;
                   return Column(
                     children: [
                       ListTile(
                         leading: const Icon(Icons.language_rounded),
-                        title: const Text('Language'),
+                        title: Text(l10nInner.language),
                         subtitle: Text(_languageService.currentLanguage.nativeName),
                       ),
                       RadioListTile<AppLanguage>(
-                        title: Text(AppLanguage.english.nativeName),
+                        title: Text(l10nInner.english),
                         value: AppLanguage.english,
                         groupValue: _languageService.currentLanguage,
                         onChanged: (value) {
@@ -131,7 +134,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         },
                       ),
                       RadioListTile<AppLanguage>(
-                        title: Text(AppLanguage.russian.nativeName),
+                        title: Text(l10nInner.russian),
                         value: AppLanguage.russian,
                         groupValue: _languageService.currentLanguage,
                         onChanged: (value) {
@@ -141,7 +144,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         },
                       ),
                       RadioListTile<AppLanguage>(
-                        title: Text(AppLanguage.chinese.nativeName),
+                        title: Text(l10nInner.chinese),
                         value: AppLanguage.chinese,
                         groupValue: _languageService.currentLanguage,
                         onChanged: (value) {
@@ -160,7 +163,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
                 child: Text(
-                  'CONNECTION',
+                  l10n.connection.toUpperCase(),
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                         letterSpacing: 1.5,
@@ -170,7 +173,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               ListTile(
                 leading: const Icon(Icons.router_rounded),
-                title: const Text('MQTT Broker'),
+                title: Text(l10n.mqttBroker),
                 subtitle: Text(
                   '${settings.host}:${settings.port}${settings.useSsl ? ' (SSL)' : ''}',
                 ),
@@ -180,7 +183,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               if (settings.username != null)
                 ListTile(
                   leading: const Icon(Icons.person_rounded),
-                  title: const Text('Username'),
+                  title: Text(l10n.username),
                   subtitle: Text(settings.username!),
                 ),
               const Divider(),
@@ -189,7 +192,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
                 child: Text(
-                  'ABOUT',
+                  l10n.about.toUpperCase(),
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                         letterSpacing: 1.5,
@@ -199,21 +202,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               ListTile(
                 leading: const Icon(Icons.info_outline),
-                title: const Text('About'),
-                subtitle: const Text('HVAC Control v1.0.0'),
+                title: Text(l10n.aboutApp),
+                subtitle: Text('${l10n.appTitle} v1.0.0'),
                 onTap: () {
                   showAboutDialog(
                     context: context,
-                    applicationName: 'HVAC Control',
+                    applicationName: l10n.appTitle,
                     applicationVersion: '1.0.0',
                     applicationIcon: const Icon(
                       Icons.air,
                       size: 48,
                     ),
                     children: [
-                      const Text(
-                        'Cross-platform HVAC management application with MQTT integration.',
-                      ),
+                      Text(l10n.appDescription),
                     ],
                   );
                 },
@@ -226,6 +227,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _showMqttSettings(BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
     final result = await showDialog<MqttSettings>(
       context: context,
       builder: (context) => MqttSettingsDialog(
@@ -237,23 +239,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
       _settingsService.updateSettings(result);
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Settings saved. Restart app to apply changes.'),
-            duration: Duration(seconds: 3),
+          SnackBar(
+            content: Text(l10n.settingsSaved),
+            duration: const Duration(seconds: 3),
           ),
         );
       }
     }
   }
 
-  String _getThemeModeText(ThemeMode mode) {
+  String _getThemeModeText(BuildContext context, ThemeMode mode) {
+    final l10n = AppLocalizations.of(context)!;
     switch (mode) {
       case ThemeMode.light:
-        return 'Light mode';
+        return l10n.lightMode;
       case ThemeMode.dark:
-        return 'Dark mode';
+        return l10n.darkMode;
       case ThemeMode.system:
-        return 'System default';
+        return l10n.systemDefault;
     }
   }
 }

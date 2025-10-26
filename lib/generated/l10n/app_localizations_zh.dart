@@ -190,4 +190,31 @@ class AppLocalizationsZh extends AppLocalizations {
   String error(String message) {
     return '错误：$message';
   }
+
+  @override
+  String get lightMode => '浅色模式';
+
+  @override
+  String get darkMode => '深色模式';
+
+  @override
+  String get systemDefault => '系统默认';
+
+  @override
+  String get toggleTheme => '切换主题';
+
+  @override
+  String get mqttBroker => 'MQTT代理';
+
+  @override
+  String get username => '用户名';
+
+  @override
+  String get settingsSaved => '设置已保存。请重启应用以应用更改。';
+
+  @override
+  String get aboutApp => '关于';
+
+  @override
+  String get appDescription => '跨平台HVAC管理应用，集成MQTT。';
 }

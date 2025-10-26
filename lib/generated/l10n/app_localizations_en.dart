@@ -191,4 +191,32 @@ class AppLocalizationsEn extends AppLocalizations {
   String error(String message) {
     return 'Error: $message';
   }
+
+  @override
+  String get lightMode => 'Light mode';
+
+  @override
+  String get darkMode => 'Dark mode';
+
+  @override
+  String get systemDefault => 'System default';
+
+  @override
+  String get toggleTheme => 'Toggle Theme';
+
+  @override
+  String get mqttBroker => 'MQTT Broker';
+
+  @override
+  String get username => 'Username';
+
+  @override
+  String get settingsSaved => 'Settings saved. Restart app to apply changes.';
+
+  @override
+  String get aboutApp => 'About';
+
+  @override
+  String get appDescription =>
+      'Cross-platform HVAC management application with MQTT integration.';
 }

@@ -59,5 +59,14 @@
   "about": "关于",
   "version": "版本",
   "hvacUnit": "HVAC设备",
-  "error": "错误：{message}"
+  "error": "错误：{message}",
+  "lightMode": "浅色模式",
+  "darkMode": "深色模式",
+  "systemDefault": "系统默认",
+  "toggleTheme": "切换主题",
+  "mqttBroker": "MQTT代理",
+  "username": "用户名",
+  "settingsSaved": "设置已保存。请重启应用以应用更改。",
+  "aboutApp": "关于",
+  "appDescription": "跨平台HVAC管理应用，集成MQTT。"
 }

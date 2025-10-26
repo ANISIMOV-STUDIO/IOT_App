@@ -42,9 +42,19 @@ class LanguageService extends ChangeNotifier {
 
   final SharedPreferences _prefs;
   Locale? _currentLocale;
+  Locale? _systemLocale;
 
   LanguageService(this._prefs) {
+    _detectSystemLocale();
     _loadSavedLocale();
+  }
+
+  /// Detect system locale
+  void _detectSystemLocale() {
+    final window = WidgetsBinding.instance.platformDispatcher;
+    if (window.locales.isNotEmpty) {
+      _systemLocale = window.locales.first;
+    }
   }
 
   /// Currently selected locale
@@ -54,6 +64,10 @@ class LanguageService extends ChangeNotifier {
   /// Currently selected language
   AppLanguage get currentLanguage {
     if (_currentLocale == null) {
+      // Use system locale if available
+      if (_systemLocale != null) {
+        return AppLanguage.fromCode(_systemLocale!.languageCode);
+      }
       return AppLanguage.english; // Default fallback
     }
     return AppLanguage.fromCode(_currentLocale!.languageCode);

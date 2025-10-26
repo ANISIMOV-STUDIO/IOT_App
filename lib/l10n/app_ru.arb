@@ -59,5 +59,14 @@
   "about": "О программе",
   "version": "Версия",
   "hvacUnit": "HVAC устройство",
-  "error": "Ошибка: {message}"
+  "error": "Ошибка: {message}",
+  "lightMode": "Светлая тема",
+  "darkMode": "Темная тема",
+  "systemDefault": "Системная",
+  "toggleTheme": "Переключить тему",
+  "mqttBroker": "MQTT Брокер",
+  "username": "Имя пользователя",
+  "settingsSaved": "Настройки сохранены. Перезапустите приложение для применения изменений.",
+  "aboutApp": "О приложении",
+  "appDescription": "Кросс-платформенное приложение для управления HVAC с интеграцией MQTT."
 }

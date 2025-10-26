@@ -453,6 +453,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Error: {message}'**
   String error(String message);
+
+  /// Light theme mode text
+  ///
+  /// In en, this message translates to:
+  /// **'Light mode'**
+  String get lightMode;
+
+  /// Dark theme mode text
+  ///
+  /// In en, this message translates to:
+  /// **'Dark mode'**
+  String get darkMode;
+
+  /// System default theme text
+  ///
+  /// In en, this message translates to:
+  /// **'System default'**
+  String get systemDefault;
+
+  /// Toggle theme tooltip
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle Theme'**
+  String get toggleTheme;
+
+  /// MQTT broker label
+  ///
+  /// In en, this message translates to:
+  /// **'MQTT Broker'**
+  String get mqttBroker;
+
+  /// Username label
+  ///
+  /// In en, this message translates to:
+  /// **'Username'**
+  String get username;
+
+  /// Settings saved message
+  ///
+  /// In en, this message translates to:
+  /// **'Settings saved. Restart app to apply changes.'**
+  String get settingsSaved;
+
+  /// About app label
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get aboutApp;
+
+  /// Application description
+  ///
+  /// In en, this message translates to:
+  /// **'Cross-platform HVAC management application with MQTT integration.'**
+  String get appDescription;
 }
 
 class _AppLocalizationsDelegate

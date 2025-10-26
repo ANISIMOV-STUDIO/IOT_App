@@ -312,5 +312,50 @@
         "type": "String"
       }
     }
+  },
+
+  "lightMode": "Light mode",
+  "@lightMode": {
+    "description": "Light theme mode text"
+  },
+
+  "darkMode": "Dark mode",
+  "@darkMode": {
+    "description": "Dark theme mode text"
+  },
+
+  "systemDefault": "System default",
+  "@systemDefault": {
+    "description": "System default theme text"
+  },
+
+  "toggleTheme": "Toggle Theme",
+  "@toggleTheme": {
+    "description": "Toggle theme tooltip"
+  },
+
+  "mqttBroker": "MQTT Broker",
+  "@mqttBroker": {
+    "description": "MQTT broker label"
+  },
+
+  "username": "Username",
+  "@username": {
+    "description": "Username label"
+  },
+
+  "settingsSaved": "Settings saved. Restart app to apply changes.",
+  "@settingsSaved": {
+    "description": "Settings saved message"
+  },
+
+  "aboutApp": "About",
+  "@aboutApp": {
+    "description": "About app label"
+  },
+
+  "appDescription": "Cross-platform HVAC management application with MQTT integration.",
+  "@appDescription": {
+    "description": "Application description"
   }
 }

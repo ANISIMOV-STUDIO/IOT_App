@@ -192,4 +192,33 @@ class AppLocalizationsRu extends AppLocalizations {
   String error(String message) {
     return 'Ошибка: $message';
   }
+
+  @override
+  String get lightMode => 'Светлая тема';
+
+  @override
+  String get darkMode => 'Темная тема';
+
+  @override
+  String get systemDefault => 'Системная';
+
+  @override
+  String get toggleTheme => 'Переключить тему';
+
+  @override
+  String get mqttBroker => 'MQTT Брокер';
+
+  @override
+  String get username => 'Имя пользователя';
+
+  @override
+  String get settingsSaved =>
+      'Настройки сохранены. Перезапустите приложение для применения изменений.';
+
+  @override
+  String get aboutApp => 'О приложении';
+
+  @override
+  String get appDescription =>
+      'Кросс-платформенное приложение для управления HVAC с интеграцией MQTT.';
 }
