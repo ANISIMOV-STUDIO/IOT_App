@@ -208,6 +208,12 @@ abstract class AppLocalizations {
   /// **'Current: {temp}°C'**
   String current(String temp);
 
+  /// Current temperature label for chart legend
+  ///
+  /// In en, this message translates to:
+  /// **'Current'**
+  String get currentTemp;
+
   /// Minimum label
   ///
   /// In en, this message translates to:

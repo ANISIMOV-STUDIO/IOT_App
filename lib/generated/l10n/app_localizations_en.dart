@@ -68,6 +68,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get currentTemp => 'Current';
+
+  @override
   String get min => 'Min';
 
   @override

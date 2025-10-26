@@ -8,6 +8,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 import '../../core/theme/app_theme.dart';
 import '../../domain/entities/temperature_reading.dart';
+import '../../generated/l10n/app_localizations.dart';
 
 class TemperatureChart extends StatefulWidget {
   final List<TemperatureReading> readings;
@@ -35,6 +36,7 @@ class _TemperatureChartState extends State<TemperatureChart> {
     }
 
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
     final modeColor = AppTheme.getModeColor(widget.mode);
     final modeGradient = AppTheme.getModeGradient(widget.mode, isDark: isDark);
 
@@ -55,7 +57,7 @@ class _TemperatureChartState extends State<TemperatureChart> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Temperature History',
+                    l10n.temperatureHistory,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                           letterSpacing: -0.5,
@@ -63,7 +65,7 @@ class _TemperatureChartState extends State<TemperatureChart> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Last 24 hours',
+                    l10n.last24Hours,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: isDark
                               ? AppTheme.darkTextHint
@@ -76,14 +78,14 @@ class _TemperatureChartState extends State<TemperatureChart> {
               Row(
                 children: [
                   _buildLegendItem(
-                    'Current',
+                    l10n.currentTemp,
                     modeColor,
                     isDark,
                     isSolid: true,
                   ),
                   const SizedBox(width: 16),
                   _buildLegendItem(
-                    'Target',
+                    l10n.target,
                     isDark
                         ? AppTheme.darkTextSecondary
                         : AppTheme.lightTextSecondary,
@@ -113,7 +115,7 @@ class _TemperatureChartState extends State<TemperatureChart> {
             children: [
               _buildStatItem(
                 context,
-                'Average',
+                l10n.average,
                 _calculateAverage(),
                 Icons.analytics_outlined,
                 isDark,
@@ -127,7 +129,7 @@ class _TemperatureChartState extends State<TemperatureChart> {
               ),
               _buildStatItem(
                 context,
-                'Min',
+                l10n.min,
                 _calculateMin(),
                 Icons.arrow_downward_rounded,
                 isDark,
@@ -141,7 +143,7 @@ class _TemperatureChartState extends State<TemperatureChart> {
               ),
               _buildStatItem(
                 context,
-                'Max',
+                l10n.max,
                 _calculateMax(),
                 Icons.arrow_upward_rounded,
                 isDark,
@@ -426,8 +428,9 @@ class _TemperatureChartState extends State<TemperatureChart> {
                 );
               } else {
                 // Target temperature
+                final l10n = AppLocalizations.of(context)!;
                 return LineTooltipItem(
-                  'Target: ${widget.targetTemp.toStringAsFixed(1)}°C',
+                  '${l10n.target}: ${widget.targetTemp.toStringAsFixed(1)}°C',
                   const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,

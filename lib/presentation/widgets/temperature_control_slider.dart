@@ -68,6 +68,7 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
     final modeColor = AppTheme.getModeColor(widget.mode);
     final modeGradient = AppTheme.getModeGradient(widget.mode, isDark: isDark);
 
@@ -87,7 +88,7 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Temperature',
+                    l10n.temperature,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                           letterSpacing: -0.5,
@@ -95,7 +96,7 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    widget.enabled ? 'Adjust target temperature' : 'Device is off',
+                    widget.enabled ? l10n.adjustTargetTemperature : l10n.deviceIsOff,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: isDark
                               ? AppTheme.darkTextHint
@@ -230,7 +231,7 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
                         children: [
                           // Target Temperature
                           Text(
-                            'Target',
+                            l10n.target,
                             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                   color: isDark
                                       ? AppTheme.darkTextHint
@@ -341,7 +342,7 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
                                 ),
                                 const SizedBox(width: 8),
                                 Text(
-                                  'Current: ${widget.currentTemp.toStringAsFixed(1)}°C',
+                                  l10n.current('${widget.currentTemp.toStringAsFixed(1)}°C'),
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyMedium
@@ -374,7 +375,7 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
             children: [
               _buildRangeIndicator(
                 context,
-                'Min',
+                l10n.min,
                 AppConstants.minTemperature,
                 Icons.ac_unit_rounded,
                 isDark,
@@ -387,7 +388,7 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
               ),
               _buildRangeIndicator(
                 context,
-                'Max',
+                l10n.max,
                 AppConstants.maxTemperature,
                 Icons.local_fire_department_rounded,
                 isDark,

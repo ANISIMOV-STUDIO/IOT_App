@@ -19,6 +19,7 @@
   "deviceIsOff": "Устройство выключено",
   "target": "Цель",
   "current": "Текущая: {temp}°C",
+  "currentTemp": "Текущая",
   "min": "Мин",
   "max": "Макс",
   "operatingMode": "Режим работы",

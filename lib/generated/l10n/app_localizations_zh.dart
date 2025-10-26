@@ -67,6 +67,9 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get currentTemp => '当前';
+
+  @override
   String get min => '最小';
 
   @override

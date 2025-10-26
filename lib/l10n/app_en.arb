@@ -104,6 +104,11 @@
     }
   },
 
+  "currentTemp": "Current",
+  "@currentTemp": {
+    "description": "Current temperature label for chart legend"
+  },
+
   "min": "Min",
   "@min": {
     "description": "Minimum label"

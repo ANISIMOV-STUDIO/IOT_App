@@ -6,6 +6,7 @@ library;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../core/theme/app_theme.dart';
+import '../../generated/l10n/app_localizations.dart';
 
 class FanSpeedControl extends StatelessWidget {
   final String selectedSpeed;
@@ -24,6 +25,7 @@ class FanSpeedControl extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
     final speedIndex = _getSpeedIndex(selectedSpeed);
     final modeColor = AppTheme.getModeColor(mode);
 
@@ -49,7 +51,7 @@ class FanSpeedControl extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Fan Speed',
+                    l10n.fanSpeed,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                           letterSpacing: -0.5,
@@ -57,7 +59,7 @@ class FanSpeedControl extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    enabled ? 'Adjust airflow intensity' : 'Device is off',
+                    enabled ? l10n.adjustAirflow : l10n.deviceIsOff,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: isDark
                               ? AppTheme.darkTextHint
@@ -131,7 +133,7 @@ class FanSpeedControl extends StatelessWidget {
                   onValueChanged: handleValueChanged,
                   backgroundColor: Colors.transparent,
                   thumbColor: modeColor,
-                  children: _buildSegments(isDark),
+                  children: _buildSegments(context, isDark),
                 ),
               ),
             ),
@@ -161,31 +163,32 @@ class FanSpeedControl extends StatelessWidget {
     );
   }
 
-  Map<int, Widget> _buildSegments(bool isDark) {
+  Map<int, Widget> _buildSegments(BuildContext context, bool isDark) {
+    final l10n = AppLocalizations.of(context)!;
     return {
       0: _buildSegmentItem(
-        'Low',
+        l10n.low,
         Icons.air_rounded,
         selectedSpeed == 'low',
         isDark,
         0.3,
       ),
       1: _buildSegmentItem(
-        'Med',
+        l10n.medium,
         Icons.air_rounded,
         selectedSpeed == 'medium',
         isDark,
         0.6,
       ),
       2: _buildSegmentItem(
-        'High',
+        l10n.high,
         Icons.air_rounded,
         selectedSpeed == 'high',
         isDark,
         1.0,
       ),
       3: _buildSegmentItem(
-        'Auto',
+        l10n.auto,
         Icons.autorenew_rounded,
         selectedSpeed == 'auto',
         isDark,
@@ -251,11 +254,12 @@ class FanSpeedControl extends StatelessWidget {
   }
 
   Widget _buildSpeedIndicator(String speed, bool isDark, Color modeColor, BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final descriptions = {
-      'low': 'Gentle airflow for quiet operation',
-      'medium': 'Balanced airflow and noise level',
-      'high': 'Maximum airflow for rapid cooling/heating',
-      'auto': 'Automatically adjusts based on temperature',
+      'low': l10n.gentleAirflow,
+      'medium': l10n.balancedAirflow,
+      'high': l10n.maximumAirflow,
+      'auto': l10n.autoAdjustSpeed,
     };
 
     final powerLevels = {
@@ -318,7 +322,7 @@ class FanSpeedControl extends StatelessWidget {
           Row(
             children: [
               Text(
-                'Power',
+                l10n.power,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: isDark
                           ? AppTheme.darkTextHint

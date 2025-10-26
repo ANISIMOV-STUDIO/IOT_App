@@ -68,6 +68,9 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String get currentTemp => 'Текущая';
+
+  @override
   String get min => 'Мин';
 
   @override

@@ -19,6 +19,7 @@
   "deviceIsOff": "设备已关闭",
   "target": "目标",
   "current": "当前：{temp}°C",
+  "currentTemp": "当前",
   "min": "最小",
   "max": "最大",
   "operatingMode": "运行模式",
