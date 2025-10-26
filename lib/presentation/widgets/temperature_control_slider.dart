@@ -77,7 +77,7 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
         isDark: isDark,
         borderRadius: 24,
       ),
-      padding: const EdgeInsets.all(32),
+      padding: const EdgeInsets.all(20),
       child: Column(
         children: [
           // Header
@@ -143,7 +143,7 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
             ],
           ),
 
-          const SizedBox(height: 40),
+          const SizedBox(height: 24),
 
           // Circular Slider
           Stack(
@@ -157,8 +157,8 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
                     return Transform.scale(
                       scale: _pulseAnimation.value,
                       child: Container(
-                        width: 220,
-                        height: 220,
+                        width: 200,
+                        height: 200,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           gradient: RadialGradient(
@@ -178,7 +178,7 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
                 onPanUpdate: widget.enabled
                     ? (details) {
                         final RenderBox box = context.findRenderObject() as RenderBox;
-                        final center = Offset(box.size.width / 2, 280 / 2);
+                        final center = Offset(box.size.width / 2, 250 / 2);
                         final position = details.localPosition - center;
                         final angle = math.atan2(position.dy, position.dx);
 
@@ -211,7 +211,7 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
                     ? (_) => widget.onChanged(_currentValue)
                     : null,
                 child: CustomPaint(
-                  size: const Size(280, 280),
+                  size: const Size(250, 250),
                   painter: _CircularSliderPainter(
                     value: _currentValue,
                     minValue: AppConstants.minTemperature,
@@ -223,8 +223,8 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
                     isDark: isDark,
                   ),
                   child: SizedBox(
-                    width: 280,
-                    height: 280,
+                    width: 250,
+                    height: 250,
                     child: Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -267,7 +267,7 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
                                       .displayLarge
                                       ?.copyWith(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 64,
+                                        fontSize: 56,
                                         color: Colors.white,
                                         height: 1,
                                         letterSpacing: -2,
@@ -367,7 +367,7 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
             ],
           ),
 
-          const SizedBox(height: 32),
+          const SizedBox(height: 20),
 
           // Temperature Range Indicators
           Row(
@@ -498,25 +498,34 @@ class _CircularSliderPainter extends CustomPainter {
         progressPaint,
       );
 
-      // Draw thumb
+      // Draw thumb (larger for better touch target)
       final thumbAngle = startAngle + progressAngle;
       final thumbX = center.dx + radius * math.cos(thumbAngle);
       final thumbY = center.dy + radius * math.sin(thumbAngle);
 
+      // Shadow layer for depth
+      final shadowPaint = Paint()
+        ..color = Colors.black.withOpacity(0.2)
+        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
+
+      canvas.drawCircle(Offset(thumbX, thumbY + 2), 16, shadowPaint);
+
+      // Main thumb circle
       final thumbPaint = Paint()
         ..color = Colors.white
         ..style = PaintingStyle.fill;
 
-      canvas.drawCircle(Offset(thumbX, thumbY), 8, thumbPaint);
+      canvas.drawCircle(Offset(thumbX, thumbY), 16, thumbPaint);
 
+      // Colored border
       final thumbBorderPaint = Paint()
         ..shader = gradient!.createShader(
-          Rect.fromCircle(center: Offset(thumbX, thumbY), radius: 8),
+          Rect.fromCircle(center: Offset(thumbX, thumbY), radius: 16),
         )
         ..style = PaintingStyle.stroke
-        ..strokeWidth = 3;
+        ..strokeWidth = 4;
 
-      canvas.drawCircle(Offset(thumbX, thumbY), 8, thumbBorderPaint);
+      canvas.drawCircle(Offset(thumbX, thumbY), 16, thumbBorderPaint);
     }
   }
 
