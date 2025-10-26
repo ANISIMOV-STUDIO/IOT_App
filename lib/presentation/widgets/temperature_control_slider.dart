@@ -1,25 +1,25 @@
 /// Temperature Control Slider
 ///
-/// Modern circular slider with gradient
+/// Circular slider for temperature control with modern design
 library;
 
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import '../../core/utils/constants.dart';
+import 'dart:math' as math;
 import '../../core/theme/app_theme.dart';
+import '../../core/utils/constants.dart';
 import '../../generated/l10n/app_localizations.dart';
 
 class TemperatureControlSlider extends StatefulWidget {
-  final double currentTemp;
   final double targetTemp;
+  final double currentTemp;
   final ValueChanged<double> onChanged;
   final bool enabled;
   final String mode;
 
   const TemperatureControlSlider({
     super.key,
-    required this.currentTemp,
     required this.targetTemp,
+    required this.currentTemp,
     required this.onChanged,
     this.enabled = true,
     this.mode = 'auto',
@@ -35,7 +35,11 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
   late double _currentValue;
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
-  bool _isDragging = false;
+
+  // Angle constants - 270° arc from bottom-left to bottom-right
+  static const double _startAngle = 135.0 * math.pi / 180.0; // 135° in radians
+  static const double _endAngle = 45.0 * math.pi / 180.0; // 45° in radians (405° = 45°)
+  static const double _totalSweep = 270.0; // total degrees of sweep
 
   @override
   void initState() {
@@ -45,17 +49,15 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
     _pulseController = AnimationController(
       duration: const Duration(milliseconds: 1500),
       vsync: this,
-    )..repeat(reverse: true);
+    );
 
-    _pulseAnimation = Tween<double>(begin: 0.95, end: 1.05).animate(
+    _pulseAnimation = Tween<double>(begin: 1.0, end: 1.15).animate(
       CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
     );
-  }
 
-  @override
-  void dispose() {
-    _pulseController.dispose();
-    super.dispose();
+    if (widget.enabled) {
+      _pulseController.repeat(reverse: true);
+    }
   }
 
   @override
@@ -65,12 +67,73 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
       _currentValue = widget.targetTemp;
     }
 
-    // CRITICAL FIX: Stop animation when disabled to save 60 FPS + battery
+    // Pause/resume animation based on enabled state
     if (!widget.enabled && oldWidget.enabled) {
       _pulseController.stop();
     } else if (widget.enabled && !oldWidget.enabled) {
       _pulseController.repeat(reverse: true);
     }
+  }
+
+  @override
+  void dispose() {
+    _pulseController.dispose();
+    super.dispose();
+  }
+
+  // Convert touch position to temperature value
+  double _getTempFromPosition(Offset center, Offset position) {
+    final dx = position.dx - center.dx;
+    final dy = position.dy - center.dy;
+
+    // Get angle in radians from atan2 (-π to π)
+    double angle = math.atan2(dy, dx);
+
+    // Convert to degrees and normalize to 0-360
+    double degrees = angle * 180 / math.pi;
+    if (degrees < 0) degrees += 360;
+
+    // Our arc goes from 135° to 45° (405°)
+    // Map the angle to progress along the arc
+    double progress;
+
+    if (degrees >= 135 && degrees <= 360) {
+      // From 135° to 360° (first part of arc)
+      progress = (degrees - 135) / _totalSweep;
+    } else if (degrees >= 0 && degrees <= 45) {
+      // From 0° to 45° (second part of arc, continuing from 360°)
+      progress = (degrees + 360 - 135) / _totalSweep;
+    } else {
+      // Outside arc range (45° to 135°) - snap to nearest endpoint
+      if (degrees > 45 && degrees < 90) {
+        progress = 1.0; // Snap to max
+      } else {
+        progress = 0.0; // Snap to min
+      }
+    }
+
+    // Clamp progress to valid range
+    progress = progress.clamp(0.0, 1.0);
+
+    // Map progress to temperature
+    return AppConstants.minTemperature +
+        (AppConstants.maxTemperature - AppConstants.minTemperature) * progress;
+  }
+
+  void _handlePanUpdate(Offset localPosition, Size size) {
+    if (!widget.enabled) return;
+
+    final center = Offset(size.width / 2, size.height / 2);
+    final newValue = _getTempFromPosition(center, localPosition);
+
+    setState(() {
+      _currentValue = newValue;
+    });
+  }
+
+  void _handlePanEnd() {
+    if (!widget.enabled) return;
+    widget.onChanged(_currentValue);
   }
 
   @override
@@ -85,7 +148,7 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
         isDark: isDark,
         borderRadius: 24,
       ),
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(24),
       child: Column(
         children: [
           // Header
@@ -113,52 +176,16 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
                   ),
                 ],
               ),
-              if (widget.enabled)
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    gradient: modeGradient,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: modeColor.withValues(alpha: 0.3),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        AppTheme.getModeIcon(widget.mode),
-                        color: Colors.white,
-                        size: 16,
-                      ),
-                      const SizedBox(width: 6),
-                      Text(
-                        widget.mode.toUpperCase(),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 0.5,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
             ],
           ),
 
           const SizedBox(height: 24),
 
-          // Circular Slider - RepaintBoundary isolates repaints
-          RepaintBoundary(
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-              // Animated pulse effect
+          // Circular Slider
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              // Pulse animation
               if (widget.enabled)
                 AnimatedBuilder(
                   animation: _pulseAnimation,
@@ -182,126 +209,86 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
                   },
                 ),
 
-              // Custom Circular Slider with scroll blocking
+              // Gesture detector with custom paint
               GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onVerticalDragUpdate: _isDragging && widget.enabled ? (_) {} : null, // Block vertical scroll only when dragging
-                child: GestureDetector(
-                  onPanDown: widget.enabled
-                      ? (details) {
-                          // Check if touch is near the thumb
-                          final RenderBox box = context.findRenderObject() as RenderBox;
-                          final center = Offset(box.size.width / 2, 250 / 2);
-                          final radius = math.min(box.size.width, 250) / 2 - 20;
-
-                          // Calculate current thumb position
-                          final progress = (_currentValue - AppConstants.minTemperature) /
-                              (AppConstants.maxTemperature - AppConstants.minTemperature);
-                          const startAngle = -math.pi * 3 / 4;
-                          const sweepAngle = math.pi * 3 / 2;
-                          final thumbAngle = startAngle + sweepAngle * progress;
-                          final thumbX = center.dx + radius * math.cos(thumbAngle);
-                          final thumbY = center.dy + radius * math.sin(thumbAngle);
-
-                          // Check if touch is within thumb area (expanded for easier touch)
-                          final touchPosition = details.localPosition;
-                          final distanceToThumb = math.sqrt(
-                            math.pow(touchPosition.dx - thumbX, 2) +
-                            math.pow(touchPosition.dy - thumbY, 2)
-                          );
-
-                          // Allow drag if within 40px of thumb (generous touch area)
-                          setState(() {
-                            _isDragging = distanceToThumb <= 40;
-                          });
-                        }
-                      : null,
-                  onPanUpdate: widget.enabled && _isDragging
-                      ? (details) {
-                          final RenderBox box = context.findRenderObject() as RenderBox;
-                          final center = Offset(box.size.width / 2, 250 / 2);
-                          final position = details.localPosition - center;
-                          final angle = math.atan2(position.dy, position.dx);
-
-                          // Convert angle to temperature (135° to 405° range)
-                          double normalizedAngle = angle + math.pi / 2;
-                          if (normalizedAngle < 0) normalizedAngle += 2 * math.pi;
-
-                          // Map to 270° range starting at 135°
-                          const startAngle = 3 * math.pi / 4;
-                          const endAngle = startAngle + 3 * math.pi / 2;
-
-                          if (normalizedAngle >= startAngle || normalizedAngle <= endAngle - 2 * math.pi) {
-                            double tempAngle = normalizedAngle;
-                            if (tempAngle < startAngle) tempAngle += 2 * math.pi;
-
-                            final progress = (tempAngle - startAngle) / (3 * math.pi / 2);
-                            final newTemp = AppConstants.minTemperature +
-                                (AppConstants.maxTemperature - AppConstants.minTemperature) * progress;
-
-                            setState(() {
-                              _currentValue = newTemp.clamp(
-                                AppConstants.minTemperature,
-                                AppConstants.maxTemperature,
-                              );
-                            });
-                          }
-                        }
-                      : null,
-                  onPanEnd: widget.enabled && _isDragging
-                      ? (_) {
-                          widget.onChanged(_currentValue);
-                          setState(() {
-                            _isDragging = false;
-                          });
-                        }
-                      : null,
-                  onPanCancel: widget.enabled
-                      ? () {
-                          setState(() {
-                            _isDragging = false;
-                          });
-                        }
-                      : null,
+                onPanUpdate: (details) {
+                  _handlePanUpdate(details.localPosition, const Size(250, 250));
+                },
+                onPanEnd: (_) => _handlePanEnd(),
+                onTapUp: (details) {
+                  _handlePanUpdate(details.localPosition, const Size(250, 250));
+                  _handlePanEnd();
+                },
+                child: RepaintBoundary(
                   child: CustomPaint(
-                  size: const Size(250, 250),
-                  painter: _CircularSliderPainter(
-                    value: _currentValue,
-                    minValue: AppConstants.minTemperature,
-                    maxValue: AppConstants.maxTemperature,
-                    gradient: widget.enabled ? modeGradient : null,
-                    trackColor: isDark
-                        ? AppTheme.darkBorder.withValues(alpha: 0.3)
-                        : AppTheme.lightBorder.withValues(alpha: 0.5),
-                    isDark: isDark,
-                  ),
-                  child: SizedBox(
-                    width: 250,
-                    height: 250,
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          // Target Temperature
-                          Text(
-                            l10n.target,
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  color: isDark
-                                      ? AppTheme.darkTextHint
-                                      : AppTheme.lightTextHint,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
-                                  letterSpacing: 1,
+                    size: const Size(250, 250),
+                    painter: _CircularSliderPainter(
+                      value: _currentValue,
+                      minValue: AppConstants.minTemperature,
+                      maxValue: AppConstants.maxTemperature,
+                      gradient: widget.enabled ? modeGradient : null,
+                      trackColor: isDark
+                          ? AppTheme.darkBorder.withValues(alpha: 0.3)
+                          : AppTheme.lightBorder.withValues(alpha: 0.5),
+                      isDark: isDark,
+                    ),
+                    child: SizedBox(
+                      width: 250,
+                      height: 250,
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            // Target label
+                            Text(
+                              l10n.target,
+                              style:
+                                  Theme.of(context).textTheme.bodySmall?.copyWith(
+                                        color: isDark
+                                            ? AppTheme.darkTextHint
+                                            : AppTheme.lightTextHint,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w600,
+                                        letterSpacing: 1,
+                                      ),
+                            ),
+                            const SizedBox(height: 8),
+                            // Temperature value
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ShaderMask(
+                                  shaderCallback: (bounds) => widget.enabled
+                                      ? modeGradient.createShader(bounds)
+                                      : LinearGradient(
+                                          colors: [
+                                            isDark
+                                                ? AppTheme.darkTextSecondary
+                                                : AppTheme.lightTextSecondary,
+                                            isDark
+                                                ? AppTheme.darkTextSecondary
+                                                : AppTheme.lightTextSecondary,
+                                          ],
+                                        ).createShader(bounds),
+                                  child: Text(
+                                    _currentValue.toStringAsFixed(1),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .displayLarge
+                                        ?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          height: 1,
+                                          color: Colors.white,
+                                          letterSpacing: -2,
+                                        ),
+                                  ),
                                 ),
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              ShaderMask(
-                                shaderCallback: (bounds) =>
-                                    widget.enabled
+                                const SizedBox(width: 4),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8),
+                                  child: ShaderMask(
+                                    shaderCallback: (bounds) => widget.enabled
                                         ? modeGradient.createShader(bounds)
                                         : LinearGradient(
                                             colors: [
@@ -313,118 +300,79 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
                                                   : AppTheme.lightTextSecondary,
                                             ],
                                           ).createShader(bounds),
-                                child: Text(
-                                  _currentValue.toStringAsFixed(1),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .displayLarge
-                                      ?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 56,
-                                        color: Colors.white,
-                                        height: 1,
-                                        letterSpacing: -2,
-                                      ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 8),
-                                child: ShaderMask(
-                                  shaderCallback: (bounds) =>
-                                      widget.enabled
-                                          ? modeGradient.createShader(bounds)
-                                          : LinearGradient(
-                                              colors: [
-                                                isDark
-                                                    ? AppTheme.darkTextSecondary
-                                                    : AppTheme.lightTextSecondary,
-                                                isDark
-                                                    ? AppTheme.darkTextSecondary
-                                                    : AppTheme.lightTextSecondary,
-                                              ],
-                                            ).createShader(bounds),
-                                  child: Text(
-                                    '°C',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineMedium
-                                        ?.copyWith(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                    child: Text(
+                                      '°C',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineMedium
+                                          ?.copyWith(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ],
-                          ),
-
-                          const SizedBox(height: 24),
-
-                          // Current Temperature
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 10,
-                            ),
-                            decoration: BoxDecoration(
-                              color: isDark
-                                  ? AppTheme.darkSurface.withValues(alpha: 0.5)
-                                  : AppTheme.lightSurface.withValues(alpha: 0.8),
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(
-                                color: widget.enabled
-                                    ? modeColor.withValues(alpha: 0.3)
-                                    : (isDark
-                                            ? AppTheme.darkBorder
-                                            : AppTheme.lightBorder)
-                                        .withValues(alpha: 0.3),
-                                width: 1.5,
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.thermostat_rounded,
-                                  size: 18,
-                                  color: widget.enabled
-                                      ? modeColor
-                                      : (isDark
-                                          ? AppTheme.darkTextHint
-                                          : AppTheme.lightTextHint),
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  l10n.current('${widget.currentTemp.toStringAsFixed(1)}°C'),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(
-                                        fontWeight: FontWeight.w600,
-                                        color: widget.enabled
-                                            ? modeColor
-                                            : (isDark
-                                                ? AppTheme.darkTextSecondary
-                                                : AppTheme.lightTextSecondary),
-                                      ),
                                 ),
                               ],
                             ),
-                          ),
-                        ],
+                            const SizedBox(height: 24),
+                            // Current temperature
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 10,
+                              ),
+                              decoration: BoxDecoration(
+                                color: isDark
+                                    ? AppTheme.darkSurface.withValues(alpha: 0.5)
+                                    : AppTheme.lightSurface.withValues(alpha: 0.7),
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(
+                                  color: isDark
+                                      ? AppTheme.darkBorder.withValues(alpha: 0.3)
+                                      : AppTheme.lightBorder.withValues(alpha: 0.3),
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.thermostat,
+                                    size: 16,
+                                    color: widget.enabled
+                                        ? modeColor
+                                        : (isDark
+                                            ? AppTheme.darkTextSecondary
+                                            : AppTheme.lightTextSecondary),
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    '${widget.currentTemp.toStringAsFixed(1)}°C',
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                              fontWeight: FontWeight.w600,
+                                              color: widget.enabled
+                                                  ? modeColor
+                                                  : (isDark
+                                                      ? AppTheme.darkTextSecondary
+                                                      : AppTheme.lightTextSecondary),
+                                            ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-                ),
-              ],
-            ),
+            ],
           ),
 
           const SizedBox(height: 20),
 
-          // Temperature Range Indicators
+          // Temperature range indicators
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -432,20 +380,14 @@ class _TemperatureControlSliderState extends State<TemperatureControlSlider>
                 context,
                 l10n.min,
                 AppConstants.minTemperature,
-                Icons.ac_unit_rounded,
+                Icons.ac_unit,
                 isDark,
-              ),
-              Container(
-                width: 1,
-                height: 40,
-                color: (isDark ? AppTheme.darkBorder : AppTheme.lightBorder)
-                    .withValues(alpha: 0.3),
               ),
               _buildRangeIndicator(
                 context,
                 l10n.max,
                 AppConstants.maxTemperature,
-                Icons.local_fire_department_rounded,
+                Icons.local_fire_department,
                 isDark,
               ),
             ],
@@ -514,8 +456,8 @@ class _CircularSliderPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = math.min(size.width, size.height) / 2 - 20;
-    const startAngle = -math.pi * 3 / 4;
-    const sweepAngle = math.pi * 3 / 2;
+    const startAngle = 135.0 * math.pi / 180.0; // 135° in radians
+    const sweepAngle = 270.0 * math.pi / 180.0; // 270° sweep
 
     // Draw track
     final trackPaint = Paint()
@@ -553,12 +495,12 @@ class _CircularSliderPainter extends CustomPainter {
         progressPaint,
       );
 
-      // Draw thumb (larger for better touch target)
+      // Draw thumb
       final thumbAngle = startAngle + progressAngle;
       final thumbX = center.dx + radius * math.cos(thumbAngle);
       final thumbY = center.dy + radius * math.sin(thumbAngle);
 
-      // Shadow layer for depth
+      // Shadow
       final shadowPaint = Paint()
         ..color = Colors.black.withValues(alpha: 0.2)
         ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
@@ -580,7 +522,7 @@ class _CircularSliderPainter extends CustomPainter {
         ..style = PaintingStyle.stroke
         ..strokeWidth = 4;
 
-      canvas.drawCircle(Offset(thumbX, thumbY), 16, thumbBorderPaint);
+      canvas.drawCircle(Offset(thumbX, thumbY), 14, thumbBorderPaint);
     }
   }
 
