@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/di/injection_container.dart';
 import '../../core/theme/liquid_glass_theme.dart';
+import '../../core/utils/responsive_utils.dart';
 import '../../core/services/theme_service.dart';
 import '../../core/services/language_service.dart';
 import '../../generated/l10n/app_localizations.dart';
@@ -56,10 +57,19 @@ class LiquidGlassSettingsScreen extends StatelessWidget {
 
               // Settings list
               Expanded(
-                child: ListView(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  physics: const BouncingScrollPhysics(),
-                  children: [
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: ResponsiveUtils.isDesktop(context) || ResponsiveUtils.isTablet(context)
+                          ? 700
+                          : double.infinity,
+                    ),
+                    child: ListView(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: ResponsiveUtils.scaledSpacing(context, 20),
+                      ),
+                      physics: const BouncingScrollPhysics(),
+                      children: [
                     // Appearance Section
                     _SectionHeader(title: l10n.appearance),
                     const SizedBox(height: 12),
@@ -193,9 +203,9 @@ class LiquidGlassSettingsScreen extends StatelessWidget {
                           Container(
                             width: 80,
                             height: 80,
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               shape: BoxShape.circle,
-                              gradient: const LinearGradient(
+                              gradient: LinearGradient(
                                 colors: [
                                   LiquidGlassTheme.glassBlue,
                                   LiquidGlassTheme.glassTeal,
@@ -249,7 +259,9 @@ class LiquidGlassSettingsScreen extends StatelessWidget {
                     ),
 
                     const SizedBox(height: 32),
-                  ],
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -400,9 +412,9 @@ class _LogoutDialog extends StatelessWidget {
           children: [
             Container(
               padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 shape: BoxShape.circle,
-                gradient: const LinearGradient(
+                gradient: LinearGradient(
                   colors: [
                     LiquidGlassTheme.glassRed,
                     LiquidGlassTheme.glassOrange,

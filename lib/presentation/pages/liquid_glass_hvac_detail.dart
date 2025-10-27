@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/theme/liquid_glass_theme.dart';
+import '../../core/utils/responsive_utils.dart';
 import '../../domain/entities/hvac_unit.dart';
 import '../../generated/l10n/app_localizations.dart';
 import '../bloc/hvac_detail/hvac_detail_bloc.dart';
@@ -63,6 +64,7 @@ class _LiquidGlassHvacDetailContent extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final l10n = AppLocalizations.of(context)!;
     final size = MediaQuery.of(context).size;
+    final isWeb = ResponsiveUtils.isDesktop(context) || ResponsiveUtils.isTablet(context);
 
     // Background gradient
     final backgroundGradient = LinearGradient(
@@ -85,34 +87,16 @@ class _LiquidGlassHvacDetailContent extends StatelessWidget {
               Expanded(
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    children: [
-                      // Main circular temperature control
-                      _buildTemperatureControl(context, isDark, size),
-
-                      const SizedBox(height: 32),
-
-                      // Current temperature display
-                      _buildCurrentTemperature(context, isDark),
-
-                      const SizedBox(height: 32),
-
-                      // Mode selector cards
-                      _buildModeSelector(context, isDark, l10n),
-
-                      const SizedBox(height: 24),
-
-                      // Fan speed control
-                      _buildFanSpeedControl(context, isDark, l10n),
-
-                      const SizedBox(height: 24),
-
-                      // Power toggle
-                      _buildPowerToggle(context, isDark, l10n),
-
-                      const SizedBox(height: 32),
-                    ],
+                  padding: EdgeInsets.all(ResponsiveUtils.scaledSpacing(context, 20)),
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxWidth: isWeb ? 900 : double.infinity,
+                      ),
+                      child: isWeb
+                          ? _buildWebLayout(context, isDark, size, l10n)
+                          : _buildMobileLayout(context, isDark, size, l10n),
+                    ),
                   ),
                 ),
               ),
@@ -120,6 +104,78 @@ class _LiquidGlassHvacDetailContent extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  // Mobile layout - vertical
+  Widget _buildMobileLayout(
+    BuildContext context,
+    bool isDark,
+    Size size,
+    AppLocalizations l10n,
+  ) {
+    return Column(
+      children: [
+        // Main circular temperature control
+        _buildTemperatureControl(context, isDark, size),
+        const SizedBox(height: 32),
+
+        // Current temperature display
+        _buildCurrentTemperature(context, isDark),
+        const SizedBox(height: 32),
+
+        // Mode selector cards
+        _buildModeSelector(context, isDark, l10n),
+        const SizedBox(height: 24),
+
+        // Fan speed control
+        _buildFanSpeedControl(context, isDark, l10n),
+        const SizedBox(height: 24),
+
+        // Power toggle
+        _buildPowerToggle(context, isDark, l10n),
+        const SizedBox(height: 32),
+      ],
+    );
+  }
+
+  // Web layout - compact grid
+  Widget _buildWebLayout(
+    BuildContext context,
+    bool isDark,
+    Size size,
+    AppLocalizations l10n,
+  ) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Left side - compact temperature control
+        Expanded(
+          flex: 2,
+          child: Column(
+            children: [
+              _buildTemperatureControl(context, isDark, size, compact: true),
+              const SizedBox(height: 24),
+              _buildCurrentTemperature(context, isDark),
+            ],
+          ),
+        ),
+        const SizedBox(width: 24),
+
+        // Right side - controls
+        Expanded(
+          flex: 3,
+          child: Column(
+            children: [
+              _buildModeSelector(context, isDark, l10n),
+              const SizedBox(height: 20),
+              _buildFanSpeedControl(context, isDark, l10n),
+              const SizedBox(height: 20),
+              _buildPowerToggle(context, isDark, l10n),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -175,23 +231,28 @@ class _LiquidGlassHvacDetailContent extends StatelessWidget {
   Widget _buildTemperatureControl(
     BuildContext context,
     bool isDark,
-    Size size,
-  ) {
+    Size size, {
+    bool compact = false,
+  }) {
     final modeGradient = LiquidGlassTheme.getModeGradient(
       unit.mode,
       isDark: isDark,
     );
 
+    // Responsive sizing
+    final circleSize = compact ? 280.0 : (size.width * 0.8).clamp(280.0, 400.0);
+    final fontSize = compact ? 56.0 : ResponsiveUtils.scaledFontSize(context, 72);
+
     return SizedBox(
-      width: size.width * 0.8,
-      height: size.width * 0.8,
+      width: circleSize,
+      height: circleSize,
       child: Stack(
         alignment: Alignment.center,
         children: [
           // Outer glow
           Container(
-            width: size.width * 0.75,
-            height: size.width * 0.75,
+            width: circleSize * 0.95,
+            height: circleSize * 0.95,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               gradient: RadialGradient(
@@ -206,10 +267,10 @@ class _LiquidGlassHvacDetailContent extends StatelessWidget {
 
           // Main circular control
           LiquidGlassContainer(
-            width: size.width * 0.7,
-            height: size.width * 0.7,
-            padding: const EdgeInsets.all(32),
-            borderRadius: size.width * 0.35,
+            width: circleSize * 0.88,
+            height: circleSize * 0.88,
+            padding: EdgeInsets.all(compact ? 24 : 32),
+            borderRadius: circleSize * 0.44,
             gradient: [
               (isDark ? Colors.white : Colors.black).withValues(alpha: 0.1),
               (isDark ? Colors.white : Colors.black).withValues(alpha: 0.05),
@@ -223,7 +284,7 @@ class _LiquidGlassHvacDetailContent extends StatelessWidget {
                 Text(
                   '${unit.targetTemp.toInt()}°',
                   style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                        fontSize: 72,
+                        fontSize: fontSize,
                         fontWeight: FontWeight.w700,
                         foreground: Paint()
                           ..shader = LinearGradient(
@@ -234,13 +295,13 @@ class _LiquidGlassHvacDetailContent extends StatelessWidget {
                       ),
                 ),
 
-                const SizedBox(height: 8),
+                SizedBox(height: compact ? 6 : 8),
 
                 // Mode indicator
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 6,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: compact ? 12 : 16,
+                    vertical: compact ? 4 : 6,
                   ),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(colors: modeGradient),
@@ -278,7 +339,7 @@ class _LiquidGlassHvacDetailContent extends StatelessWidget {
                   },
                 ),
 
-                const SizedBox(width: 60),
+                SizedBox(width: compact ? 40 : 60),
 
                 // Increase
                 _buildTempButton(

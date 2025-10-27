@@ -124,13 +124,13 @@ class LiquidGlassTheme {
       scaffoldBackgroundColor: lightGradient[0],
 
       // App Bar Theme - Translucent
-      appBarTheme: AppBarTheme(
+      appBarTheme: const AppBarTheme(
         elevation: 0,
         centerTitle: true,
         scrolledUnderElevation: 0,
         backgroundColor: Colors.transparent,
-        foregroundColor: const Color(0xFF1C1C1E),
-        titleTextStyle: const TextStyle(
+        foregroundColor: Color(0xFF1C1C1E),
+        titleTextStyle: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.w600,
           color: Color(0xFF1C1C1E),
@@ -222,13 +222,13 @@ class LiquidGlassTheme {
       scaffoldBackgroundColor: darkGradient[0],
 
       // App Bar Theme - Translucent
-      appBarTheme: AppBarTheme(
+      appBarTheme: const AppBarTheme(
         elevation: 0,
         centerTitle: true,
         scrolledUnderElevation: 0,
         backgroundColor: Colors.transparent,
-        foregroundColor: const Color(0xFFF5F5F7),
-        titleTextStyle: const TextStyle(
+        foregroundColor: Color(0xFFF5F5F7),
+        titleTextStyle: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.w600,
           color: Color(0xFFF5F5F7),

@@ -6,6 +6,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/theme/liquid_glass_theme.dart';
+import '../../core/utils/responsive_utils.dart';
 import '../../generated/l10n/app_localizations.dart';
 import '../bloc/hvac_list/hvac_list_bloc.dart';
 import '../bloc/hvac_list/hvac_list_event.dart';
@@ -175,9 +176,9 @@ class LiquidGlassHomeScreen extends StatelessWidget {
             children: [
               Container(
                 padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   shape: BoxShape.circle,
-                  gradient: const LinearGradient(
+                  gradient: LinearGradient(
                     colors: [
                       LiquidGlassTheme.glassRed,
                       LiquidGlassTheme.glassOrange,
@@ -228,9 +229,9 @@ class LiquidGlassHomeScreen extends StatelessWidget {
             children: [
               Container(
                 padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   shape: BoxShape.circle,
-                  gradient: const LinearGradient(
+                  gradient: LinearGradient(
                     colors: [
                       LiquidGlassTheme.glassBlue,
                       LiquidGlassTheme.glassTeal,
@@ -278,17 +279,21 @@ class LiquidGlassHomeScreen extends StatelessWidget {
   }
 
   Widget _buildDeviceGrid(BuildContext context, List<HvacUnit> units, bool isDark) {
+    final columnCount = ResponsiveUtils.getGridColumnCount(context, mobile: 2);
+    final spacing = ResponsiveUtils.scaledSpacing(context, 16);
+    final padding = ResponsiveUtils.scaledSpacing(context, 20);
+
     return RefreshIndicator(
       onRefresh: () async {
         context.read<HvacListBloc>().add(const RefreshHvacUnitsEvent());
       },
       child: GridView.builder(
-        padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
+        padding: EdgeInsets.fromLTRB(padding, padding * 0.4, padding, padding),
         physics: const BouncingScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: columnCount,
+          crossAxisSpacing: spacing,
+          mainAxisSpacing: spacing,
           childAspectRatio: 0.85,
         ),
         itemCount: units.length,
@@ -310,6 +315,10 @@ class _LiquidGlassDeviceCard extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final modeGradient = LiquidGlassTheme.getModeGradient(unit.mode, isDark: isDark);
 
+    // Responsive scaling for web
+    final tempFontSize = ResponsiveUtils.scaledFontSize(context, 56);
+    final labelFontSize = ResponsiveUtils.scaledFontSize(context, 17);
+
     return LiquidGlassCard(
       onTap: () {
         Navigator.of(context).push(
@@ -330,7 +339,9 @@ class _LiquidGlassDeviceCard extends StatelessWidget {
                   children: [
                     Text(
                       unit.name,
-                      style: Theme.of(context).textTheme.labelLarge,
+                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                            fontSize: labelFontSize,
+                          ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -339,7 +350,7 @@ class _LiquidGlassDeviceCard extends StatelessWidget {
                       Text(
                         unit.location!,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              fontSize: 12,
+                              fontSize: labelFontSize * 0.7,
                             ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -388,7 +399,7 @@ class _LiquidGlassDeviceCard extends StatelessWidget {
                     child: Text(
                       '${unit.currentTemp.toInt()}°',
                       style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                            fontSize: 56,
+                            fontSize: tempFontSize,
                             fontWeight: FontWeight.w700,
                             color: Colors.white,
                           ),
