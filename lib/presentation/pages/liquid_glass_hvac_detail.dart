@@ -85,20 +85,24 @@ class _LiquidGlassHvacDetailContent extends StatelessWidget {
               _buildHeader(context, isDark),
 
               Expanded(
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  padding: EdgeInsets.all(ResponsiveUtils.scaledSpacing(context, 20)),
-                  child: Center(
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxWidth: isWeb ? 900 : double.infinity,
+                child: isWeb
+                    ? Center(
+                        child: SingleChildScrollView(
+                          physics: const BouncingScrollPhysics(),
+                          padding: EdgeInsets.all(ResponsiveUtils.scaledSpacing(context, 20)),
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(
+                              maxWidth: 1100,
+                            ),
+                            child: _buildWebLayout(context, isDark, size, l10n),
+                          ),
+                        ),
+                      )
+                    : SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        padding: EdgeInsets.all(ResponsiveUtils.scaledSpacing(context, 20)),
+                        child: _buildMobileLayout(context, isDark, size, l10n),
                       ),
-                      child: isWeb
-                          ? _buildWebLayout(context, isDark, size, l10n)
-                          : _buildMobileLayout(context, isDark, size, l10n),
-                    ),
-                  ),
-                ),
               ),
             ],
           ),
@@ -240,8 +244,8 @@ class _LiquidGlassHvacDetailContent extends StatelessWidget {
     );
 
     // Responsive sizing
-    final circleSize = compact ? 280.0 : (size.width * 0.8).clamp(280.0, 400.0);
-    final fontSize = compact ? 56.0 : ResponsiveUtils.scaledFontSize(context, 72);
+    final circleSize = compact ? 340.0 : (size.width * 0.8).clamp(280.0, 400.0);
+    final fontSize = compact ? 64.0 : ResponsiveUtils.scaledFontSize(context, 72);
 
     return SizedBox(
       width: circleSize,

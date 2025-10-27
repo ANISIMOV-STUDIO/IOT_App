@@ -23,6 +23,7 @@ class LiquidGlassSettingsScreen extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final themeService = sl<ThemeService>();
     final languageService = sl<LanguageService>();
+    final isWeb = ResponsiveUtils.isDesktop(context) || ResponsiveUtils.isTablet(context);
 
     return Scaffold(
       body: Container(
@@ -57,19 +58,20 @@ class LiquidGlassSettingsScreen extends StatelessWidget {
 
               // Settings list
               Expanded(
-                child: Center(
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      maxWidth: ResponsiveUtils.isDesktop(context) || ResponsiveUtils.isTablet(context)
-                          ? 700
-                          : double.infinity,
-                    ),
-                    child: ListView(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: ResponsiveUtils.scaledSpacing(context, 20),
-                      ),
-                      physics: const BouncingScrollPhysics(),
-                      children: [
+                child: isWeb
+                    ? Center(
+                        child: SingleChildScrollView(
+                          physics: const BouncingScrollPhysics(),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: ResponsiveUtils.scaledSpacing(context, 20),
+                          ),
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(
+                              maxWidth: 800,
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
                     // Appearance Section
                     _SectionHeader(title: l10n.appearance),
                     const SizedBox(height: 12),
@@ -259,10 +261,208 @@ class LiquidGlassSettingsScreen extends StatelessWidget {
                     ),
 
                     const SizedBox(height: 32),
-                      ],
-                    ),
-                  ),
-                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
+                    : ListView(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: ResponsiveUtils.scaledSpacing(context, 20),
+                        ),
+                        physics: const BouncingScrollPhysics(),
+                        children: [
+                          // Appearance Section
+                          _SectionHeader(title: l10n.appearance),
+                          const SizedBox(height: 12),
+
+                          // Theme selector
+                          LiquidGlassContainer(
+                            padding: const EdgeInsets.all(16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.palette_outlined,
+                                      size: 20,
+                                      color: LiquidGlassTheme.glassBlue,
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Text(
+                                      l10n.theme,
+                                      style: Theme.of(context).textTheme.labelLarge,
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 16),
+                                ListenableBuilder(
+                                  listenable: themeService,
+                                  builder: (context, _) {
+                                    return Row(
+                                      children: [
+                                        Expanded(
+                                          child: _ThemeOption(
+                                            label: l10n.light,
+                                            icon: Icons.light_mode,
+                                            isSelected: themeService.themeMode == ThemeMode.light,
+                                            onTap: () => themeService.setThemeMode(ThemeMode.light),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 12),
+                                        Expanded(
+                                          child: _ThemeOption(
+                                            label: l10n.dark,
+                                            icon: Icons.dark_mode,
+                                            isSelected: themeService.themeMode == ThemeMode.dark,
+                                            onTap: () => themeService.setThemeMode(ThemeMode.dark),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 12),
+                                        Expanded(
+                                          child: _ThemeOption(
+                                            label: l10n.system,
+                                            icon: Icons.auto_awesome,
+                                            isSelected: themeService.themeMode == ThemeMode.system,
+                                            onTap: () => themeService.setThemeMode(ThemeMode.system),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          // Language selector
+                          LiquidGlassContainer(
+                            padding: const EdgeInsets.all(16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.language,
+                                      size: 20,
+                                      color: LiquidGlassTheme.glassTeal,
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Text(
+                                      l10n.language,
+                                      style: Theme.of(context).textTheme.labelLarge,
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 16),
+                                ListenableBuilder(
+                                  listenable: languageService,
+                                  builder: (context, _) {
+                                    return Column(
+                                      children: [
+                                        _LanguageOption(
+                                          label: l10n.english,
+                                          locale: const Locale('en'),
+                                          isSelected: languageService.currentLocale?.languageCode == 'en',
+                                          onTap: () => languageService.setLocale('en'),
+                                        ),
+                                        const SizedBox(height: 8),
+                                        _LanguageOption(
+                                          label: l10n.russian,
+                                          locale: const Locale('ru'),
+                                          isSelected: languageService.currentLocale?.languageCode == 'ru',
+                                          onTap: () => languageService.setLocale('ru'),
+                                        ),
+                                        const SizedBox(height: 8),
+                                        _LanguageOption(
+                                          label: l10n.chinese,
+                                          locale: const Locale('zh'),
+                                          isSelected: languageService.currentLocale?.languageCode == 'zh',
+                                          onTap: () => languageService.setLocale('zh'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          const SizedBox(height: 32),
+
+                          // About Section
+                          _SectionHeader(title: l10n.about),
+                          const SizedBox(height: 12),
+
+                          LiquidGlassContainer(
+                            padding: const EdgeInsets.all(20),
+                            child: Column(
+                              children: [
+                                Container(
+                                  width: 80,
+                                  height: 80,
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        LiquidGlassTheme.glassBlue,
+                                        LiquidGlassTheme.glassTeal,
+                                      ],
+                                    ),
+                                  ),
+                                  child: const Icon(
+                                    Icons.air,
+                                    size: 40,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                Text(
+                                  l10n.appTitle,
+                                  style: Theme.of(context).textTheme.headlineMedium,
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  '${l10n.version} 1.0.0',
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  l10n.appDescription,
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          const SizedBox(height: 32),
+
+                          // Account Section
+                          const _SectionHeader(title: 'ACCOUNT'),
+                          const SizedBox(height: 12),
+
+                          // Logout button
+                          LiquidGlassButton(
+                            text: l10n.logout,
+                            icon: Icons.logout,
+                            width: double.infinity,
+                            color: LiquidGlassTheme.glassRed,
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (dialogContext) => _LogoutDialog(),
+                              );
+                            },
+                          ),
+
+                          const SizedBox(height: 32),
+                        ],
+                      ),
               ),
             ],
           ),
