@@ -9,7 +9,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'generated/l10n/app_localizations.dart';
 import 'core/di/injection_container.dart' as di;
-import 'core/theme/app_theme.dart';
+import 'core/theme/liquid_glass_theme.dart';
 import 'core/services/theme_service.dart';
 import 'core/services/language_service.dart';
 import 'presentation/bloc/hvac_list/hvac_list_bloc.dart';
@@ -44,9 +44,9 @@ class HvacControlApp extends StatelessWidget {
           title: 'HVAC Control',
           debugShowCheckedModeBanner: false,
 
-          // Theme
-          theme: AppTheme.lightTheme,
-          darkTheme: AppTheme.darkTheme,
+          // Theme - iOS 26 Liquid Glass
+          theme: LiquidGlassTheme.lightTheme,
+          darkTheme: LiquidGlassTheme.darkTheme,
           themeMode: di.sl<ThemeService>().themeMode,
 
           // Localization

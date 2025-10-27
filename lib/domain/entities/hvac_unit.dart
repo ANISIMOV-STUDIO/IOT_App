@@ -15,6 +15,8 @@ class HvacUnit extends Equatable {
   final String fanSpeed; // low, medium, high, auto
   final DateTime timestamp;
   final String? macAddress; // MAC address of the device
+  final String? location; // Physical location of the device
+  final double humidity; // Humidity percentage
 
   const HvacUnit({
     required this.id,
@@ -26,6 +28,8 @@ class HvacUnit extends Equatable {
     required this.fanSpeed,
     required this.timestamp,
     this.macAddress,
+    this.location,
+    this.humidity = 50.0, // Default humidity
   });
 
   /// Create a copy with updated fields
@@ -39,6 +43,8 @@ class HvacUnit extends Equatable {
     String? fanSpeed,
     DateTime? timestamp,
     String? macAddress,
+    String? location,
+    double? humidity,
   }) {
     return HvacUnit(
       id: id ?? this.id,
@@ -50,6 +56,8 @@ class HvacUnit extends Equatable {
       fanSpeed: fanSpeed ?? this.fanSpeed,
       timestamp: timestamp ?? this.timestamp,
       macAddress: macAddress ?? this.macAddress,
+      location: location ?? this.location,
+      humidity: humidity ?? this.humidity,
     );
   }
 
@@ -64,6 +72,8 @@ class HvacUnit extends Equatable {
         fanSpeed,
         timestamp,
         macAddress,
+        location,
+        humidity,
       ];
 
   @override
