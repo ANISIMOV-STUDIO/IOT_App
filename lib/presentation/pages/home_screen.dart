@@ -5,6 +5,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../core/theme/app_theme.dart';
 import '../bloc/hvac_list/hvac_list_bloc.dart';
 import '../bloc/hvac_list/hvac_list_state.dart';
@@ -21,7 +22,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String _selectedRoom = 'Living Room';
+  String _selectedUnit = 'ПВ1';
   double _lampBrightness = 0.55;
   double _acTemperature = 21.0;
 
@@ -41,49 +42,74 @@ class _HomeScreenState extends State<HomeScreen> {
                   // Logo
                   Row(
                     children: [
-                      Container(
-                        width: 32,
-                        height: 32,
-                        decoration: BoxDecoration(
-                          color: AppTheme.primaryOrange,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: const Icon(
-                          Icons.home,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      const Text(
-                        'Orgelux',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700,
+                      SvgPicture.asset(
+                        'assets/images/zilon-logo.svg',
+                        height: 48,
+                        colorFilter: const ColorFilter.mode(
+                          Color(0xFFFF9D5C), // Более яркий оранжевый
+                          BlendMode.srcIn,
                         ),
                       ),
                     ],
                   ),
 
-                  // Room tabs
-                  Row(
-                    children: [
-                      _buildRoomTab('Living Room', _selectedRoom == 'Living Room'),
-                      const SizedBox(width: 12),
-                      _buildRoomTab('Bathroom', _selectedRoom == 'Bathroom'),
-                      const SizedBox(width: 12),
-                      _buildRoomTab('Bedroom', _selectedRoom == 'Bedroom'),
-                      const SizedBox(width: 12),
-                      _buildRoomTab('Kitchen', _selectedRoom == 'Kitchen'),
-                    ],
+                  // Center - HVAC Unit tabs
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _buildUnitTab('ПВ1', _selectedUnit == 'ПВ1'),
+                        const SizedBox(width: 12),
+                        _buildUnitTab('ПВ2', _selectedUnit == 'ПВ2'),
+                        const SizedBox(width: 12),
+                        _buildUnitTab('ПВ3', _selectedUnit == 'ПВ3'),
+                        const SizedBox(width: 12),
+                        _buildUnitTab('ПВ4', _selectedUnit == 'ПВ4'),
+                        const SizedBox(width: 12),
+                        // Add new unit button
+                        MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: GestureDetector(
+                            onTap: () {
+                              // TODO: Navigate to add unit screen
+                            },
+                            child: Container(
+                              width: 36,
+                              height: 36,
+                              decoration: BoxDecoration(
+                                color: AppTheme.backgroundCard,
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: AppTheme.backgroundCardBorder,
+                                ),
+                              ),
+                              child: const Icon(
+                                Icons.add,
+                                size: 20,
+                                color: AppTheme.textSecondary,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
 
-                  // User profile
+                  // User profile and Settings
                   Row(
                     children: [
+                      IconButton(
+                        icon: const Icon(
+                          Icons.settings_outlined,
+                          color: AppTheme.textSecondary,
+                        ),
+                        onPressed: () {},
+                      ),
+                      const SizedBox(width: 8),
                       CircleAvatar(
                         radius: 18,
                         backgroundColor: AppTheme.backgroundCard,
+                        backgroundImage: null, // Add user avatar here
                         child: const Icon(
                           Icons.person_outline,
                           size: 20,
@@ -132,24 +158,27 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildRoomTab(String label, bool isSelected) {
-    return GestureDetector(
-      onTap: () => setState(() => _selectedRoom = label),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: isSelected ? AppTheme.backgroundCard : Colors.transparent,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            color: isSelected ? AppTheme.backgroundCardBorder : Colors.transparent,
+  Widget _buildUnitTab(String label, bool isSelected) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () => setState(() => _selectedUnit = label),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
+            color: isSelected ? AppTheme.backgroundCard : Colors.transparent,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: isSelected ? AppTheme.backgroundCardBorder : Colors.transparent,
+            ),
           ),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: 14,
-            color: isSelected ? AppTheme.textPrimary : AppTheme.textSecondary,
-            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 14,
+              color: isSelected ? AppTheme.textPrimary : AppTheme.textSecondary,
+              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+            ),
           ),
         ),
       ),
@@ -183,10 +212,18 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildDashboard(BuildContext context, List<HvacUnit> units) {
-    final firstUnit = units.isNotEmpty ? units.first : null;
+    // Find unit matching selected tab, or use first unit as fallback
+    HvacUnit? currentUnit;
+    try {
+      currentUnit = units.firstWhere(
+        (unit) => unit.name == _selectedUnit || unit.location == _selectedUnit,
+      );
+    } catch (e) {
+      currentUnit = units.isNotEmpty ? units.first : null;
+    }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20), // Добавлен нижний отступ 20
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -195,22 +232,22 @@ class _HomeScreenState extends State<HomeScreen> {
             flex: 7,
             child: Column(
               children: [
-                // Room preview with live feed
+                // Unit preview with live feed
                 RoomPreviewCard(
-                  roomName: _selectedRoom,
+                  roomName: _selectedUnit,
                   isLive: true,
                   badges: [
-                    const StatusBadge(
+                    StatusBadge(
                       icon: Icons.thermostat,
-                      value: '50%',
+                      value: currentUnit?.fanSpeed ?? "auto",
                     ),
-                    const StatusBadge(
+                    StatusBadge(
                       icon: Icons.water_drop,
-                      value: '70%',
+                      value: '${currentUnit?.humidity.toInt() ?? 0}%',
                     ),
-                    const StatusBadge(
+                    StatusBadge(
                       icon: Icons.thermostat,
-                      value: '21°C',
+                      value: '${currentUnit?.currentTemp.toInt() ?? 21}°C',
                     ),
                     const StatusBadge(
                       icon: Icons.bolt,
@@ -269,7 +306,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           controls: [
                             TemperatureControl(
-                              value: firstUnit?.currentTemp ?? _acTemperature,
+                              value: currentUnit?.currentTemp ?? _acTemperature,
                               min: 15,
                               max: 29,
                               onChanged: (value) {
@@ -308,16 +345,16 @@ class _HomeScreenState extends State<HomeScreen> {
                           controls: [
                             Container(
                               padding: const EdgeInsets.symmetric(vertical: 12),
-                              child: Column(
+                              child: const Column(
                                 children: [
-                                  const Text(
+                                  Text(
                                     '09:00 AM',
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
-                                  const SizedBox(height: 4),
+                                  SizedBox(height: 4),
                                   Text(
                                     'Next Cleaning',
                                     style: TextStyle(
