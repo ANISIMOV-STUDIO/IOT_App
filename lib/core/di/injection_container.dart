@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // Core
 import '../services/api_service.dart';
+import '../services/grpc_service.dart';
 import '../services/theme_service.dart';
 import '../services/language_service.dart';
 import '../config/env_config.dart';
@@ -41,7 +42,10 @@ Future<void> init() async {
   sl.registerLazySingleton(() => sharedPreferences);
 
   //! Core - Services
-  // Initialize API service
+  // Initialize gRPC service
+  sl.registerLazySingleton(() => GrpcService());
+
+  // Initialize API service (REST)
   sl.registerLazySingleton(() => ApiService(sl()));
 
   // Initialize theme service
@@ -49,6 +53,13 @@ Future<void> init() async {
 
   // Initialize language service with SharedPreferences
   sl.registerLazySingleton(() => LanguageService(sl()));
+
+  // Initialize gRPC connection
+  try {
+    await sl<GrpcService>().initialize();
+  } catch (e) {
+    debugPrint('⚠️  gRPC initialization failed (will use Mock/REST): $e');
+  }
 
   //! Features - Auth
   // Auth Bloc

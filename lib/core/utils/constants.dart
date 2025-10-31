@@ -2,16 +2,6 @@
 library;
 
 class AppConstants {
-  // MQTT Configuration
-  static const String mqttBrokerHost = 'localhost'; // TODO: Configure in settings
-  static const int mqttBrokerPort = 1883;
-  static const String mqttClientId = 'hvac_control_app';
-
-  // MQTT Topics
-  static const String mqttTopicUnits = 'hvac/units';
-  static const String mqttTopicUnitState = 'hvac/units/+/state';
-  static String mqttTopicUnitCommand(String unitId) => 'hvac/units/$unitId/command';
-
   // Temperature range
   static const double minTemperature = 16.0;
   static const double maxTemperature = 30.0;

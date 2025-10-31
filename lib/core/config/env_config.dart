@@ -6,58 +6,41 @@ library;
 import 'package:flutter/foundation.dart';
 
 class EnvConfig {
-  // MQTT Configuration from environment variables
-  static String get mqttBrokerHost {
+  // Backend API Configuration
+  static String get apiBaseUrl {
     return const String.fromEnvironment(
-      'MQTT_BROKER_HOST',
+      'API_BASE_URL',
+      defaultValue: 'http://localhost:8080',
+    );
+  }
+
+  static String get grpcHost {
+    return const String.fromEnvironment(
+      'GRPC_HOST',
       defaultValue: 'localhost',
     );
   }
 
-  static int get mqttBrokerPort {
+  static int get grpcPort {
     const portStr = String.fromEnvironment(
-      'MQTT_BROKER_PORT',
-      defaultValue: '1883',
+      'GRPC_PORT',
+      defaultValue: '50051',
     );
-    return int.tryParse(portStr) ?? 1883;
+    return int.tryParse(portStr) ?? 50051;
   }
 
-  static String get mqttClientId {
-    return const String.fromEnvironment(
-      'MQTT_CLIENT_ID',
-      defaultValue: 'hvac_control_app',
-    );
-  }
-
-  static String? get mqttUsername {
-    const username = String.fromEnvironment('MQTT_USERNAME');
-    return username.isEmpty ? null : username;
-  }
-
-  static String? get mqttPassword {
-    const password = String.fromEnvironment('MQTT_PASSWORD');
-    return password.isEmpty ? null : password;
-  }
-
-  static bool get mqttUseSsl {
-    const useSsl = String.fromEnvironment('MQTT_USE_SSL', defaultValue: 'false');
-    return useSsl.toLowerCase() == 'true';
-  }
-
-  static bool get useMqtt {
-    const mode = String.fromEnvironment('USE_MQTT', defaultValue: 'true');
-    return mode.toLowerCase() == 'true';
+  static bool get grpcUseTls {
+    const useTls = String.fromEnvironment('GRPC_USE_TLS', defaultValue: 'false');
+    return useTls.toLowerCase() == 'true';
   }
 
   /// Print configuration (for debugging)
   static void printConfig() {
     if (kDebugMode) {
       print('=== Environment Configuration ===');
-      print('MQTT Mode: ${useMqtt ? 'Enabled' : 'Mock Mode'}');
-      print('Broker: $mqttBrokerHost:$mqttBrokerPort');
-      print('Client ID: $mqttClientId');
-      print('Username: ${mqttUsername ?? 'Not set'}');
-      print('SSL: ${mqttUseSsl ? 'Enabled' : 'Disabled'}');
+      print('API Base URL: $apiBaseUrl');
+      print('gRPC Host: $grpcHost:$grpcPort');
+      print('gRPC TLS: ${grpcUseTls ? 'Enabled' : 'Disabled'}');
       print('=================================');
     }
   }
