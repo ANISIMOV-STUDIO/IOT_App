@@ -1,10 +1,10 @@
 # HVAC Control
 
-Cross-platform HVAC (Heating, Ventilation, and Air Conditioning) control application built with Flutter.
+HVAC (Heating, Ventilation, and Air Conditioning) control application built with Flutter.
 
 ## Features
 
-- **Cross-Platform**: Runs on iOS, Android, macOS, Windows, Linux, and Web
+- **Multi-Platform**: Runs on iOS, Android, and Web
 - **Real-Time MQTT Communication**: Connects to MQTT broker for live device control
 - **Adaptive UI**: Responsive design with BottomNavigationBar (mobile) and NavigationRail (desktop)
 - **Clean Architecture**: Separation of concerns with Domain, Data, and Presentation layers
@@ -101,15 +101,6 @@ flutter run -d android
 
 # Web
 flutter run -d chrome
-
-# macOS (requires macOS)
-flutter run -d macos
-
-# Windows (requires Windows)
-flutter run -d windows
-
-# Linux (requires Linux)
-flutter run -d linux
 ```
 
 ## Building for Production
@@ -133,30 +124,6 @@ flutter build ios --release
 ```
 
 Then open `ios/Runner.xcworkspace` in Xcode to archive and upload.
-
-### macOS
-
-```bash
-flutter build macos --release
-```
-
-Output: `build/macos/Build/Products/Release/`
-
-### Windows
-
-```bash
-flutter build windows --release
-```
-
-Output: `build/windows/runner/Release/`
-
-### Linux
-
-```bash
-flutter build linux --release
-```
-
-Output: `build/linux/x64/release/bundle/`
 
 ### Web
 

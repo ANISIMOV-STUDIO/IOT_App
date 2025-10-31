@@ -1,5 +1,5 @@
 name: hvac_control
-description: Cross-platform HVAC control application
+description: HVAC control application for iOS, Android and Web
 publish_to: 'none'
 
 version: 1.0.0+1
@@ -76,12 +76,6 @@ flutter_launcher_icons:
     generate: true
     image_path: "assets/icon.png"
     background_color: "#6C63FF"
-  windows:
-    generate: true
-    image_path: "assets/icon.png"
-  macos:
-    generate: true
-    image_path: "assets/icon.png"
 
 # Splash Screen Configuration
 flutter_native_splash:
