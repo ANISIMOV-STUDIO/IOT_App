@@ -6,7 +6,6 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/theme/app_theme.dart';
-import '../../generated/l10n/app_localizations.dart';
 import '../bloc/hvac_detail/hvac_detail_bloc.dart';
 import '../bloc/hvac_detail/hvac_detail_event.dart';
 import '../bloc/hvac_detail/hvac_detail_state.dart';
@@ -123,7 +122,7 @@ class RoomDetailScreen extends StatelessWidget {
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        modeColor.withOpacity(0.3),
+                        modeColor.withValues(alpha: 0.3),
                         AppTheme.backgroundDark,
                       ],
                     ),
@@ -131,7 +130,7 @@ class RoomDetailScreen extends StatelessWidget {
                   child: Icon(
                     Icons.home_outlined,
                     size: 120,
-                    color: Colors.white.withOpacity(0.1),
+                    color: Colors.white.withValues(alpha: 0.1),
                   ),
                 ),
                 // Gradient overlay
@@ -142,7 +141,7 @@ class RoomDetailScreen extends StatelessWidget {
                       end: Alignment.bottomCenter,
                       colors: [
                         Colors.transparent,
-                        AppTheme.backgroundDark.withOpacity(0.7),
+                        AppTheme.backgroundDark.withValues(alpha: 0.7),
                         AppTheme.backgroundDark,
                       ],
                       stops: const [0.0, 0.7, 1.0],

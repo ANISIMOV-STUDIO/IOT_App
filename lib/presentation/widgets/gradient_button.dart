@@ -1,6 +1,7 @@
 /// Gradient Button Widget (Updated for new theme)
 ///
 /// Now uses solid orange color from Figma design
+library;
 
 import 'package:flutter/material.dart';
 import '../../core/theme/app_theme.dart';

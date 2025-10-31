@@ -82,9 +82,9 @@ class HvacControlApp extends StatelessWidget {
                     return const LoginScreen();
                   } else {
                     // Loading or initial state
-                    return Scaffold(
+                    return const Scaffold(
                       backgroundColor: AppTheme.backgroundDark,
-                      body: const Center(
+                      body: Center(
                         child: CircularProgressIndicator(
                           color: AppTheme.primaryOrange,
                         ),

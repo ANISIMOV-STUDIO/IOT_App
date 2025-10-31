@@ -181,7 +181,7 @@ class DeviceStatusCard extends StatelessWidget {
                           vertical: 6,
                         ),
                         decoration: BoxDecoration(
-                          color: modeColor.withOpacity(0.2),
+                          color: modeColor.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
                             color: modeColor,

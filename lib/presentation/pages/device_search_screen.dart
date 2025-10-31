@@ -182,8 +182,6 @@ class _DeviceSearchScreenState extends State<DeviceSearchScreen> {
   }
 
   void _addSelectedDevices(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
     // Add each selected device
     for (final index in _selectedDevices) {
       final device = _discoveredDevices[index];
