@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 import '../../core/theme/liquid_glass_theme.dart';
 import '../../generated/l10n/app_localizations.dart';
-import 'home_screen.dart';
-import 'settings_screen.dart';
+import 'liquid_glass_home_screen.dart';
+import 'liquid_glass_settings_screen.dart';
 
 class LiquidGlassResponsiveShell extends StatefulWidget {
   const LiquidGlassResponsiveShell({super.key});
@@ -105,8 +105,8 @@ class _LiquidGlassResponsiveShellState extends State<LiquidGlassResponsiveShell>
                         onPageChanged: _onPageChanged,
                         physics: const BouncingScrollPhysics(),
                         children: const [
-                          HomeScreen(),
-                          SettingsScreen(),
+                          LiquidGlassHomeScreen(),
+                          LiquidGlassSettingsScreen(),
                         ],
                       ),
                     ),
@@ -119,8 +119,8 @@ class _LiquidGlassResponsiveShellState extends State<LiquidGlassResponsiveShell>
               onPageChanged: _onPageChanged,
               physics: const BouncingScrollPhysics(),
               children: const [
-                HomeScreen(),
-                SettingsScreen(),
+                LiquidGlassHomeScreen(),
+                LiquidGlassSettingsScreen(),
               ],
             ),
       bottomNavigationBar: isWeb

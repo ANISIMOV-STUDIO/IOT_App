@@ -6,7 +6,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../core/theme/app_theme.dart';
+import '../../core/theme/liquid_glass_theme.dart';
 import '../../generated/l10n/app_localizations.dart';
 import '../bloc/hvac_list/hvac_list_bloc.dart';
 import '../bloc/hvac_list/hvac_list_event.dart';
@@ -34,9 +34,10 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
       appBar: AppBar(
         title: Text(l10n.deviceManagement),
         elevation: 0,
-        backgroundColor: isDark ? AppTheme.darkBackground : AppTheme.lightBackground,
+        backgroundColor: Colors.transparent,
       ),
-      backgroundColor: isDark ? AppTheme.darkBackground : AppTheme.lightBackground,
+      backgroundColor: Colors.transparent,
+      extendBodyBehindAppBar: true,
       body: Column(
         children: [
           // Add Device Button
@@ -106,8 +107,8 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                       state.message,
                       style: TextStyle(
                         color: isDark
-                            ? AppTheme.darkTextSecondary
-                            : AppTheme.lightTextSecondary,
+                            ? Colors.white70
+                            : Colors.black54,
                       ),
                     ),
                   );
@@ -125,8 +126,8 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                             Icons.devices_other_rounded,
                             size: 64,
                             color: isDark
-                                ? AppTheme.darkTextHint
-                                : AppTheme.lightTextHint,
+                                ? Colors.white38
+                                : Colors.black38,
                           ),
                           const SizedBox(height: 16),
                           Text(
@@ -148,23 +149,25 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 12),
                         child: Container(
-                          decoration: AppTheme.glassmorphicCard(
+                          decoration: LiquidGlassTheme.liquidGlass(
                             isDark: isDark,
-                            borderRadius: 16,
+                            borderRadius: BorderRadius.circular(16),
                           ),
                           child: ListTile(
                             contentPadding: const EdgeInsets.all(16),
                             leading: Container(
                               padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(
-                                gradient: AppTheme.getModeGradient(
-                                  unit.mode,
-                                  isDark: isDark,
+                                gradient: LinearGradient(
+                                  colors: LiquidGlassTheme.getModeGradient(
+                                    unit.mode,
+                                    isDark: isDark,
+                                  ),
                                 ),
                                 shape: BoxShape.circle,
                               ),
-                              child: Icon(
-                                AppTheme.getModeIcon(unit.mode),
+                              child: const Icon(
+                                Icons.thermostat,
                                 color: Colors.white,
                                 size: 24,
                               ),
@@ -183,8 +186,8 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                                   'ID: ${unit.id}',
                                   style: TextStyle(
                                     color: isDark
-                                        ? AppTheme.darkTextHint
-                                        : AppTheme.lightTextHint,
+                                        ? Colors.white38
+                                        : Colors.black38,
                                     fontSize: 12,
                                   ),
                                 ),
@@ -194,8 +197,8 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                                     'MAC: ${_formatMacAddress(unit.macAddress!)}',
                                     style: TextStyle(
                                       color: isDark
-                                          ? AppTheme.darkTextHint
-                                          : AppTheme.lightTextHint,
+                                          ? Colors.white38
+                                          : Colors.black38,
                                       fontSize: 12,
                                       fontFamily: 'monospace',
                                     ),
@@ -254,7 +257,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
     await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: isDark ? AppTheme.darkCard : AppTheme.lightCard,
+        backgroundColor: isDark ? Colors.white12 : Colors.white,
         title: Text(l10n.addDevice),
         content: SingleChildScrollView(
           child: Column(
@@ -347,7 +350,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(l10n.deviceAdded),
-                      backgroundColor: AppTheme.successColor,
+                      backgroundColor: LiquidGlassTheme.glassGreen,
                     ),
                   );
                 }
@@ -390,7 +393,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        backgroundColor: isDark ? AppTheme.darkCard : AppTheme.lightCard,
+        backgroundColor: isDark ? Colors.white12 : Colors.white,
         title: Text(l10n.removeDevice),
         content: Text(l10n.confirmRemoveDevice(name)),
         actions: [
@@ -421,7 +424,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
         scaffoldMessenger.showSnackBar(
           SnackBar(
             content: Text(l10n.deviceRemoved),
-            backgroundColor: AppTheme.successColor,
+            backgroundColor: LiquidGlassTheme.glassGreen,
           ),
         );
       } catch (e) {

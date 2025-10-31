@@ -8,12 +8,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/theme/liquid_glass_theme.dart';
 import '../../core/utils/responsive_utils.dart';
 import '../../generated/l10n/app_localizations.dart';
+import '../../core/di/injection_container.dart' as di;
 import '../bloc/hvac_list/hvac_list_bloc.dart';
 import '../bloc/hvac_list/hvac_list_event.dart';
 import '../bloc/hvac_list/hvac_list_state.dart';
+import '../bloc/hvac_detail/hvac_detail_bloc.dart';
 import '../widgets/liquid_glass_container.dart';
 import '../../domain/entities/hvac_unit.dart';
-import 'hvac_detail_screen.dart';
+import 'liquid_glass_hvac_detail.dart';
 import 'qr_scanner_screen.dart';
 import 'device_management_screen.dart';
 
@@ -323,7 +325,10 @@ class _LiquidGlassDeviceCard extends StatelessWidget {
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (_) => HvacDetailScreen(unitId: unit.id),
+            builder: (_) => BlocProvider<HvacDetailBloc>(
+              create: (_) => di.sl<HvacDetailBloc>(param1: unit.id),
+              child: LiquidGlassHvacDetail(unitId: unit.id),
+            ),
           ),
         );
       },
