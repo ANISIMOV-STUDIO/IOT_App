@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(timeout /t 10)",
+      "WebFetch(domain:www.figma.com)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

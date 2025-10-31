@@ -3,6 +3,7 @@
 /// Allows users to scan QR codes to add devices
 library;
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -10,6 +11,8 @@ import '../../generated/l10n/app_localizations.dart';
 import '../bloc/hvac_list/hvac_list_bloc.dart';
 import '../bloc/hvac_list/hvac_list_event.dart';
 import '../widgets/gradient_button.dart';
+import '../widgets/orange_button.dart';
+import '../../core/theme/app_theme.dart';
 
 class QrScannerScreen extends StatefulWidget {
   const QrScannerScreen({super.key});
@@ -19,11 +22,7 @@ class QrScannerScreen extends StatefulWidget {
 }
 
 class _QrScannerScreenState extends State<QrScannerScreen> {
-  final MobileScannerController _controller = MobileScannerController(
-    detectionSpeed: DetectionSpeed.noDuplicates,
-    facing: CameraFacing.back,
-    torchEnabled: false,
-  );
+  late final MobileScannerController? _controller;
 
   final TextEditingController _macController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
@@ -31,11 +30,29 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool _isProcessing = false;
-  bool _manualEntry = false;
+  late bool _manualEntry;
+
+  @override
+  void initState() {
+    super.initState();
+    // On web, always use manual entry (camera support is limited)
+    _manualEntry = kIsWeb;
+
+    // Initialize camera controller only on mobile platforms
+    if (!kIsWeb) {
+      _controller = MobileScannerController(
+        detectionSpeed: DetectionSpeed.noDuplicates,
+        facing: CameraFacing.back,
+        torchEnabled: false,
+      );
+    } else {
+      _controller = null;
+    }
+  }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller?.dispose();
     _macController.dispose();
     _nameController.dispose();
     _locationController.dispose();
@@ -185,10 +202,10 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
     });
 
     if (_manualEntry) {
-      _controller.stop();
+      _controller?.stop();
       _showDeviceDetailsDialog('', null);
     } else {
-      _controller.start();
+      _controller?.start();
     }
   }
 
@@ -196,19 +213,65 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
+    // On web, show manual entry form directly
+    if (kIsWeb) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(l10n.addDevice),
+          centerTitle: true,
+        ),
+        body: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24),
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 600),
+              padding: const EdgeInsets.all(32),
+              decoration: AppTheme.deviceCard(),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.devices_other,
+                    size: 64,
+                    color: AppTheme.primaryOrange,
+                  ),
+                  const SizedBox(height: 24),
+                  Text(
+                    'Add HVAC Device',
+                    style: theme.textTheme.headlineMedium,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Enter device information manually',
+                    style: theme.textTheme.bodyMedium,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 32),
+                  _buildWebForm(context, l10n),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    // Mobile: Show camera scanner
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.scanQrCode),
         centerTitle: true,
         actions: [
-          IconButton(
-            icon: Icon(_controller.torchEnabled ? Icons.flash_on : Icons.flash_off),
-            onPressed: () {
-              _controller.toggleTorch();
-              setState(() {});
-            },
-          ),
+          if (_controller != null)
+            IconButton(
+              icon: Icon(_controller!.torchEnabled ? Icons.flash_on : Icons.flash_off),
+              onPressed: () {
+                _controller!.toggleTorch();
+                setState(() {});
+              },
+            ),
         ],
       ),
       body: Column(
@@ -217,15 +280,16 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
             flex: 3,
             child: Stack(
               children: [
-                MobileScanner(
-                  controller: _controller,
-                  onDetect: (capture) {
-                    final List<Barcode> barcodes = capture.barcodes;
-                    for (final barcode in barcodes) {
-                      _handleQrCode(barcode.rawValue);
-                    }
-                  },
-                ),
+                if (_controller != null)
+                  MobileScanner(
+                    controller: _controller!,
+                    onDetect: (capture) {
+                      final List<Barcode> barcodes = capture.barcodes;
+                      for (final barcode in barcodes) {
+                        _handleQrCode(barcode.rawValue);
+                      }
+                    },
+                  ),
 
                 // QR Frame Overlay
                 Center(
@@ -342,6 +406,97 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
                 ],
               ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _handleAddDevice(String macAddress, String deviceName, String location) {
+    context.read<HvacListBloc>().add(
+      AddDeviceEvent(
+        macAddress: macAddress,
+        name: deviceName,
+        location: location.isNotEmpty ? location : null,
+      ),
+    );
+
+    Navigator.of(context).pop(); // Return to previous screen
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(AppLocalizations.of(context)!.deviceAdded),
+        backgroundColor: Colors.green,
+      ),
+    );
+  }
+
+  Widget _buildWebForm(BuildContext context, AppLocalizations l10n) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextFormField(
+            controller: _macController,
+            decoration: InputDecoration(
+              labelText: l10n.macAddress,
+              hintText: 'XX:XX:XX:XX:XX:XX',
+              prefixIcon: const Icon(Icons.router),
+              filled: true,
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return l10n.fillRequiredFields;
+              }
+              final macRegex = RegExp(r'^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$');
+              if (!macRegex.hasMatch(value)) {
+                return 'Invalid MAC address format (e.g., AA:BB:CC:DD:EE:FF)';
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 20),
+          TextFormField(
+            controller: _nameController,
+            decoration: InputDecoration(
+              labelText: l10n.deviceName,
+              hintText: l10n.livingRoom,
+              prefixIcon: const Icon(Icons.label),
+              filled: true,
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return l10n.fillRequiredFields;
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 20),
+          TextFormField(
+            controller: _locationController,
+            decoration: InputDecoration(
+              labelText: l10n.location,
+              hintText: l10n.optional,
+              prefixIcon: const Icon(Icons.location_on),
+              filled: true,
+            ),
+          ),
+          const SizedBox(height: 32),
+          OrangeButton(
+            text: l10n.addDevice,
+            icon: Icons.add,
+            width: double.infinity,
+            height: 56,
+            onPressed: () {
+              if (_formKey.currentState!.validate()) {
+                _handleAddDevice(
+                  _macController.text.trim(),
+                  _nameController.text.trim(),
+                  _locationController.text.trim(),
+                );
+              }
+            },
           ),
         ],
       ),

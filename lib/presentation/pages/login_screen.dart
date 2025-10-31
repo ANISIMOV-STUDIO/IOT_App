@@ -1,16 +1,170 @@
 /// Login Screen
 ///
-/// iOS 26 Liquid Glass login screen
+/// Simple login/register screen
 library;
 
 import 'package:flutter/material.dart';
-import 'liquid_glass_login_screen.dart';
+import '../../core/theme/app_theme.dart';
+import '../../generated/l10n/app_localizations.dart';
+import '../widgets/orange_button.dart';
+import 'responsive_shell.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _isLoading = false;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void _handleLogin() {
+    setState(() {
+      _isLoading = true;
+    });
+
+    // Simulate login
+    Future.delayed(const Duration(seconds: 1), () {
+      if (mounted) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (_) => const ResponsiveShell(),
+          ),
+        );
+      }
+    });
+  }
+
+  void _handleSkip() {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (_) => const ResponsiveShell(),
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const LiquidGlassLoginScreen();
+    final l10n = AppLocalizations.of(context)!;
+
+    return Scaffold(
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(32),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Logo/Icon
+                Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: const LinearGradient(
+                      colors: [
+                        AppTheme.primaryOrange,
+                        AppTheme.primaryOrangeLight,
+                      ],
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppTheme.primaryOrange.withOpacity(0.3),
+                        blurRadius: 20,
+                        spreadRadius: 5,
+                      ),
+                    ],
+                  ),
+                  child: const Icon(
+                    Icons.thermostat,
+                    size: 50,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 32),
+
+                // Welcome Text
+                Text(
+                  l10n.hvacControl,
+                  style: Theme.of(context).textTheme.displayMedium,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Smart Climate Management',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 48),
+
+                // Email Field
+                TextField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    labelText: l10n.email,
+                    hintText: 'your@email.com',
+                    prefixIcon: const Icon(Icons.email_outlined),
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                ),
+                const SizedBox(height: 16),
+
+                // Password Field
+                TextField(
+                  controller: _passwordController,
+                  decoration: InputDecoration(
+                    labelText: l10n.password,
+                    hintText: '••••••••',
+                    prefixIcon: const Icon(Icons.lock_outlined),
+                  ),
+                  obscureText: true,
+                ),
+                const SizedBox(height: 32),
+
+                // Login Button
+                OrangeButton(
+                  text: l10n.login,
+                  width: double.infinity,
+                  onPressed: _isLoading ? null : _handleLogin,
+                  isLoading: _isLoading,
+                ),
+                const SizedBox(height: 16),
+
+                // Register Button
+                OutlineButton(
+                  text: l10n.register,
+                  width: double.infinity,
+                  onPressed: _isLoading ? null : () {
+                    // TODO: Navigate to registration
+                  },
+                ),
+                const SizedBox(height: 24),
+
+                // Skip Button
+                TextButton(
+                  onPressed: _isLoading ? null : _handleSkip,
+                  child: const Text(
+                    'Skip for now',
+                    style: TextStyle(
+                      color: AppTheme.textSecondary,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

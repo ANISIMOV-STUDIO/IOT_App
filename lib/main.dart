@@ -9,13 +9,13 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'generated/l10n/app_localizations.dart';
 import 'core/di/injection_container.dart' as di;
-import 'core/theme/liquid_glass_theme.dart';
+import 'core/theme/app_theme.dart';
 import 'core/services/theme_service.dart';
 import 'core/services/language_service.dart';
 import 'presentation/bloc/hvac_list/hvac_list_bloc.dart';
 import 'presentation/bloc/hvac_list/hvac_list_event.dart';
 import 'presentation/bloc/auth/auth_bloc.dart';
-import 'presentation/pages/liquid_glass_responsive_shell.dart';
+import 'presentation/pages/responsive_shell.dart';
 import 'presentation/pages/login_screen.dart';
 
 void main() async {
@@ -44,10 +44,10 @@ class HvacControlApp extends StatelessWidget {
           title: 'HVAC Control',
           debugShowCheckedModeBanner: false,
 
-          // Theme - iOS 26 Liquid Glass
-          theme: LiquidGlassTheme.lightTheme,
-          darkTheme: LiquidGlassTheme.darkTheme,
-          themeMode: di.sl<ThemeService>().themeMode,
+          // Theme - Dark with Orange Accents (Figma Design)
+          theme: AppTheme.darkTheme(),
+          darkTheme: AppTheme.darkTheme(),
+          themeMode: ThemeMode.dark, // Always use dark theme
 
           // Localization
           locale: languageService.currentLocale,
@@ -77,14 +77,17 @@ class HvacControlApp extends StatelessWidget {
               child: BlocBuilder<AuthBloc, AuthState>(
                 builder: (context, state) {
                   if (state is AuthAuthenticated) {
-                    return const LiquidGlassResponsiveShell();
+                    return const ResponsiveShell();
                   } else if (state is AuthUnauthenticated || state is AuthError) {
                     return const LoginScreen();
                   } else {
                     // Loading or initial state
-                    return const Scaffold(
-                      body: Center(
-                        child: CircularProgressIndicator(),
+                    return Scaffold(
+                      backgroundColor: AppTheme.backgroundDark,
+                      body: const Center(
+                        child: CircularProgressIndicator(
+                          color: AppTheme.primaryOrange,
+                        ),
                       ),
                     );
                   }

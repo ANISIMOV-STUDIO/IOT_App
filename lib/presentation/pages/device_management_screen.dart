@@ -6,7 +6,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../core/theme/liquid_glass_theme.dart';
+import '../../core/theme/app_theme.dart';
 import '../../generated/l10n/app_localizations.dart';
 import '../bloc/hvac_list/hvac_list_bloc.dart';
 import '../bloc/hvac_list/hvac_list_event.dart';
@@ -149,21 +149,13 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 12),
                         child: Container(
-                          decoration: LiquidGlassTheme.liquidGlass(
-                            isDark: isDark,
-                            borderRadius: BorderRadius.circular(16),
-                          ),
+                          decoration: AppTheme.deviceCard(),
                           child: ListTile(
                             contentPadding: const EdgeInsets.all(16),
                             leading: Container(
                               padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: LiquidGlassTheme.getModeGradient(
-                                    unit.mode,
-                                    isDark: isDark,
-                                  ),
-                                ),
+                                color: AppTheme.getModeColor(unit.mode),
                                 shape: BoxShape.circle,
                               ),
                               child: const Icon(
@@ -350,7 +342,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(l10n.deviceAdded),
-                      backgroundColor: LiquidGlassTheme.glassGreen,
+                      backgroundColor: AppTheme.success,
                     ),
                   );
                 }
@@ -424,7 +416,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
         scaffoldMessenger.showSnackBar(
           SnackBar(
             content: Text(l10n.deviceRemoved),
-            backgroundColor: LiquidGlassTheme.glassGreen,
+            backgroundColor: AppTheme.success,
           ),
         );
       } catch (e) {
