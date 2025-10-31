@@ -4,10 +4,11 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/theme/app_theme.dart';
 import '../../generated/l10n/app_localizations.dart';
 import '../widgets/orange_button.dart';
-import 'responsive_shell.dart';
+import '../bloc/auth/auth_bloc.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -33,12 +34,13 @@ class _LoginScreenState extends State<LoginScreen> {
       _isLoading = true;
     });
 
-    // Simulate login
+    // Simulate login - dispatch login event to AuthBloc
     Future.delayed(const Duration(seconds: 1), () {
       if (mounted) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (_) => const ResponsiveShell(),
+        context.read<AuthBloc>().add(
+          LoginEvent(
+            email: _emailController.text,
+            password: _passwordController.text,
           ),
         );
       }
@@ -46,11 +48,8 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _handleSkip() {
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (_) => const ResponsiveShell(),
-      ),
-    );
+    // Skip login - dispatch skip event to AuthBloc
+    context.read<AuthBloc>().add(const SkipAuthEvent());
   }
 
   @override

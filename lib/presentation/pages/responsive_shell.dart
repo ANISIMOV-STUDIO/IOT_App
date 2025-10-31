@@ -4,7 +4,9 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/theme/app_theme.dart';
+import '../bloc/hvac_list/hvac_list_bloc.dart';
 import 'home_screen.dart';
 import 'device_search_screen.dart';
 import 'device_management_screen.dart';
@@ -20,19 +22,26 @@ class ResponsiveShell extends StatefulWidget {
 class _ResponsiveShellState extends State<ResponsiveShell> {
   int _currentIndex = 0;
 
-  final List<Widget> _screens = const [
-    HomeScreen(),
-    DeviceSearchScreen(),
-    DeviceManagementScreen(),
-    SettingsScreen(),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    // Get HvacListBloc from parent context (provided in main.dart)
+    final hvacListBloc = context.read<HvacListBloc>();
+
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,
-        children: _screens,
+        children: [
+          const HomeScreen(),
+          BlocProvider.value(
+            value: hvacListBloc,
+            child: const DeviceSearchScreen(),
+          ),
+          BlocProvider.value(
+            value: hvacListBloc,
+            child: const DeviceManagementScreen(),
+          ),
+          const SettingsScreen(),
+        ],
       ),
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
