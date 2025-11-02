@@ -23,6 +23,9 @@ import '../../domain/usecases/get_all_units.dart';
 import '../../domain/usecases/get_unit_by_id.dart';
 import '../../domain/usecases/update_unit.dart';
 import '../../domain/usecases/get_temperature_history.dart';
+import '../../domain/usecases/update_ventilation_mode.dart';
+import '../../domain/usecases/update_fan_speeds.dart';
+import '../../domain/usecases/update_schedule.dart';
 
 // Presentation
 import '../../presentation/bloc/hvac_list/hvac_list_bloc.dart';
@@ -82,6 +85,9 @@ Future<void> init() async {
       getUnitById: sl(),
       updateUnit: sl(),
       getTemperatureHistory: sl(),
+      updateVentilationMode: sl(),
+      updateFanSpeeds: sl(),
+      updateSchedule: sl(),
     ),
   );
 
@@ -90,6 +96,9 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetUnitById(sl()));
   sl.registerLazySingleton(() => UpdateUnit(sl()));
   sl.registerLazySingleton(() => GetTemperatureHistory(sl()));
+  sl.registerLazySingleton(() => UpdateVentilationMode(sl()));
+  sl.registerLazySingleton(() => UpdateFanSpeeds(sl()));
+  sl.registerLazySingleton(() => UpdateSchedule(sl()));
 
   // Repository - Using Mock for now, will be replaced with REST implementation
   sl.registerLazySingleton<HvacRepository>(

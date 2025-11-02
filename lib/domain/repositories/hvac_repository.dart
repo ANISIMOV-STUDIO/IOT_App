@@ -16,7 +16,8 @@ abstract class HvacRepository {
   /// Get temperature history for a unit
   Future<List<TemperatureReading>> getTemperatureHistory(String unitId, {int hours = 24});
 
-  /// Update HVAC unit settings
+  /// Update HVAC unit settings (deprecated - use updateUnitEntity)
+  @Deprecated('Use updateUnitEntity instead')
   Future<void> updateUnit({
     required String unitId,
     bool? power,
@@ -24,6 +25,9 @@ abstract class HvacRepository {
     String? mode,
     String? fanSpeed,
   });
+
+  /// Update HVAC unit with full entity
+  Future<void> updateUnitEntity(HvacUnit unit);
 
   /// Connect to MQTT broker
   Future<void> connect();

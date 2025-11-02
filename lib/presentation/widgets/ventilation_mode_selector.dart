@@ -1,0 +1,59 @@
+/// Ventilation Mode Selector Widget
+///
+/// Dropdown for selecting ventilation operating mode
+library;
+
+import 'package:flutter/material.dart';
+import '../../core/theme/app_theme.dart';
+import '../../domain/entities/ventilation_mode.dart';
+
+class VentilationModeSelector extends StatelessWidget {
+  final VentilationMode? currentMode;
+  final ValueChanged<VentilationMode?> onModeChanged;
+  final bool enabled;
+
+  const VentilationModeSelector({
+    super.key,
+    required this.currentMode,
+    required this.onModeChanged,
+    this.enabled = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      decoration: BoxDecoration(
+        color: AppTheme.backgroundCard,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: AppTheme.backgroundCardBorder,
+          width: 1,
+        ),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<VentilationMode>(
+          value: currentMode,
+          isExpanded: true,
+          dropdownColor: AppTheme.backgroundCard,
+          style: const TextStyle(
+            fontSize: 14,
+            color: AppTheme.textPrimary,
+            fontWeight: FontWeight.w500,
+          ),
+          icon: const Icon(
+            Icons.arrow_drop_down,
+            color: AppTheme.textSecondary,
+          ),
+          onChanged: enabled ? onModeChanged : null,
+          items: VentilationMode.values.map((mode) {
+            return DropdownMenuItem<VentilationMode>(
+              value: mode,
+              child: Text(mode.displayName),
+            );
+          }).toList(),
+        ),
+      ),
+    );
+  }
+}

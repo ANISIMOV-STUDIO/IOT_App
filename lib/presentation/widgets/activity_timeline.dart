@@ -165,10 +165,21 @@ class ActivityItem {
   final String time;
   final String title;
   final String description;
+  final NotificationSeverity severity;
+  final IconData? icon;
 
   const ActivityItem({
     required this.time,
     required this.title,
     required this.description,
+    this.severity = NotificationSeverity.info,
+    this.icon,
   });
+}
+
+enum NotificationSeverity {
+  critical,
+  error,
+  warning,
+  info,
 }

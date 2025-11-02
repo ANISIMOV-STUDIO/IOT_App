@@ -2,11 +2,17 @@
 library;
 
 import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../domain/entities/hvac_unit.dart';
+import '../../../domain/entities/ventilation_mode.dart';
+import '../../../domain/entities/day_schedule.dart';
 import '../../../domain/usecases/get_unit_by_id.dart';
 import '../../../domain/usecases/update_unit.dart';
 import '../../../domain/usecases/get_temperature_history.dart';
+import '../../../domain/usecases/update_ventilation_mode.dart';
+import '../../../domain/usecases/update_fan_speeds.dart';
+import '../../../domain/usecases/update_schedule.dart';
 import 'hvac_detail_event.dart';
 import 'hvac_detail_state.dart';
 
@@ -15,6 +21,9 @@ class HvacDetailBloc extends Bloc<HvacDetailEvent, HvacDetailState> {
   final GetUnitById getUnitById;
   final UpdateUnit updateUnit;
   final GetTemperatureHistory getTemperatureHistory;
+  final UpdateVentilationMode? updateVentilationMode;
+  final UpdateFanSpeeds? updateFanSpeeds;
+  final UpdateSchedule? updateSchedule;
   StreamSubscription? _unitSubscription;
 
   HvacDetailBloc({
@@ -22,6 +31,9 @@ class HvacDetailBloc extends Bloc<HvacDetailEvent, HvacDetailState> {
     required this.getUnitById,
     required this.updateUnit,
     required this.getTemperatureHistory,
+    this.updateVentilationMode,
+    this.updateFanSpeeds,
+    this.updateSchedule,
   }) : super(const HvacDetailInitial()) {
     on<LoadUnitDetailEvent>(_onLoadUnitDetail);
     on<UpdatePowerEvent>(_onUpdatePower);
@@ -29,6 +41,10 @@ class HvacDetailBloc extends Bloc<HvacDetailEvent, HvacDetailState> {
     on<UpdateModeEvent>(_onUpdateMode);
     on<UpdateFanSpeedEvent>(_onUpdateFanSpeed);
     on<LoadTemperatureHistoryEvent>(_onLoadTemperatureHistory);
+    on<UpdateVentilationModeEvent>(_onUpdateVentilationMode);
+    on<UpdateSupplyFanSpeedEvent>(_onUpdateSupplyFanSpeed);
+    on<UpdateExhaustFanSpeedEvent>(_onUpdateExhaustFanSpeed);
+    on<UpdateDayScheduleEvent>(_onUpdateDaySchedule);
   }
 
   Future<void> _onLoadUnitDetail(
@@ -153,6 +169,97 @@ class HvacDetailBloc extends Bloc<HvacDetailEvent, HvacDetailState> {
         final currentState = state as HvacDetailLoaded;
         emit(currentState.copyWith(isUpdating: false));
       }
+    }
+  }
+
+  Future<void> _onUpdateVentilationMode(
+    UpdateVentilationModeEvent event,
+    Emitter<HvacDetailState> emit,
+  ) async {
+    if (state is! HvacDetailLoaded) return;
+    if (updateVentilationMode == null) return;
+
+    try {
+      final mode = VentilationMode.values.firstWhere(
+        (m) => m.name == event.mode,
+        orElse: () => VentilationMode.basic,
+      );
+      await updateVentilationMode!(unitId, mode);
+    } catch (e) {
+      emit(HvacDetailError(e.toString()));
+    }
+  }
+
+  Future<void> _onUpdateSupplyFanSpeed(
+    UpdateSupplyFanSpeedEvent event,
+    Emitter<HvacDetailState> emit,
+  ) async {
+    if (state is! HvacDetailLoaded) return;
+    if (updateFanSpeeds == null) return;
+
+    try {
+      await updateFanSpeeds!(
+        unitId: unitId,
+        supplyFanSpeed: event.speed,
+      );
+    } catch (e) {
+      emit(HvacDetailError(e.toString()));
+    }
+  }
+
+  Future<void> _onUpdateExhaustFanSpeed(
+    UpdateExhaustFanSpeedEvent event,
+    Emitter<HvacDetailState> emit,
+  ) async {
+    if (state is! HvacDetailLoaded) return;
+    if (updateFanSpeeds == null) return;
+
+    try {
+      await updateFanSpeeds!(
+        unitId: unitId,
+        exhaustFanSpeed: event.speed,
+      );
+    } catch (e) {
+      emit(HvacDetailError(e.toString()));
+    }
+  }
+
+  Future<void> _onUpdateDaySchedule(
+    UpdateDayScheduleEvent event,
+    Emitter<HvacDetailState> emit,
+  ) async {
+    if (state is! HvacDetailLoaded) return;
+    if (updateSchedule == null) return;
+
+    try {
+      TimeOfDay? turnOnTime;
+      TimeOfDay? turnOffTime;
+
+      if (event.turnOnTime != null) {
+        final parts = event.turnOnTime!.split(':');
+        turnOnTime = TimeOfDay(
+          hour: int.parse(parts[0]),
+          minute: int.parse(parts[1]),
+        );
+      }
+
+      if (event.turnOffTime != null) {
+        final parts = event.turnOffTime!.split(':');
+        turnOffTime = TimeOfDay(
+          hour: int.parse(parts[0]),
+          minute: int.parse(parts[1]),
+        );
+      }
+
+      final daySchedule = DaySchedule(
+        turnOnTime: turnOnTime,
+        turnOffTime: turnOffTime,
+        timerEnabled: event.timerEnabled,
+      );
+
+      await updateSchedule!.updateDay(unitId, event.dayOfWeek, daySchedule);
+    } catch (e) {
+      emit(HvacDetailError(e.toString()));
     }
   }
 

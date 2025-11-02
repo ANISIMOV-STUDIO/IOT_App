@@ -10,9 +10,13 @@ import '../../core/theme/app_theme.dart';
 import '../bloc/hvac_list/hvac_list_bloc.dart';
 import '../bloc/hvac_list/hvac_list_state.dart';
 import '../widgets/room_preview_card.dart';
-import '../widgets/device_control_card.dart';
 import '../widgets/activity_timeline.dart';
 import '../../domain/entities/hvac_unit.dart';
+import '../../domain/entities/ventilation_mode.dart';
+import '../../domain/entities/alert.dart';
+import '../widgets/ventilation_mode_control.dart';
+import '../widgets/ventilation_temperature_control.dart';
+import '../widgets/ventilation_schedule_control.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -22,9 +26,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String _selectedUnit = 'ПВ1';
-  double _lampBrightness = 0.55;
-  double _acTemperature = 21.0;
+  String? _selectedUnit;
+  bool _showAllNotifications = false;
 
   @override
   Widget build(BuildContext context) {
@@ -53,45 +56,54 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
 
-                  // Center - HVAC Unit tabs
+                  // Center - HVAC Unit tabs (dynamic from units)
                   Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _buildUnitTab('ПВ1', _selectedUnit == 'ПВ1'),
-                        const SizedBox(width: 12),
-                        _buildUnitTab('ПВ2', _selectedUnit == 'ПВ2'),
-                        const SizedBox(width: 12),
-                        _buildUnitTab('ПВ3', _selectedUnit == 'ПВ3'),
-                        const SizedBox(width: 12),
-                        _buildUnitTab('ПВ4', _selectedUnit == 'ПВ4'),
-                        const SizedBox(width: 12),
-                        // Add new unit button
-                        MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          child: GestureDetector(
-                            onTap: () {
-                              // TODO: Navigate to add unit screen
-                            },
-                            child: Container(
-                              width: 36,
-                              height: 36,
-                              decoration: BoxDecoration(
-                                color: AppTheme.backgroundCard,
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: AppTheme.backgroundCardBorder,
+                    child: BlocBuilder<HvacListBloc, HvacListState>(
+                      builder: (context, state) {
+                        if (state is HvacListLoaded) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ...state.units.map((unit) {
+                                final label = unit.name;
+                                return Padding(
+                                  padding: const EdgeInsets.only(right: 12),
+                                  child: _buildUnitTab(
+                                    label,
+                                    _selectedUnit == label,
+                                  ),
+                                );
+                              }),
+                              // Add new unit button
+                              MouseRegion(
+                                cursor: SystemMouseCursors.click,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    // TODO: Navigate to add unit screen
+                                  },
+                                  child: Container(
+                                    width: 36,
+                                    height: 36,
+                                    decoration: BoxDecoration(
+                                      color: AppTheme.backgroundCard,
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: AppTheme.backgroundCardBorder,
+                                      ),
+                                    ),
+                                    child: const Icon(
+                                      Icons.add,
+                                      size: 20,
+                                      color: AppTheme.textSecondary,
+                                    ),
+                                  ),
                                 ),
                               ),
-                              child: const Icon(
-                                Icons.add,
-                                size: 20,
-                                color: AppTheme.textSecondary,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                            ],
+                          );
+                        }
+                        return const SizedBox.shrink();
+                      },
                     ),
                   ),
 
@@ -106,11 +118,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         onPressed: () {},
                       ),
                       const SizedBox(width: 8),
-                      CircleAvatar(
+                      const CircleAvatar(
                         radius: 18,
                         backgroundColor: AppTheme.backgroundCard,
                         backgroundImage: null, // Add user avatar here
-                        child: const Icon(
+                        child: Icon(
                           Icons.person_outline,
                           size: 20,
                           color: AppTheme.textSecondary,
@@ -212,6 +224,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildDashboard(BuildContext context, List<HvacUnit> units) {
+    // Initialize selected unit if not set
+    if (_selectedUnit == null && units.isNotEmpty) {
+      _selectedUnit = units.first.name;
+    }
+
     // Find unit matching selected tab, or use first unit as fallback
     HvacUnit? currentUnit;
     try {
@@ -234,186 +251,102 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 // Unit preview with live feed
                 RoomPreviewCard(
-                  roomName: _selectedUnit,
-                  isLive: true,
-                  badges: [
-                    StatusBadge(
-                      icon: Icons.thermostat,
-                      value: currentUnit?.fanSpeed ?? "auto",
-                    ),
-                    StatusBadge(
-                      icon: Icons.water_drop,
-                      value: '${currentUnit?.humidity.toInt() ?? 0}%',
-                    ),
-                    StatusBadge(
-                      icon: Icons.thermostat,
-                      value: '${currentUnit?.currentTemp.toInt() ?? 21}°C',
-                    ),
-                    const StatusBadge(
-                      icon: Icons.bolt,
-                      value: '350W',
-                    ),
-                  ],
+                  roomName: currentUnit?.location ?? _selectedUnit ?? 'Unit',
+                  isLive: currentUnit?.power ?? false,
+                  badges: currentUnit != null && currentUnit.isVentilation
+                      ? [
+                          StatusBadge(
+                            icon: Icons.air,
+                            value: currentUnit.ventMode?.displayName ?? 'Авто',
+                          ),
+                          StatusBadge(
+                            icon: Icons.thermostat,
+                            value:
+                                '${currentUnit.supplyAirTemp?.toInt() ?? 0}°C',
+                          ),
+                          StatusBadge(
+                            icon: Icons.water_drop,
+                            value: '${currentUnit.humidity.toInt()}%',
+                          ),
+                          StatusBadge(
+                            icon: Icons.speed,
+                            value: '${currentUnit.supplyFanSpeed ?? 0}%',
+                          ),
+                        ]
+                      : [
+                          StatusBadge(
+                            icon: Icons.thermostat,
+                            value: currentUnit?.fanSpeed ?? "auto",
+                          ),
+                          StatusBadge(
+                            icon: Icons.water_drop,
+                            value: '${currentUnit?.humidity.toInt() ?? 0}%',
+                          ),
+                          StatusBadge(
+                            icon: Icons.thermostat,
+                            value: '${currentUnit?.currentTemp.toInt() ?? 21}°C',
+                          ),
+                          const StatusBadge(
+                            icon: Icons.bolt,
+                            value: '350W',
+                          ),
+                        ],
                 ),
 
                 const SizedBox(height: 20),
 
-                // Device control cards
+                // Ventilation control cards
                 Expanded(
-                  child: Row(
-                    children: [
-                      // Smart Lamp
-                      Expanded(
-                        child: DeviceControlCard(
-                          title: 'Smart Lamp',
-                          subtitle: '5 devices',
-                          type: DeviceType.lamp,
-                          deviceImage: Icon(
-                            Icons.light,
-                            size: 80,
-                            color: AppTheme.warning.withValues(alpha: 0.3),
-                          ),
-                          controls: [
-                            BrightnessControl(
-                              value: _lampBrightness,
-                              onChanged: (value) {
-                                setState(() => _lampBrightness = value);
-                              },
-                            ),
-                          ],
-                          stats: const [
-                            DeviceStatItem(
-                              icon: Icons.brightness_6,
-                              label: 'Brightness',
-                              value: '55%',
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      const SizedBox(width: 16),
-
-                      // Air Conditioner
-                      Expanded(
-                        child: DeviceControlCard(
-                          title: 'Air Conditioner',
-                          subtitle: 'Full house',
-                          type: DeviceType.airConditioner,
-                          deviceImage: Icon(
-                            Icons.ac_unit,
-                            size: 80,
-                            color: AppTheme.info.withValues(alpha: 0.3),
-                          ),
-                          controls: [
-                            TemperatureControl(
-                              value: currentUnit?.currentTemp ?? _acTemperature,
-                              min: 15,
-                              max: 29,
-                              onChanged: (value) {
-                                setState(() => _acTemperature = value);
-                              },
-                            ),
-                          ],
-                          stats: const [
-                            DeviceStatItem(
-                              icon: Icons.wb_sunny_outlined,
-                              label: 'Auto Mode',
-                              value: 'Auto',
-                            ),
-                            DeviceStatItem(
-                              icon: Icons.schedule,
-                              label: 'Cooling time',
-                              value: '35 min',
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      const SizedBox(width: 16),
-
-                      // Robot Vacuum
-                      Expanded(
-                        child: DeviceControlCard(
-                          title: 'Robot vacuum cleaner',
-                          subtitle: '4 devices',
-                          type: DeviceType.vacuum,
-                          deviceImage: Icon(
-                            Icons.cleaning_services,
-                            size: 80,
-                            color: AppTheme.textSecondary.withValues(alpha: 0.3),
-                          ),
-                          controls: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                              child: const Column(
-                                children: [
-                                  Text(
-                                    '09:00 AM',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  SizedBox(height: 4),
-                                  Text(
-                                    'Next Cleaning',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: AppTheme.textSecondary,
-                                    ),
-                                  ),
-                                ],
+                  child: currentUnit != null
+                      ? Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Mode and Fan Control
+                            Expanded(
+                              child: VentilationModeControl(
+                                unit: currentUnit,
+                                onModeChanged: (mode) {
+                                  // TODO: Update mode via BLoC
+                                },
+                                onSupplyFanChanged: (speed) {
+                                  // TODO: Update supply fan via BLoC
+                                },
+                                onExhaustFanChanged: (speed) {
+                                  // TODO: Update exhaust fan via BLoC
+                                },
                               ),
                             ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                              decoration: BoxDecoration(
-                                color: AppTheme.backgroundDark,
-                                borderRadius: BorderRadius.circular(12),
+
+                            const SizedBox(width: 16),
+
+                            // Temperature Control
+                            Expanded(
+                              child: VentilationTemperatureControl(
+                                unit: currentUnit,
                               ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-                                  Text(
-                                    '50%',
-                                    style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  SizedBox(width: 8),
-                                  Text(
-                                    'Filter Status',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: AppTheme.textSecondary,
-                                    ),
-                                  ),
-                                ],
+                            ),
+
+                            const SizedBox(width: 16),
+
+                            // Schedule Control
+                            Expanded(
+                              child: VentilationScheduleControl(
+                                unit: currentUnit,
+                                onSchedulePressed: () {
+                                  // TODO: Navigate to schedule screen
+                                },
                               ),
                             ),
                           ],
-                          stats: const [
-                            DeviceStatItem(
-                              icon: Icons.crop_square,
-                              label: 'Area cleaned',
-                              value: '58 m²',
+                        )
+                      : const Center(
+                          child: Text(
+                            'Устройство не выбрано',
+                            style: TextStyle(
+                              color: AppTheme.textSecondary,
                             ),
-                            DeviceStatItem(
-                              icon: Icons.schedule,
-                              label: 'Cleaning time',
-                              value: '30 min',
-                            ),
-                            DeviceStatItem(
-                              icon: Icons.battery_charging_full,
-                              label: 'Battery charge',
-                              value: '67%',
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
                 ),
               ],
             ),
@@ -421,32 +354,454 @@ class _HomeScreenState extends State<HomeScreen> {
 
           const SizedBox(width: 20),
 
-          // Activity sidebar
+          // Notifications sidebar for current unit
           SizedBox(
             width: 320,
-            child: ActivityTimeline(
-              activities: const [
-                ActivityItem(
-                  time: '07:25',
-                  title: 'Smart Plug',
-                  description: 'Plug turned on for coffee maker',
+            child: currentUnit != null
+                ? _buildNotificationsPanel(currentUnit)
+                : const SizedBox.shrink(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNotificationsPanel(HvacUnit unit) {
+    final now = DateTime.now();
+
+    // Группируем уведомления по важности
+    final critical = <ActivityItem>[];
+    final errors = <ActivityItem>[];
+    final warnings = <ActivityItem>[];
+    final info = <ActivityItem>[];
+
+    // Добавляем уведомления об авариях
+    if (unit.alerts != null && unit.alerts!.isNotEmpty) {
+      for (final alert in unit.alerts!) {
+        if (alert.code != 0) {
+          final severity = _mapAlertSeverityToNotification(alert.severity);
+          final activity = ActivityItem(
+            time: alert.timestamp != null
+                ? '${alert.timestamp!.hour.toString().padLeft(2, '0')}:${alert.timestamp!.minute.toString().padLeft(2, '0')}'
+                : '--:--',
+            title: 'Авария: код ${alert.code}',
+            description: alert.description,
+            severity: severity,
+            icon: _getSeverityIcon(severity),
+          );
+
+          switch (severity) {
+            case NotificationSeverity.critical:
+              critical.add(activity);
+              break;
+            case NotificationSeverity.error:
+              errors.add(activity);
+              break;
+            case NotificationSeverity.warning:
+              warnings.add(activity);
+              break;
+            case NotificationSeverity.info:
+              info.add(activity);
+              break;
+          }
+        }
+      }
+    }
+
+    // Добавляем информацию о работе
+    if (unit.power) {
+      info.add(ActivityItem(
+        time: '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}',
+        title: '${unit.name} работает',
+        description: 'Режим: ${unit.ventMode?.displayName ?? "Авто"}',
+        severity: NotificationSeverity.info,
+        icon: Icons.power_settings_new,
+      ));
+    }
+
+    // Добавляем информацию о расписании
+    final todaySchedule = unit.schedule?.getDaySchedule(now.weekday);
+    if (todaySchedule != null && todaySchedule.timerEnabled) {
+      if (todaySchedule.turnOnTime != null) {
+        info.add(ActivityItem(
+          time:
+              '${todaySchedule.turnOnTime!.hour.toString().padLeft(2, '0')}:${todaySchedule.turnOnTime!.minute.toString().padLeft(2, '0')}',
+          title: 'Запланированное включение',
+          description: 'Автоматический запуск по расписанию',
+          severity: NotificationSeverity.info,
+          icon: Icons.schedule,
+        ));
+      }
+    }
+
+    final totalCount = critical.length + errors.length + warnings.length + info.length;
+
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: AppTheme.backgroundCard,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: AppTheme.backgroundCardBorder,
+          width: 1,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Уведомления',
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontSize: 18,
+                    ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8,
+                  vertical: 4,
                 ),
-                ActivityItem(
-                  time: '07:05',
-                  title: 'Air Conditioner',
-                  description: 'Set to 21°C',
+                decoration: BoxDecoration(
+                  color: AppTheme.primaryOrange.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                ActivityItem(
-                  time: '07:00',
-                  title: 'Smart Lamp',
-                  description: 'Turned on automatically',
+                child: Text(
+                  '$totalCount',
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    color: AppTheme.primaryOrange,
+                  ),
                 ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 16),
+
+          // Счётчики по категориям
+          if (totalCount > 0)
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                if (critical.isNotEmpty)
+                  _buildCategoryBadge('Критические', critical.length, AppTheme.error),
+                if (errors.isNotEmpty)
+                  _buildCategoryBadge('Ошибки', errors.length, const Color(0xFFE57373)),
+                if (warnings.isNotEmpty)
+                  _buildCategoryBadge('Предупреждения', warnings.length, AppTheme.warning),
+                if (info.isNotEmpty)
+                  _buildCategoryBadge('Инфо', info.length, AppTheme.info),
               ],
-              onSeeAll: () {},
+            ),
+
+          const SizedBox(height: 20),
+
+          // Уведомления
+          if (totalCount == 0)
+            _buildEmptyState()
+          else
+            ..._buildGroupedNotifications(critical, errors, warnings, info),
+
+          // Кнопка "Показать всё"
+          if (totalCount > 3 && !_showAllNotifications)
+            Padding(
+              padding: const EdgeInsets.only(top: 12),
+              child: Center(
+                child: TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _showAllNotifications = true;
+                    });
+                  },
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Показать все ($totalCount)',
+                        style: const TextStyle(
+                          color: AppTheme.primaryOrange,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      const Icon(
+                        Icons.expand_more,
+                        color: AppTheme.primaryOrange,
+                        size: 18,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
+          // Кнопка "Свернуть"
+          if (_showAllNotifications && totalCount > 3)
+            Padding(
+              padding: const EdgeInsets.only(top: 12),
+              child: Center(
+                child: TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _showAllNotifications = false;
+                    });
+                  },
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: const [
+                      Text(
+                        'Свернуть',
+                        style: TextStyle(
+                          color: AppTheme.textSecondary,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      SizedBox(width: 4),
+                      Icon(
+                        Icons.expand_less,
+                        color: AppTheme.textSecondary,
+                        size: 18,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  NotificationSeverity _mapAlertSeverityToNotification(AlertSeverity alertSeverity) {
+    switch (alertSeverity) {
+      case AlertSeverity.critical:
+        return NotificationSeverity.critical;
+      case AlertSeverity.error:
+        return NotificationSeverity.error;
+      case AlertSeverity.warning:
+        return NotificationSeverity.warning;
+      case AlertSeverity.info:
+        return NotificationSeverity.info;
+    }
+  }
+
+  IconData _getSeverityIcon(NotificationSeverity severity) {
+    switch (severity) {
+      case NotificationSeverity.critical:
+        return Icons.error;
+      case NotificationSeverity.error:
+        return Icons.error_outline;
+      case NotificationSeverity.warning:
+        return Icons.warning;
+      case NotificationSeverity.info:
+        return Icons.info_outline;
+    }
+  }
+
+  Widget _buildCategoryBadge(String label, int count, Color color) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: color.withValues(alpha: 0.3),
+          width: 1,
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 6,
+            height: 6,
+            decoration: BoxDecoration(
+              color: color,
+              shape: BoxShape.circle,
+            ),
+          ),
+          const SizedBox(width: 6),
+          Text(
+            '$label: $count',
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+              color: color,
             ),
           ),
         ],
       ),
     );
+  }
+
+  Widget _buildEmptyState() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        child: Column(
+          children: [
+            Icon(
+              Icons.notifications_none,
+              size: 48,
+              color: AppTheme.textSecondary.withValues(alpha: 0.5),
+            ),
+            const SizedBox(height: 12),
+            const Text(
+              'Нет уведомлений',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: AppTheme.textSecondary,
+              ),
+            ),
+            const SizedBox(height: 4),
+            const Text(
+              'Все системы работают нормально',
+              style: TextStyle(
+                fontSize: 12,
+                color: AppTheme.textSecondary,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  List<Widget> _buildGroupedNotifications(
+    List<ActivityItem> critical,
+    List<ActivityItem> errors,
+    List<ActivityItem> warnings,
+    List<ActivityItem> info,
+  ) {
+    final widgets = <Widget>[];
+    int itemCount = 0;
+    final maxItems = _showAllNotifications ? 1000 : 3;
+
+    // Добавляем критические
+    for (final activity in critical) {
+      if (itemCount >= maxItems) break;
+      widgets.add(_buildActivityItem(activity));
+      itemCount++;
+    }
+
+    // Добавляем ошибки
+    for (final activity in errors) {
+      if (itemCount >= maxItems) break;
+      widgets.add(_buildActivityItem(activity));
+      itemCount++;
+    }
+
+    // Добавляем предупреждения
+    for (final activity in warnings) {
+      if (itemCount >= maxItems) break;
+      widgets.add(_buildActivityItem(activity));
+      itemCount++;
+    }
+
+    // Добавляем информационные
+    for (final activity in info) {
+      if (itemCount >= maxItems) break;
+      widgets.add(_buildActivityItem(activity));
+      itemCount++;
+    }
+
+    return widgets;
+  }
+
+  Widget _buildActivityItem(ActivityItem activity) {
+    final severityColor = _getSeverityColor(activity.severity);
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: AppTheme.backgroundDark,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: severityColor.withValues(alpha: 0.3),
+          width: 1,
+        ),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Icon with severity color
+          Container(
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              color: severityColor.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(
+              activity.icon ?? Icons.notifications,
+              size: 18,
+              color: severityColor,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        activity.title,
+                        style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: AppTheme.textPrimary,
+                        ),
+                      ),
+                    ),
+                    Text(
+                      activity.time,
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w500,
+                        color: severityColor,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  activity.description,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: AppTheme.textSecondary,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Color _getSeverityColor(NotificationSeverity severity) {
+    switch (severity) {
+      case NotificationSeverity.critical:
+        return AppTheme.error;
+      case NotificationSeverity.error:
+        return const Color(0xFFE57373);
+      case NotificationSeverity.warning:
+        return AppTheme.warning;
+      case NotificationSeverity.info:
+        return AppTheme.info;
+    }
   }
 }

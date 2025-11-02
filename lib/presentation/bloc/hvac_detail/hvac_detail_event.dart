@@ -59,3 +59,51 @@ class UpdateFanSpeedEvent extends HvacDetailEvent {
 class LoadTemperatureHistoryEvent extends HvacDetailEvent {
   const LoadTemperatureHistoryEvent();
 }
+
+/// Update ventilation mode
+class UpdateVentilationModeEvent extends HvacDetailEvent {
+  final String mode; // VentilationMode enum name
+
+  const UpdateVentilationModeEvent(this.mode);
+
+  @override
+  List<Object?> get props => [mode];
+}
+
+/// Update supply fan speed
+class UpdateSupplyFanSpeedEvent extends HvacDetailEvent {
+  final int speed; // 0-100%
+
+  const UpdateSupplyFanSpeedEvent(this.speed);
+
+  @override
+  List<Object?> get props => [speed];
+}
+
+/// Update exhaust fan speed
+class UpdateExhaustFanSpeedEvent extends HvacDetailEvent {
+  final int speed; // 0-100%
+
+  const UpdateExhaustFanSpeedEvent(this.speed);
+
+  @override
+  List<Object?> get props => [speed];
+}
+
+/// Update day schedule
+class UpdateDayScheduleEvent extends HvacDetailEvent {
+  final int dayOfWeek; // 1=Monday, 7=Sunday
+  final String? turnOnTime; // HH:MM format
+  final String? turnOffTime; // HH:MM format
+  final bool timerEnabled;
+
+  const UpdateDayScheduleEvent({
+    required this.dayOfWeek,
+    this.turnOnTime,
+    this.turnOffTime,
+    required this.timerEnabled,
+  });
+
+  @override
+  List<Object?> get props => [dayOfWeek, turnOnTime, turnOffTime, timerEnabled];
+}
