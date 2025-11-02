@@ -15,6 +15,7 @@ import '../widgets/activity_timeline.dart';
 import '../../domain/entities/hvac_unit.dart';
 import '../../domain/entities/ventilation_mode.dart';
 import '../../domain/entities/alert.dart';
+import '../../domain/repositories/hvac_repository.dart';
 import '../../domain/usecases/update_ventilation_mode.dart';
 import '../../domain/usecases/update_fan_speeds.dart';
 import '../widgets/ventilation_mode_control.dart';
@@ -257,6 +258,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 RoomPreviewCard(
                   roomName: currentUnit?.location ?? _selectedUnit ?? 'Unit',
                   isLive: currentUnit?.power ?? false,
+                  onPowerChanged: (power) {
+                    if (currentUnit != null) {
+                      _updatePower(currentUnit, power);
+                    }
+                  },
                   badges: currentUnit != null && currentUnit.isVentilation
                       ? [
                           StatusBadge(
@@ -826,8 +832,30 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  /// Update power state
+  Future<void> _updatePower(HvacUnit unit, bool power) async {
+    if (!mounted) return;
+
+    try {
+      final updatedUnit = unit.copyWith(power: power);
+      final repository = sl<HvacRepository>();
+      await repository.updateUnitEntity(updatedUnit);
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Ошибка изменения питания: $e'),
+            backgroundColor: AppTheme.error,
+          ),
+        );
+      }
+    }
+  }
+
   /// Update ventilation mode
   Future<void> _updateVentilationMode(HvacUnit unit, VentilationMode mode) async {
+    if (!mounted) return;
+
     try {
       final updateModeUseCase = sl<UpdateVentilationMode>();
       await updateModeUseCase(unit.id, mode);
@@ -849,6 +877,8 @@ class _HomeScreenState extends State<HomeScreen> {
     int? supplySpeed,
     int? exhaustSpeed,
   }) async {
+    if (!mounted) return;
+
     try {
       final updateFanSpeedsUseCase = sl<UpdateFanSpeeds>();
       await updateFanSpeedsUseCase.call(

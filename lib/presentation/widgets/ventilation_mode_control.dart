@@ -57,7 +57,7 @@ class _VentilationModeControlState extends State<VentilationModeControl> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header
+          // Header with Power Toggle
           Row(
             children: [
               Container(

@@ -11,6 +11,7 @@ class RoomPreviewCard extends StatelessWidget {
   final String? imageUrl;
   final bool isLive;
   final List<StatusBadge> badges;
+  final ValueChanged<bool>? onPowerChanged;
 
   const RoomPreviewCard({
     super.key,
@@ -18,6 +19,7 @@ class RoomPreviewCard extends StatelessWidget {
     this.imageUrl,
     this.isLive = false,
     this.badges = const [],
+    this.onPowerChanged,
   });
 
   @override
@@ -67,41 +69,57 @@ class RoomPreviewCard extends StatelessWidget {
               ),
             ),
 
-            // Live badge
-            if (isLive)
-              Positioned(
-                top: 16,
-                left: 16,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: AppTheme.error.withValues(alpha: 0.9),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        width: 8,
-                        height: 8,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                      const SizedBox(width: 6),
-                      const Text(
-                        'Live',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
+            // Power Toggle
+            Positioned(
+              top: 16,
+              left: 16,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: AppTheme.backgroundCard.withValues(alpha: 0.95),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: AppTheme.backgroundCardBorder,
+                    width: 1,
                   ),
                 ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      isLive ? Icons.power_settings_new : Icons.power_off,
+                      color: isLive ? AppTheme.success : AppTheme.textSecondary,
+                      size: 18,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      isLive ? 'Включено' : 'Выключено',
+                      style: TextStyle(
+                        color: isLive ? AppTheme.textPrimary : AppTheme.textSecondary,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    SizedBox(
+                      height: 24,
+                      child: FittedBox(
+                        fit: BoxFit.contain,
+                        child: Switch(
+                          value: isLive,
+                          onChanged: onPowerChanged,
+                          activeColor: Colors.white,
+                          activeTrackColor: AppTheme.success,
+                          inactiveThumbColor: AppTheme.textSecondary,
+                          inactiveTrackColor: AppTheme.backgroundCardBorder,
+                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
+            ),
 
             // Status badges
             Positioned(
