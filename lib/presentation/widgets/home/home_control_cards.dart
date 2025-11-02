@@ -41,8 +41,11 @@ class HomeControlCards extends StatelessWidget {
     }
 
     final isMobile = ResponsiveUtils.isMobile(context);
+    final isTablet = ResponsiveUtils.isTablet(context);
 
-    return isMobile
+    // Both mobile and tablet use vertical layout
+    // Only desktop (>1200px) uses horizontal layout
+    return (isMobile || isTablet)
         ? _buildMobileLayout()
         : _buildDesktopLayout();
   }

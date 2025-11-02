@@ -1,0 +1,147 @@
+/// Home Tablet Layout Widget - Compact Version
+///
+/// Optimized layout for tablet devices (600-1200px width)
+/// Uses 2-column grid with extracted components
+library;
+
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../core/theme/spacing.dart';
+import '../../../domain/entities/hvac_unit.dart';
+import '../../../domain/entities/automation_rule.dart';
+import '../../../domain/entities/mode_preset.dart';
+import 'home_room_preview.dart';
+import 'home_automation_section.dart';
+import 'home_notifications_panel.dart';
+import 'tablet_quick_actions.dart';
+import 'tablet_presets_panel.dart';
+
+/// Tablet layout for home dashboard - 2 column optimized
+class HomeTabletLayout extends StatelessWidget {
+  final HvacUnit? currentUnit;
+  final List<HvacUnit> units;
+  final String? selectedUnit;
+  final Function(bool) onPowerChanged;
+  final VoidCallback? onDetailsPressed;
+  final Function(HvacUnit?, BuildContext) buildControlCards;
+  final Function(AutomationRule) onRuleToggled;
+  final VoidCallback onManageRules;
+  final Function(ModePreset) onPresetSelected;
+  final VoidCallback onPowerAllOn;
+  final VoidCallback onPowerAllOff;
+  final VoidCallback onSyncSettings;
+  final VoidCallback onApplyScheduleToAll;
+
+  const HomeTabletLayout({
+    super.key,
+    required this.currentUnit,
+    required this.units,
+    required this.selectedUnit,
+    required this.onPowerChanged,
+    required this.onDetailsPressed,
+    required this.buildControlCards,
+    required this.onRuleToggled,
+    required this.onManageRules,
+    required this.onPresetSelected,
+    required this.onPowerAllOn,
+    required this.onPowerAllOff,
+    required this.onSyncSettings,
+    required this.onApplyScheduleToAll,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isSmallTablet = screenWidth < 900;
+
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _buildRoomPreviewSection(),
+          SizedBox(height: AppSpacing.xlV),
+          _buildTwoColumnLayout(context, isSmallTablet),
+          SizedBox(height: AppSpacing.xlV),
+          HomeAutomationSection(
+            currentUnit: currentUnit,
+            onRuleToggled: onRuleToggled,
+            onManageRules: onManageRules,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRoomPreviewSection() {
+    return Container(
+      constraints: BoxConstraints(
+        maxHeight: 320.h,
+      ),
+      child: HomeRoomPreview(
+        currentUnit: currentUnit,
+        selectedUnit: selectedUnit,
+        onPowerChanged: onPowerChanged,
+        onDetailsPressed: onDetailsPressed,
+      ),
+    );
+  }
+
+  Widget _buildTwoColumnLayout(BuildContext context, bool isSmallTablet) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          flex: isSmallTablet ? 1 : 3,
+          child: _buildLeftColumn(context, isSmallTablet),
+        ),
+        SizedBox(width: AppSpacing.xlR),
+        Expanded(
+          flex: isSmallTablet ? 1 : 2,
+          child: _buildRightColumn(isSmallTablet),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLeftColumn(BuildContext context, bool isSmallTablet) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        buildControlCards(currentUnit, context),
+        if (isSmallTablet) ...[
+          SizedBox(height: AppSpacing.lgV),
+          TabletQuickActions(
+            onPowerAllOn: onPowerAllOn,
+            onPowerAllOff: onPowerAllOff,
+            onSyncSettings: onSyncSettings,
+            onApplyScheduleToAll: onApplyScheduleToAll,
+          ),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildRightColumn(bool isSmallTablet) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (!isSmallTablet) ...[
+          TabletQuickActions(
+            onPowerAllOn: onPowerAllOn,
+            onPowerAllOff: onPowerAllOff,
+            onSyncSettings: onSyncSettings,
+            onApplyScheduleToAll: onApplyScheduleToAll,
+          ),
+          SizedBox(height: AppSpacing.lgV),
+        ],
+        TabletPresetsPanel(
+          onPresetSelected: onPresetSelected,
+        ),
+        SizedBox(height: AppSpacing.lgV),
+        if (currentUnit != null)
+          HomeNotificationsPanel(unit: currentUnit!),
+      ],
+    );
+  }
+}

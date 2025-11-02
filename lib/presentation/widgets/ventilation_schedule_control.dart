@@ -28,21 +28,6 @@ class VentilationScheduleControl extends StatelessWidget {
         final dayOfWeek = now.weekday;
         final todaySchedule = unit.schedule?.getDaySchedule(dayOfWeek);
 
-        final children = [
-          _buildHeader(context, deviceSize),
-          SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 16)),
-          _buildTodaySchedule(context, deviceSize, dayOfWeek, todaySchedule),
-          SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 16)),
-          _buildQuickStats(context, deviceSize),
-          SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 16)),
-          _buildEditButton(context, deviceSize),
-        ];
-
-        // Add spacer only on desktop for equal heights
-        if (deviceSize != DeviceSize.compact) {
-          children.add(const Spacer());
-        }
-
         return Container(
           padding: AdaptiveLayout.controlPadding(context),
           decoration: BoxDecoration(
@@ -54,9 +39,52 @@ class VentilationScheduleControl extends StatelessWidget {
               color: AppTheme.backgroundCardBorder,
             ),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: children,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              // Check if we have a height constraint (desktop layout)
+              final hasHeightConstraint = constraints.maxHeight != double.infinity;
+
+              if (hasHeightConstraint) {
+                // Desktop layout with constrained height - use scrollable content
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildHeader(context, deviceSize),
+                    SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 16)),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        physics: const ClampingScrollPhysics(),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildTodaySchedule(context, deviceSize, dayOfWeek, todaySchedule),
+                            SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 16)),
+                            _buildQuickStats(context, deviceSize),
+                            SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 16)),
+                            _buildEditButton(context, deviceSize),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              } else {
+                // Mobile layout without height constraint
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _buildHeader(context, deviceSize),
+                    SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 16)),
+                    _buildTodaySchedule(context, deviceSize, dayOfWeek, todaySchedule),
+                    SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 16)),
+                    _buildQuickStats(context, deviceSize),
+                    SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 16)),
+                    _buildEditButton(context, deviceSize),
+                  ],
+                );
+              }
+            },
           ),
         );
       },
@@ -84,6 +112,7 @@ class VentilationScheduleControl extends StatelessWidget {
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 'Расписание',
@@ -92,6 +121,8 @@ class VentilationScheduleControl extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                   color: AppTheme.textPrimary,
                 ),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
               ),
               SizedBox(height: 2.h),
               Text(
@@ -100,6 +131,8 @@ class VentilationScheduleControl extends StatelessWidget {
                   fontSize: AdaptiveLayout.fontSize(context, base: 12),
                   color: AppTheme.textSecondary,
                 ),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
               ),
             ],
           ),

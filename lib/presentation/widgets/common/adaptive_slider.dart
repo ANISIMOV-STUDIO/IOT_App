@@ -42,7 +42,6 @@ class AdaptiveSlider extends StatelessWidget {
           children: [
             // Label row
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Icon(
                   icon,
@@ -59,9 +58,14 @@ class AdaptiveSlider extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                     ),
                     overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
                 ),
+                SizedBox(width: AdaptiveLayout.spacing(context, base: 8)),
                 Container(
+                  constraints: BoxConstraints(
+                    maxWidth: deviceSize == DeviceSize.compact ? 60.w : 80.w,
+                  ),
                   padding: EdgeInsets.symmetric(
                     horizontal: AdaptiveLayout.spacing(context, base: 10),
                     vertical: AdaptiveLayout.spacing(context, base: 4),
@@ -79,6 +83,7 @@ class AdaptiveSlider extends StatelessWidget {
                       fontWeight: FontWeight.w700,
                       color: effectiveColor,
                     ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
               ],

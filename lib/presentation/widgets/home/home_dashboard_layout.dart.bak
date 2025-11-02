@@ -1,6 +1,6 @@
 /// Home Dashboard Layout Widgets
 ///
-/// Mobile, tablet and desktop layout components for the home dashboard
+/// Mobile and desktop layout components for the home dashboard
 /// Part of home_screen.dart refactoring to respect 300-line limit
 library;
 
@@ -14,7 +14,6 @@ import 'home_room_preview.dart';
 import 'home_automation_section.dart';
 import 'home_sidebar.dart';
 import 'home_notifications_panel.dart';
-import 'home_tablet_layout.dart';
 
 /// Mobile layout for home dashboard
 class HomeMobileLayout extends StatelessWidget {
@@ -185,76 +184,37 @@ class HomeDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Adaptive padding based on device type
-    final EdgeInsets padding;
-    if (ResponsiveUtils.isMobile(context)) {
-      padding = EdgeInsets.symmetric(
-        horizontal: AppSpacing.mdR,
-        vertical: AppSpacing.mdV,
-      );
-    } else if (ResponsiveUtils.isTablet(context)) {
-      padding = EdgeInsets.symmetric(
+    return Padding(
+      padding: EdgeInsets.symmetric(
         horizontal: AppSpacing.lgR,
         vertical: AppSpacing.lgV,
-      );
-    } else {
-      padding = EdgeInsets.symmetric(
-        horizontal: AppSpacing.xlR,
-        vertical: AppSpacing.xlV,
-      );
-    }
-
-    return Padding(
-      padding: padding,
-      child: _buildLayout(context),
+      ),
+      child: ResponsiveUtils.isMobile(context)
+          ? HomeMobileLayout(
+              currentUnit: currentUnit,
+              units: units,
+              selectedUnit: selectedUnit,
+              onPowerChanged: onPowerChanged,
+              onDetailsPressed: onDetailsPressed,
+              buildControlCards: buildControlCards,
+              onRuleToggled: onRuleToggled,
+              onManageRules: onManageRules,
+            )
+          : HomeDesktopLayout(
+              currentUnit: currentUnit,
+              units: units,
+              selectedUnit: selectedUnit,
+              onPowerChanged: onPowerChanged,
+              onDetailsPressed: onDetailsPressed,
+              buildControlCards: buildControlCards,
+              onRuleToggled: onRuleToggled,
+              onManageRules: onManageRules,
+              onPresetSelected: onPresetSelected,
+              onPowerAllOn: onPowerAllOn,
+              onPowerAllOff: onPowerAllOff,
+              onSyncSettings: onSyncSettings,
+              onApplyScheduleToAll: onApplyScheduleToAll,
+            ),
     );
-  }
-
-  Widget _buildLayout(BuildContext context) {
-    if (ResponsiveUtils.isMobile(context)) {
-      return HomeMobileLayout(
-        currentUnit: currentUnit,
-        units: units,
-        selectedUnit: selectedUnit,
-        onPowerChanged: onPowerChanged,
-        onDetailsPressed: onDetailsPressed,
-        buildControlCards: buildControlCards,
-        onRuleToggled: onRuleToggled,
-        onManageRules: onManageRules,
-      );
-    } else if (ResponsiveUtils.isTablet(context)) {
-      // TABLET LAYOUT - NEW!
-      return HomeTabletLayout(
-        currentUnit: currentUnit,
-        units: units,
-        selectedUnit: selectedUnit,
-        onPowerChanged: onPowerChanged,
-        onDetailsPressed: onDetailsPressed,
-        buildControlCards: buildControlCards,
-        onRuleToggled: onRuleToggled,
-        onManageRules: onManageRules,
-        onPresetSelected: onPresetSelected,
-        onPowerAllOn: onPowerAllOn,
-        onPowerAllOff: onPowerAllOff,
-        onSyncSettings: onSyncSettings,
-        onApplyScheduleToAll: onApplyScheduleToAll,
-      );
-    } else {
-      return HomeDesktopLayout(
-        currentUnit: currentUnit,
-        units: units,
-        selectedUnit: selectedUnit,
-        onPowerChanged: onPowerChanged,
-        onDetailsPressed: onDetailsPressed,
-        buildControlCards: buildControlCards,
-        onRuleToggled: onRuleToggled,
-        onManageRules: onManageRules,
-        onPresetSelected: onPresetSelected,
-        onPowerAllOn: onPowerAllOn,
-        onPowerAllOff: onPowerAllOff,
-        onSyncSettings: onSyncSettings,
-        onApplyScheduleToAll: onApplyScheduleToAll,
-      );
-    }
   }
 }

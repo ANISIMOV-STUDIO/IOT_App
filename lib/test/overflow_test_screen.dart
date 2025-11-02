@@ -1,0 +1,253 @@
+/// Overflow Test Screen
+///
+/// Test screen to verify all layout overflow fixes
+/// Tests at mobile (360px), tablet (768px), and desktop (1024px) breakpoints
+library;
+
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../domain/entities/hvac_unit.dart';
+import '../domain/entities/ventilation_mode.dart';
+import '../presentation/widgets/ventilation_mode_control.dart';
+import '../presentation/widgets/ventilation_temperature_control.dart';
+import '../presentation/widgets/ventilation_schedule_control.dart';
+import '../presentation/widgets/home/home_control_cards.dart';
+import '../core/theme/app_theme.dart';
+
+class OverflowTestScreen extends StatefulWidget {
+  const OverflowTestScreen({super.key});
+
+  @override
+  State<OverflowTestScreen> createState() => _OverflowTestScreenState();
+}
+
+class _OverflowTestScreenState extends State<OverflowTestScreen> {
+  // Mock HVAC unit for testing
+  final HvacUnit mockUnit = HvacUnit(
+    id: 'test-unit',
+    name: 'Очень длинное название установки для проверки переполнения текста',
+    power: true,
+    roomTemp: 22.5,
+    outdoorTemp: -5.0,
+    supplyAirTemp: 18.0,
+    ventMode: VentilationMode.basic,
+    supplyFanSpeed: 65,
+    exhaustFanSpeed: 70,
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppTheme.backgroundDark,
+      appBar: AppBar(
+        title: const Text('Overflow Test Screen'),
+        backgroundColor: AppTheme.backgroundCard,
+      ),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return Column(
+            children: [
+              // Display current viewport size
+              Container(
+                padding: EdgeInsets.all(16.w),
+                color: AppTheme.backgroundCard,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Width: ${constraints.maxWidth.toStringAsFixed(0)}px',
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.bold,
+                        color: AppTheme.primaryOrange,
+                      ),
+                    ),
+                    Text(
+                      'Height: ${constraints.maxHeight.toStringAsFixed(0)}px',
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.bold,
+                        color: AppTheme.primaryOrange,
+                      ),
+                    ),
+                    Text(
+                      _getDeviceType(constraints.maxWidth),
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.bold,
+                        color: AppTheme.success,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.all(16.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Test 1: HomeControlCards (wrapper for all controls)
+                      _buildTestSection(
+                        'Test 1: HomeControlCards (All Controls)',
+                        HomeControlCards(
+                          currentUnit: mockUnit,
+                          onModeChanged: (_) {},
+                          onSupplyFanChanged: (_) {},
+                          onExhaustFanChanged: (_) {},
+                          onSchedulePressed: () {},
+                        ),
+                        constraints,
+                      ),
+
+                      SizedBox(height: 24.h),
+
+                      // Test 2: Individual VentilationModeControl
+                      _buildTestSection(
+                        'Test 2: VentilationModeControl',
+                        VentilationModeControl(
+                          unit: mockUnit,
+                          onModeChanged: (_) {},
+                          onSupplyFanChanged: (_) {},
+                          onExhaustFanChanged: (_) {},
+                        ),
+                        constraints,
+                      ),
+
+                      SizedBox(height: 24.h),
+
+                      // Test 3: Individual VentilationTemperatureControl
+                      _buildTestSection(
+                        'Test 3: VentilationTemperatureControl',
+                        VentilationTemperatureControl(unit: mockUnit),
+                        constraints,
+                      ),
+
+                      SizedBox(height: 24.h),
+
+                      // Test 4: Individual VentilationScheduleControl
+                      _buildTestSection(
+                        'Test 4: VentilationScheduleControl',
+                        VentilationScheduleControl(
+                          unit: mockUnit,
+                          onSchedulePressed: () {},
+                        ),
+                        constraints,
+                      ),
+
+                      SizedBox(height: 24.h),
+
+                      // Test 5: Constrained height test (simulating desktop layout)
+                      _buildTestSection(
+                        'Test 5: Constrained Height (Desktop Mode)',
+                        SizedBox(
+                          height: 280.h,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: VentilationModeControl(
+                                  unit: mockUnit,
+                                  onModeChanged: (_) {},
+                                ),
+                              ),
+                              SizedBox(width: 16.w),
+                              Expanded(
+                                child: VentilationTemperatureControl(unit: mockUnit),
+                              ),
+                              SizedBox(width: 16.w),
+                              Expanded(
+                                child: VentilationScheduleControl(
+                                  unit: mockUnit,
+                                  onSchedulePressed: () {},
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        constraints,
+                      ),
+
+                      SizedBox(height: 24.h),
+
+                      // Test 6: Very narrow width test
+                      _buildTestSection(
+                        'Test 6: Narrow Width (300px)',
+                        SizedBox(
+                          width: 300.w,
+                          child: Column(
+                            children: [
+                              VentilationModeControl(
+                                unit: mockUnit,
+                                onModeChanged: (_) {},
+                              ),
+                              SizedBox(height: 16.h),
+                              VentilationTemperatureControl(unit: mockUnit),
+                              SizedBox(height: 16.h),
+                              VentilationScheduleControl(
+                                unit: mockUnit,
+                                onSchedulePressed: () {},
+                              ),
+                            ],
+                          ),
+                        ),
+                        constraints,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildTestSection(String title, Widget content, BoxConstraints constraints) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+          decoration: BoxDecoration(
+            color: AppTheme.info.withValues(alpha: 0.2),
+            borderRadius: BorderRadius.circular(8.r),
+          ),
+          child: Text(
+            title,
+            style: TextStyle(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w600,
+              color: AppTheme.info,
+            ),
+          ),
+        ),
+        SizedBox(height: 12.h),
+        Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: AppTheme.error.withValues(alpha: 0.3),
+              width: 2,
+            ),
+            borderRadius: BorderRadius.circular(8.r),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(6.r),
+            child: content,
+          ),
+        ),
+      ],
+    );
+  }
+
+  String _getDeviceType(double width) {
+    if (width < 600) {
+      return 'Mobile';
+    } else if (width < 840) {
+      return 'Tablet';
+    } else {
+      return 'Desktop';
+    }
+  }
+}

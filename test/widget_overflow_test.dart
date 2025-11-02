@@ -1,0 +1,283 @@
+/// Widget Overflow Tests
+///
+/// Automated tests to check for layout overflow errors at different breakpoints
+library;
+
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:iot_app/domain/entities/hvac_unit.dart';
+import 'package:iot_app/domain/entities/ventilation_mode.dart';
+import 'package:iot_app/presentation/widgets/ventilation_mode_control.dart';
+import 'package:iot_app/presentation/widgets/ventilation_temperature_control.dart';
+import 'package:iot_app/presentation/widgets/ventilation_schedule_control.dart';
+import 'package:iot_app/presentation/widgets/home/home_control_cards.dart';
+
+void main() {
+  // Mock HVAC unit for testing
+  final HvacUnit mockUnit = HvacUnit(
+    id: 'test-unit',
+    name: 'Очень длинное название установки для проверки переполнения текста в интерфейсе',
+    power: true,
+    roomTemp: 22.5,
+    outdoorTemp: -5.0,
+    supplyAirTemp: 18.0,
+    ventMode: VentilationMode.basic,
+    supplyFanSpeed: 65,
+    exhaustFanSpeed: 70,
+  );
+
+  group('Layout Overflow Tests', () {
+    // Helper to create test app with specific screen size
+    Widget createTestApp(Widget child, {Size size = const Size(360, 800)}) {
+      return MaterialApp(
+        home: MediaQuery(
+          data: MediaQueryData(size: size),
+          child: ScreenUtilInit(
+            designSize: size,
+            minTextAdapt: true,
+            splitScreenMode: true,
+            child: Scaffold(
+              body: child,
+            ),
+          ),
+        ),
+      );
+    }
+
+    testWidgets('VentilationTemperatureControl - No overflow on mobile', (tester) async {
+      await tester.pumpWidget(
+        createTestApp(
+          VentilationTemperatureControl(unit: mockUnit),
+          size: const Size(360, 800),
+        ),
+      );
+
+      expect(tester.takeException(), isNull);
+      expect(find.byType(VentilationTemperatureControl), findsOneWidget);
+    });
+
+    testWidgets('VentilationTemperatureControl - No overflow on tablet', (tester) async {
+      await tester.pumpWidget(
+        createTestApp(
+          VentilationTemperatureControl(unit: mockUnit),
+          size: const Size(768, 1024),
+        ),
+      );
+
+      expect(tester.takeException(), isNull);
+      expect(find.byType(VentilationTemperatureControl), findsOneWidget);
+    });
+
+    testWidgets('VentilationTemperatureControl - No overflow in constrained height', (tester) async {
+      await tester.pumpWidget(
+        createTestApp(
+          SizedBox(
+            height: 280,
+            child: VentilationTemperatureControl(unit: mockUnit),
+          ),
+          size: const Size(1024, 768),
+        ),
+      );
+
+      expect(tester.takeException(), isNull);
+      expect(find.byType(VentilationTemperatureControl), findsOneWidget);
+    });
+
+    testWidgets('VentilationModeControl - No overflow on mobile', (tester) async {
+      await tester.pumpWidget(
+        createTestApp(
+          VentilationModeControl(
+            unit: mockUnit,
+            onModeChanged: (_) {},
+          ),
+          size: const Size(360, 800),
+        ),
+      );
+
+      expect(tester.takeException(), isNull);
+      expect(find.byType(VentilationModeControl), findsOneWidget);
+    });
+
+    testWidgets('VentilationModeControl - No overflow in constrained height', (tester) async {
+      await tester.pumpWidget(
+        createTestApp(
+          SizedBox(
+            height: 280,
+            child: VentilationModeControl(
+              unit: mockUnit,
+              onModeChanged: (_) {},
+            ),
+          ),
+          size: const Size(1024, 768),
+        ),
+      );
+
+      expect(tester.takeException(), isNull);
+      expect(find.byType(VentilationModeControl), findsOneWidget);
+    });
+
+    testWidgets('VentilationScheduleControl - No overflow on mobile', (tester) async {
+      await tester.pumpWidget(
+        createTestApp(
+          VentilationScheduleControl(
+            unit: mockUnit,
+            onSchedulePressed: () {},
+          ),
+          size: const Size(360, 800),
+        ),
+      );
+
+      expect(tester.takeException(), isNull);
+      expect(find.byType(VentilationScheduleControl), findsOneWidget);
+    });
+
+    testWidgets('VentilationScheduleControl - No overflow in constrained height', (tester) async {
+      await tester.pumpWidget(
+        createTestApp(
+          SizedBox(
+            height: 280,
+            child: VentilationScheduleControl(
+              unit: mockUnit,
+              onSchedulePressed: () {},
+            ),
+          ),
+          size: const Size(1024, 768),
+        ),
+      );
+
+      expect(tester.takeException(), isNull);
+      expect(find.byType(VentilationScheduleControl), findsOneWidget);
+    });
+
+    testWidgets('HomeControlCards - No overflow on mobile', (tester) async {
+      await tester.pumpWidget(
+        createTestApp(
+          HomeControlCards(
+            currentUnit: mockUnit,
+            onModeChanged: (_) {},
+            onSupplyFanChanged: (_) {},
+            onExhaustFanChanged: (_) {},
+            onSchedulePressed: () {},
+          ),
+          size: const Size(360, 800),
+        ),
+      );
+
+      expect(tester.takeException(), isNull);
+      expect(find.byType(HomeControlCards), findsOneWidget);
+    });
+
+    testWidgets('HomeControlCards - No overflow on desktop', (tester) async {
+      await tester.pumpWidget(
+        createTestApp(
+          HomeControlCards(
+            currentUnit: mockUnit,
+            onModeChanged: (_) {},
+            onSupplyFanChanged: (_) {},
+            onExhaustFanChanged: (_) {},
+            onSchedulePressed: () {},
+          ),
+          size: const Size(1440, 900),
+        ),
+      );
+
+      expect(tester.takeException(), isNull);
+      expect(find.byType(HomeControlCards), findsOneWidget);
+    });
+
+    testWidgets('All controls in Row - No overflow on desktop', (tester) async {
+      await tester.pumpWidget(
+        createTestApp(
+          SizedBox(
+            height: 280,
+            child: Row(
+              children: [
+                Expanded(
+                  child: VentilationModeControl(
+                    unit: mockUnit,
+                    onModeChanged: (_) {},
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: VentilationTemperatureControl(unit: mockUnit),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: VentilationScheduleControl(
+                    unit: mockUnit,
+                    onSchedulePressed: () {},
+                  ),
+                ),
+              ],
+            ),
+          ),
+          size: const Size(1440, 900),
+        ),
+      );
+
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('Very narrow width - No overflow', (tester) async {
+      await tester.pumpWidget(
+        createTestApp(
+          Column(
+            children: [
+              VentilationModeControl(
+                unit: mockUnit,
+                onModeChanged: (_) {},
+              ),
+              const SizedBox(height: 16),
+              VentilationTemperatureControl(unit: mockUnit),
+              const SizedBox(height: 16),
+              VentilationScheduleControl(
+                unit: mockUnit,
+                onSchedulePressed: () {},
+              ),
+            ],
+          ),
+          size: const Size(320, 568), // iPhone SE size
+        ),
+      );
+
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('Long text handling - No overflow', (tester) async {
+      final longTextUnit = HvacUnit(
+        id: 'test-unit',
+        name: 'Это очень очень очень очень очень длинное название установки для тестирования переполнения текста',
+        power: true,
+        roomTemp: 22.5,
+        outdoorTemp: -5.0,
+        supplyAirTemp: 18.0,
+        ventMode: VentilationMode.basic,
+        supplyFanSpeed: 100,
+        exhaustFanSpeed: 100,
+      );
+
+      await tester.pumpWidget(
+        createTestApp(
+          Column(
+            children: [
+              VentilationModeControl(
+                unit: longTextUnit,
+                onModeChanged: (_) {},
+              ),
+              VentilationTemperatureControl(unit: longTextUnit),
+              VentilationScheduleControl(
+                unit: longTextUnit,
+                onSchedulePressed: () {},
+              ),
+            ],
+          ),
+          size: const Size(360, 800),
+        ),
+      );
+
+      expect(tester.takeException(), isNull);
+    });
+  });
+}
