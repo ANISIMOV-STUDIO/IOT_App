@@ -30,23 +30,29 @@ class AddDeviceEvent extends HvacListEvent {
   final String macAddress;
   final String name;
   final String? location;
+  final String? pairingCode;
 
   const AddDeviceEvent({
     required this.macAddress,
     required this.name,
     this.location,
+    this.pairingCode,
   });
 
   @override
-  List<Object?> get props => [macAddress, name, location];
+  List<Object?> get props => [macAddress, name, location, pairingCode];
 }
 
 /// Remove a device
 class RemoveDeviceEvent extends HvacListEvent {
   final String deviceId;
+  final bool? factoryReset;
 
-  const RemoveDeviceEvent({required this.deviceId});
+  const RemoveDeviceEvent({
+    required this.deviceId,
+    this.factoryReset,
+  });
 
   @override
-  List<Object?> get props => [deviceId];
+  List<Object?> get props => [deviceId, factoryReset];
 }

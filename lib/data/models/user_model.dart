@@ -14,6 +14,8 @@ class UserModel extends User {
     super.avatarUrl,
     required super.createdAt,
     super.lastLogin,
+    super.isGuest,
+    super.permissions,
   });
 
   /// Create from JSON
@@ -27,6 +29,11 @@ class UserModel extends User {
       lastLogin: json['lastLogin'] != null
           ? DateTime.parse(json['lastLogin'] as String)
           : null,
+      isGuest: json['isGuest'] as bool? ?? false,
+      permissions: (json['permissions'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
     );
   }
 
@@ -36,7 +43,7 @@ class UserModel extends User {
   }
 
   /// Convert to JSON
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJsonMap() {
     return {
       'id': id,
       'email': email,
@@ -44,13 +51,18 @@ class UserModel extends User {
       if (avatarUrl != null) 'avatarUrl': avatarUrl,
       'createdAt': createdAt.toIso8601String(),
       if (lastLogin != null) 'lastLogin': lastLogin!.toIso8601String(),
+      'isGuest': isGuest,
+      'permissions': permissions,
     };
   }
 
-  /// Convert to JSON string
-  String toJsonString() {
-    return json.encode(toJson());
+  /// Convert to JSON string for storage
+  String toJson() {
+    return json.encode(toJsonMap());
   }
+
+  /// Alias for toJson (compatibility)
+  String toJsonString() => toJson();
 
   /// Create from Entity
   factory UserModel.fromEntity(User entity) {
@@ -61,6 +73,8 @@ class UserModel extends User {
       avatarUrl: entity.avatarUrl,
       createdAt: entity.createdAt,
       lastLogin: entity.lastLogin,
+      isGuest: entity.isGuest,
+      permissions: entity.permissions,
     );
   }
 
@@ -73,6 +87,8 @@ class UserModel extends User {
       avatarUrl: avatarUrl,
       createdAt: createdAt,
       lastLogin: lastLogin,
+      isGuest: isGuest,
+      permissions: permissions,
     );
   }
 }

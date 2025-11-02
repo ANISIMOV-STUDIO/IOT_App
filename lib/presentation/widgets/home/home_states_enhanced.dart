@@ -1,0 +1,292 @@
+/// Enhanced Home Screen State Widgets with Accessibility
+///
+/// Comprehensive state widgets with loading, error, and empty states
+/// Fully accessible with WCAG AA compliance
+library;
+
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shimmer/shimmer.dart';
+import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/spacing.dart';
+import '../../../core/utils/accessibility_utils.dart';
+import '../../../core/utils/responsive_builder.dart';
+import '../../../generated/l10n/app_localizations.dart';
+import '../../bloc/hvac_list/hvac_list_bloc.dart';
+import '../../bloc/hvac_list/hvac_list_event.dart';
+import '../common/loading_widget.dart';
+import '../common/error_widget.dart' as app_error;
+import '../common/empty_state_widget.dart';
+import '../common/accessible_button.dart';
+
+/// Enhanced loading state with shimmer effect
+class EnhancedHomeLoadingState extends StatelessWidget {
+  const EnhancedHomeLoadingState({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return ResponsiveBuilder(
+      builder: (context, info) {
+        return Padding(
+          padding: EdgeInsets.all(AppSpacing.lg.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header skeleton
+              _buildHeaderSkeleton(context),
+              SizedBox(height: AppSpacing.xl.h),
+
+              // Room cards skeleton
+              _buildRoomCardsSkeleton(context, info),
+              SizedBox(height: AppSpacing.lg.h),
+
+              // Quick controls skeleton
+              _buildQuickControlsSkeleton(context),
+
+              // Loading indicator
+              Expanded(
+                child: LoadingWidget(
+                  type: LoadingType.shimmer,
+                  message: l10n.loadingDevices,
+                  showMessage: true,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildHeaderSkeleton(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey.shade800,
+      highlightColor: Colors.grey.shade700,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 120.w,
+            height: 20.h,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(AppSpacing.xs.r),
+            ),
+          ),
+          SizedBox(height: AppSpacing.xs.h),
+          Container(
+            width: 200.w,
+            height: 32.h,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(AppSpacing.xs.r),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRoomCardsSkeleton(BuildContext context, ResponsiveInfo info) {
+    final cardCount = info.isMobile ? 2 : info.isTablet ? 3 : 4;
+
+    return SizedBox(
+      height: 180.h,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: cardCount,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: EdgeInsets.only(right: AppSpacing.md.w),
+            child: Shimmer.fromColors(
+              baseColor: Colors.grey.shade800,
+              highlightColor: Colors.grey.shade700,
+              child: Container(
+                width: 150.w,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(AppSpacing.md.r),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildQuickControlsSkeleton(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey.shade800,
+      highlightColor: Colors.grey.shade700,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: List.generate(4, (index) {
+          return Container(
+            width: 60.w,
+            height: 60.h,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+            ),
+          );
+        }),
+      ),
+    );
+  }
+}
+
+/// Enhanced error state with better accessibility
+class EnhancedHomeErrorState extends StatelessWidget {
+  final String message;
+  final String? errorCode;
+
+  const EnhancedHomeErrorState({
+    super.key,
+    required this.message,
+    this.errorCode,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return app_error.AppErrorWidget(
+      title: l10n.connectionError,
+      message: message,
+      errorCode: errorCode,
+      type: app_error.ErrorType.network,
+      onRetry: () {
+        AccessibilityUtils.announce('Retrying connection');
+        context.read<HvacListBloc>().add(const LoadHvacUnitsEvent());
+      },
+      additionalActions: [
+        app_error.ErrorAction(
+          label: l10n.settings,
+          onPressed: () {
+            Navigator.pushNamed(context, '/settings');
+          },
+          icon: Icons.settings,
+        ),
+      ],
+    );
+  }
+}
+
+/// Enhanced empty state with illustrations
+class EnhancedHomeEmptyState extends StatelessWidget {
+  const EnhancedHomeEmptyState({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ResponsiveBuilder(
+      builder: (context, info) {
+        return EmptyStateWidget.noDevices(
+          onAddDevice: () {
+            AccessibilityUtils.announce('Opening device addition screen');
+            // Navigate to add device screen
+            Navigator.pushNamed(context, '/add-device');
+          },
+        );
+      },
+    );
+  }
+}
+
+/// Quick loading indicator for refresh operations
+class QuickLoadingOverlay extends StatelessWidget {
+  final Widget child;
+  final bool isLoading;
+
+  const QuickLoadingOverlay({
+    super.key,
+    required this.child,
+    required this.isLoading,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return LoadingOverlay(
+      isLoading: isLoading,
+      loadingType: LoadingType.circular,
+      message: 'Refreshing...',  // TODO: Add to localization
+      child: child,
+    );
+  }
+}
+
+/// Accessible refresh button
+class AccessibleRefreshButton extends StatelessWidget {
+  final VoidCallback onRefresh;
+  final bool isLoading;
+
+  const AccessibleRefreshButton({
+    super.key,
+    required this.onRefresh,
+    this.isLoading = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return AccessibleIconButton(
+      onPressed: isLoading ? null : onRefresh,
+      icon: Icons.refresh,
+      semanticLabel: l10n.refresh,
+      tooltip: 'Refresh Devices',  // TODO: Add to localization
+      loading: isLoading,
+      size: 24.sp,
+      color: AppTheme.primaryOrange,
+      minTouchTarget: 48.0,
+    );
+  }
+}
+
+/// State wrapper widget that handles all states
+class HomeStateWrapper extends StatelessWidget {
+  final Widget Function() buildContent;
+  final bool isLoading;
+  final bool isEmpty;
+  final String? error;
+  final String? errorCode;
+  final VoidCallback? onRetry;
+
+  const HomeStateWrapper({
+    super.key,
+    required this.buildContent,
+    required this.isLoading,
+    required this.isEmpty,
+    this.error,
+    this.errorCode,
+    this.onRetry,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // Handle loading state
+    if (isLoading) {
+      return const EnhancedHomeLoadingState();
+    }
+
+    // Handle error state
+    if (error != null) {
+      return EnhancedHomeErrorState(
+        message: error!,
+        errorCode: errorCode,
+      );
+    }
+
+    // Handle empty state
+    if (isEmpty) {
+      return const EnhancedHomeEmptyState();
+    }
+
+    // Show content with animations
+    return buildContent().animate().fadeIn(duration: 300.ms);
+  }
+}

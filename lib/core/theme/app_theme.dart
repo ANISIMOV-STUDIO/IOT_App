@@ -41,6 +41,17 @@ class AppTheme {
   // Control Card Heights
   static const double controlCardHeight = 280.0; // Fixed height for all control widgets
 
+  // Compatibility aliases for new widgets
+  static const Color cardDark = backgroundCard;
+  static const Color borderColor = backgroundCardBorder;
+  static const Color primaryBlue = modeCool;
+
+  static const LinearGradient primaryGradient = LinearGradient(
+    colors: [primaryOrange, primaryOrangeDark],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+
   /// Dark Theme
   static ThemeData darkTheme() {
     return ThemeData(

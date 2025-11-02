@@ -12,6 +12,8 @@ class User extends Equatable {
   final String? avatarUrl;
   final DateTime createdAt;
   final DateTime? lastLogin;
+  final bool isGuest;
+  final List<String> permissions;
 
   const User({
     required this.id,
@@ -20,6 +22,8 @@ class User extends Equatable {
     this.avatarUrl,
     required this.createdAt,
     this.lastLogin,
+    this.isGuest = false,
+    this.permissions = const [],
   });
 
   /// Create a copy with updated fields
@@ -30,6 +34,8 @@ class User extends Equatable {
     String? avatarUrl,
     DateTime? createdAt,
     DateTime? lastLogin,
+    bool? isGuest,
+    List<String>? permissions,
   }) {
     return User(
       id: id ?? this.id,
@@ -38,6 +44,8 @@ class User extends Equatable {
       avatarUrl: avatarUrl ?? this.avatarUrl,
       createdAt: createdAt ?? this.createdAt,
       lastLogin: lastLogin ?? this.lastLogin,
+      isGuest: isGuest ?? this.isGuest,
+      permissions: permissions ?? this.permissions,
     );
   }
 
@@ -49,6 +57,8 @@ class User extends Equatable {
         avatarUrl,
         createdAt,
         lastLogin,
+        isGuest,
+        permissions,
       ];
 
   @override

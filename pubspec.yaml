@@ -56,6 +56,15 @@ dependencies:
   intl: ^0.20.2
   shared_preferences: ^2.2.2
 
+  # Security
+  flutter_secure_storage: ^9.0.0
+  flutter_dotenv: ^5.1.0
+  crypto: ^3.0.3
+  jwt_decoder: ^2.0.1
+
+  # Network Security (Note: Certificate pinning implementation available in SecureApiService)
+  dio: ^5.3.4
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -64,6 +73,12 @@ dev_dependencies:
 
   # gRPC Code Generation
   build_runner: ^2.4.0
+
+  # Testing
+  bloc_test: ^9.1.5
+  mocktail: ^1.0.1
+  integration_test:
+    sdk: flutter
 
   # Icons & Splash (will configure later)
   flutter_launcher_icons: ^0.13.1
