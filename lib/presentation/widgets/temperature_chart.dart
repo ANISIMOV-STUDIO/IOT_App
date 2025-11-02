@@ -77,7 +77,7 @@ class TemperatureChart extends StatelessWidget {
                   drawVerticalLine: false,
                   horizontalInterval: 5,
                   getDrawingHorizontalLine: (value) {
-                    return FlLine(
+                    return const FlLine(
                       color: AppTheme.backgroundCardBorder,
                       strokeWidth: 1,
                     );

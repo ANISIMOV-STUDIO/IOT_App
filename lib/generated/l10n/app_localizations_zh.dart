@@ -327,4 +327,217 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get skipAuth => '无需注册继续';
+
+  @override
+  String get loading => 'Loading...';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get close => 'Close';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get edit => 'Edit';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get confirm => 'Confirm';
+
+  @override
+  String get yes => 'Yes';
+
+  @override
+  String get no => 'No';
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get search => 'Search';
+
+  @override
+  String get filter => 'Filter';
+
+  @override
+  String get sort => 'Sort';
+
+  @override
+  String get refresh => 'Refresh';
+
+  @override
+  String get back => 'Back';
+
+  @override
+  String get next => 'Next';
+
+  @override
+  String get previous => 'Previous';
+
+  @override
+  String get done => 'Done';
+
+  @override
+  String get apply => 'Apply';
+
+  @override
+  String get reset => 'Reset';
+
+  @override
+  String get clear => 'Clear';
+
+  @override
+  String get success => 'Success';
+
+  @override
+  String get failed => 'Failed';
+
+  @override
+  String get warning => 'Warning';
+
+  @override
+  String get info => 'Information';
+
+  @override
+  String get notification => 'Notification';
+
+  @override
+  String get online => 'Online';
+
+  @override
+  String get offline => 'Offline';
+
+  @override
+  String get connected => 'Connected';
+
+  @override
+  String get disconnected => 'Disconnected';
+
+  @override
+  String get connecting => 'Connecting...';
+
+  @override
+  String get reconnecting => 'Reconnecting...';
+
+  @override
+  String get idle => 'Idle';
+
+  @override
+  String get active => 'Active';
+
+  @override
+  String get inactive => 'Inactive';
+
+  @override
+  String get enabled => 'Enabled';
+
+  @override
+  String get disabled => 'Disabled';
+
+  @override
+  String get available => 'Available';
+
+  @override
+  String get unavailable => 'Unavailable';
+
+  @override
+  String get maintenance => 'Maintenance';
+
+  @override
+  String get status => 'Status';
+
+  @override
+  String get details => 'Details';
+
+  @override
+  String get more => 'More';
+
+  @override
+  String get less => 'Less';
+
+  @override
+  String get all => 'All';
+
+  @override
+  String get none => 'None';
+
+  @override
+  String get today => 'Today';
+
+  @override
+  String get yesterday => 'Yesterday';
+
+  @override
+  String get week => 'Week';
+
+  @override
+  String get month => 'Month';
+
+  @override
+  String get year => 'Year';
+
+  @override
+  String get noDevices => 'No Devices';
+
+  @override
+  String get addFirstDevice => 'Add your first device to get started';
+
+  @override
+  String get deviceNotSelected => 'No device selected';
+
+  @override
+  String get errorChangingPower => 'Error changing power';
+
+  @override
+  String get errorUpdatingMode => 'Error updating mode';
+
+  @override
+  String get errorUpdatingFanSpeed => 'Error updating fan speed';
+
+  @override
+  String get errorApplyingPreset => 'Error applying preset';
+
+  @override
+  String get presetApplied => 'Preset applied';
+
+  @override
+  String get allUnitsOn => 'All units turned on';
+
+  @override
+  String get errorTurningOnUnits => 'Error turning on units';
+
+  @override
+  String get allUnitsOff => 'All units turned off';
+
+  @override
+  String get errorTurningOffUnits => 'Error turning off units';
+
+  @override
+  String get settingsSynced => 'Settings synced to all units';
+
+  @override
+  String get errorSyncingSettings => 'Error syncing settings';
+
+  @override
+  String get scheduleAppliedToAll => 'Schedule applied to all units';
+
+  @override
+  String get errorApplyingSchedule => 'Error applying schedule';
+
+  @override
+  String get activated => 'activated';
+
+  @override
+  String get deactivated => 'deactivated';
+
+  @override
+  String get manageRules => 'Manage Rules (Coming Soon)';
+
+  @override
+  String get addUnitComingSoon => 'Add unit feature coming soon';
 }

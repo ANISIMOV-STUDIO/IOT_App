@@ -723,6 +723,432 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Continue without registration'**
   String get skipAuth;
+
+  /// No description provided for @loading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading...'**
+  String get loading;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// No description provided for @close.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
+
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
+  /// No description provided for @edit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get edit;
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get confirm;
+
+  /// No description provided for @yes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get yes;
+
+  /// No description provided for @no.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get no;
+
+  /// No description provided for @ok.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get ok;
+
+  /// No description provided for @search.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get search;
+
+  /// No description provided for @filter.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter'**
+  String get filter;
+
+  /// No description provided for @sort.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort'**
+  String get sort;
+
+  /// No description provided for @refresh.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh'**
+  String get refresh;
+
+  /// No description provided for @back.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get back;
+
+  /// No description provided for @next.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get next;
+
+  /// No description provided for @previous.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous'**
+  String get previous;
+
+  /// No description provided for @done.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get done;
+
+  /// No description provided for @apply.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply'**
+  String get apply;
+
+  /// No description provided for @reset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get reset;
+
+  /// No description provided for @clear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get clear;
+
+  /// No description provided for @success.
+  ///
+  /// In en, this message translates to:
+  /// **'Success'**
+  String get success;
+
+  /// No description provided for @failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed'**
+  String get failed;
+
+  /// No description provided for @warning.
+  ///
+  /// In en, this message translates to:
+  /// **'Warning'**
+  String get warning;
+
+  /// No description provided for @info.
+  ///
+  /// In en, this message translates to:
+  /// **'Information'**
+  String get info;
+
+  /// No description provided for @notification.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification'**
+  String get notification;
+
+  /// No description provided for @online.
+  ///
+  /// In en, this message translates to:
+  /// **'Online'**
+  String get online;
+
+  /// No description provided for @offline.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline'**
+  String get offline;
+
+  /// No description provided for @connected.
+  ///
+  /// In en, this message translates to:
+  /// **'Connected'**
+  String get connected;
+
+  /// No description provided for @disconnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnected'**
+  String get disconnected;
+
+  /// No description provided for @connecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting...'**
+  String get connecting;
+
+  /// No description provided for @reconnecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Reconnecting...'**
+  String get reconnecting;
+
+  /// No description provided for @idle.
+  ///
+  /// In en, this message translates to:
+  /// **'Idle'**
+  String get idle;
+
+  /// No description provided for @active.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get active;
+
+  /// No description provided for @inactive.
+  ///
+  /// In en, this message translates to:
+  /// **'Inactive'**
+  String get inactive;
+
+  /// No description provided for @enabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Enabled'**
+  String get enabled;
+
+  /// No description provided for @disabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Disabled'**
+  String get disabled;
+
+  /// No description provided for @available.
+  ///
+  /// In en, this message translates to:
+  /// **'Available'**
+  String get available;
+
+  /// No description provided for @unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Unavailable'**
+  String get unavailable;
+
+  /// No description provided for @maintenance.
+  ///
+  /// In en, this message translates to:
+  /// **'Maintenance'**
+  String get maintenance;
+
+  /// No description provided for @status.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get status;
+
+  /// No description provided for @details.
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get details;
+
+  /// No description provided for @more.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get more;
+
+  /// No description provided for @less.
+  ///
+  /// In en, this message translates to:
+  /// **'Less'**
+  String get less;
+
+  /// No description provided for @all.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get all;
+
+  /// No description provided for @none.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get none;
+
+  /// No description provided for @today.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get today;
+
+  /// No description provided for @yesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get yesterday;
+
+  /// No description provided for @week.
+  ///
+  /// In en, this message translates to:
+  /// **'Week'**
+  String get week;
+
+  /// No description provided for @month.
+  ///
+  /// In en, this message translates to:
+  /// **'Month'**
+  String get month;
+
+  /// No description provided for @year.
+  ///
+  /// In en, this message translates to:
+  /// **'Year'**
+  String get year;
+
+  /// No description provided for @noDevices.
+  ///
+  /// In en, this message translates to:
+  /// **'No Devices'**
+  String get noDevices;
+
+  /// No description provided for @addFirstDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your first device to get started'**
+  String get addFirstDevice;
+
+  /// No description provided for @deviceNotSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'No device selected'**
+  String get deviceNotSelected;
+
+  /// No description provided for @errorChangingPower.
+  ///
+  /// In en, this message translates to:
+  /// **'Error changing power'**
+  String get errorChangingPower;
+
+  /// No description provided for @errorUpdatingMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Error updating mode'**
+  String get errorUpdatingMode;
+
+  /// No description provided for @errorUpdatingFanSpeed.
+  ///
+  /// In en, this message translates to:
+  /// **'Error updating fan speed'**
+  String get errorUpdatingFanSpeed;
+
+  /// No description provided for @errorApplyingPreset.
+  ///
+  /// In en, this message translates to:
+  /// **'Error applying preset'**
+  String get errorApplyingPreset;
+
+  /// No description provided for @presetApplied.
+  ///
+  /// In en, this message translates to:
+  /// **'Preset applied'**
+  String get presetApplied;
+
+  /// No description provided for @allUnitsOn.
+  ///
+  /// In en, this message translates to:
+  /// **'All units turned on'**
+  String get allUnitsOn;
+
+  /// No description provided for @errorTurningOnUnits.
+  ///
+  /// In en, this message translates to:
+  /// **'Error turning on units'**
+  String get errorTurningOnUnits;
+
+  /// No description provided for @allUnitsOff.
+  ///
+  /// In en, this message translates to:
+  /// **'All units turned off'**
+  String get allUnitsOff;
+
+  /// No description provided for @errorTurningOffUnits.
+  ///
+  /// In en, this message translates to:
+  /// **'Error turning off units'**
+  String get errorTurningOffUnits;
+
+  /// No description provided for @settingsSynced.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings synced to all units'**
+  String get settingsSynced;
+
+  /// No description provided for @errorSyncingSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Error syncing settings'**
+  String get errorSyncingSettings;
+
+  /// No description provided for @scheduleAppliedToAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Schedule applied to all units'**
+  String get scheduleAppliedToAll;
+
+  /// No description provided for @errorApplyingSchedule.
+  ///
+  /// In en, this message translates to:
+  /// **'Error applying schedule'**
+  String get errorApplyingSchedule;
+
+  /// No description provided for @activated.
+  ///
+  /// In en, this message translates to:
+  /// **'activated'**
+  String get activated;
+
+  /// No description provided for @deactivated.
+  ///
+  /// In en, this message translates to:
+  /// **'deactivated'**
+  String get deactivated;
+
+  /// No description provided for @manageRules.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage Rules (Coming Soon)'**
+  String get manageRules;
+
+  /// No description provided for @addUnitComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Add unit feature coming soon'**
+  String get addUnitComingSoon;
 }
 
 class _AppLocalizationsDelegate

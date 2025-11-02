@@ -1,14 +1,19 @@
 /// Analytics Screen
 ///
-/// Charts and statistics for unit performance
+/// Charts and statistics for unit performance with responsive design
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/theme/spacing.dart';
+import '../../core/theme/app_radius.dart';
 import '../../domain/entities/hvac_unit.dart';
 import '../../domain/entities/temperature_reading.dart';
 import '../widgets/temperature_chart.dart';
+import '../widgets/common/shimmer_loading.dart';
+import '../widgets/common/empty_state.dart';
 
 class AnalyticsScreen extends StatefulWidget {
   final HvacUnit unit;
@@ -22,11 +27,70 @@ class AnalyticsScreen extends StatefulWidget {
   State<AnalyticsScreen> createState() => _AnalyticsScreenState();
 }
 
-class _AnalyticsScreenState extends State<AnalyticsScreen> {
+class _AnalyticsScreenState extends State<AnalyticsScreen>
+    with SingleTickerProviderStateMixin {
   String _selectedPeriod = 'День';
+  bool _isLoading = true;
+  bool _hasError = false;
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation;
+  late Animation<Offset> _slideAnimation;
 
-  // Mock data - в реальном приложении получаем из репозитория
-  List<TemperatureReading> _generateMockTemperatureData() {
+  @override
+  void initState() {
+    super.initState();
+    _setupAnimations();
+    _loadData();
+  }
+
+  void _setupAnimations() {
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 600),
+      vsync: this,
+    );
+
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: const Interval(0.0, 0.5, curve: Curves.easeOut),
+      ),
+    );
+
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, 0.1),
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: const Interval(0.3, 1.0, curve: Curves.easeOutCubic),
+      ),
+    );
+  }
+
+  Future<void> _loadData() async {
+    setState(() {
+      _isLoading = true;
+      _hasError = false;
+    });
+
+    await Future.delayed(const Duration(milliseconds: 1200));
+
+    if (mounted) {
+      setState(() {
+        _isLoading = false;
+      });
+      _animationController.forward();
+    }
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  // Mock data generation moved out of UI
+  List<TemperatureReading> get _temperatureData {
     final now = DateTime.now();
     return List.generate(24, (index) {
       return TemperatureReading(
@@ -36,7 +100,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
     });
   }
 
-  List<TemperatureReading> _generateMockHumidityData() {
+  List<TemperatureReading> get _humidityData {
     final now = DateTime.now();
     return List.generate(24, (index) {
       return TemperatureReading(
@@ -46,6 +110,8 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
     });
   }
 
+  bool get _hasData => _temperatureData.isNotEmpty;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,24 +120,24 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
         backgroundColor: AppTheme.backgroundCard,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppTheme.textPrimary),
+          icon: Icon(Icons.arrow_back, color: AppTheme.textPrimary, size: 24.sp),
           onPressed: () => Navigator.pop(context),
         ),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'Аналитика',
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 18.sp,
                 fontWeight: FontWeight.w600,
                 color: AppTheme.textPrimary,
               ),
             ),
             Text(
               widget.unit.name,
-              style: const TextStyle(
-                fontSize: 12,
+              style: TextStyle(
+                fontSize: 12.sp,
                 color: AppTheme.textSecondary,
                 fontWeight: FontWeight.w400,
               ),
@@ -79,16 +145,15 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
           ],
         ),
         actions: [
-          // Period selector
           Padding(
-            padding: const EdgeInsets.only(right: 16),
+            padding: EdgeInsets.only(right: AppSpacing.mdR),
             child: DropdownButton<String>(
               value: _selectedPeriod,
               dropdownColor: AppTheme.backgroundCard,
               underline: const SizedBox(),
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppTheme.primaryOrange,
-                fontSize: 14,
+                fontSize: 14.sp,
                 fontWeight: FontWeight.w600,
               ),
               items: ['День', 'Неделя', 'Месяц'].map((period) {
@@ -102,176 +167,278 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                   setState(() {
                     _selectedPeriod = value;
                   });
+                  _loadData();
                 }
               },
             ),
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
+      body: _buildBody(),
+    );
+  }
+
+  Widget _buildBody() {
+    if (_isLoading) {
+      return _buildLoadingState();
+    }
+
+    if (_hasError) {
+      return _buildErrorState();
+    }
+
+    if (!_hasData) {
+      return EmptyState(
+        icon: Icons.analytics_outlined,
+        title: 'Нет данных',
+        message: 'Статистика пока недоступна для выбранного периода',
+        actionLabel: 'Обновить',
+        onAction: _loadData,
+      );
+    }
+
+    return FadeTransition(
+      opacity: _fadeAnimation,
+      child: SlideTransition(
+        position: _slideAnimation,
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(AppSpacing.lgR),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildSummaryGrid(),
+              SizedBox(height: AppSpacing.mdR),
+              _buildChart(
+                index: 0,
+                child: TemperatureChart(
+                  readings: _temperatureData,
+                  title: 'История температуры',
+                  lineColor: AppTheme.primaryOrange,
+                ),
+              ),
+              SizedBox(height: AppSpacing.lgR),
+              _buildChart(index: 1, child: _buildHumidityChart()),
+              SizedBox(height: AppSpacing.lgR),
+              _buildChart(index: 2, child: _buildEnergyChart()),
+              SizedBox(height: AppSpacing.lgR),
+              _buildChart(index: 3, child: _buildFanSpeedChart()),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLoadingState() {
+    return SingleChildScrollView(
+      padding: EdgeInsets.all(AppSpacing.lgR),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(child: ShimmerBox(height: 100.h, borderRadius: BorderRadius.circular(AppRadius.mdR))),
+              SizedBox(width: AppSpacing.mdR),
+              Expanded(child: ShimmerBox(height: 100.h, borderRadius: BorderRadius.circular(AppRadius.mdR))),
+            ],
+          ),
+          SizedBox(height: AppSpacing.mdR),
+          Row(
+            children: [
+              Expanded(child: ShimmerBox(height: 100.h, borderRadius: BorderRadius.circular(AppRadius.mdR))),
+              SizedBox(width: AppSpacing.mdR),
+              Expanded(child: ShimmerBox(height: 100.h, borderRadius: BorderRadius.circular(AppRadius.mdR))),
+            ],
+          ),
+          SizedBox(height: AppSpacing.lgR),
+          ShimmerBox(height: 250.h, width: double.infinity, borderRadius: BorderRadius.circular(AppRadius.mdR)),
+          SizedBox(height: AppSpacing.lgR),
+          ShimmerBox(height: 250.h, width: double.infinity, borderRadius: BorderRadius.circular(AppRadius.mdR)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildErrorState() {
+    return EmptyState(
+      icon: Icons.error_outline,
+      title: 'Ошибка загрузки',
+      message: 'Не удалось загрузить данные аналитики',
+      actionLabel: 'Повторить',
+      onAction: _loadData,
+    );
+  }
+
+  Widget _buildSummaryGrid() {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: _buildSummaryCard(
+                index: 0,
+                label: 'Средняя температура',
+                value: '21.5°C',
+                icon: Icons.thermostat,
+                color: AppTheme.primaryOrange,
+                change: '+0.5°C',
+              ),
+            ),
+            SizedBox(width: AppSpacing.mdR),
+            Expanded(
+              child: _buildSummaryCard(
+                index: 1,
+                label: 'Средняя влажность',
+                value: '48%',
+                icon: Icons.water_drop,
+                color: AppTheme.info,
+                change: '-2%',
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: AppSpacing.mdR),
+        Row(
+          children: [
+            Expanded(
+              child: _buildSummaryCard(
+                index: 2,
+                label: 'Время работы',
+                value: '18ч 45м',
+                icon: Icons.access_time,
+                color: AppTheme.success,
+                change: '+2ч',
+              ),
+            ),
+            SizedBox(width: AppSpacing.mdR),
+            Expanded(
+              child: _buildSummaryCard(
+                index: 3,
+                label: 'Энергопотребление',
+                value: '6.3 кВт⋅ч',
+                icon: Icons.bolt,
+                color: AppTheme.warning,
+                change: '+0.8 кВт⋅ч',
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSummaryCard({
+    required int index,
+    required String label,
+    required String value,
+    required IconData icon,
+    required Color color,
+    required String change,
+  }) {
+    final isPositive = change.startsWith('+');
+
+    return TweenAnimationBuilder<double>(
+      duration: Duration(milliseconds: 400 + (index * 100)),
+      tween: Tween(begin: 0.0, end: 1.0),
+      curve: Curves.easeOutCubic,
+      builder: (context, animValue, child) {
+        return Transform.scale(
+          scale: 0.8 + (0.2 * animValue),
+          child: Opacity(
+            opacity: animValue,
+            child: child,
+          ),
+        );
+      },
+      child: Container(
+        padding: EdgeInsets.all(AppSpacing.mdR),
+        decoration: BoxDecoration(
+          color: AppTheme.backgroundCard,
+          borderRadius: BorderRadius.circular(AppRadius.mdR),
+          border: Border.all(
+            color: AppTheme.backgroundCardBorder,
+            width: 1,
+          ),
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Summary stats
             Row(
               children: [
+                Icon(icon, color: color, size: 18.sp),
+                SizedBox(width: AppSpacing.xsR),
                 Expanded(
-                  child: _buildSummaryCard(
-                    'Средняя температура',
-                    '21.5°C',
-                    Icons.thermostat,
-                    AppTheme.primaryOrange,
-                    '+0.5°C',
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: _buildSummaryCard(
-                    'Средняя влажность',
-                    '48%',
-                    Icons.water_drop,
-                    AppTheme.info,
-                    '-2%',
+                  child: Text(
+                    label,
+                    style: TextStyle(
+                      fontSize: 11.sp,
+                      color: AppTheme.textSecondary,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ],
             ),
-
-            const SizedBox(height: 16),
-
+            SizedBox(height: AppSpacing.xsR),
+            Text(
+              value,
+              style: TextStyle(
+                fontSize: 20.sp,
+                fontWeight: FontWeight.w700,
+                color: color,
+              ),
+            ),
+            SizedBox(height: AppSpacing.xxsR),
             Row(
               children: [
-                Expanded(
-                  child: _buildSummaryCard(
-                    'Время работы',
-                    '18ч 45м',
-                    Icons.access_time,
-                    AppTheme.success,
-                    '+2ч',
-                  ),
+                Icon(
+                  isPositive ? Icons.arrow_upward : Icons.arrow_downward,
+                  size: 12.sp,
+                  color: isPositive ? AppTheme.success : AppTheme.error,
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: _buildSummaryCard(
-                    'Энергопотребление',
-                    '6.3 кВт⋅ч',
-                    Icons.bolt,
-                    AppTheme.warning,
-                    '+0.8 кВт⋅ч',
+                SizedBox(width: AppSpacing.xxsR),
+                Text(
+                  change,
+                  style: TextStyle(
+                    fontSize: 11.sp,
+                    fontWeight: FontWeight.w600,
+                    color: isPositive ? AppTheme.success : AppTheme.error,
                   ),
                 ),
               ],
             ),
-
-            const SizedBox(height: 24),
-
-            // Temperature chart
-            TemperatureChart(
-              readings: _generateMockTemperatureData(),
-              title: 'История температуры',
-              lineColor: AppTheme.primaryOrange,
-            ),
-
-            const SizedBox(height: 20),
-
-            // Humidity chart (reusing TemperatureChart with different color)
-            _buildHumidityChart(),
-
-            const SizedBox(height: 20),
-
-            // Energy consumption chart
-            _buildEnergyChart(),
-
-            const SizedBox(height: 20),
-
-            // Fan speed distribution
-            _buildFanSpeedChart(),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildSummaryCard(
-    String label,
-    String value,
-    IconData icon,
-    Color color,
-    String change,
-  ) {
-    final isPositive = change.startsWith('+');
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: AppTheme.backgroundCardBorder,
-          width: 1,
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(icon, color: color, size: 18),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  label,
-                  style: const TextStyle(
-                    fontSize: 11,
-                    color: AppTheme.textSecondary,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
+  Widget _buildChart({required int index, required Widget child}) {
+    return TweenAnimationBuilder<double>(
+      duration: Duration(milliseconds: 600 + (index * 150)),
+      tween: Tween(begin: 0.0, end: 1.0),
+      curve: Curves.easeOutCubic,
+      builder: (context, value, child) {
+        return Transform.translate(
+          offset: Offset(0, 20 * (1 - value)),
+          child: Opacity(
+            opacity: value,
+            child: child,
           ),
-          const SizedBox(height: 8),
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-              color: color,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Row(
-            children: [
-              Icon(
-                isPositive ? Icons.arrow_upward : Icons.arrow_downward,
-                size: 12,
-                color: isPositive ? AppTheme.success : AppTheme.error,
-              ),
-              const SizedBox(width: 4),
-              Text(
-                change,
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w600,
-                  color: isPositive ? AppTheme.success : AppTheme.error,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+        );
+      },
+      child: child,
     );
   }
 
   Widget _buildHumidityChart() {
-    final readings = _generateMockHumidityData();
+    final readings = _humidityData;
 
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(AppSpacing.lgR),
       decoration: BoxDecoration(
         color: AppTheme.backgroundCard,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppRadius.mdR),
         border: Border.all(
           color: AppTheme.backgroundCardBorder,
           width: 1,
@@ -280,17 +447,17 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'История влажности',
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 16.sp,
               fontWeight: FontWeight.w600,
               color: AppTheme.textPrimary,
             ),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: AppSpacing.lgR),
           SizedBox(
-            height: 200,
+            height: 200.h,
             child: LineChart(
               LineChartData(
                 gridData: FlGridData(
@@ -298,7 +465,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                   drawVerticalLine: false,
                   horizontalInterval: 10,
                   getDrawingHorizontalLine: (value) {
-                    return FlLine(
+                    return const FlLine(
                       color: AppTheme.backgroundCardBorder,
                       strokeWidth: 1,
                     );
@@ -323,12 +490,12 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                         }
                         final reading = readings[value.toInt()];
                         return Padding(
-                          padding: const EdgeInsets.only(top: 8),
+                          padding: EdgeInsets.only(top: 8.h),
                           child: Text(
                             '${reading.timestamp.hour}:00',
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: AppTheme.textSecondary,
-                              fontSize: 10,
+                              fontSize: 10.sp,
                             ),
                           ),
                         );
@@ -343,9 +510,9 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                       getTitlesWidget: (value, meta) {
                         return Text(
                           '${value.toInt()}%',
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: AppTheme.textSecondary,
-                            fontSize: 10,
+                            fontSize: 10.sp,
                           ),
                         );
                       },
@@ -391,10 +558,10 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
 
   Widget _buildEnergyChart() {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(AppSpacing.lgR),
       decoration: BoxDecoration(
         color: AppTheme.backgroundCard,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppRadius.mdR),
         border: Border.all(
           color: AppTheme.backgroundCardBorder,
           width: 1,
@@ -403,17 +570,17 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Энергопотребление',
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 16.sp,
               fontWeight: FontWeight.w600,
               color: AppTheme.textPrimary,
             ),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: AppSpacing.lgR),
           SizedBox(
-            height: 200,
+            height: 200.h,
             child: BarChart(
               BarChartData(
                 alignment: BarChartAlignment.spaceAround,
@@ -423,9 +590,10 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                     getTooltipItem: (group, groupIndex, rod, rodIndex) {
                       return BarTooltipItem(
                         '${rod.toY.toInt()} Вт',
-                        const TextStyle(
+                        TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
+                          fontSize: 12.sp,
                         ),
                       );
                     },
@@ -446,12 +614,12 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                         const hours = ['00', '04', '08', '12', '16', '20'];
                         if (value.toInt() < hours.length) {
                           return Padding(
-                            padding: const EdgeInsets.only(top: 8),
+                            padding: EdgeInsets.only(top: 8.h),
                             child: Text(
                               hours[value.toInt()],
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: AppTheme.textSecondary,
-                                fontSize: 10,
+                                fontSize: 10.sp,
                               ),
                             ),
                           );
@@ -467,9 +635,9 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                       getTitlesWidget: (value, meta) {
                         return Text(
                           '${value.toInt()}W',
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: AppTheme.textSecondary,
-                            fontSize: 10,
+                            fontSize: 10.sp,
                           ),
                         );
                       },
@@ -496,7 +664,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                   drawVerticalLine: false,
                   horizontalInterval: 100,
                   getDrawingHorizontalLine: (value) {
-                    return FlLine(
+                    return const FlLine(
                       color: AppTheme.backgroundCardBorder,
                       strokeWidth: 1,
                     );
@@ -512,10 +680,10 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
 
   Widget _buildFanSpeedChart() {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(AppSpacing.lgR),
       decoration: BoxDecoration(
         color: AppTheme.backgroundCard,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppRadius.mdR),
         border: Border.all(
           color: AppTheme.backgroundCardBorder,
           width: 1,
@@ -524,17 +692,17 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Распределение скорости вентиляторов',
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 16.sp,
               fontWeight: FontWeight.w600,
               color: AppTheme.textPrimary,
             ),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: AppSpacing.lgR),
           SizedBox(
-            height: 200,
+            height: 200.h,
             child: PieChart(
               PieChartData(
                 sections: [
@@ -542,9 +710,9 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                     color: AppTheme.success,
                     value: 30,
                     title: '30%\nНизкая',
-                    radius: 80,
-                    titleStyle: const TextStyle(
-                      fontSize: 12,
+                    radius: 80.r,
+                    titleStyle: TextStyle(
+                      fontSize: 12.sp,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
@@ -553,9 +721,9 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                     color: AppTheme.info,
                     value: 45,
                     title: '45%\nСредняя',
-                    radius: 80,
-                    titleStyle: const TextStyle(
-                      fontSize: 12,
+                    radius: 80.r,
+                    titleStyle: TextStyle(
+                      fontSize: 12.sp,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
@@ -564,9 +732,9 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                     color: AppTheme.warning,
                     value: 20,
                     title: '20%\nВысокая',
-                    radius: 80,
-                    titleStyle: const TextStyle(
-                      fontSize: 12,
+                    radius: 80.r,
+                    titleStyle: TextStyle(
+                      fontSize: 12.sp,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
@@ -575,9 +743,9 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                     color: AppTheme.error,
                     value: 5,
                     title: '5%\nМакс',
-                    radius: 80,
-                    titleStyle: const TextStyle(
-                      fontSize: 12,
+                    radius: 80.r,
+                    titleStyle: TextStyle(
+                      fontSize: 12.sp,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),

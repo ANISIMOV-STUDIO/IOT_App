@@ -1,15 +1,19 @@
 /// Schedule Screen
 ///
-/// Edit weekly schedule for ventilation unit
+/// Edit weekly schedule for ventilation unit with responsive design
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/theme/spacing.dart';
+import '../../core/theme/app_radius.dart';
 import '../../core/di/injection_container.dart';
 import '../../domain/entities/hvac_unit.dart';
 import '../../domain/entities/week_schedule.dart';
 import '../../domain/entities/day_schedule.dart';
 import '../../domain/usecases/update_schedule.dart';
+import '../widgets/common/time_picker_field.dart';
 
 class ScheduleScreen extends StatefulWidget {
   final HvacUnit unit;
@@ -23,14 +27,27 @@ class ScheduleScreen extends StatefulWidget {
   State<ScheduleScreen> createState() => _ScheduleScreenState();
 }
 
-class _ScheduleScreenState extends State<ScheduleScreen> {
+class _ScheduleScreenState extends State<ScheduleScreen>
+    with SingleTickerProviderStateMixin {
   late WeekSchedule _schedule;
   bool _hasChanges = false;
+  bool _isSaving = false;
+  late AnimationController _saveAnimationController;
 
   @override
   void initState() {
     super.initState();
     _schedule = widget.unit.schedule ?? WeekSchedule.defaultSchedule;
+    _saveAnimationController = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+  }
+
+  @override
+  void dispose() {
+    _saveAnimationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -41,7 +58,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         backgroundColor: AppTheme.backgroundCard,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppTheme.textPrimary),
+          icon: Icon(Icons.arrow_back, color: AppTheme.textPrimary, size: 24.sp),
           onPressed: () => _onBackPressed(),
         ),
         title: Column(
@@ -49,15 +66,16 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           children: [
             Text(
               'Расписание',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                  ),
+              style: TextStyle(
+                fontSize: 18.sp,
+                fontWeight: FontWeight.w600,
+                color: AppTheme.textPrimary,
+              ),
             ),
             Text(
               widget.unit.name,
-              style: const TextStyle(
-                fontSize: 12,
+              style: TextStyle(
+                fontSize: 12.sp,
                 color: AppTheme.textSecondary,
                 fontWeight: FontWeight.w400,
               ),
@@ -66,38 +84,49 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         ),
         actions: [
           if (_hasChanges)
-            TextButton(
-              onPressed: _saveSchedule,
-              child: const Text(
-                'Сохранить',
-                style: TextStyle(
-                  color: AppTheme.primaryOrange,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
+            AnimatedScale(
+              scale: _hasChanges ? 1.0 : 0.0,
+              duration: const Duration(milliseconds: 200),
+              child: TextButton(
+                onPressed: _isSaving ? null : _saveSchedule,
+                child: _isSaving
+                    ? SizedBox(
+                        width: 20.w,
+                        height: 20.h,
+                        child: const CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryOrange),
+                        ),
+                      )
+                    : Text(
+                        'Сохранить',
+                        style: TextStyle(
+                          color: AppTheme.primaryOrange,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
               ),
             ),
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(AppSpacing.lgR),
         children: [
           _buildDayCard('Понедельник', 1, _schedule.monday),
-          const SizedBox(height: 12),
+          SizedBox(height: AppSpacing.smR),
           _buildDayCard('Вторник', 2, _schedule.tuesday),
-          const SizedBox(height: 12),
+          SizedBox(height: AppSpacing.smR),
           _buildDayCard('Среда', 3, _schedule.wednesday),
-          const SizedBox(height: 12),
+          SizedBox(height: AppSpacing.smR),
           _buildDayCard('Четверг', 4, _schedule.thursday),
-          const SizedBox(height: 12),
+          SizedBox(height: AppSpacing.smR),
           _buildDayCard('Пятница', 5, _schedule.friday),
-          const SizedBox(height: 12),
+          SizedBox(height: AppSpacing.smR),
           _buildDayCard('Суббота', 6, _schedule.saturday),
-          const SizedBox(height: 12),
+          SizedBox(height: AppSpacing.smR),
           _buildDayCard('Воскресенье', 7, _schedule.sunday),
-          const SizedBox(height: 20),
-
-          // Quick actions
+          SizedBox(height: AppSpacing.lgR),
           _buildQuickActions(),
         ],
       ),
@@ -105,132 +134,24 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   }
 
   Widget _buildDayCard(String dayName, int dayOfWeek, DaySchedule schedule) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: AppTheme.backgroundCardBorder,
-          width: 1,
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Header with toggle
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                dayName,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: AppTheme.textPrimary,
-                ),
-              ),
-              Switch(
-                value: schedule.timerEnabled,
-                onChanged: (value) {
-                  setState(() {
-                    _hasChanges = true;
-                    _schedule = _schedule.updateDay(
-                      dayOfWeek,
-                      schedule.copyWith(timerEnabled: value),
-                    );
-                  });
-                },
-                activeThumbColor: AppTheme.primaryOrange,
-                activeTrackColor: AppTheme.primaryOrange.withValues(alpha: 0.5),
-              ),
-            ],
+    return TweenAnimationBuilder<double>(
+      duration: Duration(milliseconds: 300 + (dayOfWeek * 50)),
+      tween: Tween(begin: 0.0, end: 1.0),
+      curve: Curves.easeOutCubic,
+      builder: (context, value, child) {
+        return Transform.translate(
+          offset: Offset(0, 10 * (1 - value)),
+          child: Opacity(
+            opacity: value,
+            child: child,
           ),
-
-          if (schedule.timerEnabled) ...[
-            const SizedBox(height: 12),
-
-            // Time selectors
-            Row(
-              children: [
-                Expanded(
-                  child: _buildTimeSelector(
-                    'Включение',
-                    schedule.turnOnTime,
-                    Icons.power_settings_new,
-                    (time) {
-                      setState(() {
-                        _hasChanges = true;
-                        _schedule = _schedule.updateDay(
-                          dayOfWeek,
-                          schedule.copyWith(turnOnTime: time),
-                        );
-                      });
-                    },
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _buildTimeSelector(
-                    'Отключение',
-                    schedule.turnOffTime,
-                    Icons.power_off,
-                    (time) {
-                      setState(() {
-                        _hasChanges = true;
-                        _schedule = _schedule.updateDay(
-                          dayOfWeek,
-                          schedule.copyWith(turnOffTime: time),
-                        );
-                      });
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTimeSelector(
-    String label,
-    TimeOfDay? currentTime,
-    IconData icon,
-    ValueChanged<TimeOfDay?> onTimeChanged,
-  ) {
-    return GestureDetector(
-      onTap: () async {
-        final time = await showTimePicker(
-          context: context,
-          initialTime: currentTime ?? const TimeOfDay(hour: 12, minute: 0),
-          builder: (context, child) {
-            return Theme(
-              data: ThemeData.dark().copyWith(
-                colorScheme: const ColorScheme.dark(
-                  primary: AppTheme.primaryOrange,
-                  onPrimary: Colors.white,
-                  surface: AppTheme.backgroundCard,
-                  onSurface: AppTheme.textPrimary,
-                ),
-                dialogTheme: const DialogThemeData(
-                  backgroundColor: AppTheme.backgroundCard,
-                ),
-              ),
-              child: child!,
-            );
-          },
         );
-        if (time != null) {
-          onTimeChanged(time);
-        }
       },
       child: Container(
-        padding: const EdgeInsets.all(12),
+        padding: EdgeInsets.all(AppSpacing.mdR),
         decoration: BoxDecoration(
-          color: AppTheme.backgroundDark,
-          borderRadius: BorderRadius.circular(8),
+          color: AppTheme.backgroundCard,
+          borderRadius: BorderRadius.circular(AppRadius.mdR),
           border: Border.all(
             color: AppTheme.backgroundCardBorder,
             width: 1,
@@ -240,32 +161,83 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Icon(
-                  icon,
-                  size: 14,
-                  color: AppTheme.textSecondary,
-                ),
-                const SizedBox(width: 6),
                 Text(
-                  label,
-                  style: const TextStyle(
-                    fontSize: 11,
-                    color: AppTheme.textSecondary,
+                  dayName,
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                    color: AppTheme.textPrimary,
+                  ),
+                ),
+                Transform.scale(
+                  scale: 0.9,
+                  child: Switch(
+                    value: schedule.timerEnabled,
+                    onChanged: (value) {
+                      setState(() {
+                        _hasChanges = true;
+                        _schedule = _schedule.updateDay(
+                          dayOfWeek,
+                          schedule.copyWith(timerEnabled: value),
+                        );
+                      });
+                    },
+                    activeThumbColor: AppTheme.primaryOrange,
+                    activeTrackColor: AppTheme.primaryOrange.withValues(alpha: 0.5),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 6),
-            Text(
-              currentTime != null
-                  ? '${currentTime.hour.toString().padLeft(2, '0')}:${currentTime.minute.toString().padLeft(2, '0')}'
-                  : '--:--',
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                color: AppTheme.primaryOrange,
+            AnimatedCrossFade(
+              duration: const Duration(milliseconds: 300),
+              firstChild: const SizedBox(height: 0),
+              secondChild: Column(
+                children: [
+                  SizedBox(height: AppSpacing.smR),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TimePickerField(
+                          label: 'Включение',
+                          currentTime: schedule.turnOnTime,
+                          icon: Icons.power_settings_new,
+                          onTimeChanged: (time) {
+                            setState(() {
+                              _hasChanges = true;
+                              _schedule = _schedule.updateDay(
+                                dayOfWeek,
+                                schedule.copyWith(turnOnTime: time),
+                              );
+                            });
+                          },
+                        ),
+                      ),
+                      SizedBox(width: AppSpacing.smR),
+                      Expanded(
+                        child: TimePickerField(
+                          label: 'Отключение',
+                          currentTime: schedule.turnOffTime,
+                          icon: Icons.power_off,
+                          onTimeChanged: (time) {
+                            setState(() {
+                              _hasChanges = true;
+                              _schedule = _schedule.updateDay(
+                                dayOfWeek,
+                                schedule.copyWith(turnOffTime: time),
+                              );
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
+              crossFadeState: schedule.timerEnabled
+                  ? CrossFadeState.showSecond
+                  : CrossFadeState.showFirst,
             ),
           ],
         ),
@@ -275,10 +247,10 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
   Widget _buildQuickActions() {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(AppSpacing.mdR),
       decoration: BoxDecoration(
         color: AppTheme.backgroundCard,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppRadius.mdR),
         border: Border.all(
           color: AppTheme.backgroundCardBorder,
           width: 1,
@@ -287,16 +259,15 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Быстрые действия',
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 14.sp,
               fontWeight: FontWeight.w600,
               color: AppTheme.textPrimary,
             ),
           ),
-          const SizedBox(height: 12),
-
+          SizedBox(height: AppSpacing.smR),
           Row(
             children: [
               Expanded(
@@ -307,7 +278,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   _applyWeekdaySchedule,
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: AppSpacing.smR),
               Expanded(
                 child: _buildQuickActionButton(
                   'Выходные',
@@ -318,7 +289,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: AppSpacing.xsR),
           SizedBox(
             width: double.infinity,
             child: _buildQuickActionButton(
@@ -347,30 +318,30 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           width: 1,
         ),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(AppRadius.smR),
         ),
-        padding: const EdgeInsets.all(12),
+        padding: EdgeInsets.all(AppSpacing.smR),
       ),
       child: Row(
         children: [
-          Icon(icon, color: AppTheme.primaryOrange, size: 20),
-          const SizedBox(width: 8),
+          Icon(icon, color: AppTheme.primaryOrange, size: 20.sp),
+          SizedBox(width: AppSpacing.xsR),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
-                    fontSize: 13,
+                  style: TextStyle(
+                    fontSize: 13.sp,
                     fontWeight: FontWeight.w600,
                     color: AppTheme.textPrimary,
                   ),
                 ),
                 Text(
                   subtitle,
-                  style: const TextStyle(
-                    fontSize: 11,
+                  style: TextStyle(
+                    fontSize: 11.sp,
                     color: AppTheme.textSecondary,
                   ),
                 ),
@@ -434,29 +405,62 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   }
 
   Future<void> _saveSchedule() async {
+    setState(() {
+      _isSaving = true;
+    });
+
     try {
       final updateScheduleUseCase = sl<UpdateSchedule>();
       await updateScheduleUseCase(widget.unit.id, _schedule);
 
+      _saveAnimationController.forward().then((_) {
+        _saveAnimationController.reverse();
+      });
+
       setState(() {
         _hasChanges = false;
+        _isSaving = false;
       });
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Расписание успешно сохранено'),
+          SnackBar(
+            content: Row(
+              children: [
+                const Icon(Icons.check_circle, color: Colors.white),
+                SizedBox(width: AppSpacing.xsR),
+                const Text('Расписание успешно сохранено'),
+              ],
+            ),
             backgroundColor: AppTheme.success,
-            duration: Duration(seconds: 2),
+            duration: const Duration(seconds: 2),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppRadius.smR),
+            ),
           ),
         );
       }
     } catch (e) {
+      setState(() {
+        _isSaving = false;
+      });
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Ошибка сохранения: $e'),
+            content: Row(
+              children: [
+                const Icon(Icons.error, color: Colors.white),
+                SizedBox(width: AppSpacing.xsR),
+                Expanded(child: Text('Ошибка сохранения: $e')),
+              ],
+            ),
             backgroundColor: AppTheme.error,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppRadius.smR),
+            ),
           ),
         );
       }
@@ -469,27 +473,42 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         context: context,
         builder: (context) => AlertDialog(
           backgroundColor: AppTheme.backgroundCard,
-          title: const Text(
-            'Несохранённые изменения',
-            style: TextStyle(color: AppTheme.textPrimary),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppRadius.mdR),
           ),
-          content: const Text(
+          title: Text(
+            'Несохранённые изменения',
+            style: TextStyle(
+              color: AppTheme.textPrimary,
+              fontSize: 18.sp,
+            ),
+          ),
+          content: Text(
             'У вас есть несохранённые изменения. Выйти без сохранения?',
-            style: TextStyle(color: AppTheme.textSecondary),
+            style: TextStyle(
+              color: AppTheme.textSecondary,
+              fontSize: 14.sp,
+            ),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text(
+              child: Text(
                 'Отмена',
-                style: TextStyle(color: AppTheme.textSecondary),
+                style: TextStyle(
+                  color: AppTheme.textSecondary,
+                  fontSize: 14.sp,
+                ),
               ),
             ),
             TextButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const Text(
+              child: Text(
                 'Выйти',
-                style: TextStyle(color: AppTheme.error),
+                style: TextStyle(
+                  color: AppTheme.error,
+                  fontSize: 14.sp,
+                ),
               ),
             ),
           ],

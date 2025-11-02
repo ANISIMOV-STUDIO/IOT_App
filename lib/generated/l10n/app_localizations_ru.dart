@@ -333,4 +333,218 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get skipAuth => 'Продолжить без регистрации';
+
+  @override
+  String get loading => 'Загрузка...';
+
+  @override
+  String get retry => 'Повторить';
+
+  @override
+  String get close => 'Закрыть';
+
+  @override
+  String get save => 'Сохранить';
+
+  @override
+  String get edit => 'Редактировать';
+
+  @override
+  String get delete => 'Удалить';
+
+  @override
+  String get confirm => 'Подтвердить';
+
+  @override
+  String get yes => 'Да';
+
+  @override
+  String get no => 'Нет';
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get search => 'Поиск';
+
+  @override
+  String get filter => 'Фильтр';
+
+  @override
+  String get sort => 'Сортировка';
+
+  @override
+  String get refresh => 'Обновить';
+
+  @override
+  String get back => 'Назад';
+
+  @override
+  String get next => 'Далее';
+
+  @override
+  String get previous => 'Назад';
+
+  @override
+  String get done => 'Готово';
+
+  @override
+  String get apply => 'Применить';
+
+  @override
+  String get reset => 'Сбросить';
+
+  @override
+  String get clear => 'Очистить';
+
+  @override
+  String get success => 'Успешно';
+
+  @override
+  String get failed => 'Ошибка';
+
+  @override
+  String get warning => 'Предупреждение';
+
+  @override
+  String get info => 'Информация';
+
+  @override
+  String get notification => 'Уведомление';
+
+  @override
+  String get online => 'Онлайн';
+
+  @override
+  String get offline => 'Офлайн';
+
+  @override
+  String get connected => 'Подключено';
+
+  @override
+  String get disconnected => 'Отключено';
+
+  @override
+  String get connecting => 'Подключение...';
+
+  @override
+  String get reconnecting => 'Переподключение...';
+
+  @override
+  String get idle => 'Ожидание';
+
+  @override
+  String get active => 'Активно';
+
+  @override
+  String get inactive => 'Неактивно';
+
+  @override
+  String get enabled => 'Включено';
+
+  @override
+  String get disabled => 'Отключено';
+
+  @override
+  String get available => 'Доступно';
+
+  @override
+  String get unavailable => 'Недоступно';
+
+  @override
+  String get maintenance => 'Обслуживание';
+
+  @override
+  String get status => 'Статус';
+
+  @override
+  String get details => 'Детали';
+
+  @override
+  String get more => 'Ещё';
+
+  @override
+  String get less => 'Меньше';
+
+  @override
+  String get all => 'Все';
+
+  @override
+  String get none => 'Нет';
+
+  @override
+  String get today => 'Сегодня';
+
+  @override
+  String get yesterday => 'Вчера';
+
+  @override
+  String get week => 'Неделя';
+
+  @override
+  String get month => 'Месяц';
+
+  @override
+  String get year => 'Год';
+
+  @override
+  String get noDevices => 'Нет устройств';
+
+  @override
+  String get addFirstDevice => 'Добавьте первое устройство для начала работы';
+
+  @override
+  String get deviceNotSelected => 'Устройство не выбрано';
+
+  @override
+  String get errorChangingPower => 'Ошибка изменения питания';
+
+  @override
+  String get errorUpdatingMode => 'Ошибка обновления режима';
+
+  @override
+  String get errorUpdatingFanSpeed => 'Ошибка обновления скорости вентилятора';
+
+  @override
+  String get errorApplyingPreset => 'Ошибка применения пресета';
+
+  @override
+  String get presetApplied => 'Применён режим';
+
+  @override
+  String get allUnitsOn => 'Все установки включены';
+
+  @override
+  String get errorTurningOnUnits => 'Ошибка включения установок';
+
+  @override
+  String get allUnitsOff => 'Все установки выключены';
+
+  @override
+  String get errorTurningOffUnits => 'Ошибка выключения установок';
+
+  @override
+  String get settingsSynced =>
+      'Настройки синхронизированы со всеми установками';
+
+  @override
+  String get errorSyncingSettings => 'Ошибка синхронизации';
+
+  @override
+  String get scheduleAppliedToAll => 'Расписание применено ко всем установкам';
+
+  @override
+  String get errorApplyingSchedule => 'Ошибка применения расписания';
+
+  @override
+  String get activated => 'активировано';
+
+  @override
+  String get deactivated => 'деактивировано';
+
+  @override
+  String get manageRules => 'Управление правилами (в разработке)';
+
+  @override
+  String get addUnitComingSoon => 'Add unit feature coming soon';
 }

@@ -3,6 +3,10 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'app_radius.dart';
+import 'spacing.dart';
 
 class AppTheme {
   // Primary Colors - From Figma Design
@@ -55,14 +59,14 @@ class AppTheme {
       scaffoldBackgroundColor: backgroundDark,
 
       // App Bar Theme
-      appBarTheme: const AppBarTheme(
+      appBarTheme: AppBarTheme(
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        iconTheme: IconThemeData(color: textPrimary),
+        iconTheme: const IconThemeData(color: textPrimary),
         titleTextStyle: TextStyle(
           color: textPrimary,
-          fontSize: 20,
+          fontSize: 20.sp,
           fontWeight: FontWeight.w600,
         ),
       ),
@@ -91,81 +95,81 @@ class AppTheme {
         showUnselectedLabels: false,
       ),
 
-      // Text Theme
-      textTheme: const TextTheme(
+      // Text Theme - All sizes responsive with .sp
+      textTheme: TextTheme(
         displayLarge: TextStyle(
-          fontSize: 57,
+          fontSize: 57.sp,
           fontWeight: FontWeight.w700,
           color: textPrimary,
           letterSpacing: -0.25,
         ),
         displayMedium: TextStyle(
-          fontSize: 45,
+          fontSize: 45.sp,
           fontWeight: FontWeight.w700,
           color: textPrimary,
         ),
         displaySmall: TextStyle(
-          fontSize: 36,
+          fontSize: 36.sp,
           fontWeight: FontWeight.w600,
           color: textPrimary,
         ),
         headlineLarge: TextStyle(
-          fontSize: 32,
+          fontSize: 32.sp,
           fontWeight: FontWeight.w600,
           color: textPrimary,
         ),
         headlineMedium: TextStyle(
-          fontSize: 28,
+          fontSize: 28.sp,
           fontWeight: FontWeight.w600,
           color: textPrimary,
         ),
         headlineSmall: TextStyle(
-          fontSize: 24,
+          fontSize: 24.sp,
           fontWeight: FontWeight.w600,
           color: textPrimary,
         ),
         titleLarge: TextStyle(
-          fontSize: 22,
+          fontSize: 22.sp,
           fontWeight: FontWeight.w600,
           color: textPrimary,
         ),
         titleMedium: TextStyle(
-          fontSize: 18,
+          fontSize: 18.sp,
           fontWeight: FontWeight.w600,
           color: textPrimary,
         ),
         titleSmall: TextStyle(
-          fontSize: 16,
+          fontSize: 16.sp,
           fontWeight: FontWeight.w600,
           color: textPrimary,
         ),
         bodyLarge: TextStyle(
-          fontSize: 16,
+          fontSize: 16.sp,
           fontWeight: FontWeight.w400,
           color: textPrimary,
         ),
         bodyMedium: TextStyle(
-          fontSize: 14,
+          fontSize: 14.sp,
           fontWeight: FontWeight.w400,
           color: textSecondary,
         ),
         bodySmall: TextStyle(
-          fontSize: 12,
+          fontSize: 12.sp,
           fontWeight: FontWeight.w400,
           color: textTertiary,
         ),
         labelLarge: TextStyle(
-          fontSize: 18,
+          fontSize: 18.sp,
           fontWeight: FontWeight.w600,
           color: textPrimary,
         ),
         labelMedium: TextStyle(
-          fontSize: 14,
+          fontSize: 14.sp,
           fontWeight: FontWeight.w500,
           color: textPrimary,
         ),
         labelSmall: TextStyle(
-          fontSize: 12,
+          fontSize: 12.sp,
           fontWeight: FontWeight.w500,
           color: textSecondary,
         ),
@@ -222,14 +226,14 @@ class AppTheme {
           foregroundColor: textPrimary,
           elevation: 0,
           padding: const EdgeInsets.symmetric(
-            horizontal: 24,
-            vertical: 16,
+            horizontal: AppSpacing.lg,
+            vertical: AppSpacing.md,
           ),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppRadius.mdR),
           ),
-          textStyle: const TextStyle(
-            fontSize: 16,
+          textStyle: TextStyle(
+            fontSize: 16.sp,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -283,11 +287,25 @@ class AppTheme {
     }
   }
 
+  // Responsive Padding Helpers
+  static EdgeInsets get paddingXs => const EdgeInsets.all(AppSpacing.xs);
+  static EdgeInsets get paddingSm => const EdgeInsets.all(AppSpacing.sm);
+  static EdgeInsets get paddingMd => const EdgeInsets.all(AppSpacing.md);
+  static EdgeInsets get paddingLg => const EdgeInsets.all(AppSpacing.lg);
+  static EdgeInsets get paddingXl => const EdgeInsets.all(AppSpacing.xl);
+
+  static EdgeInsets get screenPadding => const EdgeInsets.symmetric(
+        horizontal: AppSpacing.md,
+        vertical: AppSpacing.md,
+      );
+
+  static EdgeInsets get cardPadding => const EdgeInsets.all(AppSpacing.lg);
+
   /// Device Card Decoration
   static BoxDecoration deviceCard({bool isSelected = false}) {
     return BoxDecoration(
       color: backgroundCard,
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(AppRadius.lgR),
       border: Border.all(
         color: isSelected ? primaryOrange : backgroundCardBorder,
         width: isSelected ? 2 : 1,
@@ -295,11 +313,36 @@ class AppTheme {
     );
   }
 
+  /// Rounded Card Decoration
+  static BoxDecoration roundedCard({Color? color, bool hasBorder = true}) {
+    return BoxDecoration(
+      color: color ?? backgroundCard,
+      borderRadius: BorderRadius.circular(AppRadius.lgR),
+      border: hasBorder
+          ? Border.all(
+              color: backgroundCardBorder,
+              width: 1,
+            )
+          : null,
+    );
+  }
+
+  /// Card Shadow
+  static List<BoxShadow> cardShadow() {
+    return [
+      BoxShadow(
+        color: Colors.black.withValues(alpha: 0.1),
+        blurRadius: 8,
+        offset: const Offset(0, 2),
+      ),
+    ];
+  }
+
   /// Orange Button Decoration
   static BoxDecoration orangeButton() {
     return BoxDecoration(
       color: primaryOrange,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(AppRadius.mdR),
     );
   }
 
@@ -307,7 +350,7 @@ class AppTheme {
   static BoxDecoration deviceImagePlaceholder() {
     return BoxDecoration(
       color: backgroundCard,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(AppRadius.mdR),
       border: Border.all(
         color: backgroundCardBorder,
         width: 1,

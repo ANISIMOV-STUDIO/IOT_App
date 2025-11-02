@@ -1,10 +1,13 @@
 /// Ventilation Mode Control Widget
 ///
-/// Compact card for mode selection and fan speed control
+/// Compact responsive card for mode selection and fan speed control
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/theme/spacing.dart';
+import '../../core/theme/app_radius.dart';
 import '../../domain/entities/hvac_unit.dart';
 import '../../domain/entities/ventilation_mode.dart';
 
@@ -26,16 +29,29 @@ class VentilationModeControl extends StatefulWidget {
   State<VentilationModeControl> createState() => _VentilationModeControlState();
 }
 
-class _VentilationModeControlState extends State<VentilationModeControl> {
+class _VentilationModeControlState extends State<VentilationModeControl>
+    with SingleTickerProviderStateMixin {
   late int _supplyFanSpeed;
   late int _exhaustFanSpeed;
   bool _showModeSelector = false;
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation;
 
   @override
   void initState() {
     super.initState();
     _supplyFanSpeed = widget.unit.supplyFanSpeed ?? 0;
     _exhaustFanSpeed = widget.unit.exhaustFanSpeed ?? 0;
+
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+
+    _fadeAnimation = CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    );
   }
 
   @override
@@ -50,111 +66,157 @@ class _VentilationModeControlState extends State<VentilationModeControl> {
   }
 
   @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(AppSpacing.mdR),
       decoration: AppTheme.deviceCard(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header with Power Toggle
-          Row(
+          _buildHeader(),
+          SizedBox(height: AppSpacing.mdR),
+          _buildModeSelector(),
+          SizedBox(height: AppSpacing.smR + 2.h),
+          _buildFanSpeed(
+            'Приточный',
+            _supplyFanSpeed,
+            Icons.air,
+            (speed) {
+              setState(() => _supplyFanSpeed = speed);
+              widget.onSupplyFanChanged?.call(speed);
+            },
+          ),
+          SizedBox(height: AppSpacing.smR),
+          _buildFanSpeed(
+            'Вытяжной',
+            _exhaustFanSpeed,
+            Icons.air,
+            (speed) {
+              setState(() => _exhaustFanSpeed = speed);
+              widget.onExhaustFanChanged?.call(speed);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHeader() {
+    return Row(
+      children: [
+        Container(
+          padding: EdgeInsets.all(AppSpacing.xsR),
+          decoration: BoxDecoration(
+            color: AppTheme.primaryOrange.withValues(alpha: 0.2),
+            borderRadius: BorderRadius.circular(AppRadius.smR),
+          ),
+          child: Icon(
+            Icons.tune,
+            color: AppTheme.primaryOrange,
+            size: 20.sp,
+          ),
+        ),
+        SizedBox(width: AppSpacing.smR),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: AppTheme.primaryOrange.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Icon(
-                  Icons.tune,
-                  color: AppTheme.primaryOrange,
-                  size: 20,
+              Text(
+                'Режим работы',
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600,
+                  color: AppTheme.textPrimary,
                 ),
               ),
-              const SizedBox(width: 12),
-              const Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Режим работы',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: AppTheme.textPrimary,
-                      ),
-                    ),
-                    SizedBox(height: 2),
-                    Text(
-                      'Управление и настройки',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: AppTheme.textSecondary,
-                      ),
-                    ),
-                  ],
+              SizedBox(height: 2.h),
+              Text(
+                'Управление и настройки',
+                style: TextStyle(
+                  fontSize: 12.sp,
+                  color: AppTheme.textSecondary,
                 ),
               ),
             ],
           ),
+        ),
+      ],
+    );
+  }
 
-          const SizedBox(height: 16),
-
-          // Custom Mode selector
-          MouseRegion(
-            cursor: SystemMouseCursors.click,
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  _showModeSelector = !_showModeSelector;
-                });
-              },
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                decoration: BoxDecoration(
-                  color: AppTheme.backgroundDark,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: _showModeSelector
-                        ? AppTheme.primaryOrange.withValues(alpha: 0.5)
-                        : AppTheme.backgroundCardBorder,
-                    width: 1.5,
-                  ),
+  Widget _buildModeSelector() {
+    return Column(
+      children: [
+        MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: () {
+              setState(() {
+                _showModeSelector = !_showModeSelector;
+                if (_showModeSelector) {
+                  _animationController.forward();
+                } else {
+                  _animationController.reverse();
+                }
+              });
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: AppSpacing.mdR,
+                vertical: AppSpacing.smR,
+              ),
+              decoration: BoxDecoration(
+                color: AppTheme.backgroundDark,
+                borderRadius: BorderRadius.circular(AppRadius.mdR),
+                border: Border.all(
+                  color: _showModeSelector
+                      ? AppTheme.primaryOrange.withValues(alpha: 0.5)
+                      : AppTheme.backgroundCardBorder,
+                  width: 1.5,
                 ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        widget.unit.ventMode?.displayName ?? 'Выберите режим',
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: AppTheme.textPrimary,
-                          fontWeight: FontWeight.w500,
-                        ),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      widget.unit.ventMode?.displayName ?? 'Выберите режим',
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        color: AppTheme.textPrimary,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
-                    Icon(
-                      _showModeSelector ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                  ),
+                  AnimatedRotation(
+                    turns: _showModeSelector ? 0.5 : 0,
+                    duration: const Duration(milliseconds: 300),
+                    child: Icon(
+                      Icons.keyboard_arrow_down,
                       color: AppTheme.primaryOrange,
-                      size: 20,
+                      size: 20.sp,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
-
-          // Mode options with animation
-          AnimatedCrossFade(
-            duration: const Duration(milliseconds: 200),
-            firstChild: const SizedBox(height: 0),
-            secondChild: Container(
-              margin: const EdgeInsets.only(top: 8),
-              padding: const EdgeInsets.all(8),
+        ),
+        SizeTransition(
+          sizeFactor: _fadeAnimation,
+          child: FadeTransition(
+            opacity: _fadeAnimation,
+            child: Container(
+              margin: EdgeInsets.only(top: AppSpacing.xsR),
+              padding: EdgeInsets.all(AppSpacing.xsR),
               decoration: BoxDecoration(
                 color: AppTheme.backgroundDark,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppRadius.mdR),
                 border: Border.all(
                   color: AppTheme.backgroundCardBorder,
                   width: 1,
@@ -167,56 +229,19 @@ class _VentilationModeControlState extends State<VentilationModeControl> {
                     mode: mode,
                     isSelected: isSelected,
                     onTap: () {
-                      if (widget.onModeChanged != null) {
-                        widget.onModeChanged!(mode);
-                      }
+                      widget.onModeChanged?.call(mode);
                       setState(() {
                         _showModeSelector = false;
+                        _animationController.reverse();
                       });
                     },
                   );
                 }).toList(),
               ),
             ),
-            crossFadeState: _showModeSelector
-                ? CrossFadeState.showSecond
-                : CrossFadeState.showFirst,
           ),
-
-          const SizedBox(height: 14),
-
-          // Fan speeds
-          _buildFanSpeed(
-            'Приточный',
-            _supplyFanSpeed,
-            Icons.air,
-            (speed) {
-              setState(() {
-                _supplyFanSpeed = speed;
-              });
-              if (widget.onSupplyFanChanged != null) {
-                widget.onSupplyFanChanged!(speed);
-              }
-            },
-          ),
-
-          const SizedBox(height: 12),
-
-          _buildFanSpeed(
-            'Вытяжной',
-            _exhaustFanSpeed,
-            Icons.air,
-            (speed) {
-              setState(() {
-                _exhaustFanSpeed = speed;
-              });
-              if (widget.onExhaustFanChanged != null) {
-                widget.onExhaustFanChanged!(speed);
-              }
-            },
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -232,34 +257,38 @@ class _VentilationModeControlState extends State<VentilationModeControl> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                Icon(
-                  icon,
-                  size: 16,
-                  color: AppTheme.textSecondary,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  label,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: AppTheme.textSecondary,
-                    fontWeight: FontWeight.w500,
+            Expanded(
+              child: Row(
+                children: [
+                  Icon(icon, size: 16.sp, color: AppTheme.textSecondary),
+                  SizedBox(width: AppSpacing.xsR),
+                  Flexible(
+                    child: Text(
+                      label,
+                      style: TextStyle(
+                        fontSize: 13.sp,
+                        color: AppTheme.textSecondary,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              padding: EdgeInsets.symmetric(
+                horizontal: 10.w,
+                vertical: 4.h,
+              ),
               decoration: BoxDecoration(
                 color: AppTheme.primaryOrange.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(AppRadius.smR),
               ),
               child: Text(
                 '$speed%',
-                style: const TextStyle(
-                  fontSize: 13,
+                style: TextStyle(
+                  fontSize: 13.sp,
                   fontWeight: FontWeight.w700,
                   color: AppTheme.primaryOrange,
                 ),
@@ -267,25 +296,25 @@ class _VentilationModeControlState extends State<VentilationModeControl> {
             ),
           ],
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: AppSpacing.xsR),
         SliderTheme(
           data: SliderThemeData(
-            trackHeight: 5,
-            thumbShape: const RoundSliderThumbShape(
-              enabledThumbRadius: 9,
+            trackHeight: 5.h,
+            thumbShape: RoundSliderThumbShape(
+              enabledThumbRadius: 9.r,
               elevation: 3,
             ),
-            overlayShape: const RoundSliderOverlayShape(
-              overlayRadius: 18,
+            overlayShape: RoundSliderOverlayShape(
+              overlayRadius: 18.r,
             ),
             activeTrackColor: AppTheme.primaryOrange,
             inactiveTrackColor: AppTheme.backgroundCardBorder,
             thumbColor: Colors.white,
             overlayColor: AppTheme.primaryOrange.withValues(alpha: 0.2),
             valueIndicatorColor: AppTheme.primaryOrange,
-            valueIndicatorTextStyle: const TextStyle(
+            valueIndicatorTextStyle: TextStyle(
               color: Colors.white,
-              fontSize: 11,
+              fontSize: 11.sp,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -303,7 +332,7 @@ class _VentilationModeControlState extends State<VentilationModeControl> {
   }
 }
 
-/// Mode Option Item with Hover Effect
+/// Mode Option Item with Hover Effect and Animation
 class _ModeOptionItem extends StatefulWidget {
   final VentilationMode mode;
   final bool isSelected;
@@ -332,15 +361,18 @@ class _ModeOptionItemState extends State<_ModeOptionItem> {
         onTap: widget.onTap,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
-          margin: const EdgeInsets.only(bottom: 4),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          margin: EdgeInsets.only(bottom: 4.h),
+          padding: EdgeInsets.symmetric(
+            horizontal: AppSpacing.smR,
+            vertical: 10.h,
+          ),
           decoration: BoxDecoration(
             color: widget.isSelected
                 ? AppTheme.primaryOrange.withValues(alpha: 0.15)
                 : _isHovered
                     ? AppTheme.primaryOrange.withValues(alpha: 0.08)
                     : Colors.transparent,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(AppRadius.smR),
             border: _isHovered && !widget.isSelected
                 ? Border.all(
                     color: AppTheme.primaryOrange.withValues(alpha: 0.3),
@@ -350,18 +382,19 @@ class _ModeOptionItemState extends State<_ModeOptionItem> {
           ),
           child: Row(
             children: [
-              if (widget.isSelected)
-                const Icon(
+              if (widget.isSelected) ...[
+                Icon(
                   Icons.check_circle,
                   color: AppTheme.primaryOrange,
-                  size: 18,
+                  size: 18.sp,
                 ),
-              if (widget.isSelected) const SizedBox(width: 8),
+                SizedBox(width: AppSpacing.xsR),
+              ],
               Expanded(
                 child: Text(
                   widget.mode.displayName,
                   style: TextStyle(
-                    fontSize: 13,
+                    fontSize: 13.sp,
                     color: widget.isSelected || _isHovered
                         ? AppTheme.primaryOrange
                         : AppTheme.textPrimary,

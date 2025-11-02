@@ -27,7 +27,10 @@ class RoomPreviewCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 450,
+      constraints: const BoxConstraints(
+        maxHeight: 500,
+        minHeight: 350,
+      ),
       decoration: BoxDecoration(
         color: AppTheme.backgroundCard,
         borderRadius: BorderRadius.circular(20),

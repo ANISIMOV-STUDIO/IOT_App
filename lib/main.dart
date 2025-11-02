@@ -6,6 +6,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'generated/l10n/app_localizations.dart';
 import 'core/di/injection_container.dart' as di;
@@ -27,6 +28,22 @@ void main() async {
   runApp(const HvacControlApp());
 }
 
+/// Get responsive design size based on screen width
+Size _getDesignSize(BuildContext context) {
+  final width = MediaQuery.of(context).size.width;
+
+  if (width >= 1200) {
+    // Desktop: based on 1920x1080
+    return const Size(1920, 1080);
+  } else if (width >= 600) {
+    // Tablet: based on iPad (768x1024)
+    return const Size(768, 1024);
+  } else {
+    // Mobile: based on iPhone X (375x812)
+    return const Size(375, 812);
+  }
+}
+
 class HvacControlApp extends StatelessWidget {
   const HvacControlApp({super.key});
 
@@ -40,26 +57,34 @@ class HvacControlApp extends StatelessWidget {
       builder: (context, child) {
         final languageService = di.sl<LanguageService>();
 
-        return MaterialApp(
-          title: 'HVAC Control',
-          debugShowCheckedModeBanner: false,
+        return ScreenUtilInit(
+          designSize: _getDesignSize(context),
+          minTextAdapt: true,
+          splitScreenMode: true,
+          builder: (context, child) {
+            return MaterialApp(
+              title: 'HVAC Control',
+              debugShowCheckedModeBanner: false,
 
-          // Theme - Dark with Orange Accents (Figma Design)
-          theme: AppTheme.darkTheme(),
-          darkTheme: AppTheme.darkTheme(),
-          themeMode: ThemeMode.dark, // Always use dark theme
+              // Theme - Dark with Orange Accents (Figma Design)
+              theme: AppTheme.darkTheme(),
+              darkTheme: AppTheme.darkTheme(),
+              themeMode: ThemeMode.dark, // Always use dark theme
 
-          // Localization
-          locale: languageService.currentLocale,
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: LanguageService.supportedLocales,
+              // Localization
+              locale: languageService.currentLocale,
+              localizationsDelegates: const [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: LanguageService.supportedLocales,
 
-          home: MultiBlocProvider(
+              home: child,
+            );
+          },
+          child: MultiBlocProvider(
             providers: [
               BlocProvider(
                 create: (context) => di.sl<AuthBloc>()

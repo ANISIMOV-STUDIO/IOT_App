@@ -4,6 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/theme/app_theme.dart';
 import '../../generated/l10n/app_localizations.dart';
@@ -144,7 +145,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   text: l10n.register,
                   width: double.infinity,
                   onPressed: _isLoading ? null : () {
-                    // TODO: Navigate to registration
+                    HapticFeedback.lightImpact();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Registration feature coming soon'),
+                        backgroundColor: AppTheme.info,
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
                   },
                 ),
                 const SizedBox(height: 24),

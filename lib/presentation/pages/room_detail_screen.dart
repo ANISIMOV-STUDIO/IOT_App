@@ -4,6 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/theme/app_theme.dart';
 import '../bloc/hvac_detail/hvac_detail_bloc.dart';
@@ -86,16 +87,36 @@ class RoomDetailScreen extends StatelessWidget {
           expandedHeight: 300,
           pinned: true,
           backgroundColor: AppTheme.backgroundDark,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () => Navigator.of(context).pop(),
+          leading: Semantics(
+            label: 'Back',
+            button: true,
+            child: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+              onPressed: () {
+                HapticFeedback.lightImpact();
+                Navigator.of(context).pop();
+              },
+            ),
           ),
           actions: [
-            IconButton(
-              icon: const Icon(Icons.notifications_outlined),
-              onPressed: () {
-                // TODO: Show notifications
-              },
+            Semantics(
+              label: 'Notifications',
+              button: true,
+              child: IconButton(
+                icon: const Icon(Icons.notifications_outlined),
+                constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+                onPressed: () {
+                  HapticFeedback.lightImpact();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Notifications feature coming soon'),
+                      backgroundColor: AppTheme.info,
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                },
+              ),
             ),
           ],
           flexibleSpace: FlexibleSpaceBar(
@@ -210,7 +231,7 @@ class RoomDetailScreen extends StatelessWidget {
                   label: 'Main light',
                   value: 0.7,
                   onChanged: (value) {
-                    // TODO: Update light brightness
+                    HapticFeedback.selectionClick();
                   },
                 ),
 
@@ -222,7 +243,7 @@ class RoomDetailScreen extends StatelessWidget {
                   label: 'Floor lamp',
                   value: 0.5,
                   onChanged: (value) {
-                    // TODO: Update lamp brightness
+                    HapticFeedback.selectionClick();
                   },
                 ),
 
@@ -287,9 +308,16 @@ class RoomDetailScreen extends StatelessWidget {
                 isOn ? 'On' : 'Off',
                 style: Theme.of(context).textTheme.bodySmall,
               ),
-              Switch(
-                value: isOn,
-                onChanged: onToggle,
+              Semantics(
+                label: '${label.replaceAll('\n', ' ')} power switch',
+                toggled: isOn,
+                child: Switch(
+                  value: isOn,
+                  onChanged: (value) {
+                    HapticFeedback.mediumImpact();
+                    onToggle(value);
+                  },
+                ),
               ),
             ],
           ),
