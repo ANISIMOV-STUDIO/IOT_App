@@ -21,7 +21,17 @@ import '../../domain/usecases/update_fan_speeds.dart';
 import '../widgets/ventilation_mode_control.dart';
 import '../widgets/ventilation_temperature_control.dart';
 import '../widgets/ventilation_schedule_control.dart';
+import '../widgets/quick_presets_panel.dart';
+import '../widgets/group_control_panel.dart';
+import '../widgets/automation_panel.dart';
+import '../../domain/entities/mode_preset.dart';
+import '../../domain/entities/automation_rule.dart';
+import '../../domain/usecases/apply_preset.dart';
+import '../../domain/usecases/group_power_control.dart';
+import '../../domain/usecases/sync_settings_to_all.dart';
+import '../../domain/usecases/apply_schedule_to_all.dart';
 import 'schedule_screen.dart';
+import 'unit_detail_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -263,6 +273,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       _updatePower(currentUnit, power);
                     }
                   },
+                  onDetailsPressed: currentUnit != null
+                      ? () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => UnitDetailScreen(unit: currentUnit!),
+                            ),
+                          );
+                        }
+                      : null,
                   badges: currentUnit != null && currentUnit.isVentilation
                       ? [
                           StatusBadge(
@@ -306,87 +326,151 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(height: 20),
 
                 // Ventilation control cards
-                Expanded(
-                  child: currentUnit != null
-                      ? Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Mode and Fan Control
-                            Expanded(
-                              child: VentilationModeControl(
-                                unit: currentUnit,
-                                onModeChanged: (mode) {
-                                  if (currentUnit != null) {
-                                    _updateVentilationMode(currentUnit, mode);
-                                  }
-                                },
-                                onSupplyFanChanged: (speed) {
-                                  if (currentUnit != null) {
-                                    _updateFanSpeeds(
-                                      currentUnit,
-                                      supplySpeed: speed,
-                                    );
-                                  }
-                                },
-                                onExhaustFanChanged: (speed) {
-                                  if (currentUnit != null) {
-                                    _updateFanSpeeds(
-                                      currentUnit,
-                                      exhaustSpeed: speed,
-                                    );
-                                  }
-                                },
-                              ),
-                            ),
-
-                            const SizedBox(width: 16),
-
-                            // Temperature Control
-                            Expanded(
-                              child: VentilationTemperatureControl(
-                                unit: currentUnit,
-                              ),
-                            ),
-
-                            const SizedBox(width: 16),
-
-                            // Schedule Control
-                            Expanded(
-                              child: VentilationScheduleControl(
-                                unit: currentUnit,
-                                onSchedulePressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ScheduleScreen(unit: currentUnit!),
-                                    ),
+                currentUnit != null
+                    ? Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Mode and Fan Control
+                          Expanded(
+                            child: VentilationModeControl(
+                              unit: currentUnit,
+                              onModeChanged: (mode) {
+                                if (currentUnit != null) {
+                                  _updateVentilationMode(currentUnit, mode);
+                                }
+                              },
+                              onSupplyFanChanged: (speed) {
+                                if (currentUnit != null) {
+                                  _updateFanSpeeds(
+                                    currentUnit,
+                                    supplySpeed: speed,
                                   );
-                                },
-                              ),
-                            ),
-                          ],
-                        )
-                      : const Center(
-                          child: Text(
-                            'Устройство не выбрано',
-                            style: TextStyle(
-                              color: AppTheme.textSecondary,
+                                }
+                              },
+                              onExhaustFanChanged: (speed) {
+                                if (currentUnit != null) {
+                                  _updateFanSpeeds(
+                                    currentUnit,
+                                    exhaustSpeed: speed,
+                                  );
+                                }
+                              },
                             ),
                           ),
+
+                          const SizedBox(width: 16),
+
+                          // Temperature Control
+                          Expanded(
+                            child: VentilationTemperatureControl(
+                              unit: currentUnit,
+                            ),
+                          ),
+
+                          const SizedBox(width: 16),
+
+                          // Schedule Control
+                          Expanded(
+                            child: VentilationScheduleControl(
+                              unit: currentUnit,
+                              onSchedulePressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ScheduleScreen(unit: currentUnit!),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      )
+                    : const Center(
+                        child: Text(
+                          'Устройство не выбрано',
+                          style: TextStyle(
+                            color: AppTheme.textSecondary,
+                          ),
                         ),
-                ),
+                      ),
+
+                const SizedBox(height: 20),
+
+                // Automation panel
+                if (currentUnit != null)
+                  AutomationPanel(
+                    rules: AutomationRule.defaults,
+                    onRuleToggled: (rule) {
+                      // Handle rule toggle
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            '${rule.name} ${rule.enabled ? "активировано" : "деактивировано"}',
+                          ),
+                          backgroundColor: AppTheme.success,
+                          duration: const Duration(seconds: 2),
+                        ),
+                      );
+                    },
+                    onManageRules: () {
+                      // Navigate to automation management screen
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Управление правилами (в разработке)'),
+                          backgroundColor: AppTheme.info,
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    },
+                  ),
+
+                const Spacer(),
               ],
             ),
           ),
 
           const SizedBox(width: 20),
 
-          // Notifications sidebar for current unit
+          // Right sidebar with presets, group control and notifications
           SizedBox(
             width: 320,
-            child: currentUnit != null
-                ? _buildNotificationsPanel(currentUnit)
-                : const SizedBox.shrink(),
+            child: BlocBuilder<HvacListBloc, HvacListState>(
+              builder: (context, state) {
+                if (state is HvacListLoaded && currentUnit != null) {
+                  return Column(
+                    children: [
+                      // Quick presets panel
+                      QuickPresetsPanel(
+                        onPresetSelected: (preset) {
+                          _applyPreset(currentUnit!, preset);
+                        },
+                      ),
+
+                      const SizedBox(height: 20),
+
+                      // Group control panel
+                      if (state.units.length > 1)
+                        GroupControlPanel(
+                          units: state.units,
+                          onPowerAllOn: _powerAllOn,
+                          onPowerAllOff: _powerAllOff,
+                          onSyncSettings: () => _syncSettings(currentUnit!),
+                          onApplyScheduleToAll: () => _applyScheduleToAll(currentUnit!),
+                        ),
+
+                      if (state.units.length > 1)
+                        const SizedBox(height: 20),
+
+                      // Notifications panel
+                      Expanded(
+                        child: _buildNotificationsPanel(currentUnit),
+                      ),
+                    ],
+                  );
+                }
+                return const SizedBox.shrink();
+              },
+            ),
           ),
         ],
       ),
@@ -891,6 +975,151 @@ class _HomeScreenState extends State<HomeScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Ошибка обновления скорости вентилятора: $e'),
+            backgroundColor: AppTheme.error,
+          ),
+        );
+      }
+    }
+  }
+
+  /// Apply preset
+  Future<void> _applyPreset(HvacUnit unit, ModePreset preset) async {
+    if (!mounted) return;
+
+    try {
+      final applyPresetUseCase = sl<ApplyPreset>();
+      await applyPresetUseCase(unit.id, preset);
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Применён режим: ${preset.mode.displayName}'),
+            backgroundColor: AppTheme.success,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Ошибка применения пресета: $e'),
+            backgroundColor: AppTheme.error,
+          ),
+        );
+      }
+    }
+  }
+
+  /// Power on all units
+  Future<void> _powerAllOn() async {
+    if (!mounted) return;
+
+    try {
+      final groupPowerControl = sl<GroupPowerControl>();
+      await groupPowerControl.powerOnAll();
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Все установки включены'),
+            backgroundColor: AppTheme.success,
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Ошибка включения установок: $e'),
+            backgroundColor: AppTheme.error,
+          ),
+        );
+      }
+    }
+  }
+
+  /// Power off all units
+  Future<void> _powerAllOff() async {
+    if (!mounted) return;
+
+    try {
+      final groupPowerControl = sl<GroupPowerControl>();
+      await groupPowerControl.powerOffAll();
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Все установки выключены'),
+            backgroundColor: AppTheme.success,
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Ошибка выключения установок: $e'),
+            backgroundColor: AppTheme.error,
+          ),
+        );
+      }
+    }
+  }
+
+  /// Sync settings to all units
+  Future<void> _syncSettings(HvacUnit sourceUnit) async {
+    if (!mounted) return;
+
+    try {
+      final syncSettingsUseCase = sl<SyncSettingsToAll>();
+      await syncSettingsUseCase(sourceUnit.id);
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Настройки синхронизированы со всеми установками'),
+            backgroundColor: AppTheme.success,
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Ошибка синхронизации: $e'),
+            backgroundColor: AppTheme.error,
+          ),
+        );
+      }
+    }
+  }
+
+  /// Apply schedule to all units
+  Future<void> _applyScheduleToAll(HvacUnit sourceUnit) async {
+    if (!mounted) return;
+
+    try {
+      final applyScheduleUseCase = sl<ApplyScheduleToAll>();
+      await applyScheduleUseCase(sourceUnit.id);
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Расписание применено ко всем установкам'),
+            backgroundColor: AppTheme.success,
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Ошибка применения расписания: $e'),
             backgroundColor: AppTheme.error,
           ),
         );

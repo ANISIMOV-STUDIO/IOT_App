@@ -12,6 +12,7 @@ class RoomPreviewCard extends StatelessWidget {
   final bool isLive;
   final List<StatusBadge> badges;
   final ValueChanged<bool>? onPowerChanged;
+  final VoidCallback? onDetailsPressed;
 
   const RoomPreviewCard({
     super.key,
@@ -20,6 +21,7 @@ class RoomPreviewCard extends StatelessWidget {
     this.isLive = false,
     this.badges = const [],
     this.onPowerChanged,
+    this.onDetailsPressed,
   });
 
   @override
@@ -108,7 +110,7 @@ class RoomPreviewCard extends StatelessWidget {
                         child: Switch(
                           value: isLive,
                           onChanged: onPowerChanged,
-                          activeColor: Colors.white,
+                          activeThumbColor: Colors.white,
                           activeTrackColor: AppTheme.success,
                           inactiveThumbColor: AppTheme.textSecondary,
                           inactiveTrackColor: AppTheme.backgroundCardBorder,
@@ -134,6 +136,52 @@ class RoomPreviewCard extends StatelessWidget {
                     .toList(),
               ),
             ),
+
+            // Details button
+            if (onDetailsPressed != null)
+              Positioned(
+                bottom: 16,
+                right: 16,
+                child: MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: GestureDetector(
+                    onTap: onDetailsPressed,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: AppTheme.primaryOrange,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppTheme.primaryOrange.withValues(alpha: 0.3),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'Подробнее',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          SizedBox(width: 6),
+                          Icon(
+                            Icons.arrow_forward,
+                            color: Colors.white,
+                            size: 16,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
           ],
         ),
       ),

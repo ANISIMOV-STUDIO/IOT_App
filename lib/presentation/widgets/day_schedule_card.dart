@@ -109,7 +109,7 @@ class DayScheduleCard extends StatelessWidget {
                             onUpdate!(schedule.copyWith(timerEnabled: value));
                           }
                         : null,
-                    activeColor: AppTheme.primaryOrange,
+                    activeThumbColor: AppTheme.primaryOrange,
                   ),
                 ],
               ),

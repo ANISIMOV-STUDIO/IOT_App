@@ -12,6 +12,7 @@ import '../services/api_service.dart';
 import '../services/grpc_service.dart';
 import '../services/theme_service.dart';
 import '../services/language_service.dart';
+import '../services/cache_service.dart';
 import '../config/env_config.dart';
 
 // Data
@@ -26,6 +27,10 @@ import '../../domain/usecases/get_temperature_history.dart';
 import '../../domain/usecases/update_ventilation_mode.dart';
 import '../../domain/usecases/update_fan_speeds.dart';
 import '../../domain/usecases/update_schedule.dart';
+import '../../domain/usecases/apply_preset.dart';
+import '../../domain/usecases/group_power_control.dart';
+import '../../domain/usecases/sync_settings_to_all.dart';
+import '../../domain/usecases/apply_schedule_to_all.dart';
 
 // Presentation
 import '../../presentation/bloc/hvac_list/hvac_list_bloc.dart';
@@ -56,6 +61,9 @@ Future<void> init() async {
 
   // Initialize language service with SharedPreferences
   sl.registerLazySingleton(() => LanguageService(sl()));
+
+  // Initialize cache service
+  sl.registerLazySingleton(() => CacheService());
 
   // Initialize gRPC connection
   try {
@@ -100,6 +108,10 @@ Future<void> init() async {
   sl.registerLazySingleton(() => UpdateVentilationMode(sl()));
   sl.registerLazySingleton(() => UpdateFanSpeeds(sl()));
   sl.registerLazySingleton(() => UpdateSchedule(sl()));
+  sl.registerLazySingleton(() => ApplyPreset(sl()));
+  sl.registerLazySingleton(() => GroupPowerControl(sl()));
+  sl.registerLazySingleton(() => SyncSettingsToAll(sl()));
+  sl.registerLazySingleton(() => ApplyScheduleToAll(sl()));
 
   // Repository - Using Mock for now, will be replaced with REST implementation
   sl.registerLazySingleton<HvacRepository>(

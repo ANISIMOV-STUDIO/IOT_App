@@ -141,7 +141,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                     );
                   });
                 },
-                activeColor: AppTheme.primaryOrange,
+                activeThumbColor: AppTheme.primaryOrange,
                 activeTrackColor: AppTheme.primaryOrange.withValues(alpha: 0.5),
               ),
             ],
@@ -214,7 +214,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   surface: AppTheme.backgroundCard,
                   onSurface: AppTheme.textPrimary,
                 ),
-                dialogBackgroundColor: AppTheme.backgroundCard,
+                dialogTheme: const DialogThemeData(
+                  backgroundColor: AppTheme.backgroundCard,
+                ),
               ),
               child: child!,
             );
