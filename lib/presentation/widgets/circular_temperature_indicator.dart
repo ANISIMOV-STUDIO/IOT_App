@@ -31,12 +31,12 @@ class CircularTemperatureIndicator extends StatelessWidget {
           color: borderColor ?? AppTheme.primaryOrange,
           width: 4,
         ),
-        gradient: RadialGradient(
+        gradient: const RadialGradient(
           colors: [
             AppTheme.backgroundCard,
             AppTheme.backgroundDark,
           ],
-          stops: const [0.7, 1.0],
+          stops: [0.7, 1.0],
         ),
       ),
       child: Center(

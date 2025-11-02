@@ -552,9 +552,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       _showAllNotifications = false;
                     });
                   },
-                  child: Row(
+                  child: const Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: const [
+                    children: [
                       Text(
                         'Свернуть',
                         style: TextStyle(

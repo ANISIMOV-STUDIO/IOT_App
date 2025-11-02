@@ -19,6 +19,7 @@ import 'hvac_detail_state.dart';
 class HvacDetailBloc extends Bloc<HvacDetailEvent, HvacDetailState> {
   final String unitId;
   final GetUnitById getUnitById;
+  // ignore: deprecated_member_use_from_same_package
   final UpdateUnit updateUnit;
   final GetTemperatureHistory getTemperatureHistory;
   final UpdateVentilationMode? updateVentilationMode;
@@ -86,6 +87,7 @@ class HvacDetailBloc extends Bloc<HvacDetailEvent, HvacDetailState> {
 
     try {
       // Don't emit intermediate state - reduces rebuilds from 2 to 1
+      // ignore: deprecated_member_use_from_same_package
       await updateUnit(
         unitId: unitId,
         power: event.power,
@@ -104,6 +106,7 @@ class HvacDetailBloc extends Bloc<HvacDetailEvent, HvacDetailState> {
 
     try {
       // Don't emit intermediate state - reduces rebuilds
+      // ignore: deprecated_member_use_from_same_package
       await updateUnit(
         unitId: unitId,
         targetTemp: event.targetTemp,
@@ -121,6 +124,7 @@ class HvacDetailBloc extends Bloc<HvacDetailEvent, HvacDetailState> {
 
     try {
       // Don't emit intermediate state - reduces rebuilds
+      // ignore: deprecated_member_use_from_same_package
       await updateUnit(
         unitId: unitId,
         mode: event.mode,
@@ -138,6 +142,7 @@ class HvacDetailBloc extends Bloc<HvacDetailEvent, HvacDetailState> {
 
     try {
       // Don't emit intermediate state - reduces rebuilds
+      // ignore: deprecated_member_use_from_same_package
       await updateUnit(
         unitId: unitId,
         fanSpeed: event.fanSpeed,

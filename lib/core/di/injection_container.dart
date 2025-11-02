@@ -94,6 +94,7 @@ Future<void> init() async {
   // Use cases
   sl.registerLazySingleton(() => GetAllUnits(sl()));
   sl.registerLazySingleton(() => GetUnitById(sl()));
+  // ignore: deprecated_member_use_from_same_package
   sl.registerLazySingleton(() => UpdateUnit(sl()));
   sl.registerLazySingleton(() => GetTemperatureHistory(sl()));
   sl.registerLazySingleton(() => UpdateVentilationMode(sl()));

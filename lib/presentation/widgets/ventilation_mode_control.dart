@@ -8,7 +8,7 @@ import '../../core/theme/app_theme.dart';
 import '../../domain/entities/hvac_unit.dart';
 import '../../domain/entities/ventilation_mode.dart';
 
-class VentilationModeControl extends StatelessWidget {
+class VentilationModeControl extends StatefulWidget {
   final HvacUnit unit;
   final ValueChanged<VentilationMode>? onModeChanged;
   final ValueChanged<int>? onSupplyFanChanged;
@@ -21,6 +21,33 @@ class VentilationModeControl extends StatelessWidget {
     this.onSupplyFanChanged,
     this.onExhaustFanChanged,
   });
+
+  @override
+  State<VentilationModeControl> createState() => _VentilationModeControlState();
+}
+
+class _VentilationModeControlState extends State<VentilationModeControl> {
+  late int _supplyFanSpeed;
+  late int _exhaustFanSpeed;
+  bool _showModeSelector = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _supplyFanSpeed = widget.unit.supplyFanSpeed ?? 0;
+    _exhaustFanSpeed = widget.unit.exhaustFanSpeed ?? 0;
+  }
+
+  @override
+  void didUpdateWidget(VentilationModeControl oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.unit.supplyFanSpeed != widget.unit.supplyFanSpeed) {
+      _supplyFanSpeed = widget.unit.supplyFanSpeed ?? 0;
+    }
+    if (oldWidget.unit.exhaustFanSpeed != widget.unit.exhaustFanSpeed) {
+      _exhaustFanSpeed = widget.unit.exhaustFanSpeed ?? 0;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,46 +101,112 @@ class VentilationModeControl extends StatelessWidget {
 
           const SizedBox(height: 20),
 
-          // Mode selector
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            decoration: BoxDecoration(
-              color: AppTheme.backgroundDark,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(
-                color: AppTheme.backgroundCardBorder,
-                width: 1,
+          // Custom Mode selector
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                _showModeSelector = !_showModeSelector;
+              });
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: AppTheme.backgroundDark,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: _showModeSelector
+                      ? AppTheme.primaryOrange.withValues(alpha: 0.5)
+                      : AppTheme.backgroundCardBorder,
+                  width: 1.5,
+                ),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      widget.unit.ventMode?.displayName ?? 'Выберите режим',
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: AppTheme.textPrimary,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  Icon(
+                    _showModeSelector ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                    color: AppTheme.primaryOrange,
+                    size: 20,
+                  ),
+                ],
               ),
             ),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<VentilationMode>(
-                value: unit.ventMode,
-                isExpanded: true,
-                dropdownColor: AppTheme.backgroundCard,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: AppTheme.textPrimary,
-                  fontWeight: FontWeight.w500,
+          ),
+
+          // Mode options with animation
+          AnimatedCrossFade(
+            duration: const Duration(milliseconds: 200),
+            firstChild: const SizedBox(height: 0),
+            secondChild: Container(
+              margin: const EdgeInsets.only(top: 8),
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: AppTheme.backgroundDark,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: AppTheme.backgroundCardBorder,
+                  width: 1,
                 ),
-                icon: const Icon(
-                  Icons.arrow_drop_down,
-                  color: AppTheme.primaryOrange,
-                ),
-                onChanged: onModeChanged != null
-                    ? (VentilationMode? value) {
-                        if (value != null) {
-                          onModeChanged!(value);
-                        }
+              ),
+              child: Column(
+                children: VentilationMode.values.map((mode) {
+                  final isSelected = widget.unit.ventMode == mode;
+                  return GestureDetector(
+                    onTap: () {
+                      if (widget.onModeChanged != null) {
+                        widget.onModeChanged!(mode);
                       }
-                    : null,
-                items: VentilationMode.values.map((mode) {
-                  return DropdownMenuItem<VentilationMode>(
-                    value: mode,
-                    child: Text(mode.displayName),
+                      setState(() {
+                        _showModeSelector = false;
+                      });
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(bottom: 4),
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? AppTheme.primaryOrange.withValues(alpha: 0.15)
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        children: [
+                          if (isSelected)
+                            const Icon(
+                              Icons.check_circle,
+                              color: AppTheme.primaryOrange,
+                              size: 18,
+                            ),
+                          if (isSelected) const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              mode.displayName,
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: isSelected ? AppTheme.primaryOrange : AppTheme.textPrimary,
+                                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   );
                 }).toList(),
               ),
             ),
+            crossFadeState: _showModeSelector
+                ? CrossFadeState.showSecond
+                : CrossFadeState.showFirst,
           ),
 
           const SizedBox(height: 20),
@@ -121,18 +214,32 @@ class VentilationModeControl extends StatelessWidget {
           // Fan speeds
           _buildFanSpeed(
             'Приточный',
-            unit.supplyFanSpeed ?? 0,
+            _supplyFanSpeed,
             Icons.air,
-            onSupplyFanChanged,
+            (speed) {
+              setState(() {
+                _supplyFanSpeed = speed;
+              });
+              if (widget.onSupplyFanChanged != null) {
+                widget.onSupplyFanChanged!(speed);
+              }
+            },
           ),
 
-          const SizedBox(height: 12),
+          const SizedBox(height: 16),
 
           _buildFanSpeed(
             'Вытяжной',
-            unit.exhaustFanSpeed ?? 0,
+            _exhaustFanSpeed,
             Icons.air,
-            onExhaustFanChanged,
+            (speed) {
+              setState(() {
+                _exhaustFanSpeed = speed;
+              });
+              if (widget.onExhaustFanChanged != null) {
+                widget.onExhaustFanChanged!(speed);
+              }
+            },
           ),
         ],
       ),
@@ -143,7 +250,7 @@ class VentilationModeControl extends StatelessWidget {
     String label,
     int speed,
     IconData icon,
-    ValueChanged<int>? onChanged,
+    ValueChanged<int> onChanged,
   ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -162,43 +269,59 @@ class VentilationModeControl extends StatelessWidget {
                 Text(
                   label,
                   style: const TextStyle(
-                    fontSize: 12,
+                    fontSize: 13,
                     color: AppTheme.textSecondary,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ],
             ),
-            Text(
-              '$speed%',
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-                color: AppTheme.primaryOrange,
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: AppTheme.primaryOrange.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                '$speed%',
+                style: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  color: AppTheme.primaryOrange,
+                ),
               ),
             ),
           ],
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 12),
         SliderTheme(
           data: SliderThemeData(
-            trackHeight: 4,
+            trackHeight: 6,
             thumbShape: const RoundSliderThumbShape(
-              enabledThumbRadius: 6,
+              enabledThumbRadius: 10,
+              elevation: 4,
             ),
             overlayShape: const RoundSliderOverlayShape(
-              overlayRadius: 12,
+              overlayRadius: 20,
             ),
             activeTrackColor: AppTheme.primaryOrange,
             inactiveTrackColor: AppTheme.backgroundCardBorder,
             thumbColor: Colors.white,
             overlayColor: AppTheme.primaryOrange.withValues(alpha: 0.2),
+            valueIndicatorColor: AppTheme.primaryOrange,
+            valueIndicatorTextStyle: const TextStyle(
+              color: Colors.white,
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+            ),
           ),
           child: Slider(
             value: speed.toDouble(),
             min: 0,
             max: 100,
             divisions: 20,
-            onChanged: onChanged != null ? (val) => onChanged(val.round()) : null,
+            label: '$speed%',
+            onChanged: (value) => onChanged(value.round()),
           ),
         ),
       ],
