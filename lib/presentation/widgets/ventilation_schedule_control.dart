@@ -157,7 +157,7 @@ class VentilationScheduleControl extends StatelessWidget {
               Expanded(
                 child: _buildStat(
                   'Время работы',
-                  '${(unit.supplyFanSpeed ?? 0) > 0 ? '2ч 15м' : '0м'}',
+                  (unit.supplyFanSpeed ?? 0) > 0 ? '2ч 15м' : '0м',
                   AppTheme.info,
                 ),
               ),

@@ -20,6 +20,7 @@ import '../../domain/usecases/update_fan_speeds.dart';
 import '../widgets/ventilation_mode_control.dart';
 import '../widgets/ventilation_temperature_control.dart';
 import '../widgets/ventilation_schedule_control.dart';
+import 'schedule_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -348,7 +349,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: VentilationScheduleControl(
                                 unit: currentUnit,
                                 onSchedulePressed: () {
-                                  // TODO: Navigate to schedule screen
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ScheduleScreen(unit: currentUnit!),
+                                    ),
+                                  );
                                 },
                               ),
                             ),
