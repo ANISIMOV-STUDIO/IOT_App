@@ -6,6 +6,7 @@ library;
 
 import 'package:flutter/material.dart';
 import '../../../core/theme/spacing.dart';
+import '../../../core/theme/ui_constants.dart';
 import '../../../core/utils/responsive_utils.dart';
 import '../../../domain/entities/hvac_unit.dart';
 import '../../../domain/entities/automation_rule.dart';
@@ -67,6 +68,7 @@ class HomeMobileLayout extends StatelessWidget {
 }
 
 /// Desktop layout for home dashboard
+/// IMPORTANT: No scroll on desktop - content fits viewport (best practice)
 class HomeDesktopLayout extends StatelessWidget {
   final HvacUnit? currentUnit;
   final List<HvacUnit> units;
@@ -101,51 +103,68 @@ class HomeDesktopLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Main content area
-        Expanded(
-          flex: 7,
-          child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                HomeRoomPreview(
-                  currentUnit: currentUnit,
-                  selectedUnit: selectedUnit,
-                  onPowerChanged: onPowerChanged,
-                  onDetailsPressed: onDetailsPressed,
-                ),
-                SizedBox(height: AppSpacing.lgV),
-                buildControlCards(currentUnit, context),
-                SizedBox(height: AppSpacing.lgV),
-                HomeAutomationSection(
-                  currentUnit: currentUnit,
-                  onRuleToggled: onRuleToggled,
-                  onManageRules: onManageRules,
-                ),
-              ],
+    // Desktop layout: NO SCROLL - content fits within viewport
+    // Following Material Design 3 and modern desktop UI best practices
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isLargeDesktop = constraints.maxWidth >= UIConstants.breakpointLargeDesktop;
+
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Main content area - NO SCROLLING
+            Expanded(
+              flex: isLargeDesktop ? 8 : 7,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Room preview - fixed size, no scroll
+                  HomeRoomPreview(
+                    currentUnit: currentUnit,
+                    selectedUnit: selectedUnit,
+                    onPowerChanged: onPowerChanged,
+                    onDetailsPressed: onDetailsPressed,
+                  ),
+
+                  SizedBox(height: AppSpacing.lgV),
+
+                  // Control cards - fills remaining space
+                  Expanded(
+                    child: buildControlCards(currentUnit, context),
+                  ),
+
+                  SizedBox(height: AppSpacing.lgV),
+
+                  // Automation section - compact on desktop
+                  HomeAutomationSection(
+                    currentUnit: currentUnit,
+                    onRuleToggled: onRuleToggled,
+                    onManageRules: onManageRules,
+                  ),
+                ],
+              ),
             ),
-          ),
-        ),
 
-        SizedBox(width: AppSpacing.lgR),
+            SizedBox(width: AppSpacing.lgR),
 
-        // Sidebar
-        HomeSidebar(
-          currentUnit: currentUnit,
-          onPresetSelected: onPresetSelected,
-          onPowerAllOn: onPowerAllOn,
-          onPowerAllOff: onPowerAllOff,
-          onSyncSettings: onSyncSettings,
-          onApplyScheduleToAll: onApplyScheduleToAll,
-          notificationsPanel: currentUnit != null
-              ? HomeNotificationsPanel(unit: currentUnit!)
-              : const SizedBox.shrink(),
-        ),
-      ],
+            // Sidebar - fixed width, scrollable if needed
+            SizedBox(
+              width: isLargeDesktop ? 380 : 320,
+              child: HomeSidebar(
+                currentUnit: currentUnit,
+                onPresetSelected: onPresetSelected,
+                onPowerAllOn: onPowerAllOn,
+                onPowerAllOff: onPowerAllOff,
+                onSyncSettings: onSyncSettings,
+                onApplyScheduleToAll: onApplyScheduleToAll,
+                notificationsPanel: currentUnit != null
+                    ? HomeNotificationsPanel(unit: currentUnit!)
+                    : const SizedBox.shrink(),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

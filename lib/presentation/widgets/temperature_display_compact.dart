@@ -8,6 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/theme/app_typography.dart';
+import '../../core/theme/app_radius.dart';
+import '../../core/theme/spacing.dart';
+import '../../core/theme/ui_constants.dart';
 
 class TemperatureDisplayCompact extends StatelessWidget {
   final double? supplyTemp;
@@ -35,13 +39,13 @@ class TemperatureDisplayCompact extends StatelessWidget {
 
   Widget _buildCompactLayout() {
     return Container(
-      padding: EdgeInsets.all(16.w),
+      padding: EdgeInsets.all(AppSpacing.mdR),
       decoration: BoxDecoration(
         color: AppTheme.backgroundCard,
-        borderRadius: BorderRadius.circular(16.r),
+        borderRadius: BorderRadius.circular(AppRadius.lgR),
         border: Border.all(
           color: AppTheme.backgroundCardBorder,
-          width: 1,
+          width: UIConstants.dividerThin,
         ),
       ),
       child: Column(
@@ -55,39 +59,34 @@ class TemperatureDisplayCompact extends StatelessWidget {
                 height: 36.w,
                 decoration: BoxDecoration(
                   color: AppTheme.info.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(10.r),
+                  borderRadius: BorderRadius.circular(AppRadius.smR),
                 ),
                 child: Icon(
                   Icons.thermostat,
                   color: AppTheme.info,
-                  size: 20.w,
+                  size: UIConstants.iconSmR,
                 ),
               ),
-              SizedBox(width: 12.w),
+              SizedBox(width: AppSpacing.smR),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'Температуры',
-                    style: TextStyle(
-                      fontSize: 16.sp,
+                    style: AppTypography.bodyMedium.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: AppTheme.textPrimary,
                     ),
                   ),
                   Text(
                     'Текущие показатели',
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      color: AppTheme.textSecondary,
-                    ),
+                    style: AppTypography.captionSmall,
                   ),
                 ],
               ),
             ],
           ),
 
-          SizedBox(height: 20.h),
+          SizedBox(height: AppSpacing.lgV),
 
           // Temperature Grid - 2x2
           Row(
@@ -285,39 +284,37 @@ class TemperatureDisplayCompact extends StatelessWidget {
     required bool isLeft,
   }) {
     return Container(
-      padding: EdgeInsets.all(12.w),
+      padding: EdgeInsets.all(AppSpacing.smR),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(AppRadius.mdR),
         border: Border.all(
           color: color.withValues(alpha: 0.2),
-          width: 1,
+          width: UIConstants.dividerThin,
         ),
       ),
       child: Row(
         children: [
           Icon(
             icon,
-            size: 20.w,
+            size: UIConstants.iconSmR,
             color: color,
           ),
-          SizedBox(width: 8.w),
+          SizedBox(width: AppSpacing.xsR),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   label,
-                  style: TextStyle(
+                  style: AppTypography.overline.copyWith(
                     fontSize: 11.sp,
-                    color: AppTheme.textSecondary,
                   ),
                 ),
-                SizedBox(height: 2.h),
+                SizedBox(height: AppSpacing.xxsV),
                 Text(
                   value != null ? '${value.toStringAsFixed(1)}°' : '--',
-                  style: TextStyle(
-                    fontSize: 18.sp,
+                  style: AppTypography.h5.copyWith(
                     fontWeight: FontWeight.w700,
                     color: color,
                   ),
@@ -406,13 +403,16 @@ class TemperatureBadge extends StatelessWidget {
     final displayColor = color ?? AppTheme.info;
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+      padding: EdgeInsets.symmetric(
+        horizontal: AppSpacing.smR,
+        vertical: AppSpacing.xxsV,
+      ),
       decoration: BoxDecoration(
         color: displayColor.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(8.r),
+        borderRadius: BorderRadius.circular(AppRadius.smR),
         border: Border.all(
           color: displayColor.withValues(alpha: 0.3),
-          width: 1,
+          width: UIConstants.dividerThin,
         ),
       ),
       child: Row(
@@ -420,27 +420,25 @@ class TemperatureBadge extends StatelessWidget {
         children: [
           Icon(
             Icons.thermostat,
-            size: 14.w,
+            size: UIConstants.iconXsR,
             color: displayColor,
           ),
-          SizedBox(width: 4.w),
+          SizedBox(width: AppSpacing.xxsR),
           Text(
             temperature != null
                 ? '${temperature!.toStringAsFixed(1)}°'
                 : '--',
-            style: TextStyle(
-              fontSize: 12.sp,
+            style: AppTypography.captionSmall.copyWith(
               fontWeight: FontWeight.w600,
               color: displayColor,
             ),
           ),
           if (label.isNotEmpty) ...[
-            SizedBox(width: 4.w),
+            SizedBox(width: AppSpacing.xxsR),
             Text(
               label,
-              style: TextStyle(
+              style: AppTypography.overline.copyWith(
                 fontSize: 10.sp,
-                color: AppTheme.textSecondary,
               ),
             ),
           ],

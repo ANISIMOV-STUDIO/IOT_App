@@ -8,6 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/theme/app_typography.dart';
+import '../../core/theme/app_radius.dart';
+import '../../core/theme/spacing.dart';
+import '../../core/theme/ui_constants.dart';
 import '../../core/utils/responsive_utils.dart';
 
 class RoomCardCompact extends StatelessWidget {
@@ -40,7 +44,7 @@ class RoomCardCompact extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: isMobile ? 140.h : 160.h,
-        padding: EdgeInsets.all(16.w),
+        padding: EdgeInsets.all(AppSpacing.mdR),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
@@ -55,18 +59,18 @@ class RoomCardCompact extends StatelessWidget {
                     AppTheme.backgroundCard,
                   ],
           ),
-          borderRadius: BorderRadius.circular(16.r),
+          borderRadius: BorderRadius.circular(AppRadius.lgR),
           border: Border.all(
             color: isActive
                 ? AppTheme.primaryOrange.withValues(alpha: 0.3)
                 : AppTheme.backgroundCardBorder,
-            width: 1,
+            width: UIConstants.dividerThin,
           ),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 2),
+              blurRadius: UIConstants.blurMedium,
+              offset: const Offset(0, UIConstants.elevation1),
             ),
           ],
         ),
@@ -102,20 +106,17 @@ class RoomCardCompact extends StatelessWidget {
             children: [
               Text(
                 roomName,
-                style: TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.w600,
-                  color: AppTheme.textPrimary,
+                style: AppTypography.h5.copyWith(
                   letterSpacing: -0.5,
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
-              SizedBox(height: 4.h),
+              SizedBox(height: AppSpacing.xxsV),
               Row(
                 children: [
                   AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
+                    duration: UIConstants.durationMedium,
                     width: 6.w,
                     height: 6.w,
                     decoration: BoxDecoration(
@@ -125,19 +126,17 @@ class RoomCardCompact extends StatelessWidget {
                           ? [
                               BoxShadow(
                                 color: AppTheme.success.withValues(alpha: 0.4),
-                                blurRadius: 8,
+                                blurRadius: UIConstants.blurMedium,
                                 spreadRadius: 2,
                               ),
                             ]
                           : null,
                     ),
                   ),
-                  SizedBox(width: 6.w),
+                  SizedBox(width: AppSpacing.xxsR),
                   Text(
                     isActive ? 'Активно' : 'Выключено',
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      color: AppTheme.textSecondary,
+                    style: AppTypography.captionSmall.copyWith(
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -158,29 +157,29 @@ class RoomCardCompact extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: () => onPowerChanged?.call(!isActive),
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: BorderRadius.circular(AppRadius.mdR),
         child: Container(
-          width: 44.w,
-          height: 44.w,
+          width: UIConstants.minTouchTargetR,
+          height: UIConstants.minTouchTargetR,
           decoration: BoxDecoration(
             color: isActive
                 ? AppTheme.primaryOrange.withValues(alpha: 0.1)
                 : AppTheme.backgroundCardBorder.withValues(alpha: 0.3),
-            borderRadius: BorderRadius.circular(12.r),
+            borderRadius: BorderRadius.circular(AppRadius.mdR),
             border: Border.all(
               color: isActive
                   ? AppTheme.primaryOrange.withValues(alpha: 0.3)
                   : AppTheme.backgroundCardBorder,
-              width: 1,
+              width: UIConstants.dividerThin,
             ),
           ),
           child: Icon(
             Icons.power_settings_new,
             color: isActive ? AppTheme.primaryOrange : AppTheme.textTertiary,
-            size: 20.w,
+            size: UIConstants.iconSmR,
           ),
         ).animate(target: isActive ? 1 : 0)
-          .rotate(end: 0.5, duration: 300.ms)
+          .rotate(end: 0.5, duration: UIConstants.durationMedium)
           .scale(begin: const Offset(1, 1), end: const Offset(1.1, 1.1)),
       ),
     );
@@ -226,13 +225,16 @@ class RoomCardCompact extends StatelessWidget {
     final modeColor = _getModeColor(mode!);
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+      padding: EdgeInsets.symmetric(
+        horizontal: AppSpacing.smR,
+        vertical: AppSpacing.xxsV,
+      ),
       decoration: BoxDecoration(
         color: modeColor.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(8.r),
+        borderRadius: BorderRadius.circular(AppRadius.smR),
         border: Border.all(
           color: modeColor.withValues(alpha: 0.3),
-          width: 1,
+          width: UIConstants.dividerThin,
         ),
       ),
       child: Row(
@@ -240,22 +242,22 @@ class RoomCardCompact extends StatelessWidget {
         children: [
           Icon(
             _getModeIcon(mode!),
-            size: 14.w,
+            size: UIConstants.iconXsR,
             color: modeColor,
           ),
-          SizedBox(width: 6.w),
+          SizedBox(width: AppSpacing.xxsR),
           Text(
             mode!,
-            style: TextStyle(
-              fontSize: 11.sp,
+            style: AppTypography.overline.copyWith(
               color: modeColor,
               fontWeight: FontWeight.w600,
+              letterSpacing: 0.5,
             ),
           ),
         ],
       ),
     ).animate()
-      .fadeIn(delay: 200.ms)
+      .fadeIn(delay: UIConstants.durationFast)
       .slideX(begin: -0.1, end: 0);
   }
 
@@ -325,32 +327,29 @@ class _StatItem extends StatelessWidget {
             height: 28.w,
             decoration: BoxDecoration(
               color: color.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(8.r),
+              borderRadius: BorderRadius.circular(AppRadius.smR),
             ),
             child: Icon(
               icon,
-              size: 16.w,
+              size: UIConstants.iconXsR,
               color: color,
             ),
           ),
-          SizedBox(width: 8.w),
+          SizedBox(width: AppSpacing.xsR),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 value,
-                style: TextStyle(
-                  fontSize: 16.sp,
+                style: AppTypography.bodyMedium.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.textPrimary,
                 ),
               ),
               Text(
                 label,
-                style: TextStyle(
+                style: AppTypography.overline.copyWith(
                   fontSize: 10.sp,
-                  color: AppTheme.textSecondary,
                 ),
               ),
             ],
@@ -368,25 +367,20 @@ class _StatItem extends StatelessWidget {
           children: [
             Icon(
               icon,
-              size: 16.w,
+              size: UIConstants.iconXsR,
               color: color,
             ),
-            SizedBox(width: 4.w),
+            SizedBox(width: AppSpacing.xxsR),
             Text(
               label,
-              style: TextStyle(
-                fontSize: 11.sp,
-                color: AppTheme.textSecondary,
-              ),
+              style: AppTypography.overline,
             ),
           ],
         ),
-        SizedBox(height: 4.h),
+        SizedBox(height: AppSpacing.xxsV),
         Text(
           value,
-          style: TextStyle(
-            fontSize: 18.sp,
-            fontWeight: FontWeight.w600,
+          style: AppTypography.h5.copyWith(
             color: color,
           ),
         ),
