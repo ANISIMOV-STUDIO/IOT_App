@@ -72,9 +72,9 @@ class _VentilationModeControlState extends State<VentilationModeControl>
       builder: (context, deviceSize) {
         final children = [
           _buildHeader(context, deviceSize),
-          SizedBox(height: AdaptiveLayout.spacing(context, base: 16)),
+          SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 16)),
           _buildModeSelector(context, deviceSize),
-          SizedBox(height: AdaptiveLayout.spacing(context, base: 16)),
+          SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 16)),
           _buildFanSpeedControls(context, deviceSize),
         ];
 
@@ -216,7 +216,7 @@ class _VentilationModeControlState extends State<VentilationModeControl>
             },
             color: AppTheme.info,
           ),
-          SizedBox(height: AdaptiveLayout.spacing(context, base: 16)),
+          SizedBox(height: 12.h),
           AdaptiveSlider(
             label: 'Вытяжной вентилятор',
             icon: Icons.upload,

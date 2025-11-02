@@ -4,7 +4,9 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/utils/responsive_utils.dart';
 
 class RoomPreviewCard extends StatelessWidget {
   final String roomName;
@@ -26,49 +28,52 @@ class RoomPreviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = ResponsiveUtils.isMobile(context);
+
     return Container(
-      constraints: const BoxConstraints(
-        maxHeight: 500,
-        minHeight: 350,
+      constraints: BoxConstraints(
+        maxHeight: isMobile ? 180 : 400,
+        minHeight: isMobile ? 160 : 300,
       ),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
-        borderRadius: BorderRadius.circular(20),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            AppTheme.backgroundCard,
+            AppTheme.backgroundCard.withValues(alpha: 0.8),
+            AppTheme.backgroundDark,
+          ],
+        ),
+        borderRadius: BorderRadius.circular(20.r),
         border: Border.all(
           color: AppTheme.backgroundCardBorder,
+          width: 1,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.2),
+            blurRadius: 20,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20.r),
         child: Stack(
           children: [
-            // Background image or placeholder
-            if (imageUrl != null)
-              Positioned.fill(
-                child: Image.network(
-                  imageUrl!,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return _buildPlaceholder();
-                  },
-                ),
-              )
-            else
-              _buildPlaceholder(),
-
-            // Gradient overlay
+            // Animated gradient background
             Positioned.fill(
               child: Container(
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
+                  gradient: RadialGradient(
+                    center: Alignment.topRight,
+                    radius: 1.5,
                     colors: [
-                      Colors.black.withValues(alpha: 0.3),
+                      AppTheme.primaryOrange.withValues(alpha: 0.1),
                       Colors.transparent,
-                      Colors.black.withValues(alpha: 0.6),
+                      AppTheme.info.withValues(alpha: 0.05),
                     ],
-                    stops: const [0.0, 0.5, 1.0],
                   ),
                 ),
               ),
@@ -76,13 +81,13 @@ class RoomPreviewCard extends StatelessWidget {
 
             // Power Toggle
             Positioned(
-              top: 16,
-              left: 16,
+              top: 12.h,
+              left: 12.w,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 6.h),
                 decoration: BoxDecoration(
                   color: AppTheme.backgroundCard.withValues(alpha: 0.95),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(10.r),
                   border: Border.all(
                     color: AppTheme.backgroundCardBorder,
                     width: 1,
@@ -94,20 +99,20 @@ class RoomPreviewCard extends StatelessWidget {
                     Icon(
                       isLive ? Icons.power_settings_new : Icons.power_off,
                       color: isLive ? AppTheme.success : AppTheme.textSecondary,
-                      size: 18,
+                      size: 16.sp,
                     ),
-                    const SizedBox(width: 8),
+                    SizedBox(width: 6.w),
                     Text(
-                      isLive ? 'Включено' : 'Выключено',
+                      isLive ? 'Вкл' : 'Выкл',
                       style: TextStyle(
                         color: isLive ? AppTheme.textPrimary : AppTheme.textSecondary,
-                        fontSize: 13,
+                        fontSize: 12.sp,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    SizedBox(width: 6.w),
                     SizedBox(
-                      height: 24,
+                      height: 20.h,
                       child: FittedBox(
                         fit: BoxFit.contain,
                         child: Switch(
@@ -128,15 +133,85 @@ class RoomPreviewCard extends StatelessWidget {
 
             // Status badges
             Positioned(
-              top: 16,
-              right: 16,
-              child: Row(
-                children: badges
-                    .map((badge) => Padding(
-                          padding: const EdgeInsets.only(left: 8),
-                          child: _buildStatusBadge(badge),
-                        ))
-                    .toList(),
+              top: ResponsiveUtils.isMobile(context) ? 50.h : 12.h,
+              right: 12.w,
+              left: ResponsiveUtils.isMobile(context) ? 12.w : null,
+              child: ResponsiveUtils.isMobile(context)
+                  ? Wrap(
+                      alignment: WrapAlignment.end,
+                      spacing: 4.w,
+                      runSpacing: 4.h,
+                      children: badges
+                          .map((badge) => _buildStatusBadge(context, badge))
+                          .toList(),
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: badges
+                          .map((badge) => Padding(
+                                padding: EdgeInsets.only(left: 6.w),
+                                child: _buildStatusBadge(context, badge),
+                              ))
+                          .toList(),
+                    ),
+            ),
+
+            // Central content - Room name and quick stats
+            Positioned(
+              left: 12.w,
+              right: 12.w,
+              top: 0,
+              bottom: 0,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    roomName,
+                    style: TextStyle(
+                      fontSize: 28.sp,
+                      fontWeight: FontWeight.w700,
+                      color: AppTheme.textPrimary,
+                      height: 1.2,
+                      shadows: [
+                        Shadow(
+                          color: Colors.black.withValues(alpha: 0.3),
+                          blurRadius: 12,
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 6.h),
+                  Row(
+                    children: [
+                      Container(
+                        width: 8.w,
+                        height: 8.h,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: isLive ? AppTheme.success : AppTheme.error,
+                          boxShadow: [
+                            BoxShadow(
+                              color: (isLive ? AppTheme.success : AppTheme.error)
+                                  .withValues(alpha: 0.5),
+                              blurRadius: 8,
+                              spreadRadius: 2,
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(width: 6.w),
+                      Text(
+                        isLive ? 'Активно' : 'Неактивно',
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500,
+                          color: AppTheme.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
 
@@ -150,10 +225,10 @@ class RoomPreviewCard extends StatelessWidget {
                   child: GestureDetector(
                     onTap: onDetailsPressed,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
                       decoration: BoxDecoration(
                         color: AppTheme.primaryOrange,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(12.r),
                         boxShadow: [
                           BoxShadow(
                             color: AppTheme.primaryOrange.withValues(alpha: 0.3),
@@ -162,22 +237,22 @@ class RoomPreviewCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                      child: const Row(
+                      child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
                             'Подробнее',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 13,
+                              fontSize: 13.sp,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                          SizedBox(width: 6),
+                          SizedBox(width: 6.w),
                           Icon(
                             Icons.arrow_forward,
                             color: Colors.white,
-                            size: 16,
+                            size: 16.sp,
                           ),
                         ],
                       ),
@@ -191,44 +266,44 @@ class RoomPreviewCard extends StatelessWidget {
     );
   }
 
-  Widget _buildPlaceholder() {
-    return Container(
-      color: AppTheme.backgroundCard,
-      child: const Center(
-        child: Icon(
-          Icons.home_outlined,
-          size: 80,
-          color: AppTheme.textTertiary,
-        ),
-      ),
-    );
-  }
+  Widget _buildStatusBadge(BuildContext context, StatusBadge badge) {
+    final isMobile = ResponsiveUtils.isMobile(context);
 
-  Widget _buildStatusBadge(StatusBadge badge) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 6.w : 10.w,
+        vertical: isMobile ? 4.h : 6.h,
+      ),
       decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.6),
-        borderRadius: BorderRadius.circular(12),
+        color: AppTheme.backgroundCard.withValues(alpha: 0.95),
+        borderRadius: BorderRadius.circular(8.r),
         border: Border.all(
-          color: Colors.white.withValues(alpha: 0.2),
+          color: AppTheme.primaryOrange.withValues(alpha: 0.3),
+          width: 1,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.2),
+            blurRadius: 6,
+            offset: const Offset(0, 1),
+          ),
+        ],
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
             badge.icon,
-            size: 16,
-            color: Colors.white,
+            size: isMobile ? 12.sp : 14.sp,
+            color: AppTheme.primaryOrange,
           ),
-          const SizedBox(width: 6),
+          SizedBox(width: 3.w),
           Text(
             badge.value,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 14,
+            style: TextStyle(
+              fontSize: isMobile ? 11.sp : 12.sp,
               fontWeight: FontWeight.w600,
+              color: AppTheme.textPrimary,
             ),
           ),
         ],

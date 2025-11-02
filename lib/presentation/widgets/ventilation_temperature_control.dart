@@ -111,7 +111,7 @@ class VentilationTemperatureControl extends StatelessWidget {
             Icons.air,
             AppTheme.info,
           ),
-          SizedBox(height: AppSpacing.smR),
+          SizedBox(height: 8.h),
           _buildTempIndicator(
             context,
             'Вытяжка',
@@ -119,7 +119,7 @@ class VentilationTemperatureControl extends StatelessWidget {
             Icons.upload,
             AppTheme.warning,
           ),
-          SizedBox(height: AppSpacing.smR),
+          SizedBox(height: 8.h),
           _buildTempIndicator(
             context,
             'Наружный',
@@ -127,7 +127,7 @@ class VentilationTemperatureControl extends StatelessWidget {
             Icons.landscape,
             AppTheme.textSecondary,
           ),
-          SizedBox(height: AppSpacing.smR),
+          SizedBox(height: 8.h),
           _buildTempIndicator(
             context,
             'Внутренний',
@@ -200,7 +200,7 @@ class VentilationTemperatureControl extends StatelessWidget {
     Color color,
   ) {
     return Container(
-      padding: EdgeInsets.all(AdaptiveLayout.spacing(context, base: 12)),
+      padding: EdgeInsets.all(AdaptiveLayout.spacing(context, base: 10)),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(
@@ -209,29 +209,35 @@ class VentilationTemperatureControl extends StatelessWidget {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
                 icon,
-                size: AdaptiveLayout.iconSize(context, base: 16),
+                size: AdaptiveLayout.iconSize(context, base: 14),
                 color: color,
               ),
-              SizedBox(width: AdaptiveLayout.spacing(context, base: 8)),
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: AdaptiveLayout.fontSize(context, base: 12),
-                  color: AppTheme.textSecondary,
+              SizedBox(width: AdaptiveLayout.spacing(context, base: 4)),
+              Flexible(
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: AdaptiveLayout.fontSize(context, base: 11),
+                    color: AppTheme.textSecondary,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                 ),
               ),
             ],
           ),
-          SizedBox(height: AdaptiveLayout.spacing(context, base: 8)),
+          SizedBox(height: AdaptiveLayout.spacing(context, base: 6)),
           Text(
             temperature != null ? '${temperature.toStringAsFixed(1)}°C' : '--',
             style: TextStyle(
-              fontSize: AdaptiveLayout.fontSize(context, base: 24),
+              fontSize: AdaptiveLayout.fontSize(context, base: 20),
               fontWeight: FontWeight.w700,
               color: color,
             ),

@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/utils/responsive_utils.dart';
 import '../../bloc/hvac_list/hvac_list_bloc.dart';
 import '../../bloc/hvac_list/hvac_list_state.dart';
 import '../../../domain/entities/hvac_unit.dart';
@@ -28,41 +29,77 @@ class HomeAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = ResponsiveUtils.isMobile(context);
+
     return Padding(
       padding: EdgeInsets.all(20.w),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // Logo
-          Row(
-            children: [
-              SvgPicture.asset(
-                'assets/images/zilon-logo.svg',
-                height: 48.h,
-                colorFilter: const ColorFilter.mode(
-                  Color(0xFFFF9D5C),
-                  BlendMode.srcIn,
-                ),
+      child: isMobile ? _buildMobileLayout() : _buildDesktopLayout(),
+    );
+  }
+
+  Widget _buildMobileLayout() {
+    return Column(
+      children: [
+        // Top row: Logo and User section
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // Logo
+            SvgPicture.asset(
+              'assets/images/zilon-logo.svg',
+              height: 40.h,
+              colorFilter: const ColorFilter.mode(
+                Color(0xFFFF9D5C),
+                BlendMode.srcIn,
               ),
-            ],
-          ),
-
-          // Center - HVAC Unit tabs
-          Expanded(
-            child: BlocBuilder<HvacListBloc, HvacListState>(
-              builder: (context, state) {
-                if (state is HvacListLoaded) {
-                  return _buildUnitTabs(state.units);
-                }
-                return const SizedBox.shrink();
-              },
             ),
-          ),
+            // User profile and Settings
+            _buildUserSection(),
+          ],
+        ),
+        SizedBox(height: 12.h),
+        // Bottom row: Unit tabs
+        BlocBuilder<HvacListBloc, HvacListState>(
+          builder: (context, state) {
+            if (state is HvacListLoaded) {
+              return _buildUnitTabs(state.units);
+            }
+            return const SizedBox.shrink();
+          },
+        ),
+      ],
+    );
+  }
 
-          // User profile and Settings
-          _buildUserSection(),
-        ],
-      ),
+  Widget _buildDesktopLayout() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        // Logo
+        SvgPicture.asset(
+          'assets/images/zilon-logo.svg',
+          height: 48.h,
+          colorFilter: const ColorFilter.mode(
+            Color(0xFFFF9D5C),
+            BlendMode.srcIn,
+          ),
+        ),
+
+        // Center - HVAC Unit tabs
+        Expanded(
+          child: BlocBuilder<HvacListBloc, HvacListState>(
+            builder: (context, state) {
+              if (state is HvacListLoaded) {
+                return _buildUnitTabs(state.units);
+              }
+              return const SizedBox.shrink();
+            },
+          ),
+        ),
+
+        // User profile and Settings
+        _buildUserSection(),
+      ],
     );
   }
 
