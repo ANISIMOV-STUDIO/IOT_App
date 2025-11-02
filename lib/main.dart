@@ -29,9 +29,9 @@ void main() async {
 }
 
 /// Get responsive design size based on screen width
-Size _getDesignSize(BuildContext context) {
-  final width = MediaQuery.of(context).size.width;
-
+/// For web/desktop, we use a fixed large size since ScreenUtil
+/// works best with a consistent design size
+Size _getDesignSize(double width) {
   if (width >= 1200) {
     // Desktop: based on 1920x1080
     return const Size(1920, 1080);
@@ -57,34 +57,38 @@ class HvacControlApp extends StatelessWidget {
       builder: (context, child) {
         final languageService = di.sl<LanguageService>();
 
-        return ScreenUtilInit(
-          designSize: _getDesignSize(context),
-          minTextAdapt: true,
-          splitScreenMode: true,
-          builder: (context, child) {
-            return MaterialApp(
-              title: 'HVAC Control',
-              debugShowCheckedModeBanner: false,
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            final designSize = _getDesignSize(constraints.maxWidth);
+            return ScreenUtilInit(
+              key: ValueKey(designSize),
+              designSize: designSize,
+              minTextAdapt: true,
+              splitScreenMode: true,
+              builder: (context, child) {
+                return MaterialApp(
+                  title: 'HVAC Control',
+                  debugShowCheckedModeBanner: false,
 
-              // Theme - Dark with Orange Accents (Figma Design)
-              theme: AppTheme.darkTheme(),
-              darkTheme: AppTheme.darkTheme(),
-              themeMode: ThemeMode.dark, // Always use dark theme
+                  // Theme - Dark with Orange Accents (Figma Design)
+                  theme: AppTheme.darkTheme(),
+                  darkTheme: AppTheme.darkTheme(),
+                  themeMode: ThemeMode.dark, // Always use dark theme
 
-              // Localization
-              locale: languageService.currentLocale,
-              localizationsDelegates: const [
-                AppLocalizations.delegate,
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-              ],
-              supportedLocales: LanguageService.supportedLocales,
+                  // Localization
+                  locale: languageService.currentLocale,
+                  localizationsDelegates: const [
+                    AppLocalizations.delegate,
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                    GlobalCupertinoLocalizations.delegate,
+                  ],
+                  supportedLocales: LanguageService.supportedLocales,
 
-              home: child,
-            );
-          },
-          child: MultiBlocProvider(
+                  home: child,
+                );
+              },
+              child: MultiBlocProvider(
             providers: [
               BlocProvider(
                 create: (context) => di.sl<AuthBloc>()
@@ -120,6 +124,8 @@ class HvacControlApp extends StatelessWidget {
               ),
             ),
           ),
+            );
+          },
         );
       },
     );

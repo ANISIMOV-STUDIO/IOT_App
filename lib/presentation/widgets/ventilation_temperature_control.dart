@@ -1,10 +1,14 @@
 /// Ventilation Temperature Control Widget
 ///
-/// Compact card for temperature monitoring and setpoints
+/// Adaptive card for temperature monitoring and setpoints
+/// Uses big-tech adaptive layout approach
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/theme/spacing.dart';
+import '../../core/utils/adaptive_layout.dart';
 import '../../domain/entities/hvac_unit.dart';
 
 class VentilationTemperatureControl extends StatelessWidget {
@@ -17,155 +21,191 @@ class VentilationTemperatureControl extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: AppTheme.deviceCard(),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Header
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: AppTheme.info.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Icon(
-                  Icons.thermostat,
-                  color: AppTheme.info,
-                  size: 20,
-                ),
-              ),
-              const SizedBox(width: 12),
-              const Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Температуры',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: AppTheme.textPrimary,
-                      ),
-                    ),
-                    SizedBox(height: 2),
-                    Text(
-                      'Мониторинг и уставки',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: AppTheme.textSecondary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+    return AdaptiveControl(
+      builder: (context, deviceSize) {
+        final children = [
+          _buildHeader(context, deviceSize),
+          SizedBox(height: AdaptiveLayout.spacing(context, base: 20)),
+          _buildTemperatureGrid(context, deviceSize),
+        ];
 
-          const SizedBox(height: 20),
+        // Add spacer only on desktop for equal heights
+        if (deviceSize != DeviceSize.compact) {
+          children.add(const Spacer());
+        }
 
-          // Temperature indicators
-          Row(
-            children: [
-              Expanded(
-                child: _buildTempIndicator(
-                  'Приток',
-                  unit.supplyAirTemp,
-                  Icons.air,
-                  AppTheme.info,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _buildTempIndicator(
-                  'В помещении',
-                  unit.roomTemp,
-                  Icons.home,
-                  AppTheme.success,
-                ),
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 12),
-
-          Row(
-            children: [
-              Expanded(
-                child: _buildTempIndicator(
-                  'На улице',
-                  unit.outdoorTemp,
-                  Icons.wb_sunny,
-                  AppTheme.warning,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _buildTempIndicator(
-                  'Влажность',
-                  unit.humidity,
-                  Icons.water_drop,
-                  AppTheme.modeCool,
-                  suffix: '%',
-                ),
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 20),
-
-          // Setpoints
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: AppTheme.backgroundDark,
-              borderRadius: BorderRadius.circular(8),
+        return Container(
+          padding: AdaptiveLayout.controlPadding(context),
+          decoration: BoxDecoration(
+            color: AppTheme.backgroundCard,
+            borderRadius: BorderRadius.circular(
+              AdaptiveLayout.borderRadius(context, base: 16),
             ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: _buildSetpoint(
-                    'Нагрев',
-                    unit.heatingTemp,
-                    Icons.whatshot,
-                  ),
-                ),
-                Container(
-                  width: 1,
-                  height: 40,
-                  color: AppTheme.backgroundCardBorder,
-                  margin: const EdgeInsets.symmetric(horizontal: 12),
-                ),
-                Expanded(
-                  child: _buildSetpoint(
-                    'Охлаждение',
-                    unit.coolingTemp,
-                    Icons.ac_unit,
-                  ),
-                ),
-              ],
+            border: Border.all(
+              color: AppTheme.backgroundCardBorder,
             ),
           ),
-        ],
-      ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: children,
+          ),
+        );
+      },
     );
   }
 
+  Widget _buildHeader(BuildContext context, DeviceSize deviceSize) {
+    return Row(
+      children: [
+        Container(
+          padding: EdgeInsets.all(AdaptiveLayout.spacing(context, base: 8)),
+          decoration: BoxDecoration(
+            color: AppTheme.info.withValues(alpha: 0.2),
+            borderRadius: BorderRadius.circular(
+              AdaptiveLayout.borderRadius(context, base: 8),
+            ),
+          ),
+          child: Icon(
+            Icons.thermostat,
+            color: AppTheme.info,
+            size: AdaptiveLayout.iconSize(context, base: 20),
+          ),
+        ),
+        SizedBox(width: AdaptiveLayout.spacing(context)),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Температуры',
+                style: TextStyle(
+                  fontSize: AdaptiveLayout.fontSize(context, base: 16),
+                  fontWeight: FontWeight.w600,
+                  color: AppTheme.textPrimary,
+                ),
+              ),
+              SizedBox(height: 2.h),
+              Text(
+                'Мониторинг и уставки',
+                style: TextStyle(
+                  fontSize: AdaptiveLayout.fontSize(context, base: 12),
+                  color: AppTheme.textSecondary,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTemperatureGrid(BuildContext context, DeviceSize deviceSize) {
+    // Adaptive layout: single column on mobile, grid on tablet/desktop
+    if (deviceSize == DeviceSize.compact) {
+      return Column(
+        children: [
+          _buildTempIndicator(
+            context,
+            'Приток',
+            unit.supplyAirTemp,
+            Icons.air,
+            AppTheme.info,
+          ),
+          SizedBox(height: AppSpacing.smR),
+          _buildTempIndicator(
+            context,
+            'Вытяжка',
+            unit.roomTemp, // Используем roomTemp как температуру вытяжки
+            Icons.upload,
+            AppTheme.warning,
+          ),
+          SizedBox(height: AppSpacing.smR),
+          _buildTempIndicator(
+            context,
+            'Наружный',
+            unit.outdoorTemp,
+            Icons.landscape,
+            AppTheme.textSecondary,
+          ),
+          SizedBox(height: AppSpacing.smR),
+          _buildTempIndicator(
+            context,
+            'Внутренний',
+            unit.roomTemp,
+            Icons.home,
+            AppTheme.success,
+          ),
+        ],
+      );
+    } else {
+      // Grid for tablet/desktop
+      return Wrap(
+        spacing: AppSpacing.mdR,
+        runSpacing: AppSpacing.mdR,
+        children: [
+          SizedBox(
+            width: deviceSize == DeviceSize.medium ?
+              (MediaQuery.of(context).size.width - 100.w) / 2 : 180.w,
+            child: _buildTempIndicator(
+              context,
+              'Приток',
+              unit.supplyAirTemp,
+              Icons.air,
+              AppTheme.info,
+            ),
+          ),
+          SizedBox(
+            width: deviceSize == DeviceSize.medium ?
+              (MediaQuery.of(context).size.width - 100.w) / 2 : 180.w,
+            child: _buildTempIndicator(
+              context,
+              'Вытяжка',
+              unit.roomTemp,
+              Icons.upload,
+              AppTheme.warning,
+            ),
+          ),
+          SizedBox(
+            width: deviceSize == DeviceSize.medium ?
+              (MediaQuery.of(context).size.width - 100.w) / 2 : 180.w,
+            child: _buildTempIndicator(
+              context,
+              'Наружный',
+              unit.outdoorTemp,
+              Icons.landscape,
+              AppTheme.textSecondary,
+            ),
+          ),
+          SizedBox(
+            width: deviceSize == DeviceSize.medium ?
+              (MediaQuery.of(context).size.width - 100.w) / 2 : 180.w,
+            child: _buildTempIndicator(
+              context,
+              'Внутренний',
+              unit.roomTemp,
+              Icons.home,
+              AppTheme.success,
+            ),
+          ),
+        ],
+      );
+    }
+  }
+
   Widget _buildTempIndicator(
+    BuildContext context,
     String label,
-    double? value,
+    double? temperature,
     IconData icon,
-    Color color, {
-    String suffix = '°C',
-  }) {
+    Color color,
+  ) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.all(AdaptiveLayout.spacing(context, base: 12)),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundDark,
-        borderRadius: BorderRadius.circular(8),
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(
+          AdaptiveLayout.borderRadius(context, base: 12),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -174,62 +214,30 @@ class VentilationTemperatureControl extends StatelessWidget {
             children: [
               Icon(
                 icon,
-                size: 14,
+                size: AdaptiveLayout.iconSize(context, base: 16),
                 color: color,
               ),
-              const SizedBox(width: 6),
-              Expanded(
-                child: Text(
-                  label,
-                  style: const TextStyle(
-                    fontSize: 10,
-                    color: AppTheme.textSecondary,
-                  ),
-                  overflow: TextOverflow.ellipsis,
+              SizedBox(width: AdaptiveLayout.spacing(context, base: 8)),
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: AdaptiveLayout.fontSize(context, base: 12),
+                  color: AppTheme.textSecondary,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: AdaptiveLayout.spacing(context, base: 8)),
           Text(
-            value != null ? '${value.toStringAsFixed(1)}$suffix' : '--',
-            style: const TextStyle(
-              fontSize: 18,
+            temperature != null ? '${temperature.toStringAsFixed(1)}°C' : '--',
+            style: TextStyle(
+              fontSize: AdaptiveLayout.fontSize(context, base: 24),
               fontWeight: FontWeight.w700,
-              color: AppTheme.textPrimary,
+              color: color,
             ),
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildSetpoint(String label, double? value, IconData icon) {
-    return Column(
-      children: [
-        Icon(
-          icon,
-          size: 16,
-          color: AppTheme.textSecondary,
-        ),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 10,
-            color: AppTheme.textSecondary,
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          value != null ? '${value.toStringAsFixed(0)}°C' : '--',
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: AppTheme.primaryOrange,
-          ),
-        ),
-      ],
     );
   }
 }

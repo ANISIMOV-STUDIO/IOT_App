@@ -38,6 +38,9 @@ class AppTheme {
   static const Color modeDry = Color(0xFFFFCA28);
   static const Color modeAuto = Color(0xFFAB47BC);
 
+  // Control Card Heights
+  static const double controlCardHeight = 280.0; // Fixed height for all control widgets
+
   /// Dark Theme
   static ThemeData darkTheme() {
     return ThemeData(

@@ -223,24 +223,26 @@ class _HomeScreenState extends State<HomeScreen> {
         // Main content area
         Expanded(
           flex: 7,
-          child: Column(
-            children: [
-              HomeRoomPreview(
-                currentUnit: currentUnit,
-                selectedUnit: _selectedUnit,
-                onPowerChanged: (power) => _updatePower(currentUnit!, power),
-                onDetailsPressed: currentUnit != null ? () => _navigateToDetails(currentUnit) : null,
-              ),
-              SizedBox(height: 20.h),
-              _buildControlCards(currentUnit),
-              SizedBox(height: 20.h),
-              HomeAutomationSection(
-                currentUnit: currentUnit,
-                onRuleToggled: _handleRuleToggled,
-                onManageRules: _handleManageRules,
-              ),
-              const Spacer(),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                HomeRoomPreview(
+                  currentUnit: currentUnit,
+                  selectedUnit: _selectedUnit,
+                  onPowerChanged: (power) => _updatePower(currentUnit!, power),
+                  onDetailsPressed: currentUnit != null ? () => _navigateToDetails(currentUnit) : null,
+                ),
+                SizedBox(height: 20.h),
+                _buildControlCards(currentUnit),
+                SizedBox(height: 20.h),
+                HomeAutomationSection(
+                  currentUnit: currentUnit,
+                  onRuleToggled: _handleRuleToggled,
+                  onManageRules: _handleManageRules,
+                ),
+              ],
+            ),
           ),
         ),
 
@@ -272,27 +274,54 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: VentilationModeControl(
+    final isMobile = ResponsiveUtils.isMobile(context);
+
+    // Mobile: vertical layout (Column)
+    if (isMobile) {
+      return Column(
+        children: [
+          VentilationModeControl(
             unit: currentUnit,
             onModeChanged: (mode) => _updateVentilationMode(currentUnit, mode),
             onSupplyFanChanged: (speed) => _updateFanSpeeds(currentUnit, supplySpeed: speed),
             onExhaustFanChanged: (speed) => _updateFanSpeeds(currentUnit, exhaustSpeed: speed),
           ),
-        ),
-        SizedBox(width: 16.w),
-        Expanded(child: VentilationTemperatureControl(unit: currentUnit)),
-        SizedBox(width: 16.w),
-        Expanded(
-          child: VentilationScheduleControl(
+          SizedBox(height: 16.h),
+          VentilationTemperatureControl(unit: currentUnit),
+          SizedBox(height: 16.h),
+          VentilationScheduleControl(
             unit: currentUnit,
             onSchedulePressed: () => _navigateToSchedule(currentUnit),
           ),
-        ),
-      ],
+        ],
+      ).animate().fadeIn(duration: 500.ms, delay: 100.ms).slideY(begin: 0.1, end: 0);
+    }
+
+    // Desktop/Tablet: horizontal layout (Row) with fixed height
+    return SizedBox(
+      height: AppTheme.controlCardHeight.h,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: VentilationModeControl(
+              unit: currentUnit,
+              onModeChanged: (mode) => _updateVentilationMode(currentUnit, mode),
+              onSupplyFanChanged: (speed) => _updateFanSpeeds(currentUnit, supplySpeed: speed),
+              onExhaustFanChanged: (speed) => _updateFanSpeeds(currentUnit, exhaustSpeed: speed),
+            ),
+          ),
+          SizedBox(width: 16.w),
+          Expanded(child: VentilationTemperatureControl(unit: currentUnit)),
+          SizedBox(width: 16.w),
+          Expanded(
+            child: VentilationScheduleControl(
+              unit: currentUnit,
+              onSchedulePressed: () => _navigateToSchedule(currentUnit),
+            ),
+          ),
+        ],
+      ),
     ).animate().fadeIn(duration: 500.ms, delay: 100.ms).slideY(begin: 0.1, end: 0);
   }
 
