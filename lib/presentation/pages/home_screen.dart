@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/di/injection_container.dart';
 import '../bloc/hvac_list/hvac_list_bloc.dart';
 import '../bloc/hvac_list/hvac_list_state.dart';
 import '../widgets/room_preview_card.dart';
@@ -14,6 +15,8 @@ import '../widgets/activity_timeline.dart';
 import '../../domain/entities/hvac_unit.dart';
 import '../../domain/entities/ventilation_mode.dart';
 import '../../domain/entities/alert.dart';
+import '../../domain/usecases/update_ventilation_mode.dart';
+import '../../domain/usecases/update_fan_speeds.dart';
 import '../widgets/ventilation_mode_control.dart';
 import '../widgets/ventilation_temperature_control.dart';
 import '../widgets/ventilation_schedule_control.dart';
@@ -306,13 +309,25 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: VentilationModeControl(
                                 unit: currentUnit,
                                 onModeChanged: (mode) {
-                                  // TODO: Update mode via BLoC
+                                  if (currentUnit != null) {
+                                    _updateVentilationMode(currentUnit, mode);
+                                  }
                                 },
                                 onSupplyFanChanged: (speed) {
-                                  // TODO: Update supply fan via BLoC
+                                  if (currentUnit != null) {
+                                    _updateFanSpeeds(
+                                      currentUnit,
+                                      supplySpeed: speed,
+                                    );
+                                  }
                                 },
                                 onExhaustFanChanged: (speed) {
-                                  // TODO: Update exhaust fan via BLoC
+                                  if (currentUnit != null) {
+                                    _updateFanSpeeds(
+                                      currentUnit,
+                                      exhaustSpeed: speed,
+                                    );
+                                  }
                                 },
                               ),
                             ),
@@ -802,6 +817,48 @@ class _HomeScreenState extends State<HomeScreen> {
         return AppTheme.warning;
       case NotificationSeverity.info:
         return AppTheme.info;
+    }
+  }
+
+  /// Update ventilation mode
+  Future<void> _updateVentilationMode(HvacUnit unit, VentilationMode mode) async {
+    try {
+      final updateModeUseCase = sl<UpdateVentilationMode>();
+      await updateModeUseCase(unit.id, mode);
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Ошибка обновления режима: $e'),
+            backgroundColor: AppTheme.error,
+          ),
+        );
+      }
+    }
+  }
+
+  /// Update fan speeds
+  Future<void> _updateFanSpeeds(
+    HvacUnit unit, {
+    int? supplySpeed,
+    int? exhaustSpeed,
+  }) async {
+    try {
+      final updateFanSpeedsUseCase = sl<UpdateFanSpeeds>();
+      await updateFanSpeedsUseCase.call(
+        unitId: unit.id,
+        supplyFanSpeed: supplySpeed,
+        exhaustFanSpeed: exhaustSpeed,
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Ошибка обновления скорости вентилятора: $e'),
+            backgroundColor: AppTheme.error,
+          ),
+        );
+      }
     }
   }
 }

@@ -24,7 +24,7 @@ class VentilationScheduleControl extends StatelessWidget {
     final todaySchedule = unit.schedule?.getDaySchedule(dayOfWeek);
 
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16),
       decoration: AppTheme.deviceCard(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

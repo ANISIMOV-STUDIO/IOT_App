@@ -18,7 +18,7 @@ class VentilationTemperatureControl extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16),
       decoration: AppTheme.deviceCard(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

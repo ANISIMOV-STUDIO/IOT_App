@@ -52,7 +52,7 @@ class _VentilationModeControlState extends State<VentilationModeControl> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16),
       decoration: AppTheme.deviceCard(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,45 +99,48 @@ class _VentilationModeControlState extends State<VentilationModeControl> {
             ],
           ),
 
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
 
           // Custom Mode selector
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                _showModeSelector = !_showModeSelector;
-              });
-            },
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: BoxDecoration(
-                color: AppTheme.backgroundDark,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: _showModeSelector
-                      ? AppTheme.primaryOrange.withValues(alpha: 0.5)
-                      : AppTheme.backgroundCardBorder,
-                  width: 1.5,
+          MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  _showModeSelector = !_showModeSelector;
+                });
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                decoration: BoxDecoration(
+                  color: AppTheme.backgroundDark,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: _showModeSelector
+                        ? AppTheme.primaryOrange.withValues(alpha: 0.5)
+                        : AppTheme.backgroundCardBorder,
+                    width: 1.5,
+                  ),
                 ),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      widget.unit.ventMode?.displayName ?? 'Выберите режим',
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: AppTheme.textPrimary,
-                        fontWeight: FontWeight.w500,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        widget.unit.ventMode?.displayName ?? 'Выберите режим',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: AppTheme.textPrimary,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
-                  ),
-                  Icon(
-                    _showModeSelector ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-                    color: AppTheme.primaryOrange,
-                    size: 20,
-                  ),
-                ],
+                    Icon(
+                      _showModeSelector ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                      color: AppTheme.primaryOrange,
+                      size: 20,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -160,7 +163,9 @@ class _VentilationModeControlState extends State<VentilationModeControl> {
               child: Column(
                 children: VentilationMode.values.map((mode) {
                   final isSelected = widget.unit.ventMode == mode;
-                  return GestureDetector(
+                  return _ModeOptionItem(
+                    mode: mode,
+                    isSelected: isSelected,
                     onTap: () {
                       if (widget.onModeChanged != null) {
                         widget.onModeChanged!(mode);
@@ -169,37 +174,6 @@ class _VentilationModeControlState extends State<VentilationModeControl> {
                         _showModeSelector = false;
                       });
                     },
-                    child: Container(
-                      margin: const EdgeInsets.only(bottom: 4),
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                      decoration: BoxDecoration(
-                        color: isSelected
-                            ? AppTheme.primaryOrange.withValues(alpha: 0.15)
-                            : Colors.transparent,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Row(
-                        children: [
-                          if (isSelected)
-                            const Icon(
-                              Icons.check_circle,
-                              color: AppTheme.primaryOrange,
-                              size: 18,
-                            ),
-                          if (isSelected) const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              mode.displayName,
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: isSelected ? AppTheme.primaryOrange : AppTheme.textPrimary,
-                                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
                   );
                 }).toList(),
               ),
@@ -209,7 +183,7 @@ class _VentilationModeControlState extends State<VentilationModeControl> {
                 : CrossFadeState.showFirst,
           ),
 
-          const SizedBox(height: 20),
+          const SizedBox(height: 14),
 
           // Fan speeds
           _buildFanSpeed(
@@ -226,7 +200,7 @@ class _VentilationModeControlState extends State<VentilationModeControl> {
             },
           ),
 
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
 
           _buildFanSpeed(
             'Вытяжной',
@@ -293,16 +267,16 @@ class _VentilationModeControlState extends State<VentilationModeControl> {
             ),
           ],
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 8),
         SliderTheme(
           data: SliderThemeData(
-            trackHeight: 6,
+            trackHeight: 5,
             thumbShape: const RoundSliderThumbShape(
-              enabledThumbRadius: 10,
-              elevation: 4,
+              enabledThumbRadius: 9,
+              elevation: 3,
             ),
             overlayShape: const RoundSliderOverlayShape(
-              overlayRadius: 20,
+              overlayRadius: 18,
             ),
             activeTrackColor: AppTheme.primaryOrange,
             inactiveTrackColor: AppTheme.backgroundCardBorder,
@@ -311,7 +285,7 @@ class _VentilationModeControlState extends State<VentilationModeControl> {
             valueIndicatorColor: AppTheme.primaryOrange,
             valueIndicatorTextStyle: const TextStyle(
               color: Colors.white,
-              fontSize: 12,
+              fontSize: 11,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -325,6 +299,80 @@ class _VentilationModeControlState extends State<VentilationModeControl> {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// Mode Option Item with Hover Effect
+class _ModeOptionItem extends StatefulWidget {
+  final VentilationMode mode;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _ModeOptionItem({
+    required this.mode,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  State<_ModeOptionItem> createState() => _ModeOptionItemState();
+}
+
+class _ModeOptionItemState extends State<_ModeOptionItem> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 150),
+          margin: const EdgeInsets.only(bottom: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          decoration: BoxDecoration(
+            color: widget.isSelected
+                ? AppTheme.primaryOrange.withValues(alpha: 0.15)
+                : _isHovered
+                    ? AppTheme.primaryOrange.withValues(alpha: 0.08)
+                    : Colors.transparent,
+            borderRadius: BorderRadius.circular(8),
+            border: _isHovered && !widget.isSelected
+                ? Border.all(
+                    color: AppTheme.primaryOrange.withValues(alpha: 0.3),
+                    width: 1,
+                  )
+                : null,
+          ),
+          child: Row(
+            children: [
+              if (widget.isSelected)
+                const Icon(
+                  Icons.check_circle,
+                  color: AppTheme.primaryOrange,
+                  size: 18,
+                ),
+              if (widget.isSelected) const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  widget.mode.displayName,
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: widget.isSelected || _isHovered
+                        ? AppTheme.primaryOrange
+                        : AppTheme.textPrimary,
+                    fontWeight: widget.isSelected ? FontWeight.w600 : FontWeight.w400,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
