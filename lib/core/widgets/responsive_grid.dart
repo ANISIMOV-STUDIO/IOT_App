@@ -1,7 +1,7 @@
 /// Responsive Grid System
 ///
 /// Adaptive grid layout that adjusts columns based on screen width
-/// Optimized for mobile, tablet, and desktop displays
+/// Optimized for mobile and tablet displays
 library;
 
 import 'package:flutter/material.dart';
@@ -46,16 +46,11 @@ class ResponsiveGrid extends StatelessWidget {
           columns = 2;
           spacing = HvacSpacing.lg;
           aspectRatio = childAspectRatio ?? 1.3;
-        } else if (width < 1200) {
+        } else {
           // Large tablet: 3 columns
           columns = 3;
           spacing = HvacSpacing.lg;
           aspectRatio = childAspectRatio ?? 1.3;
-        } else {
-          // Desktop: 4 columns
-          columns = 4;
-          spacing = HvacSpacing.xl;
-          aspectRatio = childAspectRatio ?? 1.4;
         }
 
         // Use maxCrossAxisExtent if provided

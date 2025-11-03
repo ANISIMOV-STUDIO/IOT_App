@@ -353,7 +353,7 @@ class AppErrorWidget extends StatelessWidget {
       }
     }
 
-    if (isLandscape || ResponsiveUtils.isDesktop(context)) {
+    if (isLandscape) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: actions,

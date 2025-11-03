@@ -1,15 +1,17 @@
 /// Home Notifications Panel Widget
-///
 /// Displays alerts, warnings, and info messages grouped by severity
 library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../domain/entities/hvac_unit.dart';
-import '../../../domain/entities/alert.dart';
-import '../../../domain/entities/ventilation_mode.dart';
-import '../activity_timeline.dart';
+import 'notifications/notification_types.dart';
+import 'notifications/notification_item.dart';
+import 'notifications/notification_badge.dart';
+import 'notifications/notification_empty_state.dart';
+import 'notifications/notification_grouper.dart';
 
+/// Main notifications panel widget
 class HomeNotificationsPanel extends StatefulWidget {
   final HvacUnit unit;
 
@@ -19,84 +21,32 @@ class HomeNotificationsPanel extends StatefulWidget {
   });
 
   @override
-  State<HomeNotificationsPanel> createState() => _HomeNotificationsPanelState();
+  State<HomeNotificationsPanel> createState() =>
+      _HomeNotificationsPanelState();
 }
 
 class _HomeNotificationsPanelState extends State<HomeNotificationsPanel> {
   bool _showAllNotifications = false;
+  late NotificationGrouper _grouper;
+
+  @override
+  void initState() {
+    super.initState();
+    _grouper = NotificationGrouper(unit: widget.unit);
+  }
+
+  @override
+  void didUpdateWidget(HomeNotificationsPanel oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.unit != widget.unit) {
+      _grouper = NotificationGrouper(unit: widget.unit);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final now = DateTime.now();
-
-    // Group notifications by severity
-    final critical = <ActivityItem>[];
-    final errors = <ActivityItem>[];
-    final warnings = <ActivityItem>[];
-    final info = <ActivityItem>[];
-
-    // Add alert notifications
-    if (widget.unit.alerts != null && widget.unit.alerts!.isNotEmpty) {
-      for (final alert in widget.unit.alerts!) {
-        if (alert.code != 0) {
-          final severity = _mapAlertSeverityToNotification(alert.severity);
-          final activity = ActivityItem(
-            time: alert.timestamp != null
-                ? '${alert.timestamp!.hour.toString().padLeft(2, '0')}:${alert.timestamp!.minute.toString().padLeft(2, '0')}'
-                : '--:--',
-            title: 'Авария: код ${alert.code}',
-            description: alert.description,
-            severity: severity,
-            icon: _getSeverityIcon(severity),
-          );
-
-          switch (severity) {
-            case NotificationSeverity.critical:
-              critical.add(activity);
-              break;
-            case NotificationSeverity.error:
-              errors.add(activity);
-              break;
-            case NotificationSeverity.warning:
-              warnings.add(activity);
-              break;
-            case NotificationSeverity.info:
-              info.add(activity);
-              break;
-          }
-        }
-      }
-    }
-
-    // Add operational info
-    if (widget.unit.power) {
-      info.add(ActivityItem(
-        time:
-            '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}',
-        title: '${widget.unit.name} работает',
-        description: 'Режим: ${widget.unit.ventMode?.displayName ?? "Авто"}',
-        severity: NotificationSeverity.info,
-        icon: Icons.power_settings_new,
-      ));
-    }
-
-    // Add schedule info
-    final todaySchedule = widget.unit.schedule?.getDaySchedule(now.weekday);
-    if (todaySchedule != null && todaySchedule.timerEnabled) {
-      if (todaySchedule.turnOnTime != null) {
-        info.add(ActivityItem(
-          time:
-              '${todaySchedule.turnOnTime!.hour.toString().padLeft(2, '0')}:${todaySchedule.turnOnTime!.minute.toString().padLeft(2, '0')}',
-          title: 'Запланированное включение',
-          description: 'Автоматический запуск по расписанию',
-          severity: NotificationSeverity.info,
-          icon: Icons.schedule,
-        ));
-      }
-    }
-
-    final totalCount =
-        critical.length + errors.length + warnings.length + info.length;
+    final groups = _grouper.groupNotifications();
+    final totalCount = _grouper.getTotalCount();
 
     return Container(
       height: 400.h,
@@ -119,15 +69,15 @@ class _HomeNotificationsPanelState extends State<HomeNotificationsPanel> {
           SizedBox(height: 16.h),
 
           // Category badges
-          if (totalCount > 0) _buildCategoryBadges(critical, errors, warnings, info),
+          if (totalCount > 0) _buildCategoryBadges(groups),
 
           if (totalCount > 0) SizedBox(height: 20.h),
 
           // Notifications list
           Expanded(
             child: totalCount == 0
-                ? _buildEmptyState()
-                : _buildNotificationsList(critical, errors, warnings, info),
+                ? const NotificationEmptyState()
+                : _buildNotificationsList(),
           ),
 
           // Show all/collapse button
@@ -169,205 +119,48 @@ class _HomeNotificationsPanelState extends State<HomeNotificationsPanel> {
   }
 
   Widget _buildCategoryBadges(
-    List<ActivityItem> critical,
-    List<ActivityItem> errors,
-    List<ActivityItem> warnings,
-    List<ActivityItem> info,
-  ) {
+      Map<NotificationSeverity, List<ActivityItem>> groups) {
     return Wrap(
       spacing: 8.w,
       runSpacing: 8.h,
       children: [
-        if (critical.isNotEmpty)
-          _buildCategoryBadge('Критические', critical.length, HvacColors.error),
-        if (errors.isNotEmpty)
-          _buildCategoryBadge(
-              'Ошибки', errors.length, const Color(0xFFE57373)),
-        if (warnings.isNotEmpty)
-          _buildCategoryBadge('Предупреждения', warnings.length, HvacColors.warning),
-        if (info.isNotEmpty)
-          _buildCategoryBadge('Инфо', info.length, HvacColors.info),
+        if (groups[NotificationSeverity.critical]!.isNotEmpty)
+          NotificationBadge(
+            label: 'Критические',
+            count: groups[NotificationSeverity.critical]!.length,
+            color: HvacColors.error,
+          ),
+        if (groups[NotificationSeverity.error]!.isNotEmpty)
+          NotificationBadge(
+            label: 'Ошибки',
+            count: groups[NotificationSeverity.error]!.length,
+            color: const Color(0xFFE57373),
+          ),
+        if (groups[NotificationSeverity.warning]!.isNotEmpty)
+          NotificationBadge(
+            label: 'Предупреждения',
+            count: groups[NotificationSeverity.warning]!.length,
+            color: HvacColors.warning,
+          ),
+        if (groups[NotificationSeverity.info]!.isNotEmpty)
+          NotificationBadge(
+            label: 'Инфо',
+            count: groups[NotificationSeverity.info]!.length,
+            color: HvacColors.info,
+          ),
       ],
     );
   }
 
-  Widget _buildCategoryBadge(String label, int count, Color color) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(
-          color: color.withValues(alpha: 0.3),
-          width: 1,
-        ),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 6.w,
-            height: 6.h,
-            decoration: BoxDecoration(
-              color: color,
-              shape: BoxShape.circle,
-            ),
-          ),
-          SizedBox(width: 6.w),
-          Text(
-            '$label: $count',
-            style: TextStyle(
-              fontSize: 11.sp,
-              fontWeight: FontWeight.w600,
-              color: color,
-            ),
-          ),
-        ],
-      ),
+  Widget _buildNotificationsList() {
+    final items = _grouper.getAllNotifications(
+      limit: _showAllNotifications ? null : 3,
     );
-  }
-
-  Widget _buildNotificationsList(
-    List<ActivityItem> critical,
-    List<ActivityItem> errors,
-    List<ActivityItem> warnings,
-    List<ActivityItem> info,
-  ) {
-    final maxItems = _showAllNotifications ? 1000 : 3;
-    final items = <ActivityItem>[];
-    int itemCount = 0;
-
-    // Add in priority order
-    for (final activity in critical) {
-      if (itemCount >= maxItems) break;
-      items.add(activity);
-      itemCount++;
-    }
-    for (final activity in errors) {
-      if (itemCount >= maxItems) break;
-      items.add(activity);
-      itemCount++;
-    }
-    for (final activity in warnings) {
-      if (itemCount >= maxItems) break;
-      items.add(activity);
-      itemCount++;
-    }
-    for (final activity in info) {
-      if (itemCount >= maxItems) break;
-      items.add(activity);
-      itemCount++;
-    }
 
     return ListView.builder(
       itemCount: items.length,
-      itemBuilder: (context, index) => _buildActivityItem(items[index]),
-    );
-  }
-
-  Widget _buildActivityItem(ActivityItem activity) {
-    final severityColor = _getSeverityColor(activity.severity);
-
-    return Container(
-      margin: EdgeInsets.only(bottom: 12.h),
-      padding: EdgeInsets.all(12.w),
-      decoration: BoxDecoration(
-        color: HvacColors.backgroundDark,
-        borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(
-          color: severityColor.withValues(alpha: 0.3),
-          width: 1,
-        ),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 36.w,
-            height: 36.h,
-            decoration: BoxDecoration(
-              color: severityColor.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(8.r),
-            ),
-            child: Icon(
-              activity.icon ?? Icons.notifications,
-              size: 18.sp,
-              color: severityColor,
-            ),
-          ),
-          SizedBox(width: 12.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        activity.title,
-                        style: TextStyle(
-                          fontSize: 13.sp,
-                          fontWeight: FontWeight.w600,
-                          color: HvacColors.textPrimary,
-                        ),
-                      ),
-                    ),
-                    Text(
-                      activity.time,
-                      style: TextStyle(
-                        fontSize: 11.sp,
-                        fontWeight: FontWeight.w500,
-                        color: severityColor,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 4.h),
-                Text(
-                  activity.description,
-                  style: TextStyle(
-                    fontSize: 12.sp,
-                    color: HvacColors.textSecondary,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildEmptyState() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.notifications_none,
-            size: 48.sp,
-            color: HvacColors.textSecondary.withValues(alpha: 0.5),
-          ),
-          SizedBox(height: 12.h),
-          Text(
-            'Нет уведомлений',
-            style: TextStyle(
-              fontSize: 14.sp,
-              fontWeight: FontWeight.w600,
-              color: HvacColors.textSecondary,
-            ),
-          ),
-          SizedBox(height: 4.h),
-          Text(
-            'Все системы работают нормально',
-            style: TextStyle(
-              fontSize: 12.sp,
-              color: HvacColors.textSecondary,
-            ),
-          ),
-        ],
+      itemBuilder: (context, index) => NotificationItem(
+        activity: items[index],
       ),
     );
   }
@@ -399,9 +192,7 @@ class _HomeNotificationsPanelState extends State<HomeNotificationsPanel> {
               ),
               SizedBox(width: 4.w),
               Icon(
-                _showAllNotifications
-                    ? Icons.expand_less
-                    : Icons.expand_more,
+                _showAllNotifications ? Icons.expand_less : Icons.expand_more,
                 color: _showAllNotifications
                     ? HvacColors.textSecondary
                     : HvacColors.primaryOrange,
@@ -412,45 +203,5 @@ class _HomeNotificationsPanelState extends State<HomeNotificationsPanel> {
         ),
       ),
     );
-  }
-
-  NotificationSeverity _mapAlertSeverityToNotification(
-      AlertSeverity alertSeverity) {
-    switch (alertSeverity) {
-      case AlertSeverity.critical:
-        return NotificationSeverity.critical;
-      case AlertSeverity.error:
-        return NotificationSeverity.error;
-      case AlertSeverity.warning:
-        return NotificationSeverity.warning;
-      case AlertSeverity.info:
-        return NotificationSeverity.info;
-    }
-  }
-
-  IconData _getSeverityIcon(NotificationSeverity severity) {
-    switch (severity) {
-      case NotificationSeverity.critical:
-        return Icons.error;
-      case NotificationSeverity.error:
-        return Icons.error_outline;
-      case NotificationSeverity.warning:
-        return Icons.warning;
-      case NotificationSeverity.info:
-        return Icons.info_outline;
-    }
-  }
-
-  Color _getSeverityColor(NotificationSeverity severity) {
-    switch (severity) {
-      case NotificationSeverity.critical:
-        return HvacColors.error;
-      case NotificationSeverity.error:
-        return const Color(0xFFE57373);
-      case NotificationSeverity.warning:
-        return HvacColors.warning;
-      case NotificationSeverity.info:
-        return HvacColors.info;
-    }
   }
 }

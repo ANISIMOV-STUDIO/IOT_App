@@ -90,9 +90,9 @@ class _VentilationModeControlState extends State<VentilationModeControl>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildHeader(context, deviceSize),
-                      SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 16)),
+                      SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 12)),
                       _buildModeSelector(context, deviceSize),
-                      SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 16)),
+                      SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 12)),
                       Expanded(
                         child: SingleChildScrollView(
                           physics: PerformanceUtils.getOptimalScrollPhysics(
@@ -111,9 +111,9 @@ class _VentilationModeControlState extends State<VentilationModeControl>
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       _buildHeader(context, deviceSize),
-                      SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 16)),
+                      SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 12)),
                       _buildModeSelector(context, deviceSize),
-                      SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 16)),
+                      SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 12)),
                       _buildFanSpeedControls(context, deviceSize),
                     ],
                   );
@@ -232,39 +232,12 @@ class _VentilationModeControlState extends State<VentilationModeControl>
   Widget _buildFanSpeedControls(BuildContext context, DeviceSize deviceSize) {
     // Adaptive layout: stack on mobile, side-by-side on tablet/desktop
     // MONOCHROMATIC: Both sliders use same gold accent (no color parameter needed)
-    if (deviceSize == DeviceSize.compact) {
-      return Column(
-        children: [
-          AdaptiveSlider(
-            label: 'Приточный вентилятор',
-            icon: Icons.air,
-            value: _supplyFanSpeed,
-            max: 100,
-            onChanged: (speed) {
-              setState(() => _supplyFanSpeed = speed);
-              widget.onSupplyFanChanged?.call(speed);
-            },
-          ),
-          SizedBox(height: 12.h),
-          AdaptiveSlider(
-            label: 'Вытяжной вентилятор',
-            icon: Icons.upload,
-            value: _exhaustFanSpeed,
-            max: 100,
-            onChanged: (speed) {
-              setState(() => _exhaustFanSpeed = speed);
-              widget.onExhaustFanChanged?.call(speed);
-            },
-          ),
-        ],
-      );
-    } else {
-      return Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: AdaptiveSlider(
-              label: 'Приточный',
+    switch (deviceSize) {
+      case DeviceSize.compact:
+        return Column(
+          children: [
+            AdaptiveSlider(
+              label: 'Приточный вентилятор',
               icon: Icons.air,
               value: _supplyFanSpeed,
               max: 100,
@@ -273,11 +246,9 @@ class _VentilationModeControlState extends State<VentilationModeControl>
                 widget.onSupplyFanChanged?.call(speed);
               },
             ),
-          ),
-          SizedBox(width: AdaptiveLayout.spacing(context, base: 24)),
-          Expanded(
-            child: AdaptiveSlider(
-              label: 'Вытяжной',
+            SizedBox(height: 12.h),
+            AdaptiveSlider(
+              label: 'Вытяжной вентилятор',
               icon: Icons.upload,
               value: _exhaustFanSpeed,
               max: 100,
@@ -286,9 +257,40 @@ class _VentilationModeControlState extends State<VentilationModeControl>
                 widget.onExhaustFanChanged?.call(speed);
               },
             ),
-          ),
-        ],
-      );
+          ],
+        );
+      case DeviceSize.medium:
+      case DeviceSize.expanded:
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: AdaptiveSlider(
+                label: 'Приточный',
+                icon: Icons.air,
+                value: _supplyFanSpeed,
+                max: 100,
+                onChanged: (speed) {
+                  setState(() => _supplyFanSpeed = speed);
+                  widget.onSupplyFanChanged?.call(speed);
+                },
+              ),
+            ),
+            SizedBox(width: AdaptiveLayout.spacing(context, base: 16)),
+            Expanded(
+              child: AdaptiveSlider(
+                label: 'Вытяжной',
+                icon: Icons.upload,
+                value: _exhaustFanSpeed,
+                max: 100,
+                onChanged: (speed) {
+                  setState(() => _exhaustFanSpeed = speed);
+                  widget.onExhaustFanChanged?.call(speed);
+                },
+              ),
+            ),
+          ],
+        );
     }
   }
 }

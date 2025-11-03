@@ -28,11 +28,11 @@ void main() async {
 }
 
 /// Get responsive design size based on screen width
-/// For web/desktop, we use a fixed large size since ScreenUtil
-/// works best with a consistent design size
+/// Full responsive support: mobile, tablet, and desktop
+/// Desktop uses fixed 1920x1080 reference with max-width constraint
 Size _getDesignSize(double width) {
-  if (width >= 1200) {
-    // Desktop: based on 1920x1080
+  if (width >= 1024) {
+    // Desktop: fixed design size 1920x1080
     return const Size(1920, 1080);
   } else if (width >= 600) {
     // Tablet: based on iPad (768x1024)

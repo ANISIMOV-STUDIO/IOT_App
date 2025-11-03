@@ -7,10 +7,9 @@ class AppConstants {
   static const double maxTemperature = 30.0;
   static const double defaultTemperature = 22.0;
 
-  // UI Constants - Responsive Breakpoints
+  // UI Constants - Responsive Breakpoints (mobile and tablet only)
   static const double mobileBreakpoint = 600;
   static const double tabletBreakpoint = 600; // Tablet starts at 600px
-  static const double desktopBreakpoint = 1200;
 
   // Animation durations
   static const Duration shortAnimation = Duration(milliseconds: 200);

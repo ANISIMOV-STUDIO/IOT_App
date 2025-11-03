@@ -21,8 +21,7 @@ class UnitDetailTabletSidebar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDesktop = ResponsiveUtils.isDesktop(context);
-    final width = isDesktop ? 280.w : 240.w;
+    final width = 240.w;
 
     return Container(
       width: width,

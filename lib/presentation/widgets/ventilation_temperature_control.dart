@@ -42,7 +42,7 @@ class VentilationTemperatureControl extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildHeader(context, deviceSize),
-                    SizedBox(height: AdaptiveLayout.spacing(context, base: 20)),
+                    SizedBox(height: AdaptiveLayout.spacing(context, base: 16)),
                     Expanded(
                       child: SingleChildScrollView(
                         physics: const ClampingScrollPhysics(),
@@ -58,7 +58,7 @@ class VentilationTemperatureControl extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     _buildHeader(context, deviceSize),
-                    SizedBox(height: AdaptiveLayout.spacing(context, base: 20)),
+                    SizedBox(height: AdaptiveLayout.spacing(context, base: 16)),
                     _buildTemperatureGrid(context, deviceSize),
                   ],
                 );
@@ -122,94 +122,97 @@ class VentilationTemperatureControl extends StatelessWidget {
 
   Widget _buildTemperatureGrid(BuildContext context, DeviceSize deviceSize) {
     // Adaptive layout: single column on mobile, grid on tablet/desktop
-    if (deviceSize == DeviceSize.compact) {
-      return Column(
-        children: [
-          _buildTempIndicator(
-            context,
-            'Приток',
-            unit.supplyAirTemp,
-            Icons.air,
-            HvacColors.info,
-          ),
-          SizedBox(height: 8.h),
-          _buildTempIndicator(
-            context,
-            'Вытяжка',
-            unit.roomTemp, // Используем roomTemp как температуру вытяжки
-            Icons.upload,
-            HvacColors.warning,
-          ),
-          SizedBox(height: 8.h),
-          _buildTempIndicator(
-            context,
-            'Наружный',
-            unit.outdoorTemp,
-            Icons.landscape,
-            HvacColors.textSecondary,
-          ),
-          SizedBox(height: 8.h),
-          _buildTempIndicator(
-            context,
-            'Внутренний',
-            unit.roomTemp,
-            Icons.home,
-            HvacColors.success,
-          ),
-        ],
-      );
-    } else {
-      // Grid for tablet/desktop
-      return Wrap(
-        spacing: HvacSpacing.mdR,
-        runSpacing: HvacSpacing.mdR,
-        children: [
-          SizedBox(
-            width: deviceSize == DeviceSize.medium ?
-              (MediaQuery.of(context).size.width - 100.w) / 2 : 180.w,
-            child: _buildTempIndicator(
+    switch (deviceSize) {
+      case DeviceSize.compact:
+        return Column(
+          children: [
+            _buildTempIndicator(
               context,
               'Приток',
               unit.supplyAirTemp,
               Icons.air,
               HvacColors.info,
             ),
-          ),
-          SizedBox(
-            width: deviceSize == DeviceSize.medium ?
-              (MediaQuery.of(context).size.width - 100.w) / 2 : 180.w,
-            child: _buildTempIndicator(
+            SizedBox(height: 8.h),
+            _buildTempIndicator(
               context,
               'Вытяжка',
-              unit.roomTemp,
+              unit.roomTemp, // Используем roomTemp как температуру вытяжки
               Icons.upload,
               HvacColors.warning,
             ),
-          ),
-          SizedBox(
-            width: deviceSize == DeviceSize.medium ?
-              (MediaQuery.of(context).size.width - 100.w) / 2 : 180.w,
-            child: _buildTempIndicator(
+            SizedBox(height: 8.h),
+            _buildTempIndicator(
               context,
               'Наружный',
               unit.outdoorTemp,
               Icons.landscape,
               HvacColors.textSecondary,
             ),
-          ),
-          SizedBox(
-            width: deviceSize == DeviceSize.medium ?
-              (MediaQuery.of(context).size.width - 100.w) / 2 : 180.w,
-            child: _buildTempIndicator(
+            SizedBox(height: 8.h),
+            _buildTempIndicator(
               context,
               'Внутренний',
               unit.roomTemp,
               Icons.home,
               HvacColors.success,
             ),
-          ),
-        ],
-      );
+          ],
+        );
+      case DeviceSize.medium:
+      case DeviceSize.expanded:
+        // Grid for tablet/desktop - use flexible layout
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            final itemWidth = (constraints.maxWidth - HvacSpacing.mdR) / 2;
+            return Wrap(
+              spacing: HvacSpacing.mdR,
+              runSpacing: HvacSpacing.mdR,
+              children: [
+                SizedBox(
+                  width: itemWidth,
+                  child: _buildTempIndicator(
+                    context,
+                    'Приток',
+                    unit.supplyAirTemp,
+                    Icons.air,
+                    HvacColors.info,
+                  ),
+                ),
+                SizedBox(
+                  width: itemWidth,
+                  child: _buildTempIndicator(
+                    context,
+                    'Вытяжка',
+                    unit.roomTemp,
+                    Icons.upload,
+                    HvacColors.warning,
+                  ),
+                ),
+                SizedBox(
+                  width: itemWidth,
+                  child: _buildTempIndicator(
+                    context,
+                    'Наружный',
+                    unit.outdoorTemp,
+                    Icons.landscape,
+                    HvacColors.textSecondary,
+                  ),
+                ),
+                SizedBox(
+                  width: itemWidth,
+                  child: _buildTempIndicator(
+                    context,
+                    'Внутренний',
+                    unit.roomTemp,
+                    Icons.home,
+                    HvacColors.success,
+                  ),
+                ),
+              ],
+            );
+          },
+        );
     }
   }
 

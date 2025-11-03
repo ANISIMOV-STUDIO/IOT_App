@@ -52,9 +52,8 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
   @override
   Widget build(BuildContext context) {
     final isTablet = ResponsiveUtils.isTablet(context);
-    final isDesktop = ResponsiveUtils.isDesktop(context);
 
-    if (isTablet || isDesktop) {
+    if (isTablet) {
       return _buildTabletLayout();
     } else {
       return _buildMobileLayout();

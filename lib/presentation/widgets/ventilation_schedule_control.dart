@@ -44,11 +44,15 @@ class VentilationScheduleControl extends StatelessWidget {
 
               if (hasHeightConstraint) {
                 // Desktop layout with constrained height - use scrollable content
+                final spacing = switch (deviceSize) {
+                  DeviceSize.compact => 12.h,
+                  DeviceSize.medium || DeviceSize.expanded => AdaptiveLayout.spacing(context, base: 12),
+                };
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildHeader(context, deviceSize),
-                    SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 16)),
+                    SizedBox(height: spacing),
                     Expanded(
                       child: SingleChildScrollView(
                         physics: const ClampingScrollPhysics(),
@@ -56,9 +60,9 @@ class VentilationScheduleControl extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             _buildTodaySchedule(context, deviceSize, dayOfWeek, todaySchedule),
-                            SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 16)),
+                            SizedBox(height: spacing),
                             _buildQuickStats(context, deviceSize),
-                            SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 16)),
+                            SizedBox(height: spacing),
                             _buildEditButton(context, deviceSize),
                           ],
                         ),
@@ -68,16 +72,20 @@ class VentilationScheduleControl extends StatelessWidget {
                 );
               } else {
                 // Mobile layout without height constraint
+                final spacing = switch (deviceSize) {
+                  DeviceSize.compact => 12.h,
+                  DeviceSize.medium || DeviceSize.expanded => AdaptiveLayout.spacing(context, base: 12),
+                };
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     _buildHeader(context, deviceSize),
-                    SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 16)),
+                    SizedBox(height: spacing),
                     _buildTodaySchedule(context, deviceSize, dayOfWeek, todaySchedule),
-                    SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 16)),
+                    SizedBox(height: spacing),
                     _buildQuickStats(context, deviceSize),
-                    SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 16)),
+                    SizedBox(height: spacing),
                     _buildEditButton(context, deviceSize),
                   ],
                 );

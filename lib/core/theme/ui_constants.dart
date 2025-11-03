@@ -145,7 +145,7 @@ class UIConstants {
 
   // ==================== LAYOUT CONSTRAINTS ====================
 
-  /// Maximum content width on desktop (1200-1440px recommended)
+  /// Maximum content width on tablets (responsive)
   static const double maxContentWidth = 1440.0;
 
   /// Maximum card width for readability
@@ -160,19 +160,13 @@ class UIConstants {
   static double get maxTextWidthR => maxTextWidth.w;
 
   // ==================== BREAKPOINTS ====================
-  // Standard responsive breakpoints
+  // Standard responsive breakpoints (mobile and tablet only)
 
   /// Mobile breakpoint (< 600dp)
   static const double breakpointMobile = 600.0;
 
-  /// Tablet breakpoint (600-1024dp)
+  /// Tablet breakpoint (600dp+)
   static const double breakpointTablet = 1024.0;
-
-  /// Desktop breakpoint (>= 1024dp)
-  static const double breakpointDesktop = 1024.0;
-
-  /// Large desktop (>= 1440dp)
-  static const double breakpointLargeDesktop = 1440.0;
 
   // ==================== CARD DIMENSIONS ====================
 
@@ -222,9 +216,9 @@ class UIConstants {
 
   // ==================== SCROLL PHYSICS ====================
 
-  /// Enable scroll on mobile/tablet, disable on desktop
+  /// Enable scroll on mobile/tablet
   static bool shouldEnableScroll(double screenWidth) {
-    return screenWidth < breakpointDesktop;
+    return true; // Always allow scrolling for mobile and tablet
   }
 
   /// Check if current screen is mobile
@@ -234,11 +228,6 @@ class UIConstants {
 
   /// Check if current screen is tablet
   static bool isTablet(double screenWidth) {
-    return screenWidth >= breakpointMobile && screenWidth < breakpointTablet;
-  }
-
-  /// Check if current screen is desktop
-  static bool isDesktop(double screenWidth) {
-    return screenWidth >= breakpointDesktop;
+    return screenWidth >= breakpointMobile;
   }
 }

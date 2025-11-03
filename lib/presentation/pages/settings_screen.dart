@@ -44,15 +44,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.all(20.w),
-          child: ResponsiveUtils.isMobile(context)
-              ? _buildMobileLayout()
-              : _buildDesktopLayout(),
+          child: _buildLayout(),
         ),
       ),
     );
   }
 
-  Widget _buildMobileLayout() {
+  Widget _buildLayout() {
     return Column(
       children: [
         _buildAppearanceSection(),
@@ -62,32 +60,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
         _buildNotificationsSection(),
         SizedBox(height: 20.h),
         _buildLanguageSection(),
-        SizedBox(height: 20.h),
-        _buildAboutSection(),
-      ],
-    );
-  }
-
-  Widget _buildDesktopLayout() {
-    return Column(
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(child: _buildAppearanceSection()),
-            SizedBox(width: 20.w),
-            Expanded(child: _buildUnitsSection()),
-          ],
-        ),
-        SizedBox(height: 20.h),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(child: _buildNotificationsSection()),
-            SizedBox(width: 20.w),
-            Expanded(child: _buildLanguageSection()),
-          ],
-        ),
         SizedBox(height: 20.h),
         _buildAboutSection(),
       ],

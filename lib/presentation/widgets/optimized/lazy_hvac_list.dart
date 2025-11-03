@@ -1,18 +1,18 @@
+/// Lazy HVAC List Widget
+/// Main lazy-loaded list with pagination
+library;
+
 import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../domain/entities/hvac_unit.dart';
-import 'optimized_hvac_card.dart';
+import 'list/lazy_list_controller.dart';
+import 'list/lazy_list_item.dart';
+import 'list/shimmer_loading_card.dart';
+
+// Export virtual scroll controller for advanced usage
+export 'list/virtual_scroll_controller.dart';
 
 /// Lazy-loaded HVAC list with pagination and performance optimizations
-///
-/// Key features:
-/// - Lazy loading with pagination
-/// - Item caching for smooth scrolling
-/// - Skeleton loading states
-/// - Pull-to-refresh
-/// - Automatic memory management
-/// - Virtual scrolling for large datasets
 class LazyHvacList extends StatefulWidget {
   final List<HvacUnit> initialUnits;
   final Future<List<HvacUnit>> Function(int page, int pageSize) onLoadMore;
@@ -41,36 +41,21 @@ class LazyHvacList extends StatefulWidget {
 
 class _LazyHvacListState extends State<LazyHvacList> {
   late final ScrollController _scrollController;
-  late final List<HvacUnit> _units;
-  final Set<int> _loadedPages = {};
-  bool _isLoadingMore = false;
-  bool _hasMoreData = true;
-  int _currentPage = 0;
-
-  // Performance monitoring
-  final _renderTimes = <Duration>[];
-  late final Stopwatch _frameStopwatch;
+  late final LazyListController<HvacUnit> _controller;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
-    _units = List.from(widget.initialUnits);
-    _frameStopwatch = Stopwatch();
-
-    // Mark initial page as loaded
-    if (_units.isNotEmpty) {
-      _loadedPages.add(0);
-      _currentPage = (_units.length / widget.pageSize).ceil() - 1;
-    }
-
+    _controller = LazyListController<HvacUnit>();
+    _controller.initialize(widget.initialUnits, widget.pageSize);
     _scrollController.addListener(_onScroll);
   }
 
   @override
   void dispose() {
     _scrollController.dispose();
-    _logPerformanceMetrics();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -82,17 +67,17 @@ class _LazyHvacListState extends State<LazyHvacList> {
   }
 
   Future<void> _loadMore() async {
-    if (_isLoadingMore || !_hasMoreData) return;
+    if (_controller.isLoadingMore || !_controller.hasMoreData) return;
 
     setState(() {
-      _isLoadingMore = true;
+      _controller.startLoading();
     });
 
     try {
-      final nextPage = _currentPage + 1;
-      if (_loadedPages.contains(nextPage)) {
+      final nextPage = _controller.currentPage + 1;
+      if (_controller.isPageLoaded(nextPage)) {
         setState(() {
-          _isLoadingMore = false;
+          _controller.stopLoading();
         });
         return;
       }
@@ -101,20 +86,13 @@ class _LazyHvacListState extends State<LazyHvacList> {
 
       if (mounted) {
         setState(() {
-          if (newUnits.isEmpty) {
-            _hasMoreData = false;
-          } else {
-            _units.addAll(newUnits);
-            _loadedPages.add(nextPage);
-            _currentPage = nextPage;
-          }
-          _isLoadingMore = false;
+          _controller.addItems(newUnits, nextPage);
         });
       }
     } catch (e) {
       if (mounted) {
         setState(() {
-          _isLoadingMore = false;
+          _controller.stopLoading();
         });
         _showErrorSnackbar('Failed to load more items: $e');
       }
@@ -126,15 +104,8 @@ class _LazyHvacListState extends State<LazyHvacList> {
       widget.onRefresh!();
     }
 
-    // Reset pagination state
     setState(() {
-      _units.clear();
-      _units.addAll(widget.initialUnits);
-      _loadedPages.clear();
-      _loadedPages.add(0);
-      _currentPage = 0;
-      _hasMoreData = true;
-      _isLoadingMore = false;
+      _controller.reset(widget.initialUnits);
     });
   }
 
@@ -148,23 +119,9 @@ class _LazyHvacListState extends State<LazyHvacList> {
     );
   }
 
-  void _logPerformanceMetrics() {
-    if (_renderTimes.isEmpty) return;
-
-    final averageRenderTime = _renderTimes
-            .map((d) => d.inMicroseconds)
-            .reduce((a, b) => a + b) ~/
-        _renderTimes.length;
-
-    debugPrint('📊 LazyHvacList Performance Metrics:');
-    debugPrint('  - Average render time: ${averageRenderTime / 1000}ms');
-    debugPrint('  - Total items rendered: ${_units.length}');
-    debugPrint('  - Pages loaded: ${_loadedPages.length}');
-  }
-
   @override
   Widget build(BuildContext context) {
-    _frameStopwatch
+    _controller.frameStopwatch
       ..reset()
       ..start();
 
@@ -178,14 +135,15 @@ class _LazyHvacListState extends State<LazyHvacList> {
         physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
           _buildUnitsList(),
-          if (_isLoadingMore) _buildLoadingIndicator(),
-          if (!_hasMoreData && _units.isNotEmpty) _buildEndIndicator(),
+          if (_controller.isLoadingMore) _buildLoadingIndicator(),
+          if (!_controller.hasMoreData && _controller.items.isNotEmpty)
+            _buildEndIndicator(),
         ],
       ),
     );
 
-    _frameStopwatch.stop();
-    _renderTimes.add(_frameStopwatch.elapsed);
+    _controller.frameStopwatch.stop();
+    _controller.renderTimes.add(_controller.frameStopwatch.elapsed);
 
     return result;
   }
@@ -194,12 +152,12 @@ class _LazyHvacListState extends State<LazyHvacList> {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
-          if (index >= _units.length) return null;
+          if (index >= _controller.items.length) return null;
 
-          final unit = _units[index];
+          final unit = _controller.items[index];
           final isSelected = unit.id == widget.selectedUnitId;
 
-          return _LazyListItem(
+          return LazyListItem(
             key: ValueKey(unit.id),
             unit: unit,
             isSelected: isSelected,
@@ -209,11 +167,11 @@ class _LazyHvacListState extends State<LazyHvacList> {
                 widget.onPowerChanged?.call(unit, power),
           );
         },
-        childCount: _units.length,
-        // Use these callbacks for performance optimization
+        childCount: _controller.items.length,
         findChildIndexCallback: (key) {
           if (key is ValueKey<String>) {
-            final index = _units.indexWhere((unit) => unit.id == key.value);
+            final index =
+                _controller.items.indexWhere((unit) => unit.id == key.value);
             return index != -1 ? index : null;
           }
           return null;
@@ -229,7 +187,7 @@ class _LazyHvacListState extends State<LazyHvacList> {
         child: Column(
           children: List.generate(
             3,
-            (index) => _ShimmerLoadingCard(),
+            (index) => const ShimmerLoadingCard(),
           ),
         ),
       ),
@@ -258,7 +216,7 @@ class _LazyHvacListState extends State<LazyHvacList> {
               ),
               SizedBox(height: HvacSpacing.xs.h),
               Text(
-                '${_units.length} total units',
+                '${_controller.items.length} total units',
                 style: TextStyle(
                   fontSize: 12.sp,
                   color: Colors.white38,
@@ -269,205 +227,5 @@ class _LazyHvacListState extends State<LazyHvacList> {
         ),
       ),
     );
-  }
-}
-
-/// Lazy list item with automatic visibility detection
-class _LazyListItem extends StatefulWidget {
-  final HvacUnit unit;
-  final bool isSelected;
-  final int index;
-  final VoidCallback? onTap;
-  final ValueChanged<bool>? onPowerChanged;
-
-  const _LazyListItem({
-    super.key,
-    required this.unit,
-    required this.isSelected,
-    required this.index,
-    this.onTap,
-    this.onPowerChanged,
-  });
-
-  @override
-  State<_LazyListItem> createState() => _LazyListItemState();
-}
-
-class _LazyListItemState extends State<_LazyListItem>
-    with AutomaticKeepAliveClientMixin {
-  bool _isVisible = false;
-
-  @override
-  bool get wantKeepAlive => widget.isSelected || _isVisible;
-
-  @override
-  void initState() {
-    super.initState();
-    // Stagger the appearance animation
-    Future.delayed(Duration(milliseconds: widget.index * 50), () {
-      if (mounted) {
-        setState(() {
-          _isVisible = true;
-        });
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-
-    return AnimatedOpacity(
-      duration: const Duration(milliseconds: 300),
-      opacity: _isVisible ? 1.0 : 0.0,
-      child: AnimatedSlide(
-        duration: const Duration(milliseconds: 300),
-        offset: _isVisible ? Offset.zero : const Offset(0, 0.1),
-        child: OptimizedHvacCard(
-          unit: widget.unit,
-          isSelected: widget.isSelected,
-          onTap: widget.onTap,
-          onPowerChanged: widget.onPowerChanged,
-        ),
-      ),
-    );
-  }
-}
-
-/// Shimmer loading card for skeleton UI
-class _ShimmerLoadingCard extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(
-        horizontal: HvacSpacing.md.w,
-        vertical: HvacSpacing.sm.h,
-      ),
-      padding: EdgeInsets.all(HvacSpacing.lg.w),
-      decoration: BoxDecoration(
-        color: HvacColors.cardDark,
-        borderRadius: BorderRadius.circular(HvacSpacing.lg.r),
-      ),
-      child: Shimmer.fromColors(
-        baseColor: Colors.white12,
-        highlightColor: Colors.white24,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: 150.w,
-                      height: 20.h,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(HvacSpacing.xs.r),
-                      ),
-                    ),
-                    SizedBox(height: HvacSpacing.xs.h),
-                    Container(
-                      width: 100.w,
-                      height: 14.h,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(HvacSpacing.xs.r),
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                  width: 50.w,
-                  height: 30.h,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15.r),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: HvacSpacing.lg.h),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: List.generate(
-                3,
-                (index) => Container(
-                  width: 60.w,
-                  height: 40.h,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(HvacSpacing.sm.r),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-/// Virtual scrolling controller for extremely large datasets
-class VirtualScrollController {
-  final int itemCount;
-  final double itemHeight;
-  final int bufferSize;
-
-  final _visibleIndices = <int>{};
-  final _cachedWidgets = <int, Widget>{};
-
-  VirtualScrollController({
-    required this.itemCount,
-    required this.itemHeight,
-    this.bufferSize = 5,
-  });
-
-  Set<int> calculateVisibleIndices(ScrollPosition position) {
-    final viewportHeight = position.viewportDimension;
-    final scrollOffset = position.pixels;
-
-    final firstVisibleIndex = (scrollOffset / itemHeight).floor();
-    final lastVisibleIndex =
-        ((scrollOffset + viewportHeight) / itemHeight).ceil();
-
-    final indices = <int>{};
-    for (int i = firstVisibleIndex - bufferSize;
-        i <= lastVisibleIndex + bufferSize;
-        i++) {
-      if (i >= 0 && i < itemCount) {
-        indices.add(i);
-      }
-    }
-
-    // Clean up cached widgets that are far from viewport
-    _cachedWidgets.removeWhere((index, _) {
-      return index < firstVisibleIndex - bufferSize * 2 ||
-          index > lastVisibleIndex + bufferSize * 2;
-    });
-
-    return indices;
-  }
-
-  void updateVisibleIndices(Set<int> newIndices) {
-    _visibleIndices
-      ..clear()
-      ..addAll(newIndices);
-  }
-
-  bool isIndexVisible(int index) => _visibleIndices.contains(index);
-
-  void cacheWidget(int index, Widget widget) {
-    _cachedWidgets[index] = widget;
-  }
-
-  Widget? getCachedWidget(int index) => _cachedWidgets[index];
-
-  void dispose() {
-    _visibleIndices.clear();
-    _cachedWidgets.clear();
   }
 }

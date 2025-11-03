@@ -31,7 +31,7 @@ class HomeAppBar extends StatelessWidget {
 
     return Padding(
       padding: EdgeInsets.all(20.w),
-      child: isMobile ? _buildMobileLayout() : _buildDesktopLayout(),
+      child: isMobile ? _buildMobileLayout() : _buildTabletLayout(),
     );
   }
 
@@ -69,7 +69,7 @@ class HomeAppBar extends StatelessWidget {
     );
   }
 
-  Widget _buildDesktopLayout() {
+  Widget _buildTabletLayout() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

@@ -59,7 +59,6 @@ class AppSpacing {
   // Screen edge padding
   static double get screenPaddingMobile => mdR;
   static double get screenPaddingTablet => lgR;
-  static double get screenPaddingDesktop => xlR;
 
   // Card padding
   static double get cardPadding => lgR; // Default card padding

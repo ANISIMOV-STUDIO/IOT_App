@@ -36,28 +36,23 @@ class ResponsiveBuilder extends StatelessWidget {
       return DeviceType.mobile;
     } else if (width < config.tablet) {
       return DeviceType.tablet;
-    } else if (width < config.desktop) {
-      return DeviceType.desktop;
     } else {
-      return DeviceType.largeDesktop;
+      return DeviceType.desktop;
     }
   }
 }
 
 /// Responsive layout widget with different layouts for each breakpoint
+/// Mobile and tablet only - no desktop support
 class ResponsiveLayout extends StatelessWidget {
   final Widget mobile;
   final Widget? tablet;
-  final Widget? desktop;
-  final Widget? largeDesktop;
   final BreakpointConfig? breakpoints;
 
   const ResponsiveLayout({
     super.key,
     required this.mobile,
     this.tablet,
-    this.desktop,
-    this.largeDesktop,
     this.breakpoints,
   });
 
@@ -72,9 +67,7 @@ class ResponsiveLayout extends StatelessWidget {
           case DeviceType.tablet:
             return tablet ?? mobile;
           case DeviceType.desktop:
-            return desktop ?? tablet ?? mobile;
-          case DeviceType.largeDesktop:
-            return largeDesktop ?? desktop ?? tablet ?? mobile;
+            return tablet ?? mobile;
         }
       },
     );
@@ -82,11 +75,10 @@ class ResponsiveLayout extends StatelessWidget {
 }
 
 /// Responsive value widget that returns different values based on screen size
+/// Mobile and tablet only - no desktop support
 class ResponsiveValue<T> extends StatelessWidget {
   final T mobile;
   final T? tablet;
-  final T? desktop;
-  final T? largeDesktop;
   final Widget Function(BuildContext context, T value) builder;
   final BreakpointConfig? breakpoints;
 
@@ -94,8 +86,6 @@ class ResponsiveValue<T> extends StatelessWidget {
     super.key,
     required this.mobile,
     this.tablet,
-    this.desktop,
-    this.largeDesktop,
     required this.builder,
     this.breakpoints,
   });
@@ -118,19 +108,16 @@ class ResponsiveValue<T> extends StatelessWidget {
       case DeviceType.tablet:
         return tablet ?? mobile;
       case DeviceType.desktop:
-        return desktop ?? tablet ?? mobile;
-      case DeviceType.largeDesktop:
-        return largeDesktop ?? desktop ?? tablet ?? mobile;
+        return tablet ?? mobile;
     }
   }
 }
 
 /// Responsive grid widget with adaptive column count
+/// Mobile and tablet only - no desktop support
 class ResponsiveGrid extends StatelessWidget {
   final int mobileColumns;
   final int? tabletColumns;
-  final int? desktopColumns;
-  final int? largeDesktopColumns;
   final List<Widget> children;
   final double spacing;
   final double runSpacing;
@@ -140,8 +127,6 @@ class ResponsiveGrid extends StatelessWidget {
     super.key,
     required this.mobileColumns,
     this.tabletColumns,
-    this.desktopColumns,
-    this.largeDesktopColumns,
     required this.children,
     this.spacing = 16.0,
     this.runSpacing = 16.0,
@@ -177,21 +162,17 @@ class ResponsiveGrid extends StatelessWidget {
       case DeviceType.tablet:
         return tabletColumns ?? mobileColumns + 1;
       case DeviceType.desktop:
-        return desktopColumns ?? (tabletColumns ?? mobileColumns + 1) + 1;
-      case DeviceType.largeDesktop:
-        return largeDesktopColumns ??
-            (desktopColumns ?? (tabletColumns ?? mobileColumns + 1) + 1) + 1;
+        return tabletColumns ?? mobileColumns + 2;
     }
   }
 }
 
 /// Responsive padding with different values for each breakpoint
+/// Mobile and tablet only - no desktop support
 class ResponsivePadding extends StatelessWidget {
   final Widget child;
   final EdgeInsets mobile;
   final EdgeInsets? tablet;
-  final EdgeInsets? desktop;
-  final EdgeInsets? largeDesktop;
   final BreakpointConfig? breakpoints;
 
   const ResponsivePadding({
@@ -199,8 +180,6 @@ class ResponsivePadding extends StatelessWidget {
     required this.child,
     required this.mobile,
     this.tablet,
-    this.desktop,
-    this.largeDesktop,
     this.breakpoints,
   });
 
@@ -208,15 +187,11 @@ class ResponsivePadding extends StatelessWidget {
     required Widget child,
     required double mobile,
     double? tablet,
-    double? desktop,
-    double? largeDesktop,
     BreakpointConfig? breakpoints,
   }) {
     return ResponsivePadding(
       mobile: EdgeInsets.all(mobile),
       tablet: tablet != null ? EdgeInsets.all(tablet) : null,
-      desktop: desktop != null ? EdgeInsets.all(desktop) : null,
-      largeDesktop: largeDesktop != null ? EdgeInsets.all(largeDesktop) : null,
       breakpoints: breakpoints,
       child: child,
     );
@@ -228,10 +203,6 @@ class ResponsivePadding extends StatelessWidget {
     double? mobileVertical,
     double? tabletHorizontal,
     double? tabletVertical,
-    double? desktopHorizontal,
-    double? desktopVertical,
-    double? largeDesktopHorizontal,
-    double? largeDesktopVertical,
     BreakpointConfig? breakpoints,
   }) {
     return ResponsivePadding(
@@ -243,18 +214,6 @@ class ResponsivePadding extends StatelessWidget {
           ? EdgeInsets.symmetric(
               horizontal: tabletHorizontal ?? 0,
               vertical: tabletVertical ?? 0,
-            )
-          : null,
-      desktop: (desktopHorizontal != null || desktopVertical != null)
-          ? EdgeInsets.symmetric(
-              horizontal: desktopHorizontal ?? 0,
-              vertical: desktopVertical ?? 0,
-            )
-          : null,
-      largeDesktop: (largeDesktopHorizontal != null || largeDesktopVertical != null)
-          ? EdgeInsets.symmetric(
-              horizontal: largeDesktopHorizontal ?? 0,
-              vertical: largeDesktopVertical ?? 0,
             )
           : null,
       breakpoints: breakpoints,
@@ -283,20 +242,17 @@ class ResponsivePadding extends StatelessWidget {
       case DeviceType.tablet:
         return tablet ?? mobile;
       case DeviceType.desktop:
-        return desktop ?? tablet ?? mobile;
-      case DeviceType.largeDesktop:
-        return largeDesktop ?? desktop ?? tablet ?? mobile;
+        return tablet ?? mobile;
     }
   }
 }
 
 /// Responsive visibility widget that shows/hides based on screen size
+/// Mobile and tablet only - no desktop support
 class ResponsiveVisibility extends StatelessWidget {
   final Widget child;
   final bool visibleOnMobile;
   final bool visibleOnTablet;
-  final bool visibleOnDesktop;
-  final bool visibleOnLargeDesktop;
   final Widget? replacement;
   final BreakpointConfig? breakpoints;
 
@@ -305,8 +261,6 @@ class ResponsiveVisibility extends StatelessWidget {
     required this.child,
     this.visibleOnMobile = true,
     this.visibleOnTablet = true,
-    this.visibleOnDesktop = true,
-    this.visibleOnLargeDesktop = true,
     this.replacement,
     this.breakpoints,
   });
@@ -332,20 +286,17 @@ class ResponsiveVisibility extends StatelessWidget {
       case DeviceType.tablet:
         return visibleOnTablet;
       case DeviceType.desktop:
-        return visibleOnDesktop;
-      case DeviceType.largeDesktop:
-        return visibleOnLargeDesktop;
+        return visibleOnTablet;
     }
   }
 }
 
 /// Responsive text with different styles for each breakpoint
+/// Mobile and tablet only - no desktop support
 class ResponsiveText extends StatelessWidget {
   final String text;
   final TextStyle? mobileStyle;
   final TextStyle? tabletStyle;
-  final TextStyle? desktopStyle;
-  final TextStyle? largeDesktopStyle;
   final TextAlign? textAlign;
   final int? maxLines;
   final TextOverflow? overflow;
@@ -356,8 +307,6 @@ class ResponsiveText extends StatelessWidget {
     super.key,
     this.mobileStyle,
     this.tabletStyle,
-    this.desktopStyle,
-    this.largeDesktopStyle,
     this.textAlign,
     this.maxLines,
     this.overflow,
@@ -388,9 +337,7 @@ class ResponsiveText extends StatelessWidget {
       case DeviceType.tablet:
         return tabletStyle ?? mobileStyle;
       case DeviceType.desktop:
-        return desktopStyle ?? tabletStyle ?? mobileStyle;
-      case DeviceType.largeDesktop:
-        return largeDesktopStyle ?? desktopStyle ?? tabletStyle ?? mobileStyle;
+        return tabletStyle ?? mobileStyle;
     }
   }
 }
@@ -412,7 +359,6 @@ class ResponsiveInfo {
   bool get isMobile => deviceType == DeviceType.mobile;
   bool get isTablet => deviceType == DeviceType.tablet;
   bool get isDesktop => deviceType == DeviceType.desktop;
-  bool get isLargeDesktop => deviceType == DeviceType.largeDesktop;
   bool get isPortrait => orientation == Orientation.portrait;
   bool get isLandscape => orientation == Orientation.landscape;
 
@@ -422,11 +368,11 @@ class ResponsiveInfo {
 }
 
 /// Device type enumeration
+/// Full responsive support: mobile, tablet, and desktop
 enum DeviceType {
   mobile,
   tablet,
   desktop,
-  largeDesktop,
 }
 
 /// Breakpoint configuration
@@ -472,10 +418,8 @@ extension ResponsiveExtensions on BuildContext {
       type = DeviceType.mobile;
     } else if (size.width < config.tablet) {
       type = DeviceType.tablet;
-    } else if (size.width < config.desktop) {
-      type = DeviceType.desktop;
     } else {
-      type = DeviceType.largeDesktop;
+      type = DeviceType.desktop;
     }
 
     return ResponsiveInfo(
@@ -489,7 +433,6 @@ extension ResponsiveExtensions on BuildContext {
   bool get isMobile => responsive.isMobile;
   bool get isTablet => responsive.isTablet;
   bool get isDesktop => responsive.isDesktop;
-  bool get isLargeDesktop => responsive.isLargeDesktop;
   bool get isPortrait => responsive.isPortrait;
   bool get isLandscape => responsive.isLandscape;
 }

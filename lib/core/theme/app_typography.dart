@@ -326,17 +326,14 @@ class AppTypography {
     );
   }
 
-  // Responsive text styles based on screen size
+  // Responsive text styles based on screen size (mobile and tablet only)
   static TextStyle responsive({
     required TextStyle mobile,
     TextStyle? tablet,
-    TextStyle? desktop,
   }) {
     final screenWidth = 1.sw;
 
-    if (screenWidth >= 1024 && desktop != null) {
-      return desktop;
-    } else if (screenWidth >= 600 && tablet != null) {
+    if (screenWidth >= 600 && tablet != null) {
       return tablet;
     } else {
       return mobile;

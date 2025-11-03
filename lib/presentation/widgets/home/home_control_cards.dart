@@ -6,7 +6,6 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
-import '../../../core/theme/ui_constants.dart';
 import '../../../domain/entities/hvac_unit.dart';
 import '../../../domain/entities/ventilation_mode.dart';
 import '../../../generated/l10n/app_localizations.dart';
@@ -37,14 +36,18 @@ class HomeControlCards extends StatelessWidget {
       return _buildNoDeviceSelected(context);
     }
 
-    final isMobile = ResponsiveUtils.isMobile(context);
-    final isTablet = ResponsiveUtils.isTablet(context);
-
-    // Both mobile and tablet use vertical layout
-    // Only desktop (>1200px) uses horizontal layout
-    return (isMobile || isTablet)
-        ? _buildMobileLayout()
-        : _buildDesktopLayout();
+    // Adaptive layout based on screen width
+    final width = MediaQuery.of(context).size.width;
+    if (width >= 1024) {
+      // Desktop: use grid with 3 columns
+      return _buildGridLayout(context, 3);
+    } else if (width >= 600) {
+      // Tablet: use grid with 2 columns
+      return _buildGridLayout(context, 2);
+    } else {
+      // Mobile: use vertical column
+      return _buildMobileLayout();
+    }
   }
 
   Widget _buildNoDeviceSelected(BuildContext context) {
@@ -108,42 +111,46 @@ class HomeControlCards extends StatelessWidget {
     );
   }
 
-  Widget _buildDesktopLayout() {
-    return SmoothAnimations.fadeIn(
-      delay: AnimationDurations.staggerShort,
-      duration: AnimationDurations.medium,
-      child: SmoothAnimations.slideIn(
-        begin: const Offset(0, 0.05),
-        delay: AnimationDurations.staggerShort,
-        duration: AnimationDurations.medium,
-        child: SizedBox(
-          height: UIConstants.controlCardHeight.h,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                child: VentilationModeControl(
-                  unit: currentUnit!,
-                  onModeChanged: onModeChanged,
-                  onSupplyFanChanged: onSupplyFanChanged,
-                  onExhaustFanChanged: onExhaustFanChanged,
-                ),
-              ),
-              const SizedBox(width: HvacSpacing.mdR),
-              Expanded(
-                child: VentilationTemperatureControl(unit: currentUnit!),
-              ),
-              const SizedBox(width: HvacSpacing.mdR),
-              Expanded(
-                child: VentilationScheduleControl(
-                  unit: currentUnit!,
-                  onSchedulePressed: onSchedulePressed,
-                ),
-              ),
-            ],
-          ),
-        ),
+  Widget _buildGridLayout(BuildContext context, int crossAxisCount) {
+    final cards = [
+      VentilationModeControl(
+        unit: currentUnit!,
+        onModeChanged: onModeChanged,
+        onSupplyFanChanged: onSupplyFanChanged,
+        onExhaustFanChanged: onExhaustFanChanged,
       ),
+      VentilationTemperatureControl(unit: currentUnit!),
+      VentilationScheduleControl(
+        unit: currentUnit!,
+        onSchedulePressed: onSchedulePressed,
+      ),
+    ];
+
+    // Apply staggered animations
+    final animatedCards = SmoothAnimations.staggeredList(
+      children: cards,
+      staggerDelay: AnimationDurations.staggerMedium,
+      itemDuration: AnimationDurations.medium,
+      fadeIn: true,
+      slideIn: true,
+      scaleIn: false,
+    );
+
+    final width = MediaQuery.of(context).size.width;
+    final maxContentWidth = width >= 1024 ? 1600.0 : width;
+
+    return Wrap(
+      spacing: HvacSpacing.lgR,
+      runSpacing: HvacSpacing.lgV,
+      children: animatedCards.map((card) {
+        return SizedBox(
+          width: (maxContentWidth -
+                  (HvacSpacing.lgR * 2) -
+                  (HvacSpacing.lgR * (crossAxisCount - 1))) /
+                 crossAxisCount,
+          child: card,
+        );
+      }).toList(),
     );
   }
 }

@@ -8,10 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// Device size categories (Material Design 3 breakpoints)
+/// Full responsive support: mobile, tablet, and desktop
 enum DeviceSize {
   compact,  // < 600dp (phones)
-  medium,   // 600-840dp (tablets, foldables)
-  expanded, // > 840dp (desktops, large tablets)
+  medium,   // 600-1024dp (tablets, foldables)
+  expanded, // 1024dp+ (desktops, large screens)
 }
 
 /// Layout configuration based on device size
@@ -22,7 +23,7 @@ class AdaptiveLayout {
 
     if (width < 600) {
       return DeviceSize.compact;
-    } else if (width < 840) {
+    } else if (width < 1024) {
       return DeviceSize.medium;
     } else {
       return DeviceSize.expanded;
@@ -54,7 +55,7 @@ class AdaptiveLayout {
       context,
       compact: EdgeInsets.all(16.w),
       medium: EdgeInsets.all(20.w),
-      expanded: EdgeInsets.all(24.w),
+      expanded: EdgeInsets.all(16.w), // Standard for desktop with fixed width
     );
   }
 
@@ -64,7 +65,7 @@ class AdaptiveLayout {
       context,
       compact: base.sp,
       medium: (base * 1.2).sp,
-      expanded: (base * 1.4).sp,
+      expanded: base.sp, // Same as mobile for desktop
     );
   }
 
@@ -74,7 +75,7 @@ class AdaptiveLayout {
       context,
       compact: base.sp,
       medium: (base * 0.95).sp,
-      expanded: (base * 0.9).sp,
+      expanded: base.sp, // Same as mobile for desktop
     );
   }
 
@@ -84,7 +85,7 @@ class AdaptiveLayout {
       context,
       compact: base.w,
       medium: (base * 1.2).w,
-      expanded: (base * 1.4).w,
+      expanded: base.w, // Same as mobile for desktop with fixed width
     );
   }
 
@@ -110,7 +111,8 @@ class AdaptiveLayout {
 
   /// Check if should use multi-column layout
   static bool useMultiColumn(BuildContext context) {
-    return getDeviceSize(context) == DeviceSize.expanded;
+    final size = getDeviceSize(context);
+    return size == DeviceSize.medium || size == DeviceSize.expanded;
   }
 
   /// Get number of columns for grid
@@ -129,7 +131,7 @@ class AdaptiveLayout {
       context,
       compact: 48.h, // Material minimum touch target
       medium: 56.h,
-      expanded: 64.h,
+      expanded: 56.h,
     );
   }
 
@@ -143,14 +145,9 @@ class AdaptiveLayout {
     ) ?? double.infinity;
   }
 
-  /// Get maximum content width (for large screens)
+  /// Get maximum content width (for desktop - prevents content stretching)
   static double? getMaxContentWidth(BuildContext context) {
-    final size = getDeviceSize(context);
-
-    if (size == DeviceSize.expanded) {
-      return 1400.w; // Max width for ultra-wide screens
-    }
-    return null; // No limit on smaller screens
+    return getDeviceSize(context) == DeviceSize.expanded ? 1400.w : null;
   }
 
   /// Build adaptive layout with different widgets per size
@@ -178,14 +175,8 @@ class AdaptiveLayout {
 
   /// Get slider track shape based on device
   static SliderTrackShape getSliderTrackShape(BuildContext context) {
-    final size = getDeviceSize(context);
-
-    if (size == DeviceSize.compact) {
-      return const RoundedRectSliderTrackShape();
-    } else {
-      // Thicker track for tablet/desktop
-      return const RoundedRectSliderTrackShape();
-    }
+    // Same track shape for all mobile and tablet devices
+    return const RoundedRectSliderTrackShape();
   }
 
   /// Get slider thumb size
@@ -194,14 +185,13 @@ class AdaptiveLayout {
       context,
       compact: 12.r,
       medium: 14.r,
-      expanded: 16.r,
     );
   }
 
-  /// Check if device supports hover (desktop/web)
+  /// Check if device supports hover
   static bool supportsHover(BuildContext context) {
-    // On web or desktop, we can use hover states
-    return getDeviceSize(context) == DeviceSize.expanded;
+    // Mobile and tablet primarily use touch, minimal hover support needed
+    return false;
   }
 }
 
