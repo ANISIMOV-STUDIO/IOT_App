@@ -68,8 +68,11 @@ class _VentilationModeControlState extends State<VentilationModeControl>
     return PerformanceUtils.isolateRepaint(
       AdaptiveControl(
         builder: (context, deviceSize) {
+          final isDesktop = deviceSize == DeviceSize.expanded;
           return Container(
-            padding: AdaptiveLayout.controlPadding(context),
+            padding: isDesktop
+                ? EdgeInsets.all(12.w)
+                : AdaptiveLayout.controlPadding(context),
             decoration: BoxDecoration(
               color: HvacColors.backgroundCard,
               borderRadius: BorderRadius.circular(
@@ -90,9 +93,9 @@ class _VentilationModeControlState extends State<VentilationModeControl>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildHeader(context, deviceSize),
-                      SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 12)),
+                      SizedBox(height: isDesktop ? 8.h : (deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 12))),
                       _buildModeSelector(context, deviceSize),
-                      SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 12)),
+                      SizedBox(height: isDesktop ? 8.h : (deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 12))),
                       Expanded(
                         child: SingleChildScrollView(
                           physics: PerformanceUtils.getOptimalScrollPhysics(
@@ -261,6 +264,7 @@ class _VentilationModeControlState extends State<VentilationModeControl>
         );
       case DeviceSize.medium:
       case DeviceSize.expanded:
+        final isDesktop = deviceSize == DeviceSize.expanded;
         return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -270,6 +274,7 @@ class _VentilationModeControlState extends State<VentilationModeControl>
                 icon: Icons.air,
                 value: _supplyFanSpeed,
                 max: 100,
+                showTickMarks: !isDesktop,
                 onChanged: (speed) {
                   setState(() => _supplyFanSpeed = speed);
                   widget.onSupplyFanChanged?.call(speed);
@@ -283,6 +288,7 @@ class _VentilationModeControlState extends State<VentilationModeControl>
                 icon: Icons.upload,
                 value: _exhaustFanSpeed,
                 max: 100,
+                showTickMarks: !isDesktop,
                 onChanged: (speed) {
                   setState(() => _exhaustFanSpeed = speed);
                   widget.onExhaustFanChanged?.call(speed);
