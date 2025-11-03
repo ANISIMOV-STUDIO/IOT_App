@@ -111,6 +111,9 @@ class _HomeScreenState extends State<HomeScreen> with SnackbarMixin {
       onPowerAllOff: _powerAllOff,
       onSyncSettings: () => _syncSettings(currentUnit!),
       onApplyScheduleToAll: () => _applyScheduleToAll(currentUnit!),
+      onSchedulePressed: currentUnit != null
+          ? () => _navigateToSchedule(currentUnit)
+          : null,
     );
   }
 

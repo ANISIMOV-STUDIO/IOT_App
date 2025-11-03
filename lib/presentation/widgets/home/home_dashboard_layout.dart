@@ -81,6 +81,7 @@ class HomeDashboard extends StatelessWidget {
   final VoidCallback onPowerAllOff;
   final VoidCallback onSyncSettings;
   final VoidCallback onApplyScheduleToAll;
+  final VoidCallback? onSchedulePressed;
 
   const HomeDashboard({
     super.key,
@@ -97,6 +98,7 @@ class HomeDashboard extends StatelessWidget {
     required this.onPowerAllOff,
     required this.onSyncSettings,
     required this.onApplyScheduleToAll,
+    this.onSchedulePressed,
   });
 
   @override
@@ -171,6 +173,7 @@ class HomeDashboard extends StatelessWidget {
         onPowerAllOff: onPowerAllOff,
         onSyncSettings: onSyncSettings,
         onApplyScheduleToAll: onApplyScheduleToAll,
+        onSchedulePressed: onSchedulePressed,
       );
     }
   }

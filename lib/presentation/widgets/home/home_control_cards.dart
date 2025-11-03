@@ -39,8 +39,8 @@ class HomeControlCards extends StatelessWidget {
     // Adaptive layout based on screen width
     final width = MediaQuery.of(context).size.width;
     if (width >= 1024) {
-      // Desktop: use grid with 3 columns
-      return _buildGridLayout(context, 3);
+      // Desktop: use grid with 2 columns (only Mode and Temperature)
+      return _buildDesktopLayout(context);
     } else if (width >= 600) {
       // Tablet: use grid with 2 columns
       return _buildGridLayout(context, 2);
@@ -67,6 +67,43 @@ class HomeControlCards extends StatelessWidget {
           style: TextStyle(
             fontSize: 14.sp,
             color: HvacColors.textSecondary,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDesktopLayout(BuildContext context) {
+    final cards = [
+      VentilationModeControl(
+        unit: currentUnit!,
+        onModeChanged: onModeChanged,
+        onSupplyFanChanged: onSupplyFanChanged,
+        onExhaustFanChanged: onExhaustFanChanged,
+      ),
+      VentilationTemperatureControl(unit: currentUnit!),
+    ];
+
+    // Apply staggered animations
+    final animatedCards = SmoothAnimations.staggeredList(
+      children: cards,
+      staggerDelay: AnimationDurations.staggerMedium,
+      itemDuration: AnimationDurations.medium,
+      fadeIn: true,
+      slideIn: true,
+      scaleIn: false,
+    );
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: List.generate(
+        animatedCards.length,
+        (index) => Expanded(
+          child: Padding(
+            padding: EdgeInsets.only(
+              right: index < animatedCards.length - 1 ? HvacSpacing.lgR : 0,
+            ),
+            child: animatedCards[index],
           ),
         ),
       ),
