@@ -43,90 +43,107 @@ Size _getDesignSize(double width) {
   }
 }
 
-class HvacControlApp extends StatelessWidget {
+class HvacControlApp extends StatefulWidget {
   const HvacControlApp({super.key});
 
   @override
+  State<HvacControlApp> createState() => _HvacControlAppState();
+}
+
+class _HvacControlAppState extends State<HvacControlApp> {
+  Size? _lastDesignSize;
+
+  @override
   Widget build(BuildContext context) {
-    return ListenableBuilder(
-      listenable: Listenable.merge([
-        di.sl<ThemeService>(),
-        di.sl<LanguageService>(),
-      ]),
-      builder: (context, child) {
-        final languageService = di.sl<LanguageService>();
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => di.sl<AuthBloc>()
+            ..add(const CheckAuthStatusEvent()),
+        ),
+        BlocProvider(
+          create: (context) => di.sl<HvacListBloc>()
+            ..add(const LoadHvacUnitsEvent()),
+        ),
+      ],
+      child: ListenableBuilder(
+        listenable: Listenable.merge([
+          di.sl<ThemeService>(),
+          di.sl<LanguageService>(),
+        ]),
+        builder: (context, child) {
+          final languageService = di.sl<LanguageService>();
 
-        return LayoutBuilder(
-          builder: (context, constraints) {
-            final designSize = _getDesignSize(constraints.maxWidth);
-            return ScreenUtilInit(
-              key: ValueKey(designSize),
-              designSize: designSize,
-              minTextAdapt: true,
-              splitScreenMode: true,
-              builder: (context, child) {
-                return MaterialApp(
-                  title: 'HVAC Control',
-                  debugShowCheckedModeBanner: false,
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              final designSize = _getDesignSize(constraints.maxWidth);
 
-                  // Theme - Dark with Orange Accents (Figma Design)
-                  theme: HvacTheme.darkTheme(),
-                  darkTheme: HvacTheme.darkTheme(),
-                  themeMode: ThemeMode.dark, // Always use dark theme
+              // Only rebuild ScreenUtilInit if design size actually changed
+              if (_lastDesignSize != designSize) {
+                _lastDesignSize = designSize;
+              }
 
-                  // Localization
-                  locale: languageService.currentLocale,
-                  localizationsDelegates: const [
-                    AppLocalizations.delegate,
-                    GlobalMaterialLocalizations.delegate,
-                    GlobalWidgetsLocalizations.delegate,
-                    GlobalCupertinoLocalizations.delegate,
-                  ],
-                  supportedLocales: LanguageService.supportedLocales,
+              return ScreenUtilInit(
+                key: ValueKey(_lastDesignSize),
+                designSize: designSize,
+                minTextAdapt: true,
+                splitScreenMode: true,
+                builder: (context, child) {
+                  return MaterialApp(
+                    title: 'HVAC Control',
+                    debugShowCheckedModeBanner: false,
 
-                  home: child,
-                );
-              },
-              child: MultiBlocProvider(
-            providers: [
-              BlocProvider(
-                create: (context) => di.sl<AuthBloc>()
-                  ..add(const CheckAuthStatusEvent()),
-              ),
-              BlocProvider(
-                create: (context) => di.sl<HvacListBloc>()
-                  ..add(const LoadHvacUnitsEvent()),
-              ),
-            ],
-            child: BlocListener<AuthBloc, AuthState>(
-              listener: (context, state) {
-                // Handle auth state changes globally if needed
-              },
-              child: BlocBuilder<AuthBloc, AuthState>(
-                builder: (context, state) {
-                  if (state is AuthAuthenticated) {
-                    return const ResponsiveShell();
-                  } else if (state is AuthUnauthenticated || state is AuthError) {
-                    return const LoginScreen();
-                  } else {
-                    // Loading or initial state
-                    return const Scaffold(
-                      backgroundColor: HvacColors.backgroundDark,
-                      body: Center(
-                        child: CircularProgressIndicator(
-                          color: HvacColors.primaryOrange,
-                        ),
-                      ),
-                    );
-                  }
+                    // Theme - Dark with Orange Accents (Figma Design)
+                    theme: HvacTheme.darkTheme(),
+                    darkTheme: HvacTheme.darkTheme(),
+                    themeMode: ThemeMode.dark, // Always use dark theme
+
+                    // Localization
+                    locale: languageService.currentLocale,
+                    localizationsDelegates: const [
+                      AppLocalizations.delegate,
+                      GlobalMaterialLocalizations.delegate,
+                      GlobalWidgetsLocalizations.delegate,
+                      GlobalCupertinoLocalizations.delegate,
+                    ],
+                    supportedLocales: LanguageService.supportedLocales,
+
+                    home: child,
+                  );
                 },
-              ),
-            ),
-          ),
-            );
-          },
-        );
-      },
+                child: BlocListener<AuthBloc, AuthState>(
+                  listener: (context, state) {
+                    // Handle auth state changes globally if needed
+                  },
+                  child: BlocBuilder<AuthBloc, AuthState>(
+                    buildWhen: (previous, current) {
+                      // Only rebuild when auth state actually changes type
+                      return previous.runtimeType != current.runtimeType;
+                    },
+                    builder: (context, state) {
+                      if (state is AuthAuthenticated) {
+                        return const ResponsiveShell();
+                      } else if (state is AuthUnauthenticated || state is AuthError) {
+                        return const LoginScreen();
+                      } else {
+                        // Loading or initial state
+                        return const Scaffold(
+                          backgroundColor: HvacColors.backgroundDark,
+                          body: Center(
+                            child: CircularProgressIndicator(
+                              color: HvacColors.primaryOrange,
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }
