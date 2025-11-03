@@ -235,6 +235,7 @@ class _VentilationModeControlState extends State<VentilationModeControl>
 
   Widget _buildFanSpeedControls(BuildContext context, DeviceSize deviceSize) {
     // Adaptive layout: stack on mobile, side-by-side on tablet/desktop
+    // MONOCHROMATIC: Both sliders use same gold accent (no color parameter needed)
     if (deviceSize == DeviceSize.compact) {
       return Column(
         children: [
@@ -247,7 +248,6 @@ class _VentilationModeControlState extends State<VentilationModeControl>
               setState(() => _supplyFanSpeed = speed);
               widget.onSupplyFanChanged?.call(speed);
             },
-            color: AppTheme.info,
           ),
           SizedBox(height: 12.h),
           AdaptiveSlider(
@@ -259,7 +259,6 @@ class _VentilationModeControlState extends State<VentilationModeControl>
               setState(() => _exhaustFanSpeed = speed);
               widget.onExhaustFanChanged?.call(speed);
             },
-            color: AppTheme.warning,
           ),
         ],
       );
@@ -277,7 +276,6 @@ class _VentilationModeControlState extends State<VentilationModeControl>
                 setState(() => _supplyFanSpeed = speed);
                 widget.onSupplyFanChanged?.call(speed);
               },
-              color: AppTheme.info,
             ),
           ),
           SizedBox(width: AdaptiveLayout.spacing(context, base: 24)),
@@ -291,7 +289,6 @@ class _VentilationModeControlState extends State<VentilationModeControl>
                 setState(() => _exhaustFanSpeed = speed);
                 widget.onExhaustFanChanged?.call(speed);
               },
-              color: AppTheme.warning,
             ),
           ),
         ],

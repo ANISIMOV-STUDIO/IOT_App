@@ -35,7 +35,8 @@
       "Bash(cmd /c:*)",
       "Bash(timeout /t 10 /nobreak)",
       "Bash(flutter pub run:*)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(C:srcflutterbinflutter.bat analyze)"
     ],
     "deny": [],
     "ask": []

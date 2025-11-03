@@ -47,12 +47,12 @@ class GroupControlPanel extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: AppTheme.info.withValues(alpha: 0.2),
+                  color: AppTheme.accent.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Icon(
                   Icons.group_work,
-                  color: AppTheme.info,
+                  color: AppTheme.accent, // Gold accent for header icon
                   size: 20,
                 ),
               ),
@@ -158,6 +158,7 @@ class GroupControlPanel extends StatelessWidget {
     Color color,
     VoidCallback? onPressed,
   ) {
+    // MONOCHROMATIC: Only icons are colored, buttons and text stay neutral
     return MouseRegion(
       cursor: onPressed != null ? SystemMouseCursors.click : SystemMouseCursors.basic,
       child: GestureDetector(
@@ -165,25 +166,28 @@ class GroupControlPanel extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
           decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.1),
+            // Background: always dark gray, never colored
+            color: AppTheme.backgroundDark,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
-              color: color.withValues(alpha: 0.3),
+              // Border: always neutral gray, never colored
+              color: AppTheme.backgroundCardBorder,
               width: 1,
             ),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // ONLY icon is colored
               Icon(icon, color: color, size: 16),
               const SizedBox(width: 6),
               Flexible(
                 child: Text(
                   label,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
-                    color: color,
+                    color: AppTheme.textPrimary, // Text always white
                   ),
                   textAlign: TextAlign.center,
                   maxLines: 1,

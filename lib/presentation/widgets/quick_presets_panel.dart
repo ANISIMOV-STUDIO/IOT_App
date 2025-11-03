@@ -175,6 +175,7 @@ class _PresetButtonState extends State<_PresetButton> {
 
   @override
   Widget build(BuildContext context) {
+    // MONOCHROMATIC: Only icons are colored, buttons and text stay neutral
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       onEnter: (_) => setState(() => _isHovered = true),
@@ -185,13 +186,15 @@ class _PresetButtonState extends State<_PresetButton> {
           duration: const Duration(milliseconds: 150),
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           decoration: BoxDecoration(
+            // Background: subtle lift on hover, but stay monochrome
             color: _isHovered
-                ? widget.color.withValues(alpha: 0.15)
+                ? AppTheme.backgroundElevated // Subtle gray lift
                 : AppTheme.backgroundDark,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
+              // Border: always gray, never colored
               color: _isHovered
-                  ? widget.color.withValues(alpha: 0.5)
+                  ? AppTheme.accent.withValues(alpha: 0.3) // Subtle gold hint on hover
                   : AppTheme.backgroundCardBorder,
               width: 1.5,
             ),
@@ -199,9 +202,10 @@ class _PresetButtonState extends State<_PresetButton> {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
+              // ONLY icons are colored
               Icon(
                 widget.icon,
-                color: widget.color,
+                color: widget.color, // Keep icon colored
                 size: 18,
               ),
               const SizedBox(width: 8),
@@ -209,19 +213,20 @@ class _PresetButtonState extends State<_PresetButton> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  // Text: ALWAYS white, never colored
                   Text(
                     widget.label,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
-                      color: _isHovered ? widget.color : AppTheme.textPrimary,
+                      color: AppTheme.textPrimary, // Always white
                     ),
                   ),
                   Text(
                     '${widget.preset.supplyFanSpeed}% / ${widget.preset.exhaustFanSpeed}%',
                     style: const TextStyle(
                       fontSize: 10,
-                      color: AppTheme.textSecondary,
+                      color: AppTheme.textSecondary, // Always gray
                     ),
                   ),
                 ],

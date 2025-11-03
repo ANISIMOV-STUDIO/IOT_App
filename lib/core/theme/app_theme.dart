@@ -9,34 +9,75 @@ import 'app_radius.dart';
 import 'spacing.dart';
 
 class AppTheme {
-  // Primary Colors - From Figma Design
-  static const Color primaryOrange = Color(0xFFFFB267); // #ffb267
-  static const Color primaryOrangeDark = Color(0xFFE8A055);
-  static const Color primaryOrangeLight = Color(0xFFFFCEA0); // rgba(255, 206, 160, 0.7)
-  static const Color primaryOrangeBorder = Color(0x99FFB267); // rgba(255, 178, 103, 0.6)
+  // ============================================================================
+  // PREMIUM LUXURY COLOR PALETTE 2025
+  // Based on research: Midnight & Gold, High-End Brands (Apple, Tesla)
+  // Philosophy: Monochromatic + Single Noble Accent
+  // ============================================================================
 
-  // Background Colors - From Figma Design
-  static const Color backgroundDark = Color(0xFF211D1D); // #211d1d
-  static const Color backgroundCard = Color(0xFF282424); // #282424
-  static const Color backgroundCardBorder = Color(0xFF393535); // #393535
+  // PRIMARY ACCENT - Refined Gold (Not bright orange)
+  // Deep, sophisticated gold that conveys luxury and prestige
+  static const Color accent = Color(0xFFD4AF37); // Royal Gold
+  static const Color accentDark = Color(0xFFB8962E); // Dark Gold
+  static const Color accentLight = Color(0xFFE5C85B); // Light Gold
+  static const Color accentSubtle = Color(0x33D4AF37); // Gold with 20% opacity
 
-  // Text Colors - From Figma Design
-  static const Color textPrimary = Color(0xFFF8F8F8); // #f8f8f8
-  static const Color textSecondary = Color(0x99FFFFFF); // rgba(255, 255, 255, 0.6)
-  static const Color textTertiary = Color(0x66FFFFFF); // rgba(255, 255, 255, 0.4)
+  // BACKGROUNDS - Deep Charcoal & Midnight Blue
+  // Creates depth and sophistication, not pure black
+  static const Color backgroundDark = Color(0xFF0A0E27); // Midnight Blue-Black
+  static const Color backgroundCard = Color(0xFF131829); // Charcoal Blue
+  static const Color backgroundCardBorder = Color(0xFF1F2539); // Subtle Border
+  static const Color backgroundElevated = Color(0xFF1A2035); // Elevated Surface
 
-  // Status Colors
-  static const Color success = Color(0xFF4CAF50);
-  static const Color error = Color(0xFFEF4444);
-  static const Color warning = Color(0xFFFFA726);
-  static const Color info = Color(0xFF42A5F5);
+  // TEXT - High contrast with subtle variations
+  static const Color textPrimary = Color(0xFFFAFAFA); // Pure White (slight warm)
+  static const Color textSecondary = Color(0xB3FFFFFF); // 70% White
+  static const Color textTertiary = Color(0x66FFFFFF); // 40% White
+  static const Color textDisabled = Color(0x33FFFFFF); // 20% White
 
-  // Device Mode Colors
-  static const Color modeCool = Color(0xFF42A5F5);
-  static const Color modeHeat = Color(0xFFEF5350);
-  static const Color modeFan = Color(0xFF66BB6A);
-  static const Color modeDry = Color(0xFFFFCA28);
-  static const Color modeAuto = Color(0xFFAB47BC);
+  // MONOCHROMATIC SHADES - For data visualization and states
+  // Using shades of blue-gray for sophisticated, non-colorful look
+  static const Color neutral100 = Color(0xFF8B95A8); // Light Blue-Gray
+  static const Color neutral200 = Color(0xFF6B7589); // Medium Blue-Gray
+  static const Color neutral300 = Color(0xFF4E5668); // Dark Blue-Gray
+  static const Color neutral400 = Color(0xFF353C4F); // Very Dark Blue-Gray
+
+  // SEMANTIC COLORS - Muted, not bright
+  // Success: Deep emerald green (not bright green)
+  static const Color success = Color(0xFF2E8B57); // Sea Green
+  static const Color successSubtle = Color(0x332E8B57);
+
+  // Error: Deep crimson (not bright red)
+  static const Color error = Color(0xFFC53030); // Deep Crimson
+  static const Color errorSubtle = Color(0x33C53030);
+
+  // Warning: Amber (muted, not bright yellow/orange)
+  static const Color warning = Color(0xFFD97706); // Amber
+  static const Color warningSubtle = Color(0x33D97706);
+
+  // Info: Steel Blue (muted, not bright blue)
+  static const Color info = Color(0xFF4682B4); // Steel Blue
+  static const Color infoSubtle = Color(0x334682B4);
+
+  // TEMPERATURE GRADIENT - Monochromatic with subtle warmth/cool
+  // Using blue-grays with slight temperature tint
+  static const Color tempCold = Color(0xFF5B7C99); // Cool Blue-Gray
+  static const Color tempNeutral = Color(0xFF7788A0); // Neutral Gray
+  static const Color tempWarm = Color(0xFF8B7E77); // Warm Gray
+
+  // LEGACY COMPATIBILITY - Map old colors to new palette
+  static const Color primaryOrange = accent; // Gold instead of orange
+  static const Color primaryOrangeDark = accentDark;
+  static const Color primaryOrangeLight = accentLight;
+  static const Color primaryOrangeBorder = accentSubtle;
+
+  // Device Mode Colors - ALL MONOCHROMATIC now (no rainbow)
+  // Using neutral shades with subtle accent tint
+  static const Color modeCool = neutral100; // Light shade
+  static const Color modeHeat = neutral200; // Medium shade
+  static const Color modeFan = neutral300; // Dark shade
+  static const Color modeDry = neutral200; // Medium shade
+  static const Color modeAuto = accent; // Only mode with gold accent
 
   // Control Card Heights
   static const double controlCardHeight = 280.0; // Fixed height for all control widgets
@@ -44,10 +85,26 @@ class AppTheme {
   // Compatibility aliases for new widgets
   static const Color cardDark = backgroundCard;
   static const Color borderColor = backgroundCardBorder;
-  static const Color primaryBlue = modeCool;
+  static const Color primaryBlue = neutral100; // Monochromatic
 
+  // GRADIENTS - Subtle, sophisticated
   static const LinearGradient primaryGradient = LinearGradient(
-    colors: [primaryOrange, primaryOrangeDark],
+    colors: [accent, accentDark],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+
+  static const LinearGradient subtleGradient = LinearGradient(
+    colors: [backgroundCard, backgroundElevated],
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+  );
+
+  static const LinearGradient glassGradient = LinearGradient(
+    colors: [
+      Color(0x1AFFFFFF), // 10% white
+      Color(0x0DFFFFFF), // 5% white
+    ],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
@@ -58,13 +115,13 @@ class AppTheme {
       useMaterial3: true,
       brightness: Brightness.dark,
 
-      // Color Scheme
+      // Color Scheme - Premium Luxury
       colorScheme: const ColorScheme.dark(
-        primary: primaryOrange,
-        secondary: primaryOrangeLight,
-        surface: backgroundCard,
-        error: error,
-        onPrimary: textPrimary,
+        primary: accent, // Royal Gold
+        secondary: neutral100, // Monochromatic accent
+        surface: backgroundCard, // Charcoal Blue
+        error: error, // Deep Crimson
+        onPrimary: backgroundDark, // Dark text on gold
         onSecondary: textPrimary,
         onSurface: textPrimary,
         onError: textPrimary,
@@ -98,11 +155,11 @@ class AppTheme {
         ),
       ),
 
-      // Bottom Navigation Bar Theme
+      // Bottom Navigation Bar Theme - Luxury Minimal
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: backgroundDark,
-        selectedItemColor: primaryOrange,
-        unselectedItemColor: textTertiary,
+        selectedItemColor: accent, // Gold for selected
+        unselectedItemColor: neutral200, // Muted gray for unselected
         type: BottomNavigationBarType.fixed,
         elevation: 0,
         showSelectedLabels: false,
@@ -233,11 +290,11 @@ class AppTheme {
         ),
       ),
 
-      // Elevated Button Theme
+      // Elevated Button Theme - Luxury Gold
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: primaryOrange,
-          foregroundColor: textPrimary,
+          backgroundColor: accent, // Royal Gold
+          foregroundColor: backgroundDark, // Dark text on gold
           elevation: 0,
           padding: const EdgeInsets.symmetric(
             horizontal: AppSpacing.lg,
@@ -249,55 +306,57 @@ class AppTheme {
           textStyle: TextStyle(
             fontSize: 16.sp,
             fontWeight: FontWeight.w600,
+            letterSpacing: 0.5, // Luxury spacing
           ),
         ),
       ),
 
-      // Switch Theme - Orange Rounded Toggle
+      // Switch Theme - Monochromatic with Gold accent
       switchTheme: SwitchThemeData(
         thumbColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return Colors.white;
+            return textPrimary; // White thumb
           }
-          return textTertiary;
+          return neutral200; // Gray thumb when off
         }),
         trackColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return primaryOrange;
+            return accent; // Gold when on
           }
-          return backgroundCardBorder;
+          return neutral300; // Dark gray when off
         }),
       ),
 
-      // Slider Theme - Orange Slider
+      // Slider Theme - Monochromatic with Gold accent
       sliderTheme: const SliderThemeData(
-        activeTrackColor: primaryOrange,
-        inactiveTrackColor: backgroundCardBorder,
-        thumbColor: Colors.white,
-        overlayColor: Color(0x33FF9D5C),
+        activeTrackColor: accent, // Gold for active
+        inactiveTrackColor: neutral300, // Gray for inactive
+        thumbColor: textPrimary, // White thumb
+        overlayColor: accentSubtle, // Subtle gold overlay
         trackHeight: 4,
       ),
     );
   }
 
-  /// Get color for device mode
+  /// Get color for device mode - MONOCHROMATIC (no rainbow)
+  /// All modes use neutral shades except Auto which gets gold accent
   static Color getModeColor(String mode) {
     switch (mode.toLowerCase()) {
       case 'cool':
       case 'cooling':
-        return modeCool;
+        return neutral100; // Light gray (was blue)
       case 'heat':
       case 'heating':
-        return modeHeat;
+        return neutral200; // Medium gray (was red)
       case 'fan':
       case 'fan_only':
-        return modeFan;
+        return neutral300; // Dark gray (was green)
       case 'dry':
-        return modeDry;
+        return neutral200; // Medium gray (was yellow)
       case 'auto':
-        return modeAuto;
+        return accent; // ONLY mode with gold
       default:
-        return primaryOrange;
+        return accent; // Default to gold
     }
   }
 
@@ -315,19 +374,29 @@ class AppTheme {
 
   static EdgeInsets get cardPadding => const EdgeInsets.all(AppSpacing.lg);
 
-  /// Device Card Decoration
+  /// Device Card Decoration - Luxury style
   static BoxDecoration deviceCard({bool isSelected = false}) {
     return BoxDecoration(
       color: backgroundCard,
       borderRadius: BorderRadius.circular(AppRadius.lgR),
       border: Border.all(
-        color: isSelected ? primaryOrange : backgroundCardBorder,
+        color: isSelected ? accent : backgroundCardBorder, // Gold when selected
         width: isSelected ? 2 : 1,
       ),
+      // Subtle glow when selected
+      boxShadow: isSelected
+          ? [
+              BoxShadow(
+                color: accentSubtle,
+                blurRadius: 12,
+                spreadRadius: 2,
+              ),
+            ]
+          : null,
     );
   }
 
-  /// Rounded Card Decoration
+  /// Rounded Card Decoration - Sophisticated
   static BoxDecoration roundedCard({Color? color, bool hasBorder = true}) {
     return BoxDecoration(
       color: color ?? backgroundCard,
@@ -338,6 +407,14 @@ class AppTheme {
               width: 1,
             )
           : null,
+      // Subtle inner shadow for depth
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withValues(alpha: 0.2),
+          blurRadius: 8,
+          offset: const Offset(0, 2),
+        ),
+      ],
     );
   }
 
@@ -352,13 +429,23 @@ class AppTheme {
     ];
   }
 
-  /// Orange Button Decoration
-  static BoxDecoration orangeButton() {
+  /// Accent Button Decoration - Luxury Gold
+  static BoxDecoration accentButton() {
     return BoxDecoration(
-      color: primaryOrange,
+      gradient: primaryGradient, // Gold gradient
       borderRadius: BorderRadius.circular(AppRadius.mdR),
+      boxShadow: [
+        BoxShadow(
+          color: accentSubtle,
+          blurRadius: 8,
+          offset: const Offset(0, 4),
+        ),
+      ],
     );
   }
+
+  /// Legacy: Orange button (now gold)
+  static BoxDecoration orangeButton() => accentButton();
 
   /// Device Image Placeholder
   static BoxDecoration deviceImagePlaceholder() {

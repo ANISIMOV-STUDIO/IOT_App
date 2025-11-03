@@ -202,6 +202,7 @@ class RoomCardCompact extends StatelessWidget {
   }
 
   Widget _buildStats(BuildContext context) {
+    // MONOCHROMATIC: Use neutral shades for stats, not colorful icons
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -211,7 +212,7 @@ class RoomCardCompact extends StatelessWidget {
               icon: Icons.thermostat,
               value: '${temperature!.toStringAsFixed(1)}°',
               label: 'Темп',
-              color: AppTheme.info,
+              color: AppTheme.neutral100, // Light gray
               isCompact: true,
             ),
           ),
@@ -221,11 +222,7 @@ class RoomCardCompact extends StatelessWidget {
               icon: Icons.water_drop,
               value: '$humidity%',
               label: 'Влаж',
-              color: AppTheme.info.withValues(
-                red: AppTheme.info.r * 0.7,
-                green: AppTheme.info.g * 1.2,
-                blue: AppTheme.info.b * 1.1,
-              ),
+              color: AppTheme.neutral200, // Medium gray
               isCompact: true,
             ),
           ),
@@ -235,7 +232,7 @@ class RoomCardCompact extends StatelessWidget {
               icon: Icons.air,
               value: '$fanSpeed%',
               label: 'Вент',
-              color: AppTheme.warning,
+              color: AppTheme.neutral300, // Dark gray
               isCompact: true,
             ),
           ),
@@ -295,19 +292,20 @@ class RoomCardCompact extends StatelessWidget {
   }
 
   Color _getModeColor(String mode) {
+    // MONOCHROMATIC: All modes use neutral shades, only auto gets gold accent
     switch (mode.toLowerCase()) {
       case 'авто':
       case 'auto':
-        return AppTheme.info;
+        return AppTheme.accent; // Gold for auto mode only
       case 'приток':
       case 'supply':
-        return AppTheme.success;
+        return AppTheme.neutral100; // Light gray
       case 'вытяжка':
       case 'exhaust':
-        return AppTheme.warning;
+        return AppTheme.neutral200; // Medium gray
       case 'рециркуляция':
       case 'recirculation':
-        return AppTheme.primaryOrange;
+        return AppTheme.neutral300; // Dark gray
       default:
         return AppTheme.textSecondary;
     }

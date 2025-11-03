@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/theme/spacing.dart';
+import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/responsive_utils.dart';
 import '../../../core/utils/accessibility_utils.dart';
 
@@ -194,15 +195,16 @@ class AppSnackBar {
   }
 
   static Color _getBackgroundColor(SnackBarType type, bool isDarkMode) {
+    // MONOCHROMATIC: Use muted semantic colors from luxury palette
     switch (type) {
       case SnackBarType.success:
-        return isDarkMode ? Colors.green.shade800 : Colors.green.shade600;
+        return AppTheme.success; // Deep sea green (muted)
       case SnackBarType.error:
-        return isDarkMode ? Colors.red.shade800 : Colors.red.shade600;
+        return AppTheme.error; // Deep crimson (muted)
       case SnackBarType.warning:
-        return isDarkMode ? Colors.orange.shade800 : Colors.orange.shade600;
+        return AppTheme.warning; // Amber (muted)
       case SnackBarType.info:
-        return isDarkMode ? Colors.blue.shade800 : Colors.blue.shade600;
+        return AppTheme.neutral200; // Gray for info (not bright blue!)
     }
   }
 
@@ -392,7 +394,7 @@ class AppToast {
       icon: Icons.check_circle,
       position: position,
       duration: duration,
-      backgroundColor: Colors.green,
+      backgroundColor: AppTheme.success, // Muted sea green
       enableHaptic: true,
     );
   }
@@ -410,7 +412,7 @@ class AppToast {
       icon: Icons.error,
       position: position,
       duration: duration,
-      backgroundColor: Colors.red,
+      backgroundColor: AppTheme.error, // Muted crimson
       enableHaptic: true,
     );
   }

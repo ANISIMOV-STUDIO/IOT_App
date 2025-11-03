@@ -27,8 +27,8 @@ class StatusIndicator extends StatefulWidget {
     required this.isActive,
     this.activeLabel = 'Активно',
     this.inactiveLabel = 'Отключено',
-    this.activeColor = const Color(0xFF4CAF50),
-    this.inactiveColor = const Color(0xFFEF4444),
+    this.activeColor = AppTheme.success, // Muted sea green
+    this.inactiveColor = AppTheme.neutral200, // Gray for inactive (not bright red!)
     this.size = 8.0,
     this.showLabel = true,
     this.enablePulse = true,

@@ -33,7 +33,10 @@ class AdaptiveSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveColor = color ?? AppTheme.primaryOrange;
+    // MONOCHROMATIC PALETTE - Ignore passed color, use luxury scheme
+    // Active slider uses gold accent, inactive uses neutral gray
+    const sliderColor = AppTheme.accent; // Royal Gold
+    const trackColor = AppTheme.neutral300; // Dark Gray
 
     return AdaptiveControl(
       builder: (context, deviceSize) {
@@ -71,7 +74,7 @@ class AdaptiveSlider extends StatelessWidget {
                     vertical: AdaptiveLayout.spacing(context, base: 4),
                   ),
                   decoration: BoxDecoration(
-                    color: effectiveColor.withValues(alpha: 0.15),
+                    color: sliderColor.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(
                       AdaptiveLayout.borderRadius(context, base: 8),
                     ),
@@ -81,7 +84,7 @@ class AdaptiveSlider extends StatelessWidget {
                     style: TextStyle(
                       fontSize: AdaptiveLayout.fontSize(context, base: 13),
                       fontWeight: FontWeight.w700,
-                      color: effectiveColor,
+                      color: sliderColor,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -91,15 +94,15 @@ class AdaptiveSlider extends StatelessWidget {
 
             SizedBox(height: AdaptiveLayout.spacing(context, base: 8)),
 
-            // Slider
+            // Slider - Monochromatic gold active, gray inactive
             SizedBox(
               height: AdaptiveLayout.getSliderHeight(context),
               child: SliderTheme(
                 data: SliderTheme.of(context).copyWith(
-                  activeTrackColor: effectiveColor,
-                  inactiveTrackColor: effectiveColor.withValues(alpha: 0.2),
-                  thumbColor: effectiveColor,
-                  overlayColor: effectiveColor.withValues(alpha: 0.2),
+                  activeTrackColor: sliderColor, // Gold
+                  inactiveTrackColor: trackColor, // Dark Gray
+                  thumbColor: AppTheme.textPrimary, // White thumb (luxury style)
+                  overlayColor: sliderColor.withValues(alpha: 0.2),
                   thumbShape: RoundSliderThumbShape(
                     enabledThumbRadius: AdaptiveLayout.getSliderThumbRadius(context),
                   ),
