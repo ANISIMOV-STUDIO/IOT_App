@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/spacing.dart';
 import '../../../core/theme/ui_constants.dart';
 import '../../../core/utils/responsive_utils.dart';
+import '../../../core/utils/performance_utils.dart';
 import '../../../domain/entities/hvac_unit.dart';
 import '../../../domain/entities/automation_rule.dart';
 import '../../../domain/entities/mode_preset.dart';
@@ -43,7 +44,10 @@ class HomeMobileLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
+      physics: PerformanceUtils.getOptimalScrollPhysics(
+        bouncing: true,
+        alwaysScrollable: true,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

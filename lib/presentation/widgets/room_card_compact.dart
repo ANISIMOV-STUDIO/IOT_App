@@ -6,13 +6,14 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/theme/app_typography.dart';
 import '../../core/theme/app_radius.dart';
 import '../../core/theme/spacing.dart';
 import '../../core/theme/ui_constants.dart';
 import '../../core/utils/responsive_utils.dart';
+import '../../core/animation/smooth_animations.dart';
+import '../../core/utils/performance_utils.dart';
 
 class RoomCardCompact extends StatelessWidget {
   final String roomName;
@@ -40,57 +41,75 @@ class RoomCardCompact extends StatelessWidget {
   Widget build(BuildContext context) {
     final isMobile = ResponsiveUtils.isMobile(context);
 
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: isMobile ? 140.h : 160.h,
-        padding: EdgeInsets.all(AppSpacing.mdR),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: isActive
-                ? [
-                    AppTheme.primaryOrange.withValues(alpha: 0.05),
-                    AppTheme.backgroundCard,
-                  ]
-                : [
-                    AppTheme.backgroundCard,
-                    AppTheme.backgroundCard,
+    // Wrap entire card with RepaintBoundary for performance
+    return PerformanceUtils.isolateRepaint(
+      MicroInteraction(
+        onTap: onTap,
+        child: SmoothAnimations.fadeIn(
+          duration: AnimationDurations.medium,
+          child: SmoothAnimations.scaleIn(
+            begin: 0.95,
+            duration: AnimationDurations.medium,
+            child: Container(
+              constraints: BoxConstraints(
+                minHeight: isMobile ? 140.h : 160.h,
+                maxHeight: isMobile ? 160.h : 180.h,
+              ),
+              padding: EdgeInsets.all(AppSpacing.mdR),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: isActive
+                      ? [
+                          AppTheme.primaryOrange.withValues(alpha: 0.05),
+                          AppTheme.backgroundCard,
+                        ]
+                      : [
+                          AppTheme.backgroundCard,
+                          AppTheme.backgroundCard,
+                        ],
+                ),
+                borderRadius: BorderRadius.circular(AppRadius.lgR),
+                border: Border.all(
+                  color: isActive
+                      ? AppTheme.primaryOrange.withValues(alpha: 0.3)
+                      : AppTheme.backgroundCardBorder,
+                  width: UIConstants.dividerThin,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: UIConstants.blurMedium,
+                    offset: const Offset(0, UIConstants.elevation1),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Header Row
+                  _buildHeader(context),
+
+                  SizedBox(height: AppSpacing.smV),
+
+                  // Stats Row
+                  _buildStats(context),
+
+                  // Mode Indicator
+                  if (mode != null) ...[
+                    SizedBox(height: AppSpacing.smV),
+                    _buildModeIndicator(context),
                   ],
-          ),
-          borderRadius: BorderRadius.circular(AppRadius.lgR),
-          border: Border.all(
-            color: isActive
-                ? AppTheme.primaryOrange.withValues(alpha: 0.3)
-                : AppTheme.backgroundCardBorder,
-            width: UIConstants.dividerThin,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: UIConstants.blurMedium,
-              offset: const Offset(0, UIConstants.elevation1),
+                ],
+              ),
             ),
-          ],
+          ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            // Header Row
-            _buildHeader(context),
-
-            // Stats Row
-            _buildStats(context),
-
-            // Mode Indicator
-            if (mode != null) _buildModeIndicator(context),
-          ],
-        ),
-      ).animate()
-        .fadeIn(duration: 400.ms)
-        .scale(begin: const Offset(0.95, 0.95), end: const Offset(1, 1)),
+      ),
+      debugLabel: 'RoomCard-$roomName',
     );
   }
 
@@ -178,11 +197,8 @@ class RoomCardCompact extends StatelessWidget {
             color: isActive ? AppTheme.primaryOrange : AppTheme.textTertiary,
             size: UIConstants.iconSmR,
           ),
-        ).animate(target: isActive ? 1 : 0)
-          .rotate(end: 0.5, duration: UIConstants.durationMedium)
-          .scale(begin: const Offset(1, 1), end: const Offset(1.1, 1.1)),
       ),
-    );
+    ));
   }
 
   Widget _buildStats(BuildContext context) {
@@ -190,32 +206,38 @@ class RoomCardCompact extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         if (temperature != null)
-          _StatItem(
-            icon: Icons.thermostat,
-            value: '${temperature!.toStringAsFixed(1)}°',
-            label: 'Темп',
-            color: AppTheme.info,
-            isCompact: true,
+          Flexible(
+            child: _StatItem(
+              icon: Icons.thermostat,
+              value: '${temperature!.toStringAsFixed(1)}°',
+              label: 'Темп',
+              color: AppTheme.info,
+              isCompact: true,
+            ),
           ),
         if (humidity != null)
-          _StatItem(
-            icon: Icons.water_drop,
-            value: '$humidity%',
-            label: 'Влаж',
-            color: AppTheme.info.withValues(
-              red: AppTheme.info.r * 0.7,
-              green: AppTheme.info.g * 1.2,
-              blue: AppTheme.info.b * 1.1,
+          Flexible(
+            child: _StatItem(
+              icon: Icons.water_drop,
+              value: '$humidity%',
+              label: 'Влаж',
+              color: AppTheme.info.withValues(
+                red: AppTheme.info.r * 0.7,
+                green: AppTheme.info.g * 1.2,
+                blue: AppTheme.info.b * 1.1,
+              ),
+              isCompact: true,
             ),
-            isCompact: true,
           ),
         if (fanSpeed != null)
-          _StatItem(
-            icon: Icons.air,
-            value: '$fanSpeed%',
-            label: 'Вент',
-            color: AppTheme.warning,
-            isCompact: true,
+          Flexible(
+            child: _StatItem(
+              icon: Icons.air,
+              value: '$fanSpeed%',
+              label: 'Вент',
+              color: AppTheme.warning,
+              isCompact: true,
+            ),
           ),
       ],
     );
@@ -224,41 +246,52 @@ class RoomCardCompact extends StatelessWidget {
   Widget _buildModeIndicator(BuildContext context) {
     final modeColor = _getModeColor(mode!);
 
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: AppSpacing.smR,
-        vertical: AppSpacing.xxsV,
-      ),
-      decoration: BoxDecoration(
-        color: modeColor.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(AppRadius.smR),
-        border: Border.all(
-          color: modeColor.withValues(alpha: 0.3),
-          width: UIConstants.dividerThin,
-        ),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            _getModeIcon(mode!),
-            size: UIConstants.iconXsR,
-            color: modeColor,
+    return SmoothAnimations.fadeIn(
+      delay: AnimationDurations.fast,
+      duration: AnimationDurations.normal,
+      child: SmoothAnimations.slideIn(
+        begin: const Offset(-0.05, 0),
+        delay: AnimationDurations.fast,
+        duration: AnimationDurations.normal,
+        child: Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: AppSpacing.smR,
+            vertical: AppSpacing.xxsV,
           ),
-          SizedBox(width: AppSpacing.xxsR),
-          Text(
-            mode!,
-            style: AppTypography.overline.copyWith(
-              color: modeColor,
-              fontWeight: FontWeight.w600,
-              letterSpacing: 0.5,
+          decoration: BoxDecoration(
+            color: modeColor.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(AppRadius.smR),
+            border: Border.all(
+              color: modeColor.withValues(alpha: 0.3),
+              width: UIConstants.dividerThin,
             ),
           ),
-        ],
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                _getModeIcon(mode!),
+                size: UIConstants.iconXsR,
+                color: modeColor,
+              ),
+              SizedBox(width: AppSpacing.xxsR),
+              Flexible(
+                child: Text(
+                  mode!,
+                  style: AppTypography.overline.copyWith(
+                    color: modeColor,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0.5,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
-    ).animate()
-      .fadeIn(delay: UIConstants.durationFast)
-      .slideX(begin: -0.1, end: 0);
+    );
   }
 
   Color _getModeColor(String mode) {

@@ -6,12 +6,13 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/theme/app_typography.dart';
 import '../../core/theme/app_radius.dart';
 import '../../core/theme/spacing.dart';
 import '../../core/theme/ui_constants.dart';
+import '../../core/animation/smooth_animations.dart';
+import '../../core/utils/performance_utils.dart';
 
 class TemperatureDisplayCompact extends StatelessWidget {
   final double? supplyTemp;
@@ -38,85 +39,107 @@ class TemperatureDisplayCompact extends StatelessWidget {
   }
 
   Widget _buildCompactLayout() {
-    return Container(
-      padding: EdgeInsets.all(AppSpacing.mdR),
-      decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
-        borderRadius: BorderRadius.circular(AppRadius.lgR),
-        border: Border.all(
-          color: AppTheme.backgroundCardBorder,
-          width: UIConstants.dividerThin,
+    return PerformanceUtils.isolateRepaint(
+      SmoothAnimations.fadeIn(
+        duration: AnimationDurations.medium,
+        child: SmoothAnimations.slideIn(
+          begin: const Offset(0, 0.03),
+          duration: AnimationDurations.medium,
+          child: Container(
+            constraints: BoxConstraints(
+              minHeight: 120.h,
+            ),
+            padding: EdgeInsets.all(AppSpacing.mdR),
+            decoration: BoxDecoration(
+              color: AppTheme.backgroundCard,
+              borderRadius: BorderRadius.circular(AppRadius.lgR),
+              border: Border.all(
+                color: AppTheme.backgroundCardBorder,
+                width: UIConstants.dividerThin,
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Header
+                Row(
+                  children: [
+                    Container(
+                      width: 36.w,
+                      height: 36.w,
+                      decoration: BoxDecoration(
+                        color: AppTheme.info.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(AppRadius.smR),
+                      ),
+                      child: Icon(
+                        Icons.thermostat,
+                        color: AppTheme.info,
+                        size: UIConstants.iconSmR,
+                      ),
+                    ),
+                    SizedBox(width: AppSpacing.smR),
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'Температуры',
+                            style: AppTypography.bodyMedium.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
+                          Text(
+                            'Текущие показатели',
+                            style: AppTypography.captionSmall,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+
+                SizedBox(height: AppSpacing.lgV),
+
+                // Temperature Grid - 2x2 with proper flex
+                IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(
+                        child: _buildTempItem(
+                          icon: Icons.download,
+                          label: 'Приток',
+                          value: supplyTemp,
+                          color: AppTheme.info,
+                          isLeft: true,
+                        ),
+                      ),
+                      SizedBox(width: AppSpacing.smR),
+                      Expanded(
+                        child: _buildTempItem(
+                          icon: Icons.upload,
+                          label: 'Вытяжка',
+                          value: extractTemp,
+                          color: AppTheme.warning,
+                          isLeft: false,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Header
-          Row(
-            children: [
-              Container(
-                width: 36.w,
-                height: 36.w,
-                decoration: BoxDecoration(
-                  color: AppTheme.info.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(AppRadius.smR),
-                ),
-                child: Icon(
-                  Icons.thermostat,
-                  color: AppTheme.info,
-                  size: UIConstants.iconSmR,
-                ),
-              ),
-              SizedBox(width: AppSpacing.smR),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Температуры',
-                    style: AppTypography.bodyMedium.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Text(
-                    'Текущие показатели',
-                    style: AppTypography.captionSmall,
-                  ),
-                ],
-              ),
-            ],
-          ),
-
-          SizedBox(height: AppSpacing.lgV),
-
-          // Temperature Grid - 2x2
-          Row(
-            children: [
-              Expanded(
-                child: _buildTempItem(
-                  icon: Icons.download,
-                  label: 'Приток',
-                  value: supplyTemp,
-                  color: AppTheme.info,
-                  isLeft: true,
-                ),
-              ),
-              SizedBox(width: 12.w),
-              Expanded(
-                child: _buildTempItem(
-                  icon: Icons.upload,
-                  label: 'Вытяжка',
-                  value: extractTemp,
-                  color: AppTheme.warning,
-                  isLeft: false,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    ).animate()
-      .fadeIn(duration: 400.ms)
-      .slideY(begin: 0.05, end: 0);
+      debugLabel: 'TemperatureDisplayCompact',
+    );
   }
 
   Widget _buildFullLayout() {
@@ -271,9 +294,7 @@ class TemperatureDisplayCompact extends StatelessWidget {
           ),
         ],
       ),
-    ).animate()
-      .fadeIn(duration: 400.ms)
-      .scale(begin: const Offset(0.98, 0.98), end: const Offset(1, 1));
+    );
   }
 
   Widget _buildTempItem({
@@ -283,50 +304,67 @@ class TemperatureDisplayCompact extends StatelessWidget {
     required Color color,
     required bool isLeft,
   }) {
-    return Container(
-      padding: EdgeInsets.all(AppSpacing.smR),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(AppRadius.mdR),
-        border: Border.all(
-          color: color.withValues(alpha: 0.2),
-          width: UIConstants.dividerThin,
-        ),
-      ),
-      child: Row(
-        children: [
-          Icon(
-            icon,
-            size: UIConstants.iconSmR,
-            color: color,
-          ),
-          SizedBox(width: AppSpacing.xsR),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: AppTypography.overline.copyWith(
-                    fontSize: 11.sp,
-                  ),
-                ),
-                SizedBox(height: AppSpacing.xxsV),
-                Text(
-                  value != null ? '${value.toStringAsFixed(1)}°' : '--',
-                  style: AppTypography.h5.copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: color,
-                  ),
-                ),
-              ],
+    final delay = isLeft
+        ? AnimationDurations.staggerShort
+        : AnimationDurations.staggerMedium;
+
+    return SmoothAnimations.fadeIn(
+      delay: delay,
+      duration: AnimationDurations.normal,
+      child: SmoothAnimations.slideIn(
+        begin: Offset(isLeft ? -0.03 : 0.03, 0),
+        delay: delay,
+        duration: AnimationDurations.normal,
+        child: Container(
+          padding: EdgeInsets.all(AppSpacing.smR),
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.05),
+            borderRadius: BorderRadius.circular(AppRadius.mdR),
+            border: Border.all(
+              color: color.withValues(alpha: 0.2),
+              width: UIConstants.dividerThin,
             ),
           ),
-        ],
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    icon,
+                    size: UIConstants.iconSmR,
+                    color: color,
+                  ),
+                  SizedBox(width: AppSpacing.xxsR),
+                  Flexible(
+                    child: Text(
+                      label,
+                      style: AppTypography.overline.copyWith(
+                        fontSize: 11.sp,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: AppSpacing.xxsV),
+              Text(
+                value != null ? '${value.toStringAsFixed(1)}°' : '--',
+                style: AppTypography.h5.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: color,
+                ),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              ),
+            ],
+          ),
+        ),
       ),
-    ).animate(delay: Duration(milliseconds: isLeft ? 100 : 200))
-      .fadeIn()
-      .slideX(begin: isLeft ? -0.05 : 0.05, end: 0);
+    );
   }
 
   Widget _buildFullTempItem({

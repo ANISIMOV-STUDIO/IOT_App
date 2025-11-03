@@ -6,10 +6,10 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/spacing.dart';
 import '../../../core/utils/responsive_utils.dart';
+import '../../../core/animation/smooth_animations.dart';
 import '../../../domain/entities/hvac_unit.dart';
 import '../../../domain/entities/ventilation_mode.dart';
 import '../../../generated/l10n/app_localizations.dart';
@@ -74,56 +74,79 @@ class HomeControlCards extends StatelessWidget {
   }
 
   Widget _buildMobileLayout() {
+    final cards = [
+      VentilationModeControl(
+        unit: currentUnit!,
+        onModeChanged: onModeChanged,
+        onSupplyFanChanged: onSupplyFanChanged,
+        onExhaustFanChanged: onExhaustFanChanged,
+      ),
+      VentilationTemperatureControl(unit: currentUnit!),
+      VentilationScheduleControl(
+        unit: currentUnit!,
+        onSchedulePressed: onSchedulePressed,
+      ),
+    ];
+
+    // Apply staggered animations
+    final animatedCards = SmoothAnimations.staggeredList(
+      children: cards,
+      staggerDelay: AnimationDurations.staggerMedium,
+      itemDuration: AnimationDurations.medium,
+      fadeIn: true,
+      slideIn: true,
+      scaleIn: false,
+    );
+
     return Column(
-      children: [
-        VentilationModeControl(
-          unit: currentUnit!,
-          onModeChanged: onModeChanged,
-          onSupplyFanChanged: onSupplyFanChanged,
-          onExhaustFanChanged: onExhaustFanChanged,
+      children: List.generate(
+        animatedCards.length,
+        (index) => Padding(
+          padding: EdgeInsets.only(
+            bottom: index < animatedCards.length - 1 ? AppSpacing.mdV : 0,
+          ),
+          child: animatedCards[index],
         ),
-        SizedBox(height: AppSpacing.mdV),
-        VentilationTemperatureControl(unit: currentUnit!),
-        SizedBox(height: AppSpacing.mdV),
-        VentilationScheduleControl(
-          unit: currentUnit!,
-          onSchedulePressed: onSchedulePressed,
-        ),
-      ],
-    ).animate()
-      .fadeIn(duration: 500.ms, delay: 100.ms)
-      .slideY(begin: 0.1, end: 0);
+      ),
+    );
   }
 
   Widget _buildDesktopLayout() {
-    return SizedBox(
-      height: AppTheme.controlCardHeight.h,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: VentilationModeControl(
-              unit: currentUnit!,
-              onModeChanged: onModeChanged,
-              onSupplyFanChanged: onSupplyFanChanged,
-              onExhaustFanChanged: onExhaustFanChanged,
-            ),
+    return SmoothAnimations.fadeIn(
+      delay: AnimationDurations.staggerShort,
+      duration: AnimationDurations.medium,
+      child: SmoothAnimations.slideIn(
+        begin: const Offset(0, 0.05),
+        delay: AnimationDurations.staggerShort,
+        duration: AnimationDurations.medium,
+        child: SizedBox(
+          height: AppTheme.controlCardHeight.h,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: VentilationModeControl(
+                  unit: currentUnit!,
+                  onModeChanged: onModeChanged,
+                  onSupplyFanChanged: onSupplyFanChanged,
+                  onExhaustFanChanged: onExhaustFanChanged,
+                ),
+              ),
+              SizedBox(width: AppSpacing.mdR),
+              Expanded(
+                child: VentilationTemperatureControl(unit: currentUnit!),
+              ),
+              SizedBox(width: AppSpacing.mdR),
+              Expanded(
+                child: VentilationScheduleControl(
+                  unit: currentUnit!,
+                  onSchedulePressed: onSchedulePressed,
+                ),
+              ),
+            ],
           ),
-          SizedBox(width: AppSpacing.mdR),
-          Expanded(
-            child: VentilationTemperatureControl(unit: currentUnit!),
-          ),
-          SizedBox(width: AppSpacing.mdR),
-          Expanded(
-            child: VentilationScheduleControl(
-              unit: currentUnit!,
-              onSchedulePressed: onSchedulePressed,
-            ),
-          ),
-        ],
+        ),
       ),
-    ).animate()
-      .fadeIn(duration: 500.ms, delay: 100.ms)
-      .slideY(begin: 0.1, end: 0);
+    );
   }
 }

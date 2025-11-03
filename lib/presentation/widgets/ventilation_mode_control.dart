@@ -10,6 +10,7 @@ import '../../core/theme/app_theme.dart';
 import '../../core/utils/adaptive_layout.dart';
 import '../../domain/entities/hvac_unit.dart';
 import '../../domain/entities/ventilation_mode.dart';
+import '../../core/utils/performance_utils.dart';
 import 'common/adaptive_slider.dart';
 
 class VentilationModeControl extends StatefulWidget {
@@ -68,59 +69,65 @@ class _VentilationModeControlState extends State<VentilationModeControl>
 
   @override
   Widget build(BuildContext context) {
-    return AdaptiveControl(
-      builder: (context, deviceSize) {
-        return Container(
-          padding: AdaptiveLayout.controlPadding(context),
-          decoration: BoxDecoration(
-            color: AppTheme.backgroundCard,
-            borderRadius: BorderRadius.circular(
-              AdaptiveLayout.borderRadius(context, base: 16),
+    return PerformanceUtils.isolateRepaint(
+      AdaptiveControl(
+        builder: (context, deviceSize) {
+          return Container(
+            padding: AdaptiveLayout.controlPadding(context),
+            decoration: BoxDecoration(
+              color: AppTheme.backgroundCard,
+              borderRadius: BorderRadius.circular(
+                AdaptiveLayout.borderRadius(context, base: 16),
+              ),
+              border: Border.all(
+                color: AppTheme.backgroundCardBorder,
+              ),
             ),
-            border: Border.all(
-              color: AppTheme.backgroundCardBorder,
-            ),
-          ),
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              // Check if we have a height constraint (desktop layout)
-              final hasHeightConstraint = constraints.maxHeight != double.infinity;
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                // Check if we have a height constraint (desktop layout)
+                final hasHeightConstraint = constraints.maxHeight != double.infinity;
 
-              if (hasHeightConstraint) {
-                // Desktop layout with constrained height - use scrollable content
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildHeader(context, deviceSize),
-                    SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 16)),
-                    _buildModeSelector(context, deviceSize),
-                    SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 16)),
-                    Expanded(
-                      child: SingleChildScrollView(
-                        physics: const ClampingScrollPhysics(),
-                        child: _buildFanSpeedControls(context, deviceSize),
+                if (hasHeightConstraint) {
+                  // Desktop layout with constrained height - use scrollable content
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildHeader(context, deviceSize),
+                      SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 16)),
+                      _buildModeSelector(context, deviceSize),
+                      SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 16)),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          physics: PerformanceUtils.getOptimalScrollPhysics(
+                            bouncing: true,
+                            alwaysScrollable: false,
+                          ),
+                          child: _buildFanSpeedControls(context, deviceSize),
+                        ),
                       ),
-                    ),
-                  ],
-                );
-              } else {
-                // Mobile layout without height constraint
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _buildHeader(context, deviceSize),
-                    SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 16)),
-                    _buildModeSelector(context, deviceSize),
-                    SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 16)),
-                    _buildFanSpeedControls(context, deviceSize),
-                  ],
-                );
-              }
-            },
-          ),
-        );
-      },
+                    ],
+                  );
+                } else {
+                  // Mobile layout without height constraint - smooth scrolling
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _buildHeader(context, deviceSize),
+                      SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 16)),
+                      _buildModeSelector(context, deviceSize),
+                      SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 16)),
+                      _buildFanSpeedControls(context, deviceSize),
+                    ],
+                  );
+                }
+              },
+            ),
+          );
+        },
+      ),
+      debugLabel: 'VentilationModeControl',
     );
   }
 
