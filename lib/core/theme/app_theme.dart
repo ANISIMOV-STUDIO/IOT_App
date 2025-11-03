@@ -15,12 +15,12 @@ class AppTheme {
   // Philosophy: Monochromatic + Single Noble Accent
   // ============================================================================
 
-  // PRIMARY ACCENT - Refined Gold (Not bright orange)
-  // Deep, sophisticated gold that conveys luxury and prestige
-  static const Color accent = Color(0xFFD4AF37); // Royal Gold
-  static const Color accentDark = Color(0xFFB8962E); // Dark Gold
-  static const Color accentLight = Color(0xFFE5C85B); // Light Gold
-  static const Color accentSubtle = Color(0x33D4AF37); // Gold with 20% opacity
+  // PRIMARY ACCENT - Neutral Gray (replacing gold with sophisticated gray)
+  // Elegant gray that maintains luxury feel without brightness
+  static const Color accent = Color(0xFF9CA3AF); // Sophisticated Gray
+  static const Color accentDark = Color(0xFF6B7280); // Dark Gray
+  static const Color accentLight = Color(0xFFD1D5DB); // Light Gray
+  static const Color accentSubtle = Color(0x339CA3AF); // Gray with 20% opacity
 
   // BACKGROUNDS - Deep Charcoal & Midnight Blue
   // Creates depth and sophistication, not pure black
@@ -64,6 +64,19 @@ class AppTheme {
   static const Color tempCold = Color(0xFF5B7C99); // Cool Blue-Gray
   static const Color tempNeutral = Color(0xFF7788A0); // Neutral Gray
   static const Color tempWarm = Color(0xFF8B7E77); // Warm Gray
+
+  // GLASSMORPHISM - Frosted Glass & Shimmer Effects (2025)
+  // White/light elements with blur and transparency
+  static const Color glassWhite = Color(0xFFFFFFFF); // Pure white for glass
+  static const Color glassLight = Color(0xFFF8FAFC); // Very light gray
+  static const Color glassBorder = Color(0x40FFFFFF); // 25% white for borders
+  static const Color glassShimmerBase = Color(0x1AFFFFFF); // 10% white base
+  static const Color glassShimmerHighlight = Color(0x40FFFFFF); // 25% white highlight
+
+  // Blur sigma values for BackdropFilter
+  static const double blurLight = 8.0; // Light frosted glass
+  static const double blurMedium = 12.0; // Medium frosted glass
+  static const double blurHeavy = 20.0; // Heavy frosted glass
 
   // LEGACY COMPATIBILITY - Map old colors to new palette
   static const Color primaryOrange = accent; // Gold instead of orange
@@ -386,7 +399,7 @@ class AppTheme {
       // Subtle glow when selected
       boxShadow: isSelected
           ? [
-              BoxShadow(
+              const BoxShadow(
                 color: accentSubtle,
                 blurRadius: 12,
                 spreadRadius: 2,
@@ -434,11 +447,11 @@ class AppTheme {
     return BoxDecoration(
       gradient: primaryGradient, // Gold gradient
       borderRadius: BorderRadius.circular(AppRadius.mdR),
-      boxShadow: [
+      boxShadow: const [
         BoxShadow(
           color: accentSubtle,
           blurRadius: 8,
-          offset: const Offset(0, 4),
+          offset: Offset(0, 4),
         ),
       ],
     );

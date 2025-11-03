@@ -5,6 +5,7 @@ library;
 
 import 'package:flutter/material.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/theme/glassmorphism.dart';
 import '../../domain/entities/mode_preset.dart';
 import '../../domain/entities/ventilation_mode.dart';
 
@@ -18,16 +19,10 @@ class QuickPresetsPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return GlassCard(
+      // GLASSMORPHISM: Frosted glass with blur
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: AppTheme.backgroundCardBorder,
-          width: 1,
-        ),
-      ),
+      enableBlur: true,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -85,7 +80,7 @@ class QuickPresetsPanel extends StatelessWidget {
                 'Спящий режим',
                 Icons.nightlight_round,
                 ModePreset.defaults[VentilationMode.economic]!,
-                AppTheme.info,
+                AppTheme.neutral200, // Gray instead of blue
               ),
               _buildPresetButton(
                 context,

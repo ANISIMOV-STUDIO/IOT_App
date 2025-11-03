@@ -5,6 +5,7 @@ library;
 
 import 'package:flutter/material.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/theme/glassmorphism.dart';
 import '../../domain/entities/hvac_unit.dart';
 
 class GroupControlPanel extends StatelessWidget {
@@ -28,16 +29,10 @@ class GroupControlPanel extends StatelessWidget {
     final activeUnits = units.where((u) => u.power).length;
     final totalUnits = units.length;
 
-    return Container(
+    return GlassCard(
+      // GLASSMORPHISM: Frosted glass with blur
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: AppTheme.backgroundCardBorder,
-          width: 1,
-        ),
-      ),
+      enableBlur: true,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -110,14 +105,14 @@ class GroupControlPanel extends StatelessWidget {
 
           const SizedBox(height: 12),
 
-          // Sync controls
+          // Sync controls - WHITE with shimmer instead of blue
           Row(
             children: [
               Expanded(
                 child: _buildActionButton(
                   'Синхр. настройки',
                   Icons.sync,
-                  AppTheme.info,
+                  AppTheme.glassWhite, // White shimmer instead of blue
                   onSyncSettings,
                 ),
               ),

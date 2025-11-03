@@ -229,7 +229,7 @@ class _AnimatedBadgeState extends State<AnimatedBadge>
               Container(
                 width: 6.r,
                 height: 6.r,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: AppTheme.error,
                   shape: BoxShape.circle,
                 ),

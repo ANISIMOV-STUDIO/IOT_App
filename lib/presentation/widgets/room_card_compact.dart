@@ -11,6 +11,7 @@ import '../../core/theme/app_typography.dart';
 import '../../core/theme/app_radius.dart';
 import '../../core/theme/spacing.dart';
 import '../../core/theme/ui_constants.dart';
+import '../../core/theme/glassmorphism.dart';
 import '../../core/utils/responsive_utils.dart';
 import '../../core/animation/smooth_animations.dart';
 import '../../core/utils/performance_utils.dart';
@@ -39,7 +40,7 @@ class RoomCardCompact extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = ResponsiveUtils.isMobile(context);
+    ResponsiveUtils.isMobile(context);
 
     // Wrap entire card with RepaintBoundary for performance
     return PerformanceUtils.isolateRepaint(
@@ -50,41 +51,10 @@ class RoomCardCompact extends StatelessWidget {
           child: SmoothAnimations.scaleIn(
             begin: 0.95,
             duration: AnimationDurations.medium,
-            child: Container(
-              constraints: BoxConstraints(
-                minHeight: isMobile ? 140.h : 160.h,
-                maxHeight: isMobile ? 160.h : 180.h,
-              ),
+            child: GlassCard(
+              // GLASSMORPHISM: Frosted glass with blur
               padding: EdgeInsets.all(AppSpacing.mdR),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: isActive
-                      ? [
-                          AppTheme.primaryOrange.withValues(alpha: 0.05),
-                          AppTheme.backgroundCard,
-                        ]
-                      : [
-                          AppTheme.backgroundCard,
-                          AppTheme.backgroundCard,
-                        ],
-                ),
-                borderRadius: BorderRadius.circular(AppRadius.lgR),
-                border: Border.all(
-                  color: isActive
-                      ? AppTheme.primaryOrange.withValues(alpha: 0.3)
-                      : AppTheme.backgroundCardBorder,
-                  width: UIConstants.dividerThin,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: UIConstants.blurMedium,
-                    offset: const Offset(0, UIConstants.elevation1),
-                  ),
-                ],
-              ),
+              enableBlur: true,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
