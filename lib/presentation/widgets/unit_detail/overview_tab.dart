@@ -4,8 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../core/theme/app_theme.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../domain/entities/hvac_unit.dart';
 import '../../../domain/entities/ventilation_mode.dart';
 import 'unit_stat_card.dart';
@@ -37,7 +36,7 @@ class OverviewTab extends StatelessWidget {
                   label: 'Время работы',
                   value: '2ч 15м',
                   icon: Icons.access_time,
-                  color: AppTheme.info,
+                  color: HvacColors.info,
                 ),
               ),
               SizedBox(width: 16.w),
@@ -46,7 +45,7 @@ class OverviewTab extends StatelessWidget {
                   label: 'Энергия',
                   value: '350 Вт',
                   icon: Icons.bolt,
-                  color: AppTheme.warning,
+                  color: HvacColors.warning,
                 ),
               ),
             ],
@@ -60,7 +59,7 @@ class OverviewTab extends StatelessWidget {
                   label: 'Температура притока',
                   value: '${unit.supplyAirTemp?.toInt() ?? 0}°C',
                   icon: Icons.thermostat,
-                  color: AppTheme.success,
+                  color: HvacColors.success,
                 ),
               ),
               SizedBox(width: 16.w),
@@ -69,7 +68,7 @@ class OverviewTab extends StatelessWidget {
                   label: 'Влажность',
                   value: '${unit.humidity.toInt()}%',
                   icon: Icons.water_drop,
-                  color: AppTheme.info,
+                  color: HvacColors.info,
                 ),
               ),
             ],
@@ -91,9 +90,9 @@ class OverviewTab extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
+        color: HvacColors.backgroundCard,
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: AppTheme.backgroundCardBorder, width: 1),
+        border: Border.all(color: HvacColors.backgroundCardBorder, width: 1),
       ),
       child: Row(
         children: [
@@ -103,13 +102,13 @@ class OverviewTab extends StatelessWidget {
             height: 80.h,
             decoration: BoxDecoration(
               color: unit.power
-                  ? AppTheme.success.withValues(alpha: 0.2)
-                  : AppTheme.error.withValues(alpha: 0.2),
+                  ? HvacColors.success.withValues(alpha: 0.2)
+                  : HvacColors.error.withValues(alpha: 0.2),
               shape: BoxShape.circle,
             ),
             child: Icon(
               unit.power ? Icons.check_circle : Icons.power_off,
-              color: unit.power ? AppTheme.success : AppTheme.error,
+              color: unit.power ? HvacColors.success : HvacColors.error,
               size: 40.sp,
             ),
           ),
@@ -125,18 +124,18 @@ class OverviewTab extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 24.sp,
                     fontWeight: FontWeight.w700,
-                    color: unit.power ? AppTheme.success : AppTheme.error,
+                    color: unit.power ? HvacColors.success : HvacColors.error,
                   ),
                 ),
                 SizedBox(height: 4.h),
                 Text(
                   'Режим: ${unit.ventMode != null ? _getModeDisplayName(unit.ventMode!) : "Не установлен"}',
-                  style: TextStyle(fontSize: 14.sp, color: AppTheme.textSecondary),
+                  style: TextStyle(fontSize: 14.sp, color: HvacColors.textSecondary),
                 ),
                 SizedBox(height: 2.h),
                 Text(
                   'ID устройства: ${unit.id}',
-                  style: TextStyle(fontSize: 14.sp, color: AppTheme.textSecondary),
+                  style: TextStyle(fontSize: 14.sp, color: HvacColors.textSecondary),
                 ),
               ],
             ),
@@ -150,9 +149,9 @@ class OverviewTab extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
+        color: HvacColors.backgroundCard,
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: AppTheme.backgroundCardBorder, width: 1),
+        border: Border.all(color: HvacColors.backgroundCardBorder, width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -162,7 +161,7 @@ class OverviewTab extends StatelessWidget {
             style: TextStyle(
               fontSize: 16.sp,
               fontWeight: FontWeight.w600,
-              color: AppTheme.textPrimary,
+              color: HvacColors.textPrimary,
             ),
           ),
           SizedBox(height: 16.h),
@@ -171,7 +170,7 @@ class OverviewTab extends StatelessWidget {
           _buildFanRow(
             'Приточный',
             unit.supplyFanSpeed ?? 0,
-            AppTheme.primaryOrange,
+            HvacColors.primaryOrange,
           ),
           SizedBox(height: 12.h),
 
@@ -179,7 +178,7 @@ class OverviewTab extends StatelessWidget {
           _buildFanRow(
             'Вытяжной',
             unit.exhaustFanSpeed ?? 0,
-            AppTheme.info,
+            HvacColors.info,
           ),
         ],
       ),
@@ -193,7 +192,7 @@ class OverviewTab extends StatelessWidget {
         SizedBox(width: 12.w),
         Text(
           label,
-          style: TextStyle(fontSize: 14.sp, color: AppTheme.textSecondary),
+          style: TextStyle(fontSize: 14.sp, color: HvacColors.textSecondary),
         ),
         const Spacer(),
         Container(
@@ -219,23 +218,23 @@ class OverviewTab extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
+        color: HvacColors.backgroundCard,
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: AppTheme.backgroundCardBorder, width: 1),
+        border: Border.all(color: HvacColors.backgroundCardBorder, width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(Icons.build, color: AppTheme.warning, size: 20.sp),
+              Icon(Icons.build, color: HvacColors.warning, size: 20.sp),
               SizedBox(width: 12.w),
               Text(
                 'Обслуживание',
                 style: TextStyle(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.textPrimary,
+                  color: HvacColors.textPrimary,
                 ),
               ),
             ],
@@ -260,14 +259,14 @@ class OverviewTab extends StatelessWidget {
       children: [
         Text(
           label,
-          style: TextStyle(fontSize: 13.sp, color: AppTheme.textSecondary),
+          style: TextStyle(fontSize: 13.sp, color: HvacColors.textSecondary),
         ),
         Text(
           value,
           style: TextStyle(
             fontSize: 13.sp,
             fontWeight: FontWeight.w600,
-            color: AppTheme.textPrimary,
+            color: HvacColors.textPrimary,
           ),
         ),
       ],

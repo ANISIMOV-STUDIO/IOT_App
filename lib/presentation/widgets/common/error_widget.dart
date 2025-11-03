@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../core/utils/responsive_utils.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
 /// Comprehensive error widget with retry functionality
 class AppErrorWidget extends StatelessWidget {
@@ -86,25 +85,25 @@ class AppErrorWidget extends StatelessWidget {
             maxWidth: ResponsiveUtils.getMaxContentWidth(context),
           ),
           padding: EdgeInsets.all(
-            ResponsiveUtils.scaledSpacing(context, AppSpacing.xl),
+            ResponsiveUtils.scaledSpacing(context, HvacSpacing.xl),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               _buildIcon(context, theme),
-              const SizedBox(height: AppSpacing.lg),
+              const SizedBox(height: HvacSpacing.lg),
               _buildTitle(context, theme),
-              const SizedBox(height: AppSpacing.sm),
+              const SizedBox(height: HvacSpacing.sm),
               _buildMessage(context, theme),
               if (errorCode != null) ...[
-                const SizedBox(height: AppSpacing.md),
+                const SizedBox(height: HvacSpacing.md),
                 _buildErrorCode(context, theme),
               ],
               if (showTechnicalDetails && technicalDetails != null) ...[
-                const SizedBox(height: AppSpacing.md),
+                const SizedBox(height: HvacSpacing.md),
                 _buildTechnicalDetails(context, theme),
               ],
-              const SizedBox(height: AppSpacing.xl),
+              const SizedBox(height: HvacSpacing.xl),
               _buildActions(context, theme),
             ],
           ),
@@ -174,12 +173,12 @@ class AppErrorWidget extends StatelessWidget {
       },
       child: Container(
         padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.md,
-          vertical: AppSpacing.xs,
+          horizontal: HvacSpacing.md,
+          vertical: HvacSpacing.xs,
         ),
         decoration: BoxDecoration(
           color: theme.colorScheme.surface,
-          borderRadius: BorderRadius.circular(AppSpacing.xs),
+          borderRadius: BorderRadius.circular(HvacSpacing.xs),
           border: Border.all(
             color: theme.colorScheme.outline.withValues(alpha: 0.3),
           ),
@@ -192,7 +191,7 @@ class AppErrorWidget extends StatelessWidget {
               size: ResponsiveUtils.scaledIconSize(context, 16),
               color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
             ),
-            const SizedBox(width: AppSpacing.xs),
+            const SizedBox(width: HvacSpacing.xs),
             Text(
               'Error Code: $errorCode',
               style: theme.textTheme.bodySmall?.copyWith(
@@ -200,7 +199,7 @@ class AppErrorWidget extends StatelessWidget {
                 fontFamily: 'monospace',
               ),
             ),
-            const SizedBox(width: AppSpacing.xs),
+            const SizedBox(width: HvacSpacing.xs),
             Icon(
               Icons.copy,
               size: ResponsiveUtils.scaledIconSize(context, 14),
@@ -222,10 +221,10 @@ class AppErrorWidget extends StatelessWidget {
       ),
       children: [
         Container(
-          padding: const EdgeInsets.all(AppSpacing.md),
+          padding: const EdgeInsets.all(HvacSpacing.md),
           decoration: BoxDecoration(
             color: theme.colorScheme.surface,
-            borderRadius: BorderRadius.circular(AppSpacing.xs),
+            borderRadius: BorderRadius.circular(HvacSpacing.xs),
           ),
           child: SelectableText(
             technicalDetails!,
@@ -268,11 +267,11 @@ class AppErrorWidget extends StatelessWidget {
               ),
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.xl,
-                  vertical: AppSpacing.md,
+                  horizontal: HvacSpacing.xl,
+                  vertical: HvacSpacing.md,
                 ),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppSpacing.md),
+                  borderRadius: BorderRadius.circular(HvacSpacing.md),
                 ),
               ),
             ),
@@ -285,7 +284,7 @@ class AppErrorWidget extends StatelessWidget {
     if (additionalActions != null) {
       for (final action in additionalActions!) {
         actions.add(
-          const SizedBox(width: AppSpacing.md, height: AppSpacing.md),
+          const SizedBox(width: HvacSpacing.md, height: HvacSpacing.md),
         );
         actions.add(
           Semantics(
@@ -313,11 +312,11 @@ class AppErrorWidget extends StatelessWidget {
                       ),
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: AppSpacing.lg,
-                          vertical: AppSpacing.md,
+                          horizontal: HvacSpacing.lg,
+                          vertical: HvacSpacing.md,
                         ),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(AppSpacing.md),
+                          borderRadius: BorderRadius.circular(HvacSpacing.md),
                         ),
                       ),
                     )
@@ -340,11 +339,11 @@ class AppErrorWidget extends StatelessWidget {
                       ),
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: AppSpacing.lg,
-                          vertical: AppSpacing.md,
+                          horizontal: HvacSpacing.lg,
+                          vertical: HvacSpacing.md,
                         ),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(AppSpacing.md),
+                          borderRadius: BorderRadius.circular(HvacSpacing.md),
                         ),
                       ),
                     ),

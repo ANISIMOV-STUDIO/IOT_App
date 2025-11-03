@@ -6,8 +6,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../core/theme/app_theme.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../domain/entities/hvac_unit.dart';
 import '../../../domain/entities/automation_rule.dart';
 import '../../../domain/entities/mode_preset.dart';
@@ -61,7 +60,7 @@ class HomeTabletLayout extends StatelessWidget {
           // Room preview - full width on tablets
           _buildRoomPreviewSection(),
 
-          SizedBox(height: AppSpacing.xlV),
+          const SizedBox(height: HvacSpacing.xlV),
 
           // 2-column layout for controls and info
           Row(
@@ -74,16 +73,16 @@ class HomeTabletLayout extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     buildControlCards(currentUnit, context),
-                    SizedBox(height: AppSpacing.lgV),
+                    const SizedBox(height: HvacSpacing.lgV),
                     if (isSmallTablet) ...[
                       _buildQuickActions(),
-                      SizedBox(height: AppSpacing.lgV),
+                      const SizedBox(height: HvacSpacing.lgV),
                     ],
                   ],
                 ),
               ),
 
-              SizedBox(width: AppSpacing.xlR),
+              const SizedBox(width: HvacSpacing.xlR),
 
               // Right column - Quick actions & notifications
               Expanded(
@@ -93,10 +92,10 @@ class HomeTabletLayout extends StatelessWidget {
                   children: [
                     if (!isSmallTablet) ...[
                       _buildQuickActions(),
-                      SizedBox(height: AppSpacing.lgV),
+                      const SizedBox(height: HvacSpacing.lgV),
                     ],
                     _buildPresets(),
-                    SizedBox(height: AppSpacing.lgV),
+                    const SizedBox(height: HvacSpacing.lgV),
                     if (currentUnit != null)
                       HomeNotificationsPanel(unit: currentUnit!),
                   ],
@@ -105,7 +104,7 @@ class HomeTabletLayout extends StatelessWidget {
             ],
           ),
 
-          SizedBox(height: AppSpacing.xlV),
+          const SizedBox(height: HvacSpacing.xlV),
 
           // Automation section - full width
           HomeAutomationSection(
@@ -135,14 +134,14 @@ class HomeTabletLayout extends StatelessWidget {
   Widget _buildQuickActions() {
     return Container(
       decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
+        color: HvacColors.backgroundCard,
         borderRadius: BorderRadius.circular(16.r),
         border: Border.all(
-          color: AppTheme.backgroundCardBorder,
+          color: HvacColors.backgroundCardBorder,
           width: 1.w,
         ),
       ),
-      padding: EdgeInsets.all(AppSpacing.lgR),
+      padding: const EdgeInsets.all(HvacSpacing.lgR),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -151,43 +150,43 @@ class HomeTabletLayout extends StatelessWidget {
             style: TextStyle(
               fontSize: 16.sp,
               fontWeight: FontWeight.w600,
-              color: AppTheme.textPrimary,
+              color: HvacColors.textPrimary,
             ),
           ),
-          SizedBox(height: AppSpacing.mdV),
+          const SizedBox(height: HvacSpacing.mdV),
 
           // 2x2 grid of action buttons
           GridView.count(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             crossAxisCount: 2,
-            mainAxisSpacing: AppSpacing.smV,
-            crossAxisSpacing: AppSpacing.smR,
+            mainAxisSpacing: HvacSpacing.smV,
+            crossAxisSpacing: HvacSpacing.smR,
             childAspectRatio: 2.5,
             children: [
               _buildActionButton(
                 icon: Icons.power_settings_new,
                 label: 'All On',
                 onTap: onPowerAllOn,
-                color: AppTheme.successGreen,
+                color: HvacColors.successGreen,
               ),
               _buildActionButton(
                 icon: Icons.power_off,
                 label: 'All Off',
                 onTap: onPowerAllOff,
-                color: AppTheme.errorRed,
+                color: HvacColors.errorRed,
               ),
               _buildActionButton(
                 icon: Icons.sync,
                 label: 'Sync',
                 onTap: onSyncSettings,
-                color: AppTheme.primaryOrange,
+                color: HvacColors.primaryOrange,
               ),
               _buildActionButton(
                 icon: Icons.schedule,
                 label: 'Schedule',
                 onTap: onApplyScheduleToAll,
-                color: AppTheme.primaryBlue,
+                color: HvacColors.primaryBlue,
               ),
             ],
           ),
@@ -206,14 +205,14 @@ class HomeTabletLayout extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
+        color: HvacColors.backgroundCard,
         borderRadius: BorderRadius.circular(16.r),
         border: Border.all(
-          color: AppTheme.backgroundCardBorder,
+          color: HvacColors.backgroundCardBorder,
           width: 1.w,
         ),
       ),
-      padding: EdgeInsets.all(AppSpacing.lgR),
+      padding: const EdgeInsets.all(HvacSpacing.lgR),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -222,12 +221,12 @@ class HomeTabletLayout extends StatelessWidget {
             style: TextStyle(
               fontSize: 16.sp,
               fontWeight: FontWeight.w600,
-              color: AppTheme.textPrimary,
+              color: HvacColors.textPrimary,
             ),
           ),
-          SizedBox(height: AppSpacing.mdV),
+          const SizedBox(height: HvacSpacing.mdV),
           ...presets.map((preset) => Padding(
-            padding: EdgeInsets.only(bottom: AppSpacing.smV),
+            padding: const EdgeInsets.only(bottom: HvacSpacing.smV),
             child: _buildPresetButton(preset),
           )),
         ],
@@ -237,19 +236,19 @@ class HomeTabletLayout extends StatelessWidget {
 
   Widget _buildPresetButton(ModePreset preset) {
     return Material(
-      color: AppTheme.backgroundCard,
+      color: HvacColors.backgroundCard,
       borderRadius: BorderRadius.circular(12.r),
       child: InkWell(
         onTap: () => onPresetSelected(preset),
         borderRadius: BorderRadius.circular(12.r),
         child: Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: AppSpacing.mdR,
-            vertical: AppSpacing.smV,
+          padding: const EdgeInsets.symmetric(
+            horizontal: HvacSpacing.mdR,
+            vertical: HvacSpacing.smV,
           ),
           decoration: BoxDecoration(
             border: Border.all(
-              color: AppTheme.backgroundCardBorder,
+              color: HvacColors.backgroundCardBorder,
               width: 1.w,
             ),
             borderRadius: BorderRadius.circular(12.r),
@@ -261,21 +260,21 @@ class HomeTabletLayout extends StatelessWidget {
                 size: 20.sp,
                 color: _getPresetColor(preset),
               ),
-              SizedBox(width: AppSpacing.smR),
+              const SizedBox(width: HvacSpacing.smR),
               Expanded(
                 child: Text(
                   preset.mode.displayName,
                   style: TextStyle(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w500,
-                    color: AppTheme.textPrimary,
+                    color: HvacColors.textPrimary,
                   ),
                 ),
               ),
               Icon(
                 Icons.chevron_right,
                 size: 20.sp,
-                color: AppTheme.textSecondary,
+                color: HvacColors.textSecondary,
               ),
             ],
           ),
@@ -291,19 +290,19 @@ class HomeTabletLayout extends StatelessWidget {
     required Color color,
   }) {
     return Material(
-      color: AppTheme.backgroundCard,
+      color: HvacColors.backgroundCard,
       borderRadius: BorderRadius.circular(12.r),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12.r),
         child: Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: AppSpacing.smR,
-            vertical: AppSpacing.smV,
+          padding: const EdgeInsets.symmetric(
+            horizontal: HvacSpacing.smR,
+            vertical: HvacSpacing.smV,
           ),
           decoration: BoxDecoration(
             border: Border.all(
-              color: color.withOpacity(0.3),
+              color: color.withValues(alpha: 0.3),
               width: 1.w,
             ),
             borderRadius: BorderRadius.circular(12.r),
@@ -316,13 +315,13 @@ class HomeTabletLayout extends StatelessWidget {
                 size: 18.sp,
                 color: color,
               ),
-              SizedBox(width: AppSpacing.xsR),
+              const SizedBox(width: HvacSpacing.xsR),
               Text(
                 label,
                 style: TextStyle(
                   fontSize: 13.sp,
                   fontWeight: FontWeight.w500,
-                  color: AppTheme.textPrimary,
+                  color: HvacColors.textPrimary,
                 ),
               ),
             ],
@@ -350,15 +349,15 @@ class HomeTabletLayout extends StatelessWidget {
   Color _getPresetColor(ModePreset preset) {
     switch (preset.mode.displayName.toLowerCase()) {
       case 'eco':
-        return AppTheme.successGreen;
+        return HvacColors.successGreen;
       case 'comfort':
-        return AppTheme.primaryOrange;
+        return HvacColors.primaryOrange;
       case 'turbo':
-        return AppTheme.errorRed;
+        return HvacColors.errorRed;
       case 'night':
-        return AppTheme.primaryBlue;
+        return HvacColors.primaryBlue;
       default:
-        return AppTheme.textSecondary;
+        return HvacColors.textSecondary;
     }
   }
 }

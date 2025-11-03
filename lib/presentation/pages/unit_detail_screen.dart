@@ -4,10 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../core/theme/app_theme.dart';
-import '../../core/theme/spacing.dart';
-import '../../core/utils/responsive_utils.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../core/widgets/adaptive_layout_widgets.dart';
 import '../../domain/entities/hvac_unit.dart';
 import '../widgets/unit_detail/overview_tab.dart';
@@ -66,7 +63,7 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
 
   Widget _buildMobileLayout() {
     return Scaffold(
-      backgroundColor: AppTheme.backgroundDark,
+      backgroundColor: HvacColors.backgroundDark,
       appBar: _buildMobileAppBar(),
       body: TabBarView(
         controller: _tabController,
@@ -77,7 +74,7 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
 
   Widget _buildTabletLayout() {
     return Scaffold(
-      backgroundColor: AppTheme.backgroundDark,
+      backgroundColor: HvacColors.backgroundDark,
       appBar: _buildTabletAppBar(),
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,7 +91,7 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
           ),
           Expanded(
             child: AdaptiveContainer(
-              padding: EdgeInsets.all(AppSpacing.lgR),
+              padding: const EdgeInsets.all(HvacSpacing.lgR),
               child: _getTabViews()[_selectedIndex],
             ),
           ),
@@ -105,16 +102,16 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
 
   PreferredSizeWidget _buildMobileAppBar() {
     return AppBar(
-      backgroundColor: AppTheme.backgroundCard,
+      backgroundColor: HvacColors.backgroundCard,
       elevation: 0,
       leading: _buildBackButton(),
       title: _buildTitle(),
       actions: [_buildAnalyticsButton()],
       bottom: TabBar(
         controller: _tabController,
-        indicatorColor: AppTheme.primaryOrange,
-        labelColor: AppTheme.primaryOrange,
-        unselectedLabelColor: AppTheme.textSecondary,
+        indicatorColor: HvacColors.primaryOrange,
+        labelColor: HvacColors.primaryOrange,
+        unselectedLabelColor: HvacColors.textSecondary,
         isScrollable: true,
         labelStyle: TextStyle(
           fontSize: 14.sp,
@@ -132,7 +129,7 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
 
   PreferredSizeWidget _buildTabletAppBar() {
     return AppBar(
-      backgroundColor: AppTheme.backgroundCard,
+      backgroundColor: HvacColors.backgroundCard,
       elevation: 0,
       leading: _buildBackButton(),
       title: Row(
@@ -148,7 +145,7 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
 
   Widget _buildBackButton() {
     return IconButton(
-      icon: Icon(Icons.arrow_back, color: AppTheme.textPrimary, size: 24.sp),
+      icon: Icon(Icons.arrow_back, color: HvacColors.textPrimary, size: 24.sp),
       onPressed: () => Navigator.pop(context),
     );
   }
@@ -162,14 +159,14 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
           style: TextStyle(
             fontSize: ResponsiveUtils.isTablet(context) ? 20.sp : 18.sp,
             fontWeight: FontWeight.w600,
-            color: AppTheme.textPrimary,
+            color: HvacColors.textPrimary,
           ),
         ),
         Text(
           widget.unit.location ?? 'Неизвестно',
           style: TextStyle(
             fontSize: ResponsiveUtils.isTablet(context) ? 14.sp : 12.sp,
-            color: AppTheme.textSecondary,
+            color: HvacColors.textSecondary,
             fontWeight: FontWeight.w400,
           ),
         ),
@@ -179,7 +176,7 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
 
   Widget _buildAnalyticsButton() {
     return IconButton(
-      icon: Icon(Icons.analytics, color: AppTheme.primaryOrange, size: 24.sp),
+      icon: Icon(Icons.analytics, color: HvacColors.primaryOrange, size: 24.sp),
       onPressed: () {
         Navigator.push(
           context,
@@ -196,14 +193,14 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
     return [
       _buildAnalyticsButton(),
       IconButton(
-        icon: Icon(Icons.settings, color: AppTheme.textSecondary, size: 24.sp),
+        icon: Icon(Icons.settings, color: HvacColors.textSecondary, size: 24.sp),
         onPressed: () {
           // Navigate to unit settings
         },
         tooltip: 'Настройки',
       ),
       IconButton(
-        icon: Icon(Icons.share, color: AppTheme.textSecondary, size: 24.sp),
+        icon: Icon(Icons.share, color: HvacColors.textSecondary, size: 24.sp),
         onPressed: () {
           // Share unit data
         },

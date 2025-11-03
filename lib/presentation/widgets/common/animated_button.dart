@@ -4,13 +4,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_typography.dart';
-import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/spacing.dart';
-
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 /// Primary animated button with scale and haptic feedback
 class AnimatedPrimaryButton extends StatefulWidget {
   final String label;
@@ -111,35 +105,35 @@ class _AnimatedPrimaryButtonState extends State<AnimatedPrimaryButton>
             width: widget.isExpanded ? double.infinity : widget.width,
             height: widget.height ?? 56.h,
             padding: widget.padding ??
-                EdgeInsets.symmetric(
-                  horizontal: AppSpacing.lgR,
-                  vertical: AppSpacing.mdR,
+                const EdgeInsets.symmetric(
+                  horizontal: HvacSpacing.lgR,
+                  vertical: HvacSpacing.mdR,
                 ),
             decoration: BoxDecoration(
               gradient: isDisabled
                   ? null
                   : const LinearGradient(
                       colors: [
-                        AppTheme.primaryOrange,
-                        AppTheme.primaryOrangeDark,
+                        HvacColors.primaryOrange,
+                        HvacColors.primaryOrangeDark,
                       ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
               color: isDisabled
-                  ? AppTheme.backgroundCardBorder
+                  ? HvacColors.backgroundCardBorder
                   : null,
-              borderRadius: BorderRadius.circular(AppRadius.mdR),
+              borderRadius: BorderRadius.circular(HvacRadius.mdR),
               boxShadow: _isPressed || isDisabled
                   ? []
                   : [
                       BoxShadow(
-                        color: AppTheme.primaryOrange.withValues(alpha: 0.3),
+                        color: HvacColors.primaryOrange.withValues(alpha: 0.3),
                         blurRadius: 12,
                         offset: const Offset(0, 4),
                       ),
                       BoxShadow(
-                        color: AppTheme.primaryOrange.withValues(alpha: 0.15),
+                        color: HvacColors.primaryOrange.withValues(alpha: 0.15),
                         blurRadius: 24,
                         offset: const Offset(0, 8),
                       ),
@@ -160,9 +154,9 @@ class _AnimatedPrimaryButtonState extends State<AnimatedPrimaryButton>
     return SizedBox(
       width: 20.r,
       height: 20.r,
-      child: CircularProgressIndicator(
+      child: const CircularProgressIndicator(
         strokeWidth: 2,
-        valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
       ),
     );
   }
@@ -178,10 +172,10 @@ class _AnimatedPrimaryButtonState extends State<AnimatedPrimaryButton>
             color: Colors.white,
             size: 20.r,
           ),
-          SizedBox(width: AppSpacing.smR),
+          const SizedBox(width: HvacSpacing.smR),
           Text(
             widget.label,
-            style: AppTypography.buttonMedium.copyWith(
+            style: HvacTypography.buttonMedium.copyWith(
               color: Colors.white,
             ),
           ),
@@ -191,7 +185,7 @@ class _AnimatedPrimaryButtonState extends State<AnimatedPrimaryButton>
 
     return Text(
       widget.label,
-      style: AppTypography.buttonMedium.copyWith(
+      style: HvacTypography.buttonMedium.copyWith(
         color: Colors.white,
       ),
     );
@@ -261,8 +255,8 @@ class _AnimatedOutlineButtonState extends State<AnimatedOutlineButton>
 
   @override
   Widget build(BuildContext context) {
-    final borderColor = widget.borderColor ?? AppTheme.primaryOrange;
-    final textColor = widget.textColor ?? AppTheme.primaryOrange;
+    final borderColor = widget.borderColor ?? HvacColors.primaryOrange;
+    final textColor = widget.textColor ?? HvacColors.primaryOrange;
 
     return MouseRegion(
       onEnter: (_) => _handleHover(true),
@@ -279,15 +273,15 @@ class _AnimatedOutlineButtonState extends State<AnimatedOutlineButton>
           builder: (context, child) => AnimatedContainer(
             duration: const Duration(milliseconds: 200),
             height: 48.h,
-            padding: EdgeInsets.symmetric(
-              horizontal: AppSpacing.lgR,
-              vertical: AppSpacing.smR,
+            padding: const EdgeInsets.symmetric(
+              horizontal: HvacSpacing.lgR,
+              vertical: HvacSpacing.smR,
             ),
             decoration: BoxDecoration(
               color: _isHovered
                   ? borderColor.withValues(alpha: 0.1)
                   : Colors.transparent,
-              borderRadius: BorderRadius.circular(AppRadius.mdR),
+              borderRadius: BorderRadius.circular(HvacRadius.mdR),
               border: Border.all(
                 color: borderColor,
                 width: _borderAnimation.value,
@@ -312,11 +306,11 @@ class _AnimatedOutlineButtonState extends State<AnimatedOutlineButton>
                             color: textColor,
                             size: 20.r,
                           ),
-                          SizedBox(width: AppSpacing.smR),
+                          const SizedBox(width: HvacSpacing.smR),
                         ],
                         Text(
                           widget.label,
-                          style: AppTypography.buttonMedium.copyWith(
+                          style: HvacTypography.buttonMedium.copyWith(
                             color: textColor,
                           ),
                         ),
@@ -407,7 +401,7 @@ class _AnimatedIconButtonState extends State<AnimatedIconButton>
   @override
   Widget build(BuildContext context) {
     final size = widget.size ?? 48.r;
-    final iconColor = widget.iconColor ?? AppTheme.textPrimary;
+    final iconColor = widget.iconColor ?? HvacColors.textPrimary;
     final backgroundColor = widget.backgroundColor ?? Colors.transparent;
 
     Widget button = GestureDetector(
@@ -531,21 +525,21 @@ class _AnimatedFABState extends State<AnimatedFAB>
           width: widget.label != null ? null : size,
           height: size,
           padding: widget.label != null
-              ? EdgeInsets.symmetric(horizontal: AppSpacing.lgR)
+              ? const EdgeInsets.symmetric(horizontal: HvacSpacing.lgR)
               : null,
           decoration: BoxDecoration(
-            gradient: AppTheme.primaryGradient,
+            gradient: HvacColors.primaryGradient,
             borderRadius: BorderRadius.circular(
-              widget.label != null ? AppRadius.xlR : size / 2,
+              widget.label != null ? HvacRadius.xlR : size / 2,
             ),
             boxShadow: [
               BoxShadow(
-                color: AppTheme.primaryOrange.withValues(alpha: 0.3),
+                color: HvacColors.primaryOrange.withValues(alpha: 0.3),
                 blurRadius: 12,
                 offset: const Offset(0, 6),
               ),
               BoxShadow(
-                color: AppTheme.primaryOrange.withValues(alpha: 0.15),
+                color: HvacColors.primaryOrange.withValues(alpha: 0.15),
                 blurRadius: 24,
                 offset: const Offset(0, 12),
               ),
@@ -561,10 +555,10 @@ class _AnimatedFABState extends State<AnimatedFAB>
                 size: widget.mini ? 20.r : 24.r,
               ),
               if (widget.label != null) ...[
-                SizedBox(width: AppSpacing.smR),
+                const SizedBox(width: HvacSpacing.smR),
                 Text(
                   widget.label!,
-                  style: AppTypography.buttonMedium.copyWith(
+                  style: HvacTypography.buttonMedium.copyWith(
                     color: Colors.white,
                   ),
                 ),

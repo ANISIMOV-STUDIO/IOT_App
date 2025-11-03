@@ -4,11 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../core/theme/app_radius.dart';
-
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 class TimePickerField extends StatelessWidget {
   final String label;
   final TimeOfDay? currentTime;
@@ -28,12 +24,12 @@ class TimePickerField extends StatelessWidget {
     return GestureDetector(
       onTap: () => _showTimePicker(context),
       child: Container(
-        padding: EdgeInsets.all(AppSpacing.smR),
+        padding: const EdgeInsets.all(HvacSpacing.smR),
         decoration: BoxDecoration(
-          color: AppTheme.backgroundDark,
-          borderRadius: BorderRadius.circular(AppRadius.smR),
+          color: HvacColors.backgroundDark,
+          borderRadius: BorderRadius.circular(HvacRadius.smR),
           border: Border.all(
-            color: AppTheme.backgroundCardBorder,
+            color: HvacColors.backgroundCardBorder,
             width: 1,
           ),
         ),
@@ -45,19 +41,19 @@ class TimePickerField extends StatelessWidget {
                 Icon(
                   icon,
                   size: 14.sp,
-                  color: AppTheme.textSecondary,
+                  color: HvacColors.textSecondary,
                 ),
-                SizedBox(width: AppSpacing.xsR - 2.w),
+                SizedBox(width: HvacSpacing.xsR - 2.w),
                 Text(
                   label,
                   style: TextStyle(
                     fontSize: 11.sp,
-                    color: AppTheme.textSecondary,
+                    color: HvacColors.textSecondary,
                   ),
                 ),
               ],
             ),
-            SizedBox(height: AppSpacing.xsR - 2.h),
+            SizedBox(height: HvacSpacing.xsR - 2.h),
             Text(
               currentTime != null
                   ? '${currentTime!.hour.toString().padLeft(2, '0')}:${currentTime!.minute.toString().padLeft(2, '0')}'
@@ -65,7 +61,7 @@ class TimePickerField extends StatelessWidget {
               style: TextStyle(
                 fontSize: 18.sp,
                 fontWeight: FontWeight.w700,
-                color: AppTheme.primaryOrange,
+                color: HvacColors.primaryOrange,
               ),
             ),
           ],
@@ -82,13 +78,13 @@ class TimePickerField extends StatelessWidget {
         return Theme(
           data: ThemeData.dark().copyWith(
             colorScheme: const ColorScheme.dark(
-              primary: AppTheme.primaryOrange,
+              primary: HvacColors.primaryOrange,
               onPrimary: Colors.white,
-              surface: AppTheme.backgroundCard,
-              onSurface: AppTheme.textPrimary,
+              surface: HvacColors.backgroundCard,
+              onSurface: HvacColors.textPrimary,
             ),
             dialogTheme: const DialogThemeData(
-              backgroundColor: AppTheme.backgroundCard,
+              backgroundColor: HvacColors.backgroundCard,
             ),
           ),
           child: child!,

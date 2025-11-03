@@ -6,7 +6,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../core/theme/app_theme.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../bloc/hvac_detail/hvac_detail_bloc.dart';
 import '../bloc/hvac_detail/hvac_detail_event.dart';
 import '../bloc/hvac_detail/hvac_detail_state.dart';
@@ -22,13 +22,13 @@ class RoomDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.backgroundDark,
+      backgroundColor: HvacColors.backgroundDark,
       body: BlocBuilder<HvacDetailBloc, HvacDetailState>(
         builder: (context, state) {
           if (state is HvacDetailLoading) {
             return const Center(
               child: CircularProgressIndicator(
-                color: AppTheme.primaryOrange,
+                color: HvacColors.primaryOrange,
               ),
             );
           }
@@ -57,7 +57,7 @@ class RoomDetailScreen extends StatelessWidget {
             const Icon(
               Icons.error_outline,
               size: 64,
-              color: AppTheme.error,
+              color: HvacColors.error,
             ),
             const SizedBox(height: 24),
             Text(
@@ -78,7 +78,7 @@ class RoomDetailScreen extends StatelessWidget {
 
   Widget _buildContent(BuildContext context, HvacDetailLoaded state) {
     final unit = state.unit;
-    final modeColor = AppTheme.getModeColor(unit.mode);
+    final modeColor = HvacColors.getModeColor(unit.mode);
 
     return CustomScrollView(
       slivers: [
@@ -86,7 +86,7 @@ class RoomDetailScreen extends StatelessWidget {
         SliverAppBar(
           expandedHeight: 300,
           pinned: true,
-          backgroundColor: AppTheme.backgroundDark,
+          backgroundColor: HvacColors.backgroundDark,
           leading: Semantics(
             label: 'Back',
             button: true,
@@ -111,7 +111,7 @@ class RoomDetailScreen extends StatelessWidget {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Notifications feature coming soon'),
-                      backgroundColor: AppTheme.info,
+                      backgroundColor: HvacColors.info,
                       duration: Duration(seconds: 2),
                     ),
                   );
@@ -144,7 +144,7 @@ class RoomDetailScreen extends StatelessWidget {
                       end: Alignment.bottomCenter,
                       colors: [
                         modeColor.withValues(alpha: 0.3),
-                        AppTheme.backgroundDark,
+                        HvacColors.backgroundDark,
                       ],
                     ),
                   ),
@@ -162,8 +162,8 @@ class RoomDetailScreen extends StatelessWidget {
                       end: Alignment.bottomCenter,
                       colors: [
                         Colors.transparent,
-                        AppTheme.backgroundDark.withValues(alpha: 0.7),
-                        AppTheme.backgroundDark,
+                        HvacColors.backgroundDark.withValues(alpha: 0.7),
+                        HvacColors.backgroundDark,
                       ],
                       stops: const [0.0, 0.7, 1.0],
                     ),
@@ -275,14 +275,14 @@ class RoomDetailScreen extends StatelessWidget {
   }) {
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: AppTheme.deviceCard(),
+      decoration: HvacTheme.deviceCard(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Icon(icon, size: 24, color: AppTheme.textSecondary),
+              Icon(icon, size: 24, color: HvacColors.textSecondary),
               Text(
                 'Mode 2',
                 style: Theme.of(context).textTheme.bodySmall,
@@ -334,7 +334,7 @@ class RoomDetailScreen extends StatelessWidget {
   }) {
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: AppTheme.deviceCard(),
+      decoration: HvacTheme.deviceCard(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -348,7 +348,7 @@ class RoomDetailScreen extends StatelessWidget {
               const Icon(
                 Icons.lightbulb_outline,
                 size: 20,
-                color: AppTheme.textSecondary,
+                color: HvacColors.textSecondary,
               ),
             ],
           ),
@@ -363,8 +363,8 @@ class RoomDetailScreen extends StatelessWidget {
             child: Slider(
               value: value,
               onChanged: onChanged,
-              activeColor: AppTheme.primaryOrange,
-              inactiveColor: AppTheme.backgroundCardBorder,
+              activeColor: HvacColors.primaryOrange,
+              inactiveColor: HvacColors.backgroundCardBorder,
             ),
           ),
         ],
@@ -380,7 +380,7 @@ class RoomDetailScreen extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: AppTheme.deviceCard(),
+      decoration: HvacTheme.deviceCard(),
       child: Column(
         children: [
           Row(
@@ -409,7 +409,7 @@ class RoomDetailScreen extends StatelessWidget {
                   Text(
                     '${unit.targetTemp.toInt()}°',
                     style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                      color: AppTheme.primaryOrange,
+                      color: HvacColors.primaryOrange,
                     ),
                   ),
                 ],
@@ -435,8 +435,8 @@ class RoomDetailScreen extends StatelessWidget {
                   UpdateTargetTempEvent(value),
                 );
               },
-              activeColor: AppTheme.primaryOrange,
-              inactiveColor: AppTheme.backgroundCardBorder,
+              activeColor: HvacColors.primaryOrange,
+              inactiveColor: HvacColors.backgroundCardBorder,
             ),
           ),
         ],

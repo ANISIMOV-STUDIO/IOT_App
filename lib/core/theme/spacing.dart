@@ -62,6 +62,7 @@ class AppSpacing {
   static double get screenPaddingDesktop => xlR;
 
   // Card padding
+  static double get cardPadding => lgR; // Default card padding
   static double get cardPaddingSmall => mdR;
   static double get cardPaddingMedium => lgR;
   static double get cardPaddingLarge => xlR;

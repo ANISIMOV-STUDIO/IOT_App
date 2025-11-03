@@ -5,16 +5,8 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../core/theme/app_theme.dart';
-import '../../core/theme/app_typography.dart';
-import '../../core/theme/app_radius.dart';
-import '../../core/theme/spacing.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../core/theme/ui_constants.dart';
-import '../../core/theme/glassmorphism.dart';
-import '../../core/utils/responsive_utils.dart';
-import '../../core/animation/smooth_animations.dart';
-import '../../core/utils/performance_utils.dart';
 
 class RoomCardCompact extends StatelessWidget {
   final String roomName;
@@ -53,7 +45,7 @@ class RoomCardCompact extends StatelessWidget {
             duration: AnimationDurations.medium,
             child: GlassCard(
               // GLASSMORPHISM: Frosted glass with blur
-              padding: EdgeInsets.all(AppSpacing.mdR),
+              padding: const EdgeInsets.all(HvacSpacing.mdR),
               enableBlur: true,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,14 +55,14 @@ class RoomCardCompact extends StatelessWidget {
                   // Header Row
                   _buildHeader(context),
 
-                  SizedBox(height: AppSpacing.smV),
+                  const SizedBox(height: HvacSpacing.smV),
 
                   // Stats Row
                   _buildStats(context),
 
                   // Mode Indicator
                   if (mode != null) ...[
-                    SizedBox(height: AppSpacing.smV),
+                    const SizedBox(height: HvacSpacing.smV),
                     _buildModeIndicator(context),
                   ],
                 ],
@@ -95,13 +87,13 @@ class RoomCardCompact extends StatelessWidget {
             children: [
               Text(
                 roomName,
-                style: AppTypography.h5.copyWith(
+                style: HvacTypography.h5.copyWith(
                   letterSpacing: -0.5,
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
-              SizedBox(height: AppSpacing.xxsV),
+              const SizedBox(height: HvacSpacing.xxsV),
               Row(
                 children: [
                   AnimatedContainer(
@@ -109,12 +101,12 @@ class RoomCardCompact extends StatelessWidget {
                     width: 6.w,
                     height: 6.w,
                     decoration: BoxDecoration(
-                      color: isActive ? AppTheme.success : AppTheme.textTertiary,
+                      color: isActive ? HvacColors.success : HvacColors.textTertiary,
                       shape: BoxShape.circle,
                       boxShadow: isActive
                           ? [
                               BoxShadow(
-                                color: AppTheme.success.withValues(alpha: 0.4),
+                                color: HvacColors.success.withValues(alpha: 0.4),
                                 blurRadius: UIConstants.blurMedium,
                                 spreadRadius: 2,
                               ),
@@ -122,10 +114,10 @@ class RoomCardCompact extends StatelessWidget {
                           : null,
                     ),
                   ),
-                  SizedBox(width: AppSpacing.xxsR),
+                  const SizedBox(width: HvacSpacing.xxsR),
                   Text(
                     isActive ? 'Активно' : 'Выключено',
-                    style: AppTypography.captionSmall.copyWith(
+                    style: HvacTypography.captionSmall.copyWith(
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -146,25 +138,25 @@ class RoomCardCompact extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: () => onPowerChanged?.call(!isActive),
-        borderRadius: BorderRadius.circular(AppRadius.mdR),
+        borderRadius: BorderRadius.circular(HvacRadius.mdR),
         child: Container(
           width: UIConstants.minTouchTargetR,
           height: UIConstants.minTouchTargetR,
           decoration: BoxDecoration(
             color: isActive
-                ? AppTheme.primaryOrange.withValues(alpha: 0.1)
-                : AppTheme.backgroundCardBorder.withValues(alpha: 0.3),
-            borderRadius: BorderRadius.circular(AppRadius.mdR),
+                ? HvacColors.primaryOrange.withValues(alpha: 0.1)
+                : HvacColors.backgroundCardBorder.withValues(alpha: 0.3),
+            borderRadius: BorderRadius.circular(HvacRadius.mdR),
             border: Border.all(
               color: isActive
-                  ? AppTheme.primaryOrange.withValues(alpha: 0.3)
-                  : AppTheme.backgroundCardBorder,
+                  ? HvacColors.primaryOrange.withValues(alpha: 0.3)
+                  : HvacColors.backgroundCardBorder,
               width: UIConstants.dividerThin,
             ),
           ),
           child: Icon(
             Icons.power_settings_new,
-            color: isActive ? AppTheme.primaryOrange : AppTheme.textTertiary,
+            color: isActive ? HvacColors.primaryOrange : HvacColors.textTertiary,
             size: UIConstants.iconSmR,
           ),
       ),
@@ -182,7 +174,7 @@ class RoomCardCompact extends StatelessWidget {
               icon: Icons.thermostat,
               value: '${temperature!.toStringAsFixed(1)}°',
               label: 'Темп',
-              color: AppTheme.neutral100, // Light gray
+              color: HvacColors.neutral100, // Light gray
               isCompact: true,
             ),
           ),
@@ -192,7 +184,7 @@ class RoomCardCompact extends StatelessWidget {
               icon: Icons.water_drop,
               value: '$humidity%',
               label: 'Влаж',
-              color: AppTheme.neutral200, // Medium gray
+              color: HvacColors.neutral200, // Medium gray
               isCompact: true,
             ),
           ),
@@ -202,7 +194,7 @@ class RoomCardCompact extends StatelessWidget {
               icon: Icons.air,
               value: '$fanSpeed%',
               label: 'Вент',
-              color: AppTheme.neutral300, // Dark gray
+              color: HvacColors.neutral300, // Dark gray
               isCompact: true,
             ),
           ),
@@ -221,13 +213,13 @@ class RoomCardCompact extends StatelessWidget {
         delay: AnimationDurations.fast,
         duration: AnimationDurations.normal,
         child: Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: AppSpacing.smR,
-            vertical: AppSpacing.xxsV,
+          padding: const EdgeInsets.symmetric(
+            horizontal: HvacSpacing.smR,
+            vertical: HvacSpacing.xxsV,
           ),
           decoration: BoxDecoration(
             color: modeColor.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(AppRadius.smR),
+            borderRadius: BorderRadius.circular(HvacRadius.smR),
             border: Border.all(
               color: modeColor.withValues(alpha: 0.3),
               width: UIConstants.dividerThin,
@@ -241,11 +233,11 @@ class RoomCardCompact extends StatelessWidget {
                 size: UIConstants.iconXsR,
                 color: modeColor,
               ),
-              SizedBox(width: AppSpacing.xxsR),
+              const SizedBox(width: HvacSpacing.xxsR),
               Flexible(
                 child: Text(
                   mode!,
-                  style: AppTypography.overline.copyWith(
+                  style: HvacTypography.overline.copyWith(
                     color: modeColor,
                     fontWeight: FontWeight.w600,
                     letterSpacing: 0.5,
@@ -266,18 +258,18 @@ class RoomCardCompact extends StatelessWidget {
     switch (mode.toLowerCase()) {
       case 'авто':
       case 'auto':
-        return AppTheme.accent; // Gold for auto mode only
+        return HvacColors.accent; // Gold for auto mode only
       case 'приток':
       case 'supply':
-        return AppTheme.neutral100; // Light gray
+        return HvacColors.neutral100; // Light gray
       case 'вытяжка':
       case 'exhaust':
-        return AppTheme.neutral200; // Medium gray
+        return HvacColors.neutral200; // Medium gray
       case 'рециркуляция':
       case 'recirculation':
-        return AppTheme.neutral300; // Dark gray
+        return HvacColors.neutral300; // Dark gray
       default:
-        return AppTheme.textSecondary;
+        return HvacColors.textSecondary;
     }
   }
 
@@ -328,7 +320,7 @@ class _StatItem extends StatelessWidget {
             height: 28.w,
             decoration: BoxDecoration(
               color: color.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(AppRadius.smR),
+              borderRadius: BorderRadius.circular(HvacRadius.smR),
             ),
             child: Icon(
               icon,
@@ -336,20 +328,20 @@ class _StatItem extends StatelessWidget {
               color: color,
             ),
           ),
-          SizedBox(width: AppSpacing.xsR),
+          const SizedBox(width: HvacSpacing.xsR),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 value,
-                style: AppTypography.bodyMedium.copyWith(
+                style: HvacTypography.bodyMedium.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
               ),
               Text(
                 label,
-                style: AppTypography.overline.copyWith(
+                style: HvacTypography.overline.copyWith(
                   fontSize: 10.sp,
                 ),
               ),
@@ -371,17 +363,17 @@ class _StatItem extends StatelessWidget {
               size: UIConstants.iconXsR,
               color: color,
             ),
-            SizedBox(width: AppSpacing.xxsR),
+            const SizedBox(width: HvacSpacing.xxsR),
             Text(
               label,
-              style: AppTypography.overline,
+              style: HvacTypography.overline,
             ),
           ],
         ),
-        SizedBox(height: AppSpacing.xxsV),
+        const SizedBox(height: HvacSpacing.xxsV),
         Text(
           value,
-          style: AppTypography.h5.copyWith(
+          style: HvacTypography.h5.copyWith(
             color: color,
           ),
         ),

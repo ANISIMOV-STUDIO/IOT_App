@@ -6,9 +6,8 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import '../../../core/utils/responsive_utils.dart';
 import '../../../domain/entities/hvac_unit.dart';
 import '../../../domain/entities/mode_preset.dart';
 import '../../bloc/hvac_list/hvac_list_bloc.dart';

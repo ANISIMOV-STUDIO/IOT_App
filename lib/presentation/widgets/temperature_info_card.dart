@@ -4,8 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
-
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 class TemperatureInfoCard extends StatelessWidget {
   final String value;
   final String label;
@@ -25,10 +24,10 @@ class TemperatureInfoCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
+        color: HvacColors.backgroundCard,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: AppTheme.backgroundCardBorder,
+          color: HvacColors.backgroundCardBorder,
           width: 1,
         ),
       ),
@@ -39,7 +38,7 @@ class TemperatureInfoCard extends StatelessWidget {
             Icon(
               icon,
               size: 24,
-              color: AppTheme.textSecondary,
+              color: HvacColors.textSecondary,
             ),
             const SizedBox(height: 8),
           ],
@@ -48,7 +47,7 @@ class TemperatureInfoCard extends StatelessWidget {
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.w700,
-              color: valueColor ?? AppTheme.textPrimary,
+              color: valueColor ?? HvacColors.textPrimary,
             ),
           ),
           const SizedBox(height: 4),
@@ -56,7 +55,7 @@ class TemperatureInfoCard extends StatelessWidget {
             label,
             style: const TextStyle(
               fontSize: 12,
-              color: AppTheme.textSecondary,
+              color: HvacColors.textSecondary,
             ),
             textAlign: TextAlign.center,
             maxLines: 2,

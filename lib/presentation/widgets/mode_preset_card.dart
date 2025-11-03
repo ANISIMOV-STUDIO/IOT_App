@@ -4,7 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../domain/entities/mode_preset.dart';
 import '../../domain/entities/ventilation_mode.dart';
 
@@ -25,7 +25,7 @@ class ModePresetCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(20),
-      decoration: AppTheme.deviceCard(),
+      decoration: HvacTheme.deviceCard(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -46,7 +46,7 @@ class ModePresetCard extends StatelessWidget {
                     size: 20,
                   ),
                   onPressed: onEdit,
-                  color: AppTheme.textSecondary,
+                  color: HvacColors.textSecondary,
                   tooltip: 'Редактировать',
                 ),
             ],
@@ -116,7 +116,7 @@ class ModePresetCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundDark,
+        color: HvacColors.backgroundDark,
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
@@ -124,7 +124,7 @@ class ModePresetCard extends StatelessWidget {
           Icon(
             icon,
             size: 18,
-            color: AppTheme.textSecondary,
+            color: HvacColors.textSecondary,
           ),
           const SizedBox(width: 8),
           Expanded(
@@ -135,7 +135,7 @@ class ModePresetCard extends StatelessWidget {
                   label,
                   style: const TextStyle(
                     fontSize: 10,
-                    color: AppTheme.textSecondary,
+                    color: HvacColors.textSecondary,
                   ),
                 ),
                 const SizedBox(height: 2),
@@ -144,7 +144,7 @@ class ModePresetCard extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: AppTheme.textPrimary,
+                    color: HvacColors.textPrimary,
                   ),
                 ),
               ],

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../core/utils/responsive_utils.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
 /// Comprehensive loading widget with multiple display modes
 class LoadingWidget extends StatelessWidget {
@@ -46,7 +45,7 @@ class LoadingWidget extends StatelessWidget {
               effectiveSize,
             ),
             if (showMessage && message != null) ...[
-              const SizedBox(height: AppSpacing.md),
+              const SizedBox(height: HvacSpacing.md),
               Text(
                 message!,
                 style: theme.textTheme.bodyMedium?.copyWith(
@@ -128,7 +127,7 @@ class LoadingWidget extends StatelessWidget {
       child: Column(
         children: List.generate(3, (index) =>
           Container(
-            margin: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+            margin: const EdgeInsets.symmetric(vertical: HvacSpacing.xs),
             width: size * 4,
             height: ResponsiveUtils.getResponsiveValue(
               context,
@@ -138,7 +137,7 @@ class LoadingWidget extends StatelessWidget {
             ),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(AppSpacing.xs),
+              borderRadius: BorderRadius.circular(HvacSpacing.xs),
             ),
           ),
         ),

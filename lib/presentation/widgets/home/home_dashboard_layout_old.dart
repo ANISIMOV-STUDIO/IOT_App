@@ -5,8 +5,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../core/utils/responsive_utils.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../domain/entities/hvac_unit.dart';
 import '../../../domain/entities/automation_rule.dart';
 import '../../../domain/entities/mode_preset.dart';
@@ -51,9 +50,9 @@ class HomeMobileLayout extends StatelessWidget {
             onPowerChanged: onPowerChanged,
             onDetailsPressed: onDetailsPressed,
           ),
-          SizedBox(height: AppSpacing.lgV),
+          const SizedBox(height: HvacSpacing.lgV),
           buildControlCards(currentUnit, context),
-          SizedBox(height: AppSpacing.lgV),
+          const SizedBox(height: HvacSpacing.lgV),
           HomeAutomationSection(
             currentUnit: currentUnit,
             onRuleToggled: onRuleToggled,
@@ -117,9 +116,9 @@ class HomeDesktopLayout extends StatelessWidget {
                   onPowerChanged: onPowerChanged,
                   onDetailsPressed: onDetailsPressed,
                 ),
-                SizedBox(height: AppSpacing.lgV),
+                const SizedBox(height: HvacSpacing.lgV),
                 buildControlCards(currentUnit, context),
-                SizedBox(height: AppSpacing.lgV),
+                const SizedBox(height: HvacSpacing.lgV),
                 HomeAutomationSection(
                   currentUnit: currentUnit,
                   onRuleToggled: onRuleToggled,
@@ -130,7 +129,7 @@ class HomeDesktopLayout extends StatelessWidget {
           ),
         ),
 
-        SizedBox(width: AppSpacing.lgR),
+        const SizedBox(width: HvacSpacing.lgR),
 
         // Sidebar
         HomeSidebar(
@@ -185,9 +184,9 @@ class HomeDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: AppSpacing.lgR,
-        vertical: AppSpacing.lgV,
+      padding: const EdgeInsets.symmetric(
+        horizontal: HvacSpacing.lgR,
+        vertical: HvacSpacing.lgV,
       ),
       child: ResponsiveUtils.isMobile(context)
           ? HomeMobileLayout(

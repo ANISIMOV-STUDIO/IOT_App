@@ -3,12 +3,8 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/spacing.dart';
-
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 /// Base shimmer wrapper with customizable gradient
 class EnhancedShimmer extends StatelessWidget {
   final Widget child;
@@ -35,9 +31,9 @@ class EnhancedShimmer extends StatelessWidget {
     }
 
     return Shimmer.fromColors(
-      baseColor: baseColor ?? AppTheme.backgroundCard,
+      baseColor: baseColor ?? HvacColors.backgroundCard,
       highlightColor: highlightColor ??
-          AppTheme.backgroundCardBorder.withValues(alpha: 0.6),
+          HvacColors.backgroundCardBorder.withValues(alpha: 0.6),
       period: period ?? const Duration(milliseconds: 1500),
       direction: direction ?? ShimmerDirection.ltr,
       child: child,
@@ -72,7 +68,7 @@ class SkeletonContainer extends StatelessWidget {
         color: Colors.white,
         borderRadius: isCircle
             ? null
-            : (borderRadius ?? BorderRadius.circular(AppRadius.smR)),
+            : (borderRadius ?? BorderRadius.circular(HvacRadius.smR)),
         shape: isCircle ? BoxShape.circle : BoxShape.rectangle,
       ),
     );
@@ -135,12 +131,12 @@ class DeviceCardSkeleton extends StatelessWidget {
   Widget build(BuildContext context) {
     return EnhancedShimmer(
       child: Container(
-        padding: EdgeInsets.all(AppSpacing.lgR),
+        padding: const EdgeInsets.all(HvacSpacing.lgR),
         decoration: BoxDecoration(
-          color: AppTheme.backgroundCard,
-          borderRadius: BorderRadius.circular(AppRadius.lgR),
+          color: HvacColors.backgroundCard,
+          borderRadius: BorderRadius.circular(HvacRadius.lgR),
           border: Border.all(
-            color: AppTheme.backgroundCardBorder,
+            color: HvacColors.backgroundCardBorder,
             width: 1,
           ),
         ),
@@ -154,13 +150,13 @@ class DeviceCardSkeleton extends StatelessWidget {
                   height: 48.r,
                   isCircle: true,
                 ),
-                SizedBox(width: AppSpacing.mdR),
+                const SizedBox(width: HvacSpacing.mdR),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SkeletonText(width: 150.w, height: 18),
-                      SizedBox(height: AppSpacing.xsR),
+                      const SizedBox(height: HvacSpacing.xsR),
                       SkeletonText(width: 100.w, height: 14),
                     ],
                   ),
@@ -172,7 +168,7 @@ class DeviceCardSkeleton extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: AppSpacing.lgR),
+            const SizedBox(height: HvacSpacing.lgR),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: List.generate(3, (index) => Column(
@@ -181,7 +177,7 @@ class DeviceCardSkeleton extends StatelessWidget {
                     width: 60.w,
                     height: 32.h,
                   ),
-                  SizedBox(height: AppSpacing.xsR),
+                  const SizedBox(height: HvacSpacing.xsR),
                   SkeletonText(width: 50.w, height: 12),
                 ],
               )),
@@ -207,12 +203,12 @@ class ChartSkeleton extends StatelessWidget {
     return EnhancedShimmer(
       child: Container(
         height: height ?? 200.h,
-        padding: EdgeInsets.all(AppSpacing.lgR),
+        padding: const EdgeInsets.all(HvacSpacing.lgR),
         decoration: BoxDecoration(
-          color: AppTheme.backgroundCard,
-          borderRadius: BorderRadius.circular(AppRadius.lgR),
+          color: HvacColors.backgroundCard,
+          borderRadius: BorderRadius.circular(HvacRadius.lgR),
           border: Border.all(
-            color: AppTheme.backgroundCardBorder,
+            color: HvacColors.backgroundCardBorder,
             width: 1,
           ),
         ),
@@ -220,12 +216,11 @@ class ChartSkeleton extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SkeletonText(width: 120.w, height: 16),
-            SizedBox(height: AppSpacing.mdR),
+            const SizedBox(height: HvacSpacing.mdR),
             Expanded(
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: List.generate(7, (index) {
-                  final heights = [0.3, 0.5, 0.7, 0.4, 0.8, 0.6, 0.5];
                   return Expanded(
                     child: Container(
                       margin: EdgeInsets.symmetric(horizontal: 4.w),
@@ -264,9 +259,9 @@ class ListItemSkeleton extends StatelessWidget {
   Widget build(BuildContext context) {
     return EnhancedShimmer(
       child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: AppSpacing.mdR,
-          vertical: AppSpacing.smR,
+        padding: const EdgeInsets.symmetric(
+          horizontal: HvacSpacing.mdR,
+          vertical: HvacSpacing.smR,
         ),
         child: Row(
           children: [
@@ -276,7 +271,7 @@ class ListItemSkeleton extends StatelessWidget {
                 height: 40.r,
                 isCircle: true,
               ),
-              SizedBox(width: AppSpacing.mdR),
+              const SizedBox(width: HvacSpacing.mdR),
             ],
             Expanded(
               child: Column(
@@ -284,7 +279,7 @@ class ListItemSkeleton extends StatelessWidget {
                 children: [
                   SkeletonText(width: 180.w, height: 16),
                   if (showSubtitle) ...[
-                    SizedBox(height: AppSpacing.xsR),
+                    const SizedBox(height: HvacSpacing.xsR),
                     SkeletonText(width: 120.w, height: 14),
                   ],
                 ],
@@ -310,12 +305,12 @@ class AnalyticsCardSkeleton extends StatelessWidget {
   Widget build(BuildContext context) {
     return EnhancedShimmer(
       child: Container(
-        padding: EdgeInsets.all(AppSpacing.lgR),
+        padding: const EdgeInsets.all(HvacSpacing.lgR),
         decoration: BoxDecoration(
-          color: AppTheme.backgroundCard,
-          borderRadius: BorderRadius.circular(AppRadius.lgR),
+          color: HvacColors.backgroundCard,
+          borderRadius: BorderRadius.circular(HvacRadius.lgR),
           border: Border.all(
-            color: AppTheme.backgroundCardBorder,
+            color: HvacColors.backgroundCardBorder,
             width: 1,
           ),
         ),
@@ -329,13 +324,13 @@ class AnalyticsCardSkeleton extends StatelessWidget {
                   height: 32.r,
                   borderRadius: BorderRadius.circular(8.r),
                 ),
-                SizedBox(width: AppSpacing.smR),
+                const SizedBox(width: HvacSpacing.smR),
                 SkeletonText(width: 100.w, height: 14),
               ],
             ),
-            SizedBox(height: AppSpacing.mdR),
+            const SizedBox(height: HvacSpacing.mdR),
             SkeletonText(width: 80.w, height: 32),
-            SizedBox(height: AppSpacing.xsR),
+            const SizedBox(height: HvacSpacing.xsR),
             SkeletonText(width: 60.w, height: 12),
           ],
         ),
@@ -351,7 +346,7 @@ class HomeDashboardSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: EdgeInsets.all(AppSpacing.mdR),
+      padding: const EdgeInsets.all(HvacSpacing.mdR),
       child: Column(
         children: [
           // Temperature card skeleton
@@ -359,10 +354,10 @@ class HomeDashboardSkeleton extends StatelessWidget {
             child: Container(
               height: 200.h,
               decoration: BoxDecoration(
-                color: AppTheme.backgroundCard,
-                borderRadius: BorderRadius.circular(AppRadius.xlR),
+                color: HvacColors.backgroundCard,
+                borderRadius: BorderRadius.circular(HvacRadius.xlR),
                 border: Border.all(
-                  color: AppTheme.backgroundCardBorder,
+                  color: HvacColors.backgroundCardBorder,
                   width: 1,
                 ),
               ),
@@ -375,14 +370,14 @@ class HomeDashboardSkeleton extends StatelessWidget {
                       height: 120.r,
                       isCircle: true,
                     ),
-                    SizedBox(height: AppSpacing.mdR),
+                    const SizedBox(height: HvacSpacing.mdR),
                     SkeletonText(width: 100.w, height: 16),
                   ],
                 ),
               ),
             ),
           ),
-          SizedBox(height: AppSpacing.lgR),
+          const SizedBox(height: HvacSpacing.lgR),
 
           // Stats row skeleton
           Row(
@@ -393,16 +388,16 @@ class HomeDashboardSkeleton extends StatelessWidget {
               ),
             )),
           ),
-          SizedBox(height: AppSpacing.lgR),
+          const SizedBox(height: HvacSpacing.lgR),
 
           // Chart skeleton
           const ChartSkeleton(),
-          SizedBox(height: AppSpacing.lgR),
+          const SizedBox(height: HvacSpacing.lgR),
 
           // Device list skeleton
-          ...List.generate(3, (index) => Padding(
-            padding: EdgeInsets.only(bottom: AppSpacing.mdR),
-            child: const DeviceCardSkeleton(),
+          ...List.generate(3, (index) => const Padding(
+            padding: EdgeInsets.only(bottom: HvacSpacing.mdR),
+            child: DeviceCardSkeleton(),
           )),
         ],
       ),

@@ -4,8 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
-
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 class GradientButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final String text;
@@ -37,7 +36,7 @@ class GradientButton extends StatelessWidget {
           onTap: isLoading ? null : onPressed,
           borderRadius: BorderRadius.circular(12),
           child: Container(
-            decoration: AppTheme.orangeButton(),
+            decoration: HvacTheme.orangeButton(),
             alignment: Alignment.center,
             child: isLoading
                 ? const SizedBox(

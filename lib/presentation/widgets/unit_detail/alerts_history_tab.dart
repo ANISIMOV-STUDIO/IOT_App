@@ -4,8 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../core/theme/app_theme.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../domain/entities/hvac_unit.dart';
 import '../../../domain/entities/alert.dart';
 
@@ -43,7 +42,7 @@ class AlertsHistoryTab extends StatelessWidget {
           Icon(
             Icons.check_circle_outline,
             size: 64.sp,
-            color: AppTheme.success.withValues(alpha: 0.5),
+            color: HvacColors.success.withValues(alpha: 0.5),
           ),
           SizedBox(height: 16.h),
           Text(
@@ -51,7 +50,7 @@ class AlertsHistoryTab extends StatelessWidget {
             style: TextStyle(
               fontSize: 18.sp,
               fontWeight: FontWeight.w600,
-              color: AppTheme.textPrimary,
+              color: HvacColors.textPrimary,
             ),
           ),
           SizedBox(height: 8.h),
@@ -59,7 +58,7 @@ class AlertsHistoryTab extends StatelessWidget {
             'Установка работает без ошибок',
             style: TextStyle(
               fontSize: 14.sp,
-              color: AppTheme.textSecondary,
+              color: HvacColors.textSecondary,
             ),
           ),
         ],
@@ -73,19 +72,19 @@ class AlertsHistoryTab extends StatelessWidget {
 
     switch (alert.severity) {
       case AlertSeverity.critical:
-        severityColor = AppTheme.error;
+        severityColor = HvacColors.error;
         severityIcon = Icons.error;
         break;
       case AlertSeverity.error:
-        severityColor = AppTheme.error;
+        severityColor = HvacColors.error;
         severityIcon = Icons.error_outline;
         break;
       case AlertSeverity.warning:
-        severityColor = AppTheme.warning;
+        severityColor = HvacColors.warning;
         severityIcon = Icons.warning;
         break;
       case AlertSeverity.info:
-        severityColor = AppTheme.info;
+        severityColor = HvacColors.info;
         severityIcon = Icons.info;
         break;
     }
@@ -94,7 +93,7 @@ class AlertsHistoryTab extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 12.h),
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
+        color: HvacColors.backgroundCard,
         borderRadius: BorderRadius.circular(12.r),
         border: Border.all(
           color: severityColor.withValues(alpha: 0.3),
@@ -124,7 +123,7 @@ class AlertsHistoryTab extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w600,
-                    color: AppTheme.textPrimary,
+                    color: HvacColors.textPrimary,
                   ),
                 ),
                 SizedBox(height: 4.h),
@@ -132,7 +131,7 @@ class AlertsHistoryTab extends StatelessWidget {
                   alert.description,
                   style: TextStyle(
                     fontSize: 13.sp,
-                    color: AppTheme.textSecondary,
+                    color: HvacColors.textSecondary,
                   ),
                 ),
                 SizedBox(height: 8.h),
@@ -142,7 +141,7 @@ class AlertsHistoryTab extends StatelessWidget {
                       : 'Время неизвестно',
                   style: TextStyle(
                     fontSize: 11.sp,
-                    color: AppTheme.textTertiary,
+                    color: HvacColors.textTertiary,
                   ),
                 ),
               ],

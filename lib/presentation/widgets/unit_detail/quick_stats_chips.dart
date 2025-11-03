@@ -4,9 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/spacing.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../domain/entities/hvac_unit.dart';
 import '../../../domain/entities/ventilation_mode.dart';
 
@@ -26,21 +24,21 @@ class QuickStatsChips extends StatelessWidget {
           icon: Icons.power_settings_new,
           label: unit.power ? 'ON' : 'OFF',
           color: unit.power
-              ? AppTheme.success
-              : AppTheme.textSecondary,
+              ? HvacColors.success
+              : HvacColors.textSecondary,
         ),
-        SizedBox(width: AppSpacing.mdR),
+        const SizedBox(width: HvacSpacing.mdR),
         _buildStatChip(
           icon: Icons.thermostat,
           label: '${unit.currentTemp.round()}°C',
-          color: AppTheme.primaryOrange,
+          color: HvacColors.primaryOrange,
         ),
         if (unit.ventMode != null) ...[
-          SizedBox(width: AppSpacing.mdR),
+          const SizedBox(width: HvacSpacing.mdR),
           _buildStatChip(
             icon: Icons.air,
             label: unit.ventMode!.displayName,
-            color: AppTheme.primaryBlue,
+            color: HvacColors.primaryBlue,
           ),
         ],
       ],
@@ -53,9 +51,9 @@ class QuickStatsChips extends StatelessWidget {
     required Color color,
   }) {
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: AppSpacing.smR,
-        vertical: AppSpacing.xsV,
+      padding: const EdgeInsets.symmetric(
+        horizontal: HvacSpacing.smR,
+        vertical: HvacSpacing.xsV,
       ),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
@@ -65,7 +63,7 @@ class QuickStatsChips extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, size: 16.sp, color: color),
-          SizedBox(width: AppSpacing.xsR),
+          const SizedBox(width: HvacSpacing.xsR),
           Text(
             label,
             style: TextStyle(

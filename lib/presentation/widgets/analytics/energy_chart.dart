@@ -5,24 +5,20 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fl_chart/fl_chart.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../core/theme/app_radius.dart';
-
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 class EnergyChart extends StatelessWidget {
   const EnergyChart({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(AppSpacing.lgR),
+      padding: const EdgeInsets.all(HvacSpacing.lgR),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
-        borderRadius: BorderRadius.circular(AppRadius.mdR),
+        color: HvacColors.backgroundCard,
+        borderRadius: BorderRadius.circular(HvacRadius.mdR),
         border: Border.all(
-          color: AppTheme.backgroundCardBorder,
+          color: HvacColors.backgroundCardBorder,
           width: 1,
         ),
       ),
@@ -34,10 +30,10 @@ class EnergyChart extends StatelessWidget {
             style: TextStyle(
               fontSize: 16.sp,
               fontWeight: FontWeight.w600,
-              color: AppTheme.textPrimary,
+              color: HvacColors.textPrimary,
             ),
           ),
-          SizedBox(height: AppSpacing.lgR),
+          const SizedBox(height: HvacSpacing.lgR),
           SizedBox(
             height: 200.h,
             child: BarChart(
@@ -77,7 +73,7 @@ class EnergyChart extends StatelessWidget {
                             child: Text(
                               hours[value.toInt()],
                               style: TextStyle(
-                                color: AppTheme.textSecondary,
+                                color: HvacColors.textSecondary,
                                 fontSize: 10.sp,
                               ),
                             ),
@@ -95,7 +91,7 @@ class EnergyChart extends StatelessWidget {
                         return Text(
                           '${value.toInt()}W',
                           style: TextStyle(
-                            color: AppTheme.textSecondary,
+                            color: HvacColors.textSecondary,
                             fontSize: 10.sp,
                           ),
                         );
@@ -106,7 +102,7 @@ class EnergyChart extends StatelessWidget {
                 borderData: FlBorderData(
                   show: true,
                   border: Border.all(
-                    color: AppTheme.backgroundCardBorder,
+                    color: HvacColors.backgroundCardBorder,
                     width: 1,
                   ),
                 ),
@@ -117,7 +113,7 @@ class EnergyChart extends StatelessWidget {
                   horizontalInterval: 100,
                   getDrawingHorizontalLine: (value) {
                     return const FlLine(
-                      color: AppTheme.backgroundCardBorder,
+                      color: HvacColors.backgroundCardBorder,
                       strokeWidth: 1,
                     );
                   },
@@ -134,27 +130,27 @@ class EnergyChart extends StatelessWidget {
     return [
       BarChartGroupData(
         x: 0,
-        barRods: [BarChartRodData(toY: 250, color: AppTheme.warning)],
+        barRods: [BarChartRodData(toY: 250, color: HvacColors.warning)],
       ),
       BarChartGroupData(
         x: 1,
-        barRods: [BarChartRodData(toY: 300, color: AppTheme.warning)],
+        barRods: [BarChartRodData(toY: 300, color: HvacColors.warning)],
       ),
       BarChartGroupData(
         x: 2,
-        barRods: [BarChartRodData(toY: 350, color: AppTheme.warning)],
+        barRods: [BarChartRodData(toY: 350, color: HvacColors.warning)],
       ),
       BarChartGroupData(
         x: 3,
-        barRods: [BarChartRodData(toY: 380, color: AppTheme.warning)],
+        barRods: [BarChartRodData(toY: 380, color: HvacColors.warning)],
       ),
       BarChartGroupData(
         x: 4,
-        barRods: [BarChartRodData(toY: 320, color: AppTheme.warning)],
+        barRods: [BarChartRodData(toY: 320, color: HvacColors.warning)],
       ),
       BarChartGroupData(
         x: 5,
-        barRods: [BarChartRodData(toY: 280, color: AppTheme.warning)],
+        barRods: [BarChartRodData(toY: 280, color: HvacColors.warning)],
       ),
     ];
   }

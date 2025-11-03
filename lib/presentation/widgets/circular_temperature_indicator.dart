@@ -4,8 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
-
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 class CircularTemperatureIndicator extends StatelessWidget {
   final double? temperature;
   final String label;
@@ -28,13 +27,13 @@ class CircularTemperatureIndicator extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
-          color: borderColor ?? AppTheme.primaryOrange,
+          color: borderColor ?? HvacColors.primaryOrange,
           width: 4,
         ),
         gradient: const RadialGradient(
           colors: [
-            AppTheme.backgroundCard,
-            AppTheme.backgroundDark,
+            HvacColors.backgroundCard,
+            HvacColors.backgroundDark,
           ],
           stops: [0.7, 1.0],
         ),
@@ -50,7 +49,7 @@ class CircularTemperatureIndicator extends StatelessWidget {
               style: TextStyle(
                 fontSize: size * 0.24, // 48 for size=200
                 fontWeight: FontWeight.w700,
-                color: AppTheme.textPrimary,
+                color: HvacColors.textPrimary,
                 letterSpacing: -1,
               ),
             ),
@@ -59,7 +58,7 @@ class CircularTemperatureIndicator extends StatelessWidget {
               style: TextStyle(
                 fontSize: size * 0.12, // 24 for size=200
                 fontWeight: FontWeight.w400,
-                color: AppTheme.textSecondary,
+                color: HvacColors.textSecondary,
               ),
             ),
             SizedBox(height: size * 0.04),
@@ -67,7 +66,7 @@ class CircularTemperatureIndicator extends StatelessWidget {
               label,
               style: TextStyle(
                 fontSize: size * 0.06, // 12 for size=200
-                color: AppTheme.textSecondary,
+                color: HvacColors.textSecondary,
               ),
               textAlign: TextAlign.center,
             ),

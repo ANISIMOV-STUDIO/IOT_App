@@ -4,7 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../domain/entities/ventilation_mode.dart';
 
 class VentilationModeSelector extends StatelessWidget {
@@ -24,10 +24,10 @@ class VentilationModeSelector extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
+        color: HvacColors.backgroundCard,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color: AppTheme.backgroundCardBorder,
+          color: HvacColors.backgroundCardBorder,
           width: 1,
         ),
       ),
@@ -35,15 +35,15 @@ class VentilationModeSelector extends StatelessWidget {
         child: DropdownButton<VentilationMode>(
           value: currentMode,
           isExpanded: true,
-          dropdownColor: AppTheme.backgroundCard,
+          dropdownColor: HvacColors.backgroundCard,
           style: const TextStyle(
             fontSize: 14,
-            color: AppTheme.textPrimary,
+            color: HvacColors.textPrimary,
             fontWeight: FontWeight.w500,
           ),
           icon: const Icon(
             Icons.arrow_drop_down,
-            color: AppTheme.textSecondary,
+            color: HvacColors.textSecondary,
           ),
           onChanged: enabled ? onModeChanged : null,
           items: VentilationMode.values.map((mode) {

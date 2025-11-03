@@ -6,16 +6,16 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:iot_app/domain/entities/hvac_unit.dart';
-import 'package:iot_app/domain/entities/ventilation_mode.dart';
-import 'package:iot_app/presentation/widgets/ventilation_mode_control.dart';
-import 'package:iot_app/presentation/widgets/ventilation_temperature_control.dart';
-import 'package:iot_app/presentation/widgets/ventilation_schedule_control.dart';
-import 'package:iot_app/presentation/widgets/home/home_control_cards.dart';
+import 'package:hvac_control/domain/entities/hvac_unit.dart';
+import 'package:hvac_control/domain/entities/ventilation_mode.dart';
+import 'package:hvac_control/presentation/widgets/ventilation_mode_control.dart';
+import 'package:hvac_control/presentation/widgets/ventilation_temperature_control.dart';
+import 'package:hvac_control/presentation/widgets/ventilation_schedule_control.dart';
+import 'package:hvac_control/presentation/widgets/home/home_control_cards.dart';
 
 void main() {
   // Mock HVAC unit for testing
-  final HvacUnit mockUnit = HvacUnit(
+  const HvacUnit mockUnit = HvacUnit(
     id: 'test-unit',
     name: 'Очень длинное название установки для проверки переполнения текста в интерфейсе',
     power: true,
@@ -48,7 +48,7 @@ void main() {
     testWidgets('VentilationTemperatureControl - No overflow on mobile', (tester) async {
       await tester.pumpWidget(
         createTestApp(
-          VentilationTemperatureControl(unit: mockUnit),
+          const VentilationTemperatureControl(unit: mockUnit),
           size: const Size(360, 800),
         ),
       );
@@ -60,7 +60,7 @@ void main() {
     testWidgets('VentilationTemperatureControl - No overflow on tablet', (tester) async {
       await tester.pumpWidget(
         createTestApp(
-          VentilationTemperatureControl(unit: mockUnit),
+          const VentilationTemperatureControl(unit: mockUnit),
           size: const Size(768, 1024),
         ),
       );
@@ -72,7 +72,7 @@ void main() {
     testWidgets('VentilationTemperatureControl - No overflow in constrained height', (tester) async {
       await tester.pumpWidget(
         createTestApp(
-          SizedBox(
+          const SizedBox(
             height: 280,
             child: VentilationTemperatureControl(unit: mockUnit),
           ),
@@ -200,7 +200,7 @@ void main() {
                   ),
                 ),
                 const SizedBox(width: 16),
-                Expanded(
+                const Expanded(
                   child: VentilationTemperatureControl(unit: mockUnit),
                 ),
                 const SizedBox(width: 16),
@@ -230,7 +230,7 @@ void main() {
                 onModeChanged: (_) {},
               ),
               const SizedBox(height: 16),
-              VentilationTemperatureControl(unit: mockUnit),
+              const VentilationTemperatureControl(unit: mockUnit),
               const SizedBox(height: 16),
               VentilationScheduleControl(
                 unit: mockUnit,
@@ -246,7 +246,7 @@ void main() {
     });
 
     testWidgets('Long text handling - No overflow', (tester) async {
-      final longTextUnit = HvacUnit(
+      const longTextUnit = HvacUnit(
         id: 'test-unit',
         name: 'Это очень очень очень очень очень длинное название установки для тестирования переполнения текста',
         power: true,
@@ -266,7 +266,7 @@ void main() {
                 unit: longTextUnit,
                 onModeChanged: (_) {},
               ),
-              VentilationTemperatureControl(unit: longTextUnit),
+              const VentilationTemperatureControl(unit: longTextUnit),
               VentilationScheduleControl(
                 unit: longTextUnit,
                 onSchedulePressed: () {},

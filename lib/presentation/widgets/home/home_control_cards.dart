@@ -5,11 +5,8 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../core/utils/responsive_utils.dart';
-import '../../../core/animation/smooth_animations.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+import '../../../core/theme/ui_constants.dart';
 import '../../../domain/entities/hvac_unit.dart';
 import '../../../domain/entities/ventilation_mode.dart';
 import '../../../generated/l10n/app_localizations.dart';
@@ -52,12 +49,12 @@ class HomeControlCards extends StatelessWidget {
 
   Widget _buildNoDeviceSelected(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(AppSpacing.xlR),
+      padding: const EdgeInsets.all(HvacSpacing.xlR),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
+        color: HvacColors.backgroundCard,
         borderRadius: BorderRadius.circular(12.r),
         border: Border.all(
-          color: AppTheme.backgroundCardBorder.withValues(alpha: 0.1),
+          color: HvacColors.backgroundCardBorder.withValues(alpha: 0.1),
           width: 1,
         ),
       ),
@@ -66,7 +63,7 @@ class HomeControlCards extends StatelessWidget {
           AppLocalizations.of(context)!.deviceNotSelected,
           style: TextStyle(
             fontSize: 14.sp,
-            color: AppTheme.textSecondary,
+            color: HvacColors.textSecondary,
           ),
         ),
       ),
@@ -103,7 +100,7 @@ class HomeControlCards extends StatelessWidget {
         animatedCards.length,
         (index) => Padding(
           padding: EdgeInsets.only(
-            bottom: index < animatedCards.length - 1 ? AppSpacing.mdV : 0,
+            bottom: index < animatedCards.length - 1 ? HvacSpacing.mdV : 0,
           ),
           child: animatedCards[index],
         ),
@@ -120,7 +117,7 @@ class HomeControlCards extends StatelessWidget {
         delay: AnimationDurations.staggerShort,
         duration: AnimationDurations.medium,
         child: SizedBox(
-          height: AppTheme.controlCardHeight.h,
+          height: UIConstants.controlCardHeight.h,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -132,11 +129,11 @@ class HomeControlCards extends StatelessWidget {
                   onExhaustFanChanged: onExhaustFanChanged,
                 ),
               ),
-              SizedBox(width: AppSpacing.mdR),
+              const SizedBox(width: HvacSpacing.mdR),
               Expanded(
                 child: VentilationTemperatureControl(unit: currentUnit!),
               ),
-              SizedBox(width: AppSpacing.mdR),
+              const SizedBox(width: HvacSpacing.mdR),
               Expanded(
                 child: VentilationScheduleControl(
                   unit: currentUnit!,

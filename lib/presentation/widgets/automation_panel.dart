@@ -4,7 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../domain/entities/automation_rule.dart';
 
 class AutomationPanel extends StatelessWidget {
@@ -26,10 +26,10 @@ class AutomationPanel extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
+        color: HvacColors.backgroundCard,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: AppTheme.backgroundCardBorder,
+          color: HvacColors.backgroundCardBorder,
           width: 1,
         ),
       ),
@@ -42,12 +42,12 @@ class AutomationPanel extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: AppTheme.warning.withValues(alpha: 0.2),
+                  color: HvacColors.warning.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Icon(
                   Icons.auto_awesome,
-                  color: AppTheme.warning,
+                  color: HvacColors.warning,
                   size: 20,
                 ),
               ),
@@ -61,7 +61,7 @@ class AutomationPanel extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
-                        color: AppTheme.textPrimary,
+                        color: HvacColors.textPrimary,
                       ),
                     ),
                     const SizedBox(height: 2),
@@ -69,7 +69,7 @@ class AutomationPanel extends StatelessWidget {
                       'Активно: $activeRules из ${rules.length}',
                       style: const TextStyle(
                         fontSize: 12,
-                        color: AppTheme.textSecondary,
+                        color: HvacColors.textSecondary,
                       ),
                     ),
                   ],
@@ -92,7 +92,7 @@ class AutomationPanel extends StatelessWidget {
               onPressed: onManageRules,
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(
-                  color: AppTheme.primaryOrange,
+                  color: HvacColors.primaryOrange,
                   width: 1,
                 ),
                 shape: RoundedRectangleBorder(
@@ -103,12 +103,12 @@ class AutomationPanel extends StatelessWidget {
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.settings, color: AppTheme.primaryOrange, size: 16),
+                  Icon(Icons.settings, color: HvacColors.primaryOrange, size: 16),
                   SizedBox(width: 8),
                   Text(
                     'Управление правилами',
                     style: TextStyle(
-                      color: AppTheme.primaryOrange,
+                      color: HvacColors.primaryOrange,
                       fontWeight: FontWeight.w600,
                       fontSize: 13,
                     ),
@@ -127,12 +127,12 @@ class AutomationPanel extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundDark,
+        color: HvacColors.backgroundDark,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
           color: rule.enabled
-              ? AppTheme.success.withValues(alpha: 0.3)
-              : AppTheme.backgroundCardBorder,
+              ? HvacColors.success.withValues(alpha: 0.3)
+              : HvacColors.backgroundCardBorder,
           width: 1,
         ),
       ),
@@ -143,7 +143,7 @@ class AutomationPanel extends StatelessWidget {
             width: 8,
             height: 8,
             decoration: BoxDecoration(
-              color: rule.enabled ? AppTheme.success : AppTheme.textTertiary,
+              color: rule.enabled ? HvacColors.success : HvacColors.textTertiary,
               shape: BoxShape.circle,
             ),
           ),
@@ -159,7 +159,7 @@ class AutomationPanel extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
-                    color: AppTheme.textPrimary,
+                    color: HvacColors.textPrimary,
                   ),
                 ),
                 const SizedBox(height: 2),
@@ -167,7 +167,7 @@ class AutomationPanel extends StatelessWidget {
                   '${rule.conditionDescription} → ${rule.actionDescription}',
                   style: const TextStyle(
                     fontSize: 11,
-                    color: AppTheme.textSecondary,
+                    color: HvacColors.textSecondary,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -191,9 +191,9 @@ class AutomationPanel extends StatelessWidget {
                   }
                 },
                 activeThumbColor: Colors.white,
-                activeTrackColor: AppTheme.success,
-                inactiveThumbColor: AppTheme.textSecondary,
-                inactiveTrackColor: AppTheme.backgroundCardBorder,
+                activeTrackColor: HvacColors.success,
+                inactiveThumbColor: HvacColors.textSecondary,
+                inactiveTrackColor: HvacColors.backgroundCardBorder,
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
             ),

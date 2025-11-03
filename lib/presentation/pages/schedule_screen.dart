@@ -4,10 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../core/theme/app_theme.dart';
-import '../../core/theme/spacing.dart';
-import '../../core/theme/app_radius.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../core/di/injection_container.dart';
 import '../../domain/entities/hvac_unit.dart';
 import '../../domain/entities/week_schedule.dart';
@@ -53,12 +50,12 @@ class _ScheduleScreenState extends State<ScheduleScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.backgroundDark,
+      backgroundColor: HvacColors.backgroundDark,
       appBar: AppBar(
-        backgroundColor: AppTheme.backgroundCard,
+        backgroundColor: HvacColors.backgroundCard,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: AppTheme.textPrimary, size: 24.sp),
+          icon: Icon(Icons.arrow_back, color: HvacColors.textPrimary, size: 24.sp),
           onPressed: () => _onBackPressed(),
         ),
         title: Column(
@@ -69,14 +66,14 @@ class _ScheduleScreenState extends State<ScheduleScreen>
               style: TextStyle(
                 fontSize: 18.sp,
                 fontWeight: FontWeight.w600,
-                color: AppTheme.textPrimary,
+                color: HvacColors.textPrimary,
               ),
             ),
             Text(
               widget.unit.name,
               style: TextStyle(
                 fontSize: 12.sp,
-                color: AppTheme.textSecondary,
+                color: HvacColors.textSecondary,
                 fontWeight: FontWeight.w400,
               ),
             ),
@@ -95,13 +92,13 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                         height: 20.h,
                         child: const CircularProgressIndicator(
                           strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryOrange),
+                          valueColor: AlwaysStoppedAnimation<Color>(HvacColors.primaryOrange),
                         ),
                       )
                     : Text(
                         'Сохранить',
                         style: TextStyle(
-                          color: AppTheme.primaryOrange,
+                          color: HvacColors.primaryOrange,
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w600,
                         ),
@@ -111,22 +108,22 @@ class _ScheduleScreenState extends State<ScheduleScreen>
         ],
       ),
       body: ListView(
-        padding: EdgeInsets.all(AppSpacing.lgR),
+        padding: const EdgeInsets.all(HvacSpacing.lgR),
         children: [
           _buildDayCard('Понедельник', 1, _schedule.monday),
-          SizedBox(height: AppSpacing.smR),
+          const SizedBox(height: HvacSpacing.smR),
           _buildDayCard('Вторник', 2, _schedule.tuesday),
-          SizedBox(height: AppSpacing.smR),
+          const SizedBox(height: HvacSpacing.smR),
           _buildDayCard('Среда', 3, _schedule.wednesday),
-          SizedBox(height: AppSpacing.smR),
+          const SizedBox(height: HvacSpacing.smR),
           _buildDayCard('Четверг', 4, _schedule.thursday),
-          SizedBox(height: AppSpacing.smR),
+          const SizedBox(height: HvacSpacing.smR),
           _buildDayCard('Пятница', 5, _schedule.friday),
-          SizedBox(height: AppSpacing.smR),
+          const SizedBox(height: HvacSpacing.smR),
           _buildDayCard('Суббота', 6, _schedule.saturday),
-          SizedBox(height: AppSpacing.smR),
+          const SizedBox(height: HvacSpacing.smR),
           _buildDayCard('Воскресенье', 7, _schedule.sunday),
-          SizedBox(height: AppSpacing.lgR),
+          const SizedBox(height: HvacSpacing.lgR),
           _buildQuickActions(),
         ],
       ),
@@ -148,12 +145,12 @@ class _ScheduleScreenState extends State<ScheduleScreen>
         );
       },
       child: Container(
-        padding: EdgeInsets.all(AppSpacing.mdR),
+        padding: const EdgeInsets.all(HvacSpacing.mdR),
         decoration: BoxDecoration(
-          color: AppTheme.backgroundCard,
-          borderRadius: BorderRadius.circular(AppRadius.mdR),
+          color: HvacColors.backgroundCard,
+          borderRadius: BorderRadius.circular(HvacRadius.mdR),
           border: Border.all(
-            color: AppTheme.backgroundCardBorder,
+            color: HvacColors.backgroundCardBorder,
             width: 1,
           ),
         ),
@@ -168,7 +165,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                   style: TextStyle(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w600,
-                    color: AppTheme.textPrimary,
+                    color: HvacColors.textPrimary,
                   ),
                 ),
                 Transform.scale(
@@ -184,8 +181,8 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                         );
                       });
                     },
-                    activeThumbColor: AppTheme.primaryOrange,
-                    activeTrackColor: AppTheme.primaryOrange.withValues(alpha: 0.5),
+                    activeThumbColor: HvacColors.primaryOrange,
+                    activeTrackColor: HvacColors.primaryOrange.withValues(alpha: 0.5),
                   ),
                 ),
               ],
@@ -195,7 +192,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
               firstChild: const SizedBox(height: 0),
               secondChild: Column(
                 children: [
-                  SizedBox(height: AppSpacing.smR),
+                  const SizedBox(height: HvacSpacing.smR),
                   Row(
                     children: [
                       Expanded(
@@ -214,7 +211,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                           },
                         ),
                       ),
-                      SizedBox(width: AppSpacing.smR),
+                      const SizedBox(width: HvacSpacing.smR),
                       Expanded(
                         child: TimePickerField(
                           label: 'Отключение',
@@ -247,12 +244,12 @@ class _ScheduleScreenState extends State<ScheduleScreen>
 
   Widget _buildQuickActions() {
     return Container(
-      padding: EdgeInsets.all(AppSpacing.mdR),
+      padding: const EdgeInsets.all(HvacSpacing.mdR),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
-        borderRadius: BorderRadius.circular(AppRadius.mdR),
+        color: HvacColors.backgroundCard,
+        borderRadius: BorderRadius.circular(HvacRadius.mdR),
         border: Border.all(
-          color: AppTheme.backgroundCardBorder,
+          color: HvacColors.backgroundCardBorder,
           width: 1,
         ),
       ),
@@ -264,10 +261,10 @@ class _ScheduleScreenState extends State<ScheduleScreen>
             style: TextStyle(
               fontSize: 14.sp,
               fontWeight: FontWeight.w600,
-              color: AppTheme.textPrimary,
+              color: HvacColors.textPrimary,
             ),
           ),
-          SizedBox(height: AppSpacing.smR),
+          const SizedBox(height: HvacSpacing.smR),
           Row(
             children: [
               Expanded(
@@ -278,7 +275,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                   _applyWeekdaySchedule,
                 ),
               ),
-              SizedBox(width: AppSpacing.smR),
+              const SizedBox(width: HvacSpacing.smR),
               Expanded(
                 child: _buildQuickActionButton(
                   'Выходные',
@@ -289,7 +286,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
               ),
             ],
           ),
-          SizedBox(height: AppSpacing.xsR),
+          const SizedBox(height: HvacSpacing.xsR),
           SizedBox(
             width: double.infinity,
             child: _buildQuickActionButton(
@@ -314,18 +311,18 @@ class _ScheduleScreenState extends State<ScheduleScreen>
       onPressed: onPressed,
       style: OutlinedButton.styleFrom(
         side: const BorderSide(
-          color: AppTheme.backgroundCardBorder,
+          color: HvacColors.backgroundCardBorder,
           width: 1,
         ),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppRadius.smR),
+          borderRadius: BorderRadius.circular(HvacRadius.smR),
         ),
-        padding: EdgeInsets.all(AppSpacing.smR),
+        padding: const EdgeInsets.all(HvacSpacing.smR),
       ),
       child: Row(
         children: [
-          Icon(icon, color: AppTheme.primaryOrange, size: 20.sp),
-          SizedBox(width: AppSpacing.xsR),
+          Icon(icon, color: HvacColors.primaryOrange, size: 20.sp),
+          const SizedBox(width: HvacSpacing.xsR),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -335,14 +332,14 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                   style: TextStyle(
                     fontSize: 13.sp,
                     fontWeight: FontWeight.w600,
-                    color: AppTheme.textPrimary,
+                    color: HvacColors.textPrimary,
                   ),
                 ),
                 Text(
                   subtitle,
                   style: TextStyle(
                     fontSize: 11.sp,
-                    color: AppTheme.textSecondary,
+                    color: HvacColors.textSecondary,
                   ),
                 ),
               ],
@@ -425,18 +422,18 @@ class _ScheduleScreenState extends State<ScheduleScreen>
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Row(
+            content: const Row(
               children: [
-                const Icon(Icons.check_circle, color: Colors.white),
-                SizedBox(width: AppSpacing.xsR),
-                const Text('Расписание успешно сохранено'),
+                Icon(Icons.check_circle, color: Colors.white),
+                SizedBox(width: HvacSpacing.xsR),
+                Text('Расписание успешно сохранено'),
               ],
             ),
-            backgroundColor: AppTheme.success,
+            backgroundColor: HvacColors.success,
             duration: const Duration(seconds: 2),
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppRadius.smR),
+              borderRadius: BorderRadius.circular(HvacRadius.smR),
             ),
           ),
         );
@@ -452,14 +449,14 @@ class _ScheduleScreenState extends State<ScheduleScreen>
             content: Row(
               children: [
                 const Icon(Icons.error, color: Colors.white),
-                SizedBox(width: AppSpacing.xsR),
+                const SizedBox(width: HvacSpacing.xsR),
                 Expanded(child: Text('Ошибка сохранения: $e')),
               ],
             ),
-            backgroundColor: AppTheme.error,
+            backgroundColor: HvacColors.error,
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppRadius.smR),
+              borderRadius: BorderRadius.circular(HvacRadius.smR),
             ),
           ),
         );
@@ -472,21 +469,21 @@ class _ScheduleScreenState extends State<ScheduleScreen>
       final shouldDiscard = await showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
-          backgroundColor: AppTheme.backgroundCard,
+          backgroundColor: HvacColors.backgroundCard,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppRadius.mdR),
+            borderRadius: BorderRadius.circular(HvacRadius.mdR),
           ),
           title: Text(
             'Несохранённые изменения',
             style: TextStyle(
-              color: AppTheme.textPrimary,
+              color: HvacColors.textPrimary,
               fontSize: 18.sp,
             ),
           ),
           content: Text(
             'У вас есть несохранённые изменения. Выйти без сохранения?',
             style: TextStyle(
-              color: AppTheme.textSecondary,
+              color: HvacColors.textSecondary,
               fontSize: 14.sp,
             ),
           ),
@@ -496,7 +493,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
               child: Text(
                 'Отмена',
                 style: TextStyle(
-                  color: AppTheme.textSecondary,
+                  color: HvacColors.textSecondary,
                   fontSize: 14.sp,
                 ),
               ),
@@ -506,7 +503,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
               child: Text(
                 'Выйти',
                 style: TextStyle(
-                  color: AppTheme.error,
+                  color: HvacColors.error,
                   fontSize: 14.sp,
                 ),
               ),

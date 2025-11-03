@@ -5,12 +5,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../core/theme/app_theme.dart';
-import '../../core/theme/glassmorphism.dart';
-import '../../core/animation/smooth_animations.dart';
-import '../../core/utils/performance_utils.dart';
-import '../../core/utils/adaptive_layout.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
 class TemperatureDisplayCompact extends StatelessWidget {
   final double? supplyTemp;
@@ -248,16 +243,16 @@ class TemperatureDisplayCompact extends StatelessWidget {
           width: isMobile ? 32.w : 36.w,
           height: isMobile ? 32.w : 36.w,
           decoration: BoxDecoration(
-            color: AppTheme.neutral300.withValues(alpha: 0.1),
+            color: HvacColors.neutral300.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8.r),
             border: Border.all(
-              color: AppTheme.neutral300.withValues(alpha: 0.2),
+              color: HvacColors.neutral300.withValues(alpha: 0.2),
               width: 1,
             ),
           ),
           child: Icon(
             Icons.thermostat_outlined,
-            color: AppTheme.neutral200,
+            color: HvacColors.neutral200,
             size: isMobile ? 16.w : 18.w,
           ),
         ),
@@ -274,7 +269,7 @@ class TemperatureDisplayCompact extends StatelessWidget {
                 style: TextStyle(
                   fontSize: isMobile ? 14.sp : 15.sp,
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.textPrimary,
+                  color: HvacColors.textPrimary,
                   letterSpacing: -0.2,
                 ),
               ),
@@ -284,7 +279,7 @@ class TemperatureDisplayCompact extends StatelessWidget {
                   'Контроль теплообмена системы вентиляции',
                   style: TextStyle(
                     fontSize: 11.sp,
-                    color: AppTheme.textTertiary,
+                    color: HvacColors.textTertiary,
                     letterSpacing: 0,
                   ),
                 ),
@@ -307,8 +302,8 @@ class TemperatureDisplayCompact extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
       decoration: BoxDecoration(
         color: isNormal
-            ? AppTheme.success.withValues(alpha: 0.1)
-            : AppTheme.warning.withValues(alpha: 0.1),
+            ? HvacColors.success.withValues(alpha: 0.1)
+            : HvacColors.warning.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(6.r),
       ),
       child: Row(
@@ -318,7 +313,7 @@ class TemperatureDisplayCompact extends StatelessWidget {
             width: 6.w,
             height: 6.w,
             decoration: BoxDecoration(
-              color: isNormal ? AppTheme.success : AppTheme.warning,
+              color: isNormal ? HvacColors.success : HvacColors.warning,
               shape: BoxShape.circle,
             ),
           ),
@@ -328,7 +323,7 @@ class TemperatureDisplayCompact extends StatelessWidget {
             style: TextStyle(
               fontSize: 10.sp,
               fontWeight: FontWeight.w500,
-              color: isNormal ? AppTheme.success : AppTheme.warning,
+              color: isNormal ? HvacColors.success : HvacColors.warning,
             ),
           ),
         ],
@@ -408,10 +403,10 @@ class TemperatureDisplayCompact extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 12.h),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundDark,
+        color: HvacColors.backgroundDark,
         borderRadius: BorderRadius.circular(10.r),
         border: Border.all(
-          color: AppTheme.backgroundCardBorder,
+          color: HvacColors.backgroundCardBorder,
           width: 1,
         ),
       ),
@@ -424,14 +419,14 @@ class TemperatureDisplayCompact extends StatelessWidget {
               Icon(
                 icon,
                 size: isSecondary ? 14.w : 16.w,
-                color: AppTheme.neutral200,
+                color: HvacColors.neutral200,
               ),
               SizedBox(width: 6.w),
               Text(
                 label,
                 style: TextStyle(
                   fontSize: isSecondary ? 10.sp : 11.sp,
-                  color: AppTheme.textTertiary,
+                  color: HvacColors.textTertiary,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -443,7 +438,7 @@ class TemperatureDisplayCompact extends StatelessWidget {
             style: TextStyle(
               fontSize: isSecondary ? 18.sp : 22.sp,
               fontWeight: FontWeight.w600,
-              color: value != null ? AppTheme.textPrimary : AppTheme.textDisabled,
+              color: value != null ? HvacColors.textPrimary : HvacColors.textDisabled,
               letterSpacing: -0.5,
             ),
           ),
@@ -466,14 +461,14 @@ class TemperatureDisplayCompact extends StatelessWidget {
         Icon(
           icon,
           size: 24.w,
-          color: AppTheme.neutral200,
+          color: HvacColors.neutral200,
         ),
         SizedBox(height: 8.h),
         Text(
           label,
           style: TextStyle(
             fontSize: 11.sp,
-            color: AppTheme.textTertiary,
+            color: HvacColors.textTertiary,
             fontWeight: FontWeight.w500,
           ),
           textAlign: TextAlign.center,
@@ -484,7 +479,7 @@ class TemperatureDisplayCompact extends StatelessWidget {
           style: TextStyle(
             fontSize: 28.sp,
             fontWeight: FontWeight.w600,
-            color: value != null ? AppTheme.textPrimary : AppTheme.textDisabled,
+            color: value != null ? HvacColors.textPrimary : HvacColors.textDisabled,
             letterSpacing: -1,
           ),
         ),
@@ -493,7 +488,7 @@ class TemperatureDisplayCompact extends StatelessWidget {
           subtitle,
           style: TextStyle(
             fontSize: 10.sp,
-            color: AppTheme.textTertiary,
+            color: HvacColors.textTertiary,
           ),
         ),
       ],
@@ -512,12 +507,12 @@ class TemperatureDisplayCompact extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(isPrimary ? 16.r : 14.r),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundDark,
+        color: HvacColors.backgroundDark,
         borderRadius: BorderRadius.circular(12.r),
         border: Border.all(
           color: isPrimary
-              ? AppTheme.neutral300.withValues(alpha: 0.3)
-              : AppTheme.backgroundCardBorder,
+              ? HvacColors.neutral300.withValues(alpha: 0.3)
+              : HvacColors.backgroundCardBorder,
           width: isPrimary ? 1.5 : 1,
         ),
       ),
@@ -529,13 +524,13 @@ class TemperatureDisplayCompact extends StatelessWidget {
               Container(
                 padding: EdgeInsets.all(8.r),
                 decoration: BoxDecoration(
-                  color: AppTheme.neutral300.withValues(alpha: 0.1),
+                  color: HvacColors.neutral300.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8.r),
                 ),
                 child: Icon(
                   icon,
                   size: isPrimary ? 20.w : 18.w,
-                  color: AppTheme.neutral200,
+                  color: HvacColors.neutral200,
                 ),
               ),
               SizedBox(width: 10.w),
@@ -548,7 +543,7 @@ class TemperatureDisplayCompact extends StatelessWidget {
                       style: TextStyle(
                         fontSize: isPrimary ? 12.sp : 11.sp,
                         fontWeight: FontWeight.w600,
-                        color: AppTheme.textPrimary,
+                        color: HvacColors.textPrimary,
                       ),
                     ),
                     if (isPrimary) ...[
@@ -557,7 +552,7 @@ class TemperatureDisplayCompact extends StatelessWidget {
                         description,
                         style: TextStyle(
                           fontSize: 9.sp,
-                          color: AppTheme.textTertiary,
+                          color: HvacColors.textTertiary,
                         ),
                       ),
                     ],
@@ -574,7 +569,7 @@ class TemperatureDisplayCompact extends StatelessWidget {
             style: TextStyle(
               fontSize: isPrimary ? 32.sp : 24.sp,
               fontWeight: FontWeight.w600,
-              color: value != null ? AppTheme.textPrimary : AppTheme.textDisabled,
+              color: value != null ? HvacColors.textPrimary : HvacColors.textDisabled,
               letterSpacing: -1.5,
             ),
           ),
@@ -585,7 +580,7 @@ class TemperatureDisplayCompact extends StatelessWidget {
               description,
               style: TextStyle(
                 fontSize: 9.sp,
-                color: AppTheme.textTertiary,
+                color: HvacColors.textTertiary,
               ),
             ),
           ],
@@ -602,10 +597,10 @@ class TemperatureDisplayCompact extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(isCompact ? 8.r : 12.r),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundDark,
+        color: HvacColors.backgroundDark,
         borderRadius: BorderRadius.circular(8.r),
         border: Border.all(
-          color: AppTheme.backgroundCardBorder,
+          color: HvacColors.backgroundCardBorder,
           width: 1,
         ),
       ),
@@ -623,7 +618,7 @@ class TemperatureDisplayCompact extends StatelessWidget {
             Container(
               width: 1,
               height: 20.h,
-              color: AppTheme.backgroundCardBorder,
+              color: HvacColors.backgroundCardBorder,
             ),
             SizedBox(width: isCompact ? 8.w : 12.w),
             _buildStatusItem(
@@ -639,7 +634,7 @@ class TemperatureDisplayCompact extends StatelessWidget {
             Container(
               width: 1,
               height: 20.h,
-              color: AppTheme.backgroundCardBorder,
+              color: HvacColors.backgroundCardBorder,
             ),
             SizedBox(width: 12.w),
             _buildStatusItem(
@@ -667,7 +662,7 @@ class TemperatureDisplayCompact extends StatelessWidget {
           Icon(
             icon,
             size: isCompact ? 14.w : 16.w,
-            color: AppTheme.neutral200,
+            color: HvacColors.neutral200,
           ),
           SizedBox(width: 6.w),
           Flexible(
@@ -679,7 +674,7 @@ class TemperatureDisplayCompact extends StatelessWidget {
                   label,
                   style: TextStyle(
                     fontSize: isCompact ? 9.sp : 10.sp,
-                    color: AppTheme.textTertiary,
+                    color: HvacColors.textTertiary,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -688,7 +683,7 @@ class TemperatureDisplayCompact extends StatelessWidget {
                   style: TextStyle(
                     fontSize: isCompact ? 12.sp : 13.sp,
                     fontWeight: FontWeight.w600,
-                    color: AppTheme.textPrimary,
+                    color: HvacColors.textPrimary,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -705,7 +700,7 @@ class TemperatureDisplayCompact extends StatelessWidget {
       width: 1,
       height: 60.h,
       margin: EdgeInsets.symmetric(horizontal: 16.w),
-      color: AppTheme.backgroundCardBorder,
+      color: HvacColors.backgroundCardBorder,
     );
   }
 
@@ -760,10 +755,10 @@ class TemperatureBadge extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundDark,
+        color: HvacColors.backgroundDark,
         borderRadius: BorderRadius.circular(8.r),
         border: Border.all(
-          color: AppTheme.backgroundCardBorder,
+          color: HvacColors.backgroundCardBorder,
           width: 1,
         ),
       ),
@@ -773,7 +768,7 @@ class TemperatureBadge extends StatelessWidget {
           Icon(
             Icons.thermostat_outlined,
             size: 14.w,
-            color: AppTheme.neutral200,
+            color: HvacColors.neutral200,
           ),
           SizedBox(width: 6.w),
           Text(
@@ -781,7 +776,7 @@ class TemperatureBadge extends StatelessWidget {
             style: TextStyle(
               fontSize: 12.sp,
               fontWeight: FontWeight.w600,
-              color: AppTheme.textPrimary,
+              color: HvacColors.textPrimary,
             ),
           ),
           if (label.isNotEmpty) ...[
@@ -790,7 +785,7 @@ class TemperatureBadge extends StatelessWidget {
               label,
               style: TextStyle(
                 fontSize: 10.sp,
-                color: AppTheme.textTertiary,
+                color: HvacColors.textTertiary,
               ),
             ),
           ],

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/utils/responsive_utils.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../core/utils/accessibility_utils.dart';
 
 /// Comprehensive snackbar system for user feedback
@@ -127,7 +125,7 @@ class AppSnackBar {
         behavior: behavior ?? SnackBarBehavior.floating,
         shape: shape ??
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppSpacing.sm),
+              borderRadius: BorderRadius.circular(HvacSpacing.sm),
             ),
         elevation: elevation,
         width: width,
@@ -147,7 +145,7 @@ class AppSnackBar {
       duration: indefinite ? const Duration(days: 365) : const Duration(seconds: 30),
       behavior: SnackBarBehavior.floating,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppSpacing.sm),
+        borderRadius: BorderRadius.circular(HvacSpacing.sm),
       ),
       dismissDirection: DismissDirection.none,
     );
@@ -185,9 +183,9 @@ class AppSnackBar {
         behavior: SnackBarBehavior.floating,
         duration: duration ?? _getDefaultDuration(type),
         action: action,
-        margin: const EdgeInsets.all(AppSpacing.md),
+        margin: const EdgeInsets.all(HvacSpacing.md),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppSpacing.sm),
+          borderRadius: BorderRadius.circular(HvacSpacing.sm),
         ),
         dismissDirection: DismissDirection.horizontal,
       ),
@@ -198,13 +196,13 @@ class AppSnackBar {
     // MONOCHROMATIC: Use muted semantic colors from luxury palette
     switch (type) {
       case SnackBarType.success:
-        return AppTheme.success; // Deep sea green (muted)
+        return HvacColors.success; // Deep sea green (muted)
       case SnackBarType.error:
-        return AppTheme.error; // Deep crimson (muted)
+        return HvacColors.error; // Deep crimson (muted)
       case SnackBarType.warning:
-        return AppTheme.warning; // Amber (muted)
+        return HvacColors.warning; // Amber (muted)
       case SnackBarType.info:
-        return AppTheme.neutral200; // Gray for info (not bright blue!)
+        return HvacColors.neutral200; // Gray for info (not bright blue!)
     }
   }
 
@@ -245,7 +243,7 @@ class _SnackBarContent extends StatelessWidget {
           color: Colors.white,
           size: ResponsiveUtils.scaledIconSize(context, 24),
         ),
-        const SizedBox(width: AppSpacing.sm),
+        const SizedBox(width: HvacSpacing.sm),
         Expanded(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -260,7 +258,7 @@ class _SnackBarContent extends StatelessWidget {
                     fontSize: ResponsiveUtils.scaledFontSize(context, 14),
                   ),
                 ),
-                const SizedBox(height: AppSpacing.xxs),
+                const SizedBox(height: HvacSpacing.xxs),
               ],
               Text(
                 message,
@@ -316,7 +314,7 @@ class _LoadingSnackBarContent extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(width: AppSpacing.md),
+        const SizedBox(width: HvacSpacing.md),
         Expanded(
           child: Text(
             message,
@@ -394,7 +392,7 @@ class AppToast {
       icon: Icons.check_circle,
       position: position,
       duration: duration,
-      backgroundColor: AppTheme.success, // Muted sea green
+      backgroundColor: HvacColors.success, // Muted sea green
       enableHaptic: true,
     );
   }
@@ -412,7 +410,7 @@ class AppToast {
       icon: Icons.error,
       position: position,
       duration: duration,
-      backgroundColor: AppTheme.error, // Muted crimson
+      backgroundColor: HvacColors.error, // Muted crimson
       enableHaptic: true,
     );
   }
@@ -489,13 +487,13 @@ class _ToastWidgetState extends State<_ToastWidget>
 
     return Positioned(
       top: widget.position == ToastPosition.top
-          ? mediaQuery.padding.top + AppSpacing.md
+          ? mediaQuery.padding.top + HvacSpacing.md
           : null,
       bottom: widget.position == ToastPosition.bottom
-          ? mediaQuery.padding.bottom + AppSpacing.md
+          ? mediaQuery.padding.bottom + HvacSpacing.md
           : null,
-      left: AppSpacing.md,
-      right: AppSpacing.md,
+      left: HvacSpacing.md,
+      right: HvacSpacing.md,
       child: SlideTransition(
         position: _slideAnimation,
         child: FadeTransition(
@@ -506,12 +504,12 @@ class _ToastWidgetState extends State<_ToastWidget>
               onTap: widget.onDismiss,
               child: Container(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.md,
-                  vertical: AppSpacing.sm,
+                  horizontal: HvacSpacing.md,
+                  vertical: HvacSpacing.sm,
                 ),
                 decoration: BoxDecoration(
                   color: widget.backgroundColor ?? theme.colorScheme.inverseSurface,
-                  borderRadius: BorderRadius.circular(AppSpacing.sm),
+                  borderRadius: BorderRadius.circular(HvacSpacing.sm),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withValues(alpha: 0.2),
@@ -530,7 +528,7 @@ class _ToastWidgetState extends State<_ToastWidget>
                         color: widget.textColor ?? theme.colorScheme.onInverseSurface,
                         size: ResponsiveUtils.scaledIconSize(context, 20),
                       ),
-                      const SizedBox(width: AppSpacing.xs),
+                      const SizedBox(width: HvacSpacing.xs),
                     ],
                     Flexible(
                       child: Text(

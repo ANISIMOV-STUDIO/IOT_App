@@ -5,8 +5,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../core/theme/spacing.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../domain/entities/hvac_unit.dart';
 import '../../../domain/entities/automation_rule.dart';
 import '../../../domain/entities/mode_preset.dart';
@@ -60,9 +59,9 @@ class HomeTabletLayout extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _buildRoomPreviewSection(),
-          SizedBox(height: AppSpacing.xlV),
+          const SizedBox(height: HvacSpacing.xlV),
           _buildTwoColumnLayout(context, isSmallTablet),
-          SizedBox(height: AppSpacing.xlV),
+          const SizedBox(height: HvacSpacing.xlV),
           HomeAutomationSection(
             currentUnit: currentUnit,
             onRuleToggled: onRuleToggled,
@@ -95,7 +94,7 @@ class HomeTabletLayout extends StatelessWidget {
           flex: isSmallTablet ? 1 : 3,
           child: _buildLeftColumn(context, isSmallTablet),
         ),
-        SizedBox(width: AppSpacing.xlR),
+        const SizedBox(width: HvacSpacing.xlR),
         Expanded(
           flex: isSmallTablet ? 1 : 2,
           child: _buildRightColumn(isSmallTablet),
@@ -110,7 +109,7 @@ class HomeTabletLayout extends StatelessWidget {
       children: [
         buildControlCards(currentUnit, context),
         if (isSmallTablet) ...[
-          SizedBox(height: AppSpacing.lgV),
+          const SizedBox(height: HvacSpacing.lgV),
           TabletQuickActions(
             onPowerAllOn: onPowerAllOn,
             onPowerAllOff: onPowerAllOff,
@@ -133,12 +132,12 @@ class HomeTabletLayout extends StatelessWidget {
             onSyncSettings: onSyncSettings,
             onApplyScheduleToAll: onApplyScheduleToAll,
           ),
-          SizedBox(height: AppSpacing.lgV),
+          const SizedBox(height: HvacSpacing.lgV),
         ],
         TabletPresetsPanel(
           onPresetSelected: onPresetSelected,
         ),
-        SizedBox(height: AppSpacing.lgV),
+        const SizedBox(height: HvacSpacing.lgV),
         if (currentUnit != null)
           HomeNotificationsPanel(unit: currentUnit!),
       ],

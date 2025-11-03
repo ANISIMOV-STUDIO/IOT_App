@@ -99,6 +99,8 @@ class AppTheme {
   static const Color cardDark = backgroundCard;
   static const Color borderColor = backgroundCardBorder;
   static const Color primaryBlue = neutral100; // Monochromatic
+  static const Color successGreen = success;
+  static const Color errorRed = error;
 
   // GRADIENTS - Subtle, sophisticated
   static const LinearGradient primaryGradient = LinearGradient(

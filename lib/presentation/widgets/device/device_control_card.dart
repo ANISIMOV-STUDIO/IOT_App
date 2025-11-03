@@ -4,11 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../core/theme/app_radius.dart';
-
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 enum DeviceType { lamp, airConditioner, vacuum, other }
 
 class DeviceControlCard extends StatelessWidget {
@@ -36,12 +32,12 @@ class DeviceControlCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.all(AppSpacing.lgR),
+        padding: const EdgeInsets.all(HvacSpacing.lgR),
         decoration: BoxDecoration(
-          color: AppTheme.backgroundCard,
-          borderRadius: BorderRadius.circular(AppRadius.xlR),
+          color: HvacColors.backgroundCard,
+          borderRadius: BorderRadius.circular(HvacRadius.xlR),
           border: Border.all(
-            color: AppTheme.backgroundCardBorder,
+            color: HvacColors.backgroundCardBorder,
           ),
         ),
         child: Column(
@@ -58,15 +54,15 @@ class DeviceControlCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w600,
-                        color: AppTheme.textPrimary,
+                        color: HvacColors.textPrimary,
                       ),
                     ),
-                    SizedBox(height: AppSpacing.xxsR),
+                    const SizedBox(height: HvacSpacing.xxsR),
                     Text(
                       subtitle,
                       style: TextStyle(
                         fontSize: 12.sp,
-                        color: AppTheme.textSecondary,
+                        color: HvacColors.textSecondary,
                       ),
                     ),
                   ],
@@ -75,14 +71,14 @@ class DeviceControlCard extends StatelessWidget {
                   width: 40.w,
                   height: 40.h,
                   decoration: BoxDecoration(
-                    color: AppTheme.warning.withValues(alpha: 0.2),
+                    color: HvacColors.warning.withValues(alpha: 0.2),
                     shape: BoxShape.circle,
                   ),
                   child: Center(
                     child: Icon(
                       Icons.circle,
                       size: 8.sp,
-                      color: AppTheme.warning,
+                      color: HvacColors.warning,
                     ),
                   ),
                 ),
@@ -98,7 +94,7 @@ class DeviceControlCard extends StatelessWidget {
               ),
             const Spacer(),
             if (controls.isNotEmpty) ...controls,
-            SizedBox(height: AppSpacing.mdR),
+            const SizedBox(height: HvacSpacing.mdR),
             if (stats.isNotEmpty)
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,

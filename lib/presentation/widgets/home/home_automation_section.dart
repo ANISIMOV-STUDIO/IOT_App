@@ -4,9 +4,8 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import '../../../core/theme/app_theme.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../domain/entities/hvac_unit.dart';
 import '../../../domain/entities/automation_rule.dart';
 import '../automation_panel.dart';
@@ -31,7 +30,7 @@ class HomeAutomationSection extends StatelessWidget {
           'Устройство не выбрано',
           style: TextStyle(
             fontSize: 14.sp,
-            color: AppTheme.textSecondary,
+            color: HvacColors.textSecondary,
           ),
         ),
       );

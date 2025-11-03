@@ -4,10 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/spacing.dart';
-
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 class TemperatureControl extends StatelessWidget {
   final double value;
   final double min;
@@ -25,7 +22,7 @@ class TemperatureControl extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: AppSpacing.lgR),
+      padding: const EdgeInsets.symmetric(vertical: HvacSpacing.lgR),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -33,12 +30,12 @@ class TemperatureControl extends StatelessWidget {
             min.toInt().toString(),
             style: TextStyle(
               fontSize: 14.sp,
-              color: AppTheme.textTertiary,
+              color: HvacColors.textTertiary,
             ),
           ),
           Expanded(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: AppSpacing.mdR),
+              padding: const EdgeInsets.symmetric(horizontal: HvacSpacing.mdR),
               child: Column(
                 children: [
                   Text(
@@ -47,10 +44,10 @@ class TemperatureControl extends StatelessWidget {
                       fontSize: 48.sp,
                       fontWeight: FontWeight.w700,
                       height: 1,
-                      color: AppTheme.textPrimary,
+                      color: HvacColors.textPrimary,
                     ),
                   ),
-                  SizedBox(height: AppSpacing.xsR),
+                  const SizedBox(height: HvacSpacing.xsR),
                   SliderTheme(
                     data: SliderTheme.of(context).copyWith(
                       trackHeight: 4.h,
@@ -61,7 +58,7 @@ class TemperatureControl extends StatelessWidget {
                         overlayRadius: 16.r,
                       ),
                       activeTrackColor: Colors.white,
-                      inactiveTrackColor: AppTheme.backgroundCardBorder,
+                      inactiveTrackColor: HvacColors.backgroundCardBorder,
                       thumbColor: Colors.white,
                     ),
                     child: Slider(
@@ -79,7 +76,7 @@ class TemperatureControl extends StatelessWidget {
             max.toInt().toString(),
             style: TextStyle(
               fontSize: 14.sp,
-              color: AppTheme.textTertiary,
+              color: HvacColors.textTertiary,
             ),
           ),
         ],

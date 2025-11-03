@@ -3,12 +3,9 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:lottie/lottie.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_typography.dart';
-import '../../../core/theme/spacing.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import 'animated_button.dart';
 
 /// Base empty state widget with customizable content
@@ -34,30 +31,30 @@ class EnhancedEmptyState extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget content = Center(
       child: Padding(
-        padding: padding ?? EdgeInsets.all(AppSpacing.xlR),
+        padding: padding ?? const EdgeInsets.all(HvacSpacing.xlR),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
             icon,
-            SizedBox(height: AppSpacing.lgR),
+            const SizedBox(height: HvacSpacing.lgR),
             Text(
               title,
-              style: AppTypography.h4,
+              style: HvacTypography.h4,
               textAlign: TextAlign.center,
             ),
             if (subtitle != null) ...[
-              SizedBox(height: AppSpacing.smR),
+              const SizedBox(height: HvacSpacing.smR),
               Text(
                 subtitle!,
-                style: AppTypography.bodySmall.copyWith(
-                  color: AppTheme.textSecondary,
+                style: HvacTypography.bodySmall.copyWith(
+                  color: HvacColors.textSecondary,
                 ),
                 textAlign: TextAlign.center,
               ),
             ],
             if (action != null) ...[
-              SizedBox(height: AppSpacing.xlR),
+              const SizedBox(height: HvacSpacing.xlR),
               action!,
             ],
           ],
@@ -115,12 +112,12 @@ class _AnimatedDeviceIcon extends StatelessWidget {
       height: 120.r,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: AppTheme.primaryOrange.withValues(alpha: 0.1),
+        color: HvacColors.primaryOrange.withValues(alpha: 0.1),
       ),
       child: Icon(
         Icons.devices_other,
         size: 60.r,
-        color: AppTheme.primaryOrange.withValues(alpha: 0.5),
+        color: HvacColors.primaryOrange.withValues(alpha: 0.5),
       ),
     )
         .animate(onPlay: (controller) => controller.repeat())
@@ -170,7 +167,7 @@ class _AnimatedChartIcon extends StatelessWidget {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(
-              color: AppTheme.primaryOrange.withValues(alpha: 0.2),
+              color: HvacColors.primaryOrange.withValues(alpha: 0.2),
               width: 2,
             ),
           ),
@@ -178,7 +175,7 @@ class _AnimatedChartIcon extends StatelessWidget {
         Icon(
           Icons.insert_chart_outlined,
           size: 60.r,
-          color: AppTheme.textTertiary,
+          color: HvacColors.textTertiary,
         )
             .animate(onPlay: (controller) => controller.repeat())
             .fadeIn(duration: 1000.ms)
@@ -271,8 +268,8 @@ class _AnimatedBellIconState extends State<_AnimatedBellIcon>
             shape: BoxShape.circle,
             gradient: LinearGradient(
               colors: [
-                AppTheme.primaryOrange.withValues(alpha: 0.1),
-                AppTheme.primaryOrange.withValues(alpha: 0.05),
+                HvacColors.primaryOrange.withValues(alpha: 0.1),
+                HvacColors.primaryOrange.withValues(alpha: 0.05),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -281,7 +278,7 @@ class _AnimatedBellIconState extends State<_AnimatedBellIcon>
           child: Icon(
             Icons.notifications_none,
             size: 50.r,
-            color: AppTheme.textTertiary,
+            color: HvacColors.textTertiary,
           ),
         ),
       ),
@@ -328,9 +325,9 @@ class _AnimatedSearchIcon extends StatelessWidget {
           height: 100.r,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: AppTheme.backgroundCard,
+            color: HvacColors.backgroundCard,
             border: Border.all(
-              color: AppTheme.backgroundCardBorder,
+              color: HvacColors.backgroundCardBorder,
               width: 2,
             ),
           ),
@@ -338,7 +335,7 @@ class _AnimatedSearchIcon extends StatelessWidget {
         Icon(
           Icons.search_off,
           size: 50.r,
-          color: AppTheme.textTertiary,
+          color: HvacColors.textTertiary,
         )
             .animate(onPlay: (controller) => controller.repeat(reverse: true))
             .fadeIn(duration: 1000.ms)
@@ -388,7 +385,7 @@ class _AnimatedWifiIcon extends StatelessWidget {
         Icon(
           Icons.wifi_off,
           size: 80.r,
-          color: AppTheme.error.withValues(alpha: 0.5),
+          color: HvacColors.error.withValues(alpha: 0.5),
         )
             .animate(onPlay: (controller) => controller.repeat())
             .fadeIn(duration: 500.ms)
@@ -453,12 +450,12 @@ class PermissionDeniedEmptyState extends StatelessWidget {
         height: 100.r,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: AppTheme.warning.withValues(alpha: 0.1),
+          color: HvacColors.warning.withValues(alpha: 0.1),
         ),
         child: Icon(
           Icons.lock_outline,
           size: 50.r,
-          color: AppTheme.warning,
+          color: HvacColors.warning,
         ),
       ),
       title: 'Требуется разрешение',
@@ -484,7 +481,7 @@ class MaintenanceEmptyState extends StatelessWidget {
       icon: Icon(
         Icons.construction,
         size: 80.r,
-        color: AppTheme.warning,
+        color: HvacColors.warning,
       )
           .animate(onPlay: (controller) => controller.repeat())
           .rotate(duration: 3000.ms, curve: Curves.linear),

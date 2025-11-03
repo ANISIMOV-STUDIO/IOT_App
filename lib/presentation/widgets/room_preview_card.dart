@@ -4,9 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../core/theme/app_theme.dart';
-import '../../core/utils/responsive_utils.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
 class RoomPreviewCard extends StatelessWidget {
   final String roomName;
@@ -32,22 +30,22 @@ class RoomPreviewCard extends StatelessWidget {
 
     return Container(
       constraints: BoxConstraints(
-        maxHeight: isMobile ? 180 : 400,
-        minHeight: isMobile ? 160 : 300,
+        maxHeight: isMobile ? 260 : 400,
+        minHeight: isMobile ? 240 : 300,
       ),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            AppTheme.backgroundCard,
-            AppTheme.backgroundCard.withValues(alpha: 0.8),
-            AppTheme.backgroundDark,
+            HvacColors.backgroundCard,
+            HvacColors.backgroundCard.withValues(alpha: 0.8),
+            HvacColors.backgroundDark,
           ],
         ),
         borderRadius: BorderRadius.circular(20.r),
         border: Border.all(
-          color: AppTheme.backgroundCardBorder,
+          color: HvacColors.backgroundCardBorder,
           width: 1,
         ),
         boxShadow: [
@@ -70,9 +68,9 @@ class RoomPreviewCard extends StatelessWidget {
                     center: Alignment.topRight,
                     radius: 1.5,
                     colors: [
-                      AppTheme.primaryOrange.withValues(alpha: 0.1),
+                      HvacColors.primaryOrange.withValues(alpha: 0.1),
                       Colors.transparent,
-                      AppTheme.info.withValues(alpha: 0.05),
+                      HvacColors.info.withValues(alpha: 0.05),
                     ],
                   ),
                 ),
@@ -86,10 +84,10 @@ class RoomPreviewCard extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 6.h),
                 decoration: BoxDecoration(
-                  color: AppTheme.backgroundCard.withValues(alpha: 0.95),
+                  color: HvacColors.backgroundCard.withValues(alpha: 0.95),
                   borderRadius: BorderRadius.circular(10.r),
                   border: Border.all(
-                    color: AppTheme.backgroundCardBorder,
+                    color: HvacColors.backgroundCardBorder,
                     width: 1,
                   ),
                 ),
@@ -98,17 +96,8 @@ class RoomPreviewCard extends StatelessWidget {
                   children: [
                     Icon(
                       isLive ? Icons.power_settings_new : Icons.power_off,
-                      color: isLive ? AppTheme.success : AppTheme.textSecondary,
+                      color: isLive ? HvacColors.success : HvacColors.textSecondary,
                       size: 16.sp,
-                    ),
-                    SizedBox(width: 6.w),
-                    Text(
-                      isLive ? 'Вкл' : 'Выкл',
-                      style: TextStyle(
-                        color: isLive ? AppTheme.textPrimary : AppTheme.textSecondary,
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
                     ),
                     SizedBox(width: 6.w),
                     SizedBox(
@@ -119,9 +108,9 @@ class RoomPreviewCard extends StatelessWidget {
                           value: isLive,
                           onChanged: onPowerChanged,
                           activeThumbColor: Colors.white,
-                          activeTrackColor: AppTheme.success,
-                          inactiveThumbColor: AppTheme.textSecondary,
-                          inactiveTrackColor: AppTheme.backgroundCardBorder,
+                          activeTrackColor: HvacColors.success,
+                          inactiveThumbColor: HvacColors.textSecondary,
+                          inactiveTrackColor: HvacColors.backgroundCardBorder,
                           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         ),
                       ),
@@ -131,111 +120,157 @@ class RoomPreviewCard extends StatelessWidget {
               ),
             ),
 
-            // Status badges
-            Positioned(
-              top: ResponsiveUtils.isMobile(context) ? 50.h : 12.h,
-              right: 12.w,
-              left: ResponsiveUtils.isMobile(context) ? 12.w : null,
-              child: ResponsiveUtils.isMobile(context)
-                  ? Wrap(
-                      alignment: WrapAlignment.end,
-                      spacing: 4.w,
-                      runSpacing: 4.h,
-                      children: badges
-                          .map((badge) => _buildStatusBadge(context, badge))
-                          .toList(),
-                    )
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: badges
-                          .map((badge) => Padding(
-                                padding: EdgeInsets.only(left: 6.w),
-                                child: _buildStatusBadge(context, badge),
-                              ))
-                          .toList(),
-                    ),
-            ),
+            // Status badges - positioned at top for all screen sizes
+            if (badges.isNotEmpty)
+              Positioned(
+                top: 12.h,
+                right: 12.w,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: badges
+                      .map((badge) => Padding(
+                            padding: EdgeInsets.only(left: 6.w),
+                            child: _buildStatusBadge(context, badge),
+                          ))
+                      .toList(),
+                ),
+              ),
 
             // Central content - Room name and quick stats
             Positioned(
               left: 12.w,
               right: 12.w,
-              top: 0,
-              bottom: 0,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    roomName,
-                    style: TextStyle(
-                      fontSize: 28.sp,
-                      fontWeight: FontWeight.w700,
-                      color: AppTheme.textPrimary,
-                      height: 1.2,
-                      shadows: [
-                        Shadow(
-                          color: Colors.black.withValues(alpha: 0.3),
-                          blurRadius: 12,
+              top: isMobile ? 48.h : 0,
+              bottom: isMobile ? 52.h : 0,
+              child: isMobile
+                  ? SingleChildScrollView(
+                      physics: const ClampingScrollPhysics(),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            roomName,
+                            style: TextStyle(
+                              fontSize: 22.sp,
+                              fontWeight: FontWeight.w700,
+                              color: HvacColors.textPrimary,
+                              height: 1.1,
+                              shadows: [
+                                Shadow(
+                                  color: Colors.black.withValues(alpha: 0.3),
+                                  blurRadius: 12,
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 4.h),
+                          Row(
+                            children: [
+                              Container(
+                                width: 6.w,
+                                height: 6.h,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: isLive ? HvacColors.success : HvacColors.error,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: (isLive ? HvacColors.success : HvacColors.error)
+                                          .withValues(alpha: 0.5),
+                                      blurRadius: 6,
+                                      spreadRadius: 1,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(width: 4.w),
+                              Text(
+                                isLive ? 'Активно' : 'Неактивно',
+                                style: TextStyle(
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.w500,
+                                  color: HvacColors.textSecondary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    )
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          roomName,
+                          style: TextStyle(
+                            fontSize: 28.sp,
+                            fontWeight: FontWeight.w700,
+                            color: HvacColors.textPrimary,
+                            height: 1.2,
+                            shadows: [
+                              Shadow(
+                                color: Colors.black.withValues(alpha: 0.3),
+                                blurRadius: 12,
+                              ),
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 6.h),
-                  Row(
-                    children: [
-                      Container(
-                        width: 8.w,
-                        height: 8.h,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: isLive ? AppTheme.success : AppTheme.error,
-                          boxShadow: [
-                            BoxShadow(
-                              color: (isLive ? AppTheme.success : AppTheme.error)
-                                  .withValues(alpha: 0.5),
-                              blurRadius: 8,
-                              spreadRadius: 2,
+                        SizedBox(height: 6.h),
+                        Row(
+                          children: [
+                            Container(
+                              width: 8.w,
+                              height: 8.h,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: isLive ? HvacColors.success : HvacColors.error,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: (isLive ? HvacColors.success : HvacColors.error)
+                                        .withValues(alpha: 0.5),
+                                    blurRadius: 8,
+                                    spreadRadius: 2,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(width: 6.w),
+                            Text(
+                              isLive ? 'Активно' : 'Неактивно',
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w500,
+                                color: HvacColors.textSecondary,
+                              ),
                             ),
                           ],
                         ),
-                      ),
-                      SizedBox(width: 6.w),
-                      Text(
-                        isLive ? 'Активно' : 'Неактивно',
-                        style: TextStyle(
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w500,
-                          color: AppTheme.textSecondary,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                      ],
+                    ),
             ),
 
             // Details button
             if (onDetailsPressed != null)
               Positioned(
-                bottom: 16,
-                right: 16,
+                bottom: isMobile ? 12.h : 16.h,
+                right: isMobile ? 12.w : 16.w,
                 child: MouseRegion(
                   cursor: SystemMouseCursors.click,
                   child: GestureDetector(
                     onTap: onDetailsPressed,
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: isMobile ? 10.w : 12.w,
+                        vertical: isMobile ? 6.h : 8.h,
+                      ),
                       decoration: BoxDecoration(
-                        color: AppTheme.primaryOrange,
-                        borderRadius: BorderRadius.circular(12.r),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppTheme.primaryOrange.withValues(alpha: 0.3),
-                            blurRadius: 8,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
+                        color: HvacColors.backgroundCard.withValues(alpha: 0.95),
+                        borderRadius: BorderRadius.circular(10.r),
+                        border: Border.all(
+                          color: HvacColors.primaryOrange.withValues(alpha: 0.4),
+                          width: 1,
+                        ),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -243,16 +278,16 @@ class RoomPreviewCard extends StatelessWidget {
                           Text(
                             'Подробнее',
                             style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 13.sp,
+                              color: HvacColors.primaryOrange,
+                              fontSize: isMobile ? 11.sp : 12.sp,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                          SizedBox(width: 6.w),
+                          SizedBox(width: 4.w),
                           Icon(
                             Icons.arrow_forward,
-                            color: Colors.white,
-                            size: 16.sp,
+                            color: HvacColors.primaryOrange,
+                            size: isMobile ? 12.sp : 14.sp,
                           ),
                         ],
                       ),
@@ -275,10 +310,10 @@ class RoomPreviewCard extends StatelessWidget {
         vertical: isMobile ? 4.h : 6.h,
       ),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundCard.withValues(alpha: 0.95),
+        color: HvacColors.backgroundCard.withValues(alpha: 0.95),
         borderRadius: BorderRadius.circular(8.r),
         border: Border.all(
-          color: AppTheme.primaryOrange.withValues(alpha: 0.3),
+          color: HvacColors.primaryOrange.withValues(alpha: 0.3),
           width: 1,
         ),
         boxShadow: [
@@ -295,7 +330,7 @@ class RoomPreviewCard extends StatelessWidget {
           Icon(
             badge.icon,
             size: isMobile ? 12.sp : 14.sp,
-            color: AppTheme.primaryOrange,
+            color: HvacColors.primaryOrange,
           ),
           SizedBox(width: 3.w),
           Text(
@@ -303,7 +338,7 @@ class RoomPreviewCard extends StatelessWidget {
             style: TextStyle(
               fontSize: isMobile ? 11.sp : 12.sp,
               fontWeight: FontWeight.w600,
-              color: AppTheme.textPrimary,
+              color: HvacColors.textPrimary,
             ),
           ),
         ],

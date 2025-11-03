@@ -4,10 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../utils/responsive_utils.dart';
-import '../theme/spacing.dart';
-
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 /// Container that constrains max width on larger screens
 class AdaptiveContainer extends StatelessWidget {
   final Widget child;
@@ -48,11 +45,11 @@ class AdaptiveContainer extends StatelessWidget {
     if (padding != null) {
       effectivePadding = padding!;
     } else if (ResponsiveUtils.isMobile(context)) {
-      effectivePadding = EdgeInsets.all(AppSpacing.mdR);
+      effectivePadding = const EdgeInsets.all(HvacSpacing.mdR);
     } else if (ResponsiveUtils.isTablet(context)) {
-      effectivePadding = EdgeInsets.all(AppSpacing.lgR);
+      effectivePadding = const EdgeInsets.all(HvacSpacing.lgR);
     } else {
-      effectivePadding = EdgeInsets.all(AppSpacing.xlR);
+      effectivePadding = const EdgeInsets.all(HvacSpacing.xlR);
     }
 
     return Container(
@@ -158,11 +155,11 @@ class AdaptiveCard extends StatelessWidget {
     if (padding != null) {
       effectivePadding = padding!;
     } else if (isMobile) {
-      effectivePadding = EdgeInsets.all(AppSpacing.mdR);
+      effectivePadding = const EdgeInsets.all(HvacSpacing.mdR);
     } else if (isTablet) {
-      effectivePadding = EdgeInsets.all(AppSpacing.lgR);
+      effectivePadding = const EdgeInsets.all(HvacSpacing.lgR);
     } else {
-      effectivePadding = EdgeInsets.all(AppSpacing.xlR);
+      effectivePadding = const EdgeInsets.all(HvacSpacing.xlR);
     }
 
     // Adaptive border radius
@@ -170,8 +167,8 @@ class AdaptiveCard extends StatelessWidget {
 
     return Container(
       margin: margin ?? EdgeInsets.symmetric(
-        horizontal: isMobile ? AppSpacing.mdR : AppSpacing.lgR,
-        vertical: AppSpacing.smV,
+        horizontal: isMobile ? HvacSpacing.mdR : HvacSpacing.lgR,
+        vertical: HvacSpacing.smV,
       ),
       decoration: BoxDecoration(
         color: backgroundColor ?? Theme.of(context).cardColor,
@@ -195,11 +192,11 @@ class AdaptiveCard extends StatelessWidget {
                     ),
                     child: title!,
                   ),
-                  SizedBox(height: AppSpacing.mdV),
+                  const SizedBox(height: HvacSpacing.mdV),
                 ],
                 content,
                 if (actions != null && actions!.isNotEmpty) ...[
-                  SizedBox(height: AppSpacing.mdV),
+                  const SizedBox(height: HvacSpacing.mdV),
                   _buildActions(context),
                 ],
               ],
@@ -218,7 +215,7 @@ class AdaptiveCard extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: actions!.map((action) => Padding(
-          padding: EdgeInsets.only(bottom: AppSpacing.smV),
+          padding: const EdgeInsets.only(bottom: HvacSpacing.smV),
           child: action,
         )).toList(),
       );
@@ -228,7 +225,7 @@ class AdaptiveCard extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: actions!.map((action) => Padding(
-        padding: EdgeInsets.only(left: AppSpacing.smR),
+        padding: const EdgeInsets.only(left: HvacSpacing.smR),
         child: action,
       )).toList(),
     );

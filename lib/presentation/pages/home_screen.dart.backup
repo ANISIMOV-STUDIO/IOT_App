@@ -5,11 +5,11 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import '../../core/theme/app_theme.dart';
 import '../../core/di/injection_container.dart';
 import '../../core/utils/responsive_utils.dart';
 import '../bloc/hvac_list/hvac_list_bloc.dart';
@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.backgroundDark,
+      backgroundColor: HvacColors.backgroundDark,
       body: SafeArea(
         child: Column(
           children: [
@@ -121,17 +121,17 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             constraints: const BoxConstraints(minHeight: 48),
             decoration: BoxDecoration(
-              color: isSelected ? AppTheme.backgroundCard : Colors.transparent,
+              color: isSelected ? HvacColors.backgroundCard : Colors.transparent,
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
-                color: isSelected ? AppTheme.backgroundCardBorder : Colors.transparent,
+                color: isSelected ? HvacColors.backgroundCardBorder : Colors.transparent,
               ),
             ),
             child: Text(
               label,
               style: TextStyle(
                 fontSize: 14,
-                color: isSelected ? AppTheme.textPrimary : AppTheme.textSecondary,
+                color: isSelected ? HvacColors.textPrimary : HvacColors.textSecondary,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
               ),
             ),
@@ -149,7 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
           const Icon(
             Icons.error_outline,
             size: 64,
-            color: AppTheme.error,
+            color: HvacColors.error,
           ),
           const SizedBox(height: 24),
           Text(
@@ -318,7 +318,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Text(
                           'Устройство не выбрано',
                           style: TextStyle(
-                            color: AppTheme.textSecondary,
+                            color: HvacColors.textSecondary,
                           ),
                         ),
                       ),
@@ -336,7 +336,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           content: Text(
                             '${rule.name} ${rule.enabled ? "активировано" : "деактивировано"}',
                           ),
-                          backgroundColor: AppTheme.success,
+                          backgroundColor: HvacColors.success,
                           duration: const Duration(seconds: 2),
                         ),
                       );
@@ -346,7 +346,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text('Управление правилами (в разработке)'),
-                          backgroundColor: AppTheme.info,
+                          backgroundColor: HvacColors.info,
                           duration: Duration(seconds: 2),
                         ),
                       );
@@ -479,10 +479,10 @@ class _HomeScreenState extends State<HomeScreen> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
+        color: HvacColors.backgroundCard,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: AppTheme.backgroundCardBorder,
+          color: HvacColors.backgroundCardBorder,
           width: 1,
         ),
       ),
@@ -505,7 +505,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   vertical: 4,
                 ),
                 decoration: BoxDecoration(
-                  color: AppTheme.primaryOrange.withValues(alpha: 0.2),
+                  color: HvacColors.primaryOrange.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
@@ -513,7 +513,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
-                    color: AppTheme.primaryOrange,
+                    color: HvacColors.primaryOrange,
                   ),
                 ),
               ),
@@ -529,13 +529,13 @@ class _HomeScreenState extends State<HomeScreen> {
               runSpacing: 8,
               children: [
                 if (critical.isNotEmpty)
-                  _buildCategoryBadge('Критические', critical.length, AppTheme.error),
+                  _buildCategoryBadge('Критические', critical.length, HvacColors.error),
                 if (errors.isNotEmpty)
                   _buildCategoryBadge('Ошибки', errors.length, const Color(0xFFE57373)),
                 if (warnings.isNotEmpty)
-                  _buildCategoryBadge('Предупреждения', warnings.length, AppTheme.warning),
+                  _buildCategoryBadge('Предупреждения', warnings.length, HvacColors.warning),
                 if (info.isNotEmpty)
-                  _buildCategoryBadge('Инфо', info.length, AppTheme.info),
+                  _buildCategoryBadge('Инфо', info.length, HvacColors.info),
               ],
             ),
 
@@ -564,7 +564,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Text(
                         'Показать все ($totalCount)',
                         style: const TextStyle(
-                          color: AppTheme.primaryOrange,
+                          color: HvacColors.primaryOrange,
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
                         ),
@@ -572,7 +572,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       const SizedBox(width: 4),
                       const Icon(
                         Icons.expand_more,
-                        color: AppTheme.primaryOrange,
+                        color: HvacColors.primaryOrange,
                         size: 18,
                       ),
                     ],
@@ -598,7 +598,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Text(
                         'Свернуть',
                         style: TextStyle(
-                          color: AppTheme.textSecondary,
+                          color: HvacColors.textSecondary,
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
                         ),
@@ -606,7 +606,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(width: 4),
                       Icon(
                         Icons.expand_less,
-                        color: AppTheme.textSecondary,
+                        color: HvacColors.textSecondary,
                         size: 18,
                       ),
                     ],
@@ -690,7 +690,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Icon(
               Icons.notifications_none,
               size: 48,
-              color: AppTheme.textSecondary.withValues(alpha: 0.5),
+              color: HvacColors.textSecondary.withValues(alpha: 0.5),
             ),
             const SizedBox(height: 12),
             const Text(
@@ -698,7 +698,7 @@ class _HomeScreenState extends State<HomeScreen> {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
-                color: AppTheme.textSecondary,
+                color: HvacColors.textSecondary,
               ),
             ),
             const SizedBox(height: 4),
@@ -706,7 +706,7 @@ class _HomeScreenState extends State<HomeScreen> {
               'Все системы работают нормально',
               style: TextStyle(
                 fontSize: 12,
-                color: AppTheme.textSecondary,
+                color: HvacColors.textSecondary,
               ),
             ),
           ],
@@ -763,7 +763,7 @@ class _HomeScreenState extends State<HomeScreen> {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundDark,
+        color: HvacColors.backgroundDark,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: severityColor.withValues(alpha: 0.3),
@@ -800,7 +800,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         style: const TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
-                          color: AppTheme.textPrimary,
+                          color: HvacColors.textPrimary,
                         ),
                       ),
                     ),
@@ -819,7 +819,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   activity.description,
                   style: const TextStyle(
                     fontSize: 12,
-                    color: AppTheme.textSecondary,
+                    color: HvacColors.textSecondary,
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -835,13 +835,13 @@ class _HomeScreenState extends State<HomeScreen> {
   Color _getSeverityColor(NotificationSeverity severity) {
     switch (severity) {
       case NotificationSeverity.critical:
-        return AppTheme.error;
+        return HvacColors.error;
       case NotificationSeverity.error:
         return const Color(0xFFE57373);
       case NotificationSeverity.warning:
-        return AppTheme.warning;
+        return HvacColors.warning;
       case NotificationSeverity.info:
-        return AppTheme.info;
+        return HvacColors.info;
     }
   }
 
@@ -858,7 +858,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Ошибка изменения питания: $e'),
-            backgroundColor: AppTheme.error,
+            backgroundColor: HvacColors.error,
           ),
         );
       }
@@ -877,7 +877,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Ошибка обновления режима: $e'),
-            backgroundColor: AppTheme.error,
+            backgroundColor: HvacColors.error,
           ),
         );
       }
@@ -904,7 +904,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Ошибка обновления скорости вентилятора: $e'),
-            backgroundColor: AppTheme.error,
+            backgroundColor: HvacColors.error,
           ),
         );
       }
@@ -923,7 +923,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Применён режим: ${preset.mode.displayName}'),
-            backgroundColor: AppTheme.success,
+            backgroundColor: HvacColors.success,
             duration: const Duration(seconds: 2),
           ),
         );
@@ -933,7 +933,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Ошибка применения пресета: $e'),
-            backgroundColor: AppTheme.error,
+            backgroundColor: HvacColors.error,
           ),
         );
       }
@@ -952,7 +952,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Все установки включены'),
-            backgroundColor: AppTheme.success,
+            backgroundColor: HvacColors.success,
             duration: Duration(seconds: 2),
           ),
         );
@@ -962,7 +962,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Ошибка включения установок: $e'),
-            backgroundColor: AppTheme.error,
+            backgroundColor: HvacColors.error,
           ),
         );
       }
@@ -981,7 +981,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Все установки выключены'),
-            backgroundColor: AppTheme.success,
+            backgroundColor: HvacColors.success,
             duration: Duration(seconds: 2),
           ),
         );
@@ -991,7 +991,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Ошибка выключения установок: $e'),
-            backgroundColor: AppTheme.error,
+            backgroundColor: HvacColors.error,
           ),
         );
       }
@@ -1010,7 +1010,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Настройки синхронизированы со всеми установками'),
-            backgroundColor: AppTheme.success,
+            backgroundColor: HvacColors.success,
             duration: Duration(seconds: 2),
           ),
         );
@@ -1020,7 +1020,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Ошибка синхронизации: $e'),
-            backgroundColor: AppTheme.error,
+            backgroundColor: HvacColors.error,
           ),
         );
       }
@@ -1039,7 +1039,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Расписание применено ко всем установкам'),
-            backgroundColor: AppTheme.success,
+            backgroundColor: HvacColors.success,
             duration: Duration(seconds: 2),
           ),
         );
@@ -1049,7 +1049,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Ошибка применения расписания: $e'),
-            backgroundColor: AppTheme.error,
+            backgroundColor: HvacColors.error,
           ),
         );
       }

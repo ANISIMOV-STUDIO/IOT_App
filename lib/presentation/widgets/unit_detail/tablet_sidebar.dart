@@ -4,10 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../core/utils/responsive_utils.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../domain/entities/hvac_unit.dart';
 
 class UnitDetailTabletSidebar extends StatelessWidget {
@@ -30,17 +27,17 @@ class UnitDetailTabletSidebar extends StatelessWidget {
     return Container(
       width: width,
       decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
+        color: HvacColors.backgroundCard,
         border: Border(
           right: BorderSide(
-            color: AppTheme.backgroundCardBorder,
+            color: HvacColors.backgroundCardBorder,
             width: 1.w,
           ),
         ),
       ),
       child: Column(
         children: [
-          SizedBox(height: AppSpacing.lgV),
+          const SizedBox(height: HvacSpacing.lgV),
           _buildSidebarItem(
             index: 0,
             icon: Icons.dashboard,
@@ -67,7 +64,7 @@ class UnitDetailTabletSidebar extends StatelessWidget {
           ),
           const Spacer(),
           _buildDeviceInfo(),
-          SizedBox(height: AppSpacing.lgV),
+          const SizedBox(height: HvacSpacing.lgV),
         ],
       ),
     );
@@ -81,14 +78,14 @@ class UnitDetailTabletSidebar extends StatelessWidget {
   }) {
     return Material(
       color: isSelected
-          ? AppTheme.primaryOrange.withValues(alpha: 0.1)
+          ? HvacColors.primaryOrange.withValues(alpha: 0.1)
           : Colors.transparent,
       child: InkWell(
         onTap: () => onItemSelected(index),
         child: Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: AppSpacing.lgR,
-            vertical: AppSpacing.mdV,
+          padding: const EdgeInsets.symmetric(
+            horizontal: HvacSpacing.lgR,
+            vertical: HvacSpacing.mdV,
           ),
           child: Row(
             children: [
@@ -96,10 +93,10 @@ class UnitDetailTabletSidebar extends StatelessWidget {
                 icon,
                 size: 20.sp,
                 color: isSelected
-                    ? AppTheme.primaryOrange
-                    : AppTheme.textSecondary,
+                    ? HvacColors.primaryOrange
+                    : HvacColors.textSecondary,
               ),
-              SizedBox(width: AppSpacing.mdR),
+              const SizedBox(width: HvacSpacing.mdR),
               Expanded(
                 child: Text(
                   label,
@@ -107,8 +104,8 @@ class UnitDetailTabletSidebar extends StatelessWidget {
                     fontSize: 14.sp,
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                     color: isSelected
-                        ? AppTheme.primaryOrange
-                        : AppTheme.textPrimary,
+                        ? HvacColors.primaryOrange
+                        : HvacColors.textPrimary,
                   ),
                 ),
               ),
@@ -117,7 +114,7 @@ class UnitDetailTabletSidebar extends StatelessWidget {
                   width: 3.w,
                   height: 20.h,
                   decoration: BoxDecoration(
-                    color: AppTheme.primaryOrange,
+                    color: HvacColors.primaryOrange,
                     borderRadius: BorderRadius.circular(2.r),
                   ),
                 ),
@@ -130,11 +127,11 @@ class UnitDetailTabletSidebar extends StatelessWidget {
 
   Widget _buildDeviceInfo() {
     return Padding(
-      padding: EdgeInsets.all(AppSpacing.lgR),
+      padding: const EdgeInsets.all(HvacSpacing.lgR),
       child: Column(
         children: [
           _buildInfoRow('Тип:', unit.deviceType.name),
-          SizedBox(height: AppSpacing.smV),
+          const SizedBox(height: HvacSpacing.smV),
           _buildInfoRow('MAC:', unit.macAddress ?? 'N/A'),
         ],
       ),
@@ -149,7 +146,7 @@ class UnitDetailTabletSidebar extends StatelessWidget {
           label,
           style: TextStyle(
             fontSize: 12.sp,
-            color: AppTheme.textSecondary,
+            color: HvacColors.textSecondary,
           ),
         ),
         Flexible(
@@ -158,7 +155,7 @@ class UnitDetailTabletSidebar extends StatelessWidget {
             style: TextStyle(
               fontSize: 12.sp,
               fontWeight: FontWeight.w500,
-              color: AppTheme.textPrimary,
+              color: HvacColors.textPrimary,
             ),
             overflow: TextOverflow.ellipsis,
           ),

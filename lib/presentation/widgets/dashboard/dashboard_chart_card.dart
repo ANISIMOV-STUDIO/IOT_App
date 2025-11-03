@@ -4,10 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/spacing.dart';
-
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 class DashboardChartCard extends StatelessWidget {
   final String title;
   final String? subtitle;
@@ -27,8 +24,8 @@ class DashboardChartCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.all(AppSpacing.lgR),
-        decoration: AppTheme.deviceCard(),
+        padding: const EdgeInsets.all(HvacSpacing.lgR),
+        decoration: HvacTheme.deviceCard(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -44,16 +41,16 @@ class DashboardChartCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 16.sp,
                           fontWeight: FontWeight.w600,
-                          color: AppTheme.textPrimary,
+                          color: HvacColors.textPrimary,
                         ),
                       ),
                       if (subtitle != null) ...[
-                        SizedBox(height: AppSpacing.xxsR),
+                        const SizedBox(height: HvacSpacing.xxsR),
                         Text(
                           subtitle!,
                           style: TextStyle(
                             fontSize: 12.sp,
-                            color: AppTheme.textTertiary,
+                            color: HvacColors.textTertiary,
                           ),
                         ),
                       ],
@@ -63,12 +60,12 @@ class DashboardChartCard extends StatelessWidget {
                 if (onTap != null)
                   Icon(
                     Icons.chevron_right,
-                    color: AppTheme.textTertiary,
+                    color: HvacColors.textTertiary,
                     size: 20.sp,
                   ),
               ],
             ),
-            SizedBox(height: AppSpacing.lgR),
+            const SizedBox(height: HvacSpacing.lgR),
             chart,
           ],
         ),

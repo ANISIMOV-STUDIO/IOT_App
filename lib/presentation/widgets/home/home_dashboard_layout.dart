@@ -5,10 +5,8 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../core/theme/spacing.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../core/theme/ui_constants.dart';
-import '../../../core/utils/responsive_utils.dart';
-import '../../../core/utils/performance_utils.dart';
 import '../../../domain/entities/hvac_unit.dart';
 import '../../../domain/entities/automation_rule.dart';
 import '../../../domain/entities/mode_preset.dart';
@@ -57,9 +55,9 @@ class HomeMobileLayout extends StatelessWidget {
             onPowerChanged: onPowerChanged,
             onDetailsPressed: onDetailsPressed,
           ),
-          SizedBox(height: AppSpacing.lgV),
+          const SizedBox(height: HvacSpacing.lgV),
           buildControlCards(currentUnit, context),
-          SizedBox(height: AppSpacing.lgV),
+          const SizedBox(height: HvacSpacing.lgV),
           HomeAutomationSection(
             currentUnit: currentUnit,
             onRuleToggled: onRuleToggled,
@@ -130,14 +128,14 @@ class HomeDesktopLayout extends StatelessWidget {
                     onDetailsPressed: onDetailsPressed,
                   ),
 
-                  SizedBox(height: AppSpacing.lgV),
+                  const SizedBox(height: HvacSpacing.lgV),
 
                   // Control cards - fills remaining space
                   Expanded(
                     child: buildControlCards(currentUnit, context),
                   ),
 
-                  SizedBox(height: AppSpacing.lgV),
+                  const SizedBox(height: HvacSpacing.lgV),
 
                   // Automation section - compact on desktop
                   HomeAutomationSection(
@@ -149,7 +147,7 @@ class HomeDesktopLayout extends StatelessWidget {
               ),
             ),
 
-            SizedBox(width: AppSpacing.lgR),
+            const SizedBox(width: HvacSpacing.lgR),
 
             // Sidebar - fixed width, scrollable if needed
             SizedBox(
@@ -211,19 +209,19 @@ class HomeDashboard extends StatelessWidget {
     // Adaptive padding based on device type
     final EdgeInsets padding;
     if (ResponsiveUtils.isMobile(context)) {
-      padding = EdgeInsets.symmetric(
-        horizontal: AppSpacing.mdR,
-        vertical: AppSpacing.mdV,
+      padding = const EdgeInsets.symmetric(
+        horizontal: HvacSpacing.mdR,
+        vertical: HvacSpacing.mdV,
       );
     } else if (ResponsiveUtils.isTablet(context)) {
-      padding = EdgeInsets.symmetric(
-        horizontal: AppSpacing.lgR,
-        vertical: AppSpacing.lgV,
+      padding = const EdgeInsets.symmetric(
+        horizontal: HvacSpacing.lgR,
+        vertical: HvacSpacing.lgV,
       );
     } else {
-      padding = EdgeInsets.symmetric(
-        horizontal: AppSpacing.xlR,
-        vertical: AppSpacing.xlV,
+      padding = const EdgeInsets.symmetric(
+        horizontal: HvacSpacing.xlR,
+        vertical: HvacSpacing.xlV,
       );
     }
 

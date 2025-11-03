@@ -4,8 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
-
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 class FanSpeedSlider extends StatelessWidget {
   final String label;
   final int value; // 0-100%
@@ -27,10 +26,10 @@ class FanSpeedSlider extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
+        color: HvacColors.backgroundCard,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: AppTheme.backgroundCardBorder,
+          color: HvacColors.backgroundCardBorder,
           width: 1,
         ),
       ),
@@ -46,7 +45,7 @@ class FanSpeedSlider extends StatelessWidget {
                     Icon(
                       icon,
                       size: 20,
-                      color: AppTheme.textSecondary,
+                      color: HvacColors.textSecondary,
                     ),
                     const SizedBox(width: 8),
                   ],
@@ -59,7 +58,7 @@ class FanSpeedSlider extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: AppTheme.backgroundDark,
+                  color: HvacColors.backgroundDark,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
@@ -67,7 +66,7 @@ class FanSpeedSlider extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
-                    color: AppTheme.primaryOrange,
+                    color: HvacColors.primaryOrange,
                   ),
                 ),
               ),
@@ -83,10 +82,10 @@ class FanSpeedSlider extends StatelessWidget {
               overlayShape: const RoundSliderOverlayShape(
                 overlayRadius: 20,
               ),
-              activeTrackColor: AppTheme.primaryOrange,
-              inactiveTrackColor: AppTheme.backgroundCardBorder,
+              activeTrackColor: HvacColors.primaryOrange,
+              inactiveTrackColor: HvacColors.backgroundCardBorder,
               thumbColor: Colors.white,
-              overlayColor: AppTheme.primaryOrange.withValues(alpha: 0.2),
+              overlayColor: HvacColors.primaryOrange.withValues(alpha: 0.2),
             ),
             child: Slider(
               value: value.toDouble(),

@@ -6,14 +6,13 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../domain/entities/hvac_unit.dart';
 import '../domain/entities/ventilation_mode.dart';
 import '../presentation/widgets/ventilation_mode_control.dart';
 import '../presentation/widgets/ventilation_temperature_control.dart';
 import '../presentation/widgets/ventilation_schedule_control.dart';
 import '../presentation/widgets/home/home_control_cards.dart';
-import '../core/theme/app_theme.dart';
-
 class OverflowTestScreen extends StatefulWidget {
   const OverflowTestScreen({super.key});
 
@@ -23,7 +22,7 @@ class OverflowTestScreen extends StatefulWidget {
 
 class _OverflowTestScreenState extends State<OverflowTestScreen> {
   // Mock HVAC unit for testing
-  final HvacUnit mockUnit = HvacUnit(
+  const HvacUnit mockUnit = HvacUnit(
     id: 'test-unit',
     name: 'Очень длинное название установки для проверки переполнения текста',
     power: true,
@@ -38,10 +37,10 @@ class _OverflowTestScreenState extends State<OverflowTestScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.backgroundDark,
+      backgroundColor: HvacColors.backgroundDark,
       appBar: AppBar(
         title: const Text('Overflow Test Screen'),
-        backgroundColor: AppTheme.backgroundCard,
+        backgroundColor: HvacColors.backgroundCard,
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {
@@ -50,7 +49,7 @@ class _OverflowTestScreenState extends State<OverflowTestScreen> {
               // Display current viewport size
               Container(
                 padding: EdgeInsets.all(16.w),
-                color: AppTheme.backgroundCard,
+                color: HvacColors.backgroundCard,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -59,7 +58,7 @@ class _OverflowTestScreenState extends State<OverflowTestScreen> {
                       style: TextStyle(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.bold,
-                        color: AppTheme.primaryOrange,
+                        color: HvacColors.primaryOrange,
                       ),
                     ),
                     Text(
@@ -67,7 +66,7 @@ class _OverflowTestScreenState extends State<OverflowTestScreen> {
                       style: TextStyle(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.bold,
-                        color: AppTheme.primaryOrange,
+                        color: HvacColors.primaryOrange,
                       ),
                     ),
                     Text(
@@ -75,7 +74,7 @@ class _OverflowTestScreenState extends State<OverflowTestScreen> {
                       style: TextStyle(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.bold,
-                        color: AppTheme.success,
+                        color: HvacColors.success,
                       ),
                     ),
                   ],
@@ -120,7 +119,7 @@ class _OverflowTestScreenState extends State<OverflowTestScreen> {
                       // Test 3: Individual VentilationTemperatureControl
                       _buildTestSection(
                         'Test 3: VentilationTemperatureControl',
-                        VentilationTemperatureControl(unit: mockUnit),
+                        const VentilationTemperatureControl(unit: mockUnit),
                         constraints,
                       ),
 
@@ -152,7 +151,7 @@ class _OverflowTestScreenState extends State<OverflowTestScreen> {
                                 ),
                               ),
                               SizedBox(width: 16.w),
-                              Expanded(
+                              const Expanded(
                                 child: VentilationTemperatureControl(unit: mockUnit),
                               ),
                               SizedBox(width: 16.w),
@@ -182,7 +181,7 @@ class _OverflowTestScreenState extends State<OverflowTestScreen> {
                                 onModeChanged: (_) {},
                               ),
                               SizedBox(height: 16.h),
-                              VentilationTemperatureControl(unit: mockUnit),
+                              const VentilationTemperatureControl(unit: mockUnit),
                               SizedBox(height: 16.h),
                               VentilationScheduleControl(
                                 unit: mockUnit,
@@ -211,7 +210,7 @@ class _OverflowTestScreenState extends State<OverflowTestScreen> {
         Container(
           padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
           decoration: BoxDecoration(
-            color: AppTheme.info.withValues(alpha: 0.2),
+            color: HvacColors.info.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(8.r),
           ),
           child: Text(
@@ -219,7 +218,7 @@ class _OverflowTestScreenState extends State<OverflowTestScreen> {
             style: TextStyle(
               fontSize: 14.sp,
               fontWeight: FontWeight.w600,
-              color: AppTheme.info,
+              color: HvacColors.info,
             ),
           ),
         ),
@@ -227,7 +226,7 @@ class _OverflowTestScreenState extends State<OverflowTestScreen> {
         Container(
           decoration: BoxDecoration(
             border: Border.all(
-              color: AppTheme.error.withValues(alpha: 0.3),
+              color: HvacColors.error.withValues(alpha: 0.3),
               width: 2,
             ),
             borderRadius: BorderRadius.circular(8.r),

@@ -5,11 +5,8 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fl_chart/fl_chart.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../core/theme/app_radius.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../domain/entities/temperature_reading.dart';
 
 class HumidityChart extends StatelessWidget {
@@ -23,12 +20,12 @@ class HumidityChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(AppSpacing.lgR),
+      padding: const EdgeInsets.all(HvacSpacing.lgR),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
-        borderRadius: BorderRadius.circular(AppRadius.mdR),
+        color: HvacColors.backgroundCard,
+        borderRadius: BorderRadius.circular(HvacRadius.mdR),
         border: Border.all(
-          color: AppTheme.backgroundCardBorder,
+          color: HvacColors.backgroundCardBorder,
           width: 1,
         ),
       ),
@@ -40,10 +37,10 @@ class HumidityChart extends StatelessWidget {
             style: TextStyle(
               fontSize: 16.sp,
               fontWeight: FontWeight.w600,
-              color: AppTheme.textPrimary,
+              color: HvacColors.textPrimary,
             ),
           ),
-          SizedBox(height: AppSpacing.lgR),
+          const SizedBox(height: HvacSpacing.lgR),
           SizedBox(
             height: 200.h,
             child: LineChart(
@@ -54,7 +51,7 @@ class HumidityChart extends StatelessWidget {
                   horizontalInterval: 10,
                   getDrawingHorizontalLine: (value) {
                     return const FlLine(
-                      color: AppTheme.backgroundCardBorder,
+                      color: HvacColors.backgroundCardBorder,
                       strokeWidth: 1,
                     );
                   },
@@ -83,7 +80,7 @@ class HumidityChart extends StatelessWidget {
                           child: Text(
                             '${reading.timestamp.hour}:00',
                             style: TextStyle(
-                              color: AppTheme.textSecondary,
+                              color: HvacColors.textSecondary,
                               fontSize: 10.sp,
                             ),
                           ),
@@ -100,7 +97,7 @@ class HumidityChart extends StatelessWidget {
                         return Text(
                           '${value.toInt()}%',
                           style: TextStyle(
-                            color: AppTheme.textSecondary,
+                            color: HvacColors.textSecondary,
                             fontSize: 10.sp,
                           ),
                         );
@@ -111,7 +108,7 @@ class HumidityChart extends StatelessWidget {
                 borderData: FlBorderData(
                   show: true,
                   border: Border.all(
-                    color: AppTheme.backgroundCardBorder,
+                    color: HvacColors.backgroundCardBorder,
                     width: 1,
                   ),
                 ),
@@ -130,13 +127,13 @@ class HumidityChart extends StatelessWidget {
                             ))
                         .toList(),
                     isCurved: true,
-                    color: AppTheme.info,
+                    color: HvacColors.info,
                     barWidth: 3,
                     isStrokeCapRound: true,
                     dotData: const FlDotData(show: false),
                     belowBarData: BarAreaData(
                       show: true,
-                      color: AppTheme.info.withValues(alpha: 0.1),
+                      color: HvacColors.info.withValues(alpha: 0.1),
                     ),
                   ),
                 ],

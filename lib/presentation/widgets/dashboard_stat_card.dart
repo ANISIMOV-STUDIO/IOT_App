@@ -4,8 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
-
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 class DashboardStatCard extends StatelessWidget {
   final String title;
   final String value;
@@ -34,7 +33,7 @@ class DashboardStatCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(20),
-        decoration: AppTheme.deviceCard(),
+        decoration: HvacTheme.deviceCard(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -62,8 +61,8 @@ class DashboardStatCard extends StatelessWidget {
                     ),
                     decoration: BoxDecoration(
                       color: (isPositiveTrend
-                              ? AppTheme.success
-                              : AppTheme.error)
+                              ? HvacColors.success
+                              : HvacColors.error)
                           .withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -75,8 +74,8 @@ class DashboardStatCard extends StatelessWidget {
                               ? Icons.arrow_upward
                               : Icons.arrow_downward,
                           color: isPositiveTrend
-                              ? AppTheme.success
-                              : AppTheme.error,
+                              ? HvacColors.success
+                              : HvacColors.error,
                           size: 14,
                         ),
                         const SizedBox(width: 4),
@@ -84,8 +83,8 @@ class DashboardStatCard extends StatelessWidget {
                           trend!,
                           style: TextStyle(
                             color: isPositiveTrend
-                                ? AppTheme.success
-                                : AppTheme.error,
+                                ? HvacColors.success
+                                : HvacColors.error,
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
                           ),
@@ -101,7 +100,7 @@ class DashboardStatCard extends StatelessWidget {
             Text(
               title,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppTheme.textSecondary,
+                    color: HvacColors.textSecondary,
                   ),
             ),
             const SizedBox(height: 8),
@@ -121,7 +120,7 @@ class DashboardStatCard extends StatelessWidget {
               Text(
                 subtitle!,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppTheme.textTertiary,
+                      color: HvacColors.textTertiary,
                     ),
               ),
             ],

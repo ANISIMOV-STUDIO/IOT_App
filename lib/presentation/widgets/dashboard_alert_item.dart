@@ -4,8 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
-
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 enum AlertSeverity { critical, warning, info }
 
 class DashboardAlertItem extends StatelessWidget {
@@ -27,11 +26,11 @@ class DashboardAlertItem extends StatelessWidget {
   Color get _severityColor {
     switch (severity) {
       case AlertSeverity.critical:
-        return AppTheme.error;
+        return HvacColors.error;
       case AlertSeverity.warning:
-        return AppTheme.warning;
+        return HvacColors.warning;
       case AlertSeverity.info:
-        return AppTheme.info;
+        return HvacColors.info;
     }
   }
 
@@ -88,7 +87,7 @@ class DashboardAlertItem extends StatelessWidget {
                   Text(
                     message,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppTheme.textSecondary,
+                          color: HvacColors.textSecondary,
                         ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -101,7 +100,7 @@ class DashboardAlertItem extends StatelessWidget {
             Text(
               timestamp,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppTheme.textTertiary,
+                    color: HvacColors.textTertiary,
                     fontSize: 11,
                   ),
             ),

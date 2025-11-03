@@ -4,11 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../core/theme/app_radius.dart';
-
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 class SimplePieChart extends StatelessWidget {
   final List<PieChartData> data;
   final double size;
@@ -30,13 +26,13 @@ class SimplePieChart extends StatelessWidget {
             painter: PieChartPainter(data: data),
           ),
         ),
-        SizedBox(width: AppSpacing.lgR),
+        const SizedBox(width: HvacSpacing.lgR),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: data.map((item) {
               return Padding(
-                padding: EdgeInsets.only(bottom: AppSpacing.xsR),
+                padding: const EdgeInsets.only(bottom: HvacSpacing.xsR),
                 child: Row(
                   children: [
                     Container(
@@ -44,16 +40,16 @@ class SimplePieChart extends StatelessWidget {
                       height: 12.h,
                       decoration: BoxDecoration(
                         color: item.color,
-                        borderRadius: BorderRadius.circular(AppRadius.xsR),
+                        borderRadius: BorderRadius.circular(HvacRadius.xsR),
                       ),
                     ),
-                    SizedBox(width: AppSpacing.xsR),
+                    const SizedBox(width: HvacSpacing.xsR),
                     Expanded(
                       child: Text(
                         item.label,
                         style: TextStyle(
                           fontSize: 12.sp,
-                          color: AppTheme.textPrimary,
+                          color: HvacColors.textPrimary,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -64,7 +60,7 @@ class SimplePieChart extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 12.sp,
                         fontWeight: FontWeight.w600,
-                        color: AppTheme.textPrimary,
+                        color: HvacColors.textPrimary,
                       ),
                     ),
                   ],
@@ -124,7 +120,7 @@ class PieChartPainter extends CustomPainter {
     }
 
     final centerPaint = Paint()
-      ..color = AppTheme.backgroundCard
+      ..color = HvacColors.backgroundCard
       ..style = PaintingStyle.fill;
 
     canvas.drawCircle(center, radius * 0.6, centerPaint);

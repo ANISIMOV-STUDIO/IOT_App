@@ -4,8 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
-
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 class AnimatedStatCard extends StatefulWidget {
   final String label;
   final String value;
@@ -80,10 +79,10 @@ class _AnimatedStatCardState extends State<AnimatedStatCard>
             child: Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: AppTheme.backgroundCard,
+                color: HvacColors.backgroundCard,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: AppTheme.backgroundCardBorder,
+                  color: HvacColors.backgroundCardBorder,
                   width: 1,
                 ),
                 boxShadow: [
@@ -117,7 +116,7 @@ class _AnimatedStatCardState extends State<AnimatedStatCard>
                           widget.label,
                           style: const TextStyle(
                             fontSize: 13,
-                            color: AppTheme.textSecondary,
+                            color: HvacColors.textSecondary,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -145,8 +144,8 @@ class _AnimatedStatCardState extends State<AnimatedStatCard>
                           ),
                           decoration: BoxDecoration(
                             color: widget.trend!.startsWith('+')
-                                ? AppTheme.success.withValues(alpha: 0.15)
-                                : AppTheme.error.withValues(alpha: 0.15),
+                                ? HvacColors.success.withValues(alpha: 0.15)
+                                : HvacColors.error.withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Row(
@@ -158,8 +157,8 @@ class _AnimatedStatCardState extends State<AnimatedStatCard>
                                     : Icons.arrow_downward,
                                 size: 12,
                                 color: widget.trend!.startsWith('+')
-                                    ? AppTheme.success
-                                    : AppTheme.error,
+                                    ? HvacColors.success
+                                    : HvacColors.error,
                               ),
                               const SizedBox(width: 2),
                               Text(
@@ -168,8 +167,8 @@ class _AnimatedStatCardState extends State<AnimatedStatCard>
                                   fontSize: 10,
                                   fontWeight: FontWeight.w600,
                                   color: widget.trend!.startsWith('+')
-                                      ? AppTheme.success
-                                      : AppTheme.error,
+                                      ? HvacColors.success
+                                      : HvacColors.error,
                                 ),
                               ),
                             ],

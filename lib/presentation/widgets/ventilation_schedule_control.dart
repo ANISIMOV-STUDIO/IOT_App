@@ -5,9 +5,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../core/theme/app_theme.dart';
-import '../../core/utils/adaptive_layout.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../domain/entities/hvac_unit.dart';
 
 class VentilationScheduleControl extends StatelessWidget {
@@ -31,12 +29,12 @@ class VentilationScheduleControl extends StatelessWidget {
         return Container(
           padding: AdaptiveLayout.controlPadding(context),
           decoration: BoxDecoration(
-            color: AppTheme.backgroundCard,
+            color: HvacColors.backgroundCard,
             borderRadius: BorderRadius.circular(
               AdaptiveLayout.borderRadius(context, base: 16),
             ),
             border: Border.all(
-              color: AppTheme.backgroundCardBorder,
+              color: HvacColors.backgroundCardBorder,
             ),
           ),
           child: LayoutBuilder(
@@ -97,14 +95,14 @@ class VentilationScheduleControl extends StatelessWidget {
         Container(
           padding: EdgeInsets.all(AdaptiveLayout.spacing(context, base: 8)),
           decoration: BoxDecoration(
-            color: AppTheme.success.withValues(alpha: 0.2),
+            color: HvacColors.success.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(
               AdaptiveLayout.borderRadius(context, base: 8),
             ),
           ),
           child: Icon(
             Icons.schedule,
-            color: AppTheme.success,
+            color: HvacColors.success,
             size: AdaptiveLayout.iconSize(context, base: 20),
           ),
         ),
@@ -119,7 +117,7 @@ class VentilationScheduleControl extends StatelessWidget {
                 style: TextStyle(
                   fontSize: AdaptiveLayout.fontSize(context, base: 16),
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.textPrimary,
+                  color: HvacColors.textPrimary,
                 ),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
@@ -129,7 +127,7 @@ class VentilationScheduleControl extends StatelessWidget {
                 'Автоматическое управление',
                 style: TextStyle(
                   fontSize: AdaptiveLayout.fontSize(context, base: 12),
-                  color: AppTheme.textSecondary,
+                  color: HvacColors.textSecondary,
                 ),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
@@ -150,7 +148,7 @@ class VentilationScheduleControl extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(AdaptiveLayout.spacing(context, base: 10)),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundDark,
+        color: HvacColors.backgroundDark,
         borderRadius: BorderRadius.circular(
           AdaptiveLayout.borderRadius(context, base: 12),
         ),
@@ -166,7 +164,7 @@ class VentilationScheduleControl extends StatelessWidget {
                   _getDayName(dayOfWeek),
                   style: TextStyle(
                     fontSize: AdaptiveLayout.fontSize(context, base: 11),
-                    color: AppTheme.textSecondary,
+                    color: HvacColors.textSecondary,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -179,8 +177,8 @@ class VentilationScheduleControl extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   color: todaySchedule?.timerEnabled == true
-                      ? AppTheme.success.withValues(alpha: 0.2)
-                      : AppTheme.textSecondary.withValues(alpha: 0.2),
+                      ? HvacColors.success.withValues(alpha: 0.2)
+                      : HvacColors.textSecondary.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(4.r),
                 ),
                 child: Text(
@@ -189,8 +187,8 @@ class VentilationScheduleControl extends StatelessWidget {
                     fontSize: AdaptiveLayout.fontSize(context, base: 10),
                     fontWeight: FontWeight.w600,
                     color: todaySchedule?.timerEnabled == true
-                        ? AppTheme.success
-                        : AppTheme.textSecondary,
+                        ? HvacColors.success
+                        : HvacColors.textSecondary,
                   ),
                 ),
               ),
@@ -234,7 +232,7 @@ class VentilationScheduleControl extends StatelessWidget {
             deviceSize,
             'Статус',
             unit.power ? 'Работает' : 'Выключено',
-            unit.power ? AppTheme.success : AppTheme.error,
+            unit.power ? HvacColors.success : HvacColors.error,
           ),
         ),
         SizedBox(width: AdaptiveLayout.spacing(context)),
@@ -244,7 +242,7 @@ class VentilationScheduleControl extends StatelessWidget {
             deviceSize,
             'Время работы',
             (unit.supplyFanSpeed ?? 0) > 0 ? '2ч 15м' : '0м',
-            AppTheme.info,
+            HvacColors.info,
           ),
         ),
       ],
@@ -258,7 +256,7 @@ class VentilationScheduleControl extends StatelessWidget {
         onPressed: onSchedulePressed,
         style: OutlinedButton.styleFrom(
           side: const BorderSide(
-            color: AppTheme.primaryOrange,
+            color: HvacColors.primaryOrange,
             width: 1,
           ),
           shape: RoundedRectangleBorder(
@@ -273,7 +271,7 @@ class VentilationScheduleControl extends StatelessWidget {
         child: Text(
           'Настроить расписание',
           style: TextStyle(
-            color: AppTheme.primaryOrange,
+            color: HvacColors.primaryOrange,
             fontWeight: FontWeight.w600,
             fontSize: AdaptiveLayout.fontSize(context, base: 13),
           ),
@@ -299,7 +297,7 @@ class VentilationScheduleControl extends StatelessWidget {
             Icon(
               icon,
               size: AdaptiveLayout.iconSize(context, base: 12),
-              color: AppTheme.textSecondary,
+              color: HvacColors.textSecondary,
             ),
             SizedBox(width: AdaptiveLayout.spacing(context, base: 4)),
             Flexible(
@@ -307,7 +305,7 @@ class VentilationScheduleControl extends StatelessWidget {
                 label,
                 style: TextStyle(
                   fontSize: AdaptiveLayout.fontSize(context, base: 10),
-                  color: AppTheme.textSecondary,
+                  color: HvacColors.textSecondary,
                 ),
                 overflow: TextOverflow.ellipsis,
               ),
@@ -322,7 +320,7 @@ class VentilationScheduleControl extends StatelessWidget {
           style: TextStyle(
             fontSize: AdaptiveLayout.fontSize(context, base: 15),
             fontWeight: FontWeight.w700,
-            color: AppTheme.textPrimary,
+            color: HvacColors.textPrimary,
           ),
         ),
       ],
@@ -352,7 +350,7 @@ class VentilationScheduleControl extends StatelessWidget {
             label,
             style: TextStyle(
               fontSize: AdaptiveLayout.fontSize(context, base: 10),
-              color: AppTheme.textSecondary,
+              color: HvacColors.textSecondary,
             ),
           ),
           SizedBox(height: AdaptiveLayout.spacing(context, base: 4)),

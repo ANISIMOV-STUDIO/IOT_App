@@ -4,8 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../core/theme/app_theme.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../domain/entities/hvac_unit.dart';
 import '../air_quality_indicator.dart';
 import '../airflow_animation.dart';
@@ -56,7 +55,7 @@ class AirQualityTab extends StatelessWidget {
             style: TextStyle(
               fontSize: 16.sp,
               fontWeight: FontWeight.w600,
-              color: AppTheme.textPrimary,
+              color: HvacColors.textPrimary,
             ),
           ),
 
@@ -69,7 +68,7 @@ class AirQualityTab extends StatelessWidget {
                   label: 'Температура',
                   value: '${unit.supplyAirTemp?.toInt() ?? 0}°C',
                   icon: Icons.thermostat,
-                  color: AppTheme.primaryOrange,
+                  color: HvacColors.primaryOrange,
                   trend: '+0.5°C',
                 ),
               ),
@@ -79,7 +78,7 @@ class AirQualityTab extends StatelessWidget {
                   label: 'Влажность',
                   value: '${unit.humidity.toInt()}%',
                   icon: Icons.water_drop,
-                  color: AppTheme.info,
+                  color: HvacColors.info,
                   trend: '-2%',
                 ),
               ),
@@ -95,7 +94,7 @@ class AirQualityTab extends StatelessWidget {
                   label: 'Приточный',
                   value: '${unit.supplyFanSpeed ?? 0}%',
                   icon: Icons.air,
-                  color: AppTheme.success,
+                  color: HvacColors.success,
                 ),
               ),
               SizedBox(width: 16.w),
@@ -104,7 +103,7 @@ class AirQualityTab extends StatelessWidget {
                   label: 'Вытяжной',
                   value: '${unit.exhaustFanSpeed ?? 0}%',
                   icon: Icons.air,
-                  color: AppTheme.warning,
+                  color: HvacColors.warning,
                 ),
               ),
             ],
@@ -116,10 +115,10 @@ class AirQualityTab extends StatelessWidget {
           Container(
             padding: EdgeInsets.all(16.w),
             decoration: BoxDecoration(
-              color: AppTheme.info.withValues(alpha: 0.1),
+              color: HvacColors.info.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12.r),
               border: Border.all(
-                color: AppTheme.info.withValues(alpha: 0.3),
+                color: HvacColors.info.withValues(alpha: 0.3),
                 width: 1,
               ),
             ),
@@ -127,7 +126,7 @@ class AirQualityTab extends StatelessWidget {
               children: [
                 Icon(
                   Icons.lightbulb_outline,
-                  color: AppTheme.info,
+                  color: HvacColors.info,
                   size: 24.sp,
                 ),
                 SizedBox(width: 12.w),
@@ -140,7 +139,7 @@ class AirQualityTab extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w600,
-                          color: AppTheme.textPrimary,
+                          color: HvacColors.textPrimary,
                         ),
                       ),
                       SizedBox(height: 4.h),
@@ -148,7 +147,7 @@ class AirQualityTab extends StatelessWidget {
                         'Качество воздуха хорошее. Рекомендуем поддерживать текущий режим вентиляции.',
                         style: TextStyle(
                           fontSize: 12.sp,
-                          color: AppTheme.textSecondary,
+                          color: HvacColors.textSecondary,
                         ),
                       ),
                     ],

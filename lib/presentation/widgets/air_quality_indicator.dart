@@ -4,8 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
-
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 enum AirQualityLevel {
   excellent,
   good,
@@ -109,10 +108,10 @@ class _AirQualityIndicatorState extends State<AirQualityIndicator>
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
+        color: HvacColors.backgroundCard,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: AppTheme.backgroundCardBorder,
+          color: HvacColors.backgroundCardBorder,
           width: 1,
         ),
       ),
@@ -140,7 +139,7 @@ class _AirQualityIndicatorState extends State<AirQualityIndicator>
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.textPrimary,
+                  color: HvacColors.textPrimary,
                 ),
               ),
             ],
@@ -216,7 +215,7 @@ class _AirQualityIndicatorState extends State<AirQualityIndicator>
 
           // Metrics
           if (widget.co2Level != null || widget.pm25Level != null || widget.vocLevel != null) ...[
-            const Divider(color: AppTheme.backgroundCardBorder),
+            const Divider(color: HvacColors.backgroundCardBorder),
             const SizedBox(height: 16),
             if (widget.co2Level != null)
               _buildMetric('CO₂', '${widget.co2Level} ppm', Icons.cloud),
@@ -235,13 +234,13 @@ class _AirQualityIndicatorState extends State<AirQualityIndicator>
       padding: const EdgeInsets.only(bottom: 12),
       child: Row(
         children: [
-          Icon(icon, size: 16, color: AppTheme.textSecondary),
+          Icon(icon, size: 16, color: HvacColors.textSecondary),
           const SizedBox(width: 8),
           Text(
             label,
             style: const TextStyle(
               fontSize: 13,
-              color: AppTheme.textSecondary,
+              color: HvacColors.textSecondary,
             ),
           ),
           const Spacer(),
@@ -250,7 +249,7 @@ class _AirQualityIndicatorState extends State<AirQualityIndicator>
             style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
-              color: AppTheme.textPrimary,
+              color: HvacColors.textPrimary,
             ),
           ),
         ],

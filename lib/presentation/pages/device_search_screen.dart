@@ -5,7 +5,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../core/theme/app_theme.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../generated/l10n/app_localizations.dart';
 import '../bloc/hvac_list/hvac_list_bloc.dart';
 import '../bloc/hvac_list/hvac_list_event.dart';
@@ -141,7 +141,7 @@ class _DeviceSearchScreenState extends State<DeviceSearchScreen> {
     return GestureDetector(
       onTap: () => _showManualEntryDialog(context),
       child: Container(
-        decoration: AppTheme.deviceCard(),
+        decoration: HvacTheme.deviceCard(),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -151,14 +151,14 @@ class _DeviceSearchScreenState extends State<DeviceSearchScreen> {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: AppTheme.backgroundCardBorder,
+                  color: HvacColors.backgroundCardBorder,
                   width: 2,
                 ),
               ),
               child: const Icon(
                 Icons.home_outlined,
                 size: 30,
-                color: AppTheme.textTertiary,
+                color: HvacColors.textTertiary,
               ),
             ),
             const SizedBox(height: 12),
@@ -171,7 +171,7 @@ class _DeviceSearchScreenState extends State<DeviceSearchScreen> {
             Text(
               'Select manually',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: AppTheme.primaryOrange,
+                color: HvacColors.primaryOrange,
               ),
               textAlign: TextAlign.center,
             ),
@@ -200,7 +200,7 @@ class _DeviceSearchScreenState extends State<DeviceSearchScreen> {
         content: Text(
           '${_selectedDevices.length} ${_selectedDevices.length == 1 ? 'device' : 'devices'} added',
         ),
-        backgroundColor: AppTheme.success,
+        backgroundColor: HvacColors.success,
       ),
     );
 
@@ -265,7 +265,7 @@ class _DeviceSearchScreenState extends State<DeviceSearchScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(l10n.fillRequiredFields),
-                    backgroundColor: AppTheme.error,
+                    backgroundColor: HvacColors.error,
                   ),
                 );
                 return;
@@ -287,7 +287,7 @@ class _DeviceSearchScreenState extends State<DeviceSearchScreen> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(l10n.deviceAdded),
-                  backgroundColor: AppTheme.success,
+                  backgroundColor: HvacColors.success,
                 ),
               );
             },

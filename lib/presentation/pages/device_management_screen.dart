@@ -6,7 +6,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../core/theme/app_theme.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../generated/l10n/app_localizations.dart';
 import '../bloc/hvac_list/hvac_list_bloc.dart';
 import '../bloc/hvac_list/hvac_list_event.dart';
@@ -149,13 +149,13 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 12),
                         child: Container(
-                          decoration: AppTheme.deviceCard(),
+                          decoration: HvacTheme.deviceCard(),
                           child: ListTile(
                             contentPadding: const EdgeInsets.all(16),
                             leading: Container(
                               padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(
-                                color: AppTheme.getModeColor(unit.mode),
+                                color: HvacColors.getModeColor(unit.mode),
                                 shape: BoxShape.circle,
                               ),
                               child: const Icon(
@@ -342,7 +342,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(l10n.deviceAdded),
-                      backgroundColor: AppTheme.success,
+                      backgroundColor: HvacColors.success,
                     ),
                   );
                 }
@@ -416,7 +416,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
         scaffoldMessenger.showSnackBar(
           SnackBar(
             content: Text(l10n.deviceRemoved),
-            backgroundColor: AppTheme.success,
+            backgroundColor: HvacColors.success,
           ),
         );
       } catch (e) {

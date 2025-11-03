@@ -4,9 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../core/theme/app_theme.dart';
-
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 class SimpleLineChart extends StatelessWidget {
   final List<double> data;
   final Color color;
@@ -15,7 +13,7 @@ class SimpleLineChart extends StatelessWidget {
   const SimpleLineChart({
     super.key,
     required this.data,
-    this.color = AppTheme.primaryOrange,
+    this.color = HvacColors.primaryOrange,
     this.height = 120,
   });
 

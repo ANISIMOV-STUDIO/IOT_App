@@ -6,9 +6,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/utils/responsive_utils.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../bloc/hvac_list/hvac_list_bloc.dart';
 import '../../bloc/hvac_list/hvac_list_state.dart';
 import '../../../domain/entities/hvac_unit.dart';
@@ -131,17 +129,17 @@ class HomeAppBar extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
           decoration: BoxDecoration(
-            color: isSelected ? AppTheme.backgroundCard : Colors.transparent,
+            color: isSelected ? HvacColors.backgroundCard : Colors.transparent,
             borderRadius: BorderRadius.circular(8.r),
             border: Border.all(
-              color: isSelected ? AppTheme.backgroundCardBorder : Colors.transparent,
+              color: isSelected ? HvacColors.backgroundCardBorder : Colors.transparent,
             ),
           ),
           child: Text(
             label,
             style: TextStyle(
               fontSize: 14.sp,
-              color: isSelected ? AppTheme.textPrimary : AppTheme.textSecondary,
+              color: isSelected ? HvacColors.textPrimary : HvacColors.textSecondary,
               fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
             ),
           ),
@@ -159,16 +157,16 @@ class HomeAppBar extends StatelessWidget {
           width: 36.w,
           height: 36.h,
           decoration: BoxDecoration(
-            color: AppTheme.backgroundCard,
+            color: HvacColors.backgroundCard,
             shape: BoxShape.circle,
             border: Border.all(
-              color: AppTheme.backgroundCardBorder,
+              color: HvacColors.backgroundCardBorder,
             ),
           ),
           child: Icon(
             Icons.add,
             size: 20.sp,
-            color: AppTheme.textSecondary,
+            color: HvacColors.textSecondary,
           ),
         ),
       ),
@@ -181,7 +179,7 @@ class HomeAppBar extends StatelessWidget {
         IconButton(
           icon: Icon(
             Icons.settings_outlined,
-            color: AppTheme.textSecondary,
+            color: HvacColors.textSecondary,
             size: 24.sp,
           ),
           onPressed: onSettingsPressed,
@@ -189,17 +187,17 @@ class HomeAppBar extends StatelessWidget {
         SizedBox(width: 8.w),
         CircleAvatar(
           radius: 18.r,
-          backgroundColor: AppTheme.backgroundCard,
+          backgroundColor: HvacColors.backgroundCard,
           child: Icon(
             Icons.person_outline,
             size: 20.sp,
-            color: AppTheme.textSecondary,
+            color: HvacColors.textSecondary,
           ),
         ),
         SizedBox(width: 8.w),
         Icon(
           Icons.keyboard_arrow_down,
-          color: AppTheme.textSecondary,
+          color: HvacColors.textSecondary,
           size: 20.sp,
         ),
       ],

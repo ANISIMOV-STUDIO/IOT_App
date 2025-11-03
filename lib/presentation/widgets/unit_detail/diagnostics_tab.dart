@@ -4,8 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../core/theme/app_theme.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../domain/entities/hvac_unit.dart';
 
 class DiagnosticsTab extends StatelessWidget {
@@ -44,7 +43,7 @@ class DiagnosticsTab extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () => _runDiagnostics(context),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.primaryOrange,
+                backgroundColor: HvacColors.primaryOrange,
                 padding: EdgeInsets.symmetric(vertical: 14.h),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12.r),
@@ -76,23 +75,23 @@ class DiagnosticsTab extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
+        color: HvacColors.backgroundCard,
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: AppTheme.backgroundCardBorder, width: 1),
+        border: Border.all(color: HvacColors.backgroundCardBorder, width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(Icons.health_and_safety, color: AppTheme.success, size: 20.sp),
+              Icon(Icons.health_and_safety, color: HvacColors.success, size: 20.sp),
               SizedBox(width: 12.w),
               Text(
                 'Состояние системы',
                 style: TextStyle(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.textPrimary,
+                  color: HvacColors.textPrimary,
                 ),
               ),
             ],
@@ -117,13 +116,13 @@ class DiagnosticsTab extends StatelessWidget {
         children: [
           Text(
             label,
-            style: TextStyle(fontSize: 13.sp, color: AppTheme.textSecondary),
+            style: TextStyle(fontSize: 13.sp, color: HvacColors.textSecondary),
           ),
           Row(
             children: [
               Icon(
                 isOk ? Icons.check_circle : Icons.error,
-                color: isOk ? AppTheme.success : AppTheme.error,
+                color: isOk ? HvacColors.success : HvacColors.error,
                 size: 16.sp,
               ),
               SizedBox(width: 6.w),
@@ -132,7 +131,7 @@ class DiagnosticsTab extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 13.sp,
                   fontWeight: FontWeight.w600,
-                  color: isOk ? AppTheme.success : AppTheme.error,
+                  color: isOk ? HvacColors.success : HvacColors.error,
                 ),
               ),
             ],
@@ -146,23 +145,23 @@ class DiagnosticsTab extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
+        color: HvacColors.backgroundCard,
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: AppTheme.backgroundCardBorder, width: 1),
+        border: Border.all(color: HvacColors.backgroundCardBorder, width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(Icons.sensors, color: AppTheme.info, size: 20.sp),
+              Icon(Icons.sensors, color: HvacColors.info, size: 20.sp),
               SizedBox(width: 12.w),
               Text(
                 'Показания датчиков',
                 style: TextStyle(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.textPrimary,
+                  color: HvacColors.textPrimary,
                 ),
               ),
             ],
@@ -172,22 +171,22 @@ class DiagnosticsTab extends StatelessWidget {
           _buildSensorItem(
             'Температура притока',
             '${unit.supplyAirTemp?.toInt() ?? 0}°C',
-            AppTheme.primaryOrange,
+            HvacColors.primaryOrange,
           ),
           _buildSensorItem(
             'Температура улицы',
             '${unit.outdoorTemp?.toInt() ?? 0}°C',
-            AppTheme.info,
+            HvacColors.info,
           ),
           _buildSensorItem(
             'Влажность',
             '${unit.humidity.toInt()}%',
-            AppTheme.success,
+            HvacColors.success,
           ),
           _buildSensorItem(
             'Давление',
             '1013 Па',
-            AppTheme.warning,
+            HvacColors.warning,
           ),
         ],
       ),
@@ -202,7 +201,7 @@ class DiagnosticsTab extends StatelessWidget {
         children: [
           Text(
             label,
-            style: TextStyle(fontSize: 13.sp, color: AppTheme.textSecondary),
+            style: TextStyle(fontSize: 13.sp, color: HvacColors.textSecondary),
           ),
           Text(
             value,
@@ -221,9 +220,9 @@ class DiagnosticsTab extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
+        color: HvacColors.backgroundCard,
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: AppTheme.backgroundCardBorder, width: 1),
+        border: Border.all(color: HvacColors.backgroundCardBorder, width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -233,8 +232,8 @@ class DiagnosticsTab extends StatelessWidget {
               Icon(
                 unit.wifiStatus?.isConnected == true ? Icons.wifi : Icons.wifi_off,
                 color: unit.wifiStatus?.isConnected == true
-                    ? AppTheme.success
-                    : AppTheme.error,
+                    ? HvacColors.success
+                    : HvacColors.error,
                 size: 20.sp,
               ),
               SizedBox(width: 12.w),
@@ -243,7 +242,7 @@ class DiagnosticsTab extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.textPrimary,
+                  color: HvacColors.textPrimary,
                 ),
               ),
             ],
@@ -267,14 +266,14 @@ class DiagnosticsTab extends StatelessWidget {
         children: [
           Text(
             label,
-            style: TextStyle(fontSize: 13.sp, color: AppTheme.textSecondary),
+            style: TextStyle(fontSize: 13.sp, color: HvacColors.textSecondary),
           ),
           Text(
             value,
             style: TextStyle(
               fontSize: 13.sp,
               fontWeight: FontWeight.w600,
-              color: AppTheme.textPrimary,
+              color: HvacColors.textPrimary,
             ),
           ),
         ],
@@ -286,16 +285,16 @@ class DiagnosticsTab extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: AppTheme.backgroundCard,
+        backgroundColor: HvacColors.backgroundCard,
         title: const Text(
           'Диагностика',
-          style: TextStyle(color: AppTheme.textPrimary),
+          style: TextStyle(color: HvacColors.textPrimary),
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             CircularProgressIndicator(
-              color: AppTheme.primaryOrange,
+              color: HvacColors.primaryOrange,
               strokeWidth: 3.w,
             ),
             SizedBox(height: 16.h),
@@ -303,7 +302,7 @@ class DiagnosticsTab extends StatelessWidget {
               'Выполняется диагностика системы...',
               style: TextStyle(
                 fontSize: 14.sp,
-                color: AppTheme.textSecondary,
+                color: HvacColors.textSecondary,
               ),
             ),
           ],
@@ -318,7 +317,7 @@ class DiagnosticsTab extends StatelessWidget {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Диагностика завершена. Система в норме.'),
-          backgroundColor: AppTheme.success,
+          backgroundColor: HvacColors.success,
           duration: Duration(seconds: 3),
         ),
       );

@@ -5,10 +5,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../core/theme/app_theme.dart';
-import '../../core/theme/spacing.dart';
-import '../../core/theme/app_radius.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../domain/entities/hvac_unit.dart';
 import '../../domain/entities/temperature_reading.dart';
 import '../widgets/temperature_chart.dart';
@@ -107,7 +104,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.backgroundDark,
+      backgroundColor: HvacColors.backgroundDark,
       appBar: AnalyticsAppBar(
         unitName: widget.unit.name,
         selectedPeriod: _selectedPeriod,
@@ -155,31 +152,31 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
       child: SlideTransition(
         position: _slideAnimation,
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(AppSpacing.lgR),
+          padding: const EdgeInsets.all(HvacSpacing.lgR),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const AnalyticsSummaryGrid(),
-              SizedBox(height: AppSpacing.mdR),
+              const SizedBox(height: HvacSpacing.mdR),
               _buildAnimatedChart(
                 index: 0,
                 child: TemperatureChart(
                   readings: _temperatureData,
                   title: 'История температуры',
-                  lineColor: AppTheme.primaryOrange,
+                  lineColor: HvacColors.primaryOrange,
                 ),
               ),
-              SizedBox(height: AppSpacing.lgR),
+              const SizedBox(height: HvacSpacing.lgR),
               _buildAnimatedChart(
                 index: 1,
                 child: HumidityChart(readings: _humidityData),
               ),
-              SizedBox(height: AppSpacing.lgR),
+              const SizedBox(height: HvacSpacing.lgR),
               _buildAnimatedChart(
                 index: 2,
                 child: const EnergyChart(),
               ),
-              SizedBox(height: AppSpacing.lgR),
+              const SizedBox(height: HvacSpacing.lgR),
               _buildAnimatedChart(
                 index: 3,
                 child: const FanSpeedChart(),
@@ -193,23 +190,23 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
 
   Widget _buildLoadingState() {
     return SingleChildScrollView(
-      padding: EdgeInsets.all(AppSpacing.lgR),
+      padding: const EdgeInsets.all(HvacSpacing.lgR),
       child: Column(
         children: [
           _buildLoadingRow(),
-          SizedBox(height: AppSpacing.mdR),
+          const SizedBox(height: HvacSpacing.mdR),
           _buildLoadingRow(),
-          SizedBox(height: AppSpacing.lgR),
+          const SizedBox(height: HvacSpacing.lgR),
           ShimmerBox(
             height: 250.h,
             width: double.infinity,
-            borderRadius: BorderRadius.circular(AppRadius.mdR),
+            borderRadius: BorderRadius.circular(HvacRadius.mdR),
           ),
-          SizedBox(height: AppSpacing.lgR),
+          const SizedBox(height: HvacSpacing.lgR),
           ShimmerBox(
             height: 250.h,
             width: double.infinity,
-            borderRadius: BorderRadius.circular(AppRadius.mdR),
+            borderRadius: BorderRadius.circular(HvacRadius.mdR),
           ),
         ],
       ),
@@ -222,14 +219,14 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
         Expanded(
           child: ShimmerBox(
             height: 100.h,
-            borderRadius: BorderRadius.circular(AppRadius.mdR),
+            borderRadius: BorderRadius.circular(HvacRadius.mdR),
           ),
         ),
-        SizedBox(width: AppSpacing.mdR),
+        const SizedBox(width: HvacSpacing.mdR),
         Expanded(
           child: ShimmerBox(
             height: 100.h,
-            borderRadius: BorderRadius.circular(AppRadius.mdR),
+            borderRadius: BorderRadius.circular(HvacRadius.mdR),
           ),
         ),
       ],

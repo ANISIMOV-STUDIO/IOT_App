@@ -4,8 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
-
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 class DashboardChartCard extends StatelessWidget {
   final String title;
   final String? subtitle;
@@ -26,7 +25,7 @@ class DashboardChartCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(20),
-        decoration: AppTheme.deviceCard(),
+        decoration: HvacTheme.deviceCard(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -49,7 +48,7 @@ class DashboardChartCard extends StatelessWidget {
                         Text(
                           subtitle!,
                           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: AppTheme.textTertiary,
+                                color: HvacColors.textTertiary,
                               ),
                         ),
                       ],
@@ -59,7 +58,7 @@ class DashboardChartCard extends StatelessWidget {
                 if (onTap != null)
                   const Icon(
                     Icons.chevron_right,
-                    color: AppTheme.textTertiary,
+                    color: HvacColors.textTertiary,
                     size: 20,
                   ),
               ],
@@ -85,7 +84,7 @@ class SimpleLineChart extends StatelessWidget {
   const SimpleLineChart({
     super.key,
     required this.data,
-    this.color = AppTheme.primaryOrange,
+    this.color = HvacColors.primaryOrange,
     this.height = 120,
   });
 
@@ -295,7 +294,7 @@ class _PieChartPainter extends CustomPainter {
 
     // Draw center circle for donut effect
     final centerPaint = Paint()
-      ..color = AppTheme.backgroundCard
+      ..color = HvacColors.backgroundCard
       ..style = PaintingStyle.fill;
 
     canvas.drawCircle(center, radius * 0.6, centerPaint);

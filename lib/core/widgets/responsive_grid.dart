@@ -5,10 +5,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../utils/responsive_utils.dart';
-import '../theme/spacing.dart';
-
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 /// Responsive grid widget that adapts column count based on screen size
 class ResponsiveGrid extends StatelessWidget {
   final List<Widget> children;
@@ -42,22 +39,22 @@ class ResponsiveGrid extends StatelessWidget {
         if (width < 600) {
           // Mobile: 1-2 columns
           columns = width < 400 ? 1 : 2;
-          spacing = AppSpacing.md;
+          spacing = HvacSpacing.md;
           aspectRatio = childAspectRatio ?? 1.2;
         } else if (width < 900) {
           // Small tablet: 2 columns
           columns = 2;
-          spacing = AppSpacing.lg;
+          spacing = HvacSpacing.lg;
           aspectRatio = childAspectRatio ?? 1.3;
         } else if (width < 1200) {
           // Large tablet: 3 columns
           columns = 3;
-          spacing = AppSpacing.lg;
+          spacing = HvacSpacing.lg;
           aspectRatio = childAspectRatio ?? 1.3;
         } else {
           // Desktop: 4 columns
           columns = 4;
-          spacing = AppSpacing.xl;
+          spacing = HvacSpacing.xl;
           aspectRatio = childAspectRatio ?? 1.4;
         }
 
@@ -121,8 +118,8 @@ class ResponsiveStaggeredGrid extends StatelessWidget {
 
         final columns = isMobile ? 1 : (isTablet ? 2 : 3);
         final spacing = isMobile
-            ? AppSpacing.md
-            : (isTablet ? AppSpacing.lg : AppSpacing.xl);
+            ? HvacSpacing.md
+            : (isTablet ? HvacSpacing.lg : HvacSpacing.xl);
 
         return SingleChildScrollView(
           physics: physics ?? const BouncingScrollPhysics(),

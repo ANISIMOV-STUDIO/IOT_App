@@ -4,8 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../core/theme/app_theme.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../domain/entities/hvac_unit.dart';
 
 class HomeDeviceSelector extends StatelessWidget {
@@ -53,11 +52,11 @@ class HomeDeviceSelector extends StatelessWidget {
           duration: const Duration(milliseconds: 200),
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
           decoration: BoxDecoration(
-            color: isSelected ? AppTheme.backgroundCard : Colors.transparent,
+            color: isSelected ? HvacColors.backgroundCard : Colors.transparent,
             borderRadius: BorderRadius.circular(8.r),
             border: Border.all(
               color: isSelected
-                  ? AppTheme.backgroundCardBorder
+                  ? HvacColors.backgroundCardBorder
                   : Colors.transparent,
               width: 1,
             ),
@@ -70,7 +69,7 @@ class HomeDeviceSelector extends StatelessWidget {
                 width: 6.w,
                 height: 6.h,
                 decoration: BoxDecoration(
-                  color: isOnline ? AppTheme.success : AppTheme.textTertiary,
+                  color: isOnline ? HvacColors.success : HvacColors.textTertiary,
                   shape: BoxShape.circle,
                 ),
               ),
@@ -80,8 +79,8 @@ class HomeDeviceSelector extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 14.sp,
                   color: isSelected
-                      ? AppTheme.textPrimary
-                      : AppTheme.textSecondary,
+                      ? HvacColors.textPrimary
+                      : HvacColors.textSecondary,
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                 ),
               ),
@@ -101,16 +100,16 @@ class HomeDeviceSelector extends StatelessWidget {
           width: 36.w,
           height: 36.h,
           decoration: BoxDecoration(
-            color: AppTheme.backgroundCard,
+            color: HvacColors.backgroundCard,
             shape: BoxShape.circle,
             border: Border.all(
-              color: AppTheme.backgroundCardBorder,
+              color: HvacColors.backgroundCardBorder,
             ),
           ),
           child: Icon(
             Icons.add,
             size: 20.sp,
-            color: AppTheme.textSecondary,
+            color: HvacColors.textSecondary,
           ),
         ),
       ),

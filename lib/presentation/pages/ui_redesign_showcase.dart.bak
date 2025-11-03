@@ -5,10 +5,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../core/theme/app_theme.dart';
-import '../../core/theme/spacing.dart';
-import '../../core/utils/responsive_utils.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../domain/entities/hvac_unit.dart';
 import '../../domain/entities/ventilation_mode.dart';
 import '../widgets/room_preview_card.dart';
@@ -52,10 +49,10 @@ class _UIRedesignShowcaseState extends State<UIRedesignShowcase> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.backgroundDark,
+      backgroundColor: HvacColors.backgroundDark,
       appBar: AppBar(
         title: const Text('UI Redesign Showcase'),
-        backgroundColor: AppTheme.backgroundCard,
+        backgroundColor: HvacColors.backgroundCard,
         actions: [
           TextButton.icon(
             onPressed: () {
@@ -98,13 +95,13 @@ class _UIRedesignShowcaseState extends State<UIRedesignShowcase> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            AppTheme.primaryOrange.withValues(alpha: 0.1),
-            AppTheme.info.withValues(alpha: 0.05),
+            HvacColors.primaryOrange.withValues(alpha: 0.1),
+            HvacColors.info.withValues(alpha: 0.05),
           ],
         ),
         borderRadius: BorderRadius.circular(12.r),
         border: Border.all(
-          color: AppTheme.primaryOrange.withValues(alpha: 0.3),
+          color: HvacColors.primaryOrange.withValues(alpha: 0.3),
           width: 1,
         ),
       ),
@@ -116,7 +113,7 @@ class _UIRedesignShowcaseState extends State<UIRedesignShowcase> {
             style: TextStyle(
               fontSize: 20.sp,
               fontWeight: FontWeight.bold,
-              color: AppTheme.textPrimary,
+              color: HvacColors.textPrimary,
             ),
           ),
           SizedBox(height: 8.h),
@@ -124,7 +121,7 @@ class _UIRedesignShowcaseState extends State<UIRedesignShowcase> {
             'Addressing user feedback: "Temperature widget and room card look ugly, everything is crooked and not compact"',
             style: TextStyle(
               fontSize: 14.sp,
-              color: AppTheme.textSecondary,
+              color: HvacColors.textSecondary,
             ),
           ),
         ],
@@ -141,7 +138,7 @@ class _UIRedesignShowcaseState extends State<UIRedesignShowcase> {
           style: TextStyle(
             fontSize: 18.sp,
             fontWeight: FontWeight.w600,
-            color: AppTheme.textPrimary,
+            color: HvacColors.textPrimary,
           ),
         ),
         SizedBox(height: 16.h),
@@ -151,7 +148,7 @@ class _UIRedesignShowcaseState extends State<UIRedesignShowcase> {
             'OLD DESIGN (Large, wasted space):',
             style: TextStyle(
               fontSize: 12.sp,
-              color: AppTheme.error,
+              color: HvacColors.error,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -164,7 +161,7 @@ class _UIRedesignShowcaseState extends State<UIRedesignShowcase> {
                 _isActive = value;
               });
             },
-            badges: [
+            badges: const [
               StatusBadge(icon: Icons.thermostat, value: '22°C'),
               StatusBadge(icon: Icons.water_drop, value: '47%'),
               StatusBadge(icon: Icons.speed, value: '70%'),
@@ -175,7 +172,7 @@ class _UIRedesignShowcaseState extends State<UIRedesignShowcase> {
             'NEW DESIGN (Compact, aligned, professional):',
             style: TextStyle(
               fontSize: 12.sp,
-              color: AppTheme.success,
+              color: HvacColors.success,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -216,7 +213,7 @@ class _UIRedesignShowcaseState extends State<UIRedesignShowcase> {
           style: TextStyle(
             fontSize: 18.sp,
             fontWeight: FontWeight.w600,
-            color: AppTheme.textPrimary,
+            color: HvacColors.textPrimary,
           ),
         ),
         SizedBox(height: 16.h),
@@ -226,7 +223,7 @@ class _UIRedesignShowcaseState extends State<UIRedesignShowcase> {
             'OLD DESIGN (Misaligned, inconsistent):',
             style: TextStyle(
               fontSize: 12.sp,
-              color: AppTheme.error,
+              color: HvacColors.error,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -237,7 +234,7 @@ class _UIRedesignShowcaseState extends State<UIRedesignShowcase> {
             'NEW DESIGN (Clean, aligned grid):',
             style: TextStyle(
               fontSize: 12.sp,
-              color: AppTheme.success,
+              color: HvacColors.success,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -274,10 +271,10 @@ class _UIRedesignShowcaseState extends State<UIRedesignShowcase> {
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
+        color: HvacColors.backgroundCard,
         borderRadius: BorderRadius.circular(12.r),
         border: Border.all(
-          color: AppTheme.backgroundCardBorder,
+          color: HvacColors.backgroundCardBorder,
           width: 1,
         ),
       ),
@@ -289,7 +286,7 @@ class _UIRedesignShowcaseState extends State<UIRedesignShowcase> {
             style: TextStyle(
               fontSize: 18.sp,
               fontWeight: FontWeight.w600,
-              color: AppTheme.textPrimary,
+              color: HvacColors.textPrimary,
             ),
           ),
           SizedBox(height: 16.h),
@@ -298,8 +295,8 @@ class _UIRedesignShowcaseState extends State<UIRedesignShowcase> {
               Container(
                 width: 12.w,
                 height: 12.w,
-                decoration: BoxDecoration(
-                  color: AppTheme.success,
+                decoration: const BoxDecoration(
+                  color: HvacColors.success,
                   shape: BoxShape.circle,
                 ),
               ),
@@ -309,7 +306,7 @@ class _UIRedesignShowcaseState extends State<UIRedesignShowcase> {
                 style: TextStyle(
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w500,
-                  color: AppTheme.textPrimary,
+                  color: HvacColors.textPrimary,
                 ),
               ),
             ],
@@ -336,21 +333,21 @@ class _UIRedesignShowcaseState extends State<UIRedesignShowcase> {
               style: TextStyle(
                 fontSize: 12.sp,
                 fontWeight: FontWeight.w500,
-                color: AppTheme.textPrimary,
+                color: HvacColors.textPrimary,
               ),
             ),
           ),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
             decoration: BoxDecoration(
-              color: AppTheme.info.withValues(alpha: 0.1),
+              color: HvacColors.info.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(4.r),
             ),
             child: Text(
               range,
               style: TextStyle(
                 fontSize: 11.sp,
-                color: AppTheme.info,
+                color: HvacColors.info,
                 fontFamily: 'monospace',
               ),
             ),
@@ -361,7 +358,7 @@ class _UIRedesignShowcaseState extends State<UIRedesignShowcase> {
               layout,
               style: TextStyle(
                 fontSize: 11.sp,
-                color: AppTheme.textSecondary,
+                color: HvacColors.textSecondary,
               ),
             ),
           ),
@@ -376,13 +373,13 @@ class _UIRedesignShowcaseState extends State<UIRedesignShowcase> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            AppTheme.success.withValues(alpha: 0.05),
-            AppTheme.success.withValues(alpha: 0.02),
+            HvacColors.success.withValues(alpha: 0.05),
+            HvacColors.success.withValues(alpha: 0.02),
           ],
         ),
         borderRadius: BorderRadius.circular(12.r),
         border: Border.all(
-          color: AppTheme.success.withValues(alpha: 0.3),
+          color: HvacColors.success.withValues(alpha: 0.3),
           width: 1,
         ),
       ),
@@ -394,7 +391,7 @@ class _UIRedesignShowcaseState extends State<UIRedesignShowcase> {
             style: TextStyle(
               fontSize: 18.sp,
               fontWeight: FontWeight.w600,
-              color: AppTheme.textPrimary,
+              color: HvacColors.textPrimary,
             ),
           ),
           SizedBox(height: 16.h),
@@ -419,13 +416,13 @@ class _UIRedesignShowcaseState extends State<UIRedesignShowcase> {
             label,
             style: TextStyle(
               fontSize: 13.sp,
-              color: AppTheme.textSecondary,
+              color: HvacColors.textSecondary,
             ),
           ),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
             decoration: BoxDecoration(
-              color: AppTheme.success.withValues(alpha: 0.1),
+              color: HvacColors.success.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(6.r),
             ),
             child: Text(
@@ -433,7 +430,7 @@ class _UIRedesignShowcaseState extends State<UIRedesignShowcase> {
               style: TextStyle(
                 fontSize: 12.sp,
                 fontWeight: FontWeight.w600,
-                color: AppTheme.success,
+                color: HvacColors.success,
               ),
             ),
           ),
@@ -446,10 +443,10 @@ class _UIRedesignShowcaseState extends State<UIRedesignShowcase> {
     return Container(
       padding: EdgeInsets.all(12.w),
       decoration: BoxDecoration(
-        color: AppTheme.success.withValues(alpha: 0.05),
+        color: HvacColors.success.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(8.r),
         border: Border.all(
-          color: AppTheme.success.withValues(alpha: 0.2),
+          color: HvacColors.success.withValues(alpha: 0.2),
           width: 1,
         ),
       ),
@@ -462,7 +459,7 @@ class _UIRedesignShowcaseState extends State<UIRedesignShowcase> {
               improvement,
               style: TextStyle(
                 fontSize: 12.sp,
-                color: AppTheme.textPrimary,
+                color: HvacColors.textPrimary,
               ),
             ),
           ),

@@ -5,8 +5,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../core/theme/app_theme.dart';
-
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 class OutlineButton extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
@@ -31,8 +30,8 @@ class OutlineButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveBorderColor = borderColor ?? AppTheme.primaryOrange;
-    final effectiveTextColor = textColor ?? AppTheme.primaryOrange;
+    final effectiveBorderColor = borderColor ?? HvacColors.primaryOrange;
+    final effectiveTextColor = textColor ?? HvacColors.primaryOrange;
 
     return SizedBox(
       width: width,

@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
 import '../../core/constants/security_constants.dart';
-import '../../core/theme/app_theme.dart';
 import '../../core/utils/validators.dart';
 import '../../generated/l10n/app_localizations.dart';
 import '../bloc/auth/secure_auth_bloc.dart';
@@ -177,7 +177,7 @@ class _SecureLoginScreenState extends State<SecureLoginScreen>
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: AppTheme.error,
+        backgroundColor: HvacColors.error,
         behavior: SnackBarBehavior.floating,
       ),
     );
@@ -313,13 +313,13 @@ class _SecureLoginScreenState extends State<SecureLoginScreen>
         shape: BoxShape.circle,
         gradient: const LinearGradient(
           colors: [
-            AppTheme.primaryOrange,
-            AppTheme.primaryOrangeLight,
+            HvacColors.primaryOrange,
+            HvacColors.primaryOrangeLight,
           ],
         ),
         boxShadow: [
           BoxShadow(
-            color: AppTheme.primaryOrange.withValues(alpha: 0.3),
+            color: HvacColors.primaryOrange.withValues(alpha: 0.3),
             blurRadius: 20,
             spreadRadius: 5,
           ),
@@ -347,7 +347,7 @@ class _SecureLoginScreenState extends State<SecureLoginScreen>
               ? 'Sign in to your account'
               : 'Sign up for a new account',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppTheme.textSecondary,
+                color: HvacColors.textSecondary,
               ),
           textAlign: TextAlign.center,
         ),
@@ -475,7 +475,7 @@ class _SecureLoginScreenState extends State<SecureLoginScreen>
         Text(
           'Use uppercase, lowercase, numbers, and special characters',
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: AppTheme.textSecondary,
+                color: HvacColors.textSecondary,
               ),
         ),
       ],
@@ -489,7 +489,7 @@ class _SecureLoginScreenState extends State<SecureLoginScreen>
           Checkbox(
             value: _rememberMe,
             onChanged: (value) => setState(() => _rememberMe = value ?? false),
-            activeColor: AppTheme.primaryOrange,
+            activeColor: HvacColors.primaryOrange,
           ),
           const Text('Remember me'),
         ],
@@ -500,7 +500,7 @@ class _SecureLoginScreenState extends State<SecureLoginScreen>
           Checkbox(
             value: _acceptTerms,
             onChanged: (value) => setState(() => _acceptTerms = value ?? false),
-            activeColor: AppTheme.primaryOrange,
+            activeColor: HvacColors.primaryOrange,
           ),
           Expanded(
             child: GestureDetector(
@@ -513,7 +513,7 @@ class _SecureLoginScreenState extends State<SecureLoginScreen>
                     TextSpan(
                       text: 'Terms and Conditions',
                       style: TextStyle(
-                        color: AppTheme.primaryOrange,
+                        color: HvacColors.primaryOrange,
                         decoration: TextDecoration.underline,
                       ),
                     ),
@@ -560,7 +560,7 @@ class _SecureLoginScreenState extends State<SecureLoginScreen>
           padding: EdgeInsets.symmetric(horizontal: 16),
           child: Text(
             'OR',
-            style: TextStyle(color: AppTheme.textSecondary),
+            style: TextStyle(color: HvacColors.textSecondary),
           ),
         ),
         Expanded(child: Divider()),
@@ -574,7 +574,7 @@ class _SecureLoginScreenState extends State<SecureLoginScreen>
       icon: const Icon(Icons.person_outline),
       label: const Text('Continue as Guest'),
       style: TextButton.styleFrom(
-        foregroundColor: AppTheme.textSecondary,
+        foregroundColor: HvacColors.textSecondary,
       ),
     );
   }
@@ -585,13 +585,13 @@ class _SecureLoginScreenState extends State<SecureLoginScreen>
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Password reset feature coming soon'),
-            backgroundColor: AppTheme.info,
+            backgroundColor: HvacColors.info,
           ),
         );
       },
       child: const Text(
         'Forgot Password?',
-        style: TextStyle(color: AppTheme.primaryOrange),
+        style: TextStyle(color: HvacColors.primaryOrange),
       ),
     );
   }

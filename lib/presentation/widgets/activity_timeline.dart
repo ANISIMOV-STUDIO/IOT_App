@@ -4,8 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
-
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 class ActivityTimeline extends StatelessWidget {
   final List<ActivityItem> activities;
   final VoidCallback? onSeeAll;
@@ -21,10 +20,10 @@ class ActivityTimeline extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
+        color: HvacColors.backgroundCard,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: AppTheme.backgroundCardBorder,
+          color: HvacColors.backgroundCardBorder,
         ),
       ),
       child: Column(
@@ -49,7 +48,7 @@ class ActivityTimeline extends StatelessWidget {
                     'December 12, 2024',
                     style: TextStyle(
                       fontSize: 12,
-                      color: AppTheme.textSecondary,
+                      color: HvacColors.textSecondary,
                     ),
                   ),
                 ],
@@ -69,14 +68,14 @@ class ActivityTimeline extends StatelessWidget {
                         'See All',
                         style: TextStyle(
                           fontSize: 12,
-                          color: AppTheme.textSecondary,
+                          color: HvacColors.textSecondary,
                         ),
                       ),
                       SizedBox(width: 4),
                       Icon(
                         Icons.arrow_forward,
                         size: 14,
-                        color: AppTheme.textSecondary,
+                        color: HvacColors.textSecondary,
                       ),
                     ],
                   ),
@@ -116,7 +115,7 @@ class ActivityTimeline extends StatelessWidget {
                   'AM',
                   style: TextStyle(
                     fontSize: 12,
-                    color: AppTheme.textSecondary,
+                    color: HvacColors.textSecondary,
                   ),
                 ),
               ],
@@ -130,7 +129,7 @@ class ActivityTimeline extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: AppTheme.backgroundDark,
+                color: HvacColors.backgroundDark,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Column(
@@ -148,7 +147,7 @@ class ActivityTimeline extends StatelessWidget {
                     activity.description,
                     style: const TextStyle(
                       fontSize: 12,
-                      color: AppTheme.textSecondary,
+                      color: HvacColors.textSecondary,
                     ),
                   ),
                 ],

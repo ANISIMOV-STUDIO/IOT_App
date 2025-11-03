@@ -4,10 +4,8 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import '../../core/theme/app_theme.dart';
-import '../../core/utils/responsive_utils.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -26,12 +24,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.backgroundDark,
+      backgroundColor: HvacColors.backgroundDark,
       appBar: AppBar(
-        backgroundColor: AppTheme.backgroundCard,
+        backgroundColor: HvacColors.backgroundCard,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: AppTheme.textPrimary, size: 24.sp),
+          icon: Icon(Icons.arrow_back, color: HvacColors.textPrimary, size: 24.sp),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -39,7 +37,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           style: TextStyle(
             fontSize: 20.sp,
             fontWeight: FontWeight.w600,
-            color: AppTheme.textPrimary,
+            color: HvacColors.textPrimary,
           ),
         ),
       ),
@@ -195,7 +193,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               _showSnackBar('Проверка обновлений...');
             },
             style: OutlinedButton.styleFrom(
-              side: const BorderSide(color: AppTheme.primaryOrange),
+              side: const BorderSide(color: HvacColors.primaryOrange),
               padding: EdgeInsets.symmetric(vertical: 12.h),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12.r),
@@ -204,7 +202,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             child: Text(
               'Проверить обновления',
               style: TextStyle(
-                color: AppTheme.primaryOrange,
+                color: HvacColors.primaryOrange,
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w600,
               ),
@@ -223,10 +221,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Container(
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
+        color: HvacColors.backgroundCard,
         borderRadius: BorderRadius.circular(16.r),
         border: Border.all(
-          color: AppTheme.backgroundCardBorder,
+          color: HvacColors.backgroundCardBorder,
           width: 1,
         ),
       ),
@@ -235,14 +233,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
         children: [
           Row(
             children: [
-              Icon(icon, color: AppTheme.primaryOrange, size: 24.sp),
+              Icon(icon, color: HvacColors.primaryOrange, size: 24.sp),
               SizedBox(width: 12.w),
               Text(
                 title,
                 style: TextStyle(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.textPrimary,
+                  color: HvacColors.textPrimary,
                 ),
               ),
             ],
@@ -271,7 +269,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 style: TextStyle(
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.textPrimary,
+                  color: HvacColors.textPrimary,
                 ),
               ),
               SizedBox(height: 4.h),
@@ -279,7 +277,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 subtitle,
                 style: TextStyle(
                   fontSize: 12.sp,
-                  color: AppTheme.textSecondary,
+                  color: HvacColors.textSecondary,
                 ),
               ),
             ],
@@ -288,10 +286,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
         Switch(
           value: value,
           onChanged: onChanged,
-          activeThumbColor: AppTheme.primaryOrange,
-          activeTrackColor: AppTheme.primaryOrange.withValues(alpha: 0.5),
-          inactiveThumbColor: AppTheme.textSecondary,
-          inactiveTrackColor: AppTheme.backgroundCardBorder,
+          activeThumbColor: HvacColors.primaryOrange,
+          activeTrackColor: HvacColors.primaryOrange.withValues(alpha: 0.5),
+          inactiveThumbColor: HvacColors.textSecondary,
+          inactiveTrackColor: HvacColors.backgroundCardBorder,
         ),
       ],
     );
@@ -311,13 +309,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
           decoration: BoxDecoration(
             color: isSelected
-                ? AppTheme.primaryOrange.withValues(alpha: 0.1)
-                : AppTheme.backgroundDark,
+                ? HvacColors.primaryOrange.withValues(alpha: 0.1)
+                : HvacColors.backgroundDark,
             borderRadius: BorderRadius.circular(12.r),
             border: Border.all(
               color: isSelected
-                  ? AppTheme.primaryOrange
-                  : AppTheme.backgroundCardBorder,
+                  ? HvacColors.primaryOrange
+                  : HvacColors.backgroundCardBorder,
               width: 1,
             ),
           ),
@@ -325,7 +323,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             children: [
               Icon(
                 isSelected ? Icons.radio_button_checked : Icons.radio_button_unchecked,
-                color: isSelected ? AppTheme.primaryOrange : AppTheme.textSecondary,
+                color: isSelected ? HvacColors.primaryOrange : HvacColors.textSecondary,
                 size: 20.sp,
               ),
               SizedBox(width: 12.w),
@@ -334,7 +332,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 style: TextStyle(
                   fontSize: 14.sp,
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                  color: isSelected ? AppTheme.primaryOrange : AppTheme.textPrimary,
+                  color: isSelected ? HvacColors.primaryOrange : HvacColors.textPrimary,
                 ),
               ),
             ],
@@ -352,7 +350,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           label,
           style: TextStyle(
             fontSize: 14.sp,
-            color: AppTheme.textSecondary,
+            color: HvacColors.textSecondary,
           ),
         ),
         Text(
@@ -360,7 +358,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           style: TextStyle(
             fontSize: 14.sp,
             fontWeight: FontWeight.w600,
-            color: AppTheme.textPrimary,
+            color: HvacColors.textPrimary,
           ),
         ),
       ],
@@ -371,7 +369,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: AppTheme.success,
+        backgroundColor: HvacColors.success,
         duration: const Duration(seconds: 2),
         behavior: SnackBarBehavior.floating,
         margin: EdgeInsets.all(16.w),

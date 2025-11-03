@@ -7,13 +7,12 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../generated/l10n/app_localizations.dart';
 import '../bloc/hvac_list/hvac_list_bloc.dart';
 import '../bloc/hvac_list/hvac_list_event.dart';
 import '../widgets/gradient_button.dart';
 import '../widgets/orange_button.dart';
-import '../../core/theme/app_theme.dart';
-
 class QrScannerScreen extends StatefulWidget {
   const QrScannerScreen({super.key});
 
@@ -227,14 +226,14 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
             child: Container(
               constraints: const BoxConstraints(maxWidth: 600),
               padding: const EdgeInsets.all(32),
-              decoration: AppTheme.deviceCard(),
+              decoration: HvacTheme.deviceCard(),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Icon(
                     Icons.devices_other,
                     size: 64,
-                    color: AppTheme.primaryOrange,
+                    color: HvacColors.primaryOrange,
                   ),
                   const SizedBox(height: 24),
                   Text(

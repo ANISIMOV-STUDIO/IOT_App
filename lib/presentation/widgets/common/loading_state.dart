@@ -3,10 +3,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/spacing.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
 class LoadingState extends StatelessWidget {
   final String? message;
@@ -28,12 +25,12 @@ class LoadingState extends StatelessWidget {
           width: 48.w,
           height: 48.h,
           child: const CircularProgressIndicator(
-            color: AppTheme.primaryOrange,
+            color: HvacColors.primaryOrange,
             strokeWidth: 3,
           ),
         ),
         if (message != null) ...[
-          const SizedBox(height: AppSpacing.lg),
+          const SizedBox(height: HvacSpacing.lg),
           Text(
             message!,
             style: Theme.of(context).textTheme.bodyMedium,
@@ -48,7 +45,7 @@ class LoadingState extends StatelessWidget {
     }
 
     return Scaffold(
-      backgroundColor: AppTheme.backgroundDark,
+      backgroundColor: HvacColors.backgroundDark,
       body: Center(child: content),
     );
   }
@@ -73,7 +70,7 @@ class LoadingOverlay extends StatelessWidget {
         child,
         if (isLoading)
           Container(
-            color: AppTheme.backgroundDark.withValues(alpha: 0.8),
+            color: HvacColors.backgroundDark.withValues(alpha: 0.8),
             child: Center(
               child: LoadingState(
                 message: message,

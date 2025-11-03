@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../core/utils/responsive_utils.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
 /// Accessible button with minimum touch target and semantic support
 class AccessibleButton extends StatelessWidget {
@@ -221,7 +220,7 @@ class AccessibleButton extends StatelessWidget {
         size: ResponsiveUtils.scaledIconSize(context, 20),
       );
 
-      const spacing = SizedBox(width: AppSpacing.xs);
+      const spacing = SizedBox(width: HvacSpacing.xs);
 
       return Row(
         mainAxisSize: MainAxisSize.min,
@@ -254,14 +253,14 @@ class AccessibleButton extends StatelessWidget {
       padding: WidgetStateProperty.all(
         padding ??
             EdgeInsets.symmetric(
-              horizontal: ResponsiveUtils.scaledSpacing(context, AppSpacing.md),
-              vertical: ResponsiveUtils.scaledSpacing(context, AppSpacing.sm),
+              horizontal: ResponsiveUtils.scaledSpacing(context, HvacSpacing.md),
+              vertical: ResponsiveUtils.scaledSpacing(context, HvacSpacing.sm),
             ),
       ),
       shape: WidgetStateProperty.all(
         RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(
-            ResponsiveUtils.scaledBorderRadius(context, AppSpacing.md),
+            ResponsiveUtils.scaledBorderRadius(context, HvacSpacing.md),
           ),
         ),
       ),

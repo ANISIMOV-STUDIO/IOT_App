@@ -5,11 +5,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../core/theme/app_radius.dart';
-
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 class AnalyticsSummaryCard extends StatelessWidget {
   final int index;
   final String label;
@@ -46,12 +42,12 @@ class AnalyticsSummaryCard extends StatelessWidget {
         );
       },
       child: Container(
-        padding: EdgeInsets.all(AppSpacing.mdR),
+        padding: const EdgeInsets.all(HvacSpacing.mdR),
         decoration: BoxDecoration(
-          color: AppTheme.backgroundCard,
-          borderRadius: BorderRadius.circular(AppRadius.mdR),
+          color: HvacColors.backgroundCard,
+          borderRadius: BorderRadius.circular(HvacRadius.mdR),
           border: Border.all(
-            color: AppTheme.backgroundCardBorder,
+            color: HvacColors.backgroundCardBorder,
             width: 1,
           ),
         ),
@@ -61,13 +57,13 @@ class AnalyticsSummaryCard extends StatelessWidget {
             Row(
               children: [
                 Icon(icon, color: color, size: 18.sp),
-                SizedBox(width: AppSpacing.xsR),
+                const SizedBox(width: HvacSpacing.xsR),
                 Expanded(
                   child: Text(
                     label,
                     style: TextStyle(
                       fontSize: 11.sp,
-                      color: AppTheme.textSecondary,
+                      color: HvacColors.textSecondary,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -75,7 +71,7 @@ class AnalyticsSummaryCard extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: AppSpacing.xsR),
+            const SizedBox(height: HvacSpacing.xsR),
             Text(
               value,
               style: TextStyle(
@@ -84,21 +80,21 @@ class AnalyticsSummaryCard extends StatelessWidget {
                 color: color,
               ),
             ),
-            SizedBox(height: AppSpacing.xxsR),
+            const SizedBox(height: HvacSpacing.xxsR),
             Row(
               children: [
                 Icon(
                   isPositive ? Icons.arrow_upward : Icons.arrow_downward,
                   size: 12.sp,
-                  color: isPositive ? AppTheme.success : AppTheme.error,
+                  color: isPositive ? HvacColors.success : HvacColors.error,
                 ),
-                SizedBox(width: AppSpacing.xxsR),
+                const SizedBox(width: HvacSpacing.xxsR),
                 Text(
                   change,
                   style: TextStyle(
                     fontSize: 11.sp,
                     fontWeight: FontWeight.w600,
-                    color: isPositive ? AppTheme.success : AppTheme.error,
+                    color: isPositive ? HvacColors.success : HvacColors.error,
                   ),
                 ),
               ],

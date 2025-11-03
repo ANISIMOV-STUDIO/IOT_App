@@ -5,10 +5,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/spacing.dart';
-
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 class AnalyticsAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String unitName;
   final String selectedPeriod;
@@ -29,12 +26,12 @@ class AnalyticsAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: AppTheme.backgroundCard,
+      backgroundColor: HvacColors.backgroundCard,
       elevation: 0,
       leading: IconButton(
         icon: Icon(
           Icons.arrow_back,
-          color: AppTheme.textPrimary,
+          color: HvacColors.textPrimary,
           size: 24.sp,
         ),
         onPressed: onBack,
@@ -47,14 +44,14 @@ class AnalyticsAppBar extends StatelessWidget implements PreferredSizeWidget {
             style: TextStyle(
               fontSize: 18.sp,
               fontWeight: FontWeight.w600,
-              color: AppTheme.textPrimary,
+              color: HvacColors.textPrimary,
             ),
           ),
           Text(
             unitName,
             style: TextStyle(
               fontSize: 12.sp,
-              color: AppTheme.textSecondary,
+              color: HvacColors.textSecondary,
               fontWeight: FontWeight.w400,
             ),
           ),
@@ -66,13 +63,13 @@ class AnalyticsAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   Widget _buildPeriodDropdown() {
     return Padding(
-      padding: EdgeInsets.only(right: AppSpacing.mdR),
+      padding: const EdgeInsets.only(right: HvacSpacing.mdR),
       child: DropdownButton<String>(
         value: selectedPeriod,
-        dropdownColor: AppTheme.backgroundCard,
+        dropdownColor: HvacColors.backgroundCard,
         underline: const SizedBox(),
         style: TextStyle(
-          color: AppTheme.primaryOrange,
+          color: HvacColors.primaryOrange,
           fontSize: 14.sp,
           fontWeight: FontWeight.w600,
         ),

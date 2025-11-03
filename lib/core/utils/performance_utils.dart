@@ -13,7 +13,6 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/rendering.dart';
 
 /// Performance utilities for 60 FPS optimization
 class PerformanceUtils {
@@ -267,6 +266,7 @@ class PerformanceUtils {
   ) {
     if (updates.isEmpty) return;
 
+    // ignore: invalid_use_of_protected_member
     state.setState(() {
       for (final update in updates) {
         update();
@@ -407,14 +407,10 @@ class _RebuildOptimizerState<T> extends State<RebuildOptimizer<T>> {
 /// Smooth scrolling controller with performance optimizations
 class SmoothScrollController extends ScrollController {
   SmoothScrollController({
-    double initialScrollOffset = 0.0,
-    bool keepScrollOffset = true,
-    String? debugLabel,
-  }) : super(
-          initialScrollOffset: initialScrollOffset,
-          keepScrollOffset: keepScrollOffset,
-          debugLabel: debugLabel,
-        );
+    super.initialScrollOffset,
+    super.keepScrollOffset,
+    super.debugLabel,
+  });
 
   /// Animate to position with smooth spring physics
   Future<void> animateToSmooth(

@@ -4,8 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
-import '../../core/theme/glassmorphism.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../domain/entities/hvac_unit.dart';
 
 class GroupControlPanel extends StatelessWidget {
@@ -42,12 +41,12 @@ class GroupControlPanel extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: AppTheme.accent.withValues(alpha: 0.2),
+                  color: HvacColors.accent.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Icon(
                   Icons.group_work,
-                  color: AppTheme.accent, // Gold accent for header icon
+                  color: HvacColors.accent, // Gold accent for header icon
                   size: 20,
                 ),
               ),
@@ -61,7 +60,7 @@ class GroupControlPanel extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
-                        color: AppTheme.textPrimary,
+                        color: HvacColors.textPrimary,
                       ),
                     ),
                     const SizedBox(height: 2),
@@ -69,7 +68,7 @@ class GroupControlPanel extends StatelessWidget {
                       'Активно: $activeUnits из $totalUnits',
                       style: const TextStyle(
                         fontSize: 12,
-                        color: AppTheme.textSecondary,
+                        color: HvacColors.textSecondary,
                       ),
                     ),
                   ],
@@ -87,7 +86,7 @@ class GroupControlPanel extends StatelessWidget {
                 child: _buildActionButton(
                   'Включить все',
                   Icons.power_settings_new,
-                  AppTheme.success,
+                  HvacColors.success,
                   onPowerAllOn,
                 ),
               ),
@@ -96,7 +95,7 @@ class GroupControlPanel extends StatelessWidget {
                 child: _buildActionButton(
                   'Выключить все',
                   Icons.power_off,
-                  AppTheme.error,
+                  HvacColors.error,
                   onPowerAllOff,
                 ),
               ),
@@ -112,7 +111,7 @@ class GroupControlPanel extends StatelessWidget {
                 child: _buildActionButton(
                   'Синхр. настройки',
                   Icons.sync,
-                  AppTheme.glassWhite, // White shimmer instead of blue
+                  HvacColors.glassWhite, // White shimmer instead of blue
                   onSyncSettings,
                 ),
               ),
@@ -121,7 +120,7 @@ class GroupControlPanel extends StatelessWidget {
                 child: _buildActionButton(
                   'Общее расписание',
                   Icons.schedule,
-                  AppTheme.warning,
+                  HvacColors.warning,
                   onApplyScheduleToAll,
                 ),
               ),
@@ -136,7 +135,7 @@ class GroupControlPanel extends StatelessWidget {
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w600,
-              color: AppTheme.textSecondary,
+              color: HvacColors.textSecondary,
             ),
           ),
           const SizedBox(height: 8),
@@ -162,11 +161,11 @@ class GroupControlPanel extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
           decoration: BoxDecoration(
             // Background: always dark gray, never colored
-            color: AppTheme.backgroundDark,
+            color: HvacColors.backgroundDark,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
               // Border: always neutral gray, never colored
-              color: AppTheme.backgroundCardBorder,
+              color: HvacColors.backgroundCardBorder,
               width: 1,
             ),
           ),
@@ -182,7 +181,7 @@ class GroupControlPanel extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
-                    color: AppTheme.textPrimary, // Text always white
+                    color: HvacColors.textPrimary, // Text always white
                   ),
                   textAlign: TextAlign.center,
                   maxLines: 1,
@@ -205,7 +204,7 @@ class GroupControlPanel extends StatelessWidget {
             width: 8,
             height: 8,
             decoration: BoxDecoration(
-              color: unit.power ? AppTheme.success : AppTheme.textTertiary,
+              color: unit.power ? HvacColors.success : HvacColors.textTertiary,
               shape: BoxShape.circle,
             ),
           ),
@@ -215,7 +214,7 @@ class GroupControlPanel extends StatelessWidget {
               unit.name,
               style: const TextStyle(
                 fontSize: 12,
-                color: AppTheme.textPrimary,
+                color: HvacColors.textPrimary,
               ),
             ),
           ),
@@ -224,7 +223,7 @@ class GroupControlPanel extends StatelessWidget {
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w600,
-              color: unit.power ? AppTheme.success : AppTheme.textSecondary,
+              color: unit.power ? HvacColors.success : HvacColors.textSecondary,
             ),
           ),
         ],

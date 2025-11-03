@@ -5,7 +5,7 @@ library;
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../domain/entities/temperature_reading.dart';
 
 class TemperatureChart extends StatelessWidget {
@@ -17,7 +17,7 @@ class TemperatureChart extends StatelessWidget {
     super.key,
     required this.readings,
     required this.title,
-    this.lineColor = AppTheme.primaryOrange,
+    this.lineColor = HvacColors.primaryOrange,
   });
 
   @override
@@ -27,10 +27,10 @@ class TemperatureChart extends StatelessWidget {
         height: 250,
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: AppTheme.backgroundCard,
+          color: HvacColors.backgroundCard,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: AppTheme.backgroundCardBorder,
+            color: HvacColors.backgroundCardBorder,
             width: 1,
           ),
         ),
@@ -38,7 +38,7 @@ class TemperatureChart extends StatelessWidget {
           child: Text(
             'Нет данных для отображения',
             style: TextStyle(
-              color: AppTheme.textSecondary,
+              color: HvacColors.textSecondary,
               fontSize: 14,
             ),
           ),
@@ -49,10 +49,10 @@ class TemperatureChart extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
+        color: HvacColors.backgroundCard,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: AppTheme.backgroundCardBorder,
+          color: HvacColors.backgroundCardBorder,
           width: 1,
         ),
       ),
@@ -64,7 +64,7 @@ class TemperatureChart extends StatelessWidget {
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
-              color: AppTheme.textPrimary,
+              color: HvacColors.textPrimary,
             ),
           ),
           const SizedBox(height: 20),
@@ -78,7 +78,7 @@ class TemperatureChart extends StatelessWidget {
                   horizontalInterval: 5,
                   getDrawingHorizontalLine: (value) {
                     return const FlLine(
-                      color: AppTheme.backgroundCardBorder,
+                      color: HvacColors.backgroundCardBorder,
                       strokeWidth: 1,
                     );
                   },
@@ -106,7 +106,7 @@ class TemperatureChart extends StatelessWidget {
                           child: Text(
                             '${reading.timestamp.hour}:${reading.timestamp.minute.toString().padLeft(2, '0')}',
                             style: const TextStyle(
-                              color: AppTheme.textSecondary,
+                              color: HvacColors.textSecondary,
                               fontSize: 10,
                             ),
                           ),
@@ -123,7 +123,7 @@ class TemperatureChart extends StatelessWidget {
                         return Text(
                           '${value.toInt()}°C',
                           style: const TextStyle(
-                            color: AppTheme.textSecondary,
+                            color: HvacColors.textSecondary,
                             fontSize: 10,
                           ),
                         );
@@ -134,7 +134,7 @@ class TemperatureChart extends StatelessWidget {
                 borderData: FlBorderData(
                   show: true,
                   border: Border.all(
-                    color: AppTheme.backgroundCardBorder,
+                    color: HvacColors.backgroundCardBorder,
                     width: 1,
                   ),
                 ),

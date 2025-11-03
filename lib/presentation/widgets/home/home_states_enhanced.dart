@@ -5,12 +5,10 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/spacing.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../core/utils/accessibility_utils.dart';
 import '../../../core/utils/responsive_builder.dart';
 import '../../../generated/l10n/app_localizations.dart';
@@ -32,17 +30,17 @@ class EnhancedHomeLoadingState extends StatelessWidget {
     return ResponsiveBuilder(
       builder: (context, info) {
         return Padding(
-          padding: EdgeInsets.all(AppSpacing.lg.w),
+          padding: EdgeInsets.all(HvacSpacing.lg.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Header skeleton
               _buildHeaderSkeleton(context),
-              SizedBox(height: AppSpacing.xl.h),
+              SizedBox(height: HvacSpacing.xl.h),
 
               // Room cards skeleton
               _buildRoomCardsSkeleton(context, info),
-              SizedBox(height: AppSpacing.lg.h),
+              SizedBox(height: HvacSpacing.lg.h),
 
               // Quick controls skeleton
               _buildQuickControlsSkeleton(context),
@@ -74,16 +72,16 @@ class EnhancedHomeLoadingState extends StatelessWidget {
             height: 20.h,
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(AppSpacing.xs.r),
+              borderRadius: BorderRadius.circular(HvacSpacing.xs.r),
             ),
           ),
-          SizedBox(height: AppSpacing.xs.h),
+          SizedBox(height: HvacSpacing.xs.h),
           Container(
             width: 200.w,
             height: 32.h,
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(AppSpacing.xs.r),
+              borderRadius: BorderRadius.circular(HvacSpacing.xs.r),
             ),
           ),
         ],
@@ -101,7 +99,7 @@ class EnhancedHomeLoadingState extends StatelessWidget {
         itemCount: cardCount,
         itemBuilder: (context, index) {
           return Padding(
-            padding: EdgeInsets.only(right: AppSpacing.md.w),
+            padding: EdgeInsets.only(right: HvacSpacing.md.w),
             child: Shimmer.fromColors(
               baseColor: Colors.grey.shade800,
               highlightColor: Colors.grey.shade700,
@@ -109,7 +107,7 @@ class EnhancedHomeLoadingState extends StatelessWidget {
                 width: 150.w,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(AppSpacing.md.r),
+                  borderRadius: BorderRadius.circular(HvacSpacing.md.r),
                 ),
               ),
             ),
@@ -241,7 +239,7 @@ class AccessibleRefreshButton extends StatelessWidget {
       tooltip: 'Refresh Devices',  // TODO: Add to localization
       loading: isLoading,
       size: 24.sp,
-      color: AppTheme.primaryOrange,
+      color: HvacColors.primaryOrange,
       minTouchTarget: 48.0,
     );
   }

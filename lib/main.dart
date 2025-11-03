@@ -6,11 +6,10 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import 'generated/l10n/app_localizations.dart';
 import 'core/di/injection_container.dart' as di;
-import 'core/theme/app_theme.dart';
 import 'core/services/theme_service.dart';
 import 'core/services/language_service.dart';
 import 'presentation/bloc/hvac_list/hvac_list_bloc.dart';
@@ -71,8 +70,8 @@ class HvacControlApp extends StatelessWidget {
                   debugShowCheckedModeBanner: false,
 
                   // Theme - Dark with Orange Accents (Figma Design)
-                  theme: AppTheme.darkTheme(),
-                  darkTheme: AppTheme.darkTheme(),
+                  theme: HvacTheme.darkTheme(),
+                  darkTheme: HvacTheme.darkTheme(),
                   themeMode: ThemeMode.dark, // Always use dark theme
 
                   // Localization
@@ -112,10 +111,10 @@ class HvacControlApp extends StatelessWidget {
                   } else {
                     // Loading or initial state
                     return const Scaffold(
-                      backgroundColor: AppTheme.backgroundDark,
+                      backgroundColor: HvacColors.backgroundDark,
                       body: Center(
                         child: CircularProgressIndicator(
-                          color: AppTheme.primaryOrange,
+                          color: HvacColors.primaryOrange,
                         ),
                       ),
                     );

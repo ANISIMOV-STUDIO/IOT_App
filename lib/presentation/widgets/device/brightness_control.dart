@@ -4,11 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../core/theme/app_radius.dart';
-
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 class BrightnessControl extends StatelessWidget {
   final double value;
   final ValueChanged<double>? onChanged;
@@ -27,26 +23,26 @@ class BrightnessControl extends StatelessWidget {
           width: 40.w,
           height: 40.h,
           decoration: BoxDecoration(
-            color: AppTheme.backgroundDark,
-            borderRadius: BorderRadius.circular(AppRadius.mdR),
+            color: HvacColors.backgroundDark,
+            borderRadius: BorderRadius.circular(HvacRadius.mdR),
           ),
           child: Icon(
             Icons.lightbulb_outline,
             size: 20.sp,
-            color: AppTheme.textSecondary,
+            color: HvacColors.textSecondary,
           ),
         ),
         Expanded(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: AppSpacing.mdR),
+            padding: const EdgeInsets.symmetric(horizontal: HvacSpacing.mdR),
             child: SliderTheme(
               data: SliderTheme.of(context).copyWith(
                 trackHeight: 8.h,
                 thumbShape: RoundSliderThumbShape(
                   enabledThumbRadius: 6.r,
                 ),
-                activeTrackColor: AppTheme.warning,
-                inactiveTrackColor: AppTheme.backgroundCardBorder,
+                activeTrackColor: HvacColors.warning,
+                inactiveTrackColor: HvacColors.backgroundCardBorder,
                 thumbColor: Colors.white,
               ),
               child: Slider(
@@ -61,7 +57,7 @@ class BrightnessControl extends StatelessWidget {
           style: TextStyle(
             fontSize: 16.sp,
             fontWeight: FontWeight.w600,
-            color: AppTheme.textPrimary,
+            color: HvacColors.textPrimary,
           ),
         ),
       ],

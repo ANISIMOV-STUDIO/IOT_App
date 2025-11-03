@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/spacing.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../domain/entities/hvac_unit.dart';
 import 'optimized_hvac_card.dart';
 
@@ -172,8 +170,8 @@ class _LazyHvacListState extends State<LazyHvacList> {
 
     final result = RefreshIndicator(
       onRefresh: _handleRefresh,
-      color: AppTheme.primaryBlue,
-      backgroundColor: AppTheme.cardDark,
+      color: HvacColors.primaryBlue,
+      backgroundColor: HvacColors.cardDark,
       child: CustomScrollView(
         controller: _scrollController,
         cacheExtent: widget.cacheExtent,
@@ -227,7 +225,7 @@ class _LazyHvacListState extends State<LazyHvacList> {
   Widget _buildLoadingIndicator() {
     return SliverToBoxAdapter(
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: AppSpacing.lg.h),
+        padding: EdgeInsets.symmetric(vertical: HvacSpacing.lg.h),
         child: Column(
           children: List.generate(
             3,
@@ -241,7 +239,7 @@ class _LazyHvacListState extends State<LazyHvacList> {
   Widget _buildEndIndicator() {
     return SliverToBoxAdapter(
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: AppSpacing.xl.h),
+        padding: EdgeInsets.symmetric(vertical: HvacSpacing.xl.h),
         child: Center(
           child: Column(
             children: [
@@ -250,7 +248,7 @@ class _LazyHvacListState extends State<LazyHvacList> {
                 size: 48.sp,
                 color: Colors.white30,
               ),
-              SizedBox(height: AppSpacing.md.h),
+              SizedBox(height: HvacSpacing.md.h),
               Text(
                 'All units loaded',
                 style: TextStyle(
@@ -258,7 +256,7 @@ class _LazyHvacListState extends State<LazyHvacList> {
                   color: Colors.white54,
                 ),
               ),
-              SizedBox(height: AppSpacing.xs.h),
+              SizedBox(height: HvacSpacing.xs.h),
               Text(
                 '${_units.length} total units',
                 style: TextStyle(
@@ -342,13 +340,13 @@ class _ShimmerLoadingCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(
-        horizontal: AppSpacing.md.w,
-        vertical: AppSpacing.sm.h,
+        horizontal: HvacSpacing.md.w,
+        vertical: HvacSpacing.sm.h,
       ),
-      padding: EdgeInsets.all(AppSpacing.lg.w),
+      padding: EdgeInsets.all(HvacSpacing.lg.w),
       decoration: BoxDecoration(
-        color: AppTheme.cardDark,
-        borderRadius: BorderRadius.circular(AppSpacing.lg.r),
+        color: HvacColors.cardDark,
+        borderRadius: BorderRadius.circular(HvacSpacing.lg.r),
       ),
       child: Shimmer.fromColors(
         baseColor: Colors.white12,
@@ -367,16 +365,16 @@ class _ShimmerLoadingCard extends StatelessWidget {
                       height: 20.h,
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(AppSpacing.xs.r),
+                        borderRadius: BorderRadius.circular(HvacSpacing.xs.r),
                       ),
                     ),
-                    SizedBox(height: AppSpacing.xs.h),
+                    SizedBox(height: HvacSpacing.xs.h),
                     Container(
                       width: 100.w,
                       height: 14.h,
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(AppSpacing.xs.r),
+                        borderRadius: BorderRadius.circular(HvacSpacing.xs.r),
                       ),
                     ),
                   ],
@@ -391,7 +389,7 @@ class _ShimmerLoadingCard extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: AppSpacing.lg.h),
+            SizedBox(height: HvacSpacing.lg.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: List.generate(
@@ -401,7 +399,7 @@ class _ShimmerLoadingCard extends StatelessWidget {
                   height: 40.h,
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(AppSpacing.sm.r),
+                    borderRadius: BorderRadius.circular(HvacSpacing.sm.r),
                   ),
                 ),
               ),

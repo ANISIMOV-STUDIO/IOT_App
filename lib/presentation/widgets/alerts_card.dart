@@ -5,7 +5,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../core/theme/app_theme.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../domain/entities/alert.dart';
 
 class AlertsCard extends StatelessWidget {
@@ -30,7 +30,7 @@ class AlertsCard extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: AppTheme.deviceCard(),
+      decoration: HvacTheme.deviceCard(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -50,7 +50,7 @@ class AlertsCard extends StatelessWidget {
                   child: const Text(
                     'Сброс',
                     style: TextStyle(
-                      color: AppTheme.primaryOrange,
+                      color: HvacColors.primaryOrange,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -84,7 +84,7 @@ class AlertsCard extends StatelessWidget {
       decoration: const BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            color: AppTheme.backgroundCardBorder,
+            color: HvacColors.backgroundCardBorder,
             width: 1,
           ),
         ),
@@ -99,7 +99,7 @@ class AlertsCard extends StatelessWidget {
             decoration: BoxDecoration(
               color: hasAlert
                   ? _getSeverityColor(alert.severity).withValues(alpha: 0.2)
-                  : AppTheme.backgroundDark,
+                  : HvacColors.backgroundDark,
               shape: BoxShape.circle,
             ),
             child: Icon(
@@ -107,7 +107,7 @@ class AlertsCard extends StatelessWidget {
               size: 18,
               color: hasAlert
                   ? _getSeverityColor(alert.severity)
-                  : AppTheme.textSecondary,
+                  : HvacColors.textSecondary,
             ),
           ),
           const SizedBox(width: 12),
@@ -123,7 +123,7 @@ class AlertsCard extends StatelessWidget {
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color:
-                        hasAlert ? _getSeverityColor(alert.severity) : AppTheme.textSecondary,
+                        hasAlert ? _getSeverityColor(alert.severity) : HvacColors.textSecondary,
                   ),
                 ),
                 if (hasAlert) ...[
@@ -132,7 +132,7 @@ class AlertsCard extends StatelessWidget {
                     alert.description,
                     style: const TextStyle(
                       fontSize: 12,
-                      color: AppTheme.textSecondary,
+                      color: HvacColors.textSecondary,
                     ),
                   ),
                 ],
@@ -146,7 +146,7 @@ class AlertsCard extends StatelessWidget {
               DateFormat('dd.MM.yy HH:mm').format(alert.timestamp!),
               style: const TextStyle(
                 fontSize: 11,
-                color: AppTheme.textSecondary,
+                color: HvacColors.textSecondary,
               ),
             ),
         ],
@@ -157,11 +157,11 @@ class AlertsCard extends StatelessWidget {
   Color _getSeverityColor(AlertSeverity severity) {
     switch (severity) {
       case AlertSeverity.info:
-        return AppTheme.info;
+        return HvacColors.info;
       case AlertSeverity.warning:
-        return AppTheme.warning;
+        return HvacColors.warning;
       case AlertSeverity.error:
-        return AppTheme.error;
+        return HvacColors.error;
       case AlertSeverity.critical:
         return const Color(0xFFD32F2F); // Darker red
     }

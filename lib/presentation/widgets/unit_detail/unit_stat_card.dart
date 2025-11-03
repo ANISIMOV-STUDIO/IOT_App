@@ -4,10 +4,8 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import '../../../core/theme/app_theme.dart';
-
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 class UnitStatCard extends StatelessWidget {
   final String label;
   final String value;
@@ -29,10 +27,10 @@ class UnitStatCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
+        color: HvacColors.backgroundCard,
         borderRadius: BorderRadius.circular(12.r),
         border: Border.all(
-          color: AppTheme.backgroundCardBorder,
+          color: HvacColors.backgroundCardBorder,
           width: 1,
         ),
       ),
@@ -43,11 +41,14 @@ class UnitStatCard extends StatelessWidget {
             children: [
               Icon(icon, color: color, size: 20.sp),
               SizedBox(width: 8.w),
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 12.sp,
-                  color: AppTheme.textSecondary,
+              Expanded(
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 12.sp,
+                    color: HvacColors.textSecondary,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
@@ -55,12 +56,15 @@ class UnitStatCard extends StatelessWidget {
           SizedBox(height: 8.h),
           Row(
             children: [
-              Text(
-                value,
-                style: TextStyle(
-                  fontSize: 20.sp,
-                  fontWeight: FontWeight.w700,
-                  color: color,
+              Flexible(
+                child: Text(
+                  value,
+                  style: TextStyle(
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.w700,
+                    color: color,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
               if (trend != null) ...[
@@ -69,7 +73,7 @@ class UnitStatCard extends StatelessWidget {
                   trend!,
                   style: TextStyle(
                     fontSize: 12.sp,
-                    color: AppTheme.textSecondary,
+                    color: HvacColors.textSecondary,
                   ),
                 ),
               ],

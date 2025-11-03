@@ -6,7 +6,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../core/theme/app_theme.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../generated/l10n/app_localizations.dart';
 import '../widgets/orange_button.dart';
 import '../bloc/auth/auth_bloc.dart';
@@ -73,13 +73,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     shape: BoxShape.circle,
                     gradient: const LinearGradient(
                       colors: [
-                        AppTheme.primaryOrange,
-                        AppTheme.primaryOrangeLight,
+                        HvacColors.primaryOrange,
+                        HvacColors.primaryOrangeLight,
                       ],
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: AppTheme.primaryOrange.withValues(alpha: 0.3),
+                        color: HvacColors.primaryOrange.withValues(alpha: 0.3),
                         blurRadius: 20,
                         spreadRadius: 5,
                       ),
@@ -149,7 +149,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Registration feature coming soon'),
-                        backgroundColor: AppTheme.info,
+                        backgroundColor: HvacColors.info,
                         duration: Duration(seconds: 2),
                       ),
                     );
@@ -163,7 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: const Text(
                     'Skip for now',
                     style: TextStyle(
-                      color: AppTheme.textSecondary,
+                      color: HvacColors.textSecondary,
                     ),
                   ),
                 ),

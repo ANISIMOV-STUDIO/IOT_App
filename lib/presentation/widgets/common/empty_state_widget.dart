@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../core/utils/responsive_utils.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
 /// Comprehensive empty state widget with illustrations
 class EmptyStateWidget extends StatelessWidget {
@@ -101,16 +100,16 @@ class EmptyStateWidget extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         _buildIllustration(context, theme),
-        const SizedBox(height: AppSpacing.xl),
+        const SizedBox(height: HvacSpacing.xl),
         _buildTitle(context, theme),
-        const SizedBox(height: AppSpacing.sm),
+        const SizedBox(height: HvacSpacing.sm),
         _buildMessage(context, theme),
         if (onAction != null) ...[
-          const SizedBox(height: AppSpacing.xl),
+          const SizedBox(height: HvacSpacing.xl),
           _buildActionButton(context, theme),
         ],
         if (additionalActions != null && additionalActions!.isNotEmpty) ...[
-          const SizedBox(height: AppSpacing.md),
+          const SizedBox(height: HvacSpacing.md),
           ...additionalActions!,
         ],
       ],
@@ -143,7 +142,7 @@ class EmptyStateWidget extends StatelessWidget {
             maxWidth: ResponsiveUtils.getMaxContentWidth(context) * 0.8,
           ),
           padding: EdgeInsets.all(
-            ResponsiveUtils.scaledSpacing(context, AppSpacing.xl),
+            ResponsiveUtils.scaledSpacing(context, HvacSpacing.xl),
           ),
           child: content,
         ),
@@ -264,11 +263,11 @@ class EmptyStateWidget extends StatelessWidget {
           ),
           style: ElevatedButton.styleFrom(
             padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.xl,
-              vertical: AppSpacing.md,
+              horizontal: HvacSpacing.xl,
+              vertical: HvacSpacing.md,
             ),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppSpacing.md),
+              borderRadius: BorderRadius.circular(HvacSpacing.md),
             ),
             elevation: 0,
           ),
@@ -367,9 +366,9 @@ class CompactEmptyState extends StatelessWidget {
       hint: onAction != null ? 'Double tap to take action' : null,
       child: InkWell(
         onTap: onAction,
-        borderRadius: BorderRadius.circular(AppSpacing.md),
+        borderRadius: BorderRadius.circular(HvacSpacing.md),
         child: Container(
-          padding: const EdgeInsets.all(AppSpacing.lg),
+          padding: const EdgeInsets.all(HvacSpacing.lg),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -378,7 +377,7 @@ class CompactEmptyState extends StatelessWidget {
                 size: ResponsiveUtils.scaledIconSize(context, 48),
                 color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
               ),
-              const SizedBox(height: AppSpacing.sm),
+              const SizedBox(height: HvacSpacing.sm),
               Text(
                 message,
                 style: theme.textTheme.bodyMedium?.copyWith(
@@ -388,7 +387,7 @@ class CompactEmptyState extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               if (onAction != null) ...[
-                const SizedBox(height: AppSpacing.sm),
+                const SizedBox(height: HvacSpacing.sm),
                 Icon(
                   Icons.refresh_rounded,
                   size: ResponsiveUtils.scaledIconSize(context, 20),

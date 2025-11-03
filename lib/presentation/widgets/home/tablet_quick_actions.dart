@@ -4,10 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../core/theme/app_theme.dart';
-
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 class TabletQuickActions extends StatelessWidget {
   final VoidCallback onPowerAllOn;
   final VoidCallback onPowerAllOff;
@@ -26,14 +23,14 @@ class TabletQuickActions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
+        color: HvacColors.backgroundCard,
         borderRadius: BorderRadius.circular(16.r),
         border: Border.all(
-          color: AppTheme.backgroundCardBorder,
+          color: HvacColors.backgroundCardBorder,
           width: 1.w,
         ),
       ),
-      padding: EdgeInsets.all(AppSpacing.lgR),
+      padding: const EdgeInsets.all(HvacSpacing.lgR),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -42,41 +39,41 @@ class TabletQuickActions extends StatelessWidget {
             style: TextStyle(
               fontSize: 16.sp,
               fontWeight: FontWeight.w600,
-              color: AppTheme.textPrimary,
+              color: HvacColors.textPrimary,
             ),
           ),
-          SizedBox(height: AppSpacing.mdV),
+          const SizedBox(height: HvacSpacing.mdV),
           GridView.count(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             crossAxisCount: 2,
-            mainAxisSpacing: AppSpacing.smV,
-            crossAxisSpacing: AppSpacing.smR,
+            mainAxisSpacing: HvacSpacing.smV,
+            crossAxisSpacing: HvacSpacing.smR,
             childAspectRatio: 2.5,
             children: [
               _buildActionButton(
                 icon: Icons.power_settings_new,
                 label: 'All On',
                 onTap: onPowerAllOn,
-                color: AppTheme.success,
+                color: HvacColors.success,
               ),
               _buildActionButton(
                 icon: Icons.power_off,
                 label: 'All Off',
                 onTap: onPowerAllOff,
-                color: AppTheme.error,
+                color: HvacColors.error,
               ),
               _buildActionButton(
                 icon: Icons.sync,
                 label: 'Sync',
                 onTap: onSyncSettings,
-                color: AppTheme.primaryOrange,
+                color: HvacColors.primaryOrange,
               ),
               _buildActionButton(
                 icon: Icons.schedule,
                 label: 'Schedule',
                 onTap: onApplyScheduleToAll,
-                color: AppTheme.primaryBlue,
+                color: HvacColors.primaryBlue,
               ),
             ],
           ),
@@ -92,15 +89,15 @@ class TabletQuickActions extends StatelessWidget {
     required Color color,
   }) {
     return Material(
-      color: AppTheme.backgroundCard,
+      color: HvacColors.backgroundCard,
       borderRadius: BorderRadius.circular(12.r),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12.r),
         child: Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: AppSpacing.smR,
-            vertical: AppSpacing.smV,
+          padding: const EdgeInsets.symmetric(
+            horizontal: HvacSpacing.smR,
+            vertical: HvacSpacing.smV,
           ),
           decoration: BoxDecoration(
             border: Border.all(
@@ -117,13 +114,13 @@ class TabletQuickActions extends StatelessWidget {
                 size: 18.sp,
                 color: color,
               ),
-              SizedBox(width: AppSpacing.xsR),
+              const SizedBox(width: HvacSpacing.xsR),
               Text(
                 label,
                 style: TextStyle(
                   fontSize: 13.sp,
                   fontWeight: FontWeight.w500,
-                  color: AppTheme.textPrimary,
+                  color: HvacColors.textPrimary,
                 ),
               ),
             ],

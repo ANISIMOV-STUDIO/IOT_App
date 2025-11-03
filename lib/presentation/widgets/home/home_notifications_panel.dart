@@ -4,8 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../core/theme/app_theme.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../domain/entities/hvac_unit.dart';
 import '../../../domain/entities/alert.dart';
 import '../../../domain/entities/ventilation_mode.dart';
@@ -103,10 +102,10 @@ class _HomeNotificationsPanelState extends State<HomeNotificationsPanel> {
       height: 400.h,
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
+        color: HvacColors.backgroundCard,
         borderRadius: BorderRadius.circular(16.r),
         border: Border.all(
-          color: AppTheme.backgroundCardBorder,
+          color: HvacColors.backgroundCardBorder,
           width: 1,
         ),
       ),
@@ -147,13 +146,13 @@ class _HomeNotificationsPanelState extends State<HomeNotificationsPanel> {
           style: TextStyle(
             fontSize: 18.sp,
             fontWeight: FontWeight.w600,
-            color: AppTheme.textPrimary,
+            color: HvacColors.textPrimary,
           ),
         ),
         Container(
           padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
           decoration: BoxDecoration(
-            color: AppTheme.primaryOrange.withValues(alpha: 0.2),
+            color: HvacColors.primaryOrange.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(12.r),
           ),
           child: Text(
@@ -161,7 +160,7 @@ class _HomeNotificationsPanelState extends State<HomeNotificationsPanel> {
             style: TextStyle(
               fontSize: 12.sp,
               fontWeight: FontWeight.w700,
-              color: AppTheme.primaryOrange,
+              color: HvacColors.primaryOrange,
             ),
           ),
         ),
@@ -180,14 +179,14 @@ class _HomeNotificationsPanelState extends State<HomeNotificationsPanel> {
       runSpacing: 8.h,
       children: [
         if (critical.isNotEmpty)
-          _buildCategoryBadge('Критические', critical.length, AppTheme.error),
+          _buildCategoryBadge('Критические', critical.length, HvacColors.error),
         if (errors.isNotEmpty)
           _buildCategoryBadge(
               'Ошибки', errors.length, const Color(0xFFE57373)),
         if (warnings.isNotEmpty)
-          _buildCategoryBadge('Предупреждения', warnings.length, AppTheme.warning),
+          _buildCategoryBadge('Предупреждения', warnings.length, HvacColors.warning),
         if (info.isNotEmpty)
-          _buildCategoryBadge('Инфо', info.length, AppTheme.info),
+          _buildCategoryBadge('Инфо', info.length, HvacColors.info),
       ],
     );
   }
@@ -273,7 +272,7 @@ class _HomeNotificationsPanelState extends State<HomeNotificationsPanel> {
       margin: EdgeInsets.only(bottom: 12.h),
       padding: EdgeInsets.all(12.w),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundDark,
+        color: HvacColors.backgroundDark,
         borderRadius: BorderRadius.circular(12.r),
         border: Border.all(
           color: severityColor.withValues(alpha: 0.3),
@@ -309,7 +308,7 @@ class _HomeNotificationsPanelState extends State<HomeNotificationsPanel> {
                         style: TextStyle(
                           fontSize: 13.sp,
                           fontWeight: FontWeight.w600,
-                          color: AppTheme.textPrimary,
+                          color: HvacColors.textPrimary,
                         ),
                       ),
                     ),
@@ -328,7 +327,7 @@ class _HomeNotificationsPanelState extends State<HomeNotificationsPanel> {
                   activity.description,
                   style: TextStyle(
                     fontSize: 12.sp,
-                    color: AppTheme.textSecondary,
+                    color: HvacColors.textSecondary,
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -349,7 +348,7 @@ class _HomeNotificationsPanelState extends State<HomeNotificationsPanel> {
           Icon(
             Icons.notifications_none,
             size: 48.sp,
-            color: AppTheme.textSecondary.withValues(alpha: 0.5),
+            color: HvacColors.textSecondary.withValues(alpha: 0.5),
           ),
           SizedBox(height: 12.h),
           Text(
@@ -357,7 +356,7 @@ class _HomeNotificationsPanelState extends State<HomeNotificationsPanel> {
             style: TextStyle(
               fontSize: 14.sp,
               fontWeight: FontWeight.w600,
-              color: AppTheme.textSecondary,
+              color: HvacColors.textSecondary,
             ),
           ),
           SizedBox(height: 4.h),
@@ -365,7 +364,7 @@ class _HomeNotificationsPanelState extends State<HomeNotificationsPanel> {
             'Все системы работают нормально',
             style: TextStyle(
               fontSize: 12.sp,
-              color: AppTheme.textSecondary,
+              color: HvacColors.textSecondary,
             ),
           ),
         ],
@@ -392,8 +391,8 @@ class _HomeNotificationsPanelState extends State<HomeNotificationsPanel> {
                     : 'Показать все ($totalCount)',
                 style: TextStyle(
                   color: _showAllNotifications
-                      ? AppTheme.textSecondary
-                      : AppTheme.primaryOrange,
+                      ? HvacColors.textSecondary
+                      : HvacColors.primaryOrange,
                   fontSize: 13.sp,
                   fontWeight: FontWeight.w600,
                 ),
@@ -404,8 +403,8 @@ class _HomeNotificationsPanelState extends State<HomeNotificationsPanel> {
                     ? Icons.expand_less
                     : Icons.expand_more,
                 color: _showAllNotifications
-                    ? AppTheme.textSecondary
-                    : AppTheme.primaryOrange,
+                    ? HvacColors.textSecondary
+                    : HvacColors.primaryOrange,
                 size: 18.sp,
               ),
             ],
@@ -445,13 +444,13 @@ class _HomeNotificationsPanelState extends State<HomeNotificationsPanel> {
   Color _getSeverityColor(NotificationSeverity severity) {
     switch (severity) {
       case NotificationSeverity.critical:
-        return AppTheme.error;
+        return HvacColors.error;
       case NotificationSeverity.error:
         return const Color(0xFFE57373);
       case NotificationSeverity.warning:
-        return AppTheme.warning;
+        return HvacColors.warning;
       case NotificationSeverity.info:
-        return AppTheme.info;
+        return HvacColors.info;
     }
   }
 }

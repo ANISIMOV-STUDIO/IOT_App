@@ -3,10 +3,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/spacing.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
 class ErrorState extends StatelessWidget {
   final String message;
@@ -27,7 +24,7 @@ class ErrorState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final content = Padding(
-      padding: const EdgeInsets.all(AppSpacing.xl),
+      padding: const EdgeInsets.all(HvacSpacing.xl),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
@@ -35,16 +32,16 @@ class ErrorState extends StatelessWidget {
           Icon(
             icon,
             size: 64.sp,
-            color: AppTheme.error,
+            color: HvacColors.error,
           ),
-          const SizedBox(height: AppSpacing.lg),
+          const SizedBox(height: HvacSpacing.lg),
           if (title != null) ...[
             Text(
               title!,
               style: Theme.of(context).textTheme.headlineSmall,
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: AppSpacing.sm),
+            const SizedBox(height: HvacSpacing.sm),
           ],
           Text(
             message,
@@ -52,16 +49,16 @@ class ErrorState extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           if (onRetry != null) ...[
-            const SizedBox(height: AppSpacing.xl),
+            const SizedBox(height: HvacSpacing.xl),
             ElevatedButton.icon(
               onPressed: onRetry,
               icon: const Icon(Icons.refresh),
               label: const Text('Retry'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.primaryOrange,
+                backgroundColor: HvacColors.primaryOrange,
                 padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.xl,
-                  vertical: AppSpacing.md,
+                  horizontal: HvacSpacing.xl,
+                  vertical: HvacSpacing.md,
                 ),
               ),
             ),
@@ -75,7 +72,7 @@ class ErrorState extends StatelessWidget {
     }
 
     return Scaffold(
-      backgroundColor: AppTheme.backgroundDark,
+      backgroundColor: HvacColors.backgroundDark,
       body: Center(child: content),
     );
   }
@@ -94,24 +91,24 @@ class ErrorCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: AppTheme.cardPadding,
-      decoration: AppTheme.roundedCard(),
+      padding: HvacSpacing.cardPadding,
+      decoration: HvacTheme.roundedCard(),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
             Icons.error_outline,
             size: 48.sp,
-            color: AppTheme.error,
+            color: HvacColors.error,
           ),
-          const SizedBox(height: AppSpacing.md),
+          const SizedBox(height: HvacSpacing.md),
           Text(
             message,
             style: Theme.of(context).textTheme.bodyMedium,
             textAlign: TextAlign.center,
           ),
           if (onRetry != null) ...[
-            const SizedBox(height: AppSpacing.md),
+            const SizedBox(height: HvacSpacing.md),
             TextButton.icon(
               onPressed: onRetry,
               icon: const Icon(Icons.refresh),

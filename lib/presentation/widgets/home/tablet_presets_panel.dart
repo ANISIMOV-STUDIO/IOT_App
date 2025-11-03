@@ -4,9 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../core/theme/app_theme.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../domain/entities/mode_preset.dart';
 import '../../../domain/entities/ventilation_mode.dart';
 
@@ -29,14 +27,14 @@ class TabletPresetsPanel extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
+        color: HvacColors.backgroundCard,
         borderRadius: BorderRadius.circular(16.r),
         border: Border.all(
-          color: AppTheme.backgroundCardBorder,
+          color: HvacColors.backgroundCardBorder,
           width: 1.w,
         ),
       ),
-      padding: EdgeInsets.all(AppSpacing.lgR),
+      padding: const EdgeInsets.all(HvacSpacing.lgR),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -45,12 +43,12 @@ class TabletPresetsPanel extends StatelessWidget {
             style: TextStyle(
               fontSize: 16.sp,
               fontWeight: FontWeight.w600,
-              color: AppTheme.textPrimary,
+              color: HvacColors.textPrimary,
             ),
           ),
-          SizedBox(height: AppSpacing.mdV),
+          const SizedBox(height: HvacSpacing.mdV),
           ...presets.map((preset) => Padding(
-            padding: EdgeInsets.only(bottom: AppSpacing.smV),
+            padding: const EdgeInsets.only(bottom: HvacSpacing.smV),
             child: _buildPresetButton(preset),
           )),
         ],
@@ -60,19 +58,19 @@ class TabletPresetsPanel extends StatelessWidget {
 
   Widget _buildPresetButton(ModePreset preset) {
     return Material(
-      color: AppTheme.backgroundCard,
+      color: HvacColors.backgroundCard,
       borderRadius: BorderRadius.circular(12.r),
       child: InkWell(
         onTap: () => onPresetSelected(preset),
         borderRadius: BorderRadius.circular(12.r),
         child: Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: AppSpacing.mdR,
-            vertical: AppSpacing.smV,
+          padding: const EdgeInsets.symmetric(
+            horizontal: HvacSpacing.mdR,
+            vertical: HvacSpacing.smV,
           ),
           decoration: BoxDecoration(
             border: Border.all(
-              color: AppTheme.backgroundCardBorder,
+              color: HvacColors.backgroundCardBorder,
               width: 1.w,
             ),
             borderRadius: BorderRadius.circular(12.r),
@@ -84,21 +82,21 @@ class TabletPresetsPanel extends StatelessWidget {
                 size: 20.sp,
                 color: _getPresetColor(preset),
               ),
-              SizedBox(width: AppSpacing.smR),
+              const SizedBox(width: HvacSpacing.smR),
               Expanded(
                 child: Text(
                   preset.mode.displayName,
                   style: TextStyle(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w500,
-                    color: AppTheme.textPrimary,
+                    color: HvacColors.textPrimary,
                   ),
                 ),
               ),
               Icon(
                 Icons.chevron_right,
                 size: 20.sp,
-                color: AppTheme.textSecondary,
+                color: HvacColors.textSecondary,
               ),
             ],
           ),
@@ -131,21 +129,21 @@ class TabletPresetsPanel extends StatelessWidget {
   Color _getPresetColor(ModePreset preset) {
     switch (preset.mode) {
       case VentilationMode.economic:
-        return AppTheme.success;
+        return HvacColors.success;
       case VentilationMode.basic:
-        return AppTheme.primaryOrange;
+        return HvacColors.primaryOrange;
       case VentilationMode.maximum:
-        return AppTheme.error;
+        return HvacColors.error;
       case VentilationMode.vacation:
-        return AppTheme.primaryBlue;
+        return HvacColors.primaryBlue;
       case VentilationMode.intensive:
-        return AppTheme.warning;
+        return HvacColors.warning;
       case VentilationMode.kitchen:
-        return AppTheme.modeFan;
+        return HvacColors.modeFan;
       case VentilationMode.fireplace:
-        return AppTheme.modeHeat;
+        return HvacColors.modeHeat;
       default:
-        return AppTheme.textSecondary;
+        return HvacColors.textSecondary;
     }
   }
 }

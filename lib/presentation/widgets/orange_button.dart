@@ -4,8 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
-
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 class OrangeButton extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
@@ -35,7 +34,7 @@ class OrangeButton extends StatelessWidget {
           onTap: isLoading ? null : onPressed,
           borderRadius: BorderRadius.circular(12),
           child: Container(
-            decoration: AppTheme.orangeButton(),
+            decoration: HvacTheme.orangeButton(),
             alignment: Alignment.center,
             child: isLoading
                 ? const SizedBox(
@@ -110,7 +109,7 @@ class OutlineButton extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: AppTheme.primaryOrange,
+                color: HvacColors.primaryOrange,
                 width: 2,
               ),
             ),
@@ -122,7 +121,7 @@ class OutlineButton extends StatelessWidget {
                 if (icon != null) ...[
                   Icon(
                     icon,
-                    color: AppTheme.primaryOrange,
+                    color: HvacColors.primaryOrange,
                     size: 18,
                   ),
                   const SizedBox(width: 6),
@@ -131,7 +130,7 @@ class OutlineButton extends StatelessWidget {
                   child: Text(
                     text,
                     style: const TextStyle(
-                      color: AppTheme.primaryOrange,
+                      color: HvacColors.primaryOrange,
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                     ),

@@ -4,8 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
-
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 enum AirQualityLevel { excellent, good, moderate, poor, veryPoor }
 
 class DashboardAirQuality extends StatelessWidget {
@@ -31,15 +30,15 @@ class DashboardAirQuality extends StatelessWidget {
   Color get _levelColor {
     switch (_level) {
       case AirQualityLevel.excellent:
-        return AppTheme.success;
+        return HvacColors.success;
       case AirQualityLevel.good:
         return const Color(0xFF7CB342);
       case AirQualityLevel.moderate:
-        return AppTheme.warning;
+        return HvacColors.warning;
       case AirQualityLevel.poor:
         return const Color(0xFFFF7043);
       case AirQualityLevel.veryPoor:
-        return AppTheme.error;
+        return HvacColors.error;
     }
   }
 
@@ -64,7 +63,7 @@ class DashboardAirQuality extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(20),
-        decoration: AppTheme.deviceCard(),
+        decoration: HvacTheme.deviceCard(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -97,7 +96,7 @@ class DashboardAirQuality extends StatelessWidget {
                 ),
                 const Icon(
                   Icons.chevron_right,
-                  color: AppTheme.textTertiary,
+                  color: HvacColors.textTertiary,
                   size: 20,
                 ),
               ],
@@ -124,7 +123,7 @@ class DashboardAirQuality extends StatelessWidget {
                   child: Text(
                     'AQI',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppTheme.textSecondary,
+                          color: HvacColors.textSecondary,
                         ),
                   ),
                 ),
@@ -162,13 +161,13 @@ class DashboardAirQuality extends StatelessWidget {
                 const Icon(
                   Icons.location_on,
                   size: 14,
-                  color: AppTheme.textTertiary,
+                  color: HvacColors.textTertiary,
                 ),
                 const SizedBox(width: 4),
                 Text(
                   location,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppTheme.textSecondary,
+                        color: HvacColors.textSecondary,
                       ),
                 ),
               ],

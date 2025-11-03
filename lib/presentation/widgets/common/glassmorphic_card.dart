@@ -2,15 +2,10 @@
 /// Big Tech level glassmorphism and gradient effects
 library;
 
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_typography.dart';
-import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/spacing.dart';
-
 /// Glassmorphic card with blur effect
 class GlassmorphicCard extends StatelessWidget {
   final Widget child;
@@ -47,14 +42,14 @@ class GlassmorphicCard extends StatelessWidget {
       height: height,
       margin: margin,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(AppRadius.lgR),
+        borderRadius: BorderRadius.circular(HvacRadius.lgR),
         border: Border.all(
-          color: AppTheme.textPrimary.withValues(alpha: borderOpacity),
+          color: HvacColors.textPrimary.withValues(alpha: borderOpacity),
           width: 1,
         ),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(AppRadius.lgR),
+        borderRadius: BorderRadius.circular(HvacRadius.lgR),
         child: BackdropFilter(
           filter: ImageFilter.blur(
             sigmaX: blurAmount,
@@ -63,11 +58,11 @@ class GlassmorphicCard extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               color: backgroundColor ??
-                  AppTheme.backgroundCard.withValues(alpha: 0.7),
+                  HvacColors.backgroundCard.withValues(alpha: 0.7),
               gradient: gradient,
-              borderRadius: BorderRadius.circular(AppRadius.lgR),
+              borderRadius: BorderRadius.circular(HvacRadius.lgR),
             ),
-            padding: padding ?? EdgeInsets.all(AppSpacing.lgR),
+            padding: padding ?? const EdgeInsets.all(HvacSpacing.lgR),
             child: child,
           ),
         ),
@@ -77,7 +72,7 @@ class GlassmorphicCard extends StatelessWidget {
     if (onTap != null) {
       card = InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(AppRadius.lgR),
+        borderRadius: BorderRadius.circular(HvacRadius.lgR),
         child: card,
       );
     }
@@ -186,7 +181,7 @@ class _GradientCardState extends State<GradientCard>
                   begin: widget.begin,
                   end: widget.end,
                 ),
-                borderRadius: BorderRadius.circular(AppRadius.lgR),
+                borderRadius: BorderRadius.circular(HvacRadius.lgR),
                 boxShadow: widget.enableShadow
                     ? [
                         BoxShadow(
@@ -202,7 +197,7 @@ class _GradientCardState extends State<GradientCard>
                       ]
                     : null,
               ),
-              padding: widget.padding ?? EdgeInsets.all(AppSpacing.lgR),
+              padding: widget.padding ?? const EdgeInsets.all(HvacSpacing.lgR),
               child: widget.child,
             ),
           ),
@@ -243,6 +238,7 @@ class _NeumorphicCardState extends State<NeumorphicCard>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _depthAnimation;
+  // ignore: unused_field
   bool _isPressed = false;
 
   @override
@@ -296,8 +292,8 @@ class _NeumorphicCardState extends State<NeumorphicCard>
           height: widget.height,
           margin: widget.margin,
           decoration: BoxDecoration(
-            color: AppTheme.backgroundCard,
-            borderRadius: BorderRadius.circular(AppRadius.lgR),
+            color: HvacColors.backgroundCard,
+            borderRadius: BorderRadius.circular(HvacRadius.lgR),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.2),
@@ -308,7 +304,7 @@ class _NeumorphicCardState extends State<NeumorphicCard>
                 ),
               ),
               BoxShadow(
-                color: AppTheme.backgroundDark.withValues(alpha: 0.7),
+                color: HvacColors.backgroundDark.withValues(alpha: 0.7),
                 blurRadius: _depthAnimation.value * 2,
                 offset: Offset(
                   -_depthAnimation.value,
@@ -317,7 +313,7 @@ class _NeumorphicCardState extends State<NeumorphicCard>
               ),
             ],
           ),
-          padding: widget.padding ?? EdgeInsets.all(AppSpacing.lgR),
+          padding: widget.padding ?? const EdgeInsets.all(HvacSpacing.lgR),
           child: widget.child,
         ),
       ),
@@ -457,7 +453,7 @@ class GlowCard extends StatefulWidget {
   const GlowCard({
     super.key,
     required this.child,
-    this.glowColor = AppTheme.primaryOrange,
+    this.glowColor = HvacColors.primaryOrange,
     this.padding,
     this.width,
     this.height,
@@ -506,8 +502,8 @@ class _GlowCardState extends State<GlowCard>
           width: widget.width,
           height: widget.height,
           decoration: BoxDecoration(
-            color: AppTheme.backgroundCard,
-            borderRadius: BorderRadius.circular(AppRadius.lgR),
+            color: HvacColors.backgroundCard,
+            borderRadius: BorderRadius.circular(HvacRadius.lgR),
             border: Border.all(
               color: widget.glowColor.withValues(
                 alpha: 0.3 + (_glowAnimation.value * 0.3),
@@ -524,7 +520,7 @@ class _GlowCardState extends State<GlowCard>
               ),
             ],
           ),
-          padding: widget.padding ?? EdgeInsets.all(AppSpacing.lgR),
+          padding: widget.padding ?? const EdgeInsets.all(HvacSpacing.lgR),
           child: widget.child,
         ),
       ),

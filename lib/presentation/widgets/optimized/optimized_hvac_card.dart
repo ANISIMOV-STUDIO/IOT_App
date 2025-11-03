@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/spacing.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../domain/entities/hvac_unit.dart';
 
 /// Optimized HVAC Unit Card with performance improvements
@@ -61,16 +59,16 @@ class _CardContainer extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         margin: EdgeInsets.symmetric(
-          horizontal: AppSpacing.md.w,
-          vertical: AppSpacing.sm.h,
+          horizontal: HvacSpacing.md.w,
+          vertical: HvacSpacing.sm.h,
         ),
         decoration: BoxDecoration(
           gradient: isSelected
-              ? AppTheme.primaryGradient
+              ? HvacColors.primaryGradient
               : const LinearGradient(
-                  colors: [AppTheme.cardDark, AppTheme.cardDark],
+                  colors: [HvacColors.cardDark, HvacColors.cardDark],
                 ),
-          borderRadius: BorderRadius.circular(AppSpacing.lg.r),
+          borderRadius: BorderRadius.circular(HvacSpacing.lg.r),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: isSelected ? 0.3 : 0.1),
@@ -134,17 +132,17 @@ class _CardContentState extends State<_CardContent>
     super.build(context);
 
     return Padding(
-      padding: EdgeInsets.all(AppSpacing.lg.w),
+      padding: EdgeInsets.all(HvacSpacing.lg.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           _buildHeader(),
-          SizedBox(height: AppSpacing.md.h),
+          SizedBox(height: HvacSpacing.md.h),
           _buildTemperatureDisplay(),
-          SizedBox(height: AppSpacing.md.h),
+          SizedBox(height: HvacSpacing.md.h),
           _buildStatusIndicators(),
-          SizedBox(height: AppSpacing.lg.h),
+          SizedBox(height: HvacSpacing.lg.h),
           _buildControlButtons(),
         ],
       ),
@@ -168,7 +166,7 @@ class _CardContentState extends State<_CardContent>
                 ),
                 overflow: TextOverflow.ellipsis,
               ),
-              SizedBox(height: AppSpacing.xs.h),
+              SizedBox(height: HvacSpacing.xs.h),
               Text(
                 widget.unit.location ?? '',
                 style: TextStyle(
@@ -206,13 +204,13 @@ class _CardContentState extends State<_CardContent>
           value: '${widget.unit.humidity}%',
           label: 'Humidity',
         ),
-        SizedBox(width: AppSpacing.md.w),
+        SizedBox(width: HvacSpacing.md.w),
         _StatusChip(
           icon: Icons.air,
           value: widget.unit.fanSpeed,
           label: 'Fan',
         ),
-        SizedBox(width: AppSpacing.md.w),
+        SizedBox(width: HvacSpacing.md.w),
         _StatusChip(
           icon: Icons.thermostat,
           value: widget.unit.mode,
@@ -235,7 +233,7 @@ class _CardContentState extends State<_CardContent>
                 : null,
           ),
         ),
-        SizedBox(width: AppSpacing.md.w),
+        SizedBox(width: HvacSpacing.md.w),
         Expanded(
           child: _QuickActionButton(
             icon: Icons.add,
@@ -266,7 +264,7 @@ class _PowerSwitch extends StatelessWidget {
     return Switch.adaptive(
       value: value,
       onChanged: onChanged,
-      activeThumbColor: AppTheme.primaryBlue,
+      activeThumbColor: HvacColors.primaryBlue,
       inactiveThumbColor: Colors.grey,
       inactiveTrackColor: Colors.grey.withValues(alpha: 0.3),
     );
@@ -299,7 +297,7 @@ class _TemperatureDisplay extends StatelessWidget {
             isPrimary: true,
           ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg.w),
+            padding: EdgeInsets.symmetric(horizontal: HvacSpacing.lg.w),
             child: Icon(
               Icons.arrow_forward,
               color: Colors.white54,
@@ -340,13 +338,13 @@ class _TempValue extends StatelessWidget {
             color: Colors.white54,
           ),
         ),
-        SizedBox(height: AppSpacing.xs.h),
+        SizedBox(height: HvacSpacing.xs.h),
         Text(
           '${value.toStringAsFixed(1)}°',
           style: TextStyle(
             fontSize: isPrimary ? 28.sp : 24.sp,
             fontWeight: FontWeight.bold,
-            color: isPrimary ? AppTheme.primaryBlue : Colors.white,
+            color: isPrimary ? HvacColors.primaryBlue : Colors.white,
           ),
         ),
       ],
@@ -370,12 +368,12 @@ class _StatusChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: AppSpacing.sm.w,
-        vertical: AppSpacing.xs.h,
+        horizontal: HvacSpacing.sm.w,
+        vertical: HvacSpacing.xs.h,
       ),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(AppSpacing.sm.r),
+        borderRadius: BorderRadius.circular(HvacSpacing.sm.r),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -385,7 +383,7 @@ class _StatusChip extends StatelessWidget {
             size: 16.sp,
             color: Colors.white70,
           ),
-          SizedBox(width: AppSpacing.xs.w),
+          SizedBox(width: HvacSpacing.xs.w),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -426,10 +424,10 @@ class _QuickActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: Colors.white.withValues(alpha: 0.1),
-      borderRadius: BorderRadius.circular(AppSpacing.md.r),
+      borderRadius: BorderRadius.circular(HvacSpacing.md.r),
       child: InkWell(
         onTap: onPressed,
-        borderRadius: BorderRadius.circular(AppSpacing.md.r),
+        borderRadius: BorderRadius.circular(HvacSpacing.md.r),
         child: Container(
           height: 40.h,
           alignment: Alignment.center,

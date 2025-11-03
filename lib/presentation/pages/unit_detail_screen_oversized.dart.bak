@@ -4,11 +4,8 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../core/theme/app_theme.dart';
-import '../../core/theme/spacing.dart';
-import '../../core/utils/responsive_utils.dart';
-import '../../core/widgets/adaptive_container.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+import '../../core/widgets/adaptive_layout_widgets.dart';
 import '../../domain/entities/hvac_unit.dart';
 import '../widgets/unit_detail/overview_tab.dart';
 import '../widgets/unit_detail/air_quality_tab.dart';
@@ -66,7 +63,7 @@ class _UnitDetailScreenResponsiveState
 
   Widget _buildMobileLayout() {
     return Scaffold(
-      backgroundColor: AppTheme.backgroundDark,
+      backgroundColor: HvacColors.backgroundDark,
       appBar: _buildAppBar(),
       body: TabBarView(
         controller: _tabController,
@@ -82,7 +79,7 @@ class _UnitDetailScreenResponsiveState
 
   Widget _buildTabletLayout() {
     return Scaffold(
-      backgroundColor: AppTheme.backgroundDark,
+      backgroundColor: HvacColors.backgroundDark,
       appBar: _buildTabletAppBar(),
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,7 +90,7 @@ class _UnitDetailScreenResponsiveState
           // Main content area
           Expanded(
             child: AdaptiveContainer(
-              padding: EdgeInsets.all(AppSpacing.lgR),
+              padding: const EdgeInsets.all(HvacSpacing.lgR),
               child: _getTabContent(_selectedIndex),
             ),
           ),
@@ -104,10 +101,10 @@ class _UnitDetailScreenResponsiveState
 
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
-      backgroundColor: AppTheme.backgroundCard,
+      backgroundColor: HvacColors.backgroundCard,
       elevation: 0,
       leading: IconButton(
-        icon: Icon(Icons.arrow_back, color: AppTheme.textPrimary, size: 24.sp),
+        icon: Icon(Icons.arrow_back, color: HvacColors.textPrimary, size: 24.sp),
         onPressed: () => Navigator.pop(context),
       ),
       title: Column(
@@ -118,14 +115,14 @@ class _UnitDetailScreenResponsiveState
             style: TextStyle(
               fontSize: 18.sp,
               fontWeight: FontWeight.w600,
-              color: AppTheme.textPrimary,
+              color: HvacColors.textPrimary,
             ),
           ),
           Text(
             widget.unit.location ?? 'Неизвестно',
             style: TextStyle(
               fontSize: 12.sp,
-              color: AppTheme.textSecondary,
+              color: HvacColors.textSecondary,
               fontWeight: FontWeight.w400,
             ),
           ),
@@ -134,9 +131,9 @@ class _UnitDetailScreenResponsiveState
       actions: _buildAppBarActions(),
       bottom: TabBar(
         controller: _tabController,
-        indicatorColor: AppTheme.primaryOrange,
-        labelColor: AppTheme.primaryOrange,
-        unselectedLabelColor: AppTheme.textSecondary,
+        indicatorColor: HvacColors.primaryOrange,
+        labelColor: HvacColors.primaryOrange,
+        unselectedLabelColor: HvacColors.textSecondary,
         isScrollable: ResponsiveUtils.isMobile(context),
         labelStyle: TextStyle(
           fontSize: 14.sp,
@@ -154,10 +151,10 @@ class _UnitDetailScreenResponsiveState
 
   PreferredSizeWidget _buildTabletAppBar() {
     return AppBar(
-      backgroundColor: AppTheme.backgroundCard,
+      backgroundColor: HvacColors.backgroundCard,
       elevation: 0,
       leading: IconButton(
-        icon: Icon(Icons.arrow_back, color: AppTheme.textPrimary, size: 24.sp),
+        icon: Icon(Icons.arrow_back, color: HvacColors.textPrimary, size: 24.sp),
         onPressed: () => Navigator.pop(context),
       ),
       title: Row(
@@ -170,14 +167,14 @@ class _UnitDetailScreenResponsiveState
                 style: TextStyle(
                   fontSize: 20.sp,
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.textPrimary,
+                  color: HvacColors.textPrimary,
                 ),
               ),
               Text(
                 widget.unit.location ?? 'Неизвестно',
                 style: TextStyle(
                   fontSize: 14.sp,
-                  color: AppTheme.textSecondary,
+                  color: HvacColors.textSecondary,
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -199,20 +196,20 @@ class _UnitDetailScreenResponsiveState
           icon: Icons.power_settings_new,
           label: widget.unit.power ? 'ON' : 'OFF',
           color: widget.unit.power
-              ? AppTheme.successGreen
-              : AppTheme.textSecondary,
+              ? HvacColors.successGreen
+              : HvacColors.textSecondary,
         ),
-        SizedBox(width: AppSpacing.mdR),
+        const SizedBox(width: HvacSpacing.mdR),
         _buildStatChip(
           icon: Icons.thermostat,
           label: '${widget.unit.temperature.round()}°C',
-          color: AppTheme.primaryOrange,
+          color: HvacColors.primaryOrange,
         ),
-        SizedBox(width: AppSpacing.mdR),
+        const SizedBox(width: HvacSpacing.mdR),
         _buildStatChip(
           icon: Icons.air,
           label: widget.unit.ventilationMode.displayName,
-          color: AppTheme.primaryBlue,
+          color: HvacColors.primaryBlue,
         ),
       ],
     );
@@ -224,19 +221,19 @@ class _UnitDetailScreenResponsiveState
     required Color color,
   }) {
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: AppSpacing.smR,
-        vertical: AppSpacing.xsV,
+      padding: const EdgeInsets.symmetric(
+        horizontal: HvacSpacing.smR,
+        vertical: HvacSpacing.xsV,
       ),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8.r),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, size: 16.sp, color: color),
-          SizedBox(width: AppSpacing.xsR),
+          const SizedBox(width: HvacSpacing.xsR),
           Text(
             label,
             style: TextStyle(
@@ -253,7 +250,7 @@ class _UnitDetailScreenResponsiveState
   List<Widget> _buildAppBarActions() {
     return [
       IconButton(
-        icon: Icon(Icons.analytics, color: AppTheme.primaryOrange, size: 24.sp),
+        icon: Icon(Icons.analytics, color: HvacColors.primaryOrange, size: 24.sp),
         onPressed: () {
           Navigator.push(
             context,
@@ -266,14 +263,14 @@ class _UnitDetailScreenResponsiveState
       ),
       if (ResponsiveUtils.isTablet(context)) ...[
         IconButton(
-          icon: Icon(Icons.settings, color: AppTheme.textSecondary, size: 24.sp),
+          icon: Icon(Icons.settings, color: HvacColors.textSecondary, size: 24.sp),
           onPressed: () {
             // Navigate to unit settings
           },
           tooltip: 'Настройки',
         ),
         IconButton(
-          icon: Icon(Icons.share, color: AppTheme.textSecondary, size: 24.sp),
+          icon: Icon(Icons.share, color: HvacColors.textSecondary, size: 24.sp),
           onPressed: () {
             // Share unit data
           },
@@ -287,17 +284,17 @@ class _UnitDetailScreenResponsiveState
     return Container(
       width: ResponsiveUtils.isDesktop(context) ? 280.w : 240.w,
       decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
+        color: HvacColors.backgroundCard,
         border: Border(
           right: BorderSide(
-            color: AppTheme.backgroundCardBorder,
+            color: HvacColors.backgroundCardBorder,
             width: 1.w,
           ),
         ),
       ),
       child: Column(
         children: [
-          SizedBox(height: AppSpacing.lgV),
+          const SizedBox(height: HvacSpacing.lgV),
           // Navigation items
           _buildSidebarItem(
             index: 0,
@@ -326,18 +323,18 @@ class _UnitDetailScreenResponsiveState
           const Spacer(),
           // Additional info at bottom
           Padding(
-            padding: EdgeInsets.all(AppSpacing.lgR),
+            padding: const EdgeInsets.all(HvacSpacing.lgR),
             child: Column(
               children: [
                 _buildInfoRow('Модель:', widget.unit.model ?? 'N/A'),
-                SizedBox(height: AppSpacing.smV),
+                const SizedBox(height: HvacSpacing.smV),
                 _buildInfoRow('IP:', widget.unit.ipAddress ?? 'N/A'),
-                SizedBox(height: AppSpacing.smV),
+                const SizedBox(height: HvacSpacing.smV),
                 _buildInfoRow('MAC:', widget.unit.macAddress ?? 'N/A'),
               ],
             ),
           ),
-          SizedBox(height: AppSpacing.lgV),
+          const SizedBox(height: HvacSpacing.lgV),
         ],
       ),
     );
@@ -351,7 +348,7 @@ class _UnitDetailScreenResponsiveState
   }) {
     return Material(
       color: isSelected
-          ? AppTheme.primaryOrange.withOpacity(0.1)
+          ? HvacColors.primaryOrange.withValues(alpha: 0.1)
           : Colors.transparent,
       child: InkWell(
         onTap: () {
@@ -361,9 +358,9 @@ class _UnitDetailScreenResponsiveState
           });
         },
         child: Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: AppSpacing.lgR,
-            vertical: AppSpacing.mdV,
+          padding: const EdgeInsets.symmetric(
+            horizontal: HvacSpacing.lgR,
+            vertical: HvacSpacing.mdV,
           ),
           child: Row(
             children: [
@@ -371,10 +368,10 @@ class _UnitDetailScreenResponsiveState
                 icon,
                 size: 20.sp,
                 color: isSelected
-                    ? AppTheme.primaryOrange
-                    : AppTheme.textSecondary,
+                    ? HvacColors.primaryOrange
+                    : HvacColors.textSecondary,
               ),
-              SizedBox(width: AppSpacing.mdR),
+              const SizedBox(width: HvacSpacing.mdR),
               Expanded(
                 child: Text(
                   label,
@@ -382,8 +379,8 @@ class _UnitDetailScreenResponsiveState
                     fontSize: 14.sp,
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                     color: isSelected
-                        ? AppTheme.primaryOrange
-                        : AppTheme.textPrimary,
+                        ? HvacColors.primaryOrange
+                        : HvacColors.textPrimary,
                   ),
                 ),
               ),
@@ -392,7 +389,7 @@ class _UnitDetailScreenResponsiveState
                   width: 3.w,
                   height: 20.h,
                   decoration: BoxDecoration(
-                    color: AppTheme.primaryOrange,
+                    color: HvacColors.primaryOrange,
                     borderRadius: BorderRadius.circular(2.r),
                   ),
                 ),
@@ -411,7 +408,7 @@ class _UnitDetailScreenResponsiveState
           label,
           style: TextStyle(
             fontSize: 12.sp,
-            color: AppTheme.textSecondary,
+            color: HvacColors.textSecondary,
           ),
         ),
         Text(
@@ -419,7 +416,7 @@ class _UnitDetailScreenResponsiveState
           style: TextStyle(
             fontSize: 12.sp,
             fontWeight: FontWeight.w500,
-            color: AppTheme.textPrimary,
+            color: HvacColors.textPrimary,
           ),
         ),
       ],

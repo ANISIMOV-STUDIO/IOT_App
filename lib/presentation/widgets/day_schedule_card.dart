@@ -4,7 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../domain/entities/day_schedule.dart';
 
 class DayScheduleCard extends StatelessWidget {
@@ -27,10 +27,10 @@ class DayScheduleCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
+        color: HvacColors.backgroundCard,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: AppTheme.backgroundCardBorder,
+          color: HvacColors.backgroundCardBorder,
           width: 1,
         ),
       ),
@@ -86,7 +86,7 @@ class DayScheduleCard extends StatelessWidget {
                 'Таймер',
                 style: TextStyle(
                   fontSize: 14,
-                  color: AppTheme.textSecondary,
+                  color: HvacColors.textSecondary,
                 ),
               ),
               Row(
@@ -96,8 +96,8 @@ class DayScheduleCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 12,
                       color: schedule.timerEnabled
-                          ? AppTheme.success
-                          : AppTheme.textSecondary,
+                          ? HvacColors.success
+                          : HvacColors.textSecondary,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -109,7 +109,7 @@ class DayScheduleCard extends StatelessWidget {
                             onUpdate!(schedule.copyWith(timerEnabled: value));
                           }
                         : null,
-                    activeThumbColor: AppTheme.primaryOrange,
+                    activeThumbColor: HvacColors.primaryOrange,
                   ),
                 ],
               ),
@@ -136,10 +136,10 @@ class DayScheduleCard extends StatelessWidget {
                   return Theme(
                     data: Theme.of(context).copyWith(
                       colorScheme: const ColorScheme.dark(
-                        primary: AppTheme.primaryOrange,
+                        primary: HvacColors.primaryOrange,
                         onPrimary: Colors.white,
-                        surface: AppTheme.backgroundCard,
-                        onSurface: AppTheme.textPrimary,
+                        surface: HvacColors.backgroundCard,
+                        onSurface: HvacColors.textPrimary,
                       ),
                     ),
                     child: child!,
@@ -154,10 +154,10 @@ class DayScheduleCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         decoration: BoxDecoration(
-          color: AppTheme.backgroundDark,
+          color: HvacColors.backgroundDark,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: AppTheme.backgroundCardBorder,
+            color: HvacColors.backgroundCardBorder,
             width: 1,
           ),
         ),
@@ -168,7 +168,7 @@ class DayScheduleCard extends StatelessWidget {
               label,
               style: const TextStyle(
                 fontSize: 10,
-                color: AppTheme.textSecondary,
+                color: HvacColors.textSecondary,
               ),
             ),
             const SizedBox(height: 4),
@@ -182,13 +182,13 @@ class DayScheduleCard extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
-                    color: AppTheme.textPrimary,
+                    color: HvacColors.textPrimary,
                   ),
                 ),
                 const Icon(
                   Icons.access_time,
                   size: 16,
-                  color: AppTheme.textSecondary,
+                  color: HvacColors.textSecondary,
                 ),
               ],
             ),

@@ -3,12 +3,8 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_typography.dart';
-import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/spacing.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../core/services/haptic_service.dart';
 
 /// Premium status indicator with glow
@@ -27,8 +23,8 @@ class StatusIndicator extends StatefulWidget {
     required this.isActive,
     this.activeLabel = 'Активно',
     this.inactiveLabel = 'Отключено',
-    this.activeColor = AppTheme.success, // Muted sea green
-    this.inactiveColor = AppTheme.neutral200, // Gray for inactive (not bright red!)
+    this.activeColor = HvacColors.success, // Muted sea green
+    this.inactiveColor = HvacColors.neutral200, // Gray for inactive (not bright red!)
     this.size = 8.0,
     this.showLabel = true,
     this.enablePulse = true,
@@ -124,10 +120,10 @@ class _StatusIndicatorState extends State<StatusIndicator>
           ),
         ),
         if (widget.showLabel) ...[
-          SizedBox(width: AppSpacing.smR),
+          const SizedBox(width: HvacSpacing.smR),
           Text(
             label,
-            style: AppTypography.captionMedium.copyWith(
+            style: HvacTypography.captionMedium.copyWith(
               color: color,
             ),
           ),
@@ -149,7 +145,7 @@ class AnimatedBadge extends StatefulWidget {
   const AnimatedBadge({
     super.key,
     required this.label,
-    this.backgroundColor = AppTheme.primaryOrange,
+    this.backgroundColor = HvacColors.primaryOrange,
     this.textColor = Colors.white,
     this.icon,
     this.isNew = false,
@@ -195,13 +191,13 @@ class _AnimatedBadgeState extends State<AnimatedBadge>
     Widget badge = ScaleTransition(
       scale: _scaleAnimation,
       child: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: AppSpacing.smR,
-          vertical: AppSpacing.xxsR,
+        padding: const EdgeInsets.symmetric(
+          horizontal: HvacSpacing.smR,
+          vertical: HvacSpacing.xxsR,
         ),
         decoration: BoxDecoration(
           color: widget.backgroundColor.withValues(alpha: 0.2),
-          borderRadius: BorderRadius.circular(AppRadius.smR),
+          borderRadius: BorderRadius.circular(HvacRadius.smR),
           border: Border.all(
             color: widget.backgroundColor.withValues(alpha: 0.3),
             width: 1,
@@ -216,21 +212,21 @@ class _AnimatedBadgeState extends State<AnimatedBadge>
                 size: 12.r,
                 color: widget.backgroundColor,
               ),
-              SizedBox(width: AppSpacing.xxsR),
+              const SizedBox(width: HvacSpacing.xxsR),
             ],
             Text(
               widget.label,
-              style: AppTypography.label.copyWith(
+              style: HvacTypography.label.copyWith(
                 color: widget.backgroundColor,
               ),
             ),
             if (widget.isNew) ...[
-              SizedBox(width: AppSpacing.xxsR),
+              const SizedBox(width: HvacSpacing.xxsR),
               Container(
                 width: 6.r,
                 height: 6.r,
                 decoration: const BoxDecoration(
-                  color: AppTheme.error,
+                  color: HvacColors.error,
                   shape: BoxShape.circle,
                 ),
               ),
@@ -342,7 +338,7 @@ class _PremiumProgressIndicatorState extends State<PremiumProgressIndicator>
             height: widget.height.h,
             decoration: BoxDecoration(
               color: widget.backgroundColor ??
-                  AppTheme.backgroundCardBorder.withValues(alpha: 0.3),
+                  HvacColors.backgroundCardBorder.withValues(alpha: 0.3),
               borderRadius: BorderRadius.circular(widget.height.h / 2),
             ),
             child: LayoutBuilder(
@@ -352,12 +348,12 @@ class _PremiumProgressIndicatorState extends State<PremiumProgressIndicator>
                     duration: const Duration(milliseconds: 300),
                     width: constraints.maxWidth * _progressAnimation.value,
                     decoration: BoxDecoration(
-                      gradient: widget.gradient ?? AppTheme.primaryGradient,
+                      gradient: widget.gradient ?? HvacColors.primaryGradient,
                       borderRadius: BorderRadius.circular(widget.height.h / 2),
                       boxShadow: [
                         BoxShadow(
                           color:
-                              AppTheme.primaryOrange.withValues(alpha: 0.3),
+                              HvacColors.primaryOrange.withValues(alpha: 0.3),
                           blurRadius: 8,
                           offset: const Offset(0, 2),
                         ),
@@ -370,13 +366,13 @@ class _PremiumProgressIndicatorState extends State<PremiumProgressIndicator>
           ),
         ),
         if (widget.showPercentage) ...[
-          SizedBox(height: AppSpacing.xsR),
+          const SizedBox(height: HvacSpacing.xsR),
           AnimatedBuilder(
             animation: _progressAnimation,
             builder: (context, child) => Text(
               '${(_progressAnimation.value * 100).toInt()}%',
-              style: AppTypography.captionBold.copyWith(
-                color: AppTheme.primaryOrange,
+              style: HvacTypography.captionBold.copyWith(
+                color: HvacColors.primaryOrange,
               ),
             ),
           ),
@@ -476,14 +472,14 @@ class _FloatingTooltipState extends State<FloatingTooltip>
                   position: _slideAnimation,
                   child: Center(
                     child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: AppSpacing.smR,
-                        vertical: AppSpacing.xsR,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: HvacSpacing.smR,
+                        vertical: HvacSpacing.xsR,
                       ),
                       decoration: BoxDecoration(
                         color: widget.backgroundColor ??
-                            AppTheme.backgroundCard,
-                        borderRadius: BorderRadius.circular(AppRadius.smR),
+                            HvacColors.backgroundCard,
+                        borderRadius: BorderRadius.circular(HvacRadius.smR),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withValues(alpha: 0.1),
@@ -494,7 +490,7 @@ class _FloatingTooltipState extends State<FloatingTooltip>
                       ),
                       child: Text(
                         widget.message,
-                        style: widget.textStyle ?? AppTypography.caption,
+                        style: widget.textStyle ?? HvacTypography.caption,
                       ),
                     ),
                   ),
@@ -532,8 +528,8 @@ class AnimatedDivider extends StatelessWidget {
             LinearGradient(
               colors: [
                 Colors.transparent,
-                AppTheme.backgroundCardBorder.withValues(alpha: 0.5),
-                AppTheme.backgroundCardBorder.withValues(alpha: 0.5),
+                HvacColors.backgroundCardBorder.withValues(alpha: 0.5),
+                HvacColors.backgroundCardBorder.withValues(alpha: 0.5),
                 Colors.transparent,
               ],
               stops: const [0.0, 0.2, 0.8, 1.0],

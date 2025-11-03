@@ -3,10 +3,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/spacing.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
 class EmptyState extends StatelessWidget {
   final String message;
@@ -29,7 +26,7 @@ class EmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final content = Padding(
-      padding: const EdgeInsets.all(AppSpacing.xl),
+      padding: const EdgeInsets.all(HvacSpacing.xl),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
@@ -37,16 +34,16 @@ class EmptyState extends StatelessWidget {
           Icon(
             icon,
             size: 64.sp,
-            color: AppTheme.textTertiary,
+            color: HvacColors.textTertiary,
           ),
-          const SizedBox(height: AppSpacing.lg),
+          const SizedBox(height: HvacSpacing.lg),
           if (title != null) ...[
             Text(
               title!,
               style: Theme.of(context).textTheme.headlineSmall,
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: AppSpacing.sm),
+            const SizedBox(height: HvacSpacing.sm),
           ],
           Text(
             message,
@@ -54,7 +51,7 @@ class EmptyState extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           if (onAction != null && actionLabel != null) ...[
-            const SizedBox(height: AppSpacing.xl),
+            const SizedBox(height: HvacSpacing.xl),
             ElevatedButton(
               onPressed: onAction,
               child: Text(actionLabel!),
@@ -69,7 +66,7 @@ class EmptyState extends StatelessWidget {
     }
 
     return Scaffold(
-      backgroundColor: AppTheme.backgroundDark,
+      backgroundColor: HvacColors.backgroundDark,
       body: Center(child: content),
     );
   }
@@ -89,16 +86,16 @@ class EmptyListState extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.xl),
+        padding: const EdgeInsets.all(HvacSpacing.xl),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
               icon,
               size: 48.sp,
-              color: AppTheme.textTertiary,
+              color: HvacColors.textTertiary,
             ),
-            const SizedBox(height: AppSpacing.md),
+            const SizedBox(height: HvacSpacing.md),
             Text(
               message,
               style: Theme.of(context).textTheme.bodyMedium,

@@ -5,11 +5,8 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import '../../core/theme/app_theme.dart';
-import '../../core/theme/spacing.dart';
-import '../../core/utils/responsive_utils.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../domain/entities/hvac_unit.dart';
 import 'temperature_display_compact.dart';
 
@@ -67,10 +64,10 @@ class TemperatureGridCompact extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
+        color: HvacColors.backgroundCard,
         borderRadius: BorderRadius.circular(16.r),
         border: Border.all(
-          color: AppTheme.backgroundCardBorder,
+          color: HvacColors.backgroundCardBorder,
           width: 1,
         ),
       ),
@@ -100,15 +97,15 @@ class TemperatureGridCompact extends StatelessWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                AppTheme.info.withValues(alpha: 0.2),
-                AppTheme.info.withValues(alpha: 0.1),
+                HvacColors.info.withValues(alpha: 0.2),
+                HvacColors.info.withValues(alpha: 0.1),
               ],
             ),
             borderRadius: BorderRadius.circular(10.r),
           ),
           child: Icon(
             Icons.thermostat_outlined,
-            color: AppTheme.info,
+            color: HvacColors.info,
             size: 20.w,
           ),
         ),
@@ -122,7 +119,7 @@ class TemperatureGridCompact extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.textPrimary,
+                  color: HvacColors.textPrimary,
                   letterSpacing: -0.3,
                 ),
               ),
@@ -130,7 +127,7 @@ class TemperatureGridCompact extends StatelessWidget {
                 'Мониторинг и уставки',
                 style: TextStyle(
                   fontSize: 12.sp,
-                  color: AppTheme.textSecondary,
+                  color: HvacColors.textSecondary,
                 ),
               ),
             ],
@@ -154,7 +151,7 @@ class TemperatureGridCompact extends StatelessWidget {
                   icon: Icons.download,
                   label: 'Приток',
                   value: unit.supplyAirTemp,
-                  color: AppTheme.info,
+                  color: HvacColors.info,
                   isPrimary: true,
                 ),
               ),
@@ -164,7 +161,7 @@ class TemperatureGridCompact extends StatelessWidget {
                   icon: Icons.upload,
                   label: 'Вытяжка',
                   value: unit.roomTemp,
-                  color: AppTheme.warning,
+                  color: HvacColors.warning,
                   isPrimary: true,
                 ),
               ),
@@ -180,7 +177,7 @@ class TemperatureGridCompact extends StatelessWidget {
                       icon: Icons.landscape,
                       label: 'Наружный',
                       value: unit.outdoorTemp,
-                      color: AppTheme.textSecondary,
+                      color: HvacColors.textSecondary,
                       isPrimary: false,
                     ),
                   ),
@@ -192,7 +189,7 @@ class TemperatureGridCompact extends StatelessWidget {
                       icon: Icons.home,
                       label: 'Комнатный',
                       value: unit.roomTemp,
-                      color: AppTheme.success,
+                      color: HvacColors.success,
                       isPrimary: false,
                     ),
                   ),
@@ -214,7 +211,7 @@ class TemperatureGridCompact extends StatelessWidget {
             icon: Icons.download,
             label: 'Приток',
             value: unit.supplyAirTemp,
-            color: AppTheme.info,
+            color: HvacColors.info,
             isPrimary: true,
           ),
         ),
@@ -224,7 +221,7 @@ class TemperatureGridCompact extends StatelessWidget {
             icon: Icons.upload,
             label: 'Вытяжка',
             value: unit.roomTemp,
-            color: AppTheme.warning,
+            color: HvacColors.warning,
             isPrimary: true,
           ),
         ),
@@ -235,7 +232,7 @@ class TemperatureGridCompact extends StatelessWidget {
               icon: Icons.landscape,
               label: 'Наружный',
               value: unit.outdoorTemp,
-              color: AppTheme.textSecondary,
+              color: HvacColors.textSecondary,
               isPrimary: false,
             ),
           ),
@@ -246,7 +243,7 @@ class TemperatureGridCompact extends StatelessWidget {
               icon: Icons.home,
               label: 'Комнатный',
               value: unit.roomTemp,
-              color: AppTheme.success,
+              color: HvacColors.success,
               isPrimary: false,
             ),
           ),
@@ -320,7 +317,7 @@ class _TempCard extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 10.sp,
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.textSecondary,
+                  color: HvacColors.textSecondary,
                   letterSpacing: 0.5,
                 ),
               ),
@@ -332,7 +329,7 @@ class _TempCard extends StatelessWidget {
             style: TextStyle(
               fontSize: isPrimary ? 20.sp : 18.sp,
               fontWeight: FontWeight.w700,
-              color: isPrimary ? color : AppTheme.textPrimary,
+              color: isPrimary ? color : HvacColors.textPrimary,
             ),
           ),
         ],

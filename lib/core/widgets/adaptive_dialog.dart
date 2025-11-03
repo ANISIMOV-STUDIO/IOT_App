@@ -4,10 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../utils/responsive_utils.dart';
-import '../theme/spacing.dart';
-
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 /// Responsive dialog that adapts size based on screen
 class AdaptiveDialog extends StatelessWidget {
   final Widget? title;
@@ -51,7 +48,7 @@ class AdaptiveDialog extends StatelessWidget {
           children: [
             if (title != null)
               Padding(
-                padding: EdgeInsets.all(AppSpacing.lgR),
+                padding: const EdgeInsets.all(HvacSpacing.lgR),
                 child: DefaultTextStyle(
                   style: TextStyle(
                     fontSize: isMobile ? 18.sp : 20.sp,
@@ -62,16 +59,16 @@ class AdaptiveDialog extends StatelessWidget {
               ),
             Flexible(
               child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppSpacing.lgR,
-                  vertical: AppSpacing.mdV,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: HvacSpacing.lgR,
+                  vertical: HvacSpacing.mdV,
                 ),
                 child: content,
               ),
             ),
             if (actions != null && actions!.isNotEmpty)
               Padding(
-                padding: EdgeInsets.all(AppSpacing.mdR),
+                padding: const EdgeInsets.all(HvacSpacing.mdR),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: actions!,

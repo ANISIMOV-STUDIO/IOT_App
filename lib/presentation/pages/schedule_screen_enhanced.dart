@@ -5,9 +5,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../core/theme/app_theme.dart';
-import '../../core/theme/spacing.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../core/utils/accessibility_utils.dart';
 import '../../core/utils/responsive_builder.dart';
 import '../../generated/l10n/app_localizations.dart';
@@ -159,13 +157,13 @@ class _EnhancedScheduleScreenState extends State<EnhancedScheduleScreen> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      backgroundColor: AppTheme.backgroundDark,
+      backgroundColor: HvacColors.backgroundDark,
       appBar: _buildAppBar(context, l10n),
       body: ResponsiveBuilder(
         builder: (context, info) {
           return RefreshIndicator(
             onRefresh: _loadSchedules,
-            color: AppTheme.primaryOrange,
+            color: HvacColors.primaryOrange,
             child: _buildBody(context, l10n, info),
           );
         },
@@ -176,7 +174,7 @@ class _EnhancedScheduleScreenState extends State<EnhancedScheduleScreen> {
 
   AppBar _buildAppBar(BuildContext context, AppLocalizations l10n) {
     return AppBar(
-      backgroundColor: AppTheme.backgroundDark,
+      backgroundColor: HvacColors.backgroundDark,
       elevation: 0,
       leading: AccessibleIconButton(
         onPressed: () => Navigator.pop(context),
@@ -191,7 +189,7 @@ class _EnhancedScheduleScreenState extends State<EnhancedScheduleScreen> {
           style: TextStyle(
             fontSize: 20.sp,
             fontWeight: FontWeight.w700,
-            color: AppTheme.textPrimary,
+            color: HvacColors.textPrimary,
           ),
         ),
       ),
@@ -243,10 +241,10 @@ class _EnhancedScheduleScreenState extends State<EnhancedScheduleScreen> {
 
     // Show schedules list
     return ResponsivePadding.symmetric(
-      mobileHorizontal: AppSpacing.md.w,
-      mobileVertical: AppSpacing.md.h,
-      tabletHorizontal: AppSpacing.xl.w,
-      desktopHorizontal: AppSpacing.xxl.w,
+      mobileHorizontal: HvacSpacing.md.w,
+      mobileVertical: HvacSpacing.md.h,
+      tabletHorizontal: HvacSpacing.xl.w,
+      desktopHorizontal: HvacSpacing.xxl.w,
       child: _buildSchedulesList(context, l10n, info),
     );
   }
@@ -258,7 +256,7 @@ class _EnhancedScheduleScreenState extends State<EnhancedScheduleScreen> {
   ) {
     return ListView.separated(
       itemCount: _schedules.length,
-      separatorBuilder: (context, index) => SizedBox(height: AppSpacing.md.h),
+      separatorBuilder: (context, index) => SizedBox(height: HvacSpacing.md.h),
       itemBuilder: (context, index) {
         final schedule = _schedules[index];
         return _ScheduleCard(
@@ -343,18 +341,18 @@ class _ScheduleCard extends StatelessWidget {
             AccessibilityUtils.hapticFeedback(HapticType.selection);
             onTap();
           },
-          borderRadius: BorderRadius.circular(AppSpacing.md.r),
+          borderRadius: BorderRadius.circular(HvacSpacing.md.r),
           child: Container(
-            padding: EdgeInsets.all(AppSpacing.md.w),
+            padding: EdgeInsets.all(HvacSpacing.md.w),
             decoration: BoxDecoration(
               color: isSelected
-                  ? AppTheme.primaryOrange.withValues(alpha: 0.1)
-                  : AppTheme.cardDark,
-              borderRadius: BorderRadius.circular(AppSpacing.md.r),
+                  ? HvacColors.primaryOrange.withValues(alpha: 0.1)
+                  : HvacColors.cardDark,
+              borderRadius: BorderRadius.circular(HvacSpacing.md.r),
               border: Border.all(
                 color: isSelected
-                    ? AppTheme.primaryOrange
-                    : AppTheme.cardDark,
+                    ? HvacColors.primaryOrange
+                    : HvacColors.cardDark,
                 width: 2,
               ),
             ),
@@ -388,15 +386,15 @@ class _ScheduleCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w600,
-                      color: AppTheme.textPrimary,
+                      color: HvacColors.textPrimary,
                     ),
                   ),
-                  SizedBox(height: AppSpacing.xs.h),
+                  SizedBox(height: HvacSpacing.xs.h),
                   Text(
                     '${schedule.time} • ${schedule.days.join(', ')}',
                     style: TextStyle(
                       fontSize: 14.sp,
-                      color: AppTheme.textSecondary,
+                      color: HvacColors.textSecondary,
                     ),
                   ),
                 ],
@@ -405,7 +403,7 @@ class _ScheduleCard extends StatelessWidget {
             _buildToggleSwitch(context),
           ],
         ),
-        SizedBox(height: AppSpacing.sm.h),
+        SizedBox(height: HvacSpacing.sm.h),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -430,15 +428,15 @@ class _ScheduleCard extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.textPrimary,
+                  color: HvacColors.textPrimary,
                 ),
               ),
-              SizedBox(height: AppSpacing.xs.h),
+              SizedBox(height: HvacSpacing.xs.h),
               Text(
                 '${schedule.time} • ${schedule.days.join(', ')}',
                 style: TextStyle(
                   fontSize: 14.sp,
-                  color: AppTheme.textSecondary,
+                  color: HvacColors.textSecondary,
                 ),
               ),
             ],
@@ -449,7 +447,7 @@ class _ScheduleCard extends StatelessWidget {
           child: _buildTemperatureInfo(context),
         ),
         _buildActionButtons(context),
-        SizedBox(width: AppSpacing.md.w),
+        SizedBox(width: HvacSpacing.md.w),
         _buildToggleSwitch(context),
       ],
     );
@@ -461,32 +459,32 @@ class _ScheduleCard extends StatelessWidget {
         Icon(
           Icons.thermostat,
           size: 20.sp,
-          color: AppTheme.primaryOrange,
+          color: HvacColors.primaryOrange,
         ),
-        SizedBox(width: AppSpacing.xs.w),
+        SizedBox(width: HvacSpacing.xs.w),
         Text(
           '${schedule.temperature}°C',
           style: TextStyle(
             fontSize: 14.sp,
             fontWeight: FontWeight.w500,
-            color: AppTheme.textPrimary,
+            color: HvacColors.textPrimary,
           ),
         ),
-        SizedBox(width: AppSpacing.sm.w),
+        SizedBox(width: HvacSpacing.sm.w),
         Container(
           padding: EdgeInsets.symmetric(
-            horizontal: AppSpacing.xs.w,
-            vertical: AppSpacing.xxs.h,
+            horizontal: HvacSpacing.xs.w,
+            vertical: HvacSpacing.xxs.h,
           ),
           decoration: BoxDecoration(
-            color: AppTheme.primaryOrange.withValues(alpha: 0.2),
-            borderRadius: BorderRadius.circular(AppSpacing.xs.r),
+            color: HvacColors.primaryOrange.withValues(alpha: 0.2),
+            borderRadius: BorderRadius.circular(HvacSpacing.xs.r),
           ),
           child: Text(
             schedule.mode,
             style: TextStyle(
               fontSize: 12.sp,
-              color: AppTheme.primaryOrange,
+              color: HvacColors.primaryOrange,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -513,7 +511,7 @@ class _ScheduleCard extends StatelessWidget {
           semanticLabel: 'Delete ${schedule.name}',
           tooltip: 'Delete',
           size: 20.sp,
-          color: AppTheme.error,
+          color: HvacColors.error,
           minTouchTarget: 44,
         ),
       ],
@@ -528,9 +526,9 @@ class _ScheduleCard extends StatelessWidget {
       child: Switch(
         value: schedule.isActive,
         onChanged: onToggle,
-        activeThumbColor: AppTheme.primaryOrange,
-        inactiveThumbColor: AppTheme.textSecondary,
-        inactiveTrackColor: AppTheme.cardDark,
+        activeThumbColor: HvacColors.primaryOrange,
+        inactiveThumbColor: HvacColors.textSecondary,
+        inactiveTrackColor: HvacColors.cardDark,
       ),
     );
   }
@@ -560,7 +558,7 @@ class _AccessibleConfirmDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: AppTheme.cardDark,
+      backgroundColor: HvacColors.cardDark,
       title: Semantics(
         header: true,
         child: Text(
@@ -568,7 +566,7 @@ class _AccessibleConfirmDialog extends StatelessWidget {
           style: TextStyle(
             fontSize: 18.sp,
             fontWeight: FontWeight.w600,
-            color: AppTheme.textPrimary,
+            color: HvacColors.textPrimary,
           ),
         ),
       ),
@@ -576,7 +574,7 @@ class _AccessibleConfirmDialog extends StatelessWidget {
         message,
         style: TextStyle(
           fontSize: 14.sp,
-          color: AppTheme.textSecondary,
+          color: HvacColors.textSecondary,
         ),
       ),
       actions: [
@@ -585,7 +583,7 @@ class _AccessibleConfirmDialog extends StatelessWidget {
           text: cancelLabel,
           textStyle: TextStyle(
             fontSize: 14.sp,
-            color: AppTheme.textSecondary,
+            color: HvacColors.textSecondary,
           ),
         ),
         AccessibleButton(
@@ -596,7 +594,7 @@ class _AccessibleConfirmDialog extends StatelessWidget {
             confirmLabel,
             style: TextStyle(
               fontSize: 14.sp,
-              color: AppTheme.error,
+              color: HvacColors.error,
               fontWeight: FontWeight.w600,
             ),
           ),

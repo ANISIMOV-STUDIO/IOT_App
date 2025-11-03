@@ -4,10 +4,9 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
 import '../../../core/constants/animation_constants.dart';
-import '../../../core/theme/app_theme.dart';
-
 class AnimatedCard extends StatelessWidget {
   final Widget child;
   final int delay;
@@ -29,8 +28,8 @@ class AnimatedCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget card = Container(
-      decoration: decoration ?? AppTheme.roundedCard(),
-      padding: padding ?? AppTheme.cardPadding,
+      decoration: decoration ?? HvacTheme.roundedCard(),
+      padding: padding ?? HvacSpacing.cardPadding,
       child: child,
     );
 
@@ -82,8 +81,8 @@ class AnimatedDeviceCard extends StatelessWidget {
     return AnimatedCard(
       delay: delay,
       onTap: onTap,
-      decoration: AppTheme.deviceCard(isSelected: isSelected),
-      padding: padding ?? AppTheme.cardPadding,
+      decoration: HvacTheme.deviceCard(isSelected: isSelected),
+      padding: padding ?? HvacSpacing.cardPadding,
       child: child,
     );
   }

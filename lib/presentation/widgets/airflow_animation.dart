@@ -4,8 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
-
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 class AirflowAnimation extends StatefulWidget {
   final bool isActive;
   final int speed; // 0-100
@@ -71,10 +70,10 @@ class _AirflowAnimationState extends State<AirflowAnimation>
       height: 100,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppTheme.backgroundCard,
+        color: HvacColors.backgroundCard,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: AppTheme.backgroundCardBorder,
+          color: HvacColors.backgroundCardBorder,
           width: 1,
         ),
       ),
@@ -86,7 +85,7 @@ class _AirflowAnimationState extends State<AirflowAnimation>
             left: 0,
             right: 0,
             child: _buildAirflowLine(
-              color: AppTheme.info,
+              color: HvacColors.info,
               label: 'Приток',
             ),
           ),
@@ -97,7 +96,7 @@ class _AirflowAnimationState extends State<AirflowAnimation>
             left: 0,
             right: 0,
             child: _buildAirflowLine(
-              color: AppTheme.warning,
+              color: HvacColors.warning,
               label: 'Вытяжка',
               reversed: true,
             ),

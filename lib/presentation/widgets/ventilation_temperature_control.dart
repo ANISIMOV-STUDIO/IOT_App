@@ -5,10 +5,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../core/theme/app_theme.dart';
-import '../../core/theme/spacing.dart';
-import '../../core/utils/adaptive_layout.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../domain/entities/hvac_unit.dart';
 
 class VentilationTemperatureControl extends StatelessWidget {
@@ -26,12 +23,12 @@ class VentilationTemperatureControl extends StatelessWidget {
         return Container(
           padding: AdaptiveLayout.controlPadding(context),
           decoration: BoxDecoration(
-            color: AppTheme.backgroundCard,
+            color: HvacColors.backgroundCard,
             borderRadius: BorderRadius.circular(
               AdaptiveLayout.borderRadius(context, base: 16),
             ),
             border: Border.all(
-              color: AppTheme.backgroundCardBorder,
+              color: HvacColors.backgroundCardBorder,
             ),
           ),
           child: LayoutBuilder(
@@ -79,14 +76,14 @@ class VentilationTemperatureControl extends StatelessWidget {
         Container(
           padding: EdgeInsets.all(AdaptiveLayout.spacing(context, base: 8)),
           decoration: BoxDecoration(
-            color: AppTheme.info.withValues(alpha: 0.2),
+            color: HvacColors.info.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(
               AdaptiveLayout.borderRadius(context, base: 8),
             ),
           ),
           child: Icon(
             Icons.thermostat,
-            color: AppTheme.info,
+            color: HvacColors.info,
             size: AdaptiveLayout.iconSize(context, base: 20),
           ),
         ),
@@ -101,7 +98,7 @@ class VentilationTemperatureControl extends StatelessWidget {
                 style: TextStyle(
                   fontSize: AdaptiveLayout.fontSize(context, base: 16),
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.textPrimary,
+                  color: HvacColors.textPrimary,
                 ),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
@@ -111,7 +108,7 @@ class VentilationTemperatureControl extends StatelessWidget {
                 'Мониторинг и уставки',
                 style: TextStyle(
                   fontSize: AdaptiveLayout.fontSize(context, base: 12),
-                  color: AppTheme.textSecondary,
+                  color: HvacColors.textSecondary,
                 ),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
@@ -133,7 +130,7 @@ class VentilationTemperatureControl extends StatelessWidget {
             'Приток',
             unit.supplyAirTemp,
             Icons.air,
-            AppTheme.info,
+            HvacColors.info,
           ),
           SizedBox(height: 8.h),
           _buildTempIndicator(
@@ -141,7 +138,7 @@ class VentilationTemperatureControl extends StatelessWidget {
             'Вытяжка',
             unit.roomTemp, // Используем roomTemp как температуру вытяжки
             Icons.upload,
-            AppTheme.warning,
+            HvacColors.warning,
           ),
           SizedBox(height: 8.h),
           _buildTempIndicator(
@@ -149,7 +146,7 @@ class VentilationTemperatureControl extends StatelessWidget {
             'Наружный',
             unit.outdoorTemp,
             Icons.landscape,
-            AppTheme.textSecondary,
+            HvacColors.textSecondary,
           ),
           SizedBox(height: 8.h),
           _buildTempIndicator(
@@ -157,15 +154,15 @@ class VentilationTemperatureControl extends StatelessWidget {
             'Внутренний',
             unit.roomTemp,
             Icons.home,
-            AppTheme.success,
+            HvacColors.success,
           ),
         ],
       );
     } else {
       // Grid for tablet/desktop
       return Wrap(
-        spacing: AppSpacing.mdR,
-        runSpacing: AppSpacing.mdR,
+        spacing: HvacSpacing.mdR,
+        runSpacing: HvacSpacing.mdR,
         children: [
           SizedBox(
             width: deviceSize == DeviceSize.medium ?
@@ -175,7 +172,7 @@ class VentilationTemperatureControl extends StatelessWidget {
               'Приток',
               unit.supplyAirTemp,
               Icons.air,
-              AppTheme.info,
+              HvacColors.info,
             ),
           ),
           SizedBox(
@@ -186,7 +183,7 @@ class VentilationTemperatureControl extends StatelessWidget {
               'Вытяжка',
               unit.roomTemp,
               Icons.upload,
-              AppTheme.warning,
+              HvacColors.warning,
             ),
           ),
           SizedBox(
@@ -197,7 +194,7 @@ class VentilationTemperatureControl extends StatelessWidget {
               'Наружный',
               unit.outdoorTemp,
               Icons.landscape,
-              AppTheme.textSecondary,
+              HvacColors.textSecondary,
             ),
           ),
           SizedBox(
@@ -208,7 +205,7 @@ class VentilationTemperatureControl extends StatelessWidget {
               'Внутренний',
               unit.roomTemp,
               Icons.home,
-              AppTheme.success,
+              HvacColors.success,
             ),
           ),
         ],
@@ -249,7 +246,7 @@ class VentilationTemperatureControl extends StatelessWidget {
                   label,
                   style: TextStyle(
                     fontSize: AdaptiveLayout.fontSize(context, base: 11),
-                    color: AppTheme.textSecondary,
+                    color: HvacColors.textSecondary,
                   ),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,

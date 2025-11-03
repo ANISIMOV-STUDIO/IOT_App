@@ -5,13 +5,9 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../core/theme/app_theme.dart';
-import '../../core/utils/adaptive_layout.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../domain/entities/hvac_unit.dart';
 import '../../domain/entities/ventilation_mode.dart';
-import '../../core/utils/performance_utils.dart';
-import 'common/adaptive_slider.dart';
 
 class VentilationModeControl extends StatefulWidget {
   final HvacUnit unit;
@@ -75,12 +71,12 @@ class _VentilationModeControlState extends State<VentilationModeControl>
           return Container(
             padding: AdaptiveLayout.controlPadding(context),
             decoration: BoxDecoration(
-              color: AppTheme.backgroundCard,
+              color: HvacColors.backgroundCard,
               borderRadius: BorderRadius.circular(
                 AdaptiveLayout.borderRadius(context, base: 16),
               ),
               border: Border.all(
-                color: AppTheme.backgroundCardBorder,
+                color: HvacColors.backgroundCardBorder,
               ),
             ),
             child: LayoutBuilder(
@@ -137,14 +133,14 @@ class _VentilationModeControlState extends State<VentilationModeControl>
         Container(
           padding: EdgeInsets.all(AdaptiveLayout.spacing(context, base: 8)),
           decoration: BoxDecoration(
-            color: AppTheme.primaryOrange.withValues(alpha: 0.2),
+            color: HvacColors.primaryOrange.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(
               AdaptiveLayout.borderRadius(context, base: 8),
             ),
           ),
           child: Icon(
             Icons.tune,
-            color: AppTheme.primaryOrange,
+            color: HvacColors.primaryOrange,
             size: AdaptiveLayout.iconSize(context, base: 20),
           ),
         ),
@@ -159,7 +155,7 @@ class _VentilationModeControlState extends State<VentilationModeControl>
                 style: TextStyle(
                   fontSize: AdaptiveLayout.fontSize(context, base: 16),
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.textPrimary,
+                  color: HvacColors.textPrimary,
                 ),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
@@ -169,7 +165,7 @@ class _VentilationModeControlState extends State<VentilationModeControl>
                 widget.unit.ventMode?.displayName ?? 'Базовый',
                 style: TextStyle(
                   fontSize: AdaptiveLayout.fontSize(context, base: 12),
-                  color: AppTheme.textSecondary,
+                  color: HvacColors.textSecondary,
                 ),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
@@ -197,12 +193,12 @@ class _VentilationModeControlState extends State<VentilationModeControl>
           vertical: AdaptiveLayout.spacing(context, base: 10),
         ),
         decoration: BoxDecoration(
-          color: AppTheme.primaryOrange.withValues(alpha: 0.1),
+          color: HvacColors.primaryOrange.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(
             AdaptiveLayout.borderRadius(context, base: 12),
           ),
           border: Border.all(
-            color: AppTheme.primaryOrange.withValues(alpha: 0.3),
+            color: HvacColors.primaryOrange.withValues(alpha: 0.3),
           ),
         ),
         child: Row(
@@ -213,7 +209,7 @@ class _VentilationModeControlState extends State<VentilationModeControl>
                 style: TextStyle(
                   fontSize: AdaptiveLayout.fontSize(context, base: 14),
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.primaryOrange,
+                  color: HvacColors.primaryOrange,
                 ),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
@@ -224,7 +220,7 @@ class _VentilationModeControlState extends State<VentilationModeControl>
               _showModeSelector
                   ? Icons.keyboard_arrow_up
                   : Icons.keyboard_arrow_down,
-              color: AppTheme.primaryOrange,
+              color: HvacColors.primaryOrange,
               size: AdaptiveLayout.iconSize(context, base: 20),
             ),
           ],

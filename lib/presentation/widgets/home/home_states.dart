@@ -5,11 +5,9 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/spacing.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../generated/l10n/app_localizations.dart';
 import '../../bloc/hvac_list/hvac_list_bloc.dart';
 import '../../bloc/hvac_list/hvac_list_event.dart';
@@ -27,15 +25,15 @@ class HomeLoadingState extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CircularProgressIndicator(
-            color: AppTheme.primaryOrange,
+            color: HvacColors.primaryOrange,
             strokeWidth: 3.w,
           ),
-          SizedBox(height: AppSpacing.mdV),
+          const SizedBox(height: HvacSpacing.mdV),
           Text(
             l10n.loadingDevices,
             style: TextStyle(
               fontSize: 14.sp,
-              color: AppTheme.textSecondary,
+              color: HvacColors.textSecondary,
             ),
           ),
         ],
@@ -59,43 +57,43 @@ class HomeErrorState extends StatelessWidget {
 
     return Center(
       child: Padding(
-        padding: EdgeInsets.all(AppSpacing.lgR),
+        padding: const EdgeInsets.all(HvacSpacing.lgR),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               Icons.error_outline,
               size: 64.sp,
-              color: AppTheme.error,
+              color: HvacColors.error,
             ),
-            SizedBox(height: AppSpacing.lgV),
+            const SizedBox(height: HvacSpacing.lgV),
             Text(
               l10n.connectionError,
               style: TextStyle(
                 fontSize: 20.sp,
                 fontWeight: FontWeight.w700,
-                color: AppTheme.textPrimary,
+                color: HvacColors.textPrimary,
               ),
             ),
-            SizedBox(height: AppSpacing.smV),
+            const SizedBox(height: HvacSpacing.smV),
             Text(
               message,
               style: TextStyle(
                 fontSize: 14.sp,
-                color: AppTheme.textSecondary,
+                color: HvacColors.textSecondary,
               ),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: AppSpacing.lgV),
+            const SizedBox(height: HvacSpacing.lgV),
             ElevatedButton(
               onPressed: () => context.read<HvacListBloc>().add(
                 const LoadHvacUnitsEvent(),
               ),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.primaryOrange,
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppSpacing.lgR,
-                  vertical: AppSpacing.smV,
+                backgroundColor: HvacColors.primaryOrange,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: HvacSpacing.lgR,
+                  vertical: HvacSpacing.smV,
                 ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.r),
@@ -123,30 +121,30 @@ class HomeEmptyState extends StatelessWidget {
 
     return Center(
       child: Padding(
-        padding: EdgeInsets.all(AppSpacing.lgR),
+        padding: const EdgeInsets.all(HvacSpacing.lgR),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               Icons.devices_other,
               size: 64.sp,
-              color: AppTheme.textSecondary.withValues(alpha: 0.5),
+              color: HvacColors.textSecondary.withValues(alpha: 0.5),
             ),
-            SizedBox(height: AppSpacing.lgV),
+            const SizedBox(height: HvacSpacing.lgV),
             Text(
               l10n.noDevices,
               style: TextStyle(
                 fontSize: 20.sp,
                 fontWeight: FontWeight.w700,
-                color: AppTheme.textPrimary,
+                color: HvacColors.textPrimary,
               ),
             ),
-            SizedBox(height: AppSpacing.smV),
+            const SizedBox(height: HvacSpacing.smV),
             Text(
               l10n.addFirstDevice,
               style: TextStyle(
                 fontSize: 14.sp,
-                color: AppTheme.textSecondary,
+                color: HvacColors.textSecondary,
               ),
               textAlign: TextAlign.center,
             ),

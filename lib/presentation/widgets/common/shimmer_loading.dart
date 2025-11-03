@@ -4,10 +4,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_radius.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
 class ShimmerLoading extends StatelessWidget {
   final double width;
@@ -24,13 +21,13 @@ class ShimmerLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: AppTheme.backgroundCard,
-      highlightColor: AppTheme.backgroundCardBorder,
+      baseColor: HvacColors.backgroundCard,
+      highlightColor: HvacColors.backgroundCardBorder,
       child: Container(
         width: width,
         height: height,
         decoration: BoxDecoration(
-          color: AppTheme.backgroundCard,
+          color: HvacColors.backgroundCard,
           borderRadius: BorderRadius.circular(borderRadius.r),
         ),
       ),
@@ -53,14 +50,14 @@ class ShimmerBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: AppTheme.backgroundCard,
-      highlightColor: AppTheme.backgroundCardBorder,
+      baseColor: HvacColors.backgroundCard,
+      highlightColor: HvacColors.backgroundCardBorder,
       child: Container(
         width: width,
         height: height,
         decoration: BoxDecoration(
-          color: AppTheme.backgroundCard,
-          borderRadius: borderRadius ?? BorderRadius.circular(AppRadius.mdR),
+          color: HvacColors.backgroundCard,
+          borderRadius: borderRadius ?? BorderRadius.circular(HvacRadius.mdR),
         ),
       ),
     );
@@ -78,13 +75,13 @@ class ShimmerCircle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: AppTheme.backgroundCard,
-      highlightColor: AppTheme.backgroundCardBorder,
+      baseColor: HvacColors.backgroundCard,
+      highlightColor: HvacColors.backgroundCardBorder,
       child: Container(
         width: size,
         height: size,
         decoration: const BoxDecoration(
-          color: AppTheme.backgroundCard,
+          color: HvacColors.backgroundCard,
           shape: BoxShape.circle,
         ),
       ),

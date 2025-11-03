@@ -4,8 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
-
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 class DeviceCard extends StatelessWidget {
   final String name;
   final String subtitle;
@@ -29,7 +28,7 @@ class DeviceCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        decoration: AppTheme.deviceCard(isSelected: isSelected),
+        decoration: HvacTheme.deviceCard(isSelected: isSelected),
         padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -38,7 +37,7 @@ class DeviceCard extends StatelessWidget {
             Container(
               width: 80,
               height: 80,
-              decoration: AppTheme.deviceImagePlaceholder(),
+              decoration: HvacTheme.deviceImagePlaceholder(),
               child: imageUrl != null
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(12),
@@ -49,7 +48,7 @@ class DeviceCard extends StatelessWidget {
                           return Icon(
                             icon,
                             size: 40,
-                            color: AppTheme.textSecondary,
+                            color: HvacColors.textSecondary,
                           );
                         },
                       ),
@@ -57,7 +56,7 @@ class DeviceCard extends StatelessWidget {
                   : Icon(
                       icon,
                       size: 40,
-                      color: AppTheme.textSecondary,
+                      color: HvacColors.textSecondary,
                     ),
             ),
             const SizedBox(height: 12),
@@ -108,12 +107,12 @@ class DeviceStatusCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final modeColor = AppTheme.getModeColor(mode);
+    final modeColor = HvacColors.getModeColor(mode);
 
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        decoration: AppTheme.deviceCard(),
+        decoration: HvacTheme.deviceCard(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -131,11 +130,11 @@ class DeviceStatusCard extends StatelessWidget {
                   errorBuilder: (context, error, stackTrace) {
                     return Container(
                       height: 120,
-                      color: AppTheme.backgroundCard,
+                      color: HvacColors.backgroundCard,
                       child: const Icon(
                         Icons.thermostat,
                         size: 48,
-                        color: AppTheme.textTertiary,
+                        color: HvacColors.textTertiary,
                       ),
                     );
                   },

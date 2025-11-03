@@ -4,8 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
-import '../../core/theme/glassmorphism.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../domain/entities/mode_preset.dart';
 import '../../domain/entities/ventilation_mode.dart';
 
@@ -32,12 +31,12 @@ class QuickPresetsPanel extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: AppTheme.primaryOrange.withValues(alpha: 0.2),
+                  color: HvacColors.primaryOrange.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Icon(
                   Icons.flash_on,
-                  color: AppTheme.primaryOrange,
+                  color: HvacColors.primaryOrange,
                   size: 20,
                 ),
               ),
@@ -51,7 +50,7 @@ class QuickPresetsPanel extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
-                        color: AppTheme.textPrimary,
+                        color: HvacColors.textPrimary,
                       ),
                     ),
                     SizedBox(height: 2),
@@ -59,7 +58,7 @@ class QuickPresetsPanel extends StatelessWidget {
                       'Применить настройки одной кнопкой',
                       style: TextStyle(
                         fontSize: 12,
-                        color: AppTheme.textSecondary,
+                        color: HvacColors.textSecondary,
                       ),
                     ),
                   ],
@@ -80,28 +79,28 @@ class QuickPresetsPanel extends StatelessWidget {
                 'Спящий режим',
                 Icons.nightlight_round,
                 ModePreset.defaults[VentilationMode.economic]!,
-                AppTheme.neutral200, // Gray instead of blue
+                HvacColors.neutral200, // Gray instead of blue
               ),
               _buildPresetButton(
                 context,
                 'Макс. вентиляция',
                 Icons.air,
                 ModePreset.defaults[VentilationMode.maximum]!,
-                AppTheme.error,
+                HvacColors.error,
               ),
               _buildPresetButton(
                 context,
                 'Эко-режим',
                 Icons.eco,
                 ModePreset.defaults[VentilationMode.economic]!,
-                AppTheme.success,
+                HvacColors.success,
               ),
               _buildPresetButton(
                 context,
                 'Стандартный',
                 Icons.home,
                 ModePreset.defaults[VentilationMode.basic]!,
-                AppTheme.primaryOrange,
+                HvacColors.primaryOrange,
               ),
               _buildPresetButton(
                 context,
@@ -183,14 +182,14 @@ class _PresetButtonState extends State<_PresetButton> {
           decoration: BoxDecoration(
             // Background: subtle lift on hover, but stay monochrome
             color: _isHovered
-                ? AppTheme.backgroundElevated // Subtle gray lift
-                : AppTheme.backgroundDark,
+                ? HvacColors.backgroundElevated // Subtle gray lift
+                : HvacColors.backgroundDark,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
               // Border: always gray, never colored
               color: _isHovered
-                  ? AppTheme.accent.withValues(alpha: 0.3) // Subtle gold hint on hover
-                  : AppTheme.backgroundCardBorder,
+                  ? HvacColors.accent.withValues(alpha: 0.3) // Subtle gold hint on hover
+                  : HvacColors.backgroundCardBorder,
               width: 1.5,
             ),
           ),
@@ -214,14 +213,14 @@ class _PresetButtonState extends State<_PresetButton> {
                     style: const TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
-                      color: AppTheme.textPrimary, // Always white
+                      color: HvacColors.textPrimary, // Always white
                     ),
                   ),
                   Text(
                     '${widget.preset.supplyFanSpeed}% / ${widget.preset.exhaustFanSpeed}%',
                     style: const TextStyle(
                       fontSize: 10,
-                      color: AppTheme.textSecondary, // Always gray
+                      color: HvacColors.textSecondary, // Always gray
                     ),
                   ),
                 ],

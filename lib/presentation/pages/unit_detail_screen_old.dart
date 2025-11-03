@@ -5,8 +5,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../core/theme/app_theme.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../domain/entities/hvac_unit.dart';
 import '../widgets/unit_detail/overview_tab.dart';
 import '../widgets/unit_detail/air_quality_tab.dart';
@@ -45,12 +44,12 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.backgroundDark,
+      backgroundColor: HvacColors.backgroundDark,
       appBar: AppBar(
-        backgroundColor: AppTheme.backgroundCard,
+        backgroundColor: HvacColors.backgroundCard,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: AppTheme.textPrimary, size: 24.sp),
+          icon: Icon(Icons.arrow_back, color: HvacColors.textPrimary, size: 24.sp),
           onPressed: () => Navigator.pop(context),
         ),
         title: Column(
@@ -61,14 +60,14 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
               style: TextStyle(
                 fontSize: 18.sp,
                 fontWeight: FontWeight.w600,
-                color: AppTheme.textPrimary,
+                color: HvacColors.textPrimary,
               ),
             ),
             Text(
               widget.unit.location ?? 'Неизвестно',
               style: TextStyle(
                 fontSize: 12.sp,
-                color: AppTheme.textSecondary,
+                color: HvacColors.textSecondary,
                 fontWeight: FontWeight.w400,
               ),
             ),
@@ -76,7 +75,7 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.analytics, color: AppTheme.primaryOrange, size: 24.sp),
+            icon: Icon(Icons.analytics, color: HvacColors.primaryOrange, size: 24.sp),
             onPressed: () {
               Navigator.push(
                 context,
@@ -90,9 +89,9 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
         ],
         bottom: TabBar(
           controller: _tabController,
-          indicatorColor: AppTheme.primaryOrange,
-          labelColor: AppTheme.primaryOrange,
-          unselectedLabelColor: AppTheme.textSecondary,
+          indicatorColor: HvacColors.primaryOrange,
+          labelColor: HvacColors.primaryOrange,
+          unselectedLabelColor: HvacColors.textSecondary,
           labelStyle: TextStyle(
             fontSize: 14.sp,
             fontWeight: FontWeight.w600,

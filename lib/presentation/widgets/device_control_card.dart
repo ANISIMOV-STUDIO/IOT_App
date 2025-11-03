@@ -4,8 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
-
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 enum DeviceType { lamp, airConditioner, vacuum, other }
 
 class DeviceControlCard extends StatelessWidget {
@@ -35,10 +34,10 @@ class DeviceControlCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: AppTheme.backgroundCard,
+          color: HvacColors.backgroundCard,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: AppTheme.backgroundCardBorder,
+            color: HvacColors.backgroundCardBorder,
           ),
         ),
         child: Column(
@@ -63,7 +62,7 @@ class DeviceControlCard extends StatelessWidget {
                       subtitle,
                       style: const TextStyle(
                         fontSize: 12,
-                        color: AppTheme.textSecondary,
+                        color: HvacColors.textSecondary,
                       ),
                     ),
                   ],
@@ -72,14 +71,14 @@ class DeviceControlCard extends StatelessWidget {
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: AppTheme.warning.withValues(alpha: 0.2),
+                    color: HvacColors.warning.withValues(alpha: 0.2),
                     shape: BoxShape.circle,
                   ),
                   child: const Center(
                     child: Icon(
                       Icons.circle,
                       size: 8,
-                      color: AppTheme.warning,
+                      color: HvacColors.warning,
                     ),
                   ),
                 ),
@@ -140,7 +139,7 @@ class DeviceStatItem extends StatelessWidget {
             Icon(
               icon,
               size: 16,
-              color: AppTheme.textSecondary,
+              color: HvacColors.textSecondary,
             ),
             const SizedBox(width: 4),
             Text(
@@ -157,7 +156,7 @@ class DeviceStatItem extends StatelessWidget {
           label,
           style: const TextStyle(
             fontSize: 11,
-            color: AppTheme.textTertiary,
+            color: HvacColors.textTertiary,
           ),
         ),
       ],
@@ -191,7 +190,7 @@ class TemperatureControl extends StatelessWidget {
             min.toInt().toString(),
             style: const TextStyle(
               fontSize: 14,
-              color: AppTheme.textTertiary,
+              color: HvacColors.textTertiary,
             ),
           ),
           Expanded(
@@ -218,7 +217,7 @@ class TemperatureControl extends StatelessWidget {
                         overlayRadius: 16,
                       ),
                       activeTrackColor: Colors.white,
-                      inactiveTrackColor: AppTheme.backgroundCardBorder,
+                      inactiveTrackColor: HvacColors.backgroundCardBorder,
                       thumbColor: Colors.white,
                     ),
                     child: Slider(
@@ -236,7 +235,7 @@ class TemperatureControl extends StatelessWidget {
             max.toInt().toString(),
             style: const TextStyle(
               fontSize: 14,
-              color: AppTheme.textTertiary,
+              color: HvacColors.textTertiary,
             ),
           ),
         ],
@@ -264,13 +263,13 @@ class BrightnessControl extends StatelessWidget {
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: AppTheme.backgroundDark,
+            color: HvacColors.backgroundDark,
             borderRadius: BorderRadius.circular(12),
           ),
           child: const Icon(
             Icons.lightbulb_outline,
             size: 20,
-            color: AppTheme.textSecondary,
+            color: HvacColors.textSecondary,
           ),
         ),
         Expanded(
@@ -282,8 +281,8 @@ class BrightnessControl extends StatelessWidget {
                 thumbShape: const RoundSliderThumbShape(
                   enabledThumbRadius: 6,
                 ),
-                activeTrackColor: AppTheme.warning,
-                inactiveTrackColor: AppTheme.backgroundCardBorder,
+                activeTrackColor: HvacColors.warning,
+                inactiveTrackColor: HvacColors.backgroundCardBorder,
                 thumbColor: Colors.white,
               ),
               child: Slider(
