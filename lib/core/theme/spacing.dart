@@ -2,6 +2,7 @@
 /// Provides consistent spacing scale based on 8px base unit
 library;
 
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AppSpacing {
@@ -65,4 +66,16 @@ class AppSpacing {
   static double get cardPaddingSmall => mdR;
   static double get cardPaddingMedium => lgR;
   static double get cardPaddingLarge => xlR;
+
+  // Snackbar margins (responsive)
+  static double snackbarMargin(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    if (width < 600) return md; // 16 for mobile
+    if (width < 1024) return lg; // 24 for tablet
+    return xl; // 32 for desktop
+  }
+
+  static double get snackbarMarginMobile => md;
+  static double get snackbarMarginTablet => lg;
+  static double get snackbarMarginDesktop => xl;
 }

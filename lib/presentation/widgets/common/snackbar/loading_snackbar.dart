@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+import '../../../../core/theme/spacing.dart';
 
 /// Loading snackbar for ongoing operations
 class LoadingSnackBar {
@@ -23,9 +24,7 @@ class LoadingSnackBar {
     final snackbarWidth = screenWidth < 600
         ? null
         : (screenWidth < 1024 ? 500.0 : (screenWidth < 1440 ? 450.0 : 480.0));
-    final snackbarMargin = screenWidth < 600
-        ? const EdgeInsets.all(16)
-        : (screenWidth < 1024 ? const EdgeInsets.all(24) : const EdgeInsets.all(32));
+    final snackbarMargin = EdgeInsets.all(AppSpacing.snackbarMargin(context));
 
     final snackBar = SnackBar(
       content: _LoadingContent(
@@ -216,7 +215,7 @@ class _LoadingContent extends StatelessWidget {
                 ),
               ),
               if (showProgress && progress != null) ...[
-                const SizedBox(height: 8),
+                SizedBox(height: 8.h),
                 ClipRRect(
                   borderRadius: HvacRadius.xsRadius,
                   child: LinearProgressIndicator(
@@ -228,7 +227,7 @@ class _LoadingContent extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4.h),
                 Text(
                   '${(progress! * 100).toStringAsFixed(0)}%',
                   style: theme.textTheme.bodySmall?.copyWith(

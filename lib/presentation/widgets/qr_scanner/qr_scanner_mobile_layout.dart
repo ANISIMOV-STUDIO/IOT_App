@@ -140,7 +140,7 @@ class _ToggleSection extends StatelessWidget {
             controller.isManualMode
                 ? l10n.scanQrCode
                 : l10n.enterMacManually,
-            style: TextStyle(fontSize: 16.sp),
+            style: HvacTypography.bodyLarge,
           ),
           SizedBox(height: AppSpacing.mdR),
           GradientButton(

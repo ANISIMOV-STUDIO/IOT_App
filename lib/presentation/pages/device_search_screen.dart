@@ -161,13 +161,13 @@ class _DeviceSearchScreenState extends State<DeviceSearchScreen> {
                 color: HvacColors.textTertiary,
               ),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12.h),
             Text(
               'Not found\ndevice?',
               style: Theme.of(context).textTheme.titleMedium,
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8.h),
             Text(
               'Select manually',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -230,7 +230,7 @@ class _DeviceSearchScreenState extends State<DeviceSearchScreen> {
                   prefixIcon: const Icon(Icons.router),
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
               TextField(
                 controller: nameController,
                 decoration: InputDecoration(
@@ -239,7 +239,7 @@ class _DeviceSearchScreenState extends State<DeviceSearchScreen> {
                   prefixIcon: const Icon(Icons.label),
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
               TextField(
                 controller: locationController,
                 decoration: InputDecoration(

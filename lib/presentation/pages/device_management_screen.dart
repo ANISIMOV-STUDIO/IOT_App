@@ -165,7 +165,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                                   ),
                                 ),
                                 if (unit.macAddress != null) ...[
-                                  const SizedBox(height: 2),
+                                  SizedBox(height: 2.h),
                                   Text(
                                     'MAC: ${_formatMacAddress(unit.macAddress!)}',
                                     style: TextStyle(

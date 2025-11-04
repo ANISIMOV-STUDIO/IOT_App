@@ -181,7 +181,7 @@ class _ToastWidgetState extends State<ToastWidget>
             color: widget.textColor ?? theme.colorScheme.onInverseSurface,
             size: iconSize,
           ),
-          const SizedBox(width: 8),
+          SizedBox(width: 8.w),
         ],
         Flexible(
           child: Text(

@@ -159,7 +159,7 @@ class _AnimatedIconButtonState extends State<AnimatedIconButton>
         color: Colors.transparent,
         shape: const CircleBorder(),
         child: InkWell(
-          borderRadius: BorderRadius.circular(size / 2),
+          borderRadius: HvacRadius.fullRadius,
           splashColor: effectiveIconColor.withValues(alpha: 0.3),
           highlightColor: effectiveIconColor.withValues(alpha: 0.1),
           onTap: isButtonEnabled ? _handleTap : null,

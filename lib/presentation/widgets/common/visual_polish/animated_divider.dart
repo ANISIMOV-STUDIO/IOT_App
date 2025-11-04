@@ -32,7 +32,7 @@ class AnimatedDivider extends StatelessWidget {
       margin: margin ?? EdgeInsets.symmetric(vertical: HvacSpacing.md.h),
       decoration: BoxDecoration(
         gradient: _buildGradient(),
-        borderRadius: BorderRadius.circular(height.h / 2),
+        borderRadius: HvacRadius.fullRadius,
       ),
     );
 
@@ -112,7 +112,7 @@ class AnimatedVerticalDivider extends StatelessWidget {
       margin: margin ?? EdgeInsets.symmetric(horizontal: HvacSpacing.md.w),
       decoration: BoxDecoration(
         gradient: _buildGradient(),
-        borderRadius: BorderRadius.circular(width.w / 2),
+        borderRadius: HvacRadius.fullRadius,
       ),
     );
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+import '../../../../core/theme/spacing.dart';
 import 'snackbar_types.dart';
 
 /// Base snackbar widget with common functionality
@@ -51,7 +52,7 @@ class BaseSnackBar extends StatelessWidget {
       child: Row(
         children: [
           _buildIcon(context),
-          SizedBox(width: isDesktop ? 12 : 8),
+          SizedBox(width: (isDesktop ? 12 : 8).w),
           Expanded(child: _buildTextContent(context, theme)),
           if (config.showCloseButton) _buildCloseButton(context),
         ],
@@ -87,7 +88,7 @@ class BaseSnackBar extends StatelessWidget {
               fontSize: titleFontSize,
             ),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4.h),
         ],
         Text(
           message,
@@ -146,9 +147,7 @@ class BaseSnackBar extends StatelessWidget {
     final snackbarWidth = screenWidth < 600
         ? null
         : (screenWidth < 1024 ? 500.0 : (screenWidth < 1440 ? 450.0 : 480.0));
-    final snackbarMargin = screenWidth < 600
-        ? const EdgeInsets.all(16)
-        : (screenWidth < 1024 ? const EdgeInsets.all(24) : const EdgeInsets.all(32));
+    final snackbarMargin = EdgeInsets.all(AppSpacing.snackbarMargin(context));
 
     // Show snackbar
     ScaffoldMessenger.of(context).showSnackBar(

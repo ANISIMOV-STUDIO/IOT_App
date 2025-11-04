@@ -5,7 +5,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../core/theme/spacing.dart';
 import '../../../generated/l10n/app_localizations.dart';
 import 'device_form_widget.dart';
@@ -122,8 +122,7 @@ class DeviceDetailsDialog extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: theme.colorScheme.primaryContainer
                               .withValues(alpha: 0.1),
-                          borderRadius:
-                              BorderRadius.circular(responsive.borderRadius / 2),
+                          borderRadius: BorderRadius.circular(8.0),
                           border: Border.all(
                             color: theme.colorScheme.primary.withValues(alpha: 0.3),
                             width: 1.w,
@@ -196,7 +195,7 @@ class DeviceDetailsDialog extends StatelessWidget {
                     ),
                     child: Text(
                       l10n.cancel,
-                      style: TextStyle(fontSize: 14.sp),
+                      style: HvacTypography.bodyMedium,
                     ),
                   ),
                   SizedBox(width: AppSpacing.smR),
@@ -218,7 +217,7 @@ class DeviceDetailsDialog extends StatelessWidget {
                     ),
                     child: Text(
                       l10n.add,
-                      style: TextStyle(fontSize: 14.sp),
+                      style: HvacTypography.bodyMedium,
                     ),
                   ),
                 ],

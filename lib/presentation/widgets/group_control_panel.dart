@@ -50,7 +50,7 @@ class GroupControlPanel extends StatelessWidget {
                   size: 20,
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12.w),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,7 +61,7 @@ class GroupControlPanel extends StatelessWidget {
                         color: HvacColors.textPrimary,
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2.h),
                     Text(
                       'Активно: $activeUnits из $totalUnits',
                       style: HvacTypography.labelLarge.copyWith(
@@ -74,7 +74,7 @@ class GroupControlPanel extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 16),
+          SizedBox(height: 16.h),
 
           // Power controls
           Row(
@@ -87,7 +87,7 @@ class GroupControlPanel extends StatelessWidget {
                   onPowerAllOn,
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12.w),
               Expanded(
                 child: _buildActionButton(
                   'Выключить все',
@@ -99,7 +99,7 @@ class GroupControlPanel extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
 
           // Sync controls - WHITE with shimmer instead of blue
           Row(
@@ -112,7 +112,7 @@ class GroupControlPanel extends StatelessWidget {
                   onSyncSettings,
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12.w),
               Expanded(
                 child: _buildActionButton(
                   'Общее расписание',
@@ -124,7 +124,7 @@ class GroupControlPanel extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 16),
+          SizedBox(height: 16.h),
 
           // Units list with checkboxes
           Text(
@@ -134,7 +134,7 @@ class GroupControlPanel extends StatelessWidget {
               color: HvacColors.textSecondary,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
 
           ...units.map((unit) => _buildUnitItem(unit)),
         ],
@@ -170,7 +170,7 @@ class GroupControlPanel extends StatelessWidget {
             children: [
               // ONLY icon is colored
               Icon(icon, color: color, size: 16),
-              const SizedBox(width: 6),
+              SizedBox(width: 6.w),
               Flexible(
                 child: Text(
                   label,
@@ -203,7 +203,7 @@ class GroupControlPanel extends StatelessWidget {
               shape: BoxShape.circle,
             ),
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: 10.w),
           Expanded(
             child: Text(
               unit.name,

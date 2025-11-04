@@ -5,7 +5,6 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../core/theme/spacing.dart';
 import '../../../generated/l10n/app_localizations.dart';
@@ -125,7 +124,7 @@ class _DeviceFormWidgetState extends State<DeviceFormWidget> {
             readOnly: widget.initialMacAddress != null && !widget.isWebMode,
             validator: (value) => _validateMacAddress(value, l10n),
             textCapitalization: TextCapitalization.characters,
-            style: TextStyle(fontSize: 14.sp),
+            style: HvacTypography.bodyMedium,
           ),
           SizedBox(height: responsive.verticalSpacing),
 
@@ -143,7 +142,7 @@ class _DeviceFormWidgetState extends State<DeviceFormWidget> {
               ),
             ),
             validator: (value) => _validateDeviceName(value, l10n),
-            style: TextStyle(fontSize: 14.sp),
+            style: HvacTypography.bodyMedium,
           ),
           SizedBox(height: responsive.verticalSpacing),
 
@@ -160,7 +159,7 @@ class _DeviceFormWidgetState extends State<DeviceFormWidget> {
                 vertical: AppSpacing.smR,
               ),
             ),
-            style: TextStyle(fontSize: 14.sp),
+            style: HvacTypography.bodyMedium,
           ),
           SizedBox(height: AppSpacing.xlR),
 

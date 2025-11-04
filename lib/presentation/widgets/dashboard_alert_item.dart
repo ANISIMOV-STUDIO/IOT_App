@@ -60,7 +60,7 @@ class DashboardAlertItem extends StatelessWidget {
               height: 40,
               decoration: BoxDecoration(
                 color: _severityColor.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(HvacSpacing.sm - 2),
+                borderRadius: HvacRadius.smRadius,
               ),
               child: Icon(
                 _severityIcon,

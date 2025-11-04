@@ -40,12 +40,12 @@ class QuickPresetsPanel extends StatelessWidget {
                   size: 20,
                 ),
               ),
-              const SizedBox(width: 12),
-              const Expanded(
+              SizedBox(width: 12.w),
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Быстрые режимы',
                       style: TextStyle(
                         fontSize: 16,
@@ -53,8 +53,8 @@ class QuickPresetsPanel extends StatelessWidget {
                         color: HvacColors.textPrimary,
                       ),
                     ),
-                    SizedBox(height: 2),
-                    Text(
+                    SizedBox(height: 2.h),
+                    const Text(
                       'Применить настройки одной кнопкой',
                       style: TextStyle(
                         fontSize: 12,
@@ -67,7 +67,7 @@ class QuickPresetsPanel extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 16),
+          SizedBox(height: 16.h),
 
           // Quick preset buttons
           Wrap(
@@ -202,7 +202,7 @@ class _PresetButtonState extends State<_PresetButton> {
                 color: widget.color, // Keep icon colored
                 size: 18,
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8.w),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,

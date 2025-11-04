@@ -202,15 +202,15 @@ class ErrorSnackBar {
                 'Message:',
                 style: Theme.of(context).textTheme.titleSmall,
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8.h),
               Text(message),
               if (technicalDetails != null) ...[
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
                 Text(
                   'Technical Details:',
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8.h),
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(

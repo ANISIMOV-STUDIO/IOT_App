@@ -94,7 +94,7 @@ class _DayScheduleCardState extends State<DayScheduleCard> {
               _buildHeader(),
               AnimatedCrossFade(
                 duration: const Duration(milliseconds: 300),
-                firstChild: const SizedBox(height: 0),
+                firstChild: SizedBox(height: 0.h),
                 secondChild: _buildTimeSelectors(),
                 crossFadeState: _isExpanded
                     ? CrossFadeState.showSecond
