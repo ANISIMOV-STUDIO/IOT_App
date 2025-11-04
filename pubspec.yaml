@@ -44,7 +44,7 @@ dependencies:
   fl_chart: ^0.69.0
 
   # Advanced UI Components (from hvac_ui_kit)
-  skeletonizer: ^1.4.0
+  skeletonizer: ^2.1.0
   flutter_slidable: ^3.1.0
   liquid_swipe: ^3.1.0
 
