@@ -43,7 +43,9 @@ class VisualPolishExample extends StatelessWidget {
                 AnimatedBadge(
                   label: 'Premium',
                   icon: Icons.star,
-                  onTap: () => print('Premium badge tapped'),
+                  onTap: () {
+                    // Handle premium badge tap
+                  },
                 ),
                 SizedBox(width: 16.w),
                 const AnimatedBadge(

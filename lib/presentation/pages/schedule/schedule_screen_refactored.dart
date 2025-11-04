@@ -31,11 +31,31 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   late WeekSchedule _schedule;
   bool _hasChanges = false;
   bool _isSaving = false;
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
     _schedule = widget.unit.schedule ?? WeekSchedule.defaultSchedule;
+    _loadSchedule();
+  }
+
+  Future<void> _loadSchedule() async {
+    setState(() => _isLoading = true);
+    // Simulate loading
+    await Future.delayed(const Duration(milliseconds: 800));
+    setState(() => _isLoading = false);
+  }
+
+  Future<void> _refreshSchedule() async {
+    // Reload schedule from server
+    await Future.delayed(const Duration(seconds: 1));
+    if (mounted) {
+      setState(() {
+        _schedule = widget.unit.schedule ?? WeekSchedule.defaultSchedule;
+        _hasChanges = false;
+      });
+    }
   }
 
   @override
@@ -70,40 +90,52 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   }
 
   Widget _buildMobileLayout() {
-    return ListView(
-      children: [
-        ..._buildDayCards(),
-        SizedBox(height: HvacSpacing.lg.h),
-        QuickActionsPanel(
-          onWeekdaySchedule: _applyWeekdaySchedule,
-          onWeekendSchedule: _applyWeekendSchedule,
-          onDisableAll: _disableAllSchedules,
+    return HvacRefreshIndicator(
+      onRefresh: _refreshSchedule,
+      child: HvacSkeletonLoader(
+        isLoading: _isLoading,
+        child: ListView(
+          children: [
+            ..._buildDayCards(),
+            SizedBox(height: HvacSpacing.lg.h),
+            QuickActionsPanel(
+              onWeekdaySchedule: _applyWeekdaySchedule,
+              onWeekendSchedule: _applyWeekendSchedule,
+              onDisableAll: _disableAllSchedules,
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
   Widget _buildDesktopLayout() {
-    return Center(
-      child: Container(
-        constraints: BoxConstraints(maxWidth: 1200.w),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              flex: 3,
-              child: ListView(children: _buildDayCards()),
+    return HvacRefreshIndicator(
+      onRefresh: _refreshSchedule,
+      child: HvacSkeletonLoader(
+        isLoading: _isLoading,
+        child: Center(
+          child: Container(
+            constraints: BoxConstraints(maxWidth: 1200.w),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: ListView(children: _buildDayCards()),
+                ),
+                SizedBox(width: HvacSpacing.xl.w),
+                SizedBox(
+                  width: 320.w,
+                  child: QuickActionsPanel(
+                    onWeekdaySchedule: _applyWeekdaySchedule,
+                    onWeekendSchedule: _applyWeekendSchedule,
+                    onDisableAll: _disableAllSchedules,
+                  ),
+                ),
+              ],
             ),
-            SizedBox(width: HvacSpacing.xl.w),
-            SizedBox(
-              width: 320.w,
-              child: QuickActionsPanel(
-                onWeekdaySchedule: _applyWeekdaySchedule,
-                onWeekendSchedule: _applyWeekendSchedule,
-                onDisableAll: _disableAllSchedules,
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

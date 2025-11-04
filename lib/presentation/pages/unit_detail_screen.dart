@@ -1,6 +1,7 @@
 /// Unit Detail Screen - Compact Responsive Version
 ///
 /// Tablet-optimized view with extracted components
+/// Enhanced with Hero animations, charts, and UI Kit components
 library;
 
 import 'package:flutter/material.dart';
@@ -49,6 +50,12 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
     super.dispose();
   }
 
+  /// Refresh unit data
+  Future<void> _refreshData() async {
+    // Simulate API call
+    await Future.delayed(const Duration(seconds: 1));
+  }
+
   @override
   Widget build(BuildContext context) {
     final isTablet = ResponsiveUtils.isTablet(context);
@@ -64,9 +71,12 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
     return Scaffold(
       backgroundColor: HvacColors.backgroundDark,
       appBar: _buildMobileAppBar(),
-      body: TabBarView(
-        controller: _tabController,
-        children: _getTabViews(),
+      body: HvacRefreshIndicator(
+        onRefresh: _refreshData,
+        child: TabBarView(
+          controller: _tabController,
+          children: _getTabViews(),
+        ),
       ),
     );
   }
@@ -89,9 +99,15 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
             },
           ),
           Expanded(
-            child: AdaptiveContainer(
-              padding: const EdgeInsets.all(HvacSpacing.lgR),
-              child: _getTabViews()[_selectedIndex],
+            child: HvacRefreshIndicator(
+              onRefresh: _refreshData,
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: AdaptiveContainer(
+                  padding: const EdgeInsets.all(HvacSpacing.lgR),
+                  child: _getTabViews()[_selectedIndex],
+                ),
+              ),
             ),
           ),
         ],
@@ -153,21 +169,46 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          widget.unit.name,
-          style: TextStyle(
-            fontSize: ResponsiveUtils.isTablet(context) ? 20.sp : 18.sp,
-            fontWeight: FontWeight.w600,
-            color: HvacColors.textPrimary,
-          ),
+        Row(
+          children: [
+            HvacIconHero(
+              tag: 'unit_icon_${widget.unit.id}',
+              icon: widget.unit.power ? Icons.air : Icons.power_off,
+              size: ResponsiveUtils.isTablet(context) ? 24.sp : 20.sp,
+              color: widget.unit.power ? HvacColors.success : HvacColors.error,
+            ),
+            SizedBox(width: 8.w),
+            HvacStatusHero(
+              tag: 'unit_name_${widget.unit.id}',
+              child: Text(
+                widget.unit.name,
+                style: TextStyle(
+                  fontSize: ResponsiveUtils.isTablet(context) ? 20.sp : 18.sp,
+                  fontWeight: FontWeight.w600,
+                  color: HvacColors.textPrimary,
+                ),
+              ),
+            ),
+          ],
         ),
-        Text(
-          widget.unit.location ?? 'Неизвестно',
-          style: TextStyle(
-            fontSize: ResponsiveUtils.isTablet(context) ? 14.sp : 12.sp,
-            color: HvacColors.textSecondary,
-            fontWeight: FontWeight.w400,
-          ),
+        Row(
+          children: [
+            if (widget.unit.power) ...[
+              const HvacPulsingDot(
+                color: HvacColors.success,
+                size: 8,
+              ),
+              SizedBox(width: 6.w),
+            ],
+            Text(
+              widget.unit.location ?? 'Неизвестно',
+              style: TextStyle(
+                fontSize: ResponsiveUtils.isTablet(context) ? 14.sp : 12.sp,
+                color: HvacColors.textSecondary,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ],
         ),
       ],
     );

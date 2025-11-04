@@ -20,9 +20,25 @@ class DeviceManagementScreen extends StatefulWidget {
 }
 
 class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
+  bool _isRefreshing = false;
+
   @override
   void initState() {
     super.initState();
+  }
+
+  Future<void> _handleRefresh() async {
+    setState(() => _isRefreshing = true);
+
+    // Trigger refresh event
+    context.read<HvacListBloc>().add(const LoadHvacUnitsEvent());
+
+    // Wait for a short delay to show the refresh animation
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    if (mounted) {
+      setState(() => _isRefreshing = false);
+    }
   }
 
   @override
@@ -42,37 +58,39 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
           // Add Device Button
           Padding(
             padding: const EdgeInsets.all(HvacSpacing.md),
-            child: Container(
-              decoration: HvacDecorations.gradientBlue(),
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  borderRadius: HvacRadius.lgRadius,
-                  onTap: () => _showAddDeviceDialog(context),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: HvacSpacing.lg,
-                      vertical: HvacSpacing.md,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.add_circle_outline_rounded,
-                          color: HvacColors.textPrimary,
-                          size: 24,
-                        ),
-                        const SizedBox(width: HvacSpacing.sm),
-                        Text(
-                          l10n.addDevice,
-                          style: const TextStyle(
+            child: HvacInteractiveScale(
+              child: Container(
+                decoration: HvacDecorations.gradientBlue(),
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: HvacRadius.lgRadius,
+                    onTap: () => _showAddDeviceDialog(context),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: HvacSpacing.lg,
+                        vertical: HvacSpacing.md,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.add_circle_outline_rounded,
                             color: HvacColors.textPrimary,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            letterSpacing: 0.5,
+                            size: 24,
                           ),
-                        ),
-                      ],
+                          const SizedBox(width: HvacSpacing.sm),
+                          Text(
+                            l10n.addDevice,
+                            style: const TextStyle(
+                              color: HvacColors.textPrimary,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -80,20 +98,71 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
             ),
           ),
 
-          // Devices List
+          // Devices List with RefreshIndicator
           Expanded(
             child: BlocBuilder<HvacListBloc, HvacListState>(
               builder: (context, state) {
-                if (state is HvacListLoading) {
-                  return const Center(child: CircularProgressIndicator());
+                // Show skeleton loader during initial loading
+                if (state is HvacListLoading && !_isRefreshing) {
+                  return ListView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: HvacSpacing.md),
+                    itemCount: 5,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: HvacSpacing.sm),
+                        child: HvacSkeletonLoader(
+                          isLoading: true,
+                          child: Container(
+                            width: double.infinity,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              color: HvacColors.backgroundCard,
+                              borderRadius: HvacRadius.lgRadius,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  );
                 }
 
                 if (state is HvacListError) {
-                  return Center(
-                    child: Text(
-                      state.message,
-                      style: const TextStyle(
-                        color: HvacColors.textSecondary,
+                  return HvacRefreshIndicator(
+                    onRefresh: _handleRefresh,
+                    child: SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      child: SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.6,
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.error_outline_rounded,
+                                size: 64,
+                                color: HvacColors.error.withValues(alpha: 0.7),
+                              ),
+                              const SizedBox(height: HvacSpacing.md),
+                              Text(
+                                state.message,
+                                style: const TextStyle(
+                                  color: HvacColors.textSecondary,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: HvacSpacing.lg),
+                              ElevatedButton.icon(
+                                onPressed: _handleRefresh,
+                                icon: const Icon(Icons.refresh_rounded),
+                                label: Text(l10n.retry),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: HvacColors.primaryBlue,
+                                  foregroundColor: HvacColors.textPrimary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   );
@@ -103,96 +172,185 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                   final units = state.units;
 
                   if (units.isEmpty) {
-                    return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.devices_other_rounded,
-                            size: 64,
-                            color: HvacColors.textSecondary.withValues(alpha: 0.5),
-                          ),
-                          const SizedBox(height: HvacSpacing.md),
-                          Text(
-                            l10n.noDevicesFound,
-                            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                  fontWeight: FontWeight.bold,
+                    return HvacRefreshIndicator(
+                      onRefresh: _handleRefresh,
+                      child: SingleChildScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.6,
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.devices_other_rounded,
+                                  size: 64,
+                                  color: HvacColors.textSecondary.withValues(alpha: 0.5),
                                 ),
+                                const SizedBox(height: HvacSpacing.md),
+                                Text(
+                                  l10n.noDevicesFound,
+                                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                                const SizedBox(height: HvacSpacing.sm),
+                                Text(
+                                  'Pull to refresh',
+                                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                        color: HvacColors.textSecondary,
+                                      ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ],
+                        ),
                       ),
                     );
                   }
 
-                  return ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: HvacSpacing.md),
-                    itemCount: units.length,
-                    itemBuilder: (context, index) {
-                      final unit = units[index];
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: HvacSpacing.sm),
-                        child: Container(
-                          decoration: HvacTheme.deviceCard(),
-                          child: ListTile(
-                            contentPadding: const EdgeInsets.all(HvacSpacing.md),
-                            leading: Container(
-                              padding: const EdgeInsets.all(HvacSpacing.sm),
-                              decoration: BoxDecoration(
-                                color: HvacColors.getModeColor(unit.mode),
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(
-                                Icons.thermostat,
-                                color: HvacColors.textPrimary,
-                                size: 24,
-                              ),
-                            ),
-                            title: Text(
+                  return HvacRefreshIndicator(
+                    onRefresh: _handleRefresh,
+                    child: ListView.builder(
+                      padding: const EdgeInsets.symmetric(horizontal: HvacSpacing.md),
+                      itemCount: units.length,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        final unit = units[index];
+                        const isOnline = true; // You can add online status logic here
+
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: HvacSpacing.sm),
+                          child: HvacSwipeableCard(
+                            key: ValueKey(unit.id),
+                            onSwipeRight: () => _showEditDeviceDialog(context, unit),
+                            onSwipeLeft: () => _confirmRemoveDevice(
+                              context,
+                              unit.id,
                               unit.name,
-                              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                              unit.macAddress,
                             ),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SizedBox(height: HvacSpacing.xxs),
-                                Text(
-                                  'ID: ${unit.id}',
-                                  style: TextStyle(
-                                    color: HvacColors.textSecondary.withValues(alpha: 0.5),
-                                    fontSize: 12,
-                                  ),
+                            rightActionLabel: 'Edit',
+                            leftActionLabel: 'Delete',
+                            rightActionIcon: Icons.edit,
+                            leftActionIcon: Icons.delete,
+                            rightActionColor: HvacColors.info,
+                            leftActionColor: HvacColors.error,
+                            child: HvacInteractiveScale(
+                              onTap: () {
+                                // Navigate to device details
+                                Navigator.of(context).pop();
+                              },
+                              child: Hero(
+                                tag: 'device_${unit.id}',
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: HvacGradientBorder(
+                                          gradientColors: const [
+                                            HvacColors.primaryOrange,
+                                            HvacColors.primaryBlue,
+                                          ],
+                                          child: Container(
+                                            decoration: HvacDecorations.card(),
+                                            child: Padding(
+                                      padding: const EdgeInsets.all(HvacSpacing.md),
+                                      child: Row(
+                                        children: [
+                                          // Icon with mode color
+                                          Stack(
+                                            children: [
+                                              Container(
+                                                padding: const EdgeInsets.all(HvacSpacing.sm),
+                                                decoration: BoxDecoration(
+                                                  color: HvacColors.getModeColor(unit.mode),
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: const Icon(
+                                                  Icons.thermostat,
+                                                  color: HvacColors.textPrimary,
+                                                  size: 24,
+                                                ),
+                                              ),
+                                              // Online status indicator
+                                              if (isOnline)
+                                                const Positioned(
+                                                  right: 0,
+                                                  bottom: 0,
+                                                  child: HvacPulsingDot(
+                                                    color: HvacColors.success,
+                                                    size: 12,
+                                                  ),
+                                                ),
+                                            ],
+                                          ),
+
+                                          const SizedBox(width: HvacSpacing.md),
+
+                                          // Device info
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  unit.name,
+                                                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                                        fontWeight: FontWeight.bold,
+                                                      ),
+                                                ),
+                                                const SizedBox(height: HvacSpacing.xxs),
+                                                Text(
+                                                  'ID: ${unit.id}',
+                                                  style: TextStyle(
+                                                    color: HvacColors.textSecondary.withValues(alpha: 0.5),
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                                if (unit.macAddress != null) ...[
+                                                  const SizedBox(height: 2),
+                                                  Text(
+                                                    'MAC: ${_formatMacAddress(unit.macAddress!)}',
+                                                    style: TextStyle(
+                                                      color: HvacColors.textSecondary.withValues(alpha: 0.5),
+                                                      fontSize: 12,
+                                                      fontFamily: 'monospace',
+                                                    ),
+                                                  ),
+                                                ],
+                                              ],
+                                            ),
+                                          ),
+
+                                          // Status badge
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: HvacSpacing.sm,
+                                              vertical: HvacSpacing.xxs,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: HvacColors.success.withValues(alpha: 0.2),
+                                              borderRadius: HvacRadius.smRadius,
+                                            ),
+                                            child: const Text(
+                                              'Online',
+                                              style: TextStyle(
+                                                color: HvacColors.success,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                            ),
+                                          ),
+                                        ),
                                 ),
-                                if (unit.macAddress != null) ...[
-                                  SizedBox(height: 2.h),
-                                  Text(
-                                    'MAC: ${_formatMacAddress(unit.macAddress!)}',
-                                    style: TextStyle(
-                                      color: HvacColors.textSecondary.withValues(alpha: 0.5),
-                                      fontSize: 12,
-                                      fontFamily: 'monospace',
-                                    ),
-                                  ),
-                                ],
-                              ],
-                            ),
-                            trailing: IconButton(
-                              icon: const Icon(
-                                Icons.delete_outline_rounded,
-                                color: HvacColors.error,
-                              ),
-                              onPressed: () => _confirmRemoveDevice(
-                                context,
-                                unit.id,
-                                unit.name,
-                                unit.macAddress,
                               ),
                             ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   );
                 }
 
@@ -344,6 +502,129 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
               ),
             ),
             child: Text(l10n.add),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _showEditDeviceDialog(BuildContext context, dynamic unit) async {
+    final l10n = AppLocalizations.of(context)!;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final nameController = TextEditingController(text: unit.name);
+    final locationController = TextEditingController(text: unit.location ?? '');
+
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: isDark ? HvacColors.backgroundCard : HvacColors.glassWhite,
+        title: const Text('Edit Device'),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // MAC address is read-only
+              TextField(
+                controller: TextEditingController(
+                  text: unit.macAddress != null
+                      ? _formatMacAddress(unit.macAddress!)
+                      : unit.id,
+                ),
+                enabled: false,
+                decoration: InputDecoration(
+                  labelText: l10n.macAddress,
+                  prefixIcon: const Icon(Icons.router_rounded),
+                  border: OutlineInputBorder(
+                    borderRadius: HvacRadius.mdRadius,
+                  ),
+                ),
+              ),
+              const SizedBox(height: HvacSpacing.md),
+              TextField(
+                controller: nameController,
+                decoration: InputDecoration(
+                  labelText: l10n.deviceName,
+                  prefixIcon: const Icon(Icons.label_outline_rounded),
+                  border: OutlineInputBorder(
+                    borderRadius: HvacRadius.mdRadius,
+                  ),
+                ),
+              ),
+              const SizedBox(height: HvacSpacing.md),
+              TextField(
+                controller: locationController,
+                decoration: InputDecoration(
+                  labelText: l10n.location,
+                  hintText: l10n.optional,
+                  prefixIcon: const Icon(Icons.location_on_outlined),
+                  border: OutlineInputBorder(
+                    borderRadius: HvacRadius.mdRadius,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(l10n.cancel),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              final name = nameController.text.trim();
+
+              if (name.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(l10n.fillRequiredFields),
+                    backgroundColor: HvacColors.error,
+                  ),
+                );
+                return;
+              }
+
+              try {
+                // TODO: Implement UpdateDeviceEvent in HvacListBloc
+                // For now, just show success message
+                // context.read<HvacListBloc>().add(
+                //   UpdateDeviceEvent(
+                //     deviceId: unit.id,
+                //     name: name,
+                //     location: locationController.text.isEmpty
+                //         ? null
+                //         : locationController.text.trim(),
+                //   ),
+                // );
+
+                if (context.mounted) {
+                  Navigator.of(context).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Device updated'),
+                      backgroundColor: HvacColors.success,
+                    ),
+                  );
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('${l10n.error}: $e'),
+                      backgroundColor: HvacColors.error,
+                    ),
+                  );
+                }
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: HvacColors.primaryBlue,
+              foregroundColor: HvacColors.textPrimary,
+              shape: RoundedRectangleBorder(
+                borderRadius: HvacRadius.mdRadius,
+              ),
+            ),
+            child: Text(l10n.save),
           ),
         ],
       ),

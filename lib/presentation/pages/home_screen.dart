@@ -23,6 +23,7 @@ import '../../domain/usecases/sync_settings_to_all.dart';
 import '../../domain/usecases/apply_schedule_to_all.dart';
 import '../bloc/hvac_list/hvac_list_bloc.dart';
 import '../bloc/hvac_list/hvac_list_state.dart';
+import '../bloc/hvac_list/hvac_list_event.dart';
 import '../widgets/home/home_app_bar.dart';
 import '../widgets/home/home_states.dart';
 import '../widgets/home/home_dashboard_layout.dart';
@@ -70,50 +71,74 @@ class _HomeScreenState extends State<HomeScreen> with SnackbarMixin {
     return Expanded(
       child: BlocBuilder<HvacListBloc, HvacListState>(
         builder: (context, state) {
-          if (state is HvacListLoading) {
-            return const HomeLoadingState();
-          }
+          final isLoading = state is HvacListLoading;
 
           if (state is HvacListError) {
             return HomeErrorState(message: state.message);
           }
 
-          if (state is HvacListLoaded) {
-            if (state.units.isEmpty) {
-              return const HomeEmptyState();
-            }
-            return _buildDashboard(state.units);
+          if (state is HvacListLoaded && state.units.isEmpty) {
+            return const HomeEmptyState();
           }
 
-          return const SizedBox.shrink();
+          // Show skeleton loader while loading or show actual dashboard
+          final units = state is HvacListLoaded ? state.units : <HvacUnit>[];
+          return _buildDashboardWithRefresh(units, isLoading);
         },
       ),
     );
   }
 
-  Widget _buildDashboard(List<HvacUnit> units) {
-    _initializeSelectedUnit(units);
-    final currentUnit = _getCurrentUnit(units);
+  Widget _buildDashboardWithRefresh(List<HvacUnit> units, bool isLoading) {
+    return HvacRefreshIndicator(
+      onRefresh: _handleRefresh,
+      child: _buildDashboard(units, isLoading),
+    );
+  }
 
-    return HomeDashboard(
-      currentUnit: currentUnit,
-      units: units,
-      selectedUnit: _selectedUnit,
-      onPowerChanged: (power) => _updatePower(currentUnit!, power),
-      onDetailsPressed: currentUnit != null
-          ? () => _navigateToDetails(currentUnit)
-          : null,
-      buildControlCards: _buildControlCards,
-      onRuleToggled: _handleRuleToggled,
-      onManageRules: _handleManageRules,
-      onPresetSelected: (preset) => _applyPreset(currentUnit!, preset),
-      onPowerAllOn: _powerAllOn,
-      onPowerAllOff: _powerAllOff,
-      onSyncSettings: () => _syncSettings(currentUnit!),
-      onApplyScheduleToAll: () => _applyScheduleToAll(currentUnit!),
-      onSchedulePressed: currentUnit != null
-          ? () => _navigateToSchedule(currentUnit)
-          : null,
+  Future<void> _handleRefresh() async {
+    if (!mounted) return;
+    context.read<HvacListBloc>().add(const LoadHvacUnitsEvent());
+    // Wait for the bloc to finish loading
+    await Future.delayed(const Duration(milliseconds: 500));
+  }
+
+  Widget _buildDashboard(List<HvacUnit> units, bool isLoading) {
+    if (!isLoading) {
+      _initializeSelectedUnit(units);
+    }
+    final currentUnit = !isLoading ? _getCurrentUnit(units) : null;
+
+    return HvacSkeletonLoader(
+      isLoading: isLoading,
+      child: HomeDashboard(
+        currentUnit: currentUnit,
+        units: units,
+        selectedUnit: _selectedUnit,
+        onPowerChanged: (power) => currentUnit != null
+            ? _updatePower(currentUnit, power)
+            : null,
+        onDetailsPressed: currentUnit != null
+            ? () => _navigateToDetails(currentUnit)
+            : null,
+        buildControlCards: _buildControlCards,
+        onRuleToggled: _handleRuleToggled,
+        onManageRules: _handleManageRules,
+        onPresetSelected: (preset) => currentUnit != null
+            ? _applyPreset(currentUnit, preset)
+            : null,
+        onPowerAllOn: _powerAllOn,
+        onPowerAllOff: _powerAllOff,
+        onSyncSettings: () => currentUnit != null
+            ? _syncSettings(currentUnit)
+            : null,
+        onApplyScheduleToAll: () => currentUnit != null
+            ? _applyScheduleToAll(currentUnit)
+            : null,
+        onSchedulePressed: currentUnit != null
+            ? () => _navigateToSchedule(currentUnit)
+            : null,
+      ),
     );
   }
 
@@ -177,9 +202,10 @@ class _HomeScreenState extends State<HomeScreen> with SnackbarMixin {
   }
 
   void _navigateToDetails(HvacUnit unit) {
+    HapticFeedback.lightImpact();
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => UnitDetailScreen(unit: unit)),
+      HvacHeroPageRoute(builder: (_) => UnitDetailScreen(unit: unit)),
     );
   }
 
