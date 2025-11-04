@@ -106,509 +106,11 @@ abstract class AppLocalizations {
   /// **'BREEZ Home'**
   String get appTitle;
 
-  /// Home tab label
+  /// Application tagline
   ///
   /// In en, this message translates to:
-  /// **'Home'**
-  String get home;
-
-  /// Settings tab label
-  ///
-  /// In en, this message translates to:
-  /// **'Settings'**
-  String get settings;
-
-  /// Main screen title
-  ///
-  /// In en, this message translates to:
-  /// **'BREEZ Home'**
-  String get hvacControl;
-
-  /// Active devices count
-  ///
-  /// In en, this message translates to:
-  /// **'{count} of {total} active'**
-  String activeDevices(int count, int total);
-
-  /// Connection error title
-  ///
-  /// In en, this message translates to:
-  /// **'Connection Error'**
-  String get connectionError;
-
-  /// Retry connection button
-  ///
-  /// In en, this message translates to:
-  /// **'Retry Connection'**
-  String get retryConnection;
-
-  /// No devices found message
-  ///
-  /// In en, this message translates to:
-  /// **'No Devices Found'**
-  String get noDevicesFound;
-
-  /// MQTT connection help text
-  ///
-  /// In en, this message translates to:
-  /// **'Check your MQTT connection settings\nand make sure devices are online'**
-  String get checkMqttSettings;
-
-  /// Loading devices message
-  ///
-  /// In en, this message translates to:
-  /// **'Loading devices...'**
-  String get loadingDevices;
-
-  /// Power label
-  ///
-  /// In en, this message translates to:
-  /// **'Power'**
-  String get power;
-
-  /// On state
-  ///
-  /// In en, this message translates to:
-  /// **'On'**
-  String get on;
-
-  /// Off state
-  ///
-  /// In en, this message translates to:
-  /// **'Off'**
-  String get off;
-
-  /// Temperature label
-  ///
-  /// In en, this message translates to:
-  /// **'Temperature'**
-  String get temperature;
-
-  /// Temperature slider description
-  ///
-  /// In en, this message translates to:
-  /// **'Adjust target temperature'**
-  String get adjustTargetTemperature;
-
-  /// Device off message
-  ///
-  /// In en, this message translates to:
-  /// **'Device is off'**
-  String get deviceIsOff;
-
-  /// Target temperature label
-  ///
-  /// In en, this message translates to:
-  /// **'Target'**
-  String get target;
-
-  /// Current temperature
-  ///
-  /// In en, this message translates to:
-  /// **'Current: {temp}°C'**
-  String current(String temp);
-
-  /// Current temperature label for chart legend
-  ///
-  /// In en, this message translates to:
-  /// **'Current'**
-  String get currentTemp;
-
-  /// Minimum label
-  ///
-  /// In en, this message translates to:
-  /// **'Min'**
-  String get min;
-
-  /// Maximum label
-  ///
-  /// In en, this message translates to:
-  /// **'Max'**
-  String get max;
-
-  /// Operating mode title
-  ///
-  /// In en, this message translates to:
-  /// **'Operating Mode'**
-  String get operatingMode;
-
-  /// Mode selector description
-  ///
-  /// In en, this message translates to:
-  /// **'Select HVAC operating mode'**
-  String get selectHvacMode;
-
-  /// Cooling mode
-  ///
-  /// In en, this message translates to:
-  /// **'Cooling'**
-  String get cooling;
-
-  /// Heating mode
-  ///
-  /// In en, this message translates to:
-  /// **'Heating'**
-  String get heating;
-
-  /// Auto mode
-  ///
-  /// In en, this message translates to:
-  /// **'Auto'**
-  String get auto;
-
-  /// Fan mode
-  ///
-  /// In en, this message translates to:
-  /// **'Fan'**
-  String get fan;
-
-  /// Cooling mode description
-  ///
-  /// In en, this message translates to:
-  /// **'Cool down to target temperature'**
-  String get coolDownToTarget;
-
-  /// Heating mode description
-  ///
-  /// In en, this message translates to:
-  /// **'Heat up to target temperature'**
-  String get heatUpToTarget;
-
-  /// Auto mode description
-  ///
-  /// In en, this message translates to:
-  /// **'Automatically adjust temperature'**
-  String get autoAdjustTemperature;
-
-  /// Fan mode description
-  ///
-  /// In en, this message translates to:
-  /// **'Circulate air without heating/cooling'**
-  String get circulateAir;
-
-  /// Fan speed title
-  ///
-  /// In en, this message translates to:
-  /// **'Fan Speed'**
-  String get fanSpeed;
-
-  /// Fan speed description
-  ///
-  /// In en, this message translates to:
-  /// **'Adjust airflow intensity'**
-  String get adjustAirflow;
-
-  /// Low speed
-  ///
-  /// In en, this message translates to:
-  /// **'Low'**
-  String get low;
-
-  /// Medium speed
-  ///
-  /// In en, this message translates to:
-  /// **'Med'**
-  String get medium;
-
-  /// High speed
-  ///
-  /// In en, this message translates to:
-  /// **'High'**
-  String get high;
-
-  /// Low speed description
-  ///
-  /// In en, this message translates to:
-  /// **'Gentle airflow for quiet operation'**
-  String get gentleAirflow;
-
-  /// Medium speed description
-  ///
-  /// In en, this message translates to:
-  /// **'Balanced airflow and noise level'**
-  String get balancedAirflow;
-
-  /// High speed description
-  ///
-  /// In en, this message translates to:
-  /// **'Maximum airflow for rapid cooling/heating'**
-  String get maximumAirflow;
-
-  /// Auto speed description
-  ///
-  /// In en, this message translates to:
-  /// **'Automatically adjusts based on temperature'**
-  String get autoAdjustSpeed;
-
-  /// Power level label
-  ///
-  /// In en, this message translates to:
-  /// **'Power'**
-  String get powerLevel;
-
-  /// Temperature history title
-  ///
-  /// In en, this message translates to:
-  /// **'Temperature History'**
-  String get temperatureHistory;
-
-  /// Last 24 hours label
-  ///
-  /// In en, this message translates to:
-  /// **'Last 24 hours'**
-  String get last24Hours;
-
-  /// Average label
-  ///
-  /// In en, this message translates to:
-  /// **'Average'**
-  String get average;
-
-  /// Appearance section title
-  ///
-  /// In en, this message translates to:
-  /// **'Appearance'**
-  String get appearance;
-
-  /// Theme label
-  ///
-  /// In en, this message translates to:
-  /// **'Theme'**
-  String get theme;
-
-  /// Light theme
-  ///
-  /// In en, this message translates to:
-  /// **'Light'**
-  String get light;
-
-  /// Dark theme
-  ///
-  /// In en, this message translates to:
-  /// **'Dark'**
-  String get dark;
-
-  /// System theme
-  ///
-  /// In en, this message translates to:
-  /// **'System'**
-  String get system;
-
-  /// Language label
-  ///
-  /// In en, this message translates to:
-  /// **'Language'**
-  String get language;
-
-  /// English language
-  ///
-  /// In en, this message translates to:
-  /// **'English'**
-  String get english;
-
-  /// Russian language
-  ///
-  /// In en, this message translates to:
-  /// **'Русский'**
-  String get russian;
-
-  /// Chinese language
-  ///
-  /// In en, this message translates to:
-  /// **'中文'**
-  String get chinese;
-
-  /// Connection section title
-  ///
-  /// In en, this message translates to:
-  /// **'Connection'**
-  String get connection;
-
-  /// MQTT settings label
-  ///
-  /// In en, this message translates to:
-  /// **'MQTT Settings'**
-  String get mqttSettings;
-
-  /// MQTT settings description
-  ///
-  /// In en, this message translates to:
-  /// **'Configure MQTT broker connection'**
-  String get configureMqtt;
-
-  /// About section title
-  ///
-  /// In en, this message translates to:
-  /// **'About'**
-  String get about;
-
-  /// Version label
-  ///
-  /// In en, this message translates to:
-  /// **'Version'**
-  String get version;
-
-  /// HVAC unit title
-  ///
-  /// In en, this message translates to:
-  /// **'HVAC Unit'**
-  String get hvacUnit;
-
-  /// Error message
-  ///
-  /// In en, this message translates to:
-  /// **'Error: {message}'**
-  String error(String message);
-
-  /// Light theme mode text
-  ///
-  /// In en, this message translates to:
-  /// **'Light mode'**
-  String get lightMode;
-
-  /// Dark theme mode text
-  ///
-  /// In en, this message translates to:
-  /// **'Dark mode'**
-  String get darkMode;
-
-  /// System default theme text
-  ///
-  /// In en, this message translates to:
-  /// **'System default'**
-  String get systemDefault;
-
-  /// Toggle theme tooltip
-  ///
-  /// In en, this message translates to:
-  /// **'Toggle Theme'**
-  String get toggleTheme;
-
-  /// MQTT broker label
-  ///
-  /// In en, this message translates to:
-  /// **'MQTT Broker'**
-  String get mqttBroker;
-
-  /// Username label
-  ///
-  /// In en, this message translates to:
-  /// **'Username'**
-  String get username;
-
-  /// Settings saved message
-  ///
-  /// In en, this message translates to:
-  /// **'Settings saved. Restart app to apply changes.'**
-  String get settingsSaved;
-
-  /// About app label
-  ///
-  /// In en, this message translates to:
-  /// **'About'**
-  String get aboutApp;
-
-  /// Application description
-  ///
-  /// In en, this message translates to:
-  /// **'BREEZ Home - Smart control for ZILON ventilation systems.'**
-  String get appDescription;
-
-  /// Device management screen title
-  ///
-  /// In en, this message translates to:
-  /// **'Device Management'**
-  String get deviceManagement;
-
-  /// Add device button label
-  ///
-  /// In en, this message translates to:
-  /// **'Add Device'**
-  String get addDevice;
-
-  /// MAC address label
-  ///
-  /// In en, this message translates to:
-  /// **'MAC Address'**
-  String get macAddress;
-
-  /// Device name label
-  ///
-  /// In en, this message translates to:
-  /// **'Device Name'**
-  String get deviceName;
-
-  /// Example room name
-  ///
-  /// In en, this message translates to:
-  /// **'Living Room'**
-  String get livingRoom;
-
-  /// Location label
-  ///
-  /// In en, this message translates to:
-  /// **'Location'**
-  String get location;
-
-  /// Optional field hint
-  ///
-  /// In en, this message translates to:
-  /// **'Optional'**
-  String get optional;
-
-  /// Validation error for empty required fields
-  ///
-  /// In en, this message translates to:
-  /// **'Please fill in all required fields'**
-  String get fillRequiredFields;
-
-  /// Success message when device is added
-  ///
-  /// In en, this message translates to:
-  /// **'Device added successfully'**
-  String get deviceAdded;
-
-  /// Remove device dialog title
-  ///
-  /// In en, this message translates to:
-  /// **'Remove Device'**
-  String get removeDevice;
-
-  /// Confirmation message for removing device
-  ///
-  /// In en, this message translates to:
-  /// **'Are you sure you want to remove {name}?'**
-  String confirmRemoveDevice(String name);
-
-  /// Remove button label
-  ///
-  /// In en, this message translates to:
-  /// **'Remove'**
-  String get remove;
-
-  /// Success message when device is removed
-  ///
-  /// In en, this message translates to:
-  /// **'Device removed successfully'**
-  String get deviceRemoved;
-
-  /// Cancel button label
-  ///
-  /// In en, this message translates to:
-  /// **'Cancel'**
-  String get cancel;
-
-  /// Add button label
-  ///
-  /// In en, this message translates to:
-  /// **'Add'**
-  String get add;
-
-  /// Error message when trying to manage devices without MQTT
-  ///
-  /// In en, this message translates to:
-  /// **'MQTT mode is required for device management'**
-  String get mqttModeRequired;
+  /// **'Smart Climate Management'**
+  String get smartClimateManagement;
 
   /// Login button text
   ///
@@ -646,59 +148,443 @@ abstract class AppLocalizations {
   /// **'Password'**
   String get password;
 
+  /// Confirm password field label
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Password'**
+  String get confirmPassword;
+
   /// Name field label
   ///
   /// In en, this message translates to:
   /// **'Full Name'**
   String get fullName;
 
-  /// Email validation error
+  /// Welcome back message
   ///
   /// In en, this message translates to:
-  /// **'Email is required'**
-  String get emailRequired;
+  /// **'Welcome Back'**
+  String get welcomeBack;
 
-  /// Invalid email error
+  /// Create account title
   ///
   /// In en, this message translates to:
-  /// **'Please enter a valid email'**
-  String get invalidEmail;
+  /// **'Create Account'**
+  String get createAccount;
 
-  /// Password validation error
+  /// Sign in subtitle
   ///
   /// In en, this message translates to:
-  /// **'Password is required'**
-  String get passwordRequired;
+  /// **'Sign in to your account'**
+  String get signInToAccount;
 
-  /// Password too short error
+  /// Sign up subtitle
   ///
   /// In en, this message translates to:
-  /// **'Password must be at least 6 characters'**
-  String get passwordTooShort;
+  /// **'Sign up for a new account'**
+  String get signUpForAccount;
 
-  /// Name validation error
+  /// Skip authentication button
   ///
   /// In en, this message translates to:
-  /// **'Name is required'**
-  String get nameRequired;
+  /// **'Skip for now'**
+  String get skipForNow;
 
-  /// Name too short error
+  /// Skip authentication button alternative
   ///
   /// In en, this message translates to:
-  /// **'Name must be at least 2 characters'**
-  String get nameTooShort;
+  /// **'Continue without registration'**
+  String get skipAuth;
 
-  /// Switch to register text
+  /// Remember me checkbox
   ///
   /// In en, this message translates to:
-  /// **'Don\'t have an account? Sign up'**
-  String get dontHaveAccount;
+  /// **'Remember me'**
+  String get rememberMe;
 
-  /// Switch to login text
+  /// Terms and conditions link
   ///
   /// In en, this message translates to:
-  /// **'Already have an account? Sign in'**
-  String get alreadyHaveAccount;
+  /// **'Terms and Conditions'**
+  String get termsAndConditions;
+
+  /// Guest user name
+  ///
+  /// In en, this message translates to:
+  /// **'Guest User'**
+  String get guestUser;
+
+  /// Registration coming soon message
+  ///
+  /// In en, this message translates to:
+  /// **'Registration feature coming soon'**
+  String get registrationComingSoon;
+
+  /// Show password tooltip
+  ///
+  /// In en, this message translates to:
+  /// **'Show password'**
+  String get showPassword;
+
+  /// Hide password tooltip
+  ///
+  /// In en, this message translates to:
+  /// **'Hide password'**
+  String get hidePassword;
+
+  /// Skip button
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get skip;
+
+  /// Onboarding welcome title
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to\nBREEZ Home'**
+  String get welcomeToBreezHome;
+
+  /// Onboarding welcome subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Your smart home climate control\nat your fingertips'**
+  String get smartHomeClimateControl;
+
+  /// Swipe instruction
+  ///
+  /// In en, this message translates to:
+  /// **'Swipe to continue'**
+  String get swipeToContinue;
+
+  /// Onboarding control title
+  ///
+  /// In en, this message translates to:
+  /// **'Control Your\nDevices'**
+  String get controlYourDevices;
+
+  /// Onboarding control subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Manage all your HVAC systems\nfrom anywhere, anytime'**
+  String get manageHvacSystems;
+
+  /// Remote control feature
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on/off remotely'**
+  String get turnOnOffRemotely;
+
+  /// Onboarding final title
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to\nGet Started?'**
+  String get readyToGetStarted;
+
+  /// Onboarding final subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Start controlling your home climate\nwith ease and efficiency'**
+  String get startControllingClimate;
+
+  /// Get started button
+  ///
+  /// In en, this message translates to:
+  /// **'Get Started'**
+  String get getStarted;
+
+  /// Terms and privacy agreement text
+  ///
+  /// In en, this message translates to:
+  /// **'By continuing, you agree to our\nTerms of Service and Privacy Policy'**
+  String get termsPrivacyAgreement;
+
+  /// Loading screen text
+  ///
+  /// In en, this message translates to:
+  /// **'Loading BREEZ Home'**
+  String get loadingBreezHome;
+
+  /// Home tab label
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get home;
+
+  /// Settings tab label
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settings;
+
+  /// Back button
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get back;
+
+  /// Next button
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get next;
+
+  /// Previous button
+  ///
+  /// In en, this message translates to:
+  /// **'Previous'**
+  String get previous;
+
+  /// Navigate back label
+  ///
+  /// In en, this message translates to:
+  /// **'Navigate back'**
+  String get navigateBack;
+
+  /// Settings screen title (Russian: Настройки)
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settingsTitle;
+
+  /// Appearance section title (Russian: Внешний вид)
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appearance;
+
+  /// Dark theme option (Russian: Темная тема)
+  ///
+  /// In en, this message translates to:
+  /// **'Dark Theme'**
+  String get darkTheme;
+
+  /// Dark theme description (Russian: Использовать темную цветовую схему)
+  ///
+  /// In en, this message translates to:
+  /// **'Use dark color scheme'**
+  String get useDarkColorScheme;
+
+  /// Theme change message (Russian: Смена темы будет доступна в следующей версии)
+  ///
+  /// In en, this message translates to:
+  /// **'Theme change will be available in the next version'**
+  String get themeChangeNextVersion;
+
+  /// Units section title (Russian: Единицы измерения)
+  ///
+  /// In en, this message translates to:
+  /// **'Units'**
+  String get units;
+
+  /// Temperature units label (Russian: Температура)
+  ///
+  /// In en, this message translates to:
+  /// **'Temperature'**
+  String get temperatureUnits;
+
+  /// Celsius option (Russian: Цельсий (°C))
+  ///
+  /// In en, this message translates to:
+  /// **'Celsius (°C)'**
+  String get celsius;
+
+  /// Fahrenheit option (Russian: Фаренгейт (°F))
+  ///
+  /// In en, this message translates to:
+  /// **'Fahrenheit (°F)'**
+  String get fahrenheit;
+
+  /// Units changed message
+  ///
+  /// In en, this message translates to:
+  /// **'Units changed to {unit}'**
+  String unitsChangedTo(String unit);
+
+  /// Notifications section (Russian: Уведомления)
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notifications;
+
+  /// Push notifications option (Russian: Push-уведомления)
+  ///
+  /// In en, this message translates to:
+  /// **'Push Notifications'**
+  String get pushNotifications;
+
+  /// Push notifications description (Russian: Получать мгновенные уведомления)
+  ///
+  /// In en, this message translates to:
+  /// **'Receive instant notifications'**
+  String get receiveInstantNotifications;
+
+  /// Email notifications option (Russian: Email-уведомления)
+  ///
+  /// In en, this message translates to:
+  /// **'Email Notifications'**
+  String get emailNotifications;
+
+  /// Email notifications description (Russian: Получать отчеты на email)
+  ///
+  /// In en, this message translates to:
+  /// **'Receive reports via email'**
+  String get receiveEmailReports;
+
+  /// Notifications state message
+  ///
+  /// In en, this message translates to:
+  /// **'{type} notifications {state}'**
+  String notificationsState(String type, String state);
+
+  /// Language section (Russian: Язык)
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get language;
+
+  /// Russian language option
+  ///
+  /// In en, this message translates to:
+  /// **'Русский'**
+  String get russian;
+
+  /// English language option
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get english;
+
+  /// German language option
+  ///
+  /// In en, this message translates to:
+  /// **'Deutsch'**
+  String get german;
+
+  /// Language changed message
+  ///
+  /// In en, this message translates to:
+  /// **'Language changed to {language}'**
+  String languageChangedTo(String language);
+
+  /// About section (Russian: О приложении)
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get about;
+
+  /// Version label (Russian: Версия)
+  ///
+  /// In en, this message translates to:
+  /// **'Version'**
+  String get version;
+
+  /// Developer label (Russian: Разработчик)
+  ///
+  /// In en, this message translates to:
+  /// **'Developer'**
+  String get developer;
+
+  /// License label (Russian: Лицензия)
+  ///
+  /// In en, this message translates to:
+  /// **'License'**
+  String get license;
+
+  /// Check updates button (Russian: Проверить обновления)
+  ///
+  /// In en, this message translates to:
+  /// **'Check for Updates'**
+  String get checkUpdates;
+
+  /// Checking updates message (Russian: Проверка обновлений...)
+  ///
+  /// In en, this message translates to:
+  /// **'Checking for updates...'**
+  String get checkingUpdates;
+
+  /// Device management screen title
+  ///
+  /// In en, this message translates to:
+  /// **'Device Management'**
+  String get deviceManagement;
+
+  /// Search title
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get search;
+
+  /// Scan for devices button
+  ///
+  /// In en, this message translates to:
+  /// **'Scan for Devices'**
+  String get scanForDevices;
+
+  /// Add device button
+  ///
+  /// In en, this message translates to:
+  /// **'Add Device'**
+  String get addDevice;
+
+  /// Edit device dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Device'**
+  String get editDevice;
+
+  /// Remove device button
+  ///
+  /// In en, this message translates to:
+  /// **'Remove Device'**
+  String get removeDevice;
+
+  /// Device name label
+  ///
+  /// In en, this message translates to:
+  /// **'Device Name'**
+  String get deviceName;
+
+  /// MAC address label
+  ///
+  /// In en, this message translates to:
+  /// **'MAC Address'**
+  String get macAddress;
+
+  /// Location label
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get location;
+
+  /// Device not found message
+  ///
+  /// In en, this message translates to:
+  /// **'Not found\ndevice?'**
+  String get notFoundDevice;
+
+  /// Select device manually button
+  ///
+  /// In en, this message translates to:
+  /// **'Select manually'**
+  String get selectManually;
+
+  /// Device updated message
+  ///
+  /// In en, this message translates to:
+  /// **'Device updated'**
+  String get deviceUpdated;
+
+  /// Device added success message
+  ///
+  /// In en, this message translates to:
+  /// **'Device added successfully'**
+  String get deviceAdded;
+
+  /// Device removed success message
+  ///
+  /// In en, this message translates to:
+  /// **'Device removed successfully'**
+  String get deviceRemoved;
 
   /// Scan QR code button
   ///
@@ -706,11 +592,971 @@ abstract class AppLocalizations {
   /// **'Scan QR Code'**
   String get scanQrCode;
 
+  /// Processing QR code message
+  ///
+  /// In en, this message translates to:
+  /// **'Processing QR Code...'**
+  String get processingQrCode;
+
+  /// Invalid QR code error
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid QR code'**
+  String get invalidQrCode;
+
+  /// Device detected from QR message
+  ///
+  /// In en, this message translates to:
+  /// **'Device detected from QR code'**
+  String get deviceDetectedFromQr;
+
   /// Manual MAC entry option
   ///
   /// In en, this message translates to:
   /// **'Or enter MAC address manually'**
   String get enterMacManually;
+
+  /// Invalid MAC format error
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid MAC address format (e.g., AA:BB:CC:DD:EE:FF)'**
+  String get invalidMacFormat;
+
+  /// Device name validation error
+  ///
+  /// In en, this message translates to:
+  /// **'Device name must be at least 3 characters'**
+  String get deviceNameMinLength;
+
+  /// Adding in progress
+  ///
+  /// In en, this message translates to:
+  /// **'Adding...'**
+  String get adding;
+
+  /// Pull to refresh hint
+  ///
+  /// In en, this message translates to:
+  /// **'Pull to refresh'**
+  String get pullToRefresh;
+
+  /// Online status
+  ///
+  /// In en, this message translates to:
+  /// **'Online'**
+  String get online;
+
+  /// Offline status
+  ///
+  /// In en, this message translates to:
+  /// **'Offline'**
+  String get offline;
+
+  /// Edit action
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get edit;
+
+  /// Delete action
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// Confirm device removal
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to remove {name}?'**
+  String confirmRemoveDevice(String name);
+
+  /// WiFi network display
+  ///
+  /// In en, this message translates to:
+  /// **'WiFi: {network}'**
+  String wifiNetwork(String network);
+
+  /// Main screen title
+  ///
+  /// In en, this message translates to:
+  /// **'BREEZ Home'**
+  String get hvacControl;
+
+  /// Temperature label
+  ///
+  /// In en, this message translates to:
+  /// **'Temperature'**
+  String get temperature;
+
+  /// Humidity label
+  ///
+  /// In en, this message translates to:
+  /// **'Humidity'**
+  String get humidity;
+
+  /// Air quality label
+  ///
+  /// In en, this message translates to:
+  /// **'Air Quality'**
+  String get airQuality;
+
+  /// Fan speed label
+  ///
+  /// In en, this message translates to:
+  /// **'Fan Speed'**
+  String get fanSpeed;
+
+  /// Fan label short
+  ///
+  /// In en, this message translates to:
+  /// **'Fan'**
+  String get fan;
+
+  /// Mode label
+  ///
+  /// In en, this message translates to:
+  /// **'Mode'**
+  String get mode;
+
+  /// Operating mode title
+  ///
+  /// In en, this message translates to:
+  /// **'Operating Mode'**
+  String get operatingMode;
+
+  /// Power label
+  ///
+  /// In en, this message translates to:
+  /// **'Power'**
+  String get power;
+
+  /// On state
+  ///
+  /// In en, this message translates to:
+  /// **'On'**
+  String get on;
+
+  /// Off state
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get off;
+
+  /// Current label
+  ///
+  /// In en, this message translates to:
+  /// **'Current'**
+  String current(Object temp);
+
+  /// Target label
+  ///
+  /// In en, this message translates to:
+  /// **'Target'**
+  String get target;
+
+  /// Cooling mode
+  ///
+  /// In en, this message translates to:
+  /// **'Cooling'**
+  String get cooling;
+
+  /// Heating mode
+  ///
+  /// In en, this message translates to:
+  /// **'Heating'**
+  String get heating;
+
+  /// Auto mode
+  ///
+  /// In en, this message translates to:
+  /// **'Auto'**
+  String get auto;
+
+  /// Low speed
+  ///
+  /// In en, this message translates to:
+  /// **'Low'**
+  String get low;
+
+  /// Password strength
+  ///
+  /// In en, this message translates to:
+  /// **'Medium'**
+  String get medium;
+
+  /// High speed
+  ///
+  /// In en, this message translates to:
+  /// **'High'**
+  String get high;
+
+  /// Mode 2 label
+  ///
+  /// In en, this message translates to:
+  /// **'Mode 2'**
+  String get mode2;
+
+  /// Humidifier air label
+  ///
+  /// In en, this message translates to:
+  /// **'Humidifier\nAir'**
+  String get humidifierAir;
+
+  /// Purifier air label
+  ///
+  /// In en, this message translates to:
+  /// **'Purifier\nAir'**
+  String get purifierAir;
+
+  /// Lighting section
+  ///
+  /// In en, this message translates to:
+  /// **'Lighting'**
+  String get lighting;
+
+  /// Main light label
+  ///
+  /// In en, this message translates to:
+  /// **'Main light'**
+  String get mainLight;
+
+  /// Floor lamp label
+  ///
+  /// In en, this message translates to:
+  /// **'Floor lamp'**
+  String get floorLamp;
+
+  /// Unit label
+  ///
+  /// In en, this message translates to:
+  /// **'Unit'**
+  String get unit;
+
+  /// Notifications coming soon message
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications feature coming soon'**
+  String get notificationsComingSoon;
+
+  /// Favorite action
+  ///
+  /// In en, this message translates to:
+  /// **'Favorite'**
+  String get favorite;
+
+  /// Activity label
+  ///
+  /// In en, this message translates to:
+  /// **'Activity'**
+  String get activity;
+
+  /// See all button
+  ///
+  /// In en, this message translates to:
+  /// **'See All'**
+  String get seeAll;
+
+  /// Excellent air quality
+  ///
+  /// In en, this message translates to:
+  /// **'Excellent'**
+  String get excellent;
+
+  /// Good air quality
+  ///
+  /// In en, this message translates to:
+  /// **'Good'**
+  String get good;
+
+  /// Moderate air quality
+  ///
+  /// In en, this message translates to:
+  /// **'Moderate'**
+  String get moderate;
+
+  /// Poor air quality
+  ///
+  /// In en, this message translates to:
+  /// **'Poor'**
+  String get poor;
+
+  /// Very poor air quality
+  ///
+  /// In en, this message translates to:
+  /// **'Very Poor'**
+  String get veryPoor;
+
+  /// Quick actions title
+  ///
+  /// In en, this message translates to:
+  /// **'Quick Actions'**
+  String get quickActions;
+
+  /// Turn all devices on
+  ///
+  /// In en, this message translates to:
+  /// **'All On'**
+  String get allOn;
+
+  /// Turn all devices off
+  ///
+  /// In en, this message translates to:
+  /// **'All Off'**
+  String get allOff;
+
+  /// Sync devices
+  ///
+  /// In en, this message translates to:
+  /// **'Sync'**
+  String get sync;
+
+  /// Schedule button
+  ///
+  /// In en, this message translates to:
+  /// **'Schedule'**
+  String get schedule;
+
+  /// Presets title
+  ///
+  /// In en, this message translates to:
+  /// **'Presets'**
+  String get presets;
+
+  /// Error title
+  ///
+  /// In en, this message translates to:
+  /// **'Error'**
+  String error(Object message);
+
+  /// Connection error title
+  ///
+  /// In en, this message translates to:
+  /// **'Connection Error'**
+  String get connectionError;
+
+  /// Server error title
+  ///
+  /// In en, this message translates to:
+  /// **'Server Error'**
+  String get serverError;
+
+  /// Permission required title
+  ///
+  /// In en, this message translates to:
+  /// **'Permission Required'**
+  String get permissionRequired;
+
+  /// Generic error title
+  ///
+  /// In en, this message translates to:
+  /// **'Oops! Something went wrong'**
+  String get somethingWentWrong;
+
+  /// Network error message
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to connect to the server. Please check your internet connection.'**
+  String get unableToConnect;
+
+  /// Server error message
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong on our end. Please try again later.'**
+  String get serverErrorMessage;
+
+  /// Permission required message
+  ///
+  /// In en, this message translates to:
+  /// **'This feature requires additional permissions to work properly.'**
+  String get permissionRequiredMessage;
+
+  /// Network connection failed
+  ///
+  /// In en, this message translates to:
+  /// **'Network connection failed. Please check your internet connection.'**
+  String get networkConnectionFailed;
+
+  /// Request timeout error
+  ///
+  /// In en, this message translates to:
+  /// **'Request timed out. Please try again.'**
+  String get requestTimedOut;
+
+  /// Device server connection error
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to connect to device server'**
+  String get failedToConnect;
+
+  /// Connection failed with error
+  ///
+  /// In en, this message translates to:
+  /// **'Connection failed: {error}'**
+  String connectionFailed(String error);
+
+  /// Failed to add device
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to add device: {error}'**
+  String failedToAddDevice(String error);
+
+  /// Failed to remove device
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to remove device: {error}'**
+  String failedToRemoveDevice(String error);
+
+  /// Failed to load more items
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load more items: {error}'**
+  String failedToLoadMore(String error);
+
+  /// Try again button
+  ///
+  /// In en, this message translates to:
+  /// **'Try Again'**
+  String get tryAgain;
+
+  /// Retry button
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// Retry connection button
+  ///
+  /// In en, this message translates to:
+  /// **'Retry Connection'**
+  String get retryConnection;
+
+  /// Refreshing message
+  ///
+  /// In en, this message translates to:
+  /// **'Refreshing...'**
+  String get refreshing;
+
+  /// Refresh devices tooltip
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh Devices'**
+  String get refreshDevices;
+
+  /// Retrying connection announcement
+  ///
+  /// In en, this message translates to:
+  /// **'Retrying connection'**
+  String get retryingConnection;
+
+  /// Error code display
+  ///
+  /// In en, this message translates to:
+  /// **'Error Code: {code}'**
+  String errorCode(String code);
+
+  /// Error code copied message
+  ///
+  /// In en, this message translates to:
+  /// **'Error code copied to clipboard'**
+  String get errorCodeCopied;
+
+  /// Technical details label
+  ///
+  /// In en, this message translates to:
+  /// **'Technical Details'**
+  String get technicalDetails;
+
+  /// Double tap to retry hint
+  ///
+  /// In en, this message translates to:
+  /// **'Double tap to retry'**
+  String get doubleTapToRetry;
+
+  /// Loading message
+  ///
+  /// In en, this message translates to:
+  /// **'Loading...'**
+  String get loading;
+
+  /// Loading devices message
+  ///
+  /// In en, this message translates to:
+  /// **'Loading devices...'**
+  String get loadingDevices;
+
+  /// All units loaded message
+  ///
+  /// In en, this message translates to:
+  /// **'All units loaded'**
+  String get allUnitsLoaded;
+
+  /// Connecting message
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting...'**
+  String get connecting;
+
+  /// Reconnecting message
+  ///
+  /// In en, this message translates to:
+  /// **'Reconnecting...'**
+  String get reconnecting;
+
+  /// No devices title
+  ///
+  /// In en, this message translates to:
+  /// **'No Devices'**
+  String get noDevices;
+
+  /// No devices found message
+  ///
+  /// In en, this message translates to:
+  /// **'No Devices Found'**
+  String get noDevicesFound;
+
+  /// Add first device prompt
+  ///
+  /// In en, this message translates to:
+  /// **'Add your first device to get started'**
+  String get addFirstDevice;
+
+  /// MQTT settings help text
+  ///
+  /// In en, this message translates to:
+  /// **'Check your MQTT connection settings\nand make sure devices are online'**
+  String get checkMqttSettings;
+
+  /// No device selected message
+  ///
+  /// In en, this message translates to:
+  /// **'No device selected'**
+  String get deviceNotSelected;
+
+  /// Opening device addition announcement
+  ///
+  /// In en, this message translates to:
+  /// **'Opening device addition screen'**
+  String get openDeviceAddition;
+
+  /// Camera initialization message
+  ///
+  /// In en, this message translates to:
+  /// **'Initializing camera...'**
+  String get initializingCamera;
+
+  /// Camera permission message
+  ///
+  /// In en, this message translates to:
+  /// **'Camera access is required to scan QR codes.\nPlease enable camera permissions in your browser settings.'**
+  String get cameraAccessRequired;
+
+  /// Camera error title
+  ///
+  /// In en, this message translates to:
+  /// **'Camera Error'**
+  String get cameraError;
+
+  /// Camera error message
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred while accessing the camera.'**
+  String get cameraErrorMessage;
+
+  /// Web camera setup message
+  ///
+  /// In en, this message translates to:
+  /// **'Web camera scanning requires additional setup. Please use manual entry or scan from mobile device.'**
+  String get webCameraSetupRequired;
+
+  /// Camera view label
+  ///
+  /// In en, this message translates to:
+  /// **'Camera View'**
+  String get cameraView;
+
+  /// Email required validation
+  ///
+  /// In en, this message translates to:
+  /// **'Email is required'**
+  String get emailRequired;
+
+  /// Invalid email validation
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid email'**
+  String get invalidEmail;
+
+  /// Password required validation
+  ///
+  /// In en, this message translates to:
+  /// **'Password is required'**
+  String get passwordRequired;
+
+  /// Password too short validation
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least {length} characters'**
+  String passwordTooShort(int length);
+
+  /// Name required validation
+  ///
+  /// In en, this message translates to:
+  /// **'{fieldName} is required'**
+  String nameRequired(String fieldName);
+
+  /// Name too short validation
+  ///
+  /// In en, this message translates to:
+  /// **'{fieldName} must be at least 2 characters'**
+  String nameTooShort(String fieldName);
+
+  /// Fill required fields message
+  ///
+  /// In en, this message translates to:
+  /// **'Please fill in all required fields'**
+  String get fillRequiredFields;
+
+  /// Accept terms validation
+  ///
+  /// In en, this message translates to:
+  /// **'Please accept the terms and conditions'**
+  String get pleaseAcceptTerms;
+
+  /// Minimum characters hint
+  ///
+  /// In en, this message translates to:
+  /// **'Min {count} characters'**
+  String minCharacters(int count);
+
+  /// Password requirement
+  ///
+  /// In en, this message translates to:
+  /// **'At least 8 characters'**
+  String get atLeast8Characters;
+
+  /// Password requirement
+  ///
+  /// In en, this message translates to:
+  /// **'Uppercase letter'**
+  String get uppercaseLetter;
+
+  /// Password requirement
+  ///
+  /// In en, this message translates to:
+  /// **'Lowercase letter'**
+  String get lowercaseLetter;
+
+  /// Password requirement
+  ///
+  /// In en, this message translates to:
+  /// **'Number'**
+  String get number;
+
+  /// Password requirement
+  ///
+  /// In en, this message translates to:
+  /// **'Special character'**
+  String get specialCharacter;
+
+  /// Password strength
+  ///
+  /// In en, this message translates to:
+  /// **'Weak'**
+  String get weak;
+
+  /// Password strength
+  ///
+  /// In en, this message translates to:
+  /// **'Strong'**
+  String get strong;
+
+  /// Password strength
+  ///
+  /// In en, this message translates to:
+  /// **'Very Strong'**
+  String get veryStrong;
+
+  /// Edit schedule semantic label
+  ///
+  /// In en, this message translates to:
+  /// **'Edit {name}'**
+  String editSchedule(String name);
+
+  /// Delete schedule semantic label
+  ///
+  /// In en, this message translates to:
+  /// **'Delete {name}'**
+  String deleteSchedule(String name);
+
+  /// Edit schedule tooltip
+  ///
+  /// In en, this message translates to:
+  /// **'Edit schedule'**
+  String get editScheduleTooltip;
+
+  /// Delete schedule tooltip
+  ///
+  /// In en, this message translates to:
+  /// **'Delete schedule'**
+  String get deleteScheduleTooltip;
+
+  /// Success title
+  ///
+  /// In en, this message translates to:
+  /// **'Success'**
+  String get success;
+
+  /// Settings saved message
+  ///
+  /// In en, this message translates to:
+  /// **'Settings saved. Restart app to apply changes.'**
+  String get settingsSaved;
+
+  /// Preset applied message
+  ///
+  /// In en, this message translates to:
+  /// **'Preset applied'**
+  String get presetApplied;
+
+  /// All units on message
+  ///
+  /// In en, this message translates to:
+  /// **'All units turned on'**
+  String get allUnitsOn;
+
+  /// All units off message
+  ///
+  /// In en, this message translates to:
+  /// **'All units turned off'**
+  String get allUnitsOff;
+
+  /// Settings synced message
+  ///
+  /// In en, this message translates to:
+  /// **'Settings synced to all units'**
+  String get settingsSynced;
+
+  /// Schedule applied message
+  ///
+  /// In en, this message translates to:
+  /// **'Schedule applied to all units'**
+  String get scheduleAppliedToAll;
+
+  /// Power change error
+  ///
+  /// In en, this message translates to:
+  /// **'Error changing power'**
+  String get errorChangingPower;
+
+  /// Mode update error
+  ///
+  /// In en, this message translates to:
+  /// **'Error updating mode'**
+  String get errorUpdatingMode;
+
+  /// Fan speed update error
+  ///
+  /// In en, this message translates to:
+  /// **'Error updating fan speed'**
+  String get errorUpdatingFanSpeed;
+
+  /// Preset apply error
+  ///
+  /// In en, this message translates to:
+  /// **'Error applying preset'**
+  String get errorApplyingPreset;
+
+  /// Turn on units error
+  ///
+  /// In en, this message translates to:
+  /// **'Error turning on units'**
+  String get errorTurningOnUnits;
+
+  /// Turn off units error
+  ///
+  /// In en, this message translates to:
+  /// **'Error turning off units'**
+  String get errorTurningOffUnits;
+
+  /// Settings sync error
+  ///
+  /// In en, this message translates to:
+  /// **'Error syncing settings'**
+  String get errorSyncingSettings;
+
+  /// Schedule apply error
+  ///
+  /// In en, this message translates to:
+  /// **'Error applying schedule'**
+  String get errorApplyingSchedule;
+
+  /// Connected status
+  ///
+  /// In en, this message translates to:
+  /// **'Connected'**
+  String get connected;
+
+  /// Disconnected status
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnected'**
+  String get disconnected;
+
+  /// Idle status
+  ///
+  /// In en, this message translates to:
+  /// **'Idle'**
+  String get idle;
+
+  /// Active status
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get active;
+
+  /// Inactive status
+  ///
+  /// In en, this message translates to:
+  /// **'Inactive'**
+  String get inactive;
+
+  /// Enabled status
+  ///
+  /// In en, this message translates to:
+  /// **'Enabled'**
+  String get enabled;
+
+  /// Disabled status
+  ///
+  /// In en, this message translates to:
+  /// **'Disabled'**
+  String get disabled;
+
+  /// Available status
+  ///
+  /// In en, this message translates to:
+  /// **'Available'**
+  String get available;
+
+  /// Unavailable status
+  ///
+  /// In en, this message translates to:
+  /// **'Unavailable'**
+  String get unavailable;
+
+  /// Maintenance status
+  ///
+  /// In en, this message translates to:
+  /// **'Maintenance'**
+  String get maintenance;
+
+  /// Activated state
+  ///
+  /// In en, this message translates to:
+  /// **'activated'**
+  String get activated;
+
+  /// Deactivated state
+  ///
+  /// In en, this message translates to:
+  /// **'deactivated'**
+  String get deactivated;
+
+  /// Save button
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
+  /// Cancel button
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// Close button
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
+
+  /// Confirm button
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get confirm;
+
+  /// Yes button
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get yes;
+
+  /// No button
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get no;
+
+  /// OK button
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get ok;
+
+  /// Apply button
+  ///
+  /// In en, this message translates to:
+  /// **'Apply'**
+  String get apply;
+
+  /// Reset button
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get reset;
+
+  /// Clear button
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get clear;
+
+  /// Done button
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get done;
+
+  /// Add button
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get add;
+
+  /// Remove button
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get remove;
+
+  /// Filter button
+  ///
+  /// In en, this message translates to:
+  /// **'Filter'**
+  String get filter;
+
+  /// Sort button
+  ///
+  /// In en, this message translates to:
+  /// **'Sort'**
+  String get sort;
+
+  /// Refresh button
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh'**
+  String get refresh;
 
   /// Logout button
   ///
@@ -718,437 +1564,197 @@ abstract class AppLocalizations {
   /// **'Logout'**
   String get logout;
 
-  /// Skip authentication button
-  ///
-  /// In en, this message translates to:
-  /// **'Continue without registration'**
-  String get skipAuth;
-
-  /// No description provided for @loading.
-  ///
-  /// In en, this message translates to:
-  /// **'Loading...'**
-  String get loading;
-
-  /// No description provided for @retry.
-  ///
-  /// In en, this message translates to:
-  /// **'Retry'**
-  String get retry;
-
-  /// No description provided for @close.
-  ///
-  /// In en, this message translates to:
-  /// **'Close'**
-  String get close;
-
-  /// No description provided for @save.
-  ///
-  /// In en, this message translates to:
-  /// **'Save'**
-  String get save;
-
-  /// No description provided for @edit.
-  ///
-  /// In en, this message translates to:
-  /// **'Edit'**
-  String get edit;
-
-  /// No description provided for @delete.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete'**
-  String get delete;
-
-  /// No description provided for @confirm.
-  ///
-  /// In en, this message translates to:
-  /// **'Confirm'**
-  String get confirm;
-
-  /// No description provided for @yes.
-  ///
-  /// In en, this message translates to:
-  /// **'Yes'**
-  String get yes;
-
-  /// No description provided for @no.
-  ///
-  /// In en, this message translates to:
-  /// **'No'**
-  String get no;
-
-  /// No description provided for @ok.
-  ///
-  /// In en, this message translates to:
-  /// **'OK'**
-  String get ok;
-
-  /// No description provided for @search.
-  ///
-  /// In en, this message translates to:
-  /// **'Search'**
-  String get search;
-
-  /// No description provided for @filter.
-  ///
-  /// In en, this message translates to:
-  /// **'Filter'**
-  String get filter;
-
-  /// No description provided for @sort.
-  ///
-  /// In en, this message translates to:
-  /// **'Sort'**
-  String get sort;
-
-  /// No description provided for @refresh.
-  ///
-  /// In en, this message translates to:
-  /// **'Refresh'**
-  String get refresh;
-
-  /// No description provided for @back.
-  ///
-  /// In en, this message translates to:
-  /// **'Back'**
-  String get back;
-
-  /// No description provided for @next.
-  ///
-  /// In en, this message translates to:
-  /// **'Next'**
-  String get next;
-
-  /// No description provided for @previous.
-  ///
-  /// In en, this message translates to:
-  /// **'Previous'**
-  String get previous;
-
-  /// No description provided for @done.
-  ///
-  /// In en, this message translates to:
-  /// **'Done'**
-  String get done;
-
-  /// No description provided for @apply.
-  ///
-  /// In en, this message translates to:
-  /// **'Apply'**
-  String get apply;
-
-  /// No description provided for @reset.
-  ///
-  /// In en, this message translates to:
-  /// **'Reset'**
-  String get reset;
-
-  /// No description provided for @clear.
-  ///
-  /// In en, this message translates to:
-  /// **'Clear'**
-  String get clear;
-
-  /// No description provided for @success.
-  ///
-  /// In en, this message translates to:
-  /// **'Success'**
-  String get success;
-
-  /// No description provided for @failed.
-  ///
-  /// In en, this message translates to:
-  /// **'Failed'**
-  String get failed;
-
-  /// No description provided for @warning.
-  ///
-  /// In en, this message translates to:
-  /// **'Warning'**
-  String get warning;
-
-  /// No description provided for @info.
-  ///
-  /// In en, this message translates to:
-  /// **'Information'**
-  String get info;
-
-  /// No description provided for @notification.
-  ///
-  /// In en, this message translates to:
-  /// **'Notification'**
-  String get notification;
-
-  /// No description provided for @online.
-  ///
-  /// In en, this message translates to:
-  /// **'Online'**
-  String get online;
-
-  /// No description provided for @offline.
-  ///
-  /// In en, this message translates to:
-  /// **'Offline'**
-  String get offline;
-
-  /// No description provided for @connected.
-  ///
-  /// In en, this message translates to:
-  /// **'Connected'**
-  String get connected;
-
-  /// No description provided for @disconnected.
-  ///
-  /// In en, this message translates to:
-  /// **'Disconnected'**
-  String get disconnected;
-
-  /// No description provided for @connecting.
-  ///
-  /// In en, this message translates to:
-  /// **'Connecting...'**
-  String get connecting;
-
-  /// No description provided for @reconnecting.
-  ///
-  /// In en, this message translates to:
-  /// **'Reconnecting...'**
-  String get reconnecting;
-
-  /// No description provided for @idle.
-  ///
-  /// In en, this message translates to:
-  /// **'Idle'**
-  String get idle;
-
-  /// No description provided for @active.
-  ///
-  /// In en, this message translates to:
-  /// **'Active'**
-  String get active;
-
-  /// No description provided for @inactive.
-  ///
-  /// In en, this message translates to:
-  /// **'Inactive'**
-  String get inactive;
-
-  /// No description provided for @enabled.
-  ///
-  /// In en, this message translates to:
-  /// **'Enabled'**
-  String get enabled;
-
-  /// No description provided for @disabled.
-  ///
-  /// In en, this message translates to:
-  /// **'Disabled'**
-  String get disabled;
-
-  /// No description provided for @available.
-  ///
-  /// In en, this message translates to:
-  /// **'Available'**
-  String get available;
-
-  /// No description provided for @unavailable.
-  ///
-  /// In en, this message translates to:
-  /// **'Unavailable'**
-  String get unavailable;
-
-  /// No description provided for @maintenance.
-  ///
-  /// In en, this message translates to:
-  /// **'Maintenance'**
-  String get maintenance;
-
-  /// No description provided for @status.
+  /// Status label
   ///
   /// In en, this message translates to:
   /// **'Status'**
   String get status;
 
-  /// No description provided for @details.
+  /// Details label
   ///
   /// In en, this message translates to:
   /// **'Details'**
   String get details;
 
-  /// No description provided for @more.
+  /// More label
   ///
   /// In en, this message translates to:
   /// **'More'**
   String get more;
 
-  /// No description provided for @less.
+  /// Less label
   ///
   /// In en, this message translates to:
   /// **'Less'**
   String get less;
 
-  /// No description provided for @all.
+  /// All label
   ///
   /// In en, this message translates to:
   /// **'All'**
   String get all;
 
-  /// No description provided for @none.
+  /// None label
   ///
   /// In en, this message translates to:
   /// **'None'**
   String get none;
 
-  /// No description provided for @today.
+  /// Optional field hint
+  ///
+  /// In en, this message translates to:
+  /// **'Optional'**
+  String get optional;
+
+  /// Required field hint
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get required;
+
+  /// Information label
+  ///
+  /// In en, this message translates to:
+  /// **'Information'**
+  String get info;
+
+  /// Warning label
+  ///
+  /// In en, this message translates to:
+  /// **'Warning'**
+  String get warning;
+
+  /// Notification label
+  ///
+  /// In en, this message translates to:
+  /// **'Notification'**
+  String get notification;
+
+  /// Today label
   ///
   /// In en, this message translates to:
   /// **'Today'**
   String get today;
 
-  /// No description provided for @yesterday.
+  /// Yesterday label
   ///
   /// In en, this message translates to:
   /// **'Yesterday'**
   String get yesterday;
 
-  /// No description provided for @week.
+  /// Week label
   ///
   /// In en, this message translates to:
   /// **'Week'**
   String get week;
 
-  /// No description provided for @month.
+  /// Month label
   ///
   /// In en, this message translates to:
   /// **'Month'**
   String get month;
 
-  /// No description provided for @year.
+  /// Year label
   ///
   /// In en, this message translates to:
   /// **'Year'**
   String get year;
 
-  /// No description provided for @noDevices.
+  /// Date format
   ///
   /// In en, this message translates to:
-  /// **'No Devices'**
-  String get noDevices;
+  /// **'{date}'**
+  String date(String date);
 
-  /// No description provided for @addFirstDevice.
-  ///
-  /// In en, this message translates to:
-  /// **'Add your first device to get started'**
-  String get addFirstDevice;
-
-  /// No description provided for @deviceNotSelected.
-  ///
-  /// In en, this message translates to:
-  /// **'No device selected'**
-  String get deviceNotSelected;
-
-  /// No description provided for @errorChangingPower.
-  ///
-  /// In en, this message translates to:
-  /// **'Error changing power'**
-  String get errorChangingPower;
-
-  /// No description provided for @errorUpdatingMode.
-  ///
-  /// In en, this message translates to:
-  /// **'Error updating mode'**
-  String get errorUpdatingMode;
-
-  /// No description provided for @errorUpdatingFanSpeed.
-  ///
-  /// In en, this message translates to:
-  /// **'Error updating fan speed'**
-  String get errorUpdatingFanSpeed;
-
-  /// No description provided for @errorApplyingPreset.
-  ///
-  /// In en, this message translates to:
-  /// **'Error applying preset'**
-  String get errorApplyingPreset;
-
-  /// No description provided for @presetApplied.
-  ///
-  /// In en, this message translates to:
-  /// **'Preset applied'**
-  String get presetApplied;
-
-  /// No description provided for @allUnitsOn.
-  ///
-  /// In en, this message translates to:
-  /// **'All units turned on'**
-  String get allUnitsOn;
-
-  /// No description provided for @errorTurningOnUnits.
-  ///
-  /// In en, this message translates to:
-  /// **'Error turning on units'**
-  String get errorTurningOnUnits;
-
-  /// No description provided for @allUnitsOff.
-  ///
-  /// In en, this message translates to:
-  /// **'All units turned off'**
-  String get allUnitsOff;
-
-  /// No description provided for @errorTurningOffUnits.
-  ///
-  /// In en, this message translates to:
-  /// **'Error turning off units'**
-  String get errorTurningOffUnits;
-
-  /// No description provided for @settingsSynced.
-  ///
-  /// In en, this message translates to:
-  /// **'Settings synced to all units'**
-  String get settingsSynced;
-
-  /// No description provided for @errorSyncingSettings.
-  ///
-  /// In en, this message translates to:
-  /// **'Error syncing settings'**
-  String get errorSyncingSettings;
-
-  /// No description provided for @scheduleAppliedToAll.
-  ///
-  /// In en, this message translates to:
-  /// **'Schedule applied to all units'**
-  String get scheduleAppliedToAll;
-
-  /// No description provided for @errorApplyingSchedule.
-  ///
-  /// In en, this message translates to:
-  /// **'Error applying schedule'**
-  String get errorApplyingSchedule;
-
-  /// No description provided for @activated.
-  ///
-  /// In en, this message translates to:
-  /// **'activated'**
-  String get activated;
-
-  /// No description provided for @deactivated.
-  ///
-  /// In en, this message translates to:
-  /// **'deactivated'**
-  String get deactivated;
-
-  /// No description provided for @manageRules.
+  /// Manage rules button/message
   ///
   /// In en, this message translates to:
   /// **'Manage Rules (Coming Soon)'**
   String get manageRules;
 
-  /// No description provided for @addUnitComingSoon.
+  /// Manage rules coming soon
+  ///
+  /// In en, this message translates to:
+  /// **'Manage Rules (Coming Soon)'**
+  String get manageRulesComingSoon;
+
+  /// Add unit coming soon
   ///
   /// In en, this message translates to:
   /// **'Add unit feature coming soon'**
   String get addUnitComingSoon;
+
+  /// Living room name
+  ///
+  /// In en, this message translates to:
+  /// **'Living Room'**
+  String get livingRoom;
+
+  /// Bedroom name
+  ///
+  /// In en, this message translates to:
+  /// **'Bedroom'**
+  String get bedroom;
+
+  /// Kitchen name
+  ///
+  /// In en, this message translates to:
+  /// **'Kitchen'**
+  String get kitchen;
+
+  /// Vacuum cleaner device type
+  ///
+  /// In en, this message translates to:
+  /// **'Vacuum cleaner'**
+  String get vacuumCleaner;
+
+  /// Smart bulb device type
+  ///
+  /// In en, this message translates to:
+  /// **'Smart bulb'**
+  String get smartBulb;
+
+  /// Humidifier device type
+  ///
+  /// In en, this message translates to:
+  /// **'Humidifier'**
+  String get humidifier;
+
+  /// Average label
+  ///
+  /// In en, this message translates to:
+  /// **'Average'**
+  String get average;
+
+  /// Minimum label
+  ///
+  /// In en, this message translates to:
+  /// **'Min'**
+  String get min;
+
+  /// Maximum label
+  ///
+  /// In en, this message translates to:
+  /// **'Max'**
+  String get max;
+
+  /// Temperature history title
+  ///
+  /// In en, this message translates to:
+  /// **'Temperature History'**
+  String get temperatureHistory;
+
+  /// Last 24 hours label
+  ///
+  /// In en, this message translates to:
+  /// **'Last 24 hours'**
+  String get last24Hours;
+
+  /// Active devices count
+  ///
+  /// In en, this message translates to:
+  /// **'{count} of {total} active'**
+  String activeDevices(int count, int total);
 }
 
 class _AppLocalizationsDelegate

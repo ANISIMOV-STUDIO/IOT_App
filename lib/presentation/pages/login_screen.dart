@@ -129,19 +129,21 @@ class _LoginScreenState extends State<LoginScreen>
                       children: [
                         // BREEZ Home Title
                         Text(
-                          'BREEZ HOME',
-                          style: HvacTypography.displayLarge.copyWith(
+                          l10n.appTitle.toUpperCase(),
+                          style: TextStyle(
                             color: HvacColors.textPrimary,
                             fontWeight: FontWeight.bold,
-                            fontSize: 48,
+                            fontSize: 42.sp,
+                            letterSpacing: 1.5,
                           ),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: HvacSpacing.xs),
                         Text(
-                          'Smart Climate Management',
-                          style: HvacTypography.bodyMedium.copyWith(
+                          l10n.smartClimateManagement,
+                          style: TextStyle(
                             color: HvacColors.textSecondary,
+                            fontSize: 16.sp,
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -306,24 +308,28 @@ class _LoginScreenState extends State<LoginScreen>
                 height: 24,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    HvacColors.backgroundCard,
+                  ),
                 ),
               )
             : Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Icon(
+                    Icons.login_rounded,
+                    color: HvacColors.backgroundCard,
+                    size: 16.sp,
+                  ),
+                  SizedBox(width: 6.w),
                   Text(
                     l10n.login,
-                    style: HvacTypography.labelLarge.copyWith(
-                      color: Colors.white,
+                    style: TextStyle(
+                      color: HvacColors.backgroundCard,
                       fontWeight: FontWeight.bold,
+                      fontSize: 14.sp,
+                      letterSpacing: 0.3,
                     ),
-                  ),
-                  const SizedBox(width: HvacSpacing.sm),
-                  const Icon(
-                    Icons.arrow_forward_rounded,
-                    color: Colors.white,
-                    size: 20,
                   ),
                 ],
               ),
@@ -336,17 +342,17 @@ class _LoginScreenState extends State<LoginScreen>
       scaleDown: 0.97,
       child: HvacNeumorphicButton(
         width: double.infinity,
-        height: 52,
+        height: 56,
         borderRadius: 16,
         onPressed: _isLoading
             ? null
             : () {
                 HapticFeedback.lightImpact();
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Registration feature coming soon'),
+                  SnackBar(
+                    content: Text(l10n.registrationComingSoon),
                     backgroundColor: HvacColors.info,
-                    duration: Duration(seconds: 2),
+                    duration: const Duration(seconds: 2),
                     behavior: SnackBarBehavior.floating,
                   ),
                 );
@@ -354,17 +360,19 @@ class _LoginScreenState extends State<LoginScreen>
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
+            Icon(
               Icons.person_add_outlined,
               color: HvacColors.primaryOrange,
-              size: 20,
+              size: 16.sp,
             ),
-            const SizedBox(width: HvacSpacing.sm),
+            SizedBox(width: 6.w),
             Text(
               l10n.register,
-              style: HvacTypography.labelLarge.copyWith(
+              style: TextStyle(
                 color: HvacColors.primaryOrange,
                 fontWeight: FontWeight.w600,
+                fontSize: 14.sp,
+                letterSpacing: 0.3,
               ),
             ),
           ],
@@ -374,6 +382,7 @@ class _LoginScreenState extends State<LoginScreen>
   }
 
   Widget _buildSkipButton() {
+    final l10n = AppLocalizations.of(context)!;
     return HvacInteractiveScale(
       scaleDown: 0.95,
       child: TextButton(
@@ -388,7 +397,7 @@ class _LoginScreenState extends State<LoginScreen>
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Skip for now',
+              l10n.skipForNow,
               style: HvacTypography.bodyMedium.copyWith(
                 color: HvacColors.textSecondary,
               ),

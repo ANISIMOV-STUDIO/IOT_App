@@ -196,7 +196,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                                 ),
                                 const SizedBox(height: HvacSpacing.sm),
                                 Text(
-                                  'Pull to refresh',
+                                  l10n.pullToRefresh,
                                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                         color: HvacColors.textSecondary,
                                       ),
@@ -230,8 +230,8 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                               unit.name,
                               unit.macAddress,
                             ),
-                            rightActionLabel: 'Edit',
-                            leftActionLabel: 'Delete',
+                            rightActionLabel: l10n.edit,
+                            leftActionLabel: l10n.delete,
                             rightActionIcon: Icons.edit,
                             leftActionIcon: Icons.delete,
                             rightActionColor: HvacColors.info,
@@ -330,9 +330,9 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                                               color: HvacColors.success.withValues(alpha: 0.2),
                                               borderRadius: HvacRadius.smRadius,
                                             ),
-                                            child: const Text(
-                                              'Online',
-                                              style: TextStyle(
+                                            child: Text(
+                                              l10n.online,
+                                              style: const TextStyle(
                                                 color: HvacColors.success,
                                                 fontSize: 10,
                                                 fontWeight: FontWeight.bold,
@@ -518,7 +518,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: isDark ? HvacColors.backgroundCard : HvacColors.glassWhite,
-        title: const Text('Edit Device'),
+        title: Text(l10n.editDevice),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -600,8 +600,8 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                 if (context.mounted) {
                   Navigator.of(context).pop();
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Device updated'),
+                    SnackBar(
+                      content: Text(l10n.deviceUpdated),
                       backgroundColor: HvacColors.success,
                     ),
                   );

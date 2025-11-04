@@ -8,6 +8,7 @@ import 'package:liquid_swipe/liquid_swipe.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import 'responsive_shell.dart';
+import '../../generated/l10n/app_localizations.dart';
 
 /// Onboarding screen for first-time users
 class OnboardingScreen extends StatefulWidget {
@@ -50,6 +51,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: HvacColors.backgroundDark,
       body: Stack(
@@ -57,10 +59,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           // Liquid Swipe Pages
           HvacLiquidSwipe(
             pages: [
-              _buildWelcomePage(),
-              _buildControlPage(),
+              _buildWelcomePage(l10n),
+              _buildControlPage(l10n),
               _buildAnalyticsPage(),
-              _buildGetStartedPage(),
+              _buildGetStartedPage(l10n),
             ],
             controller: _liquidController,
             enableLoop: false,
@@ -85,9 +87,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       vertical: 12,
                     ),
                   ),
-                  child: const Text(
-                    'Skip',
-                    style: TextStyle(
+                  child: Text(
+                    l10n.skip,
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                     ),
@@ -127,7 +129,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   /// Page 1: Welcome
-  Widget _buildWelcomePage() {
+  Widget _buildWelcomePage(AppLocalizations l10n) {
     return Container(
       color: HvacColors.backgroundDark,
       child: SafeArea(
@@ -153,9 +155,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               const SizedBox(height: 60),
 
               // Title
-              const Text(
-                'Welcome to\nBREEZ Home',
-                style: TextStyle(
+              Text(
+                l10n.welcomeToBreezHome,
+                style: const TextStyle(
                   fontSize: 42,
                   fontWeight: FontWeight.bold,
                   color: HvacColors.textPrimary,
@@ -166,9 +168,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               const SizedBox(height: 24),
 
               // Subtitle
-              const Text(
-                'Your smart home climate control\nat your fingertips',
-                style: TextStyle(
+              Text(
+                l10n.smartHomeClimateControl,
+                style: const TextStyle(
                   fontSize: 18,
                   color: HvacColors.textSecondary,
                   height: 1.5,
@@ -182,7 +184,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Swipe to continue',
+                    l10n.swipeToContinue,
                     style: TextStyle(
                       fontSize: 14,
                       color: HvacColors.textSecondary.withValues(alpha:0.6),
@@ -204,7 +206,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   /// Page 2: Control Devices
-  Widget _buildControlPage() {
+  Widget _buildControlPage(AppLocalizations l10n) {
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
@@ -239,9 +241,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               const SizedBox(height: 60),
 
               // Title
-              const Text(
-                'Control Your\nDevices',
-                style: TextStyle(
+              Text(
+                l10n.controlYourDevices,
+                style: const TextStyle(
                   fontSize: 42,
                   fontWeight: FontWeight.bold,
                   color: HvacColors.textPrimary,
@@ -252,9 +254,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               const SizedBox(height: 24),
 
               // Subtitle
-              const Text(
-                'Manage all your HVAC systems\nfrom anywhere, anytime',
-                style: TextStyle(
+              Text(
+                l10n.manageHvacSystems,
+                style: const TextStyle(
                   fontSize: 18,
                   color: HvacColors.textSecondary,
                   height: 1.5,
@@ -266,7 +268,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               // Features
               _buildFeatureRow(
                 Icons.power_settings_new,
-                'Turn on/off remotely',
+                l10n.turnOnOffRemotely,
               ),
               const SizedBox(height: 20),
               _buildFeatureRow(
@@ -362,7 +364,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   /// Page 4: Get Started
-  Widget _buildGetStartedPage() {
+  Widget _buildGetStartedPage(AppLocalizations l10n) {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -397,9 +399,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               const SizedBox(height: 60),
 
               // Title
-              const Text(
-                'Ready to\nGet Started?',
-                style: TextStyle(
+              Text(
+                l10n.readyToGetStarted,
+                style: const TextStyle(
                   fontSize: 42,
                   fontWeight: FontWeight.bold,
                   color: HvacColors.textPrimary,
@@ -410,9 +412,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               const SizedBox(height: 24),
 
               // Subtitle
-              const Text(
-                'Start controlling your home climate\nwith ease and efficiency',
-                style: TextStyle(
+              Text(
+                l10n.startControllingClimate,
+                style: const TextStyle(
                   fontSize: 18,
                   color: HvacColors.textSecondary,
                   height: 1.5,
@@ -428,19 +430,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 height: 60,
                 borderRadius: 30,
                 color: HvacColors.primaryOrange,
-                child: const Row(
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Get Started',
-                      style: TextStyle(
+                      l10n.getStarted,
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: HvacColors.textPrimary,
                       ),
                     ),
-                    SizedBox(width: 12),
-                    Icon(
+                    const SizedBox(width: 12),
+                    const Icon(
                       Icons.arrow_forward,
                       color: HvacColors.textPrimary,
                       size: 24,
@@ -452,7 +454,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
               // Terms & Privacy
               Text(
-                'By continuing, you agree to our\nTerms of Service and Privacy Policy',
+                l10n.termsPrivacyAgreement,
                 style: TextStyle(
                   fontSize: 12,
                   color: HvacColors.textSecondary.withValues(alpha:0.6),

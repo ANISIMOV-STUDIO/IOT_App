@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+import '../../../generated/l10n/app_localizations.dart';
 
 /// Comprehensive error widget with retry functionality
 class AppErrorWidget extends StatelessWidget {
@@ -28,12 +29,14 @@ class AppErrorWidget extends StatelessWidget {
   });
 
   factory AppErrorWidget.network({
+    required BuildContext context,
     VoidCallback? onRetry,
     String? customMessage,
   }) {
+    final l10n = AppLocalizations.of(context)!;
     return AppErrorWidget(
-      title: 'Connection Error',
-      message: customMessage ?? 'Unable to connect to the server. Please check your internet connection.',
+      title: l10n.connectionError,
+      message: customMessage ?? l10n.unableToConnect,
       icon: Icons.wifi_off_rounded,
       onRetry: onRetry,
       type: ErrorType.network,
@@ -41,13 +44,15 @@ class AppErrorWidget extends StatelessWidget {
   }
 
   factory AppErrorWidget.server({
+    required BuildContext context,
     VoidCallback? onRetry,
     String? errorCode,
     String? technicalDetails,
   }) {
+    final l10n = AppLocalizations.of(context)!;
     return AppErrorWidget(
-      title: 'Server Error',
-      message: 'Something went wrong on our end. Please try again later.',
+      title: l10n.serverError,
+      message: l10n.serverErrorMessage,
       icon: Icons.cloud_off_rounded,
       errorCode: errorCode,
       technicalDetails: technicalDetails,
@@ -57,13 +62,15 @@ class AppErrorWidget extends StatelessWidget {
   }
 
   factory AppErrorWidget.permission({
+    required BuildContext context,
     VoidCallback? onRetry,
     String? customMessage,
     List<ErrorAction>? actions,
   }) {
+    final l10n = AppLocalizations.of(context)!;
     return AppErrorWidget(
-      title: 'Permission Required',
-      message: customMessage ?? 'This feature requires additional permissions to work properly.',
+      title: l10n.permissionRequired,
+      message: customMessage ?? l10n.permissionRequiredMessage,
       icon: Icons.lock_outline_rounded,
       onRetry: onRetry,
       additionalActions: actions,
@@ -74,10 +81,11 @@ class AppErrorWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return Semantics(
-      label: '${title ?? 'Error'}: $message',
-      hint: onRetry != null ? 'Double tap to retry' : null,
+      label: '${title ?? l10n.error}: $message',
+      hint: onRetry != null ? l10n.doubleTapToRetry : null,
       button: onRetry != null,
       child: Center(
         child: Container(
@@ -134,7 +142,8 @@ class AppErrorWidget extends StatelessWidget {
   }
 
   Widget _buildTitle(BuildContext context, ThemeData theme) {
-    final effectiveTitle = title ?? 'Oops! Something went wrong';
+    final l10n = AppLocalizations.of(context)!;
+    final effectiveTitle = title ?? l10n.somethingWentWrong;
 
     return Text(
       effectiveTitle,
@@ -160,14 +169,15 @@ class AppErrorWidget extends StatelessWidget {
   }
 
   Widget _buildErrorCode(BuildContext context, ThemeData theme) {
+    final l10n = AppLocalizations.of(context)!;
     return GestureDetector(
       onTap: () {
         // Copy error code to clipboard
         Clipboard.setData(ClipboardData(text: errorCode!));
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Error code copied to clipboard'),
-            duration: Duration(seconds: 2),
+          SnackBar(
+            content: Text(l10n.errorCodeCopied),
+            duration: const Duration(seconds: 2),
           ),
         );
       },
@@ -193,7 +203,7 @@ class AppErrorWidget extends StatelessWidget {
             ),
             const SizedBox(width: HvacSpacing.xs),
             Text(
-              'Error Code: $errorCode',
+              l10n.errorCode(errorCode!),
               style: theme.textTheme.bodySmall?.copyWith(
                 fontSize: ResponsiveUtils.scaledFontSize(context, 12),
                 fontFamily: 'monospace',
@@ -212,9 +222,10 @@ class AppErrorWidget extends StatelessWidget {
   }
 
   Widget _buildTechnicalDetails(BuildContext context, ThemeData theme) {
+    final l10n = AppLocalizations.of(context)!;
     return ExpansionTile(
       title: Text(
-        'Technical Details',
+        l10n.technicalDetails,
         style: theme.textTheme.bodySmall?.copyWith(
           fontSize: ResponsiveUtils.scaledFontSize(context, 12),
         ),
@@ -239,6 +250,7 @@ class AppErrorWidget extends StatelessWidget {
   }
 
   Widget _buildActions(BuildContext context, ThemeData theme) {
+    final l10n = AppLocalizations.of(context)!;
     final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
     final actions = <Widget>[];
 
@@ -247,7 +259,7 @@ class AppErrorWidget extends StatelessWidget {
       actions.add(
         Semantics(
           button: true,
-          label: 'Retry',
+          label: l10n.retry,
           child: SizedBox(
             height: 48.0, // Minimum touch target
             child: ElevatedButton.icon(
@@ -260,7 +272,7 @@ class AppErrorWidget extends StatelessWidget {
                 size: ResponsiveUtils.scaledIconSize(context, 20),
               ),
               label: Text(
-                'Try Again',
+                l10n.tryAgain,
                 style: TextStyle(
                   fontSize: ResponsiveUtils.scaledFontSize(context, 16),
                 ),

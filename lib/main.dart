@@ -17,6 +17,7 @@ import 'presentation/bloc/hvac_list/hvac_list_event.dart';
 import 'presentation/bloc/auth/auth_bloc.dart';
 import 'presentation/pages/responsive_shell.dart';
 import 'presentation/pages/login_screen.dart';
+import 'presentation/widgets/common/login_skeleton.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,10 +30,11 @@ void main() async {
 
 /// Get responsive design size based on screen width
 /// Full responsive support: mobile, tablet, and desktop
-/// Desktop uses fixed 1920x1080 reference with max-width constraint
+/// Desktop uses fixed 1920x1080 reference - content never scales beyond this
 Size _getDesignSize(double width) {
   if (width >= 1024) {
-    // Desktop: fixed design size 1920x1080
+    // Desktop: always use 1920x1080 as reference
+    // This prevents scaling on monitors larger than 1920px
     return const Size(1920, 1080);
   } else if (width >= 600) {
     // Tablet: based on iPad (768x1024)
@@ -76,7 +78,11 @@ class _HvacControlAppState extends State<HvacControlApp> {
 
           return LayoutBuilder(
             builder: (context, constraints) {
-              final designSize = _getDesignSize(constraints.maxWidth);
+              // Force design size to be 1920x1080 for all desktop screens
+              // This prevents scaling on large monitors
+              final designSize = _getDesignSize(
+                constraints.maxWidth < 1920 ? constraints.maxWidth : 1920.0
+              );
 
               // Only rebuild ScreenUtilInit if design size actually changed
               if (_lastDesignSize != designSize) {
@@ -126,15 +132,8 @@ class _HvacControlAppState extends State<HvacControlApp> {
                       } else if (state is AuthUnauthenticated || state is AuthError) {
                         return const LoginScreen();
                       } else {
-                        // Loading or initial state
-                        return const Scaffold(
-                          backgroundColor: HvacColors.backgroundDark,
-                          body: Center(
-                            child: CircularProgressIndicator(
-                              color: HvacColors.primaryOrange,
-                            ),
-                          ),
-                        );
+                        // Loading or initial state - show login skeleton
+                        return const LoginSkeleton();
                       }
                     },
                   ),

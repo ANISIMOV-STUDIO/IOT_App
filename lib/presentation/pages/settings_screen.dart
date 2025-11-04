@@ -6,6 +6,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+import '../../generated/l10n/app_localizations.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -20,7 +21,7 @@ class _SettingsScreenState extends State<SettingsScreen>
   bool _celsius = true;
   bool _pushNotifications = true;
   bool _emailNotifications = false;
-  String _language = 'Русский';
+  String _language = '';  // Will be set to localized value in initState
   late AnimationController _themeAnimationController;
 
   @override
@@ -33,6 +34,16 @@ class _SettingsScreenState extends State<SettingsScreen>
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Set initial language value using localized string
+    if (_language.isEmpty) {
+      final l10n = AppLocalizations.of(context)!;
+      _language = l10n.russian;
+    }
+  }
+
+  @override
   void dispose() {
     _themeAnimationController.dispose();
     super.dispose();
@@ -40,6 +51,7 @@ class _SettingsScreenState extends State<SettingsScreen>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: HvacColors.backgroundDark,
       appBar: AppBar(
@@ -50,7 +62,7 @@ class _SettingsScreenState extends State<SettingsScreen>
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          'Настройки',
+          l10n.settingsTitle,
           style: HvacTypography.headlineMedium.copyWith(
             fontSize: 20.sp,
             color: HvacColors.textPrimary,
@@ -83,21 +95,22 @@ class _SettingsScreenState extends State<SettingsScreen>
   }
 
   Widget _buildAppearanceSection() {
+    final l10n = AppLocalizations.of(context)!;
     return _buildSection(
-      title: 'Внешний вид',
+      title: l10n.appearance,
       icon: Icons.palette_outlined,
       children: [
         HvacInteractiveRipple(
           child: _buildSwitchTile(
-            title: 'Темная тема',
-            subtitle: 'Использовать темную цветовую схему',
+            title: l10n.darkTheme,
+            subtitle: l10n.useDarkColorScheme,
             value: _darkMode,
             onChanged: (value) {
               setState(() => _darkMode = value);
               // Animate theme change
               _themeAnimationController.reset();
               _themeAnimationController.forward();
-              _showSnackBar('Смена темы будет доступна в следующей версии');
+              _showSnackBar(l10n.themeChangeNextVersion);
             },
           ),
         ),
@@ -106,19 +119,20 @@ class _SettingsScreenState extends State<SettingsScreen>
   }
 
   Widget _buildUnitsSection() {
+    final l10n = AppLocalizations.of(context)!;
     return _buildSection(
-      title: 'Единицы измерения',
+      title: l10n.units,
       icon: Icons.straighten_outlined,
       children: [
         HvacInteractiveRipple(
           child: _buildSwitchTile(
-            title: 'Температура',
-            subtitle: _celsius ? 'Цельсий (°C)' : 'Фаренгейт (°F)',
+            title: l10n.temperatureUnits,
+            subtitle: _celsius ? l10n.celsius : l10n.fahrenheit,
             value: _celsius,
             onChanged: (value) {
               setState(() => _celsius = value);
               _showSnackBar(
-                  'Единицы изменены на ${value ? "Цельсий" : "Фаренгейт"}');
+                  l10n.unitsChangedTo(value ? l10n.celsius : l10n.fahrenheit));
             },
           ),
         ),
@@ -127,32 +141,33 @@ class _SettingsScreenState extends State<SettingsScreen>
   }
 
   Widget _buildNotificationsSection() {
+    final l10n = AppLocalizations.of(context)!;
     return _buildSection(
-      title: 'Уведомления',
+      title: l10n.notifications,
       icon: Icons.notifications_outlined,
       children: [
         HvacInteractiveRipple(
           child: _buildSwitchTile(
-            title: 'Push-уведомления',
-            subtitle: 'Получать мгновенные уведомления',
+            title: l10n.pushNotifications,
+            subtitle: l10n.receiveInstantNotifications,
             value: _pushNotifications,
             onChanged: (value) {
               setState(() => _pushNotifications = value);
               _showSnackBar(
-                  'Push-уведомления ${value ? "включены" : "выключены"}');
+                  l10n.notificationsState('Push', value ? l10n.enabled : l10n.disabled));
             },
           ),
         ),
         SizedBox(height: 12.h),
         HvacInteractiveRipple(
           child: _buildSwitchTile(
-            title: 'Email-уведомления',
-            subtitle: 'Получать отчеты на email',
+            title: l10n.emailNotifications,
+            subtitle: l10n.receiveEmailReports,
             value: _emailNotifications,
             onChanged: (value) {
               setState(() => _emailNotifications = value);
               _showSnackBar(
-                  'Email-уведомления ${value ? "включены" : "выключены"}');
+                  l10n.notificationsState('Email', value ? l10n.enabled : l10n.disabled));
             },
           ),
         ),
@@ -161,44 +176,46 @@ class _SettingsScreenState extends State<SettingsScreen>
   }
 
   Widget _buildLanguageSection() {
+    final l10n = AppLocalizations.of(context)!;
     return _buildSection(
-      title: 'Язык',
+      title: l10n.language,
       icon: Icons.language_outlined,
       children: [
-        _buildLanguageTile('Русский'),
+        _buildLanguageTile(l10n.russian),
         SizedBox(height: 8.h),
-        _buildLanguageTile('English'),
+        _buildLanguageTile(l10n.english),
         SizedBox(height: 8.h),
-        _buildLanguageTile('Deutsch'),
+        _buildLanguageTile(l10n.german),
       ],
     ).animate().fadeIn(duration: 500.ms, delay: 300.ms).slideX(begin: -0.1, end: 0);
   }
 
   Widget _buildAboutSection() {
+    final l10n = AppLocalizations.of(context)!;
     return _buildSection(
-      title: 'О приложении',
+      title: l10n.about,
       icon: Icons.info_outline,
       children: [
         HvacInteractiveRipple(
-          child: _buildInfoRow('Версия', '1.0.0'),
+          child: _buildInfoRow(l10n.version, '1.0.0'),
         ),
         SizedBox(height: 12.h),
         HvacInteractiveRipple(
-          child: _buildInfoRow('Разработчик', 'BREEZ'),
+          child: _buildInfoRow(l10n.developer, 'BREEZ'),
         ),
         SizedBox(height: 12.h),
         HvacInteractiveRipple(
-          child: _buildInfoRow('Лицензия', 'MIT License'),
+          child: _buildInfoRow(l10n.license, 'MIT License'),
         ),
         SizedBox(height: 16.h),
         SizedBox(
           width: double.infinity,
           child: HvacNeumorphicButton(
             onPressed: () {
-              _showSnackBar('Проверка обновлений...');
+              _showSnackBar(l10n.checkingUpdates);
             },
             child: Text(
-              'Проверить обновления',
+              l10n.checkUpdates,
               style: TextStyle(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w600,
@@ -304,12 +321,13 @@ class _SettingsScreenState extends State<SettingsScreen>
   }
 
   Widget _buildLanguageTile(String language) {
+    final l10n = AppLocalizations.of(context)!;
     final isSelected = _language == language;
 
     return HvacInteractiveScale(
       onTap: () {
         setState(() => _language = language);
-        _showSnackBar('Язык изменен на $language');
+        _showSnackBar(l10n.languageChangedTo(language));
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
