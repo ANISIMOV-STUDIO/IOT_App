@@ -32,7 +32,7 @@ class DeviceControlCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(HvacSpacing.xlR),
         decoration: BoxDecoration(
           color: HvacColors.backgroundCard,
           borderRadius: BorderRadius.circular(20),
@@ -52,16 +52,12 @@ class DeviceControlCard extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: HvacTypography.titleLarge,
                     ),
                     const SizedBox(height: 4),
                     Text(
                       subtitle,
-                      style: const TextStyle(
-                        fontSize: 12,
+                      style: HvacTypography.labelLarge.copyWith(
                         color: HvacColors.textSecondary,
                       ),
                     ),
@@ -144,18 +140,14 @@ class DeviceStatItem extends StatelessWidget {
             const SizedBox(width: 4),
             Text(
               value,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              ),
+              style: HvacTypography.titleMedium,
             ),
           ],
         ),
         const SizedBox(height: 4),
         Text(
           label,
-          style: const TextStyle(
-            fontSize: 11,
+          style: HvacTypography.labelMedium.copyWith(
             color: HvacColors.textTertiary,
           ),
         ),
@@ -188,8 +180,7 @@ class TemperatureControl extends StatelessWidget {
         children: [
           Text(
             min.toInt().toString(),
-            style: const TextStyle(
-              fontSize: 14,
+            style: HvacTypography.bodyMedium.copyWith(
               color: HvacColors.textTertiary,
             ),
           ),
@@ -200,9 +191,7 @@ class TemperatureControl extends StatelessWidget {
                 children: [
                   Text(
                     '${value.toInt()}°',
-                    style: const TextStyle(
-                      fontSize: 48,
-                      fontWeight: FontWeight.w700,
+                    style: HvacTypography.displayLarge.copyWith(
                       height: 1,
                     ),
                   ),
@@ -233,8 +222,7 @@ class TemperatureControl extends StatelessWidget {
           ),
           Text(
             max.toInt().toString(),
-            style: const TextStyle(
-              fontSize: 14,
+            style: HvacTypography.bodyMedium.copyWith(
               color: HvacColors.textTertiary,
             ),
           ),
@@ -294,10 +282,7 @@ class BrightnessControl extends StatelessWidget {
         ),
         Text(
           '${(value * 100).toInt()}%',
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
+          style: HvacTypography.titleLarge,
         ),
       ],
     );

@@ -20,7 +20,7 @@ class QuickPresetsPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return GlassCard(
       // GLASSMORPHISM: Frosted glass with blur
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(HvacSpacing.lgR),
       enableBlur: true,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -29,7 +29,7 @@ class QuickPresetsPanel extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(HvacSpacing.smR),
                 decoration: BoxDecoration(
                   color: HvacColors.primaryOrange.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(8),
@@ -107,14 +107,14 @@ class QuickPresetsPanel extends StatelessWidget {
                 'Кухня',
                 Icons.restaurant,
                 ModePreset.defaults[VentilationMode.kitchen]!,
-                const Color(0xFFFFA726),
+                HvacColors.warning,
               ),
               _buildPresetButton(
                 context,
                 'Камин',
                 Icons.fireplace,
                 ModePreset.defaults[VentilationMode.fireplace]!,
-                const Color(0xFFFF7043),
+                HvacColors.primaryOrange,
               ),
             ],
           ),

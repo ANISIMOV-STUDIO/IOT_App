@@ -32,11 +32,11 @@ class DashboardAirQuality extends StatelessWidget {
       case AirQualityLevel.excellent:
         return HvacColors.success;
       case AirQualityLevel.good:
-        return const Color(0xFF7CB342);
+        return HvacColors.success.withValues(alpha: 0.8);
       case AirQualityLevel.moderate:
         return HvacColors.warning;
       case AirQualityLevel.poor:
-        return const Color(0xFFFF7043);
+        return HvacColors.primaryOrange;
       case AirQualityLevel.veryPoor:
         return HvacColors.error;
     }
@@ -62,7 +62,7 @@ class DashboardAirQuality extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(HvacSpacing.xlR),
         decoration: HvacTheme.deviceCard(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,7 +74,7 @@ class DashboardAirQuality extends StatelessWidget {
                 Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(HvacSpacing.smR),
                       decoration: BoxDecoration(
                         color: _levelColor.withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(8),
@@ -119,7 +119,7 @@ class DashboardAirQuality extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
+                  padding: const EdgeInsets.only(bottom: HvacSpacing.smR),
                   child: Text(
                     'AQI',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -134,7 +134,7 @@ class DashboardAirQuality extends StatelessWidget {
 
             // Level badge
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              padding: const EdgeInsets.symmetric(horizontal: HvacSpacing.mdR, vertical: HvacSpacing.xsR),
               decoration: BoxDecoration(
                 color: _levelColor.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(8),

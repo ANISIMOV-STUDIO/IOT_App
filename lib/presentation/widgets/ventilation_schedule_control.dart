@@ -122,9 +122,8 @@ class VentilationScheduleControl extends StatelessWidget {
             children: [
               Text(
                 'Расписание',
-                style: TextStyle(
+                style: HvacTypography.titleLarge.copyWith(
                   fontSize: AdaptiveLayout.fontSize(context, base: 16),
-                  fontWeight: FontWeight.w600,
                   color: HvacColors.textPrimary,
                 ),
                 overflow: TextOverflow.ellipsis,
@@ -133,7 +132,7 @@ class VentilationScheduleControl extends StatelessWidget {
               SizedBox(height: 2.h),
               Text(
                 'Автоматическое управление',
-                style: TextStyle(
+                style: HvacTypography.labelLarge.copyWith(
                   fontSize: AdaptiveLayout.fontSize(context, base: 12),
                   color: HvacColors.textSecondary,
                 ),
@@ -170,7 +169,7 @@ class VentilationScheduleControl extends StatelessWidget {
               Flexible(
                 child: Text(
                   _getDayName(dayOfWeek),
-                  style: TextStyle(
+                  style: HvacTypography.labelMedium.copyWith(
                     fontSize: AdaptiveLayout.fontSize(context, base: 11),
                     color: HvacColors.textSecondary,
                   ),
@@ -191,7 +190,7 @@ class VentilationScheduleControl extends StatelessWidget {
                 ),
                 child: Text(
                   todaySchedule?.timerEnabled == true ? 'Включен' : 'Выключен',
-                  style: TextStyle(
+                  style: HvacTypography.labelSmall.copyWith(
                     fontSize: AdaptiveLayout.fontSize(context, base: 10),
                     fontWeight: FontWeight.w600,
                     color: todaySchedule?.timerEnabled == true
@@ -278,9 +277,8 @@ class VentilationScheduleControl extends StatelessWidget {
         ),
         child: Text(
           'Настроить расписание',
-          style: TextStyle(
+          style: HvacTypography.buttonMedium.copyWith(
             color: HvacColors.primaryOrange,
-            fontWeight: FontWeight.w600,
             fontSize: AdaptiveLayout.fontSize(context, base: 13),
           ),
         ),
@@ -311,7 +309,7 @@ class VentilationScheduleControl extends StatelessWidget {
             Flexible(
               child: Text(
                 label,
-                style: TextStyle(
+                style: HvacTypography.labelSmall.copyWith(
                   fontSize: AdaptiveLayout.fontSize(context, base: 10),
                   color: HvacColors.textSecondary,
                 ),
@@ -325,7 +323,7 @@ class VentilationScheduleControl extends StatelessWidget {
           time != null
               ? '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}'
               : '--:--',
-          style: TextStyle(
+          style: HvacTypography.titleMedium.copyWith(
             fontSize: AdaptiveLayout.fontSize(context, base: 15),
             fontWeight: FontWeight.w700,
             color: HvacColors.textPrimary,
@@ -356,7 +354,7 @@ class VentilationScheduleControl extends StatelessWidget {
         children: [
           Text(
             label,
-            style: TextStyle(
+            style: HvacTypography.labelSmall.copyWith(
               fontSize: AdaptiveLayout.fontSize(context, base: 10),
               color: HvacColors.textSecondary,
             ),
@@ -364,7 +362,7 @@ class VentilationScheduleControl extends StatelessWidget {
           SizedBox(height: AdaptiveLayout.spacing(context, base: 4)),
           Text(
             value,
-            style: TextStyle(
+            style: HvacTypography.labelLarge.copyWith(
               fontSize: AdaptiveLayout.fontSize(context, base: 12),
               fontWeight: FontWeight.w600,
               color: color,

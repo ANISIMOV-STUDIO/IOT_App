@@ -68,7 +68,7 @@ class _AirflowAnimationState extends State<AirflowAnimation>
   Widget build(BuildContext context) {
     return Container(
       height: 100,
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(HvacSpacing.lgR),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
         borderRadius: BorderRadius.circular(12),

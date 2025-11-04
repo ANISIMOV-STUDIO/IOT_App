@@ -25,7 +25,7 @@ class TemperatureChart extends StatelessWidget {
     if (readings.isEmpty) {
       return Container(
         height: 250,
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(HvacSpacing.xlR),
         decoration: BoxDecoration(
           color: HvacColors.backgroundCard,
           borderRadius: BorderRadius.circular(12),
@@ -47,7 +47,7 @@ class TemperatureChart extends StatelessWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(HvacSpacing.xlR),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
         borderRadius: BorderRadius.circular(12),

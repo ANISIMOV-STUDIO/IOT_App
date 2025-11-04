@@ -4,8 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'app_theme.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
 class AppTypography {
   // Font Family
@@ -18,7 +17,7 @@ class AppTypography {
     fontWeight: FontWeight.w700,
     letterSpacing: -1.5,
     height: 1.1,
-    color: AppTheme.textPrimary,
+    color: HvacColors.textPrimary,
   );
 
   static TextStyle display2 = TextStyle(
@@ -26,7 +25,7 @@ class AppTypography {
     fontWeight: FontWeight.w600,
     letterSpacing: -1.0,
     height: 1.15,
-    color: AppTheme.textPrimary,
+    color: HvacColors.textPrimary,
   );
 
   static TextStyle display3 = TextStyle(
@@ -34,7 +33,7 @@ class AppTypography {
     fontWeight: FontWeight.w600,
     letterSpacing: -0.8,
     height: 1.2,
-    color: AppTheme.textPrimary,
+    color: HvacColors.textPrimary,
   );
 
   // Headlines - For section headers
@@ -43,7 +42,7 @@ class AppTypography {
     fontWeight: FontWeight.w700,
     letterSpacing: -0.5,
     height: 1.2,
-    color: AppTheme.textPrimary,
+    color: HvacColors.textPrimary,
   );
 
   static TextStyle h2 = TextStyle(
@@ -51,7 +50,7 @@ class AppTypography {
     fontWeight: FontWeight.w600,
     letterSpacing: -0.3,
     height: 1.25,
-    color: AppTheme.textPrimary,
+    color: HvacColors.textPrimary,
   );
 
   static TextStyle h3 = TextStyle(
@@ -59,7 +58,7 @@ class AppTypography {
     fontWeight: FontWeight.w600,
     letterSpacing: -0.2,
     height: 1.3,
-    color: AppTheme.textPrimary,
+    color: HvacColors.textPrimary,
   );
 
   static TextStyle h4 = TextStyle(
@@ -67,7 +66,7 @@ class AppTypography {
     fontWeight: FontWeight.w600,
     letterSpacing: 0,
     height: 1.35,
-    color: AppTheme.textPrimary,
+    color: HvacColors.textPrimary,
   );
 
   static TextStyle h5 = TextStyle(
@@ -75,7 +74,7 @@ class AppTypography {
     fontWeight: FontWeight.w600,
     letterSpacing: 0.15,
     height: 1.4,
-    color: AppTheme.textPrimary,
+    color: HvacColors.textPrimary,
   );
 
   static TextStyle h6 = TextStyle(
@@ -83,7 +82,7 @@ class AppTypography {
     fontWeight: FontWeight.w600,
     letterSpacing: 0.15,
     height: 1.4,
-    color: AppTheme.textPrimary,
+    color: HvacColors.textPrimary,
   );
 
   // Body Text - For content
@@ -92,7 +91,7 @@ class AppTypography {
     fontWeight: FontWeight.w400,
     letterSpacing: 0.15,
     height: 1.5,
-    color: AppTheme.textPrimary,
+    color: HvacColors.textPrimary,
   );
 
   static TextStyle bodyLargeMedium = TextStyle(
@@ -100,7 +99,7 @@ class AppTypography {
     fontWeight: FontWeight.w500,
     letterSpacing: 0.15,
     height: 1.5,
-    color: AppTheme.textPrimary,
+    color: HvacColors.textPrimary,
   );
 
   static TextStyle bodyLargeBold = TextStyle(
@@ -108,7 +107,7 @@ class AppTypography {
     fontWeight: FontWeight.w600,
     letterSpacing: 0.15,
     height: 1.5,
-    color: AppTheme.textPrimary,
+    color: HvacColors.textPrimary,
   );
 
   static TextStyle body = TextStyle(
@@ -116,7 +115,7 @@ class AppTypography {
     fontWeight: FontWeight.w400,
     letterSpacing: 0.1,
     height: 1.5,
-    color: AppTheme.textPrimary,
+    color: HvacColors.textPrimary,
   );
 
   static TextStyle bodyMedium = TextStyle(
@@ -124,7 +123,7 @@ class AppTypography {
     fontWeight: FontWeight.w500,
     letterSpacing: 0.1,
     height: 1.5,
-    color: AppTheme.textPrimary,
+    color: HvacColors.textPrimary,
   );
 
   static TextStyle bodyBold = TextStyle(
@@ -132,7 +131,7 @@ class AppTypography {
     fontWeight: FontWeight.w600,
     letterSpacing: 0.1,
     height: 1.5,
-    color: AppTheme.textPrimary,
+    color: HvacColors.textPrimary,
   );
 
   static TextStyle bodySmall = TextStyle(
@@ -140,7 +139,7 @@ class AppTypography {
     fontWeight: FontWeight.w400,
     letterSpacing: 0.1,
     height: 1.45,
-    color: AppTheme.textPrimary,
+    color: HvacColors.textPrimary,
   );
 
   static TextStyle bodySmallMedium = TextStyle(
@@ -148,7 +147,7 @@ class AppTypography {
     fontWeight: FontWeight.w500,
     letterSpacing: 0.1,
     height: 1.45,
-    color: AppTheme.textPrimary,
+    color: HvacColors.textPrimary,
   );
 
   static TextStyle bodySmallBold = TextStyle(
@@ -156,7 +155,7 @@ class AppTypography {
     fontWeight: FontWeight.w600,
     letterSpacing: 0.1,
     height: 1.45,
-    color: AppTheme.textPrimary,
+    color: HvacColors.textPrimary,
   );
 
   // Captions - For secondary text
@@ -165,7 +164,7 @@ class AppTypography {
     fontWeight: FontWeight.w400,
     letterSpacing: 0.2,
     height: 1.4,
-    color: AppTheme.textSecondary,
+    color: HvacColors.textSecondary,
   );
 
   static TextStyle captionMedium = TextStyle(
@@ -173,7 +172,7 @@ class AppTypography {
     fontWeight: FontWeight.w500,
     letterSpacing: 0.2,
     height: 1.4,
-    color: AppTheme.textSecondary,
+    color: HvacColors.textSecondary,
   );
 
   static TextStyle captionBold = TextStyle(
@@ -181,7 +180,7 @@ class AppTypography {
     fontWeight: FontWeight.w600,
     letterSpacing: 0.2,
     height: 1.4,
-    color: AppTheme.textSecondary,
+    color: HvacColors.textSecondary,
   );
 
   static TextStyle captionSmall = TextStyle(
@@ -189,7 +188,7 @@ class AppTypography {
     fontWeight: FontWeight.w400,
     letterSpacing: 0.3,
     height: 1.35,
-    color: AppTheme.textSecondary,
+    color: HvacColors.textSecondary,
   );
 
   // Labels - For UI elements
@@ -198,7 +197,7 @@ class AppTypography {
     fontWeight: FontWeight.w500,
     letterSpacing: 0.5,
     height: 1.3,
-    color: AppTheme.textSecondary,
+    color: HvacColors.textSecondary,
   );
 
   static TextStyle labelMedium = TextStyle(
@@ -206,7 +205,7 @@ class AppTypography {
     fontWeight: FontWeight.w600,
     letterSpacing: 0.5,
     height: 1.3,
-    color: AppTheme.textSecondary,
+    color: HvacColors.textSecondary,
   );
 
   static TextStyle labelLarge = TextStyle(
@@ -214,7 +213,7 @@ class AppTypography {
     fontWeight: FontWeight.w600,
     letterSpacing: 0.3,
     height: 1.3,
-    color: AppTheme.textPrimary,
+    color: HvacColors.textPrimary,
   );
 
   // Buttons - For interactive elements
@@ -223,7 +222,7 @@ class AppTypography {
     fontWeight: FontWeight.w600,
     letterSpacing: 0.5,
     height: 1.2,
-    color: AppTheme.textPrimary,
+    color: HvacColors.textPrimary,
   );
 
   static TextStyle buttonMedium = TextStyle(
@@ -231,7 +230,7 @@ class AppTypography {
     fontWeight: FontWeight.w600,
     letterSpacing: 0.5,
     height: 1.2,
-    color: AppTheme.textPrimary,
+    color: HvacColors.textPrimary,
   );
 
   static TextStyle buttonSmall = TextStyle(
@@ -239,7 +238,7 @@ class AppTypography {
     fontWeight: FontWeight.w600,
     letterSpacing: 0.5,
     height: 1.2,
-    color: AppTheme.textPrimary,
+    color: HvacColors.textPrimary,
   );
 
   // Numbers - For metrics and values
@@ -248,7 +247,7 @@ class AppTypography {
     fontWeight: FontWeight.w300,
     letterSpacing: -1,
     height: 1.0,
-    color: AppTheme.textPrimary,
+    color: HvacColors.textPrimary,
     fontFeatures: const [FontFeature.tabularFigures()],
   );
 
@@ -257,7 +256,7 @@ class AppTypography {
     fontWeight: FontWeight.w400,
     letterSpacing: -0.5,
     height: 1.0,
-    color: AppTheme.textPrimary,
+    color: HvacColors.textPrimary,
     fontFeatures: const [FontFeature.tabularFigures()],
   );
 
@@ -266,7 +265,7 @@ class AppTypography {
     fontWeight: FontWeight.w500,
     letterSpacing: 0,
     height: 1.0,
-    color: AppTheme.textPrimary,
+    color: HvacColors.textPrimary,
     fontFeatures: const [FontFeature.tabularFigures()],
   );
 
@@ -276,7 +275,7 @@ class AppTypography {
     fontWeight: FontWeight.w200,
     letterSpacing: -2,
     height: 0.9,
-    color: AppTheme.textPrimary,
+    color: HvacColors.textPrimary,
     fontFeatures: const [FontFeature.tabularFigures()],
   );
 
@@ -285,7 +284,7 @@ class AppTypography {
     fontWeight: FontWeight.w300,
     letterSpacing: 0,
     height: 1.0,
-    color: AppTheme.textSecondary,
+    color: HvacColors.textSecondary,
   );
 
   // Overline - For small labels above content
@@ -294,7 +293,7 @@ class AppTypography {
     fontWeight: FontWeight.w600,
     letterSpacing: 1.0,
     height: 1.2,
-    color: AppTheme.textSecondary,
+    color: HvacColors.textSecondary,
   );
 
   // Code - For technical text
@@ -303,7 +302,7 @@ class AppTypography {
     fontWeight: FontWeight.w400,
     letterSpacing: 0,
     height: 1.4,
-    color: AppTheme.primaryOrange,
+    color: HvacColors.primaryOrange,
     fontFamily: 'JetBrains Mono',
   );
 

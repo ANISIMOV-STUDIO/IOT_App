@@ -134,7 +134,7 @@ class _HomeNotificationsPanelState extends State<HomeNotificationsPanel> {
           NotificationBadge(
             label: 'Ошибки',
             count: groups[NotificationSeverity.error]!.length,
-            color: const Color(0xFFE57373),
+            color: HvacColors.error,
           ),
         if (groups[NotificationSeverity.warning]!.isNotEmpty)
           NotificationBadge(

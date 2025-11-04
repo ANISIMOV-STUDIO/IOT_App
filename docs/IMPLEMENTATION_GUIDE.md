@@ -246,8 +246,8 @@ Container(
 // In _getModeColor() method
 Color _getModeColor(String mode) {
   switch (mode.toLowerCase()) {
-    case 'авто': return AppTheme.primary;     // Your custom color
-    case 'приток': return AppTheme.accent;   // Your custom color
+    case 'авто': return HvacColors.accent;     // Your custom color
+    case 'приток': return HvacColors.accentLight;   // Your custom color
     // ...
   }
 }

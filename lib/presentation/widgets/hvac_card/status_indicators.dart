@@ -157,7 +157,7 @@ class _StatusChipState extends State<_StatusChip>
               decoration: BoxDecoration(
                 color: _isHovered
                     ? widget.color.withValues(alpha: 0.2)
-                    : Colors.white.withValues(alpha: 0.1),
+                    : HvacColors.textPrimary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(HvacRadius.sm.r),
                 border: Border.all(
                   color: _isHovered
@@ -185,7 +185,7 @@ class _StatusChipState extends State<_StatusChip>
                           style: TextStyle(
                             fontSize: widget.isCompact ? 11.sp : 12.sp,
                             fontWeight: FontWeight.bold,
-                            color: _isHovered ? widget.color : Colors.white,
+                            color: _isHovered ? widget.color : HvacColors.textPrimary,
                           ),
                         ),
                         Text(
@@ -194,7 +194,7 @@ class _StatusChipState extends State<_StatusChip>
                             fontSize: widget.isCompact ? 9.sp : 10.sp,
                             color: _isHovered
                                 ? widget.color.withValues(alpha: 0.8)
-                                : Colors.white54,
+                                : HvacColors.textSecondary,
                           ),
                         ),
                       ],

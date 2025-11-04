@@ -121,21 +121,26 @@ class OverviewTab extends StatelessWidget {
               children: [
                 Text(
                   unit.power ? 'Работает' : 'Выключено',
-                  style: TextStyle(
+                  style: HvacTypography.displaySmall.copyWith(
                     fontSize: 24.sp,
-                    fontWeight: FontWeight.w700,
                     color: unit.power ? HvacColors.success : HvacColors.error,
                   ),
                 ),
                 SizedBox(height: 4.h),
                 Text(
                   'Режим: ${unit.ventMode != null ? _getModeDisplayName(unit.ventMode!) : "Не установлен"}',
-                  style: TextStyle(fontSize: 14.sp, color: HvacColors.textSecondary),
+                  style: HvacTypography.bodyMedium.copyWith(
+                    fontSize: 14.sp,
+                    color: HvacColors.textSecondary,
+                  ),
                 ),
                 SizedBox(height: 2.h),
                 Text(
                   'ID устройства: ${unit.id}',
-                  style: TextStyle(fontSize: 14.sp, color: HvacColors.textSecondary),
+                  style: HvacTypography.bodyMedium.copyWith(
+                    fontSize: 14.sp,
+                    color: HvacColors.textSecondary,
+                  ),
                 ),
               ],
             ),
@@ -158,9 +163,8 @@ class OverviewTab extends StatelessWidget {
         children: [
           Text(
             'Скорости вентиляторов',
-            style: TextStyle(
+            style: HvacTypography.titleLarge.copyWith(
               fontSize: 16.sp,
-              fontWeight: FontWeight.w600,
               color: HvacColors.textPrimary,
             ),
           ),
@@ -192,7 +196,10 @@ class OverviewTab extends StatelessWidget {
         SizedBox(width: 12.w),
         Text(
           label,
-          style: TextStyle(fontSize: 14.sp, color: HvacColors.textSecondary),
+          style: HvacTypography.bodyMedium.copyWith(
+            fontSize: 14.sp,
+            color: HvacColors.textSecondary,
+          ),
         ),
         const Spacer(),
         Container(
@@ -203,7 +210,7 @@ class OverviewTab extends StatelessWidget {
           ),
           child: Text(
             '$speed%',
-            style: TextStyle(
+            style: HvacTypography.titleLarge.copyWith(
               fontSize: 16.sp,
               fontWeight: FontWeight.w700,
               color: color,
@@ -231,9 +238,8 @@ class OverviewTab extends StatelessWidget {
               SizedBox(width: 12.w),
               Text(
                 'Обслуживание',
-                style: TextStyle(
+                style: HvacTypography.titleLarge.copyWith(
                   fontSize: 16.sp,
-                  fontWeight: FontWeight.w600,
                   color: HvacColors.textPrimary,
                 ),
               ),
@@ -259,11 +265,14 @@ class OverviewTab extends StatelessWidget {
       children: [
         Text(
           label,
-          style: TextStyle(fontSize: 13.sp, color: HvacColors.textSecondary),
+          style: HvacTypography.bodySmall.copyWith(
+            fontSize: 13.sp,
+            color: HvacColors.textSecondary,
+          ),
         ),
         Text(
           value,
-          style: TextStyle(
+          style: HvacTypography.bodySmall.copyWith(
             fontSize: 13.sp,
             fontWeight: FontWeight.w600,
             color: HvacColors.textPrimary,

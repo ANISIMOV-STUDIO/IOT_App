@@ -72,7 +72,7 @@ Button with custom gradient background.
 GradientButton(
   text: 'Get Started',
   gradient: LinearGradient(
-    colors: [AppTheme.primaryOrange, AppTheme.primaryOrangeLight],
+    colors: [HvacColors.primaryOrange, HvacColors.primaryOrangeLight],
   ),
   onPressed: () => navigateToHome(),
 )
@@ -163,7 +163,7 @@ DashboardStatCard(
   title: 'Temperature',
   value: '22°C',
   icon: Icons.thermostat,
-  color: AppTheme.modeCool,
+  color: HvacColors.modeCool,
   trend: '+2°',
 )
 ```

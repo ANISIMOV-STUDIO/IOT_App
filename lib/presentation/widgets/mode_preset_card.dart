@@ -23,8 +23,8 @@ class ModePresetCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(20),
+      margin: const EdgeInsets.only(bottom: HvacSpacing.lgR),
+      padding: const EdgeInsets.all(HvacSpacing.xlR),
       decoration: HvacTheme.deviceCard(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,7 +114,7 @@ class ModePresetCard extends StatelessWidget {
     IconData icon,
   ) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(HvacSpacing.mdR),
       decoration: BoxDecoration(
         color: HvacColors.backgroundDark,
         borderRadius: BorderRadius.circular(8),

@@ -38,7 +38,7 @@ class PasswordStrengthIndicator extends StatelessWidget {
                 borderRadius: BorderRadius.circular(4.rw(context)),
                 child: LinearProgressIndicator(
                   value: (strength.index + 1) / 4,
-                  backgroundColor: Colors.grey.shade300,
+                  backgroundColor: HvacColors.textSecondary.withValues(alpha: 0.2),
                   valueColor: AlwaysStoppedAnimation<Color>(
                     _getStrengthColor(strength),
                   ),
@@ -112,13 +112,13 @@ class PasswordStrengthIndicator extends StatelessWidget {
             ),
             decoration: BoxDecoration(
               color: req.isMet
-                  ? Colors.green.withAlpha(26)
-                  : Colors.grey.withAlpha(26),
+                  ? HvacColors.success.withValues(alpha: 0.1)
+                  : HvacColors.textSecondary.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(4.rw(context)),
               border: Border.all(
                 color: req.isMet
-                    ? Colors.green.withAlpha(102)
-                    : Colors.grey.withAlpha(102),
+                    ? HvacColors.success.withValues(alpha: 0.4)
+                    : HvacColors.textSecondary.withValues(alpha: 0.4),
                 width: 1.rw(context),
               ),
             ),
@@ -128,7 +128,7 @@ class PasswordStrengthIndicator extends StatelessWidget {
                 Icon(
                   req.isMet ? Icons.check_circle : Icons.circle_outlined,
                   size: (14 * responsive.fontMultiplier).rsp(context),
-                  color: req.isMet ? Colors.green : Colors.grey,
+                  color: req.isMet ? HvacColors.success : HvacColors.textSecondary,
                 ),
                 SizedBox(width: 4.rw(context)),
                 Text(
@@ -136,7 +136,7 @@ class PasswordStrengthIndicator extends StatelessWidget {
                   style: TextStyle(
                     fontSize: (11 * responsive.fontMultiplier).rsp(context),
                     color: req.isMet
-                        ? Colors.green.shade700
+                        ? HvacColors.success
                         : HvacColors.textSecondary,
                   ),
                 ),
@@ -151,13 +151,13 @@ class PasswordStrengthIndicator extends StatelessWidget {
   Color _getStrengthColor(PasswordStrength strength) {
     switch (strength) {
       case PasswordStrength.weak:
-        return Colors.red;
+        return HvacColors.error;
       case PasswordStrength.medium:
-        return Colors.orange;
+        return HvacColors.warning;
       case PasswordStrength.strong:
-        return Colors.lightGreen;
+        return HvacColors.success.withValues(alpha: 0.7);
       case PasswordStrength.veryStrong:
-        return Colors.green;
+        return HvacColors.success;
     }
   }
 

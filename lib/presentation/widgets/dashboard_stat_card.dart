@@ -32,7 +32,7 @@ class DashboardStatCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(HvacSpacing.xlR),
         decoration: HvacTheme.deviceCard(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,7 +42,7 @@ class DashboardStatCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(HvacSpacing.mdR),
                   decoration: BoxDecoration(
                     color: iconColor.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(12),
@@ -56,8 +56,8 @@ class DashboardStatCard extends StatelessWidget {
                 if (trend != null)
                   Container(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
+                      horizontal: HvacSpacing.smR,
+                      vertical: HvacSpacing.xxsR,
                     ),
                     decoration: BoxDecoration(
                       color: (isPositiveTrend

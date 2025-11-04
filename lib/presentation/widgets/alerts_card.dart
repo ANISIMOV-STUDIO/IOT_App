@@ -29,7 +29,7 @@ class AlertsCard extends StatelessWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(HvacSpacing.xlR),
       decoration: HvacTheme.deviceCard(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,7 +80,7 @@ class AlertsCard extends StatelessWidget {
     final hasAlert = alert != null && alert.code != 0;
 
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      padding: const EdgeInsets.symmetric(vertical: HvacSpacing.mdR),
       decoration: const BoxDecoration(
         border: Border(
           bottom: BorderSide(
@@ -119,9 +119,7 @@ class AlertsCard extends StatelessWidget {
               children: [
                 Text(
                   hasAlert ? 'Код ${alert.code}' : 'Нет аварий',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
+                  style: HvacTypography.titleMedium.copyWith(
                     color:
                         hasAlert ? _getSeverityColor(alert.severity) : HvacColors.textSecondary,
                   ),
@@ -130,8 +128,7 @@ class AlertsCard extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     alert.description,
-                    style: const TextStyle(
-                      fontSize: 12,
+                    style: HvacTypography.labelLarge.copyWith(
                       color: HvacColors.textSecondary,
                     ),
                   ),
@@ -144,8 +141,7 @@ class AlertsCard extends StatelessWidget {
           if (hasAlert && alert.timestamp != null)
             Text(
               DateFormat('dd.MM.yy HH:mm').format(alert.timestamp!),
-              style: const TextStyle(
-                fontSize: 11,
+              style: HvacTypography.labelMedium.copyWith(
                 color: HvacColors.textSecondary,
               ),
             ),
@@ -163,7 +159,7 @@ class AlertsCard extends StatelessWidget {
       case AlertSeverity.error:
         return HvacColors.error;
       case AlertSeverity.critical:
-        return const Color(0xFFD32F2F); // Darker red
+        return HvacColors.error; // Use HvacColors.error for critical
     }
   }
 

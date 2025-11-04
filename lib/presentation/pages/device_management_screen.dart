@@ -27,7 +27,6 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
@@ -45,13 +44,13 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
             padding: const EdgeInsets.all(16.0),
             child: Container(
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+                gradient: LinearGradient(
+                  colors: [HvacColors.primaryBlue, HvacColors.primaryBlue.withValues(alpha: 0.8)],
                 ),
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF6366F1).withValues(alpha: 0.3),
+                    color: HvacColors.primaryBlue.withValues(alpha: 0.3),
                     blurRadius: 12,
                     offset: const Offset(0, 4),
                   ),
@@ -72,14 +71,14 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                       children: [
                         const Icon(
                           Icons.add_circle_outline_rounded,
-                          color: Colors.white,
+                          color: HvacColors.textPrimary,
                           size: 24,
                         ),
                         const SizedBox(width: 12),
                         Text(
                           l10n.addDevice,
                           style: const TextStyle(
-                            color: Colors.white,
+                            color: HvacColors.textPrimary,
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
                             letterSpacing: 0.5,
@@ -105,10 +104,8 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                   return Center(
                     child: Text(
                       state.message,
-                      style: TextStyle(
-                        color: isDark
-                            ? Colors.white70
-                            : Colors.black54,
+                      style: const TextStyle(
+                        color: HvacColors.textSecondary,
                       ),
                     ),
                   );
@@ -125,9 +122,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                           Icon(
                             Icons.devices_other_rounded,
                             size: 64,
-                            color: isDark
-                                ? Colors.white38
-                                : Colors.black38,
+                            color: HvacColors.textSecondary.withValues(alpha: 0.5),
                           ),
                           const SizedBox(height: 16),
                           Text(
@@ -160,7 +155,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                               ),
                               child: const Icon(
                                 Icons.thermostat,
-                                color: Colors.white,
+                                color: HvacColors.textPrimary,
                                 size: 24,
                               ),
                             ),
@@ -177,9 +172,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                                 Text(
                                   'ID: ${unit.id}',
                                   style: TextStyle(
-                                    color: isDark
-                                        ? Colors.white38
-                                        : Colors.black38,
+                                    color: HvacColors.textSecondary.withValues(alpha: 0.5),
                                     fontSize: 12,
                                   ),
                                 ),
@@ -188,9 +181,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                                   Text(
                                     'MAC: ${_formatMacAddress(unit.macAddress!)}',
                                     style: TextStyle(
-                                      color: isDark
-                                          ? Colors.white38
-                                          : Colors.black38,
+                                      color: HvacColors.textSecondary.withValues(alpha: 0.5),
                                       fontSize: 12,
                                       fontFamily: 'monospace',
                                     ),
@@ -201,7 +192,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                             trailing: IconButton(
                               icon: const Icon(
                                 Icons.delete_outline_rounded,
-                                color: Color(0xFFEF4444),
+                                color: HvacColors.error,
                               ),
                               onPressed: () => _confirmRemoveDevice(
                                 context,
@@ -249,7 +240,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
     await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: isDark ? Colors.white12 : Colors.white,
+        backgroundColor: isDark ? HvacColors.backgroundCard : HvacColors.glassWhite,
         title: Text(l10n.addDevice),
         content: SingleChildScrollView(
           child: Column(
@@ -319,7 +310,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(l10n.fillRequiredFields),
-                    backgroundColor: const Color(0xFFEF4444),
+                    backgroundColor: HvacColors.error,
                   ),
                 );
                 return;
@@ -351,15 +342,15 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text('${l10n.error}: $e'),
-                      backgroundColor: const Color(0xFFEF4444),
+                      backgroundColor: HvacColors.error,
                     ),
                   );
                 }
               }
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF6366F1),
-              foregroundColor: Colors.white,
+              backgroundColor: HvacColors.primaryBlue,
+              foregroundColor: HvacColors.textPrimary,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -385,7 +376,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        backgroundColor: isDark ? Colors.white12 : Colors.white,
+        backgroundColor: isDark ? HvacColors.backgroundCard : HvacColors.glassWhite,
         title: Text(l10n.removeDevice),
         content: Text(l10n.confirmRemoveDevice(name)),
         actions: [
@@ -396,8 +387,8 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
           ElevatedButton(
             onPressed: () => Navigator.of(dialogContext).pop(true),
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFEF4444),
-              foregroundColor: Colors.white,
+              backgroundColor: HvacColors.error,
+              foregroundColor: HvacColors.textPrimary,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -423,7 +414,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
         scaffoldMessenger.showSnackBar(
           SnackBar(
             content: Text('${l10n.error}: $e'),
-            backgroundColor: const Color(0xFFEF4444),
+            backgroundColor: HvacColors.error,
           ),
         );
       }

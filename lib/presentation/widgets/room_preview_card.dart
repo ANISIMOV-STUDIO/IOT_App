@@ -50,7 +50,7 @@ class RoomPreviewCard extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.2),
+            color: HvacColors.backgroundDark.withValues(alpha: 0.5),
             blurRadius: 20,
             offset: const Offset(0, 4),
           ),
@@ -107,7 +107,7 @@ class RoomPreviewCard extends StatelessWidget {
                         child: Switch(
                           value: isLive,
                           onChanged: onPowerChanged,
-                          activeThumbColor: Colors.white,
+                          activeThumbColor: HvacColors.textPrimary,
                           activeTrackColor: HvacColors.success,
                           inactiveThumbColor: HvacColors.textSecondary,
                           inactiveTrackColor: HvacColors.backgroundCardBorder,
@@ -158,7 +158,7 @@ class RoomPreviewCard extends StatelessWidget {
                               height: 1.1,
                               shadows: [
                                 Shadow(
-                                  color: Colors.black.withValues(alpha: 0.3),
+                                  color: HvacColors.backgroundDark.withValues(alpha: 0.6),
                                   blurRadius: 12,
                                 ),
                               ],
@@ -210,7 +210,7 @@ class RoomPreviewCard extends StatelessWidget {
                             height: 1.2,
                             shadows: [
                               Shadow(
-                                color: Colors.black.withValues(alpha: 0.3),
+                                color: HvacColors.backgroundDark.withValues(alpha: 0.6),
                                 blurRadius: 12,
                               ),
                             ],
@@ -318,7 +318,7 @@ class RoomPreviewCard extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.2),
+            color: HvacColors.backgroundDark.withValues(alpha: 0.5),
             blurRadius: 6,
             offset: const Offset(0, 1),
           ),

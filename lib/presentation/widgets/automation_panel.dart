@@ -24,7 +24,7 @@ class AutomationPanel extends StatelessWidget {
     final activeRules = rules.where((r) => r.enabled).length;
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(HvacSpacing.lgR),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
         borderRadius: BorderRadius.circular(12),
@@ -40,7 +40,7 @@ class AutomationPanel extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(HvacSpacing.smR),
                 decoration: BoxDecoration(
                   color: HvacColors.warning.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(8),
@@ -98,7 +98,7 @@ class AutomationPanel extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
-                padding: const EdgeInsets.symmetric(vertical: 10),
+                padding: const EdgeInsets.symmetric(vertical: HvacSpacing.smR),
               ),
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -124,8 +124,8 @@ class AutomationPanel extends StatelessWidget {
 
   Widget _buildRuleItem(AutomationRule rule) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.only(bottom: HvacSpacing.smR),
+      padding: const EdgeInsets.all(HvacSpacing.mdR),
       decoration: BoxDecoration(
         color: HvacColors.backgroundDark,
         borderRadius: BorderRadius.circular(8),

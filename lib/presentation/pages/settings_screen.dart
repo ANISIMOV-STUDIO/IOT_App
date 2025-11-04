@@ -34,9 +34,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
         title: Text(
           'Настройки',
-          style: TextStyle(
+          style: HvacTypography.headlineMedium.copyWith(
             fontSize: 20.sp,
-            fontWeight: FontWeight.w600,
             color: HvacColors.textPrimary,
           ),
         ),
@@ -173,10 +172,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             child: Text(
               'Проверить обновления',
-              style: TextStyle(
+              style: HvacTypography.buttonMedium.copyWith(
                 color: HvacColors.primaryOrange,
                 fontSize: 14.sp,
-                fontWeight: FontWeight.w600,
               ),
             ),
           ),
@@ -209,9 +207,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               SizedBox(width: 12.w),
               Text(
                 title,
-                style: TextStyle(
+                style: HvacTypography.headlineSmall.copyWith(
                   fontSize: 18.sp,
-                  fontWeight: FontWeight.w600,
                   color: HvacColors.textPrimary,
                 ),
               ),
@@ -238,16 +235,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
             children: [
               Text(
                 title,
-                style: TextStyle(
+                style: HvacTypography.titleMedium.copyWith(
                   fontSize: 14.sp,
-                  fontWeight: FontWeight.w600,
                   color: HvacColors.textPrimary,
                 ),
               ),
               SizedBox(height: 4.h),
               Text(
                 subtitle,
-                style: TextStyle(
+                style: HvacTypography.labelLarge.copyWith(
                   fontSize: 12.sp,
                   color: HvacColors.textSecondary,
                 ),
@@ -301,7 +297,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               SizedBox(width: 12.w),
               Text(
                 language,
-                style: TextStyle(
+                style: HvacTypography.bodyMedium.copyWith(
                   fontSize: 14.sp,
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                   color: isSelected ? HvacColors.primaryOrange : HvacColors.textPrimary,
@@ -320,16 +316,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
       children: [
         Text(
           label,
-          style: TextStyle(
+          style: HvacTypography.bodyMedium.copyWith(
             fontSize: 14.sp,
             color: HvacColors.textSecondary,
           ),
         ),
         Text(
           value,
-          style: TextStyle(
+          style: HvacTypography.titleMedium.copyWith(
             fontSize: 14.sp,
-            fontWeight: FontWeight.w600,
             color: HvacColors.textPrimary,
           ),
         ),

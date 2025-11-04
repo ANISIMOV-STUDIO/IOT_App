@@ -138,7 +138,7 @@ class _ControlButtonState extends State<_ControlButton>
 
   Color get _buttonColor {
     if (widget.onPressed == null) {
-      return Colors.white.withValues(alpha: 0.05);
+      return HvacColors.textPrimary.withValues(alpha: 0.05);
     }
     if (_isPressed) {
       return widget.isDecrease
@@ -150,19 +150,19 @@ class _ControlButtonState extends State<_ControlButton>
           ? HvacColors.primaryBlue.withValues(alpha: 0.2)
           : HvacColors.primaryOrange.withValues(alpha: 0.2);
     }
-    return Colors.white.withValues(alpha: 0.1);
+    return HvacColors.textPrimary.withValues(alpha: 0.1);
   }
 
   Color get _iconColor {
     if (widget.onPressed == null) {
-      return Colors.white38;
+      return HvacColors.textSecondary.withValues(alpha: 0.5);
     }
     if (_isPressed || _isHovered) {
       return widget.isDecrease
           ? HvacColors.primaryBlue
           : HvacColors.primaryOrange;
     }
-    return Colors.white;
+    return HvacColors.textPrimary;
   }
 
   @override
@@ -262,8 +262,8 @@ class _PowerSwitchState extends State<PowerSwitch> {
           onChanged: widget.onChanged,
           activeThumbColor: HvacColors.primaryBlue,
           activeTrackColor: HvacColors.primaryBlue.withValues(alpha: 0.5),
-          inactiveThumbColor: Colors.grey,
-          inactiveTrackColor: Colors.grey.withValues(alpha: 0.3),
+          inactiveThumbColor: HvacColors.textSecondary,
+          inactiveTrackColor: HvacColors.textSecondary.withValues(alpha: 0.3),
         ),
       ),
     );

@@ -67,7 +67,7 @@ class _DeviceSearchScreenState extends State<DeviceSearchScreen> {
         children: [
           // Header
           Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(HvacSpacing.xlR),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -82,7 +82,7 @@ class _DeviceSearchScreenState extends State<DeviceSearchScreen> {
           // Device Grid
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: HvacSpacing.xlR),
               child: GridView.builder(
                 physics: const BouncingScrollPhysics(),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -123,7 +123,7 @@ class _DeviceSearchScreenState extends State<DeviceSearchScreen> {
 
           // Add Device Button
           Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(HvacSpacing.xlR),
             child: OrangeButton(
               text: l10n.addDevice,
               width: double.infinity,

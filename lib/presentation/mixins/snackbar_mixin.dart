@@ -18,7 +18,7 @@ mixin SnackbarMixin<T extends StatefulWidget> on State<T> {
           children: [
             Icon(
               Icons.check_circle,
-              color: Colors.white,
+              color: HvacColors.textPrimary,
               size: 20.sp,
             ),
             const SizedBox(width: HvacSpacing.smR),
@@ -54,7 +54,7 @@ mixin SnackbarMixin<T extends StatefulWidget> on State<T> {
           children: [
             Icon(
               Icons.error_outline,
-              color: Colors.white,
+              color: HvacColors.textPrimary,
               size: 20.sp,
             ),
             const SizedBox(width: HvacSpacing.smR),
@@ -90,7 +90,7 @@ mixin SnackbarMixin<T extends StatefulWidget> on State<T> {
           children: [
             Icon(
               Icons.info_outline,
-              color: Colors.white,
+              color: HvacColors.textPrimary,
               size: 20.sp,
             ),
             const SizedBox(width: HvacSpacing.smR),
@@ -126,7 +126,7 @@ mixin SnackbarMixin<T extends StatefulWidget> on State<T> {
           children: [
             Icon(
               Icons.warning_amber_rounded,
-              color: Colors.white,
+              color: HvacColors.textPrimary,
               size: 20.sp,
             ),
             const SizedBox(width: HvacSpacing.smR),
@@ -174,7 +174,7 @@ mixin SnackbarMixin<T extends StatefulWidget> on State<T> {
         action: SnackBarAction(
           label: actionLabel,
           onPressed: onAction,
-          textColor: Colors.white,
+          textColor: HvacColors.textPrimary,
         ),
         backgroundColor: backgroundColor ?? HvacColors.backgroundCard,
         duration: duration ?? const Duration(seconds: 4),

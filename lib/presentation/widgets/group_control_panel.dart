@@ -30,7 +30,7 @@ class GroupControlPanel extends StatelessWidget {
 
     return GlassCard(
       // GLASSMORPHISM: Frosted glass with blur
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(HvacSpacing.lgR),
       enableBlur: true,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,7 +39,7 @@ class GroupControlPanel extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(HvacSpacing.smR),
                 decoration: BoxDecoration(
                   color: HvacColors.accent.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(8),
@@ -55,19 +55,16 @@ class GroupControlPanel extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Групповое управление',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
+                      style: HvacTypography.titleLarge.copyWith(
                         color: HvacColors.textPrimary,
                       ),
                     ),
                     const SizedBox(height: 2),
                     Text(
                       'Активно: $activeUnits из $totalUnits',
-                      style: const TextStyle(
-                        fontSize: 12,
+                      style: HvacTypography.labelLarge.copyWith(
                         color: HvacColors.textSecondary,
                       ),
                     ),
@@ -130,10 +127,9 @@ class GroupControlPanel extends StatelessWidget {
           const SizedBox(height: 16),
 
           // Units list with checkboxes
-          const Text(
+          Text(
             'Управляемые установки',
-            style: TextStyle(
-              fontSize: 13,
+            style: HvacTypography.bodySmall.copyWith(
               fontWeight: FontWeight.w600,
               color: HvacColors.textSecondary,
             ),
@@ -178,8 +174,7 @@ class GroupControlPanel extends StatelessWidget {
               Flexible(
                 child: Text(
                   label,
-                  style: const TextStyle(
-                    fontSize: 12,
+                  style: HvacTypography.labelLarge.copyWith(
                     fontWeight: FontWeight.w600,
                     color: HvacColors.textPrimary, // Text always white
                   ),
@@ -212,16 +207,14 @@ class GroupControlPanel extends StatelessWidget {
           Expanded(
             child: Text(
               unit.name,
-              style: const TextStyle(
-                fontSize: 12,
+              style: HvacTypography.labelLarge.copyWith(
                 color: HvacColors.textPrimary,
               ),
             ),
           ),
           Text(
             unit.power ? 'Вкл' : 'Выкл',
-            style: TextStyle(
-              fontSize: 11,
+            style: HvacTypography.labelMedium.copyWith(
               fontWeight: FontWeight.w600,
               color: unit.power ? HvacColors.success : HvacColors.textSecondary,
             ),

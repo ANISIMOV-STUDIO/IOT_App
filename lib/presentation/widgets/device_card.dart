@@ -29,7 +29,7 @@ class DeviceCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: HvacTheme.deviceCard(isSelected: isSelected),
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(HvacSpacing.lgR),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -143,7 +143,7 @@ class DeviceStatusCard extends StatelessWidget {
 
             // Device Info
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(HvacSpacing.lgR),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -176,8 +176,8 @@ class DeviceStatusCard extends StatelessWidget {
                       // Mode Badge
                       Container(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 6,
+                          horizontal: HvacSpacing.mdR,
+                          vertical: HvacSpacing.xsR,
                         ),
                         decoration: BoxDecoration(
                           color: modeColor.withValues(alpha: 0.2),

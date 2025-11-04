@@ -69,7 +69,7 @@ class NotificationUtils {
       case NotificationSeverity.critical:
         return HvacColors.error;
       case NotificationSeverity.error:
-        return const Color(0xFFE57373);
+        return HvacColors.error;
       case NotificationSeverity.warning:
         return HvacColors.warning;
       case NotificationSeverity.info:

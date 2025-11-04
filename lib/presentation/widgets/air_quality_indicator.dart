@@ -59,15 +59,15 @@ class _AirQualityIndicatorState extends State<AirQualityIndicator>
   Color _getLevelColor() {
     switch (widget.level) {
       case AirQualityLevel.excellent:
-        return const Color(0xFF10B981);
+        return HvacColors.success;
       case AirQualityLevel.good:
-        return const Color(0xFF84CC16);
+        return HvacColors.success.withValues(alpha: 0.8);
       case AirQualityLevel.moderate:
-        return const Color(0xFFFBBF24);
+        return HvacColors.warning;
       case AirQualityLevel.poor:
-        return const Color(0xFFF97316);
+        return HvacColors.primaryOrange;
       case AirQualityLevel.veryPoor:
-        return const Color(0xFFEF4444);
+        return HvacColors.error;
     }
   }
 
@@ -106,7 +106,7 @@ class _AirQualityIndicatorState extends State<AirQualityIndicator>
     final color = _getLevelColor();
 
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(HvacSpacing.xlR),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
         borderRadius: BorderRadius.circular(12),
@@ -122,7 +122,7 @@ class _AirQualityIndicatorState extends State<AirQualityIndicator>
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(HvacSpacing.smR),
                 decoration: BoxDecoration(
                   color: color.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(8),
@@ -134,11 +134,9 @@ class _AirQualityIndicatorState extends State<AirQualityIndicator>
                 ),
               ),
               const SizedBox(width: 12),
-              const Text(
+              Text(
                 'Качество воздуха',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
+                style: HvacTypography.titleLarge.copyWith(
                   color: HvacColors.textPrimary,
                 ),
               ),
@@ -203,9 +201,7 @@ class _AirQualityIndicatorState extends State<AirQualityIndicator>
           Center(
             child: Text(
               _getLevelText(),
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w700,
+              style: HvacTypography.displaySmall.copyWith(
                 color: color,
               ),
             ),
@@ -238,17 +234,14 @@ class _AirQualityIndicatorState extends State<AirQualityIndicator>
           const SizedBox(width: 8),
           Text(
             label,
-            style: const TextStyle(
-              fontSize: 13,
+            style: HvacTypography.bodySmall.copyWith(
               color: HvacColors.textSecondary,
             ),
           ),
           const Spacer(),
           Text(
             value,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
+            style: HvacTypography.titleMedium.copyWith(
               color: HvacColors.textPrimary,
             ),
           ),

@@ -531,8 +531,8 @@ ElevatedButton(
 // ✅ Стало (благородное золото):
 ElevatedButton(
   style: ElevatedButton.styleFrom(
-    backgroundColor: AppTheme.accent, // Royal Gold
-    foregroundColor: AppTheme.backgroundDark, // Dark text
+    backgroundColor: HvacColors.accent, // Royal Gold
+    foregroundColor: HvacColors.backgroundDark, // Dark text
   ),
 )
 ```
@@ -550,8 +550,8 @@ Container(
 // ✅ Стало (приглушенные):
 Container(
   color: isOnline
-    ? AppTheme.success    // Deep Sea Green
-    : AppTheme.error,     // Deep Crimson
+    ? HvacColors.success    // Deep Sea Green
+    : HvacColors.error,     // Deep Crimson
 )
 ```
 
@@ -570,13 +570,13 @@ Icon(
 Icon(
   Icons.ac_unit,
   color: mode == 'cool'
-    ? AppTheme.neutral100      // Light Gray
-    : AppTheme.neutral300,     // Dark Gray
+    ? HvacColors.neutral100      // Light Gray
+    : HvacColors.neutral300,     // Dark Gray
 )
 
 // Только Auto mode получает золото:
 if (mode == 'auto') {
-  color = AppTheme.accent; // Gold!
+  color = HvacColors.accent; // Gold!
 }
 ```
 
@@ -596,10 +596,10 @@ LineChart(
 // ✅ Стало (монохроматический):
 LineChart(
   datasets: [
-    { color: AppTheme.neutral100 },  // Primary metric
-    { color: AppTheme.neutral200 },  // Secondary
-    { color: AppTheme.neutral300 },  // Tertiary
-    { color: AppTheme.accent },      // Important highlight
+    { color: HvacColors.neutral100 },  // Primary metric
+    { color: HvacColors.neutral200 },  // Secondary
+    { color: HvacColors.neutral300 },  // Tertiary
+    { color: HvacColors.accent },      // Important highlight
   ],
 )
 ```

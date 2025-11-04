@@ -18,7 +18,7 @@ class ActivityTimeline extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(HvacSpacing.xlR),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
         borderRadius: BorderRadius.circular(20),
@@ -33,21 +33,17 @@ class ActivityTimeline extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Column(
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'Activity',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: HvacTypography.headlineSmall,
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   Text(
                     'December 12, 2024',
-                    style: TextStyle(
-                      fontSize: 12,
+                    style: HvacTypography.labelLarge.copyWith(
                       color: HvacColors.textSecondary,
                     ),
                   ),
@@ -61,18 +57,17 @@ class ActivityTimeline extends StatelessWidget {
                     minimumSize: const Size(60, 30),
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
-                  child: const Row(
+                  child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
                         'See All',
-                        style: TextStyle(
-                          fontSize: 12,
+                        style: HvacTypography.labelLarge.copyWith(
                           color: HvacColors.textSecondary,
                         ),
                       ),
-                      SizedBox(width: 4),
-                      Icon(
+                      const SizedBox(width: 4),
+                      const Icon(
                         Icons.arrow_forward,
                         size: 14,
                         color: HvacColors.textSecondary,
@@ -94,7 +89,7 @@ class ActivityTimeline extends StatelessWidget {
 
   Widget _buildActivityItem(ActivityItem activity) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
+      padding: const EdgeInsets.only(bottom: HvacSpacing.xlR),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -106,15 +101,11 @@ class ActivityTimeline extends StatelessWidget {
               children: [
                 Text(
                   activity.time,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: HvacTypography.titleMedium,
                 ),
-                const Text(
+                Text(
                   'AM',
-                  style: TextStyle(
-                    fontSize: 12,
+                  style: HvacTypography.labelLarge.copyWith(
                     color: HvacColors.textSecondary,
                   ),
                 ),
@@ -127,7 +118,7 @@ class ActivityTimeline extends StatelessWidget {
           // Content
           Expanded(
             child: Container(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(HvacSpacing.lgR),
               decoration: BoxDecoration(
                 color: HvacColors.backgroundDark,
                 borderRadius: BorderRadius.circular(12),
@@ -137,16 +128,12 @@ class ActivityTimeline extends StatelessWidget {
                 children: [
                   Text(
                     activity.title,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: HvacTypography.titleMedium,
                   ),
                   const SizedBox(height: 4),
                   Text(
                     activity.description,
-                    style: const TextStyle(
-                      fontSize: 12,
+                    style: HvacTypography.labelLarge.copyWith(
                       color: HvacColors.textSecondary,
                     ),
                   ),

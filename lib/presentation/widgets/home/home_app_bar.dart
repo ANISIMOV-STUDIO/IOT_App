@@ -47,7 +47,7 @@ class HomeAppBar extends StatelessWidget {
               'assets/images/zilon-logo.svg',
               height: 40.h,
               colorFilter: const ColorFilter.mode(
-                Color(0xFFFF9D5C),
+                HvacColors.primaryOrange,
                 BlendMode.srcIn,
               ),
             ),
@@ -83,7 +83,7 @@ class HomeAppBar extends StatelessWidget {
               'assets/images/zilon-logo.svg',
               height: 48.h,
               colorFilter: const ColorFilter.mode(
-                Color(0xFFFF9D5C),
+                HvacColors.primaryOrange,
                 BlendMode.srcIn,
               ),
             ),

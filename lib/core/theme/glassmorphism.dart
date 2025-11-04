@@ -6,8 +6,7 @@ library;
 
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'app_theme.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import 'app_radius.dart';
 
 /// Glassmorphism Container with BackdropFilter blur
@@ -32,7 +31,7 @@ class GlassContainer extends StatelessWidget {
     this.padding,
     this.margin,
     this.borderRadius = 16.0,
-    this.blurSigma = AppTheme.blurMedium,
+    this.blurSigma = HvacColors.blurMedium,
     this.backgroundColor,
     this.borderColor,
     this.borderWidth = 1.0,
@@ -55,10 +54,10 @@ class GlassContainer extends StatelessWidget {
           child: Container(
             padding: padding,
             decoration: BoxDecoration(
-              color: backgroundColor ?? AppTheme.glassShimmerBase,
+              color: backgroundColor ?? HvacColors.glassShimmerBase,
               borderRadius: BorderRadius.circular(borderRadius.r),
               border: Border.all(
-                color: borderColor ?? AppTheme.glassBorder,
+                color: borderColor ?? HvacColors.glassBorder,
                 width: borderWidth,
               ),
               boxShadow: boxShadow,
@@ -96,12 +95,12 @@ class GlassCard extends StatelessWidget {
       return GlassContainer(
         width: width,
         height: height,
-        padding: padding ?? EdgeInsets.all(AppTheme.paddingLg.top),
+        padding: padding ?? HvacSpacing.paddingLg,
         margin: margin,
         borderRadius: AppRadius.lgR,
-        blurSigma: AppTheme.blurMedium,
-        backgroundColor: AppTheme.backgroundCard.withValues(alpha: 0.7),
-        borderColor: AppTheme.glassBorder,
+        blurSigma: HvacColors.blurMedium,
+        backgroundColor: HvacColors.backgroundCard.withValues(alpha: 0.7),
+        borderColor: HvacColors.glassBorder,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.1),
@@ -116,13 +115,13 @@ class GlassCard extends StatelessWidget {
       return Container(
         width: width,
         height: height,
-        padding: padding ?? EdgeInsets.all(AppTheme.paddingLg.top),
+        padding: padding ?? HvacSpacing.paddingLg,
         margin: margin,
         decoration: BoxDecoration(
-          color: AppTheme.backgroundCard.withValues(alpha: 0.9),
+          color: HvacColors.backgroundCard.withValues(alpha: 0.9),
           borderRadius: BorderRadius.circular(AppRadius.lgR),
           border: Border.all(
-            color: AppTheme.backgroundCardBorder,
+            color: HvacColors.backgroundCardBorder,
             width: 1,
           ),
           boxShadow: [
@@ -151,8 +150,8 @@ class ShimmerAnimation extends StatefulWidget {
     super.key,
     required this.child,
     this.duration = const Duration(milliseconds: 1500),
-    this.baseColor = AppTheme.glassShimmerBase,
-    this.highlightColor = AppTheme.glassShimmerHighlight,
+    this.baseColor = HvacColors.glassShimmerBase,
+    this.highlightColor = HvacColors.glassShimmerHighlight,
     this.enabled = true,
   });
 
@@ -283,7 +282,7 @@ class _GlassButtonState extends State<GlassButton> {
           Icon(
             widget.icon,
             size: 18.r,
-            color: AppTheme.glassWhite,
+            color: HvacColors.glassWhite,
           ),
           SizedBox(width: 8.w),
         ],
@@ -292,7 +291,7 @@ class _GlassButtonState extends State<GlassButton> {
           style: TextStyle(
             fontSize: 14.sp,
             fontWeight: FontWeight.w600,
-            color: AppTheme.glassWhite,
+            color: HvacColors.glassWhite,
           ),
         ),
       ],
@@ -317,11 +316,11 @@ class _GlassButtonState extends State<GlassButton> {
             vertical: 12.h,
           ),
           borderRadius: 12.0,
-          blurSigma: _isHovered ? AppTheme.blurHeavy : AppTheme.blurMedium,
+          blurSigma: _isHovered ? HvacColors.blurHeavy : HvacColors.blurMedium,
           backgroundColor: _isHovered
-              ? AppTheme.glassShimmerHighlight
-              : AppTheme.glassShimmerBase,
-          borderColor: AppTheme.glassBorder,
+              ? HvacColors.glassShimmerHighlight
+              : HvacColors.glassShimmerBase,
+          borderColor: HvacColors.glassBorder,
           child: content,
         ),
       ),
@@ -352,15 +351,15 @@ class GlassAppBar extends StatelessWidget implements PreferredSizeWidget {
     return ClipRRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(
-          sigmaX: AppTheme.blurMedium,
-          sigmaY: AppTheme.blurMedium,
+          sigmaX: HvacColors.blurMedium,
+          sigmaY: HvacColors.blurMedium,
         ),
         child: Container(
           decoration: BoxDecoration(
-            color: AppTheme.backgroundDark.withValues(alpha: 0.8),
+            color: HvacColors.backgroundDark.withValues(alpha: 0.8),
             border: const Border(
               bottom: BorderSide(
-                color: AppTheme.glassBorder,
+                color: HvacColors.glassBorder,
                 width: 1,
               ),
             ),
@@ -390,6 +389,6 @@ class GlassHelper {
   static double getOptimalBlur(BuildContext context) {
     // Adjust blur based on device performance
     // Lower-end devices get less blur
-    return AppTheme.blurMedium;
+    return HvacColors.blurMedium;
   }
 }

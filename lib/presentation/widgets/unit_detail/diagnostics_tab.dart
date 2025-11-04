@@ -52,14 +52,13 @@ class DiagnosticsTab extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.play_arrow, color: Colors.white, size: 24.sp),
+                  Icon(Icons.play_arrow, color: HvacColors.textPrimary, size: 24.sp),
                   SizedBox(width: 8.w),
                   Text(
                     'Запустить диагностику',
-                    style: TextStyle(
-                      color: Colors.white,
+                    style: HvacTypography.buttonMedium.copyWith(
+                      color: HvacColors.textPrimary,
                       fontSize: 15.sp,
-                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
@@ -88,9 +87,8 @@ class DiagnosticsTab extends StatelessWidget {
               SizedBox(width: 12.w),
               Text(
                 'Состояние системы',
-                style: TextStyle(
+                style: HvacTypography.titleLarge.copyWith(
                   fontSize: 16.sp,
-                  fontWeight: FontWeight.w600,
                   color: HvacColors.textPrimary,
                 ),
               ),
@@ -116,7 +114,10 @@ class DiagnosticsTab extends StatelessWidget {
         children: [
           Text(
             label,
-            style: TextStyle(fontSize: 13.sp, color: HvacColors.textSecondary),
+            style: HvacTypography.bodySmall.copyWith(
+              fontSize: 13.sp,
+              color: HvacColors.textSecondary,
+            ),
           ),
           Row(
             children: [
@@ -128,7 +129,7 @@ class DiagnosticsTab extends StatelessWidget {
               SizedBox(width: 6.w),
               Text(
                 isOk ? 'Норма' : 'Ошибка',
-                style: TextStyle(
+                style: HvacTypography.bodySmall.copyWith(
                   fontSize: 13.sp,
                   fontWeight: FontWeight.w600,
                   color: isOk ? HvacColors.success : HvacColors.error,
@@ -158,9 +159,8 @@ class DiagnosticsTab extends StatelessWidget {
               SizedBox(width: 12.w),
               Text(
                 'Показания датчиков',
-                style: TextStyle(
+                style: HvacTypography.titleLarge.copyWith(
                   fontSize: 16.sp,
-                  fontWeight: FontWeight.w600,
                   color: HvacColors.textPrimary,
                 ),
               ),
@@ -201,13 +201,15 @@ class DiagnosticsTab extends StatelessWidget {
         children: [
           Text(
             label,
-            style: TextStyle(fontSize: 13.sp, color: HvacColors.textSecondary),
+            style: HvacTypography.bodySmall.copyWith(
+              fontSize: 13.sp,
+              color: HvacColors.textSecondary,
+            ),
           ),
           Text(
             value,
-            style: TextStyle(
+            style: HvacTypography.titleMedium.copyWith(
               fontSize: 14.sp,
-              fontWeight: FontWeight.w600,
               color: color,
             ),
           ),
@@ -239,9 +241,8 @@ class DiagnosticsTab extends StatelessWidget {
               SizedBox(width: 12.w),
               Text(
                 'Сетевое подключение',
-                style: TextStyle(
+                style: HvacTypography.titleLarge.copyWith(
                   fontSize: 16.sp,
-                  fontWeight: FontWeight.w600,
                   color: HvacColors.textPrimary,
                 ),
               ),
@@ -266,11 +267,14 @@ class DiagnosticsTab extends StatelessWidget {
         children: [
           Text(
             label,
-            style: TextStyle(fontSize: 13.sp, color: HvacColors.textSecondary),
+            style: HvacTypography.bodySmall.copyWith(
+              fontSize: 13.sp,
+              color: HvacColors.textSecondary,
+            ),
           ),
           Text(
             value,
-            style: TextStyle(
+            style: HvacTypography.bodySmall.copyWith(
               fontSize: 13.sp,
               fontWeight: FontWeight.w600,
               color: HvacColors.textPrimary,
@@ -286,9 +290,11 @@ class DiagnosticsTab extends StatelessWidget {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: HvacColors.backgroundCard,
-        title: const Text(
+        title: Text(
           'Диагностика',
-          style: TextStyle(color: HvacColors.textPrimary),
+          style: HvacTypography.titleLarge.copyWith(
+            color: HvacColors.textPrimary,
+          ),
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -300,7 +306,7 @@ class DiagnosticsTab extends StatelessWidget {
             SizedBox(height: 16.h),
             Text(
               'Выполняется диагностика системы...',
-              style: TextStyle(
+              style: HvacTypography.bodyMedium.copyWith(
                 fontSize: 14.sp,
                 color: HvacColors.textSecondary,
               ),
