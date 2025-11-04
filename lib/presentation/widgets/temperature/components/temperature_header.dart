@@ -25,11 +25,11 @@ class TemperatureHeader extends StatelessWidget {
       children: [
         // Simple icon without shimmer for calm look
         Container(
-          width: isMobile ? 32.w : 36.w,
-          height: isMobile ? 32.w : 36.w,
+          width: isMobile ? 28.w : 36.w,
+          height: isMobile ? 28.w : 36.w,
           decoration: BoxDecoration(
             color: HvacColors.neutral300.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(8.r),
+            borderRadius: BorderRadius.circular(6.r),
             border: Border.all(
               color: HvacColors.neutral300.withValues(alpha: 0.2),
               width: 1,
@@ -38,19 +38,19 @@ class TemperatureHeader extends StatelessWidget {
           child: Icon(
             Icons.thermostat_outlined,
             color: HvacColors.neutral200,
-            size: isMobile ? 16.w : 18.w,
+            size: isMobile ? 14.w : 18.w,
           ),
         ),
-        SizedBox(width: 10.w),
+        SizedBox(width: 8.w),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Мониторинг температур',
+                'Температуры',
                 style: TextStyle(
-                  fontSize: isMobile ? 14.sp : 15.sp,
+                  fontSize: isMobile ? 13.sp : 15.sp,
                   fontWeight: FontWeight.w600,
                   color: HvacColors.textPrimary,
                   letterSpacing: -0.2,
@@ -59,9 +59,9 @@ class TemperatureHeader extends StatelessWidget {
               if (showDetails) ...[
                 SizedBox(height: 2.h),
                 Text(
-                  'Контроль теплообмена системы вентиляции',
+                  'Мониторинг и уставки',
                   style: TextStyle(
-                    fontSize: 11.sp,
+                    fontSize: 10.sp,
                     color: HvacColors.textTertiary,
                     letterSpacing: 0,
                   ),
@@ -87,29 +87,29 @@ class _SystemStatusIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+      padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
       decoration: BoxDecoration(
         color: isNormal
             ? HvacColors.success.withValues(alpha: 0.1)
             : HvacColors.warning.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(6.r),
+        borderRadius: BorderRadius.circular(4.r),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            width: 6.w,
-            height: 6.w,
+            width: 5.w,
+            height: 5.w,
             decoration: BoxDecoration(
               color: isNormal ? HvacColors.success : HvacColors.warning,
               shape: BoxShape.circle,
             ),
           ),
-          SizedBox(width: 4.w),
+          SizedBox(width: 3.w),
           Text(
             isNormal ? 'Норма' : 'Проверка',
             style: TextStyle(
-              fontSize: 10.sp,
+              fontSize: 9.sp,
               fontWeight: FontWeight.w500,
               color: isNormal ? HvacColors.success : HvacColors.warning,
             ),

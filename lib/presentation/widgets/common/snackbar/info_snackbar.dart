@@ -223,8 +223,8 @@ class InfoSnackBar {
 
     // Use neutral color for info (not bright blue)
     return isDarkMode
-      ? HvacColors.neutral700
-      : HvacColors.neutral600;
+      ? HvacColors.neutral400
+      : HvacColors.neutral300;
   }
 
   /// Format date time for display

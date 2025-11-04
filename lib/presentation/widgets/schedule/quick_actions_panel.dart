@@ -107,7 +107,6 @@ class _QuickActionButton extends StatefulWidget {
 class _QuickActionButtonState extends State<_QuickActionButton>
     with SingleTickerProviderStateMixin {
   bool _isHovered = false;
-  bool _isPressed = false;
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
 
@@ -134,18 +133,15 @@ class _QuickActionButtonState extends State<_QuickActionButton>
   }
 
   void _handleTapDown(TapDownDetails details) {
-    setState(() => _isPressed = true);
     _animationController.forward();
   }
 
   void _handleTapUp(TapUpDetails details) {
-    setState(() => _isPressed = false);
     _animationController.reverse();
     widget.onPressed();
   }
 
   void _handleTapCancel() {
-    setState(() => _isPressed = false);
     _animationController.reverse();
   }
 

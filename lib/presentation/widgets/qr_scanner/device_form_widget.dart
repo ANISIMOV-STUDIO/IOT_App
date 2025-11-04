@@ -101,7 +101,6 @@ class _DeviceFormWidgetState extends State<DeviceFormWidget> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
     final responsive = QrScannerResponsive(context);
 
     return Form(

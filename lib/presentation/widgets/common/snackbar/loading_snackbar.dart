@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
-import 'responsive_utils.dart';
 
 /// Loading snackbar for ongoing operations
 class LoadingSnackBar {
@@ -20,8 +19,13 @@ class LoadingSnackBar {
     final isDarkMode = theme.brightness == Brightness.dark;
 
     // Get responsive values
-    final snackbarWidth = ResponsiveUtils.getSnackbarWidth(context);
-    final snackbarMargin = ResponsiveUtils.getSnackbarMargin(context);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final snackbarWidth = screenWidth < 600
+        ? null
+        : (screenWidth < 1024 ? 500.0 : (screenWidth < 1440 ? 450.0 : 480.0));
+    final snackbarMargin = screenWidth < 600
+        ? const EdgeInsets.all(16)
+        : (screenWidth < 1024 ? const EdgeInsets.all(24) : const EdgeInsets.all(32));
 
     final snackBar = SnackBar(
       content: _LoadingContent(
@@ -34,8 +38,8 @@ class LoadingSnackBar {
         : maxDuration ?? const Duration(seconds: 30),
       behavior: SnackBarBehavior.floating,
       backgroundColor: backgroundColor ?? (isDarkMode
-        ? HvacColors.neutral800
-        : HvacColors.neutral700),
+        ? HvacColors.neutral400
+        : HvacColors.neutral300),
       margin: snackbarMargin,
       width: snackbarWidth,
       shape: RoundedRectangleBorder(
@@ -168,7 +172,10 @@ class _LoadingContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDesktop = ResponsiveUtils.isDesktop(context);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isDesktop = screenWidth >= 1024;
+    final messageFontSize = screenWidth >= 1024 ? 14.0 : (screenWidth >= 600 ? 13.5 : 13.0);
+    final percentFontSize = screenWidth >= 1024 ? 12.0 : (screenWidth >= 600 ? 11.5 : 11.0);
 
     return Row(
       children: [
@@ -205,7 +212,7 @@ class _LoadingContent extends StatelessWidget {
                 message,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: theme.colorScheme.onPrimary,
-                  fontSize: ResponsiveUtils.scaledFontSize(context, 14),
+                  fontSize: messageFontSize,
                 ),
               ),
               if (showProgress && progress != null) ...[
@@ -226,7 +233,7 @@ class _LoadingContent extends StatelessWidget {
                   '${(progress! * 100).toStringAsFixed(0)}%',
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onPrimary.withValues(alpha: 0.8),
-                    fontSize: ResponsiveUtils.scaledFontSize(context, 12),
+                    fontSize: percentFontSize,
                   ),
                 ),
               ],

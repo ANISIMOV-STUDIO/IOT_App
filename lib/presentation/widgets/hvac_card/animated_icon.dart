@@ -2,7 +2,6 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
 /// Animated icon with pulse effect on hover
 class AnimatedPulseIcon extends StatefulWidget {

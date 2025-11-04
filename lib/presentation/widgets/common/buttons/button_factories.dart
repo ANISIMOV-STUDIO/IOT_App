@@ -48,7 +48,7 @@ class AccessibleButtonFactory {
     ButtonStyle? style,
     bool loading = false,
     IconData? icon,
-    IconAlignment iconAlignment = IconAlignment.start,
+    CustomIconAlignment iconAlignment = CustomIconAlignment.start,
   }) {
     return BaseAccessibleButton(
       onPressed: onPressed,
@@ -75,7 +75,7 @@ class AccessibleButtonFactory {
     ButtonStyle? style,
     bool loading = false,
     IconData? icon,
-    IconAlignment iconAlignment = IconAlignment.start,
+    CustomIconAlignment iconAlignment = CustomIconAlignment.start,
   }) {
     return BaseAccessibleButton(
       onPressed: onPressed,
@@ -99,7 +99,7 @@ class AccessibleButtonFactory {
     ButtonStyle? style,
     bool loading = false,
     IconData? icon,
-    IconAlignment iconAlignment = IconAlignment.start,
+    CustomIconAlignment iconAlignment = CustomIconAlignment.start,
   }) {
     return BaseAccessibleButton(
       onPressed: onPressed,
@@ -123,7 +123,7 @@ class AccessibleButtonFactory {
     ButtonStyle? style,
     bool loading = false,
     IconData? icon,
-    IconAlignment iconAlignment = IconAlignment.start,
+    CustomIconAlignment iconAlignment = CustomIconAlignment.start,
   }) {
     return BaseAccessibleButton(
       onPressed: onPressed,
@@ -147,7 +147,7 @@ class AccessibleButtonFactory {
     ButtonStyle? style,
     bool loading = false,
     IconData? icon,
-    IconAlignment iconAlignment = IconAlignment.start,
+    CustomIconAlignment iconAlignment = CustomIconAlignment.start,
   }) {
     return BaseAccessibleButton(
       onPressed: onPressed,

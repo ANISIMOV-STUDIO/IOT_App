@@ -25,7 +25,7 @@ class BaseAccessibleButton extends StatelessWidget {
   final ButtonType type;
   final bool loading;
   final IconData? icon;
-  final IconAlignment iconAlignment;
+  final CustomIconAlignment iconAlignment;
 
   const BaseAccessibleButton({
     super.key,
@@ -44,7 +44,7 @@ class BaseAccessibleButton extends StatelessWidget {
     this.type = ButtonType.elevated,
     this.loading = false,
     this.icon,
-    this.iconAlignment = IconAlignment.start,
+    this.iconAlignment = CustomIconAlignment.start,
   });
 
   @override
@@ -188,7 +188,7 @@ class BaseAccessibleButton extends StatelessWidget {
 
       return Row(
         mainAxisSize: MainAxisSize.min,
-        children: iconAlignment == IconAlignment.start
+        children: iconAlignment == CustomIconAlignment.start
             ? [iconWidget, spacing, Flexible(child: child)]
             : [Flexible(child: child), spacing, iconWidget],
       );

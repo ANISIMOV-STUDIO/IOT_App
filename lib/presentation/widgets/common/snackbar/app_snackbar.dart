@@ -7,7 +7,6 @@ library;
 
 // Export all snackbar components
 export 'snackbar_types.dart';
-export 'responsive_utils.dart' show ResponsiveUtils, DeviceType;
 export 'base_snackbar.dart' show BaseSnackBar;
 export 'success_snackbar.dart' show SuccessSnackBar;
 export 'error_snackbar.dart' show ErrorSnackBar;

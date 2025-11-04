@@ -24,10 +24,10 @@ class TemperatureTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 12.h),
+      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
       decoration: BoxDecoration(
         color: HvacColors.backgroundDark,
-        borderRadius: BorderRadius.circular(10.r),
+        borderRadius: BorderRadius.circular(8.r),
         border: Border.all(
           color: HvacColors.backgroundCardBorder,
           width: 1,
@@ -41,25 +41,25 @@ class TemperatureTile extends StatelessWidget {
             children: [
               Icon(
                 icon,
-                size: isSecondary ? 14.w : 16.w,
+                size: isSecondary ? 12.w : 14.w,
                 color: HvacColors.neutral200,
               ),
-              SizedBox(width: 6.w),
+              SizedBox(width: 4.w),
               Text(
                 label,
                 style: TextStyle(
-                  fontSize: isSecondary ? 10.sp : 11.sp,
+                  fontSize: isSecondary ? 9.sp : 10.sp,
                   color: HvacColors.textTertiary,
                   fontWeight: FontWeight.w500,
                 ),
               ),
             ],
           ),
-          SizedBox(height: 6.h),
+          SizedBox(height: 4.h),
           Text(
-            value != null ? '${value.toStringAsFixed(1)}°C' : '—',
+            value != null ? '${value!.toStringAsFixed(1)}°C' : '—',
             style: TextStyle(
-              fontSize: isSecondary ? 18.sp : 22.sp,
+              fontSize: isSecondary ? 16.sp : 20.sp,
               fontWeight: FontWeight.w600,
               color: value != null ? HvacColors.textPrimary : HvacColors.textDisabled,
               letterSpacing: -0.5,

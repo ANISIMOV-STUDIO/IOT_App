@@ -85,7 +85,7 @@ class DetailedTemperatureCard extends StatelessWidget {
           ),
           SizedBox(height: isPrimary ? 14.h : 12.h),
           Text(
-            value != null ? '${value.toStringAsFixed(1)}°C' : '—',
+            value != null ? '${value!.toStringAsFixed(1)}°C' : '—',
             style: TextStyle(
               fontSize: isPrimary ? 32.sp : 24.sp,
               fontWeight: FontWeight.w600,

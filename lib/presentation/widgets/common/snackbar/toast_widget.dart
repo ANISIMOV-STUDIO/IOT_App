@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hvac_ui_kit/hvac_ui_kit.dart';
-import 'responsive_utils.dart';
 import 'snackbar_types.dart';
 
 /// Toast widget implementation with responsive design and hover effects
@@ -72,28 +70,29 @@ class _ToastWidgetState extends State<ToastWidget>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final mediaQuery = MediaQuery.of(context);
-    final deviceType = ResponsiveUtils.getDeviceType(context);
-    final toastMaxWidth = ResponsiveUtils.getToastMaxWidth(context);
+    final screenWidth = mediaQuery.size.width;
+    final isMobile = screenWidth < 600;
+    final toastMaxWidth = screenWidth < 600 ? null : (screenWidth < 1024 ? 400.0 : 480.0);
 
     // Position adjustments for web
     final topPosition = widget.position == ToastPosition.top
-      ? (deviceType == DeviceType.mobile
+      ? (isMobile
           ? mediaQuery.padding.top + 16
           : 32)
       : null;
 
     final bottomPosition = widget.position == ToastPosition.bottom
-      ? (deviceType == DeviceType.mobile
+      ? (isMobile
           ? mediaQuery.padding.bottom + 16
           : 32)
       : null;
 
     // Horizontal margins for different devices
-    final horizontalMargin = deviceType == DeviceType.mobile ? 16.0 : 24.0;
+    final horizontalMargin = isMobile ? 16.0 : 24.0;
 
     return Positioned(
-      top: topPosition,
-      bottom: bottomPosition,
+      top: topPosition?.toDouble(),
+      bottom: bottomPosition?.toDouble(),
       left: horizontalMargin,
       right: horizontalMargin,
       child: SlideTransition(
@@ -106,7 +105,7 @@ class _ToastWidgetState extends State<ToastWidget>
               constraints: BoxConstraints(
                 maxWidth: toastMaxWidth ?? double.infinity,
               ),
-              child: _buildToastContent(context, theme, deviceType),
+              child: _buildToastContent(context, theme, isMobile),
             ),
           ),
         ),
@@ -117,7 +116,7 @@ class _ToastWidgetState extends State<ToastWidget>
   Widget _buildToastContent(
     BuildContext context,
     ThemeData theme,
-    DeviceType deviceType,
+    bool isMobile,
   ) {
     return Material(
       color: Colors.transparent,
@@ -139,14 +138,12 @@ class _ToastWidgetState extends State<ToastWidget>
               widget.onDismiss();
             }
           },
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            transform: Matrix4.identity()
-              ..scale(_isHovered ? 1.02 : 1.0),
+          child: Transform.scale(
+            scale: _isHovered ? 1.02 : 1.0,
             child: Container(
               padding: EdgeInsets.symmetric(
-                horizontal: deviceType == DeviceType.mobile ? 16 : 20,
-                vertical: deviceType == DeviceType.mobile ? 12 : 14,
+                horizontal: isMobile ? 16 : 20,
+                vertical: isMobile ? 12 : 14,
               ),
               decoration: BoxDecoration(
                 color: widget.backgroundColor ??
@@ -169,6 +166,10 @@ class _ToastWidgetState extends State<ToastWidget>
   }
 
   Widget _buildToastBody(BuildContext context, ThemeData theme) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final iconSize = screenWidth >= 1024 ? 20.0 : (screenWidth >= 600 ? 19.0 : 18.0);
+    final fontSize = screenWidth >= 1024 ? 14.0 : (screenWidth >= 600 ? 13.5 : 13.0);
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -177,7 +178,7 @@ class _ToastWidgetState extends State<ToastWidget>
           Icon(
             widget.icon,
             color: widget.textColor ?? theme.colorScheme.onInverseSurface,
-            size: ResponsiveUtils.scaledIconSize(context, 20),
+            size: iconSize,
           ),
           const SizedBox(width: 8),
         ],
@@ -186,7 +187,7 @@ class _ToastWidgetState extends State<ToastWidget>
             widget.message,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: widget.textColor ?? theme.colorScheme.onInverseSurface,
-              fontSize: ResponsiveUtils.scaledFontSize(context, 14),
+              fontSize: fontSize,
             ),
             textAlign: TextAlign.center,
             maxLines: 2,

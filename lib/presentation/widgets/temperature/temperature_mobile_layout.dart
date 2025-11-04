@@ -31,7 +31,7 @@ class TemperatureMobileLayout extends StatelessWidget {
       SmoothAnimations.fadeIn(
         duration: AnimationDurations.medium,
         child: GlassCard(
-          padding: EdgeInsets.all(16.r),
+          padding: EdgeInsets.all(12.r),
           enableBlur: true,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,12 +45,12 @@ class TemperatureMobileLayout extends StatelessWidget {
                   extractTemp,
                 ),
               ),
-              SizedBox(height: 16.h),
+              SizedBox(height: 10.h),
               // Temperature Grid - 2x2
               _buildTemperatureGrid(context),
               // Status bar
               if (TemperatureHelpers.hasAllData(supplyTemp, extractTemp)) ...[
-                SizedBox(height: 12.h),
+                SizedBox(height: 8.h),
                 _buildStatusBar(context),
               ],
             ],
@@ -75,7 +75,7 @@ class TemperatureMobileLayout extends StatelessWidget {
                 value: supplyTemp,
               ),
             ),
-            SizedBox(width: 10.w),
+            SizedBox(width: 8.w),
             Expanded(
               child: TemperatureTile(
                 icon: Icons.arrow_upward_rounded,
@@ -87,24 +87,24 @@ class TemperatureMobileLayout extends StatelessWidget {
         ),
         // Secondary temps (outdoor & indoor)
         if (TemperatureHelpers.hasSecondaryData(outdoorTemp, indoorTemp)) ...[
-          SizedBox(height: 10.h),
+          SizedBox(height: 8.h),
           Row(
             children: [
               if (outdoorTemp != null)
                 Expanded(
                   child: TemperatureTile(
                     icon: Icons.wb_sunny_outlined,
-                    label: 'Улица',
+                    label: 'Наружный',
                     value: outdoorTemp,
                     isSecondary: true,
                   ),
                 ),
-              if (outdoorTemp != null && indoorTemp != null) SizedBox(width: 10.w),
+              if (outdoorTemp != null && indoorTemp != null) SizedBox(width: 8.w),
               if (indoorTemp != null)
                 Expanded(
                   child: TemperatureTile(
                     icon: Icons.home_outlined,
-                    label: 'Комната',
+                    label: 'Внутренний',
                     value: indoorTemp,
                     isSecondary: true,
                   ),
@@ -126,10 +126,10 @@ class TemperatureMobileLayout extends StatelessWidget {
     );
 
     return Container(
-      padding: EdgeInsets.all(8.r),
+      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 6.h),
       decoration: BoxDecoration(
         color: HvacColors.backgroundDark,
-        borderRadius: BorderRadius.circular(8.r),
+        borderRadius: BorderRadius.circular(6.r),
         border: Border.all(
           color: HvacColors.backgroundCardBorder,
           width: 1,
@@ -144,13 +144,13 @@ class TemperatureMobileLayout extends StatelessWidget {
             isCompact: true,
           ),
           if (efficiency != null) ...[
-            SizedBox(width: 8.w),
+            SizedBox(width: 6.w),
             Container(
               width: 1,
-              height: 20.h,
+              height: 16.h,
               color: HvacColors.backgroundCardBorder,
             ),
-            SizedBox(width: 8.w),
+            SizedBox(width: 6.w),
             StatusItem(
               icon: Icons.speed,
               label: 'Эффективность',

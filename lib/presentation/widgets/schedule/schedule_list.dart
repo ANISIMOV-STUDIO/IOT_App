@@ -6,7 +6,6 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
-import '../../core/utils/responsive_builder.dart';
 import 'schedule_model.dart';
 import 'schedule_card.dart';
 
@@ -36,10 +35,12 @@ class _ScheduleListState extends State<ScheduleList> {
 
   @override
   Widget build(BuildContext context) {
-    return ResponsivePadding.symmetric(
-      mobileHorizontal: HvacSpacing.md.w,
-      mobileVertical: HvacSpacing.md.h,
-      tabletHorizontal: HvacSpacing.xl.w,
+    final isMobile = MediaQuery.of(context).size.width < 600;
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? HvacSpacing.md.w : HvacSpacing.xl.w,
+        vertical: HvacSpacing.md.h,
+      ),
       child: KeyboardListener(
         focusNode: FocusNode(),
         onKeyEvent: _handleKeyEvent,
@@ -94,7 +95,7 @@ class _ScheduleListState extends State<ScheduleList> {
     } else if (event.logicalKey == LogicalKeyboardKey.delete) {
       _deleteCurrentItem();
     } else if (event.logicalKey == LogicalKeyboardKey.keyE &&
-        event.isControlPressed) {
+        HardwareKeyboard.instance.isControlPressed) {
       _editCurrentItem();
     }
   }

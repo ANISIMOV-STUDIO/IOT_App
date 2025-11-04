@@ -136,7 +136,7 @@ class _OptimizedHvacCardState extends State<OptimizedHvacCard>
         ),
         SizedBox(height: HvacSpacing.md.h),
         StatusIndicators(
-          humidity: widget.unit.humidity,
+          humidity: widget.unit.humidity.toInt(),
           fanSpeed: widget.unit.fanSpeed,
           mode: widget.unit.mode,
           isCompact: isCompact,
@@ -185,7 +185,7 @@ class _OptimizedHvacCardState extends State<OptimizedHvacCard>
             mainAxisSize: MainAxisSize.min,
             children: [
               StatusIndicators(
-                humidity: widget.unit.humidity,
+                humidity: widget.unit.humidity.toInt(),
                 fanSpeed: widget.unit.fanSpeed,
                 mode: widget.unit.mode,
                 isCompact: true,

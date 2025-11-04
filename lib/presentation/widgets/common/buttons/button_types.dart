@@ -13,4 +13,4 @@ enum ButtonType {
 }
 
 /// Icon alignment for buttons with icons
-enum IconAlignment { start, end }
+enum CustomIconAlignment { start, end }

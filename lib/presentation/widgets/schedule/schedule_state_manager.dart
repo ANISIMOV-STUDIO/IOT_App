@@ -4,8 +4,6 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:hvac_ui_kit/hvac_ui_kit.dart';
-import '../../core/utils/accessibility_utils.dart';
 import '../common/app_snackbar.dart';
 import 'schedule_model.dart';
 import 'schedule_dialogs.dart';
@@ -13,8 +11,6 @@ import 'schedule_dialogs.dart';
 class ScheduleStateManager {
   /// Load schedules from API or mock data
   static Future<List<Schedule>> loadSchedules() async {
-    AccessibilityUtils.announce('Loading schedules');
-
     try {
       // TODO: Replace with actual API call
       await Future.delayed(const Duration(seconds: 2));
@@ -40,10 +36,8 @@ class ScheduleStateManager {
         ),
       ];
 
-      AccessibilityUtils.announce('Schedules loaded successfully');
       return schedules;
     } catch (e) {
-      AccessibilityUtils.announce('Error loading schedules');
       throw Exception('Failed to load schedules. Please check your connection.');
     }
   }
@@ -78,7 +72,6 @@ class ScheduleStateManager {
         message: 'Schedule deleted successfully',
       );
 
-      AccessibilityUtils.announce('Schedule ${schedule.name} deleted');
       return true;
     } catch (e) {
       loadingController.close();
@@ -115,7 +108,5 @@ class ScheduleStateManager {
       icon: value ? Icons.check_circle : Icons.cancel,
       position: ToastPosition.bottom,
     );
-
-    AccessibilityUtils.announce(message);
   }
 }

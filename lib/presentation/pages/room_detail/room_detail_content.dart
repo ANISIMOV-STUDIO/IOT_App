@@ -23,8 +23,6 @@ class RoomDetailContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final unit = state.unit;
-
     return SliverToBoxAdapter(
       child: Padding(
         padding: EdgeInsets.all(20.w),

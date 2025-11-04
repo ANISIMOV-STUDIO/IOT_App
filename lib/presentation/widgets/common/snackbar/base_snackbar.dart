@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hvac_ui_kit/hvac_ui_kit.dart';
-import '../../../../core/utils/accessibility_utils.dart';
-import 'responsive_utils.dart';
 import 'snackbar_types.dart';
 
 /// Base snackbar widget with common functionality
@@ -40,9 +37,10 @@ class BaseSnackBar extends StatelessWidget {
   }
 
   Widget _buildDefaultContent(BuildContext context, ThemeData theme) {
-    final isDesktop = ResponsiveUtils.isDesktop(context);
-    final horizontalPadding = ResponsiveUtils.getHorizontalPadding(context);
-    final verticalPadding = ResponsiveUtils.getVerticalPadding(context);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isDesktop = screenWidth >= 1024;
+    final horizontalPadding = isDesktop ? 24.0 : (screenWidth >= 600 ? 20.0 : 16.0);
+    final verticalPadding = isDesktop ? 16.0 : (screenWidth >= 600 ? 14.0 : 12.0);
 
     return Container(
       padding: EdgeInsets.symmetric(
@@ -61,14 +59,20 @@ class BaseSnackBar extends StatelessWidget {
   }
 
   Widget _buildIcon(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final iconSize = screenWidth >= 1024 ? 24.0 : (screenWidth >= 600 ? 22.0 : 20.0);
     return Icon(
       icon,
       color: Colors.white,
-      size: ResponsiveUtils.scaledIconSize(context, 24),
+      size: iconSize,
     );
   }
 
   Widget _buildTextContent(BuildContext context, ThemeData theme) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final titleFontSize = screenWidth >= 1024 ? 14.0 : (screenWidth >= 600 ? 13.5 : 13.0);
+    final messageFontSize = screenWidth >= 1024 ? 13.0 : (screenWidth >= 600 ? 12.5 : 12.0);
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,7 +83,7 @@ class BaseSnackBar extends StatelessWidget {
             style: theme.textTheme.titleSmall?.copyWith(
               color: Colors.white,
               fontWeight: FontWeight.bold,
-              fontSize: ResponsiveUtils.scaledFontSize(context, 14),
+              fontSize: titleFontSize,
             ),
           ),
           const SizedBox(height: 4),
@@ -88,7 +92,7 @@ class BaseSnackBar extends StatelessWidget {
           message,
           style: theme.textTheme.bodyMedium?.copyWith(
             color: Colors.white.withValues(alpha: 0.95),
-            fontSize: ResponsiveUtils.scaledFontSize(context, 13),
+            fontSize: messageFontSize,
           ),
           maxLines: 3,
           overflow: TextOverflow.ellipsis,
@@ -98,11 +102,14 @@ class BaseSnackBar extends StatelessWidget {
   }
 
   Widget _buildCloseButton(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final closeIconSize = screenWidth >= 1024 ? 20.0 : (screenWidth >= 600 ? 19.0 : 18.0);
+
     return IconButton(
       icon: Icon(
         Icons.close,
         color: Colors.white.withValues(alpha: 0.8),
-        size: ResponsiveUtils.scaledIconSize(context, 20),
+        size: closeIconSize,
       ),
       onPressed: () {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -130,17 +137,17 @@ class BaseSnackBar extends StatelessWidget {
       _triggerHapticFeedback(type);
     }
 
-    // Announce to screen reader
-    AccessibilityUtils.announce(
-      '${type.name} notification: ${title ?? ''} $message',
-    );
-
     // Clear existing snackbars
     ScaffoldMessenger.of(context).clearSnackBars();
 
     // Get responsive values
-    final snackbarWidth = ResponsiveUtils.getSnackbarWidth(context);
-    final snackbarMargin = ResponsiveUtils.getSnackbarMargin(context);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final snackbarWidth = screenWidth < 600
+        ? null
+        : (screenWidth < 1024 ? 500.0 : (screenWidth < 1440 ? 450.0 : 480.0));
+    final snackbarMargin = screenWidth < 600
+        ? const EdgeInsets.all(16)
+        : (screenWidth < 1024 ? const EdgeInsets.all(24) : const EdgeInsets.all(32));
 
     // Show snackbar
     ScaffoldMessenger.of(context).showSnackBar(

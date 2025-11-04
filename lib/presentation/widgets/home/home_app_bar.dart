@@ -70,55 +70,67 @@ class HomeAppBar extends StatelessWidget {
   }
 
   Widget _buildTabletLayout() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        // Logo
-        SvgPicture.asset(
-          'assets/images/zilon-logo.svg',
-          height: 48.h,
-          colorFilter: const ColorFilter.mode(
-            Color(0xFFFF9D5C),
-            BlendMode.srcIn,
-          ),
-        ),
+    return BlocBuilder<HvacListBloc, HvacListState>(
+      builder: (context, state) {
+        final screenWidth = MediaQuery.of(context).size.width;
+        final isDesktop = screenWidth >= 1024;
 
-        // Center - HVAC Unit tabs
-        Expanded(
-          child: BlocBuilder<HvacListBloc, HvacListState>(
-            builder: (context, state) {
-              if (state is HvacListLoaded) {
-                return _buildUnitTabs(state.units);
-              }
-              return const SizedBox.shrink();
-            },
-          ),
-        ),
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // Logo
+            SvgPicture.asset(
+              'assets/images/zilon-logo.svg',
+              height: 48.h,
+              colorFilter: const ColorFilter.mode(
+                Color(0xFFFF9D5C),
+                BlendMode.srcIn,
+              ),
+            ),
 
-        // User profile and Settings
-        _buildUserSection(),
-      ],
+            // Center - HVAC Unit tabs
+            Expanded(
+              child: state is HvacListLoaded
+                  ? _buildUnitTabs(state.units, isDesktop)
+                  : const SizedBox.shrink(),
+            ),
+
+            // User profile and Settings
+            _buildUserSection(),
+          ],
+        );
+      },
     );
   }
 
-  Widget _buildUnitTabs(List<HvacUnit> units) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ...units.map((unit) {
-            final label = unit.name;
-            return Padding(
-              padding: EdgeInsets.only(right: 12.w),
-              child: _buildUnitTab(label, selectedUnit == label),
-            );
-          }),
-          // Add new unit button
-          _buildAddUnitButton(),
-        ],
-      ),
+  Widget _buildUnitTabs(List<HvacUnit> units, [bool isDesktop = false]) {
+    final tabsContent = Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ...units.map((unit) {
+          final label = unit.name;
+          return Padding(
+            padding: EdgeInsets.only(right: 12.w),
+            child: _buildUnitTab(label, selectedUnit == label),
+          );
+        }),
+        // Add new unit button
+        _buildAddUnitButton(),
+      ],
     );
+
+    if (isDesktop) {
+      // Desktop: center the tabs horizontally
+      return Center(
+        child: tabsContent,
+      );
+    } else {
+      // Tablet/Mobile: scrollable tabs
+      return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: tabsContent,
+      );
+    }
   }
 
   Widget _buildUnitTab(String label, bool isSelected) {
