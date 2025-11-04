@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../generated/l10n/app_localizations.dart';
+import '../../core/utils/responsive_size.dart';
 import '../bloc/auth/auth_bloc.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -133,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen>
                           style: TextStyle(
                             color: HvacColors.textPrimary,
                             fontWeight: FontWeight.bold,
-                            fontSize: 42.sp,
+                            fontSize: 42.spFixed,
                             letterSpacing: 1.5,
                           ),
                           textAlign: TextAlign.center,
@@ -143,7 +144,7 @@ class _LoginScreenState extends State<LoginScreen>
                           l10n.smartClimateManagement,
                           style: TextStyle(
                             color: HvacColors.textSecondary,
-                            fontSize: 16.sp,
+                            fontSize: 16.spFixed,
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -319,15 +320,15 @@ class _LoginScreenState extends State<LoginScreen>
                   Icon(
                     Icons.login_rounded,
                     color: HvacColors.backgroundCard,
-                    size: 16.sp,
+                    size: 16.spFixed,
                   ),
-                  SizedBox(width: 6.w),
+                  SizedBox(width: 6.wFixed),
                   Text(
                     l10n.login,
                     style: TextStyle(
                       color: HvacColors.backgroundCard,
                       fontWeight: FontWeight.bold,
-                      fontSize: 14.sp,
+                      fontSize: 14.spFixed,
                       letterSpacing: 0.3,
                     ),
                   ),
@@ -363,15 +364,15 @@ class _LoginScreenState extends State<LoginScreen>
             Icon(
               Icons.person_add_outlined,
               color: HvacColors.primaryOrange,
-              size: 16.sp,
+              size: 16.spFixed,
             ),
-            SizedBox(width: 6.w),
+            SizedBox(width: 6.wFixed),
             Text(
               l10n.register,
               style: TextStyle(
                 color: HvacColors.primaryOrange,
                 fontWeight: FontWeight.w600,
-                fontSize: 14.sp,
+                fontSize: 14.spFixed,
                 letterSpacing: 0.3,
               ),
             ),

@@ -63,7 +63,10 @@
       "Bash(powershell.exe -Command \"Set-Location C:\\Projects\\IOT_App; C:\\src\\flutter\\bin\\flutter.bat analyze --no-pub 2>&1 | Select-String -Pattern ''error:|warning:|info:'' | Select-Object -First 10\")",
       "Bash(powershell.exe -Command:*)",
       "Bash(dir \"C:\\Projects\\IOT_App\" /B /A-D)",
-      "Bash(dart analyze:*)"
+      "Bash(dart analyze:*)",
+      "Bash(flutter --version:*)",
+      "WebFetch(domain:pub.dev)",
+      "WebFetch(domain:github.com)"
     ],
     "deny": [],
     "ask": []

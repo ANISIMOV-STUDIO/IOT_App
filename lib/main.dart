@@ -78,11 +78,10 @@ class _HvacControlAppState extends State<HvacControlApp> {
 
           return LayoutBuilder(
             builder: (context, constraints) {
-              // Force design size to be 1920x1080 for all desktop screens
-              // This prevents scaling on large monitors
-              final designSize = _getDesignSize(
-                constraints.maxWidth < 1920 ? constraints.maxWidth : 1920.0
-              );
+              // Clamp width to max 1920px to prevent text scaling on large monitors
+              final actualWidth = constraints.maxWidth;
+              final clampedWidth = actualWidth > 1920 ? 1920.0 : actualWidth;
+              final designSize = _getDesignSize(clampedWidth);
 
               // Only rebuild ScreenUtilInit if design size actually changed
               if (_lastDesignSize != designSize) {
@@ -113,6 +112,20 @@ class _HvacControlAppState extends State<HvacControlApp> {
                       GlobalCupertinoLocalizations.delegate,
                     ],
                     supportedLocales: LanguageService.supportedLocales,
+
+                    // Override MediaQuery INSIDE MaterialApp using builder
+                    builder: (context, widget) {
+                      // Force max width to 1920px
+                      return MediaQuery(
+                        data: MediaQuery.of(context).copyWith(
+                          size: Size(
+                            clampedWidth,
+                            MediaQuery.of(context).size.height,
+                          ),
+                        ),
+                        child: widget!,
+                      );
+                    },
 
                     home: child,
                   );
