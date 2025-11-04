@@ -24,7 +24,7 @@ class TabletQuickActions extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
-        borderRadius: BorderRadius.circular(16.r),
+        borderRadius: HvacRadius.lgRadius,
         border: Border.all(
           color: HvacColors.backgroundCardBorder,
           width: 1.w,
@@ -90,10 +90,10 @@ class TabletQuickActions extends StatelessWidget {
   }) {
     return Material(
       color: HvacColors.backgroundCard,
-      borderRadius: BorderRadius.circular(12.r),
+      borderRadius: HvacRadius.mdRadius,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: HvacRadius.mdRadius,
         child: Container(
           padding: const EdgeInsets.symmetric(
             horizontal: HvacSpacing.smR,
@@ -104,7 +104,7 @@ class TabletQuickActions extends StatelessWidget {
               color: color.withValues(alpha: 0.3),
               width: 1.w,
             ),
-            borderRadius: BorderRadius.circular(12.r),
+            borderRadius: HvacRadius.mdRadius,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

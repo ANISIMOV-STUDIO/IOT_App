@@ -65,7 +65,7 @@ class TemperatureGridCompact extends StatelessWidget {
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
-        borderRadius: BorderRadius.circular(16.r),
+        borderRadius: HvacRadius.lgRadius,
         border: Border.all(
           color: HvacColors.backgroundCardBorder,
           width: 1,
@@ -101,7 +101,7 @@ class TemperatureGridCompact extends StatelessWidget {
                 HvacColors.info.withValues(alpha: 0.1),
               ],
             ),
-            borderRadius: BorderRadius.circular(10.r),
+            borderRadius: HvacRadius.smRadius,
           ),
           child: Icon(
             Icons.thermostat_outlined,
@@ -294,7 +294,7 @@ class _TempCard extends StatelessWidget {
             color.withValues(alpha: 0.02),
           ],
         ),
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: HvacRadius.mdRadius,
         border: Border.all(
           color: color.withValues(alpha: isPrimary ? 0.3 : 0.2),
           width: 1,

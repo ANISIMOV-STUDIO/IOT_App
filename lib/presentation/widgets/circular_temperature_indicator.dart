@@ -46,25 +46,23 @@ class CircularTemperatureIndicator extends StatelessWidget {
               temperature != null
                   ? temperature!.toStringAsFixed(1)
                   : '--',
-              style: TextStyle(
+              style: HvacTypography.displayLarge.copyWith(
                 fontSize: size * 0.24, // 48 for size=200
-                fontWeight: FontWeight.w700,
                 color: HvacColors.textPrimary,
                 letterSpacing: -1,
               ),
             ),
             Text(
               '°C',
-              style: TextStyle(
+              style: HvacTypography.titleLarge.copyWith(
                 fontSize: size * 0.12, // 24 for size=200
-                fontWeight: FontWeight.w400,
                 color: HvacColors.textSecondary,
               ),
             ),
             SizedBox(height: size * 0.04),
             Text(
               label,
-              style: TextStyle(
+              style: HvacTypography.caption.copyWith(
                 fontSize: size * 0.06, // 12 for size=200
                 color: HvacColors.textSecondary,
               ),

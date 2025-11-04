@@ -35,7 +35,7 @@ class DeviceControlCard extends StatelessWidget {
         padding: const EdgeInsets.all(HvacSpacing.xlR),
         decoration: BoxDecoration(
           color: HvacColors.backgroundCard,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: HvacRadius.xlRadius,
           border: Border.all(
             color: HvacColors.backgroundCardBorder,
           ),
@@ -54,7 +54,7 @@ class DeviceControlCard extends StatelessWidget {
                       title,
                       style: HvacTypography.titleLarge,
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: HvacSpacing.xxs),
                     Text(
                       subtitle,
                       style: HvacTypography.labelLarge.copyWith(
@@ -97,7 +97,7 @@ class DeviceControlCard extends StatelessWidget {
             // Controls
             if (controls.isNotEmpty) ...controls,
 
-            const SizedBox(height: 16),
+            const SizedBox(height: HvacSpacing.md),
 
             // Stats
             if (stats.isNotEmpty)
@@ -137,14 +137,14 @@ class DeviceStatItem extends StatelessWidget {
               size: 16,
               color: HvacColors.textSecondary,
             ),
-            const SizedBox(width: 4),
+            const SizedBox(width: HvacSpacing.xxs),
             Text(
               value,
               style: HvacTypography.titleMedium,
             ),
           ],
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: HvacSpacing.xxs),
         Text(
           label,
           style: HvacTypography.labelMedium.copyWith(
@@ -174,7 +174,7 @@ class TemperatureControl extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 20),
+      padding: const EdgeInsets.symmetric(vertical: HvacSpacing.lg),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -186,7 +186,7 @@ class TemperatureControl extends StatelessWidget {
           ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: HvacSpacing.md),
               child: Column(
                 children: [
                   Text(
@@ -195,7 +195,7 @@ class TemperatureControl extends StatelessWidget {
                       height: 1,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: HvacSpacing.xs),
                   SliderTheme(
                     data: SliderTheme.of(context).copyWith(
                       trackHeight: 4,
@@ -252,7 +252,7 @@ class BrightnessControl extends StatelessWidget {
           height: 40,
           decoration: BoxDecoration(
             color: HvacColors.backgroundDark,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: HvacRadius.mdRadius,
           ),
           child: const Icon(
             Icons.lightbulb_outline,
@@ -262,7 +262,7 @@ class BrightnessControl extends StatelessWidget {
         ),
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: HvacSpacing.md),
             child: SliderTheme(
               data: SliderTheme.of(context).copyWith(
                 trackHeight: 8,

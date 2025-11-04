@@ -28,7 +28,7 @@ class TabletPresetsPanel extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
-        borderRadius: BorderRadius.circular(16.r),
+        borderRadius: HvacRadius.lgRadius,
         border: Border.all(
           color: HvacColors.backgroundCardBorder,
           width: 1.w,
@@ -59,10 +59,10 @@ class TabletPresetsPanel extends StatelessWidget {
   Widget _buildPresetButton(ModePreset preset) {
     return Material(
       color: HvacColors.backgroundCard,
-      borderRadius: BorderRadius.circular(12.r),
+      borderRadius: HvacRadius.mdRadius,
       child: InkWell(
         onTap: () => onPresetSelected(preset),
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: HvacRadius.mdRadius,
         child: Container(
           padding: const EdgeInsets.symmetric(
             horizontal: HvacSpacing.mdR,
@@ -73,7 +73,7 @@ class TabletPresetsPanel extends StatelessWidget {
               color: HvacColors.backgroundCardBorder,
               width: 1.w,
             ),
-            borderRadius: BorderRadius.circular(12.r),
+            borderRadius: HvacRadius.mdRadius,
           ),
           child: Row(
             children: [

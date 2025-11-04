@@ -50,9 +50,9 @@ class OutlineButton extends StatelessWidget {
             width: 1.5,
           ),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: HvacRadius.mdRadius,
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: HvacSpacing.lg, vertical: HvacSpacing.sm),
         ),
         child: isLoading
             ? SizedBox(
@@ -69,7 +69,7 @@ class OutlineButton extends StatelessWidget {
                 children: [
                   if (icon != null) ...[
                     Icon(icon, size: 20),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: HvacSpacing.xs),
                   ],
                   Text(
                     text,

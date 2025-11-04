@@ -53,7 +53,7 @@ class _HomeNotificationsPanelState extends State<HomeNotificationsPanel> {
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
-        borderRadius: BorderRadius.circular(16.r),
+        borderRadius: HvacRadius.lgRadius,
         border: Border.all(
           color: HvacColors.backgroundCardBorder,
           width: 1,
@@ -103,7 +103,7 @@ class _HomeNotificationsPanelState extends State<HomeNotificationsPanel> {
           padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
           decoration: BoxDecoration(
             color: HvacColors.primaryOrange.withValues(alpha: 0.2),
-            borderRadius: BorderRadius.circular(12.r),
+            borderRadius: HvacRadius.mdRadius,
           ),
           child: Text(
             '$totalCount',

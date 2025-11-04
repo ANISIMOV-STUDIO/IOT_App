@@ -36,7 +36,7 @@ class AnimatedCard extends StatelessWidget {
     if (onTap != null) {
       card = InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: HvacRadius.lgRadius,
         child: card,
       );
     }

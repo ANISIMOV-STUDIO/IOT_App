@@ -77,15 +77,9 @@ class _AnimatedStatCardState extends State<AnimatedStatCard>
           child: Opacity(
             opacity: _fadeAnimation.value,
             child: Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: HvacColors.backgroundCard,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: HvacColors.backgroundCardBorder,
-                  width: 1,
-                ),
-                boxShadow: [
+              padding: const EdgeInsets.all(HvacSpacing.md),
+              decoration: HvacDecorations.card(
+                shadow: [
                   BoxShadow(
                     color: widget.color.withValues(alpha: 0.1),
                     blurRadius: 8,
@@ -99,10 +93,9 @@ class _AnimatedStatCardState extends State<AnimatedStatCard>
                   Row(
                     children: [
                       Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: widget.color.withValues(alpha: 0.2),
-                          borderRadius: BorderRadius.circular(8),
+                        padding: const EdgeInsets.all(HvacSpacing.xs),
+                        decoration: HvacDecorations.iconContainer(
+                          color: widget.color,
                         ),
                         child: Icon(
                           widget.icon,
@@ -110,43 +103,39 @@ class _AnimatedStatCardState extends State<AnimatedStatCard>
                           size: 20,
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: HvacSpacing.sm),
                       Expanded(
                         child: Text(
                           widget.label,
-                          style: const TextStyle(
-                            fontSize: 13,
+                          style: HvacTypography.labelLarge.copyWith(
                             color: HvacColors.textSecondary,
-                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: HvacSpacing.sm),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
                         widget.value,
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.w700,
+                        style: HvacTypography.headlineMedium.copyWith(
                           color: widget.color,
                         ),
                       ),
                       if (widget.trend != null) ...[
-                        const SizedBox(width: 8),
+                        const SizedBox(width: HvacSpacing.xs),
                         Container(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 6,
+                            horizontal: HvacSpacing.xxs + 2,
                             vertical: 2,
                           ),
-                          decoration: BoxDecoration(
+                          decoration: HvacDecorations.badgeSmall(
                             color: widget.trend!.startsWith('+')
-                                ? HvacColors.success.withValues(alpha: 0.15)
-                                : HvacColors.error.withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(4),
+                                ? HvacColors.success
+                                : HvacColors.error,
+                            filled: false,
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
@@ -160,12 +149,10 @@ class _AnimatedStatCardState extends State<AnimatedStatCard>
                                     ? HvacColors.success
                                     : HvacColors.error,
                               ),
-                              const SizedBox(width: 2),
+                              const SizedBox(width: HvacSpacing.xxs),
                               Text(
                                 widget.trend!,
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w600,
+                                style: HvacTypography.captionSmall.copyWith(
                                   color: widget.trend!.startsWith('+')
                                       ? HvacColors.success
                                       : HvacColors.error,

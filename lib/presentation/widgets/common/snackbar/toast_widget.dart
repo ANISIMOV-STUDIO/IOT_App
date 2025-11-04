@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import 'snackbar_types.dart';
 
 /// Toast widget implementation with responsive design and hover effects
@@ -148,7 +149,7 @@ class _ToastWidgetState extends State<ToastWidget>
               decoration: BoxDecoration(
                 color: widget.backgroundColor ??
                     theme.colorScheme.inverseSurface,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: HvacRadius.smRadius,
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.2),

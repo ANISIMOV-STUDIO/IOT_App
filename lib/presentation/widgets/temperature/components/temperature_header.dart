@@ -29,7 +29,7 @@ class TemperatureHeader extends StatelessWidget {
           height: isMobile ? 28.w : 36.w,
           decoration: BoxDecoration(
             color: HvacColors.neutral300.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(6.r),
+            borderRadius: HvacRadius.smRadius,
             border: Border.all(
               color: HvacColors.neutral300.withValues(alpha: 0.2),
               width: 1,
@@ -92,7 +92,7 @@ class _SystemStatusIndicator extends StatelessWidget {
         color: isNormal
             ? HvacColors.success.withValues(alpha: 0.1)
             : HvacColors.warning.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(4.r),
+        borderRadius: HvacRadius.xsRadius,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

@@ -109,7 +109,7 @@ class _AirQualityIndicatorState extends State<AirQualityIndicator>
       padding: const EdgeInsets.all(HvacSpacing.xlR),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: HvacRadius.mdRadius,
         border: Border.all(
           color: HvacColors.backgroundCardBorder,
           width: 1,
@@ -125,7 +125,7 @@ class _AirQualityIndicatorState extends State<AirQualityIndicator>
                 padding: const EdgeInsets.all(HvacSpacing.smR),
                 decoration: BoxDecoration(
                   color: color.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: HvacRadius.smRadius,
                 ),
                 child: Icon(
                   Icons.air,
@@ -133,7 +133,7 @@ class _AirQualityIndicatorState extends State<AirQualityIndicator>
                   size: 20,
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: HvacSpacing.sm),
               Text(
                 'Качество воздуха',
                 style: HvacTypography.titleLarge.copyWith(
@@ -143,7 +143,7 @@ class _AirQualityIndicatorState extends State<AirQualityIndicator>
             ],
           ),
 
-          const SizedBox(height: 20),
+          const SizedBox(height: HvacSpacing.lg),
 
           // Animated circle indicator
           Center(
@@ -195,7 +195,7 @@ class _AirQualityIndicatorState extends State<AirQualityIndicator>
             ),
           ),
 
-          const SizedBox(height: 20),
+          const SizedBox(height: HvacSpacing.lg),
 
           // Quality level text
           Center(
@@ -207,12 +207,12 @@ class _AirQualityIndicatorState extends State<AirQualityIndicator>
             ),
           ),
 
-          const SizedBox(height: 20),
+          const SizedBox(height: HvacSpacing.lg),
 
           // Metrics
           if (widget.co2Level != null || widget.pm25Level != null || widget.vocLevel != null) ...[
             const Divider(color: HvacColors.backgroundCardBorder),
-            const SizedBox(height: 16),
+            const SizedBox(height: HvacSpacing.md),
             if (widget.co2Level != null)
               _buildMetric('CO₂', '${widget.co2Level} ppm', Icons.cloud),
             if (widget.pm25Level != null)
@@ -227,11 +227,11 @@ class _AirQualityIndicatorState extends State<AirQualityIndicator>
 
   Widget _buildMetric(String label, String value, IconData icon) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.only(bottom: HvacSpacing.sm),
       child: Row(
         children: [
           Icon(icon, size: 16, color: HvacColors.textSecondary),
-          const SizedBox(width: 8),
+          const SizedBox(width: HvacSpacing.xs),
           Text(
             label,
             style: HvacTypography.bodySmall.copyWith(

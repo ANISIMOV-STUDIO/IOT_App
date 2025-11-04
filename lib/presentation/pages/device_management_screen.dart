@@ -41,30 +41,18 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
         children: [
           // Add Device Button
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(HvacSpacing.md),
             child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [HvacColors.primaryBlue, HvacColors.primaryBlue.withValues(alpha: 0.8)],
-                ),
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: HvacColors.primaryBlue.withValues(alpha: 0.3),
-                    blurRadius: 12,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
+              decoration: HvacDecorations.gradientBlue(),
               child: Material(
                 color: Colors.transparent,
                 child: InkWell(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: HvacRadius.lgRadius,
                   onTap: () => _showAddDeviceDialog(context),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: 16,
+                      horizontal: HvacSpacing.lg,
+                      vertical: HvacSpacing.md,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -74,7 +62,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                           color: HvacColors.textPrimary,
                           size: 24,
                         ),
-                        const SizedBox(width: 12),
+                        const SizedBox(width: HvacSpacing.sm),
                         Text(
                           l10n.addDevice,
                           style: const TextStyle(
@@ -124,7 +112,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                             size: 64,
                             color: HvacColors.textSecondary.withValues(alpha: 0.5),
                           ),
-                          const SizedBox(height: 16),
+                          const SizedBox(height: HvacSpacing.md),
                           Text(
                             l10n.noDevicesFound,
                             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
@@ -137,18 +125,18 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                   }
 
                   return ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: HvacSpacing.md),
                     itemCount: units.length,
                     itemBuilder: (context, index) {
                       final unit = units[index];
                       return Padding(
-                        padding: const EdgeInsets.only(bottom: 12),
+                        padding: const EdgeInsets.only(bottom: HvacSpacing.sm),
                         child: Container(
                           decoration: HvacTheme.deviceCard(),
                           child: ListTile(
-                            contentPadding: const EdgeInsets.all(16),
+                            contentPadding: const EdgeInsets.all(HvacSpacing.md),
                             leading: Container(
-                              padding: const EdgeInsets.all(12),
+                              padding: const EdgeInsets.all(HvacSpacing.sm),
                               decoration: BoxDecoration(
                                 color: HvacColors.getModeColor(unit.mode),
                                 shape: BoxShape.circle,
@@ -168,7 +156,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const SizedBox(height: 4),
+                                const SizedBox(height: HvacSpacing.xxs),
                                 Text(
                                   'ID: ${unit.id}',
                                   style: TextStyle(
@@ -253,7 +241,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                   hintText: 'XX:XX:XX:XX:XX:XX',
                   prefixIcon: const Icon(Icons.router_rounded),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: HvacRadius.mdRadius,
                   ),
                 ),
                 inputFormatters: [
@@ -269,7 +257,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                   }),
                 ],
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: HvacSpacing.md),
               TextField(
                 controller: nameController,
                 decoration: InputDecoration(
@@ -277,11 +265,11 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                   hintText: l10n.livingRoom,
                   prefixIcon: const Icon(Icons.label_outline_rounded),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: HvacRadius.mdRadius,
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: HvacSpacing.md),
               TextField(
                 controller: locationController,
                 decoration: InputDecoration(
@@ -289,7 +277,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
                   hintText: l10n.optional,
                   prefixIcon: const Icon(Icons.location_on_outlined),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: HvacRadius.mdRadius,
                   ),
                 ),
               ),
@@ -352,7 +340,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
               backgroundColor: HvacColors.primaryBlue,
               foregroundColor: HvacColors.textPrimary,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: HvacRadius.mdRadius,
               ),
             ),
             child: Text(l10n.add),
@@ -390,7 +378,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
               backgroundColor: HvacColors.error,
               foregroundColor: HvacColors.textPrimary,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: HvacRadius.mdRadius,
               ),
             ),
             child: Text(l10n.remove),

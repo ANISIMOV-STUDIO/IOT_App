@@ -32,7 +32,7 @@ class OrangeButton extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: isLoading ? null : onPressed,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: HvacRadius.mdRadius,
           child: Container(
             decoration: HvacTheme.orangeButton(),
             alignment: Alignment.center,
@@ -55,7 +55,7 @@ class OrangeButton extends StatelessWidget {
                           color: Colors.white,
                           size: 18,
                         ),
-                        const SizedBox(width: 6),
+                        const SizedBox(width: HvacSpacing.xxs + 2),
                       ],
                       Flexible(
                         child: Text(
@@ -104,10 +104,10 @@ class OutlineButton extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: onPressed,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: HvacRadius.mdRadius,
           child: Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: HvacRadius.mdRadius,
               border: Border.all(
                 color: HvacColors.primaryOrange,
                 width: 2,
@@ -124,7 +124,7 @@ class OutlineButton extends StatelessWidget {
                     color: HvacColors.primaryOrange,
                     size: 18,
                   ),
-                  const SizedBox(width: 6),
+                  const SizedBox(width: HvacSpacing.xxs + 2),
                 ],
                 Flexible(
                   child: Text(

@@ -13,6 +13,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
 /// Performance utilities for 60 FPS optimization
 class PerformanceUtils {
@@ -480,7 +481,7 @@ class _PerformanceMonitorState extends State<PerformanceMonitor> {
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               color: Colors.black54,
-              borderRadius: BorderRadius.circular(4),
+              borderRadius: HvacRadius.xsRadius,
             ),
             child: const Text(
               'FPS: Monitor',

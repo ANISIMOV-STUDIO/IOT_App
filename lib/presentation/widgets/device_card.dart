@@ -40,7 +40,7 @@ class DeviceCard extends StatelessWidget {
               decoration: HvacTheme.deviceImagePlaceholder(),
               child: imageUrl != null
                   ? ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: HvacRadius.mdRadius,
                       child: Image.network(
                         imageUrl!,
                         fit: BoxFit.cover,
@@ -59,7 +59,7 @@ class DeviceCard extends StatelessWidget {
                       color: HvacColors.textSecondary,
                     ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: HvacSpacing.sm),
 
             // Device Name
             Text(
@@ -69,7 +69,7 @@ class DeviceCard extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: HvacSpacing.xxs),
 
             // Device Subtitle
             Text(
@@ -154,14 +154,14 @@ class DeviceStatusCard extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: HvacSpacing.xxs),
                   Text(
                     location,
                     style: Theme.of(context).textTheme.bodySmall,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: HvacSpacing.md),
 
                   // Temperature and Mode
                   Row(
@@ -179,20 +179,13 @@ class DeviceStatusCard extends StatelessWidget {
                           horizontal: HvacSpacing.mdR,
                           vertical: HvacSpacing.xsR,
                         ),
-                        decoration: BoxDecoration(
-                          color: modeColor.withValues(alpha: 0.2),
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                            color: modeColor,
-                            width: 1,
-                          ),
+                        decoration: HvacDecorations.modeBadge(
+                          modeColor: modeColor,
                         ),
                         child: Text(
                           mode.toUpperCase(),
-                          style: TextStyle(
+                          style: HvacTypography.caption.copyWith(
                             color: modeColor,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),

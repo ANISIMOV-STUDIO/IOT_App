@@ -61,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(32),
+            padding: const EdgeInsets.all(HvacSpacing.xl),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -91,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     color: Colors.white,
                   ),
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(height: HvacSpacing.xl),
 
                 // Welcome Text
                 Text(
@@ -99,13 +99,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: Theme.of(context).textTheme.displayMedium,
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: HvacSpacing.xs),
                 Text(
                   'Smart Climate Management',
                   style: Theme.of(context).textTheme.bodyMedium,
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 48),
+                const SizedBox(height: HvacSpacing.xxl),
 
                 // Email Field
                 TextField(
@@ -117,7 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   keyboardType: TextInputType.emailAddress,
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: HvacSpacing.md),
 
                 // Password Field
                 TextField(
@@ -129,7 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   obscureText: true,
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(height: HvacSpacing.xl),
 
                 // Login Button
                 OrangeButton(
@@ -138,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   onPressed: _isLoading ? null : _handleLogin,
                   isLoading: _isLoading,
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: HvacSpacing.md),
 
                 // Register Button
                 OutlineButton(
@@ -155,14 +155,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     );
                   },
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: HvacSpacing.lg),
 
                 // Skip Button
                 TextButton(
                   onPressed: _isLoading ? null : _handleSkip,
-                  child: const Text(
+                  child: Text(
                     'Skip for now',
-                    style: TextStyle(
+                    style: HvacTypography.bodyMedium.copyWith(
                       color: HvacColors.textSecondary,
                     ),
                   ),

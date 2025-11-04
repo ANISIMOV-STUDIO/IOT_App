@@ -30,7 +30,7 @@ class DetailedTemperatureCard extends StatelessWidget {
       padding: EdgeInsets.all(isPrimary ? 16.r : 14.r),
       decoration: BoxDecoration(
         color: HvacColors.backgroundDark,
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: HvacRadius.mdRadius,
         border: Border.all(
           color: isPrimary
               ? HvacColors.neutral300.withValues(alpha: 0.3)
@@ -47,7 +47,7 @@ class DetailedTemperatureCard extends StatelessWidget {
                 padding: EdgeInsets.all(8.r),
                 decoration: BoxDecoration(
                   color: HvacColors.neutral300.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(8.r),
+                  borderRadius: HvacRadius.smRadius,
                 ),
                 child: Icon(
                   icon,

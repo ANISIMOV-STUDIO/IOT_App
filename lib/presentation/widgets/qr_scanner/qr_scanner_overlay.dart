@@ -5,7 +5,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../core/theme/spacing.dart';
 import 'qr_scanner_responsive.dart';
 import 'scanner_animation_line.dart';
@@ -123,7 +123,7 @@ class QrScannerOverlay extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   color: Colors.black54,
-                  borderRadius: BorderRadius.circular(24.r),
+                  borderRadius: HvacRadius.xxlRadius,
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,

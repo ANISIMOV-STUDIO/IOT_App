@@ -44,7 +44,7 @@ class DashboardChartCard extends StatelessWidget {
                             ),
                       ),
                       if (subtitle != null) ...[
-                        const SizedBox(height: 4),
+                        const SizedBox(height: HvacSpacing.xxs),
                         Text(
                           subtitle!,
                           style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -64,7 +64,7 @@ class DashboardChartCard extends StatelessWidget {
               ],
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: HvacSpacing.lg),
 
             // Chart
             chart,
@@ -202,7 +202,7 @@ class SimplePieChart extends StatelessWidget {
           ),
         ),
 
-        const SizedBox(width: 20),
+        const SizedBox(width: HvacSpacing.lg),
 
         // Legend
         Expanded(
@@ -210,7 +210,7 @@ class SimplePieChart extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: data.map((item) {
               return Padding(
-                padding: const EdgeInsets.only(bottom: 8),
+                padding: const EdgeInsets.only(bottom: HvacSpacing.xs),
                 child: Row(
                   children: [
                     Container(
@@ -218,10 +218,10 @@ class SimplePieChart extends StatelessWidget {
                       height: 12,
                       decoration: BoxDecoration(
                         color: item.color,
-                        borderRadius: BorderRadius.circular(3),
+                        borderRadius: HvacRadius.xsRadius,
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: HvacSpacing.xs),
                     Expanded(
                       child: Text(
                         item.label,

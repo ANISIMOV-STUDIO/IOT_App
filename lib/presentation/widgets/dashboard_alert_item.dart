@@ -49,9 +49,9 @@ class DashboardAlertItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: HvacRadius.mdRadius,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: HvacSpacing.md, vertical: HvacSpacing.sm),
         child: Row(
           children: [
             // Severity Icon
@@ -60,7 +60,7 @@ class DashboardAlertItem extends StatelessWidget {
               height: 40,
               decoration: BoxDecoration(
                 color: _severityColor.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(HvacSpacing.sm - 2),
               ),
               child: Icon(
                 _severityIcon,
@@ -68,7 +68,7 @@ class DashboardAlertItem extends StatelessWidget {
                 size: 20,
               ),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: HvacSpacing.sm),
 
             // Content
             Expanded(
@@ -83,7 +83,7 @@ class DashboardAlertItem extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: HvacSpacing.xxs),
                   Text(
                     message,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(

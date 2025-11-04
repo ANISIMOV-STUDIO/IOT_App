@@ -47,22 +47,21 @@ class AlertsCard extends StatelessWidget {
               if (onClearAlerts != null && alerts.isNotEmpty)
                 TextButton(
                   onPressed: onClearAlerts,
-                  child: const Text(
+                  child: Text(
                     'Сброс',
-                    style: TextStyle(
+                    style: HvacTypography.titleSmall.copyWith(
                       color: HvacColors.primaryOrange,
-                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: HvacSpacing.md),
 
           // Alert rows
           ...displayAlerts.map((alert) => _buildAlertRow(context, alert)),
 
-          const SizedBox(height: 12),
+          const SizedBox(height: HvacSpacing.sm),
 
           // Footer note
           Text(
@@ -110,7 +109,7 @@ class AlertsCard extends StatelessWidget {
                   : HvacColors.textSecondary,
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: HvacSpacing.sm),
 
           // Alert info
           Expanded(
@@ -125,7 +124,7 @@ class AlertsCard extends StatelessWidget {
                   ),
                 ),
                 if (hasAlert) ...[
-                  const SizedBox(height: 2),
+                  const SizedBox(height: HvacSpacing.xxs),
                   Text(
                     alert.description,
                     style: HvacTypography.labelLarge.copyWith(

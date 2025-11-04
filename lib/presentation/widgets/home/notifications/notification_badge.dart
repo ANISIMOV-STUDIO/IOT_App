@@ -24,7 +24,7 @@ class NotificationBadge extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(8.r),
+        borderRadius: HvacRadius.smRadius,
         border: Border.all(
           color: color.withValues(alpha: 0.3),
           width: 1,

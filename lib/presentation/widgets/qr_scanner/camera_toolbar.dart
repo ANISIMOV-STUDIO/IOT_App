@@ -4,7 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import '../../../core/theme/spacing.dart';
 
@@ -60,9 +60,9 @@ class _ToolbarButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: Colors.black26,
-      borderRadius: BorderRadius.circular(24.r),
+      borderRadius: HvacRadius.xxlRadius,
       child: InkWell(
-        borderRadius: BorderRadius.circular(24.r),
+        borderRadius: HvacRadius.xxlRadius,
         onTap: onTap,
         child: Padding(
           padding: EdgeInsets.all(AppSpacing.smR),

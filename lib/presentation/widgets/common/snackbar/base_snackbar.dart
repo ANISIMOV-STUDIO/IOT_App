@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import 'snackbar_types.dart';
 
 /// Base snackbar widget with common functionality
@@ -168,7 +169,7 @@ class BaseSnackBar extends StatelessWidget {
         margin: finalConfig.margin ?? snackbarMargin,
         width: finalConfig.width ?? snackbarWidth,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: HvacRadius.smRadius,
         ),
         dismissDirection: finalConfig.dismissDirection,
       ),

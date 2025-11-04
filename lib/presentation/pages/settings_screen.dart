@@ -167,7 +167,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               side: const BorderSide(color: HvacColors.primaryOrange),
               padding: EdgeInsets.symmetric(vertical: 12.h),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.r),
+                borderRadius: HvacRadius.mdRadius,
               ),
             ),
             child: Text(
@@ -192,7 +192,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
-        borderRadius: BorderRadius.circular(16.r),
+        borderRadius: HvacRadius.lgRadius,
         border: Border.all(
           color: HvacColors.backgroundCardBorder,
           width: 1,
@@ -279,7 +279,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             color: isSelected
                 ? HvacColors.primaryOrange.withValues(alpha: 0.1)
                 : HvacColors.backgroundDark,
-            borderRadius: BorderRadius.circular(12.r),
+            borderRadius: HvacRadius.mdRadius,
             border: Border.all(
               color: isSelected
                   ? HvacColors.primaryOrange
@@ -341,7 +341,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         behavior: SnackBarBehavior.floating,
         margin: EdgeInsets.all(16.w),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.r),
+          borderRadius: HvacRadius.mdRadius,
         ),
       ),
     );

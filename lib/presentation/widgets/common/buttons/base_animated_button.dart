@@ -4,6 +4,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
 /// Base mixin for animated button states
 mixin AnimatedButtonMixin<T extends StatefulWidget> on TickerProviderStateMixin<T> {
@@ -115,21 +116,21 @@ class ButtonSize {
 
   static const small = ButtonSize._(
     height: 36,
-    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+    padding: EdgeInsets.symmetric(horizontal: HvacSpacing.sm, vertical: HvacSpacing.xxs),
     fontSize: 12,
     iconSize: 16,
   );
 
   static const medium = ButtonSize._(
     height: 48,
-    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    padding: EdgeInsets.symmetric(horizontal: HvacSpacing.md, vertical: HvacSpacing.xs),
     fontSize: 14,
     iconSize: 20,
   );
 
   static const large = ButtonSize._(
     height: 56,
-    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+    padding: EdgeInsets.symmetric(horizontal: HvacSpacing.lg, vertical: HvacSpacing.sm),
     fontSize: 16,
     iconSize: 24,
   );

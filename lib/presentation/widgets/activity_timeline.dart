@@ -21,7 +21,7 @@ class ActivityTimeline extends StatelessWidget {
       padding: const EdgeInsets.all(HvacSpacing.xlR),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: HvacRadius.xlRadius,
         border: Border.all(
           color: HvacColors.backgroundCardBorder,
         ),
@@ -40,7 +40,7 @@ class ActivityTimeline extends StatelessWidget {
                     'Activity',
                     style: HvacTypography.headlineSmall,
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: HvacSpacing.xxs),
                   Text(
                     'December 12, 2024',
                     style: HvacTypography.labelLarge.copyWith(
@@ -66,7 +66,7 @@ class ActivityTimeline extends StatelessWidget {
                           color: HvacColors.textSecondary,
                         ),
                       ),
-                      const SizedBox(width: 4),
+                      const SizedBox(width: HvacSpacing.xxs),
                       const Icon(
                         Icons.arrow_forward,
                         size: 14,
@@ -78,7 +78,7 @@ class ActivityTimeline extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 24),
+          const SizedBox(height: HvacSpacing.lg),
 
           // Activity items
           ...activities.map((activity) => _buildActivityItem(activity)),
@@ -113,7 +113,7 @@ class ActivityTimeline extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(width: 16),
+          const SizedBox(width: HvacSpacing.md),
 
           // Content
           Expanded(
@@ -121,7 +121,7 @@ class ActivityTimeline extends StatelessWidget {
               padding: const EdgeInsets.all(HvacSpacing.lgR),
               decoration: BoxDecoration(
                 color: HvacColors.backgroundDark,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: HvacRadius.mdRadius,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,7 +130,7 @@ class ActivityTimeline extends StatelessWidget {
                     activity.title,
                     style: HvacTypography.titleMedium,
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: HvacSpacing.xxs),
                   Text(
                     activity.description,
                     style: HvacTypography.labelLarge.copyWith(

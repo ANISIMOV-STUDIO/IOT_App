@@ -22,10 +22,10 @@ class TemperatureInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: HvacSpacing.md, vertical: HvacSpacing.md + 4),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: HvacRadius.mdRadius,
         border: Border.all(
           color: HvacColors.backgroundCardBorder,
           width: 1,
@@ -40,7 +40,7 @@ class TemperatureInfoCard extends StatelessWidget {
               size: 24,
               color: HvacColors.textSecondary,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: HvacSpacing.xs),
           ],
           Text(
             value,
@@ -50,7 +50,7 @@ class TemperatureInfoCard extends StatelessWidget {
               color: valueColor ?? HvacColors.textPrimary,
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: HvacSpacing.xxs),
           Text(
             label,
             style: const TextStyle(

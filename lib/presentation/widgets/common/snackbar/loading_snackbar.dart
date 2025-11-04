@@ -43,7 +43,7 @@ class LoadingSnackBar {
       margin: snackbarMargin,
       width: snackbarWidth,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: HvacRadius.smRadius,
       ),
       dismissDirection: DismissDirection.none, // Can't be dismissed by swiping
     );
@@ -218,7 +218,7 @@ class _LoadingContent extends StatelessWidget {
               if (showProgress && progress != null) ...[
                 const SizedBox(height: 8),
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(2),
+                  borderRadius: HvacRadius.xsRadius,
                   child: LinearProgressIndicator(
                     value: progress,
                     minHeight: 3,

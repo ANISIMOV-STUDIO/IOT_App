@@ -96,7 +96,7 @@ class HomeErrorState extends StatelessWidget {
                   vertical: HvacSpacing.smV,
                 ),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.r),
+                  borderRadius: HvacRadius.smRadius,
                 ),
               ),
               child: Text(

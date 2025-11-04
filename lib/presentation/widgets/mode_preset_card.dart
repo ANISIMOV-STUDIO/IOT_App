@@ -51,12 +51,12 @@ class ModePresetCard extends StatelessWidget {
                 ),
             ],
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: HvacSpacing.xxs),
           Text(
             preset.mode.description,
             style: Theme.of(context).textTheme.bodySmall,
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: HvacSpacing.md),
 
           // Parameters
           Row(
@@ -69,7 +69,7 @@ class ModePresetCard extends StatelessWidget {
                   Icons.air,
                 ),
               ),
-              const SizedBox(width: 16),
+              const SizedBox(width: HvacSpacing.md),
               Expanded(
                 child: _buildParameter(
                   context,
@@ -80,7 +80,7 @@ class ModePresetCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: HvacSpacing.sm),
           Row(
             children: [
               Expanded(
@@ -91,7 +91,7 @@ class ModePresetCard extends StatelessWidget {
                   Icons.thermostat,
                 ),
               ),
-              const SizedBox(width: 16),
+              const SizedBox(width: HvacSpacing.md),
               Expanded(
                 child: _buildParameter(
                   context,
@@ -115,9 +115,10 @@ class ModePresetCard extends StatelessWidget {
   ) {
     return Container(
       padding: const EdgeInsets.all(HvacSpacing.mdR),
-      decoration: BoxDecoration(
+      decoration: HvacDecorations.cardFlat(
         color: HvacColors.backgroundDark,
-        borderRadius: BorderRadius.circular(8),
+        radius: HvacRadius.sm,
+        withBorder: false,
       ),
       child: Row(
         children: [
@@ -126,7 +127,7 @@ class ModePresetCard extends StatelessWidget {
             size: 18,
             color: HvacColors.textSecondary,
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: HvacSpacing.xs),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -138,7 +139,7 @@ class ModePresetCard extends StatelessWidget {
                     color: HvacColors.textSecondary,
                   ),
                 ),
-                const SizedBox(height: 2),
+                const SizedBox(height: HvacSpacing.xxs),
                 Text(
                   value,
                   style: const TextStyle(

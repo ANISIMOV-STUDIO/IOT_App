@@ -114,7 +114,7 @@ class UnitDetailTabletSidebar extends StatelessWidget {
                   height: 20.h,
                   decoration: BoxDecoration(
                     color: HvacColors.primaryOrange,
-                    borderRadius: BorderRadius.circular(2.r),
+                    borderRadius: HvacRadius.xsRadius,
                   ),
                 ),
             ],

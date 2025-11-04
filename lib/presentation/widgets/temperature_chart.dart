@@ -28,7 +28,7 @@ class TemperatureChart extends StatelessWidget {
         padding: const EdgeInsets.all(HvacSpacing.xlR),
         decoration: BoxDecoration(
           color: HvacColors.backgroundCard,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: HvacRadius.mdRadius,
           border: Border.all(
             color: HvacColors.backgroundCardBorder,
             width: 1,
@@ -50,7 +50,7 @@ class TemperatureChart extends StatelessWidget {
       padding: const EdgeInsets.all(HvacSpacing.xlR),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: HvacRadius.mdRadius,
         border: Border.all(
           color: HvacColors.backgroundCardBorder,
           width: 1,
@@ -102,7 +102,7 @@ class TemperatureChart extends StatelessWidget {
                         }
                         final reading = readings[value.toInt()];
                         return Padding(
-                          padding: const EdgeInsets.only(top: 8),
+                          padding: const EdgeInsets.only(top: HvacSpacing.xs),
                           child: Text(
                             '${reading.timestamp.hour}:${reading.timestamp.minute.toString().padLeft(2, '0')}',
                             style: const TextStyle(

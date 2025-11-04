@@ -22,10 +22,10 @@ class VentilationModeSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: HvacSpacing.md, vertical: HvacSpacing.xxs),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: HvacRadius.smRadius,
         border: Border.all(
           color: HvacColors.backgroundCardBorder,
           width: 1,

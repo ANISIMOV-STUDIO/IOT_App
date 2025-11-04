@@ -129,7 +129,7 @@ class TemperatureMobileLayout extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 6.h),
       decoration: BoxDecoration(
         color: HvacColors.backgroundDark,
-        borderRadius: BorderRadius.circular(6.r),
+        borderRadius: HvacRadius.smRadius,
         border: Border.all(
           color: HvacColors.backgroundCardBorder,
           width: 1,

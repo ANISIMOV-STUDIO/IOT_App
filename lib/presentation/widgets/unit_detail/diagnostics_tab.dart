@@ -46,7 +46,7 @@ class DiagnosticsTab extends StatelessWidget {
                 backgroundColor: HvacColors.primaryOrange,
                 padding: EdgeInsets.symmetric(vertical: 14.h),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.r),
+                  borderRadius: HvacRadius.mdRadius,
                 ),
               ),
               child: Row(
@@ -75,7 +75,7 @@ class DiagnosticsTab extends StatelessWidget {
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: HvacRadius.mdRadius,
         border: Border.all(color: HvacColors.backgroundCardBorder, width: 1),
       ),
       child: Column(
@@ -147,7 +147,7 @@ class DiagnosticsTab extends StatelessWidget {
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: HvacRadius.mdRadius,
         border: Border.all(color: HvacColors.backgroundCardBorder, width: 1),
       ),
       child: Column(
@@ -223,7 +223,7 @@ class DiagnosticsTab extends StatelessWidget {
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: HvacRadius.mdRadius,
         border: Border.all(color: HvacColors.backgroundCardBorder, width: 1),
       ),
       child: Column(

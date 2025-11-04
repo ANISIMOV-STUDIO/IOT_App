@@ -26,14 +26,7 @@ class DayScheduleCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: HvacSpacing.mdR),
       padding: const EdgeInsets.all(HvacSpacing.lgR),
-      decoration: BoxDecoration(
-        color: HvacColors.backgroundCard,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: HvacColors.backgroundCardBorder,
-          width: 1,
-        ),
-      ),
+      decoration: HvacDecorations.card(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -44,7 +37,7 @@ class DayScheduleCard extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                 ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: HvacSpacing.sm),
 
           // Time controls
           Row(
@@ -61,7 +54,7 @@ class DayScheduleCard extends StatelessWidget {
                   },
                 ),
               ),
-              const SizedBox(width: 16),
+              const SizedBox(width: HvacSpacing.md),
               Expanded(
                 child: _buildTimeControl(
                   context,
@@ -76,16 +69,15 @@ class DayScheduleCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: HvacSpacing.sm),
 
           // Timer toggle
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Таймер',
-                style: TextStyle(
-                  fontSize: 14,
+                style: HvacTypography.bodyMedium.copyWith(
                   color: HvacColors.textSecondary,
                 ),
               ),
@@ -93,15 +85,13 @@ class DayScheduleCard extends StatelessWidget {
                 children: [
                   Text(
                     schedule.timerEnabled ? 'Включен' : 'Выключен',
-                    style: TextStyle(
-                      fontSize: 12,
+                    style: HvacTypography.labelMedium.copyWith(
                       color: schedule.timerEnabled
                           ? HvacColors.success
                           : HvacColors.textSecondary,
-                      fontWeight: FontWeight.w500,
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: HvacSpacing.xs),
                   Switch(
                     value: schedule.timerEnabled,
                     onChanged: isEditable && onUpdate != null
@@ -152,26 +142,21 @@ class DayScheduleCard extends StatelessWidget {
             }
           : null,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        decoration: BoxDecoration(
+        padding: const EdgeInsets.symmetric(horizontal: HvacSpacing.sm, vertical: HvacSpacing.sm),
+        decoration: HvacDecorations.cardFlat(
           color: HvacColors.backgroundDark,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            color: HvacColors.backgroundCardBorder,
-            width: 1,
-          ),
+          radius: HvacRadius.sm,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               label,
-              style: const TextStyle(
-                fontSize: 10,
+              style: HvacTypography.captionSmall.copyWith(
                 color: HvacColors.textSecondary,
               ),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: HvacSpacing.xxs),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -179,9 +164,7 @@ class DayScheduleCard extends StatelessWidget {
                   time != null
                       ? '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}'
                       : '--:--',
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
+                  style: HvacTypography.titleSmall.copyWith(
                     color: HvacColors.textPrimary,
                   ),
                 ),

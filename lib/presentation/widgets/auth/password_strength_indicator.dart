@@ -35,7 +35,7 @@ class PasswordStrengthIndicator extends StatelessWidget {
           children: [
             Expanded(
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(4.rw(context)),
+                borderRadius: HvacRadius.xsRadius,
                 child: LinearProgressIndicator(
                   value: (strength.index + 1) / 4,
                   backgroundColor: HvacColors.textSecondary.withValues(alpha: 0.2),
@@ -114,7 +114,7 @@ class PasswordStrengthIndicator extends StatelessWidget {
               color: req.isMet
                   ? HvacColors.success.withValues(alpha: 0.1)
                   : HvacColors.textSecondary.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(4.rw(context)),
+              borderRadius: HvacRadius.xsRadius,
               border: Border.all(
                 color: req.isMet
                     ? HvacColors.success.withValues(alpha: 0.4)

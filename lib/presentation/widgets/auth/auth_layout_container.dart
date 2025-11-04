@@ -5,6 +5,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
 import 'responsive_utils.dart';
 
@@ -63,7 +64,7 @@ class AuthLayoutContainer extends StatelessWidget {
       padding: EdgeInsets.all(48.rw(context)),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(24.rw(context)),
+        borderRadius: HvacRadius.xxlRadius,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withAlpha(13),

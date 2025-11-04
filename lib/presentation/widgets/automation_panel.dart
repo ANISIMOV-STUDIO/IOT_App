@@ -25,14 +25,7 @@ class AutomationPanel extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.all(HvacSpacing.lgR),
-      decoration: BoxDecoration(
-        color: HvacColors.backgroundCard,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: HvacColors.backgroundCardBorder,
-          width: 1,
-        ),
-      ),
+      decoration: HvacDecorations.card(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -41,9 +34,8 @@ class AutomationPanel extends StatelessWidget {
             children: [
               Container(
                 padding: const EdgeInsets.all(HvacSpacing.smR),
-                decoration: BoxDecoration(
-                  color: HvacColors.warning.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(8),
+                decoration: HvacDecorations.iconContainer(
+                  color: HvacColors.warning,
                 ),
                 child: const Icon(
                   Icons.auto_awesome,
@@ -51,24 +43,21 @@ class AutomationPanel extends StatelessWidget {
                   size: 20,
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: HvacSpacing.sm),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Автоматизация',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
+                      style: HvacTypography.titleMedium.copyWith(
                         color: HvacColors.textPrimary,
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    const SizedBox(height: HvacSpacing.xxs),
                     Text(
                       'Активно: $activeRules из ${rules.length}',
-                      style: const TextStyle(
-                        fontSize: 12,
+                      style: HvacTypography.caption.copyWith(
                         color: HvacColors.textSecondary,
                       ),
                     ),
@@ -78,12 +67,12 @@ class AutomationPanel extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 16),
+          const SizedBox(height: HvacSpacing.md),
 
           // Rules list
           ...rules.take(3).map((rule) => _buildRuleItem(rule)),
 
-          const SizedBox(height: 12),
+          const SizedBox(height: HvacSpacing.sm),
 
           // Manage button
           SizedBox(
@@ -96,21 +85,19 @@ class AutomationPanel extends StatelessWidget {
                   width: 1,
                 ),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: HvacRadius.smRadius,
                 ),
                 padding: const EdgeInsets.symmetric(vertical: HvacSpacing.smR),
               ),
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.settings, color: HvacColors.primaryOrange, size: 16),
-                  SizedBox(width: 8),
+                  const Icon(Icons.settings, color: HvacColors.primaryOrange, size: 16),
+                  const SizedBox(width: HvacSpacing.xs),
                   Text(
                     'Управление правилами',
-                    style: TextStyle(
+                    style: HvacTypography.labelLarge.copyWith(
                       color: HvacColors.primaryOrange,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 13,
                     ),
                   ),
                 ],
@@ -126,9 +113,10 @@ class AutomationPanel extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: HvacSpacing.smR),
       padding: const EdgeInsets.all(HvacSpacing.mdR),
-      decoration: BoxDecoration(
+      decoration: HvacDecorations.cardFlat(
         color: HvacColors.backgroundDark,
-        borderRadius: BorderRadius.circular(8),
+        radius: HvacRadius.sm,
+      ).copyWith(
         border: Border.all(
           color: rule.enabled
               ? HvacColors.success.withValues(alpha: 0.3)
@@ -147,7 +135,7 @@ class AutomationPanel extends StatelessWidget {
               shape: BoxShape.circle,
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: HvacSpacing.sm),
 
           // Rule info
           Expanded(
@@ -156,17 +144,14 @@ class AutomationPanel extends StatelessWidget {
               children: [
                 Text(
                   rule.name,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
+                  style: HvacTypography.labelLarge.copyWith(
                     color: HvacColors.textPrimary,
                   ),
                 ),
-                const SizedBox(height: 2),
+                const SizedBox(height: HvacSpacing.xxs),
                 Text(
                   '${rule.conditionDescription} → ${rule.actionDescription}',
-                  style: const TextStyle(
-                    fontSize: 11,
+                  style: HvacTypography.caption.copyWith(
                     color: HvacColors.textSecondary,
                   ),
                   maxLines: 1,
@@ -176,7 +161,7 @@ class AutomationPanel extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(width: 8),
+          const SizedBox(width: HvacSpacing.xs),
 
           // Toggle switch
           SizedBox(

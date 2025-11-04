@@ -43,7 +43,7 @@ class RoomPreviewCard extends StatelessWidget {
             HvacColors.backgroundDark,
           ],
         ),
-        borderRadius: BorderRadius.circular(20.r),
+        borderRadius: HvacRadius.xlRadius,
         border: Border.all(
           color: HvacColors.backgroundCardBorder,
           width: 1,
@@ -57,7 +57,7 @@ class RoomPreviewCard extends StatelessWidget {
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(20.r),
+        borderRadius: HvacRadius.xlRadius,
         child: Stack(
           children: [
             // Animated gradient background
@@ -85,7 +85,7 @@ class RoomPreviewCard extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 6.h),
                 decoration: BoxDecoration(
                   color: HvacColors.backgroundCard.withValues(alpha: 0.95),
-                  borderRadius: BorderRadius.circular(10.r),
+                  borderRadius: HvacRadius.smRadius,
                   border: Border.all(
                     color: HvacColors.backgroundCardBorder,
                     width: 1,
@@ -266,7 +266,7 @@ class RoomPreviewCard extends StatelessWidget {
                       ),
                       decoration: BoxDecoration(
                         color: HvacColors.backgroundCard.withValues(alpha: 0.95),
-                        borderRadius: BorderRadius.circular(10.r),
+                        borderRadius: HvacRadius.smRadius,
                         border: Border.all(
                           color: HvacColors.primaryOrange.withValues(alpha: 0.4),
                           width: 1,
@@ -311,7 +311,7 @@ class RoomPreviewCard extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard.withValues(alpha: 0.95),
-        borderRadius: BorderRadius.circular(8.r),
+        borderRadius: HvacRadius.smRadius,
         border: Border.all(
           color: HvacColors.primaryOrange.withValues(alpha: 0.3),
           width: 1,

@@ -42,7 +42,7 @@ class GroupControlPanel extends StatelessWidget {
                 padding: const EdgeInsets.all(HvacSpacing.smR),
                 decoration: BoxDecoration(
                   color: HvacColors.accent.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: HvacRadius.smRadius,
                 ),
                 child: const Icon(
                   Icons.group_work,
@@ -154,11 +154,11 @@ class GroupControlPanel extends StatelessWidget {
       child: GestureDetector(
         onTap: onPressed,
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+          padding: const EdgeInsets.symmetric(vertical: HvacSpacing.sm, horizontal: HvacSpacing.sm),
           decoration: BoxDecoration(
             // Background: always dark gray, never colored
             color: HvacColors.backgroundDark,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: HvacRadius.smRadius,
             border: Border.all(
               // Border: always neutral gray, never colored
               color: HvacColors.backgroundCardBorder,
@@ -192,7 +192,7 @@ class GroupControlPanel extends StatelessWidget {
 
   Widget _buildUnitItem(HvacUnit unit) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.only(bottom: HvacSpacing.xs),
       child: Row(
         children: [
           Container(

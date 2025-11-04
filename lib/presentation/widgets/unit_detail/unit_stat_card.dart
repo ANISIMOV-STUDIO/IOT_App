@@ -28,7 +28,7 @@ class UnitStatCard extends StatelessWidget {
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: HvacRadius.mdRadius,
         border: Border.all(
           color: HvacColors.backgroundCardBorder,
           width: 1,

@@ -43,9 +43,10 @@ class DashboardStatCard extends StatelessWidget {
               children: [
                 Container(
                   padding: const EdgeInsets.all(HvacSpacing.mdR),
-                  decoration: BoxDecoration(
+                  decoration: HvacDecorations.iconContainer(
+                    color: iconColor,
+                  ).copyWith(
                     color: iconColor.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
                     icon,
@@ -59,12 +60,17 @@ class DashboardStatCard extends StatelessWidget {
                       horizontal: HvacSpacing.smR,
                       vertical: HvacSpacing.xxsR,
                     ),
-                    decoration: BoxDecoration(
+                    decoration: HvacDecorations.badgeSmall(
+                      color: isPositiveTrend
+                          ? HvacColors.success
+                          : HvacColors.error,
+                      filled: false,
+                    ).copyWith(
                       color: (isPositiveTrend
                               ? HvacColors.success
                               : HvacColors.error)
                           .withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(8),
+                      border: null,
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -78,7 +84,7 @@ class DashboardStatCard extends StatelessWidget {
                               : HvacColors.error,
                           size: 14,
                         ),
-                        const SizedBox(width: 4),
+                        const SizedBox(width: HvacSpacing.xxs),
                         Text(
                           trend!,
                           style: TextStyle(
@@ -94,7 +100,7 @@ class DashboardStatCard extends StatelessWidget {
                   ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: HvacSpacing.md),
 
             // Title
             Text(
@@ -103,7 +109,7 @@ class DashboardStatCard extends StatelessWidget {
                     color: HvacColors.textSecondary,
                   ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: HvacSpacing.xs),
 
             // Value
             Text(
@@ -116,7 +122,7 @@ class DashboardStatCard extends StatelessWidget {
 
             // Subtitle
             if (subtitle != null) ...[
-              const SizedBox(height: 4),
+              const SizedBox(height: HvacSpacing.xxs),
               Text(
                 subtitle!,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(

@@ -48,7 +48,7 @@ class DeviceCardSkeleton extends StatelessWidget {
                 SkeletonContainer(
                   width: 60.w,
                   height: 32.h,
-                  borderRadius: BorderRadius.circular(16.r),
+                  borderRadius: HvacRadius.lgRadius,
                 ),
               ],
             ),
@@ -154,7 +154,7 @@ class AnalyticsCardSkeleton extends StatelessWidget {
                 SkeletonContainer(
                   width: 32.r,
                   height: 32.r,
-                  borderRadius: BorderRadius.circular(8.r),
+                  borderRadius: HvacRadius.smRadius,
                 ),
                 SizedBox(width: HvacSpacing.sm.w),
                 SkeletonText(width: 100.w, height: 14),

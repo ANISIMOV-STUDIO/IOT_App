@@ -153,7 +153,7 @@ class TemperatureTabletLayout extends StatelessWidget {
       padding: EdgeInsets.all(12.r),
       decoration: BoxDecoration(
         color: HvacColors.backgroundDark,
-        borderRadius: BorderRadius.circular(8.r),
+        borderRadius: HvacRadius.smRadius,
         border: Border.all(
           color: HvacColors.backgroundCardBorder,
           width: 1,

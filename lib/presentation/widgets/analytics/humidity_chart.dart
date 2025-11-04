@@ -34,9 +34,7 @@ class HumidityChart extends StatelessWidget {
         children: [
           Text(
             'История влажности',
-            style: TextStyle(
-              fontSize: 16.sp,
-              fontWeight: FontWeight.w600,
+            style: HvacTypography.titleMedium.copyWith(
               color: HvacColors.textPrimary,
             ),
           ),
@@ -79,9 +77,8 @@ class HumidityChart extends StatelessWidget {
                           padding: EdgeInsets.only(top: 8.h),
                           child: Text(
                             '${reading.timestamp.hour}:00',
-                            style: TextStyle(
+                            style: HvacTypography.captionSmall.copyWith(
                               color: HvacColors.textSecondary,
-                              fontSize: 10.sp,
                             ),
                           ),
                         );
@@ -96,9 +93,8 @@ class HumidityChart extends StatelessWidget {
                       getTitlesWidget: (value, meta) {
                         return Text(
                           '${value.toInt()}%',
-                          style: TextStyle(
+                          style: HvacTypography.captionSmall.copyWith(
                             color: HvacColors.textSecondary,
-                            fontSize: 10.sp,
                           ),
                         );
                       },

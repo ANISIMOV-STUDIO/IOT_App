@@ -198,7 +198,7 @@ class _AnimatedTextButtonState extends State<AnimatedTextButton>
         margin: const EdgeInsets.only(top: HvacSpacing.xxsR),
         decoration: BoxDecoration(
           color: color,
-          borderRadius: BorderRadius.circular(1),
+          borderRadius: HvacRadius.xsRadius,
         ),
       ),
     );

@@ -6,7 +6,7 @@ library;
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../core/theme/spacing.dart';
 import 'camera_state_widget.dart';
 import 'qr_scanner_responsive.dart';
@@ -139,7 +139,7 @@ class _WebCameraHandlerState extends State<WebCameraHandler> {
             padding: EdgeInsets.all(AppSpacing.mdR),
             decoration: BoxDecoration(
               color: Colors.black54,
-              borderRadius: BorderRadius.circular(8.r),
+              borderRadius: HvacRadius.smRadius,
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,

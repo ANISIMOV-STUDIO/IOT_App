@@ -142,7 +142,7 @@ class HomeAppBar extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
           decoration: BoxDecoration(
             color: isSelected ? HvacColors.backgroundCard : Colors.transparent,
-            borderRadius: BorderRadius.circular(8.r),
+            borderRadius: HvacRadius.smRadius,
             border: Border.all(
               color: isSelected ? HvacColors.backgroundCardBorder : Colors.transparent,
             ),

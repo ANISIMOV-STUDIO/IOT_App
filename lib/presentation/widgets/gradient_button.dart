@@ -34,7 +34,7 @@ class GradientButton extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: isLoading ? null : onPressed,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: HvacRadius.mdRadius,
           child: Container(
             decoration: HvacTheme.orangeButton(),
             alignment: Alignment.center,
@@ -57,7 +57,7 @@ class GradientButton extends StatelessWidget {
                           color: Colors.white,
                           size: 20,
                         ),
-                        const SizedBox(width: 8),
+                        const SizedBox(width: HvacSpacing.xs),
                       ],
                       Text(
                         text,

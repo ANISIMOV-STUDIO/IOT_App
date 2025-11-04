@@ -25,10 +25,7 @@ mixin SnackbarMixin<T extends StatefulWidget> on State<T> {
             Expanded(
               child: Text(
                 message,
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: HvacTypography.labelLarge,
               ),
             ),
           ],
@@ -38,7 +35,7 @@ mixin SnackbarMixin<T extends StatefulWidget> on State<T> {
         behavior: SnackBarBehavior.floating,
         margin: const EdgeInsets.all(HvacSpacing.mdR),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.r),
+          borderRadius: HvacRadius.smRadius,
         ),
       ),
     );
@@ -61,10 +58,7 @@ mixin SnackbarMixin<T extends StatefulWidget> on State<T> {
             Expanded(
               child: Text(
                 message,
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: HvacTypography.labelLarge,
               ),
             ),
           ],
@@ -74,7 +68,7 @@ mixin SnackbarMixin<T extends StatefulWidget> on State<T> {
         behavior: SnackBarBehavior.floating,
         margin: const EdgeInsets.all(HvacSpacing.mdR),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.r),
+          borderRadius: HvacRadius.smRadius,
         ),
       ),
     );
@@ -97,10 +91,7 @@ mixin SnackbarMixin<T extends StatefulWidget> on State<T> {
             Expanded(
               child: Text(
                 message,
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: HvacTypography.labelLarge,
               ),
             ),
           ],
@@ -110,7 +101,7 @@ mixin SnackbarMixin<T extends StatefulWidget> on State<T> {
         behavior: SnackBarBehavior.floating,
         margin: const EdgeInsets.all(HvacSpacing.mdR),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.r),
+          borderRadius: HvacRadius.smRadius,
         ),
       ),
     );
@@ -133,10 +124,7 @@ mixin SnackbarMixin<T extends StatefulWidget> on State<T> {
             Expanded(
               child: Text(
                 message,
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: HvacTypography.labelLarge,
               ),
             ),
           ],
@@ -146,7 +134,7 @@ mixin SnackbarMixin<T extends StatefulWidget> on State<T> {
         behavior: SnackBarBehavior.floating,
         margin: const EdgeInsets.all(HvacSpacing.mdR),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.r),
+          borderRadius: HvacRadius.smRadius,
         ),
       ),
     );
@@ -166,10 +154,7 @@ mixin SnackbarMixin<T extends StatefulWidget> on State<T> {
       SnackBar(
         content: Text(
           message,
-          style: TextStyle(
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w500,
-          ),
+          style: HvacTypography.labelLarge,
         ),
         action: SnackBarAction(
           label: actionLabel,
@@ -181,7 +166,7 @@ mixin SnackbarMixin<T extends StatefulWidget> on State<T> {
         behavior: SnackBarBehavior.floating,
         margin: const EdgeInsets.all(HvacSpacing.mdR),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.r),
+          borderRadius: HvacRadius.smRadius,
         ),
       ),
     );

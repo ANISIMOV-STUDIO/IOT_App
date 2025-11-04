@@ -69,14 +69,7 @@ class _AirflowAnimationState extends State<AirflowAnimation>
     return Container(
       height: 100,
       padding: const EdgeInsets.all(HvacSpacing.lgR),
-      decoration: BoxDecoration(
-        color: HvacColors.backgroundCard,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: HvacColors.backgroundCardBorder,
-          width: 1,
-        ),
-      ),
+      decoration: HvacDecorations.card(),
       child: Stack(
         children: [
           // Supply air (left to right)
@@ -116,13 +109,11 @@ class _AirflowAnimationState extends State<AirflowAnimation>
         if (!reversed) ...[
           Text(
             label,
-            style: TextStyle(
-              fontSize: 11,
+            style: HvacTypography.caption.copyWith(
               color: color,
-              fontWeight: FontWeight.w600,
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: HvacSpacing.xs),
         ],
         Expanded(
           child: AnimatedBuilder(
@@ -141,13 +132,11 @@ class _AirflowAnimationState extends State<AirflowAnimation>
           ),
         ),
         if (reversed) ...[
-          const SizedBox(width: 8),
+          const SizedBox(width: HvacSpacing.xs),
           Text(
             label,
-            style: TextStyle(
-              fontSize: 11,
+            style: HvacTypography.caption.copyWith(
               color: color,
-              fontWeight: FontWeight.w600,
             ),
           ),
         ],

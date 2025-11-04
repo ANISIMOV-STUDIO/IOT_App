@@ -24,10 +24,10 @@ class FanSpeedSlider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(HvacSpacing.md),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: HvacRadius.mdRadius,
         border: Border.all(
           color: HvacColors.backgroundCardBorder,
           width: 1,
@@ -47,7 +47,7 @@ class FanSpeedSlider extends StatelessWidget {
                       size: 20,
                       color: HvacColors.textSecondary,
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: HvacSpacing.xs),
                   ],
                   Text(
                     label,
@@ -56,10 +56,10 @@ class FanSpeedSlider extends StatelessWidget {
                 ],
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(horizontal: HvacSpacing.sm, vertical: HvacSpacing.xxs + 2),
                 decoration: BoxDecoration(
                   color: HvacColors.backgroundDark,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: HvacRadius.smRadius,
                 ),
                 child: Text(
                   '$value%',
@@ -72,7 +72,7 @@ class FanSpeedSlider extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: HvacSpacing.sm),
           SliderTheme(
             data: SliderTheme.of(context).copyWith(
               trackHeight: 6,

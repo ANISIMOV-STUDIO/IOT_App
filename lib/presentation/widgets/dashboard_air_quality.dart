@@ -77,7 +77,7 @@ class DashboardAirQuality extends StatelessWidget {
                       padding: const EdgeInsets.all(HvacSpacing.smR),
                       decoration: BoxDecoration(
                         color: _levelColor.withValues(alpha: 0.15),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: HvacRadius.smRadius,
                       ),
                       child: Icon(
                         Icons.air,
@@ -85,7 +85,7 @@ class DashboardAirQuality extends StatelessWidget {
                         size: 20,
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: HvacSpacing.sm),
                     Text(
                       'Air Quality',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -102,7 +102,7 @@ class DashboardAirQuality extends StatelessWidget {
               ],
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: HvacSpacing.lg),
 
             // AQI Value
             Row(
@@ -117,7 +117,7 @@ class DashboardAirQuality extends StatelessWidget {
                         height: 1,
                       ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: HvacSpacing.xs),
                 Padding(
                   padding: const EdgeInsets.only(bottom: HvacSpacing.smR),
                   child: Text(
@@ -130,14 +130,14 @@ class DashboardAirQuality extends StatelessWidget {
               ],
             ),
 
-            const SizedBox(height: 12),
+            const SizedBox(height: HvacSpacing.sm),
 
             // Level badge
             Container(
               padding: const EdgeInsets.symmetric(horizontal: HvacSpacing.mdR, vertical: HvacSpacing.xsR),
               decoration: BoxDecoration(
                 color: _levelColor.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: HvacRadius.smRadius,
                 border: Border.all(
                   color: _levelColor.withValues(alpha: 0.3),
                   width: 1,
@@ -153,7 +153,7 @@ class DashboardAirQuality extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 12),
+            const SizedBox(height: HvacSpacing.sm),
 
             // Location
             Row(
@@ -163,7 +163,7 @@ class DashboardAirQuality extends StatelessWidget {
                   size: 14,
                   color: HvacColors.textTertiary,
                 ),
-                const SizedBox(width: 4),
+                const SizedBox(width: HvacSpacing.xxs),
                 Text(
                   location,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(

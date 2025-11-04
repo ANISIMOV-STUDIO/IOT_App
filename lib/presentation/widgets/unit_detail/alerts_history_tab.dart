@@ -94,7 +94,7 @@ class AlertsHistoryTab extends StatelessWidget {
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: HvacRadius.mdRadius,
         border: Border.all(
           color: severityColor.withValues(alpha: 0.3),
           width: 1,
@@ -107,7 +107,7 @@ class AlertsHistoryTab extends StatelessWidget {
             padding: EdgeInsets.all(8.w),
             decoration: BoxDecoration(
               color: severityColor.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(8.r),
+              borderRadius: HvacRadius.smRadius,
             ),
             child: Icon(severityIcon, color: severityColor, size: 20.sp),
           ),

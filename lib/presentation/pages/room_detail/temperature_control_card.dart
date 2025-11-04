@@ -94,9 +94,8 @@ class TemperatureControlCard extends StatelessWidget {
           overlayShape: RoundSliderOverlayShape(
             overlayRadius: kIsWeb ? 20.r : 24.r,
           ),
-          valueIndicatorTextStyle: TextStyle(
+          valueIndicatorTextStyle: HvacTypography.bodyMedium.copyWith(
             fontSize: 14.sp,
-            fontWeight: FontWeight.bold,
           ),
         ),
         child: Slider(

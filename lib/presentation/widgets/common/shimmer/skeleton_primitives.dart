@@ -79,7 +79,7 @@ class SkeletonText extends StatelessWidget {
           child: SkeletonContainer(
             width: lineWidth,
             height: height.h,
-            borderRadius: BorderRadius.circular(4.r),
+            borderRadius: HvacRadius.xsRadius,
           ),
         );
       }),

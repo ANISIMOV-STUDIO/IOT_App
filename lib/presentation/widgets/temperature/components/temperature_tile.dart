@@ -27,7 +27,7 @@ class TemperatureTile extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
       decoration: BoxDecoration(
         color: HvacColors.backgroundDark,
-        borderRadius: BorderRadius.circular(8.r),
+        borderRadius: HvacRadius.smRadius,
         border: Border.all(
           color: HvacColors.backgroundCardBorder,
           width: 1,

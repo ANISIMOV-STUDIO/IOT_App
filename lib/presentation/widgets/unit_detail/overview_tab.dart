@@ -91,7 +91,7 @@ class OverviewTab extends StatelessWidget {
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: HvacRadius.mdRadius,
         border: Border.all(color: HvacColors.backgroundCardBorder, width: 1),
       ),
       child: Row(
@@ -155,7 +155,7 @@ class OverviewTab extends StatelessWidget {
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: HvacRadius.mdRadius,
         border: Border.all(color: HvacColors.backgroundCardBorder, width: 1),
       ),
       child: Column(
@@ -206,7 +206,7 @@ class OverviewTab extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
           decoration: BoxDecoration(
             color: color.withValues(alpha: 0.15),
-            borderRadius: BorderRadius.circular(8.r),
+            borderRadius: HvacRadius.smRadius,
           ),
           child: Text(
             '$speed%',
@@ -226,7 +226,7 @@ class OverviewTab extends StatelessWidget {
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: HvacRadius.mdRadius,
         border: Border.all(color: HvacColors.backgroundCardBorder, width: 1),
       ),
       child: Column(

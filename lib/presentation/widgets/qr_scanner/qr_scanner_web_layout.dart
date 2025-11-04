@@ -111,7 +111,7 @@ class _WebTabSelector extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: HvacRadius.mdRadius,
       ),
       child: Row(
         children: [
@@ -166,7 +166,7 @@ class _TabButton extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           color: isSelected ? theme.colorScheme.primary : Colors.transparent,
-          borderRadius: BorderRadius.circular(10.r),
+          borderRadius: HvacRadius.smRadius,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

@@ -7,7 +7,7 @@ library;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../core/theme/spacing.dart';
 import '../../generated/l10n/app_localizations.dart';
 import '../bloc/hvac_list/hvac_list_bloc.dart';
@@ -88,7 +88,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
         behavior: SnackBarBehavior.floating,
         margin: EdgeInsets.all(AppSpacing.mdR),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.r),
+          borderRadius: HvacRadius.smRadius,
         ),
       ),
     );
@@ -102,7 +102,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
         behavior: SnackBarBehavior.floating,
         margin: EdgeInsets.all(AppSpacing.mdR),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.r),
+          borderRadius: HvacRadius.smRadius,
         ),
       ),
     );

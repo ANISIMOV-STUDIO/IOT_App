@@ -44,7 +44,7 @@ class _AuthOutlineButtonState extends State<AuthOutlineButton> {
           color: _isHovered
               ? HvacColors.primaryOrange.withAlpha(13)
               : Colors.transparent,
-          borderRadius: BorderRadius.circular(12.rw(context)),
+          borderRadius: HvacRadius.mdRadius,
           border: Border.all(
             color: _isHovered ? HvacColors.primaryOrange : HvacColors.backgroundCardBorder,
             width: (_isHovered ? 2 : 1).rw(context),
@@ -54,7 +54,7 @@ class _AuthOutlineButtonState extends State<AuthOutlineButton> {
           color: Colors.transparent,
           child: InkWell(
             onTap: widget.onPressed,
-            borderRadius: BorderRadius.circular(12.rw(context)),
+            borderRadius: HvacRadius.mdRadius,
             child: Center(
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -127,7 +127,7 @@ class _AuthTextButtonState extends State<AuthTextButton> {
             vertical: 12.rh(context),
           ),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.rw(context)),
+            borderRadius: HvacRadius.smRadius,
           ),
         ),
         child: Row(

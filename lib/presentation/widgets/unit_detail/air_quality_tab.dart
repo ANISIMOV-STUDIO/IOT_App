@@ -116,7 +116,7 @@ class AirQualityTab extends StatelessWidget {
             padding: EdgeInsets.all(16.w),
             decoration: BoxDecoration(
               color: HvacColors.info.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(12.r),
+              borderRadius: HvacRadius.mdRadius,
               border: Border.all(
                 color: HvacColors.info.withValues(alpha: 0.3),
                 width: 1,

@@ -186,7 +186,7 @@ class VentilationScheduleControl extends StatelessWidget {
                   color: todaySchedule?.timerEnabled == true
                       ? HvacColors.success.withValues(alpha: 0.2)
                       : HvacColors.textSecondary.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(4.r),
+                  borderRadius: HvacRadius.xsRadius,
                 ),
                 child: Text(
                   todaySchedule?.timerEnabled == true ? 'Включен' : 'Выключен',

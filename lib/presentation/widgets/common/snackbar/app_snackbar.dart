@@ -16,6 +16,7 @@ export 'loading_snackbar.dart' show LoadingSnackBar;
 export 'toast_notification.dart' show ToastNotification;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import 'success_snackbar.dart';
 import 'error_snackbar.dart';
 import 'warning_snackbar.dart';
@@ -146,7 +147,7 @@ class AppSnackBar {
         padding: padding,
         behavior: behavior ?? SnackBarBehavior.floating,
         shape: shape ?? RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: HvacRadius.smRadius,
         ),
         elevation: elevation,
         width: width,

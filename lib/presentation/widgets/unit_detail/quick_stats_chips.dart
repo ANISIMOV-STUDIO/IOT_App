@@ -57,7 +57,7 @@ class QuickStatsChips extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(8.r),
+        borderRadius: HvacRadius.smRadius,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

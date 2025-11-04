@@ -53,7 +53,7 @@ class _DeviceSearchScreenState extends State<DeviceSearchScreen> {
         actions: [
           // WiFi indicator
           Padding(
-            padding: const EdgeInsets.only(right: 16),
+            padding: const EdgeInsets.only(right: HvacSpacing.md),
             child: Center(
               child: Text(
                 'WiFi: bwH_413_7G',

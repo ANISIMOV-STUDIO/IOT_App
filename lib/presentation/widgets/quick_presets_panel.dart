@@ -32,7 +32,7 @@ class QuickPresetsPanel extends StatelessWidget {
                 padding: const EdgeInsets.all(HvacSpacing.smR),
                 decoration: BoxDecoration(
                   color: HvacColors.primaryOrange.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: HvacRadius.smRadius,
                 ),
                 child: const Icon(
                   Icons.flash_on,
@@ -178,13 +178,13 @@ class _PresetButtonState extends State<_PresetButton> {
         onTap: widget.onTap,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: HvacSpacing.sm, vertical: HvacSpacing.sm),
           decoration: BoxDecoration(
             // Background: subtle lift on hover, but stay monochrome
             color: _isHovered
                 ? HvacColors.backgroundElevated // Subtle gray lift
                 : HvacColors.backgroundDark,
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: HvacRadius.smRadius,
             border: Border.all(
               // Border: always gray, never colored
               color: _isHovered

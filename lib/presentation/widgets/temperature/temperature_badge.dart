@@ -23,7 +23,7 @@ class TemperatureBadge extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
       decoration: BoxDecoration(
         color: HvacColors.backgroundDark,
-        borderRadius: BorderRadius.circular(8.r),
+        borderRadius: HvacRadius.smRadius,
         border: Border.all(
           color: HvacColors.backgroundCardBorder,
           width: 1,

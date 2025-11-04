@@ -55,7 +55,7 @@ class HomeControlCards extends StatelessWidget {
       padding: const EdgeInsets.all(HvacSpacing.xlR),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: HvacRadius.mdRadius,
         border: Border.all(
           color: HvacColors.backgroundCardBorder.withValues(alpha: 0.1),
           width: 1,

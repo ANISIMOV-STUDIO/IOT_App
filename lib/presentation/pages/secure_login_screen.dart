@@ -85,7 +85,7 @@ class _SecureLoginScreenState extends State<SecureLoginScreen> {
       context: context,
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16.rw(context)),
+          borderRadius: HvacRadius.lgRadius,
         ),
         title: const Text('Guest Access'),
         content: const Text(
@@ -109,7 +109,7 @@ class _SecureLoginScreenState extends State<SecureLoginScreen> {
             style: ElevatedButton.styleFrom(
               backgroundColor: HvacColors.primaryOrange,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.rw(context)),
+                borderRadius: HvacRadius.smRadius,
               ),
             ),
             child: const Text('Continue'),
@@ -126,7 +126,7 @@ class _SecureLoginScreenState extends State<SecureLoginScreen> {
         backgroundColor: HvacColors.error,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.rw(context)),
+          borderRadius: HvacRadius.smRadius,
         ),
         margin: EdgeInsets.all(16.rw(context)),
       ),
@@ -227,7 +227,7 @@ class _SecureLoginScreenState extends State<SecureLoginScreen> {
                       backgroundColor: HvacColors.info,
                       behavior: SnackBarBehavior.floating,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.rw(context)),
+                        borderRadius: HvacRadius.smRadius,
                       ),
                       margin: EdgeInsets.all(16.rw(context)),
                     ),

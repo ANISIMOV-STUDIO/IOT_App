@@ -88,7 +88,7 @@ class _AuthInputFieldState extends State<AuthInputField> {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12.rw(context)),
+          borderRadius: HvacRadius.mdRadius,
           boxShadow: _isFocused
               ? [
                   BoxShadow(
@@ -132,14 +132,14 @@ class _AuthInputFieldState extends State<AuthInputField> {
               vertical: responsive.inputHeight / 4,
             ),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12.rw(context)),
+              borderRadius: HvacRadius.mdRadius,
               borderSide: BorderSide(
                 color: HvacColors.backgroundCardBorder,
                 width: 1.rw(context),
               ),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12.rw(context)),
+              borderRadius: HvacRadius.mdRadius,
               borderSide: BorderSide(
                 color: _isHovered
                     ? HvacColors.textSecondary.withAlpha(102)
@@ -148,37 +148,37 @@ class _AuthInputFieldState extends State<AuthInputField> {
               ),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12.rw(context)),
+              borderRadius: HvacRadius.mdRadius,
               borderSide: BorderSide(
                 color: HvacColors.primaryOrange,
                 width: 2.rw(context),
               ),
             ),
             errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12.rw(context)),
+              borderRadius: HvacRadius.mdRadius,
               borderSide: BorderSide(
                 color: HvacColors.error,
                 width: 1.rw(context),
               ),
             ),
             focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12.rw(context)),
+              borderRadius: HvacRadius.mdRadius,
               borderSide: BorderSide(
                 color: HvacColors.error,
                 width: 2.rw(context),
               ),
             ),
-            labelStyle: TextStyle(
+            labelStyle: HvacTypography.bodyMedium.copyWith(
               fontSize: (14 * responsive.fontMultiplier).rsp(context),
               color: _isFocused
                   ? HvacColors.primaryOrange
                   : HvacColors.textSecondary,
             ),
-            hintStyle: TextStyle(
+            hintStyle: HvacTypography.bodyMedium.copyWith(
               fontSize: (14 * responsive.fontMultiplier).rsp(context),
               color: HvacColors.textSecondary.withAlpha(153),
             ),
-            errorStyle: TextStyle(
+            errorStyle: HvacTypography.caption.copyWith(
               fontSize: (12 * responsive.fontMultiplier).rsp(context),
             ),
           ),

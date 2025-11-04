@@ -24,7 +24,7 @@ class NotificationItem extends StatelessWidget {
       padding: EdgeInsets.all(12.w),
       decoration: BoxDecoration(
         color: HvacColors.backgroundDark,
-        borderRadius: BorderRadius.circular(12.r),
+        borderRadius: HvacRadius.mdRadius,
         border: Border.all(
           color: severityColor.withValues(alpha: 0.3),
           width: 1,
@@ -49,7 +49,7 @@ class NotificationItem extends StatelessWidget {
       height: 36.h,
       decoration: BoxDecoration(
         color: severityColor.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(8.r),
+        borderRadius: HvacRadius.smRadius,
       ),
       child: Icon(
         activity.icon ?? Icons.notifications,

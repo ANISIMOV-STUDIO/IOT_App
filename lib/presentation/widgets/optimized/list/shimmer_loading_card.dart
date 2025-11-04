@@ -58,7 +58,7 @@ class ShimmerLoadingCard extends StatelessWidget {
                   height: 30.h,
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(15.r),
+                    borderRadius: HvacRadius.lgRadius,
                   ),
                 ),
               ],

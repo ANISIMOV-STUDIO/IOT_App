@@ -66,7 +66,7 @@ class _AuthSubmitButtonState extends State<AuthSubmitButton> {
                               HvacColors.primaryOrange,
                             ],
             ),
-            borderRadius: BorderRadius.circular(12.rw(context)),
+            borderRadius: HvacRadius.mdRadius,
             boxShadow: [
               if (!isDisabled && (_isHovered || _isPressed))
                 BoxShadow(
@@ -80,7 +80,7 @@ class _AuthSubmitButtonState extends State<AuthSubmitButton> {
             color: Colors.transparent,
             child: InkWell(
               onTap: isDisabled ? null : widget.onPressed,
-              borderRadius: BorderRadius.circular(12.rw(context)),
+              borderRadius: HvacRadius.mdRadius,
               child: Center(
                 child: widget.isLoading
                     ? SizedBox(
