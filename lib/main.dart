@@ -1,4 +1,4 @@
-/// HVAC Control Application
+/// BREEZ Home Application
 ///
 /// Cross-platform HVAC management app with MQTT integration
 library;
@@ -90,7 +90,7 @@ class _HvacControlAppState extends State<HvacControlApp> {
                 splitScreenMode: true,
                 builder: (context, child) {
                   return MaterialApp(
-                    title: 'HVAC Control',
+                    title: 'BREEZ Home',
                     debugShowCheckedModeBanner: false,
 
                     // Theme - Dark with Orange Accents (Figma Design)

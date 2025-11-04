@@ -9,7 +9,7 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
-  String get appTitle => 'HVAC控制';
+  String get appTitle => 'BREEZ Home';
 
   @override
   String get home => '主页';
@@ -18,7 +18,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settings => '设置';
 
   @override
-  String get hvacControl => 'HVAC控制';
+  String get hvacControl => 'BREEZ Home';
 
   @override
   String activeDevices(int count, int total) {
@@ -219,7 +219,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aboutApp => '关于';
 
   @override
-  String get appDescription => '跨平台HVAC管理应用，集成MQTT。';
+  String get appDescription => 'BREEZ Home - ZILON通风系统智能控制。';
 
   @override
   String get deviceManagement => '设备管理';

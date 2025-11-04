@@ -1,7 +1,7 @@
 # Modular Snackbar System
 
 ## Overview
-This directory contains the refactored snackbar system for the HVAC Control App. The original 565-line file has been split into 11 modular components, each under 250 lines, with enhanced web-responsive design and improved maintainability.
+This directory contains the refactored snackbar system for the BREEZ Home App. The original 565-line file has been split into 11 modular components, each under 250 lines, with enhanced web-responsive design and improved maintainability.
 
 ## Architecture
 

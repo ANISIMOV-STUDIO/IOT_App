@@ -1,5 +1,5 @@
 name: hvac_control
-description: HVAC control application for iOS, Android and Web
+description: BREEZ Home - Smart ventilation control for ZILON systems (iOS, Android, Web)
 publish_to: 'none'
 
 version: 1.0.0+1

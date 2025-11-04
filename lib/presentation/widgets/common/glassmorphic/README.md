@@ -1,7 +1,7 @@
 # Glassmorphic Components Library
 
 ## Overview
-A modular, web-optimized collection of glassmorphic card components for the HVAC Control application. This library provides various card styles with blur effects, gradients, neumorphic designs, and glow effects.
+A modular, web-optimized collection of glassmorphic card components for the BREEZ Home application. This library provides various card styles with blur effects, gradients, neumorphic designs, and glow effects.
 
 ## Components Structure
 

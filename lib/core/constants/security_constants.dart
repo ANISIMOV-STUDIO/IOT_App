@@ -26,8 +26,8 @@ class SecurityConstants {
   static const int maxApiRequestsPerMinute = 60;
 
   /// JWT Configuration
-  static const String jwtIssuer = 'hvac_control_app';
-  static const String jwtAudience = 'hvac_users';
+  static const String jwtIssuer = 'breez_home_app';
+  static const String jwtAudience = 'breez_users';
   static const Duration jwtExpiry = Duration(hours: 1);
   static const Duration refreshTokenExpiry = Duration(days: 30);
 
@@ -116,7 +116,7 @@ class SecurityConstants {
 
   /// Biometric authentication settings
   static const bool biometricEnabled = true;
-  static const String biometricReason = 'Please authenticate to access HVAC Control';
+  static const String biometricReason = 'Please authenticate to access BREEZ Home';
   static const bool biometricRequired = false; // Optional enhancement
 
   /// Security event types for logging

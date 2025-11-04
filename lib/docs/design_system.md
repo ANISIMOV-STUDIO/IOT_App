@@ -1,10 +1,10 @@
 # Design System
 
-> HVAC Control Application - Design Specifications
+> BREEZ Home Application - Design Specifications
 
 ## Overview
 
-This design system defines the visual language and component library for the HVAC Control application. It ensures consistency across all screens and platforms (iOS, Android, Web).
+This design system defines the visual language and component library for the BREEZ Home application. It ensures consistency across all screens and platforms (iOS, Android, Web).
 
 ---
 

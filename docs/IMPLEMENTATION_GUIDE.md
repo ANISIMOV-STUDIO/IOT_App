@@ -2,7 +2,7 @@
 
 ## Quick Start
 
-To integrate the redesigned UI components into your HVAC Control app, follow these steps:
+To integrate the redesigned UI components into your BREEZ Home app, follow these steps:
 
 ## Step 1: Update Home Room Preview
 

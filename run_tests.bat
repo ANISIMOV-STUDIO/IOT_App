@@ -1,6 +1,6 @@
 @echo off
 echo =====================================
-echo HVAC Control App - Test Runner
+echo BREEZ Home App - Test Runner
 echo =====================================
 echo.
 

@@ -4,7 +4,7 @@
 **Accepted** - November 2, 2025
 
 ## Context
-The HVAC Control application needs a robust state management solution to handle:
+The BREEZ Home application needs a robust state management solution to handle:
 
 1. User authentication state
 2. HVAC unit data and real-time updates

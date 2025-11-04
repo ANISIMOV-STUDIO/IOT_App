@@ -1,4 +1,4 @@
-/// Modular Snackbar System for HVAC Control App
+/// Modular Snackbar System for BREEZ Home App
 ///
 /// This is the main entry point for all snackbar functionality.
 /// It provides a unified API that maintains backward compatibility

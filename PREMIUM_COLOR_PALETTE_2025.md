@@ -761,4 +761,4 @@ Toy → Premium Product
 
 *Документация создана: Ноябрь 2025*
 *Premium Luxury Color Palette 2025*
-*Flutter HVAC Control App - Color System Redesign*
+*Flutter BREEZ Home App - Color System Redesign*

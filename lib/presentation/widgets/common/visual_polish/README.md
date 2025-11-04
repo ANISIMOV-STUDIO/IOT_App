@@ -1,6 +1,6 @@
 # Visual Polish Components
 
-A collection of premium UI components with animations, hover effects, and responsive design for the HVAC Control mobile application.
+A collection of premium UI components with animations, hover effects, and responsive design for the BREEZ Home mobile application.
 
 ## Architecture
 

@@ -1,4 +1,4 @@
-# HVAC Control Application
+# BREEZ Home Application
 
 > Modern, cross-platform HVAC control system with advanced automation and real-time monitoring
 
@@ -225,7 +225,7 @@ File: `lib/core/utils/constants.dart`
 ```dart
 static const String mqttBrokerHost = 'localhost';
 static const int mqttBrokerPort = 1883;
-static const String mqttClientId = 'hvac_control_app';
+static const String mqttClientId = 'breez_home_app';
 ```
 
 ### Temperature Range

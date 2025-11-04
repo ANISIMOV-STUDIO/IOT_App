@@ -103,7 +103,7 @@ abstract class AppLocalizations {
   /// Application title
   ///
   /// In en, this message translates to:
-  /// **'HVAC Control'**
+  /// **'BREEZ Home'**
   String get appTitle;
 
   /// Home tab label
@@ -121,7 +121,7 @@ abstract class AppLocalizations {
   /// Main screen title
   ///
   /// In en, this message translates to:
-  /// **'HVAC Control'**
+  /// **'BREEZ Home'**
   String get hvacControl;
 
   /// Active devices count
@@ -511,7 +511,7 @@ abstract class AppLocalizations {
   /// Application description
   ///
   /// In en, this message translates to:
-  /// **'Cross-platform HVAC management application with MQTT integration.'**
+  /// **'BREEZ Home - Smart control for ZILON ventilation systems.'**
   String get appDescription;
 
   /// Device management screen title

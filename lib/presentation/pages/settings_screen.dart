@@ -184,7 +184,7 @@ class _SettingsScreenState extends State<SettingsScreen>
         ),
         SizedBox(height: 12.h),
         HvacInteractiveRipple(
-          child: _buildInfoRow('Разработчик', 'HVAC Control Team'),
+          child: _buildInfoRow('Разработчик', 'BREEZ'),
         ),
         SizedBox(height: 12.h),
         HvacInteractiveRipple(

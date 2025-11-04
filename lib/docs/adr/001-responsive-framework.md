@@ -4,7 +4,7 @@
 **Accepted** - November 2, 2025
 
 ## Context
-The HVAC Control application needs to run on multiple platforms (iOS, Android, Web) and support various screen sizes from small phones (iPhone SE 375x667) to large desktops (1920x1080). We need a robust responsive framework that:
+The BREEZ Home application needs to run on multiple platforms (iOS, Android, Web) and support various screen sizes from small phones (iPhone SE 375x667) to large desktops (1920x1080). We need a robust responsive framework that:
 
 1. Maintains design consistency across all screen sizes
 2. Scales UI elements proportionally

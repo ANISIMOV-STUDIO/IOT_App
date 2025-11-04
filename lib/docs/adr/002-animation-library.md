@@ -4,7 +4,7 @@
 **Accepted** - November 2, 2025
 
 ## Context
-The HVAC Control application requires smooth, engaging animations to enhance user experience and provide visual feedback. Animations are needed for:
+The BREEZ Home application requires smooth, engaging animations to enhance user experience and provide visual feedback. Animations are needed for:
 
 1. Screen transitions and page navigation
 2. UI element entrances and exits

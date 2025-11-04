@@ -154,7 +154,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
               // Title
               const Text(
-                'Welcome to\nHVAC Control',
+                'Welcome to\nBREEZ Home',
                 style: TextStyle(
                   fontSize: 42,
                   fontWeight: FontWeight.bold,

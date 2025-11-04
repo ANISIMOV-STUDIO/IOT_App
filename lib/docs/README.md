@@ -1,6 +1,6 @@
 # Documentation Index
 
-> Comprehensive documentation for the HVAC Control Application
+> Comprehensive documentation for the BREEZ Home Application
 
 ## Quick Links
 

@@ -1,7 +1,7 @@
 {
   "@@locale": "en",
 
-  "appTitle": "HVAC Control",
+  "appTitle": "BREEZ Home",
   "@appTitle": {
     "description": "Application title"
   },
@@ -16,7 +16,7 @@
     "description": "Settings tab label"
   },
 
-  "hvacControl": "HVAC Control",
+  "hvacControl": "BREEZ Home",
   "@hvacControl": {
     "description": "Main screen title"
   },
@@ -359,7 +359,7 @@
     "description": "About app label"
   },
 
-  "appDescription": "Cross-platform HVAC management application with MQTT integration.",
+  "appDescription": "BREEZ Home - Smart control for ZILON ventilation systems.",
   "@appDescription": {
     "description": "Application description"
   },

@@ -1,6 +1,6 @@
 # Component Library
 
-> Reusable widgets and components for the HVAC Control Application
+> Reusable widgets and components for the BREEZ Home Application
 
 ## Table of Contents
 1. [Buttons](#buttons)

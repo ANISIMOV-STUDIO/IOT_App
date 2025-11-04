@@ -2,7 +2,7 @@
 
 ## Overview
 
-A collection of web-optimized animated button components for the HVAC Control application. Originally refactored from a single 571-line file into modular, maintainable components.
+A collection of web-optimized animated button components for the BREEZ Home application. Originally refactored from a single 571-line file into modular, maintainable components.
 
 ## Components
 

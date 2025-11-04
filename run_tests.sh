@@ -7,7 +7,7 @@ RED='\033[0;31m'
 NC='\033[0m' # No Color
 
 echo "====================================="
-echo "HVAC Control App - Test Runner"
+echo "BREEZ Home App - Test Runner"
 echo "====================================="
 echo ""
 
