@@ -34,7 +34,7 @@ class QrScannerWebLayout extends StatelessWidget {
         padding: EdgeInsets.all(responsive.horizontalPadding),
         child: Container(
           constraints: BoxConstraints(maxWidth: responsive.formMaxWidth),
-          padding: EdgeInsets.all(AppSpacing.xlR),
+          padding: const EdgeInsets.all(AppSpacing.xl),
           decoration: HvacTheme.deviceCard(),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -44,22 +44,22 @@ class QrScannerWebLayout extends StatelessWidget {
                 size: responsive.iconSize,
                 color: HvacColors.primaryOrange,
               ),
-              SizedBox(height: AppSpacing.lgR),
+              const SizedBox(height: AppSpacing.lg),
               Text(
                 'Add HVAC Device',
                 style: theme.textTheme.headlineMedium?.copyWith(
-                  fontSize: responsive.isDesktop ? 28.sp : 24.sp,
+                  fontSize: responsive.isDesktop ? 28.0 : 24.0,
                 ),
               ),
-              SizedBox(height: AppSpacing.smR),
+              const SizedBox(height: AppSpacing.sm),
               Text(
                 'Enter device information manually or use camera',
                 style: theme.textTheme.bodyMedium?.copyWith(
-                  fontSize: 14.sp,
+                  fontSize: 14.0,
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: AppSpacing.xlR),
+              const SizedBox(height: AppSpacing.xl),
 
               // Tab selector for web
               if (responsive.isDesktop) ...[
@@ -67,7 +67,7 @@ class QrScannerWebLayout extends StatelessWidget {
                   controller: controller,
                   theme: theme,
                 ),
-                SizedBox(height: AppSpacing.xlR),
+                const SizedBox(height: AppSpacing.xl),
               ],
 
               // Content based on mode
@@ -81,7 +81,7 @@ class QrScannerWebLayout extends StatelessWidget {
                       )
                     : SizedBox(
                         key: const ValueKey('camera'),
-                        height: 400.h,
+                        height: 400.0,
                         child: WebCameraHandler(
                           onCodeDetected: onCodeDetected,
                           onUnsupported: () =>
@@ -160,9 +160,9 @@ class _TabButton extends StatelessWidget {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: EdgeInsets.symmetric(
-          horizontal: AppSpacing.mdR,
-          vertical: AppSpacing.smR,
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.md,
+          vertical: AppSpacing.sm,
         ),
         decoration: BoxDecoration(
           color: isSelected ? theme.colorScheme.primary : Colors.transparent,
@@ -173,16 +173,16 @@ class _TabButton extends StatelessWidget {
           children: [
             Icon(
               icon,
-              size: 20.w,
+              size: 20.0,
               color: isSelected
                   ? theme.colorScheme.onPrimary
                   : theme.colorScheme.onSurfaceVariant,
             ),
-            SizedBox(width: AppSpacing.smR),
+            const SizedBox(width: AppSpacing.sm),
             Text(
               label,
               style: TextStyle(
-                fontSize: 14.sp,
+                fontSize: 14.0,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                 color: isSelected
                     ? theme.colorScheme.onPrimary

@@ -45,9 +45,7 @@ class RoomCardCompact extends StatelessWidget {
             duration: AnimationDurations.medium,
             child: GlassCard(
               // GLASSMORPHISM: Frosted glass with blur
-              padding: const EdgeInsets.all(HvacSpacing.mdR),
-              enableBlur: true,
-              child: Column(
+              padding: const EdgeInsets.all(HvacSpacing.mdR), child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 mainAxisSize: MainAxisSize.min,
@@ -98,8 +96,8 @@ class RoomCardCompact extends StatelessWidget {
                 children: [
                   AnimatedContainer(
                     duration: UIConstants.durationMedium,
-                    width: 6.w,
-                    height: 6.w,
+                    width: 6.0,
+                    height: 6.0,
                     decoration: BoxDecoration(
                       color: isActive ? HvacColors.success : HvacColors.textTertiary,
                       shape: BoxShape.circle,
@@ -316,8 +314,8 @@ class _StatItem extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            width: 28.w,
-            height: 28.w,
+            width: 28.0,
+            height: 28.0,
             decoration: BoxDecoration(
               color: color.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(HvacRadius.smR),
@@ -342,7 +340,7 @@ class _StatItem extends StatelessWidget {
               Text(
                 label,
                 style: HvacTypography.overline.copyWith(
-                  fontSize: 10.sp,
+                  fontSize: 10.0,
                 ),
               ),
             ],

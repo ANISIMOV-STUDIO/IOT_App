@@ -52,24 +52,20 @@ class _GradientCardState extends State<GradientCard>
     super.initState();
     _controller = AnimationController(
       duration: const Duration(milliseconds: 200),
-      vsync: this,
-    );
+      vsync: this);
 
     _scaleAnimation = Tween<double>(
       begin: 1.0,
       end: kIsWeb ? 1.03 : 1.02, // Slightly more scale on web
     ).animate(CurvedAnimation(
       parent: _controller,
-      curve: Curves.easeOutCubic,
-    ));
+      curve: Curves.easeOutCubic));
 
     _shadowAnimation = Tween<double>(
       begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
+      end: 1.0).animate(CurvedAnimation(
       parent: _controller,
-      curve: Curves.easeOutCubic,
-    ));
+      curve: Curves.easeOutCubic));
   }
 
   @override
@@ -91,34 +87,28 @@ class _GradientCardState extends State<GradientCard>
   List<BoxShadow>? _buildResponsiveShadows() {
     if (!widget.enableShadow) return null;
 
-    final baseBlur = 12.w;
-    final hoverBlur = 20.w;
-    final baseOffset = 4.h;
-    final hoverOffset = 8.h;
+    const baseBlur = 12.0;
+    const hoverBlur = 20.0;
+    const baseOffset = 4.0;
+    const hoverOffset = 8.0;
 
     return [
       BoxShadow(
         color: widget.colors.first.withValues(
-          alpha: 0.3 * (1 + _shadowAnimation.value * 0.3),
-        ),
+          alpha: 0.3 * (1 + _shadowAnimation.value * 0.3)),
         blurRadius: baseBlur + (hoverBlur - baseBlur) * _shadowAnimation.value,
         offset: Offset(
           0,
-          baseOffset + (hoverOffset - baseOffset) * _shadowAnimation.value,
-        ),
-      ),
+          baseOffset + (hoverOffset - baseOffset) * _shadowAnimation.value)),
       BoxShadow(
         color: widget.colors.last.withValues(
-          alpha: 0.15 * (1 + _shadowAnimation.value * 0.5),
-        ),
+          alpha: 0.15 * (1 + _shadowAnimation.value * 0.5)),
         blurRadius: (baseBlur * 2) +
             ((hoverBlur * 1.6) - (baseBlur * 2)) * _shadowAnimation.value,
         offset: Offset(
           0,
           (baseOffset * 2) +
-              ((hoverOffset * 2) - (baseOffset * 2)) * _shadowAnimation.value,
-        ),
-      ),
+              ((hoverOffset * 2) - (baseOffset * 2)) * _shadowAnimation.value)),
     ];
   }
 
@@ -146,26 +136,19 @@ class _GradientCardState extends State<GradientCard>
           builder: (context, child) => Transform.scale(
             scale: _scaleAnimation.value,
             child: Container(
-              width: widget.width?.w,
-              height: widget.height?.h,
+              width: widget.width,
+              height: widget.height,
               margin: widget.margin,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: widget.colors,
                   begin: widget.begin,
-                  end: widget.end,
-                ),
-                borderRadius: BorderRadius.circular(widget.borderRadius.r),
-                boxShadow: _buildResponsiveShadows(),
-              ),
-              padding: widget.padding ?? EdgeInsets.all(HvacSpacing.lg.w),
-              child: child!,
-            ),
-          ),
-          child: widget.child,
-        ),
-      ),
-    );
+                  end: widget.end),
+                borderRadius: BorderRadius.circular(widget.borderRadius),
+                boxShadow: _buildResponsiveShadows()),
+              padding: widget.padding ?? const EdgeInsets.all(HvacSpacing.lg),
+              child: child!)),
+          child: widget.child)));
   }
 }
 

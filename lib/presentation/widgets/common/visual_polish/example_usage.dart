@@ -3,7 +3,6 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'visual_polish_components.dart';
 
 class VisualPolishExample extends StatelessWidget {
@@ -19,25 +18,25 @@ class VisualPolishExample extends StatelessWidget {
           children: [
             // Status Indicator Examples
             const Text('Status Indicators:', style: TextStyle(fontSize: 18)),
-            SizedBox(height: 16.h),
-            Row(
+            const SizedBox(height: 16),
+            const Row(
               children: [
-                const StatusIndicator(
+                StatusIndicator(
                   isActive: true,
                   activeLabel: 'Online',
                 ),
-                SizedBox(width: 24.w),
-                const StatusIndicator(
+                SizedBox(width: 24),
+                StatusIndicator(
                   isActive: false,
                   inactiveLabel: 'Offline',
                 ),
               ],
             ),
-            SizedBox(height: 32.h),
+            const SizedBox(height: 32),
 
             // Animated Badge Examples
             const Text('Animated Badges:', style: TextStyle(fontSize: 18)),
-            SizedBox(height: 16.h),
+            const SizedBox(height: 16),
             Row(
               children: [
                 AnimatedBadge(
@@ -47,7 +46,7 @@ class VisualPolishExample extends StatelessWidget {
                     // Handle premium badge tap
                   },
                 ),
-                SizedBox(width: 16.w),
+                const SizedBox(width: 16),
                 const AnimatedBadge(
                   label: 'New',
                   isNew: true,
@@ -55,31 +54,31 @@ class VisualPolishExample extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 32.h),
+            const SizedBox(height: 32),
 
             // Premium Progress Indicator
             const Text('Progress Indicators:', style: TextStyle(fontSize: 18)),
-            SizedBox(height: 16.h),
+            const SizedBox(height: 16),
             const PremiumProgressIndicator(
               value: 0.65,
               showPercentage: true,
               label: 'Upload Progress',
             ),
-            SizedBox(height: 32.h),
+            const SizedBox(height: 32),
 
             // Animated Dividers
             const Text('Dividers:', style: TextStyle(fontSize: 18)),
-            SizedBox(height: 16.h),
+            const SizedBox(height: 16),
             const AnimatedDivider(),
             const AnimatedDivider(
               style: DividerStyle.primary,
               height: 2,
             ),
-            SizedBox(height: 32.h),
+            const SizedBox(height: 32),
 
             // Floating Tooltip
             const Text('Floating Tooltip:', style: TextStyle(fontSize: 18)),
-            SizedBox(height: 16.h),
+            const SizedBox(height: 16),
             const FloatingTooltip(
               message: 'This is a helpful tooltip message',
               child: Icon(Icons.info_outline, size: 32),

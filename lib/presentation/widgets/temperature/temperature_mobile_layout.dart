@@ -31,8 +31,7 @@ class TemperatureMobileLayout extends StatelessWidget {
       SmoothAnimations.fadeIn(
         duration: AnimationDurations.medium,
         child: GlassCard(
-          padding: EdgeInsets.all(12.r),
-          enableBlur: true,
+          padding: const EdgeInsets.all(12.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -45,12 +44,12 @@ class TemperatureMobileLayout extends StatelessWidget {
                   extractTemp,
                 ),
               ),
-              SizedBox(height: 10.h),
+              const SizedBox(height: 10.0),
               // Temperature Grid - 2x2
               _buildTemperatureGrid(context),
               // Status bar
               if (TemperatureHelpers.hasAllData(supplyTemp, extractTemp)) ...[
-                SizedBox(height: 8.h),
+                const SizedBox(height: 8.0),
                 _buildStatusBar(context),
               ],
             ],
@@ -75,7 +74,7 @@ class TemperatureMobileLayout extends StatelessWidget {
                 value: supplyTemp,
               ),
             ),
-            SizedBox(width: 8.w),
+            const SizedBox(width: 8.0),
             Expanded(
               child: TemperatureTile(
                 icon: Icons.arrow_upward_rounded,
@@ -87,7 +86,7 @@ class TemperatureMobileLayout extends StatelessWidget {
         ),
         // Secondary temps (outdoor & indoor)
         if (TemperatureHelpers.hasSecondaryData(outdoorTemp, indoorTemp)) ...[
-          SizedBox(height: 8.h),
+          const SizedBox(height: 8.0),
           Row(
             children: [
               if (outdoorTemp != null)
@@ -99,7 +98,7 @@ class TemperatureMobileLayout extends StatelessWidget {
                     isSecondary: true,
                   ),
                 ),
-              if (outdoorTemp != null && indoorTemp != null) SizedBox(width: 8.w),
+              if (outdoorTemp != null && indoorTemp != null) const SizedBox(width: 8.0),
               if (indoorTemp != null)
                 Expanded(
                   child: TemperatureTile(
@@ -126,7 +125,7 @@ class TemperatureMobileLayout extends StatelessWidget {
     );
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 6.h),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
       decoration: BoxDecoration(
         color: HvacColors.backgroundDark,
         borderRadius: HvacRadius.smRadius,
@@ -144,13 +143,13 @@ class TemperatureMobileLayout extends StatelessWidget {
             isCompact: true,
           ),
           if (efficiency != null) ...[
-            SizedBox(width: 6.w),
+            const SizedBox(width: 6.0),
             Container(
               width: 1,
-              height: 16.h,
+              height: 16.0,
               color: HvacColors.backgroundCardBorder,
             ),
-            SizedBox(width: 6.w),
+            const SizedBox(width: 6.0),
             StatusItem(
               icon: Icons.speed,
               label: 'Эффективность',

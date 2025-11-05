@@ -25,7 +25,7 @@ class AlertsHistoryTab extends StatelessWidget {
     }
 
     return ListView.builder(
-      padding: EdgeInsets.all(20.w),
+      padding: const EdgeInsets.all(20.0),
       itemCount: alerts.length,
       itemBuilder: (context, index) {
         final alert = alerts[index];
@@ -41,23 +41,23 @@ class AlertsHistoryTab extends StatelessWidget {
         children: [
           Icon(
             Icons.check_circle_outline,
-            size: 64.sp,
+            size: 64.0,
             color: HvacColors.success.withValues(alpha: 0.5),
           ),
-          SizedBox(height: 16.h),
-          Text(
+          const SizedBox(height: 16.0),
+          const Text(
             'Нет аварий',
             style: TextStyle(
-              fontSize: 18.sp,
+              fontSize: 18.0,
               fontWeight: FontWeight.w600,
               color: HvacColors.textPrimary,
             ),
           ),
-          SizedBox(height: 8.h),
-          Text(
+          const SizedBox(height: 8.0),
+          const Text(
             'Установка работает без ошибок',
             style: TextStyle(
-              fontSize: 14.sp,
+              fontSize: 14.0,
               color: HvacColors.textSecondary,
             ),
           ),
@@ -90,8 +90,8 @@ class AlertsHistoryTab extends StatelessWidget {
     }
 
     return Container(
-      margin: EdgeInsets.only(bottom: 12.h),
-      padding: EdgeInsets.all(16.w),
+      margin: const EdgeInsets.only(bottom: 12.0),
+      padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
         borderRadius: HvacRadius.mdRadius,
@@ -104,15 +104,15 @@ class AlertsHistoryTab extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: EdgeInsets.all(8.w),
+            padding: const EdgeInsets.all(8.0),
             decoration: BoxDecoration(
               color: severityColor.withValues(alpha: 0.15),
               borderRadius: HvacRadius.smRadius,
             ),
-            child: Icon(severityIcon, color: severityColor, size: 20.sp),
+            child: Icon(severityIcon, color: severityColor, size: 20.0),
           ),
 
-          SizedBox(width: 12.w),
+          const SizedBox(width: 12.0),
 
           Expanded(
             child: Column(
@@ -120,27 +120,27 @@ class AlertsHistoryTab extends StatelessWidget {
               children: [
                 Text(
                   'Авария: код ${alert.code}',
-                  style: TextStyle(
-                    fontSize: 14.sp,
+                  style: const TextStyle(
+                    fontSize: 14.0,
                     fontWeight: FontWeight.w600,
                     color: HvacColors.textPrimary,
                   ),
                 ),
-                SizedBox(height: 4.h),
+                const SizedBox(height: 4.0),
                 Text(
                   alert.description,
-                  style: TextStyle(
-                    fontSize: 13.sp,
+                  style: const TextStyle(
+                    fontSize: 13.0,
                     color: HvacColors.textSecondary,
                   ),
                 ),
-                SizedBox(height: 8.h),
+                const SizedBox(height: 8.0),
                 Text(
                   alert.timestamp != null
                       ? '${alert.timestamp!.day.toString().padLeft(2, '0')}.${alert.timestamp!.month.toString().padLeft(2, '0')}.${alert.timestamp!.year} ${alert.timestamp!.hour.toString().padLeft(2, '0')}:${alert.timestamp!.minute.toString().padLeft(2, '0')}'
                       : 'Время неизвестно',
-                  style: TextStyle(
-                    fontSize: 11.sp,
+                  style: const TextStyle(
+                    fontSize: 11.0,
                     color: HvacColors.textTertiary,
                   ),
                 ),

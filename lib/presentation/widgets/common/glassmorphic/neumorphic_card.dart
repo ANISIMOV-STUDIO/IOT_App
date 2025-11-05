@@ -47,16 +47,13 @@ class _NeumorphicCardState extends State<NeumorphicCard>
     super.initState();
     _controller = AnimationController(
       duration: const Duration(milliseconds: 150),
-      vsync: this,
-    );
+      vsync: this);
 
     _depthAnimation = Tween<double>(
       begin: widget.depth,
-      end: 0,
-    ).animate(CurvedAnimation(
+      end: 0).animate(CurvedAnimation(
       parent: _controller,
-      curve: Curves.easeInOut,
-    ));
+      curve: Curves.easeInOut));
   }
 
   @override
@@ -79,23 +76,21 @@ class _NeumorphicCardState extends State<NeumorphicCard>
   }
 
   List<BoxShadow> _buildNeumorphicShadows(double depth) {
-    final responsiveDepth = depth.w;
-    final blurRadius = (depth * 2).w;
+    final responsiveDepth = depth;
+    final blurRadius = depth * 2;
 
     return [
       // Dark shadow (bottom-right)
       BoxShadow(
         color: Colors.black.withValues(alpha: kIsWeb ? 0.15 : 0.2),
         blurRadius: blurRadius,
-        offset: Offset(responsiveDepth, responsiveDepth),
-      ),
+        offset: Offset(responsiveDepth, responsiveDepth)),
       // Light shadow (top-left)
       BoxShadow(
         color: (widget.backgroundColor ?? HvacColors.backgroundCard)
             .withValues(alpha: 0.7),
         blurRadius: blurRadius,
-        offset: Offset(-responsiveDepth, -responsiveDepth),
-      ),
+        offset: Offset(-responsiveDepth, -responsiveDepth)),
     ];
   }
 
@@ -106,18 +101,15 @@ class _NeumorphicCardState extends State<NeumorphicCard>
     Widget card = AnimatedBuilder(
       animation: _depthAnimation,
       builder: (context, child) => Container(
-        width: widget.width?.w,
-        height: widget.height?.h,
+        width: widget.width,
+        height: widget.height,
         margin: widget.margin,
         decoration: BoxDecoration(
           color: backgroundColor,
-          borderRadius: BorderRadius.circular(widget.borderRadius.r),
-          boxShadow: _buildNeumorphicShadows(_depthAnimation.value),
-        ),
-        padding: widget.padding ?? EdgeInsets.all(HvacSpacing.lg.w),
-        child: widget.child,
-      ),
-    );
+          borderRadius: BorderRadius.circular(widget.borderRadius),
+          boxShadow: _buildNeumorphicShadows(_depthAnimation.value)),
+        padding: widget.padding ?? const EdgeInsets.all(HvacSpacing.lg),
+        child: widget.child));
 
     if (widget.onTap != null) {
       card = GestureDetector(
@@ -126,9 +118,7 @@ class _NeumorphicCardState extends State<NeumorphicCard>
         onTapCancel: _handleTapCancel,
         child: MouseRegion(
           cursor: kIsWeb ? SystemMouseCursors.click : MouseCursor.defer,
-          child: card,
-        ),
-      );
+          child: card));
     }
 
     return card;
@@ -164,8 +154,7 @@ class SoftNeumorphicCard extends StatelessWidget {
       onTap: onTap,
       depth: 2.0,
       backgroundColor: HvacColors.backgroundCard,
-      child: child,
-    );
+      child: child);
   }
 }
 
@@ -193,44 +182,37 @@ class ConcaveNeumorphicCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bgColor = backgroundColor ?? HvacColors.backgroundCard;
-    final responsiveDepth = depth.w;
+    final responsiveDepth = depth;
 
     return Container(
-      width: width?.w,
-      height: height?.h,
+      width: width,
+      height: height,
       margin: margin,
       decoration: BoxDecoration(
         color: bgColor,
-        borderRadius: BorderRadius.circular(HvacRadius.lg.r),
+        borderRadius: BorderRadius.circular(HvacRadius.lg),
         boxShadow: [
           // Inner shadow effect for concave appearance
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.2),
             blurRadius: responsiveDepth,
-            offset: Offset(-responsiveDepth / 2, -responsiveDepth / 2),
-          ),
+            offset: Offset(-responsiveDepth / 2, -responsiveDepth / 2)),
           BoxShadow(
             color: bgColor.withValues(alpha: 0.9),
             blurRadius: responsiveDepth,
-            offset: Offset(responsiveDepth / 2, responsiveDepth / 2),
-          ),
-        ],
-      ),
+            offset: Offset(responsiveDepth / 2, responsiveDepth / 2)),
+        ]),
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(HvacRadius.lg.r),
+          borderRadius: BorderRadius.circular(HvacRadius.lg),
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
               bgColor.withValues(alpha: 0.95),
               bgColor,
-            ],
-          ),
-        ),
-        padding: padding ?? EdgeInsets.all(HvacSpacing.lg.w),
-        child: child,
-      ),
-    );
+            ])),
+        padding: padding ?? const EdgeInsets.all(HvacSpacing.lg),
+        child: child));
   }
 }

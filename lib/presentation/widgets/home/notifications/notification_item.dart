@@ -20,8 +20,8 @@ class NotificationItem extends StatelessWidget {
     final severityColor = NotificationUtils.getSeverityColor(activity.severity);
 
     return Container(
-      margin: EdgeInsets.only(bottom: 12.h),
-      padding: EdgeInsets.all(12.w),
+      margin: const EdgeInsets.only(bottom: 12.0),
+      padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
         color: HvacColors.backgroundDark,
         borderRadius: HvacRadius.mdRadius,
@@ -34,7 +34,7 @@ class NotificationItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildIcon(severityColor),
-          SizedBox(width: 12.w),
+          const SizedBox(width: 12.0),
           Expanded(
             child: _buildContent(severityColor),
           ),
@@ -45,15 +45,15 @@ class NotificationItem extends StatelessWidget {
 
   Widget _buildIcon(Color severityColor) {
     return Container(
-      width: 36.w,
-      height: 36.h,
+      width: 36.0,
+      height: 36.0,
       decoration: BoxDecoration(
         color: severityColor.withValues(alpha: 0.15),
         borderRadius: HvacRadius.smRadius,
       ),
       child: Icon(
         activity.icon ?? Icons.notifications,
-        size: 18.sp,
+        size: 18.0,
         color: severityColor,
       ),
     );
@@ -68,8 +68,8 @@ class NotificationItem extends StatelessWidget {
             Expanded(
               child: Text(
                 activity.title,
-                style: TextStyle(
-                  fontSize: 13.sp,
+                style: const TextStyle(
+                  fontSize: 13.0,
                   fontWeight: FontWeight.w600,
                   color: HvacColors.textPrimary,
                 ),
@@ -78,18 +78,18 @@ class NotificationItem extends StatelessWidget {
             Text(
               activity.time,
               style: TextStyle(
-                fontSize: 11.sp,
+                fontSize: 11.0,
                 fontWeight: FontWeight.w500,
                 color: severityColor,
               ),
             ),
           ],
         ),
-        SizedBox(height: 4.h),
+        const SizedBox(height: 4.0),
         Text(
           activity.description,
-          style: TextStyle(
-            fontSize: 12.sp,
+          style: const TextStyle(
+            fontSize: 12.0,
             color: HvacColors.textSecondary,
           ),
           maxLines: 2,

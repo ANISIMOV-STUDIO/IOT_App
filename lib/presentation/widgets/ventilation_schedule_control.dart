@@ -45,7 +45,7 @@ class VentilationScheduleControl extends StatelessWidget {
               if (hasHeightConstraint) {
                 // Desktop layout with constrained height - use scrollable content
                 final spacing = switch (deviceSize) {
-                  DeviceSize.compact => 12.h,
+                  DeviceSize.compact => 12.0,
                   DeviceSize.medium || DeviceSize.expanded => AdaptiveLayout.spacing(context, base: 12),
                 };
                 return Column(
@@ -73,7 +73,7 @@ class VentilationScheduleControl extends StatelessWidget {
               } else {
                 // Mobile layout without height constraint
                 final spacing = switch (deviceSize) {
-                  DeviceSize.compact => 12.h,
+                  DeviceSize.compact => 12.0,
                   DeviceSize.medium || DeviceSize.expanded => AdaptiveLayout.spacing(context, base: 12),
                 };
                 return Column(
@@ -129,7 +129,7 @@ class VentilationScheduleControl extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
               ),
-              SizedBox(height: 2.h),
+              const SizedBox(height: 2.0),
               Text(
                 'Автоматическое управление',
                 style: HvacTypography.labelLarge.copyWith(
@@ -176,11 +176,11 @@ class VentilationScheduleControl extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              SizedBox(width: 8.w),
+              const SizedBox(width: 8.0),
               Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 6.w,
-                  vertical: 3.h,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 6.0,
+                  vertical: 3.0,
                 ),
                 decoration: BoxDecoration(
                   color: todaySchedule?.timerEnabled == true
@@ -272,7 +272,7 @@ class VentilationScheduleControl extends StatelessWidget {
             ),
           ),
           padding: EdgeInsets.symmetric(
-            vertical: deviceSize == DeviceSize.compact ? 10.h : 12.h,
+            vertical: deviceSize == DeviceSize.compact ? 10.0 : 12.0,
           ),
         ),
         child: Text(

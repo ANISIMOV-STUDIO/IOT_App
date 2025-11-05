@@ -25,13 +25,13 @@ class LightControlCard extends StatelessWidget {
     return MouseRegion(
       cursor: kIsWeb ? SystemMouseCursors.click : MouseCursor.defer,
       child: Container(
-        padding: EdgeInsets.all(16.w),
+        padding: const EdgeInsets.all(16.0),
         decoration: HvacTheme.deviceCard(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildHeader(context),
-            SizedBox(height: 8.h),
+            const SizedBox(height: 8.0),
             _buildSlider(context),
           ],
         ),
@@ -46,12 +46,12 @@ class LightControlCard extends StatelessWidget {
         Text(
           label,
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontSize: 16.sp,
+                fontSize: 16.0,
               ),
         ),
-        Icon(
+        const Icon(
           Icons.lightbulb_outline,
-          size: 20.sp,
+          size: 20.0,
           color: HvacColors.textSecondary,
         ),
       ],
@@ -61,12 +61,12 @@ class LightControlCard extends StatelessWidget {
   Widget _buildSlider(BuildContext context) {
     return SliderTheme(
       data: SliderTheme.of(context).copyWith(
-        trackHeight: 4.h,
-        thumbShape: RoundSliderThumbShape(
-          enabledThumbRadius: 8.r,
+        trackHeight: 4.0,
+        thumbShape: const RoundSliderThumbShape(
+          enabledThumbRadius: 8.0,
         ),
-        overlayShape: RoundSliderOverlayShape(
-          overlayRadius: kIsWeb ? 16.r : 20.r,
+        overlayShape: const RoundSliderOverlayShape(
+          overlayRadius: kIsWeb ? 16.0 : 20.0,
         ),
       ),
       child: Slider(

@@ -60,16 +60,14 @@ class BaseAccessibleButton extends StatelessWidget {
         cursor: (onPressed != null && !loading)
             ? SystemMouseCursors.click
             : SystemMouseCursors.basic,
-        child: button,
-      );
+        child: button);
     }
 
     // Wrap with tooltip if provided
     if (tooltip != null && tooltip!.isNotEmpty) {
       button = Tooltip(
         message: tooltip!,
-        child: button,
-      );
+        child: button);
     }
 
     // Wrap with semantics
@@ -78,17 +76,14 @@ class BaseAccessibleButton extends StatelessWidget {
       enabled: onPressed != null && !loading,
       label: semanticLabel,
       hint: loading ? 'Loading' : null,
-      child: button,
-    );
+      child: button);
 
     // Ensure minimum touch target
     return ConstrainedBox(
       constraints: BoxConstraints(
-        minHeight: minHeight.h,
-        minWidth: minWidth.w,
-      ),
-      child: button,
-    );
+        minHeight: minHeight,
+        minWidth: minWidth),
+      child: button);
   }
 
   Widget _buildButton(
@@ -123,8 +118,7 @@ class BaseAccessibleButton extends StatelessWidget {
           style: effectiveStyle,
           autofocus: autofocus,
           focusNode: focusNode,
-          child: effectiveChild,
-        );
+          child: effectiveChild);
 
       case ButtonType.filled:
         return FilledButton(
@@ -133,8 +127,7 @@ class BaseAccessibleButton extends StatelessWidget {
           style: effectiveStyle,
           autofocus: autofocus,
           focusNode: focusNode,
-          child: effectiveChild,
-        );
+          child: effectiveChild);
 
       case ButtonType.outlined:
         return OutlinedButton(
@@ -143,8 +136,7 @@ class BaseAccessibleButton extends StatelessWidget {
           style: effectiveStyle,
           autofocus: autofocus,
           focusNode: focusNode,
-          child: effectiveChild,
-        );
+          child: effectiveChild);
 
       case ButtonType.text:
         return TextButton(
@@ -153,8 +145,7 @@ class BaseAccessibleButton extends StatelessWidget {
           style: effectiveStyle,
           autofocus: autofocus,
           focusNode: focusNode,
-          child: effectiveChild,
-        );
+          child: effectiveChild);
 
       case ButtonType.icon:
         return IconButton(
@@ -162,8 +153,7 @@ class BaseAccessibleButton extends StatelessWidget {
           style: effectiveStyle,
           autofocus: autofocus,
           focusNode: focusNode,
-          icon: effectiveChild,
-        );
+          icon: effectiveChild);
 
       case ButtonType.tonal:
         return FilledButton.tonal(
@@ -172,8 +162,7 @@ class BaseAccessibleButton extends StatelessWidget {
           style: effectiveStyle,
           autofocus: autofocus,
           focusNode: focusNode,
-          child: effectiveChild,
-        );
+          child: effectiveChild);
     }
   }
 
@@ -181,54 +170,43 @@ class BaseAccessibleButton extends StatelessWidget {
     if (icon != null && type != ButtonType.icon) {
       final iconWidget = Icon(
         icon,
-        size: ResponsiveUtils.scaledIconSize(context, 20),
-      );
+        size: ResponsiveUtils.scaledIconSize(context, 20));
 
-      final spacing = SizedBox(width: HvacSpacing.xs.w);
+      const spacing = SizedBox(width: HvacSpacing.xs);
 
       return Row(
         mainAxisSize: MainAxisSize.min,
         children: iconAlignment == CustomIconAlignment.start
             ? [iconWidget, spacing, Flexible(child: child)]
-            : [Flexible(child: child), spacing, iconWidget],
-      );
+            : [Flexible(child: child), spacing, iconWidget]);
     }
 
     return child;
   }
 
   Widget _buildLoadingIndicator(BuildContext context, ThemeData theme) {
-    final size = type == ButtonType.icon ? 20.r : 16.r;
+    final size = type == ButtonType.icon ? 20.0 : 16.0;
     return SizedBox(
       width: size,
       height: size,
       child: CircularProgressIndicator(
         strokeWidth: 2,
         valueColor: AlwaysStoppedAnimation<Color>(
-          theme.colorScheme.onPrimary,
-        ),
-      ),
-    );
+          theme.colorScheme.onPrimary)));
   }
 
   ButtonStyle _getEffectiveStyle(BuildContext context, ThemeData theme) {
     final defaultStyle = ButtonStyle(
-      minimumSize: WidgetStateProperty.all(Size(minWidth.w, minHeight.h)),
+      minimumSize: WidgetStateProperty.all(Size(minWidth, minHeight)),
       padding: WidgetStateProperty.all(
         padding ??
             EdgeInsets.symmetric(
               horizontal: ResponsiveUtils.scaledSpacing(context, HvacSpacing.md),
-              vertical: ResponsiveUtils.scaledSpacing(context, HvacSpacing.sm),
-            ),
-      ),
+              vertical: ResponsiveUtils.scaledSpacing(context, HvacSpacing.sm))),
       shape: WidgetStateProperty.all(
         RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(
-            ResponsiveUtils.scaledBorderRadius(context, HvacRadius.md),
-          ),
-        ),
-      ),
-    );
+            ResponsiveUtils.scaledBorderRadius(context, HvacRadius.md)))));
 
     return style?.merge(defaultStyle) ?? defaultStyle;
   }

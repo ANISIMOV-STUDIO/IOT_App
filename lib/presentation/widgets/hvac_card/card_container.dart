@@ -87,7 +87,7 @@ class _HvacCardContainerState extends State<HvacCardContainer>
 
     return BoxDecoration(
       gradient: baseGradient,
-      borderRadius: BorderRadius.circular(HvacSpacing.lg.r),
+      borderRadius: BorderRadius.circular(HvacSpacing.lg),
       border: Border.all(
         color: borderColor,
         width: _isHovered ? 2 : 0,
@@ -95,16 +95,16 @@ class _HvacCardContainerState extends State<HvacCardContainer>
       boxShadow: [
         BoxShadow(
           color: shadowColor,
-          blurRadius: _isHovered ? 24.r : (widget.isSelected ? 20.r : 10.r),
-          offset: Offset(0, _isHovered ? 12.h : (widget.isSelected ? 10.h : 5.h)),
+          blurRadius: _isHovered ? 24.0 : (widget.isSelected ? 20.0 : 10.0),
+          offset: Offset(0, _isHovered ? 12.0 : (widget.isSelected ? 10.0 : 5.0)),
         ),
         if (widget.isSelected)
           BoxShadow(
             color: HvacColors.primaryOrange.withValues(
               alpha: 0.1 + (_glowAnimation.value * 0.1),
             ),
-            blurRadius: 30.r,
-            spreadRadius: _glowAnimation.value * 10.r,
+            blurRadius: 30.0,
+            spreadRadius: _glowAnimation.value * 10.0,
           ),
       ],
     );
@@ -139,9 +139,9 @@ class _HvacCardContainerState extends State<HvacCardContainer>
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
                 curve: Curves.easeInOut,
-                margin: EdgeInsets.symmetric(
-                  horizontal: HvacSpacing.md.w,
-                  vertical: HvacSpacing.sm.h,
+                margin: const EdgeInsets.symmetric(
+                  horizontal: HvacSpacing.md,
+                  vertical: HvacSpacing.sm,
                 ),
                 decoration: _getDecoration(),
                 child: widget.child,

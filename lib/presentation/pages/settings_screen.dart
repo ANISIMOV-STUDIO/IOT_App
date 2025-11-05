@@ -58,20 +58,20 @@ class _SettingsScreenState extends State<SettingsScreen>
         backgroundColor: HvacColors.backgroundCard,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: HvacColors.textPrimary, size: 24.sp),
+          icon: const Icon(Icons.arrow_back, color: HvacColors.textPrimary, size: 24.0),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           l10n.settingsTitle,
           style: HvacTypography.headlineMedium.copyWith(
-            fontSize: 20.sp,
+            fontSize: 20.0,
             color: HvacColors.textPrimary,
           ),
         ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(20.w),
+          padding: const EdgeInsets.all(20.0),
           child: _buildLayout(),
         ),
       ),
@@ -82,13 +82,13 @@ class _SettingsScreenState extends State<SettingsScreen>
     return Column(
       children: [
         _buildAppearanceSection(),
-        SizedBox(height: 20.h),
+        const SizedBox(height: 20.0),
         _buildUnitsSection(),
-        SizedBox(height: 20.h),
+        const SizedBox(height: 20.0),
         _buildNotificationsSection(),
-        SizedBox(height: 20.h),
+        const SizedBox(height: 20.0),
         _buildLanguageSection(),
-        SizedBox(height: 20.h),
+        const SizedBox(height: 20.0),
         _buildAboutSection(),
       ],
     );
@@ -158,7 +158,7 @@ class _SettingsScreenState extends State<SettingsScreen>
             },
           ),
         ),
-        SizedBox(height: 12.h),
+        const SizedBox(height: 12.0),
         HvacInteractiveRipple(
           child: _buildSwitchTile(
             title: l10n.emailNotifications,
@@ -182,9 +182,9 @@ class _SettingsScreenState extends State<SettingsScreen>
       icon: Icons.language_outlined,
       children: [
         _buildLanguageTile(l10n.russian),
-        SizedBox(height: 8.h),
+        const SizedBox(height: 8.0),
         _buildLanguageTile(l10n.english),
-        SizedBox(height: 8.h),
+        const SizedBox(height: 8.0),
         _buildLanguageTile(l10n.german),
       ],
     ).animate().fadeIn(duration: 500.ms, delay: 300.ms).slideX(begin: -0.1, end: 0);
@@ -199,15 +199,15 @@ class _SettingsScreenState extends State<SettingsScreen>
         HvacInteractiveRipple(
           child: _buildInfoRow(l10n.version, '1.0.0'),
         ),
-        SizedBox(height: 12.h),
+        const SizedBox(height: 12.0),
         HvacInteractiveRipple(
           child: _buildInfoRow(l10n.developer, 'BREEZ'),
         ),
-        SizedBox(height: 12.h),
+        const SizedBox(height: 12.0),
         HvacInteractiveRipple(
           child: _buildInfoRow(l10n.license, 'MIT License'),
         ),
-        SizedBox(height: 16.h),
+        const SizedBox(height: 16.0),
         SizedBox(
           width: double.infinity,
           child: HvacNeumorphicButton(
@@ -216,8 +216,8 @@ class _SettingsScreenState extends State<SettingsScreen>
             },
             child: Text(
               l10n.checkUpdates,
-              style: TextStyle(
-                fontSize: 16.sp,
+              style: const TextStyle(
+                fontSize: 16.0,
                 fontWeight: FontWeight.w600,
                 color: HvacColors.textPrimary,
               ),
@@ -241,7 +241,7 @@ class _SettingsScreenState extends State<SettingsScreen>
       ],
       borderRadius: HvacRadius.lgRadius,
       child: Container(
-        padding: EdgeInsets.all(20.w),
+        padding: const EdgeInsets.all(20.0),
         decoration: BoxDecoration(
           color: HvacColors.backgroundCard,
           borderRadius: HvacRadius.lgRadius,
@@ -251,18 +251,18 @@ class _SettingsScreenState extends State<SettingsScreen>
           children: [
             Row(
               children: [
-                Icon(icon, color: HvacColors.primaryOrange, size: 24.sp),
-                SizedBox(width: 12.w),
+                Icon(icon, color: HvacColors.primaryOrange, size: 24.0),
+                const SizedBox(width: 12.0),
                 Text(
                   title,
                   style: HvacTypography.headlineSmall.copyWith(
-                    fontSize: 18.sp,
+                    fontSize: 18.0,
                     color: HvacColors.textPrimary,
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 16.h),
+            const SizedBox(height: 16.0),
             ...children,
           ],
         ),
@@ -285,15 +285,15 @@ class _SettingsScreenState extends State<SettingsScreen>
               Text(
                 title,
                 style: HvacTypography.titleMedium.copyWith(
-                  fontSize: 14.sp,
+                  fontSize: 14.0,
                   color: HvacColors.textPrimary,
                 ),
               ),
-              SizedBox(height: 4.h),
+              const SizedBox(height: 4.0),
               Text(
                 subtitle,
                 style: HvacTypography.labelLarge.copyWith(
-                  fontSize: 12.sp,
+                  fontSize: 12.0,
                   color: HvacColors.textSecondary,
                 ),
               ),
@@ -330,7 +330,7 @@ class _SettingsScreenState extends State<SettingsScreen>
         _showSnackBar(l10n.languageChangedTo(language));
       },
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
         decoration: BoxDecoration(
           color: isSelected
               ? HvacColors.primaryOrange.withValues(alpha: 0.1)
@@ -348,13 +348,13 @@ class _SettingsScreenState extends State<SettingsScreen>
             Icon(
               isSelected ? Icons.radio_button_checked : Icons.radio_button_unchecked,
               color: isSelected ? HvacColors.primaryOrange : HvacColors.textSecondary,
-              size: 20.sp,
+              size: 20.0,
             ),
-            SizedBox(width: 12.w),
+            const SizedBox(width: 12.0),
             Text(
               language,
               style: HvacTypography.bodyMedium.copyWith(
-                fontSize: 14.sp,
+                fontSize: 14.0,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                 color: isSelected ? HvacColors.primaryOrange : HvacColors.textPrimary,
               ),
@@ -375,14 +375,14 @@ class _SettingsScreenState extends State<SettingsScreen>
         Text(
           label,
           style: HvacTypography.bodyMedium.copyWith(
-            fontSize: 14.sp,
+            fontSize: 14.0,
             color: HvacColors.textSecondary,
           ),
         ),
         Text(
           value,
           style: HvacTypography.titleMedium.copyWith(
-            fontSize: 14.sp,
+            fontSize: 14.0,
             color: HvacColors.textPrimary,
           ),
         ),
@@ -397,7 +397,7 @@ class _SettingsScreenState extends State<SettingsScreen>
         backgroundColor: HvacColors.success,
         duration: const Duration(seconds: 2),
         behavior: SnackBarBehavior.floating,
-        margin: EdgeInsets.all(16.w),
+        margin: const EdgeInsets.all(16.0),
         shape: RoundedRectangleBorder(
           borderRadius: HvacRadius.mdRadius,
         ),

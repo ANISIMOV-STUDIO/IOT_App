@@ -4,7 +4,6 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class UIConstants {
   // ==================== ICON SIZES ====================
@@ -30,12 +29,12 @@ class UIConstants {
   static const double iconXxl = 64.0;
 
   // Responsive icon sizes
-  static double get iconXsR => iconXs.r;
-  static double get iconSmR => iconSm.r;
-  static double get iconMdR => iconMd.r;
-  static double get iconLgR => iconLg.r;
-  static double get iconXlR => iconXl.r;
-  static double get iconXxlR => iconXxl.r;
+  static double get iconXsR => iconXs;
+  static double get iconSmR => iconSm;
+  static double get iconMdR => iconMd;
+  static double get iconLgR => iconLg;
+  static double get iconXlR => iconXl;
+  static double get iconXxlR => iconXxl;
 
   // ==================== ELEVATION LEVELS ====================
   // Material Design 3 elevation system (0-5 levels)
@@ -92,9 +91,9 @@ class UIConstants {
   static const double largeTouchTarget = 64.0;
 
   // Responsive touch targets
-  static double get minTouchTargetR => minTouchTarget.r;
-  static double get comfortableTouchTargetR => comfortableTouchTarget.r;
-  static double get largeTouchTargetR => largeTouchTarget.r;
+  static double get minTouchTargetR => minTouchTarget;
+  static double get comfortableTouchTargetR => comfortableTouchTarget;
+  static double get largeTouchTargetR => largeTouchTarget;
 
   // ==================== OPACITY LEVELS ====================
   // Standard opacity values for disabled states, overlays
@@ -155,9 +154,9 @@ class UIConstants {
   static const double maxTextWidth = 680.0;
 
   // Responsive layout constraints
-  static double get maxContentWidthR => maxContentWidth.w;
-  static double get maxCardWidthR => maxCardWidth.w;
-  static double get maxTextWidthR => maxTextWidth.w;
+  static double get maxContentWidthR => maxContentWidth;
+  static double get maxCardWidthR => maxCardWidth;
+  static double get maxTextWidthR => maxTextWidth;
 
   // ==================== BREAKPOINTS ====================
   // Standard responsive breakpoints (mobile and tablet only)
@@ -180,9 +179,9 @@ class UIConstants {
   static const double expandedCardHeight = 400.0;
 
   // Responsive card dimensions
-  static double get controlCardHeightR => controlCardHeight.h;
-  static double get compactCardHeightR => compactCardHeight.h;
-  static double get expandedCardHeightR => expandedCardHeight.h;
+  static double get controlCardHeightR => controlCardHeight;
+  static double get compactCardHeightR => compactCardHeight;
+  static double get expandedCardHeightR => expandedCardHeight;
 
   // ==================== BLUR RADIUS ====================
 

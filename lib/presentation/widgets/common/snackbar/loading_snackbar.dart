@@ -215,7 +215,7 @@ class _LoadingContent extends StatelessWidget {
                 ),
               ),
               if (showProgress && progress != null) ...[
-                SizedBox(height: 8.h),
+                const SizedBox(height: 8.0),
                 ClipRRect(
                   borderRadius: HvacRadius.xsRadius,
                   child: LinearProgressIndicator(
@@ -227,7 +227,7 @@ class _LoadingContent extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: 4.h),
+                const SizedBox(height: 4.0),
                 Text(
                   '${(progress! * 100).toStringAsFixed(0)}%',
                   style: theme.textTheme.bodySmall?.copyWith(

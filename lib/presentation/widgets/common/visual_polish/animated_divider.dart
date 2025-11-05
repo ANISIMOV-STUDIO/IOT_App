@@ -28,13 +28,11 @@ class AnimatedDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget divider = Container(
-      height: height.h,
-      margin: margin ?? EdgeInsets.symmetric(vertical: HvacSpacing.md.h),
+      height: height,
+      margin: margin ?? const EdgeInsets.symmetric(vertical: HvacSpacing.md),
       decoration: BoxDecoration(
         gradient: _buildGradient(),
-        borderRadius: HvacRadius.fullRadius,
-      ),
-    );
+        borderRadius: HvacRadius.fullRadius));
 
     if (animate) {
       divider = divider
@@ -45,8 +43,7 @@ class AnimatedDivider extends StatelessWidget {
           .shimmer(
             duration: 2000.ms,
             delay: 500.ms,
-            color: HvacColors.primaryOrange.withValues(alpha: 0.05),
-          );
+            color: HvacColors.primaryOrange.withValues(alpha: 0.05));
     }
     return divider;
   }
@@ -63,8 +60,7 @@ class AnimatedDivider extends StatelessWidget {
         return LinearGradient(
           colors: [Colors.transparent, bc.withValues(alpha: 0.5),
                    bc.withValues(alpha: 0.5), Colors.transparent],
-          stops: s,
-        );
+          stops: s);
       case DividerStyle.solid:
         return LinearGradient(colors: [
           bc.withValues(alpha: 0.3),
@@ -74,8 +70,7 @@ class AnimatedDivider extends StatelessWidget {
         return LinearGradient(
           colors: [Colors.transparent, pc.withValues(alpha: 0.3),
                    pc.withValues(alpha: 0.3), Colors.transparent],
-          stops: s,
-        );
+          stops: s);
       case DividerStyle.dashed:
         return LinearGradient(colors: [
           bc.withValues(alpha: 0.4),
@@ -107,14 +102,12 @@ class AnimatedVerticalDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget divider = Container(
-      width: width.w,
-      height: height?.h,
-      margin: margin ?? EdgeInsets.symmetric(horizontal: HvacSpacing.md.w),
+      width: width,
+      height: height,
+      margin: margin ?? const EdgeInsets.symmetric(horizontal: HvacSpacing.md),
       decoration: BoxDecoration(
         gradient: _buildGradient(),
-        borderRadius: HvacRadius.fullRadius,
-      ),
-    );
+        borderRadius: HvacRadius.fullRadius));
 
     if (animate) {
       divider = divider
@@ -135,8 +128,7 @@ class AnimatedVerticalDivider extends StatelessWidget {
         end: Alignment.bottomCenter,
         colors: [Colors.transparent, bc.withValues(alpha: 0.5),
                  bc.withValues(alpha: 0.5), Colors.transparent],
-        stops: const [0.0, 0.2, 0.8, 1.0],
-      );
+        stops: const [0.0, 0.2, 0.8, 1.0]);
     }
     return LinearGradient(colors: [
       bc.withValues(alpha: 0.3),

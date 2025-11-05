@@ -25,7 +25,7 @@ class UnitStatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16.w),
+      padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
         borderRadius: HvacRadius.mdRadius,
@@ -39,13 +39,13 @@ class UnitStatCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(icon, color: color, size: 20.sp),
-              SizedBox(width: 8.w),
+              Icon(icon, color: color, size: 20.0),
+              const SizedBox(width: 8.0),
               Expanded(
                 child: Text(
                   label,
-                  style: TextStyle(
-                    fontSize: 12.sp,
+                  style: const TextStyle(
+                    fontSize: 12.0,
                     color: HvacColors.textSecondary,
                   ),
                   overflow: TextOverflow.ellipsis,
@@ -53,14 +53,14 @@ class UnitStatCard extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 8.h),
+          const SizedBox(height: 8.0),
           Row(
             children: [
               Flexible(
                 child: Text(
                   value,
                   style: TextStyle(
-                    fontSize: 20.sp,
+                    fontSize: 20.0,
                     fontWeight: FontWeight.w700,
                     color: color,
                   ),
@@ -68,11 +68,11 @@ class UnitStatCard extends StatelessWidget {
                 ),
               ),
               if (trend != null) ...[
-                SizedBox(width: 8.w),
+                const SizedBox(width: 8.0),
                 Text(
                   trend!,
-                  style: TextStyle(
-                    fontSize: 12.sp,
+                  style: const TextStyle(
+                    fontSize: 12.0,
                     color: HvacColors.textSecondary,
                   ),
                 ),

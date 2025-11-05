@@ -267,13 +267,13 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
             children: [
               Row(
                 children: [
-                  Icon(icon, color: color, size: 18.sp),
+                  Icon(icon, color: color, size: 18.0),
                   const SizedBox(width: HvacSpacing.xsR),
                   Expanded(
                     child: Text(
                       label,
-                      style: TextStyle(
-                        fontSize: 11.sp,
+                      style: const TextStyle(
+                        fontSize: 11.0,
                         color: HvacColors.textSecondary,
                       ),
                       maxLines: 1,
@@ -286,7 +286,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
               Text(
                 value,
                 style: TextStyle(
-                  fontSize: 20.sp,
+                  fontSize: 20.0,
                   fontWeight: FontWeight.w700,
                   color: color,
                 ),
@@ -296,14 +296,14 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
                 children: [
                   Icon(
                     isPositive ? Icons.arrow_upward : Icons.arrow_downward,
-                    size: 12.sp,
+                    size: 12.0,
                     color: isPositive ? HvacColors.success : HvacColors.error,
                   ),
                   const SizedBox(width: HvacSpacing.xxsR),
                   Text(
                     change,
                     style: TextStyle(
-                      fontSize: 11.sp,
+                      fontSize: 11.0,
                       fontWeight: FontWeight.w600,
                       color: isPositive ? HvacColors.success : HvacColors.error,
                     ),
@@ -341,18 +341,18 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+          const Row(
             children: [
               Icon(
                 Icons.show_chart,
                 color: HvacColors.primaryOrange,
-                size: 20.sp,
+                size: 20.0,
               ),
-              const SizedBox(width: HvacSpacing.xsR),
+              SizedBox(width: HvacSpacing.xsR),
               Text(
                 'История температуры',
                 style: TextStyle(
-                  fontSize: 16.sp,
+                  fontSize: 16.0,
                   fontWeight: FontWeight.w600,
                   color: HvacColors.textPrimary,
                 ),
@@ -398,18 +398,18 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+          const Row(
             children: [
               Icon(
                 Icons.water_drop,
                 color: HvacColors.info,
-                size: 20.sp,
+                size: 20.0,
               ),
-              const SizedBox(width: HvacSpacing.xsR),
+              SizedBox(width: HvacSpacing.xsR),
               Text(
                 'История влажности',
                 style: TextStyle(
-                  fontSize: 16.sp,
+                  fontSize: 16.0,
                   fontWeight: FontWeight.w600,
                   color: HvacColors.textPrimary,
                 ),
@@ -452,18 +452,18 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+          const Row(
             children: [
               Icon(
                 Icons.bolt,
                 color: HvacColors.warning,
-                size: 20.sp,
+                size: 20.0,
               ),
-              const SizedBox(width: HvacSpacing.xsR),
+              SizedBox(width: HvacSpacing.xsR),
               Text(
                 'Энергопотребление',
                 style: TextStyle(
-                  fontSize: 16.sp,
+                  fontSize: 16.0,
                   fontWeight: FontWeight.w600,
                   color: HvacColors.textPrimary,
                 ),
@@ -503,18 +503,18 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+          const Row(
             children: [
               Icon(
                 Icons.air,
                 color: HvacColors.primaryBlue,
-                size: 20.sp,
+                size: 20.0,
               ),
-              const SizedBox(width: HvacSpacing.xsR),
+              SizedBox(width: HvacSpacing.xsR),
               Text(
                 'Скорость вентилятора',
                 style: TextStyle(
-                  fontSize: 16.sp,
+                  fontSize: 16.0,
                   fontWeight: FontWeight.w600,
                   color: HvacColors.textPrimary,
                 ),
@@ -535,7 +535,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
 
   Widget _buildLoadingChartContainer(String title) {
     return Container(
-      height: 300.h,
+      height: 300.0,
       padding: const EdgeInsets.all(HvacSpacing.xlR),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
@@ -549,8 +549,8 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            width: 150.w,
-            height: 16.h,
+            width: 150.0,
+            height: 16.0,
             decoration: BoxDecoration(
               color: HvacColors.backgroundElevated,
               borderRadius: BorderRadius.circular(4),

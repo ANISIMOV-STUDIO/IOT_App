@@ -31,12 +31,12 @@ class AdaptiveDialog extends StatelessWidget {
     } else if (isTablet) {
       dialogWidth = screenWidth * 0.7;
     } else {
-      dialogWidth = 600.w;
+      dialogWidth = 600.0;
     }
 
     return Dialog(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(isMobile ? 16.r : 20.r),
+        borderRadius: BorderRadius.circular(isMobile ? 16.0 : 20.0),
       ),
       child: Container(
         width: dialogWidth,
@@ -51,7 +51,7 @@ class AdaptiveDialog extends StatelessWidget {
                 padding: const EdgeInsets.all(HvacSpacing.lgR),
                 child: DefaultTextStyle(
                   style: TextStyle(
-                    fontSize: isMobile ? 18.sp : 20.sp,
+                    fontSize: isMobile ? 18.0 : 20.0,
                     fontWeight: FontWeight.w600,
                   ),
                   child: title!,

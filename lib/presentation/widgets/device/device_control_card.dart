@@ -51,8 +51,8 @@ class DeviceControlCard extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: TextStyle(
-                        fontSize: 16.sp,
+                      style: const TextStyle(
+                        fontSize: 16.0,
                         fontWeight: FontWeight.w600,
                         color: HvacColors.textPrimary,
                       ),
@@ -60,24 +60,24 @@ class DeviceControlCard extends StatelessWidget {
                     const SizedBox(height: HvacSpacing.xxsR),
                     Text(
                       subtitle,
-                      style: TextStyle(
-                        fontSize: 12.sp,
+                      style: const TextStyle(
+                        fontSize: 12.0,
                         color: HvacColors.textSecondary,
                       ),
                     ),
                   ],
                 ),
                 Container(
-                  width: 40.w,
-                  height: 40.h,
+                  width: 40.0,
+                  height: 40.0,
                   decoration: BoxDecoration(
                     color: HvacColors.warning.withValues(alpha: 0.2),
                     shape: BoxShape.circle,
                   ),
-                  child: Center(
+                  child: const Center(
                     child: Icon(
                       Icons.circle,
-                      size: 8.sp,
+                      size: 8.0,
                       color: HvacColors.warning,
                     ),
                   ),
@@ -88,7 +88,7 @@ class DeviceControlCard extends StatelessWidget {
             if (deviceImage != null)
               Center(
                 child: SizedBox(
-                  height: 120.h,
+                  height: 120.0,
                   child: deviceImage,
                 ),
               ),

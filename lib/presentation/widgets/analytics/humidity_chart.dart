@@ -40,7 +40,7 @@ class HumidityChart extends StatelessWidget {
           ),
           const SizedBox(height: HvacSpacing.lgR),
           SizedBox(
-            height: 200.h,
+            height: 200.0,
             child: LineChart(
               LineChartData(
                 gridData: FlGridData(
@@ -74,7 +74,7 @@ class HumidityChart extends StatelessWidget {
                         }
                         final reading = readings[value.toInt()];
                         return Padding(
-                          padding: EdgeInsets.only(top: 8.h),
+                          padding: const EdgeInsets.only(top: 8.0),
                           child: Text(
                             '${reading.timestamp.hour}:00',
                             style: HvacTypography.captionSmall.copyWith(

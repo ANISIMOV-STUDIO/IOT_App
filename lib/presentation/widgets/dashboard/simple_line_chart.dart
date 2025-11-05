@@ -20,15 +20,12 @@ class SimpleLineChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: height.h,
+      height: height,
       child: CustomPaint(
         painter: LineChartPainter(
           data: data,
-          color: color,
-        ),
-        child: Container(),
-      ),
-    );
+          color: color),
+        child: Container()));
   }
 }
 
@@ -47,7 +44,7 @@ class LineChartPainter extends CustomPainter {
 
     final paint = Paint()
       ..color = color
-      ..strokeWidth = 2.w
+      ..strokeWidth = 2.0
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
 
@@ -92,7 +89,7 @@ class LineChartPainter extends CustomPainter {
     for (int i = 0; i < data.length; i++) {
       final x = i * stepX;
       final y = size.height - ((data[i] - minValue) / range * size.height);
-      canvas.drawCircle(Offset(x, y), 3.r, pointPaint);
+      canvas.drawCircle(Offset(x, y), 3.0, pointPaint);
     }
   }
 

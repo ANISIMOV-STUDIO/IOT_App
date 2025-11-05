@@ -45,7 +45,7 @@ class GlassContainer extends StatelessWidget {
       height: height,
       margin: margin,
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(borderRadius.r),
+        borderRadius: BorderRadius.circular(borderRadius),
         child: BackdropFilter(
           filter: ImageFilter.blur(
             sigmaX: blurSigma,
@@ -55,7 +55,7 @@ class GlassContainer extends StatelessWidget {
             padding: padding,
             decoration: BoxDecoration(
               color: backgroundColor ?? HvacColors.glassShimmerBase,
-              borderRadius: BorderRadius.circular(borderRadius.r),
+              borderRadius: BorderRadius.circular(borderRadius),
               border: Border.all(
                 color: borderColor ?? HvacColors.glassBorder,
                 width: borderWidth,
@@ -97,7 +97,7 @@ class GlassCard extends StatelessWidget {
         height: height,
         padding: padding ?? HvacSpacing.paddingLg,
         margin: margin,
-        borderRadius: AppRadius.lgR,
+        borderRadius: AppRadius.lg,
         blurSigma: HvacColors.blurMedium,
         backgroundColor: HvacColors.backgroundCard.withValues(alpha: 0.7),
         borderColor: HvacColors.glassBorder,
@@ -119,7 +119,7 @@ class GlassCard extends StatelessWidget {
         margin: margin,
         decoration: BoxDecoration(
           color: HvacColors.backgroundCard.withValues(alpha: 0.9),
-          borderRadius: BorderRadius.circular(AppRadius.lgR),
+          borderRadius: BorderRadius.circular(AppRadius.lg),
           border: Border.all(
             color: HvacColors.backgroundCardBorder,
             width: 1,
@@ -280,16 +280,16 @@ class _GlassButtonState extends State<GlassButton> {
       children: [
         if (widget.icon != null) ...[
           Icon(
-            widget.icon,
-            size: 18.r,
+            widget.icon!,
+            size: 18.0,
             color: HvacColors.glassWhite,
           ),
-          SizedBox(width: 8.w),
+          const SizedBox(width: 8.0),
         ],
         Text(
           widget.label,
-          style: TextStyle(
-            fontSize: 14.sp,
+          style: const TextStyle(
+            fontSize: 14.0,
             fontWeight: FontWeight.w600,
             color: HvacColors.glassWhite,
           ),
@@ -311,9 +311,9 @@ class _GlassButtonState extends State<GlassButton> {
         onTap: widget.onPressed,
         child: GlassContainer(
           width: widget.width,
-          padding: EdgeInsets.symmetric(
-            horizontal: 20.w,
-            vertical: 12.h,
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20.0,
+            vertical: 12.0,
           ),
           borderRadius: 12.0,
           blurSigma: _isHovered ? HvacColors.blurHeavy : HvacColors.blurMedium,
@@ -344,7 +344,7 @@ class GlassAppBar extends StatelessWidget implements PreferredSizeWidget {
   });
 
   @override
-  Size get preferredSize => Size.fromHeight(56.h);
+  Size get preferredSize => const Size.fromHeight(56.0);
 
   @override
   Widget build(BuildContext context) {

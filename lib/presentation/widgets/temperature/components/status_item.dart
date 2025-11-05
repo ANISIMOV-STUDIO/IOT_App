@@ -29,10 +29,10 @@ class StatusItem extends StatelessWidget {
         children: [
           Icon(
             icon,
-            size: isCompact ? 14.w : 16.w,
+            size: isCompact ? 14.0 : 16.0,
             color: HvacColors.neutral200,
           ),
-          SizedBox(width: 6.w),
+          const SizedBox(width: 6.0),
           Flexible(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,7 +41,7 @@ class StatusItem extends StatelessWidget {
                 Text(
                   label,
                   style: TextStyle(
-                    fontSize: isCompact ? 9.sp : 10.sp,
+                    fontSize: isCompact ? 9.0 : 10.0,
                     color: HvacColors.textTertiary,
                   ),
                   overflow: TextOverflow.ellipsis,
@@ -49,7 +49,7 @@ class StatusItem extends StatelessWidget {
                 Text(
                   value,
                   style: TextStyle(
-                    fontSize: isCompact ? 12.sp : 13.sp,
+                    fontSize: isCompact ? 12.0 : 13.0,
                     fontWeight: FontWeight.w600,
                     color: HvacColors.textPrimary,
                   ),
@@ -77,8 +77,8 @@ class TemperatureDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 1,
-      height: height.h,
-      margin: EdgeInsets.symmetric(horizontal: 16.w),
+      height: height,
+      margin: const EdgeInsets.symmetric(horizontal: 16.0),
       color: HvacColors.backgroundCardBorder,
     );
   }

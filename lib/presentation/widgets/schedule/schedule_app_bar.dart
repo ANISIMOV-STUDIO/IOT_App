@@ -43,18 +43,18 @@ class ScheduleAppBar extends StatelessWidget implements PreferredSizeWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           'Расписание',
           style: TextStyle(
-            fontSize: 18.sp,
+            fontSize: 18.0,
             fontWeight: FontWeight.w600,
             color: HvacColors.textPrimary,
           ),
         ),
         Text(
           unit.name,
-          style: TextStyle(
-            fontSize: 12.sp,
+          style: const TextStyle(
+            fontSize: 12.0,
             color: HvacColors.textSecondary,
             fontWeight: FontWeight.w400,
           ),
@@ -159,10 +159,10 @@ class _SaveButtonState extends State<_SaveButton> {
   }
 
   Widget _buildSavingIndicator() {
-    return SizedBox(
-      width: 20.w,
-      height: 20.h,
-      child: const CircularProgressIndicator(
+    return const SizedBox(
+      width: 20.0,
+      height: 20.0,
+      child: CircularProgressIndicator(
         strokeWidth: 2,
         valueColor: AlwaysStoppedAnimation<Color>(HvacColors.primaryOrange),
       ),
@@ -170,11 +170,11 @@ class _SaveButtonState extends State<_SaveButton> {
   }
 
   Widget _buildSaveText() {
-    return Text(
+    return const Text(
       'Сохранить',
       style: TextStyle(
         color: HvacColors.primaryOrange,
-        fontSize: 14.sp,
+        fontSize: 14.0,
         fontWeight: FontWeight.w600,
       ),
     );

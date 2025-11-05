@@ -26,16 +26,16 @@ class ScheduleInfo extends StatelessWidget {
         Text(
           schedule.name,
           style: TextStyle(
-            fontSize: isTablet ? 18.sp : 16.sp,
+            fontSize: isTablet ? 18.0 : 16.0,
             fontWeight: FontWeight.w600,
             color: HvacColors.textPrimary,
           ),
         ),
-        SizedBox(height: HvacSpacing.xs.h),
+        const SizedBox(height: 8.0),
         Text(
           '${schedule.time} • ${schedule.days.join(', ')}',
-          style: TextStyle(
-            fontSize: 14.sp,
+          style: const TextStyle(
+            fontSize: 14.0,
             color: HvacColors.textSecondary,
           ),
         ),
@@ -57,21 +57,21 @@ class TemperatureInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(
+        const Icon(
           Icons.thermostat,
-          size: 20.sp,
+          size: 20.0,
           color: HvacColors.primaryOrange,
         ),
-        SizedBox(width: HvacSpacing.xs.w),
+        const SizedBox(width: 8.0),
         Text(
           '${schedule.temperature}°C',
-          style: TextStyle(
-            fontSize: 14.sp,
+          style: const TextStyle(
+            fontSize: 14.0,
             fontWeight: FontWeight.w500,
             color: HvacColors.textPrimary,
           ),
         ),
-        SizedBox(width: HvacSpacing.sm.w),
+        const SizedBox(width: 12.0),
         _ModeChip(mode: schedule.mode),
       ],
     );
@@ -87,18 +87,18 @@ class _ModeChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: HvacSpacing.xs.w,
-        vertical: HvacSpacing.xxs.h,
+      padding: const EdgeInsets.symmetric(
+        horizontal: 8.0,
+        vertical: 4.0,
       ),
       decoration: BoxDecoration(
         color: HvacColors.primaryOrange.withValues(alpha: 0.2),
-        borderRadius: BorderRadius.circular(HvacSpacing.xs.r),
+        borderRadius: BorderRadius.circular(8.0),
       ),
       child: Text(
         mode,
-        style: TextStyle(
-          fontSize: 12.sp,
+        style: const TextStyle(
+          fontSize: 12.0,
           color: HvacColors.primaryOrange,
           fontWeight: FontWeight.w500,
         ),

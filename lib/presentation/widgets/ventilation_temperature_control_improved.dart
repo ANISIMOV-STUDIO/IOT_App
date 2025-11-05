@@ -37,7 +37,7 @@ class VentilationTemperatureControlImproved extends StatelessWidget {
     // For tablet and desktop, use the full layout
     return ConstrainedBox(
       constraints: BoxConstraints(
-        maxHeight: isTablet ? 250.h : 300.h,
+        maxHeight: isTablet ? 250.0 : 300.0,
       ),
       child: TemperatureDisplayCompact(
         supplyTemp: unit.supplyAirTemp,
@@ -62,7 +62,7 @@ class TemperatureGridCompact extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16.w),
+      padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
         borderRadius: HvacRadius.lgRadius,
@@ -77,7 +77,7 @@ class TemperatureGridCompact extends StatelessWidget {
           // Header
           _buildHeader(context),
 
-          SizedBox(height: 16.h),
+          const SizedBox(height: 16.0),
 
           // Temperature Grid
           _buildTemperatureGrid(context),
@@ -90,8 +90,8 @@ class TemperatureGridCompact extends StatelessWidget {
     return Row(
       children: [
         Container(
-          width: 36.w,
-          height: 36.w,
+          width: 36.0,
+          height: 36.0,
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topLeft,
@@ -103,21 +103,21 @@ class TemperatureGridCompact extends StatelessWidget {
             ),
             borderRadius: HvacRadius.smRadius,
           ),
-          child: Icon(
+          child: const Icon(
             Icons.thermostat_outlined,
             color: HvacColors.info,
-            size: 20.w,
+            size: 20.0,
           ),
         ),
-        SizedBox(width: 12.w),
-        Expanded(
+        const SizedBox(width: 12.0),
+        const Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 'Температуры',
                 style: TextStyle(
-                  fontSize: 16.sp,
+                  fontSize: 16.0,
                   fontWeight: FontWeight.w600,
                   color: HvacColors.textPrimary,
                   letterSpacing: -0.3,
@@ -126,7 +126,7 @@ class TemperatureGridCompact extends StatelessWidget {
               Text(
                 'Мониторинг и уставки',
                 style: TextStyle(
-                  fontSize: 12.sp,
+                  fontSize: 12.0,
                   color: HvacColors.textSecondary,
                 ),
               ),
@@ -155,7 +155,7 @@ class TemperatureGridCompact extends StatelessWidget {
                   isPrimary: true,
                 ),
               ),
-              SizedBox(width: 12.w),
+              const SizedBox(width: 12.0),
               Expanded(
                 child: _TempCard(
                   icon: Icons.upload,
@@ -168,7 +168,7 @@ class TemperatureGridCompact extends StatelessWidget {
             ],
           ),
           if (unit.outdoorTemp != null || unit.roomTemp != null) ...[
-            SizedBox(height: 12.h),
+            const SizedBox(height: 12.0),
             Row(
               children: [
                 if (unit.outdoorTemp != null)
@@ -182,7 +182,7 @@ class TemperatureGridCompact extends StatelessWidget {
                     ),
                   ),
                 if (unit.outdoorTemp != null && unit.roomTemp != null)
-                  SizedBox(width: 12.w),
+                  const SizedBox(width: 12.0),
                 if (unit.roomTemp != null)
                   Expanded(
                     child: _TempCard(
@@ -202,8 +202,8 @@ class TemperatureGridCompact extends StatelessWidget {
 
     // Grid layout for tablet/desktop
     return Wrap(
-      spacing: 12.w,
-      runSpacing: 12.h,
+      spacing: 12.0,
+      runSpacing: 12.0,
       children: [
         SizedBox(
           width: _calculateCardWidth(context),
@@ -257,10 +257,10 @@ class TemperatureGridCompact extends StatelessWidget {
 
     if (isTablet) {
       // Two columns on tablet
-      return (width - 100.w) / 2;
+      return (width - 100.0) / 2;
     } else {
       // Four columns on desktop
-      return 150.w;
+      return 150.0;
     }
   }
 }
@@ -284,7 +284,7 @@ class _TempCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(12.w),
+      padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -308,14 +308,14 @@ class _TempCard extends StatelessWidget {
             children: [
               Icon(
                 icon,
-                size: isPrimary ? 18.w : 16.w,
+                size: isPrimary ? 18.0 : 16.0,
                 color: color,
               ),
-              SizedBox(width: 6.w),
+              const SizedBox(width: 6.0),
               Text(
                 label.toUpperCase(),
-                style: TextStyle(
-                  fontSize: 10.sp,
+                style: const TextStyle(
+                  fontSize: 10.0,
                   fontWeight: FontWeight.w600,
                   color: HvacColors.textSecondary,
                   letterSpacing: 0.5,
@@ -323,11 +323,11 @@ class _TempCard extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 8.h),
+          const SizedBox(height: 8.0),
           Text(
             value != null ? '${value!.toStringAsFixed(1)}°C' : '--',
             style: TextStyle(
-              fontSize: isPrimary ? 20.sp : 18.sp,
+              fontSize: isPrimary ? 20.0 : 18.0,
               fontWeight: FontWeight.w700,
               color: isPrimary ? color : HvacColors.textPrimary,
             ),

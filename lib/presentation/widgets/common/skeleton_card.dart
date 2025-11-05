@@ -21,38 +21,38 @@ class SkeletonCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: width,
-      height: height ?? 120.h,
+      height: height ?? 120.0,
       padding: HvacSpacing.cardPadding,
       decoration: HvacTheme.roundedCard(),
-      child: Column(
+      child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              ShimmerCircle(size: 40.w),
-              const SizedBox(width: HvacSpacing.md),
+              ShimmerCircle(size: 40.0),
+              SizedBox(width: HvacSpacing.md),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ShimmerBox(
-                      width: 120.w,
-                      height: 16.h,
+                      width: 120.0,
+                      height: 16.0,
                     ),
-                    const SizedBox(height: HvacSpacing.sm),
+                    SizedBox(height: HvacSpacing.sm),
                     ShimmerBox(
-                      width: 80.w,
-                      height: 12.h,
+                      width: 80.0,
+                      height: 12.0,
                     ),
                   ],
                 ),
               ),
             ],
           ),
-          const Spacer(),
+          Spacer(),
           ShimmerBox(
             width: double.infinity,
-            height: 12.h,
+            height: 12.0,
           ),
         ],
       ),
@@ -74,40 +74,40 @@ class SkeletonDeviceCard extends StatelessWidget {
           // Header with icon and name
           Row(
             children: [
-              ShimmerBox(
-                width: 48.w,
-                height: 48.h,
+              const ShimmerBox(
+                width: 48.0,
+                height: 48.0,
               ),
               const SizedBox(width: HvacSpacing.md),
-              Expanded(
+              const Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ShimmerBox(
-                      width: 100.w,
-                      height: 18.h,
+                      width: 100.0,
+                      height: 18.0,
                     ),
-                    const SizedBox(height: HvacSpacing.xs),
+                    SizedBox(height: HvacSpacing.xs),
                     ShimmerBox(
-                      width: 60.w,
-                      height: 14.h,
+                      width: 60.0,
+                      height: 14.0,
                     ),
                   ],
                 ),
               ),
               ShimmerBox(
-                width: 40.w,
-                height: 24.h,
+                width: 40.0,
+                height: 24.0,
                 borderRadius: BorderRadius.circular(HvacRadius.roundR),
               ),
             ],
           ),
           const SizedBox(height: HvacSpacing.lg),
           // Temperature display
-          Center(
+          const Center(
             child: ShimmerBox(
-              width: 120.w,
-              height: 48.h,
+              width: 120.0,
+              height: 48.0,
             ),
           ),
           const SizedBox(height: HvacSpacing.lg),
@@ -117,8 +117,8 @@ class SkeletonDeviceCard extends StatelessWidget {
             children: List.generate(
               3,
               (index) => ShimmerBox(
-                width: 70.w,
-                height: 36.h,
+                width: 70.0,
+                height: 36.0,
                 borderRadius: BorderRadius.circular(HvacRadius.mdR),
               ),
             ),
@@ -134,27 +134,27 @@ class SkeletonListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
+    return const Padding(
+      padding: EdgeInsets.symmetric(
         vertical: HvacSpacing.sm,
         horizontal: HvacSpacing.md,
       ),
       child: Row(
         children: [
-          ShimmerCircle(size: 48.w),
-          const SizedBox(width: HvacSpacing.md),
+          ShimmerCircle(size: 48.0),
+          SizedBox(width: HvacSpacing.md),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ShimmerBox(
                   width: double.infinity,
-                  height: 16.h,
+                  height: 16.0,
                 ),
-                const SizedBox(height: HvacSpacing.xs),
+                SizedBox(height: HvacSpacing.xs),
                 ShimmerBox(
-                  width: 150.w,
-                  height: 12.h,
+                  width: 150.0,
+                  height: 12.0,
                 ),
               ],
             ),

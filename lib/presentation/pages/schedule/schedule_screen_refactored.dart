@@ -78,8 +78,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       builder: (context, constraints) {
         final isDesktop = constraints.maxWidth > 1024;
         final padding = isDesktop
-            ? EdgeInsets.all(HvacSpacing.xl.w)
-            : EdgeInsets.all(HvacSpacing.lg.w);
+            ? const EdgeInsets.all(HvacSpacing.xl)
+            : const EdgeInsets.all(HvacSpacing.lg);
 
         return Padding(
           padding: padding,
@@ -97,7 +97,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         child: ListView(
           children: [
             ..._buildDayCards(),
-            SizedBox(height: HvacSpacing.lg.h),
+            const SizedBox(height: HvacSpacing.lg),
             QuickActionsPanel(
               onWeekdaySchedule: _applyWeekdaySchedule,
               onWeekendSchedule: _applyWeekendSchedule,
@@ -116,7 +116,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         isLoading: _isLoading,
         child: Center(
           child: Container(
-            constraints: BoxConstraints(maxWidth: 1200.w),
+            constraints: const BoxConstraints(maxWidth: 1200.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -124,9 +124,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   flex: 3,
                   child: ListView(children: _buildDayCards()),
                 ),
-                SizedBox(width: HvacSpacing.xl.w),
+                const SizedBox(width: HvacSpacing.xl),
                 SizedBox(
-                  width: 320.w,
+                  width: 320.0,
                   child: QuickActionsPanel(
                     onWeekdaySchedule: _applyWeekdaySchedule,
                     onWeekendSchedule: _applyWeekendSchedule,
@@ -145,7 +145,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     final days = ScheduleLogic.getDayList(_schedule);
     return days.map((day) {
       return Padding(
-        padding: EdgeInsets.only(bottom: HvacSpacing.sm.h),
+        padding: const EdgeInsets.only(bottom: HvacSpacing.sm),
         child: DayScheduleCard(
           dayName: day.$1,
           dayOfWeek: day.$2,

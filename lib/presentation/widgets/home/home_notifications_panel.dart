@@ -49,8 +49,8 @@ class _HomeNotificationsPanelState extends State<HomeNotificationsPanel> {
     final totalCount = _grouper.getTotalCount();
 
     return Container(
-      height: 400.h,
-      padding: EdgeInsets.all(20.w),
+      height: 400.0,
+      padding: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
         borderRadius: HvacRadius.lgRadius,
@@ -66,12 +66,12 @@ class _HomeNotificationsPanelState extends State<HomeNotificationsPanel> {
           // Header
           _buildHeader(totalCount),
 
-          SizedBox(height: 16.h),
+          const SizedBox(height: 16.0),
 
           // Category badges
           if (totalCount > 0) _buildCategoryBadges(groups),
 
-          if (totalCount > 0) SizedBox(height: 20.h),
+          if (totalCount > 0) const SizedBox(height: 20.0),
 
           // Notifications list
           Expanded(
@@ -91,24 +91,24 @@ class _HomeNotificationsPanelState extends State<HomeNotificationsPanel> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
+        const Text(
           'Уведомления',
           style: TextStyle(
-            fontSize: 18.sp,
+            fontSize: 18.0,
             fontWeight: FontWeight.w600,
             color: HvacColors.textPrimary,
           ),
         ),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
           decoration: BoxDecoration(
             color: HvacColors.primaryOrange.withValues(alpha: 0.2),
             borderRadius: HvacRadius.mdRadius,
           ),
           child: Text(
             '$totalCount',
-            style: TextStyle(
-              fontSize: 12.sp,
+            style: const TextStyle(
+              fontSize: 12.0,
               fontWeight: FontWeight.w700,
               color: HvacColors.primaryOrange,
             ),
@@ -121,8 +121,8 @@ class _HomeNotificationsPanelState extends State<HomeNotificationsPanel> {
   Widget _buildCategoryBadges(
       Map<NotificationSeverity, List<ActivityItem>> groups) {
     return Wrap(
-      spacing: 8.w,
-      runSpacing: 8.h,
+      spacing: 8.0,
+      runSpacing: 8.0,
       children: [
         if (groups[NotificationSeverity.critical]!.isNotEmpty)
           NotificationBadge(
@@ -167,7 +167,7 @@ class _HomeNotificationsPanelState extends State<HomeNotificationsPanel> {
 
   Widget _buildToggleButton(int totalCount) {
     return Padding(
-      padding: EdgeInsets.only(top: 12.h),
+      padding: const EdgeInsets.only(top: 12.0),
       child: Center(
         child: TextButton(
           onPressed: () {
@@ -186,17 +186,17 @@ class _HomeNotificationsPanelState extends State<HomeNotificationsPanel> {
                   color: _showAllNotifications
                       ? HvacColors.textSecondary
                       : HvacColors.primaryOrange,
-                  fontSize: 13.sp,
+                  fontSize: 13.0,
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              SizedBox(width: 4.w),
+              const SizedBox(width: 4.0),
               Icon(
                 _showAllNotifications ? Icons.expand_less : Icons.expand_more,
                 color: _showAllNotifications
                     ? HvacColors.textSecondary
                     : HvacColors.primaryOrange,
-                size: 18.sp,
+                size: 18.0,
               ),
             ],
           ),

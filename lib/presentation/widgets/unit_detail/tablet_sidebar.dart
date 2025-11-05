@@ -21,16 +21,14 @@ class UnitDetailTabletSidebar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final width = 240.w;
-
     return Container(
-      width: width,
-      decoration: BoxDecoration(
+      width: 240.0,
+      decoration: const BoxDecoration(
         color: HvacColors.backgroundCard,
         border: Border(
           right: BorderSide(
             color: HvacColors.backgroundCardBorder,
-            width: 1.w,
+            width: 1.0,
           ),
         ),
       ),
@@ -90,7 +88,7 @@ class UnitDetailTabletSidebar extends StatelessWidget {
             children: [
               Icon(
                 icon,
-                size: 20.sp,
+                size: 20.0,
                 color: isSelected
                     ? HvacColors.primaryOrange
                     : HvacColors.textSecondary,
@@ -100,7 +98,7 @@ class UnitDetailTabletSidebar extends StatelessWidget {
                 child: Text(
                   label,
                   style: TextStyle(
-                    fontSize: 14.sp,
+                    fontSize: 14.0,
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                     color: isSelected
                         ? HvacColors.primaryOrange
@@ -110,8 +108,8 @@ class UnitDetailTabletSidebar extends StatelessWidget {
               ),
               if (isSelected)
                 Container(
-                  width: 3.w,
-                  height: 20.h,
+                  width: 3.0,
+                  height: 20.0,
                   decoration: BoxDecoration(
                     color: HvacColors.primaryOrange,
                     borderRadius: HvacRadius.xsRadius,
@@ -143,16 +141,16 @@ class UnitDetailTabletSidebar extends StatelessWidget {
       children: [
         Text(
           label,
-          style: TextStyle(
-            fontSize: 12.sp,
+          style: const TextStyle(
+            fontSize: 12.0,
             color: HvacColors.textSecondary,
           ),
         ),
         Flexible(
           child: Text(
             value,
-            style: TextStyle(
-              fontSize: 12.sp,
+            style: const TextStyle(
+              fontSize: 12.0,
               fontWeight: FontWeight.w500,
               color: HvacColors.textPrimary,
             ),

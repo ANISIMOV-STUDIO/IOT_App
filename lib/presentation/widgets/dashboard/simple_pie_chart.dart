@@ -20,8 +20,8 @@ class SimplePieChart extends StatelessWidget {
     return Row(
       children: [
         SizedBox(
-          width: size.w,
-          height: size.h,
+          width: size,
+          height: size,
           child: CustomPaint(
             painter: PieChartPainter(data: data),
           ),
@@ -36,8 +36,8 @@ class SimplePieChart extends StatelessWidget {
                 child: Row(
                   children: [
                     Container(
-                      width: 12.w,
-                      height: 12.h,
+                      width: 12.0,
+                      height: 12.0,
                       decoration: BoxDecoration(
                         color: item.color,
                         borderRadius: BorderRadius.circular(HvacRadius.xsR),
@@ -47,8 +47,8 @@ class SimplePieChart extends StatelessWidget {
                     Expanded(
                       child: Text(
                         item.label,
-                        style: TextStyle(
-                          fontSize: 12.sp,
+                        style: const TextStyle(
+                          fontSize: 12.0,
                           color: HvacColors.textPrimary,
                         ),
                         maxLines: 1,
@@ -57,8 +57,8 @@ class SimplePieChart extends StatelessWidget {
                     ),
                     Text(
                       '${item.value.toInt()}',
-                      style: TextStyle(
-                        fontSize: 12.sp,
+                      style: const TextStyle(
+                        fontSize: 12.0,
                         fontWeight: FontWeight.w600,
                         color: HvacColors.textPrimary,
                       ),

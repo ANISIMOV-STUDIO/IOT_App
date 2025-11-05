@@ -90,7 +90,7 @@ class _ManualEntrySection extends StatelessWidget {
             constraints: BoxConstraints(
               maxWidth: responsive.formMaxWidth,
             ),
-            padding: EdgeInsets.all(AppSpacing.lgR),
+            padding: const EdgeInsets.all(AppSpacing.lg),
             decoration: HvacTheme.deviceCard(),
             child: DeviceFormWidget(
               onSubmit: onAddDevice,
@@ -119,7 +119,7 @@ class _ToggleSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(AppSpacing.lgR),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
         color: theme.cardColor,
         borderRadius: BorderRadius.vertical(
@@ -128,8 +128,8 @@ class _ToggleSection extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.1),
-            blurRadius: 10.r,
-            offset: Offset(0, -5.h),
+            blurRadius: 10.0,
+            offset: const Offset(0, -5.0),
           ),
         ],
       ),
@@ -142,7 +142,7 @@ class _ToggleSection extends StatelessWidget {
                 : l10n.enterMacManually,
             style: HvacTypography.bodyLarge,
           ),
-          SizedBox(height: AppSpacing.mdR),
+          const SizedBox(height: AppSpacing.md),
           GradientButton(
             onPressed: () => controller.toggleMode(),
             text:

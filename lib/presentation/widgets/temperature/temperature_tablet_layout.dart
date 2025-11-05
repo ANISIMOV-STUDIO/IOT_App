@@ -30,9 +30,7 @@ class TemperatureTabletLayout extends StatelessWidget {
       SmoothAnimations.fadeIn(
         duration: AnimationDurations.medium,
         child: GlassCard(
-          padding: EdgeInsets.all(20.r),
-          enableBlur: true,
-          child: Column(
+          padding: const EdgeInsets.all(20.0), child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -43,7 +41,7 @@ class TemperatureTabletLayout extends StatelessWidget {
                   extractTemp,
                 ),
               ),
-              SizedBox(height: 20.h),
+              const SizedBox(height: 20.0),
               // Horizontal layout with dividers
               Row(
                 children: [
@@ -81,7 +79,7 @@ class TemperatureTabletLayout extends StatelessWidget {
                 ],
               ),
               if (TemperatureHelpers.hasAllData(supplyTemp, extractTemp)) ...[
-                SizedBox(height: 16.h),
+                const SizedBox(height: 16.0),
                 _buildStatusBar(context),
               ],
             ],
@@ -105,34 +103,34 @@ class TemperatureTabletLayout extends StatelessWidget {
       children: [
         Icon(
           icon,
-          size: 24.w,
+          size: 24.0,
           color: HvacColors.neutral200,
         ),
-        SizedBox(height: 8.h),
+        const SizedBox(height: 8.0),
         Text(
           label,
-          style: TextStyle(
-            fontSize: 11.sp,
+          style: const TextStyle(
+            fontSize: 11.0,
             color: HvacColors.textTertiary,
             fontWeight: FontWeight.w500,
           ),
           textAlign: TextAlign.center,
         ),
-        SizedBox(height: 4.h),
+        const SizedBox(height: 4.0),
         Text(
           value != null ? '${value.toStringAsFixed(1)}°C' : '—',
           style: TextStyle(
-            fontSize: 28.sp,
+            fontSize: 28.0,
             fontWeight: FontWeight.w600,
             color: value != null ? HvacColors.textPrimary : HvacColors.textDisabled,
             letterSpacing: -1,
           ),
         ),
-        SizedBox(height: 2.h),
+        const SizedBox(height: 2.0),
         Text(
           subtitle,
-          style: TextStyle(
-            fontSize: 10.sp,
+          style: const TextStyle(
+            fontSize: 10.0,
             color: HvacColors.textTertiary,
           ),
         ),
@@ -150,7 +148,7 @@ class TemperatureTabletLayout extends StatelessWidget {
     );
 
     return Container(
-      padding: EdgeInsets.all(12.r),
+      padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
         color: HvacColors.backgroundDark,
         borderRadius: HvacRadius.smRadius,
@@ -168,13 +166,13 @@ class TemperatureTabletLayout extends StatelessWidget {
             isCompact: false,
           ),
           if (efficiency != null) ...[
-            SizedBox(width: 12.w),
+            const SizedBox(width: 12.0),
             Container(
               width: 1,
-              height: 20.h,
+              height: 20.0,
               color: HvacColors.backgroundCardBorder,
             ),
-            SizedBox(width: 12.w),
+            const SizedBox(width: 12.0),
             StatusItem(
               icon: Icons.speed,
               label: 'Эффективность',

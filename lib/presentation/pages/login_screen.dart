@@ -10,7 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../generated/l10n/app_localizations.dart';
-import '../../core/utils/responsive_size.dart';
+import '../../core/utils/responsive_text.dart';
 import '../bloc/auth/auth_bloc.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -131,10 +131,12 @@ class _LoginScreenState extends State<LoginScreen>
                         // BREEZ Home Title
                         Text(
                           l10n.appTitle.toUpperCase(),
-                          style: TextStyle(
-                            color: HvacColors.textPrimary,
+                          style: ResponsiveText.adaptive(
+                            context,
+                            mobileSize: 32.0,
+                            desktopSize: 42.0,
                             fontWeight: FontWeight.bold,
-                            fontSize: 42.spFixed,
+                            color: HvacColors.textPrimary,
                             letterSpacing: 1.5,
                           ),
                           textAlign: TextAlign.center,
@@ -142,9 +144,9 @@ class _LoginScreenState extends State<LoginScreen>
                         const SizedBox(height: HvacSpacing.xs),
                         Text(
                           l10n.smartClimateManagement,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: HvacColors.textSecondary,
-                            fontSize: 16.spFixed,
+                            fontSize: ResponsiveText.bodyMedium,
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -317,18 +319,18 @@ class _LoginScreenState extends State<LoginScreen>
             : Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.login_rounded,
                     color: HvacColors.backgroundCard,
-                    size: 16.spFixed,
+                    size: ResponsiveText.iconSmall,
                   ),
-                  SizedBox(width: 6.wFixed),
+                  const SizedBox(width: 6),
                   Text(
                     l10n.login,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: HvacColors.backgroundCard,
                       fontWeight: FontWeight.bold,
-                      fontSize: 14.spFixed,
+                      fontSize: ResponsiveText.labelMedium,
                       letterSpacing: 0.3,
                     ),
                   ),
@@ -361,18 +363,18 @@ class _LoginScreenState extends State<LoginScreen>
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
+            const Icon(
               Icons.person_add_outlined,
               color: HvacColors.primaryOrange,
-              size: 16.spFixed,
+              size: ResponsiveText.iconSmall,
             ),
-            SizedBox(width: 6.wFixed),
+            const SizedBox(width: 6),
             Text(
               l10n.register,
-              style: TextStyle(
+              style: const TextStyle(
                 color: HvacColors.primaryOrange,
                 fontWeight: FontWeight.w600,
-                fontSize: 14.spFixed,
+                fontSize: ResponsiveText.labelMedium,
                 letterSpacing: 0.3,
               ),
             ),

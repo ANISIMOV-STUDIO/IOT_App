@@ -4,7 +4,6 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ScannerCornerMarker extends StatelessWidget {
   final double size;
@@ -32,23 +31,23 @@ class ScannerCornerMarker extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border(
           top: (topLeft || topRight)
-              ? BorderSide(color: color, width: 4.w)
+              ? BorderSide(color: color, width: 4.0)
               : BorderSide.none,
           bottom: (bottomLeft || bottomRight)
-              ? BorderSide(color: color, width: 4.w)
+              ? BorderSide(color: color, width: 4.0)
               : BorderSide.none,
           left: (topLeft || bottomLeft)
-              ? BorderSide(color: color, width: 4.w)
+              ? BorderSide(color: color, width: 4.0)
               : BorderSide.none,
           right: (topRight || bottomRight)
-              ? BorderSide(color: color, width: 4.w)
+              ? BorderSide(color: color, width: 4.0)
               : BorderSide.none,
         ),
         borderRadius: BorderRadius.only(
-          topLeft: topLeft ? Radius.circular(8.r) : Radius.zero,
-          topRight: topRight ? Radius.circular(8.r) : Radius.zero,
-          bottomLeft: bottomLeft ? Radius.circular(8.r) : Radius.zero,
-          bottomRight: bottomRight ? Radius.circular(8.r) : Radius.zero,
+          topLeft: topLeft ? const Radius.circular(8.0) : Radius.zero,
+          topRight: topRight ? const Radius.circular(8.0) : Radius.zero,
+          bottomLeft: bottomLeft ? const Radius.circular(8.0) : Radius.zero,
+          bottomRight: bottomRight ? const Radius.circular(8.0) : Radius.zero,
         ),
       ),
     );

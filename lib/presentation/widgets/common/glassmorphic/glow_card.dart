@@ -50,8 +50,7 @@ class _GlowCardState extends State<GlowCard>
     super.initState();
     _controller = AnimationController(
       duration: widget.animationDuration,
-      vsync: this,
-    );
+      vsync: this);
 
     if (widget.enablePulse) {
       _controller.repeat(reverse: true);
@@ -59,19 +58,15 @@ class _GlowCardState extends State<GlowCard>
 
     _glowAnimation = Tween<double>(
       begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
+      end: 1.0).animate(CurvedAnimation(
       parent: _controller,
-      curve: Curves.easeInOut,
-    ));
+      curve: Curves.easeInOut));
 
     _borderAnimation = Tween<double>(
       begin: 0.3,
-      end: 0.6,
-    ).animate(CurvedAnimation(
+      end: 0.6).animate(CurvedAnimation(
       parent: _controller,
-      curve: Curves.easeInOut,
-    ));
+      curve: Curves.easeInOut));
   }
 
   @override
@@ -89,11 +84,9 @@ class _GlowCardState extends State<GlowCard>
       return [
         BoxShadow(
           color: widget.glowColor.withValues(
-            alpha: (0.2 * baseIntensity) + (animValue * 0.1 * baseIntensity),
-          ),
-          blurRadius: (15 * baseIntensity).w,
-          spreadRadius: (2 * baseIntensity).w,
-        ),
+            alpha: (0.2 * baseIntensity) + (animValue * 0.1 * baseIntensity)),
+          blurRadius: 15 * baseIntensity,
+          spreadRadius: 2 * baseIntensity),
       ];
     }
 
@@ -101,19 +94,15 @@ class _GlowCardState extends State<GlowCard>
       // Primary glow
       BoxShadow(
         color: widget.glowColor.withValues(
-          alpha: (0.2 * baseIntensity) + (animValue * 0.2 * baseIntensity),
-        ),
-        blurRadius: (20 + (animValue * 10)).w * baseIntensity,
-        spreadRadius: (animValue * 5).w * baseIntensity,
-      ),
+          alpha: (0.2 * baseIntensity) + (animValue * 0.2 * baseIntensity)),
+        blurRadius: (20 + (animValue * 10)) * baseIntensity,
+        spreadRadius: (animValue * 5) * baseIntensity),
       // Secondary subtle glow
       BoxShadow(
         color: widget.glowColor.withValues(
-          alpha: (0.1 * baseIntensity) + (animValue * 0.1 * baseIntensity),
-        ),
-        blurRadius: (30 + (animValue * 15)).w * baseIntensity,
-        spreadRadius: (animValue * 8).w * baseIntensity,
-      ),
+          alpha: (0.1 * baseIntensity) + (animValue * 0.1 * baseIntensity)),
+        blurRadius: (30 + (animValue * 15)) * baseIntensity,
+        spreadRadius: (animValue * 8) * baseIntensity),
     ];
   }
 
@@ -122,35 +111,28 @@ class _GlowCardState extends State<GlowCard>
     Widget card = AnimatedBuilder(
       animation: _controller,
       builder: (context, child) => Container(
-        width: widget.width?.w,
-        height: widget.height?.h,
+        width: widget.width,
+        height: widget.height,
         margin: widget.margin,
         decoration: BoxDecoration(
           color: HvacColors.backgroundCard,
-          borderRadius: BorderRadius.circular(widget.borderRadius.r),
+          borderRadius: BorderRadius.circular(widget.borderRadius),
           border: Border.all(
             color: widget.glowColor.withValues(
               alpha: widget.enablePulse
                   ? _borderAnimation.value
-                  : 0.4 * widget.glowIntensity,
-            ),
-            width: (2 * widget.glowIntensity).w,
-          ),
-          boxShadow: _buildGlowShadows(),
-        ),
-        padding: widget.padding ?? EdgeInsets.all(HvacSpacing.lg.w),
-        child: widget.child,
-      ),
-    );
+                  : 0.4 * widget.glowIntensity),
+            width: 2 * widget.glowIntensity),
+          boxShadow: _buildGlowShadows()),
+        padding: widget.padding ?? const EdgeInsets.all(HvacSpacing.lg),
+        child: widget.child));
 
     if (widget.onTap != null) {
       card = GestureDetector(
         onTap: widget.onTap,
         child: MouseRegion(
           cursor: kIsWeb ? SystemMouseCursors.click : MouseCursor.defer,
-          child: card,
-        ),
-      );
+          child: card));
     }
 
     return card;
@@ -191,8 +173,7 @@ class StaticGlowCard extends StatelessWidget {
       onTap: onTap,
       glowIntensity: glowIntensity,
       enablePulse: false,
-      child: child,
-    );
+      child: child);
   }
 }
 
@@ -228,7 +209,6 @@ class NeonGlowCard extends StatelessWidget {
       onTap: onTap,
       glowIntensity: 1.5,
       animationDuration: const Duration(milliseconds: 1500),
-      child: child,
-    );
+      child: child);
   }
 }

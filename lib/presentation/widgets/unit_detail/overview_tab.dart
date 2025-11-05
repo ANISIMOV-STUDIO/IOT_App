@@ -35,26 +35,26 @@ class OverviewTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: EdgeInsets.all(20.w),
+      padding: const EdgeInsets.all(20.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Hero Temperature Display with Gradient Border
           _buildHeroTemperatureCard(),
-          SizedBox(height: 20.h),
+          const SizedBox(height: 20.0),
 
           // Temperature Chart
           _buildTemperatureChart(),
-          SizedBox(height: 20.h),
+          const SizedBox(height: 20.0),
 
           // Status card
           _buildStatusCard(),
-          SizedBox(height: 20.h),
+          const SizedBox(height: 20.0),
 
           // Quick stats
-          Row(
+          const Row(
             children: [
-              const Expanded(
+              Expanded(
                 child: UnitStatCard(
                   label: 'Время работы',
                   value: '2ч 15м',
@@ -62,8 +62,8 @@ class OverviewTab extends StatelessWidget {
                   color: HvacColors.info,
                 ),
               ),
-              SizedBox(width: 16.w),
-              const Expanded(
+              SizedBox(width: 16.0),
+              Expanded(
                 child: UnitStatCard(
                   label: 'Энергия',
                   value: '350 Вт',
@@ -73,7 +73,7 @@ class OverviewTab extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 16.h),
+          const SizedBox(height: 16.0),
 
           Row(
             children: [
@@ -85,7 +85,7 @@ class OverviewTab extends StatelessWidget {
                   color: HvacColors.success,
                 ),
               ),
-              SizedBox(width: 16.w),
+              const SizedBox(width: 16.0),
               Expanded(
                 child: UnitStatCard(
                   label: 'Влажность',
@@ -96,15 +96,15 @@ class OverviewTab extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 20.h),
+          const SizedBox(height: 20.0),
 
           // Control Buttons with Neumorphic Design
           _buildControlButtons(),
-          SizedBox(height: 20.h),
+          const SizedBox(height: 20.0),
 
           // Fan speeds card
           _buildFanSpeedsCard(),
-          SizedBox(height: 20.h),
+          const SizedBox(height: 20.0),
 
           // Maintenance card
           _buildMaintenanceCard(),
@@ -123,22 +123,22 @@ class OverviewTab extends StatelessWidget {
       ],
       borderWidth: 3,
       child: Container(
-        padding: EdgeInsets.all(24.w),
+        padding: const EdgeInsets.all(24.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                Icon(
+                const Icon(
                   Icons.thermostat,
                   color: HvacColors.primaryOrange,
-                  size: 28.sp,
+                  size: 28.0,
                 ),
-                SizedBox(width: 12.w),
+                const SizedBox(width: 12.0),
                 Text(
                   'Текущая температура',
                   style: HvacTypography.titleLarge.copyWith(
-                    fontSize: 16.sp,
+                    fontSize: 16.0,
                     color: HvacColors.textSecondary,
                   ),
                 ),
@@ -150,22 +150,22 @@ class OverviewTab extends StatelessWidget {
                   ),
               ],
             ),
-            SizedBox(height: 16.h),
+            const SizedBox(height: 16.0),
             HvacTemperatureHero(
               tag: 'unit_temp_${unit.id}',
               temperature: '$temp°C',
-              style: TextStyle(
-                fontSize: 52.sp,
+              style: const TextStyle(
+                fontSize: 52.0,
                 fontWeight: FontWeight.w700,
                 color: HvacColors.textPrimary,
                 height: 1,
               ),
             ),
-            SizedBox(height: 8.h),
+            const SizedBox(height: 8.0),
             Text(
               'Режим: ${unit.ventMode != null ? _getModeDisplayName(unit.ventMode!) : "Не установлен"}',
               style: HvacTypography.bodyMedium.copyWith(
-                fontSize: 14.sp,
+                fontSize: 14.0,
                 color: HvacColors.textSecondary,
               ),
             ),
@@ -178,7 +178,7 @@ class OverviewTab extends StatelessWidget {
   /// Temperature chart for last 24 hours
   Widget _buildTemperatureChart() {
     return Container(
-      padding: EdgeInsets.all(20.w),
+      padding: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
         borderRadius: HvacRadius.mdRadius,
@@ -189,22 +189,22 @@ class OverviewTab extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(
+              const Icon(
                 Icons.show_chart,
                 color: HvacColors.primaryOrange,
-                size: 20.sp,
+                size: 20.0,
               ),
-              SizedBox(width: 12.w),
+              const SizedBox(width: 12.0),
               Text(
                 'Температура за 24 часа',
                 style: HvacTypography.titleLarge.copyWith(
-                  fontSize: 16.sp,
+                  fontSize: 16.0,
                   color: HvacColors.textPrimary,
                 ),
               ),
             ],
           ),
-          SizedBox(height: 20.h),
+          const SizedBox(height: 20.0),
           HvacAnimatedLineChart(
             spots: _generateTemperatureData(),
             lineColor: HvacColors.primaryOrange,
@@ -221,7 +221,7 @@ class OverviewTab extends StatelessWidget {
   /// Control buttons with neumorphic design
   Widget _buildControlButtons() {
     return Container(
-      padding: EdgeInsets.all(20.w),
+      padding: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
         borderRadius: HvacRadius.mdRadius,
@@ -233,11 +233,11 @@ class OverviewTab extends StatelessWidget {
           Text(
             'Управление',
             style: HvacTypography.titleLarge.copyWith(
-              fontSize: 16.sp,
+              fontSize: 16.0,
               color: HvacColors.textPrimary,
             ),
           ),
-          SizedBox(height: 16.h),
+          const SizedBox(height: 16.0),
           Row(
             children: [
               Expanded(
@@ -255,13 +255,13 @@ class OverviewTab extends StatelessWidget {
                         Icon(
                           unit.power ? Icons.power_off : Icons.power_settings_new,
                           color: unit.power ? HvacColors.error : HvacColors.success,
-                          size: 20.sp,
+                          size: 20.0,
                         ),
-                        SizedBox(width: 8.w),
+                        const SizedBox(width: 8.0),
                         Text(
                           unit.power ? 'Выключить' : 'Включить',
                           style: HvacTypography.bodyMedium.copyWith(
-                            fontSize: 14.sp,
+                            fontSize: 14.0,
                             fontWeight: FontWeight.w600,
                             color: HvacColors.textPrimary,
                           ),
@@ -271,7 +271,7 @@ class OverviewTab extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(width: 12.w),
+              const SizedBox(width: 12.0),
               Expanded(
                 child: HvacInteractiveScale(
                   onTap: () {
@@ -284,16 +284,16 @@ class OverviewTab extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.settings,
                           color: HvacColors.primaryOrange,
-                          size: 20.sp,
+                          size: 20.0,
                         ),
-                        SizedBox(width: 8.w),
+                        const SizedBox(width: 8.0),
                         Text(
                           'Режим',
                           style: HvacTypography.bodyMedium.copyWith(
-                            fontSize: 14.sp,
+                            fontSize: 14.0,
                             fontWeight: FontWeight.w600,
                             color: HvacColors.textPrimary,
                           ),
@@ -312,7 +312,7 @@ class OverviewTab extends StatelessWidget {
 
   Widget _buildStatusCard() {
     return Container(
-      padding: EdgeInsets.all(20.w),
+      padding: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
         borderRadius: HvacRadius.mdRadius,
@@ -324,8 +324,8 @@ class OverviewTab extends StatelessWidget {
           Stack(
             children: [
               Container(
-                width: 80.w,
-                height: 80.h,
+                width: 80.0,
+                height: 80.0,
                 decoration: BoxDecoration(
                   color: unit.power
                       ? HvacColors.success.withValues(alpha: 0.2)
@@ -335,7 +335,7 @@ class OverviewTab extends StatelessWidget {
                 child: Icon(
                   unit.power ? Icons.check_circle : Icons.power_off,
                   color: unit.power ? HvacColors.success : HvacColors.error,
-                  size: 40.sp,
+                  size: 40.0,
                 ),
               ),
               if (unit.power)
@@ -349,7 +349,7 @@ class OverviewTab extends StatelessWidget {
                 ),
             ],
           ),
-          SizedBox(width: 20.w),
+          const SizedBox(width: 20.0),
 
           // Status text
           Expanded(
@@ -361,16 +361,16 @@ class OverviewTab extends StatelessWidget {
                     Text(
                       unit.power ? 'Работает' : 'Выключено',
                       style: HvacTypography.displaySmall.copyWith(
-                        fontSize: 24.sp,
+                        fontSize: 24.0,
                         color: unit.power ? HvacColors.success : HvacColors.error,
                       ),
                     ),
                     if (unit.power) ...[
-                      SizedBox(width: 8.w),
+                      const SizedBox(width: 8.0),
                       Text(
                         'ONLINE',
                         style: HvacTypography.bodySmall.copyWith(
-                          fontSize: 11.sp,
+                          fontSize: 11.0,
                           fontWeight: FontWeight.w700,
                           color: HvacColors.success,
                           letterSpacing: 0.5,
@@ -379,19 +379,19 @@ class OverviewTab extends StatelessWidget {
                     ],
                   ],
                 ),
-                SizedBox(height: 4.h),
+                const SizedBox(height: 4.0),
                 Text(
                   'Режим: ${unit.ventMode != null ? _getModeDisplayName(unit.ventMode!) : "Не установлен"}',
                   style: HvacTypography.bodyMedium.copyWith(
-                    fontSize: 14.sp,
+                    fontSize: 14.0,
                     color: HvacColors.textSecondary,
                   ),
                 ),
-                SizedBox(height: 2.h),
+                const SizedBox(height: 2.0),
                 Text(
                   'ID устройства: ${unit.id}',
                   style: HvacTypography.bodyMedium.copyWith(
-                    fontSize: 14.sp,
+                    fontSize: 14.0,
                     color: HvacColors.textSecondary,
                   ),
                 ),
@@ -405,7 +405,7 @@ class OverviewTab extends StatelessWidget {
 
   Widget _buildFanSpeedsCard() {
     return Container(
-      padding: EdgeInsets.all(20.w),
+      padding: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
         borderRadius: HvacRadius.mdRadius,
@@ -417,11 +417,11 @@ class OverviewTab extends StatelessWidget {
           Text(
             'Скорости вентиляторов',
             style: HvacTypography.titleLarge.copyWith(
-              fontSize: 16.sp,
+              fontSize: 16.0,
               color: HvacColors.textPrimary,
             ),
           ),
-          SizedBox(height: 16.h),
+          const SizedBox(height: 16.0),
 
           // Supply fan
           _buildFanRow(
@@ -429,7 +429,7 @@ class OverviewTab extends StatelessWidget {
             unit.supplyFanSpeed ?? 0,
             HvacColors.primaryOrange,
           ),
-          SizedBox(height: 12.h),
+          const SizedBox(height: 12.0),
 
           // Exhaust fan
           _buildFanRow(
@@ -445,18 +445,18 @@ class OverviewTab extends StatelessWidget {
   Widget _buildFanRow(String label, int speed, Color color) {
     return Row(
       children: [
-        Icon(Icons.air, color: color, size: 20.sp),
-        SizedBox(width: 12.w),
+        Icon(Icons.air, color: color, size: 20.0),
+        const SizedBox(width: 12.0),
         Text(
           label,
           style: HvacTypography.bodyMedium.copyWith(
-            fontSize: 14.sp,
+            fontSize: 14.0,
             color: HvacColors.textSecondary,
           ),
         ),
         const Spacer(),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
           decoration: BoxDecoration(
             color: color.withValues(alpha: 0.15),
             borderRadius: HvacRadius.smRadius,
@@ -464,7 +464,7 @@ class OverviewTab extends StatelessWidget {
           child: Text(
             '$speed%',
             style: HvacTypography.titleLarge.copyWith(
-              fontSize: 16.sp,
+              fontSize: 16.0,
               fontWeight: FontWeight.w700,
               color: color,
             ),
@@ -476,7 +476,7 @@ class OverviewTab extends StatelessWidget {
 
   Widget _buildMaintenanceCard() {
     return Container(
-      padding: EdgeInsets.all(20.w),
+      padding: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
         borderRadius: HvacRadius.mdRadius,
@@ -487,25 +487,25 @@ class OverviewTab extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(Icons.build, color: HvacColors.warning, size: 20.sp),
-              SizedBox(width: 12.w),
+              const Icon(Icons.build, color: HvacColors.warning, size: 20.0),
+              const SizedBox(width: 12.0),
               Text(
                 'Обслуживание',
                 style: HvacTypography.titleLarge.copyWith(
-                  fontSize: 16.sp,
+                  fontSize: 16.0,
                   color: HvacColors.textPrimary,
                 ),
               ),
             ],
           ),
-          SizedBox(height: 16.h),
+          const SizedBox(height: 16.0),
 
           _buildMaintenanceItem('Последнее обслуживание', '15 дней назад'),
-          SizedBox(height: 8.h),
+          const SizedBox(height: 8.0),
           _buildMaintenanceItem('Фильтр приточный', '70% ресурса'),
-          SizedBox(height: 8.h),
+          const SizedBox(height: 8.0),
           _buildMaintenanceItem('Фильтр вытяжной', '85% ресурса'),
-          SizedBox(height: 8.h),
+          const SizedBox(height: 8.0),
           _buildMaintenanceItem('Следующее ТО', 'через 45 дней'),
         ],
       ),
@@ -519,14 +519,14 @@ class OverviewTab extends StatelessWidget {
         Text(
           label,
           style: HvacTypography.bodySmall.copyWith(
-            fontSize: 13.sp,
+            fontSize: 13.0,
             color: HvacColors.textSecondary,
           ),
         ),
         Text(
           value,
           style: HvacTypography.bodySmall.copyWith(
-            fontSize: 13.sp,
+            fontSize: 13.0,
             fontWeight: FontWeight.w600,
             color: HvacColors.textPrimary,
           ),

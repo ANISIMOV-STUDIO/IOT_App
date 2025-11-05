@@ -5,7 +5,6 @@ library;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
 /// Floating action button with accessibility
 class AccessibleFAB extends StatelessWidget {
@@ -54,8 +53,8 @@ class AccessibleFAB extends StatelessWidget {
             : null,
         icon: loading
             ? SizedBox(
-                width: 20.r,
-                height: 20.r,
+                width: 20.0,
+                height: 20.0,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
                   valueColor: AlwaysStoppedAnimation<Color>(
@@ -85,8 +84,8 @@ class AccessibleFAB extends StatelessWidget {
         heroTag: heroTag,
         child: loading
             ? SizedBox(
-                width: 24.r,
-                height: 24.r,
+                width: 24.0,
+                height: 24.0,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
                   valueColor: AlwaysStoppedAnimation<Color>(

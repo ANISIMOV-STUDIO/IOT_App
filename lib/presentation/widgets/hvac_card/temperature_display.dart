@@ -48,7 +48,7 @@ class TemperatureDisplay extends StatelessWidget {
           isPrimary: true,
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: HvacSpacing.lg.w),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: _AnimatedArrow(isPowerOn: isPowerOn),
         ),
         _TemperatureValue(
@@ -70,7 +70,7 @@ class TemperatureDisplay extends StatelessWidget {
           isCompact: true,
         ),
         Padding(
-          padding: EdgeInsets.symmetric(vertical: HvacSpacing.xs.h),
+          padding: const EdgeInsets.symmetric(vertical: 4.0),
           child: Transform.rotate(
             angle: 1.5708, // 90 degrees in radians
             child: _AnimatedArrow(isPowerOn: isPowerOn),
@@ -155,32 +155,32 @@ class _TemperatureValueState extends State<_TemperatureValue>
                 Text(
                   widget.label,
                   style: TextStyle(
-                    fontSize: widget.isCompact ? 11.sp : 12.sp,
+                    fontSize: widget.isCompact ? 11.0 : 12.0,
                     color: _isHovered
                         ? HvacColors.primaryOrange
                         : Colors.white54,
                   ),
                 ),
-                SizedBox(height: HvacSpacing.xs.h),
+                const SizedBox(height: 4.0),
                 Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: HvacSpacing.sm.w,
-                    vertical: HvacSpacing.xs.h,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8.0,
+                    vertical: 4.0,
                   ),
                   decoration: _isHovered
                       ? BoxDecoration(
                           color: widget.isPrimary
                               ? HvacColors.primaryBlue.withValues(alpha: 0.1)
                               : Colors.white.withValues(alpha: 0.05),
-                          borderRadius: BorderRadius.circular(HvacRadius.sm.r),
+                          borderRadius: BorderRadius.circular(6.0),
                         )
                       : null,
                   child: Text(
                     '${widget.value.toStringAsFixed(1)}°',
                     style: TextStyle(
                       fontSize: widget.isPrimary
-                          ? (widget.isCompact ? 24.sp : 28.sp)
-                          : (widget.isCompact ? 20.sp : 24.sp),
+                          ? (widget.isCompact ? 24.0 : 28.0)
+                          : (widget.isCompact ? 20.0 : 24.0),
                       fontWeight: FontWeight.bold,
                       color: widget.isPrimary
                           ? HvacColors.primaryBlue
@@ -262,7 +262,7 @@ class _AnimatedArrowState extends State<_AnimatedArrow>
             color: widget.isPowerOn
                 ? HvacColors.primaryOrange
                 : Colors.white54,
-            size: 20.sp,
+            size: 20.0,
           ),
         );
       },

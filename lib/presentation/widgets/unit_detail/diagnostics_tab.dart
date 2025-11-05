@@ -18,24 +18,24 @@ class DiagnosticsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: EdgeInsets.all(20.w),
+      padding: const EdgeInsets.all(20.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // System health
           _buildSystemHealthCard(),
 
-          SizedBox(height: 20.h),
+          const SizedBox(height: 20.0),
 
           // Sensor readings
           _buildSensorReadingsCard(),
 
-          SizedBox(height: 20.h),
+          const SizedBox(height: 20.0),
 
           // Network status
           _buildNetworkStatusCard(),
 
-          SizedBox(height: 20.h),
+          const SizedBox(height: 20.0),
 
           // Run diagnostics button
           SizedBox(
@@ -44,7 +44,7 @@ class DiagnosticsTab extends StatelessWidget {
               onPressed: () => _runDiagnostics(context),
               style: ElevatedButton.styleFrom(
                 backgroundColor: HvacColors.primaryOrange,
-                padding: EdgeInsets.symmetric(vertical: 14.h),
+                padding: const EdgeInsets.symmetric(vertical: 14.0),
                 shape: RoundedRectangleBorder(
                   borderRadius: HvacRadius.mdRadius,
                 ),
@@ -52,13 +52,13 @@ class DiagnosticsTab extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.play_arrow, color: HvacColors.textPrimary, size: 24.sp),
-                  SizedBox(width: 8.w),
+                  const Icon(Icons.play_arrow, color: HvacColors.textPrimary, size: 24.0),
+                  const SizedBox(width: 8.0),
                   Text(
                     'Запустить диагностику',
                     style: HvacTypography.buttonMedium.copyWith(
                       color: HvacColors.textPrimary,
-                      fontSize: 15.sp,
+                      fontSize: 15.0,
                     ),
                   ),
                 ],
@@ -72,7 +72,7 @@ class DiagnosticsTab extends StatelessWidget {
 
   Widget _buildSystemHealthCard() {
     return Container(
-      padding: EdgeInsets.all(20.w),
+      padding: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
         borderRadius: HvacRadius.mdRadius,
@@ -83,18 +83,18 @@ class DiagnosticsTab extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(Icons.health_and_safety, color: HvacColors.success, size: 20.sp),
-              SizedBox(width: 12.w),
+              const Icon(Icons.health_and_safety, color: HvacColors.success, size: 20.0),
+              const SizedBox(width: 12.0),
               Text(
                 'Состояние системы',
                 style: HvacTypography.titleLarge.copyWith(
-                  fontSize: 16.sp,
+                  fontSize: 16.0,
                   color: HvacColors.textPrimary,
                 ),
               ),
             ],
           ),
-          SizedBox(height: 16.h),
+          const SizedBox(height: 16.0),
 
           _buildHealthItem('Приточный вентилятор', true),
           _buildHealthItem('Вытяжной вентилятор', true),
@@ -108,14 +108,14 @@ class DiagnosticsTab extends StatelessWidget {
 
   Widget _buildHealthItem(String label, bool isOk) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 12.h),
+      padding: const EdgeInsets.only(bottom: 12.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             label,
             style: HvacTypography.bodySmall.copyWith(
-              fontSize: 13.sp,
+              fontSize: 13.0,
               color: HvacColors.textSecondary,
             ),
           ),
@@ -124,13 +124,13 @@ class DiagnosticsTab extends StatelessWidget {
               Icon(
                 isOk ? Icons.check_circle : Icons.error,
                 color: isOk ? HvacColors.success : HvacColors.error,
-                size: 16.sp,
+                size: 16.0,
               ),
-              SizedBox(width: 6.w),
+              const SizedBox(width: 6.0),
               Text(
                 isOk ? 'Норма' : 'Ошибка',
                 style: HvacTypography.bodySmall.copyWith(
-                  fontSize: 13.sp,
+                  fontSize: 13.0,
                   fontWeight: FontWeight.w600,
                   color: isOk ? HvacColors.success : HvacColors.error,
                 ),
@@ -144,7 +144,7 @@ class DiagnosticsTab extends StatelessWidget {
 
   Widget _buildSensorReadingsCard() {
     return Container(
-      padding: EdgeInsets.all(20.w),
+      padding: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
         borderRadius: HvacRadius.mdRadius,
@@ -155,18 +155,18 @@ class DiagnosticsTab extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(Icons.sensors, color: HvacColors.info, size: 20.sp),
-              SizedBox(width: 12.w),
+              const Icon(Icons.sensors, color: HvacColors.info, size: 20.0),
+              const SizedBox(width: 12.0),
               Text(
                 'Показания датчиков',
                 style: HvacTypography.titleLarge.copyWith(
-                  fontSize: 16.sp,
+                  fontSize: 16.0,
                   color: HvacColors.textPrimary,
                 ),
               ),
             ],
           ),
-          SizedBox(height: 16.h),
+          const SizedBox(height: 16.0),
 
           _buildSensorItem(
             'Температура притока',
@@ -195,21 +195,21 @@ class DiagnosticsTab extends StatelessWidget {
 
   Widget _buildSensorItem(String label, String value, Color color) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 12.h),
+      padding: const EdgeInsets.only(bottom: 12.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             label,
             style: HvacTypography.bodySmall.copyWith(
-              fontSize: 13.sp,
+              fontSize: 13.0,
               color: HvacColors.textSecondary,
             ),
           ),
           Text(
             value,
             style: HvacTypography.titleMedium.copyWith(
-              fontSize: 14.sp,
+              fontSize: 14.0,
               color: color,
             ),
           ),
@@ -220,7 +220,7 @@ class DiagnosticsTab extends StatelessWidget {
 
   Widget _buildNetworkStatusCard() {
     return Container(
-      padding: EdgeInsets.all(20.w),
+      padding: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
         borderRadius: HvacRadius.mdRadius,
@@ -236,19 +236,19 @@ class DiagnosticsTab extends StatelessWidget {
                 color: unit.wifiStatus?.isConnected == true
                     ? HvacColors.success
                     : HvacColors.error,
-                size: 20.sp,
+                size: 20.0,
               ),
-              SizedBox(width: 12.w),
+              const SizedBox(width: 12.0),
               Text(
                 'Сетевое подключение',
                 style: HvacTypography.titleLarge.copyWith(
-                  fontSize: 16.sp,
+                  fontSize: 16.0,
                   color: HvacColors.textPrimary,
                 ),
               ),
             ],
           ),
-          SizedBox(height: 16.h),
+          const SizedBox(height: 16.0),
 
           _buildNetworkItem('Статус', unit.wifiStatus?.isConnected == true ? 'Подключено' : 'Отключено'),
           _buildNetworkItem('Сеть', unit.wifiStatus?.connectedSSID ?? 'Не подключено'),
@@ -261,21 +261,21 @@ class DiagnosticsTab extends StatelessWidget {
 
   Widget _buildNetworkItem(String label, String value) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 12.h),
+      padding: const EdgeInsets.only(bottom: 12.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             label,
             style: HvacTypography.bodySmall.copyWith(
-              fontSize: 13.sp,
+              fontSize: 13.0,
               color: HvacColors.textSecondary,
             ),
           ),
           Text(
             value,
             style: HvacTypography.bodySmall.copyWith(
-              fontSize: 13.sp,
+              fontSize: 13.0,
               fontWeight: FontWeight.w600,
               color: HvacColors.textPrimary,
             ),
@@ -299,15 +299,15 @@ class DiagnosticsTab extends StatelessWidget {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CircularProgressIndicator(
+            const CircularProgressIndicator(
               color: HvacColors.primaryOrange,
-              strokeWidth: 3.w,
+              strokeWidth: 3.0,
             ),
-            SizedBox(height: 16.h),
+            const SizedBox(height: 16.0),
             Text(
               'Выполняется диагностика системы...',
               style: HvacTypography.bodyMedium.copyWith(
-                fontSize: 14.sp,
+                fontSize: 14.0,
                 color: HvacColors.textSecondary,
               ),
             ),

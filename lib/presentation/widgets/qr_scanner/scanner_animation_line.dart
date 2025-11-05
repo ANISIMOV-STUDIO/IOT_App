@@ -4,7 +4,6 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ScannerAnimationLine extends StatefulWidget {
   final double frameSize;
@@ -34,7 +33,7 @@ class _ScannerAnimationLineState extends State<ScannerAnimationLine>
     );
     _animation = Tween<double>(
       begin: 0.0,
-      end: widget.frameSize - 4.h,
+      end: widget.frameSize - 4.0,
     ).animate(CurvedAnimation(
       parent: _controller,
       curve: Curves.easeInOut,
@@ -58,7 +57,7 @@ class _ScannerAnimationLineState extends State<ScannerAnimationLine>
           left: 0,
           right: 0,
           child: Container(
-            height: 2.h,
+            height: 2.0,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
@@ -70,8 +69,8 @@ class _ScannerAnimationLineState extends State<ScannerAnimationLine>
               boxShadow: [
                 BoxShadow(
                   color: widget.color.withValues(alpha: 0.5),
-                  blurRadius: 8.r,
-                  spreadRadius: 2.r,
+                  blurRadius: 8.0,
+                  spreadRadius: 2.0,
                 ),
               ],
             ),

@@ -4,7 +4,6 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../core/theme/spacing.dart';
 import 'qr_scanner_responsive.dart';
 
@@ -42,16 +41,14 @@ class CameraStateWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CircularProgressIndicator(
-            strokeWidth: 3.w,
-            color: theme.colorScheme.primary,
+          const CircularProgressIndicator(
+            strokeWidth: 3.0,
           ),
-          SizedBox(height: AppSpacing.lgR),
+          const SizedBox(height: AppSpacing.lg),
           Text(
             message ?? 'Initializing camera...',
-            style: TextStyle(
-              fontSize: 16.sp,
-              color: theme.colorScheme.onSurfaceVariant,
+            style: const TextStyle(
+              fontSize: 16.0,
             ),
           ),
         ],
@@ -74,32 +71,30 @@ class CameraStateWidget extends StatelessWidget {
               size: responsive.iconSize,
               color: theme.colorScheme.error,
             ),
-            SizedBox(height: AppSpacing.lgR),
-            Text(
+            const SizedBox(height: AppSpacing.lg),
+            const Text(
               'Camera Error',
               style: TextStyle(
-                fontSize: 20.sp,
+                fontSize: 20.0,
                 fontWeight: FontWeight.bold,
-                color: theme.colorScheme.onSurface,
               ),
             ),
-            SizedBox(height: AppSpacing.mdR),
+            const SizedBox(height: AppSpacing.md),
             Text(
               message ?? 'An error occurred while accessing the camera.',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14.sp,
-                color: theme.colorScheme.onSurfaceVariant,
+              style: const TextStyle(
+                fontSize: 14.0,
               ),
             ),
             if (onRetry != null) ...[
-              SizedBox(height: AppSpacing.xlR),
+              const SizedBox(height: AppSpacing.xl),
               ElevatedButton.icon(
                 onPressed: onRetry,
-                icon: Icon(Icons.refresh, size: 20.w),
+                icon: const Icon(Icons.refresh, size: 20.0),
                 label: const Text('Try Again'),
                 style: ElevatedButton.styleFrom(
-                  minimumSize: Size(200.w, responsive.buttonHeight),
+                  minimumSize: Size(200.0, responsive.buttonHeight),
                 ),
               ),
             ],
@@ -124,34 +119,32 @@ class CameraStateWidget extends StatelessWidget {
               size: responsive.iconSize,
               color: theme.colorScheme.error,
             ),
-            SizedBox(height: AppSpacing.lgR),
-            Text(
+            const SizedBox(height: AppSpacing.lg),
+            const Text(
               'Camera Permission Denied',
               style: TextStyle(
-                fontSize: 20.sp,
+                fontSize: 20.0,
                 fontWeight: FontWeight.bold,
-                color: theme.colorScheme.onSurface,
               ),
             ),
-            SizedBox(height: AppSpacing.mdR),
+            const SizedBox(height: AppSpacing.md),
             Text(
               message ??
                   'Camera access is required to scan QR codes.\n'
                       'Please enable camera permissions in your browser settings.',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14.sp,
-                color: theme.colorScheme.onSurfaceVariant,
+              style: const TextStyle(
+                fontSize: 14.0,
               ),
             ),
             if (onRetry != null) ...[
-              SizedBox(height: AppSpacing.xlR),
+              const SizedBox(height: AppSpacing.xl),
               ElevatedButton.icon(
                 onPressed: onRetry,
-                icon: Icon(Icons.refresh, size: 20.w),
+                icon: const Icon(Icons.refresh, size: 20.0),
                 label: const Text('Try Again'),
                 style: ElevatedButton.styleFrom(
-                  minimumSize: Size(200.w, responsive.buttonHeight),
+                  minimumSize: Size(200.0, responsive.buttonHeight),
                 ),
               ),
             ],
@@ -176,24 +169,22 @@ class CameraStateWidget extends StatelessWidget {
               size: responsive.iconSize,
               color: theme.colorScheme.primary.withValues(alpha: 0.5),
             ),
-            SizedBox(height: AppSpacing.lgR),
-            Text(
+            const SizedBox(height: AppSpacing.lg),
+            const Text(
               'Web Camera Not Available',
               style: TextStyle(
-                fontSize: 20.sp,
+                fontSize: 20.0,
                 fontWeight: FontWeight.bold,
-                color: theme.colorScheme.onSurface,
               ),
             ),
-            SizedBox(height: AppSpacing.mdR),
+            const SizedBox(height: AppSpacing.md),
             Text(
               message ??
                   'QR code scanning via camera is not available on web.\n'
                       'Please use manual entry or scan from your mobile device.',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14.sp,
-                color: theme.colorScheme.onSurfaceVariant,
+              style: const TextStyle(
+                fontSize: 14.0,
               ),
             ),
           ],

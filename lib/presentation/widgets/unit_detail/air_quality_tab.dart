@@ -27,7 +27,7 @@ class AirQualityTab extends StatelessWidget {
     const vocLevel = 180.0;
 
     return SingleChildScrollView(
-      padding: EdgeInsets.all(20.w),
+      padding: const EdgeInsets.all(20.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -39,7 +39,7 @@ class AirQualityTab extends StatelessWidget {
             vocLevel: vocLevel,
           ),
 
-          SizedBox(height: 20.h),
+          const SizedBox(height: 20.0),
 
           // Airflow animation
           AirflowAnimation(
@@ -47,19 +47,19 @@ class AirQualityTab extends StatelessWidget {
             speed: unit.supplyFanSpeed ?? 0,
           ),
 
-          SizedBox(height: 20.h),
+          const SizedBox(height: 20.0),
 
           // Stats with animation
-          Text(
+          const Text(
             'Текущие показатели',
             style: TextStyle(
-              fontSize: 16.sp,
+              fontSize: 16.0,
               fontWeight: FontWeight.w600,
               color: HvacColors.textPrimary,
             ),
           ),
 
-          SizedBox(height: 16.h),
+          const SizedBox(height: 16.0),
 
           Row(
             children: [
@@ -72,7 +72,7 @@ class AirQualityTab extends StatelessWidget {
                   trend: '+0.5°C',
                 ),
               ),
-              SizedBox(width: 16.w),
+              const SizedBox(width: 16.0),
               Expanded(
                 child: AnimatedStatCard(
                   label: 'Влажность',
@@ -85,7 +85,7 @@ class AirQualityTab extends StatelessWidget {
             ],
           ),
 
-          SizedBox(height: 16.h),
+          const SizedBox(height: 16.0),
 
           Row(
             children: [
@@ -97,7 +97,7 @@ class AirQualityTab extends StatelessWidget {
                   color: HvacColors.success,
                 ),
               ),
-              SizedBox(width: 16.w),
+              const SizedBox(width: 16.0),
               Expanded(
                 child: AnimatedStatCard(
                   label: 'Вытяжной',
@@ -109,11 +109,11 @@ class AirQualityTab extends StatelessWidget {
             ],
           ),
 
-          SizedBox(height: 20.h),
+          const SizedBox(height: 20.0),
 
           // Recommendations
           Container(
-            padding: EdgeInsets.all(16.w),
+            padding: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
               color: HvacColors.info.withValues(alpha: 0.1),
               borderRadius: HvacRadius.mdRadius,
@@ -122,14 +122,14 @@ class AirQualityTab extends StatelessWidget {
                 width: 1,
               ),
             ),
-            child: Row(
+            child: const Row(
               children: [
                 Icon(
                   Icons.lightbulb_outline,
                   color: HvacColors.info,
-                  size: 24.sp,
+                  size: 24.0,
                 ),
-                SizedBox(width: 12.w),
+                SizedBox(width: 12.0),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -137,16 +137,16 @@ class AirQualityTab extends StatelessWidget {
                       Text(
                         'Рекомендация',
                         style: TextStyle(
-                          fontSize: 14.sp,
+                          fontSize: 14.0,
                           fontWeight: FontWeight.w600,
                           color: HvacColors.textPrimary,
                         ),
                       ),
-                      SizedBox(height: 4.h),
+                      SizedBox(height: 4.0),
                       Text(
                         'Качество воздуха хорошее. Рекомендуем поддерживать текущий режим вентиляции.',
                         style: TextStyle(
-                          fontSize: 12.sp,
+                          fontSize: 12.0,
                           color: HvacColors.textSecondary,
                         ),
                       ),

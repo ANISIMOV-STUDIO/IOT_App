@@ -27,17 +27,17 @@ class DeviceStatusCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16.w),
+      padding: const EdgeInsets.all(16.0),
       decoration: HvacTheme.deviceCard(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildHeader(context),
-          SizedBox(height: 12.h),
+          const SizedBox(height: 12.0),
           _buildValue(context),
-          SizedBox(height: 4.h),
+          const SizedBox(height: 4.0),
           _buildLabel(context),
-          SizedBox(height: 12.h),
+          const SizedBox(height: 12.0),
           _buildToggle(context),
         ],
       ),
@@ -48,11 +48,11 @@ class DeviceStatusCard extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Icon(icon, size: 24.sp, color: HvacColors.textSecondary),
+        Icon(icon, size: 24.0, color: HvacColors.textSecondary),
         Text(
           'Mode 2',
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                fontSize: 12.sp,
+                fontSize: 12.0,
               ),
         ),
       ],
@@ -63,7 +63,7 @@ class DeviceStatusCard extends StatelessWidget {
     return Text(
       value,
       style: Theme.of(context).textTheme.displaySmall?.copyWith(
-            fontSize: 32.sp,
+            fontSize: 32.0,
             fontWeight: FontWeight.bold,
           ),
     );
@@ -73,7 +73,7 @@ class DeviceStatusCard extends StatelessWidget {
     return Text(
       label,
       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            fontSize: 12.sp,
+            fontSize: 12.0,
           ),
       maxLines: 2,
     );
@@ -86,7 +86,7 @@ class DeviceStatusCard extends StatelessWidget {
         Text(
           isOn ? 'On' : 'Off',
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                fontSize: 12.sp,
+                fontSize: 12.0,
               ),
         ),
         Semantics(

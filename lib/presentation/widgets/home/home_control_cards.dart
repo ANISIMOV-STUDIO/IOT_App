@@ -64,8 +64,8 @@ class HomeControlCards extends StatelessWidget {
       child: Center(
         child: Text(
           AppLocalizations.of(context)!.deviceNotSelected,
-          style: TextStyle(
-            fontSize: 14.sp,
+          style: const TextStyle(
+            fontSize: 14.0,
             color: HvacColors.textSecondary,
           ),
         ),

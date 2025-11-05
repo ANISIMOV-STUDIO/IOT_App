@@ -33,7 +33,7 @@ class EmptyState extends StatelessWidget {
         children: [
           Icon(
             icon,
-            size: 64.sp,
+            size: 64.0,
             color: HvacColors.textTertiary,
           ),
           const SizedBox(height: HvacSpacing.lg),
@@ -92,7 +92,7 @@ class EmptyListState extends StatelessWidget {
           children: [
             Icon(
               icon,
-              size: 48.sp,
+              size: 48.0,
               color: HvacColors.textTertiary,
             ),
             const SizedBox(height: HvacSpacing.md),

@@ -26,14 +26,14 @@ class DeviceStatItem extends StatelessWidget {
           children: [
             Icon(
               icon,
-              size: 16.sp,
+              size: 16.0,
               color: HvacColors.textSecondary,
             ),
             const SizedBox(width: HvacSpacing.xxsR),
             Text(
               value,
-              style: TextStyle(
-                fontSize: 14.sp,
+              style: const TextStyle(
+                fontSize: 14.0,
                 fontWeight: FontWeight.w600,
                 color: HvacColors.textPrimary,
               ),
@@ -43,8 +43,8 @@ class DeviceStatItem extends StatelessWidget {
         const SizedBox(height: HvacSpacing.xxsR),
         Text(
           label,
-          style: TextStyle(
-            fontSize: 11.sp,
+          style: const TextStyle(
+            fontSize: 11.0,
             color: HvacColors.textTertiary,
           ),
         ),

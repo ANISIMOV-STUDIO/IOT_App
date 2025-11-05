@@ -56,13 +56,13 @@ class AnalyticsSummaryCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(icon, color: color, size: 18.sp),
+                Icon(icon, color: color, size: 18.0),
                 const SizedBox(width: HvacSpacing.xsR),
                 Expanded(
                   child: Text(
                     label,
-                    style: TextStyle(
-                      fontSize: 11.sp,
+                    style: const TextStyle(
+                      fontSize: 11.0,
                       color: HvacColors.textSecondary,
                     ),
                     maxLines: 1,
@@ -75,7 +75,7 @@ class AnalyticsSummaryCard extends StatelessWidget {
             Text(
               value,
               style: TextStyle(
-                fontSize: 20.sp,
+                fontSize: 20.0,
                 fontWeight: FontWeight.w700,
                 color: color,
               ),
@@ -85,14 +85,14 @@ class AnalyticsSummaryCard extends StatelessWidget {
               children: [
                 Icon(
                   isPositive ? Icons.arrow_upward : Icons.arrow_downward,
-                  size: 12.sp,
+                  size: 12.0,
                   color: isPositive ? HvacColors.success : HvacColors.error,
                 ),
                 const SizedBox(width: HvacSpacing.xxsR),
                 Text(
                   change,
                   style: TextStyle(
-                    fontSize: 11.sp,
+                    fontSize: 11.0,
                     fontWeight: FontWeight.w600,
                     color: isPositive ? HvacColors.success : HvacColors.error,
                   ),

@@ -29,39 +29,32 @@ class BaseEmptyState extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget content = Center(
       child: Padding(
-        padding: padding ?? EdgeInsets.all(HvacSpacing.xl.w),
+        padding: padding ?? const EdgeInsets.all(HvacSpacing.xl),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
             icon,
-            SizedBox(height: HvacSpacing.lg.h),
+            const SizedBox(height: HvacSpacing.lg),
             Text(
               title,
               style: HvacTypography.h4.copyWith(
-                fontSize: 24.sp,
-              ),
-              textAlign: TextAlign.center,
-            ),
+                fontSize: 24.0),
+              textAlign: TextAlign.center),
             if (subtitle != null) ...[
-              SizedBox(height: HvacSpacing.sm.h),
+              const SizedBox(height: HvacSpacing.sm),
               Text(
                 subtitle!,
                 style: HvacTypography.bodySmall.copyWith(
                   color: HvacColors.textSecondary,
-                  fontSize: 14.sp,
-                ),
-                textAlign: TextAlign.center,
-              ),
+                  fontSize: 14.0),
+                textAlign: TextAlign.center),
             ],
             if (action != null) ...[
-              SizedBox(height: HvacSpacing.xl.h),
+              const SizedBox(height: HvacSpacing.xl),
               action!,
             ],
-          ],
-        ),
-      ),
-    );
+          ])));
 
     if (enableAnimation) {
       content = content
@@ -71,8 +64,7 @@ class BaseEmptyState extends StatelessWidget {
             begin: 0.1,
             end: 0,
             duration: 500.ms,
-            curve: Curves.easeOut,
-          );
+            curve: Curves.easeOut);
     }
 
     return content;

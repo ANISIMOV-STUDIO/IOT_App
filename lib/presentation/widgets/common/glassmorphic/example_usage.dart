@@ -15,31 +15,31 @@ class GlassmorphicExampleScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: HvacColors.backgroundDark,
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(HvacSpacing.lg.w),
+        padding: const EdgeInsets.all(HvacSpacing.lg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildSectionTitle('Standard Glassmorphic Card'),
             GlassmorphicCard(
               width: double.infinity,
-              margin: EdgeInsets.only(bottom: HvacSpacing.md.h),
+              margin: const EdgeInsets.only(bottom: HvacSpacing.md),
               onTap: () => debugPrint('Glassmorphic card tapped'),
-              child: Column(
+              child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'Temperature Control',
                     style: TextStyle(
-                      fontSize: 18.sp,
+                      fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                       color: HvacColors.textPrimary,
                     ),
                   ),
-                  SizedBox(height: HvacSpacing.sm.h),
+                  SizedBox(height: HvacSpacing.sm),
                   Text(
                     'Set your preferred temperature',
                     style: TextStyle(
-                      fontSize: 14.sp,
+                      fontSize: 14.0,
                       color: HvacColors.textSecondary,
                     ),
                   ),
@@ -48,22 +48,22 @@ class GlassmorphicExampleScreen extends StatelessWidget {
             ),
 
             _buildSectionTitle('Elevated Glassmorphic Card'),
-            ElevatedGlassmorphicCard(
+            const ElevatedGlassmorphicCard(
               width: double.infinity,
-              margin: EdgeInsets.only(bottom: HvacSpacing.md.h),
+              margin: EdgeInsets.only(bottom: HvacSpacing.md),
               child: Row(
                 children: [
                   Icon(
                     Icons.ac_unit,
-                    size: 32.sp,
+                    size: 32.0,
                     color: HvacColors.primaryBlue,
                   ),
-                  SizedBox(width: HvacSpacing.md.w),
+                  SizedBox(width: HvacSpacing.md),
                   Expanded(
                     child: Text(
                       'Cooling Mode Active',
                       style: TextStyle(
-                        fontSize: 16.sp,
+                        fontSize: 16.0,
                         color: HvacColors.textPrimary,
                       ),
                     ),
@@ -76,12 +76,12 @@ class GlassmorphicExampleScreen extends StatelessWidget {
             GradientCard(
               width: double.infinity,
               colors: const [HvacColors.primaryBlue, HvacColors.primaryOrange],
-              margin: EdgeInsets.only(bottom: HvacSpacing.md.h),
+              margin: const EdgeInsets.only(bottom: HvacSpacing.md),
               onTap: () => debugPrint('Gradient card tapped'),
-              child: Text(
+              child: const Text(
                 'Premium Feature',
                 style: TextStyle(
-                  fontSize: 18.sp,
+                  fontSize: 18.0,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
@@ -89,81 +89,81 @@ class GlassmorphicExampleScreen extends StatelessWidget {
             ),
 
             _buildSectionTitle('Neumorphic Cards'),
-            Row(
+            const Row(
               children: [
                 Expanded(
                   child: NeumorphicCard(
-                    margin: EdgeInsets.only(right: HvacSpacing.sm.w),
+                    margin: EdgeInsets.only(right: HvacSpacing.sm),
                     child: Center(
                       child: Text(
                         'Standard',
-                        style: TextStyle(fontSize: 14.sp),
+                        style: TextStyle(fontSize: 14.0),
                       ),
                     ),
                   ),
                 ),
                 Expanded(
                   child: SoftNeumorphicCard(
-                    margin: EdgeInsets.symmetric(horizontal: HvacSpacing.xs.w),
+                    margin: EdgeInsets.symmetric(horizontal: HvacSpacing.xs),
                     child: Center(
                       child: Text(
                         'Soft',
-                        style: TextStyle(fontSize: 14.sp),
+                        style: TextStyle(fontSize: 14.0),
                       ),
                     ),
                   ),
                 ),
                 Expanded(
                   child: ConcaveNeumorphicCard(
-                    margin: EdgeInsets.only(left: HvacSpacing.sm.w),
+                    margin: EdgeInsets.only(left: HvacSpacing.sm),
                     child: Center(
                       child: Text(
                         'Concave',
-                        style: TextStyle(fontSize: 14.sp),
+                        style: TextStyle(fontSize: 14.0),
                       ),
                     ),
                   ),
                 ),
               ],
             ),
-            SizedBox(height: HvacSpacing.md.h),
+            const SizedBox(height: HvacSpacing.md),
 
             _buildSectionTitle('Glow Cards'),
             GlowCard(
               width: double.infinity,
               glowColor: HvacColors.primaryOrange,
-              margin: EdgeInsets.only(bottom: HvacSpacing.md.h),
+              margin: const EdgeInsets.only(bottom: HvacSpacing.md),
               onTap: () => debugPrint('Glow card tapped'),
-              child: Text(
+              child: const Text(
                 'Animated Glow Effect',
                 style: TextStyle(
-                  fontSize: 16.sp,
+                  fontSize: 16.0,
                   color: HvacColors.textPrimary,
                 ),
               ),
             ),
 
-            StaticGlowCard(
+            const StaticGlowCard(
               width: double.infinity,
               glowColor: HvacColors.primaryBlue,
-              margin: EdgeInsets.only(bottom: HvacSpacing.md.h),
+              margin: EdgeInsets.only(bottom: HvacSpacing.md),
               child: Text(
                 'Static Glow (Better Performance)',
                 style: TextStyle(
-                  fontSize: 16.sp,
+                  fontSize: 16.0,
                   color: HvacColors.textPrimary,
                 ),
               ),
             ),
 
-            NeonGlowCard(
+            const NeonGlowCard(
               width: double.infinity,
               neonColor: HvacColors.primaryBlue,
-              margin: EdgeInsets.only(bottom: HvacSpacing.md.h),
+              margin: EdgeInsets.only(bottom: HvacSpacing.md),
               child: Text(
                 'Neon Glow Effect',
                 style: TextStyle(
-                  fontSize: 16.sp,
+                  fontSize: 16.0,
                   fontWeight: FontWeight.bold,
                   color: HvacColors.textPrimary,
                 ),
@@ -178,13 +178,13 @@ class GlassmorphicExampleScreen extends StatelessWidget {
                 HvacColors.info,
               ],
               child: Container(
-                height: 200.h,
-                padding: EdgeInsets.all(HvacSpacing.lg.w),
-                child: Center(
+                height: 200.0,
+                padding: const EdgeInsets.all(HvacSpacing.lg),
+                child: const Center(
                   child: Text(
                     'Animated Background',
                     style: TextStyle(
-                      fontSize: 24.sp,
+                      fontSize: 24.0,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
@@ -200,11 +200,11 @@ class GlassmorphicExampleScreen extends StatelessWidget {
 
   Widget _buildSectionTitle(String title) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: HvacSpacing.md.h),
+      padding: const EdgeInsets.symmetric(vertical: HvacSpacing.md),
       child: Text(
         title,
-        style: TextStyle(
-          fontSize: 20.sp,
+        style: const TextStyle(
+          fontSize: 20.0,
           fontWeight: FontWeight.bold,
           color: HvacColors.textPrimary,
         ),

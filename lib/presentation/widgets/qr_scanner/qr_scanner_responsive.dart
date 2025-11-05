@@ -5,7 +5,6 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// Responsive breakpoints for QR scanner
 class QrScannerBreakpoints {
@@ -50,12 +49,12 @@ class QrScannerResponsive {
   double get scannerFrameSize {
     switch (deviceType) {
       case DeviceType.mobile:
-        return 250.w;
+        return 250.0;
       case DeviceType.tablet:
-        return 320.w;
+        return 320.0;
       case DeviceType.desktop:
       case DeviceType.largeDesktop:
-        return 380.w;
+        return 380.0;
     }
   }
 
@@ -65,11 +64,11 @@ class QrScannerResponsive {
       case DeviceType.mobile:
         return double.infinity;
       case DeviceType.tablet:
-        return 600.w;
+        return 600.0;
       case DeviceType.desktop:
-        return 600.w;
+        return 600.0;
       case DeviceType.largeDesktop:
-        return 700.w;
+        return 700.0;
     }
   }
 
@@ -77,13 +76,13 @@ class QrScannerResponsive {
   double get horizontalPadding {
     switch (deviceType) {
       case DeviceType.mobile:
-        return 24.w;
+        return 24.0;
       case DeviceType.tablet:
-        return 32.w;
+        return 32.0;
       case DeviceType.desktop:
-        return 48.w;
+        return 48.0;
       case DeviceType.largeDesktop:
-        return 64.w;
+        return 64.0;
     }
   }
 
@@ -91,12 +90,12 @@ class QrScannerResponsive {
   double get verticalSpacing {
     switch (deviceType) {
       case DeviceType.mobile:
-        return 16.h;
+        return 16.0;
       case DeviceType.tablet:
-        return 20.h;
+        return 20.0;
       case DeviceType.desktop:
       case DeviceType.largeDesktop:
-        return 24.h;
+        return 24.0;
     }
   }
 
@@ -104,12 +103,12 @@ class QrScannerResponsive {
   double get buttonHeight {
     switch (deviceType) {
       case DeviceType.mobile:
-        return 48.h;
+        return 48.0;
       case DeviceType.tablet:
-        return 52.h;
+        return 52.0;
       case DeviceType.desktop:
       case DeviceType.largeDesktop:
-        return 56.h;
+        return 56.0;
     }
   }
 
@@ -117,12 +116,12 @@ class QrScannerResponsive {
   double get iconSize {
     switch (deviceType) {
       case DeviceType.mobile:
-        return 64.w;
+        return 64.0;
       case DeviceType.tablet:
-        return 80.w;
+        return 80.0;
       case DeviceType.desktop:
       case DeviceType.largeDesktop:
-        return 96.w;
+        return 96.0;
     }
   }
 
@@ -130,12 +129,12 @@ class QrScannerResponsive {
   double get cornerMarkerSize {
     switch (deviceType) {
       case DeviceType.mobile:
-        return 20.w;
+        return 20.0;
       case DeviceType.tablet:
-        return 24.w;
+        return 24.0;
       case DeviceType.desktop:
       case DeviceType.largeDesktop:
-        return 28.w;
+        return 28.0;
     }
   }
 
@@ -161,12 +160,12 @@ class QrScannerResponsive {
   double get borderRadius {
     switch (deviceType) {
       case DeviceType.mobile:
-        return 12.r;
+        return 12.0;
       case DeviceType.tablet:
-        return 16.r;
+        return 16.0;
       case DeviceType.desktop:
       case DeviceType.largeDesktop:
-        return 20.r;
+        return 20.0;
     }
   }
 
@@ -176,10 +175,10 @@ class QrScannerResponsive {
       case DeviceType.mobile:
         return screenWidth * 0.9;
       case DeviceType.tablet:
-        return 500.w;
+        return 500.0;
       case DeviceType.desktop:
       case DeviceType.largeDesktop:
-        return 550.w;
+        return 550.0;
     }
   }
 }

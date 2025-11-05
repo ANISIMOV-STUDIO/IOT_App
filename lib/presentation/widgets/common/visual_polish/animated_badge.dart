@@ -72,17 +72,17 @@ class _AnimatedBadgeState extends State<AnimatedBadge>
             _isPressed ? 0.95 : (_isHovered ? 1.05 : 1.0),
             1.0,
           ),
-          padding: EdgeInsets.symmetric(
-            horizontal: HvacSpacing.sm.r,
-            vertical: HvacSpacing.xs.r,
+          padding: const EdgeInsets.symmetric(
+            horizontal: HvacSpacing.sm,
+            vertical: HvacSpacing.xs,
           ),
           decoration: _buildDecoration(),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               if (widget.icon != null) ...[
-                Icon(widget.icon, size: 12.r, color: widget.backgroundColor),
-                SizedBox(width: HvacSpacing.xxs.r),
+                Icon(widget.icon, size: 12.0, color: widget.backgroundColor),
+                const SizedBox(width: HvacSpacing.xxs),
               ],
               Text(
                 widget.label,
@@ -92,10 +92,10 @@ class _AnimatedBadgeState extends State<AnimatedBadge>
                 ),
               ),
               if (widget.isNew) ...[
-                SizedBox(width: HvacSpacing.xxs.r),
+                const SizedBox(width: HvacSpacing.xxs),
                 Container(
-                  width: 6.r,
-                  height: 6.r,
+                  width: 6.0,
+                  height: 6.0,
                   decoration: const BoxDecoration(
                     color: HvacColors.error,
                     shape: BoxShape.circle,
@@ -138,7 +138,7 @@ class _AnimatedBadgeState extends State<AnimatedBadge>
         color: widget.backgroundColor.withValues(
           alpha: _isHovered ? 0.25 : 0.2,
         ),
-        borderRadius: BorderRadius.circular(HvacRadius.sm.r),
+        borderRadius: BorderRadius.circular(HvacRadius.sm),
         border: Border.all(
           color: widget.backgroundColor.withValues(
             alpha: _isHovered ? 0.5 : 0.3,

@@ -136,29 +136,29 @@ class _WebCameraHandlerState extends State<WebCameraHandler> {
         _buildCameraView(theme, responsive),
         Center(
           child: Container(
-            padding: EdgeInsets.all(AppSpacing.mdR),
+            padding: const EdgeInsets.all(AppSpacing.md),
             decoration: BoxDecoration(
               color: Colors.black54,
               borderRadius: HvacRadius.smRadius,
             ),
-            child: Row(
+            child: const Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(
-                  width: 20.w,
-                  height: 20.w,
+                  width: 20.0,
+                  height: 20.0,
                   child: CircularProgressIndicator(
-                    strokeWidth: 2.w,
+                    strokeWidth: 2.0,
                     valueColor:
-                        const AlwaysStoppedAnimation<Color>(Colors.white),
+                        AlwaysStoppedAnimation<Color>(Colors.white),
                   ),
                 ),
-                SizedBox(width: AppSpacing.smR),
+                SizedBox(width: AppSpacing.sm),
                 Text(
                   'Processing QR Code...',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 14.sp,
+                    fontSize: 14.0,
                   ),
                 ),
               ],
@@ -180,12 +180,12 @@ class _WebCameraHandlerState extends State<WebCameraHandler> {
         color: Colors.black,
         borderRadius: BorderRadius.circular(responsive.borderRadius),
       ),
-      child: Center(
+      child: const Center(
         child: Text(
           'Camera View',
           style: TextStyle(
             color: Colors.white,
-            fontSize: 16.sp,
+            fontSize: 16.0,
           ),
         ),
       ),

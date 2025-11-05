@@ -25,17 +25,17 @@ class EnergyChart extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'Энергопотребление',
             style: TextStyle(
-              fontSize: 16.sp,
+              fontSize: 16.0,
               fontWeight: FontWeight.w600,
               color: HvacColors.textPrimary,
             ),
           ),
           const SizedBox(height: HvacSpacing.lgR),
           SizedBox(
-            height: 200.h,
+            height: 200.0,
             child: BarChart(
               BarChartData(
                 alignment: BarChartAlignment.spaceAround,
@@ -45,10 +45,10 @@ class EnergyChart extends StatelessWidget {
                     getTooltipItem: (group, groupIndex, rod, rodIndex) {
                       return BarTooltipItem(
                         '${rod.toY.toInt()} Вт',
-                        TextStyle(
+                        const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: 12.sp,
+                          fontSize: 12.0,
                         ),
                       );
                     },
@@ -69,12 +69,12 @@ class EnergyChart extends StatelessWidget {
                         const hours = ['00', '04', '08', '12', '16', '20'];
                         if (value.toInt() < hours.length) {
                           return Padding(
-                            padding: EdgeInsets.only(top: 8.h),
+                            padding: const EdgeInsets.only(top: 8.0),
                             child: Text(
                               hours[value.toInt()],
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: HvacColors.textSecondary,
-                                fontSize: 10.sp,
+                                fontSize: 10.0,
                               ),
                             ),
                           );
@@ -90,9 +90,9 @@ class EnergyChart extends StatelessWidget {
                       getTitlesWidget: (value, meta) {
                         return Text(
                           '${value.toInt()}W',
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: HvacColors.textSecondary,
-                            fontSize: 10.sp,
+                            fontSize: 10.0,
                           ),
                         );
                       },

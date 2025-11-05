@@ -38,16 +38,16 @@ class _ScheduleListState extends State<ScheduleList> {
     final isMobile = MediaQuery.of(context).size.width < 600;
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: isMobile ? HvacSpacing.md.w : HvacSpacing.xl.w,
-        vertical: HvacSpacing.md.h,
+        horizontal: isMobile ? HvacSpacing.md : HvacSpacing.xl,
+        vertical: HvacSpacing.md,
       ),
       child: KeyboardListener(
         focusNode: FocusNode(),
         onKeyEvent: _handleKeyEvent,
         child: ListView.separated(
           itemCount: widget.schedules.length,
-          separatorBuilder: (context, index) => SizedBox(
-            height: HvacSpacing.md.h,
+          separatorBuilder: (context, index) => const SizedBox(
+            height: HvacSpacing.md,
           ),
           itemBuilder: (context, index) {
             final schedule = widget.schedules[index];

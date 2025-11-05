@@ -38,8 +38,8 @@ class DashboardChartCard extends StatelessWidget {
                     children: [
                       Text(
                         title,
-                        style: TextStyle(
-                          fontSize: 16.sp,
+                        style: const TextStyle(
+                          fontSize: 16.0,
                           fontWeight: FontWeight.w600,
                           color: HvacColors.textPrimary,
                         ),
@@ -48,8 +48,8 @@ class DashboardChartCard extends StatelessWidget {
                         const SizedBox(height: HvacSpacing.xxsR),
                         Text(
                           subtitle!,
-                          style: TextStyle(
-                            fontSize: 12.sp,
+                          style: const TextStyle(
+                            fontSize: 12.0,
                             color: HvacColors.textTertiary,
                           ),
                         ),
@@ -58,10 +58,10 @@ class DashboardChartCard extends StatelessWidget {
                   ),
                 ),
                 if (onTap != null)
-                  Icon(
+                  const Icon(
                     Icons.chevron_right,
                     color: HvacColors.textTertiary,
-                    size: 20.sp,
+                    size: 20.0,
                   ),
               ],
             ),

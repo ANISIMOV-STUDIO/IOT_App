@@ -20,7 +20,7 @@ class TemperatureBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
       decoration: BoxDecoration(
         color: HvacColors.backgroundDark,
         borderRadius: HvacRadius.smRadius,
@@ -32,26 +32,26 @@ class TemperatureBadge extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
+          const Icon(
             Icons.thermostat_outlined,
-            size: 14.w,
+            size: 14.0,
             color: HvacColors.neutral200,
           ),
-          SizedBox(width: 6.w),
+          const SizedBox(width: 6.0),
           Text(
             temperature != null ? '${temperature!.toStringAsFixed(1)}°C' : '—',
-            style: TextStyle(
-              fontSize: 12.sp,
+            style: const TextStyle(
+              fontSize: 12.0,
               fontWeight: FontWeight.w600,
               color: HvacColors.textPrimary,
             ),
           ),
           if (label.isNotEmpty) ...[
-            SizedBox(width: 4.w),
+            const SizedBox(width: 4.0),
             Text(
               label,
-              style: TextStyle(
-                fontSize: 10.sp,
+              style: const TextStyle(
+                fontSize: 10.0,
                 color: HvacColors.textTertiary,
               ),
             ),

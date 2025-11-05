@@ -51,7 +51,7 @@ class QrScannerOverlay extends StatelessWidget {
             decoration: BoxDecoration(
               border: Border.all(
                 color: effectiveFrameColor.withValues(alpha: 0.3),
-                width: 1.w,
+                width: 1.0,
               ),
               borderRadius: BorderRadius.circular(responsive.borderRadius),
             ),
@@ -112,14 +112,14 @@ class QrScannerOverlay extends StatelessWidget {
         // Status message
         if (statusMessage != null)
           Positioned(
-            bottom: 40.h,
+            bottom: 40.0,
             left: 0,
             right: 0,
             child: Center(
               child: Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppSpacing.lgR,
-                  vertical: AppSpacing.smR,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.lg,
+                  vertical: AppSpacing.sm,
                 ),
                 decoration: BoxDecoration(
                   color: Colors.black54,
@@ -129,22 +129,22 @@ class QrScannerOverlay extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     if (isScanning) ...[
-                      SizedBox(
-                        width: 16.w,
-                        height: 16.w,
+                      const SizedBox(
+                        width: 16.0,
+                        height: 16.0,
                         child: CircularProgressIndicator(
-                          strokeWidth: 2.w,
+                          strokeWidth: 2.0,
                           valueColor:
-                              const AlwaysStoppedAnimation<Color>(Colors.white),
+                              AlwaysStoppedAnimation<Color>(Colors.white),
                         ),
                       ),
-                      SizedBox(width: AppSpacing.xsR),
+                      const SizedBox(width: AppSpacing.xs),
                     ],
                     Text(
                       statusMessage!,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 14.sp,
+                        fontSize: 14.0,
                       ),
                     ),
                   ],
@@ -184,7 +184,7 @@ class _OverlayPainter extends CustomPainter {
         PathOperation.difference,
         Path()..addRect(Rect.fromLTWH(0, 0, size.width, size.height)),
         Path()
-          ..addRRect(RRect.fromRectAndRadius(rect, Radius.circular(12.r))),
+          ..addRRect(RRect.fromRectAndRadius(rect, const Radius.circular(12.0))),
       ),
       paint,
     );

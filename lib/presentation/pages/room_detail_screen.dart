@@ -44,10 +44,10 @@ class RoomDetailScreen extends StatelessWidget {
   }
 
   Widget _buildLoading() {
-    return Center(
+    return const Center(
       child: CircularProgressIndicator(
         color: HvacColors.primaryOrange,
-        strokeWidth: 3.r,
+        strokeWidth: 3.0,
       ),
     );
   }
@@ -55,27 +55,27 @@ class RoomDetailScreen extends StatelessWidget {
   Widget _buildError(BuildContext context, String message) {
     return Center(
       child: Padding(
-        padding: EdgeInsets.all(32.w),
+        padding: const EdgeInsets.all(32.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
+            const Icon(
               Icons.error_outline,
-              size: 64.sp,
+              size: 64.0,
               color: HvacColors.error,
             ),
-            SizedBox(height: 24.h),
+            const SizedBox(height: 24.0),
             Text(
               'Error',
               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    fontSize: 24.sp,
+                    fontSize: 24.0,
                   ),
             ),
-            SizedBox(height: 12.h),
+            const SizedBox(height: 12.0),
             Text(
               message,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontSize: 14.sp,
+                    fontSize: 14.0,
                   ),
               textAlign: TextAlign.center,
             ),

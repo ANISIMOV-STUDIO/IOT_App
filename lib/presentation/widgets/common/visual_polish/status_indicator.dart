@@ -103,8 +103,8 @@ class _StatusIndicatorState extends State<StatusIndicator>
                   // Glow effect with web optimization
                   if (widget.isActive && widget.enablePulse)
                     Container(
-                      width: widget.size.r * _pulseAnimation.value * 2,
-                      height: widget.size.r * _pulseAnimation.value * 2,
+                      width: widget.size * _pulseAnimation.value * 2,
+                      height: widget.size * _pulseAnimation.value * 2,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: color.withValues(alpha: _isHovered ? 0.3 : 0.2),
@@ -112,8 +112,8 @@ class _StatusIndicatorState extends State<StatusIndicator>
                     ),
                   // Main dot with enhanced shadow on hover
                   Container(
-                    width: widget.size.r,
-                    height: widget.size.r,
+                    width: widget.size,
+                    height: widget.size,
                     decoration: BoxDecoration(
                       color: _isHovered ? color.withValues(alpha: 0.9) : color,
                       shape: BoxShape.circle,
@@ -130,7 +130,7 @@ class _StatusIndicatorState extends State<StatusIndicator>
               ),
             ),
             if (widget.showLabel) ...[
-              SizedBox(width: HvacSpacing.xs.r),
+              const SizedBox(width: HvacSpacing.xs),
               AnimatedDefaultTextStyle(
                 duration: const Duration(milliseconds: 200),
                 style: HvacTypography.captionMedium.copyWith(

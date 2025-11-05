@@ -13,15 +13,15 @@ class AnimatedDeviceIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 120.r,
-      height: 120.r,
+      width: 120.0,
+      height: 120.0,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: HvacColors.primaryOrange.withValues(alpha: 0.1),
       ),
       child: Icon(
         Icons.devices_other,
-        size: 60.r,
+        size: 60.0,
         color: HvacColors.primaryOrange.withValues(alpha: 0.5),
       ),
     )
@@ -41,8 +41,8 @@ class AnimatedChartIcon extends StatelessWidget {
       alignment: Alignment.center,
       children: [
         Container(
-          width: 120.r,
-          height: 120.r,
+          width: 120.0,
+          height: 120.0,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(
@@ -51,9 +51,9 @@ class AnimatedChartIcon extends StatelessWidget {
             ),
           ),
         ),
-        Icon(
+        const Icon(
           Icons.insert_chart_outlined,
-          size: 60.r,
+          size: 60.0,
           color: HvacColors.textTertiary,
         )
             .animate(onPlay: (controller) => controller.repeat())
@@ -130,8 +130,8 @@ class _AnimatedBellIconState extends State<AnimatedBellIcon>
       builder: (context, child) => Transform.rotate(
         angle: _rotationAnimation.value,
         child: Container(
-          width: 100.r,
-          height: 100.r,
+          width: 100.0,
+          height: 100.0,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             gradient: LinearGradient(
@@ -143,9 +143,9 @@ class _AnimatedBellIconState extends State<AnimatedBellIcon>
               end: Alignment.bottomRight,
             ),
           ),
-          child: Icon(
+          child: const Icon(
             Icons.notifications_none,
-            size: 50.r,
+            size: 50.0,
             color: HvacColors.textTertiary,
           ),
         ),
@@ -164,8 +164,8 @@ class AnimatedSearchIcon extends StatelessWidget {
       alignment: Alignment.center,
       children: [
         Container(
-          width: 100.r,
-          height: 100.r,
+          width: 100.0,
+          height: 100.0,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: HvacColors.backgroundCard,
@@ -175,9 +175,9 @@ class AnimatedSearchIcon extends StatelessWidget {
             ),
           ),
         ),
-        Icon(
+        const Icon(
           Icons.search_off,
-          size: 50.r,
+          size: 50.0,
           color: HvacColors.textTertiary,
         )
             .animate(onPlay: (controller) => controller.repeat(reverse: true))
@@ -204,7 +204,7 @@ class AnimatedWifiIcon extends StatelessWidget {
       children: [
         Icon(
           Icons.wifi_off,
-          size: 80.r,
+          size: 80.0,
           color: HvacColors.error.withValues(alpha: 0.5),
         )
             .animate(onPlay: (controller) => controller.repeat())
@@ -224,15 +224,15 @@ class PermissionIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 100.r,
-      height: 100.r,
+      width: 100.0,
+      height: 100.0,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: HvacColors.warning.withValues(alpha: 0.1),
       ),
-      child: Icon(
+      child: const Icon(
         Icons.lock_outline,
-        size: 50.r,
+        size: 50.0,
         color: HvacColors.warning,
       ),
     );
@@ -245,9 +245,9 @@ class AnimatedMaintenanceIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Icon(
+    return const Icon(
       Icons.construction,
-      size: 80.r,
+      size: 80.0,
       color: HvacColors.warning,
     )
         .animate(onPlay: (controller) => controller.repeat())

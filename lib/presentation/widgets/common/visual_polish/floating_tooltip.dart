@@ -85,7 +85,7 @@ class _FloatingTooltipState extends State<FloatingTooltip>
     final size = renderBox.size;
     final offset = renderBox.localToGlobal(Offset.zero);
     final tooltipTop = widget.position == TooltipPosition.top
-        ? offset.dy - 40.h - widget.verticalOffset
+        ? offset.dy - 40.0 - widget.verticalOffset
         : offset.dy + size.height + widget.verticalOffset;
 
     return OverlayEntry(
@@ -99,17 +99,17 @@ class _FloatingTooltipState extends State<FloatingTooltip>
             child: SlideTransition(
               position: _slideAnimation,
               child: Container(
-                constraints: BoxConstraints(
-                  maxWidth: 200.w,
-                  minWidth: 50.w,
+                constraints: const BoxConstraints(
+                  maxWidth: 200.0,
+                  minWidth: 50.0,
                 ),
-                padding: EdgeInsets.symmetric(
-                  horizontal: HvacSpacing.sm.w,
-                  vertical: HvacSpacing.xs.h,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: HvacSpacing.sm,
+                  vertical: HvacSpacing.xs,
                 ),
                 decoration: BoxDecoration(
                   color: widget.backgroundColor ?? HvacColors.backgroundCard,
-                  borderRadius: BorderRadius.circular(HvacRadius.sm.r),
+                  borderRadius: BorderRadius.circular(HvacRadius.sm),
                   border: Border.all(
                     color:
                         HvacColors.backgroundCardBorder.withValues(alpha: 0.2),

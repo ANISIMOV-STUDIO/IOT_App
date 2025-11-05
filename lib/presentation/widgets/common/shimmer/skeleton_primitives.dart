@@ -32,10 +32,8 @@ class SkeletonContainer extends StatelessWidget {
         color: Colors.white,
         borderRadius: isCircle
             ? null
-            : (borderRadius ?? BorderRadius.circular(HvacRadius.sm.r)),
-        shape: isCircle ? BoxShape.circle : BoxShape.rectangle,
-      ),
-    );
+            : (borderRadius ?? BorderRadius.circular(HvacRadius.sm)),
+        shape: isCircle ? BoxShape.circle : BoxShape.rectangle));
   }
 }
 
@@ -66,23 +64,22 @@ class SkeletonText extends StatelessWidget {
         if (randomWidth && width == null) {
           // Create realistic text width variations
           if (index == lines - 1) {
-            lineWidth = 0.6.sw; // Last line typically shorter
+            lineWidth = 0.6; // Last line typically shorter
           } else {
-            lineWidth = (0.8 + (index % 2) * 0.2).sw;
+            lineWidth = (0.8 + (index % 2) * 0.2);
           }
         }
 
         return Padding(
           padding: EdgeInsets.only(
-            bottom: index < lines - 1 ? spacing.h : 0,
+            bottom: index < lines - 1 ? spacing : 0,
           ),
           child: SkeletonContainer(
             width: lineWidth,
-            height: height.h,
+            height: height,
             borderRadius: HvacRadius.xsRadius,
           ),
         );
-      }),
-    );
+      }));
   }
 }

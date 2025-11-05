@@ -35,9 +35,9 @@ class AdaptiveContainer extends StatelessWidget {
     } else if (ResponsiveUtils.isMobile(context)) {
       effectiveMaxWidth = double.infinity;
     } else if (ResponsiveUtils.isTablet(context)) {
-      effectiveMaxWidth = screenWidth < 900 ? 600.w : 800.w;
+      effectiveMaxWidth = screenWidth < 900 ? 600.0 : 800.0;
     } else {
-      effectiveMaxWidth = 1200.w;
+      effectiveMaxWidth = 1200.0;
     }
 
     // Determine padding based on device
@@ -97,7 +97,7 @@ class AdaptiveTwoPane extends StatelessWidget {
             crossAxisAlignment: crossAxisAlignment,
             children: [
               leftPane,
-              SizedBox(height: spacing.h),
+              SizedBox(height: spacing),
               rightPane,
             ],
           );
@@ -110,7 +110,7 @@ class AdaptiveTwoPane extends StatelessWidget {
               flex: leftFlex,
               child: leftPane,
             ),
-            SizedBox(width: spacing.w),
+            SizedBox(width: spacing),
             Expanded(
               flex: rightFlex,
               child: rightPane,
@@ -163,7 +163,7 @@ class AdaptiveCard extends StatelessWidget {
     }
 
     // Adaptive border radius
-    final radius = borderRadius ?? (isMobile ? 12.r : 16.r);
+    final radius = borderRadius ?? (isMobile ? 12.0 : 16.0);
 
     return Container(
       margin: margin ?? EdgeInsets.symmetric(
@@ -187,7 +187,7 @@ class AdaptiveCard extends StatelessWidget {
                 if (title != null) ...[
                   DefaultTextStyle(
                     style: TextStyle(
-                      fontSize: isMobile ? 16.sp : 18.sp,
+                      fontSize: isMobile ? 16.0 : 18.0,
                       fontWeight: FontWeight.w600,
                     ),
                     child: title!,

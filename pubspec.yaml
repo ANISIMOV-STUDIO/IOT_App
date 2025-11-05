@@ -36,7 +36,7 @@ dependencies:
 
   # UI & Responsive
   responsive_builder: ^0.7.0
-  flutter_screenutil: ^5.9.0
+  responsive_framework: ^1.5.1
   flutter_animate: ^4.5.0
   shimmer: ^3.0.0
 

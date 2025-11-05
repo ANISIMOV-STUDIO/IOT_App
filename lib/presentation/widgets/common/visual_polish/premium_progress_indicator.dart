@@ -41,16 +41,14 @@ class _PremiumProgressIndicatorState extends State<PremiumProgressIndicator>
     super.initState();
     _controller = AnimationController(
       duration: const Duration(milliseconds: 1000),
-      vsync: this,
-    );
+      vsync: this);
     _updateAnimation(0.0, widget.value.clamp(0.0, 1.0));
     if (widget.animate) _controller.forward();
   }
 
   void _updateAnimation(double from, double to) {
     _progressAnimation = Tween<double>(begin: from, end: to).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
   }
 
   @override
@@ -59,8 +57,7 @@ class _PremiumProgressIndicatorState extends State<PremiumProgressIndicator>
     if (widget.value != oldWidget.value) {
       _updateAnimation(
         oldWidget.value.clamp(0.0, 1.0),
-        widget.value.clamp(0.0, 1.0),
-      );
+        widget.value.clamp(0.0, 1.0));
       _controller.forward(from: 0);
     }
   }
@@ -83,27 +80,25 @@ class _PremiumProgressIndicatorState extends State<PremiumProgressIndicator>
             Text(widget.label!,
                 style: HvacTypography.captionMedium
                     .copyWith(color: HvacColors.textSecondary)),
-            SizedBox(height: HvacSpacing.xxs.h),
+            const SizedBox(height: HvacSpacing.xxs),
           ],
           AnimatedBuilder(
             animation: _progressAnimation,
             builder: (_, __) => AnimatedContainer(
               duration: const Duration(milliseconds: 200),
-              height: _isHovered ? widget.height.h * 1.2 : widget.height.h,
+              height: _isHovered ? widget.height * 1.2 : widget.height,
               decoration: BoxDecoration(
                 color: widget.backgroundColor ??
                     HvacColors.backgroundCardBorder.withValues(alpha: 0.3),
-                borderRadius: BorderRadius.circular(widget.height.h),
+                borderRadius: BorderRadius.circular(widget.height),
                 boxShadow: _isHovered
                     ? [
                         BoxShadow(
                           color: Colors.black.withValues(alpha: 0.05),
                           blurRadius: 4,
-                          offset: const Offset(0, 2),
-                        )
+                          offset: const Offset(0, 2))
                       ]
-                    : null,
-              ),
+                    : null),
               child: LayoutBuilder(
                 builder: (_, constraints) => Stack(children: [
                   AnimatedContainer(
@@ -111,23 +106,17 @@ class _PremiumProgressIndicatorState extends State<PremiumProgressIndicator>
                     width: constraints.maxWidth * _progressAnimation.value,
                     decoration: BoxDecoration(
                       gradient: widget.gradient ?? HvacColors.primaryGradient,
-                      borderRadius: BorderRadius.circular(widget.height.h),
+                      borderRadius: BorderRadius.circular(widget.height),
                       boxShadow: [
                         BoxShadow(
                           color: HvacColors.primaryOrange
                               .withValues(alpha: _isHovered ? 0.4 : 0.3),
                           blurRadius: _isHovered ? 12 : 8,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                  ),
-                ]),
-              ),
-            ),
-          ),
+                          offset: const Offset(0, 2)),
+                      ])),
+                ])))),
           if (widget.showPercentage) ...[
-            SizedBox(height: HvacSpacing.xs.h),
+            const SizedBox(height: HvacSpacing.xs),
             AnimatedBuilder(
               animation: _progressAnimation,
               builder: (_, __) => Row(
@@ -138,18 +127,12 @@ class _PremiumProgressIndicatorState extends State<PremiumProgressIndicator>
                     style: HvacTypography.captionBold.copyWith(
                       color: _isHovered
                           ? HvacColors.primaryOrange
-                          : HvacColors.primaryOrange.withValues(alpha: 0.8),
-                    ),
-                  ),
+                          : HvacColors.primaryOrange.withValues(alpha: 0.8))),
                   if (_progressAnimation.value >= 1.0)
-                    Icon(Icons.check_circle,
-                        size: 14.r, color: HvacColors.success),
-                ],
-              ),
-            ),
+                    const Icon(Icons.check_circle,
+                        size: 14.0, color: HvacColors.success),
+                ])),
           ],
-        ],
-      ),
-    );
+        ]));
   }
 }

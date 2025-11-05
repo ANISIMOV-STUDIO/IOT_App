@@ -22,7 +22,7 @@ class RoomDetailHeader extends StatelessWidget {
     final modeColor = HvacColors.getModeColor(unit.mode);
 
     return SliverAppBar(
-      expandedHeight: 300.h,
+      expandedHeight: 300.0,
       pinned: true,
       backgroundColor: HvacColors.backgroundDark,
       leading: _buildBackButton(context),
@@ -30,10 +30,10 @@ class RoomDetailHeader extends StatelessWidget {
       flexibleSpace: FlexibleSpaceBar(
         title: Text(
           unit.location ?? unit.name,
-          style: TextStyle(
-            fontSize: 20.sp,
+          style: const TextStyle(
+            fontSize: 20.0,
             fontWeight: FontWeight.w600,
-            shadows: const [
+            shadows: [
               Shadow(
                 color: Colors.black54,
                 blurRadius: 8,
@@ -51,8 +51,8 @@ class RoomDetailHeader extends StatelessWidget {
       label: 'Back',
       button: true,
       child: IconButton(
-        icon: Icon(Icons.arrow_back, size: 24.sp),
-        constraints: BoxConstraints(minWidth: 48.w, minHeight: 48.h),
+        icon: const Icon(Icons.arrow_back, size: 24.0),
+        constraints: const BoxConstraints(minWidth: 48.0, minHeight: 48.0),
         onPressed: () {
           if (!kIsWeb) {
             HapticFeedback.lightImpact();
@@ -68,8 +68,8 @@ class RoomDetailHeader extends StatelessWidget {
       label: 'Notifications',
       button: true,
       child: IconButton(
-        icon: Icon(Icons.notifications_outlined, size: 24.sp),
-        constraints: BoxConstraints(minWidth: 48.w, minHeight: 48.h),
+        icon: const Icon(Icons.notifications_outlined, size: 24.0),
+        constraints: const BoxConstraints(minWidth: 48.0, minHeight: 48.0),
         onPressed: () {
           if (!kIsWeb) {
             HapticFeedback.lightImpact();
@@ -114,7 +114,7 @@ class RoomDetailHeader extends StatelessWidget {
           ),
           child: Icon(
             Icons.home_outlined,
-            size: 120.sp,
+            size: 120.0,
             color: Colors.white.withValues(alpha: 0.1),
           ),
         ),

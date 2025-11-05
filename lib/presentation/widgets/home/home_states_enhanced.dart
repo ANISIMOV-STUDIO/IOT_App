@@ -30,17 +30,17 @@ class EnhancedHomeLoadingState extends StatelessWidget {
     return ResponsiveBuilder(
       builder: (context, info) {
         return Padding(
-          padding: EdgeInsets.all(HvacSpacing.lg.w),
+          padding: const EdgeInsets.all(HvacSpacing.lg),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Header skeleton
               _buildHeaderSkeleton(context),
-              SizedBox(height: HvacSpacing.xl.h),
+              const SizedBox(height: HvacSpacing.xl),
 
               // Room cards skeleton
               _buildRoomCardsSkeleton(context, info),
-              SizedBox(height: HvacSpacing.lg.h),
+              const SizedBox(height: HvacSpacing.lg),
 
               // Quick controls skeleton
               _buildQuickControlsSkeleton(context),
@@ -68,20 +68,20 @@ class EnhancedHomeLoadingState extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            width: 120.w,
-            height: 20.h,
+            width: 120.0,
+            height: 20.0,
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(HvacSpacing.xs.r),
+              borderRadius: BorderRadius.circular(HvacSpacing.xs),
             ),
           ),
-          SizedBox(height: HvacSpacing.xs.h),
+          const SizedBox(height: HvacSpacing.xs),
           Container(
-            width: 200.w,
-            height: 32.h,
+            width: 200.0,
+            height: 32.0,
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(HvacSpacing.xs.r),
+              borderRadius: BorderRadius.circular(HvacSpacing.xs),
             ),
           ),
         ],
@@ -93,21 +93,21 @@ class EnhancedHomeLoadingState extends StatelessWidget {
     final cardCount = info.isMobile ? 2 : info.isTablet ? 3 : 4;
 
     return SizedBox(
-      height: 180.h,
+      height: 180.0,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: cardCount,
         itemBuilder: (context, index) {
           return Padding(
-            padding: EdgeInsets.only(right: HvacSpacing.md.w),
+            padding: const EdgeInsets.only(right: HvacSpacing.md),
             child: Shimmer.fromColors(
               baseColor: Colors.grey.shade800,
               highlightColor: Colors.grey.shade700,
               child: Container(
-                width: 150.w,
+                width: 150.0,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(HvacSpacing.md.r),
+                  borderRadius: BorderRadius.circular(HvacSpacing.md),
                 ),
               ),
             ),
@@ -125,8 +125,8 @@ class EnhancedHomeLoadingState extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: List.generate(4, (index) {
           return Container(
-            width: 60.w,
-            height: 60.h,
+            width: 60.0,
+            height: 60.0,
             decoration: const BoxDecoration(
               color: Colors.white,
               shape: BoxShape.circle,
@@ -238,7 +238,7 @@ class AccessibleRefreshButton extends StatelessWidget {
       semanticLabel: l10n.refresh,
       tooltip: 'Refresh Devices',  // TODO: Add to localization
       loading: isLoading,
-      size: 24.sp,
+      size: 24.0,
       color: HvacColors.primaryOrange,
       minTouchTarget: 48.0,
     );

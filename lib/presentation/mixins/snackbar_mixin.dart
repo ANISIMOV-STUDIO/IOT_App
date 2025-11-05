@@ -16,12 +16,12 @@ mixin SnackbarMixin<T extends StatefulWidget> on State<T> {
       SnackBar(
         content: Row(
           children: [
-            Icon(
+            const Icon(
               Icons.check_circle,
               color: HvacColors.textPrimary,
-              size: 20.sp,
+              size: 20.0,
             ),
-            const SizedBox(width: HvacSpacing.smR),
+            const SizedBox(width: 12.0),
             Expanded(
               child: Text(
                 message,
@@ -33,9 +33,9 @@ mixin SnackbarMixin<T extends StatefulWidget> on State<T> {
         backgroundColor: HvacColors.success,
         duration: duration ?? const Duration(seconds: 2),
         behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.all(HvacSpacing.mdR),
+        margin: const EdgeInsets.all(16.0),
         shape: RoundedRectangleBorder(
-          borderRadius: HvacRadius.smRadius,
+          borderRadius: BorderRadius.circular(8.0),
         ),
       ),
     );
@@ -49,12 +49,12 @@ mixin SnackbarMixin<T extends StatefulWidget> on State<T> {
       SnackBar(
         content: Row(
           children: [
-            Icon(
+            const Icon(
               Icons.error_outline,
               color: HvacColors.textPrimary,
-              size: 20.sp,
+              size: 20.0,
             ),
-            const SizedBox(width: HvacSpacing.smR),
+            const SizedBox(width: 12.0),
             Expanded(
               child: Text(
                 message,
@@ -66,9 +66,9 @@ mixin SnackbarMixin<T extends StatefulWidget> on State<T> {
         backgroundColor: HvacColors.error,
         duration: duration ?? const Duration(seconds: 3),
         behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.all(HvacSpacing.mdR),
+        margin: const EdgeInsets.all(16.0),
         shape: RoundedRectangleBorder(
-          borderRadius: HvacRadius.smRadius,
+          borderRadius: BorderRadius.circular(8.0),
         ),
       ),
     );
@@ -82,12 +82,12 @@ mixin SnackbarMixin<T extends StatefulWidget> on State<T> {
       SnackBar(
         content: Row(
           children: [
-            Icon(
+            const Icon(
               Icons.info_outline,
               color: HvacColors.textPrimary,
-              size: 20.sp,
+              size: 20.0,
             ),
-            const SizedBox(width: HvacSpacing.smR),
+            const SizedBox(width: 12.0),
             Expanded(
               child: Text(
                 message,
@@ -99,9 +99,9 @@ mixin SnackbarMixin<T extends StatefulWidget> on State<T> {
         backgroundColor: HvacColors.info,
         duration: duration ?? const Duration(seconds: 2),
         behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.all(HvacSpacing.mdR),
+        margin: const EdgeInsets.all(16.0),
         shape: RoundedRectangleBorder(
-          borderRadius: HvacRadius.smRadius,
+          borderRadius: BorderRadius.circular(8.0),
         ),
       ),
     );
@@ -115,12 +115,12 @@ mixin SnackbarMixin<T extends StatefulWidget> on State<T> {
       SnackBar(
         content: Row(
           children: [
-            Icon(
+            const Icon(
               Icons.warning_amber_rounded,
               color: HvacColors.textPrimary,
-              size: 20.sp,
+              size: 20.0,
             ),
-            const SizedBox(width: HvacSpacing.smR),
+            const SizedBox(width: 12.0),
             Expanded(
               child: Text(
                 message,
@@ -132,9 +132,9 @@ mixin SnackbarMixin<T extends StatefulWidget> on State<T> {
         backgroundColor: HvacColors.warning,
         duration: duration ?? const Duration(seconds: 3),
         behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.all(HvacSpacing.mdR),
+        margin: const EdgeInsets.all(16.0),
         shape: RoundedRectangleBorder(
-          borderRadius: HvacRadius.smRadius,
+          borderRadius: BorderRadius.circular(8.0),
         ),
       ),
     );
@@ -164,9 +164,9 @@ mixin SnackbarMixin<T extends StatefulWidget> on State<T> {
         backgroundColor: backgroundColor ?? HvacColors.backgroundCard,
         duration: duration ?? const Duration(seconds: 4),
         behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.all(HvacSpacing.mdR),
+        margin: const EdgeInsets.all(16.0),
         shape: RoundedRectangleBorder(
-          borderRadius: HvacRadius.smRadius,
+          borderRadius: BorderRadius.circular(8.0),
         ),
       ),
     );

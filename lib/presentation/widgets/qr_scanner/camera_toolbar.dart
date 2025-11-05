@@ -21,9 +21,9 @@ class CameraToolbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: MediaQuery.of(context).padding.top + AppSpacing.mdR,
-      left: AppSpacing.mdR,
-      right: AppSpacing.mdR,
+      top: MediaQuery.of(context).padding.top + AppSpacing.md,
+      left: AppSpacing.md,
+      right: AppSpacing.md,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -65,11 +65,11 @@ class _ToolbarButton extends StatelessWidget {
         borderRadius: HvacRadius.xxlRadius,
         onTap: onTap,
         child: Padding(
-          padding: EdgeInsets.all(AppSpacing.smR),
+          padding: const EdgeInsets.all(AppSpacing.sm),
           child: Icon(
             icon,
             color: Colors.white,
-            size: 24.w,
+            size: 24.0,
           ),
         ),
       ),

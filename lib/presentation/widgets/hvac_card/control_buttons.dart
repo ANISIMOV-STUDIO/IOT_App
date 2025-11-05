@@ -32,7 +32,7 @@ class TemperatureControlButtons extends StatelessWidget {
             isCompact: isCompact,
           ),
         ),
-        SizedBox(width: HvacSpacing.md.w),
+        const SizedBox(width: 12.0),
         Expanded(
           child: _ControlButton(
             icon: Icons.add,
@@ -183,10 +183,10 @@ class _ControlButtonState extends State<_ControlButton>
             return Transform.scale(
               scale: _scaleAnimation.value,
               child: Container(
-                height: widget.isCompact ? 36.h : 40.h,
+                height: widget.isCompact ? 36.0 : 40.0,
                 decoration: BoxDecoration(
                   color: _buttonColor,
-                  borderRadius: BorderRadius.circular(HvacRadius.md.r),
+                  borderRadius: BorderRadius.circular(8.0),
                   border: Border.all(
                     color: _isHovered
                         ? (widget.isDecrease
@@ -203,7 +203,7 @@ class _ControlButtonState extends State<_ControlButton>
                     if (_rippleAnimation.value > 0)
                       Positioned.fill(
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(HvacRadius.md.r),
+                          borderRadius: BorderRadius.circular(8.0),
                           child: CustomPaint(
                             painter: RipplePainter(
                               progress: _rippleAnimation.value,
@@ -218,7 +218,7 @@ class _ControlButtonState extends State<_ControlButton>
                     Icon(
                       widget.icon,
                       color: _iconColor,
-                      size: widget.isCompact ? 18.sp : 20.sp,
+                      size: widget.isCompact ? 18.0 : 20.0,
                     ),
                   ],
                 ),

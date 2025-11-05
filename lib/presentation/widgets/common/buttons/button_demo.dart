@@ -3,7 +3,6 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import 'animated_button.dart';
 
 class ButtonDemo extends StatelessWidget {
@@ -182,21 +181,21 @@ class ButtonDemo extends StatelessWidget {
                     AnimatedIconButton(
                       icon: Icons.add,
                       onPressed: () {},
-                      size: 32.r,
+                      size: 32.0,
                       tooltip: 'Small',
                     ),
                     const SizedBox(width: HvacSpacing.mdR),
                     AnimatedIconButton(
                       icon: Icons.add,
                       onPressed: () {},
-                      size: 48.r,
+                      size: 48.0,
                       tooltip: 'Medium',
                     ),
                     const SizedBox(width: HvacSpacing.mdR),
                     AnimatedIconButton(
                       icon: Icons.add,
                       onPressed: () {},
-                      size: 64.r,
+                      size: 64.0,
                       tooltip: 'Large',
                     ),
                   ],

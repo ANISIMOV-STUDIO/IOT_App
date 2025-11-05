@@ -107,10 +107,10 @@ class RoomPreviewCard extends StatelessWidget {
 
             // Power Toggle
             Positioned(
-              top: 12.h,
-              left: 12.w,
+              top: 12.0,
+              left: 12.0,
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 6.h),
+                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
                 decoration: BoxDecoration(
                   color: HvacColors.backgroundCard.withValues(alpha: 0.95),
                   borderRadius: HvacRadius.smRadius,
@@ -125,11 +125,11 @@ class RoomPreviewCard extends StatelessWidget {
                     Icon(
                       isLive ? Icons.power_settings_new : Icons.power_off,
                       color: isLive ? HvacColors.success : HvacColors.textSecondary,
-                      size: 16.sp,
+                      size: 16.0,
                     ),
-                    SizedBox(width: 6.w),
+                    const SizedBox(width: 6.0),
                     SizedBox(
-                      height: 20.h,
+                      height: 20.0,
                       child: FittedBox(
                         fit: BoxFit.contain,
                         child: Switch(
@@ -151,14 +151,14 @@ class RoomPreviewCard extends StatelessWidget {
             // Status badges - positioned at top for all screen sizes
             if (badges.isNotEmpty)
               Positioned(
-                top: 12.h,
-                right: 12.w,
+                top: 12.0,
+                right: 12.0,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: badges
                       .map((badge) => Padding(
-                            padding: EdgeInsets.only(left: 6.w),
+                            padding: const EdgeInsets.only(left: 6.0),
                             child: _buildStatusBadge(context, badge),
                           ))
                       .toList(),
@@ -167,10 +167,10 @@ class RoomPreviewCard extends StatelessWidget {
 
             // Central content - Room name and quick stats with Hero
             Positioned(
-              left: 12.w,
-              right: 12.w,
-              top: isMobile ? 48.h : 0,
-              bottom: isMobile ? 52.h : 0,
+              left: 12.0,
+              right: 12.0,
+              top: isMobile ? 48.0 : 0,
+              bottom: isMobile ? 52.0 : 0,
               child: isMobile
                   ? SingleChildScrollView(
                       physics: const ClampingScrollPhysics(),
@@ -181,7 +181,7 @@ class RoomPreviewCard extends StatelessWidget {
                             tag: 'roomName_$roomName',
                             temperature: roomName,
                             style: TextStyle(
-                              fontSize: 22.sp,
+                              fontSize: 22.0,
                               fontWeight: FontWeight.w700,
                               color: HvacColors.textPrimary,
                               height: 1.1,
@@ -193,14 +193,14 @@ class RoomPreviewCard extends StatelessWidget {
                               ],
                             ),
                           ),
-                          SizedBox(height: 4.h),
+                          const SizedBox(height: 4.0),
                           HvacStatusHero(
                             tag: 'status_$roomName',
                             child: Row(
                               children: [
                                 Container(
-                                  width: 6.w,
-                                  height: 6.h,
+                                  width: 6.0,
+                                  height: 6.0,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     color: isLive ? HvacColors.success : HvacColors.error,
@@ -214,11 +214,11 @@ class RoomPreviewCard extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                                SizedBox(width: 4.w),
+                                const SizedBox(width: 4.0),
                                 Text(
                                   isLive ? 'Активно' : 'Неактивно',
-                                  style: TextStyle(
-                                    fontSize: 12.sp,
+                                  style: const TextStyle(
+                                    fontSize: 12.0,
                                     fontWeight: FontWeight.w500,
                                     color: HvacColors.textSecondary,
                                   ),
@@ -237,7 +237,7 @@ class RoomPreviewCard extends StatelessWidget {
                           tag: 'roomName_$roomName',
                           temperature: roomName,
                           style: TextStyle(
-                            fontSize: 28.sp,
+                            fontSize: 28.0,
                             fontWeight: FontWeight.w700,
                             color: HvacColors.textPrimary,
                             height: 1.2,
@@ -249,14 +249,14 @@ class RoomPreviewCard extends StatelessWidget {
                             ],
                           ),
                         ),
-                        SizedBox(height: 6.h),
+                        const SizedBox(height: 6.0),
                         HvacStatusHero(
                           tag: 'status_$roomName',
                           child: Row(
                             children: [
                               Container(
-                                width: 8.w,
-                                height: 8.h,
+                                width: 8.0,
+                                height: 8.0,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: isLive ? HvacColors.success : HvacColors.error,
@@ -270,11 +270,11 @@ class RoomPreviewCard extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              SizedBox(width: 6.w),
+                              const SizedBox(width: 6.0),
                               Text(
                                 isLive ? 'Активно' : 'Неактивно',
-                                style: TextStyle(
-                                  fontSize: 14.sp,
+                                style: const TextStyle(
+                                  fontSize: 14.0,
                                   fontWeight: FontWeight.w500,
                                   color: HvacColors.textSecondary,
                                 ),
@@ -289,14 +289,14 @@ class RoomPreviewCard extends StatelessWidget {
             // Details button with interactive scale
             if (onDetailsPressed != null)
               Positioned(
-                bottom: isMobile ? 12.h : 16.h,
-                right: isMobile ? 12.w : 16.w,
+                bottom: isMobile ? 12.0 : 16.0,
+                right: isMobile ? 12.0 : 16.0,
                 child: HvacInteractiveScale(
                   onTap: onDetailsPressed,
                   child: Container(
                     padding: EdgeInsets.symmetric(
-                      horizontal: isMobile ? 10.w : 12.w,
-                      vertical: isMobile ? 6.h : 8.h,
+                      horizontal: isMobile ? 10.0 : 12.0,
+                      vertical: isMobile ? 6.0 : 8.0,
                     ),
                     decoration: BoxDecoration(
                       color: HvacColors.backgroundCard.withValues(alpha: 0.95),
@@ -313,16 +313,16 @@ class RoomPreviewCard extends StatelessWidget {
                           'Подробнее',
                           style: TextStyle(
                             color: HvacColors.primaryOrange,
-                            fontSize: isMobile ? 11.sp : 12.sp,
+                            fontSize: isMobile ? 11.0 : 12.0,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        SizedBox(width: 4.w),
+                        const SizedBox(width: 4.0),
                         HvacIconHero(
                           tag: 'arrow_$roomName',
                           icon: Icons.arrow_forward,
                           color: HvacColors.primaryOrange,
-                          size: isMobile ? 12.sp : 14.sp,
+                          size: isMobile ? 12.0 : 14.0,
                         ),
                       ],
                     ),
@@ -353,8 +353,8 @@ class RoomPreviewCard extends StatelessWidget {
       scaleDown: 0.92,
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: isMobile ? 6.w : 10.w,
-          vertical: isMobile ? 4.h : 6.h,
+          horizontal: isMobile ? 6.0 : 10.0,
+          vertical: isMobile ? 4.0 : 6.0,
         ),
         decoration: BoxDecoration(
           color: HvacColors.backgroundCard.withValues(alpha: 0.95),
@@ -377,15 +377,15 @@ class RoomPreviewCard extends StatelessWidget {
             HvacIconHero(
               tag: 'badge_${badge.icon}_${badge.value}',
               icon: badge.icon,
-              size: isMobile ? 12.sp : 14.sp,
+              size: isMobile ? 12.0 : 14.0,
               color: HvacColors.primaryOrange,
             ),
-            SizedBox(width: 3.w),
+            const SizedBox(width: 3.0),
             HvacTemperatureHero(
               tag: 'badgeValue_${badge.value}',
               temperature: badge.value,
               style: TextStyle(
-                fontSize: isMobile ? 11.sp : 12.sp,
+                fontSize: isMobile ? 11.0 : 12.0,
                 fontWeight: FontWeight.w600,
                 color: HvacColors.textPrimary,
               ),

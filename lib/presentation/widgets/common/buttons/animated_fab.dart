@@ -96,7 +96,7 @@ class _AnimatedFABState extends State<AnimatedFAB>
 
   @override
   Widget build(BuildContext context) {
-    final size = widget.mini ? 48.r : 56.r;
+    final size = widget.mini ? 48.0 : 56.0;
     final hasLabel = widget.label != null && (widget.extended || _isHovered);
 
     return ScaleTransition(
@@ -176,7 +176,7 @@ class _AnimatedFABState extends State<AnimatedFAB>
   }
 
   Widget _buildContent(bool hasLabel) {
-    final iconSize = widget.mini ? 20.r : 24.r;
+    final iconSize = widget.mini ? 20.0 : 24.0;
     final foregroundColor = widget.foregroundColor ?? Colors.white;
 
     return Row(

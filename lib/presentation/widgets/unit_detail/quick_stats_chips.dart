@@ -62,12 +62,12 @@ class QuickStatsChips extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 16.sp, color: color),
+          Icon(icon, size: 16.0, color: color),
           const SizedBox(width: HvacSpacing.xsR),
           Text(
             label,
             style: TextStyle(
-              fontSize: 13.sp,
+              fontSize: 13.0,
               fontWeight: FontWeight.w500,
               color: color,
             ),

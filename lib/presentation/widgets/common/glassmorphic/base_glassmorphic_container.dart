@@ -50,7 +50,7 @@ class BaseGlassmorphicContainer extends StatelessWidget {
 
   /// Get responsive border radius
   BorderRadius get _responsiveBorderRadius {
-    return borderRadius ?? BorderRadius.circular(HvacRadius.lg.r);
+    return borderRadius ?? BorderRadius.circular(HvacRadius.lg);
   }
 
   /// Build optimized backdrop filter
@@ -62,11 +62,9 @@ class BaseGlassmorphicContainer extends StatelessWidget {
           color: backgroundColor?.withValues(alpha: 0.9) ??
               HvacColors.backgroundCard.withValues(alpha: 0.9),
           gradient: gradient,
-          borderRadius: _responsiveBorderRadius,
-        ),
-        padding: padding ?? EdgeInsets.all(HvacSpacing.lg.w),
-        child: child,
-      );
+          borderRadius: _responsiveBorderRadius),
+        padding: padding ?? const EdgeInsets.all(HvacSpacing.lg),
+        child: child);
     }
 
     return ClipRRect(
@@ -74,39 +72,31 @@ class BaseGlassmorphicContainer extends StatelessWidget {
       child: BackdropFilter(
         filter: ImageFilter.blur(
           sigmaX: _optimizedBlurAmount,
-          sigmaY: _optimizedBlurAmount,
-        ),
+          sigmaY: _optimizedBlurAmount),
         child: Container(
           decoration: BoxDecoration(
             color: backgroundColor ??
                 HvacColors.backgroundCard.withValues(alpha: 0.7),
             gradient: gradient,
-            borderRadius: _responsiveBorderRadius,
-          ),
-          padding: padding ?? EdgeInsets.all(HvacSpacing.lg.w),
-          child: child,
-        ),
-      ),
-    );
+            borderRadius: _responsiveBorderRadius),
+          padding: padding ?? const EdgeInsets.all(HvacSpacing.lg),
+          child: child)));
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: width?.w,
-      height: height?.h,
+      width: width,
+      height: height,
       margin: margin,
       decoration: BoxDecoration(
         borderRadius: _responsiveBorderRadius,
         border: border ??
             Border.all(
               color: HvacColors.textPrimary.withValues(alpha: borderOpacity),
-              width: 1.w,
-            ),
-        boxShadow: boxShadow,
-      ),
-      child: _buildBackdropFilter(child),
-    );
+              width: 1.0),
+        boxShadow: boxShadow),
+      child: _buildBackdropFilter(child));
   }
 }
 
@@ -128,20 +118,17 @@ class GlassmorphicConfig {
   static const light = GlassmorphicConfig(
     blurAmount: 8.0,
     borderOpacity: 0.08,
-    backgroundColor: HvacColors.backgroundCard,
-  );
+    backgroundColor: HvacColors.backgroundCard);
 
   /// Dark theme configuration
   static const dark = GlassmorphicConfig(
     blurAmount: 12.0,
     borderOpacity: 0.15,
-    backgroundColor: HvacColors.backgroundDark,
-  );
+    backgroundColor: HvacColors.backgroundDark);
 
   /// Web optimized configuration
   static const web = GlassmorphicConfig(
     blurAmount: 6.0,
     borderOpacity: 0.1,
-    enableWebOptimization: true,
-  );
+    enableWebOptimization: true);
 }

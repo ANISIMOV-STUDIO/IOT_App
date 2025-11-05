@@ -4,7 +4,6 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../bloc/hvac_detail/hvac_detail_bloc.dart';
 import '../../bloc/hvac_detail/hvac_detail_event.dart';
 import '../../bloc/hvac_detail/hvac_detail_state.dart';
@@ -25,19 +24,19 @@ class RoomDetailContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
       child: Padding(
-        padding: EdgeInsets.all(20.w),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Device status cards
             _buildDeviceStatusCards(context),
 
-            SizedBox(height: 32.h),
+            const SizedBox(height: 32.0),
 
             // Light controls section
             _buildLightingSection(context),
 
-            SizedBox(height: 32.h),
+            const SizedBox(height: 32.0),
 
             // Temperature control
             _buildTemperatureSection(context),
@@ -63,7 +62,7 @@ class RoomDetailContent extends StatelessWidget {
             },
           ),
         ),
-        SizedBox(width: 16.w),
+        const SizedBox(width: 16.0),
         Expanded(
           child: DeviceStatusCard(
             icon: Icons.air,
@@ -88,11 +87,11 @@ class RoomDetailContent extends StatelessWidget {
         Text(
           'Lighting',
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontSize: 20.sp,
+                fontSize: 20.0,
                 fontWeight: FontWeight.w600,
               ),
         ),
-        SizedBox(height: 16.h),
+        const SizedBox(height: 16.0),
 
         // Main light slider
         LightControlCard(
@@ -103,7 +102,7 @@ class RoomDetailContent extends StatelessWidget {
           },
         ),
 
-        SizedBox(height: 16.h),
+        const SizedBox(height: 16.0),
 
         // Floor lamp slider
         LightControlCard(
@@ -124,11 +123,11 @@ class RoomDetailContent extends StatelessWidget {
         Text(
           'Temperature',
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontSize: 20.sp,
+                fontSize: 20.0,
                 fontWeight: FontWeight.w600,
               ),
         ),
-        SizedBox(height: 16.h),
+        const SizedBox(height: 16.0),
         TemperatureControlCard(unit: state.unit),
       ],
     );

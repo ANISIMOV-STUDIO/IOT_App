@@ -150,8 +150,8 @@ class HomeTabletLayout extends StatelessWidget {
 
   Widget _buildRoomPreviewSection() {
     return Container(
-      constraints: BoxConstraints(
-        maxHeight: 320.h,
+      constraints: const BoxConstraints(
+        maxHeight: 320.0,
       ),
       child: HomeRoomPreview(
         currentUnit: currentUnit,

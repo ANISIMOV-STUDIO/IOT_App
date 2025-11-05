@@ -27,7 +27,7 @@ class DetailedTemperatureCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(isPrimary ? 16.r : 14.r),
+      padding: EdgeInsets.all(isPrimary ? 16.0 : 14.0),
       decoration: BoxDecoration(
         color: HvacColors.backgroundDark,
         borderRadius: HvacRadius.mdRadius,
@@ -44,18 +44,18 @@ class DetailedTemperatureCard extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: EdgeInsets.all(8.r),
+                padding: const EdgeInsets.all(8.0),
                 decoration: BoxDecoration(
                   color: HvacColors.neutral300.withValues(alpha: 0.1),
                   borderRadius: HvacRadius.smRadius,
                 ),
                 child: Icon(
                   icon,
-                  size: isPrimary ? 20.w : 18.w,
+                  size: isPrimary ? 20.0 : 18.0,
                   color: HvacColors.neutral200,
                 ),
               ),
-              SizedBox(width: 10.w),
+              const SizedBox(width: 10.0),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,17 +63,17 @@ class DetailedTemperatureCard extends StatelessWidget {
                     Text(
                       label,
                       style: TextStyle(
-                        fontSize: isPrimary ? 12.sp : 11.sp,
+                        fontSize: isPrimary ? 12.0 : 11.0,
                         fontWeight: FontWeight.w600,
                         color: HvacColors.textPrimary,
                       ),
                     ),
                     if (isPrimary) ...[
-                      SizedBox(height: 2.h),
+                      const SizedBox(height: 2.0),
                       Text(
                         description,
-                        style: TextStyle(
-                          fontSize: 9.sp,
+                        style: const TextStyle(
+                          fontSize: 9.0,
                           color: HvacColors.textTertiary,
                         ),
                       ),
@@ -83,22 +83,22 @@ class DetailedTemperatureCard extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: isPrimary ? 14.h : 12.h),
+          SizedBox(height: isPrimary ? 14.0 : 12.0),
           Text(
             value != null ? '${value!.toStringAsFixed(1)}°C' : '—',
             style: TextStyle(
-              fontSize: isPrimary ? 32.sp : 24.sp,
+              fontSize: isPrimary ? 32.0 : 24.0,
               fontWeight: FontWeight.w600,
               color: value != null ? HvacColors.textPrimary : HvacColors.textDisabled,
               letterSpacing: -1.5,
             ),
           ),
           if (!isPrimary && description.isNotEmpty) ...[
-            SizedBox(height: 4.h),
+            const SizedBox(height: 4.0),
             Text(
               description,
-              style: TextStyle(
-                fontSize: 9.sp,
+              style: const TextStyle(
+                fontSize: 9.0,
                 color: HvacColors.textTertiary,
               ),
             ),

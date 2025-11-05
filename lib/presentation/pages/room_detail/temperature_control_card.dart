@@ -22,12 +22,12 @@ class TemperatureControlCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(20.w),
+      padding: const EdgeInsets.all(20.0),
       decoration: HvacTheme.deviceCard(),
       child: Column(
         children: [
           _buildTemperatureDisplay(context),
-          SizedBox(height: 20.h),
+          const SizedBox(height: 20.0),
           _buildTemperatureSlider(context),
         ],
       ),
@@ -67,13 +67,13 @@ class TemperatureControlCard extends StatelessWidget {
         Text(
           label,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontSize: 14.sp,
+                fontSize: 14.0,
               ),
         ),
         Text(
           value,
           style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                fontSize: 32.sp,
+                fontSize: 32.0,
                 fontWeight: FontWeight.bold,
                 color: isTarget ? HvacColors.primaryOrange : null,
               ),
@@ -87,15 +87,15 @@ class TemperatureControlCard extends StatelessWidget {
       cursor: kIsWeb ? SystemMouseCursors.grab : MouseCursor.defer,
       child: SliderTheme(
         data: SliderTheme.of(context).copyWith(
-          trackHeight: 6.h,
-          thumbShape: RoundSliderThumbShape(
-            enabledThumbRadius: 10.r,
+          trackHeight: 6.0,
+          thumbShape: const RoundSliderThumbShape(
+            enabledThumbRadius: 10.0,
           ),
-          overlayShape: RoundSliderOverlayShape(
-            overlayRadius: kIsWeb ? 20.r : 24.r,
+          overlayShape: const RoundSliderOverlayShape(
+            overlayRadius: kIsWeb ? 20.0 : 24.0,
           ),
           valueIndicatorTextStyle: HvacTypography.bodyMedium.copyWith(
-            fontSize: 14.sp,
+            fontSize: 14.0,
           ),
         ),
         child: Slider(

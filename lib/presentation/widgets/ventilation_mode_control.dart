@@ -71,7 +71,7 @@ class _VentilationModeControlState extends State<VentilationModeControl>
           final isDesktop = deviceSize == DeviceSize.expanded;
           return Container(
             padding: isDesktop
-                ? EdgeInsets.all(12.w)
+                ? const EdgeInsets.all(12.0)
                 : AdaptiveLayout.controlPadding(context),
             decoration: BoxDecoration(
               color: HvacColors.backgroundCard,
@@ -93,9 +93,9 @@ class _VentilationModeControlState extends State<VentilationModeControl>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildHeader(context, deviceSize),
-                      SizedBox(height: isDesktop ? 8.h : (deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 12))),
+                      SizedBox(height: isDesktop ? 8.0 : (deviceSize == DeviceSize.compact ? 12.0 : AdaptiveLayout.spacing(context, base: 12))),
                       _buildModeSelector(context, deviceSize),
-                      SizedBox(height: isDesktop ? 8.h : (deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 12))),
+                      SizedBox(height: isDesktop ? 8.0 : (deviceSize == DeviceSize.compact ? 12.0 : AdaptiveLayout.spacing(context, base: 12))),
                       Expanded(
                         child: SingleChildScrollView(
                           physics: PerformanceUtils.getOptimalScrollPhysics(
@@ -114,9 +114,9 @@ class _VentilationModeControlState extends State<VentilationModeControl>
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       _buildHeader(context, deviceSize),
-                      SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 12)),
+                      SizedBox(height: deviceSize == DeviceSize.compact ? 12.0 : AdaptiveLayout.spacing(context, base: 12)),
                       _buildModeSelector(context, deviceSize),
-                      SizedBox(height: deviceSize == DeviceSize.compact ? 12.h : AdaptiveLayout.spacing(context, base: 12)),
+                      SizedBox(height: deviceSize == DeviceSize.compact ? 12.0 : AdaptiveLayout.spacing(context, base: 12)),
                       _buildFanSpeedControls(context, deviceSize),
                     ],
                   );
@@ -163,7 +163,7 @@ class _VentilationModeControlState extends State<VentilationModeControl>
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
               ),
-              SizedBox(height: 2.h),
+              const SizedBox(height: 2.0),
               Text(
                 widget.unit.ventMode?.displayName ?? 'Базовый',
                 style: TextStyle(
@@ -218,7 +218,7 @@ class _VentilationModeControlState extends State<VentilationModeControl>
                 maxLines: 1,
               ),
             ),
-            SizedBox(width: 4.w),
+            const SizedBox(width: 4.0),
             Icon(
               _showModeSelector
                   ? Icons.keyboard_arrow_up
@@ -249,7 +249,7 @@ class _VentilationModeControlState extends State<VentilationModeControl>
                 widget.onSupplyFanChanged?.call(speed);
               },
             ),
-            SizedBox(height: 12.h),
+            const SizedBox(height: 12.0),
             AdaptiveSlider(
               label: 'Вытяжной вентилятор',
               icon: Icons.upload,

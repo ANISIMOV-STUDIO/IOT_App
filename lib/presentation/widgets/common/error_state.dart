@@ -31,7 +31,7 @@ class ErrorState extends StatelessWidget {
         children: [
           Icon(
             icon,
-            size: 64.sp,
+            size: 64.0,
             color: HvacColors.error,
           ),
           const SizedBox(height: HvacSpacing.lg),
@@ -96,9 +96,9 @@ class ErrorCard extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
+          const Icon(
             Icons.error_outline,
-            size: 48.sp,
+            size: 48.0,
             color: HvacColors.error,
           ),
           const SizedBox(height: HvacSpacing.md),

@@ -75,7 +75,7 @@ class _AnimatedPrimaryButtonState extends State<AnimatedPrimaryButton>
   @override
   Widget build(BuildContext context) {
     final effectivePadding = widget.padding ?? widget.size.padding;
-    final effectiveHeight = widget.height ?? widget.size.height.h;
+    final effectiveHeight = widget.height ?? widget.size.height;
 
     return MouseRegion(
       cursor: mouseCursor,
@@ -163,8 +163,8 @@ class _AnimatedPrimaryButtonState extends State<AnimatedPrimaryButton>
 
   Widget _buildLoadingIndicator() {
     return SizedBox(
-      width: widget.size.iconSize.r,
-      height: widget.size.iconSize.r,
+      width: widget.size.iconSize,
+      height: widget.size.iconSize,
       child: const CircularProgressIndicator(
         strokeWidth: 2,
         valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
@@ -181,7 +181,7 @@ class _AnimatedPrimaryButtonState extends State<AnimatedPrimaryButton>
           Icon(
             widget.icon,
             color: Colors.white,
-            size: widget.size.iconSize.r,
+            size: widget.size.iconSize,
           ),
           const SizedBox(width: HvacSpacing.smR),
           Flexible(
@@ -189,7 +189,7 @@ class _AnimatedPrimaryButtonState extends State<AnimatedPrimaryButton>
               widget.label,
               style: HvacTypography.buttonMedium.copyWith(
                 color: Colors.white,
-                fontSize: widget.size.fontSize.sp,
+                fontSize: widget.size.fontSize,
               ),
               overflow: TextOverflow.ellipsis,
             ),
@@ -202,7 +202,7 @@ class _AnimatedPrimaryButtonState extends State<AnimatedPrimaryButton>
       widget.label,
       style: HvacTypography.buttonMedium.copyWith(
         color: Colors.white,
-        fontSize: widget.size.fontSize.sp,
+        fontSize: widget.size.fontSize,
       ),
       overflow: TextOverflow.ellipsis,
     );

@@ -20,10 +20,10 @@ class QuickActionsPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(HvacSpacing.md.w),
+      padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
-        borderRadius: BorderRadius.circular(HvacRadius.md.r),
+        borderRadius: BorderRadius.circular(12.0),
         border: Border.all(
           color: HvacColors.backgroundCardBorder,
           width: 1,
@@ -32,15 +32,15 @@ class QuickActionsPanel extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'Быстрые действия',
             style: TextStyle(
-              fontSize: 14.sp,
+              fontSize: 14.0,
               fontWeight: FontWeight.w600,
               color: HvacColors.textPrimary,
             ),
           ),
-          SizedBox(height: HvacSpacing.sm.h),
+          const SizedBox(height: 12.0),
           Row(
             children: [
               Expanded(
@@ -52,7 +52,7 @@ class QuickActionsPanel extends StatelessWidget {
                   color: HvacColors.primaryBlue,
                 ),
               ),
-              SizedBox(width: HvacSpacing.sm.w),
+              const SizedBox(width: 12.0),
               Expanded(
                 child: _QuickActionButton(
                   title: 'Выходные',
@@ -64,7 +64,7 @@ class QuickActionsPanel extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: HvacSpacing.xs.h),
+          const SizedBox(height: 8.0),
           SizedBox(
             width: double.infinity,
             child: _QuickActionButton(
@@ -104,22 +104,22 @@ class _QuickActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return HvacNeumorphicButton(
       onPressed: onPressed,
-      borderRadius: HvacRadius.sm.r,
+      borderRadius: 8.0,
       child: Row(
         children: [
           Container(
-            padding: EdgeInsets.all(HvacSpacing.xs.w),
+            padding: const EdgeInsets.all(8.0),
             decoration: BoxDecoration(
               color: color.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(HvacRadius.xs.r),
+              borderRadius: BorderRadius.circular(6.0),
             ),
             child: Icon(
               icon,
               color: color,
-              size: 20.sp,
+              size: 20.0,
             ),
           ),
-          SizedBox(width: HvacSpacing.xs.w),
+          const SizedBox(width: 8.0),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -127,17 +127,17 @@ class _QuickActionButton extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: TextStyle(
-                    fontSize: 13.sp,
+                  style: const TextStyle(
+                    fontSize: 13.0,
                     fontWeight: FontWeight.w600,
                     color: HvacColors.textPrimary,
                   ),
                 ),
-                SizedBox(height: 2.h),
+                const SizedBox(height: 2.0),
                 Text(
                   subtitle,
-                  style: TextStyle(
-                    fontSize: 11.sp,
+                  style: const TextStyle(
+                    fontSize: 11.0,
                     color: HvacColors.textSecondary,
                   ),
                   overflow: isFullWidth ? TextOverflow.visible : TextOverflow.ellipsis,

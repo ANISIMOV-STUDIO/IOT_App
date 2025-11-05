@@ -114,11 +114,11 @@ class _DeviceFormWidgetState extends State<DeviceFormWidget> {
             decoration: InputDecoration(
               labelText: l10n.macAddress,
               hintText: 'XX:XX:XX:XX:XX:XX',
-              prefixIcon: Icon(Icons.router, size: 24.w),
+              prefixIcon: const Icon(Icons.router, size: 24.0),
               filled: widget.isWebMode,
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: AppSpacing.mdR,
-                vertical: AppSpacing.smR,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.md,
+                vertical: AppSpacing.sm,
               ),
             ),
             readOnly: widget.initialMacAddress != null && !widget.isWebMode,
@@ -134,11 +134,11 @@ class _DeviceFormWidgetState extends State<DeviceFormWidget> {
             decoration: InputDecoration(
               labelText: l10n.deviceName,
               hintText: l10n.livingRoom,
-              prefixIcon: Icon(Icons.label, size: 24.w),
+              prefixIcon: const Icon(Icons.label, size: 24.0),
               filled: widget.isWebMode,
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: AppSpacing.mdR,
-                vertical: AppSpacing.smR,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.md,
+                vertical: AppSpacing.sm,
               ),
             ),
             validator: (value) => _validateDeviceName(value, l10n),
@@ -152,16 +152,16 @@ class _DeviceFormWidgetState extends State<DeviceFormWidget> {
             decoration: InputDecoration(
               labelText: l10n.location,
               hintText: l10n.optional,
-              prefixIcon: Icon(Icons.location_on, size: 24.w),
+              prefixIcon: const Icon(Icons.location_on, size: 24.0),
               filled: widget.isWebMode,
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: AppSpacing.mdR,
-                vertical: AppSpacing.smR,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.md,
+                vertical: AppSpacing.sm,
               ),
             ),
             style: HvacTypography.bodyMedium,
           ),
-          SizedBox(height: AppSpacing.xlR),
+          const SizedBox(height: AppSpacing.xl),
 
           // Submit Button
           if (widget.isWebMode) ...[
@@ -175,13 +175,13 @@ class _DeviceFormWidgetState extends State<DeviceFormWidget> {
           ] else ...[
             // For dialog mode, buttons are handled by the dialog
             if (_isSubmitting)
-              Center(
+              const Center(
                 child: Padding(
-                  padding: EdgeInsets.all(AppSpacing.mdR),
+                  padding: EdgeInsets.all(AppSpacing.md),
                   child: SizedBox(
-                    width: 24.w,
-                    height: 24.w,
-                    child: const CircularProgressIndicator(strokeWidth: 2),
+                    width: 24.0,
+                    height: 24.0,
+                    child: CircularProgressIndicator(strokeWidth: 2),
                   ),
                 ),
               ),

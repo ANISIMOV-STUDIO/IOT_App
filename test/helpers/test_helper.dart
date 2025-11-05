@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 
 /// Test helper utilities for widget and integration testing
@@ -24,16 +23,11 @@ class TestHelper {
       );
     }
 
-    return ScreenUtilInit(
-      designSize: const Size(375, 812),
-      minTextAdapt: true,
-      splitScreenMode: false,
-      builder: (context, _) => MaterialApp(
-        home: Scaffold(body: child),
-        theme: theme ?? ThemeData.light(),
-        navigatorObservers:
-            navigatorObserver != null ? [navigatorObserver] : [],
-      ),
+    return MaterialApp(
+      home: Scaffold(body: child),
+      theme: theme ?? ThemeData.light(),
+      navigatorObservers:
+          navigatorObserver != null ? [navigatorObserver] : [],
     );
   }
 
@@ -73,13 +67,8 @@ class TestHelper {
     Widget widget, {
     Size designSize = const Size(375, 812),
   }) {
-    return ScreenUtilInit(
-      designSize: designSize,
-      minTextAdapt: true,
-      splitScreenMode: false,
-      builder: (context, child) => MaterialApp(
-        home: Material(child: widget),
-      ),
+    return MaterialApp(
+      home: Material(child: widget),
     );
   }
 

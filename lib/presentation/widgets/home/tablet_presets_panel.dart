@@ -31,17 +31,17 @@ class TabletPresetsPanel extends StatelessWidget {
         borderRadius: HvacRadius.lgRadius,
         border: Border.all(
           color: HvacColors.backgroundCardBorder,
-          width: 1.w,
+          width: 1.0,
         ),
       ),
       padding: const EdgeInsets.all(HvacSpacing.lgR),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
+          const Text(
             'Presets',
             style: TextStyle(
-              fontSize: 16.sp,
+              fontSize: 16.0,
               fontWeight: FontWeight.w600,
               color: HvacColors.textPrimary,
             ),
@@ -71,7 +71,7 @@ class TabletPresetsPanel extends StatelessWidget {
           decoration: BoxDecoration(
             border: Border.all(
               color: HvacColors.backgroundCardBorder,
-              width: 1.w,
+              width: 1.0,
             ),
             borderRadius: HvacRadius.mdRadius,
           ),
@@ -79,23 +79,23 @@ class TabletPresetsPanel extends StatelessWidget {
             children: [
               Icon(
                 _getPresetIcon(preset),
-                size: 20.sp,
+                size: 20.0,
                 color: _getPresetColor(preset),
               ),
               const SizedBox(width: HvacSpacing.smR),
               Expanded(
                 child: Text(
                   preset.mode.displayName,
-                  style: TextStyle(
-                    fontSize: 14.sp,
+                  style: const TextStyle(
+                    fontSize: 14.0,
                     fontWeight: FontWeight.w500,
                     color: HvacColors.textPrimary,
                   ),
                 ),
               ),
-              Icon(
+              const Icon(
                 Icons.chevron_right,
-                size: 20.sp,
+                size: 20.0,
                 color: HvacColors.textSecondary,
               ),
             ],

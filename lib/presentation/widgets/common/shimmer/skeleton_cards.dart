@@ -15,10 +15,10 @@ class DeviceCardSkeleton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseShimmer(
       child: Container(
-        padding: EdgeInsets.all(HvacSpacing.lg.w),
+        padding: const EdgeInsets.all(HvacSpacing.lg),
         decoration: BoxDecoration(
           color: HvacColors.backgroundCard,
-          borderRadius: BorderRadius.circular(HvacRadius.lg.r),
+          borderRadius: BorderRadius.circular(HvacRadius.lg),
           border: Border.all(
             color: HvacColors.backgroundCardBorder,
             width: 1,
@@ -29,42 +29,42 @@ class DeviceCardSkeleton extends StatelessWidget {
           children: [
             Row(
               children: [
-                SkeletonContainer(
-                  width: 48.r,
-                  height: 48.r,
+                const SkeletonContainer(
+                  width: 48.0,
+                  height: 48.0,
                   isCircle: true,
                 ),
-                SizedBox(width: HvacSpacing.md.w),
-                Expanded(
+                const SizedBox(width: HvacSpacing.md),
+                const Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SkeletonText(width: 150.w, height: 18),
-                      SizedBox(height: HvacSpacing.xs.h),
-                      SkeletonText(width: 100.w, height: 14),
+                      SkeletonText(width: 150.0, height: 18),
+                      SizedBox(height: HvacSpacing.xs),
+                      SkeletonText(width: 100.0, height: 14),
                     ],
                   ),
                 ),
                 SkeletonContainer(
-                  width: 60.w,
-                  height: 32.h,
+                  width: 60.0,
+                  height: 32.0,
                   borderRadius: HvacRadius.lgRadius,
                 ),
               ],
             ),
-            SizedBox(height: HvacSpacing.lg.h),
+            const SizedBox(height: HvacSpacing.lg),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: List.generate(
                 3,
-                (index) => Column(
+                (index) => const Column(
                   children: [
                     SkeletonContainer(
-                      width: 60.w,
-                      height: 32.h,
+                      width: 60.0,
+                      height: 32.0,
                     ),
-                    SizedBox(height: HvacSpacing.xs.h),
-                    SkeletonText(width: 50.w, height: 12),
+                    SizedBox(height: HvacSpacing.xs),
+                    SkeletonText(width: 50.0, height: 12),
                   ],
                 ),
               ),
@@ -89,11 +89,11 @@ class ChartSkeleton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseShimmer(
       child: Container(
-        height: height ?? 200.h,
-        padding: EdgeInsets.all(HvacSpacing.lg.w),
+        height: height ?? 200.0,
+        padding: const EdgeInsets.all(HvacSpacing.lg),
         decoration: BoxDecoration(
           color: HvacColors.backgroundCard,
-          borderRadius: BorderRadius.circular(HvacRadius.lg.r),
+          borderRadius: BorderRadius.circular(HvacRadius.lg),
           border: Border.all(
             color: HvacColors.backgroundCardBorder,
             width: 1,
@@ -102,19 +102,19 @@ class ChartSkeleton extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SkeletonText(width: 120.w, height: 16),
-            SizedBox(height: HvacSpacing.md.h),
+            const SkeletonText(width: 120.0, height: 16),
+            const SizedBox(height: HvacSpacing.md),
             Expanded(
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: List.generate(7, (index) {
                   return Expanded(
                     child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 4.w),
-                      child: SkeletonContainer(
+                      margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                      child: const SkeletonContainer(
                         height: double.infinity,
                         borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(4.r),
+                          top: Radius.circular(4.0),
                         ),
                       ),
                     ),
@@ -137,10 +137,10 @@ class AnalyticsCardSkeleton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseShimmer(
       child: Container(
-        padding: EdgeInsets.all(HvacSpacing.lg.w),
+        padding: const EdgeInsets.all(HvacSpacing.lg),
         decoration: BoxDecoration(
           color: HvacColors.backgroundCard,
-          borderRadius: BorderRadius.circular(HvacRadius.lg.r),
+          borderRadius: BorderRadius.circular(HvacRadius.lg),
           border: Border.all(
             color: HvacColors.backgroundCardBorder,
             width: 1,
@@ -152,18 +152,18 @@ class AnalyticsCardSkeleton extends StatelessWidget {
             Row(
               children: [
                 SkeletonContainer(
-                  width: 32.r,
-                  height: 32.r,
+                  width: 32.0,
+                  height: 32.0,
                   borderRadius: HvacRadius.smRadius,
                 ),
-                SizedBox(width: HvacSpacing.sm.w),
-                SkeletonText(width: 100.w, height: 14),
+                const SizedBox(width: HvacSpacing.sm),
+                const SkeletonText(width: 100.0, height: 14),
               ],
             ),
-            SizedBox(height: HvacSpacing.md.h),
-            SkeletonText(width: 80.w, height: 32),
-            SizedBox(height: HvacSpacing.xs.h),
-            SkeletonText(width: 60.w, height: 12),
+            const SizedBox(height: HvacSpacing.md),
+            const SkeletonText(width: 80.0, height: 32),
+            const SizedBox(height: HvacSpacing.xs),
+            const SkeletonText(width: 60.0, height: 12),
           ],
         ),
       ),

@@ -5,7 +5,6 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// Device size categories (Material Design 3 breakpoints)
 /// Full responsive support: mobile, tablet, and desktop
@@ -53,9 +52,9 @@ class AdaptiveLayout {
   static EdgeInsets controlPadding(BuildContext context) {
     return getAdaptiveValue(
       context,
-      compact: EdgeInsets.all(16.w),
-      medium: EdgeInsets.all(20.w),
-      expanded: EdgeInsets.all(16.w), // Standard for desktop with fixed width
+      compact: const EdgeInsets.all(16.0),
+      medium: const EdgeInsets.all(20.0),
+      expanded: const EdgeInsets.all(16.0), // Standard for desktop with fixed width
     );
   }
 
@@ -63,9 +62,9 @@ class AdaptiveLayout {
   static double iconSize(BuildContext context, {double base = 20}) {
     return getAdaptiveValue(
       context,
-      compact: base.sp,
-      medium: (base * 1.2).sp,
-      expanded: base.sp, // Same as mobile for desktop
+      compact: base,
+      medium: base * 1.2,
+      expanded: base, // Same as mobile for desktop
     );
   }
 
@@ -73,9 +72,9 @@ class AdaptiveLayout {
   static double fontSize(BuildContext context, {double base = 14}) {
     return getAdaptiveValue(
       context,
-      compact: base.sp,
-      medium: (base * 0.95).sp,
-      expanded: base.sp, // Same as mobile for desktop
+      compact: base,
+      medium: base * 0.95,
+      expanded: base, // Same as mobile for desktop
     );
   }
 
@@ -83,9 +82,9 @@ class AdaptiveLayout {
   static double spacing(BuildContext context, {double base = 12}) {
     return getAdaptiveValue(
       context,
-      compact: base.w,
-      medium: (base * 1.2).w,
-      expanded: base.w, // Same as mobile for desktop with fixed width
+      compact: base,
+      medium: base * 1.2,
+      expanded: base, // Same as mobile for desktop with fixed width
     );
   }
 
@@ -93,9 +92,9 @@ class AdaptiveLayout {
   static double borderRadius(BuildContext context, {double base = 12}) {
     return getAdaptiveValue(
       context,
-      compact: base.r,
-      medium: (base * 1.1).r,
-      expanded: (base * 1.2).r,
+      compact: base,
+      medium: base * 1.1,
+      expanded: base * 1.2,
     );
   }
 
@@ -129,9 +128,9 @@ class AdaptiveLayout {
   static double getSliderHeight(BuildContext context) {
     return getAdaptiveValue(
       context,
-      compact: 48.h, // Material minimum touch target
-      medium: 56.h,
-      expanded: 56.h,
+      compact: 48.0, // Material minimum touch target
+      medium: 56.0,
+      expanded: 56.0,
     );
   }
 
@@ -140,14 +139,14 @@ class AdaptiveLayout {
     return getAdaptiveValue(
       context,
       compact: null, // Auto height
-      medium: 200.h,
-      expanded: 220.h,
+      medium: 200.0,
+      expanded: 220.0,
     ) ?? double.infinity;
   }
 
   /// Get maximum content width (for desktop - prevents content stretching)
   static double? getMaxContentWidth(BuildContext context) {
-    return getDeviceSize(context) == DeviceSize.expanded ? 1400.w : null;
+    return getDeviceSize(context) == DeviceSize.expanded ? 1400.0 : null;
   }
 
   /// Build adaptive layout with different widgets per size
@@ -183,8 +182,8 @@ class AdaptiveLayout {
   static double getSliderThumbRadius(BuildContext context) {
     return getAdaptiveValue(
       context,
-      compact: 12.r,
-      medium: 14.r,
+      compact: 12.0,
+      medium: 14.0,
     );
   }
 

@@ -77,9 +77,9 @@ class _ScheduleFABState extends State<ScheduleFAB>
                   : HvacColors.primaryOrange,
               foregroundColor: HvacColors.textPrimary,
               elevation: _isHovered ? 8 : 4,
-              child: Icon(
+              child: const Icon(
                 Icons.add,
-                size: 24.sp,
+                size: 24.0,
               ),
             ),
           ),

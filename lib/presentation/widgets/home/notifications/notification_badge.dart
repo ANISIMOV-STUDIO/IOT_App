@@ -21,7 +21,7 @@ class NotificationBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.15),
         borderRadius: HvacRadius.smRadius,
@@ -34,18 +34,18 @@ class NotificationBadge extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            width: 6.w,
-            height: 6.h,
+            width: 6.0,
+            height: 6.0,
             decoration: BoxDecoration(
               color: color,
               shape: BoxShape.circle,
             ),
           ),
-          SizedBox(width: 6.w),
+          const SizedBox(width: 6.0),
           Text(
             '$label: $count',
             style: TextStyle(
-              fontSize: 11.sp,
+              fontSize: 11.0,
               fontWeight: FontWeight.w600,
               color: color,
             ),

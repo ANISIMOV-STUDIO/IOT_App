@@ -20,15 +20,15 @@ class BrightnessControl extends StatelessWidget {
     return Row(
       children: [
         Container(
-          width: 40.w,
-          height: 40.h,
+          width: 40.0,
+          height: 40.0,
           decoration: BoxDecoration(
             color: HvacColors.backgroundDark,
             borderRadius: BorderRadius.circular(HvacRadius.mdR),
           ),
-          child: Icon(
+          child: const Icon(
             Icons.lightbulb_outline,
-            size: 20.sp,
+            size: 20.0,
             color: HvacColors.textSecondary,
           ),
         ),
@@ -37,9 +37,9 @@ class BrightnessControl extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: HvacSpacing.mdR),
             child: SliderTheme(
               data: SliderTheme.of(context).copyWith(
-                trackHeight: 8.h,
-                thumbShape: RoundSliderThumbShape(
-                  enabledThumbRadius: 6.r,
+                trackHeight: 8.0,
+                thumbShape: const RoundSliderThumbShape(
+                  enabledThumbRadius: 6.0,
                 ),
                 activeTrackColor: HvacColors.warning,
                 inactiveTrackColor: HvacColors.backgroundCardBorder,
@@ -54,8 +54,8 @@ class BrightnessControl extends StatelessWidget {
         ),
         Text(
           '${(value * 100).toInt()}%',
-          style: TextStyle(
-            fontSize: 16.sp,
+          style: const TextStyle(
+            fontSize: 16.0,
             fontWeight: FontWeight.w600,
             color: HvacColors.textPrimary,
           ),

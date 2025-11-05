@@ -29,7 +29,7 @@ class HomeDeviceSelector extends StatelessWidget {
         ...units.map((unit) {
           final label = unit.name;
           return Padding(
-            padding: EdgeInsets.only(right: 12.w),
+            padding: const EdgeInsets.only(right: 12.0),
             child: _buildUnitTab(
               label,
               selectedUnit == label,
@@ -50,7 +50,7 @@ class HomeDeviceSelector extends StatelessWidget {
         onTap: () => onUnitSelected(label),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
           decoration: BoxDecoration(
             color: isSelected ? HvacColors.backgroundCard : Colors.transparent,
             borderRadius: HvacRadius.smRadius,
@@ -66,18 +66,18 @@ class HomeDeviceSelector extends StatelessWidget {
             children: [
               // Status indicator
               Container(
-                width: 6.w,
-                height: 6.h,
+                width: 6.0,
+                height: 6.0,
                 decoration: BoxDecoration(
                   color: isOnline ? HvacColors.success : HvacColors.textTertiary,
                   shape: BoxShape.circle,
                 ),
               ),
-              SizedBox(width: 8.w),
+              const SizedBox(width: 8.0),
               Text(
                 label,
                 style: TextStyle(
-                  fontSize: 14.sp,
+                  fontSize: 14.0,
                   color: isSelected
                       ? HvacColors.textPrimary
                       : HvacColors.textSecondary,
@@ -97,8 +97,8 @@ class HomeDeviceSelector extends StatelessWidget {
       child: GestureDetector(
         onTap: onAddPressed,
         child: Container(
-          width: 36.w,
-          height: 36.h,
+          width: 36.0,
+          height: 36.0,
           decoration: BoxDecoration(
             color: HvacColors.backgroundCard,
             shape: BoxShape.circle,
@@ -106,9 +106,9 @@ class HomeDeviceSelector extends StatelessWidget {
               color: HvacColors.backgroundCardBorder,
             ),
           ),
-          child: Icon(
+          child: const Icon(
             Icons.add,
-            size: 20.sp,
+            size: 20.0,
             color: HvacColors.textSecondary,
           ),
         ),

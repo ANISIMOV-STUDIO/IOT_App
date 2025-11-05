@@ -1,7 +1,7 @@
 /// Home Sidebar Widget
 ///
 /// Right sidebar with presets, group controls, and notifications
-/// FIXED: Uses responsive width (320.w) instead of hard-coded 320
+/// FIXED: Uses responsive width (320.0) instead of hard-coded 320
 library;
 
 import 'package:flutter/material.dart';
@@ -39,7 +39,7 @@ class HomeSidebar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       // CRITICAL FIX: Use responsive width instead of hard-coded 320
-      width: ResponsiveUtils.isMobile(context) ? double.infinity : 320.w,
+      width: ResponsiveUtils.isMobile(context) ? double.infinity : 320.0,
       child: BlocBuilder<HvacListBloc, HvacListState>(
         builder: (context, state) {
           if (state is HvacListLoaded && currentUnit != null) {
@@ -53,7 +53,7 @@ class HomeSidebar extends StatelessWidget {
                     .fadeIn(duration: 500.ms, delay: 100.ms)
                     .slideX(begin: 0.2, end: 0),
 
-                SizedBox(height: 20.h),
+                const SizedBox(height: 20.0),
 
                 // Group control panel
                 if (state.units.length > 1)
@@ -68,7 +68,7 @@ class HomeSidebar extends StatelessWidget {
                       .fadeIn(duration: 500.ms, delay: 200.ms)
                       .slideX(begin: 0.2, end: 0),
 
-                if (state.units.length > 1) SizedBox(height: 20.h),
+                if (state.units.length > 1) const SizedBox(height: 20.0),
 
                 // Notifications panel
                 Expanded(

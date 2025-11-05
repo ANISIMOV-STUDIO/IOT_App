@@ -21,10 +21,10 @@ class LoadingState extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
-        SizedBox(
-          width: 48.w,
-          height: 48.h,
-          child: const CircularProgressIndicator(
+        const SizedBox(
+          width: 48.0,
+          height: 48.0,
+          child: CircularProgressIndicator(
             color: HvacColors.primaryOrange,
             strokeWidth: 3,
           ),

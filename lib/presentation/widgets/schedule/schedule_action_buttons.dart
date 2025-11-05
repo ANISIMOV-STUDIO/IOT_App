@@ -34,19 +34,19 @@ class ScheduleActionButtons extends StatelessWidget {
           icon: Icons.edit,
           semanticLabel: 'Edit ${schedule.name}',
           tooltip: 'Edit schedule',
-          size: iconSize.sp,
+          size: iconSize,
           minTouchTarget: minTouchTarget,
           color: HvacColors.textSecondary,
           hoverColor: HvacColors.primaryOrange,
         ),
-        SizedBox(width: HvacSpacing.xs.w),
+        const SizedBox(width: 8.0),
         // Delete button with hover effect for web
         _WebFriendlyIconButton(
           onPressed: onDelete,
           icon: Icons.delete,
           semanticLabel: 'Delete ${schedule.name}',
           tooltip: 'Delete schedule',
-          size: iconSize.sp,
+          size: iconSize,
           minTouchTarget: minTouchTarget,
           color: HvacColors.textSecondary,
           hoverColor: HvacColors.error,
@@ -99,11 +99,11 @@ class _WebFriendlyIconButtonState extends State<_WebFriendlyIconButton> {
           child: GestureDetector(
             onTap: widget.onPressed,
             child: Container(
-              width: widget.minTouchTarget.w,
-              height: widget.minTouchTarget.h,
+              width: widget.minTouchTarget,
+              height: widget.minTouchTarget,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(HvacSpacing.xs.r),
+                borderRadius: BorderRadius.circular(8.0),
                 color: _isHovered
                     ? widget.hoverColor.withValues(alpha: 0.1)
                     : Colors.transparent,

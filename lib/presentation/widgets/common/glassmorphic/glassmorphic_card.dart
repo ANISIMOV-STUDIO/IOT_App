@@ -57,24 +57,19 @@ class _GlassmorphicCardState extends State<GlassmorphicCard>
     super.initState();
     _hoverController = AnimationController(
       duration: const Duration(milliseconds: 200),
-      vsync: this,
-    );
+      vsync: this);
 
     _hoverScale = Tween<double>(
       begin: 1.0,
-      end: 1.02,
-    ).animate(CurvedAnimation(
+      end: 1.02).animate(CurvedAnimation(
       parent: _hoverController,
-      curve: Curves.easeOutCubic,
-    ));
+      curve: Curves.easeOutCubic));
 
     _shadowElevation = Tween<double>(
       begin: 4,
-      end: 12,
-    ).animate(CurvedAnimation(
+      end: 12).animate(CurvedAnimation(
       parent: _hoverController,
-      curve: Curves.easeOutCubic,
-    ));
+      curve: Curves.easeOutCubic));
   }
 
   @override
@@ -99,15 +94,13 @@ class _GlassmorphicCardState extends State<GlassmorphicCard>
     return [
       BoxShadow(
         color: Colors.black.withValues(alpha: 0.1),
-        blurRadius: elevation.w,
-        offset: Offset(0, (elevation / 2).h),
-      ),
+        blurRadius: elevation,
+        offset: Offset(0, elevation / 2)),
       if (_isHovered)
         BoxShadow(
           color: HvacColors.primaryBlue.withValues(alpha: 0.05),
-          blurRadius: (elevation * 2).w,
-          offset: Offset(0, elevation.h),
-        ),
+          blurRadius: elevation * 2,
+          offset: Offset(0, elevation)),
     ];
   }
 
@@ -133,21 +126,16 @@ class _GlassmorphicCardState extends State<GlassmorphicCard>
             backgroundColor: widget.backgroundColor,
             gradient: widget.gradient,
             boxShadow: _responsiveShadows,
-            child: widget.child,
-          ),
-        ),
-      ),
-    );
+            child: widget.child))));
 
     // Add tap handler if provided
     if (widget.onTap != null) {
       card = InkWell(
         onTap: widget.onTap,
-        borderRadius: BorderRadius.circular(HvacRadius.lg.r),
+        borderRadius: BorderRadius.circular(HvacRadius.lg),
         splashColor: HvacColors.primaryBlue.withValues(alpha: 0.1),
         highlightColor: HvacColors.primaryBlue.withValues(alpha: 0.05),
-        child: card,
-      );
+        child: card);
     }
 
     // Add entrance animation if enabled
@@ -156,13 +144,11 @@ class _GlassmorphicCardState extends State<GlassmorphicCard>
           .animate()
           .fadeIn(
             duration: widget.animationDuration,
-            curve: Curves.easeOut,
-          )
+            curve: Curves.easeOut)
           .slideY(
             begin: 0.05,
             duration: widget.animationDuration,
-            curve: Curves.easeOut,
-          );
+            curve: Curves.easeOut);
     }
 
     return card;
@@ -200,7 +186,6 @@ class ElevatedGlassmorphicCard extends StatelessWidget {
       onTap: onTap,
       blurAmount: 15.0,
       borderOpacity: 0.15,
-      child: child,
-    );
+      child: child);
   }
 }

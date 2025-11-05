@@ -12,18 +12,18 @@ class ScheduleDialogs {
   static void showSuccessSnackBar(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Row(
+        content: const Row(
           children: [
-            Icon(Icons.check_circle, color: Colors.white, size: 20.sp),
-            SizedBox(width: HvacSpacing.xs.w),
-            const Text('Расписание успешно сохранено'),
+            Icon(Icons.check_circle, color: Colors.white, size: 20.0),
+            SizedBox(width: HvacSpacing.xs),
+            Text('Расписание успешно сохранено'),
           ],
         ),
         backgroundColor: HvacColors.success,
         duration: const Duration(seconds: 2),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(HvacRadius.sm.r),
+          borderRadius: BorderRadius.circular(HvacRadius.sm),
         ),
       ),
     );
@@ -35,15 +35,15 @@ class ScheduleDialogs {
       SnackBar(
         content: Row(
           children: [
-            Icon(Icons.error, color: Colors.white, size: 20.sp),
-            SizedBox(width: HvacSpacing.xs.w),
+            const Icon(Icons.error, color: Colors.white, size: 20.0),
+            const SizedBox(width: HvacSpacing.xs),
             Expanded(child: Text('Ошибка сохранения: $error')),
           ],
         ),
         backgroundColor: HvacColors.error,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(HvacRadius.sm.r),
+          borderRadius: BorderRadius.circular(HvacRadius.sm),
         ),
         action: SnackBarAction(
           label: 'Повторить',
@@ -80,30 +80,30 @@ class _UnsavedChangesDialogState extends State<_UnsavedChangesDialog> {
     return AlertDialog(
       backgroundColor: HvacColors.backgroundCard,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(HvacRadius.md.r),
+        borderRadius: BorderRadius.circular(HvacRadius.md),
       ),
-      title: Row(
+      title: const Row(
         children: [
           Icon(
             Icons.warning_amber_rounded,
             color: HvacColors.warning,
-            size: 24.sp,
+            size: 24.0,
           ),
-          SizedBox(width: HvacSpacing.sm.w),
+          SizedBox(width: HvacSpacing.sm),
           Text(
             'Несохранённые изменения',
             style: TextStyle(
               color: HvacColors.textPrimary,
-              fontSize: 18.sp,
+              fontSize: 18.0,
             ),
           ),
         ],
       ),
-      content: Text(
+      content: const Text(
         'У вас есть несохранённые изменения. Выйти без сохранения?',
         style: TextStyle(
           color: HvacColors.textSecondary,
-          fontSize: 14.sp,
+          fontSize: 14.0,
         ),
       ),
       actions: [
@@ -124,7 +124,7 @@ class _UnsavedChangesDialogState extends State<_UnsavedChangesDialog> {
                 color: _cancelHovered
                     ? HvacColors.primaryOrange
                     : HvacColors.textSecondary,
-                fontSize: 14.sp,
+                fontSize: 14.0,
               ),
             ),
           ),
@@ -146,7 +146,7 @@ class _UnsavedChangesDialogState extends State<_UnsavedChangesDialog> {
                 color: _discardHovered
                     ? HvacColors.error.withValues(alpha: 0.8)
                     : HvacColors.error,
-                fontSize: 14.sp,
+                fontSize: 14.0,
               ),
             ),
           ),

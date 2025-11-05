@@ -40,26 +40,26 @@ class TimePickerField extends StatelessWidget {
               children: [
                 Icon(
                   icon,
-                  size: 14.sp,
+                  size: 14.0,
                   color: HvacColors.textSecondary,
                 ),
-                SizedBox(width: HvacSpacing.xsR - 2.w),
+                const SizedBox(width: HvacSpacing.xsR - 2.0),
                 Text(
                   label,
-                  style: TextStyle(
-                    fontSize: 11.sp,
+                  style: const TextStyle(
+                    fontSize: 11.0,
                     color: HvacColors.textSecondary,
                   ),
                 ),
               ],
             ),
-            SizedBox(height: HvacSpacing.xsR - 2.h),
+            const SizedBox(height: HvacSpacing.xsR - 2.0),
             Text(
               currentTime != null
                   ? '${currentTime!.hour.toString().padLeft(2, '0')}:${currentTime!.minute.toString().padLeft(2, '0')}'
                   : '--:--',
-              style: TextStyle(
-                fontSize: 18.sp,
+              style: const TextStyle(
+                fontSize: 18.0,
                 fontWeight: FontWeight.w700,
                 color: HvacColors.primaryOrange,
               ),

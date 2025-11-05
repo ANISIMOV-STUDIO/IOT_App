@@ -67,7 +67,7 @@ class TemperatureChart extends StatelessWidget {
               color: HvacColors.textPrimary,
             ),
           ),
-          SizedBox(height: 20.h),
+          const SizedBox(height: 20.0),
           SizedBox(
             height: 200,
             child: LineChart(

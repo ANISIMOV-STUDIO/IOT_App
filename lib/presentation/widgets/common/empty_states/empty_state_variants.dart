@@ -4,7 +4,6 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../animated_button.dart';
 import 'base_empty_state.dart';
 import 'animated_icons.dart';
@@ -154,8 +153,8 @@ class LottieEmptyState extends StatelessWidget {
     return BaseEmptyState(
       icon: Lottie.asset(
         lottieAsset,
-        width: lottieSize ?? 200.r,
-        height: lottieSize ?? 200.r,
+        width: lottieSize ?? 200.0,
+        height: lottieSize ?? 200.0,
         repeat: true,
         animate: true,
       ),

@@ -40,7 +40,7 @@ class ScheduleCardMobileLayout extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(height: HvacSpacing.sm.h),
+        const SizedBox(height: HvacSpacing.sm),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -89,7 +89,7 @@ class ScheduleCardTabletLayout extends StatelessWidget {
           onEdit: onEdit,
           onDelete: onDelete,
         ),
-        SizedBox(width: HvacSpacing.md.w),
+        const SizedBox(width: HvacSpacing.md),
         ScheduleToggleSwitch(
           isActive: schedule.isActive,
           onToggle: onToggle,

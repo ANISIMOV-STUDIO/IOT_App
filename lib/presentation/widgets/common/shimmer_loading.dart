@@ -28,7 +28,7 @@ class ShimmerLoading extends StatelessWidget {
         height: height,
         decoration: BoxDecoration(
           color: HvacColors.backgroundCard,
-          borderRadius: BorderRadius.circular(borderRadius.r),
+          borderRadius: BorderRadius.circular(borderRadius),
         ),
       ),
     );

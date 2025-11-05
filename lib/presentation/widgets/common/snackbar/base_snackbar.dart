@@ -52,7 +52,7 @@ class BaseSnackBar extends StatelessWidget {
       child: Row(
         children: [
           _buildIcon(context),
-          SizedBox(width: (isDesktop ? 12 : 8).w),
+          SizedBox(width: isDesktop ? 12.0 : 8.0),
           Expanded(child: _buildTextContent(context, theme)),
           if (config.showCloseButton) _buildCloseButton(context),
         ],
@@ -88,7 +88,7 @@ class BaseSnackBar extends StatelessWidget {
               fontSize: titleFontSize,
             ),
           ),
-          SizedBox(height: 4.h),
+          const SizedBox(height: 4.0),
         ],
         Text(
           message,

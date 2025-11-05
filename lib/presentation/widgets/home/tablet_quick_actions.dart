@@ -27,17 +27,17 @@ class TabletQuickActions extends StatelessWidget {
         borderRadius: HvacRadius.lgRadius,
         border: Border.all(
           color: HvacColors.backgroundCardBorder,
-          width: 1.w,
+          width: 1.0,
         ),
       ),
       padding: const EdgeInsets.all(HvacSpacing.lgR),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
+          const Text(
             'Quick Actions',
             style: TextStyle(
-              fontSize: 16.sp,
+              fontSize: 16.0,
               fontWeight: FontWeight.w600,
               color: HvacColors.textPrimary,
             ),
@@ -102,7 +102,7 @@ class TabletQuickActions extends StatelessWidget {
           decoration: BoxDecoration(
             border: Border.all(
               color: color.withValues(alpha: 0.3),
-              width: 1.w,
+              width: 1.0,
             ),
             borderRadius: HvacRadius.mdRadius,
           ),
@@ -111,14 +111,14 @@ class TabletQuickActions extends StatelessWidget {
             children: [
               Icon(
                 icon,
-                size: 18.sp,
+                size: 18.0,
                 color: color,
               ),
               const SizedBox(width: HvacSpacing.xsR),
               Text(
                 label,
-                style: TextStyle(
-                  fontSize: 13.sp,
+                style: const TextStyle(
+                  fontSize: 13.0,
                   fontWeight: FontWeight.w500,
                   color: HvacColors.textPrimary,
                 ),

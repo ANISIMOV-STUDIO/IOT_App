@@ -97,7 +97,7 @@ class _OptimizedHvacCardState extends State<OptimizedHvacCard>
             onTap: widget.onTap,
             child: Padding(
               padding: EdgeInsets.all(
-                isCompact ? HvacSpacing.md.w : HvacSpacing.lg.w,
+                isCompact ? HvacSpacing.md : HvacSpacing.lg,
               ),
               child: _buildCardContent(isCompact, isTablet),
             ),
@@ -127,21 +127,21 @@ class _OptimizedHvacCardState extends State<OptimizedHvacCard>
           onPowerChanged: _handlePowerToggle,
           isCompact: isCompact,
         ),
-        SizedBox(height: HvacSpacing.md.h),
+        const SizedBox(height: HvacSpacing.md),
         TemperatureDisplay(
           currentTemp: widget.unit.currentTemp,
           targetTemp: _targetTemperature,
           isPowerOn: _isPowerOn,
           isCompact: isCompact,
         ),
-        SizedBox(height: HvacSpacing.md.h),
+        const SizedBox(height: HvacSpacing.md),
         StatusIndicators(
           humidity: widget.unit.humidity.toInt(),
           fanSpeed: widget.unit.fanSpeed,
           mode: widget.unit.mode,
           isCompact: isCompact,
         ),
-        SizedBox(height: HvacSpacing.lg.h),
+        const SizedBox(height: HvacSpacing.lg),
         TemperatureControlButtons(
           onDecrease: _handleTemperatureDecrease,
           onIncrease: _handleTemperatureIncrease,
@@ -168,7 +168,7 @@ class _OptimizedHvacCardState extends State<OptimizedHvacCard>
                 onPowerChanged: _handlePowerToggle,
                 isCompact: isCompact,
               ),
-              SizedBox(height: HvacSpacing.md.h),
+              const SizedBox(height: HvacSpacing.md),
               TemperatureDisplay(
                 currentTemp: widget.unit.currentTemp,
                 targetTemp: _targetTemperature,
@@ -178,7 +178,7 @@ class _OptimizedHvacCardState extends State<OptimizedHvacCard>
             ],
           ),
         ),
-        SizedBox(width: HvacSpacing.lg.w),
+        const SizedBox(width: HvacSpacing.lg),
         Expanded(
           flex: 2,
           child: Column(
@@ -190,7 +190,7 @@ class _OptimizedHvacCardState extends State<OptimizedHvacCard>
                 mode: widget.unit.mode,
                 isCompact: true,
               ),
-              SizedBox(height: HvacSpacing.md.h),
+              const SizedBox(height: HvacSpacing.md),
               TemperatureControlButtons(
                 onDecrease: _handleTemperatureDecrease,
                 onIncrease: _handleTemperatureIncrease,

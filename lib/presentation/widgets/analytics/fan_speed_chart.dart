@@ -25,17 +25,17 @@ class FanSpeedChart extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'Распределение скорости вентиляторов',
             style: TextStyle(
-              fontSize: 16.sp,
+              fontSize: 16.0,
               fontWeight: FontWeight.w600,
               color: HvacColors.textPrimary,
             ),
           ),
           const SizedBox(height: HvacSpacing.lgR),
           SizedBox(
-            height: 200.h,
+            height: 200.0,
             child: PieChart(
               PieChartData(
                 sections: _generateSections(),
@@ -55,9 +55,9 @@ class FanSpeedChart extends StatelessWidget {
         color: HvacColors.success,
         value: 30,
         title: '30%\nНизкая',
-        radius: 80.r,
-        titleStyle: TextStyle(
-          fontSize: 12.sp,
+        radius: 80.0,
+        titleStyle: const TextStyle(
+          fontSize: 12.0,
           fontWeight: FontWeight.bold,
           color: Colors.white,
         ),
@@ -66,9 +66,9 @@ class FanSpeedChart extends StatelessWidget {
         color: HvacColors.info,
         value: 45,
         title: '45%\nСредняя',
-        radius: 80.r,
-        titleStyle: TextStyle(
-          fontSize: 12.sp,
+        radius: 80.0,
+        titleStyle: const TextStyle(
+          fontSize: 12.0,
           fontWeight: FontWeight.bold,
           color: Colors.white,
         ),
@@ -77,9 +77,9 @@ class FanSpeedChart extends StatelessWidget {
         color: HvacColors.warning,
         value: 20,
         title: '20%\nВысокая',
-        radius: 80.r,
-        titleStyle: TextStyle(
-          fontSize: 12.sp,
+        radius: 80.0,
+        titleStyle: const TextStyle(
+          fontSize: 12.0,
           fontWeight: FontWeight.bold,
           color: Colors.white,
         ),
@@ -88,9 +88,9 @@ class FanSpeedChart extends StatelessWidget {
         color: HvacColors.error,
         value: 5,
         title: '5%\nМакс',
-        radius: 80.r,
-        titleStyle: TextStyle(
-          fontSize: 12.sp,
+        radius: 80.0,
+        titleStyle: const TextStyle(
+          fontSize: 12.0,
           fontWeight: FontWeight.bold,
           color: Colors.white,
         ),

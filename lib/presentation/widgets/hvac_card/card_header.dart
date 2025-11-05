@@ -2,7 +2,6 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import 'control_buttons.dart';
 
 /// Header section of HVAC card with title and power control
@@ -46,17 +45,17 @@ class HvacCardHeader extends StatelessWidget {
         _AnimatedText(
           text: name,
           style: TextStyle(
-            fontSize: isCompact ? 16.sp : 18.sp,
+            fontSize: isCompact ? 16.0 : 18.0,
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
         ),
         if (location != null && location!.isNotEmpty) ...[
-          SizedBox(height: HvacSpacing.xs.h),
+          const SizedBox(height: 4.0),
           _AnimatedText(
             text: location!,
             style: TextStyle(
-              fontSize: isCompact ? 12.sp : 14.sp,
+              fontSize: isCompact ? 12.0 : 14.0,
               color: Colors.white70,
             ),
             delay: 100,

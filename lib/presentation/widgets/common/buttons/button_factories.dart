@@ -3,7 +3,6 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import 'base_accessible_button.dart';
 import 'button_types.dart';
 
@@ -31,7 +30,7 @@ class AccessibleButtonFactory {
       loading: loading,
       child: Icon(
         icon,
-        size: size.r,
+        size: size,
         color: color,
         semanticLabel: semanticLabel,
       ),

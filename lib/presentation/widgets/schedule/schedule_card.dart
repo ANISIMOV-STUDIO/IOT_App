@@ -58,12 +58,12 @@ class _ScheduleCardState extends State<ScheduleCard> {
                 HapticFeedback.selectionClick();
                 widget.onTap();
               },
-              borderRadius: BorderRadius.circular(HvacSpacing.md.r),
+              borderRadius: BorderRadius.circular(HvacSpacing.md),
               child: Container(
-                padding: EdgeInsets.all(HvacSpacing.md.w),
+                padding: const EdgeInsets.all(HvacSpacing.md),
                 decoration: BoxDecoration(
                   color: _getBackgroundColor(),
-                  borderRadius: BorderRadius.circular(HvacSpacing.md.r),
+                  borderRadius: BorderRadius.circular(HvacSpacing.md),
                   border: Border.all(
                     color: _getBorderColor(),
                     width: 2,
@@ -124,8 +124,8 @@ class _ScheduleCardState extends State<ScheduleCard> {
       return [
         BoxShadow(
           color: HvacColors.primaryOrange.withValues(alpha: 0.1),
-          blurRadius: 8.r,
-          offset: Offset(0, 2.h),
+          blurRadius: 8.0,
+          offset: const Offset(0, 2.0),
         ),
       ];
     }

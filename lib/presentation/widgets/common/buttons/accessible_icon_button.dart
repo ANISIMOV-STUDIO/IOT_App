@@ -50,8 +50,7 @@ class AccessibleIconButton extends StatelessWidget {
             icon,
             size: ResponsiveUtils.scaledIconSize(context, size),
             color: effectiveColor,
-            semanticLabel: semanticLabel,
-          );
+            semanticLabel: semanticLabel);
 
     Widget button = Material(
       color: backgroundColor ?? Colors.transparent,
@@ -68,22 +67,17 @@ class AccessibleIconButton extends StatelessWidget {
         customBorder: const CircleBorder(),
         hoverColor: kIsWeb ? theme.hoverColor : null,
         child: Container(
-          width: minTouchTarget.w,
-          height: minTouchTarget.h,
+          width: minTouchTarget,
+          height: minTouchTarget,
           alignment: Alignment.center,
           child: loading
               ? SizedBox(
-                  width: (size * 0.8).r,
-                  height: (size * 0.8).r,
+                  width: (size * 0.8),
+                  height: (size * 0.8),
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation<Color>(effectiveColor),
-                  ),
-                )
-              : effectiveIcon,
-        ),
-      ),
-    );
+                    valueColor: AlwaysStoppedAnimation<Color>(effectiveColor)))
+              : effectiveIcon)));
 
     // Web enhancements
     if (kIsWeb) {
@@ -91,16 +85,14 @@ class AccessibleIconButton extends StatelessWidget {
         cursor: (onPressed != null && !loading)
             ? SystemMouseCursors.click
             : SystemMouseCursors.basic,
-        child: button,
-      );
+        child: button);
     }
 
     // Wrap with tooltip if provided
     if (tooltip != null && tooltip!.isNotEmpty) {
       button = Tooltip(
         message: tooltip!,
-        child: button,
-      );
+        child: button);
     }
 
     // Wrap with semantics
@@ -110,7 +102,6 @@ class AccessibleIconButton extends StatelessWidget {
       label: semanticLabel,
       hint: loading ? 'Loading' : null,
       selected: selected,
-      child: button,
-    );
+      child: button);
   }
 }

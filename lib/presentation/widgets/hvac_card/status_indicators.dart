@@ -53,7 +53,7 @@ class StatusIndicators extends StatelessWidget {
           return Column(
             children: indicators
                 .map((indicator) => Padding(
-                      padding: EdgeInsets.only(bottom: HvacSpacing.xs.h),
+                      padding: const EdgeInsets.only(bottom: 4.0),
                       child: indicator,
                     ))
                 .toList(),
@@ -65,8 +65,8 @@ class StatusIndicators extends StatelessWidget {
             children: indicators
                 .map((indicator) => Expanded(
                       child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: HvacSpacing.xs.w,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 4.0,
                         ),
                         child: indicator,
                       ),
@@ -147,18 +147,14 @@ class _StatusChipState extends State<_StatusChip>
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
               padding: EdgeInsets.symmetric(
-                horizontal: widget.isCompact
-                    ? HvacSpacing.xs.w
-                    : HvacSpacing.sm.w,
-                vertical: widget.isCompact
-                    ? HvacSpacing.xs.h
-                    : HvacSpacing.xs.h,
+                horizontal: widget.isCompact ? 4.0 : 8.0,
+                vertical: 4.0,
               ),
               decoration: BoxDecoration(
                 color: _isHovered
                     ? widget.color.withValues(alpha: 0.2)
                     : HvacColors.textPrimary.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(HvacRadius.sm.r),
+                borderRadius: BorderRadius.circular(6.0),
                 border: Border.all(
                   color: _isHovered
                       ? widget.color.withValues(alpha: 0.5)
@@ -173,9 +169,9 @@ class _StatusChipState extends State<_StatusChip>
                     icon: widget.icon,
                     color: widget.color,
                     isHovered: _isHovered,
-                    size: widget.isCompact ? 14.sp : 16.sp,
+                    size: widget.isCompact ? 14.0 : 16.0,
                   ),
-                  SizedBox(width: HvacSpacing.xs.w),
+                  const SizedBox(width: 4.0),
                   Flexible(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -183,7 +179,7 @@ class _StatusChipState extends State<_StatusChip>
                         Text(
                           widget.value,
                           style: TextStyle(
-                            fontSize: widget.isCompact ? 11.sp : 12.sp,
+                            fontSize: widget.isCompact ? 11.0 : 12.0,
                             fontWeight: FontWeight.bold,
                             color: _isHovered ? widget.color : HvacColors.textPrimary,
                           ),
@@ -191,7 +187,7 @@ class _StatusChipState extends State<_StatusChip>
                         Text(
                           widget.label,
                           style: TextStyle(
-                            fontSize: widget.isCompact ? 9.sp : 10.sp,
+                            fontSize: widget.isCompact ? 9.0 : 10.0,
                             color: _isHovered
                                 ? widget.color.withValues(alpha: 0.8)
                                 : HvacColors.textSecondary,

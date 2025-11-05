@@ -25,8 +25,8 @@ class TemperatureHeader extends StatelessWidget {
       children: [
         // Simple icon without shimmer for calm look
         Container(
-          width: isMobile ? 28.w : 36.w,
-          height: isMobile ? 28.w : 36.w,
+          width: isMobile ? 28.0 : 36.0,
+          height: isMobile ? 28.0 : 36.0,
           decoration: BoxDecoration(
             color: HvacColors.neutral300.withValues(alpha: 0.1),
             borderRadius: HvacRadius.smRadius,
@@ -38,10 +38,10 @@ class TemperatureHeader extends StatelessWidget {
           child: Icon(
             Icons.thermostat_outlined,
             color: HvacColors.neutral200,
-            size: isMobile ? 14.w : 18.w,
+            size: isMobile ? 14.0 : 18.0,
           ),
         ),
-        SizedBox(width: 8.w),
+        const SizedBox(width: 8.0),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,18 +50,18 @@ class TemperatureHeader extends StatelessWidget {
               Text(
                 'Температуры',
                 style: TextStyle(
-                  fontSize: isMobile ? 13.sp : 15.sp,
+                  fontSize: isMobile ? 13.0 : 15.0,
                   fontWeight: FontWeight.w600,
                   color: HvacColors.textPrimary,
                   letterSpacing: -0.2,
                 ),
               ),
               if (showDetails) ...[
-                SizedBox(height: 2.h),
-                Text(
+                const SizedBox(height: 2.0),
+                const Text(
                   'Мониторинг и уставки',
                   style: TextStyle(
-                    fontSize: 10.sp,
+                    fontSize: 10.0,
                     color: HvacColors.textTertiary,
                     letterSpacing: 0,
                   ),
@@ -87,7 +87,7 @@ class _SystemStatusIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
+      padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 3.0),
       decoration: BoxDecoration(
         color: isNormal
             ? HvacColors.success.withValues(alpha: 0.1)
@@ -98,18 +98,18 @@ class _SystemStatusIndicator extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            width: 5.w,
-            height: 5.w,
+            width: 5.0,
+            height: 5.0,
             decoration: BoxDecoration(
               color: isNormal ? HvacColors.success : HvacColors.warning,
               shape: BoxShape.circle,
             ),
           ),
-          SizedBox(width: 3.w),
+          const SizedBox(width: 3.0),
           Text(
             isNormal ? 'Норма' : 'Проверка',
             style: TextStyle(
-              fontSize: 9.sp,
+              fontSize: 9.0,
               fontWeight: FontWeight.w500,
               color: isNormal ? HvacColors.success : HvacColors.warning,
             ),

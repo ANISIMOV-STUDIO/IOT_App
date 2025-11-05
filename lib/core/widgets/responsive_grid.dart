@@ -63,11 +63,9 @@ class ResponsiveGrid extends StatelessWidget {
               maxCrossAxisExtent: maxCrossAxisExtent!,
               crossAxisSpacing: spacing,
               mainAxisSpacing: spacing,
-              childAspectRatio: aspectRatio,
-            ),
+              childAspectRatio: aspectRatio),
             itemCount: children.length,
-            itemBuilder: (context, index) => children[index],
-          );
+            itemBuilder: (context, index) => children[index]);
         }
 
         return GridView.builder(
@@ -78,13 +76,10 @@ class ResponsiveGrid extends StatelessWidget {
             crossAxisCount: columns,
             crossAxisSpacing: spacing,
             mainAxisSpacing: spacing,
-            childAspectRatio: aspectRatio,
-          ),
+            childAspectRatio: aspectRatio),
           itemCount: children.length,
-          itemBuilder: (context, index) => children[index],
-        );
-      },
-    );
+          itemBuilder: (context, index) => children[index]);
+      });
   }
 }
 
@@ -125,13 +120,9 @@ class ResponsiveStaggeredGrid extends StatelessWidget {
             children: children.map((child) {
               return SizedBox(
                 width: (width - (columns + 1) * spacing) / columns,
-                child: child,
-              );
-            }).toList(),
-          ),
-        );
-      },
-    );
+                child: child);
+            }).toList()));
+      });
   }
 }
 
@@ -162,17 +153,14 @@ class AdaptiveColumns extends StatelessWidget {
           return Column(
             mainAxisAlignment: mainAxisAlignment,
             crossAxisAlignment: crossAxisAlignment,
-            children: _buildChildrenWithSpacing(true),
-          );
+            children: _buildChildrenWithSpacing(true));
         } else {
           return Row(
             mainAxisAlignment: mainAxisAlignment,
             crossAxisAlignment: crossAxisAlignment,
-            children: _buildChildrenWithSpacing(false),
-          );
+            children: _buildChildrenWithSpacing(false));
         }
-      },
-    );
+      });
   }
 
   List<Widget> _buildChildrenWithSpacing(bool isColumn) {
@@ -181,12 +169,12 @@ class AdaptiveColumns extends StatelessWidget {
       if (isColumn) {
         widgets.add(children[i]);
         if (i < children.length - 1) {
-          widgets.add(SizedBox(height: spacing.h));
+          widgets.add(SizedBox(height: spacing));
         }
       } else {
         widgets.add(Expanded(child: children[i]));
         if (i < children.length - 1) {
-          widgets.add(SizedBox(width: spacing.w));
+          widgets.add(SizedBox(width: spacing));
         }
       }
     }

@@ -6,6 +6,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import 'generated/l10n/app_localizations.dart';
@@ -28,22 +29,12 @@ void main() async {
   runApp(const HvacControlApp());
 }
 
-/// Get responsive design size based on screen width
-/// Full responsive support: mobile, tablet, and desktop
-/// Desktop uses fixed 1920x1080 reference - content never scales beyond this
-Size _getDesignSize(double width) {
-  if (width >= 1024) {
-    // Desktop: always use 1920x1080 as reference
-    // This prevents scaling on monitors larger than 1920px
-    return const Size(1920, 1080);
-  } else if (width >= 600) {
-    // Tablet: based on iPad (768x1024)
-    return const Size(768, 1024);
-  } else {
-    // Mobile: based on iPhone X (375x812)
-    return const Size(375, 812);
-  }
-}
+/// Responsive breakpoints configuration
+/// Based on industry standards (Material Design, Bootstrap, Tailwind)
+/// - Mobile: < 600px
+/// - Tablet: 600px - 1024px
+/// - Desktop: 1024px - 1920px
+/// - Large Desktop: > 1920px (content max-width clamped to 1920px)
 
 class HvacControlApp extends StatefulWidget {
   const HvacControlApp({super.key});
@@ -53,8 +44,6 @@ class HvacControlApp extends StatefulWidget {
 }
 
 class _HvacControlAppState extends State<HvacControlApp> {
-  Size? _lastDesignSize;
-
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -76,83 +65,73 @@ class _HvacControlAppState extends State<HvacControlApp> {
         builder: (context, child) {
           final languageService = di.sl<LanguageService>();
 
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              // Clamp width to max 1920px to prevent text scaling on large monitors
-              final actualWidth = constraints.maxWidth;
-              final clampedWidth = actualWidth > 1920 ? 1920.0 : actualWidth;
-              final designSize = _getDesignSize(clampedWidth);
+          return MaterialApp(
+            title: 'BREEZ Home',
+            debugShowCheckedModeBanner: false,
 
-              // Only rebuild ScreenUtilInit if design size actually changed
-              if (_lastDesignSize != designSize) {
-                _lastDesignSize = designSize;
-              }
+            // Theme - Dark with Orange Accents (Figma Design)
+            theme: HvacTheme.darkTheme(),
+            darkTheme: HvacTheme.darkTheme(),
+            themeMode: ThemeMode.dark, // Always use dark theme
 
-              return ScreenUtilInit(
-                key: ValueKey(_lastDesignSize),
-                designSize: designSize,
-                minTextAdapt: true,
-                splitScreenMode: true,
-                builder: (context, child) {
-                  return MaterialApp(
-                    title: 'BREEZ Home',
-                    debugShowCheckedModeBanner: false,
+            // Localization
+            locale: languageService.currentLocale,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: LanguageService.supportedLocales,
 
-                    // Theme - Dark with Orange Accents (Figma Design)
-                    theme: HvacTheme.darkTheme(),
-                    darkTheme: HvacTheme.darkTheme(),
-                    themeMode: ThemeMode.dark, // Always use dark theme
-
-                    // Localization
-                    locale: languageService.currentLocale,
-                    localizationsDelegates: const [
-                      AppLocalizations.delegate,
-                      GlobalMaterialLocalizations.delegate,
-                      GlobalWidgetsLocalizations.delegate,
-                      GlobalCupertinoLocalizations.delegate,
-                    ],
-                    supportedLocales: LanguageService.supportedLocales,
-
-                    // Override MediaQuery INSIDE MaterialApp using builder
-                    builder: (context, widget) {
-                      // Force max width to 1920px
-                      return MediaQuery(
-                        data: MediaQuery.of(context).copyWith(
-                          size: Size(
-                            clampedWidth,
-                            MediaQuery.of(context).size.height,
-                          ),
-                        ),
-                        child: widget!,
-                      );
-                    },
-
-                    home: child,
-                  );
-                },
-                child: BlocListener<AuthBloc, AuthState>(
-                  listener: (context, state) {
-                    // Handle auth state changes globally if needed
-                  },
-                  child: BlocBuilder<AuthBloc, AuthState>(
-                    buildWhen: (previous, current) {
-                      // Only rebuild when auth state actually changes type
-                      return previous.runtimeType != current.runtimeType;
-                    },
-                    builder: (context, state) {
-                      if (state is AuthAuthenticated) {
-                        return const ResponsiveShell();
-                      } else if (state is AuthUnauthenticated || state is AuthError) {
-                        return const LoginScreen();
-                      } else {
-                        // Loading or initial state - show login skeleton
-                        return const LoginSkeleton();
-                      }
-                    },
+            // Responsive Framework - Industry Standard Approach
+            builder: (context, widget) => Container(
+              color: HvacColors.backgroundDark,
+              child: ResponsiveBreakpoints(
+                breakpoints: const [
+                  Breakpoint(start: 0, end: 599, name: MOBILE),
+                  Breakpoint(start: 600, end: 1023, name: TABLET),
+                  Breakpoint(start: 1024, end: 1919, name: DESKTOP),
+                  Breakpoint(start: 1920, end: double.infinity, name: '4K'),
+                ],
+                child: Builder(
+                  builder: (context) => ResponsiveScaledBox(
+                    width: ResponsiveValue<double>(
+                      context,
+                      defaultValue: 1920,
+                      conditionalValues: [
+                        const Condition.equals(name: MOBILE, value: 375),
+                        const Condition.between(start: 600, end: 1024, value: 768),
+                        const Condition.largerThan(name: TABLET, value: 1920),
+                      ],
+                    ).value,
+                    child: widget!,
                   ),
                 ),
-              );
-            },
+              ),
+            ),
+
+            home: BlocListener<AuthBloc, AuthState>(
+              listener: (context, state) {
+                // Handle auth state changes globally if needed
+              },
+              child: BlocBuilder<AuthBloc, AuthState>(
+                buildWhen: (previous, current) {
+                  // Only rebuild when auth state actually changes type
+                  return previous.runtimeType != current.runtimeType;
+                },
+                builder: (context, state) {
+                  if (state is AuthAuthenticated) {
+                    return const ResponsiveShell();
+                  } else if (state is AuthUnauthenticated || state is AuthError) {
+                    return const LoginScreen();
+                  } else {
+                    // Loading or initial state - show login skeleton
+                    return const LoginSkeleton();
+                  }
+                },
+              ),
+            ),
           );
         },
       ),

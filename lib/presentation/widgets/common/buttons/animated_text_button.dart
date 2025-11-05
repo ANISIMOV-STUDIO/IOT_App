@@ -157,7 +157,7 @@ class _AnimatedTextButtonState extends State<AnimatedTextButton>
               Icon(
                 widget.icon,
                 color: textColor,
-                size: widget.size.iconSize.r,
+                size: widget.size.iconSize,
               ),
               const SizedBox(width: HvacSpacing.xsR),
             ],
@@ -165,7 +165,7 @@ class _AnimatedTextButtonState extends State<AnimatedTextButton>
               duration: const Duration(milliseconds: 200),
               style: HvacTypography.buttonMedium.copyWith(
                 color: textColor,
-                fontSize: widget.size.fontSize.sp,
+                fontSize: widget.size.fontSize,
                 decoration: _isHovered && !widget.showUnderline
                     ? TextDecoration.underline
                     : TextDecoration.none,
@@ -180,8 +180,8 @@ class _AnimatedTextButtonState extends State<AnimatedTextButton>
 
   Widget _buildLoadingIndicator(Color color) {
     return SizedBox(
-      width: widget.size.iconSize.r,
-      height: widget.size.iconSize.r,
+      width: widget.size.iconSize,
+      height: widget.size.iconSize,
       child: CircularProgressIndicator(
         strokeWidth: 2,
         valueColor: AlwaysStoppedAnimation<Color>(color),

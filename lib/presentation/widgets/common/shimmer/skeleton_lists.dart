@@ -24,36 +24,36 @@ class ListItemSkeleton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseShimmer(
       child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: HvacSpacing.md.w,
-          vertical: HvacSpacing.sm.h,
+        padding: const EdgeInsets.symmetric(
+          horizontal: HvacSpacing.md,
+          vertical: HvacSpacing.sm,
         ),
         child: Row(
           children: [
             if (showAvatar) ...[
-              SkeletonContainer(
-                width: 40.r,
-                height: 40.r,
+              const SkeletonContainer(
+                width: 40.0,
+                height: 40.0,
                 isCircle: true,
               ),
-              SizedBox(width: HvacSpacing.md.w),
+              const SizedBox(width: HvacSpacing.md),
             ],
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SkeletonText(width: 180.w, height: 16),
+                  const SkeletonText(width: 180.0, height: 16),
                   if (showSubtitle) ...[
-                    SizedBox(height: HvacSpacing.xs.h),
-                    SkeletonText(width: 120.w, height: 14),
+                    const SizedBox(height: HvacSpacing.xs),
+                    const SkeletonText(width: 120.0, height: 14),
                   ],
                 ],
               ),
             ),
             if (showTrailing)
-              SkeletonContainer(
-                width: 24.r,
-                height: 24.r,
+              const SkeletonContainer(
+                width: 24.0,
+                height: 24.0,
               ),
           ],
         ),

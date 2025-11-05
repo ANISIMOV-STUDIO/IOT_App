@@ -31,7 +31,6 @@ class GroupControlPanel extends StatelessWidget {
     return GlassCard(
       // GLASSMORPHISM: Frosted glass with blur
       padding: const EdgeInsets.all(HvacSpacing.lgR),
-      enableBlur: true,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -50,7 +49,7 @@ class GroupControlPanel extends StatelessWidget {
                   size: 20,
                 ),
               ),
-              SizedBox(width: 12.w),
+              const SizedBox(width: 12.0),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,7 +60,7 @@ class GroupControlPanel extends StatelessWidget {
                         color: HvacColors.textPrimary,
                       ),
                     ),
-                    SizedBox(height: 2.h),
+                    const SizedBox(height: 2.0),
                     Text(
                       'Активно: $activeUnits из $totalUnits',
                       style: HvacTypography.labelLarge.copyWith(
@@ -74,7 +73,7 @@ class GroupControlPanel extends StatelessWidget {
             ],
           ),
 
-          SizedBox(height: 16.h),
+          const SizedBox(height: 16.0),
 
           // Power controls
           Row(
@@ -87,7 +86,7 @@ class GroupControlPanel extends StatelessWidget {
                   onPowerAllOn,
                 ),
               ),
-              SizedBox(width: 12.w),
+              const SizedBox(width: 12.0),
               Expanded(
                 child: _buildActionButton(
                   'Выключить все',
@@ -99,7 +98,7 @@ class GroupControlPanel extends StatelessWidget {
             ],
           ),
 
-          SizedBox(height: 12.h),
+          const SizedBox(height: 12.0),
 
           // Sync controls - WHITE with shimmer instead of blue
           Row(
@@ -112,7 +111,7 @@ class GroupControlPanel extends StatelessWidget {
                   onSyncSettings,
                 ),
               ),
-              SizedBox(width: 12.w),
+              const SizedBox(width: 12.0),
               Expanded(
                 child: _buildActionButton(
                   'Общее расписание',
@@ -124,7 +123,7 @@ class GroupControlPanel extends StatelessWidget {
             ],
           ),
 
-          SizedBox(height: 16.h),
+          const SizedBox(height: 16.0),
 
           // Units list with checkboxes
           Text(
@@ -134,7 +133,7 @@ class GroupControlPanel extends StatelessWidget {
               color: HvacColors.textSecondary,
             ),
           ),
-          SizedBox(height: 8.h),
+          const SizedBox(height: 8.0),
 
           ...units.map((unit) => _buildUnitItem(unit)),
         ],
@@ -170,7 +169,7 @@ class GroupControlPanel extends StatelessWidget {
             children: [
               // ONLY icon is colored
               Icon(icon, color: color, size: 16),
-              SizedBox(width: 6.w),
+              const SizedBox(width: 6.0),
               Flexible(
                 child: Text(
                   label,
@@ -203,7 +202,7 @@ class GroupControlPanel extends StatelessWidget {
               shape: BoxShape.circle,
             ),
           ),
-          SizedBox(width: 10.w),
+          const SizedBox(width: 10.0),
           Expanded(
             child: Text(
               unit.name,

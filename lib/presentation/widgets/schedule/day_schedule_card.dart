@@ -120,7 +120,7 @@ class _DayScheduleCardState extends State<DayScheduleCard>
 
   Widget _buildCardContent() {
     final cardChild = Padding(
-      padding: EdgeInsets.all(HvacSpacing.md.w),
+      padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -145,11 +145,11 @@ class _DayScheduleCardState extends State<DayScheduleCard>
           HvacColors.primaryBlue,
         ],
         borderWidth: 2.0,
-        borderRadius: BorderRadius.circular(HvacRadius.md.r),
+        borderRadius: BorderRadius.circular(12.0),
         child: Container(
           decoration: BoxDecoration(
             color: HvacColors.backgroundCard,
-            borderRadius: BorderRadius.circular(HvacRadius.md.r - 2),
+            borderRadius: BorderRadius.circular(10.0),
           ),
           child: cardChild,
         ),
@@ -166,7 +166,7 @@ class _DayScheduleCardState extends State<DayScheduleCard>
       child: Container(
         decoration: BoxDecoration(
           color: HvacColors.backgroundCard,
-          borderRadius: BorderRadius.circular(HvacRadius.md.r),
+          borderRadius: BorderRadius.circular(12.0),
           border: Border.all(
             color: HvacColors.backgroundCardBorder,
             width: 1,
@@ -183,8 +183,8 @@ class _DayScheduleCardState extends State<DayScheduleCard>
       children: [
         Text(
           widget.dayName,
-          style: TextStyle(
-            fontSize: 16.sp,
+          style: const TextStyle(
+            fontSize: 16.0,
             fontWeight: FontWeight.w600,
             color: HvacColors.textPrimary,
           ),
@@ -211,13 +211,13 @@ class _DayScheduleCardState extends State<DayScheduleCard>
   Widget _buildTimeSelectors() {
     return Column(
       children: [
-        SizedBox(height: HvacSpacing.sm.h),
+        const SizedBox(height: 12.0),
         Row(
           children: [
             Expanded(
               child: HvacInteractiveRipple(
                 onTap: () {},
-                borderRadius: BorderRadius.circular(HvacRadius.sm.r),
+                borderRadius: BorderRadius.circular(8.0),
                 rippleColor: HvacColors.success.withValues(alpha: 0.3),
                 child: TimePickerField(
                   label: 'Включение',
@@ -231,11 +231,11 @@ class _DayScheduleCardState extends State<DayScheduleCard>
                 ),
               ),
             ),
-            SizedBox(width: HvacSpacing.sm.w),
+            const SizedBox(width: 12.0),
             Expanded(
               child: HvacInteractiveRipple(
                 onTap: () {},
-                borderRadius: BorderRadius.circular(HvacRadius.sm.r),
+                borderRadius: BorderRadius.circular(8.0),
                 rippleColor: HvacColors.error.withValues(alpha: 0.3),
                 child: TimePickerField(
                   label: 'Отключение',

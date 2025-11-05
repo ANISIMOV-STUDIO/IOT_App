@@ -15,38 +15,38 @@ class HomeDashboardSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: EdgeInsets.all(HvacSpacing.md.w),
+      padding: const EdgeInsets.all(HvacSpacing.md),
       child: Column(
         children: [
           // Temperature card skeleton
           BaseShimmer(
             child: Container(
-              height: 200.h,
+              height: 200.0,
               decoration: BoxDecoration(
                 color: HvacColors.backgroundCard,
-                borderRadius: BorderRadius.circular(HvacRadius.xl.r),
+                borderRadius: BorderRadius.circular(HvacRadius.xl),
                 border: Border.all(
                   color: HvacColors.backgroundCardBorder,
                   width: 1,
                 ),
               ),
-              child: Center(
+              child: const Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SkeletonContainer(
-                      width: 120.r,
-                      height: 120.r,
+                      width: 120.0,
+                      height: 120.0,
                       isCircle: true,
                     ),
-                    SizedBox(height: HvacSpacing.md.h),
-                    SkeletonText(width: 100.w, height: 16),
+                    SizedBox(height: HvacSpacing.md),
+                    SkeletonText(width: 100.0, height: 16),
                   ],
                 ),
               ),
             ),
           ),
-          SizedBox(height: HvacSpacing.lg.h),
+          const SizedBox(height: HvacSpacing.lg),
 
           // Stats row skeleton
           Row(
@@ -54,24 +54,24 @@ class HomeDashboardSkeleton extends StatelessWidget {
               3,
               (index) => Expanded(
                 child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 4.w),
+                  margin: const EdgeInsets.symmetric(horizontal: 4.0),
                   child: const AnalyticsCardSkeleton(),
                 ),
               ),
             ),
           ),
-          SizedBox(height: HvacSpacing.lg.h),
+          const SizedBox(height: HvacSpacing.lg),
 
           // Chart skeleton
           const ChartSkeleton(),
-          SizedBox(height: HvacSpacing.lg.h),
+          const SizedBox(height: HvacSpacing.lg),
 
           // Device list skeleton
           ...List.generate(
             3,
-            (index) => Padding(
-              padding: EdgeInsets.only(bottom: HvacSpacing.md.h),
-              child: const DeviceCardSkeleton(),
+            (index) => const Padding(
+              padding: EdgeInsets.only(bottom: HvacSpacing.md),
+              child: DeviceCardSkeleton(),
             ),
           ),
         ],

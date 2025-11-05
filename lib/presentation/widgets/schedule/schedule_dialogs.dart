@@ -46,14 +46,14 @@ class ScheduleConfirmDialog extends StatelessWidget {
     return AlertDialog(
       backgroundColor: HvacColors.cardDark,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(HvacSpacing.md.r),
+        borderRadius: BorderRadius.circular(16.0),
       ),
       title: Semantics(
         header: true,
         child: Text(
           title,
-          style: TextStyle(
-            fontSize: 18.sp,
+          style: const TextStyle(
+            fontSize: 18.0,
             fontWeight: FontWeight.w600,
             color: HvacColors.textPrimary,
           ),
@@ -61,8 +61,8 @@ class ScheduleConfirmDialog extends StatelessWidget {
       ),
       content: Text(
         message,
-        style: TextStyle(
-          fontSize: 14.sp,
+        style: const TextStyle(
+          fontSize: 14.0,
           color: HvacColors.textSecondary,
         ),
       ),
@@ -74,8 +74,8 @@ class ScheduleConfirmDialog extends StatelessWidget {
             onPressed: () => Navigator.pop(context, false),
             child: Text(
               cancelLabel,
-              style: TextStyle(
-                fontSize: 14.sp,
+              style: const TextStyle(
+                fontSize: 14.0,
                 color: HvacColors.textSecondary,
               ),
             ),
@@ -89,7 +89,7 @@ class ScheduleConfirmDialog extends StatelessWidget {
             child: Text(
               confirmLabel,
               style: TextStyle(
-                fontSize: 14.sp,
+                fontSize: 14.0,
                 color: confirmColor ?? HvacColors.primaryOrange,
                 fontWeight: FontWeight.w600,
               ),

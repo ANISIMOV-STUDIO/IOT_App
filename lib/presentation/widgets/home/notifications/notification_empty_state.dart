@@ -17,23 +17,23 @@ class NotificationEmptyState extends StatelessWidget {
         children: [
           Icon(
             Icons.notifications_none,
-            size: 48.sp,
+            size: 48.0,
             color: HvacColors.textSecondary.withValues(alpha: 0.5),
           ),
-          SizedBox(height: 12.h),
-          Text(
+          const SizedBox(height: 12.0),
+          const Text(
             'Нет уведомлений',
             style: TextStyle(
-              fontSize: 14.sp,
+              fontSize: 14.0,
               fontWeight: FontWeight.w600,
               color: HvacColors.textSecondary,
             ),
           ),
-          SizedBox(height: 4.h),
-          Text(
+          const SizedBox(height: 4.0),
+          const Text(
             'Все системы работают нормально',
             style: TextStyle(
-              fontSize: 12.sp,
+              fontSize: 12.0,
               color: HvacColors.textSecondary,
             ),
           ),

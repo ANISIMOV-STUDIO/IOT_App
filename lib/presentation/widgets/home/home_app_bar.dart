@@ -30,7 +30,7 @@ class HomeAppBar extends StatelessWidget {
     final isMobile = ResponsiveUtils.isMobile(context);
 
     return Padding(
-      padding: EdgeInsets.all(20.w),
+      padding: const EdgeInsets.all(20.0),
       child: isMobile ? _buildMobileLayout() : _buildTabletLayout(),
     );
   }
@@ -45,7 +45,7 @@ class HomeAppBar extends StatelessWidget {
             // Logo
             SvgPicture.asset(
               'assets/images/zilon-logo.svg',
-              height: 40.h,
+              height: 40.0,
               colorFilter: const ColorFilter.mode(
                 HvacColors.primaryOrange,
                 BlendMode.srcIn,
@@ -55,7 +55,7 @@ class HomeAppBar extends StatelessWidget {
             _buildUserSection(),
           ],
         ),
-        SizedBox(height: 12.h),
+        const SizedBox(height: 12.0),
         // Bottom row: Unit tabs
         BlocBuilder<HvacListBloc, HvacListState>(
           builder: (context, state) {
@@ -81,7 +81,7 @@ class HomeAppBar extends StatelessWidget {
             // Logo
             SvgPicture.asset(
               'assets/images/zilon-logo.svg',
-              height: 48.h,
+              height: 48.0,
               colorFilter: const ColorFilter.mode(
                 HvacColors.primaryOrange,
                 BlendMode.srcIn,
@@ -110,7 +110,7 @@ class HomeAppBar extends StatelessWidget {
         ...units.map((unit) {
           final label = unit.name;
           return Padding(
-            padding: EdgeInsets.only(right: 12.w),
+            padding: const EdgeInsets.only(right: 12.0),
             child: _buildUnitTab(label, selectedUnit == label),
           );
         }),
@@ -139,7 +139,7 @@ class HomeAppBar extends StatelessWidget {
       child: GestureDetector(
         onTap: () => onUnitSelected(label),
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
           decoration: BoxDecoration(
             color: isSelected ? HvacColors.backgroundCard : Colors.transparent,
             borderRadius: HvacRadius.smRadius,
@@ -150,7 +150,7 @@ class HomeAppBar extends StatelessWidget {
           child: Text(
             label,
             style: TextStyle(
-              fontSize: 14.sp,
+              fontSize: 14.0,
               color: isSelected ? HvacColors.textPrimary : HvacColors.textSecondary,
               fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
             ),
@@ -166,8 +166,8 @@ class HomeAppBar extends StatelessWidget {
       child: GestureDetector(
         onTap: onAddUnitPressed,
         child: Container(
-          width: 36.w,
-          height: 36.h,
+          width: 36.0,
+          height: 36.0,
           decoration: BoxDecoration(
             color: HvacColors.backgroundCard,
             shape: BoxShape.circle,
@@ -175,9 +175,9 @@ class HomeAppBar extends StatelessWidget {
               color: HvacColors.backgroundCardBorder,
             ),
           ),
-          child: Icon(
+          child: const Icon(
             Icons.add,
-            size: 20.sp,
+            size: 20.0,
             color: HvacColors.textSecondary,
           ),
         ),
@@ -189,28 +189,28 @@ class HomeAppBar extends StatelessWidget {
     return Row(
       children: [
         IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.settings_outlined,
             color: HvacColors.textSecondary,
-            size: 24.sp,
+            size: 24.0,
           ),
           onPressed: onSettingsPressed,
         ),
-        SizedBox(width: 8.w),
-        CircleAvatar(
-          radius: 18.r,
+        const SizedBox(width: 8.0),
+        const CircleAvatar(
+          radius: 18.0,
           backgroundColor: HvacColors.backgroundCard,
           child: Icon(
             Icons.person_outline,
-            size: 20.sp,
+            size: 20.0,
             color: HvacColors.textSecondary,
           ),
         ),
-        SizedBox(width: 8.w),
-        Icon(
+        const SizedBox(width: 8.0),
+        const Icon(
           Icons.keyboard_arrow_down,
           color: HvacColors.textSecondary,
-          size: 20.sp,
+          size: 20.0,
         ),
       ],
     );

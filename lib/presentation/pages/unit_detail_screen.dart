@@ -128,8 +128,8 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
         labelColor: HvacColors.primaryOrange,
         unselectedLabelColor: HvacColors.textSecondary,
         isScrollable: true,
-        labelStyle: TextStyle(
-          fontSize: 14.sp,
+        labelStyle: const TextStyle(
+          fontSize: 14.0,
           fontWeight: FontWeight.w600,
         ),
         tabs: const [
@@ -160,7 +160,7 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
 
   Widget _buildBackButton() {
     return IconButton(
-      icon: Icon(Icons.arrow_back, color: HvacColors.textPrimary, size: 24.sp),
+      icon: const Icon(Icons.arrow_back, color: HvacColors.textPrimary, size: 24.0),
       onPressed: () => Navigator.pop(context),
     );
   }
@@ -174,16 +174,16 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
             HvacIconHero(
               tag: 'unit_icon_${widget.unit.id}',
               icon: widget.unit.power ? Icons.air : Icons.power_off,
-              size: ResponsiveUtils.isTablet(context) ? 24.sp : 20.sp,
+              size: ResponsiveUtils.isTablet(context) ? 24.0 : 20.0,
               color: widget.unit.power ? HvacColors.success : HvacColors.error,
             ),
-            SizedBox(width: 8.w),
+            const SizedBox(width: 8.0),
             HvacStatusHero(
               tag: 'unit_name_${widget.unit.id}',
               child: Text(
                 widget.unit.name,
                 style: TextStyle(
-                  fontSize: ResponsiveUtils.isTablet(context) ? 20.sp : 18.sp,
+                  fontSize: ResponsiveUtils.isTablet(context) ? 20.0 : 18.0,
                   fontWeight: FontWeight.w600,
                   color: HvacColors.textPrimary,
                 ),
@@ -198,12 +198,12 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
                 color: HvacColors.success,
                 size: 8,
               ),
-              SizedBox(width: 6.w),
+              const SizedBox(width: 6.0),
             ],
             Text(
               widget.unit.location ?? 'Неизвестно',
               style: TextStyle(
-                fontSize: ResponsiveUtils.isTablet(context) ? 14.sp : 12.sp,
+                fontSize: ResponsiveUtils.isTablet(context) ? 14.0 : 12.0,
                 color: HvacColors.textSecondary,
                 fontWeight: FontWeight.w400,
               ),
@@ -216,7 +216,7 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
 
   Widget _buildAnalyticsButton() {
     return IconButton(
-      icon: Icon(Icons.analytics, color: HvacColors.primaryOrange, size: 24.sp),
+      icon: const Icon(Icons.analytics, color: HvacColors.primaryOrange, size: 24.0),
       onPressed: () {
         Navigator.push(
           context,
@@ -233,14 +233,14 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
     return [
       _buildAnalyticsButton(),
       IconButton(
-        icon: Icon(Icons.settings, color: HvacColors.textSecondary, size: 24.sp),
+        icon: const Icon(Icons.settings, color: HvacColors.textSecondary, size: 24.0),
         onPressed: () {
           // Navigate to unit settings
         },
         tooltip: 'Настройки',
       ),
       IconButton(
-        icon: Icon(Icons.share, color: HvacColors.textSecondary, size: 24.sp),
+        icon: const Icon(Icons.share, color: HvacColors.textSecondary, size: 24.0),
         onPressed: () {
           // Share unit data
         },

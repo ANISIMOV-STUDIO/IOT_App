@@ -21,7 +21,6 @@ class QuickPresetsPanel extends StatelessWidget {
     return GlassCard(
       // GLASSMORPHISM: Frosted glass with blur
       padding: const EdgeInsets.all(HvacSpacing.lgR),
-      enableBlur: true,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -40,12 +39,12 @@ class QuickPresetsPanel extends StatelessWidget {
                   size: 20,
                 ),
               ),
-              SizedBox(width: 12.w),
-              Expanded(
+              const SizedBox(width: 12.0),
+              const Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Быстрые режимы',
                       style: TextStyle(
                         fontSize: 16,
@@ -53,8 +52,8 @@ class QuickPresetsPanel extends StatelessWidget {
                         color: HvacColors.textPrimary,
                       ),
                     ),
-                    SizedBox(height: 2.h),
-                    const Text(
+                    SizedBox(height: 2.0),
+                    Text(
                       'Применить настройки одной кнопкой',
                       style: TextStyle(
                         fontSize: 12,
@@ -67,7 +66,7 @@ class QuickPresetsPanel extends StatelessWidget {
             ],
           ),
 
-          SizedBox(height: 16.h),
+          const SizedBox(height: 16.0),
 
           // Quick preset buttons
           Wrap(
@@ -202,7 +201,7 @@ class _PresetButtonState extends State<_PresetButton> {
                 color: widget.color, // Keep icon colored
                 size: 18,
               ),
-              SizedBox(width: 8.w),
+              const SizedBox(width: 8.0),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,

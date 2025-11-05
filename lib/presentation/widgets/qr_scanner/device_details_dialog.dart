@@ -53,8 +53,8 @@ class DeviceDetailsDialog extends StatelessWidget {
         borderRadius: BorderRadius.circular(responsive.borderRadius),
       ),
       insetPadding: EdgeInsets.symmetric(
-        horizontal: responsive.isMobile ? 24.w : 40.w,
-        vertical: 24.h,
+        horizontal: responsive.isMobile ? 24.0 : 40.0,
+        vertical: 24.0,
       ),
       child: Container(
         constraints: BoxConstraints(
@@ -66,7 +66,7 @@ class DeviceDetailsDialog extends StatelessWidget {
           children: [
             // Header
             Container(
-              padding: EdgeInsets.all(AppSpacing.lgR),
+              padding: const EdgeInsets.all(AppSpacing.lg),
               decoration: BoxDecoration(
                 color: theme.colorScheme.primaryContainer,
                 borderRadius: BorderRadius.vertical(
@@ -78,30 +78,28 @@ class DeviceDetailsDialog extends StatelessWidget {
                   Icon(
                     Icons.devices,
                     color: theme.colorScheme.onPrimaryContainer,
-                    size: 28.w,
+                    size: 28.0,
                   ),
-                  SizedBox(width: AppSpacing.smR),
+                  const SizedBox(width: AppSpacing.sm),
                   Expanded(
                     child: Text(
                       l10n.addDevice,
-                      style: TextStyle(
-                        fontSize: 18.sp,
+                      style: const TextStyle(
+                        fontSize: 18.0,
                         fontWeight: FontWeight.bold,
-                        color: theme.colorScheme.onPrimaryContainer,
                       ),
                     ),
                   ),
                   IconButton(
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.close,
-                      size: 24.w,
-                      color: theme.colorScheme.onPrimaryContainer,
+                      size: 24.0,
                     ),
                     onPressed: () => Navigator.of(context).pop(),
                     padding: EdgeInsets.zero,
-                    constraints: BoxConstraints(
-                      minWidth: 48.w,
-                      minHeight: 48.h,
+                    constraints: const BoxConstraints(
+                      minWidth: 48.0,
+                      minHeight: 48.0,
                     ),
                   ),
                 ],
@@ -111,21 +109,21 @@ class DeviceDetailsDialog extends StatelessWidget {
             // Body
             Flexible(
               child: SingleChildScrollView(
-                padding: EdgeInsets.all(AppSpacing.lgR),
+                padding: const EdgeInsets.all(AppSpacing.lg),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Info message
                     if (initialMacAddress != null) ...[
                       Container(
-                        padding: EdgeInsets.all(AppSpacing.mdR),
+                        padding: const EdgeInsets.all(AppSpacing.md),
                         decoration: BoxDecoration(
                           color: theme.colorScheme.primaryContainer
                               .withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(8.0),
                           border: Border.all(
                             color: theme.colorScheme.primary.withValues(alpha: 0.3),
-                            width: 1.w,
+                            width: 1.0,
                           ),
                         ),
                         child: Row(
@@ -133,14 +131,14 @@ class DeviceDetailsDialog extends StatelessWidget {
                             Icon(
                               Icons.qr_code_2,
                               color: theme.colorScheme.primary,
-                              size: 20.w,
+                              size: 20.0,
                             ),
-                            SizedBox(width: AppSpacing.smR),
+                            const SizedBox(width: AppSpacing.sm),
                             Expanded(
                               child: Text(
                                 'Device detected from QR code',
                                 style: TextStyle(
-                                  fontSize: 13.sp,
+                                  fontSize: 13.0,
                                   color: theme.colorScheme.primary,
                                 ),
                               ),
@@ -148,7 +146,7 @@ class DeviceDetailsDialog extends StatelessWidget {
                           ],
                         ),
                       ),
-                      SizedBox(height: AppSpacing.lgR),
+                      const SizedBox(height: AppSpacing.lg),
                     ],
 
                     // Form
@@ -168,16 +166,15 @@ class DeviceDetailsDialog extends StatelessWidget {
 
             // Actions
             Container(
-              padding: EdgeInsets.all(AppSpacing.mdR),
+              padding: const EdgeInsets.all(AppSpacing.md),
               decoration: BoxDecoration(
                 color: theme.colorScheme.surface,
                 borderRadius: BorderRadius.vertical(
                   bottom: Radius.circular(responsive.borderRadius),
                 ),
-                border: Border(
+                border: const Border(
                   top: BorderSide(
-                    color: theme.dividerColor,
-                    width: 1.h,
+                    width: 1.0,
                   ),
                 ),
               ),
@@ -187,18 +184,18 @@ class DeviceDetailsDialog extends StatelessWidget {
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(),
                     style: TextButton.styleFrom(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: AppSpacing.lgR,
-                        vertical: AppSpacing.smR,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.lg,
+                        vertical: AppSpacing.sm,
                       ),
-                      minimumSize: Size(80.w, 40.h),
+                      minimumSize: const Size(80.0, 40.0),
                     ),
                     child: Text(
                       l10n.cancel,
                       style: HvacTypography.bodyMedium,
                     ),
                   ),
-                  SizedBox(width: AppSpacing.smR),
+                  const SizedBox(width: AppSpacing.sm),
                   ElevatedButton(
                     onPressed: () {
                       // Submit is handled by the form widget
@@ -209,11 +206,11 @@ class DeviceDetailsDialog extends StatelessWidget {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: AppSpacing.lgR,
-                        vertical: AppSpacing.smR,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.lg,
+                        vertical: AppSpacing.sm,
                       ),
-                      minimumSize: Size(80.w, 40.h),
+                      minimumSize: const Size(80.0, 40.0),
                     ),
                     child: Text(
                       l10n.add,

@@ -25,11 +25,11 @@ class HomeAutomationSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (currentUnit == null) {
-      return Center(
+      return const Center(
         child: Text(
           'Устройство не выбрано',
           style: TextStyle(
-            fontSize: 14.sp,
+            fontSize: 14.0,
             color: HvacColors.textSecondary,
           ),
         ),

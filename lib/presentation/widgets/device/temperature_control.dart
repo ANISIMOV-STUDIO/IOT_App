@@ -28,8 +28,8 @@ class TemperatureControl extends StatelessWidget {
         children: [
           Text(
             min.toInt().toString(),
-            style: TextStyle(
-              fontSize: 14.sp,
+            style: const TextStyle(
+              fontSize: 14.0,
               color: HvacColors.textTertiary,
             ),
           ),
@@ -40,8 +40,8 @@ class TemperatureControl extends StatelessWidget {
                 children: [
                   Text(
                     '${value.toInt()}°',
-                    style: TextStyle(
-                      fontSize: 48.sp,
+                    style: const TextStyle(
+                      fontSize: 48.0,
                       fontWeight: FontWeight.w700,
                       height: 1,
                       color: HvacColors.textPrimary,
@@ -50,12 +50,12 @@ class TemperatureControl extends StatelessWidget {
                   const SizedBox(height: HvacSpacing.xsR),
                   SliderTheme(
                     data: SliderTheme.of(context).copyWith(
-                      trackHeight: 4.h,
-                      thumbShape: RoundSliderThumbShape(
-                        enabledThumbRadius: 8.r,
+                      trackHeight: 4.0,
+                      thumbShape: const RoundSliderThumbShape(
+                        enabledThumbRadius: 8.0,
                       ),
-                      overlayShape: RoundSliderOverlayShape(
-                        overlayRadius: 16.r,
+                      overlayShape: const RoundSliderOverlayShape(
+                        overlayRadius: 16.0,
                       ),
                       activeTrackColor: Colors.white,
                       inactiveTrackColor: HvacColors.backgroundCardBorder,
@@ -74,8 +74,8 @@ class TemperatureControl extends StatelessWidget {
           ),
           Text(
             max.toInt().toString(),
-            style: TextStyle(
-              fontSize: 14.sp,
+            style: const TextStyle(
+              fontSize: 14.0,
               color: HvacColors.textTertiary,
             ),
           ),

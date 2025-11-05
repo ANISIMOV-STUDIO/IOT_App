@@ -29,28 +29,28 @@ class AnalyticsAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: HvacColors.backgroundCard,
       elevation: 0,
       leading: IconButton(
-        icon: Icon(
+        icon: const Icon(
           Icons.arrow_back,
           color: HvacColors.textPrimary,
-          size: 24.sp,
+          size: 24.0,
         ),
         onPressed: onBack,
       ),
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'Аналитика',
             style: TextStyle(
-              fontSize: 18.sp,
+              fontSize: 18.0,
               fontWeight: FontWeight.w600,
               color: HvacColors.textPrimary,
             ),
           ),
           Text(
             unitName,
-            style: TextStyle(
-              fontSize: 12.sp,
+            style: const TextStyle(
+              fontSize: 12.0,
               color: HvacColors.textSecondary,
               fontWeight: FontWeight.w400,
             ),
@@ -68,9 +68,9 @@ class AnalyticsAppBar extends StatelessWidget implements PreferredSizeWidget {
         value: selectedPeriod,
         dropdownColor: HvacColors.backgroundCard,
         underline: const SizedBox(),
-        style: TextStyle(
+        style: const TextStyle(
           color: HvacColors.primaryOrange,
-          fontSize: 14.sp,
+          fontSize: 14.0,
           fontWeight: FontWeight.w600,
         ),
         items: ['День', 'Неделя', 'Месяц'].map((period) {

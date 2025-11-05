@@ -105,7 +105,7 @@ class _AnimatedIconButtonState extends State<AnimatedIconButton>
 
   @override
   Widget build(BuildContext context) {
-    final size = widget.size ?? 48.r;
+    final size = widget.size ?? 48.0;
     final iconColor = widget.iconColor ?? HvacColors.textPrimary;
     final backgroundColor = widget.backgroundColor ?? Colors.transparent;
 

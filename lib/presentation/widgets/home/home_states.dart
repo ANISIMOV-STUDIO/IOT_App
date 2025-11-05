@@ -24,15 +24,15 @@ class HomeLoadingState extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CircularProgressIndicator(
+          const CircularProgressIndicator(
             color: HvacColors.primaryOrange,
-            strokeWidth: 3.w,
+            strokeWidth: 3.0,
           ),
           const SizedBox(height: HvacSpacing.mdV),
           Text(
             l10n.loadingDevices,
-            style: TextStyle(
-              fontSize: 14.sp,
+            style: const TextStyle(
+              fontSize: 14.0,
               color: HvacColors.textSecondary,
             ),
           ),
@@ -61,16 +61,16 @@ class HomeErrorState extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
+            const Icon(
               Icons.error_outline,
-              size: 64.sp,
+              size: 64.0,
               color: HvacColors.error,
             ),
             const SizedBox(height: HvacSpacing.lgV),
             Text(
               l10n.connectionError,
-              style: TextStyle(
-                fontSize: 20.sp,
+              style: const TextStyle(
+                fontSize: 20.0,
                 fontWeight: FontWeight.w700,
                 color: HvacColors.textPrimary,
               ),
@@ -78,8 +78,8 @@ class HomeErrorState extends StatelessWidget {
             const SizedBox(height: HvacSpacing.smV),
             Text(
               message,
-              style: TextStyle(
-                fontSize: 14.sp,
+              style: const TextStyle(
+                fontSize: 14.0,
                 color: HvacColors.textSecondary,
               ),
               textAlign: TextAlign.center,
@@ -101,7 +101,7 @@ class HomeErrorState extends StatelessWidget {
               ),
               child: Text(
                 l10n.retry,
-                style: TextStyle(fontSize: 14.sp),
+                style: const TextStyle(fontSize: 14.0),
               ),
             ),
           ],
@@ -127,14 +127,14 @@ class HomeEmptyState extends StatelessWidget {
           children: [
             Icon(
               Icons.devices_other,
-              size: 64.sp,
+              size: 64.0,
               color: HvacColors.textSecondary.withValues(alpha: 0.5),
             ),
             const SizedBox(height: HvacSpacing.lgV),
             Text(
               l10n.noDevices,
-              style: TextStyle(
-                fontSize: 20.sp,
+              style: const TextStyle(
+                fontSize: 20.0,
                 fontWeight: FontWeight.w700,
                 color: HvacColors.textPrimary,
               ),
@@ -142,8 +142,8 @@ class HomeEmptyState extends StatelessWidget {
             const SizedBox(height: HvacSpacing.smV),
             Text(
               l10n.addFirstDevice,
-              style: TextStyle(
-                fontSize: 14.sp,
+              style: const TextStyle(
+                fontSize: 14.0,
                 color: HvacColors.textSecondary,
               ),
               textAlign: TextAlign.center,

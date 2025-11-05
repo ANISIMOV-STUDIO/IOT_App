@@ -183,7 +183,7 @@ class _LazyHvacListState extends State<LazyHvacList> {
   Widget _buildLoadingIndicator() {
     return SliverToBoxAdapter(
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: HvacSpacing.lg.h),
+        padding: const EdgeInsets.symmetric(vertical: HvacSpacing.lg),
         child: Column(
           children: List.generate(
             3,
@@ -197,28 +197,28 @@ class _LazyHvacListState extends State<LazyHvacList> {
   Widget _buildEndIndicator() {
     return SliverToBoxAdapter(
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: HvacSpacing.xl.h),
+        padding: const EdgeInsets.symmetric(vertical: HvacSpacing.xl),
         child: Center(
           child: Column(
             children: [
-              Icon(
+              const Icon(
                 Icons.check_circle_outline,
-                size: 48.sp,
+                size: 48.0,
                 color: Colors.white30,
               ),
-              SizedBox(height: HvacSpacing.md.h),
-              Text(
+              const SizedBox(height: HvacSpacing.md),
+              const Text(
                 'All units loaded',
                 style: TextStyle(
-                  fontSize: 14.sp,
+                  fontSize: 14.0,
                   color: Colors.white54,
                 ),
               ),
-              SizedBox(height: HvacSpacing.xs.h),
+              const SizedBox(height: HvacSpacing.xs),
               Text(
                 '${_controller.items.length} total units',
-                style: TextStyle(
-                  fontSize: 12.sp,
+                style: const TextStyle(
+                  fontSize: 12.0,
                   color: Colors.white38,
                 ),
               ),

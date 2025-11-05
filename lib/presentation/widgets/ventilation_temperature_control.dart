@@ -103,7 +103,7 @@ class VentilationTemperatureControl extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
               ),
-              SizedBox(height: 2.h),
+              const SizedBox(height: 2.0),
               Text(
                 'Мониторинг и уставки',
                 style: TextStyle(
@@ -133,7 +133,7 @@ class VentilationTemperatureControl extends StatelessWidget {
               Icons.air,
               HvacColors.info,
             ),
-            SizedBox(height: 8.h),
+            const SizedBox(height: 8.0),
             _buildTempIndicator(
               context,
               'Вытяжка',
@@ -141,7 +141,7 @@ class VentilationTemperatureControl extends StatelessWidget {
               Icons.upload,
               HvacColors.warning,
             ),
-            SizedBox(height: 8.h),
+            const SizedBox(height: 8.0),
             _buildTempIndicator(
               context,
               'Наружный',
@@ -149,7 +149,7 @@ class VentilationTemperatureControl extends StatelessWidget {
               Icons.landscape,
               HvacColors.textSecondary,
             ),
-            SizedBox(height: 8.h),
+            const SizedBox(height: 8.0),
             _buildTempIndicator(
               context,
               'Внутренний',

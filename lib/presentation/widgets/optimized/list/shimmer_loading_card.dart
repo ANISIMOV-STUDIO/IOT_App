@@ -13,14 +13,14 @@ class ShimmerLoadingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(
-        horizontal: HvacSpacing.md.w,
-        vertical: HvacSpacing.sm.h,
+      margin: const EdgeInsets.symmetric(
+        horizontal: HvacSpacing.md,
+        vertical: HvacSpacing.sm,
       ),
-      padding: EdgeInsets.all(HvacSpacing.lg.w),
+      padding: const EdgeInsets.all(HvacSpacing.lg),
       decoration: BoxDecoration(
         color: HvacColors.cardDark,
-        borderRadius: BorderRadius.circular(HvacRadius.lg.r),
+        borderRadius: BorderRadius.circular(HvacRadius.lg),
       ),
       child: Shimmer.fromColors(
         baseColor: Colors.white12,
@@ -35,27 +35,27 @@ class ShimmerLoadingCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      width: 150.w,
-                      height: 20.h,
+                      width: 150.0,
+                      height: 20.0,
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(HvacRadius.xs.r),
+                        borderRadius: BorderRadius.circular(HvacRadius.xs),
                       ),
                     ),
-                    SizedBox(height: HvacSpacing.xs.h),
+                    const SizedBox(height: HvacSpacing.xs),
                     Container(
-                      width: 100.w,
-                      height: 14.h,
+                      width: 100.0,
+                      height: 14.0,
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(HvacRadius.xs.r),
+                        borderRadius: BorderRadius.circular(HvacRadius.xs),
                       ),
                     ),
                   ],
                 ),
                 Container(
-                  width: 50.w,
-                  height: 30.h,
+                  width: 50.0,
+                  height: 30.0,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: HvacRadius.lgRadius,
@@ -63,17 +63,17 @@ class ShimmerLoadingCard extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: HvacSpacing.lg.h),
+            const SizedBox(height: HvacSpacing.lg),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: List.generate(
                 3,
                 (index) => Container(
-                  width: 60.w,
-                  height: 40.h,
+                  width: 60.0,
+                  height: 40.0,
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(HvacRadius.sm.r),
+                    borderRadius: BorderRadius.circular(HvacRadius.sm),
                   ),
                 ),
               ),

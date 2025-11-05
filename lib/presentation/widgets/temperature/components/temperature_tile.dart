@@ -24,7 +24,7 @@ class TemperatureTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
       decoration: BoxDecoration(
         color: HvacColors.backgroundDark,
         borderRadius: HvacRadius.smRadius,
@@ -41,25 +41,25 @@ class TemperatureTile extends StatelessWidget {
             children: [
               Icon(
                 icon,
-                size: isSecondary ? 12.w : 14.w,
+                size: isSecondary ? 12.0 : 14.0,
                 color: HvacColors.neutral200,
               ),
-              SizedBox(width: 4.w),
+              const SizedBox(width: 4.0),
               Text(
                 label,
                 style: TextStyle(
-                  fontSize: isSecondary ? 9.sp : 10.sp,
+                  fontSize: isSecondary ? 9.0 : 10.0,
                   color: HvacColors.textTertiary,
                   fontWeight: FontWeight.w500,
                 ),
               ),
             ],
           ),
-          SizedBox(height: 4.h),
+          const SizedBox(height: 4.0),
           Text(
             value != null ? '${value!.toStringAsFixed(1)}°C' : '—',
             style: TextStyle(
-              fontSize: isSecondary ? 16.sp : 20.sp,
+              fontSize: isSecondary ? 16.0 : 20.0,
               fontWeight: FontWeight.w600,
               color: value != null ? HvacColors.textPrimary : HvacColors.textDisabled,
               letterSpacing: -0.5,

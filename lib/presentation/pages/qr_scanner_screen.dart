@@ -86,7 +86,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
         content: Text(message),
         backgroundColor: Colors.green,
         behavior: SnackBarBehavior.floating,
-        margin: EdgeInsets.all(AppSpacing.mdR),
+        margin: const EdgeInsets.all(AppSpacing.md),
         shape: RoundedRectangleBorder(
           borderRadius: HvacRadius.smRadius,
         ),
@@ -100,7 +100,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
         content: Text(message),
         backgroundColor: Theme.of(context).colorScheme.error,
         behavior: SnackBarBehavior.floating,
-        margin: EdgeInsets.all(AppSpacing.mdR),
+        margin: const EdgeInsets.all(AppSpacing.md),
         shape: RoundedRectangleBorder(
           borderRadius: HvacRadius.smRadius,
         ),
