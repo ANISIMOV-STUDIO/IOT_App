@@ -208,10 +208,12 @@ class QuickLoadingOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return LoadingOverlay(
       isLoading: isLoading,
       loadingType: LoadingType.circular,
-      message: 'Refreshing...',  // TODO: Add to localization
+      message: l10n.refreshing,
       child: child,
     );
   }
@@ -236,7 +238,7 @@ class AccessibleRefreshButton extends StatelessWidget {
       onPressed: isLoading ? null : onRefresh,
       icon: Icons.refresh,
       semanticLabel: l10n.refresh,
-      tooltip: 'Refresh Devices',  // TODO: Add to localization
+      tooltip: l10n.refreshDevices,
       loading: isLoading,
       size: 24.0,
       color: HvacColors.primaryOrange,

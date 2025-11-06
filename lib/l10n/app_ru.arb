@@ -332,5 +332,7 @@
   "max": "Макс",
   "temperatureHistory": "История температуры",
   "last24Hours": "Последние 24 часа",
-  "activeDevices": "{count} из {total} активно"
+  "activeDevices": "{count} из {total} активно",
+  "refreshing": "Обновление...",
+  "refreshDevices": "Обновить устройства"
 }

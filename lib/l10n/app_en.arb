@@ -1251,5 +1251,13 @@
       "count": {"type": "int"},
       "total": {"type": "int"}
     }
+  },
+  "refreshing": "Refreshing...",
+  "@refreshing": {
+    "description": "Refreshing message"
+  },
+  "refreshDevices": "Refresh Devices",
+  "@refreshDevices": {
+    "description": "Refresh devices tooltip"
   }
 }
