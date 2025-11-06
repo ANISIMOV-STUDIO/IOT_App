@@ -5,23 +5,26 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../core/widgets/adaptive_layout_widgets.dart';
+import '../../core/navigation/app_router.dart';
 import '../../domain/entities/hvac_unit.dart';
+import '../bloc/hvac_list/hvac_list_bloc.dart';
+import '../bloc/hvac_list/hvac_list_state.dart';
 import '../widgets/unit_detail/overview_tab.dart';
 import '../widgets/unit_detail/air_quality_tab.dart';
 import '../widgets/unit_detail/alerts_history_tab.dart';
 import '../widgets/unit_detail/diagnostics_tab.dart';
 import '../widgets/unit_detail/tablet_sidebar.dart';
 import '../widgets/unit_detail/quick_stats_chips.dart';
-import 'analytics_screen.dart';
 
 class UnitDetailScreen extends StatefulWidget {
-  final HvacUnit unit;
+  final String unitId;
 
   const UnitDetailScreen({
     super.key,
-    required this.unit,
+    required this.unitId,
   });
 
   @override
@@ -58,38 +61,57 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
 
   @override
   Widget build(BuildContext context) {
+    return BlocBuilder<HvacListBloc, HvacListState>(
+      builder: (context, state) {
+        if (state is HvacListLoaded) {
+          final unit = state.units.firstWhere(
+            (u) => u.id == widget.unitId,
+            orElse: () => state.units.first,
+          );
+          return _buildContent(unit);
+        }
+
+        // Show loading state
+        return const Scaffold(
+          body: Center(child: CircularProgressIndicator()),
+        );
+      },
+    );
+  }
+
+  Widget _buildContent(HvacUnit unit) {
     final isTablet = ResponsiveUtils.isTablet(context);
 
     if (isTablet) {
-      return _buildTabletLayout();
+      return _buildTabletLayout(unit);
     } else {
-      return _buildMobileLayout();
+      return _buildMobileLayout(unit);
     }
   }
 
-  Widget _buildMobileLayout() {
+  Widget _buildMobileLayout(HvacUnit unit) {
     return Scaffold(
       backgroundColor: HvacColors.backgroundDark,
-      appBar: _buildMobileAppBar(),
+      appBar: _buildMobileAppBar(unit),
       body: HvacRefreshIndicator(
         onRefresh: _refreshData,
         child: TabBarView(
           controller: _tabController,
-          children: _getTabViews(),
+          children: _getTabViews(unit),
         ),
       ),
     );
   }
 
-  Widget _buildTabletLayout() {
+  Widget _buildTabletLayout(HvacUnit unit) {
     return Scaffold(
       backgroundColor: HvacColors.backgroundDark,
-      appBar: _buildTabletAppBar(),
+      appBar: _buildTabletAppBar(unit),
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           UnitDetailTabletSidebar(
-            unit: widget.unit,
+            unit: unit,
             selectedIndex: _selectedIndex,
             onItemSelected: (index) {
               setState(() {
@@ -105,7 +127,7 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
                 physics: const AlwaysScrollableScrollPhysics(),
                 child: AdaptiveContainer(
                   padding: const EdgeInsets.all(HvacSpacing.lgR),
-                  child: _getTabViews()[_selectedIndex],
+                  child: _getTabViews(unit)[_selectedIndex],
                 ),
               ),
             ),
@@ -115,13 +137,13 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
     );
   }
 
-  PreferredSizeWidget _buildMobileAppBar() {
+  PreferredSizeWidget _buildMobileAppBar(HvacUnit unit) {
     return AppBar(
       backgroundColor: HvacColors.backgroundCard,
       elevation: 0,
       leading: _buildBackButton(),
-      title: _buildTitle(),
-      actions: [_buildAnalyticsButton()],
+      title: _buildTitle(unit),
+      actions: [_buildAnalyticsButton(unit)],
       bottom: TabBar(
         controller: _tabController,
         indicatorColor: HvacColors.primaryOrange,
@@ -142,19 +164,19 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
     );
   }
 
-  PreferredSizeWidget _buildTabletAppBar() {
+  PreferredSizeWidget _buildTabletAppBar(HvacUnit unit) {
     return AppBar(
       backgroundColor: HvacColors.backgroundCard,
       elevation: 0,
       leading: _buildBackButton(),
       title: Row(
         children: [
-          _buildTitle(),
+          _buildTitle(unit),
           const Spacer(),
-          QuickStatsChips(unit: widget.unit),
+          QuickStatsChips(unit: unit),
         ],
       ),
-      actions: _buildTabletActions(),
+      actions: _buildTabletActions(unit),
     );
   }
 
@@ -165,23 +187,23 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
     );
   }
 
-  Widget _buildTitle() {
+  Widget _buildTitle(HvacUnit unit) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
             HvacIconHero(
-              tag: 'unit_icon_${widget.unit.id}',
-              icon: widget.unit.power ? Icons.air : Icons.power_off,
+              tag: 'unit_icon_${unit.id}',
+              icon: unit.power ? Icons.air : Icons.power_off,
               size: ResponsiveUtils.isTablet(context) ? 24.0 : 20.0,
-              color: widget.unit.power ? HvacColors.success : HvacColors.error,
+              color: unit.power ? HvacColors.success : HvacColors.error,
             ),
             const SizedBox(width: 8.0),
             HvacStatusHero(
-              tag: 'unit_name_${widget.unit.id}',
+              tag: 'unit_name_${unit.id}',
               child: Text(
-                widget.unit.name,
+                unit.name,
                 style: TextStyle(
                   fontSize: ResponsiveUtils.isTablet(context) ? 20.0 : 18.0,
                   fontWeight: FontWeight.w600,
@@ -193,7 +215,7 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
         ),
         Row(
           children: [
-            if (widget.unit.power) ...[
+            if (unit.power) ...[
               const HvacPulsingDot(
                 color: HvacColors.success,
                 size: 8,
@@ -201,7 +223,7 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
               const SizedBox(width: 6.0),
             ],
             Text(
-              widget.unit.location ?? 'Неизвестно',
+              unit.location ?? 'Неизвестно',
               style: TextStyle(
                 fontSize: ResponsiveUtils.isTablet(context) ? 14.0 : 12.0,
                 color: HvacColors.textSecondary,
@@ -214,24 +236,19 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
     );
   }
 
-  Widget _buildAnalyticsButton() {
+  Widget _buildAnalyticsButton(HvacUnit unit) {
     return IconButton(
       icon: const Icon(Icons.analytics, color: HvacColors.primaryOrange, size: 24.0),
       onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => AnalyticsScreen(unit: widget.unit),
-          ),
-        );
+        context.goToAnalytics();
       },
       tooltip: 'Аналитика',
     );
   }
 
-  List<Widget> _buildTabletActions() {
+  List<Widget> _buildTabletActions(HvacUnit unit) {
     return [
-      _buildAnalyticsButton(),
+      _buildAnalyticsButton(unit),
       IconButton(
         icon: const Icon(Icons.settings, color: HvacColors.textSecondary, size: 24.0),
         onPressed: () {
@@ -249,12 +266,12 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
     ];
   }
 
-  List<Widget> _getTabViews() {
+  List<Widget> _getTabViews(HvacUnit unit) {
     return [
-      OverviewTab(unit: widget.unit),
-      AirQualityTab(unit: widget.unit),
-      AlertsHistoryTab(unit: widget.unit),
-      DiagnosticsTab(unit: widget.unit),
+      OverviewTab(unit: unit),
+      AirQualityTab(unit: unit),
+      AlertsHistoryTab(unit: unit),
+      DiagnosticsTab(unit: unit),
     ];
   }
 }

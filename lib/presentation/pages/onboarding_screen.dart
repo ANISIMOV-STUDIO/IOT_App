@@ -1,14 +1,16 @@
 /// Onboarding Screen with Liquid Swipe
 ///
-/// First-time user experience with smooth liquid swipe navigation
+/// Compact and beautiful first-time user experience
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:liquid_swipe/liquid_swipe.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
-import 'responsive_shell.dart';
 import '../../generated/l10n/app_localizations.dart';
+import '../bloc/auth/auth_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// Onboarding screen for first-time users
 class OnboardingScreen extends StatefulWidget {
@@ -18,14 +20,44 @@ class OnboardingScreen extends StatefulWidget {
   State<OnboardingScreen> createState() => _OnboardingScreenState();
 }
 
-class _OnboardingScreenState extends State<OnboardingScreen> {
+class _OnboardingScreenState extends State<OnboardingScreen>
+    with TickerProviderStateMixin {
   final LiquidController _liquidController = LiquidController();
   int _currentPage = 0;
   static const int _totalPages = 4;
 
+  late AnimationController _swipeHintController;
+  late Animation<Offset> _swipeHintAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _setupSwipeHintAnimation();
+  }
+
+  void _setupSwipeHintAnimation() {
+    _swipeHintController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    );
+
+    _swipeHintAnimation = Tween<Offset>(
+      begin: Offset.zero,
+      end: const Offset(-0.3, 0),
+    ).animate(
+      CurvedAnimation(
+        parent: _swipeHintController,
+        curve: Curves.easeInOut,
+      ),
+    );
+
+    // Loop the animation
+    _swipeHintController.repeat(reverse: true);
+  }
+
   @override
   void dispose() {
-    // LiquidController doesn't need manual disposal
+    _swipeHintController.dispose();
     super.dispose();
   }
 
@@ -36,169 +68,247 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
     if (!mounted) return;
 
-    // Navigate to home screen
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => const ResponsiveShell(),
-      ),
-    );
+    // Skip auth and go home
+    context.read<AuthBloc>().add(const SkipAuthEvent());
   }
 
   /// Skip onboarding
   void _skipOnboarding() {
+    HapticFeedback.lightImpact();
     _completeOnboarding();
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final size = MediaQuery.of(context).size;
+    final isCompact = size.height < 700 || size.width < 600;
+
     return Scaffold(
       backgroundColor: HvacColors.backgroundDark,
-      body: Stack(
-        children: [
-          // Liquid Swipe Pages
-          HvacLiquidSwipe(
-            pages: [
-              _buildWelcomePage(l10n),
-              _buildControlPage(l10n),
-              _buildAnalyticsPage(),
-              _buildGetStartedPage(l10n),
-            ],
-            controller: _liquidController,
-            enableLoop: false,
-            waveType: WaveType.liquidReveal,
-            onPageChangeCallback: (index) {
-              setState(() => _currentPage = index);
-            },
-          ),
+      body: MouseRegion(
+        cursor: SystemMouseCursors.grab,
+        child: Stack(
+          children: [
+            // Liquid Swipe Pages
+            HvacLiquidSwipe(
+              pages: [
+                _buildWelcomePage(l10n, isCompact),
+                _buildControlPage(l10n, isCompact),
+                _buildAnalyticsPage(l10n, isCompact),
+                _buildGetStartedPage(l10n, isCompact),
+              ],
+              controller: _liquidController,
+              enableLoop: false,
+              waveType: WaveType.liquidReveal,
+              onPageChangeCallback: (index) {
+                HapticFeedback.selectionClick();
+                setState(() => _currentPage = index);
+              },
+            ),
 
-          // Skip Button (only on first 3 pages)
-          if (_currentPage < _totalPages - 1)
-            Positioned(
-              top: 50,
-              right: 20,
-              child: SafeArea(
-                child: TextButton(
-                  onPressed: _skipOnboarding,
-                  style: TextButton.styleFrom(
-                    foregroundColor: HvacColors.textSecondary,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 12,
-                    ),
-                  ),
-                  child: Text(
-                    l10n.skip,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
+            // Skip Button (only on first 3 pages)
+            if (_currentPage < _totalPages - 1)
+              Positioned(
+                top: 40,
+                right: 20,
+                child: SafeArea(
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: HvacInteractiveScale(
+                      scaleDown: 0.95,
+                      child: TextButton(
+                        onPressed: _skipOnboarding,
+                        style: TextButton.styleFrom(
+                          foregroundColor: HvacColors.textSecondary,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 12,
+                          ),
+                        ),
+                        child: Text(
+                          l10n.skip,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
 
-          // Page Indicators (only on first 3 pages)
-          if (_currentPage < _totalPages - 1)
-            Positioned(
-              bottom: 60,
-              left: 0,
-              right: 0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(
-                  _totalPages - 1,
-                  (index) => AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    margin: const EdgeInsets.symmetric(horizontal: 4),
-                    width: _currentPage == index ? 32 : 8,
-                    height: 8,
-                    decoration: BoxDecoration(
-                      color: _currentPage == index
-                          ? HvacColors.primaryOrange
-                          : HvacColors.textSecondary.withValues(alpha:0.3),
-                      borderRadius: BorderRadius.circular(4),
+            // Animated Swipe Hint (only on first page)
+            if (_currentPage == 0)
+              Positioned(
+                bottom: isCompact ? 100 : 140,
+                left: 0,
+                right: 0,
+                child: MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: SlideTransition(
+                    position: _swipeHintAnimation,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 12,
+                          ),
+                          decoration: BoxDecoration(
+                            color: HvacColors.primaryOrange.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(30),
+                            border: Border.all(
+                              color: HvacColors.primaryOrange.withValues(alpha: 0.3),
+                              width: 1,
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(
+                                Icons.swipe,
+                                size: 20,
+                                color: HvacColors.primaryOrange,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                l10n.swipeToContinue,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: HvacColors.primaryOrange,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              const Icon(
+                                Icons.arrow_forward,
+                                size: 16,
+                                color: HvacColors.primaryOrange,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
               ),
-            ),
-        ],
+
+            // Page Indicators (only on first 3 pages)
+            if (_currentPage < _totalPages - 1)
+              Positioned(
+                bottom: isCompact ? 50 : 80,
+                left: 0,
+                right: 0,
+                child: MouseRegion(
+                  cursor: SystemMouseCursors.basic,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(
+                      _totalPages - 1,
+                      (index) => AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        margin: const EdgeInsets.symmetric(horizontal: 4),
+                        width: _currentPage == index ? 32 : 8,
+                        height: 8,
+                        decoration: BoxDecoration(
+                          color: _currentPage == index
+                              ? HvacColors.primaryOrange
+                              : HvacColors.textSecondary.withValues(alpha: 0.3),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
 
   /// Page 1: Welcome
-  Widget _buildWelcomePage(AppLocalizations l10n) {
+  Widget _buildWelcomePage(AppLocalizations l10n, bool isCompact) {
     return Container(
       color: HvacColors.backgroundDark,
       child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(40.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Icon
-              Container(
-                width: 160,
-                height: 160,
-                decoration: BoxDecoration(
-                  color: HvacColors.primaryOrange.withValues(alpha:0.2),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.air,
-                  size: 100,
-                  color: HvacColors.primaryOrange,
-                ),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 500),
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: isCompact ? 24 : 40,
+                vertical: isCompact ? 20 : 40,
               ),
-              const SizedBox(height: 60),
-
-              // Title
-              Text(
-                l10n.welcomeToBreezHome,
-                style: const TextStyle(
-                  fontSize: 42,
-                  fontWeight: FontWeight.bold,
-                  color: HvacColors.textPrimary,
-                  height: 1.2,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 24),
-
-              // Subtitle
-              Text(
-                l10n.smartHomeClimateControl,
-                style: const TextStyle(
-                  fontSize: 18,
-                  color: HvacColors.textSecondary,
-                  height: 1.5,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 80),
-
-              // Swipe hint
-              Row(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    l10n.swipeToContinue,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: HvacColors.textSecondary.withValues(alpha:0.6),
+                  // Icon with glow effect
+                  Container(
+                    width: isCompact ? 80 : 120,
+                    height: isCompact ? 80 : 120,
+                    decoration: BoxDecoration(
+                      color: HvacColors.primaryOrange.withValues(alpha: 0.2),
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: HvacColors.primaryOrange.withValues(alpha: 0.3),
+                          blurRadius: 40,
+                          spreadRadius: 10,
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      Icons.air,
+                      size: isCompact ? 50 : 70,
+                      color: HvacColors.primaryOrange,
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    size: 14,
-                    color: HvacColors.textSecondary.withValues(alpha:0.6),
+                  SizedBox(height: isCompact ? 30 : 50),
+
+                  // Title with BREEZ HOME
+                  RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      style: TextStyle(
+                        fontSize: isCompact ? 28 : 36,
+                        fontWeight: FontWeight.bold,
+                        color: HvacColors.textPrimary,
+                        height: 1.2,
+                      ),
+                      children: const [
+                        TextSpan(text: 'Welcome to\n'),
+                        TextSpan(
+                          text: 'BREEZ ',
+                          style: TextStyle(
+                            color: HvacColors.primaryOrange,
+                          ),
+                        ),
+                        TextSpan(text: 'HOME'),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: isCompact ? 12 : 20),
+
+                  // Subtitle
+                  Text(
+                    l10n.smartHomeClimateControl,
+                    style: TextStyle(
+                      fontSize: isCompact ? 14 : 16,
+                      color: HvacColors.textSecondary,
+                      height: 1.4,
+                    ),
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
-            ],
+            ),
           ),
         ),
       ),
@@ -206,7 +316,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   /// Page 2: Control Devices
-  Widget _buildControlPage(AppLocalizations l10n) {
+  Widget _buildControlPage(AppLocalizations l10n, bool isCompact) {
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
@@ -219,68 +329,78 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         ),
       ),
       child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(40.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Icon
-              Container(
-                width: 160,
-                height: 160,
-                decoration: BoxDecoration(
-                  color: HvacColors.primaryBlue.withValues(alpha:0.2),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.devices,
-                  size: 100,
-                  color: HvacColors.primaryBlue,
-                ),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 500),
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: isCompact ? 24 : 40,
+                vertical: isCompact ? 20 : 40,
               ),
-              const SizedBox(height: 60),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Icon
+                  Container(
+                    width: isCompact ? 80 : 120,
+                    height: isCompact ? 80 : 120,
+                    decoration: BoxDecoration(
+                      color: HvacColors.primaryBlue.withValues(alpha: 0.2),
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: HvacColors.primaryBlue.withValues(alpha: 0.3),
+                          blurRadius: 40,
+                          spreadRadius: 10,
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      Icons.devices,
+                      size: isCompact ? 50 : 70,
+                      color: HvacColors.primaryBlue,
+                    ),
+                  ),
+                  SizedBox(height: isCompact ? 30 : 50),
 
-              // Title
-              Text(
-                l10n.controlYourDevices,
-                style: const TextStyle(
-                  fontSize: 42,
-                  fontWeight: FontWeight.bold,
-                  color: HvacColors.textPrimary,
-                  height: 1.2,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 24),
+                  // Title
+                  Text(
+                    l10n.controlYourDevices,
+                    style: TextStyle(
+                      fontSize: isCompact ? 28 : 36,
+                      fontWeight: FontWeight.bold,
+                      color: HvacColors.textPrimary,
+                      height: 1.2,
+                    ),
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: isCompact ? 12 : 20),
 
-              // Subtitle
-              Text(
-                l10n.manageHvacSystems,
-                style: const TextStyle(
-                  fontSize: 18,
-                  color: HvacColors.textSecondary,
-                  height: 1.5,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 60),
+                  // Subtitle
+                  Text(
+                    l10n.manageHvacSystems,
+                    style: TextStyle(
+                      fontSize: isCompact ? 14 : 16,
+                      color: HvacColors.textSecondary,
+                      height: 1.4,
+                    ),
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: isCompact ? 24 : 40),
 
-              // Features
-              _buildFeatureRow(
-                Icons.power_settings_new,
-                l10n.turnOnOffRemotely,
+                  // Features (compact)
+                  _buildFeatureRow(Icons.power_settings_new, l10n.turnOnOffRemotely, isCompact),
+                  SizedBox(height: isCompact ? 10 : 12),
+                  _buildFeatureRow(Icons.thermostat, 'Adjust temperature', isCompact),
+                  SizedBox(height: isCompact ? 10 : 12),
+                  _buildFeatureRow(Icons.schedule, 'Set schedules', isCompact),
+                ],
               ),
-              const SizedBox(height: 20),
-              _buildFeatureRow(
-                Icons.thermostat,
-                'Adjust temperature',
-              ),
-              const SizedBox(height: 20),
-              _buildFeatureRow(
-                Icons.schedule,
-                'Set schedules',
-              ),
-            ],
+            ),
           ),
         ),
       ),
@@ -288,7 +408,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   /// Page 3: Analytics & Monitoring
-  Widget _buildAnalyticsPage() {
+  Widget _buildAnalyticsPage(AppLocalizations l10n, bool isCompact) {
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
@@ -301,62 +421,81 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         ),
       ),
       child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(40.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Icon
-              Container(
-                width: 160,
-                height: 160,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF9C27B0).withValues(alpha:0.2),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.analytics,
-                  size: 100,
-                  color: Color(0xFF9C27B0),
-                ),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 500),
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: isCompact ? 24 : 40,
+                vertical: isCompact ? 20 : 40,
               ),
-              const SizedBox(height: 60),
-
-              // Title
-              const Text(
-                'Monitor Energy\nConsumption',
-                style: TextStyle(
-                  fontSize: 42,
-                  fontWeight: FontWeight.bold,
-                  color: HvacColors.textPrimary,
-                  height: 1.2,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 24),
-
-              // Subtitle
-              const Text(
-                'Track your energy usage and\nsave on electricity bills',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: HvacColors.textSecondary,
-                  height: 1.5,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 60),
-
-              // Statistics Cards
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _buildStatCard('24°C', 'Temperature', Icons.thermostat),
-                  _buildStatCard('65%', 'Humidity', Icons.water_drop),
-                  _buildStatCard('45', 'Air Quality', Icons.air),
+                  // Icon
+                  Container(
+                    width: isCompact ? 80 : 120,
+                    height: isCompact ? 80 : 120,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF9C27B0).withValues(alpha: 0.2),
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF9C27B0).withValues(alpha: 0.3),
+                          blurRadius: 40,
+                          spreadRadius: 10,
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      Icons.analytics,
+                      size: isCompact ? 50 : 70,
+                      color: const Color(0xFF9C27B0),
+                    ),
+                  ),
+                  SizedBox(height: isCompact ? 30 : 50),
+
+                  // Title
+                  Text(
+                    'Monitor & Analyze',
+                    style: TextStyle(
+                      fontSize: isCompact ? 28 : 36,
+                      fontWeight: FontWeight.bold,
+                      color: HvacColors.textPrimary,
+                      height: 1.2,
+                    ),
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: isCompact ? 12 : 20),
+
+                  // Subtitle
+                  Text(
+                    'Track energy usage and climate stats',
+                    style: TextStyle(
+                      fontSize: isCompact ? 14 : 16,
+                      color: HvacColors.textSecondary,
+                      height: 1.4,
+                    ),
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: isCompact ? 30 : 40),
+
+                  // Statistics Cards
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _buildStatCard('24°C', 'Temp', Icons.thermostat, isCompact),
+                      _buildStatCard('65%', 'Humidity', Icons.water_drop, isCompact),
+                      _buildStatCard('45', 'Quality', Icons.air, isCompact),
+                    ],
+                  ),
                 ],
               ),
-            ],
+            ),
           ),
         ),
       ),
@@ -364,144 +503,171 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   /// Page 4: Get Started
-  Widget _buildGetStartedPage(AppLocalizations l10n) {
+  Widget _buildGetStartedPage(AppLocalizations l10n, bool isCompact) {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            HvacColors.primaryOrange.withValues(alpha:0.1),
+            HvacColors.primaryOrange.withValues(alpha: 0.1),
             HvacColors.backgroundDark,
           ],
         ),
       ),
       child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(40.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Icon
-              Container(
-                width: 160,
-                height: 160,
-                decoration: BoxDecoration(
-                  color: HvacColors.success.withValues(alpha:0.2),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.check_circle,
-                  size: 100,
-                  color: HvacColors.success,
-                ),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 500),
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: isCompact ? 24 : 40,
+                vertical: isCompact ? 20 : 40,
               ),
-              const SizedBox(height: 60),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Icon
+                  Container(
+                    width: isCompact ? 80 : 120,
+                    height: isCompact ? 80 : 120,
+                    decoration: BoxDecoration(
+                      color: HvacColors.success.withValues(alpha: 0.2),
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: HvacColors.success.withValues(alpha: 0.3),
+                          blurRadius: 40,
+                          spreadRadius: 10,
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      Icons.check_circle,
+                      size: isCompact ? 50 : 70,
+                      color: HvacColors.success,
+                    ),
+                  ),
+                  SizedBox(height: isCompact ? 30 : 50),
 
-              // Title
-              Text(
-                l10n.readyToGetStarted,
-                style: const TextStyle(
-                  fontSize: 42,
-                  fontWeight: FontWeight.bold,
-                  color: HvacColors.textPrimary,
-                  height: 1.2,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 24),
+                  // Title
+                  Text(
+                    l10n.readyToGetStarted,
+                    style: TextStyle(
+                      fontSize: isCompact ? 28 : 36,
+                      fontWeight: FontWeight.bold,
+                      color: HvacColors.textPrimary,
+                      height: 1.2,
+                    ),
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: isCompact ? 12 : 20),
 
-              // Subtitle
-              Text(
-                l10n.startControllingClimate,
-                style: const TextStyle(
-                  fontSize: 18,
-                  color: HvacColors.textSecondary,
-                  height: 1.5,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 80),
+                  // Subtitle
+                  Text(
+                    l10n.startControllingClimate,
+                    style: TextStyle(
+                      fontSize: isCompact ? 14 : 16,
+                      color: HvacColors.textSecondary,
+                      height: 1.4,
+                    ),
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: isCompact ? 40 : 60),
 
-              // Get Started Button
-              HvacNeumorphicButton(
-                onPressed: _completeOnboarding,
-                width: double.infinity,
-                height: 60,
-                borderRadius: 30,
-                color: HvacColors.primaryOrange,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      l10n.getStarted,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: HvacColors.textPrimary,
+                  // Get Started Button
+                  MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: HvacInteractiveScale(
+                      scaleDown: 0.98,
+                      child: HvacNeumorphicButton(
+                        onPressed: _completeOnboarding,
+                        width: double.infinity,
+                        height: isCompact ? 52 : 56,
+                        borderRadius: 30,
+                        color: HvacColors.primaryOrange,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              l10n.getStarted,
+                              style: TextStyle(
+                                fontSize: isCompact ? 15 : 17,
+                                fontWeight: FontWeight.bold,
+                                color: HvacColors.textPrimary,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Icon(
+                              Icons.arrow_forward,
+                              color: HvacColors.textPrimary,
+                              size: isCompact ? 18 : 22,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    const SizedBox(width: 12),
-                    const Icon(
-                      Icons.arrow_forward,
-                      color: HvacColors.textPrimary,
-                      size: 24,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 40),
+                  ),
+                  SizedBox(height: isCompact ? 20 : 30),
 
-              // Terms & Privacy
-              Text(
-                l10n.termsPrivacyAgreement,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: HvacColors.textSecondary.withValues(alpha:0.6),
-                  height: 1.5,
-                ),
-                textAlign: TextAlign.center,
+                  // Terms & Privacy
+                  Text(
+                    l10n.termsPrivacyAgreement,
+                    style: TextStyle(
+                      fontSize: isCompact ? 10 : 11,
+                      color: HvacColors.textSecondary.withValues(alpha: 0.6),
+                      height: 1.5,
+                    ),
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  /// Feature row widget
-  Widget _buildFeatureRow(IconData icon, String text) {
+  /// Feature row widget (compact)
+  Widget _buildFeatureRow(IconData icon, String text, bool isCompact) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(isCompact ? 12 : 16),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha:0.05),
+        color: Colors.white.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: Colors.white.withValues(alpha:0.1),
+          color: Colors.white.withValues(alpha: 0.1),
           width: 1,
         ),
       ),
       child: Row(
         children: [
           Container(
-            width: 48,
-            height: 48,
+            width: isCompact ? 40 : 48,
+            height: isCompact ? 40 : 48,
             decoration: BoxDecoration(
-              color: HvacColors.primaryOrange.withValues(alpha:0.2),
+              color: HvacColors.primaryOrange.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
               icon,
               color: HvacColors.primaryOrange,
-              size: 28,
+              size: isCompact ? 20 : 24,
             ),
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: isCompact ? 12 : 16),
           Expanded(
             child: Text(
               text,
-              style: const TextStyle(
-                fontSize: 16,
+              style: TextStyle(
+                fontSize: isCompact ? 14 : 16,
                 color: HvacColors.textPrimary,
                 fontWeight: FontWeight.w500,
               ),
@@ -512,16 +678,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
-  /// Statistic card widget
-  Widget _buildStatCard(String value, String label, IconData icon) {
+  /// Statistic card widget (compact)
+  Widget _buildStatCard(String value, String label, IconData icon, bool isCompact) {
     return Container(
-      width: 100,
-      padding: const EdgeInsets.all(16),
+      width: isCompact ? 90 : 100,
+      padding: EdgeInsets.all(isCompact ? 12 : 16),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha:0.05),
+        color: Colors.white.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: Colors.white.withValues(alpha:0.1),
+          color: Colors.white.withValues(alpha: 0.1),
           width: 1,
         ),
       ),
@@ -530,13 +696,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           Icon(
             icon,
             color: const Color(0xFF9C27B0),
-            size: 32,
+            size: isCompact ? 24 : 32,
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: isCompact ? 8 : 12),
           Text(
             value,
-            style: const TextStyle(
-              fontSize: 24,
+            style: TextStyle(
+              fontSize: isCompact ? 18 : 24,
               fontWeight: FontWeight.bold,
               color: HvacColors.textPrimary,
             ),
@@ -544,13 +710,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           const SizedBox(height: 4),
           Text(
             label,
-            style: const TextStyle(
-              fontSize: 11,
+            style: TextStyle(
+              fontSize: isCompact ? 10 : 11,
               color: HvacColors.textSecondary,
             ),
             textAlign: TextAlign.center,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),

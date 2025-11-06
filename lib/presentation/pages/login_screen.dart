@@ -8,6 +8,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../generated/l10n/app_localizations.dart';
 import '../../core/utils/responsive_text.dart';
@@ -71,19 +72,28 @@ class _LoginScreenState extends State<LoginScreen>
     // Simulate login - dispatch login event to AuthBloc
     Future.delayed(const Duration(seconds: 1), () {
       if (mounted) {
-        context.read<AuthBloc>().add(
-              LoginEvent(
-                email: _emailController.text,
-                password: _passwordController.text,
-              ),
-            );
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            context.read<AuthBloc>().add(
+                  LoginEvent(
+                    email: _emailController.text,
+                    password: _passwordController.text,
+                  ),
+                );
+          }
+        });
       }
     });
   }
 
   void _handleSkip() {
     // Skip login - dispatch skip event to AuthBloc
-    context.read<AuthBloc>().add(const SkipAuthEvent());
+    // Use addPostFrameCallback to avoid navigation during build
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<AuthBloc>().add(const SkipAuthEvent());
+      }
+    });
   }
 
   @override
@@ -297,14 +307,16 @@ class _LoginScreenState extends State<LoginScreen>
   }
 
   Widget _buildLoginButton(AppLocalizations l10n) {
-    return HvacInteractiveScale(
-      scaleDown: 0.97,
-      child: HvacNeumorphicButton(
-        width: double.infinity,
-        height: 56,
-        borderRadius: 16,
-        color: HvacColors.primaryOrange,
-        onPressed: _isLoading ? null : _handleLogin,
+    return MouseRegion(
+      cursor: _isLoading ? SystemMouseCursors.basic : SystemMouseCursors.click,
+      child: HvacInteractiveScale(
+        scaleDown: 0.97,
+        child: HvacNeumorphicButton(
+          width: double.infinity,
+          height: 56,
+          borderRadius: 16,
+          color: HvacColors.primaryOrange,
+          onPressed: _isLoading ? null : _handleLogin,
         child: _isLoading
             ? const SizedBox(
                 width: 24,
@@ -336,49 +348,46 @@ class _LoginScreenState extends State<LoginScreen>
                   ),
                 ],
               ),
+        ),
       ),
     );
   }
 
   Widget _buildRegisterButton(AppLocalizations l10n) {
-    return HvacInteractiveScale(
-      scaleDown: 0.97,
-      child: HvacNeumorphicButton(
-        width: double.infinity,
-        height: 56,
-        borderRadius: 16,
-        onPressed: _isLoading
-            ? null
-            : () {
-                HapticFeedback.lightImpact();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(l10n.registrationComingSoon),
-                    backgroundColor: HvacColors.info,
-                    duration: const Duration(seconds: 2),
-                    behavior: SnackBarBehavior.floating,
-                  ),
-                );
-              },
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-              Icons.person_add_outlined,
-              color: HvacColors.primaryOrange,
-              size: ResponsiveText.iconSmall,
-            ),
-            const SizedBox(width: 6),
-            Text(
-              l10n.register,
-              style: const TextStyle(
+    return MouseRegion(
+      cursor: _isLoading ? SystemMouseCursors.basic : SystemMouseCursors.click,
+      child: HvacInteractiveScale(
+        scaleDown: 0.97,
+        child: HvacNeumorphicButton(
+          width: double.infinity,
+          height: 56,
+          borderRadius: 16,
+          onPressed: _isLoading
+              ? null
+              : () {
+                  HapticFeedback.lightImpact();
+                  context.go('/onboarding');
+                },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.person_add_outlined,
                 color: HvacColors.primaryOrange,
-                fontWeight: FontWeight.w600,
-                fontSize: ResponsiveText.labelMedium,
-                letterSpacing: 0.3,
+                size: ResponsiveText.iconSmall,
               ),
-            ),
-          ],
+              const SizedBox(width: 6),
+              Text(
+                l10n.register,
+                style: const TextStyle(
+                  color: HvacColors.primaryOrange,
+                  fontWeight: FontWeight.w600,
+                  fontSize: ResponsiveText.labelMedium,
+                  letterSpacing: 0.3,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -386,32 +395,35 @@ class _LoginScreenState extends State<LoginScreen>
 
   Widget _buildSkipButton() {
     final l10n = AppLocalizations.of(context)!;
-    return HvacInteractiveScale(
-      scaleDown: 0.95,
-      child: TextButton(
-        onPressed: _isLoading ? null : _handleSkip,
-        style: TextButton.styleFrom(
-          padding: const EdgeInsets.symmetric(
-            horizontal: HvacSpacing.lg,
-            vertical: HvacSpacing.sm,
+    return MouseRegion(
+      cursor: _isLoading ? SystemMouseCursors.basic : SystemMouseCursors.click,
+      child: HvacInteractiveScale(
+        scaleDown: 0.95,
+        child: TextButton(
+          onPressed: _isLoading ? null : _handleSkip,
+          style: TextButton.styleFrom(
+            padding: const EdgeInsets.symmetric(
+              horizontal: HvacSpacing.lg,
+              vertical: HvacSpacing.sm,
+            ),
           ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              l10n.skipForNow,
-              style: HvacTypography.bodyMedium.copyWith(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                l10n.skipForNow,
+                style: HvacTypography.bodyMedium.copyWith(
+                  color: HvacColors.textSecondary,
+                ),
+              ),
+              const SizedBox(width: HvacSpacing.xs),
+              const Icon(
+                Icons.arrow_forward_ios_rounded,
+                size: 14,
                 color: HvacColors.textSecondary,
               ),
-            ),
-            const SizedBox(width: HvacSpacing.xs),
-            const Icon(
-              Icons.arrow_forward_ios_rounded,
-              size: 14,
-              color: HvacColors.textSecondary,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -7,18 +7,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import 'generated/l10n/app_localizations.dart';
 import 'core/di/injection_container.dart' as di;
 import 'core/services/theme_service.dart';
 import 'core/services/language_service.dart';
+import 'core/navigation/app_router.dart';
 import 'presentation/bloc/hvac_list/hvac_list_bloc.dart';
 import 'presentation/bloc/hvac_list/hvac_list_event.dart';
 import 'presentation/bloc/auth/auth_bloc.dart';
-import 'presentation/pages/responsive_shell.dart';
-import 'presentation/pages/login_screen.dart';
-import 'presentation/widgets/common/login_skeleton.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,14 +43,21 @@ class HvacControlApp extends StatefulWidget {
 }
 
 class _HvacControlAppState extends State<HvacControlApp> {
+  late final GoRouter _router;
+  late final AuthBloc _authBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _authBloc = di.sl<AuthBloc>()..add(const CheckAuthStatusEvent());
+    _router = createRouter(_authBloc);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) => di.sl<AuthBloc>()
-            ..add(const CheckAuthStatusEvent()),
-        ),
+        BlocProvider.value(value: _authBloc),
         BlocProvider(
           create: (context) => di.sl<HvacListBloc>()
             ..add(const LoadHvacUnitsEvent()),
@@ -65,7 +71,8 @@ class _HvacControlAppState extends State<HvacControlApp> {
         builder: (context, child) {
           final languageService = di.sl<LanguageService>();
 
-          return MaterialApp(
+          return MaterialApp.router(
+            routerConfig: _router,
             title: 'BREEZ Home',
             debugShowCheckedModeBanner: false,
 
@@ -110,31 +117,15 @@ class _HvacControlAppState extends State<HvacControlApp> {
                 ),
               ),
             ),
-
-            home: BlocListener<AuthBloc, AuthState>(
-              listener: (context, state) {
-                // Handle auth state changes globally if needed
-              },
-              child: BlocBuilder<AuthBloc, AuthState>(
-                buildWhen: (previous, current) {
-                  // Only rebuild when auth state actually changes type
-                  return previous.runtimeType != current.runtimeType;
-                },
-                builder: (context, state) {
-                  if (state is AuthAuthenticated) {
-                    return const ResponsiveShell();
-                  } else if (state is AuthUnauthenticated || state is AuthError) {
-                    return const LoginScreen();
-                  } else {
-                    // Loading or initial state - show login skeleton
-                    return const LoginSkeleton();
-                  }
-                },
-              ),
-            ),
           );
         },
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _authBloc.close();
+    super.dispose();
   }
 }

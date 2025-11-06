@@ -10,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../generated/l10n/app_localizations.dart';
 import '../../core/di/injection_container.dart';
+import '../../core/navigation/app_router.dart';
 import '../../domain/entities/hvac_unit.dart';
 import '../../domain/entities/ventilation_mode.dart';
 import '../../domain/entities/mode_preset.dart';
@@ -29,9 +30,6 @@ import '../widgets/home/home_states.dart';
 import '../widgets/home/home_dashboard_layout.dart';
 import '../widgets/home/home_control_cards.dart';
 import '../mixins/snackbar_mixin.dart';
-import 'schedule_screen.dart';
-import 'unit_detail_screen.dart';
-import 'settings_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -195,25 +193,16 @@ class _HomeScreenState extends State<HomeScreen> with SnackbarMixin {
   // Navigation
   void _navigateToSettings() {
     HapticFeedback.lightImpact();
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => const SettingsScreen()),
-    );
+    context.goToSettings();
   }
 
   void _navigateToDetails(HvacUnit unit) {
     HapticFeedback.lightImpact();
-    Navigator.push(
-      context,
-      HvacHeroPageRoute(builder: (_) => UnitDetailScreen(unit: unit)),
-    );
+    context.goToUnitDetail(unit.id);
   }
 
   void _navigateToSchedule(HvacUnit unit) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => ScheduleScreen(unit: unit)),
-    );
+    context.goToSchedule(unit.id);
   }
 
   // API Operations

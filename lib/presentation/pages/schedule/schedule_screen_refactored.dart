@@ -2,12 +2,15 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../core/di/injection_container.dart';
 import '../../../domain/entities/hvac_unit.dart';
 import '../../../domain/entities/week_schedule.dart';
 import '../../../domain/entities/day_schedule.dart';
 import '../../../domain/usecases/update_schedule.dart';
+import '../../bloc/hvac_list/hvac_list_bloc.dart';
+import '../../bloc/hvac_list/hvac_list_state.dart';
 import '../../widgets/schedule/schedule_app_bar.dart';
 import '../../widgets/schedule/day_schedule_card.dart';
 import '../../widgets/schedule/quick_actions_panel.dart';
@@ -16,11 +19,11 @@ import 'schedule_logic.dart';
 
 /// Main schedule screen - refactored to under 200 lines
 class ScheduleScreen extends StatefulWidget {
-  final HvacUnit unit;
+  final String unitId;
 
   const ScheduleScreen({
     super.key,
-    required this.unit,
+    required this.unitId,
   });
 
   @override
@@ -32,11 +35,12 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   bool _hasChanges = false;
   bool _isSaving = false;
   bool _isLoading = false;
+  HvacUnit? _currentUnit;
 
   @override
   void initState() {
     super.initState();
-    _schedule = widget.unit.schedule ?? WeekSchedule.defaultSchedule;
+    _schedule = WeekSchedule.defaultSchedule;
     _loadSchedule();
   }
 
@@ -47,12 +51,12 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     setState(() => _isLoading = false);
   }
 
-  Future<void> _refreshSchedule() async {
+  Future<void> _refreshSchedule(HvacUnit unit) async {
     // Reload schedule from server
     await Future.delayed(const Duration(seconds: 1));
     if (mounted) {
       setState(() {
-        _schedule = widget.unit.schedule ?? WeekSchedule.defaultSchedule;
+        _schedule = unit.schedule ?? WeekSchedule.defaultSchedule;
         _hasChanges = false;
       });
     }
@@ -60,13 +64,38 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
   @override
   Widget build(BuildContext context) {
+    return BlocBuilder<HvacListBloc, HvacListState>(
+      builder: (context, state) {
+        if (state is HvacListLoaded) {
+          final unit = state.units.firstWhere(
+            (u) => u.id == widget.unitId,
+            orElse: () => state.units.first,
+          );
+
+          // Initialize schedule from unit if not set
+          if (_currentUnit?.id != unit.id) {
+            _currentUnit = unit;
+            _schedule = unit.schedule ?? WeekSchedule.defaultSchedule;
+          }
+
+          return _buildContent(unit);
+        }
+
+        return const Scaffold(
+          body: Center(child: CircularProgressIndicator()),
+        );
+      },
+    );
+  }
+
+  Widget _buildContent(HvacUnit unit) {
     return Scaffold(
       backgroundColor: HvacColors.backgroundDark,
       appBar: ScheduleAppBar(
-        unit: widget.unit,
+        unit: unit,
         hasChanges: _hasChanges,
         isSaving: _isSaving,
-        onSave: _saveSchedule,
+        onSave: () => _saveSchedule(unit),
         onBack: _onBackPressed,
       ),
       body: _buildBody(),
@@ -74,6 +103,10 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   }
 
   Widget _buildBody() {
+    if (_currentUnit == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final isDesktop = constraints.maxWidth > 1024;
@@ -83,15 +116,15 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
         return Padding(
           padding: padding,
-          child: isDesktop ? _buildDesktopLayout() : _buildMobileLayout(),
+          child: isDesktop ? _buildDesktopLayout(_currentUnit!) : _buildMobileLayout(_currentUnit!),
         );
       },
     );
   }
 
-  Widget _buildMobileLayout() {
+  Widget _buildMobileLayout(HvacUnit unit) {
     return HvacRefreshIndicator(
-      onRefresh: _refreshSchedule,
+      onRefresh: () => _refreshSchedule(unit),
       child: HvacSkeletonLoader(
         isLoading: _isLoading,
         child: ListView(
@@ -109,9 +142,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     );
   }
 
-  Widget _buildDesktopLayout() {
+  Widget _buildDesktopLayout(HvacUnit unit) {
     return HvacRefreshIndicator(
-      onRefresh: _refreshSchedule,
+      onRefresh: () => _refreshSchedule(unit),
       child: HvacSkeletonLoader(
         isLoading: _isLoading,
         child: Center(
@@ -184,12 +217,12 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     });
   }
 
-  Future<void> _saveSchedule() async {
+  Future<void> _saveSchedule(HvacUnit unit) async {
     setState(() => _isSaving = true);
 
     try {
       final updateSchedule = sl<UpdateSchedule>();
-      await updateSchedule(widget.unit.id, _schedule);
+      await updateSchedule(unit.id, _schedule);
 
       setState(() {
         _hasChanges = false;
