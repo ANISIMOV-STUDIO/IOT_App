@@ -42,6 +42,9 @@ export 'src/theme/glassmorphism.dart';
 // Buttons
 export 'src/widgets/buttons/buttons.dart';
 
+// Inputs
+export 'src/widgets/inputs/inputs.dart';
+
 // States (Empty, Error, Loading)
 export 'src/widgets/states/states.dart';
 

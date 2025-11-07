@@ -10,7 +10,6 @@ import '../../generated/l10n/app_localizations.dart';
 import '../bloc/hvac_list/hvac_list_bloc.dart';
 import '../bloc/hvac_list/hvac_list_event.dart';
 import '../widgets/device_card.dart';
-import '../widgets/orange_button.dart';
 
 class DeviceSearchScreen extends StatefulWidget {
   const DeviceSearchScreen({super.key});
@@ -124,9 +123,9 @@ class _DeviceSearchScreenState extends State<DeviceSearchScreen> {
           // Add Device Button
           Padding(
             padding: const EdgeInsets.all(HvacSpacing.xlR),
-            child: OrangeButton(
-              text: l10n.addDevice,
-              width: double.infinity,
+            child: HvacPrimaryButton(
+              label: l10n.addDevice,
+              isExpanded: true,
               onPressed: _selectedDevices.isEmpty
                   ? null
                   : () => _addSelectedDevices(context),

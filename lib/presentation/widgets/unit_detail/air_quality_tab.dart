@@ -8,7 +8,6 @@ import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../domain/entities/hvac_unit.dart';
 import '../air_quality_indicator.dart';
 import '../airflow_animation.dart';
-import '../animated_stat_card.dart';
 
 class AirQualityTab extends StatelessWidget {
   final HvacUnit unit;
@@ -64,22 +63,22 @@ class AirQualityTab extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: AnimatedStatCard(
-                  label: 'Температура',
+                child: HvacStatCard(
+                  title: 'Температура',
                   value: '${unit.supplyAirTemp?.toInt() ?? 0}°C',
                   icon: Icons.thermostat,
-                  color: HvacColors.primaryOrange,
-                  trend: '+0.5°C',
+                  iconColor: HvacColors.primaryOrange,
+                  subtitle: '+0.5°C',
                 ),
               ),
               const SizedBox(width: 16.0),
               Expanded(
-                child: AnimatedStatCard(
-                  label: 'Влажность',
+                child: HvacStatCard(
+                  title: 'Влажность',
                   value: '${unit.humidity.toInt()}%',
                   icon: Icons.water_drop,
-                  color: HvacColors.info,
-                  trend: '-2%',
+                  iconColor: HvacColors.info,
+                  subtitle: '-2%',
                 ),
               ),
             ],
@@ -90,20 +89,20 @@ class AirQualityTab extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: AnimatedStatCard(
-                  label: 'Приточный',
+                child: HvacStatCard(
+                  title: 'Приточный',
                   value: '${unit.supplyFanSpeed ?? 0}%',
                   icon: Icons.air,
-                  color: HvacColors.success,
+                  iconColor: HvacColors.success,
                 ),
               ),
               const SizedBox(width: 16.0),
               Expanded(
-                child: AnimatedStatCard(
-                  label: 'Вытяжной',
+                child: HvacStatCard(
+                  title: 'Вытяжной',
                   value: '${unit.exhaustFanSpeed ?? 0}%',
                   icon: Icons.air,
-                  color: HvacColors.warning,
+                  iconColor: HvacColors.warning,
                 ),
               ),
             ],

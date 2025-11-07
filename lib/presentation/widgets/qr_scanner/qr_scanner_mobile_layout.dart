@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../core/theme/spacing.dart';
 import '../../../generated/l10n/app_localizations.dart';
-import '../../widgets/gradient_button.dart';
 import 'device_form_widget.dart';
 import 'qr_scanner_camera.dart';
 import 'qr_scanner_controller.dart';
@@ -143,11 +142,10 @@ class _ToggleSection extends StatelessWidget {
             style: HvacTypography.bodyLarge,
           ),
           const SizedBox(height: AppSpacing.md),
-          GradientButton(
+          HvacPrimaryButton(
+            label: controller.isManualMode ? l10n.scanQrCode : 'Enter Manually',
+            isExpanded: true,
             onPressed: () => controller.toggleMode(),
-            text:
-                controller.isManualMode ? l10n.scanQrCode : 'Enter Manually',
-            width: double.infinity,
           ),
         ],
       ),

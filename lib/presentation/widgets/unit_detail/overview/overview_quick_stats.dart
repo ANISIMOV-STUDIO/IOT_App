@@ -6,7 +6,6 @@ library;
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../../domain/entities/hvac_unit.dart';
-import '../unit_stat_card.dart';
 
 class OverviewQuickStats extends StatelessWidget {
   final HvacUnit unit;
@@ -24,20 +23,20 @@ class OverviewQuickStats extends StatelessWidget {
         const Row(
           children: [
             Expanded(
-              child: UnitStatCard(
-                label: 'Время работы',
+              child: HvacStatCard(
+                title: 'Время работы',
                 value: '2ч 15м',
                 icon: Icons.access_time,
-                color: HvacColors.info,
+                iconColor: HvacColors.info,
               ),
             ),
             SizedBox(width: 16.0),
             Expanded(
-              child: UnitStatCard(
-                label: 'Энергия',
+              child: HvacStatCard(
+                title: 'Энергия',
                 value: '350 Вт',
                 icon: Icons.bolt,
-                color: HvacColors.warning,
+                iconColor: HvacColors.warning,
               ),
             ),
           ],
@@ -48,20 +47,20 @@ class OverviewQuickStats extends StatelessWidget {
         Row(
           children: [
             Expanded(
-              child: UnitStatCard(
-                label: 'Температура притока',
+              child: HvacStatCard(
+                title: 'Температура притока',
                 value: '${unit.supplyAirTemp?.toInt() ?? 0}°C',
                 icon: Icons.thermostat,
-                color: HvacColors.success,
+                iconColor: HvacColors.success,
               ),
             ),
             const SizedBox(width: 16.0),
             Expanded(
-              child: UnitStatCard(
-                label: 'Влажность',
+              child: HvacStatCard(
+                title: 'Влажность',
                 value: '${unit.humidity.toInt()}%',
                 icon: Icons.water_drop,
-                color: HvacColors.info,
+                iconColor: HvacColors.info,
               ),
             ),
           ],

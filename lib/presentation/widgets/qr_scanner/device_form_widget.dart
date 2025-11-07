@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../core/theme/spacing.dart';
 import '../../../generated/l10n/app_localizations.dart';
-import '../orange_button.dart';
 import 'qr_scanner_responsive.dart';
 
 class DeviceFormWidget extends StatefulWidget {
@@ -165,11 +164,11 @@ class _DeviceFormWidgetState extends State<DeviceFormWidget> {
 
           // Submit Button
           if (widget.isWebMode) ...[
-            OrangeButton(
-              text: _isSubmitting ? 'Adding...' : l10n.addDevice,
+            HvacPrimaryButton(
+              label: _isSubmitting ? 'Adding...' : l10n.addDevice,
               icon: _isSubmitting ? null : Icons.add,
-              width: double.infinity,
-              height: responsive.buttonHeight,
+              isExpanded: true,
+              isLoading: _isSubmitting,
               onPressed: _isSubmitting ? null : _handleSubmit,
             ),
           ] else ...[

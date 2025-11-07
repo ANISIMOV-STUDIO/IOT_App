@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../domain/entities/hvac_unit.dart';
 import '../../domain/entities/temperature_reading.dart';
-import '../widgets/common/empty_state.dart';
 import '../widgets/analytics/analytics_app_bar.dart';
 import '../widgets/analytics/analytics_content.dart';
 import '../providers/analytics_data_provider.dart';
