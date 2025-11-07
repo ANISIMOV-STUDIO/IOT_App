@@ -9,6 +9,9 @@ import 'colors.dart';
 import 'typography.dart';
 import 'spacing.dart';
 import 'radius.dart';
+import 'theme_decorations.dart';
+
+export 'theme_decorations.dart';
 
 /// Main theme class for HVAC UI Kit
 ///
@@ -16,7 +19,8 @@ import 'radius.dart';
 /// - Dark mode optimized color scheme
 /// - Responsive typography
 /// - Custom component themes
-/// - Helper methods for common decorations
+///
+/// For decoration helpers, see [HvacDecorations]
 class HvacTheme {
   HvacTheme._(); // Private constructor
 
@@ -350,135 +354,33 @@ class HvacTheme {
     );
   }
 
-  // ============================================================================
-  // HELPER METHODS - Decorations
-  // ============================================================================
+  // Legacy decoration methods maintained for backward compatibility
+  // For new code, use HvacDecorations class directly
 
-  /// Device Card Decoration - Luxury style with selection state
-  static BoxDecoration deviceCard({bool isSelected = false}) {
-    return BoxDecoration(
-      color: HvacColors.backgroundCard,
-      borderRadius: BorderRadius.circular(HvacRadius.lg),
-      border: Border.all(
-        color: isSelected ? HvacColors.accent : HvacColors.backgroundCardBorder,
-        width: isSelected ? 2 : 1,
-      ),
-      // Subtle glow when selected
-      boxShadow: isSelected
-          ? [
-              const BoxShadow(
-                color: HvacColors.accentSubtle,
-                blurRadius: 12,
-                spreadRadius: 2,
-              ),
-            ]
-          : null,
-    );
-  }
+  /// @deprecated Use HvacDecorations.deviceCard() instead
+  static BoxDecoration deviceCard({bool isSelected = false}) =>
+      HvacDecorations.deviceCard(isSelected: isSelected);
 
-  /// Rounded Card Decoration - Sophisticated
-  static BoxDecoration roundedCard({
-    Color? color,
-    bool hasBorder = true,
-  }) {
-    return BoxDecoration(
-      color: color ?? HvacColors.backgroundCard,
-      borderRadius: BorderRadius.circular(HvacRadius.lg),
-      border: hasBorder
-          ? Border.all(
-              color: HvacColors.backgroundCardBorder,
-              width: 1,
-            )
-          : null,
-      // Subtle shadow for depth
-      boxShadow: [
-        BoxShadow(
-          color: Colors.black.withValues(alpha: 0.2),
-          blurRadius: 8,
-          offset: const Offset(0, 2),
-        ),
-      ],
-    );
-  }
+  /// @deprecated Use HvacDecorations.roundedCard() instead
+  static BoxDecoration roundedCard({Color? color, bool hasBorder = true}) =>
+      HvacDecorations.roundedCard(color: color, hasBorder: hasBorder);
 
-  /// Card Shadow - Standard elevation
-  static List<BoxShadow> cardShadow() {
-    return [
-      BoxShadow(
-        color: Colors.black.withValues(alpha: 0.1),
-        blurRadius: 8,
-        offset: const Offset(0, 2),
-      ),
-    ];
-  }
+  /// @deprecated Use HvacDecorations.cardShadow() instead
+  static List<BoxShadow> cardShadow() => HvacDecorations.cardShadow();
 
-  /// Accent Button Decoration - Luxury Gold with gradient
-  static BoxDecoration accentButton() {
-    return BoxDecoration(
-      gradient: HvacColors.primaryGradient,
-      borderRadius: BorderRadius.circular(HvacRadius.md),
-      boxShadow: const [
-        BoxShadow(
-          color: HvacColors.accentSubtle,
-          blurRadius: 8,
-          offset: Offset(0, 4),
-        ),
-      ],
-    );
-  }
+  /// @deprecated Use HvacDecorations.accentButton() instead
+  static BoxDecoration accentButton() => HvacDecorations.accentButton();
 
-  /// Glassmorphism Card - Frosted glass effect
-  static BoxDecoration glassCard() {
-    return BoxDecoration(
-      gradient: HvacColors.glassGradient,
-      borderRadius: BorderRadius.circular(HvacRadius.lg),
-      border: Border.all(
-        color: HvacColors.glassBorder,
-        width: 1,
-      ),
-    );
-  }
+  /// @deprecated Use HvacDecorations.glassCard() instead
+  static BoxDecoration glassCard() => HvacDecorations.glassCard();
 
-  /// Device Image Placeholder
-  static BoxDecoration deviceImagePlaceholder() {
-    return BoxDecoration(
-      color: HvacColors.backgroundCard,
-      borderRadius: BorderRadius.circular(HvacRadius.md),
-      border: Border.all(
-        color: HvacColors.backgroundCardBorder,
-        width: 1,
-      ),
-    );
-  }
+  /// @deprecated Use HvacDecorations.deviceImagePlaceholder() instead
+  static BoxDecoration deviceImagePlaceholder() =>
+      HvacDecorations.deviceImagePlaceholder();
 
-  /// Subtle Background Gradient
-  static BoxDecoration subtleGradient() {
-    return BoxDecoration(
-      gradient: HvacColors.subtleGradient,
-      borderRadius: BorderRadius.circular(HvacRadius.lg),
-    );
-  }
+  /// @deprecated Use HvacDecorations.subtleGradient() instead
+  static BoxDecoration subtleGradient() => HvacDecorations.subtleGradient();
 
-  /// Orange Button Decoration - For legacy compatibility
-  /// Creates an orange gradient button decoration
-  static BoxDecoration orangeButton() {
-    return BoxDecoration(
-      gradient: const LinearGradient(
-        colors: [
-          HvacColors.primaryOrange,
-          HvacColors.primaryOrangeDark,
-        ],
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-      ),
-      borderRadius: BorderRadius.circular(HvacRadius.md),
-      boxShadow: [
-        BoxShadow(
-          color: HvacColors.primaryOrange.withValues(alpha: 0.3),
-          blurRadius: 8,
-          offset: const Offset(0, 4),
-        ),
-      ],
-    );
-  }
+  /// @deprecated Use HvacDecorations.orangeButton() instead
+  static BoxDecoration orangeButton() => HvacDecorations.orangeButton();
 }
