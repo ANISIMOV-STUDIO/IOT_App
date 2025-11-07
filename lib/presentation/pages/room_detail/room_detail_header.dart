@@ -30,11 +30,9 @@ class RoomDetailHeader extends StatelessWidget {
       flexibleSpace: FlexibleSpaceBar(
         title: Text(
           unit.location ?? unit.name,
-          style: const TextStyle(
-            fontSize: 20.0,
-            fontWeight: FontWeight.w600,
+          style: HvacTypography.titleLarge.copyWith(
             shadows: [
-              Shadow(
+              const Shadow(
                 color: Colors.black54,
                 blurRadius: 8,
               ),

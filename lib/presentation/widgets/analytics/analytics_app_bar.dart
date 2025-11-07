@@ -6,6 +6,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+
 class AnalyticsAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String unitName;
   final String selectedPeriod;
@@ -39,21 +40,13 @@ class AnalyticsAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Аналитика',
-            style: TextStyle(
-              fontSize: 18.0,
-              fontWeight: FontWeight.w600,
-              color: HvacColors.textPrimary,
-            ),
+            style: HvacTypography.titleMedium,
           ),
           Text(
             unitName,
-            style: const TextStyle(
-              fontSize: 12.0,
-              color: HvacColors.textSecondary,
-              fontWeight: FontWeight.w400,
-            ),
+            style: HvacTypography.bodySmall,
           ),
         ],
       ),
@@ -68,10 +61,8 @@ class AnalyticsAppBar extends StatelessWidget implements PreferredSizeWidget {
         value: selectedPeriod,
         dropdownColor: HvacColors.backgroundCard,
         underline: const SizedBox(),
-        style: const TextStyle(
+        style: HvacTypography.labelMedium.copyWith(
           color: HvacColors.primaryOrange,
-          fontSize: 14.0,
-          fontWeight: FontWeight.w600,
         ),
         items: ['День', 'Неделя', 'Месяц'].map((period) {
           return DropdownMenuItem(

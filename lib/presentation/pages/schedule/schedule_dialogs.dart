@@ -82,29 +82,23 @@ class _UnsavedChangesDialogState extends State<_UnsavedChangesDialog> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(HvacRadius.md),
       ),
-      title: const Row(
+      title: Row(
         children: [
-          Icon(
+          const Icon(
             Icons.warning_amber_rounded,
             color: HvacColors.warning,
             size: 24.0,
           ),
-          SizedBox(width: HvacSpacing.sm),
+          const SizedBox(width: HvacSpacing.sm),
           Text(
             'Несохранённые изменения',
-            style: TextStyle(
-              color: HvacColors.textPrimary,
-              fontSize: 18.0,
-            ),
+            style: HvacTypography.titleMedium,
           ),
         ],
       ),
-      content: const Text(
+      content: Text(
         'У вас есть несохранённые изменения. Выйти без сохранения?',
-        style: TextStyle(
-          color: HvacColors.textSecondary,
-          fontSize: 14.0,
-        ),
+        style: HvacTypography.bodyMedium,
       ),
       actions: [
         MouseRegion(
@@ -120,11 +114,10 @@ class _UnsavedChangesDialogState extends State<_UnsavedChangesDialog> {
             ),
             child: Text(
               'Отмена',
-              style: TextStyle(
+              style: HvacTypography.labelMedium.copyWith(
                 color: _cancelHovered
                     ? HvacColors.primaryOrange
                     : HvacColors.textSecondary,
-                fontSize: 14.0,
               ),
             ),
           ),
@@ -142,11 +135,10 @@ class _UnsavedChangesDialogState extends State<_UnsavedChangesDialog> {
             ),
             child: Text(
               'Выйти',
-              style: TextStyle(
+              style: HvacTypography.labelMedium.copyWith(
                 color: _discardHovered
                     ? HvacColors.error.withValues(alpha: 0.8)
                     : HvacColors.error,
-                fontSize: 14.0,
               ),
             ),
           ),

@@ -150,10 +150,7 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
         labelColor: HvacColors.primaryOrange,
         unselectedLabelColor: HvacColors.textSecondary,
         isScrollable: true,
-        labelStyle: const TextStyle(
-          fontSize: 14.0,
-          fontWeight: FontWeight.w600,
-        ),
+        labelStyle: HvacTypography.labelMedium,
         tabs: const [
           Tab(text: 'Обзор'),
           Tab(text: 'Качество воздуха'),
@@ -188,6 +185,8 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
   }
 
   Widget _buildTitle(HvacUnit unit) {
+    final isTablet = ResponsiveUtils.isTablet(context);
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -196,7 +195,7 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
             HvacIconHero(
               tag: 'unit_icon_${unit.id}',
               icon: unit.power ? Icons.air : Icons.power_off,
-              size: ResponsiveUtils.isTablet(context) ? 24.0 : 20.0,
+              size: isTablet ? 24.0 : 20.0,
               color: unit.power ? HvacColors.success : HvacColors.error,
             ),
             const SizedBox(width: 8.0),
@@ -204,11 +203,9 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
               tag: 'unit_name_${unit.id}',
               child: Text(
                 unit.name,
-                style: TextStyle(
-                  fontSize: ResponsiveUtils.isTablet(context) ? 20.0 : 18.0,
-                  fontWeight: FontWeight.w600,
-                  color: HvacColors.textPrimary,
-                ),
+                style: isTablet
+                    ? HvacTypography.titleLarge
+                    : HvacTypography.titleMedium,
               ),
             ),
           ],
@@ -224,11 +221,9 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
             ],
             Text(
               unit.location ?? 'Неизвестно',
-              style: TextStyle(
-                fontSize: ResponsiveUtils.isTablet(context) ? 14.0 : 12.0,
-                color: HvacColors.textSecondary,
-                fontWeight: FontWeight.w400,
-              ),
+              style: isTablet
+                  ? HvacTypography.bodyMedium
+                  : HvacTypography.bodySmall,
             ),
           ],
         ),
