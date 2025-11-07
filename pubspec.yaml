@@ -13,9 +13,9 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  # UI Kit (Internal Package)
+  # UI Kit (Internal Package - Now in repository)
   hvac_ui_kit:
-    path: ../hvac_ui_kit
+    path: packages/hvac_ui_kit
 
   # State Management
   flutter_bloc: ^8.1.3
