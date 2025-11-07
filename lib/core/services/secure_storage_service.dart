@@ -57,7 +57,7 @@ class SecureStorageService {
       Logger.info('Auth token saved securely');
     } catch (e) {
       Logger.error('Failed to save auth token: $e');
-      throw SecurityException('Failed to save authentication token');
+      throw const SecurityException('Failed to save authentication token');
     }
   }
 
@@ -78,7 +78,7 @@ class SecureStorageService {
       Logger.info('Refresh token saved securely');
     } catch (e) {
       Logger.error('Failed to save refresh token: $e');
-      throw SecurityException('Failed to save refresh token');
+      throw const SecurityException('Failed to save refresh token');
     }
   }
 
@@ -113,7 +113,7 @@ class SecureStorageService {
       Logger.info('User credentials saved securely');
     } catch (e) {
       Logger.error('Failed to save user credentials: $e');
-      throw SecurityException('Failed to save user credentials');
+      throw const SecurityException('Failed to save user credentials');
     }
   }
 
@@ -152,7 +152,7 @@ class SecureStorageService {
       Logger.info('WiFi credentials saved securely');
     } catch (e) {
       Logger.error('Failed to save WiFi credentials: $e');
-      throw SecurityException('Failed to save WiFi credentials');
+      throw const SecurityException('Failed to save WiFi credentials');
     }
   }
 
@@ -185,7 +185,7 @@ class SecureStorageService {
       Logger.info('Device secrets saved securely');
     } catch (e) {
       Logger.error('Failed to save device secrets: $e');
-      throw SecurityException('Failed to save device secrets');
+      throw const SecurityException('Failed to save device secrets');
     }
   }
 
@@ -219,7 +219,7 @@ class SecureStorageService {
       Logger.info('API keys saved securely');
     } catch (e) {
       Logger.error('Failed to save API keys: $e');
-      throw SecurityException('Failed to save API keys');
+      throw const SecurityException('Failed to save API keys');
     }
   }
 
@@ -249,7 +249,7 @@ class SecureStorageService {
       Logger.info('Certificates saved securely');
     } catch (e) {
       Logger.error('Failed to save certificates: $e');
-      throw SecurityException('Failed to save certificates');
+      throw const SecurityException('Failed to save certificates');
     }
   }
 
@@ -275,7 +275,7 @@ class SecureStorageService {
       );
     } catch (e) {
       Logger.error('Failed to save session data: $e');
-      throw SecurityException('Failed to save session data');
+      throw const SecurityException('Failed to save session data');
     }
   }
 
@@ -324,7 +324,7 @@ class SecureStorageService {
       Logger.info('All secure storage cleared');
     } catch (e) {
       Logger.error('Failed to clear secure storage: $e');
-      throw SecurityException('Failed to clear secure storage');
+      throw const SecurityException('Failed to clear secure storage');
     }
   }
 
@@ -376,7 +376,19 @@ class SecureStorageService {
       return utf8.decode(decrypted);
     } catch (e) {
       Logger.error('Failed to decrypt data: $e');
-      throw SecurityException('Failed to decrypt sensitive data');
+      throw const SecurityException('Failed to decrypt sensitive data');
+    }
+  }
+
+  /// Clear authentication tokens
+  Future<void> clearTokens() async {
+    try {
+      await _storage.delete(key: _authTokenKey);
+      await _storage.delete(key: _refreshTokenKey);
+      Logger.info('Tokens cleared successfully');
+    } catch (e) {
+      Logger.error('Failed to clear tokens: $e');
+      throw const SecurityException('Failed to clear tokens');
     }
   }
 }
@@ -385,7 +397,7 @@ class SecureStorageService {
 class SecurityException implements Exception {
   final String message;
 
-  SecurityException(this.message);
+  const SecurityException(this.message);
 
   @override
   String toString() => 'SecurityException: $message';

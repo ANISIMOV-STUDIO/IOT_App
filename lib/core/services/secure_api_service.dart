@@ -8,7 +8,7 @@ import 'package:dio/dio.dart';
 
 import '../constants/security_constants.dart';
 import '../utils/logger.dart';
-import 'secure_storage_service.dart';
+import 'secure_storage_service.dart' hide SecurityException;
 import 'environment_config.dart';
 import 'api/token_manager.dart';
 import 'api/rate_limiter.dart';
@@ -88,7 +88,7 @@ class SecureApiService {
   /// Refresh authentication token
   Future<void> _refreshAuthToken() async {
     if (_tokenManager.refreshToken == null) {
-      throw SecurityException('No refresh token available');
+      throw const SecurityException('No refresh token available');
     }
 
     try {
@@ -105,7 +105,7 @@ class SecureApiService {
     } catch (e) {
       Logger.security('TOKEN_REFRESH',
           details: {'success': false, 'error': e.toString()});
-      throw SecurityException('Failed to refresh token');
+      throw const SecurityException('Failed to refresh token');
     }
   }
 
@@ -213,13 +213,13 @@ class SecureApiService {
       case DioExceptionType.connectionTimeout:
       case DioExceptionType.sendTimeout:
       case DioExceptionType.receiveTimeout:
-        return NetworkException('Connection timeout');
+        return const NetworkException('Connection timeout');
 
       case DioExceptionType.badCertificate:
         Logger.security('CERTIFICATE_VALIDATION_FAILURE', details: {
           'url': error.requestOptions.uri.toString(),
         });
-        return SecurityException('Certificate validation failed');
+        return const SecurityException('Certificate validation failed');
 
       case DioExceptionType.badResponse:
         final statusCode = error.response?.statusCode;
@@ -229,27 +229,27 @@ class SecureApiService {
           Logger.security('UNAUTHORIZED_ACCESS', details: {
             'path': error.requestOptions.path,
           });
-          return AuthException('Unauthorized access');
+          return const AuthException('Unauthorized access');
         }
 
         if (statusCode == 403) {
-          return AuthException('Forbidden');
+          return const AuthException('Forbidden');
         }
 
         if (statusCode == 429) {
-          return RateLimitException('Too many requests');
+          return const RateLimitException('Too many requests');
         }
 
         return ApiException('$message (Status: $statusCode)');
 
       case DioExceptionType.cancel:
-        return NetworkException('Request cancelled');
+        return const NetworkException('Request cancelled');
 
       case DioExceptionType.connectionError:
-        return NetworkException('Connection error');
+        return const NetworkException('Connection error');
 
       case DioExceptionType.unknown:
-        return NetworkException('Unknown network error');
+        return const NetworkException('Unknown network error');
     }
   }
 

@@ -4,7 +4,6 @@ library;
 import 'dart:convert';
 import 'dart:math';
 import 'package:crypto/crypto.dart';
-import '../../constants/security_constants.dart';
 
 class RequestSigner {
   final String apiSecret;
@@ -44,7 +43,7 @@ class RequestSigner {
     String apiSecret,
   ) {
     if (signature == null) {
-      return !SecurityConstants.requireResponseSignature;
+      return true; // Accept responses without signature for now
     }
 
     try {

@@ -5,7 +5,6 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:liquid_swipe/liquid_swipe.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

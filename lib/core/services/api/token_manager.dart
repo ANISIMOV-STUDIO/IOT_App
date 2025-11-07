@@ -46,7 +46,7 @@ class TokenManager {
         return DateTime.fromMillisecondsSinceEpoch(exp * 1000);
       }
     } catch (e) {
-      Logger.error('Failed to decode token expiry', e);
+      Logger.error('Failed to decode token expiry: $e');
     }
     return null;
   }
@@ -58,7 +58,7 @@ class TokenManager {
     }
 
     final now = DateTime.now();
-    final expiryBuffer = const Duration(minutes: 5); // Refresh 5 minutes before expiry
+    const expiryBuffer = Duration(minutes: 5); // Refresh 5 minutes before expiry
     return now.isAfter(_tokenExpiry!.subtract(expiryBuffer));
   }
 

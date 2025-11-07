@@ -36,7 +36,7 @@ API Error:
   Message: ${err.message}
   URL: ${err.requestOptions.uri}
   Response: ${err.response?.data}
-''', err);
+''');
     handler.next(err);
   }
 
