@@ -5,7 +5,6 @@
 /// - Adaptive padding
 /// - Hover effects for web
 /// - Corporate blue theme
-library;
 
 import 'package:flutter/material.dart';
 import '../../theme/colors.dart';

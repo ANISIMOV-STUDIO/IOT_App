@@ -5,7 +5,6 @@
 /// - Retry functionality
 /// - Error details support
 /// - Corporate blue theme
-library;
 
 import 'package:flutter/material.dart';
 import '../../theme/colors.dart';

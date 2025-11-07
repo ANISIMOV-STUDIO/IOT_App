@@ -5,7 +5,6 @@
 /// - Adaptive layouts
 /// - Optional message
 /// - Corporate blue theme
-library;
 
 import 'package:flutter/material.dart';
 import '../../theme/colors.dart';

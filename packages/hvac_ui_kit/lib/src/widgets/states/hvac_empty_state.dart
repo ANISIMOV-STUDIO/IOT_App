@@ -5,7 +5,6 @@
 /// - Customizable icon and messages
 /// - Optional action button
 /// - Corporate blue theme
-library;
 
 import 'package:flutter/material.dart';
 import '../../theme/colors.dart';
