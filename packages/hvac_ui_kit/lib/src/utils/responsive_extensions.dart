@@ -41,7 +41,7 @@ class ResponsiveConfig {
     statusBarHeight = mediaQuery.padding.top;
     bottomBarHeight = mediaQuery.padding.bottom;
     devicePixelRatio = mediaQuery.devicePixelRatio;
-    textScaleFactor = mediaQuery.textScaleFactor;
+    textScaleFactor = mediaQuery.textScaler.scale(1.0);
 
     // Calculate scaling factors
     scaleWidth = screenWidth / baseWidth;
