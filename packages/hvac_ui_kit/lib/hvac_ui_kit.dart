@@ -77,9 +77,10 @@ export 'src/animations/hvac_hero_animations.dart';
 // ============================================================================
 // UTILS
 // ============================================================================
-export 'src/utils/adaptive_layout.dart';
+export 'src/utils/adaptive_layout.dart' hide AdaptiveLayout;
 export 'src/utils/performance_utils.dart';
 export 'src/utils/responsive_utils.dart';
+export 'src/utils/responsive_extensions.dart';
 
 // ============================================================================
 // RE-EXPORTS (for convenience)

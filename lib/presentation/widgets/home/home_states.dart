@@ -45,10 +45,12 @@ class HomeLoadingState extends StatelessWidget {
 /// Error state widget for home screen
 class HomeErrorState extends StatelessWidget {
   final String message;
+  final VoidCallback? onRetry;
 
   const HomeErrorState({
     super.key,
     required this.message,
+    this.onRetry,
   });
 
   @override
@@ -86,7 +88,7 @@ class HomeErrorState extends StatelessWidget {
             ),
             const SizedBox(height: HvacSpacing.lgV),
             ElevatedButton(
-              onPressed: () => context.read<HvacListBloc>().add(
+              onPressed: onRetry ?? () => context.read<HvacListBloc>().add(
                 const LoadHvacUnitsEvent(),
               ),
               style: ElevatedButton.styleFrom(
@@ -113,7 +115,12 @@ class HomeErrorState extends StatelessWidget {
 
 /// Empty state widget for home screen
 class HomeEmptyState extends StatelessWidget {
-  const HomeEmptyState({super.key});
+  final VoidCallback? onAddDevice;
+
+  const HomeEmptyState({
+    super.key,
+    this.onAddDevice,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -148,6 +155,27 @@ class HomeEmptyState extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
+            if (onAddDevice != null) ...[
+              const SizedBox(height: HvacSpacing.lgV),
+              ElevatedButton.icon(
+                onPressed: onAddDevice,
+                icon: const Icon(Icons.add, size: 18.0),
+                label: Text(
+                  l10n.addDevice,
+                  style: const TextStyle(fontSize: 14.0),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: HvacColors.primaryOrange,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: HvacSpacing.lgR,
+                    vertical: HvacSpacing.smV,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: HvacRadius.smRadius,
+                  ),
+                ),
+              ),
+            ],
           ],
         ),
       ),

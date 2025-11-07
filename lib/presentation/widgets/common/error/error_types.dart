@@ -1,22 +1,21 @@
-/// Error types and models for error widgets
+/// Error Types and Models
+///
+/// Common types and models for error handling
 library;
 
 import 'package:flutter/material.dart';
 
-/// Types of errors that can be displayed
+/// Types of errors
 enum ErrorType {
   general,
   network,
   server,
   permission,
-  validation,
-  authentication,
-  timeout,
   notFound,
-  offline,
+  timeout,
 }
 
-/// Action that can be taken on an error
+/// Error action for additional buttons
 class ErrorAction {
   final String label;
   final VoidCallback onPressed;
@@ -31,27 +30,27 @@ class ErrorAction {
   });
 }
 
-/// Error widget configuration
+/// Error configuration
 class ErrorConfig {
   final String? title;
   final String message;
+  final VoidCallback? onRetry;
   final IconData? icon;
-  final ErrorType type;
   final String? errorCode;
   final String? technicalDetails;
   final bool showTechnicalDetails;
-  final VoidCallback? onRetry;
   final List<ErrorAction>? additionalActions;
+  final ErrorType type;
 
   const ErrorConfig({
     this.title,
     required this.message,
+    this.onRetry,
     this.icon,
-    this.type = ErrorType.general,
     this.errorCode,
     this.technicalDetails,
     this.showTechnicalDetails = false,
-    this.onRetry,
     this.additionalActions,
+    this.type = ErrorType.general,
   });
 }

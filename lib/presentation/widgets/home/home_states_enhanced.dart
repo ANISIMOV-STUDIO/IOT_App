@@ -8,9 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart' as ui_kit;
 import '../../../core/utils/accessibility_utils.dart';
-import '../../../core/utils/responsive_builder.dart';
+import '../../../core/utils/responsive_builder.dart' as core_resp;
 import '../../../generated/l10n/app_localizations.dart';
 import '../../bloc/hvac_list/hvac_list_bloc.dart';
 import '../../bloc/hvac_list/hvac_list_event.dart';
@@ -26,20 +26,20 @@ class EnhancedHomeLoadingState extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return ResponsiveBuilder(
+    return core_resp.ResponsiveBuilder(
       builder: (context, info) {
         return Padding(
-          padding: const EdgeInsets.all(HvacSpacing.lg),
+          padding: const EdgeInsets.all(ui_kit.HvacSpacing.lg),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Header skeleton
               _buildHeaderSkeleton(context),
-              const SizedBox(height: HvacSpacing.xl),
+              const SizedBox(height: ui_kit.HvacSpacing.xl),
 
               // Room cards skeleton
               _buildRoomCardsSkeleton(context, info),
-              const SizedBox(height: HvacSpacing.lg),
+              const SizedBox(height: ui_kit.HvacSpacing.lg),
 
               // Quick controls skeleton
               _buildQuickControlsSkeleton(context),
@@ -180,7 +180,7 @@ class EnhancedHomeEmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ResponsiveBuilder(
+    return core_resp.ResponsiveBuilder(
       builder: (context, info) {
         return EmptyStateWidget.noDevices(
           onAddDevice: () {
