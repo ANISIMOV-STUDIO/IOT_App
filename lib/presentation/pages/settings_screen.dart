@@ -7,6 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../generated/l10n/app_localizations.dart';
+import '../widgets/settings/settings_section_widget.dart';
+import '../widgets/settings/settings_switch_tile.dart';
+import '../widgets/settings/settings_language_tile.dart';
+import '../widgets/settings/settings_info_row.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -21,7 +25,7 @@ class _SettingsScreenState extends State<SettingsScreen>
   bool _celsius = true;
   bool _pushNotifications = true;
   bool _emailNotifications = false;
-  String _language = '';  // Will be set to localized value in initState
+  String _language = '';
   late AnimationController _themeAnimationController;
 
   @override
@@ -36,7 +40,6 @@ class _SettingsScreenState extends State<SettingsScreen>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // Set initial language value using localized string
     if (_language.isEmpty) {
       final l10n = AppLocalizations.of(context)!;
       _language = l10n.russian;
@@ -72,42 +75,37 @@ class _SettingsScreenState extends State<SettingsScreen>
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20.0),
-          child: _buildLayout(),
+          child: Column(
+            children: [
+              _buildAppearanceSection(),
+              const SizedBox(height: 20.0),
+              _buildUnitsSection(),
+              const SizedBox(height: 20.0),
+              _buildNotificationsSection(),
+              const SizedBox(height: 20.0),
+              _buildLanguageSection(),
+              const SizedBox(height: 20.0),
+              _buildAboutSection(),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildLayout() {
-    return Column(
-      children: [
-        _buildAppearanceSection(),
-        const SizedBox(height: 20.0),
-        _buildUnitsSection(),
-        const SizedBox(height: 20.0),
-        _buildNotificationsSection(),
-        const SizedBox(height: 20.0),
-        _buildLanguageSection(),
-        const SizedBox(height: 20.0),
-        _buildAboutSection(),
-      ],
-    );
-  }
-
   Widget _buildAppearanceSection() {
     final l10n = AppLocalizations.of(context)!;
-    return _buildSection(
+    return SettingsSectionWidget(
       title: l10n.appearance,
       icon: Icons.palette_outlined,
       children: [
         HvacInteractiveRipple(
-          child: _buildSwitchTile(
+          child: SettingsSwitchTile(
             title: l10n.darkTheme,
             subtitle: l10n.useDarkColorScheme,
             value: _darkMode,
             onChanged: (value) {
               setState(() => _darkMode = value);
-              // Animate theme change
               _themeAnimationController.reset();
               _themeAnimationController.forward();
               _showSnackBar(l10n.themeChangeNextVersion);
@@ -120,12 +118,12 @@ class _SettingsScreenState extends State<SettingsScreen>
 
   Widget _buildUnitsSection() {
     final l10n = AppLocalizations.of(context)!;
-    return _buildSection(
+    return SettingsSectionWidget(
       title: l10n.units,
       icon: Icons.straighten_outlined,
       children: [
         HvacInteractiveRipple(
-          child: _buildSwitchTile(
+          child: SettingsSwitchTile(
             title: l10n.temperatureUnits,
             subtitle: _celsius ? l10n.celsius : l10n.fahrenheit,
             value: _celsius,
@@ -142,12 +140,12 @@ class _SettingsScreenState extends State<SettingsScreen>
 
   Widget _buildNotificationsSection() {
     final l10n = AppLocalizations.of(context)!;
-    return _buildSection(
+    return SettingsSectionWidget(
       title: l10n.notifications,
       icon: Icons.notifications_outlined,
       children: [
         HvacInteractiveRipple(
-          child: _buildSwitchTile(
+          child: SettingsSwitchTile(
             title: l10n.pushNotifications,
             subtitle: l10n.receiveInstantNotifications,
             value: _pushNotifications,
@@ -160,7 +158,7 @@ class _SettingsScreenState extends State<SettingsScreen>
         ),
         const SizedBox(height: 12.0),
         HvacInteractiveRipple(
-          child: _buildSwitchTile(
+          child: SettingsSwitchTile(
             title: l10n.emailNotifications,
             subtitle: l10n.receiveEmailReports,
             value: _emailNotifications,
@@ -177,43 +175,62 @@ class _SettingsScreenState extends State<SettingsScreen>
 
   Widget _buildLanguageSection() {
     final l10n = AppLocalizations.of(context)!;
-    return _buildSection(
+    return SettingsSectionWidget(
       title: l10n.language,
       icon: Icons.language_outlined,
       children: [
-        _buildLanguageTile(l10n.russian),
+        SettingsLanguageTile(
+          language: l10n.russian,
+          isSelected: _language == l10n.russian,
+          onTap: () {
+            setState(() => _language = l10n.russian);
+            _showSnackBar(l10n.languageChangedTo(l10n.russian));
+          },
+        ),
         const SizedBox(height: 8.0),
-        _buildLanguageTile(l10n.english),
+        SettingsLanguageTile(
+          language: l10n.english,
+          isSelected: _language == l10n.english,
+          onTap: () {
+            setState(() => _language = l10n.english);
+            _showSnackBar(l10n.languageChangedTo(l10n.english));
+          },
+        ),
         const SizedBox(height: 8.0),
-        _buildLanguageTile(l10n.german),
+        SettingsLanguageTile(
+          language: l10n.german,
+          isSelected: _language == l10n.german,
+          onTap: () {
+            setState(() => _language = l10n.german);
+            _showSnackBar(l10n.languageChangedTo(l10n.german));
+          },
+        ),
       ],
     ).animate().fadeIn(duration: 500.ms, delay: 300.ms).slideX(begin: -0.1, end: 0);
   }
 
   Widget _buildAboutSection() {
     final l10n = AppLocalizations.of(context)!;
-    return _buildSection(
+    return SettingsSectionWidget(
       title: l10n.about,
       icon: Icons.info_outline,
       children: [
         HvacInteractiveRipple(
-          child: _buildInfoRow(l10n.version, '1.0.0'),
+          child: SettingsInfoRow(label: l10n.version, value: '1.0.0'),
         ),
         const SizedBox(height: 12.0),
         HvacInteractiveRipple(
-          child: _buildInfoRow(l10n.developer, 'BREEZ'),
+          child: SettingsInfoRow(label: l10n.developer, value: 'BREEZ'),
         ),
         const SizedBox(height: 12.0),
         HvacInteractiveRipple(
-          child: _buildInfoRow(l10n.license, 'MIT License'),
+          child: SettingsInfoRow(label: l10n.license, value: 'MIT License'),
         ),
         const SizedBox(height: 16.0),
         SizedBox(
           width: double.infinity,
           child: HvacNeumorphicButton(
-            onPressed: () {
-              _showSnackBar(l10n.checkingUpdates);
-            },
+            onPressed: () => _showSnackBar(l10n.checkingUpdates),
             child: Text(
               l10n.checkUpdates,
               style: const TextStyle(
@@ -226,168 +243,6 @@ class _SettingsScreenState extends State<SettingsScreen>
         ),
       ],
     ).animate().fadeIn(duration: 500.ms, delay: 400.ms).slideX(begin: -0.1, end: 0);
-  }
-
-  Widget _buildSection({
-    required String title,
-    required IconData icon,
-    required List<Widget> children,
-  }) {
-    return HvacGradientBorder(
-      borderWidth: 2.0,
-      gradientColors: [
-        HvacColors.primaryOrange.withValues(alpha:0.3),
-        HvacColors.primaryBlue.withValues(alpha:0.3),
-      ],
-      borderRadius: HvacRadius.lgRadius,
-      child: Container(
-        padding: const EdgeInsets.all(20.0),
-        decoration: BoxDecoration(
-          color: HvacColors.backgroundCard,
-          borderRadius: HvacRadius.lgRadius,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(icon, color: HvacColors.primaryOrange, size: 24.0),
-                const SizedBox(width: 12.0),
-                Text(
-                  title,
-                  style: HvacTypography.headlineSmall.copyWith(
-                    fontSize: 18.0,
-                    color: HvacColors.textPrimary,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16.0),
-            ...children,
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSwitchTile({
-    required String title,
-    required String subtitle,
-    required bool value,
-    required ValueChanged<bool> onChanged,
-  }) {
-    return Row(
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: HvacTypography.titleMedium.copyWith(
-                  fontSize: 14.0,
-                  color: HvacColors.textPrimary,
-                ),
-              ),
-              const SizedBox(height: 4.0),
-              Text(
-                subtitle,
-                style: HvacTypography.labelLarge.copyWith(
-                  fontSize: 12.0,
-                  color: HvacColors.textSecondary,
-                ),
-              ),
-            ],
-          ),
-        ),
-        Switch(
-          value: value,
-          onChanged: onChanged,
-          thumbColor: WidgetStateProperty.resolveWith((states) {
-            if (states.contains(WidgetState.selected)) {
-              return HvacColors.primaryOrange;
-            }
-            return null;
-          }),
-          trackColor: WidgetStateProperty.resolveWith((states) {
-            if (!states.contains(WidgetState.selected)) {
-              return HvacColors.textSecondary.withValues(alpha:0.3);
-            }
-            return null;
-          }),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildLanguageTile(String language) {
-    final l10n = AppLocalizations.of(context)!;
-    final isSelected = _language == language;
-
-    return HvacInteractiveScale(
-      onTap: () {
-        setState(() => _language = language);
-        _showSnackBar(l10n.languageChangedTo(language));
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? HvacColors.primaryOrange.withValues(alpha: 0.1)
-              : HvacColors.backgroundDark,
-          borderRadius: HvacRadius.mdRadius,
-          border: Border.all(
-            color: isSelected
-                ? HvacColors.primaryOrange
-                : HvacColors.backgroundCardBorder,
-            width: 1,
-          ),
-        ),
-        child: Row(
-          children: [
-            Icon(
-              isSelected ? Icons.radio_button_checked : Icons.radio_button_unchecked,
-              color: isSelected ? HvacColors.primaryOrange : HvacColors.textSecondary,
-              size: 20.0,
-            ),
-            const SizedBox(width: 12.0),
-            Text(
-              language,
-              style: HvacTypography.bodyMedium.copyWith(
-                fontSize: 14.0,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                color: isSelected ? HvacColors.primaryOrange : HvacColors.textPrimary,
-              ),
-            ),
-          ],
-        ),
-      ),
-    )
-        .animate()
-        .fadeIn(duration: 300.ms)
-        .scale(begin: const Offset(0.95, 0.95), end: const Offset(1.0, 1.0));
-  }
-
-  Widget _buildInfoRow(String label, String value) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          label,
-          style: HvacTypography.bodyMedium.copyWith(
-            fontSize: 14.0,
-            color: HvacColors.textSecondary,
-          ),
-        ),
-        Text(
-          value,
-          style: HvacTypography.titleMedium.copyWith(
-            fontSize: 14.0,
-            color: HvacColors.textPrimary,
-          ),
-        ),
-      ],
-    );
   }
 
   void _showSnackBar(String message) {

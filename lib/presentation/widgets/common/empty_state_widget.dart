@@ -1,6 +1,18 @@
+/// Empty State Widget
+///
+/// Comprehensive empty state widget with illustrations and actions
+library;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+import 'empty_state/empty_state_types.dart';
+import 'empty_state/empty_state_illustration.dart';
+
+// Export sub-components
+export 'empty_state/empty_state_types.dart';
+export 'empty_state/empty_state_illustration.dart';
+export 'empty_state/compact_empty_state.dart';
 
 /// Comprehensive empty state widget with illustrations
 class EmptyStateWidget extends StatelessWidget {
@@ -27,9 +39,8 @@ class EmptyStateWidget extends StatelessWidget {
     this.showAnimation = true,
   });
 
-  factory EmptyStateWidget.noDevices({
-    VoidCallback? onAddDevice,
-  }) {
+  /// Factory: No devices found
+  factory EmptyStateWidget.noDevices({VoidCallback? onAddDevice}) {
     return EmptyStateWidget(
       title: 'No Devices Found',
       message: 'Start by adding your first HVAC device to control it remotely.',
@@ -40,9 +51,8 @@ class EmptyStateWidget extends StatelessWidget {
     );
   }
 
-  factory EmptyStateWidget.noSchedules({
-    VoidCallback? onCreateSchedule,
-  }) {
+  /// Factory: No schedules
+  factory EmptyStateWidget.noSchedules({VoidCallback? onCreateSchedule}) {
     return EmptyStateWidget(
       title: 'No Schedules Set',
       message: 'Create schedules to automate your HVAC system and save energy.',
@@ -53,10 +63,8 @@ class EmptyStateWidget extends StatelessWidget {
     );
   }
 
-  factory EmptyStateWidget.noData({
-    VoidCallback? onRefresh,
-    String? customMessage,
-  }) {
+  /// Factory: No data available
+  factory EmptyStateWidget.noData({VoidCallback? onRefresh, String? customMessage}) {
     return EmptyStateWidget(
       title: 'No Data Available',
       message: customMessage ?? 'There\'s no data to display at the moment.',
@@ -67,6 +75,7 @@ class EmptyStateWidget extends StatelessWidget {
     );
   }
 
+  /// Factory: No notifications
   factory EmptyStateWidget.noNotifications() {
     return const EmptyStateWidget(
       title: 'All Caught Up!',
@@ -76,6 +85,7 @@ class EmptyStateWidget extends StatelessWidget {
     );
   }
 
+  /// Factory: No search results
   factory EmptyStateWidget.noSearchResults({
     VoidCallback? onClearSearch,
     String? searchQuery,
@@ -155,60 +165,13 @@ class EmptyStateWidget extends StatelessWidget {
       return illustration!;
     }
 
-    final effectiveIcon = icon ?? _getIconForType();
-    final iconSize = ResponsiveUtils.scaledIconSize(context, 120.0);
-    final iconColor = _getColorForType(theme);
+    final effectiveIcon = icon ?? type.defaultIcon;
+    final iconColor = type.getColor(theme);
 
-    return TweenAnimationBuilder<double>(
-      tween: Tween(begin: 0.0, end: 1.0),
-      duration: const Duration(milliseconds: 800),
-      curve: Curves.elasticOut,
-      builder: (context, value, child) {
-        return Transform.scale(
-          scale: value,
-          child: Container(
-            width: iconSize * 1.5,
-            height: iconSize * 1.5,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: iconColor.withValues(alpha: 0.1),
-              border: Border.all(
-                color: iconColor.withValues(alpha: 0.2),
-                width: 2,
-              ),
-            ),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                // Background pulse animation
-                if (showAnimation)
-                  TweenAnimationBuilder<double>(
-                    tween: Tween(begin: 0.5, end: 1.0),
-                    duration: const Duration(seconds: 2),
-                    curve: Curves.easeInOut,
-                    onEnd: () {},
-                    builder: (context, pulseValue, child) {
-                      return Container(
-                        width: iconSize * 1.3 * pulseValue,
-                        height: iconSize * 1.3 * pulseValue,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: iconColor.withValues(alpha: 0.05 * (2 - pulseValue)),
-                        ),
-                      );
-                    },
-                  ),
-                Icon(
-                  effectiveIcon,
-                  size: iconSize * 0.7,
-                  color: iconColor,
-                  semanticLabel: 'Empty state icon',
-                ),
-              ],
-            ),
-          ),
-        );
-      },
+    return EmptyStateIllustration(
+      icon: effectiveIcon,
+      color: iconColor,
+      showAnimation: showAnimation,
     );
   }
 
@@ -251,7 +214,7 @@ class EmptyStateWidget extends StatelessWidget {
             onAction!();
           },
           icon: Icon(
-            _getActionIconForType(),
+            type.actionIcon,
             size: ResponsiveUtils.scaledIconSize(context, 20),
           ),
           label: Text(
@@ -270,131 +233,6 @@ class EmptyStateWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(HvacSpacing.md),
             ),
             elevation: 0,
-          ),
-        ),
-      ),
-    );
-  }
-
-  IconData _getIconForType() {
-    switch (type) {
-      case EmptyStateType.noDevices:
-        return Icons.devices_other_rounded;
-      case EmptyStateType.noSchedules:
-        return Icons.schedule_rounded;
-      case EmptyStateType.noData:
-        return Icons.analytics_outlined;
-      case EmptyStateType.noNotifications:
-        return Icons.notifications_none_rounded;
-      case EmptyStateType.noSearchResults:
-        return Icons.search_off_rounded;
-      case EmptyStateType.noConnection:
-        return Icons.wifi_off_rounded;
-      case EmptyStateType.general:
-        return Icons.inbox_rounded;
-    }
-  }
-
-  IconData _getActionIconForType() {
-    switch (type) {
-      case EmptyStateType.noDevices:
-        return Icons.add_rounded;
-      case EmptyStateType.noSchedules:
-        return Icons.add_alarm_rounded;
-      case EmptyStateType.noData:
-        return Icons.refresh_rounded;
-      case EmptyStateType.noSearchResults:
-        return Icons.clear_rounded;
-      case EmptyStateType.noConnection:
-        return Icons.refresh_rounded;
-      case EmptyStateType.general:
-      case EmptyStateType.noNotifications:
-        return Icons.arrow_forward_rounded;
-    }
-  }
-
-  Color _getColorForType(ThemeData theme) {
-    switch (type) {
-      case EmptyStateType.noDevices:
-        return Colors.blue;
-      case EmptyStateType.noSchedules:
-        return Colors.orange;
-      case EmptyStateType.noData:
-        return Colors.purple;
-      case EmptyStateType.noNotifications:
-        return Colors.green;
-      case EmptyStateType.noSearchResults:
-        return Colors.grey;
-      case EmptyStateType.noConnection:
-        return Colors.red;
-      case EmptyStateType.general:
-        return theme.colorScheme.primary;
-    }
-  }
-}
-
-/// Types of empty states
-enum EmptyStateType {
-  general,
-  noDevices,
-  noSchedules,
-  noData,
-  noNotifications,
-  noSearchResults,
-  noConnection,
-}
-
-/// Compact empty state for smaller spaces
-class CompactEmptyState extends StatelessWidget {
-  final String message;
-  final IconData icon;
-  final VoidCallback? onAction;
-
-  const CompactEmptyState({
-    super.key,
-    required this.message,
-    required this.icon,
-    this.onAction,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Semantics(
-      label: message,
-      hint: onAction != null ? 'Double tap to take action' : null,
-      child: InkWell(
-        onTap: onAction,
-        borderRadius: BorderRadius.circular(HvacSpacing.md),
-        child: Container(
-          padding: const EdgeInsets.all(HvacSpacing.lg),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                icon,
-                size: ResponsiveUtils.scaledIconSize(context, 48),
-                color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
-              ),
-              const SizedBox(height: HvacSpacing.sm),
-              Text(
-                message,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-                  fontSize: ResponsiveUtils.scaledFontSize(context, 14),
-                ),
-                textAlign: TextAlign.center,
-              ),
-              if (onAction != null) ...[
-                const SizedBox(height: HvacSpacing.sm),
-                Icon(
-                  Icons.refresh_rounded,
-                  size: ResponsiveUtils.scaledIconSize(context, 20),
-                  color: theme.colorScheme.primary,
-                ),
-              ],
-            ],
           ),
         ),
       ),
