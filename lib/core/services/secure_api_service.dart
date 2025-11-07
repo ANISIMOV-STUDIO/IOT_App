@@ -1,49 +1,61 @@
-/// Secure API Service
+/// Secure API Service - Refactored version
 ///
-/// Enhanced API service with certificate pinning, request signing, and security features
+/// Enhanced API service with modular architecture
 library;
 
-import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
-// import 'package:dio_certificate_pinning/dio_certificate_pinning.dart'; // Package not available
-import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:crypto/crypto.dart';
 
 import '../constants/security_constants.dart';
 import '../utils/logger.dart';
 import 'secure_storage_service.dart';
 import 'environment_config.dart';
+import 'api/token_manager.dart';
+import 'api/rate_limiter.dart';
+import 'api/request_signer.dart';
+import 'api/interceptors/security_interceptor.dart';
+import 'api/interceptors/logging_interceptor.dart';
+import 'api/interceptors/retry_interceptor.dart';
+import 'api/exceptions.dart';
+
+export 'api/exceptions.dart';
 
 class SecureApiService {
   late final Dio _dio;
+  late final TokenManager _tokenManager;
+  late final RateLimiter _rateLimiter;
+  late final RequestSigner _requestSigner;
+
   final SecureStorageService _secureStorage;
   final EnvironmentConfig _envConfig;
-
-  String? _authToken;
-  String? _refreshToken;
-  DateTime? _tokenExpiry;
-
-  // Rate limiting
-  final Map<String, List<DateTime>> _requestHistory = {};
-  final Map<String, DateTime> _rateLimitExpiryMap = {};
 
   SecureApiService({
     required SecureStorageService secureStorage,
     required EnvironmentConfig envConfig,
   })  : _secureStorage = secureStorage,
         _envConfig = envConfig {
+    _initializeServices();
     _initializeDio();
     _loadStoredTokens();
+  }
+
+  /// Initialize internal services
+  void _initializeServices() {
+    _tokenManager = TokenManager(secureStorage: _secureStorage);
+    _rateLimiter = RateLimiter();
+    _requestSigner = RequestSigner(apiSecret: _envConfig.apiSecret);
   }
 
   /// Initialize Dio with security configurations
   void _initializeDio() {
     final baseOptions = BaseOptions(
       baseUrl: _envConfig.apiBaseUrl,
-      connectTimeout: const Duration(seconds: SecurityConstants.apiTimeoutSeconds),
-      receiveTimeout: const Duration(seconds: SecurityConstants.apiTimeoutSeconds),
-      sendTimeout: const Duration(seconds: SecurityConstants.apiTimeoutSeconds),
+      connectTimeout:
+          const Duration(seconds: SecurityConstants.apiTimeoutSeconds),
+      receiveTimeout:
+          const Duration(seconds: SecurityConstants.apiTimeoutSeconds),
+      sendTimeout:
+          const Duration(seconds: SecurityConstants.apiTimeoutSeconds),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
@@ -55,183 +67,52 @@ class SecureApiService {
 
     _dio = Dio(baseOptions);
 
-    // Add certificate pinning (only for production)
-    // Commented out - CertificatePinningInterceptor not available
-    // if (_envConfig.isProduction) {
-    //   _dio.interceptors.add(
-    //     CertificatePinningInterceptor(
-    //       allowedSHAFingerprints: SecurityConstants.certificateFingerprints,
-    //       timeout: SecurityConstants.apiTimeoutSeconds,
-    //     ),
-    //   );
-    // }
-
-    // Add request/response interceptors
-    _dio.interceptors.add(_SecurityInterceptor(this));
-    _dio.interceptors.add(_LoggingInterceptor());
-    _dio.interceptors.add(_RetryInterceptor(_dio));
+    // Add interceptors
+    _dio.interceptors.addAll([
+      SecurityInterceptor(
+        tokenManager: _tokenManager,
+        requestSigner: _requestSigner,
+        rateLimiter: _rateLimiter,
+        onTokenRefresh: _refreshAuthToken,
+      ),
+      LoggingInterceptor(),
+      RetryInterceptor(dio: _dio),
+    ]);
   }
 
   /// Load stored tokens on initialization
   Future<void> _loadStoredTokens() async {
-    _authToken = await _secureStorage.getAuthToken();
-    _refreshToken = await _secureStorage.getRefreshToken();
-
-    if (_authToken != null) {
-      try {
-        _tokenExpiry = _getTokenExpiry(_authToken!);
-      } catch (e) {
-        Logger.warning('Failed to parse stored token expiry: $e');
-        await _clearTokens();
-      }
-    }
-  }
-
-  /// Get token expiry from JWT
-  DateTime? _getTokenExpiry(String token) {
-    try {
-      if (JwtDecoder.isExpired(token)) {
-        return null;
-      }
-      final decodedToken = JwtDecoder.decode(token);
-      final exp = decodedToken['exp'] as int?;
-      if (exp != null) {
-        return DateTime.fromMillisecondsSinceEpoch(exp * 1000);
-      }
-    } catch (e) {
-      Logger.error('Failed to decode JWT: $e');
-    }
-    return null;
-  }
-
-  /// Check if token needs refresh
-  bool _needsTokenRefresh() {
-    if (_authToken == null || _tokenExpiry == null) return true;
-
-    final now = DateTime.now();
-    final timeUntilExpiry = _tokenExpiry!.difference(now);
-
-    // Refresh if token expires in less than 5 minutes
-    return timeUntilExpiry.inMinutes < 5;
+    await _tokenManager.loadStoredTokens();
   }
 
   /// Refresh authentication token
   Future<void> _refreshAuthToken() async {
-    if (_refreshToken == null) {
+    if (_tokenManager.refreshToken == null) {
       throw SecurityException('No refresh token available');
     }
 
     try {
       final response = await _dio.post(
         '/auth/refresh',
-        data: {'refresh_token': _refreshToken},
+        data: {'refresh_token': _tokenManager.refreshToken},
       );
 
       final newAuthToken = response.data['access_token'];
       final newRefreshToken = response.data['refresh_token'];
 
-      await _updateTokens(newAuthToken, newRefreshToken);
+      await _tokenManager.updateTokens(newAuthToken, newRefreshToken);
       Logger.security('TOKEN_REFRESH', details: {'success': true});
     } catch (e) {
-      Logger.security('TOKEN_REFRESH', details: {'success': false, 'error': e.toString()});
+      Logger.security('TOKEN_REFRESH',
+          details: {'success': false, 'error': e.toString()});
       throw SecurityException('Failed to refresh token');
     }
-  }
-
-  /// Update and store tokens
-  Future<void> _updateTokens(String authToken, String? refreshToken) async {
-    _authToken = authToken;
-    _tokenExpiry = _getTokenExpiry(authToken);
-
-    await _secureStorage.saveAuthToken(authToken);
-
-    if (refreshToken != null) {
-      _refreshToken = refreshToken;
-      await _secureStorage.saveRefreshToken(refreshToken);
-    }
-  }
-
-  /// Clear all tokens
-  Future<void> _clearTokens() async {
-    _authToken = null;
-    _refreshToken = null;
-    _tokenExpiry = null;
-    await _secureStorage.clearAuthData();
-  }
-
-  /// Check rate limiting
-  void _checkRateLimit(String endpoint) {
-    final now = DateTime.now();
-
-    // Check if rate limit is already exceeded
-    if (_rateLimitExpiryMap.containsKey(endpoint)) {
-      final expiry = _rateLimitExpiryMap[endpoint]!;
-      if (now.isBefore(expiry)) {
-        final waitTime = expiry.difference(now);
-        throw RateLimitException(
-          'Rate limit exceeded. Please wait ${waitTime.inSeconds} seconds',
-        );
-      } else {
-        _rateLimitExpiryMap.remove(endpoint);
-      }
-    }
-
-    // Track request
-    _requestHistory[endpoint] ??= [];
-    _requestHistory[endpoint]!.add(now);
-
-    // Remove old requests (older than 1 minute)
-    _requestHistory[endpoint]!.removeWhere(
-      (time) => now.difference(time).inMinutes >= 1,
-    );
-
-    // Check if limit exceeded
-    if (_requestHistory[endpoint]!.length > SecurityConstants.maxApiRequestsPerMinute) {
-      _rateLimitExpiryMap[endpoint] = now.add(const Duration(minutes: 1));
-      Logger.security('RATE_LIMIT_EXCEEDED', details: {'endpoint': endpoint});
-      throw RateLimitException('Rate limit exceeded for endpoint: $endpoint');
-    }
-  }
-
-  /// Sign request for additional security
-  String _signRequest(String method, String path, Map<String, dynamic>? body) {
-    final timestamp = DateTime.now().millisecondsSinceEpoch.toString();
-    final nonce = _generateNonce();
-
-    String dataToSign = '$method$path$timestamp$nonce';
-    if (body != null) {
-      dataToSign += json.encode(body);
-    }
-
-    final key = utf8.encode(_envConfig.apiSecret);
-    final bytes = utf8.encode(dataToSign);
-    final hmacSha256 = Hmac(sha256, key);
-    final digest = hmacSha256.convert(bytes);
-
-    return base64.encode(digest.bytes);
-  }
-
-  /// Generate random nonce
-  String _generateNonce() {
-    final random = List<int>.generate(16, (i) =>
-      DateTime.now().millisecondsSinceEpoch + i);
-    return base64.encode(random);
-  }
-
-  /// Validate response signature
-  bool _validateResponseSignature(Response response) {
-    final signature = response.headers.value('X-Signature');
-    if (signature == null) return false;
-
-    // Implement signature validation logic
-    // This should match the server's signing algorithm
-    return true; // Simplified for example
   }
 
   // ===== PUBLIC API METHODS =====
 
   /// Check if user is authenticated
-  bool get isAuthenticated => _authToken != null && !_needsTokenRefresh();
+  bool get isAuthenticated => _tokenManager.isAuthenticated;
 
   /// Perform GET request
   Future<T> get<T>(
@@ -310,42 +191,15 @@ class SecureApiService {
     bool requireAuth = true,
   }) async {
     try {
-      // Check rate limiting
-      _checkRateLimit(path);
-
-      // Refresh token if needed
-      if (requireAuth && _needsTokenRefresh()) {
-        await _refreshAuthToken();
-      }
-
-      // Sign request
-      final signature = _signRequest(method, path, data);
-
-      // Prepare headers
-      final headers = <String, dynamic>{
-        'X-Request-Signature': signature,
-        'X-Request-Timestamp': DateTime.now().millisecondsSinceEpoch.toString(),
-      };
-
-      if (requireAuth && _authToken != null) {
-        headers['Authorization'] = 'Bearer $_authToken';
-      }
-
-      // Perform request
       final response = await _dio.request<T>(
         path,
         queryParameters: queryParameters,
         data: data,
         options: Options(
           method: method,
-          headers: headers,
+          extra: {'requireAuth': requireAuth},
         ),
       );
-
-      // Validate response signature
-      if (_envConfig.isProduction && !_validateResponseSignature(response)) {
-        throw SecurityException('Invalid response signature');
-      }
 
       return response.data as T;
     } on DioException catch (e) {
@@ -420,49 +274,25 @@ class SecureApiService {
       final authToken = response['access_token'];
       final refreshToken = response['refresh_token'];
 
-      await _updateTokens(authToken, refreshToken);
+      await _tokenManager.updateTokens(authToken, refreshToken);
 
       Logger.security('LOGIN_SUCCESS', details: {'email': email});
       return response;
     } catch (e) {
-      Logger.security('LOGIN_FAILURE', details: {'email': email, 'error': e.toString()});
+      Logger.security('LOGIN_FAILURE',
+          details: {'email': email, 'error': e.toString()});
       rethrow;
     }
-  }
-
-  /// Register user
-  Future<Map<String, dynamic>> register({
-    required String email,
-    required String password,
-    required String name,
-  }) async {
-    final response = await post<Map<String, dynamic>>(
-      '/auth/register',
-      data: {
-        'email': email,
-        'password': password,
-        'name': name,
-        'device_info': await _getDeviceInfo(),
-      },
-      requireAuth: false,
-    );
-
-    final authToken = response['access_token'];
-    final refreshToken = response['refresh_token'];
-
-    await _updateTokens(authToken, refreshToken);
-
-    return response;
   }
 
   /// Logout user
   Future<void> logout() async {
     try {
-      if (_authToken != null) {
+      if (_tokenManager.authToken != null) {
         await post('/auth/logout', requireAuth: true);
       }
     } finally {
-      await _clearTokens();
+      await _tokenManager.clearTokens();
       Logger.security('LOGOUT');
     }
   }
@@ -481,176 +311,4 @@ class SecureApiService {
       'hostname': Platform.localHostname,
     };
   }
-}
-
-/// Security Interceptor
-class _SecurityInterceptor extends Interceptor {
-  final SecureApiService _apiService;
-
-  _SecurityInterceptor(this._apiService);
-
-  @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    // Add security headers
-    options.headers.addAll(SecurityConstants.securityHeaders);
-
-    // Validate method
-    if (!SecurityConstants.allowedMethods.contains(options.method)) {
-      handler.reject(
-        DioException(
-          requestOptions: options,
-          error: 'Method not allowed: ${options.method}',
-        ),
-      );
-      return;
-    }
-
-    // Validate domain (for production)
-    if (_apiService._envConfig.isProduction) {
-      final host = options.uri.host;
-      if (!SecurityConstants.allowedDomains.contains(host)) {
-        Logger.security('SUSPICIOUS_ACTIVITY', details: {
-          'reason': 'Unauthorized domain',
-          'domain': host,
-        });
-        handler.reject(
-          DioException(
-            requestOptions: options,
-            error: 'Unauthorized domain: $host',
-          ),
-        );
-        return;
-      }
-    }
-
-    handler.next(options);
-  }
-
-  @override
-  void onError(DioException err, ErrorInterceptorHandler handler) {
-    // Log security-related errors
-    if (err.response?.statusCode == 401) {
-      Logger.security('TOKEN_EXPIRED');
-    }
-
-    handler.next(err);
-  }
-}
-
-/// Logging Interceptor
-class _LoggingInterceptor extends Interceptor {
-  @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    Logger.network(
-      method: options.method,
-      url: options.uri.toString(),
-      headers: options.headers,
-      body: options.data,
-    );
-    handler.next(options);
-  }
-
-  @override
-  void onResponse(Response response, ResponseInterceptorHandler handler) {
-    Logger.network(
-      method: response.requestOptions.method,
-      url: response.requestOptions.uri.toString(),
-      statusCode: response.statusCode,
-      response: response.data,
-    );
-    handler.next(response);
-  }
-
-  @override
-  void onError(DioException err, ErrorInterceptorHandler handler) {
-    Logger.network(
-      method: err.requestOptions.method,
-      url: err.requestOptions.uri.toString(),
-      statusCode: err.response?.statusCode,
-      error: err.message,
-    );
-    handler.next(err);
-  }
-}
-
-/// Retry Interceptor
-class _RetryInterceptor extends Interceptor {
-  final Dio dio;
-  int _retryCount = 0;
-
-  _RetryInterceptor(this.dio);
-
-  @override
-  void onError(DioException err, ErrorInterceptorHandler handler) async {
-    if (_shouldRetry(err) && _retryCount < SecurityConstants.maxRetryAttempts) {
-      _retryCount++;
-      Logger.info('Retrying request (attempt $_retryCount)');
-
-      try {
-        // Wait before retry with exponential backoff
-        await Future.delayed(Duration(seconds: _retryCount * 2));
-
-        final response = await dio.request(
-          err.requestOptions.path,
-          data: err.requestOptions.data,
-          queryParameters: err.requestOptions.queryParameters,
-          options: Options(
-            method: err.requestOptions.method,
-            headers: err.requestOptions.headers,
-          ),
-        );
-
-        handler.resolve(response);
-        _retryCount = 0;
-      } catch (e) {
-        handler.next(err);
-      }
-    } else {
-      _retryCount = 0;
-      handler.next(err);
-    }
-  }
-
-  bool _shouldRetry(DioException err) {
-    return err.type == DioExceptionType.connectionTimeout ||
-           err.type == DioExceptionType.sendTimeout ||
-           err.type == DioExceptionType.receiveTimeout ||
-           err.type == DioExceptionType.connectionError ||
-           (err.response?.statusCode != null &&
-            err.response!.statusCode! >= 500);
-  }
-}
-
-// ===== EXCEPTIONS =====
-
-class ApiException implements Exception {
-  final String message;
-  ApiException(this.message);
-
-  @override
-  String toString() => 'ApiException: $message';
-}
-
-class NetworkException implements Exception {
-  final String message;
-  NetworkException(this.message);
-
-  @override
-  String toString() => 'NetworkException: $message';
-}
-
-class AuthException implements Exception {
-  final String message;
-  AuthException(this.message);
-
-  @override
-  String toString() => 'AuthException: $message';
-}
-
-class RateLimitException implements Exception {
-  final String message;
-  RateLimitException(this.message);
-
-  @override
-  String toString() => 'RateLimitException: $message';
 }
