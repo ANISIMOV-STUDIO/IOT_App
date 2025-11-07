@@ -45,7 +45,7 @@ class ErrorActions extends StatelessWidget {
       onPressed: onRetry!,
       label: l10n.retry,
       icon: Icons.refresh_rounded,
-      minWidth: 140.w,
+      width: 140.w,
     );
   }
 
@@ -55,7 +55,7 @@ class ErrorActions extends StatelessWidget {
         onPressed: action.onPressed,
         label: action.label,
         icon: action.icon,
-        minWidth: 140.w,
+        width: 140.w,
       );
     }
 
@@ -63,7 +63,7 @@ class ErrorActions extends StatelessWidget {
       onPressed: action.onPressed,
       label: action.label,
       icon: action.icon,
-      minWidth: 140.w,
+      width: 140.w,
     );
   }
 }

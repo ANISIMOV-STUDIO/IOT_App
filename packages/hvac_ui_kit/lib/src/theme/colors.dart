@@ -242,6 +242,12 @@ class HvacColors {
   /// Glass border color (30% white)
   static const Color glassBorder = Color(0x4DFFFFFF);
 
+  /// Subtle border color
+  static const Color borderSubtle = Color(0x1AFFFFFF); // 10% white
+
+  /// Accent orange light (legacy mapping to blue)
+  static const Color accentOrangeLight = accentLight;
+
   /// Shimmer base color (15% white)
   static const Color glassShimmerBase = Color(0x26FFFFFF);
 

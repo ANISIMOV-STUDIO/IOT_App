@@ -55,6 +55,12 @@ class ErrorIcon extends StatelessWidget {
         return Icons.search_off_rounded;
       case ErrorType.timeout:
         return Icons.timer_off_rounded;
+      case ErrorType.validation:
+        return Icons.warning_amber_rounded;
+      case ErrorType.authentication:
+        return Icons.person_off_rounded;
+      case ErrorType.offline:
+        return Icons.signal_wifi_off_rounded;
       case ErrorType.general:
         return Icons.error_outline_rounded;
     }
@@ -72,6 +78,12 @@ class ErrorIcon extends StatelessWidget {
         return Colors.grey;
       case ErrorType.timeout:
         return Colors.deepOrange;
+      case ErrorType.validation:
+        return Colors.amber;
+      case ErrorType.authentication:
+        return Colors.blue;
+      case ErrorType.offline:
+        return Colors.orange;
       case ErrorType.general:
         return theme.colorScheme.error;
     }

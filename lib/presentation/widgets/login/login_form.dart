@@ -31,7 +31,7 @@ class LoginForm extends StatelessWidget {
       children: [
         _LoginTextField(
           controller: emailController,
-          hintText: l10n.emailHint,
+          hintText: l10n.email,
           icon: Icons.email_rounded,
           inputFormatters: [
             FilteringTextInputFormatter.deny(RegExp(r'\s')),
@@ -45,7 +45,7 @@ class LoginForm extends StatelessWidget {
 
         _LoginTextField(
           controller: passwordController,
-          hintText: l10n.passwordHint,
+          hintText: l10n.password,
           icon: Icons.lock_rounded,
           obscureText: true,
           enabled: !isLoading,

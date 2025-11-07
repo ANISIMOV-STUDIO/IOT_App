@@ -27,7 +27,7 @@ class TemperatureTabletLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PerformanceUtils.isolateRepaint(
-      SmoothAnimations.fadeIn(
+      child: SmoothAnimations.fadeIn(
         duration: AnimationDurations.medium,
         child: GlassCard(
           padding: const EdgeInsets.all(20.0), child: Column(
@@ -86,7 +86,6 @@ class TemperatureTabletLayout extends StatelessWidget {
           ),
         ),
       ),
-      debugLabel: 'TempDisplay-Tablet',
     );
   }
 

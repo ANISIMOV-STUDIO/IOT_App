@@ -92,10 +92,9 @@ class AppErrorWidget extends StatelessWidget {
     String? customMessage,
     VoidCallback? onRetry,
   }) {
-    final l10n = AppLocalizations.of(context)!;
     return AppErrorWidget(
-      title: l10n.notFound,
-      message: customMessage ?? l10n.pageNotFound,
+      title: 'Not Found',
+      message: customMessage ?? 'The requested page could not be found',
       icon: Icons.search_off_rounded,
       onRetry: onRetry,
       type: ErrorType.notFound,

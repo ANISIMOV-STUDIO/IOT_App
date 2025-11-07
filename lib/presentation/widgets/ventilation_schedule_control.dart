@@ -6,6 +6,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+import 'package:hvac_ui_kit/src/utils/adaptive_layout.dart' as adaptive;
 import '../../domain/entities/hvac_unit.dart';
 
 class VentilationScheduleControl extends StatelessWidget {
@@ -27,11 +28,11 @@ class VentilationScheduleControl extends StatelessWidget {
         final todaySchedule = unit.schedule?.getDaySchedule(dayOfWeek);
 
         return Container(
-          padding: AdaptiveLayout.controlPadding(context),
+          padding: adaptive.AdaptiveLayout.controlPadding(context),
           decoration: BoxDecoration(
             color: HvacColors.backgroundCard,
             borderRadius: BorderRadius.circular(
-              AdaptiveLayout.borderRadius(context, base: 16),
+              adaptive.AdaptiveLayout.borderRadius(context, base: 16),
             ),
             border: Border.all(
               color: HvacColors.backgroundCardBorder,
@@ -46,7 +47,7 @@ class VentilationScheduleControl extends StatelessWidget {
                 // Desktop layout with constrained height - use scrollable content
                 final spacing = switch (deviceSize) {
                   DeviceSize.compact => 12.0,
-                  DeviceSize.medium || DeviceSize.expanded => AdaptiveLayout.spacing(context, base: 12),
+                  DeviceSize.medium || DeviceSize.expanded => adaptive.AdaptiveLayout.spacing(context, base: 12),
                 };
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,7 +75,7 @@ class VentilationScheduleControl extends StatelessWidget {
                 // Mobile layout without height constraint
                 final spacing = switch (deviceSize) {
                   DeviceSize.compact => 12.0,
-                  DeviceSize.medium || DeviceSize.expanded => AdaptiveLayout.spacing(context, base: 12),
+                  DeviceSize.medium || DeviceSize.expanded => adaptive.AdaptiveLayout.spacing(context, base: 12),
                 };
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -101,20 +102,20 @@ class VentilationScheduleControl extends StatelessWidget {
     return Row(
       children: [
         Container(
-          padding: EdgeInsets.all(AdaptiveLayout.spacing(context, base: 8)),
+          padding: EdgeInsets.all(adaptive.AdaptiveLayout.spacing(context, base: 8)),
           decoration: BoxDecoration(
             color: HvacColors.success.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(
-              AdaptiveLayout.borderRadius(context, base: 8),
+              adaptive.AdaptiveLayout.borderRadius(context, base: 8),
             ),
           ),
           child: Icon(
             Icons.schedule,
             color: HvacColors.success,
-            size: AdaptiveLayout.iconSize(context, base: 20),
+            size: adaptive.AdaptiveLayout.iconSize(context, base: 20),
           ),
         ),
-        SizedBox(width: AdaptiveLayout.spacing(context)),
+        SizedBox(width: adaptive.AdaptiveLayout.spacing(context)),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,7 +124,7 @@ class VentilationScheduleControl extends StatelessWidget {
               Text(
                 'Расписание',
                 style: HvacTypography.titleLarge.copyWith(
-                  fontSize: AdaptiveLayout.fontSize(context, base: 16),
+                  fontSize: adaptive.AdaptiveLayout.fontSize(context, base: 16),
                   color: HvacColors.textPrimary,
                 ),
                 overflow: TextOverflow.ellipsis,
@@ -133,7 +134,7 @@ class VentilationScheduleControl extends StatelessWidget {
               Text(
                 'Автоматическое управление',
                 style: HvacTypography.labelLarge.copyWith(
-                  fontSize: AdaptiveLayout.fontSize(context, base: 12),
+                  fontSize: adaptive.AdaptiveLayout.fontSize(context, base: 12),
                   color: HvacColors.textSecondary,
                 ),
                 overflow: TextOverflow.ellipsis,
@@ -153,11 +154,11 @@ class VentilationScheduleControl extends StatelessWidget {
     dynamic todaySchedule,
   ) {
     return Container(
-      padding: EdgeInsets.all(AdaptiveLayout.spacing(context, base: 10)),
+      padding: EdgeInsets.all(adaptive.AdaptiveLayout.spacing(context, base: 10)),
       decoration: BoxDecoration(
         color: HvacColors.backgroundDark,
         borderRadius: BorderRadius.circular(
-          AdaptiveLayout.borderRadius(context, base: 12),
+          adaptive.AdaptiveLayout.borderRadius(context, base: 12),
         ),
       ),
       child: Column(
@@ -170,7 +171,7 @@ class VentilationScheduleControl extends StatelessWidget {
                 child: Text(
                   _getDayName(dayOfWeek),
                   style: HvacTypography.labelMedium.copyWith(
-                    fontSize: AdaptiveLayout.fontSize(context, base: 11),
+                    fontSize: adaptive.AdaptiveLayout.fontSize(context, base: 11),
                     color: HvacColors.textSecondary,
                   ),
                   overflow: TextOverflow.ellipsis,
@@ -191,7 +192,7 @@ class VentilationScheduleControl extends StatelessWidget {
                 child: Text(
                   todaySchedule?.timerEnabled == true ? 'Включен' : 'Выключен',
                   style: HvacTypography.labelSmall.copyWith(
-                    fontSize: AdaptiveLayout.fontSize(context, base: 10),
+                    fontSize: adaptive.AdaptiveLayout.fontSize(context, base: 10),
                     fontWeight: FontWeight.w600,
                     color: todaySchedule?.timerEnabled == true
                         ? HvacColors.success
@@ -201,7 +202,7 @@ class VentilationScheduleControl extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: AdaptiveLayout.spacing(context, base: 10)),
+          SizedBox(height: adaptive.AdaptiveLayout.spacing(context, base: 10)),
           Row(
             children: [
               Expanded(
@@ -213,7 +214,7 @@ class VentilationScheduleControl extends StatelessWidget {
                   Icons.power_settings_new,
                 ),
               ),
-              SizedBox(width: AdaptiveLayout.spacing(context)),
+              SizedBox(width: adaptive.AdaptiveLayout.spacing(context)),
               Expanded(
                 child: _buildTime(
                   context,
@@ -242,7 +243,7 @@ class VentilationScheduleControl extends StatelessWidget {
             unit.power ? HvacColors.success : HvacColors.error,
           ),
         ),
-        SizedBox(width: AdaptiveLayout.spacing(context)),
+        SizedBox(width: adaptive.AdaptiveLayout.spacing(context)),
         Expanded(
           child: _buildStat(
             context,
@@ -268,7 +269,7 @@ class VentilationScheduleControl extends StatelessWidget {
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(
-              AdaptiveLayout.borderRadius(context, base: 8),
+              adaptive.AdaptiveLayout.borderRadius(context, base: 8),
             ),
           ),
           padding: EdgeInsets.symmetric(
@@ -279,7 +280,7 @@ class VentilationScheduleControl extends StatelessWidget {
           'Настроить расписание',
           style: HvacTypography.buttonMedium.copyWith(
             color: HvacColors.primaryOrange,
-            fontSize: AdaptiveLayout.fontSize(context, base: 13),
+            fontSize: adaptive.AdaptiveLayout.fontSize(context, base: 13),
           ),
         ),
       ),
@@ -302,15 +303,15 @@ class VentilationScheduleControl extends StatelessWidget {
           children: [
             Icon(
               icon,
-              size: AdaptiveLayout.iconSize(context, base: 12),
+              size: adaptive.AdaptiveLayout.iconSize(context, base: 12),
               color: HvacColors.textSecondary,
             ),
-            SizedBox(width: AdaptiveLayout.spacing(context, base: 4)),
+            SizedBox(width: adaptive.AdaptiveLayout.spacing(context, base: 4)),
             Flexible(
               child: Text(
                 label,
                 style: HvacTypography.labelSmall.copyWith(
-                  fontSize: AdaptiveLayout.fontSize(context, base: 10),
+                  fontSize: adaptive.AdaptiveLayout.fontSize(context, base: 10),
                   color: HvacColors.textSecondary,
                 ),
                 overflow: TextOverflow.ellipsis,
@@ -318,13 +319,13 @@ class VentilationScheduleControl extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(height: AdaptiveLayout.spacing(context, base: 4)),
+        SizedBox(height: adaptive.AdaptiveLayout.spacing(context, base: 4)),
         Text(
           time != null
               ? '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}'
               : '--:--',
           style: HvacTypography.titleMedium.copyWith(
-            fontSize: AdaptiveLayout.fontSize(context, base: 15),
+            fontSize: adaptive.AdaptiveLayout.fontSize(context, base: 15),
             fontWeight: FontWeight.w700,
             color: HvacColors.textPrimary,
           ),
@@ -341,11 +342,11 @@ class VentilationScheduleControl extends StatelessWidget {
     Color color,
   ) {
     return Container(
-      padding: EdgeInsets.all(AdaptiveLayout.spacing(context, base: 8)),
+      padding: EdgeInsets.all(adaptive.AdaptiveLayout.spacing(context, base: 8)),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(
-          AdaptiveLayout.borderRadius(context, base: 8),
+          adaptive.AdaptiveLayout.borderRadius(context, base: 8),
         ),
       ),
       child: Column(
@@ -355,15 +356,15 @@ class VentilationScheduleControl extends StatelessWidget {
           Text(
             label,
             style: HvacTypography.labelSmall.copyWith(
-              fontSize: AdaptiveLayout.fontSize(context, base: 10),
+              fontSize: adaptive.AdaptiveLayout.fontSize(context, base: 10),
               color: HvacColors.textSecondary,
             ),
           ),
-          SizedBox(height: AdaptiveLayout.spacing(context, base: 4)),
+          SizedBox(height: adaptive.AdaptiveLayout.spacing(context, base: 4)),
           Text(
             value,
             style: HvacTypography.labelLarge.copyWith(
-              fontSize: AdaptiveLayout.fontSize(context, base: 12),
+              fontSize: adaptive.AdaptiveLayout.fontSize(context, base: 12),
               fontWeight: FontWeight.w600,
               color: color,
             ),

@@ -32,7 +32,7 @@ export 'src/theme/spacing.dart';
 export 'src/theme/radius.dart';
 export 'src/theme/shadows.dart';
 export 'src/theme/decorations.dart';
-export 'src/theme/theme.dart';
+export 'src/theme/theme.dart' hide HvacDecorations;
 export 'src/theme/glassmorphism.dart';
 
 // ============================================================================

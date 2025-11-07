@@ -6,6 +6,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+import 'package:hvac_ui_kit/src/utils/adaptive_layout.dart' as adaptive;
 import '../../domain/entities/hvac_unit.dart';
 import '../../domain/entities/ventilation_mode.dart';
 
@@ -66,17 +67,17 @@ class _VentilationModeControlState extends State<VentilationModeControl>
   @override
   Widget build(BuildContext context) {
     return PerformanceUtils.isolateRepaint(
-      AdaptiveControl(
+      child: AdaptiveControl(
         builder: (context, deviceSize) {
           final isDesktop = deviceSize == DeviceSize.expanded;
           return Container(
             padding: isDesktop
                 ? const EdgeInsets.all(12.0)
-                : AdaptiveLayout.controlPadding(context),
+                : adaptive.AdaptiveLayout.controlPadding(context),
             decoration: BoxDecoration(
               color: HvacColors.backgroundCard,
               borderRadius: BorderRadius.circular(
-                AdaptiveLayout.borderRadius(context, base: 16),
+                adaptive.AdaptiveLayout.borderRadius(context, base: 16),
               ),
               border: Border.all(
                 color: HvacColors.backgroundCardBorder,
@@ -93,12 +94,13 @@ class _VentilationModeControlState extends State<VentilationModeControl>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildHeader(context, deviceSize),
-                      SizedBox(height: isDesktop ? 8.0 : (deviceSize == DeviceSize.compact ? 12.0 : AdaptiveLayout.spacing(context, base: 12))),
+                      SizedBox(height: isDesktop ? 8.0 : (deviceSize == DeviceSize.compact ? 12.0 : adaptive.AdaptiveLayout.spacing(context, base: 12))),
                       _buildModeSelector(context, deviceSize),
-                      SizedBox(height: isDesktop ? 8.0 : (deviceSize == DeviceSize.compact ? 12.0 : AdaptiveLayout.spacing(context, base: 12))),
+                      SizedBox(height: isDesktop ? 8.0 : (deviceSize == DeviceSize.compact ? 12.0 : adaptive.AdaptiveLayout.spacing(context, base: 12))),
                       Expanded(
                         child: SingleChildScrollView(
                           physics: PerformanceUtils.getOptimalScrollPhysics(
+                            context,
                             bouncing: true,
                             alwaysScrollable: false,
                           ),
@@ -114,9 +116,9 @@ class _VentilationModeControlState extends State<VentilationModeControl>
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       _buildHeader(context, deviceSize),
-                      SizedBox(height: deviceSize == DeviceSize.compact ? 12.0 : AdaptiveLayout.spacing(context, base: 12)),
+                      SizedBox(height: deviceSize == DeviceSize.compact ? 12.0 : adaptive.AdaptiveLayout.spacing(context, base: 12)),
                       _buildModeSelector(context, deviceSize),
-                      SizedBox(height: deviceSize == DeviceSize.compact ? 12.0 : AdaptiveLayout.spacing(context, base: 12)),
+                      SizedBox(height: deviceSize == DeviceSize.compact ? 12.0 : adaptive.AdaptiveLayout.spacing(context, base: 12)),
                       _buildFanSpeedControls(context, deviceSize),
                     ],
                   );
@@ -126,7 +128,6 @@ class _VentilationModeControlState extends State<VentilationModeControl>
           );
         },
       ),
-      debugLabel: 'VentilationModeControl',
     );
   }
 
@@ -134,20 +135,20 @@ class _VentilationModeControlState extends State<VentilationModeControl>
     return Row(
       children: [
         Container(
-          padding: EdgeInsets.all(AdaptiveLayout.spacing(context, base: 8)),
+          padding: EdgeInsets.all(adaptive.AdaptiveLayout.spacing(context, base: 8)),
           decoration: BoxDecoration(
             color: HvacColors.primaryOrange.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(
-              AdaptiveLayout.borderRadius(context, base: 8),
+              adaptive.AdaptiveLayout.borderRadius(context, base: 8),
             ),
           ),
           child: Icon(
             Icons.tune,
             color: HvacColors.primaryOrange,
-            size: AdaptiveLayout.iconSize(context, base: 20),
+            size: adaptive.AdaptiveLayout.iconSize(context, base: 20),
           ),
         ),
-        SizedBox(width: AdaptiveLayout.spacing(context)),
+        SizedBox(width: adaptive.AdaptiveLayout.spacing(context)),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,7 +157,7 @@ class _VentilationModeControlState extends State<VentilationModeControl>
               Text(
                 'Режим работы',
                 style: TextStyle(
-                  fontSize: AdaptiveLayout.fontSize(context, base: 16),
+                  fontSize: adaptive.AdaptiveLayout.fontSize(context, base: 16),
                   fontWeight: FontWeight.w600,
                   color: HvacColors.textPrimary,
                 ),
@@ -167,7 +168,7 @@ class _VentilationModeControlState extends State<VentilationModeControl>
               Text(
                 widget.unit.ventMode?.displayName ?? 'Базовый',
                 style: TextStyle(
-                  fontSize: AdaptiveLayout.fontSize(context, base: 12),
+                  fontSize: adaptive.AdaptiveLayout.fontSize(context, base: 12),
                   color: HvacColors.textSecondary,
                 ),
                 overflow: TextOverflow.ellipsis,
@@ -192,13 +193,13 @@ class _VentilationModeControlState extends State<VentilationModeControl>
       },
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: AdaptiveLayout.spacing(context, base: 12),
-          vertical: AdaptiveLayout.spacing(context, base: 10),
+          horizontal: adaptive.AdaptiveLayout.spacing(context, base: 12),
+          vertical: adaptive.AdaptiveLayout.spacing(context, base: 10),
         ),
         decoration: BoxDecoration(
           color: HvacColors.primaryOrange.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(
-            AdaptiveLayout.borderRadius(context, base: 12),
+            adaptive.AdaptiveLayout.borderRadius(context, base: 12),
           ),
           border: Border.all(
             color: HvacColors.primaryOrange.withValues(alpha: 0.3),
@@ -210,7 +211,7 @@ class _VentilationModeControlState extends State<VentilationModeControl>
               child: Text(
                 widget.unit.ventMode?.displayName ?? 'Базовый',
                 style: TextStyle(
-                  fontSize: AdaptiveLayout.fontSize(context, base: 14),
+                  fontSize: adaptive.AdaptiveLayout.fontSize(context, base: 14),
                   fontWeight: FontWeight.w600,
                   color: HvacColors.primaryOrange,
                 ),
@@ -224,7 +225,7 @@ class _VentilationModeControlState extends State<VentilationModeControl>
                   ? Icons.keyboard_arrow_up
                   : Icons.keyboard_arrow_down,
               color: HvacColors.primaryOrange,
-              size: AdaptiveLayout.iconSize(context, base: 20),
+              size: adaptive.AdaptiveLayout.iconSize(context, base: 20),
             ),
           ],
         ),
@@ -281,7 +282,7 @@ class _VentilationModeControlState extends State<VentilationModeControl>
                 },
               ),
             ),
-            SizedBox(width: AdaptiveLayout.spacing(context, base: 16)),
+            SizedBox(width: adaptive.AdaptiveLayout.spacing(context, base: 16)),
             Expanded(
               child: AdaptiveSlider(
                 label: 'Вытяжной',

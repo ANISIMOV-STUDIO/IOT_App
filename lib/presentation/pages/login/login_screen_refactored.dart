@@ -189,7 +189,7 @@ class _LoginScreenState extends State<LoginScreen>
   }
 
   void _handleAuthStateChange(BuildContext context, AuthState state) {
-    if (state is AuthSuccess) {
+    if (state is AuthAuthenticated) {
       setState(() => _isLoading = false);
       context.go('/home');
     } else if (state is AuthError) {

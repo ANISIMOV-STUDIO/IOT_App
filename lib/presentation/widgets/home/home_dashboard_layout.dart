@@ -40,6 +40,7 @@ class HomeMobileLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       physics: PerformanceUtils.getOptimalScrollPhysics(
+        context,
         bouncing: true,
         alwaysScrollable: true,
       ),

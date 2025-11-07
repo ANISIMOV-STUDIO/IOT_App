@@ -63,7 +63,7 @@ class LoginHeader extends StatelessWidget {
 
         // Subtitle
         Text(
-          l10n.loginToContinue,
+          l10n.loginSubtitle,
           style: TextStyle(
             fontSize: 16.sp,
             color: HvacColors.textSecondary,

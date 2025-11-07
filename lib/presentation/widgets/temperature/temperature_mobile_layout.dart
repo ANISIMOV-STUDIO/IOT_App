@@ -28,7 +28,7 @@ class TemperatureMobileLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PerformanceUtils.isolateRepaint(
-      SmoothAnimations.fadeIn(
+      child: SmoothAnimations.fadeIn(
         duration: AnimationDurations.medium,
         child: GlassCard(
           padding: const EdgeInsets.all(12.0),
@@ -56,7 +56,6 @@ class TemperatureMobileLayout extends StatelessWidget {
           ),
         ),
       ),
-      debugLabel: 'TempDisplay-Mobile',
     );
   }
 

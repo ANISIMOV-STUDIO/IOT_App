@@ -13,6 +13,9 @@ enum ErrorType {
   permission,
   notFound,
   timeout,
+  validation,
+  authentication,
+  offline,
 }
 
 /// Error action for additional buttons

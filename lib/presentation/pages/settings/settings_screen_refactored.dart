@@ -160,7 +160,7 @@ class _SettingsScreenRefactoredState extends State<SettingsScreenRefactored>
         // Sidebar Navigation
         Container(
           width: 240.w,
-          color: HvacColors.backgroundCard,
+          color: ui_kit.HvacColors.backgroundCard,
           child: _buildDesktopSidebar(l10n),
         ),
         // Main Content
@@ -220,12 +220,12 @@ class _SettingsScreenRefactoredState extends State<SettingsScreenRefactored>
         ),
         decoration: BoxDecoration(
           color: isSelected
-              ? HvacColors.primaryOrange.withValues(alpha: 0.1)
+              ? ui_kit.HvacColors.primaryOrange.withValues(alpha: 0.1)
               : Colors.transparent,
           border: Border(
             left: BorderSide(
               color: isSelected
-                  ? HvacColors.primaryOrange
+                  ? ui_kit.HvacColors.primaryOrange
                   : Colors.transparent,
               width: 3.w,
             ),
@@ -237,19 +237,19 @@ class _SettingsScreenRefactoredState extends State<SettingsScreenRefactored>
               icon,
               size: 20.w,
               color: isSelected
-                  ? HvacColors.primaryOrange
-                  : HvacColors.textSecondary,
+                  ? ui_kit.HvacColors.primaryOrange
+                  : ui_kit.HvacColors.textSecondary,
             ),
             SizedBox(width: 12.w),
             Expanded(
               child: Text(
                 label,
-                style: HvacTypography.bodyMedium.copyWith(
+                style: ui_kit.HvacTypography.bodyMedium.copyWith(
                   fontSize: 14.sp,
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                   color: isSelected
-                      ? HvacColors.primaryOrange
-                      : HvacColors.textPrimary,
+                      ? ui_kit.HvacColors.primaryOrange
+                      : ui_kit.HvacColors.textPrimary,
                 ),
               ),
             ),
@@ -339,7 +339,7 @@ class _SettingsScreenRefactoredState extends State<SettingsScreenRefactored>
           message,
           style: TextStyle(fontSize: 14.sp),
         ),
-        backgroundColor: HvacColors.success,
+        backgroundColor: ui_kit.HvacColors.success,
         duration: const Duration(seconds: 2),
         behavior: SnackBarBehavior.floating,
         margin: EdgeInsets.all(16.w),

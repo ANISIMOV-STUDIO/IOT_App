@@ -36,7 +36,7 @@ class RoomCardCompact extends StatelessWidget {
 
     // Wrap entire card with RepaintBoundary for performance
     return PerformanceUtils.isolateRepaint(
-      MicroInteraction(
+      child: MicroInteraction(
         onTap: onTap,
         child: SmoothAnimations.fadeIn(
           duration: AnimationDurations.medium,
@@ -69,7 +69,6 @@ class RoomCardCompact extends StatelessWidget {
           ),
         ),
       ),
-      debugLabel: 'RoomCard-$roomName',
     );
   }
 
