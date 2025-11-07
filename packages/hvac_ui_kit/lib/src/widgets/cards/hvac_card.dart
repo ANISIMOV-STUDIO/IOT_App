@@ -1,11 +1,3 @@
-/// Card Widget for HVAC UI Kit
-///
-/// Professional card component with:
-/// - Glassmorphism design
-/// - Adaptive padding
-/// - Hover effects for web
-/// - Corporate blue theme
-
 import 'package:flutter/material.dart';
 import '../../theme/colors.dart';
 import '../../theme/spacing.dart';

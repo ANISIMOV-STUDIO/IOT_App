@@ -1,11 +1,3 @@
-/// Error State Widget for HVAC UI Kit
-///
-/// Professional error state with:
-/// - Adaptive layouts (mobile/tablet/desktop)
-/// - Retry functionality
-/// - Error details support
-/// - Corporate blue theme
-
 import 'package:flutter/material.dart';
 import '../../theme/colors.dart';
 import '../../theme/spacing.dart';

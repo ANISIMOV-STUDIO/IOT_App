@@ -19,7 +19,6 @@ class _LiquidSwipeExampleState extends State<LiquidSwipeExample> {
 
   @override
   void dispose() {
-    _controller.dispose();
     super.dispose();
   }
 

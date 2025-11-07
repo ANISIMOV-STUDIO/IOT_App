@@ -1,11 +1,3 @@
-/// Empty State Widget for HVAC UI Kit
-///
-/// Professional empty state with:
-/// - Adaptive layouts (mobile/tablet/desktop)
-/// - Customizable icon and messages
-/// - Optional action button
-/// - Corporate blue theme
-
 import 'package:flutter/material.dart';
 import '../../theme/colors.dart';
 import '../../theme/spacing.dart';

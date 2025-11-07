@@ -267,6 +267,7 @@ class PerformanceUtils {
   ) {
     if (updates.isEmpty) return;
 
+    // ignore: invalid_use_of_protected_member
     state.setState(() {
       for (final update in updates) {
         update();

@@ -1,11 +1,3 @@
-/// Loading State Widget for HVAC UI Kit
-///
-/// Professional loading state with:
-/// - Multiple loading styles (spinner, shimmer, progress)
-/// - Adaptive layouts
-/// - Optional message
-/// - Corporate blue theme
-
 import 'package:flutter/material.dart';
 import '../../theme/colors.dart';
 import '../../theme/spacing.dart';

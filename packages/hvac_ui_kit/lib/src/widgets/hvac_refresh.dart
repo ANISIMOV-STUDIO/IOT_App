@@ -125,7 +125,6 @@ class HvacLogoRefresh extends StatefulWidget {
 class _HvacLogoRefreshState extends State<HvacLogoRefresh>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late Animation<double> _rotation;
 
   @override
   void initState() {
@@ -134,7 +133,6 @@ class _HvacLogoRefreshState extends State<HvacLogoRefresh>
       duration: const Duration(milliseconds: 1000),
       vsync: this,
     );
-    _rotation = Tween<double>(begin: 0, end: 1).animate(_controller);
   }
 
   @override
