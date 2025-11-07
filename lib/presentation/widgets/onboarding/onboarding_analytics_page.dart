@@ -5,7 +5,6 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
-import 'onboarding_stat_card.dart';
 
 /// Analytics and monitoring page widget for onboarding
 class OnboardingAnalyticsPage extends StatelessWidget {
@@ -98,23 +97,31 @@ class OnboardingAnalyticsPage extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      OnboardingStatCard(
-                        value: '24°C',
-                        label: 'Temp',
-                        icon: Icons.thermostat,
-                        isCompact: isCompact,
+                      Expanded(
+                        child: _OnboardingStatCard(
+                          value: '24°C',
+                          label: 'Temp',
+                          icon: Icons.thermostat,
+                          isCompact: isCompact,
+                        ),
                       ),
-                      OnboardingStatCard(
-                        value: '65%',
-                        label: 'Humidity',
-                        icon: Icons.water_drop,
-                        isCompact: isCompact,
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: _OnboardingStatCard(
+                          value: '65%',
+                          label: 'Humidity',
+                          icon: Icons.water_drop,
+                          isCompact: isCompact,
+                        ),
                       ),
-                      OnboardingStatCard(
-                        value: '45',
-                        label: 'Quality',
-                        icon: Icons.air,
-                        isCompact: isCompact,
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: _OnboardingStatCard(
+                          value: '45',
+                          label: 'Quality',
+                          icon: Icons.air,
+                          isCompact: isCompact,
+                        ),
                       ),
                     ],
                   ),
@@ -123,6 +130,63 @@ class OnboardingAnalyticsPage extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Internal compact stat card for onboarding
+class _OnboardingStatCard extends StatelessWidget {
+  final String value;
+  final String label;
+  final IconData icon;
+  final bool isCompact;
+
+  const _OnboardingStatCard({
+    required this.value,
+    required this.label,
+    required this.icon,
+    required this.isCompact,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(isCompact ? 12 : 16),
+      decoration: BoxDecoration(
+        color: HvacColors.backgroundCard,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: HvacColors.backgroundCardBorder,
+          width: 1,
+        ),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            size: isCompact ? 24 : 32,
+            color: HvacColors.accent,
+          ),
+          SizedBox(height: isCompact ? 8 : 12),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: isCompact ? 18 : 24,
+              fontWeight: FontWeight.bold,
+              color: HvacColors.textPrimary,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: isCompact ? 10 : 12,
+              color: HvacColors.textSecondary,
+            ),
+          ),
+        ],
       ),
     );
   }

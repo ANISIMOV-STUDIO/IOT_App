@@ -20,7 +20,7 @@ class OverviewQuickStats extends StatelessWidget {
     return Column(
       children: [
         // Runtime and Energy row
-        const Row(
+        Row(
           children: [
             Expanded(
               child: HvacStatCard(
@@ -30,7 +30,7 @@ class OverviewQuickStats extends StatelessWidget {
                 iconColor: HvacColors.info,
               ),
             ),
-            SizedBox(width: 16.0),
+            const SizedBox(width: 16.0),
             Expanded(
               child: HvacStatCard(
                 title: 'Энергия',

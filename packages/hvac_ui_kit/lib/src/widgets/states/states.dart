@@ -4,5 +4,5 @@
 library;
 
 export 'hvac_empty_state.dart';
-export 'hvac_error_state.dart';
+export 'hvac_error_state.dart' hide EmptyStateSize;
 export 'hvac_loading_state.dart';

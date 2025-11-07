@@ -134,7 +134,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
 
     // Empty state
     if (!_hasData && !_isLoading) {
-      return EmptyState(
+      return HvacEmptyState(
         icon: Icons.analytics_outlined,
         title: 'Нет данных',
         message: 'Статистика пока недоступна для выбранного периода',
@@ -165,12 +165,11 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
   }
 
   Widget _buildErrorState() {
-    return EmptyState(
+    return const HvacErrorState(
       icon: Icons.error_outline,
       title: 'Ошибка загрузки',
       message: 'Не удалось загрузить данные аналитики',
-      actionLabel: 'Повторить',
-      onAction: _loadData,
+      retryLabel: 'Повторить',
     );
   }
 }

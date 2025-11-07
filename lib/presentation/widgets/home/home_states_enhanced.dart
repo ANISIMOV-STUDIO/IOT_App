@@ -17,7 +17,6 @@ import '../../bloc/hvac_list/hvac_list_event.dart';
 import '../common/loading_widget.dart';
 import '../common/error_widget.dart' as app_error;
 import '../common/empty_state_widget.dart';
-import '../common/accessible_button.dart';
 
 /// Enhanced loading state with shimmer effect
 class EnhancedHomeLoadingState extends StatelessWidget {
@@ -234,15 +233,13 @@ class AccessibleRefreshButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return AccessibleIconButton(
+    return IconButton(
       onPressed: isLoading ? null : onRefresh,
-      icon: Icons.refresh,
-      semanticLabel: l10n.refresh,
+      icon: Icon(
+        Icons.refresh,
+        color: isLoading ? HvacColors.textTertiary : HvacColors.accent,
+      ),
       tooltip: l10n.refreshDevices,
-      loading: isLoading,
-      size: 24.0,
-      color: HvacColors.primaryOrange,
-      minTouchTarget: 48.0,
     );
   }
 }

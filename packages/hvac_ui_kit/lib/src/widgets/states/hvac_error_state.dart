@@ -21,6 +21,9 @@ enum ErrorStateSize {
   large,    // For full screen
 }
 
+/// Re-export for compatibility
+typedef EmptyStateSize = ErrorStateSize;
+
 /// Error state component
 ///
 /// Usage:
@@ -58,7 +61,7 @@ class HvacErrorState extends StatelessWidget {
   final bool isFullScreen;
 
   /// Size variant
-  final EmptyStateSize size;
+  final ErrorStateSize size;
 
   const HvacErrorState({
     super.key,
@@ -70,7 +73,7 @@ class HvacErrorState extends StatelessWidget {
     this.errorDetails,
     this.showDetailsToggle = false,
     this.isFullScreen = false,
-    this.size = EmptyStateSize.medium,
+    this.size = ErrorStateSize.medium,
   });
 
   @override
@@ -159,8 +162,8 @@ class _ErrorStateContentState extends State<_ErrorStateContent> {
             widget.message,
             style: _getMessageStyle(),
             textAlign: TextAlign.center,
-            maxLines: widget.size == EmptyStateSize.compact ? 3 : null,
-            overflow: widget.size == EmptyStateSize.compact
+            maxLines: widget.size == ErrorStateSize.compact ? 3 : null,
+            overflow: widget.size == ErrorStateSize.compact
                 ? TextOverflow.ellipsis
                 : null,
           ),
@@ -203,7 +206,7 @@ class _ErrorStateContentState extends State<_ErrorStateContent> {
               label: widget.retryLabel,
               onPressed: widget.onRetry,
               icon: Icons.refresh,
-              size: widget.size == EmptyStateSize.compact
+              size: widget.size == ErrorStateSize.compact
                   ? HvacButtonSize.small
                   : HvacButtonSize.medium,
             ),
@@ -215,21 +218,21 @@ class _ErrorStateContentState extends State<_ErrorStateContent> {
 
   _SizeConfig _getSpacing() {
     switch (widget.size) {
-      case EmptyStateSize.compact:
+      case ErrorStateSize.compact:
         return _SizeConfig(
           padding: HvacSpacing.md,
           titleGap: HvacSpacing.sm,
           messageGap: HvacSpacing.xs,
           buttonGap: HvacSpacing.md,
         );
-      case EmptyStateSize.medium:
+      case ErrorStateSize.medium:
         return _SizeConfig(
           padding: HvacSpacing.xl,
           titleGap: HvacSpacing.md,
           messageGap: HvacSpacing.sm,
           buttonGap: HvacSpacing.xl,
         );
-      case EmptyStateSize.large:
+      case ErrorStateSize.large:
         return _SizeConfig(
           padding: HvacSpacing.xxl,
           titleGap: HvacSpacing.lg,
@@ -241,33 +244,33 @@ class _ErrorStateContentState extends State<_ErrorStateContent> {
 
   double _getIconSize() {
     switch (widget.size) {
-      case EmptyStateSize.compact:
+      case ErrorStateSize.compact:
         return 48.0;
-      case EmptyStateSize.medium:
+      case ErrorStateSize.medium:
         return 64.0;
-      case EmptyStateSize.large:
+      case ErrorStateSize.large:
         return 80.0;
     }
   }
 
   TextStyle _getTitleStyle() {
     switch (widget.size) {
-      case EmptyStateSize.compact:
+      case ErrorStateSize.compact:
         return HvacTypography.h4.copyWith(color: HvacColors.textPrimary);
-      case EmptyStateSize.medium:
+      case ErrorStateSize.medium:
         return HvacTypography.h3.copyWith(color: HvacColors.textPrimary);
-      case EmptyStateSize.large:
+      case ErrorStateSize.large:
         return HvacTypography.h2.copyWith(color: HvacColors.textPrimary);
     }
   }
 
   TextStyle _getMessageStyle() {
     switch (widget.size) {
-      case EmptyStateSize.compact:
+      case ErrorStateSize.compact:
         return HvacTypography.bodySmall.copyWith(color: HvacColors.textSecondary);
-      case EmptyStateSize.medium:
+      case ErrorStateSize.medium:
         return HvacTypography.bodyMedium.copyWith(color: HvacColors.textSecondary);
-      case EmptyStateSize.large:
+      case ErrorStateSize.large:
         return HvacTypography.bodyLarge.copyWith(color: HvacColors.textSecondary);
     }
   }
