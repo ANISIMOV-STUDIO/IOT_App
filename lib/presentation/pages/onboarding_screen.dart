@@ -31,7 +31,7 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
-  final LiquidController _liquidController = LiquidController();
+  final PageController _pageController = PageController();
   int _currentPage = 0;
   static const int _totalPages = 4;
 
@@ -78,43 +78,44 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
     return Scaffold(
       backgroundColor: HvacColors.backgroundDark,
-      body: MouseRegion(
-        cursor: SystemMouseCursors.grab,
-        child: Stack(
-          children: [
-            // Liquid Swipe Pages
-            HvacLiquidSwipe(
-              pages: _buildPages(isCompact),
-              controller: _liquidController,
-              enableLoop: false,
-              waveType: WaveType.liquidReveal,
-              onPageChangeCallback: _onPageChanged,
+      body: Stack(
+        children: [
+          // PageView for onboarding pages
+          PageView(
+            controller: _pageController,
+            onPageChanged: _onPageChanged,
+            children: _buildPages(isCompact),
+          ),
+
+          // Skip Button (only on first 3 pages)
+          if (_currentPage < _totalPages - 1)
+            OnboardingSkipButton(
+              onSkip: _skipOnboarding,
+              skipText: l10n.skip,
             ),
 
-            // Skip Button (only on first 3 pages)
-            if (_currentPage < _totalPages - 1)
-              OnboardingSkipButton(
-                onSkip: _skipOnboarding,
-                skipText: l10n.skip,
-              ),
+          // Animated Swipe Hint (only on first page)
+          if (_currentPage == 0)
+            OnboardingSwipeHint(
+              isCompact: isCompact,
+              hintText: l10n.swipeToContinue,
+            ),
 
-            // Animated Swipe Hint (only on first page)
-            if (_currentPage == 0)
-              OnboardingSwipeHint(
-                isCompact: isCompact,
-                hintText: l10n.swipeToContinue,
-              ),
-
-            // Page Indicators (only on first 3 pages)
-            if (_currentPage < _totalPages - 1)
-              OnboardingPageIndicators(
-                currentPage: _currentPage,
-                totalPages: _totalPages - 1,
-                isCompact: isCompact,
-              ),
-          ],
-        ),
+          // Page Indicators (only on first 3 pages)
+          if (_currentPage < _totalPages - 1)
+            OnboardingPageIndicators(
+              currentPage: _currentPage,
+              totalPages: _totalPages - 1,
+              isCompact: isCompact,
+            ),
+        ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 }
