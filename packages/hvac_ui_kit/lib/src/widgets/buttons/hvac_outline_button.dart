@@ -216,7 +216,7 @@ class _HvacOutlineButtonState extends State<HvacOutlineButton>
             color: textColor,
             size: widget.size.iconSize,
           ),
-          SizedBox(width: HvacSpacing.xs),
+          const SizedBox(width: HvacSpacing.xs),
           Flexible(
             child: Text(
               widget.label,

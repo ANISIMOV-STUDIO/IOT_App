@@ -119,7 +119,7 @@ class _StatusIndicatorState extends State<StatusIndicator>
           ),
         ),
         if (widget.showLabel) ...[
-          SizedBox(width: HvacSpacing.sm),
+          const SizedBox(width: HvacSpacing.sm),
           Text(
             label,
             style: HvacTypography.caption.copyWith(

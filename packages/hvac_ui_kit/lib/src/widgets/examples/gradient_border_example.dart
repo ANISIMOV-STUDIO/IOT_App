@@ -15,43 +15,43 @@ class GradientBorderExample extends StatelessWidget {
       backgroundColor: HvacColors.backgroundDark,
       appBar: AppBar(title: const Text('Gradient Borders')),
       body: ListView(
-        padding: EdgeInsets.all(HvacSpacing.md),
+        padding: const EdgeInsets.all(HvacSpacing.md),
         children: [
-          Text('Static Gradient Borders:',
+          const Text('Static Gradient Borders:',
               style: TextStyle(color: HvacColors.textSecondary)),
-          SizedBox(height: HvacSpacing.md),
+          const SizedBox(height: HvacSpacing.md),
 
           // Branded border
           HvacBrandedBorder(
             child: _buildCard('Branded Border\n(Orange → Blue)'),
           ),
-          SizedBox(height: HvacSpacing.lg),
+          const SizedBox(height: HvacSpacing.lg),
 
           // Success border
           HvacSuccessBorder(
             child: _buildCard('Success Border\n(Device Active)'),
           ),
-          SizedBox(height: HvacSpacing.lg),
+          const SizedBox(height: HvacSpacing.lg),
 
           // Warning border
           HvacWarningBorder(
             child: _buildCard('Warning Border\n(Attention Needed)'),
           ),
-          SizedBox(height: HvacSpacing.lg),
+          const SizedBox(height: HvacSpacing.lg),
 
           // Error border
           HvacErrorBorder(
             child: _buildCard('Error Border\n(Device Offline)'),
           ),
-          SizedBox(height: HvacSpacing.xl),
+          const SizedBox(height: HvacSpacing.xl),
 
-          Text('Animated Gradient Border:',
+          const Text('Animated Gradient Border:',
               style: TextStyle(color: HvacColors.textSecondary)),
-          SizedBox(height: HvacSpacing.md),
+          const SizedBox(height: HvacSpacing.md),
 
           // Animated border
           HvacAnimatedGradientBorder(
-            gradientColors: [
+            gradientColors: const [
               HvacColors.primaryOrange,
               HvacColors.primaryBlue,
               HvacColors.primaryOrange,
@@ -66,12 +66,12 @@ class GradientBorderExample extends StatelessWidget {
 
   Widget _buildCard(String text) {
     return Container(
-      padding: EdgeInsets.all(HvacSpacing.xl),
+      padding: const EdgeInsets.all(HvacSpacing.xl),
       child: Center(
         child: Text(
           text,
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
       ),
     );

@@ -45,11 +45,11 @@ class HvacTheme {
       scaffoldBackgroundColor: HvacColors.backgroundDark,
 
       // App Bar Theme
-      appBarTheme: AppBarTheme(
+      appBarTheme: const AppBarTheme(
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        iconTheme: const IconThemeData(color: HvacColors.textPrimary),
+        iconTheme: IconThemeData(color: HvacColors.textPrimary),
         titleTextStyle: TextStyle(
           color: HvacColors.textPrimary,
           fontSize: 20.0,
@@ -141,7 +141,7 @@ class HvacTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(HvacRadius.md),
           ),
-          textStyle: TextStyle(
+          textStyle: const TextStyle(
             fontSize: 16.0,
             fontWeight: FontWeight.w600,
             letterSpacing: 0.5,
@@ -157,7 +157,7 @@ class HvacTheme {
             horizontal: HvacSpacing.md,
             vertical: HvacSpacing.sm,
           ),
-          textStyle: TextStyle(
+          textStyle: const TextStyle(
             fontSize: 14.0,
             fontWeight: FontWeight.w600,
           ),
@@ -243,12 +243,12 @@ class HvacTheme {
             width: 1,
           ),
         ),
-        titleTextStyle: TextStyle(
+        titleTextStyle: const TextStyle(
           color: HvacColors.textPrimary,
           fontSize: 20.0,
           fontWeight: FontWeight.w600,
         ),
-        contentTextStyle: TextStyle(
+        contentTextStyle: const TextStyle(
           color: HvacColors.textSecondary,
           fontSize: 14.0,
           fontWeight: FontWeight.w400,
@@ -256,7 +256,7 @@ class HvacTheme {
       ),
 
       // Bottom Sheet Theme
-      bottomSheetTheme: BottomSheetThemeData(
+      bottomSheetTheme: const BottomSheetThemeData(
         backgroundColor: HvacColors.backgroundCard,
         modalBackgroundColor: HvacColors.backgroundCard,
         elevation: 8,
@@ -264,7 +264,7 @@ class HvacTheme {
           borderRadius: BorderRadius.vertical(
             top: Radius.circular(HvacRadius.xl),
           ),
-          side: const BorderSide(
+          side: BorderSide(
             color: HvacColors.backgroundCardBorder,
             width: 1,
           ),
@@ -274,7 +274,7 @@ class HvacTheme {
       // Snackbar Theme
       snackBarTheme: SnackBarThemeData(
         backgroundColor: HvacColors.backgroundCard,
-        contentTextStyle: TextStyle(
+        contentTextStyle: const TextStyle(
           color: HvacColors.textPrimary,
           fontSize: 14.0,
         ),
@@ -298,7 +298,7 @@ class HvacTheme {
             width: 1,
           ),
         ),
-        textStyle: TextStyle(
+        textStyle: const TextStyle(
           color: HvacColors.textPrimary,
           fontSize: 12.0,
         ),
@@ -317,11 +317,11 @@ class HvacTheme {
           horizontal: HvacSpacing.sm,
           vertical: HvacSpacing.xs,
         ),
-        labelStyle: TextStyle(
+        labelStyle: const TextStyle(
           color: HvacColors.textPrimary,
           fontSize: 14.0,
         ),
-        secondaryLabelStyle: TextStyle(
+        secondaryLabelStyle: const TextStyle(
           color: HvacColors.backgroundDark,
           fontSize: 14.0,
         ),

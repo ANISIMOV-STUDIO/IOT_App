@@ -35,7 +35,7 @@ class HvacNeumorphicContainer extends StatelessWidget {
     return Container(
       width: width,
       height: height,
-      padding: padding ?? EdgeInsets.all(HvacSpacing.md),
+      padding: padding ?? const EdgeInsets.all(HvacSpacing.md),
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(borderRadius),
@@ -43,13 +43,13 @@ class HvacNeumorphicContainer extends StatelessWidget {
             ? [
                 // Inner shadows (pressed state)
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
+                  color: Colors.black.withValues(alpha:0.2),
                   offset: const Offset(2, 2),
                   blurRadius: 4,
                   spreadRadius: -2,
                 ),
                 BoxShadow(
-                  color: Colors.white.withOpacity(0.05),
+                  color: Colors.white.withValues(alpha:0.05),
                   offset: const Offset(-2, -2),
                   blurRadius: 4,
                   spreadRadius: -2,
@@ -58,12 +58,12 @@ class HvacNeumorphicContainer extends StatelessWidget {
             : [
                 // Outer shadows (normal state)
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.3),
+                  color: Colors.black.withValues(alpha:0.3),
                   offset: const Offset(6, 6),
                   blurRadius: 12,
                 ),
                 BoxShadow(
-                  color: Colors.white.withOpacity(0.05),
+                  color: Colors.white.withValues(alpha:0.05),
                   offset: const Offset(-6, -6),
                   blurRadius: 12,
                 ),
@@ -184,12 +184,12 @@ class HvacNeumorphicToggle extends StatelessWidget {
       child: HvacNeumorphicContainer(
         isPressed: value,
         color: value
-            ? HvacColors.primaryOrange.withOpacity(0.2)
+            ? HvacColors.primaryOrange.withValues(alpha:0.2)
             : HvacColors.backgroundCard,
-        padding: EdgeInsets.all(HvacSpacing.sm),
+        padding: const EdgeInsets.all(HvacSpacing.sm),
         child: value
-            ? (activeChild ?? Icon(Icons.check, color: HvacColors.primaryOrange))
-            : (inactiveChild ?? Icon(Icons.close, color: HvacColors.textSecondary)),
+            ? (activeChild ?? const Icon(Icons.check, color: HvacColors.primaryOrange))
+            : (inactiveChild ?? const Icon(Icons.close, color: HvacColors.textSecondary)),
       ),
     );
   }
@@ -219,7 +219,7 @@ class HvacNeumorphicCard extends StatelessWidget {
       child: HvacNeumorphicContainer(
         width: width,
         height: height,
-        padding: padding ?? EdgeInsets.all(HvacSpacing.lg),
+        padding: padding ?? const EdgeInsets.all(HvacSpacing.lg),
         child: child,
       ),
     );

@@ -26,9 +26,9 @@ class _NeumorphicExampleState extends State<NeumorphicExample> {
         elevation: 0,
       ),
       body: ListView(
-        padding: EdgeInsets.all(HvacSpacing.lg),
+        padding: const EdgeInsets.all(HvacSpacing.lg),
         children: [
-          Text(
+          const Text(
             'Soft 3D Buttons:',
             style: TextStyle(
               fontSize: 16,
@@ -36,7 +36,7 @@ class _NeumorphicExampleState extends State<NeumorphicExample> {
               color: HvacColors.textPrimary,
             ),
           ),
-          SizedBox(height: HvacSpacing.md),
+          const SizedBox(height: HvacSpacing.md),
 
           // Regular buttons
           Row(
@@ -46,7 +46,7 @@ class _NeumorphicExampleState extends State<NeumorphicExample> {
                 onPressed: () => _showMessage('Button 1 pressed'),
                 width: 100,
                 height: 100,
-                child: Column(
+                child: const Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.power_settings_new, size: 32),
@@ -59,7 +59,7 @@ class _NeumorphicExampleState extends State<NeumorphicExample> {
                 onPressed: () => _showMessage('Button 2 pressed'),
                 width: 100,
                 height: 100,
-                child: Column(
+                child: const Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.ac_unit, size: 32),
@@ -72,7 +72,7 @@ class _NeumorphicExampleState extends State<NeumorphicExample> {
                 onPressed: () => _showMessage('Button 3 pressed'),
                 width: 100,
                 height: 100,
-                child: Column(
+                child: const Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.wb_sunny, size: 32),
@@ -83,9 +83,9 @@ class _NeumorphicExampleState extends State<NeumorphicExample> {
               ),
             ],
           ),
-          SizedBox(height: HvacSpacing.xl),
+          const SizedBox(height: HvacSpacing.xl),
 
-          Text(
+          const Text(
             'Icon Buttons:',
             style: TextStyle(
               fontSize: 16,
@@ -93,7 +93,7 @@ class _NeumorphicExampleState extends State<NeumorphicExample> {
               color: HvacColors.textPrimary,
             ),
           ),
-          SizedBox(height: HvacSpacing.md),
+          const SizedBox(height: HvacSpacing.md),
 
           // Icon buttons
           Row(
@@ -114,9 +114,9 @@ class _NeumorphicExampleState extends State<NeumorphicExample> {
               ),
             ],
           ),
-          SizedBox(height: HvacSpacing.xl),
+          const SizedBox(height: HvacSpacing.xl),
 
-          Text(
+          const Text(
             'Toggle Button:',
             style: TextStyle(
               fontSize: 16,
@@ -124,7 +124,7 @@ class _NeumorphicExampleState extends State<NeumorphicExample> {
               color: HvacColors.textPrimary,
             ),
           ),
-          SizedBox(height: HvacSpacing.md),
+          const SizedBox(height: HvacSpacing.md),
 
           Center(
             child: HvacNeumorphicToggle(
@@ -132,9 +132,9 @@ class _NeumorphicExampleState extends State<NeumorphicExample> {
               onChanged: (val) => setState(() => _isToggled = val),
             ),
           ),
-          SizedBox(height: HvacSpacing.xl),
+          const SizedBox(height: HvacSpacing.xl),
 
-          Text(
+          const Text(
             'Neumorphic Card:',
             style: TextStyle(
               fontSize: 16,
@@ -142,11 +142,11 @@ class _NeumorphicExampleState extends State<NeumorphicExample> {
               color: HvacColors.textPrimary,
             ),
           ),
-          SizedBox(height: HvacSpacing.md),
+          const SizedBox(height: HvacSpacing.md),
 
           HvacNeumorphicCard(
             onTap: () => _showMessage('Card tapped'),
-            child: Column(
+            child: const Column(
               children: [
                 Icon(Icons.thermostat, size: 48, color: HvacColors.primaryOrange),
                 SizedBox(height: HvacSpacing.md),
@@ -173,7 +173,7 @@ class _NeumorphicExampleState extends State<NeumorphicExample> {
 
   void _showMessage(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message), duration: Duration(seconds: 1)),
+      SnackBar(content: Text(message), duration: const Duration(seconds: 1)),
     );
   }
 }

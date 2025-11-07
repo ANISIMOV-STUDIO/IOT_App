@@ -65,7 +65,7 @@ class _AnimatedBadgeState extends State<AnimatedBadge>
     Widget badge = ScaleTransition(
       scale: _scaleAnimation,
       child: Container(
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           horizontal: HvacSpacing.sm,
           vertical: HvacSpacing.xxs,
         ),
@@ -86,7 +86,7 @@ class _AnimatedBadgeState extends State<AnimatedBadge>
                 size: 12.0,
                 color: widget.backgroundColor,
               ),
-              SizedBox(width: HvacSpacing.xxs),
+              const SizedBox(width: HvacSpacing.xxs),
             ],
             Text(
               widget.label,
@@ -95,7 +95,7 @@ class _AnimatedBadgeState extends State<AnimatedBadge>
               ),
             ),
             if (widget.isNew) ...[
-              SizedBox(width: HvacSpacing.xxs),
+              const SizedBox(width: HvacSpacing.xxs),
               Container(
                 width: 6.0,
                 height: 6.0,

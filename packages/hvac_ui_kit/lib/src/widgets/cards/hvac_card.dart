@@ -215,7 +215,7 @@ class HvacStatCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   title,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 14,
                     color: HvacColors.textSecondary,
                     fontWeight: FontWeight.w500,
@@ -241,7 +241,7 @@ class HvacStatCard extends StatelessWidget {
             const SizedBox(height: HvacSpacing.xs),
             Text(
               subtitle!,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 12,
                 color: HvacColors.textTertiary,
               ),
@@ -309,7 +309,7 @@ class HvacInfoCard extends StatelessWidget {
                 const SizedBox(height: HvacSpacing.xs),
                 Text(
                   message,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 14,
                     color: HvacColors.textSecondary,
                   ),

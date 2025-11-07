@@ -40,11 +40,11 @@ class _RefreshExampleState extends State<RefreshExample> {
       body: HvacRefreshIndicator(
         onRefresh: _handleRefresh,
         child: ListView.builder(
-          padding: EdgeInsets.all(HvacSpacing.md),
+          padding: const EdgeInsets.all(HvacSpacing.md),
           itemCount: _devices.length + 1,
           itemBuilder: (context, index) {
             if (index == 0) {
-              return Padding(
+              return const Padding(
                 padding: EdgeInsets.only(bottom: HvacSpacing.md),
                 child: Text(
                   'Pull down to refresh device list',
@@ -58,7 +58,7 @@ class _RefreshExampleState extends State<RefreshExample> {
             }
 
             return Padding(
-              padding: EdgeInsets.only(bottom: HvacSpacing.sm),
+              padding: const EdgeInsets.only(bottom: HvacSpacing.sm),
               child: _buildDeviceCard(_devices[index - 1]),
             );
           },
@@ -69,7 +69,7 @@ class _RefreshExampleState extends State<RefreshExample> {
 
   Widget _buildDeviceCard(String deviceName) {
     return Container(
-      padding: EdgeInsets.all(HvacSpacing.md),
+      padding: const EdgeInsets.all(HvacSpacing.md),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
         borderRadius: HvacRadius.mdRadius,
@@ -77,26 +77,26 @@ class _RefreshExampleState extends State<RefreshExample> {
       ),
       child: Row(
         children: [
-          Icon(
+          const Icon(
             Icons.device_thermostat,
             color: HvacColors.primaryOrange,
             size: 32,
           ),
-          SizedBox(width: HvacSpacing.md),
+          const SizedBox(width: HvacSpacing.md),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   deviceName,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                     color: HvacColors.textPrimary,
                   ),
                 ),
-                SizedBox(height: HvacSpacing.xxs),
-                Text(
+                const SizedBox(height: HvacSpacing.xxs),
+                const Text(
                   'Online',
                   style: TextStyle(
                     fontSize: 14,
@@ -106,7 +106,7 @@ class _RefreshExampleState extends State<RefreshExample> {
               ],
             ),
           ),
-          Text(
+          const Text(
             '24°C',
             style: TextStyle(
               fontSize: 24,
@@ -153,10 +153,10 @@ class _CupertinoRefreshExampleState extends State<CupertinoRefreshExample> {
             delegate: SliverChildBuilderDelegate(
               (context, index) {
                 return ListTile(
-                  leading: Icon(Icons.device_thermostat, color: HvacColors.primaryOrange),
+                  leading: const Icon(Icons.device_thermostat, color: HvacColors.primaryOrange),
                   title: Text('Device ${index + 1}'),
-                  subtitle: Text('Status: Online'),
-                  trailing: Text('24°C'),
+                  subtitle: const Text('Status: Online'),
+                  trailing: const Text('24°C'),
                 );
               },
               childCount: _itemCount,

@@ -93,13 +93,13 @@ class HvacDismissibleCard extends StatelessWidget {
       background: Container(
         color: HvacColors.error,
         alignment: Alignment.centerLeft,
-        padding: EdgeInsets.symmetric(horizontal: HvacSpacing.lg),
+        padding: const EdgeInsets.symmetric(horizontal: HvacSpacing.lg),
         child: const Icon(Icons.delete, color: Colors.white, size: 32),
       ),
       secondaryBackground: Container(
         color: HvacColors.success,
         alignment: Alignment.centerRight,
-        padding: EdgeInsets.symmetric(horizontal: HvacSpacing.lg),
+        padding: const EdgeInsets.symmetric(horizontal: HvacSpacing.lg),
         child: const Icon(Icons.check, color: Colors.white, size: 32),
       ),
       confirmDismiss: (direction) async {
@@ -159,7 +159,7 @@ class HvacDeviceSwipeCard extends StatelessWidget {
       leftActionColor: HvacColors.error,
       rightActionColor: HvacColors.success,
       child: Container(
-        padding: EdgeInsets.all(HvacSpacing.md),
+        padding: const EdgeInsets.all(HvacSpacing.md),
         decoration: BoxDecoration(
           color: HvacColors.backgroundCard,
           borderRadius: HvacRadius.mdRadius,
@@ -170,22 +170,22 @@ class HvacDeviceSwipeCard extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(Icons.device_thermostat, size: 40, color: HvacColors.primaryOrange),
-            SizedBox(width: HvacSpacing.md),
+            const Icon(Icons.device_thermostat, size: 40, color: HvacColors.primaryOrange),
+            const SizedBox(width: HvacSpacing.md),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(deviceName, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-                  SizedBox(height: HvacSpacing.xxs),
-                  Text(status, style: TextStyle(fontSize: 14, color: HvacColors.textSecondary)),
+                  Text(deviceName, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                  const SizedBox(height: HvacSpacing.xxs),
+                  Text(status, style: const TextStyle(fontSize: 14, color: HvacColors.textSecondary)),
                 ],
               ),
             ),
             if (onSettings != null)
               IconButton(
                 onPressed: onSettings,
-                icon: Icon(Icons.settings),
+                icon: const Icon(Icons.settings),
               ),
           ],
         ),

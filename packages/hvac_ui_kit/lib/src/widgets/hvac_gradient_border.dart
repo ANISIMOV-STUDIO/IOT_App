@@ -68,7 +68,7 @@ class HvacBrandedBorder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return HvacGradientBorder(
-      gradientColors: [
+      gradientColors: const [
         HvacColors.primaryOrange,
         HvacColors.primaryBlue,
       ],
@@ -159,7 +159,7 @@ class HvacSuccessBorder extends StatelessWidget {
     return HvacGradientBorder(
       gradientColors: [
         HvacColors.success,
-        HvacColors.success.withOpacity(0.6),
+        HvacColors.success.withValues(alpha:0.6),
       ],
       borderWidth: borderWidth,
       child: child,
@@ -183,7 +183,7 @@ class HvacWarningBorder extends StatelessWidget {
     return HvacGradientBorder(
       gradientColors: [
         HvacColors.warning,
-        HvacColors.warning.withOpacity(0.6),
+        HvacColors.warning.withValues(alpha:0.6),
       ],
       borderWidth: borderWidth,
       child: child,
@@ -207,7 +207,7 @@ class HvacErrorBorder extends StatelessWidget {
     return HvacGradientBorder(
       gradientColors: [
         HvacColors.error,
-        HvacColors.error.withOpacity(0.6),
+        HvacColors.error.withValues(alpha:0.6),
       ],
       borderWidth: borderWidth,
       child: child,

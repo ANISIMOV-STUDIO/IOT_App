@@ -285,11 +285,11 @@ class _GlassButtonState extends State<GlassButton> {
             size: 18.0,
             color: HvacColors.glassWhite,
           ),
-          SizedBox(width: 8.0),
+          const SizedBox(width: 8.0),
         ],
         Text(
           widget.label,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 14.0,
             fontWeight: FontWeight.w600,
             color: HvacColors.glassWhite,
@@ -312,7 +312,7 @@ class _GlassButtonState extends State<GlassButton> {
         onTap: widget.onPressed,
         child: GlassContainer(
           width: widget.width,
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             horizontal: 20.0,
             vertical: 12.0,
           ),
@@ -345,7 +345,7 @@ class GlassAppBar extends StatelessWidget implements PreferredSizeWidget {
   });
 
   @override
-  Size get preferredSize => Size.fromHeight(56.0);
+  Size get preferredSize => const Size.fromHeight(56.0);
 
   @override
   Widget build(BuildContext context) {
@@ -358,7 +358,7 @@ class GlassAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: Container(
           decoration: BoxDecoration(
             color: HvacColors.backgroundDark.withValues(alpha: 0.8),
-            border: Border(
+            border: const Border(
               bottom: BorderSide(
                 color: HvacColors.glassBorder,
                 width: 1,

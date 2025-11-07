@@ -38,7 +38,7 @@ class HvacAnimatedLineChart extends StatelessWidget {
         if (title != null) ...[
           Text(
             title!,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
               color: HvacColors.textPrimary,
@@ -59,7 +59,7 @@ class HvacAnimatedLineChart extends StatelessWidget {
                     getTitlesWidget: (value, meta) {
                       return Text(
                         value.toInt().toString(),
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 12,
                           color: HvacColors.textSecondary,
                         ),
@@ -74,7 +74,7 @@ class HvacAnimatedLineChart extends StatelessWidget {
                     getTitlesWidget: (value, meta) {
                       return Text(
                         value.toInt().toString(),
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 12,
                           color: HvacColors.textSecondary,
                         ),
@@ -82,8 +82,8 @@ class HvacAnimatedLineChart extends StatelessWidget {
                     },
                   ),
                 ),
-                rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
               ),
               borderData: FlBorderData(show: false),
               lineBarsData: [
@@ -97,8 +97,8 @@ class HvacAnimatedLineChart extends StatelessWidget {
                     show: true,
                     gradient: LinearGradient(
                       colors: [
-                        (gradientStartColor ?? HvacColors.primaryOrange).withOpacity(0.3),
-                        (gradientEndColor ?? HvacColors.primaryOrange).withOpacity(0.0),
+                        (gradientStartColor ?? HvacColors.primaryOrange).withValues(alpha:0.3),
+                        (gradientEndColor ?? HvacColors.primaryOrange).withValues(alpha:0.0),
                       ],
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
@@ -141,7 +141,7 @@ class HvacAnimatedBarChart extends StatelessWidget {
         if (title != null) ...[
           Text(
             title!,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
               color: HvacColors.textPrimary,
@@ -175,7 +175,7 @@ class HvacAnimatedBarChart extends StatelessWidget {
                     getTitlesWidget: (value, meta) {
                       return Text(
                         value.toInt().toString(),
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 12,
                           color: HvacColors.textSecondary,
                         ),
@@ -192,7 +192,7 @@ class HvacAnimatedBarChart extends StatelessWidget {
                       }
                       return Text(
                         labels![value.toInt()],
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 12,
                           color: HvacColors.textSecondary,
                         ),
@@ -200,11 +200,11 @@ class HvacAnimatedBarChart extends StatelessWidget {
                     },
                   ),
                 ),
-                rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
               ),
               borderData: FlBorderData(show: false),
-              gridData: FlGridData(show: true),
+              gridData: const FlGridData(show: true),
             ),
             duration: animationDuration,
             curve: Curves.easeInOutCubic,
@@ -262,7 +262,7 @@ class _HvacPulsingDotState extends State<HvacPulsingDot>
           width: widget.size * _animation.value,
           height: widget.size * _animation.value,
           decoration: BoxDecoration(
-            color: widget.color.withOpacity(0.3),
+            color: widget.color.withValues(alpha:0.3),
             shape: BoxShape.circle,
           ),
           child: Center(

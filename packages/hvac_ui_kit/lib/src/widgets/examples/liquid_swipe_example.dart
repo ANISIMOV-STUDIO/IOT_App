@@ -2,7 +2,6 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:liquid_swipe/liquid_swipe.dart';
 import '../hvac_liquid_swipe.dart';
 import '../../theme/colors.dart';
 
@@ -48,19 +47,19 @@ class _LiquidSwipeExampleState extends State<LiquidSwipeExample> {
               ),
 
               // Analytics page
-              HvacLiquidPage(
+              const HvacLiquidPage(
                 title: 'Analytics',
                 subtitle: 'View energy consumption',
                 icon: Icons.analytics,
-                backgroundColor: const Color(0xFF16213E),
+                backgroundColor: Color(0xFF16213E),
               ),
 
               // Settings page
-              HvacLiquidPage(
+              const HvacLiquidPage(
                 title: 'Settings',
                 subtitle: 'Configure your preferences',
                 icon: Icons.settings,
-                backgroundColor: const Color(0xFF0F3460),
+                backgroundColor: Color(0xFF0F3460),
               ),
             ],
             controller: _controller,
@@ -85,7 +84,7 @@ class _LiquidSwipeExampleState extends State<LiquidSwipeExample> {
                   decoration: BoxDecoration(
                     color: _currentPage == index
                         ? HvacColors.primaryOrange
-                        : HvacColors.textSecondary.withOpacity(0.3),
+                        : HvacColors.textSecondary.withValues(alpha:0.3),
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
@@ -122,7 +121,7 @@ class _LiquidSwipeExampleState extends State<LiquidSwipeExample> {
         const SizedBox(height: 8),
         Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 14,
             color: HvacColors.textSecondary,
           ),
@@ -147,12 +146,12 @@ class _LiquidSwipeExampleState extends State<LiquidSwipeExample> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.1),
+        color: Colors.white.withValues(alpha:0.1),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
         children: [
-          Icon(Icons.device_thermostat, color: HvacColors.primaryOrange),
+          const Icon(Icons.device_thermostat, color: HvacColors.primaryOrange),
           const SizedBox(width: 12),
           Expanded(
             child: Text(

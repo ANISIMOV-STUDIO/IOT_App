@@ -2,7 +2,6 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/physics.dart';
 
 /// Spring physics constants for natural motion
 class SpringConstants {

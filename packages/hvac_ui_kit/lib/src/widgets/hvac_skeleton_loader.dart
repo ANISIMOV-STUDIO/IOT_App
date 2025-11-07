@@ -22,10 +22,10 @@ class HvacSkeletonLoader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Skeletonizer(
       enabled: isLoading,
-      effect: ShimmerEffect(
+      effect: const ShimmerEffect(
         baseColor: HvacColors.backgroundCard,
         highlightColor: HvacColors.backgroundElevated,
-        duration: const Duration(milliseconds: 1000),
+        duration: Duration(milliseconds: 1000),
       ),
       child: child,
     );
@@ -47,10 +47,10 @@ class HvacSkeletonPulse extends StatelessWidget {
   Widget build(BuildContext context) {
     return Skeletonizer(
       enabled: isLoading,
-      effect: PulseEffect(
+      effect: const PulseEffect(
         from: HvacColors.backgroundCard,
         to: HvacColors.backgroundElevated,
-        duration: const Duration(milliseconds: 800),
+        duration: Duration(milliseconds: 800),
       ),
       child: child,
     );

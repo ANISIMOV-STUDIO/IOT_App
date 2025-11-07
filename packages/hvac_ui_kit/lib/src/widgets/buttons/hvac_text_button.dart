@@ -137,7 +137,7 @@ class _HvacTextButtonState extends State<HvacTextButton> {
             color: textColor,
             size: widget.size.iconSize,
           ),
-          SizedBox(width: HvacSpacing.xs),
+          const SizedBox(width: HvacSpacing.xs),
           Text(
             widget.label,
             style: HvacTypography.buttonMedium.copyWith(

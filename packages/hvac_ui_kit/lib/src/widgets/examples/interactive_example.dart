@@ -23,64 +23,64 @@ class _InteractiveExampleState extends State<InteractiveExample> {
       backgroundColor: HvacColors.backgroundDark,
       appBar: AppBar(title: const Text('Interactive Animations')),
       body: ListView(
-        padding: EdgeInsets.all(HvacSpacing.md),
+        padding: const EdgeInsets.all(HvacSpacing.md),
         children: [
-          Text('Tap to see micro-interactions:',
+          const Text('Tap to see micro-interactions:',
                style: TextStyle(color: HvacColors.textSecondary)),
-          SizedBox(height: HvacSpacing.lg),
+          const SizedBox(height: HvacSpacing.lg),
 
           // Scale animation
-          Text('Scale on Press:', style: TextStyle(fontWeight: FontWeight.bold)),
-          SizedBox(height: HvacSpacing.sm),
+          const Text('Scale on Press:', style: TextStyle(fontWeight: FontWeight.bold)),
+          const SizedBox(height: HvacSpacing.sm),
           HvacInteractiveScale(
             onTap: () => _showMessage('Scale pressed'),
             child: _buildCard('Tap me - I scale down!'),
           ),
-          SizedBox(height: HvacSpacing.lg),
+          const SizedBox(height: HvacSpacing.lg),
 
           // Opacity animation
-          Text('Opacity on Press:', style: TextStyle(fontWeight: FontWeight.bold)),
-          SizedBox(height: HvacSpacing.sm),
+          const Text('Opacity on Press:', style: TextStyle(fontWeight: FontWeight.bold)),
+          const SizedBox(height: HvacSpacing.sm),
           HvacInteractiveOpacity(
             onTap: () => _showMessage('Opacity pressed'),
             child: _buildCard('Tap me - I fade!'),
           ),
-          SizedBox(height: HvacSpacing.lg),
+          const SizedBox(height: HvacSpacing.lg),
 
           // Ripple effect
-          Text('Ripple Effect:', style: TextStyle(fontWeight: FontWeight.bold)),
-          SizedBox(height: HvacSpacing.sm),
+          const Text('Ripple Effect:', style: TextStyle(fontWeight: FontWeight.bold)),
+          const SizedBox(height: HvacSpacing.sm),
           HvacInteractiveRipple(
             onTap: () => _showMessage('Ripple pressed'),
             child: _buildCard('Tap me - I ripple!'),
           ),
-          SizedBox(height: HvacSpacing.lg),
+          const SizedBox(height: HvacSpacing.lg),
 
           // Bouncy button
-          Text('Bouncy Animation:', style: TextStyle(fontWeight: FontWeight.bold)),
-          SizedBox(height: HvacSpacing.sm),
+          const Text('Bouncy Animation:', style: TextStyle(fontWeight: FontWeight.bold)),
+          const SizedBox(height: HvacSpacing.sm),
           HvacBouncyButton(
             onTap: () => _showMessage('Bouncy pressed'),
             child: _buildButton('Tap me - I bounce!'),
           ),
-          SizedBox(height: HvacSpacing.lg),
+          const SizedBox(height: HvacSpacing.lg),
 
           // Shake animation
-          Text('Shake on Error:', style: TextStyle(fontWeight: FontWeight.bold)),
-          SizedBox(height: HvacSpacing.sm),
+          const Text('Shake on Error:', style: TextStyle(fontWeight: FontWeight.bold)),
+          const SizedBox(height: HvacSpacing.sm),
           HvacShakeAnimation(
             trigger: _shakeError,
             child: _buildCard('Shake animation (press button below)'),
           ),
-          SizedBox(height: HvacSpacing.sm),
+          const SizedBox(height: HvacSpacing.sm),
           ElevatedButton(
             onPressed: () {
               setState(() => _shakeError = true);
-              Future.delayed(Duration(milliseconds: 100), () {
+              Future.delayed(const Duration(milliseconds: 100), () {
                 setState(() => _shakeError = false);
               });
             },
-            child: Text('Trigger Shake'),
+            child: const Text('Trigger Shake'),
           ),
         ],
       ),
@@ -89,38 +89,38 @@ class _InteractiveExampleState extends State<InteractiveExample> {
 
   Widget _buildCard(String text) {
     return Container(
-      padding: EdgeInsets.all(HvacSpacing.lg),
+      padding: const EdgeInsets.all(HvacSpacing.lg),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
         borderRadius: HvacRadius.mdRadius,
         border: Border.all(color: HvacColors.backgroundCardBorder),
       ),
-      child: Center(child: Text(text, style: TextStyle(fontSize: 16))),
+      child: Center(child: Text(text, style: const TextStyle(fontSize: 16))),
     );
   }
 
   Widget _buildButton(String text) {
     return Container(
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         horizontal: HvacSpacing.xl,
         vertical: HvacSpacing.md,
       ),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
+        gradient: const LinearGradient(
           colors: [HvacColors.primaryOrange, HvacColors.primaryOrangeDark],
         ),
         borderRadius: HvacRadius.mdRadius,
       ),
       child: Text(
         text,
-        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
       ),
     );
   }
 
   void _showMessage(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message), duration: Duration(seconds: 1)),
+      SnackBar(content: Text(message), duration: const Duration(seconds: 1)),
     );
   }
 }

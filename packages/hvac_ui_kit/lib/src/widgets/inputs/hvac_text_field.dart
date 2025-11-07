@@ -224,7 +224,7 @@ class _HvacTextFieldState extends State<HvacTextField> {
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(HvacRadius.mdR),
-              borderSide: BorderSide(
+              borderSide: const BorderSide(
                 color: HvacColors.backgroundCardBorder,
                 width: 1,
               ),

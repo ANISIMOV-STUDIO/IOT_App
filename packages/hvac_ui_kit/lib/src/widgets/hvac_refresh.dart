@@ -82,7 +82,7 @@ class HvacCupertinoRefresh extends StatelessWidget {
   }
 
   Widget _buildLoadingAnimation() {
-    return SizedBox(
+    return const SizedBox(
       width: 32,
       height: 32,
       child: CircularProgressIndicator(
@@ -97,7 +97,7 @@ class HvacCupertinoRefresh extends StatelessWidget {
       scale: progress,
       child: Opacity(
         opacity: progress,
-        child: Icon(
+        child: const Icon(
           Icons.refresh,
           color: HvacColors.primaryOrange,
           size: 32,

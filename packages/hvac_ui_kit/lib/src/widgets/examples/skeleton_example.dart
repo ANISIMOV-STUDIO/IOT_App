@@ -36,7 +36,7 @@ class _SkeletonLoaderExampleState extends State<SkeletonLoaderExample> {
         title: const Text('Skeleton Loader Example'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(HvacSpacing.md),
+        padding: const EdgeInsets.all(HvacSpacing.md),
         child: Column(
           children: [
             // Shimmer effect example
@@ -44,14 +44,14 @@ class _SkeletonLoaderExampleState extends State<SkeletonLoaderExample> {
               isLoading: _isLoading,
               child: _buildDeviceCard(),
             ),
-            SizedBox(height: HvacSpacing.lg),
+            const SizedBox(height: HvacSpacing.lg),
 
             // Pulse effect example
             HvacSkeletonPulse(
               isLoading: _isLoading,
               child: _buildStatCard(),
             ),
-            SizedBox(height: HvacSpacing.lg),
+            const SizedBox(height: HvacSpacing.lg),
 
             // Fade effect example
             HvacSkeletonFade(
@@ -59,7 +59,7 @@ class _SkeletonLoaderExampleState extends State<SkeletonLoaderExample> {
               child: _buildListTile(),
             ),
 
-            SizedBox(height: HvacSpacing.xl),
+            const SizedBox(height: HvacSpacing.xl),
             ElevatedButton(
               onPressed: () => setState(() => _isLoading = !_isLoading),
               child: Text(_isLoading ? 'Stop Loading' : 'Start Loading'),
@@ -72,7 +72,7 @@ class _SkeletonLoaderExampleState extends State<SkeletonLoaderExample> {
 
   Widget _buildDeviceCard() {
     return Container(
-      padding: EdgeInsets.all(HvacSpacing.md),
+      padding: const EdgeInsets.all(HvacSpacing.md),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
         borderRadius: HvacRadius.mdRadius,
@@ -80,10 +80,10 @@ class _SkeletonLoaderExampleState extends State<SkeletonLoaderExample> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Living Room AC', style: TextStyle(fontSize: 18)),
-          SizedBox(height: HvacSpacing.sm),
-          Text('Temperature: 24°C', style: TextStyle(fontSize: 14)),
-          SizedBox(height: HvacSpacing.sm),
+          const Text('Living Room AC', style: TextStyle(fontSize: 18)),
+          const SizedBox(height: HvacSpacing.sm),
+          const Text('Temperature: 24°C', style: TextStyle(fontSize: 14)),
+          const SizedBox(height: HvacSpacing.sm),
           Row(
             children: [
               Container(
@@ -94,8 +94,8 @@ class _SkeletonLoaderExampleState extends State<SkeletonLoaderExample> {
                   borderRadius: HvacRadius.smRadius,
                 ),
               ),
-              SizedBox(width: HvacSpacing.sm),
-              Text('Active'),
+              const SizedBox(width: HvacSpacing.sm),
+              const Text('Active'),
             ],
           ),
         ],
@@ -105,12 +105,12 @@ class _SkeletonLoaderExampleState extends State<SkeletonLoaderExample> {
 
   Widget _buildStatCard() {
     return Container(
-      padding: EdgeInsets.all(HvacSpacing.md),
+      padding: const EdgeInsets.all(HvacSpacing.md),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
         borderRadius: HvacRadius.mdRadius,
       ),
-      child: Row(
+      child: const Row(
         children: [
           Icon(Icons.thermostat, size: 48),
           SizedBox(width: HvacSpacing.md),
@@ -127,7 +127,7 @@ class _SkeletonLoaderExampleState extends State<SkeletonLoaderExample> {
   }
 
   Widget _buildListTile() {
-    return ListTile(
+    return const ListTile(
       leading: CircleAvatar(child: Icon(Icons.device_thermostat)),
       title: Text('Device Name'),
       subtitle: Text('Status information'),

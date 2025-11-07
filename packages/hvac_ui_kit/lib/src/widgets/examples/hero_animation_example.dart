@@ -16,11 +16,11 @@ class HeroAnimationExample extends StatelessWidget {
       backgroundColor: HvacColors.backgroundDark,
       appBar: AppBar(title: const Text('Hero Animations')),
       body: ListView(
-        padding: EdgeInsets.all(HvacSpacing.md),
+        padding: const EdgeInsets.all(HvacSpacing.md),
         children: [
-          Text('Tap cards to see Hero animations:',
+          const Text('Tap cards to see Hero animations:',
               style: TextStyle(color: HvacColors.textSecondary)),
-          SizedBox(height: HvacSpacing.lg),
+          const SizedBox(height: HvacSpacing.lg),
 
           _buildDeviceCard(
             context,
@@ -28,7 +28,7 @@ class HeroAnimationExample extends StatelessWidget {
             '24°C',
             'device_1',
           ),
-          SizedBox(height: HvacSpacing.md),
+          const SizedBox(height: HvacSpacing.md),
 
           _buildDeviceCard(
             context,
@@ -36,7 +36,7 @@ class HeroAnimationExample extends StatelessWidget {
             '22°C',
             'device_2',
           ),
-          SizedBox(height: HvacSpacing.md),
+          const SizedBox(height: HvacSpacing.md),
 
           _buildDeviceCard(
             context,
@@ -63,7 +63,7 @@ class HeroAnimationExample extends StatelessWidget {
         );
       },
       child: Container(
-        padding: EdgeInsets.all(HvacSpacing.md),
+        padding: const EdgeInsets.all(HvacSpacing.md),
         decoration: BoxDecoration(
           color: HvacColors.backgroundCard,
           borderRadius: HvacRadius.mdRadius,
@@ -73,13 +73,13 @@ class HeroAnimationExample extends StatelessWidget {
           children: [
             HvacHeroHelper.createHero(
               tag: 'icon_$tag',
-              child: Icon(
+              child: const Icon(
                 Icons.device_thermostat,
                 size: 40,
                 color: HvacColors.primaryOrange,
               ),
             ),
-            SizedBox(width: HvacSpacing.md),
+            const SizedBox(width: HvacSpacing.md),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,15 +90,15 @@ class HeroAnimationExample extends StatelessWidget {
                       color: Colors.transparent,
                       child: Text(
                         name,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(height: HvacSpacing.xxs),
-                  Text(
+                  const SizedBox(height: HvacSpacing.xxs),
+                  const Text(
                     'Active',
                     style: TextStyle(
                       fontSize: 14,
@@ -114,7 +114,7 @@ class HeroAnimationExample extends StatelessWidget {
                 color: Colors.transparent,
                 child: Text(
                   temperature,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
                     color: HvacColors.primaryOrange,
@@ -151,31 +151,31 @@ class _DetailScreen extends StatelessWidget {
           children: [
             HvacHeroHelper.createHero(
               tag: 'icon_$tag',
-              child: Icon(
+              child: const Icon(
                 Icons.device_thermostat,
                 size: 120,
                 color: HvacColors.primaryOrange,
               ),
             ),
-            SizedBox(height: HvacSpacing.xl),
+            const SizedBox(height: HvacSpacing.xl),
             HvacHeroHelper.createHero(
               tag: 'name_$tag',
               child: Material(
                 color: Colors.transparent,
                 child: Text(
                   name,
-                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
-            SizedBox(height: HvacSpacing.lg),
+            const SizedBox(height: HvacSpacing.lg),
             HvacHeroHelper.createHero(
               tag: 'temp_$tag',
               child: Material(
                 color: Colors.transparent,
                 child: Text(
                   temperature,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 72,
                     fontWeight: FontWeight.bold,
                     color: HvacColors.primaryOrange,

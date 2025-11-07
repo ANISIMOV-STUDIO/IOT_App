@@ -14,7 +14,7 @@ class HvacTypography {
   // DISPLAY STYLES - Large headings
   // ============================================================================
 
-  static TextStyle get displayLarge => TextStyle(
+  static TextStyle get displayLarge => const TextStyle(
         fontSize: 57.0,
         fontWeight: FontWeight.w700,
         color: HvacColors.textPrimary,
@@ -22,14 +22,14 @@ class HvacTypography {
         height: 1.1,
       );
 
-  static TextStyle get displayMedium => TextStyle(
+  static TextStyle get displayMedium => const TextStyle(
         fontSize: 45.0,
         fontWeight: FontWeight.w700,
         color: HvacColors.textPrimary,
         height: 1.15,
       );
 
-  static TextStyle get displaySmall => TextStyle(
+  static TextStyle get displaySmall => const TextStyle(
         fontSize: 36.0,
         fontWeight: FontWeight.w600,
         color: HvacColors.textPrimary,
@@ -40,21 +40,21 @@ class HvacTypography {
   // HEADLINE STYLES - Section headers
   // ============================================================================
 
-  static TextStyle get headlineLarge => TextStyle(
+  static TextStyle get headlineLarge => const TextStyle(
         fontSize: 32.0,
         fontWeight: FontWeight.w600,
         color: HvacColors.textPrimary,
         height: 1.25,
       );
 
-  static TextStyle get headlineMedium => TextStyle(
+  static TextStyle get headlineMedium => const TextStyle(
         fontSize: 28.0,
         fontWeight: FontWeight.w600,
         color: HvacColors.textPrimary,
         height: 1.3,
       );
 
-  static TextStyle get headlineSmall => TextStyle(
+  static TextStyle get headlineSmall => const TextStyle(
         fontSize: 24.0,
         fontWeight: FontWeight.w600,
         color: HvacColors.textPrimary,
@@ -65,21 +65,21 @@ class HvacTypography {
   // TITLE STYLES - Component headers
   // ============================================================================
 
-  static TextStyle get titleLarge => TextStyle(
+  static TextStyle get titleLarge => const TextStyle(
         fontSize: 22.0,
         fontWeight: FontWeight.w600,
         color: HvacColors.textPrimary,
         height: 1.35,
       );
 
-  static TextStyle get titleMedium => TextStyle(
+  static TextStyle get titleMedium => const TextStyle(
         fontSize: 18.0,
         fontWeight: FontWeight.w600,
         color: HvacColors.textPrimary,
         height: 1.4,
       );
 
-  static TextStyle get titleSmall => TextStyle(
+  static TextStyle get titleSmall => const TextStyle(
         fontSize: 16.0,
         fontWeight: FontWeight.w600,
         color: HvacColors.textPrimary,
@@ -90,21 +90,21 @@ class HvacTypography {
   // BODY STYLES - Content text
   // ============================================================================
 
-  static TextStyle get bodyLarge => TextStyle(
+  static TextStyle get bodyLarge => const TextStyle(
         fontSize: 16.0,
         fontWeight: FontWeight.w400,
         color: HvacColors.textPrimary,
         height: 1.5,
       );
 
-  static TextStyle get bodyMedium => TextStyle(
+  static TextStyle get bodyMedium => const TextStyle(
         fontSize: 14.0,
         fontWeight: FontWeight.w400,
         color: HvacColors.textSecondary,
         height: 1.5,
       );
 
-  static TextStyle get bodySmall => TextStyle(
+  static TextStyle get bodySmall => const TextStyle(
         fontSize: 12.0,
         fontWeight: FontWeight.w400,
         color: HvacColors.textTertiary,
@@ -115,21 +115,21 @@ class HvacTypography {
   // LABEL STYLES - UI labels and buttons
   // ============================================================================
 
-  static TextStyle get labelLarge => TextStyle(
+  static TextStyle get labelLarge => const TextStyle(
         fontSize: 18.0,
         fontWeight: FontWeight.w600,
         color: HvacColors.textPrimary,
         letterSpacing: 0.1,
       );
 
-  static TextStyle get labelMedium => TextStyle(
+  static TextStyle get labelMedium => const TextStyle(
         fontSize: 14.0,
         fontWeight: FontWeight.w500,
         color: HvacColors.textPrimary,
         letterSpacing: 0.1,
       );
 
-  static TextStyle get labelSmall => TextStyle(
+  static TextStyle get labelSmall => const TextStyle(
         fontSize: 12.0,
         fontWeight: FontWeight.w500,
         color: HvacColors.textSecondary,
@@ -141,7 +141,7 @@ class HvacTypography {
   // ============================================================================
 
   /// Caption text
-  static TextStyle get caption => TextStyle(
+  static TextStyle get caption => const TextStyle(
         fontSize: 12.0,
         fontWeight: FontWeight.w400,
         color: HvacColors.textTertiary,
@@ -149,7 +149,7 @@ class HvacTypography {
       );
 
   /// Caption medium weight
-  static TextStyle get captionMedium => TextStyle(
+  static TextStyle get captionMedium => const TextStyle(
         fontSize: 12.0,
         fontWeight: FontWeight.w500,
         color: HvacColors.textSecondary,
@@ -157,7 +157,7 @@ class HvacTypography {
       );
 
   /// Caption small
-  static TextStyle get captionSmall => TextStyle(
+  static TextStyle get captionSmall => const TextStyle(
         fontSize: 11.0,
         fontWeight: FontWeight.w400,
         color: HvacColors.textTertiary,
@@ -165,7 +165,7 @@ class HvacTypography {
       );
 
   /// Caption bold
-  static TextStyle get captionBold => TextStyle(
+  static TextStyle get captionBold => const TextStyle(
         fontSize: 12.0,
         fontWeight: FontWeight.w600,
         color: HvacColors.textSecondary,
@@ -176,7 +176,7 @@ class HvacTypography {
   static TextStyle get label => labelSmall;
 
   /// Overline text (all caps labels)
-  static TextStyle get overline => TextStyle(
+  static TextStyle get overline => const TextStyle(
         fontSize: 10.0,
         fontWeight: FontWeight.w600,
         color: HvacColors.textTertiary,
@@ -184,7 +184,7 @@ class HvacTypography {
       );
 
   /// Button text
-  static TextStyle get button => TextStyle(
+  static TextStyle get button => const TextStyle(
         fontSize: 14.0,
         fontWeight: FontWeight.w600,
         color: HvacColors.textPrimary,
@@ -192,7 +192,7 @@ class HvacTypography {
       );
 
   /// Button medium
-  static TextStyle get buttonMedium => TextStyle(
+  static TextStyle get buttonMedium => const TextStyle(
         fontSize: 16.0,
         fontWeight: FontWeight.w600,
         color: HvacColors.textPrimary,
@@ -213,7 +213,7 @@ class HvacTypography {
   static TextStyle get h3 => headlineSmall;
 
   /// h4 - 20sp
-  static TextStyle get h4 => TextStyle(
+  static TextStyle get h4 => const TextStyle(
         fontSize: 20.0,
         fontWeight: FontWeight.w600,
         color: HvacColors.textPrimary,
@@ -221,7 +221,7 @@ class HvacTypography {
       );
 
   /// h5 - 18sp
-  static TextStyle get h5 => TextStyle(
+  static TextStyle get h5 => const TextStyle(
         fontSize: 18.0,
         fontWeight: FontWeight.w600,
         color: HvacColors.textPrimary,

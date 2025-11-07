@@ -15,11 +15,11 @@ class SwipeableCardExample extends StatelessWidget {
       backgroundColor: HvacColors.backgroundDark,
       appBar: AppBar(title: const Text('Swipeable Cards Example')),
       body: ListView(
-        padding: EdgeInsets.all(HvacSpacing.md),
+        padding: const EdgeInsets.all(HvacSpacing.md),
         children: [
-          Text('Swipe left to turn off, right to turn on:',
+          const Text('Swipe left to turn off, right to turn on:',
                style: TextStyle(color: HvacColors.textSecondary)),
-          SizedBox(height: HvacSpacing.md),
+          const SizedBox(height: HvacSpacing.md),
 
           HvacDeviceSwipeCard(
             deviceName: 'Living Room AC',
@@ -29,7 +29,7 @@ class SwipeableCardExample extends StatelessWidget {
             onSettings: () => _showSnackbar(context, 'Settings opened'),
           ),
 
-          SizedBox(height: HvacSpacing.md),
+          const SizedBox(height: HvacSpacing.md),
 
           HvacDeviceSwipeCard(
             deviceName: 'Bedroom Heater',
@@ -38,20 +38,20 @@ class SwipeableCardExample extends StatelessWidget {
             onTurnOff: () => _showSnackbar(context, 'Heater turned OFF'),
           ),
 
-          SizedBox(height: HvacSpacing.lg),
-          Text('Swipe to dismiss:', style: TextStyle(color: HvacColors.textSecondary)),
-          SizedBox(height: HvacSpacing.md),
+          const SizedBox(height: HvacSpacing.lg),
+          const Text('Swipe to dismiss:', style: TextStyle(color: HvacColors.textSecondary)),
+          const SizedBox(height: HvacSpacing.md),
 
           HvacDismissibleCard(
             confirmMessage: 'Are you sure you want to remove this device?',
             onDismissed: () => _showSnackbar(context, 'Device removed'),
             child: Container(
-              padding: EdgeInsets.all(HvacSpacing.md),
+              padding: const EdgeInsets.all(HvacSpacing.md),
               decoration: BoxDecoration(
                 color: HvacColors.backgroundCard,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: ListTile(
+              child: const ListTile(
                 leading: Icon(Icons.warning, color: HvacColors.warning),
                 title: Text('Old Device'),
                 subtitle: Text('Swipe to remove'),
@@ -65,7 +65,7 @@ class SwipeableCardExample extends StatelessWidget {
 
   void _showSnackbar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message), duration: Duration(seconds: 1)),
+      SnackBar(content: Text(message), duration: const Duration(seconds: 1)),
     );
   }
 }

@@ -133,7 +133,7 @@ class AdaptiveSlider extends StatelessWidget {
 
   Widget _buildTickMarks(BuildContext context, DeviceSize deviceSize) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 12.0),
+      padding: const EdgeInsets.symmetric(horizontal: 12.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

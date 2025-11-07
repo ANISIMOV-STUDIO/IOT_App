@@ -115,7 +115,7 @@ class _PremiumProgressIndicatorState extends State<PremiumProgressIndicator>
           ),
         ),
         if (widget.showPercentage) ...[
-          SizedBox(height: HvacSpacing.xs),
+          const SizedBox(height: HvacSpacing.xs),
           AnimatedBuilder(
             animation: _progressAnimation,
             builder: (context, child) => Text(

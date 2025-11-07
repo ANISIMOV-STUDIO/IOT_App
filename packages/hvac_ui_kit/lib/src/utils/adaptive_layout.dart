@@ -51,9 +51,9 @@ class AdaptiveLayout {
   static EdgeInsets controlPadding(BuildContext context) {
     return getAdaptiveValue(
       context,
-      compact: EdgeInsets.all(16.0),
-      medium: EdgeInsets.all(20.0),
-      expanded: EdgeInsets.all(24.0),
+      compact: const EdgeInsets.all(16.0),
+      medium: const EdgeInsets.all(20.0),
+      expanded: const EdgeInsets.all(24.0),
     );
   }
 

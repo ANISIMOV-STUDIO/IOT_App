@@ -24,8 +24,8 @@ class _AnimatedChartsExampleState extends State<AnimatedChartsExample> {
         backgroundColor: HvacColors.backgroundDark,
       ),
       body: ListView(
-        padding: EdgeInsets.all(HvacSpacing.md),
-        children: [
+        padding: const EdgeInsets.all(HvacSpacing.md),
+        children: const [
           // Temperature line chart
           HvacAnimatedLineChart(
             title: 'Temperature Over Time',
