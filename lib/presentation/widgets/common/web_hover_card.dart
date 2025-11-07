@@ -5,8 +5,8 @@ library;
 
 import 'dart:ui';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
 class WebHoverCard extends StatefulWidget {
@@ -108,7 +108,7 @@ class _WebHoverCardState extends State<WebHoverCard>
               boxShadow: widget.showElevationOnHover
                   ? [
                       BoxShadow(
-                        color: HvacColors.primaryOrange.withOpacity(0.1),
+                        color: HvacColors.primaryOrange.withValues(alpha: 0.1),
                         blurRadius: _elevationAnimation.value,
                         offset: Offset(0, _elevationAnimation.value / 2),
                       ),
@@ -122,19 +122,19 @@ class _WebHoverCardState extends State<WebHoverCard>
                 onTap: widget.onTap,
                 onLongPress: widget.onLongPress,
                 borderRadius: BorderRadius.circular(widget.borderRadius),
-                splashColor: HvacColors.primaryOrange.withOpacity(0.1),
-                highlightColor: HvacColors.primaryOrange.withOpacity(0.05),
+                splashColor: HvacColors.primaryOrange.withValues(alpha: 0.1),
+                highlightColor: HvacColors.primaryOrange.withValues(alpha: 0.05),
                 child: Container(
                   padding: widget.padding,
                   decoration: BoxDecoration(
                     color: widget.backgroundColor ??
                         (_isHovering
-                            ? HvacColors.backgroundLight.withValues(alpha: 0.05)
+                            ? HvacColors.backgroundElevated.withValues(alpha: 0.05)
                             : Colors.transparent),
                     borderRadius: BorderRadius.circular(widget.borderRadius),
                     border: _isHovering
                         ? Border.all(
-                            color: HvacColors.primaryOrange.withOpacity(0.3),
+                            color: HvacColors.primaryOrange.withValues(alpha: 0.3),
                             width: 1,
                           )
                         : null,
@@ -239,7 +239,7 @@ class _WebHoverIconButtonState extends State<WebHoverIconButton>
             decoration: widget.showBackground
                 ? BoxDecoration(
                     color: _isHovering
-                        ? HvacColors.primaryOrange.withOpacity(0.1)
+                        ? HvacColors.primaryOrange.withValues(alpha: 0.1)
                         : Colors.transparent,
                     borderRadius: BorderRadius.circular(8),
                   )

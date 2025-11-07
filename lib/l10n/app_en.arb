@@ -1259,5 +1259,156 @@
   "refreshDevices": "Refresh Devices",
   "@refreshDevices": {
     "description": "Refresh devices tooltip"
+  },
+
+  "@@_DIAGNOSTICS": "=== Diagnostics ===",
+  "runDiagnostics": "Run Diagnostics",
+  "@runDiagnostics": {
+    "description": "Run diagnostics button"
+  },
+  "systemHealth": "System Health",
+  "@systemHealth": {
+    "description": "System health title"
+  },
+  "supplyFan": "Supply Fan",
+  "@supplyFan": {
+    "description": "Supply fan component"
+  },
+  "exhaustFan": "Exhaust Fan",
+  "@exhaustFan": {
+    "description": "Exhaust fan component"
+  },
+  "heater": "Heater",
+  "@heater": {
+    "description": "Heater component"
+  },
+  "recuperator": "Recuperator",
+  "@recuperator": {
+    "description": "Heat recuperator"
+  },
+  "sensors": "Sensors",
+  "@sensors": {
+    "description": "Sensors component"
+  },
+  "normal": "Normal",
+  "@normal": {
+    "description": "Normal status"
+  },
+  "sensorReadings": "Sensor Readings",
+  "@sensorReadings": {
+    "description": "Sensor readings title"
+  },
+  "supplyAirTemp": "Supply Air Temperature",
+  "@supplyAirTemp": {
+    "description": "Supply air temperature"
+  },
+  "outdoorTemp": "Outdoor Temperature",
+  "@outdoorTemp": {
+    "description": "Outdoor temperature"
+  },
+  "pressure": "Pressure",
+  "@pressure": {
+    "description": "Pressure reading"
+  },
+  "networkConnection": "Network Connection",
+  "@networkConnection": {
+    "description": "Network connection title"
+  },
+  "network": "Network",
+  "@network": {
+    "description": "Network label"
+  },
+  "signal": "Signal",
+  "@signal": {
+    "description": "Signal strength"
+  },
+  "ipAddress": "IP Address",
+  "@ipAddress": {
+    "description": "IP address label"
+  },
+  "notConnected": "Not Connected",
+  "@notConnected": {
+    "description": "Not connected status"
+  },
+  "notAssigned": "Not Assigned",
+  "@notAssigned": {
+    "description": "Not assigned status"
+  },
+  "diagnosticsTitle": "Diagnostics",
+  "@diagnosticsTitle": {
+    "description": "Diagnostics title"
+  },
+  "diagnosticsRunning": "Running system diagnostics...",
+  "@diagnosticsRunning": {
+    "description": "Diagnostics running message"
+  },
+  "diagnosticsComplete": "Diagnostics complete. System is normal.",
+  "@diagnosticsComplete": {
+    "description": "Diagnostics complete message"
+  },
+
+  "@@_SCHEDULE_DIALOGS": "=== Schedule Dialogs ===",
+  "scheduleSaved": "Schedule saved successfully",
+  "@scheduleSaved": {
+    "description": "Schedule saved message"
+  },
+  "saveError": "Save error: {error}",
+  "@saveError": {
+    "description": "Save error message",
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  "unsavedChanges": "Unsaved Changes",
+  "@unsavedChanges": {
+    "description": "Unsaved changes title"
+  },
+  "unsavedChangesMessage": "You have unsaved changes. Exit without saving?",
+  "@unsavedChangesMessage": {
+    "description": "Unsaved changes confirmation"
+  },
+  "exit": "Exit",
+  "@exit": {
+    "description": "Exit button"
+  },
+
+  "@@_DEVICE_SEARCH": "=== Device Search ===",
+  "devicesFound": "{count} new devices",
+  "@devicesFound": {
+    "description": "New devices found",
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "deviceFound": "{count} new device",
+  "@deviceFound": {
+    "description": "Single device found",
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "notFoundDeviceTitle": "Not found\ndevice?",
+  "@notFoundDeviceTitle": {
+    "description": "Device not found message"
+  },
+  "selectManuallyButton": "Select manually",
+  "@selectManuallyButton": {
+    "description": "Select manually button"
+  },
+  "devicesAdded": "{count} {plural} added",
+  "@devicesAdded": {
+    "description": "Devices added confirmation",
+    "placeholders": {
+      "count": {"type": "int"},
+      "plural": {"type": "String"}
+    }
+  },
+  "device": "device",
+  "@device": {
+    "description": "Device singular"
+  },
+  "devices": "devices",
+  "@devices": {
+    "description": "Devices plural"
   }
 }
