@@ -167,7 +167,7 @@ class WebSkeletonShapes {
     return Container(
       width: size,
       height: size,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: HvacColors.backgroundCard,
         shape: BoxShape.circle,
       ),

@@ -1755,6 +1755,204 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count} of {total} active'**
   String activeDevices(int count, int total);
+
+  /// Run diagnostics button
+  ///
+  /// In en, this message translates to:
+  /// **'Run Diagnostics'**
+  String get runDiagnostics;
+
+  /// System health title
+  ///
+  /// In en, this message translates to:
+  /// **'System Health'**
+  String get systemHealth;
+
+  /// Supply fan component
+  ///
+  /// In en, this message translates to:
+  /// **'Supply Fan'**
+  String get supplyFan;
+
+  /// Exhaust fan component
+  ///
+  /// In en, this message translates to:
+  /// **'Exhaust Fan'**
+  String get exhaustFan;
+
+  /// Heater component
+  ///
+  /// In en, this message translates to:
+  /// **'Heater'**
+  String get heater;
+
+  /// Heat recuperator
+  ///
+  /// In en, this message translates to:
+  /// **'Recuperator'**
+  String get recuperator;
+
+  /// Sensors component
+  ///
+  /// In en, this message translates to:
+  /// **'Sensors'**
+  String get sensors;
+
+  /// Normal status
+  ///
+  /// In en, this message translates to:
+  /// **'Normal'**
+  String get normal;
+
+  /// Sensor readings title
+  ///
+  /// In en, this message translates to:
+  /// **'Sensor Readings'**
+  String get sensorReadings;
+
+  /// Supply air temperature
+  ///
+  /// In en, this message translates to:
+  /// **'Supply Air Temperature'**
+  String get supplyAirTemp;
+
+  /// Outdoor temperature
+  ///
+  /// In en, this message translates to:
+  /// **'Outdoor Temperature'**
+  String get outdoorTemp;
+
+  /// Pressure reading
+  ///
+  /// In en, this message translates to:
+  /// **'Pressure'**
+  String get pressure;
+
+  /// Network connection title
+  ///
+  /// In en, this message translates to:
+  /// **'Network Connection'**
+  String get networkConnection;
+
+  /// Network label
+  ///
+  /// In en, this message translates to:
+  /// **'Network'**
+  String get network;
+
+  /// Signal strength
+  ///
+  /// In en, this message translates to:
+  /// **'Signal'**
+  String get signal;
+
+  /// IP address label
+  ///
+  /// In en, this message translates to:
+  /// **'IP Address'**
+  String get ipAddress;
+
+  /// Not connected status
+  ///
+  /// In en, this message translates to:
+  /// **'Not Connected'**
+  String get notConnected;
+
+  /// Not assigned status
+  ///
+  /// In en, this message translates to:
+  /// **'Not Assigned'**
+  String get notAssigned;
+
+  /// Diagnostics title
+  ///
+  /// In en, this message translates to:
+  /// **'Diagnostics'**
+  String get diagnosticsTitle;
+
+  /// Diagnostics running message
+  ///
+  /// In en, this message translates to:
+  /// **'Running system diagnostics...'**
+  String get diagnosticsRunning;
+
+  /// Diagnostics complete message
+  ///
+  /// In en, this message translates to:
+  /// **'Diagnostics complete. System is normal.'**
+  String get diagnosticsComplete;
+
+  /// Schedule saved message
+  ///
+  /// In en, this message translates to:
+  /// **'Schedule saved successfully'**
+  String get scheduleSaved;
+
+  /// Save error message
+  ///
+  /// In en, this message translates to:
+  /// **'Save error: {error}'**
+  String saveError(String error);
+
+  /// Unsaved changes title
+  ///
+  /// In en, this message translates to:
+  /// **'Unsaved Changes'**
+  String get unsavedChanges;
+
+  /// Unsaved changes confirmation
+  ///
+  /// In en, this message translates to:
+  /// **'You have unsaved changes. Exit without saving?'**
+  String get unsavedChangesMessage;
+
+  /// Exit button
+  ///
+  /// In en, this message translates to:
+  /// **'Exit'**
+  String get exit;
+
+  /// New devices found
+  ///
+  /// In en, this message translates to:
+  /// **'{count} new devices'**
+  String devicesFound(int count);
+
+  /// Single device found
+  ///
+  /// In en, this message translates to:
+  /// **'{count} new device'**
+  String deviceFound(int count);
+
+  /// Device not found message
+  ///
+  /// In en, this message translates to:
+  /// **'Not found\ndevice?'**
+  String get notFoundDeviceTitle;
+
+  /// Select manually button
+  ///
+  /// In en, this message translates to:
+  /// **'Select manually'**
+  String get selectManuallyButton;
+
+  /// Devices added confirmation
+  ///
+  /// In en, this message translates to:
+  /// **'{count} {plural} added'**
+  String devicesAdded(int count, String plural);
+
+  /// Device singular
+  ///
+  /// In en, this message translates to:
+  /// **'device'**
+  String get device;
+
+  /// Devices plural
+  ///
+  /// In en, this message translates to:
+  /// **'devices'**
+  String get devices;
 }
 
 class _AppLocalizationsDelegate

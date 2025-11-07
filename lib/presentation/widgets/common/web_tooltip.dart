@@ -353,7 +353,7 @@ class _WebContextMenuOverlay extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: items.map((item) {
             if (item.isDivider) {
-              return Divider(
+              return const Divider(
                 height: 1,
                 color: HvacColors.backgroundCardBorder,
               );

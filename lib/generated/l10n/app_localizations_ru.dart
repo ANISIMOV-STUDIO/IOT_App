@@ -894,4 +894,112 @@ class AppLocalizationsRu extends AppLocalizations {
   String activeDevices(int count, int total) {
     return '$count из $total активно';
   }
+
+  @override
+  String get runDiagnostics => 'Запустить диагностику';
+
+  @override
+  String get systemHealth => 'Состояние системы';
+
+  @override
+  String get supplyFan => 'Приточный вентилятор';
+
+  @override
+  String get exhaustFan => 'Вытяжной вентилятор';
+
+  @override
+  String get heater => 'Нагреватель';
+
+  @override
+  String get recuperator => 'Рекуператор';
+
+  @override
+  String get sensors => 'Датчики';
+
+  @override
+  String get normal => 'Норма';
+
+  @override
+  String get sensorReadings => 'Показания датчиков';
+
+  @override
+  String get supplyAirTemp => 'Температура притока';
+
+  @override
+  String get outdoorTemp => 'Температура улицы';
+
+  @override
+  String get pressure => 'Давление';
+
+  @override
+  String get networkConnection => 'Сетевое подключение';
+
+  @override
+  String get network => 'Сеть';
+
+  @override
+  String get signal => 'Сигнал';
+
+  @override
+  String get ipAddress => 'IP адрес';
+
+  @override
+  String get notConnected => 'Не подключено';
+
+  @override
+  String get notAssigned => 'Не назначен';
+
+  @override
+  String get diagnosticsTitle => 'Диагностика';
+
+  @override
+  String get diagnosticsRunning => 'Выполняется диагностика системы...';
+
+  @override
+  String get diagnosticsComplete => 'Диагностика завершена. Система в норме.';
+
+  @override
+  String get scheduleSaved => 'Расписание успешно сохранено';
+
+  @override
+  String saveError(String error) {
+    return 'Ошибка сохранения: $error';
+  }
+
+  @override
+  String get unsavedChanges => 'Несохранённые изменения';
+
+  @override
+  String get unsavedChangesMessage =>
+      'У вас есть несохранённые изменения. Выйти без сохранения?';
+
+  @override
+  String get exit => 'Выйти';
+
+  @override
+  String devicesFound(int count) {
+    return '$count новых устройств';
+  }
+
+  @override
+  String deviceFound(int count) {
+    return '$count новое устройство';
+  }
+
+  @override
+  String get notFoundDeviceTitle => 'Не нашли\nустройство?';
+
+  @override
+  String get selectManuallyButton => 'Выбрать вручную';
+
+  @override
+  String devicesAdded(int count, String plural) {
+    return '$count $plural добавлено';
+  }
+
+  @override
+  String get device => 'устройство';
+
+  @override
+  String get devices => 'устройства';
 }

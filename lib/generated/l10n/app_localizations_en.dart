@@ -889,4 +889,112 @@ class AppLocalizationsEn extends AppLocalizations {
   String activeDevices(int count, int total) {
     return '$count of $total active';
   }
+
+  @override
+  String get runDiagnostics => 'Run Diagnostics';
+
+  @override
+  String get systemHealth => 'System Health';
+
+  @override
+  String get supplyFan => 'Supply Fan';
+
+  @override
+  String get exhaustFan => 'Exhaust Fan';
+
+  @override
+  String get heater => 'Heater';
+
+  @override
+  String get recuperator => 'Recuperator';
+
+  @override
+  String get sensors => 'Sensors';
+
+  @override
+  String get normal => 'Normal';
+
+  @override
+  String get sensorReadings => 'Sensor Readings';
+
+  @override
+  String get supplyAirTemp => 'Supply Air Temperature';
+
+  @override
+  String get outdoorTemp => 'Outdoor Temperature';
+
+  @override
+  String get pressure => 'Pressure';
+
+  @override
+  String get networkConnection => 'Network Connection';
+
+  @override
+  String get network => 'Network';
+
+  @override
+  String get signal => 'Signal';
+
+  @override
+  String get ipAddress => 'IP Address';
+
+  @override
+  String get notConnected => 'Not Connected';
+
+  @override
+  String get notAssigned => 'Not Assigned';
+
+  @override
+  String get diagnosticsTitle => 'Diagnostics';
+
+  @override
+  String get diagnosticsRunning => 'Running system diagnostics...';
+
+  @override
+  String get diagnosticsComplete => 'Diagnostics complete. System is normal.';
+
+  @override
+  String get scheduleSaved => 'Schedule saved successfully';
+
+  @override
+  String saveError(String error) {
+    return 'Save error: $error';
+  }
+
+  @override
+  String get unsavedChanges => 'Unsaved Changes';
+
+  @override
+  String get unsavedChangesMessage =>
+      'You have unsaved changes. Exit without saving?';
+
+  @override
+  String get exit => 'Exit';
+
+  @override
+  String devicesFound(int count) {
+    return '$count new devices';
+  }
+
+  @override
+  String deviceFound(int count) {
+    return '$count new device';
+  }
+
+  @override
+  String get notFoundDeviceTitle => 'Not found\ndevice?';
+
+  @override
+  String get selectManuallyButton => 'Select manually';
+
+  @override
+  String devicesAdded(int count, String plural) {
+    return '$count $plural added';
+  }
+
+  @override
+  String get device => 'device';
+
+  @override
+  String get devices => 'devices';
 }
