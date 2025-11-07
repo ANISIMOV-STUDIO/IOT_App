@@ -135,9 +135,7 @@ class AuthHeader extends StatelessWidget {
         ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.2, end: 0),
         SizedBox(height: 8.rh(context)),
         Text(
-          isLoginMode
-              ? 'Sign in to your account'
-              : 'Sign up for a new account',
+          isLoginMode ? 'Sign in to your account' : 'Sign up for a new account',
           style: theme.textTheme.bodyMedium?.copyWith(
             fontSize: (15 * responsive.fontMultiplier).rsp(context),
             color: HvacColors.textSecondary,

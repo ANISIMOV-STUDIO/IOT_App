@@ -92,7 +92,11 @@ class EnhancedHomeLoadingState extends StatelessWidget {
   }
 
   Widget _buildRoomCardsSkeleton(BuildContext context, ResponsiveInfo info) {
-    final cardCount = info.isMobile ? 2 : info.isTablet ? 3 : 4;
+    final cardCount = info.isMobile
+        ? 2
+        : info.isTablet
+            ? 3
+            : 4;
 
     return SizedBox(
       height: 180.0,

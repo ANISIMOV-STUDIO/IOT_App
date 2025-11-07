@@ -14,7 +14,8 @@ abstract class HvacRepository {
   Stream<HvacUnit> getUnitById(String id);
 
   /// Get temperature history for a unit
-  Future<List<TemperatureReading>> getTemperatureHistory(String unitId, {int hours = 24});
+  Future<List<TemperatureReading>> getTemperatureHistory(String unitId,
+      {int hours = 24});
 
   /// Update HVAC unit settings (deprecated - use updateUnitEntity)
   @Deprecated('Use updateUnitEntity instead')

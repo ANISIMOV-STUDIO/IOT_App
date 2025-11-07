@@ -140,7 +140,8 @@ class _HvacOutlineButtonState extends State<HvacOutlineButton>
     final textColor = widget.textColor ?? HvacColors.accent;
 
     return MouseRegion(
-      cursor: _isEnabled ? SystemMouseCursors.click : SystemMouseCursors.forbidden,
+      cursor:
+          _isEnabled ? SystemMouseCursors.click : SystemMouseCursors.forbidden,
       onEnter: (_) => _handleHover(true),
       onExit: (_) => _handleHover(false),
       child: GestureDetector(
@@ -164,12 +165,10 @@ class _HvacOutlineButtonState extends State<HvacOutlineButton>
     Color borderColor,
     Color textColor,
   ) {
-    final effectiveBorderColor = _isEnabled
-        ? borderColor
-        : borderColor.withValues(alpha: 0.5);
-    final effectiveTextColor = _isEnabled
-        ? textColor
-        : textColor.withValues(alpha: 0.5);
+    final effectiveBorderColor =
+        _isEnabled ? borderColor : borderColor.withValues(alpha: 0.5);
+    final effectiveTextColor =
+        _isEnabled ? textColor : textColor.withValues(alpha: 0.5);
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),

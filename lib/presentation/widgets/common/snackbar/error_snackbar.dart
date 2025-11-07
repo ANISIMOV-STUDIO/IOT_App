@@ -22,20 +22,22 @@ class ErrorSnackBar {
   }) {
     final config = SnackBarConfig(
       duration: duration ?? const Duration(seconds: 5),
-      action: action ?? (onRetry != null ? SnackBarAction(
-        label: 'RETRY',
-        onPressed: onRetry,
-        textColor: Colors.white,
-      ) : null),
+      action: action ??
+          (onRetry != null
+              ? SnackBarAction(
+                  label: 'RETRY',
+                  onPressed: onRetry,
+                  textColor: Colors.white,
+                )
+              : null),
       enableHaptic: enableHaptic,
       showCloseButton: showCloseButton,
       onDismissed: onDismissed,
     );
 
     // Add error code to message if provided
-    final fullMessage = errorCode != null
-      ? '$message (Code: $errorCode)'
-      : message;
+    final fullMessage =
+        errorCode != null ? '$message (Code: $errorCode)' : message;
 
     BaseSnackBar.show(
       context,
@@ -57,7 +59,8 @@ class ErrorSnackBar {
     show(
       context,
       title: 'Connection Error',
-      message: customMessage ?? 'Unable to connect. Please check your internet connection.',
+      message: customMessage ??
+          'Unable to connect. Please check your internet connection.',
       onRetry: onRetry,
       showCloseButton: true,
     );
@@ -104,11 +107,13 @@ class ErrorSnackBar {
       context,
       title: 'Permission Required',
       message: 'Please grant $permission permission to continue.',
-      action: onOpenSettings != null ? SnackBarAction(
-        label: 'SETTINGS',
-        onPressed: onOpenSettings,
-        textColor: Colors.white,
-      ) : null,
+      action: onOpenSettings != null
+          ? SnackBarAction(
+              label: 'SETTINGS',
+              onPressed: onOpenSettings,
+              textColor: Colors.white,
+            )
+          : null,
       duration: const Duration(seconds: 6),
     );
   }
@@ -123,11 +128,13 @@ class ErrorSnackBar {
       context,
       title: 'Authentication Failed',
       message: message ?? 'Please sign in to continue.',
-      action: onSignIn != null ? SnackBarAction(
-        label: 'SIGN IN',
-        onPressed: onSignIn,
-        textColor: Colors.white,
-      ) : null,
+      action: onSignIn != null
+          ? SnackBarAction(
+              label: 'SIGN IN',
+              onPressed: onSignIn,
+              textColor: Colors.white,
+            )
+          : null,
     );
   }
 
@@ -156,19 +163,23 @@ class ErrorSnackBar {
     show(
       context,
       message: message,
-      action: onShowDetails != null ? SnackBarAction(
-        label: 'DETAILS',
-        onPressed: () {
-          onShowDetails();
-          // Show details in dialog or bottom sheet
-          _showErrorDetailsDialog(context, message, technicalDetails);
-        },
-        textColor: Colors.white,
-      ) : (onRetry != null ? SnackBarAction(
-        label: 'RETRY',
-        onPressed: onRetry,
-        textColor: Colors.white,
-      ) : null),
+      action: onShowDetails != null
+          ? SnackBarAction(
+              label: 'DETAILS',
+              onPressed: () {
+                onShowDetails();
+                // Show details in dialog or bottom sheet
+                _showErrorDetailsDialog(context, message, technicalDetails);
+              },
+              textColor: Colors.white,
+            )
+          : (onRetry != null
+              ? SnackBarAction(
+                  label: 'RETRY',
+                  onPressed: onRetry,
+                  textColor: Colors.white,
+                )
+              : null),
     );
   }
 

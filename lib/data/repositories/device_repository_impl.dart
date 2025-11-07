@@ -40,7 +40,8 @@ class DeviceRepositoryImpl implements DeviceRepository {
       final responseData = json.decode(response.body) as Map<String, dynamic>;
 
       // Convert response to HVAC unit
-      final unitModel = HvacUnitModel.fromJson(responseData['device'] ?? responseData);
+      final unitModel =
+          HvacUnitModel.fromJson(responseData['device'] ?? responseData);
       return unitModel.toEntity();
     } catch (e) {
       throw _handleError(e);
@@ -156,7 +157,8 @@ class DeviceRepositoryImpl implements DeviceRepository {
   @override
   Future<bool> updateFirmware(String deviceId, String firmwareVersion) async {
     try {
-      final response = await _apiService.post('/devices/$deviceId/firmware', body: {
+      final response =
+          await _apiService.post('/devices/$deviceId/firmware', body: {
         'version': firmwareVersion,
       });
 
@@ -226,9 +228,8 @@ class DeviceRepositoryImpl implements DeviceRepository {
       'device_id': deviceId,
       'status': 'healthy',
       'uptime_hours': 1234,
-      'last_maintenance': DateTime.now()
-          .subtract(const Duration(days: 30))
-          .toIso8601String(),
+      'last_maintenance':
+          DateTime.now().subtract(const Duration(days: 30)).toIso8601String(),
       'wifi_strength': -65,
       'cpu_usage': 45,
       'memory_usage': 62,

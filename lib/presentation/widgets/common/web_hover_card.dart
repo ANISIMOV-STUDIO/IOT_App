@@ -123,18 +123,21 @@ class _WebHoverCardState extends State<WebHoverCard>
                 onLongPress: widget.onLongPress,
                 borderRadius: BorderRadius.circular(widget.borderRadius),
                 splashColor: HvacColors.primaryOrange.withValues(alpha: 0.1),
-                highlightColor: HvacColors.primaryOrange.withValues(alpha: 0.05),
+                highlightColor:
+                    HvacColors.primaryOrange.withValues(alpha: 0.05),
                 child: Container(
                   padding: widget.padding,
                   decoration: BoxDecoration(
                     color: widget.backgroundColor ??
                         (_isHovering
-                            ? HvacColors.backgroundElevated.withValues(alpha: 0.05)
+                            ? HvacColors.backgroundElevated
+                                .withValues(alpha: 0.05)
                             : Colors.transparent),
                     borderRadius: BorderRadius.circular(widget.borderRadius),
                     border: _isHovering
                         ? Border.all(
-                            color: HvacColors.primaryOrange.withValues(alpha: 0.3),
+                            color:
+                                HvacColors.primaryOrange.withValues(alpha: 0.3),
                             width: 1,
                           )
                         : null,

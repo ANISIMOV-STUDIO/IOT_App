@@ -5,6 +5,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+
 class AirflowAnimation extends StatefulWidget {
   final bool isActive;
   final int speed; // 0-100
@@ -212,7 +213,6 @@ class _AirflowPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_AirflowPainter oldDelegate) {
-    return oldDelegate.progress != progress ||
-        oldDelegate.isActive != isActive;
+    return oldDelegate.progress != progress || oldDelegate.isActive != isActive;
   }
 }

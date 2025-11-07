@@ -85,9 +85,8 @@ class _HvacTextButtonState extends State<HvacTextButton> {
   @override
   Widget build(BuildContext context) {
     final textColor = widget.textColor ?? HvacColors.accent;
-    final effectiveTextColor = _isEnabled
-        ? textColor
-        : textColor.withValues(alpha: 0.5);
+    final effectiveTextColor =
+        _isEnabled ? textColor : textColor.withValues(alpha: 0.5);
 
     return MouseRegion(
       cursor: _isEnabled ? SystemMouseCursors.click : SystemMouseCursors.basic,
@@ -239,9 +238,8 @@ class _HvacIconButtonState extends State<HvacIconButton> {
   @override
   Widget build(BuildContext context) {
     final iconColor = widget.iconColor ?? HvacColors.accent;
-    final effectiveIconColor = _isEnabled
-        ? iconColor
-        : iconColor.withValues(alpha: 0.5);
+    final effectiveIconColor =
+        _isEnabled ? iconColor : iconColor.withValues(alpha: 0.5);
     final size = widget.iconSize ?? 24.0;
 
     final button = MouseRegion(

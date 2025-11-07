@@ -130,8 +130,7 @@ class SecureWiFiConfig {
     if (ssid.isEmpty || ssid.length > 32) return false;
 
     // Validate password based on security type
-    if (securityType != WiFiSecurityType.open &&
-        encryptedPassword.isEmpty) {
+    if (securityType != WiFiSecurityType.open && encryptedPassword.isEmpty) {
       return false;
     }
 
@@ -172,9 +171,7 @@ class SecureWiFiConfig {
 
   @override
   int get hashCode {
-    return ssid.hashCode ^
-        encryptedPassword.hashCode ^
-        securityType.hashCode;
+    return ssid.hashCode ^ encryptedPassword.hashCode ^ securityType.hashCode;
   }
 }
 

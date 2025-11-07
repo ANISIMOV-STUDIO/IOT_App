@@ -26,7 +26,8 @@ class HvacTemperatureHero extends StatelessWidget {
         color: Colors.transparent,
         child: Text(
           temperature,
-          style: style ?? const TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
+          style: style ??
+              const TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
         ),
       ),
     );

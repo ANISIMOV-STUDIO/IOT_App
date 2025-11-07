@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 /// Device size categories (Material Design 3 breakpoints)
 /// Full responsive support: mobile, tablet, and desktop
 enum DeviceSize {
-  compact,  // < 600dp (phones)
-  medium,   // 600-1024dp (tablets, foldables)
+  compact, // < 600dp (phones)
+  medium, // 600-1024dp (tablets, foldables)
   expanded, // 1024dp+ (desktops, large screens)
 }
 
@@ -54,7 +54,8 @@ class AdaptiveLayout {
       context,
       compact: const EdgeInsets.all(16.0),
       medium: const EdgeInsets.all(20.0),
-      expanded: const EdgeInsets.all(16.0), // Standard for desktop with fixed width
+      expanded:
+          const EdgeInsets.all(16.0), // Standard for desktop with fixed width
     );
   }
 
@@ -137,11 +138,12 @@ class AdaptiveLayout {
   /// Get control card height
   static double getControlCardHeight(BuildContext context) {
     return getAdaptiveValue(
-      context,
-      compact: null, // Auto height
-      medium: 200.0,
-      expanded: 220.0,
-    ) ?? double.infinity;
+          context,
+          compact: null, // Auto height
+          medium: 200.0,
+          expanded: 220.0,
+        ) ??
+        double.infinity;
   }
 
   /// Get maximum content width (for desktop - prevents content stretching)

@@ -51,21 +51,15 @@ class _GradientCardState extends State<GradientCard>
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 200),
-      vsync: this);
+        duration: const Duration(milliseconds: 200), vsync: this);
 
     _scaleAnimation = Tween<double>(
       begin: 1.0,
       end: kIsWeb ? 1.03 : 1.02, // Slightly more scale on web
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeOutCubic));
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
 
-    _shadowAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeOutCubic));
+    _shadowAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+        CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
   }
 
   @override
@@ -94,61 +88,65 @@ class _GradientCardState extends State<GradientCard>
 
     return [
       BoxShadow(
-        color: widget.colors.first.withValues(
-          alpha: 0.3 * (1 + _shadowAnimation.value * 0.3)),
-        blurRadius: baseBlur + (hoverBlur - baseBlur) * _shadowAnimation.value,
-        offset: Offset(
-          0,
-          baseOffset + (hoverOffset - baseOffset) * _shadowAnimation.value)),
+          color: widget.colors.first
+              .withValues(alpha: 0.3 * (1 + _shadowAnimation.value * 0.3)),
+          blurRadius:
+              baseBlur + (hoverBlur - baseBlur) * _shadowAnimation.value,
+          offset: Offset(
+              0,
+              baseOffset +
+                  (hoverOffset - baseOffset) * _shadowAnimation.value)),
       BoxShadow(
-        color: widget.colors.last.withValues(
-          alpha: 0.15 * (1 + _shadowAnimation.value * 0.5)),
-        blurRadius: (baseBlur * 2) +
-            ((hoverBlur * 1.6) - (baseBlur * 2)) * _shadowAnimation.value,
-        offset: Offset(
-          0,
-          (baseOffset * 2) +
-              ((hoverOffset * 2) - (baseOffset * 2)) * _shadowAnimation.value)),
+          color: widget.colors.last
+              .withValues(alpha: 0.15 * (1 + _shadowAnimation.value * 0.5)),
+          blurRadius: (baseBlur * 2) +
+              ((hoverBlur * 1.6) - (baseBlur * 2)) * _shadowAnimation.value,
+          offset: Offset(
+              0,
+              (baseOffset * 2) +
+                  ((hoverOffset * 2) - (baseOffset * 2)) *
+                      _shadowAnimation.value)),
     ];
   }
 
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
-      onEnter: kIsWeb ? (_) => _handleHover(true) : null,
-      onExit: kIsWeb ? (_) => _handleHover(false) : null,
-      cursor: widget.onTap != null && kIsWeb
-          ? SystemMouseCursors.click
-          : SystemMouseCursors.basic,
-      child: GestureDetector(
-        onTap: widget.onTap,
-        onTapDown: !kIsWeb && widget.enableHoverEffect
-            ? (_) => _handleHover(true)
-            : null,
-        onTapUp: !kIsWeb && widget.enableHoverEffect
-            ? (_) => _handleHover(false)
-            : null,
-        onTapCancel: !kIsWeb && widget.enableHoverEffect
-            ? () => _handleHover(false)
-            : null,
-        child: AnimatedBuilder(
-          animation: _controller,
-          builder: (context, child) => Transform.scale(
-            scale: _scaleAnimation.value,
-            child: Container(
-              width: widget.width,
-              height: widget.height,
-              margin: widget.margin,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: widget.colors,
-                  begin: widget.begin,
-                  end: widget.end),
-                borderRadius: BorderRadius.circular(widget.borderRadius),
-                boxShadow: _buildResponsiveShadows()),
-              padding: widget.padding ?? const EdgeInsets.all(HvacSpacing.lg),
-              child: child!)),
-          child: widget.child)));
+        onEnter: kIsWeb ? (_) => _handleHover(true) : null,
+        onExit: kIsWeb ? (_) => _handleHover(false) : null,
+        cursor: widget.onTap != null && kIsWeb
+            ? SystemMouseCursors.click
+            : SystemMouseCursors.basic,
+        child: GestureDetector(
+            onTap: widget.onTap,
+            onTapDown: !kIsWeb && widget.enableHoverEffect
+                ? (_) => _handleHover(true)
+                : null,
+            onTapUp: !kIsWeb && widget.enableHoverEffect
+                ? (_) => _handleHover(false)
+                : null,
+            onTapCancel: !kIsWeb && widget.enableHoverEffect
+                ? () => _handleHover(false)
+                : null,
+            child: AnimatedBuilder(
+                animation: _controller,
+                builder: (context, child) => Transform.scale(
+                    scale: _scaleAnimation.value,
+                    child: Container(
+                        width: widget.width,
+                        height: widget.height,
+                        margin: widget.margin,
+                        decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                                colors: widget.colors,
+                                begin: widget.begin,
+                                end: widget.end),
+                            borderRadius:
+                                BorderRadius.circular(widget.borderRadius),
+                            boxShadow: _buildResponsiveShadows()),
+                        padding: widget.padding ??
+                            const EdgeInsets.all(HvacSpacing.lg),
+                        child: child!)),
+                child: widget.child)));
   }
 }
-

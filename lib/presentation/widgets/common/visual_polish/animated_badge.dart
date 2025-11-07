@@ -122,13 +122,12 @@ class _AnimatedBadgeState extends State<AnimatedBadge>
     }
 
     if (widget.isNew) {
-      badge = badge
-          .animate(onPlay: (controller) => controller.repeat())
-          .shimmer(
-            duration: 2000.ms,
-            delay: 1000.ms,
-            color: widget.backgroundColor.withValues(alpha: 0.1),
-          );
+      badge =
+          badge.animate(onPlay: (controller) => controller.repeat()).shimmer(
+                duration: 2000.ms,
+                delay: 1000.ms,
+                color: widget.backgroundColor.withValues(alpha: 0.1),
+              );
     }
 
     return badge;

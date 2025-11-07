@@ -111,9 +111,7 @@ class AlertsHistoryTab extends StatelessWidget {
             ),
             child: Icon(severityIcon, color: severityColor, size: 20.0),
           ),
-
           const SizedBox(width: 12.0),
-
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

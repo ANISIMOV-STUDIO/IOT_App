@@ -30,7 +30,8 @@ class EnvConfig {
   }
 
   static bool get grpcUseTls {
-    const useTls = String.fromEnvironment('GRPC_USE_TLS', defaultValue: 'false');
+    const useTls =
+        String.fromEnvironment('GRPC_USE_TLS', defaultValue: 'false');
     return useTls.toLowerCase() == 'true';
   }
 

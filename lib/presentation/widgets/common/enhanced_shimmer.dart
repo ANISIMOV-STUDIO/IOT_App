@@ -12,4 +12,5 @@ export 'shimmer/pulse_skeleton.dart';
 
 // For backwards compatibility, re-export main components with original names
 import 'shimmer/base_shimmer.dart';
+
 typedef EnhancedShimmer = BaseShimmer;

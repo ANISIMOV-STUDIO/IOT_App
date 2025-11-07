@@ -35,7 +35,6 @@ class OverviewMaintenanceCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16.0),
-
           const _MaintenanceItem(
             label: 'Последнее обслуживание',
             value: '15 дней назад',

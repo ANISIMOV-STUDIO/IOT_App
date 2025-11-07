@@ -39,7 +39,13 @@ class SecurityConstants {
   /// API Security
   static const int apiTimeoutSeconds = 30;
   static const int maxRetryAttempts = 3;
-  static const List<String> allowedMethods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'];
+  static const List<String> allowedMethods = [
+    'GET',
+    'POST',
+    'PUT',
+    'DELETE',
+    'PATCH'
+  ];
 
   /// Certificate Pinning (SHA256 fingerprints)
   /// Replace with your actual certificate fingerprints
@@ -85,9 +91,27 @@ class SecurityConstants {
 
   /// Sanitization rules
   static const List<String> bannedCharacters = [
-    '<', '>', '"', "'", '&', '/', '\\',
-    '\$', '{', '}', '(', ')', '[', ']',
-    ';', ':', '?', '!', '|', '`', '~',
+    '<',
+    '>',
+    '"',
+    "'",
+    '&',
+    '/',
+    '\\',
+    '\$',
+    '{',
+    '}',
+    '(',
+    ')',
+    '[',
+    ']',
+    ';',
+    ':',
+    '?',
+    '!',
+    '|',
+    '`',
+    '~',
   ];
 
   /// Security headers
@@ -111,12 +135,18 @@ class SecurityConstants {
   /// File upload restrictions
   static const int maxFileSize = 10 * 1024 * 1024; // 10MB
   static const List<String> allowedFileTypes = [
-    'jpg', 'jpeg', 'png', 'pdf', 'csv', 'json',
+    'jpg',
+    'jpeg',
+    'png',
+    'pdf',
+    'csv',
+    'json',
   ];
 
   /// Biometric authentication settings
   static const bool biometricEnabled = true;
-  static const String biometricReason = 'Please authenticate to access BREEZ Home';
+  static const String biometricReason =
+      'Please authenticate to access BREEZ Home';
   static const bool biometricRequired = false; // Optional enhancement
 
   /// Security event types for logging

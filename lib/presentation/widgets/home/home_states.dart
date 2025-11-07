@@ -88,9 +88,10 @@ class HomeErrorState extends StatelessWidget {
             ),
             const SizedBox(height: HvacSpacing.lgV),
             ElevatedButton(
-              onPressed: onRetry ?? () => context.read<HvacListBloc>().add(
-                const LoadHvacUnitsEvent(),
-              ),
+              onPressed: onRetry ??
+                  () => context.read<HvacListBloc>().add(
+                        const LoadHvacUnitsEvent(),
+                      ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: HvacColors.primaryOrange,
                 padding: const EdgeInsets.symmetric(

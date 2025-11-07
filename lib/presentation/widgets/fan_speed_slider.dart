@@ -5,6 +5,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+
 class FanSpeedSlider extends StatelessWidget {
   final String label;
   final int value; // 0-100%
@@ -56,7 +57,8 @@ class FanSpeedSlider extends StatelessWidget {
                 ],
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: HvacSpacing.sm, vertical: HvacSpacing.xxs + 2),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: HvacSpacing.sm, vertical: HvacSpacing.xxs + 2),
                 decoration: BoxDecoration(
                   color: HvacColors.backgroundDark,
                   borderRadius: HvacRadius.smRadius,

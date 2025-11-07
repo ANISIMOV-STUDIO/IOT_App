@@ -5,6 +5,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+
 enum AirQualityLevel {
   excellent,
   good,
@@ -162,7 +163,8 @@ class _AirQualityIndicatorState extends State<AirQualityIndicator>
                         height: 160,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: color.withValues(alpha: 0.1 * _animation.value),
+                          color:
+                              color.withValues(alpha: 0.1 * _animation.value),
                         ),
                       ),
                       // Middle circle
@@ -210,15 +212,19 @@ class _AirQualityIndicatorState extends State<AirQualityIndicator>
           const SizedBox(height: HvacSpacing.lg),
 
           // Metrics
-          if (widget.co2Level != null || widget.pm25Level != null || widget.vocLevel != null) ...[
+          if (widget.co2Level != null ||
+              widget.pm25Level != null ||
+              widget.vocLevel != null) ...[
             const Divider(color: HvacColors.backgroundCardBorder),
             const SizedBox(height: HvacSpacing.md),
             if (widget.co2Level != null)
               _buildMetric('CO₂', '${widget.co2Level} ppm', Icons.cloud),
             if (widget.pm25Level != null)
-              _buildMetric('PM2.5', '${widget.pm25Level?.toInt()} μg/m³', Icons.grain),
+              _buildMetric(
+                  'PM2.5', '${widget.pm25Level?.toInt()} μg/m³', Icons.grain),
             if (widget.vocLevel != null)
-              _buildMetric('VOC', '${widget.vocLevel?.toInt()} ppb', Icons.science),
+              _buildMetric(
+                  'VOC', '${widget.vocLevel?.toInt()} ppb', Icons.science),
           ],
         ],
       ),

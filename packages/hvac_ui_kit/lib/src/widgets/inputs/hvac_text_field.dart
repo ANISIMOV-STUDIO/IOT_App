@@ -16,9 +16,9 @@ import '../../theme/typography.dart';
 
 /// Text field size variant
 enum HvacTextFieldSize {
-  small,   // Compact input (40h)
-  medium,  // Standard input (48h)
-  large,   // Large input (56h)
+  small, // Compact input (40h)
+  medium, // Standard input (48h)
+  large, // Large input (56h)
 }
 
 /// Professional text field component
@@ -167,7 +167,9 @@ class _HvacTextFieldState extends State<HvacTextField> {
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
-      cursor: widget.enabled ? SystemMouseCursors.text : SystemMouseCursors.forbidden,
+      cursor: widget.enabled
+          ? SystemMouseCursors.text
+          : SystemMouseCursors.forbidden,
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
       child: AnimatedContainer(
@@ -201,7 +203,9 @@ class _HvacTextFieldState extends State<HvacTextField> {
           enabled: widget.enabled,
           style: HvacTypography.bodyMedium.copyWith(
             fontSize: _fontSize,
-            color: widget.enabled ? HvacColors.textPrimary : HvacColors.textTertiary,
+            color: widget.enabled
+                ? HvacColors.textPrimary
+                : HvacColors.textTertiary,
           ),
           decoration: InputDecoration(
             labelText: widget.labelText,

@@ -84,9 +84,8 @@ class _PerformanceMonitorState extends State<PerformanceMonitor> {
   }
 
   void _logPerformanceSummary() {
-    final totalMicroseconds = _buildTimes
-        .map((d) => d.inMicroseconds)
-        .reduce((a, b) => a + b);
+    final totalMicroseconds =
+        _buildTimes.map((d) => d.inMicroseconds).reduce((a, b) => a + b);
     final averageMicroseconds = totalMicroseconds ~/ _buildTimes.length;
     final averageMs = averageMicroseconds / 1000;
 
@@ -97,9 +96,8 @@ class _PerformanceMonitorState extends State<PerformanceMonitor> {
         .map((d) => d.inMilliseconds)
         .reduce((a, b) => a < b ? a : b);
 
-    final exceededCount = _buildTimes
-        .where((d) => d.inMilliseconds > widget.thresholdMs)
-        .length;
+    final exceededCount =
+        _buildTimes.where((d) => d.inMilliseconds > widget.thresholdMs).length;
     final exceededPercentage =
         (exceededCount / _buildTimes.length * 100).toStringAsFixed(1);
 
@@ -116,9 +114,9 @@ class _PerformanceMonitorState extends State<PerformanceMonitor> {
   int _calculateScore() {
     if (_buildTimes.isEmpty) return 100;
 
-    final averageMicroseconds = _buildTimes
-        .map((d) => d.inMicroseconds)
-        .reduce((a, b) => a + b) ~/ _buildTimes.length;
+    final averageMicroseconds =
+        _buildTimes.map((d) => d.inMicroseconds).reduce((a, b) => a + b) ~/
+            _buildTimes.length;
     final averageMs = averageMicroseconds / 1000;
 
     // Perfect score if average is under 8ms
@@ -159,9 +157,10 @@ mixin PerformanceMonitorMixin<T extends StatefulWidget> on State<T> {
   void logPerformanceMetrics(String widgetName) {
     if (_frameTimes.isEmpty) return;
 
-    final averageMs = _frameTimes
-        .map((d) => d.inMicroseconds)
-        .reduce((a, b) => a + b) / _frameTimes.length / 1000;
+    final averageMs =
+        _frameTimes.map((d) => d.inMicroseconds).reduce((a, b) => a + b) /
+            _frameTimes.length /
+            1000;
 
     debugPrint(
       '📊 $widgetName performance: '

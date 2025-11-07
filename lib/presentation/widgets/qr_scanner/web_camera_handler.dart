@@ -149,8 +149,7 @@ class _WebCameraHandlerState extends State<WebCameraHandler> {
                   height: 20.0,
                   child: CircularProgressIndicator(
                     strokeWidth: 2.0,
-                    valueColor:
-                        AlwaysStoppedAnimation<Color>(Colors.white),
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                   ),
                 ),
                 SizedBox(width: AppSpacing.sm),

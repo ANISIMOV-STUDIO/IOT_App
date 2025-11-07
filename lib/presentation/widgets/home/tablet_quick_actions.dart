@@ -5,6 +5,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+
 class TabletQuickActions extends StatelessWidget {
   final VoidCallback onPowerAllOn;
   final VoidCallback onPowerAllOff;

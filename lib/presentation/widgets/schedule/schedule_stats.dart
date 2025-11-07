@@ -62,7 +62,8 @@ class ScheduleStat extends StatelessWidget {
     return AdaptiveControl(
       builder: (context, deviceSize) {
         return Container(
-          padding: EdgeInsets.all(adaptive.AdaptiveLayout.spacing(context, base: 8)),
+          padding:
+              EdgeInsets.all(adaptive.AdaptiveLayout.spacing(context, base: 8)),
           decoration: BoxDecoration(
             color: color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(
@@ -80,7 +81,8 @@ class ScheduleStat extends StatelessWidget {
                   color: HvacColors.textSecondary,
                 ),
               ),
-              SizedBox(height: adaptive.AdaptiveLayout.spacing(context, base: 4)),
+              SizedBox(
+                  height: adaptive.AdaptiveLayout.spacing(context, base: 4)),
               Text(
                 value,
                 style: HvacTypography.labelLarge.copyWith(

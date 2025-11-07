@@ -61,7 +61,9 @@ class TemperatureTile extends StatelessWidget {
             style: TextStyle(
               fontSize: isSecondary ? 16.0 : 20.0,
               fontWeight: FontWeight.w600,
-              color: value != null ? HvacColors.textPrimary : HvacColors.textDisabled,
+              color: value != null
+                  ? HvacColors.textPrimary
+                  : HvacColors.textDisabled,
               letterSpacing: -0.5,
             ),
           ),

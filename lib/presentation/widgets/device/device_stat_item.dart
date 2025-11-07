@@ -5,6 +5,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+
 class DeviceStatItem extends StatelessWidget {
   final IconData icon;
   final String label;

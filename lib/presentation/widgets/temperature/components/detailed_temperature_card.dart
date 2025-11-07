@@ -89,7 +89,9 @@ class DetailedTemperatureCard extends StatelessWidget {
             style: TextStyle(
               fontSize: isPrimary ? 32.0 : 24.0,
               fontWeight: FontWeight.w600,
-              color: value != null ? HvacColors.textPrimary : HvacColors.textDisabled,
+              color: value != null
+                  ? HvacColors.textPrimary
+                  : HvacColors.textDisabled,
               letterSpacing: -1.5,
             ),
           ),

@@ -181,7 +181,9 @@ class _StatusChipState extends State<_StatusChip>
                           style: TextStyle(
                             fontSize: widget.isCompact ? 11.0 : 12.0,
                             fontWeight: FontWeight.bold,
-                            color: _isHovered ? widget.color : HvacColors.textPrimary,
+                            color: _isHovered
+                                ? widget.color
+                                : HvacColors.textPrimary,
                           ),
                         ),
                         Text(
@@ -205,4 +207,3 @@ class _StatusChipState extends State<_StatusChip>
     );
   }
 }
-

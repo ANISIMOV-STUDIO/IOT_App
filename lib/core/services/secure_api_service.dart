@@ -54,8 +54,7 @@ class SecureApiService {
           const Duration(seconds: SecurityConstants.apiTimeoutSeconds),
       receiveTimeout:
           const Duration(seconds: SecurityConstants.apiTimeoutSeconds),
-      sendTimeout:
-          const Duration(seconds: SecurityConstants.apiTimeoutSeconds),
+      sendTimeout: const Duration(seconds: SecurityConstants.apiTimeoutSeconds),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',

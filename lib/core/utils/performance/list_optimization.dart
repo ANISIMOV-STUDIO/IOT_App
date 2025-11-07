@@ -30,9 +30,7 @@ class ListOptimization {
       scrollDirection: scrollDirection,
       itemBuilder: (context, index) {
         final item = itemBuilder(context, index);
-        return addRepaintBoundary
-            ? RepaintBoundary(child: item)
-            : item;
+        return addRepaintBoundary ? RepaintBoundary(child: item) : item;
       },
     );
   }
@@ -57,9 +55,7 @@ class ListOptimization {
       shrinkWrap: shrinkWrap,
       itemBuilder: (context, index) {
         final item = itemBuilder(context, index);
-        return addRepaintBoundary
-            ? RepaintBoundary(child: item)
-            : item;
+        return addRepaintBoundary ? RepaintBoundary(child: item) : item;
       },
     );
   }

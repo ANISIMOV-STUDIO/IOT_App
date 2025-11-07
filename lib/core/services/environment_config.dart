@@ -64,12 +64,15 @@ class EnvironmentConfig {
   /// Load configuration from environment variables
   void _loadConfiguration() {
     _environment = dotenv.get('ENVIRONMENT', fallback: 'development');
-    _apiBaseUrl = _sanitizeUrl(dotenv.get('API_BASE_URL', fallback: 'http://localhost:8080/api'));
+    _apiBaseUrl = _sanitizeUrl(
+        dotenv.get('API_BASE_URL', fallback: 'http://localhost:8080/api'));
     _apiSecret = dotenv.get('API_SECRET', fallback: _generateDefaultSecret());
     _appVersion = dotenv.get('APP_VERSION', fallback: '1.0.0');
     _isProduction = _environment == 'production';
-    _enableAnalytics = dotenv.get('ENABLE_ANALYTICS', fallback: 'false') == 'true';
-    _enableCrashReporting = dotenv.get('ENABLE_CRASH_REPORTING', fallback: 'true') == 'true';
+    _enableAnalytics =
+        dotenv.get('ENABLE_ANALYTICS', fallback: 'false') == 'true';
+    _enableCrashReporting =
+        dotenv.get('ENABLE_CRASH_REPORTING', fallback: 'true') == 'true';
 
     // Validate configuration
     _validateConfiguration();
@@ -93,13 +96,15 @@ class EnvironmentConfig {
   /// Validate configuration values
   void _validateConfiguration() {
     // Validate API URL
-    if (!_apiBaseUrl.startsWith('http://') && !_apiBaseUrl.startsWith('https://')) {
+    if (!_apiBaseUrl.startsWith('http://') &&
+        !_apiBaseUrl.startsWith('https://')) {
       throw ConfigurationException('Invalid API base URL: $_apiBaseUrl');
     }
 
     // Enforce HTTPS in production
     if (_isProduction && !_apiBaseUrl.startsWith('https://')) {
-      throw ConfigurationException('HTTPS is required in production environment');
+      throw ConfigurationException(
+          'HTTPS is required in production environment');
     }
 
     // Validate API secret
@@ -109,12 +114,16 @@ class EnvironmentConfig {
 
     // Check for default/placeholder values in production
     if (_isProduction) {
-      if (_apiSecret.contains('DEFAULT') || _apiSecret.contains('PLACEHOLDER')) {
-        throw ConfigurationException('Default API secret cannot be used in production');
+      if (_apiSecret.contains('DEFAULT') ||
+          _apiSecret.contains('PLACEHOLDER')) {
+        throw ConfigurationException(
+            'Default API secret cannot be used in production');
       }
 
-      if (_apiBaseUrl.contains('localhost') || _apiBaseUrl.contains('127.0.0.1')) {
-        throw ConfigurationException('Localhost URL cannot be used in production');
+      if (_apiBaseUrl.contains('localhost') ||
+          _apiBaseUrl.contains('127.0.0.1')) {
+        throw ConfigurationException(
+            'Localhost URL cannot be used in production');
       }
     }
   }

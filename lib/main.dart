@@ -59,8 +59,8 @@ class _HvacControlAppState extends State<HvacControlApp> {
       providers: [
         BlocProvider.value(value: _authBloc),
         BlocProvider(
-          create: (context) => di.sl<HvacListBloc>()
-            ..add(const LoadHvacUnitsEvent()),
+          create: (context) =>
+              di.sl<HvacListBloc>()..add(const LoadHvacUnitsEvent()),
         ),
       ],
       child: ListenableBuilder(
@@ -108,7 +108,8 @@ class _HvacControlAppState extends State<HvacControlApp> {
                       defaultValue: 1920,
                       conditionalValues: [
                         const Condition.equals(name: MOBILE, value: 375),
-                        const Condition.between(start: 600, end: 1024, value: 768),
+                        const Condition.between(
+                            start: 600, end: 1024, value: 768),
                         const Condition.largerThan(name: TABLET, value: 1920),
                       ],
                     ).value,

@@ -5,6 +5,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+
 /// Container that constrains max width on larger screens
 class AdaptiveContainer extends StatelessWidget {
   final Widget child;
@@ -166,10 +167,11 @@ class AdaptiveCard extends StatelessWidget {
     final radius = borderRadius ?? (isMobile ? 12.0 : 16.0);
 
     return Container(
-      margin: margin ?? EdgeInsets.symmetric(
-        horizontal: isMobile ? HvacSpacing.mdR : HvacSpacing.lgR,
-        vertical: HvacSpacing.smV,
-      ),
+      margin: margin ??
+          EdgeInsets.symmetric(
+            horizontal: isMobile ? HvacSpacing.mdR : HvacSpacing.lgR,
+            vertical: HvacSpacing.smV,
+          ),
       decoration: BoxDecoration(
         color: backgroundColor ?? Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(radius),
@@ -214,20 +216,24 @@ class AdaptiveCard extends StatelessWidget {
       // Stack actions vertically on mobile if more than 2
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: actions!.map((action) => Padding(
-          padding: const EdgeInsets.only(bottom: HvacSpacing.smV),
-          child: action,
-        )).toList(),
+        children: actions!
+            .map((action) => Padding(
+                  padding: const EdgeInsets.only(bottom: HvacSpacing.smV),
+                  child: action,
+                ))
+            .toList(),
       );
     }
 
     // Horizontal layout for desktop/tablet or few actions
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
-      children: actions!.map((action) => Padding(
-        padding: const EdgeInsets.only(left: HvacSpacing.smR),
-        child: action,
-      )).toList(),
+      children: actions!
+          .map((action) => Padding(
+                padding: const EdgeInsets.only(left: HvacSpacing.smR),
+                child: action,
+              ))
+          .toList(),
     );
   }
 }

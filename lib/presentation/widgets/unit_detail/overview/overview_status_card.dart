@@ -69,7 +69,8 @@ class OverviewStatusCard extends StatelessWidget {
                       unit.power ? 'Работает' : 'Выключено',
                       style: HvacTypography.displaySmall.copyWith(
                         fontSize: 24.0,
-                        color: unit.power ? HvacColors.success : HvacColors.error,
+                        color:
+                            unit.power ? HvacColors.success : HvacColors.error,
                       ),
                     ),
                     if (unit.power) ...[

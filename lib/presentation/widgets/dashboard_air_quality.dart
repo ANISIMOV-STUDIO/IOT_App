@@ -5,6 +5,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+
 enum AirQualityLevel { excellent, good, moderate, poor, veryPoor }
 
 class DashboardAirQuality extends StatelessWidget {
@@ -134,7 +135,8 @@ class DashboardAirQuality extends StatelessWidget {
 
             // Level badge
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: HvacSpacing.mdR, vertical: HvacSpacing.xsR),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: HvacSpacing.mdR, vertical: HvacSpacing.xsR),
               decoration: BoxDecoration(
                 color: _levelColor.withValues(alpha: 0.15),
                 borderRadius: HvacRadius.smRadius,

@@ -146,9 +146,10 @@ class AppSnackBar {
         margin: margin,
         padding: padding,
         behavior: behavior ?? SnackBarBehavior.floating,
-        shape: shape ?? RoundedRectangleBorder(
-          borderRadius: HvacRadius.smRadius,
-        ),
+        shape: shape ??
+            RoundedRectangleBorder(
+              borderRadius: HvacRadius.smRadius,
+            ),
         elevation: elevation,
         width: width,
         dismissDirection: dismissDirection ?? DismissDirection.down,

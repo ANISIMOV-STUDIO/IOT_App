@@ -56,8 +56,8 @@ class AnimationOptimization {
 
 /// Animation complexity levels
 enum AnimationComplexity {
-  simple,      // Icon rotation, simple fade
-  medium,      // Slide, scale, combined animations
-  complex,     // Multiple widgets, staggered
+  simple, // Icon rotation, simple fade
+  medium, // Slide, scale, combined animations
+  complex, // Multiple widgets, staggered
   veryComplex, // Heavy transformations, 3D effects
 }

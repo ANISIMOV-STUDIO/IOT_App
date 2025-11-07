@@ -342,10 +342,9 @@ class PerformanceBenchmark {
   static void printReport() {
     debugPrint('\n📊 Performance Benchmark Report:');
     _benchmarks.forEach((name, durations) {
-      final average = durations
-              .map((d) => d.inMilliseconds)
-              .reduce((a, b) => a + b) ~/
-          durations.length;
+      final average =
+          durations.map((d) => d.inMilliseconds).reduce((a, b) => a + b) ~/
+              durations.length;
       final min = durations
           .map((d) => d.inMilliseconds)
           .reduce((a, b) => a < b ? a : b);

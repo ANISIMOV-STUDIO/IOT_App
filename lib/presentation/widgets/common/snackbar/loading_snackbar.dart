@@ -33,12 +33,11 @@ class LoadingSnackBar {
         progress: progress,
       ),
       duration: indefinite
-        ? const Duration(days: 365) // Effectively indefinite
-        : maxDuration ?? const Duration(seconds: 30),
+          ? const Duration(days: 365) // Effectively indefinite
+          : maxDuration ?? const Duration(seconds: 30),
       behavior: SnackBarBehavior.floating,
-      backgroundColor: backgroundColor ?? (isDarkMode
-        ? HvacColors.neutral400
-        : HvacColors.neutral300),
+      backgroundColor: backgroundColor ??
+          (isDarkMode ? HvacColors.neutral400 : HvacColors.neutral300),
       margin: snackbarMargin,
       width: snackbarWidth,
       shape: RoundedRectangleBorder(
@@ -54,14 +53,14 @@ class LoadingSnackBar {
   }
 
   /// Show operation in progress
-  static ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showOperation(
+  static ScaffoldFeatureController<SnackBar, SnackBarClosedReason>
+      showOperation(
     BuildContext context, {
     required String operation,
     String? details,
   }) {
-    final message = details != null
-      ? '$operation: $details'
-      : '$operation in progress...';
+    final message =
+        details != null ? '$operation: $details' : '$operation in progress...';
 
     return show(context, message: message);
   }
@@ -73,9 +72,7 @@ class LoadingSnackBar {
   }) {
     return show(
       context,
-      message: itemName != null
-        ? 'Syncing $itemName...'
-        : 'Syncing data...',
+      message: itemName != null ? 'Syncing $itemName...' : 'Syncing data...',
     );
   }
 
@@ -86,72 +83,67 @@ class LoadingSnackBar {
   }) {
     return show(
       context,
-      message: itemName != null
-        ? 'Saving $itemName...'
-        : 'Saving changes...',
+      message: itemName != null ? 'Saving $itemName...' : 'Saving changes...',
     );
   }
 
   /// Show loading data
-  static ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showLoadingData(
+  static ScaffoldFeatureController<SnackBar, SnackBarClosedReason>
+      showLoadingData(
     BuildContext context, {
     String? dataType,
   }) {
     return show(
       context,
-      message: dataType != null
-        ? 'Loading $dataType...'
-        : 'Loading data...',
+      message: dataType != null ? 'Loading $dataType...' : 'Loading data...',
     );
   }
 
   /// Show processing
-  static ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showProcessing(
+  static ScaffoldFeatureController<SnackBar, SnackBarClosedReason>
+      showProcessing(
     BuildContext context, {
     String? itemName,
   }) {
     return show(
       context,
-      message: itemName != null
-        ? 'Processing $itemName...'
-        : 'Processing...',
+      message: itemName != null ? 'Processing $itemName...' : 'Processing...',
     );
   }
 
   /// Show uploading with progress
-  static ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showUploading(
+  static ScaffoldFeatureController<SnackBar, SnackBarClosedReason>
+      showUploading(
     BuildContext context, {
     String? fileName,
     double? progress,
   }) {
     return show(
       context,
-      message: fileName != null
-        ? 'Uploading $fileName'
-        : 'Uploading...',
+      message: fileName != null ? 'Uploading $fileName' : 'Uploading...',
       showProgress: true,
       progress: progress,
     );
   }
 
   /// Show downloading with progress
-  static ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showDownloading(
+  static ScaffoldFeatureController<SnackBar, SnackBarClosedReason>
+      showDownloading(
     BuildContext context, {
     String? fileName,
     double? progress,
   }) {
     return show(
       context,
-      message: fileName != null
-        ? 'Downloading $fileName'
-        : 'Downloading...',
+      message: fileName != null ? 'Downloading $fileName' : 'Downloading...',
       showProgress: true,
       progress: progress,
     );
   }
 
   /// Hide loading snackbar
-  static void hide(ScaffoldFeatureController<SnackBar, SnackBarClosedReason> controller) {
+  static void hide(
+      ScaffoldFeatureController<SnackBar, SnackBarClosedReason> controller) {
     controller.close();
   }
 }
@@ -173,8 +165,10 @@ class _LoadingContent extends StatelessWidget {
     final theme = Theme.of(context);
     final screenWidth = MediaQuery.of(context).size.width;
     final isDesktop = screenWidth >= 1024;
-    final messageFontSize = screenWidth >= 1024 ? 14.0 : (screenWidth >= 600 ? 13.5 : 13.0);
-    final percentFontSize = screenWidth >= 1024 ? 12.0 : (screenWidth >= 600 ? 11.5 : 11.0);
+    final messageFontSize =
+        screenWidth >= 1024 ? 14.0 : (screenWidth >= 600 ? 13.5 : 13.0);
+    final percentFontSize =
+        screenWidth >= 1024 ? 12.0 : (screenWidth >= 600 ? 11.5 : 11.0);
 
     return Row(
       children: [

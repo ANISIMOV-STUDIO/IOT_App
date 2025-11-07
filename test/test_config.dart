@@ -52,8 +52,7 @@ class TestConfig {
   }
 
   /// Configure test timeouts
-  static void _configureTimeouts() {
-  }
+  static void _configureTimeouts() {}
 
   /// Performance test helpers
   static void assertPerformance({
@@ -164,8 +163,8 @@ class TestReporter {
     final performanceTests = _results.entries
         .where((e) => e.value.executionTime != null)
         .toList()
-      ..sort((a, b) =>
-          b.value.executionTime!.compareTo(a.value.executionTime!));
+      ..sort(
+          (a, b) => b.value.executionTime!.compareTo(a.value.executionTime!));
 
     if (performanceTests.isNotEmpty) {
       buffer.writeln('SLOWEST TESTS:');
@@ -206,9 +205,8 @@ class TestReporter {
             _results.values.where((r) => r.status == TestStatus.passed).length,
         'failed':
             _results.values.where((r) => r.status == TestStatus.failed).length,
-        'skipped': _results.values
-            .where((r) => r.status == TestStatus.skipped)
-            .length,
+        'skipped':
+            _results.values.where((r) => r.status == TestStatus.skipped).length,
       },
     };
   }
@@ -276,10 +274,9 @@ class TestProfiler {
       final sorted = List<Duration>.from(durations)
         ..sort((a, b) => a.compareTo(b));
 
-      final average = durations
-              .map((d) => d.inMicroseconds)
-              .reduce((a, b) => a + b) ~/
-          durations.length;
+      final average =
+          durations.map((d) => d.inMicroseconds).reduce((a, b) => a + b) ~/
+              durations.length;
 
       report[operation] = {
         'samples': durations.length,

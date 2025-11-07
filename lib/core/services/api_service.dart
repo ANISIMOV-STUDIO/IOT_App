@@ -118,7 +118,8 @@ class ApiService {
   }
 
   // Convenience methods
-  Future<http.Response> get(String endpoint, {Map<String, String>? queryParams}) {
+  Future<http.Response> get(String endpoint,
+      {Map<String, String>? queryParams}) {
     return _request('GET', endpoint, queryParams: queryParams);
   }
 

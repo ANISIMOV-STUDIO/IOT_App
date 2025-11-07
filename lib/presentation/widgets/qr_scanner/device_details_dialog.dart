@@ -122,7 +122,8 @@ class DeviceDetailsDialog extends StatelessWidget {
                               .withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(8.0),
                           border: Border.all(
-                            color: theme.colorScheme.primary.withValues(alpha: 0.3),
+                            color: theme.colorScheme.primary
+                                .withValues(alpha: 0.3),
                             width: 1.0,
                           ),
                         ),

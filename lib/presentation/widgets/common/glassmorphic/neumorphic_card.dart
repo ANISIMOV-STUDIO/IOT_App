@@ -46,14 +46,10 @@ class _NeumorphicCardState extends State<NeumorphicCard>
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 150),
-      vsync: this);
+        duration: const Duration(milliseconds: 150), vsync: this);
 
-    _depthAnimation = Tween<double>(
-      begin: widget.depth,
-      end: 0).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut));
+    _depthAnimation = Tween<double>(begin: widget.depth, end: 0)
+        .animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
   }
 
   @override
@@ -82,15 +78,15 @@ class _NeumorphicCardState extends State<NeumorphicCard>
     return [
       // Dark shadow (bottom-right)
       BoxShadow(
-        color: Colors.black.withValues(alpha: kIsWeb ? 0.15 : 0.2),
-        blurRadius: blurRadius,
-        offset: Offset(responsiveDepth, responsiveDepth)),
+          color: Colors.black.withValues(alpha: kIsWeb ? 0.15 : 0.2),
+          blurRadius: blurRadius,
+          offset: Offset(responsiveDepth, responsiveDepth)),
       // Light shadow (top-left)
       BoxShadow(
-        color: (widget.backgroundColor ?? HvacColors.backgroundCard)
-            .withValues(alpha: 0.7),
-        blurRadius: blurRadius,
-        offset: Offset(-responsiveDepth, -responsiveDepth)),
+          color: (widget.backgroundColor ?? HvacColors.backgroundCard)
+              .withValues(alpha: 0.7),
+          blurRadius: blurRadius,
+          offset: Offset(-responsiveDepth, -responsiveDepth)),
     ];
   }
 
@@ -99,26 +95,26 @@ class _NeumorphicCardState extends State<NeumorphicCard>
     final backgroundColor = widget.backgroundColor ?? HvacColors.backgroundCard;
 
     Widget card = AnimatedBuilder(
-      animation: _depthAnimation,
-      builder: (context, child) => Container(
-        width: widget.width,
-        height: widget.height,
-        margin: widget.margin,
-        decoration: BoxDecoration(
-          color: backgroundColor,
-          borderRadius: BorderRadius.circular(widget.borderRadius),
-          boxShadow: _buildNeumorphicShadows(_depthAnimation.value)),
-        padding: widget.padding ?? const EdgeInsets.all(HvacSpacing.lg),
-        child: widget.child));
+        animation: _depthAnimation,
+        builder: (context, child) => Container(
+            width: widget.width,
+            height: widget.height,
+            margin: widget.margin,
+            decoration: BoxDecoration(
+                color: backgroundColor,
+                borderRadius: BorderRadius.circular(widget.borderRadius),
+                boxShadow: _buildNeumorphicShadows(_depthAnimation.value)),
+            padding: widget.padding ?? const EdgeInsets.all(HvacSpacing.lg),
+            child: widget.child));
 
     if (widget.onTap != null) {
       card = GestureDetector(
-        onTapDown: _handleTapDown,
-        onTapUp: _handleTapUp,
-        onTapCancel: _handleTapCancel,
-        child: MouseRegion(
-          cursor: kIsWeb ? SystemMouseCursors.click : MouseCursor.defer,
-          child: card));
+          onTapDown: _handleTapDown,
+          onTapUp: _handleTapUp,
+          onTapCancel: _handleTapCancel,
+          child: MouseRegion(
+              cursor: kIsWeb ? SystemMouseCursors.click : MouseCursor.defer,
+              child: card));
     }
 
     return card;
@@ -147,14 +143,14 @@ class SoftNeumorphicCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return NeumorphicCard(
-      padding: padding,
-      margin: margin,
-      width: width,
-      height: height,
-      onTap: onTap,
-      depth: 2.0,
-      backgroundColor: HvacColors.backgroundCard,
-      child: child);
+        padding: padding,
+        margin: margin,
+        width: width,
+        height: height,
+        onTap: onTap,
+        depth: 2.0,
+        backgroundColor: HvacColors.backgroundCard,
+        child: child);
   }
 }
 
@@ -185,34 +181,34 @@ class ConcaveNeumorphicCard extends StatelessWidget {
     final responsiveDepth = depth;
 
     return Container(
-      width: width,
-      height: height,
-      margin: margin,
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(HvacRadius.lg),
-        boxShadow: [
-          // Inner shadow effect for concave appearance
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.2),
-            blurRadius: responsiveDepth,
-            offset: Offset(-responsiveDepth / 2, -responsiveDepth / 2)),
-          BoxShadow(
-            color: bgColor.withValues(alpha: 0.9),
-            blurRadius: responsiveDepth,
-            offset: Offset(responsiveDepth / 2, responsiveDepth / 2)),
-        ]),
-      child: Container(
+        width: width,
+        height: height,
+        margin: margin,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(HvacRadius.lg),
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              bgColor.withValues(alpha: 0.95),
-              bgColor,
-            ])),
-        padding: padding ?? const EdgeInsets.all(HvacSpacing.lg),
-        child: child));
+            color: bgColor,
+            borderRadius: BorderRadius.circular(HvacRadius.lg),
+            boxShadow: [
+              // Inner shadow effect for concave appearance
+              BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.2),
+                  blurRadius: responsiveDepth,
+                  offset: Offset(-responsiveDepth / 2, -responsiveDepth / 2)),
+              BoxShadow(
+                  color: bgColor.withValues(alpha: 0.9),
+                  blurRadius: responsiveDepth,
+                  offset: Offset(responsiveDepth / 2, responsiveDepth / 2)),
+            ]),
+        child: Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(HvacRadius.lg),
+                gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      bgColor.withValues(alpha: 0.95),
+                      bgColor,
+                    ])),
+            padding: padding ?? const EdgeInsets.all(HvacSpacing.lg),
+            child: child));
   }
 }

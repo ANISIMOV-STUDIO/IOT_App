@@ -163,8 +163,7 @@ class _LazyHvacListState extends State<LazyHvacList> {
             isSelected: isSelected,
             index: index,
             onTap: () => widget.onUnitTap?.call(unit),
-            onPowerChanged: (power) =>
-                widget.onPowerChanged?.call(unit, power),
+            onPowerChanged: (power) => widget.onPowerChanged?.call(unit, power),
           );
         },
         childCount: _controller.items.length,

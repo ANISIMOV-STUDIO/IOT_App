@@ -24,30 +24,40 @@ import 'package:grpc/grpc.dart';
 
 // Repository Mocks
 class MockHvacRepository extends Mock implements HvacRepository {}
+
 class MockAuthRepository extends Mock implements AuthRepository {}
 
 // Service Mocks
 class MockApiService extends Mock implements ApiService {}
+
 class MockCacheService extends Mock implements CacheService {}
+
 class MockGrpcService extends Mock implements GrpcService {}
 
 // Network Mocks
 class MockDio extends Mock implements dio.Dio {}
+
 class MockResponse extends Mock implements dio.Response {}
+
 class MockClientChannel extends Mock implements ClientChannel {}
 
 // BLoC Mocks
 class MockCubit<S> extends Mock implements Cubit<S> {}
+
 class MockBloc<E, S> extends Mock implements Bloc<E, S> {}
 
 // Entity Mocks
 class MockHvacUnit extends Mock implements HvacUnit {}
+
 class MockUser extends Mock implements User {}
 
 // Use Case Mocks
 class MockGetAllUnits extends Mock implements GetAllUnits {}
+
 class MockAddDevice extends Mock implements AddDevice {}
+
 class MockRemoveDevice extends Mock implements RemoveDevice {}
+
 class MockConnectToDevices extends Mock implements ConnectToDevices {}
 
 // Test Fake Classes for more control
@@ -185,7 +195,8 @@ class StubHvacRepository implements HvacRepository {
   }
 
   @override
-  Future<List<TemperatureReading>> getTemperatureHistory(String unitId, {int hours = 24}) async {
+  Future<List<TemperatureReading>> getTemperatureHistory(String unitId,
+      {int hours = 24}) async {
     if (shouldThrowError) {
       throw Exception('Failed to fetch temperature history');
     }

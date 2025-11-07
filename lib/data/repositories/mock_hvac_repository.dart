@@ -355,7 +355,8 @@ class MockHvacRepository implements HvacRepository {
     String unitId, {
     int hours = 24,
   }) async {
-    await Future.delayed(const Duration(milliseconds: 500)); // Simulate API call
+    await Future.delayed(
+        const Duration(milliseconds: 500)); // Simulate API call
 
     final unit = _units[unitId];
     if (unit == null) return [];
@@ -368,9 +369,8 @@ class MockHvacRepository implements HvacRepository {
     final baseTemp = unit.targetTemp;
     for (int i = hours * 12; i >= 0; i--) {
       final time = now.subtract(Duration(minutes: i * 5));
-      final temp = baseTemp +
-          (random.nextDouble() - 0.5) * 2.0 +
-          sin(i / 12.0) * 1.5;
+      final temp =
+          baseTemp + (random.nextDouble() - 0.5) * 2.0 + sin(i / 12.0) * 1.5;
       readings.add(TemperatureReading(
         timestamp: time,
         temperature: temp,

@@ -30,7 +30,8 @@ class TemperatureTabletLayout extends StatelessWidget {
       child: SmoothAnimations.fadeIn(
         duration: AnimationDurations.medium,
         child: GlassCard(
-          padding: const EdgeInsets.all(20.0), child: Column(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -64,7 +65,8 @@ class TemperatureTabletLayout extends StatelessWidget {
                       subtitle: 'Удаление',
                     ),
                   ),
-                  if (TemperatureHelpers.hasSecondaryData(outdoorTemp, indoorTemp)) ...[
+                  if (TemperatureHelpers.hasSecondaryData(
+                      outdoorTemp, indoorTemp)) ...[
                     const TemperatureDivider(),
                     Expanded(
                       child: _buildTempColumn(
@@ -121,7 +123,9 @@ class TemperatureTabletLayout extends StatelessWidget {
           style: TextStyle(
             fontSize: 28.0,
             fontWeight: FontWeight.w600,
-            color: value != null ? HvacColors.textPrimary : HvacColors.textDisabled,
+            color: value != null
+                ? HvacColors.textPrimary
+                : HvacColors.textDisabled,
             letterSpacing: -1,
           ),
         ),

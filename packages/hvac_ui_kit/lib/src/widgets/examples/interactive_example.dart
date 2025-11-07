@@ -26,11 +26,12 @@ class _InteractiveExampleState extends State<InteractiveExample> {
         padding: const EdgeInsets.all(HvacSpacing.md),
         children: [
           const Text('Tap to see micro-interactions:',
-               style: TextStyle(color: HvacColors.textSecondary)),
+              style: TextStyle(color: HvacColors.textSecondary)),
           const SizedBox(height: HvacSpacing.lg),
 
           // Scale animation
-          const Text('Scale on Press:', style: TextStyle(fontWeight: FontWeight.bold)),
+          const Text('Scale on Press:',
+              style: TextStyle(fontWeight: FontWeight.bold)),
           const SizedBox(height: HvacSpacing.sm),
           HvacInteractiveScale(
             onTap: () => _showMessage('Scale pressed'),
@@ -39,7 +40,8 @@ class _InteractiveExampleState extends State<InteractiveExample> {
           const SizedBox(height: HvacSpacing.lg),
 
           // Opacity animation
-          const Text('Opacity on Press:', style: TextStyle(fontWeight: FontWeight.bold)),
+          const Text('Opacity on Press:',
+              style: TextStyle(fontWeight: FontWeight.bold)),
           const SizedBox(height: HvacSpacing.sm),
           HvacInteractiveOpacity(
             onTap: () => _showMessage('Opacity pressed'),
@@ -48,7 +50,8 @@ class _InteractiveExampleState extends State<InteractiveExample> {
           const SizedBox(height: HvacSpacing.lg),
 
           // Ripple effect
-          const Text('Ripple Effect:', style: TextStyle(fontWeight: FontWeight.bold)),
+          const Text('Ripple Effect:',
+              style: TextStyle(fontWeight: FontWeight.bold)),
           const SizedBox(height: HvacSpacing.sm),
           HvacInteractiveRipple(
             onTap: () => _showMessage('Ripple pressed'),
@@ -57,7 +60,8 @@ class _InteractiveExampleState extends State<InteractiveExample> {
           const SizedBox(height: HvacSpacing.lg),
 
           // Bouncy button
-          const Text('Bouncy Animation:', style: TextStyle(fontWeight: FontWeight.bold)),
+          const Text('Bouncy Animation:',
+              style: TextStyle(fontWeight: FontWeight.bold)),
           const SizedBox(height: HvacSpacing.sm),
           HvacBouncyButton(
             onTap: () => _showMessage('Bouncy pressed'),
@@ -66,7 +70,8 @@ class _InteractiveExampleState extends State<InteractiveExample> {
           const SizedBox(height: HvacSpacing.lg),
 
           // Shake animation
-          const Text('Shake on Error:', style: TextStyle(fontWeight: FontWeight.bold)),
+          const Text('Shake on Error:',
+              style: TextStyle(fontWeight: FontWeight.bold)),
           const SizedBox(height: HvacSpacing.sm),
           HvacShakeAnimation(
             trigger: _shakeError,
@@ -113,7 +118,8 @@ class _InteractiveExampleState extends State<InteractiveExample> {
       ),
       child: Text(
         text,
-        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        style:
+            const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
       ),
     );
   }

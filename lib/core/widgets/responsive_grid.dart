@@ -6,6 +6,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+
 /// Responsive grid widget that adapts column count based on screen size
 class ResponsiveGrid extends StatelessWidget {
   final List<Widget> children;
@@ -27,59 +28,58 @@ class ResponsiveGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final width = constraints.maxWidth;
+    return LayoutBuilder(builder: (context, constraints) {
+      final width = constraints.maxWidth;
 
-        // Determine columns based on width
-        int columns;
-        double spacing;
-        double aspectRatio;
+      // Determine columns based on width
+      int columns;
+      double spacing;
+      double aspectRatio;
 
-        if (width < 600) {
-          // Mobile: 1-2 columns
-          columns = width < 400 ? 1 : 2;
-          spacing = HvacSpacing.md;
-          aspectRatio = childAspectRatio ?? 1.2;
-        } else if (width < 900) {
-          // Small tablet: 2 columns
-          columns = 2;
-          spacing = HvacSpacing.lg;
-          aspectRatio = childAspectRatio ?? 1.3;
-        } else {
-          // Large tablet: 3 columns
-          columns = 3;
-          spacing = HvacSpacing.lg;
-          aspectRatio = childAspectRatio ?? 1.3;
-        }
+      if (width < 600) {
+        // Mobile: 1-2 columns
+        columns = width < 400 ? 1 : 2;
+        spacing = HvacSpacing.md;
+        aspectRatio = childAspectRatio ?? 1.2;
+      } else if (width < 900) {
+        // Small tablet: 2 columns
+        columns = 2;
+        spacing = HvacSpacing.lg;
+        aspectRatio = childAspectRatio ?? 1.3;
+      } else {
+        // Large tablet: 3 columns
+        columns = 3;
+        spacing = HvacSpacing.lg;
+        aspectRatio = childAspectRatio ?? 1.3;
+      }
 
-        // Use maxCrossAxisExtent if provided
-        if (maxCrossAxisExtent != null) {
-          return GridView.builder(
+      // Use maxCrossAxisExtent if provided
+      if (maxCrossAxisExtent != null) {
+        return GridView.builder(
             padding: padding ?? EdgeInsets.all(spacing),
             shrinkWrap: shrinkWrap,
             physics: physics ?? const BouncingScrollPhysics(),
             gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: maxCrossAxisExtent!,
-              crossAxisSpacing: spacing,
-              mainAxisSpacing: spacing,
-              childAspectRatio: aspectRatio),
+                maxCrossAxisExtent: maxCrossAxisExtent!,
+                crossAxisSpacing: spacing,
+                mainAxisSpacing: spacing,
+                childAspectRatio: aspectRatio),
             itemCount: children.length,
             itemBuilder: (context, index) => children[index]);
-        }
+      }
 
-        return GridView.builder(
+      return GridView.builder(
           padding: padding ?? EdgeInsets.all(spacing),
           shrinkWrap: shrinkWrap,
           physics: physics ?? const BouncingScrollPhysics(),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: columns,
-            crossAxisSpacing: spacing,
-            mainAxisSpacing: spacing,
-            childAspectRatio: aspectRatio),
+              crossAxisCount: columns,
+              crossAxisSpacing: spacing,
+              mainAxisSpacing: spacing,
+              childAspectRatio: aspectRatio),
           itemCount: children.length,
           itemBuilder: (context, index) => children[index]);
-      });
+    });
   }
 }
 
@@ -100,29 +100,28 @@ class ResponsiveStaggeredGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final width = constraints.maxWidth;
-        final isMobile = width < 600;
-        final isTablet = width >= 600 && width < 1200;
+    return LayoutBuilder(builder: (context, constraints) {
+      final width = constraints.maxWidth;
+      final isMobile = width < 600;
+      final isTablet = width >= 600 && width < 1200;
 
-        final columns = isMobile ? 1 : (isTablet ? 2 : 3);
-        final spacing = isMobile
-            ? HvacSpacing.md
-            : (isTablet ? HvacSpacing.lg : HvacSpacing.xl);
+      final columns = isMobile ? 1 : (isTablet ? 2 : 3);
+      final spacing = isMobile
+          ? HvacSpacing.md
+          : (isTablet ? HvacSpacing.lg : HvacSpacing.xl);
 
-        return SingleChildScrollView(
+      return SingleChildScrollView(
           physics: physics ?? const BouncingScrollPhysics(),
           padding: padding ?? EdgeInsets.all(spacing),
           child: Wrap(
-            spacing: spacing,
-            runSpacing: spacing,
-            children: children.map((child) {
-              return SizedBox(
-                width: (width - (columns + 1) * spacing) / columns,
-                child: child);
-            }).toList()));
-      });
+              spacing: spacing,
+              runSpacing: spacing,
+              children: children.map((child) {
+                return SizedBox(
+                    width: (width - (columns + 1) * spacing) / columns,
+                    child: child);
+              }).toList()));
+    });
   }
 }
 
@@ -145,22 +144,21 @@ class AdaptiveColumns extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final isColumn = constraints.maxWidth < breakpoint;
+    return LayoutBuilder(builder: (context, constraints) {
+      final isColumn = constraints.maxWidth < breakpoint;
 
-        if (isColumn) {
-          return Column(
+      if (isColumn) {
+        return Column(
             mainAxisAlignment: mainAxisAlignment,
             crossAxisAlignment: crossAxisAlignment,
             children: _buildChildrenWithSpacing(true));
-        } else {
-          return Row(
+      } else {
+        return Row(
             mainAxisAlignment: mainAxisAlignment,
             crossAxisAlignment: crossAxisAlignment,
             children: _buildChildrenWithSpacing(false));
-        }
-      });
+      }
+    });
   }
 
   List<Widget> _buildChildrenWithSpacing(bool isColumn) {

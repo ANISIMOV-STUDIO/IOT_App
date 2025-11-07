@@ -48,9 +48,9 @@ class TabletPresetsPanel extends StatelessWidget {
           ),
           const SizedBox(height: HvacSpacing.mdV),
           ...presets.map((preset) => Padding(
-            padding: const EdgeInsets.only(bottom: HvacSpacing.smV),
-            child: _buildPresetButton(preset),
-          )),
+                padding: const EdgeInsets.only(bottom: HvacSpacing.smV),
+                child: _buildPresetButton(preset),
+              )),
         ],
       ),
     );

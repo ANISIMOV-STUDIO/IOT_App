@@ -38,7 +38,8 @@ class ScheduleStateManager {
 
       return schedules;
     } catch (e) {
-      throw Exception('Failed to load schedules. Please check your connection.');
+      throw Exception(
+          'Failed to load schedules. Please check your connection.');
     }
   }
 

@@ -25,15 +25,15 @@ class SkeletonContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: width,
-      height: height,
-      margin: margin,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: isCircle
-            ? null
-            : (borderRadius ?? BorderRadius.circular(HvacRadius.sm)),
-        shape: isCircle ? BoxShape.circle : BoxShape.rectangle));
+        width: width,
+        height: height,
+        margin: margin,
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: isCircle
+                ? null
+                : (borderRadius ?? BorderRadius.circular(HvacRadius.sm)),
+            shape: isCircle ? BoxShape.circle : BoxShape.rectangle));
   }
 }
 
@@ -57,29 +57,29 @@ class SkeletonText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: List.generate(lines, (index) {
-        double lineWidth = width ?? double.infinity;
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: List.generate(lines, (index) {
+          double lineWidth = width ?? double.infinity;
 
-        if (randomWidth && width == null) {
-          // Create realistic text width variations
-          if (index == lines - 1) {
-            lineWidth = 0.6; // Last line typically shorter
-          } else {
-            lineWidth = (0.8 + (index % 2) * 0.2);
+          if (randomWidth && width == null) {
+            // Create realistic text width variations
+            if (index == lines - 1) {
+              lineWidth = 0.6; // Last line typically shorter
+            } else {
+              lineWidth = (0.8 + (index % 2) * 0.2);
+            }
           }
-        }
 
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: index < lines - 1 ? spacing : 0,
-          ),
-          child: SkeletonContainer(
-            width: lineWidth,
-            height: height,
-            borderRadius: HvacRadius.xsRadius,
-          ),
-        );
-      }));
+          return Padding(
+            padding: EdgeInsets.only(
+              bottom: index < lines - 1 ? spacing : 0,
+            ),
+            child: SkeletonContainer(
+              width: lineWidth,
+              height: height,
+              borderRadius: HvacRadius.xsRadius,
+            ),
+          );
+        }));
   }
 }

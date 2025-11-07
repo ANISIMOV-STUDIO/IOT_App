@@ -5,6 +5,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+
 /// Responsive dialog that adapts size based on screen
 class AdaptiveDialog extends StatelessWidget {
   final Widget? title;

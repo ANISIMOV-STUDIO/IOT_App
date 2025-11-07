@@ -119,8 +119,9 @@ class AlertsCard extends StatelessWidget {
                 Text(
                   hasAlert ? 'Код ${alert.code}' : 'Нет аварий',
                   style: HvacTypography.titleMedium.copyWith(
-                    color:
-                        hasAlert ? _getSeverityColor(alert.severity) : HvacColors.textSecondary,
+                    color: hasAlert
+                        ? _getSeverityColor(alert.severity)
+                        : HvacColors.textSecondary,
                   ),
                 ),
                 if (hasAlert) ...[

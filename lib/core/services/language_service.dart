@@ -74,9 +74,8 @@ class LanguageService extends ChangeNotifier {
   }
 
   /// List of supported locales for MaterialApp
-  static List<Locale> get supportedLocales => AppLanguage.values
-      .map((lang) => lang.locale)
-      .toList();
+  static List<Locale> get supportedLocales =>
+      AppLanguage.values.map((lang) => lang.locale).toList();
 
   /// Check if a locale is supported
   static bool isSupported(Locale locale) {

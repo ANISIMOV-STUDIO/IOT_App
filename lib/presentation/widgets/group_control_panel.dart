@@ -149,11 +149,14 @@ class GroupControlPanel extends StatelessWidget {
   ) {
     // MONOCHROMATIC: Only icons are colored, buttons and text stay neutral
     return MouseRegion(
-      cursor: onPressed != null ? SystemMouseCursors.click : SystemMouseCursors.basic,
+      cursor: onPressed != null
+          ? SystemMouseCursors.click
+          : SystemMouseCursors.basic,
       child: GestureDetector(
         onTap: onPressed,
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: HvacSpacing.sm, horizontal: HvacSpacing.sm),
+          padding: const EdgeInsets.symmetric(
+              vertical: HvacSpacing.sm, horizontal: HvacSpacing.sm),
           decoration: BoxDecoration(
             // Background: always dark gray, never colored
             color: HvacColors.backgroundDark,

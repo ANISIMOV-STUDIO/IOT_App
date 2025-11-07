@@ -23,7 +23,8 @@ class ErrorActions extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    if (onRetry == null && (additionalActions == null || additionalActions!.isEmpty)) {
+    if (onRetry == null &&
+        (additionalActions == null || additionalActions!.isEmpty)) {
       return const SizedBox.shrink();
     }
 
@@ -32,10 +33,10 @@ class ErrorActions extends StatelessWidget {
       runSpacing: 12.h,
       alignment: WrapAlignment.center,
       children: [
-        if (onRetry != null)
-          _buildRetryButton(context, l10n),
+        if (onRetry != null) _buildRetryButton(context, l10n),
         if (additionalActions != null)
-          ...additionalActions!.map((action) => _buildActionButton(context, action)),
+          ...additionalActions!
+              .map((action) => _buildActionButton(context, action)),
       ],
     );
   }

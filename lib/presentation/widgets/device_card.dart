@@ -5,6 +5,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+
 class DeviceCard extends StatelessWidget {
   final String name;
   final String subtitle;

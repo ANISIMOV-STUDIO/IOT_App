@@ -82,14 +82,17 @@ class WebTooltipOverlay extends StatelessWidget {
     switch (position) {
       case TooltipPosition.top:
       case TooltipPosition.bottom:
-        final centerX = targetOffset.dx + targetSize.width / 2 - tooltipWidth / 2;
+        final centerX =
+            targetOffset.dx + targetSize.width / 2 - tooltipWidth / 2;
         return centerX.clamp(8, screenWidth - tooltipWidth - 8);
 
       case TooltipPosition.left:
-        return (targetOffset.dx - tooltipWidth - 8).clamp(8, screenWidth - tooltipWidth - 8);
+        return (targetOffset.dx - tooltipWidth - 8)
+            .clamp(8, screenWidth - tooltipWidth - 8);
 
       case TooltipPosition.right:
-        return (targetOffset.dx + targetSize.width + 8).clamp(8, screenWidth - tooltipWidth - 8);
+        return (targetOffset.dx + targetSize.width + 8)
+            .clamp(8, screenWidth - tooltipWidth - 8);
 
       case TooltipPosition.topStart:
       case TooltipPosition.bottomStart:
@@ -110,7 +113,8 @@ class WebTooltipOverlay extends StatelessWidget {
       case TooltipPosition.top:
       case TooltipPosition.topStart:
       case TooltipPosition.topEnd:
-        return (targetOffset.dy - tooltipHeight - 8).clamp(8, screenHeight - tooltipHeight - 8);
+        return (targetOffset.dy - tooltipHeight - 8)
+            .clamp(8, screenHeight - tooltipHeight - 8);
 
       case TooltipPosition.bottom:
       case TooltipPosition.bottomStart:
@@ -120,7 +124,8 @@ class WebTooltipOverlay extends StatelessWidget {
 
       case TooltipPosition.left:
       case TooltipPosition.right:
-        final centerY = targetOffset.dy + targetSize.height / 2 - tooltipHeight / 2;
+        final centerY =
+            targetOffset.dy + targetSize.height / 2 - tooltipHeight / 2;
         return centerY.clamp(8, screenHeight - tooltipHeight - 8);
     }
   }

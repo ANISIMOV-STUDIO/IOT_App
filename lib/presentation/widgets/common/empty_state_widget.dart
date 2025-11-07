@@ -64,7 +64,8 @@ class EmptyStateWidget extends StatelessWidget {
   }
 
   /// Factory: No data available
-  factory EmptyStateWidget.noData({VoidCallback? onRefresh, String? customMessage}) {
+  factory EmptyStateWidget.noData(
+      {VoidCallback? onRefresh, String? customMessage}) {
     return EmptyStateWidget(
       title: 'No Data Available',
       message: customMessage ?? 'There\'s no data to display at the moment.',
@@ -145,7 +146,9 @@ class EmptyStateWidget extends StatelessWidget {
 
     return Semantics(
       label: '$title. $message',
-      hint: onAction != null ? 'Double tap to ${actionLabel ?? "take action"}' : null,
+      hint: onAction != null
+          ? 'Double tap to ${actionLabel ?? "take action"}'
+          : null,
       child: Center(
         child: Container(
           constraints: BoxConstraints(

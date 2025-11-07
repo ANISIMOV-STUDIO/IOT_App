@@ -125,7 +125,8 @@ class CupertinoRefreshExample extends StatefulWidget {
   const CupertinoRefreshExample({super.key});
 
   @override
-  State<CupertinoRefreshExample> createState() => _CupertinoRefreshExampleState();
+  State<CupertinoRefreshExample> createState() =>
+      _CupertinoRefreshExampleState();
 }
 
 class _CupertinoRefreshExampleState extends State<CupertinoRefreshExample> {
@@ -153,7 +154,8 @@ class _CupertinoRefreshExampleState extends State<CupertinoRefreshExample> {
             delegate: SliverChildBuilderDelegate(
               (context, index) {
                 return ListTile(
-                  leading: const Icon(Icons.device_thermostat, color: HvacColors.primaryOrange),
+                  leading: const Icon(Icons.device_thermostat,
+                      color: HvacColors.primaryOrange),
                   title: Text('Device ${index + 1}'),
                   subtitle: const Text('Status: Online'),
                   trailing: const Text('24°C'),

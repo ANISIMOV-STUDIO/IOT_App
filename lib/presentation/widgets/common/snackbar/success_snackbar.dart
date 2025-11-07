@@ -113,8 +113,8 @@ class SuccessSnackBar {
     show(
       context,
       message: itemName != null
-        ? '$itemName saved successfully'
-        : 'Changes saved successfully',
+          ? '$itemName saved successfully'
+          : 'Changes saved successfully',
       duration: const Duration(seconds: 2),
     );
   }

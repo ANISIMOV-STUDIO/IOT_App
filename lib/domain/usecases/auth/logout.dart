@@ -27,7 +27,7 @@ class Logout {
       // Log error but don't throw - logout should always succeed locally
       // even if server notification fails
       Logger.debug('Logout server notification failed: $e');
-    } finally{
+    } finally {
       // Always clear local authentication state
       await _repository.clearAuthToken();
     }

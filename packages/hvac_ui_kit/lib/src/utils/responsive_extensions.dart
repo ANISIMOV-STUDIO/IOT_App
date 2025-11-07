@@ -120,23 +120,23 @@ extension ResponsiveExtension on num {
 extension EdgeInsetsExtension on EdgeInsets {
   /// Scale all EdgeInsets values
   EdgeInsets get r => copyWith(
-    left: left.w,
-    right: right.w,
-    top: top.h,
-    bottom: bottom.h,
-  );
+        left: left.w,
+        right: right.w,
+        top: top.h,
+        bottom: bottom.h,
+      );
 
   /// Scale horizontal values only
   EdgeInsets get rh => copyWith(
-    left: left.w,
-    right: right.w,
-  );
+        left: left.w,
+        right: right.w,
+      );
 
   /// Scale vertical values only
   EdgeInsets get rv => copyWith(
-    top: top.h,
-    bottom: bottom.h,
-  );
+        top: top.h,
+        bottom: bottom.h,
+      );
 }
 
 /// Extension on BorderRadius for responsive radius
@@ -230,8 +230,7 @@ class ResponsiveSpacing {
 
   static EdgeInsets get paddingHorizontalMd =>
       EdgeInsets.symmetric(horizontal: md);
-  static EdgeInsets get paddingVerticalMd =>
-      EdgeInsets.symmetric(vertical: md);
+  static EdgeInsets get paddingVerticalMd => EdgeInsets.symmetric(vertical: md);
 }
 
 /// Responsive text styles

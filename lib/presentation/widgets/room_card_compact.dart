@@ -45,7 +45,8 @@ class RoomCardCompact extends StatelessWidget {
             duration: AnimationDurations.medium,
             child: GlassCard(
               // GLASSMORPHISM: Frosted glass with blur
-              padding: const EdgeInsets.all(HvacSpacing.mdR), child: Column(
+              padding: const EdgeInsets.all(HvacSpacing.mdR),
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 mainAxisSize: MainAxisSize.min,
@@ -98,12 +99,15 @@ class RoomCardCompact extends StatelessWidget {
                     width: 6.0,
                     height: 6.0,
                     decoration: BoxDecoration(
-                      color: isActive ? HvacColors.success : HvacColors.textTertiary,
+                      color: isActive
+                          ? HvacColors.success
+                          : HvacColors.textTertiary,
                       shape: BoxShape.circle,
                       boxShadow: isActive
                           ? [
                               BoxShadow(
-                                color: HvacColors.success.withValues(alpha: 0.4),
+                                color:
+                                    HvacColors.success.withValues(alpha: 0.4),
                                 blurRadius: UIConstants.blurMedium,
                                 spreadRadius: 2,
                               ),
@@ -132,32 +136,33 @@ class RoomCardCompact extends StatelessWidget {
 
   Widget _buildPowerButton(BuildContext context) {
     return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: () => onPowerChanged?.call(!isActive),
-        borderRadius: BorderRadius.circular(HvacRadius.mdR),
-        child: Container(
-          width: UIConstants.minTouchTargetR,
-          height: UIConstants.minTouchTargetR,
-          decoration: BoxDecoration(
-            color: isActive
-                ? HvacColors.primaryOrange.withValues(alpha: 0.1)
-                : HvacColors.backgroundCardBorder.withValues(alpha: 0.3),
-            borderRadius: BorderRadius.circular(HvacRadius.mdR),
-            border: Border.all(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () => onPowerChanged?.call(!isActive),
+          borderRadius: BorderRadius.circular(HvacRadius.mdR),
+          child: Container(
+            width: UIConstants.minTouchTargetR,
+            height: UIConstants.minTouchTargetR,
+            decoration: BoxDecoration(
               color: isActive
-                  ? HvacColors.primaryOrange.withValues(alpha: 0.3)
-                  : HvacColors.backgroundCardBorder,
-              width: UIConstants.dividerThin,
+                  ? HvacColors.primaryOrange.withValues(alpha: 0.1)
+                  : HvacColors.backgroundCardBorder.withValues(alpha: 0.3),
+              borderRadius: BorderRadius.circular(HvacRadius.mdR),
+              border: Border.all(
+                color: isActive
+                    ? HvacColors.primaryOrange.withValues(alpha: 0.3)
+                    : HvacColors.backgroundCardBorder,
+                width: UIConstants.dividerThin,
+              ),
+            ),
+            child: Icon(
+              Icons.power_settings_new,
+              color:
+                  isActive ? HvacColors.primaryOrange : HvacColors.textTertiary,
+              size: UIConstants.iconSmR,
             ),
           ),
-          child: Icon(
-            Icons.power_settings_new,
-            color: isActive ? HvacColors.primaryOrange : HvacColors.textTertiary,
-            size: UIConstants.iconSmR,
-          ),
-      ),
-    ));
+        ));
   }
 
   Widget _buildStats(BuildContext context) {

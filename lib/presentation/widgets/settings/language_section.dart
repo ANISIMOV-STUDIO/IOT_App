@@ -119,10 +119,7 @@ class _LanguageTile extends StatelessWidget {
           ),
         ),
       ),
-    )
-        .animate()
-        .fadeIn(duration: 300.ms)
-        .scale(
+    ).animate().fadeIn(duration: 300.ms).scale(
           begin: const Offset(0.95, 0.95),
           end: const Offset(1.0, 1.0),
         );

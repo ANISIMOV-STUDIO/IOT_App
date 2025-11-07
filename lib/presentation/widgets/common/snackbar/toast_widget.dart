@@ -73,20 +73,17 @@ class _ToastWidgetState extends State<ToastWidget>
     final mediaQuery = MediaQuery.of(context);
     final screenWidth = mediaQuery.size.width;
     final isMobile = screenWidth < 600;
-    final toastMaxWidth = screenWidth < 600 ? null : (screenWidth < 1024 ? 400.0 : 480.0);
+    final toastMaxWidth =
+        screenWidth < 600 ? null : (screenWidth < 1024 ? 400.0 : 480.0);
 
     // Position adjustments for web
     final topPosition = widget.position == ToastPosition.top
-      ? (isMobile
-          ? mediaQuery.padding.top + 16
-          : 32)
-      : null;
+        ? (isMobile ? mediaQuery.padding.top + 16 : 32)
+        : null;
 
     final bottomPosition = widget.position == ToastPosition.bottom
-      ? (isMobile
-          ? mediaQuery.padding.bottom + 16
-          : 32)
-      : null;
+        ? (isMobile ? mediaQuery.padding.bottom + 16 : 32)
+        : null;
 
     // Horizontal margins for different devices
     final horizontalMargin = isMobile ? 16.0 : 24.0;
@@ -123,8 +120,8 @@ class _ToastWidgetState extends State<ToastWidget>
       color: Colors.transparent,
       child: MouseRegion(
         cursor: widget.onTap != null
-          ? SystemMouseCursors.click
-          : SystemMouseCursors.basic,
+            ? SystemMouseCursors.click
+            : SystemMouseCursors.basic,
         onEnter: (_) => setState(() => _isHovered = true),
         onExit: (_) => setState(() => _isHovered = false),
         child: GestureDetector(
@@ -147,8 +144,8 @@ class _ToastWidgetState extends State<ToastWidget>
                 vertical: isMobile ? 12 : 14,
               ),
               decoration: BoxDecoration(
-                color: widget.backgroundColor ??
-                    theme.colorScheme.inverseSurface,
+                color:
+                    widget.backgroundColor ?? theme.colorScheme.inverseSurface,
                 borderRadius: HvacRadius.smRadius,
                 boxShadow: [
                   BoxShadow(
@@ -168,8 +165,10 @@ class _ToastWidgetState extends State<ToastWidget>
 
   Widget _buildToastBody(BuildContext context, ThemeData theme) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final iconSize = screenWidth >= 1024 ? 20.0 : (screenWidth >= 600 ? 19.0 : 18.0);
-    final fontSize = screenWidth >= 1024 ? 14.0 : (screenWidth >= 600 ? 13.5 : 13.0);
+    final iconSize =
+        screenWidth >= 1024 ? 20.0 : (screenWidth >= 600 ? 19.0 : 18.0);
+    final fontSize =
+        screenWidth >= 1024 ? 14.0 : (screenWidth >= 600 ? 13.5 : 13.0);
 
     return Row(
       mainAxisSize: MainAxisSize.min,

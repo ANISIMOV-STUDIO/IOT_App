@@ -25,12 +25,13 @@ class LoadingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final effectiveColor = color ?? theme.colorScheme.primary;
-    final effectiveSize = size ?? ResponsiveUtils.getResponsiveValue(
-      context,
-      mobile: 48.0,
-      tablet: 56.0,
-      desktop: 64.0,
-    );
+    final effectiveSize = size ??
+        ResponsiveUtils.getResponsiveValue(
+          context,
+          mobile: 48.0,
+          tablet: 56.0,
+          desktop: 64.0,
+        );
 
     return Semantics(
       label: message ?? 'Loading content',
@@ -119,14 +120,16 @@ class LoadingWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildDefaultShimmer(BuildContext context, ThemeData theme, double size) {
+  Widget _buildDefaultShimmer(
+      BuildContext context, ThemeData theme, double size) {
     return Shimmer.fromColors(
       baseColor: theme.colorScheme.surface,
       highlightColor: theme.colorScheme.surface.withValues(alpha: 0.3),
       period: const Duration(milliseconds: 1500),
       child: Column(
-        children: List.generate(3, (index) =>
-          Container(
+        children: List.generate(
+          3,
+          (index) => Container(
             margin: const EdgeInsets.symmetric(vertical: HvacSpacing.xs),
             width: size * 4,
             height: ResponsiveUtils.getResponsiveValue(
@@ -151,8 +154,9 @@ class LoadingWidget extends StatelessWidget {
       height: size / 2,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: List.generate(3, (index) =>
-          TweenAnimationBuilder<double>(
+        children: List.generate(
+          3,
+          (index) => TweenAnimationBuilder<double>(
             tween: Tween(begin: 0.0, end: 1.0),
             duration: Duration(milliseconds: 600 + (index * 200)),
             curve: Curves.easeInOut,
@@ -238,7 +242,7 @@ class LoadingOverlay extends StatelessWidget {
           Positioned.fill(
             child: Container(
               color: backgroundColor ??
-                Theme.of(context).colorScheme.surface.withValues(alpha: 0.8),
+                  Theme.of(context).colorScheme.surface.withValues(alpha: 0.8),
               child: LoadingWidget(
                 type: loadingType,
                 message: message,

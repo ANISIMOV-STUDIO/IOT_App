@@ -42,8 +42,7 @@ class QrScannerResponsive {
 
   /// Check if desktop or web
   bool get isDesktop =>
-      deviceType == DeviceType.desktop ||
-      deviceType == DeviceType.largeDesktop;
+      deviceType == DeviceType.desktop || deviceType == DeviceType.largeDesktop;
 
   /// Get scanner frame size
   double get scannerFrameSize {

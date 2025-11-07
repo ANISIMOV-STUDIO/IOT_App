@@ -18,9 +18,8 @@ class SwipeableCardExample extends StatelessWidget {
         padding: const EdgeInsets.all(HvacSpacing.md),
         children: [
           const Text('Swipe left to turn off, right to turn on:',
-               style: TextStyle(color: HvacColors.textSecondary)),
+              style: TextStyle(color: HvacColors.textSecondary)),
           const SizedBox(height: HvacSpacing.md),
-
           HvacDeviceSwipeCard(
             deviceName: 'Living Room AC',
             status: 'Currently On - 24°C',
@@ -28,20 +27,17 @@ class SwipeableCardExample extends StatelessWidget {
             onTurnOff: () => _showSnackbar(context, 'Device turned OFF'),
             onSettings: () => _showSnackbar(context, 'Settings opened'),
           ),
-
           const SizedBox(height: HvacSpacing.md),
-
           HvacDeviceSwipeCard(
             deviceName: 'Bedroom Heater',
             status: 'Currently Off',
             onTurnOn: () => _showSnackbar(context, 'Heater turned ON'),
             onTurnOff: () => _showSnackbar(context, 'Heater turned OFF'),
           ),
-
           const SizedBox(height: HvacSpacing.lg),
-          const Text('Swipe to dismiss:', style: TextStyle(color: HvacColors.textSecondary)),
+          const Text('Swipe to dismiss:',
+              style: TextStyle(color: HvacColors.textSecondary)),
           const SizedBox(height: HvacSpacing.md),
-
           HvacDismissibleCard(
             confirmMessage: 'Are you sure you want to remove this device?',
             onDismissed: () => _showSnackbar(context, 'Device removed'),

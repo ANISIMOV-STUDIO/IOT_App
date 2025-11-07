@@ -57,8 +57,7 @@ class RemoveDevice {
       return true;
     } catch (e) {
       // Transform repository exceptions to domain exceptions
-      if (e.toString().contains('not found') ||
-          e.toString().contains('404')) {
+      if (e.toString().contains('not found') || e.toString().contains('404')) {
         throw Exception('Device not found');
       } else if (e.toString().contains('network')) {
         throw Exception('Network error. Please check your connection');

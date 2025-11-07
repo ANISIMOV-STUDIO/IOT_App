@@ -22,7 +22,8 @@ class VentilationModeSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: HvacSpacing.md, vertical: HvacSpacing.xxs),
+      padding: const EdgeInsets.symmetric(
+          horizontal: HvacSpacing.md, vertical: HvacSpacing.xxs),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
         borderRadius: HvacRadius.smRadius,

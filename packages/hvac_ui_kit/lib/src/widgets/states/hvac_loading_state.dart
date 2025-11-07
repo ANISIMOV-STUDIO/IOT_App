@@ -5,16 +5,16 @@ import '../../theme/typography.dart';
 
 /// Loading style variant
 enum LoadingStyle {
-  spinner,   // Circular progress indicator
-  linear,    // Linear progress bar
-  dots,      // Animated dots
+  spinner, // Circular progress indicator
+  linear, // Linear progress bar
+  dots, // Animated dots
 }
 
 /// Size variant for loading state
 enum LoadingStateSize {
-  small,   // 24px
-  medium,  // 48px
-  large,   // 64px
+  small, // 24px
+  medium, // 48px
+  large, // 64px
 }
 
 /// Loading state component
@@ -135,11 +135,14 @@ class HvacLoadingState extends StatelessWidget {
   TextStyle _getMessageStyle() {
     switch (size) {
       case LoadingStateSize.small:
-        return HvacTypography.bodySmall.copyWith(color: HvacColors.textSecondary);
+        return HvacTypography.bodySmall
+            .copyWith(color: HvacColors.textSecondary);
       case LoadingStateSize.medium:
-        return HvacTypography.bodyMedium.copyWith(color: HvacColors.textSecondary);
+        return HvacTypography.bodyMedium
+            .copyWith(color: HvacColors.textSecondary);
       case LoadingStateSize.large:
-        return HvacTypography.bodyLarge.copyWith(color: HvacColors.textSecondary);
+        return HvacTypography.bodyLarge
+            .copyWith(color: HvacColors.textSecondary);
     }
   }
 }
@@ -190,9 +193,8 @@ class _AnimatedDotsState extends State<_AnimatedDots>
             final scale = progress < 0.5
                 ? 1.0 + (progress * 0.4)
                 : 1.2 - ((progress - 0.5) * 0.4);
-            final opacity = progress < 0.5
-                ? 1.0
-                : 1.0 - ((progress - 0.5) * 0.8);
+            final opacity =
+                progress < 0.5 ? 1.0 : 1.0 - ((progress - 0.5) * 0.8);
 
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: widget.size / 2),

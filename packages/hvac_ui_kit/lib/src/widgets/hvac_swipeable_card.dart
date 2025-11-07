@@ -170,15 +170,20 @@ class HvacDeviceSwipeCard extends StatelessWidget {
         ),
         child: Row(
           children: [
-            const Icon(Icons.device_thermostat, size: 40, color: HvacColors.primaryOrange),
+            const Icon(Icons.device_thermostat,
+                size: 40, color: HvacColors.primaryOrange),
             const SizedBox(width: HvacSpacing.md),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(deviceName, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                  Text(deviceName,
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w600)),
                   const SizedBox(height: HvacSpacing.xxs),
-                  Text(status, style: const TextStyle(fontSize: 14, color: HvacColors.textSecondary)),
+                  Text(status,
+                      style: const TextStyle(
+                          fontSize: 14, color: HvacColors.textSecondary)),
                 ],
               ),
             ),

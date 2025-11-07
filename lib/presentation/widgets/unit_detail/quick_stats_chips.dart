@@ -23,9 +23,7 @@ class QuickStatsChips extends StatelessWidget {
         _buildStatChip(
           icon: Icons.power_settings_new,
           label: unit.power ? 'ON' : 'OFF',
-          color: unit.power
-              ? HvacColors.success
-              : HvacColors.textSecondary,
+          color: unit.power ? HvacColors.success : HvacColors.textSecondary,
         ),
         const SizedBox(width: HvacSpacing.mdR),
         _buildStatChip(

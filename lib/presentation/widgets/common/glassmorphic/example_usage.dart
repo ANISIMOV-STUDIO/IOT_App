@@ -46,7 +46,6 @@ class GlassmorphicExampleScreen extends StatelessWidget {
                 ],
               ),
             ),
-
             _buildSectionTitle('Elevated Glassmorphic Card'),
             const ElevatedGlassmorphicCard(
               width: double.infinity,
@@ -71,7 +70,6 @@ class GlassmorphicExampleScreen extends StatelessWidget {
                 ],
               ),
             ),
-
             _buildSectionTitle('Gradient Card'),
             GradientCard(
               width: double.infinity,
@@ -87,7 +85,6 @@ class GlassmorphicExampleScreen extends StatelessWidget {
                 ),
               ),
             ),
-
             _buildSectionTitle('Neumorphic Cards'),
             const Row(
               children: [
@@ -127,7 +124,6 @@ class GlassmorphicExampleScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: HvacSpacing.md),
-
             _buildSectionTitle('Glow Cards'),
             GlowCard(
               width: double.infinity,
@@ -142,7 +138,6 @@ class GlassmorphicExampleScreen extends StatelessWidget {
                 ),
               ),
             ),
-
             const StaticGlowCard(
               width: double.infinity,
               glowColor: HvacColors.primaryBlue,
@@ -155,7 +150,6 @@ class GlassmorphicExampleScreen extends StatelessWidget {
                 ),
               ),
             ),
-
             const NeonGlowCard(
               width: double.infinity,
               neonColor: HvacColors.primaryBlue,
@@ -169,7 +163,6 @@ class GlassmorphicExampleScreen extends StatelessWidget {
                 ),
               ),
             ),
-
             _buildSectionTitle('Animated Gradient Background'),
             AnimatedGradientBackground(
               colors: const [

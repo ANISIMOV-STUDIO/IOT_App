@@ -28,7 +28,8 @@ class DeviceRemoveDialog extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return AlertDialog(
-      backgroundColor: isDark ? HvacColors.backgroundCard : HvacColors.glassWhite,
+      backgroundColor:
+          isDark ? HvacColors.backgroundCard : HvacColors.glassWhite,
       title: Text(l10n.removeDevice),
       content: Text(l10n.confirmRemoveDevice(name)),
       actions: [

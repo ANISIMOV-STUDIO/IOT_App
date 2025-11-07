@@ -58,45 +58,45 @@ class BaseGlassmorphicContainer extends StatelessWidget {
     // Skip blur on web if amount is too high for performance
     if (kIsWeb && _optimizedBlurAmount > 20) {
       return Container(
-        decoration: BoxDecoration(
-          color: backgroundColor?.withValues(alpha: 0.9) ??
-              HvacColors.backgroundCard.withValues(alpha: 0.9),
-          gradient: gradient,
-          borderRadius: _responsiveBorderRadius),
-        padding: padding ?? const EdgeInsets.all(HvacSpacing.lg),
-        child: child);
+          decoration: BoxDecoration(
+              color: backgroundColor?.withValues(alpha: 0.9) ??
+                  HvacColors.backgroundCard.withValues(alpha: 0.9),
+              gradient: gradient,
+              borderRadius: _responsiveBorderRadius),
+          padding: padding ?? const EdgeInsets.all(HvacSpacing.lg),
+          child: child);
     }
 
     return ClipRRect(
-      borderRadius: _responsiveBorderRadius,
-      child: BackdropFilter(
-        filter: ImageFilter.blur(
-          sigmaX: _optimizedBlurAmount,
-          sigmaY: _optimizedBlurAmount),
-        child: Container(
-          decoration: BoxDecoration(
-            color: backgroundColor ??
-                HvacColors.backgroundCard.withValues(alpha: 0.7),
-            gradient: gradient,
-            borderRadius: _responsiveBorderRadius),
-          padding: padding ?? const EdgeInsets.all(HvacSpacing.lg),
-          child: child)));
+        borderRadius: _responsiveBorderRadius,
+        child: BackdropFilter(
+            filter: ImageFilter.blur(
+                sigmaX: _optimizedBlurAmount, sigmaY: _optimizedBlurAmount),
+            child: Container(
+                decoration: BoxDecoration(
+                    color: backgroundColor ??
+                        HvacColors.backgroundCard.withValues(alpha: 0.7),
+                    gradient: gradient,
+                    borderRadius: _responsiveBorderRadius),
+                padding: padding ?? const EdgeInsets.all(HvacSpacing.lg),
+                child: child)));
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: width,
-      height: height,
-      margin: margin,
-      decoration: BoxDecoration(
-        borderRadius: _responsiveBorderRadius,
-        border: border ??
-            Border.all(
-              color: HvacColors.textPrimary.withValues(alpha: borderOpacity),
-              width: 1.0),
-        boxShadow: boxShadow),
-      child: _buildBackdropFilter(child));
+        width: width,
+        height: height,
+        margin: margin,
+        decoration: BoxDecoration(
+            borderRadius: _responsiveBorderRadius,
+            border: border ??
+                Border.all(
+                    color:
+                        HvacColors.textPrimary.withValues(alpha: borderOpacity),
+                    width: 1.0),
+            boxShadow: boxShadow),
+        child: _buildBackdropFilter(child));
   }
 }
 
@@ -116,19 +116,17 @@ class GlassmorphicConfig {
 
   /// Light theme configuration
   static const light = GlassmorphicConfig(
-    blurAmount: 8.0,
-    borderOpacity: 0.08,
-    backgroundColor: HvacColors.backgroundCard);
+      blurAmount: 8.0,
+      borderOpacity: 0.08,
+      backgroundColor: HvacColors.backgroundCard);
 
   /// Dark theme configuration
   static const dark = GlassmorphicConfig(
-    blurAmount: 12.0,
-    borderOpacity: 0.15,
-    backgroundColor: HvacColors.backgroundDark);
+      blurAmount: 12.0,
+      borderOpacity: 0.15,
+      backgroundColor: HvacColors.backgroundDark);
 
   /// Web optimized configuration
   static const web = GlassmorphicConfig(
-    blurAmount: 6.0,
-    borderOpacity: 0.1,
-    enableWebOptimization: true);
+      blurAmount: 6.0, borderOpacity: 0.1, enableWebOptimization: true);
 }

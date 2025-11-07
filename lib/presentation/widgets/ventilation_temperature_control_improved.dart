@@ -334,12 +334,15 @@ class _TempCard extends StatelessWidget {
           ),
         ],
       ),
-    ).animate()
-      .fadeIn(duration: 300.ms, delay: Duration(milliseconds: isPrimary ? 0 : 100))
-      .scale(
-        begin: const Offset(0.95, 0.95),
-        end: const Offset(1, 1),
-        duration: 300.ms,
-      );
+    )
+        .animate()
+        .fadeIn(
+            duration: 300.ms,
+            delay: Duration(milliseconds: isPrimary ? 0 : 100))
+        .scale(
+          begin: const Offset(0.95, 0.95),
+          end: const Offset(1, 1),
+          duration: 300.ms,
+        );
   }
 }

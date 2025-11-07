@@ -86,7 +86,7 @@ class HvacLiquidPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (icon != null) ...[
-                Icon(icon, size: 100, color: color.withValues(alpha:0.8)),
+                Icon(icon, size: 100, color: color.withValues(alpha: 0.8)),
                 const SizedBox(height: 40),
               ],
               Text(
@@ -104,7 +104,7 @@ class HvacLiquidPage extends StatelessWidget {
                   subtitle!,
                   style: TextStyle(
                     fontSize: 18,
-                    color: color.withValues(alpha:0.7),
+                    color: color.withValues(alpha: 0.7),
                   ),
                   textAlign: TextAlign.center,
                 ),

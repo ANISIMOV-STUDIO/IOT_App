@@ -48,25 +48,18 @@ class _GlowCardState extends State<GlowCard>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      duration: widget.animationDuration,
-      vsync: this);
+    _controller =
+        AnimationController(duration: widget.animationDuration, vsync: this);
 
     if (widget.enablePulse) {
       _controller.repeat(reverse: true);
     }
 
-    _glowAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut));
+    _glowAnimation = Tween<double>(begin: 0.0, end: 1.0)
+        .animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
-    _borderAnimation = Tween<double>(
-      begin: 0.3,
-      end: 0.6).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut));
+    _borderAnimation = Tween<double>(begin: 0.3, end: 0.6)
+        .animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
   }
 
   @override
@@ -83,56 +76,57 @@ class _GlowCardState extends State<GlowCard>
     if (kIsWeb && baseIntensity > 1.5) {
       return [
         BoxShadow(
-          color: widget.glowColor.withValues(
-            alpha: (0.2 * baseIntensity) + (animValue * 0.1 * baseIntensity)),
-          blurRadius: 15 * baseIntensity,
-          spreadRadius: 2 * baseIntensity),
+            color: widget.glowColor.withValues(
+                alpha:
+                    (0.2 * baseIntensity) + (animValue * 0.1 * baseIntensity)),
+            blurRadius: 15 * baseIntensity,
+            spreadRadius: 2 * baseIntensity),
       ];
     }
 
     return [
       // Primary glow
       BoxShadow(
-        color: widget.glowColor.withValues(
-          alpha: (0.2 * baseIntensity) + (animValue * 0.2 * baseIntensity)),
-        blurRadius: (20 + (animValue * 10)) * baseIntensity,
-        spreadRadius: (animValue * 5) * baseIntensity),
+          color: widget.glowColor.withValues(
+              alpha: (0.2 * baseIntensity) + (animValue * 0.2 * baseIntensity)),
+          blurRadius: (20 + (animValue * 10)) * baseIntensity,
+          spreadRadius: (animValue * 5) * baseIntensity),
       // Secondary subtle glow
       BoxShadow(
-        color: widget.glowColor.withValues(
-          alpha: (0.1 * baseIntensity) + (animValue * 0.1 * baseIntensity)),
-        blurRadius: (30 + (animValue * 15)) * baseIntensity,
-        spreadRadius: (animValue * 8) * baseIntensity),
+          color: widget.glowColor.withValues(
+              alpha: (0.1 * baseIntensity) + (animValue * 0.1 * baseIntensity)),
+          blurRadius: (30 + (animValue * 15)) * baseIntensity,
+          spreadRadius: (animValue * 8) * baseIntensity),
     ];
   }
 
   @override
   Widget build(BuildContext context) {
     Widget card = AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) => Container(
-        width: widget.width,
-        height: widget.height,
-        margin: widget.margin,
-        decoration: BoxDecoration(
-          color: HvacColors.backgroundCard,
-          borderRadius: BorderRadius.circular(widget.borderRadius),
-          border: Border.all(
-            color: widget.glowColor.withValues(
-              alpha: widget.enablePulse
-                  ? _borderAnimation.value
-                  : 0.4 * widget.glowIntensity),
-            width: 2 * widget.glowIntensity),
-          boxShadow: _buildGlowShadows()),
-        padding: widget.padding ?? const EdgeInsets.all(HvacSpacing.lg),
-        child: widget.child));
+        animation: _controller,
+        builder: (context, child) => Container(
+            width: widget.width,
+            height: widget.height,
+            margin: widget.margin,
+            decoration: BoxDecoration(
+                color: HvacColors.backgroundCard,
+                borderRadius: BorderRadius.circular(widget.borderRadius),
+                border: Border.all(
+                    color: widget.glowColor.withValues(
+                        alpha: widget.enablePulse
+                            ? _borderAnimation.value
+                            : 0.4 * widget.glowIntensity),
+                    width: 2 * widget.glowIntensity),
+                boxShadow: _buildGlowShadows()),
+            padding: widget.padding ?? const EdgeInsets.all(HvacSpacing.lg),
+            child: widget.child));
 
     if (widget.onTap != null) {
       card = GestureDetector(
-        onTap: widget.onTap,
-        child: MouseRegion(
-          cursor: kIsWeb ? SystemMouseCursors.click : MouseCursor.defer,
-          child: card));
+          onTap: widget.onTap,
+          child: MouseRegion(
+              cursor: kIsWeb ? SystemMouseCursors.click : MouseCursor.defer,
+              child: card));
     }
 
     return card;
@@ -165,15 +159,15 @@ class StaticGlowCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GlowCard(
-      glowColor: glowColor,
-      padding: padding,
-      margin: margin,
-      width: width,
-      height: height,
-      onTap: onTap,
-      glowIntensity: glowIntensity,
-      enablePulse: false,
-      child: child);
+        glowColor: glowColor,
+        padding: padding,
+        margin: margin,
+        width: width,
+        height: height,
+        onTap: onTap,
+        glowIntensity: glowIntensity,
+        enablePulse: false,
+        child: child);
   }
 }
 
@@ -201,14 +195,14 @@ class NeonGlowCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GlowCard(
-      glowColor: neonColor,
-      padding: padding,
-      margin: margin,
-      width: width,
-      height: height,
-      onTap: onTap,
-      glowIntensity: 1.5,
-      animationDuration: const Duration(milliseconds: 1500),
-      child: child);
+        glowColor: neonColor,
+        padding: padding,
+        margin: margin,
+        width: width,
+        height: height,
+        onTap: onTap,
+        glowIntensity: 1.5,
+        animationDuration: const Duration(milliseconds: 1500),
+        child: child);
   }
 }

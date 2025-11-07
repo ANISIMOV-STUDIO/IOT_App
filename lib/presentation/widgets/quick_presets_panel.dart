@@ -177,7 +177,8 @@ class _PresetButtonState extends State<_PresetButton> {
         onTap: widget.onTap,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
-          padding: const EdgeInsets.symmetric(horizontal: HvacSpacing.sm, vertical: HvacSpacing.sm),
+          padding: const EdgeInsets.symmetric(
+              horizontal: HvacSpacing.sm, vertical: HvacSpacing.sm),
           decoration: BoxDecoration(
             // Background: subtle lift on hover, but stay monochrome
             color: _isHovered
@@ -187,7 +188,8 @@ class _PresetButtonState extends State<_PresetButton> {
             border: Border.all(
               // Border: always gray, never colored
               color: _isHovered
-                  ? HvacColors.accent.withValues(alpha: 0.3) // Subtle gold hint on hover
+                  ? HvacColors.accent
+                      .withValues(alpha: 0.3) // Subtle gold hint on hover
                   : HvacColors.backgroundCardBorder,
               width: 1.5,
             ),

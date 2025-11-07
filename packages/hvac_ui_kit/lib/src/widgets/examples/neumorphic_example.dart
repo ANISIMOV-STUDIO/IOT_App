@@ -148,7 +148,8 @@ class _NeumorphicExampleState extends State<NeumorphicExample> {
             onTap: () => _showMessage('Card tapped'),
             child: const Column(
               children: [
-                Icon(Icons.thermostat, size: 48, color: HvacColors.primaryOrange),
+                Icon(Icons.thermostat,
+                    size: 48, color: HvacColors.primaryOrange),
                 SizedBox(height: HvacSpacing.md),
                 Text(
                   'Living Room',

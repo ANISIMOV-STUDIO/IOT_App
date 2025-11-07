@@ -5,6 +5,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+
 class SimpleLineChart extends StatelessWidget {
   final List<double> data;
   final Color color;
@@ -20,12 +21,10 @@ class SimpleLineChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: height,
-      child: CustomPaint(
-        painter: LineChartPainter(
-          data: data,
-          color: color),
-        child: Container()));
+        height: height,
+        child: CustomPaint(
+            painter: LineChartPainter(data: data, color: color),
+            child: Container()));
   }
 }
 

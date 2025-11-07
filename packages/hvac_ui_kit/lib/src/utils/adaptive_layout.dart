@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 
 /// Device size categories (Material Design 3 breakpoints)
 enum DeviceSize {
-  compact,  // < 600dp (phones)
-  medium,   // 600-840dp (tablets, foldables)
+  compact, // < 600dp (phones)
+  medium, // 600-840dp (tablets, foldables)
   expanded, // > 840dp (desktops, large tablets)
 }
 
@@ -135,11 +135,12 @@ class AdaptiveLayout {
   /// Get control card height
   static double getControlCardHeight(BuildContext context) {
     return getAdaptiveValue(
-      context,
-      compact: null, // Auto height
-      medium: 200.0,
-      expanded: 220.0,
-    ) ?? double.infinity;
+          context,
+          compact: null, // Auto height
+          medium: 200.0,
+          expanded: 220.0,
+        ) ??
+        double.infinity;
   }
 
   /// Get maximum content width (for large screens)

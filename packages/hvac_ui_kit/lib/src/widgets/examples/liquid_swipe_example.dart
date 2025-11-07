@@ -84,7 +84,7 @@ class _LiquidSwipeExampleState extends State<LiquidSwipeExample> {
                   decoration: BoxDecoration(
                     color: _currentPage == index
                         ? HvacColors.primaryOrange
-                        : HvacColors.textSecondary.withValues(alpha:0.3),
+                        : HvacColors.textSecondary.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
@@ -146,7 +146,7 @@ class _LiquidSwipeExampleState extends State<LiquidSwipeExample> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha:0.1),
+        color: Colors.white.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(

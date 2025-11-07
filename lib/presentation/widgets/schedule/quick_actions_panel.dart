@@ -140,7 +140,9 @@ class _QuickActionButton extends StatelessWidget {
                     fontSize: 11.0,
                     color: HvacColors.textSecondary,
                   ),
-                  overflow: isFullWidth ? TextOverflow.visible : TextOverflow.ellipsis,
+                  overflow: isFullWidth
+                      ? TextOverflow.visible
+                      : TextOverflow.ellipsis,
                   maxLines: isFullWidth ? 2 : 1,
                 ),
               ],

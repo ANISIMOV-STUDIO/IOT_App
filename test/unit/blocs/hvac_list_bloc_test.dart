@@ -2,7 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:http/http.dart' as http;
-import 'package:hvac_control/presentation/bloc/hvac_list/hvac_list_bloc_refactored.dart' hide HvacListLoaded;
+import 'package:hvac_control/presentation/bloc/hvac_list/hvac_list_bloc_refactored.dart'
+    hide HvacListLoaded;
 import 'package:hvac_control/presentation/bloc/hvac_list/hvac_list_event.dart';
 import 'package:hvac_control/presentation/bloc/hvac_list/hvac_list_state.dart';
 import 'package:hvac_control/core/services/api_service.dart';
@@ -65,7 +66,8 @@ void main() {
           HvacListLoaded(testUnits),
         ],
         verify: (_) {
-          verify(() => mockGetAllUnits.call()).called(2); // Initial + subscription
+          verify(() => mockGetAllUnits.call())
+              .called(2); // Initial + subscription
         },
       );
 
@@ -147,8 +149,7 @@ void main() {
       blocTest<HvacListBloc, HvacListState>(
         'emits [HvacListLoading, HvacListLoaded] when connection retry is successful',
         build: () {
-          when(() => mockRepository.connect())
-              .thenAnswer((_) async => {});
+          when(() => mockRepository.connect()).thenAnswer((_) async => {});
           when(() => mockGetAllUnits.call())
               .thenAnswer((_) => Stream.value(testUnits));
           return bloc;
@@ -191,9 +192,10 @@ void main() {
         'successfully adds device and refreshes list',
         build: () {
           when(() => mockApiService.post(
-                '/devices',
-                body: any(named: 'body'),
-              )).thenAnswer((_) async => http.Response('{"success": true}', 200));
+                    '/devices',
+                    body: any(named: 'body'),
+                  ))
+              .thenAnswer((_) async => http.Response('{"success": true}', 200));
           when(() => mockGetAllUnits.call())
               .thenAnswer((_) => Stream.value(testUnits));
           return bloc;
@@ -257,12 +259,14 @@ void main() {
           return bloc;
         },
         seed: () => HvacListLoaded(testUnits),
-        act: (bloc) => bloc.add(const RemoveDeviceEvent(deviceId: testDeviceId)),
+        act: (bloc) =>
+            bloc.add(const RemoveDeviceEvent(deviceId: testDeviceId)),
         expect: () => [
           HvacListLoaded(testUnits.skip(1).toList()),
         ],
         verify: (_) {
-          verify(() => mockApiService.delete('/devices/$testDeviceId')).called(1);
+          verify(() => mockApiService.delete('/devices/$testDeviceId'))
+              .called(1);
         },
       );
 
@@ -274,7 +278,8 @@ void main() {
           return bloc;
         },
         seed: () => HvacListLoaded(testUnits),
-        act: (bloc) => bloc.add(const RemoveDeviceEvent(deviceId: testDeviceId)),
+        act: (bloc) =>
+            bloc.add(const RemoveDeviceEvent(deviceId: testDeviceId)),
         expect: () => [
           isA<HvacListError>().having(
             (e) => e.message,

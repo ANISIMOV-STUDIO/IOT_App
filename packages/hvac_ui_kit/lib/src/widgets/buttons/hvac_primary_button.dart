@@ -17,9 +17,21 @@ import '../../theme/typography.dart';
 
 /// Size variants for buttons
 enum HvacButtonSize {
-  small(height: 40.0, fontSize: 14.0, iconSize: 16.0, padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8)),
-  medium(height: 48.0, fontSize: 16.0, iconSize: 20.0, padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12)),
-  large(height: 56.0, fontSize: 18.0, iconSize: 24.0, padding: EdgeInsets.symmetric(horizontal: 24, vertical: 14));
+  small(
+      height: 40.0,
+      fontSize: 14.0,
+      iconSize: 16.0,
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8)),
+  medium(
+      height: 48.0,
+      fontSize: 16.0,
+      iconSize: 20.0,
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12)),
+  large(
+      height: 56.0,
+      fontSize: 18.0,
+      iconSize: 24.0,
+      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 14));
 
   const HvacButtonSize({
     required this.height,
@@ -151,7 +163,8 @@ class _HvacPrimaryButtonState extends State<HvacPrimaryButton>
     final effectiveHeight = widget.height ?? widget.size.height;
 
     return MouseRegion(
-      cursor: _isEnabled ? SystemMouseCursors.click : SystemMouseCursors.forbidden,
+      cursor:
+          _isEnabled ? SystemMouseCursors.click : SystemMouseCursors.forbidden,
       onEnter: (_) => _handleHover(true),
       onExit: (_) => _handleHover(false),
       child: GestureDetector(
@@ -237,7 +250,8 @@ class _HvacPrimaryButtonState extends State<HvacPrimaryButton>
   }
 
   Widget _buildContent() {
-    final textColor = _isEnabled ? HvacColors.textPrimary : HvacColors.textDisabled;
+    final textColor =
+        _isEnabled ? HvacColors.textPrimary : HvacColors.textDisabled;
 
     if (widget.icon != null) {
       return Row(

@@ -29,7 +29,8 @@ class _DeviceEditDialogState extends State<DeviceEditDialog> {
   void initState() {
     super.initState();
     _nameController = TextEditingController(text: widget.unit.name);
-    _locationController = TextEditingController(text: widget.unit.location ?? '');
+    _locationController =
+        TextEditingController(text: widget.unit.location ?? '');
     _macController = TextEditingController(
       text: widget.unit.macAddress != null
           ? DeviceUtils.formatMacAddress(widget.unit.macAddress!)
@@ -51,7 +52,8 @@ class _DeviceEditDialogState extends State<DeviceEditDialog> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return AlertDialog(
-      backgroundColor: isDark ? HvacColors.backgroundCard : HvacColors.glassWhite,
+      backgroundColor:
+          isDark ? HvacColors.backgroundCard : HvacColors.glassWhite,
       title: Text(l10n.editDevice),
       content: SingleChildScrollView(
         child: Column(

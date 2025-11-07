@@ -21,8 +21,7 @@ class HomeNotificationsPanel extends StatefulWidget {
   });
 
   @override
-  State<HomeNotificationsPanel> createState() =>
-      _HomeNotificationsPanelState();
+  State<HomeNotificationsPanel> createState() => _HomeNotificationsPanelState();
 }
 
 class _HomeNotificationsPanelState extends State<HomeNotificationsPanel> {

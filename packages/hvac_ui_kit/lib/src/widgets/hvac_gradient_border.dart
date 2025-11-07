@@ -101,8 +101,7 @@ class HvacAnimatedGradientBorder extends StatefulWidget {
       _HvacAnimatedGradientBorderState();
 }
 
-class _HvacAnimatedGradientBorderState
-    extends State<HvacAnimatedGradientBorder>
+class _HvacAnimatedGradientBorderState extends State<HvacAnimatedGradientBorder>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
@@ -159,7 +158,7 @@ class HvacSuccessBorder extends StatelessWidget {
     return HvacGradientBorder(
       gradientColors: [
         HvacColors.success,
-        HvacColors.success.withValues(alpha:0.6),
+        HvacColors.success.withValues(alpha: 0.6),
       ],
       borderWidth: borderWidth,
       child: child,
@@ -183,7 +182,7 @@ class HvacWarningBorder extends StatelessWidget {
     return HvacGradientBorder(
       gradientColors: [
         HvacColors.warning,
-        HvacColors.warning.withValues(alpha:0.6),
+        HvacColors.warning.withValues(alpha: 0.6),
       ],
       borderWidth: borderWidth,
       child: child,
@@ -207,7 +206,7 @@ class HvacErrorBorder extends StatelessWidget {
     return HvacGradientBorder(
       gradientColors: [
         HvacColors.error,
-        HvacColors.error.withValues(alpha:0.6),
+        HvacColors.error.withValues(alpha: 0.6),
       ],
       borderWidth: borderWidth,
       child: child,

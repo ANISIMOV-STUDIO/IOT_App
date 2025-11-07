@@ -21,4 +21,3 @@ class _ResponsiveShellState extends State<ResponsiveShell> {
     );
   }
 }
-

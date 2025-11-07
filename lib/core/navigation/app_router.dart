@@ -36,7 +36,8 @@ class AppRoutes {
 }
 
 /// Global router configuration
-final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
+final GlobalKey<NavigatorState> _rootNavigatorKey =
+    GlobalKey<NavigatorState>(debugLabel: 'root');
 
 /// GoRouter refresh notifier based on Stream
 class _GoRouterRefreshStream extends ChangeNotifier {
@@ -71,7 +72,8 @@ GoRouter createRouter(AuthBloc authBloc) {
     // Redirect logic based on authentication state
     redirect: (BuildContext context, GoRouterState state) {
       final authState = authBloc.state;
-      final isAuthenticating = authState is AuthLoading || authState is AuthInitial;
+      final isAuthenticating =
+          authState is AuthLoading || authState is AuthInitial;
       final isAuthenticated = authState is AuthAuthenticated;
       final isLoggingIn = state.matchedLocation == AppRoutes.login;
       final isOnboarding = state.matchedLocation == AppRoutes.onboarding;

@@ -97,7 +97,8 @@ class TemperatureMobileLayout extends StatelessWidget {
                     isSecondary: true,
                   ),
                 ),
-              if (outdoorTemp != null && indoorTemp != null) const SizedBox(width: 8.0),
+              if (outdoorTemp != null && indoorTemp != null)
+                const SizedBox(width: 8.0),
               if (indoorTemp != null)
                 Expanded(
                   child: TemperatureTile(

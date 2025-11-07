@@ -175,7 +175,8 @@ class ToastNotification {
       icon: isOnline ? Icons.wifi : Icons.wifi_off,
       position: ToastPosition.top,
       duration: const Duration(seconds: 2),
-      backgroundColor: isOnline ? HvacColors.success : HvacColors.backgroundCard,
+      backgroundColor:
+          isOnline ? HvacColors.success : HvacColors.backgroundCard,
     );
   }
 

@@ -69,7 +69,8 @@ class HomeDeviceSelector extends StatelessWidget {
                 width: 6.0,
                 height: 6.0,
                 decoration: BoxDecoration(
-                  color: isOnline ? HvacColors.success : HvacColors.textTertiary,
+                  color:
+                      isOnline ? HvacColors.success : HvacColors.textTertiary,
                   shape: BoxShape.circle,
                 ),
               ),

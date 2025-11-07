@@ -183,7 +183,8 @@ class HvacDecorations {
           Color(0x1AFFFFFF), // 10% white
           Color(0x0DFFFFFF), // 5% white
         ],
-        begin: Alignment.topLeft,        end: Alignment.bottomRight,
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
       ),
       borderRadius: BorderRadius.circular(radius ?? HvacRadius.md),
       border: Border.all(
@@ -210,7 +211,8 @@ class HvacDecorations {
         color: color.withValues(alpha: 0.4),
         width: 1,
       ),
-      boxShadow: withShadow ? HvacShadows.accentShadow(color, alpha: 0.15) : null,
+      boxShadow:
+          withShadow ? HvacShadows.accentShadow(color, alpha: 0.15) : null,
     );
   }
 

@@ -137,7 +137,9 @@ class _HvacPasswordFieldState extends State<HvacPasswordField> {
           ],
           suffixIcon: IconButton(
             icon: Icon(
-              _obscureText ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+              _obscureText
+                  ? Icons.visibility_outlined
+                  : Icons.visibility_off_outlined,
               size: 20,
             ),
             onPressed: () => setState(() => _obscureText = !_obscureText),
@@ -146,7 +148,8 @@ class _HvacPasswordFieldState extends State<HvacPasswordField> {
         ),
 
         // Password strength indicator
-        if (widget.showStrengthIndicator && widget.controller.text.isNotEmpty) ...[
+        if (widget.showStrengthIndicator &&
+            widget.controller.text.isNotEmpty) ...[
           const SizedBox(height: 8),
           Row(
             children: [
@@ -156,7 +159,8 @@ class _HvacPasswordFieldState extends State<HvacPasswordField> {
                   child: LinearProgressIndicator(
                     value: _passwordStrength,
                     backgroundColor: HvacColors.backgroundCardBorder,
-                    valueColor: AlwaysStoppedAnimation<Color>(_getStrengthColor()),
+                    valueColor:
+                        AlwaysStoppedAnimation<Color>(_getStrengthColor()),
                     minHeight: 4,
                   ),
                 ),

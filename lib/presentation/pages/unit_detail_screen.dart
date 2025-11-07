@@ -179,14 +179,15 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
 
   Widget _buildBackButton() {
     return IconButton(
-      icon: const Icon(Icons.arrow_back, color: HvacColors.textPrimary, size: 24.0),
+      icon: const Icon(Icons.arrow_back,
+          color: HvacColors.textPrimary, size: 24.0),
       onPressed: () => Navigator.pop(context),
     );
   }
 
   Widget _buildTitle(HvacUnit unit) {
     final isTablet = ResponsiveUtils.isTablet(context);
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -233,7 +234,8 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
 
   Widget _buildAnalyticsButton(HvacUnit unit) {
     return IconButton(
-      icon: const Icon(Icons.analytics, color: HvacColors.primaryOrange, size: 24.0),
+      icon: const Icon(Icons.analytics,
+          color: HvacColors.primaryOrange, size: 24.0),
       onPressed: () {
         context.goToAnalytics();
       },
@@ -245,14 +247,16 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
     return [
       _buildAnalyticsButton(unit),
       IconButton(
-        icon: const Icon(Icons.settings, color: HvacColors.textSecondary, size: 24.0),
+        icon: const Icon(Icons.settings,
+            color: HvacColors.textSecondary, size: 24.0),
         onPressed: () {
           // Navigate to unit settings
         },
         tooltip: 'Настройки',
       ),
       IconButton(
-        icon: const Icon(Icons.share, color: HvacColors.textSecondary, size: 24.0),
+        icon: const Icon(Icons.share,
+            color: HvacColors.textSecondary, size: 24.0),
         onPressed: () {
           // Share unit data
         },

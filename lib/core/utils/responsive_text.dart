@@ -46,7 +46,8 @@ class ResponsiveText {
   /// Get responsive font size based on breakpoint
   /// Mobile: smaller text for better readability
   /// Tablet/Desktop: standard sizes
-  static double getSize(BuildContext context, {
+  static double getSize(
+    BuildContext context, {
     required double mobile,
     required double desktop,
   }) {

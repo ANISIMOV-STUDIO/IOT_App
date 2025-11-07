@@ -47,11 +47,13 @@ class InfoSnackBar {
       context,
       title: 'Tip',
       message: tip,
-      action: onLearnMore != null ? SnackBarAction(
-        label: 'LEARN MORE',
-        onPressed: onLearnMore,
-        textColor: Colors.white,
-      ) : null,
+      action: onLearnMore != null
+          ? SnackBarAction(
+              label: 'LEARN MORE',
+              onPressed: onLearnMore,
+              textColor: Colors.white,
+            )
+          : null,
       duration: const Duration(seconds: 4),
     );
   }
@@ -67,11 +69,13 @@ class InfoSnackBar {
       context,
       title: 'Update Available',
       message: 'Version $version is ready to install',
-      action: onUpdate != null ? SnackBarAction(
-        label: 'UPDATE',
-        onPressed: onUpdate,
-        textColor: Colors.white,
-      ) : null,
+      action: onUpdate != null
+          ? SnackBarAction(
+              label: 'UPDATE',
+              onPressed: onUpdate,
+              textColor: Colors.white,
+            )
+          : null,
       duration: const Duration(seconds: 6),
       showCloseButton: true,
       onDismissed: onLater,
@@ -89,11 +93,13 @@ class InfoSnackBar {
       context,
       title: 'New Feature',
       message: description ?? '$featureName is now available',
-      action: onTryNow != null ? SnackBarAction(
-        label: 'TRY NOW',
-        onPressed: onTryNow,
-        textColor: Colors.white,
-      ) : null,
+      action: onTryNow != null
+          ? SnackBarAction(
+              label: 'TRY NOW',
+              onPressed: onTryNow,
+              textColor: Colors.white,
+            )
+          : null,
       duration: const Duration(seconds: 5),
     );
   }
@@ -105,10 +111,10 @@ class InfoSnackBar {
     String? lastSyncTime,
   }) {
     final message = isSyncing
-      ? 'Syncing your data...'
-      : lastSyncTime != null
-        ? 'Last synced: $lastSyncTime'
-        : 'Data is up to date';
+        ? 'Syncing your data...'
+        : lastSyncTime != null
+            ? 'Last synced: $lastSyncTime'
+            : 'Data is up to date';
 
     show(
       context,
@@ -138,18 +144,21 @@ class InfoSnackBar {
     final hours = expectedDuration.inHours;
     final minutes = expectedDuration.inMinutes % 60;
     final durationText = hours > 0
-      ? '$hours hour${hours > 1 ? 's' : ''} ${minutes > 0 ? '$minutes min' : ''}'
-      : '$minutes minutes';
+        ? '$hours hour${hours > 1 ? 's' : ''} ${minutes > 0 ? '$minutes min' : ''}'
+        : '$minutes minutes';
 
     show(
       context,
       title: 'Scheduled Maintenance',
-      message: 'System maintenance scheduled for ${_formatDateTime(startTime)} (Est. $durationText)',
-      action: onViewDetails != null ? SnackBarAction(
-        label: 'DETAILS',
-        onPressed: onViewDetails,
-        textColor: Colors.white,
-      ) : null,
+      message:
+          'System maintenance scheduled for ${_formatDateTime(startTime)} (Est. $durationText)',
+      action: onViewDetails != null
+          ? SnackBarAction(
+              label: 'DETAILS',
+              onPressed: onViewDetails,
+              textColor: Colors.white,
+            )
+          : null,
       duration: const Duration(seconds: 6),
     );
   }
@@ -164,11 +173,13 @@ class InfoSnackBar {
       context,
       title: 'Energy Saving Tip',
       message: tip,
-      action: onApply != null ? SnackBarAction(
-        label: 'APPLY',
-        onPressed: onApply,
-        textColor: Colors.white,
-      ) : null,
+      action: onApply != null
+          ? SnackBarAction(
+              label: 'APPLY',
+              onPressed: onApply,
+              textColor: Colors.white,
+            )
+          : null,
       duration: const Duration(seconds: 5),
     );
   }
@@ -187,11 +198,13 @@ class InfoSnackBar {
       context,
       title: '$resource Usage',
       message: 'Using $used of $total ($percentage%)',
-      action: onManage != null ? SnackBarAction(
-        label: 'MANAGE',
-        onPressed: onManage,
-        textColor: Colors.white,
-      ) : null,
+      action: onManage != null
+          ? SnackBarAction(
+              label: 'MANAGE',
+              onPressed: onManage,
+              textColor: Colors.white,
+            )
+          : null,
       duration: const Duration(seconds: 4),
     );
   }
@@ -207,11 +220,13 @@ class InfoSnackBar {
       context,
       title: helpTopic ?? 'Hint',
       message: hint,
-      action: onGetHelp != null ? SnackBarAction(
-        label: 'HELP',
-        onPressed: onGetHelp,
-        textColor: Colors.white,
-      ) : null,
+      action: onGetHelp != null
+          ? SnackBarAction(
+              label: 'HELP',
+              onPressed: onGetHelp,
+              textColor: Colors.white,
+            )
+          : null,
       duration: const Duration(seconds: 4),
     );
   }
@@ -222,9 +237,7 @@ class InfoSnackBar {
     final isDarkMode = theme.brightness == Brightness.dark;
 
     // Use neutral color for info (not bright blue)
-    return isDarkMode
-      ? HvacColors.neutral400
-      : HvacColors.neutral300;
+    return isDarkMode ? HvacColors.neutral400 : HvacColors.neutral300;
   }
 
   /// Format date time for display

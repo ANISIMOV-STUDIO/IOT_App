@@ -6,9 +6,9 @@ import '../buttons/hvac_primary_button.dart';
 
 /// Size variant for empty state
 enum EmptyStateSize {
-  compact,  // For small containers
-  medium,   // Default
-  large,    // For full screen
+  compact, // For small containers
+  medium, // Default
+  large, // For full screen
 }
 
 /// Empty state component
@@ -109,9 +109,8 @@ class HvacEmptyState extends StatelessWidget {
             style: _getMessageStyle(context),
             textAlign: TextAlign.center,
             maxLines: size == EmptyStateSize.compact ? 2 : null,
-            overflow: size == EmptyStateSize.compact
-                ? TextOverflow.ellipsis
-                : null,
+            overflow:
+                size == EmptyStateSize.compact ? TextOverflow.ellipsis : null,
           ),
 
           // Action button (optional)
@@ -181,11 +180,14 @@ class HvacEmptyState extends StatelessWidget {
   TextStyle _getMessageStyle(BuildContext context) {
     switch (size) {
       case EmptyStateSize.compact:
-        return HvacTypography.bodySmall.copyWith(color: HvacColors.textSecondary);
+        return HvacTypography.bodySmall
+            .copyWith(color: HvacColors.textSecondary);
       case EmptyStateSize.medium:
-        return HvacTypography.bodyMedium.copyWith(color: HvacColors.textSecondary);
+        return HvacTypography.bodyMedium
+            .copyWith(color: HvacColors.textSecondary);
       case EmptyStateSize.large:
-        return HvacTypography.bodyLarge.copyWith(color: HvacColors.textSecondary);
+        return HvacTypography.bodyLarge
+            .copyWith(color: HvacColors.textSecondary);
     }
   }
 }

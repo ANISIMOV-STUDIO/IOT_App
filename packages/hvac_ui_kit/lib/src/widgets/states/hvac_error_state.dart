@@ -7,9 +7,9 @@ import '../buttons/hvac_text_button.dart';
 
 /// Size variant for error state
 enum ErrorStateSize {
-  compact,  // For small containers
-  medium,   // Default
-  large,    // For full screen
+  compact, // For small containers
+  medium, // Default
+  large, // For full screen
 }
 
 /// Re-export for compatibility
@@ -258,11 +258,14 @@ class _ErrorStateContentState extends State<_ErrorStateContent> {
   TextStyle _getMessageStyle() {
     switch (widget.size) {
       case ErrorStateSize.compact:
-        return HvacTypography.bodySmall.copyWith(color: HvacColors.textSecondary);
+        return HvacTypography.bodySmall
+            .copyWith(color: HvacColors.textSecondary);
       case ErrorStateSize.medium:
-        return HvacTypography.bodyMedium.copyWith(color: HvacColors.textSecondary);
+        return HvacTypography.bodyMedium
+            .copyWith(color: HvacColors.textSecondary);
       case ErrorStateSize.large:
-        return HvacTypography.bodyLarge.copyWith(color: HvacColors.textSecondary);
+        return HvacTypography.bodyLarge
+            .copyWith(color: HvacColors.textSecondary);
     }
   }
 }

@@ -41,8 +41,10 @@ class BaseSnackBar extends StatelessWidget {
   Widget _buildDefaultContent(BuildContext context, ThemeData theme) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isDesktop = screenWidth >= 1024;
-    final horizontalPadding = isDesktop ? 24.0 : (screenWidth >= 600 ? 20.0 : 16.0);
-    final verticalPadding = isDesktop ? 16.0 : (screenWidth >= 600 ? 14.0 : 12.0);
+    final horizontalPadding =
+        isDesktop ? 24.0 : (screenWidth >= 600 ? 20.0 : 16.0);
+    final verticalPadding =
+        isDesktop ? 16.0 : (screenWidth >= 600 ? 14.0 : 12.0);
 
     return Container(
       padding: EdgeInsets.symmetric(
@@ -62,7 +64,8 @@ class BaseSnackBar extends StatelessWidget {
 
   Widget _buildIcon(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final iconSize = screenWidth >= 1024 ? 24.0 : (screenWidth >= 600 ? 22.0 : 20.0);
+    final iconSize =
+        screenWidth >= 1024 ? 24.0 : (screenWidth >= 600 ? 22.0 : 20.0);
     return Icon(
       icon,
       color: Colors.white,
@@ -72,8 +75,10 @@ class BaseSnackBar extends StatelessWidget {
 
   Widget _buildTextContent(BuildContext context, ThemeData theme) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final titleFontSize = screenWidth >= 1024 ? 14.0 : (screenWidth >= 600 ? 13.5 : 13.0);
-    final messageFontSize = screenWidth >= 1024 ? 13.0 : (screenWidth >= 600 ? 12.5 : 12.0);
+    final titleFontSize =
+        screenWidth >= 1024 ? 14.0 : (screenWidth >= 600 ? 13.5 : 13.0);
+    final messageFontSize =
+        screenWidth >= 1024 ? 13.0 : (screenWidth >= 600 ? 12.5 : 12.0);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -105,7 +110,8 @@ class BaseSnackBar extends StatelessWidget {
 
   Widget _buildCloseButton(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final closeIconSize = screenWidth >= 1024 ? 20.0 : (screenWidth >= 600 ? 19.0 : 18.0);
+    final closeIconSize =
+        screenWidth >= 1024 ? 20.0 : (screenWidth >= 600 ? 19.0 : 18.0);
 
     return IconButton(
       icon: Icon(

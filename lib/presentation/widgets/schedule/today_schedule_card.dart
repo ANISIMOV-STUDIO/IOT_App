@@ -22,7 +22,8 @@ class TodayScheduleCard extends StatelessWidget {
     return AdaptiveControl(
       builder: (context, deviceSize) {
         return Container(
-          padding: EdgeInsets.all(adaptive.AdaptiveLayout.spacing(context, base: 10)),
+          padding: EdgeInsets.all(
+              adaptive.AdaptiveLayout.spacing(context, base: 10)),
           decoration: BoxDecoration(
             color: HvacColors.backgroundDark,
             borderRadius: BorderRadius.circular(
@@ -39,7 +40,8 @@ class TodayScheduleCard extends StatelessWidget {
                     child: Text(
                       _getDayName(dayOfWeek),
                       style: HvacTypography.labelMedium.copyWith(
-                        fontSize: adaptive.AdaptiveLayout.fontSize(context, base: 11),
+                        fontSize:
+                            adaptive.AdaptiveLayout.fontSize(context, base: 11),
                         color: HvacColors.textSecondary,
                       ),
                       overflow: TextOverflow.ellipsis,
@@ -60,7 +62,8 @@ class TodayScheduleCard extends StatelessWidget {
                     child: Text(
                       schedule?.timerEnabled == true ? 'Включен' : 'Выключен',
                       style: HvacTypography.labelSmall.copyWith(
-                        fontSize: adaptive.AdaptiveLayout.fontSize(context, base: 10),
+                        fontSize:
+                            adaptive.AdaptiveLayout.fontSize(context, base: 10),
                         fontWeight: FontWeight.w600,
                         color: schedule?.timerEnabled == true
                             ? HvacColors.success
@@ -70,7 +73,8 @@ class TodayScheduleCard extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: adaptive.AdaptiveLayout.spacing(context, base: 10)),
+              SizedBox(
+                  height: adaptive.AdaptiveLayout.spacing(context, base: 10)),
               Row(
                 children: [
                   Expanded(

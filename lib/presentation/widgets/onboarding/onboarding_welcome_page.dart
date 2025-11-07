@@ -44,7 +44,8 @@ class OnboardingWelcomePage extends StatelessWidget {
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: HvacColors.primaryOrange.withValues(alpha: 0.3),
+                          color:
+                              HvacColors.primaryOrange.withValues(alpha: 0.3),
                           blurRadius: 40,
                           spreadRadius: 10,
                         ),

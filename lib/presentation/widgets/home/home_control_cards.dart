@@ -184,7 +184,7 @@ class HomeControlCards extends StatelessWidget {
           width: (maxContentWidth -
                   (HvacSpacing.lgR * 2) -
                   (HvacSpacing.lgR * (crossAxisCount - 1))) /
-                 crossAxisCount,
+              crossAxisCount,
           child: card,
         );
       }).toList(),

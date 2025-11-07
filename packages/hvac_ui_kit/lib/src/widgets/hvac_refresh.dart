@@ -48,7 +48,8 @@ class HvacCupertinoRefresh extends StatelessWidget {
       slivers: [
         CupertinoSliverRefreshControl(
           onRefresh: onRefresh,
-          builder: (context, refreshState, pulledExtent, refreshTriggerPullDistance, refreshIndicatorExtent) {
+          builder: (context, refreshState, pulledExtent,
+              refreshTriggerPullDistance, refreshIndicatorExtent) {
             return _buildRefreshAnimation(
               context,
               refreshState,
@@ -70,7 +71,8 @@ class HvacCupertinoRefresh extends StatelessWidget {
     double refreshTriggerPullDistance,
     double refreshIndicatorExtent,
   ) {
-    final progress = (pulledExtent / refreshTriggerPullDistance).clamp(0.0, 1.0);
+    final progress =
+        (pulledExtent / refreshTriggerPullDistance).clamp(0.0, 1.0);
 
     return Container(
       height: pulledExtent,

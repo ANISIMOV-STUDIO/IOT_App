@@ -5,6 +5,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+
 enum AlertSeverity { critical, warning, info }
 
 class DashboardAlertItem extends StatelessWidget {
@@ -51,7 +52,8 @@ class DashboardAlertItem extends StatelessWidget {
       onTap: onTap,
       borderRadius: HvacRadius.mdRadius,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: HvacSpacing.md, vertical: HvacSpacing.sm),
+        padding: const EdgeInsets.symmetric(
+            horizontal: HvacSpacing.md, vertical: HvacSpacing.sm),
         child: Row(
           children: [
             // Severity Icon

@@ -5,6 +5,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+
 enum DeviceType { lamp, airConditioner, vacuum, other }
 
 class DeviceControlCard extends StatelessWidget {

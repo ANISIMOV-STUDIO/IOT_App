@@ -5,6 +5,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+
 class CircularTemperatureIndicator extends StatelessWidget {
   final double? temperature;
   final String label;
@@ -43,9 +44,7 @@ class CircularTemperatureIndicator extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              temperature != null
-                  ? temperature!.toStringAsFixed(1)
-                  : '--',
+              temperature != null ? temperature!.toStringAsFixed(1) : '--',
               style: HvacTypography.displayLarge.copyWith(
                 fontSize: size * 0.24, // 48 for size=200
                 color: HvacColors.textPrimary,

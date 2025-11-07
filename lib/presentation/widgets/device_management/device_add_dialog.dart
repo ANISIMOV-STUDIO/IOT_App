@@ -37,7 +37,8 @@ class _DeviceAddDialogState extends State<DeviceAddDialog> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return AlertDialog(
-      backgroundColor: isDark ? HvacColors.backgroundCard : HvacColors.glassWhite,
+      backgroundColor:
+          isDark ? HvacColors.backgroundCard : HvacColors.glassWhite,
       title: Text(l10n.addDevice),
       content: SingleChildScrollView(
         child: Column(

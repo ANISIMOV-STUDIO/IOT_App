@@ -214,8 +214,7 @@ class HomeTabletLayout extends StatelessWidget {
           onPresetSelected: onPresetSelected,
         ),
         const SizedBox(height: HvacSpacing.lgV),
-        if (currentUnit != null)
-          HomeNotificationsPanel(unit: currentUnit!),
+        if (currentUnit != null) HomeNotificationsPanel(unit: currentUnit!),
       ],
     );
   }

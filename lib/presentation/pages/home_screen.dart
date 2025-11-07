@@ -113,29 +113,23 @@ class _HomeScreenState extends State<HomeScreen> with SnackbarMixin {
         currentUnit: currentUnit,
         units: units,
         selectedUnit: _selectedUnit,
-        onPowerChanged: (power) => currentUnit != null
-            ? _updatePower(currentUnit, power)
-            : null,
-        onDetailsPressed: currentUnit != null
-            ? () => _navigateToDetails(currentUnit)
-            : null,
+        onPowerChanged: (power) =>
+            currentUnit != null ? _updatePower(currentUnit, power) : null,
+        onDetailsPressed:
+            currentUnit != null ? () => _navigateToDetails(currentUnit) : null,
         buildControlCards: _buildControlCards,
         onRuleToggled: _handleRuleToggled,
         onManageRules: _handleManageRules,
-        onPresetSelected: (preset) => currentUnit != null
-            ? _applyPreset(currentUnit, preset)
-            : null,
+        onPresetSelected: (preset) =>
+            currentUnit != null ? _applyPreset(currentUnit, preset) : null,
         onPowerAllOn: _powerAllOn,
         onPowerAllOff: _powerAllOff,
-        onSyncSettings: () => currentUnit != null
-            ? _syncSettings(currentUnit)
-            : null,
-        onApplyScheduleToAll: () => currentUnit != null
-            ? _applyScheduleToAll(currentUnit)
-            : null,
-        onSchedulePressed: currentUnit != null
-            ? () => _navigateToSchedule(currentUnit)
-            : null,
+        onSyncSettings: () =>
+            currentUnit != null ? _syncSettings(currentUnit) : null,
+        onApplyScheduleToAll: () =>
+            currentUnit != null ? _applyScheduleToAll(currentUnit) : null,
+        onSchedulePressed:
+            currentUnit != null ? () => _navigateToSchedule(currentUnit) : null,
       ),
     );
   }
@@ -161,8 +155,7 @@ class _HomeScreenState extends State<HomeScreen> with SnackbarMixin {
   HvacUnit? _getCurrentUnit(List<HvacUnit> units) {
     try {
       return units.firstWhere(
-        (unit) => unit.name == _selectedUnit ||
-                  unit.location == _selectedUnit,
+        (unit) => unit.name == _selectedUnit || unit.location == _selectedUnit,
       );
     } catch (e) {
       return units.isNotEmpty ? units.first : null;
@@ -211,18 +204,14 @@ class _HomeScreenState extends State<HomeScreen> with SnackbarMixin {
     final l10n = AppLocalizations.of(context)!;
 
     try {
-      await sl<HvacRepository>().updateUnitEntity(
-        unit.copyWith(power: power)
-      );
+      await sl<HvacRepository>().updateUnitEntity(unit.copyWith(power: power));
     } catch (e) {
       showErrorSnackbar('${l10n.errorChangingPower}: $e');
     }
   }
 
   Future<void> _updateVentilationMode(
-    HvacUnit unit,
-    VentilationMode mode
-  ) async {
+      HvacUnit unit, VentilationMode mode) async {
     if (!mounted) return;
     final l10n = AppLocalizations.of(context)!;
 
@@ -233,11 +222,8 @@ class _HomeScreenState extends State<HomeScreen> with SnackbarMixin {
     }
   }
 
-  Future<void> _updateFanSpeeds(
-    HvacUnit unit, {
-    int? supplySpeed,
-    int? exhaustSpeed
-  }) async {
+  Future<void> _updateFanSpeeds(HvacUnit unit,
+      {int? supplySpeed, int? exhaustSpeed}) async {
     if (!mounted) return;
     final l10n = AppLocalizations.of(context)!;
 
@@ -258,9 +244,7 @@ class _HomeScreenState extends State<HomeScreen> with SnackbarMixin {
 
     try {
       await sl<ApplyPreset>()(unit.id, preset);
-      showSuccessSnackbar(
-        '${l10n.presetApplied}: ${preset.mode.displayName}'
-      );
+      showSuccessSnackbar('${l10n.presetApplied}: ${preset.mode.displayName}');
     } catch (e) {
       showErrorSnackbar('${l10n.errorApplyingPreset}: $e');
     }

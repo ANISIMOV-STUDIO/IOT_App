@@ -38,7 +38,8 @@ class PasswordStrengthIndicator extends StatelessWidget {
                 borderRadius: HvacRadius.xsRadius,
                 child: LinearProgressIndicator(
                   value: (strength.index + 1) / 4,
-                  backgroundColor: HvacColors.textSecondary.withValues(alpha: 0.2),
+                  backgroundColor:
+                      HvacColors.textSecondary.withValues(alpha: 0.2),
                   valueColor: AlwaysStoppedAnimation<Color>(
                     _getStrengthColor(strength),
                   ),
@@ -128,7 +129,8 @@ class PasswordStrengthIndicator extends StatelessWidget {
                 Icon(
                   req.isMet ? Icons.check_circle : Icons.circle_outlined,
                   size: (14 * responsive.fontMultiplier).rsp(context),
-                  color: req.isMet ? HvacColors.success : HvacColors.textSecondary,
+                  color:
+                      req.isMet ? HvacColors.success : HvacColors.textSecondary,
                 ),
                 SizedBox(width: 4.rw(context)),
                 Text(

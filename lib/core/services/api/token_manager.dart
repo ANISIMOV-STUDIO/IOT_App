@@ -58,7 +58,8 @@ class TokenManager {
     }
 
     final now = DateTime.now();
-    const expiryBuffer = Duration(minutes: 5); // Refresh 5 minutes before expiry
+    const expiryBuffer =
+        Duration(minutes: 5); // Refresh 5 minutes before expiry
     return now.isAfter(_tokenExpiry!.subtract(expiryBuffer));
   }
 

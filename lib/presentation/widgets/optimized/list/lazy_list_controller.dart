@@ -76,10 +76,9 @@ class LazyListController<T> {
   void logPerformanceMetrics() {
     if (renderTimes.isEmpty) return;
 
-    final averageRenderTime = renderTimes
-            .map((d) => d.inMicroseconds)
-            .reduce((a, b) => a + b) ~/
-        renderTimes.length;
+    final averageRenderTime =
+        renderTimes.map((d) => d.inMicroseconds).reduce((a, b) => a + b) ~/
+            renderTimes.length;
 
     debugPrint('📊 LazyList Performance Metrics:');
     debugPrint('  - Average render time: ${averageRenderTime / 1000}ms');

@@ -7,6 +7,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
 import '../../../core/constants/animation_constants.dart';
+
 class AnimatedCard extends StatelessWidget {
   final Widget child;
   final int delay;

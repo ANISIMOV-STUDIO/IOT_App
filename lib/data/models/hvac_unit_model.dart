@@ -224,7 +224,8 @@ class HvacUnitModel extends HvacUnit {
       if (modePresets != null) 'modePresets': _presetsToJson(modePresets!),
       if (schedule != null) 'schedule': _scheduleToJson(schedule!),
       if (wifiStatus != null) 'wifiStatus': _wifiStatusToJson(wifiStatus!),
-      if (alerts != null) 'alerts': alerts!.map((a) => _alertToJson(a)).toList(),
+      if (alerts != null)
+        'alerts': alerts!.map((a) => _alertToJson(a)).toList(),
     };
   }
 

@@ -116,7 +116,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
         return Padding(
           padding: padding,
-          child: isDesktop ? _buildDesktopLayout(_currentUnit!) : _buildMobileLayout(_currentUnit!),
+          child: isDesktop
+              ? _buildDesktopLayout(_currentUnit!)
+              : _buildMobileLayout(_currentUnit!),
         );
       },
     );
@@ -242,7 +244,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
   Future<void> _onBackPressed() async {
     if (_hasChanges) {
-      final shouldDiscard = await ScheduleDialogs.showUnsavedChangesDialog(context);
+      final shouldDiscard =
+          await ScheduleDialogs.showUnsavedChangesDialog(context);
       if (shouldDiscard == true && mounted) {
         Navigator.pop(context);
       }

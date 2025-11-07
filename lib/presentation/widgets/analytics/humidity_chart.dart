@@ -117,10 +117,8 @@ class HumidityChart extends StatelessWidget {
                     spots: readings
                         .asMap()
                         .entries
-                        .map((e) => FlSpot(
-                              e.key.toDouble(),
-                              e.value.temperature
-                            ))
+                        .map((e) =>
+                            FlSpot(e.key.toDouble(), e.value.temperature))
                         .toList(),
                     isCurved: true,
                     color: HvacColors.info,

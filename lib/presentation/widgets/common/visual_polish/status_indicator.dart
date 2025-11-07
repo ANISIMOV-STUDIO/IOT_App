@@ -119,8 +119,10 @@ class _StatusIndicatorState extends State<StatusIndicator>
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: color.withValues(alpha: _isHovered ? 0.7 : 0.5),
-                          blurRadius: _isHovered ? widget.size * 1.5 : widget.size,
+                          color:
+                              color.withValues(alpha: _isHovered ? 0.7 : 0.5),
+                          blurRadius:
+                              _isHovered ? widget.size * 1.5 : widget.size,
                           spreadRadius: _isHovered ? 3 : 2,
                         ),
                       ],

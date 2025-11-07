@@ -102,15 +102,18 @@ class AdaptiveSlider extends StatelessWidget {
                 data: SliderTheme.of(context).copyWith(
                   activeTrackColor: sliderColor,
                   inactiveTrackColor: trackColor,
-                  thumbColor: HvacColors.textPrimary, // White thumb (luxury style)
+                  thumbColor:
+                      HvacColors.textPrimary, // White thumb (luxury style)
                   overlayColor: sliderColor.withValues(alpha: 0.2),
                   thumbShape: RoundSliderThumbShape(
-                    enabledThumbRadius: AdaptiveLayout.getSliderThumbRadius(context),
+                    enabledThumbRadius:
+                        AdaptiveLayout.getSliderThumbRadius(context),
                   ),
                   trackHeight: deviceSize == DeviceSize.compact ? 4.0 : 6.0,
                   trackShape: const RoundedRectSliderTrackShape(),
                   overlayShape: RoundSliderOverlayShape(
-                    overlayRadius: AdaptiveLayout.getSliderThumbRadius(context) * 1.5,
+                    overlayRadius:
+                        AdaptiveLayout.getSliderThumbRadius(context) * 1.5,
                   ),
                 ),
                 child: Slider(
@@ -124,7 +127,8 @@ class AdaptiveSlider extends StatelessWidget {
             ),
 
             // Optional: tick marks for tablet/desktop
-            if (showTickMarks && deviceSize != DeviceSize.compact) _buildTickMarks(context, deviceSize),
+            if (showTickMarks && deviceSize != DeviceSize.compact)
+              _buildTickMarks(context, deviceSize),
           ],
         );
       },

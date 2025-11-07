@@ -90,7 +90,8 @@ class _DeviceSearchScreenState extends State<DeviceSearchScreen> {
                   mainAxisSpacing: 16,
                   childAspectRatio: 0.85,
                 ),
-                itemCount: _discoveredDevices.length + 1, // +1 for "Not found" card
+                itemCount:
+                    _discoveredDevices.length + 1, // +1 for "Not found" card
                 itemBuilder: (context, index) {
                   if (index < _discoveredDevices.length) {
                     final device = _discoveredDevices[index];
@@ -170,8 +171,8 @@ class _DeviceSearchScreenState extends State<DeviceSearchScreen> {
             Text(
               'Select manually',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: HvacColors.primaryOrange,
-              ),
+                    color: HvacColors.primaryOrange,
+                  ),
               textAlign: TextAlign.center,
             ),
           ],
@@ -185,12 +186,12 @@ class _DeviceSearchScreenState extends State<DeviceSearchScreen> {
     for (final index in _selectedDevices) {
       final device = _discoveredDevices[index];
       context.read<HvacListBloc>().add(
-        AddDeviceEvent(
-          macAddress: device['macAddress'],
-          name: device['name'],
-          location: null,
-        ),
-      );
+            AddDeviceEvent(
+              macAddress: device['macAddress'],
+              name: device['name'],
+              location: null,
+            ),
+          );
     }
 
     // Show success message
@@ -271,14 +272,14 @@ class _DeviceSearchScreenState extends State<DeviceSearchScreen> {
               }
 
               context.read<HvacListBloc>().add(
-                AddDeviceEvent(
-                  macAddress: mac,
-                  name: name,
-                  location: locationController.text.isEmpty
-                      ? null
-                      : locationController.text.trim(),
-                ),
-              );
+                    AddDeviceEvent(
+                      macAddress: mac,
+                      name: name,
+                      location: locationController.text.isEmpty
+                          ? null
+                          : locationController.text.trim(),
+                    ),
+                  );
 
               Navigator.of(dialogContext).pop();
               Navigator.of(context).pop();

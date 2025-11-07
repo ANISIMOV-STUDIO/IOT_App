@@ -184,7 +184,8 @@ class _OverlayPainter extends CustomPainter {
         PathOperation.difference,
         Path()..addRect(Rect.fromLTWH(0, 0, size.width, size.height)),
         Path()
-          ..addRRect(RRect.fromRectAndRadius(rect, const Radius.circular(12.0))),
+          ..addRRect(
+              RRect.fromRectAndRadius(rect, const Radius.circular(12.0))),
       ),
       paint,
     );

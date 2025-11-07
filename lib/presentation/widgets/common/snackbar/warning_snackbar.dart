@@ -48,11 +48,13 @@ class WarningSnackBar {
       context,
       title: 'Low Battery',
       message: '$deviceName battery is at $batteryLevel%',
-      action: onViewDetails != null ? SnackBarAction(
-        label: 'VIEW',
-        onPressed: onViewDetails,
-        textColor: Colors.white,
-      ) : null,
+      action: onViewDetails != null
+          ? SnackBarAction(
+              label: 'VIEW',
+              onPressed: onViewDetails,
+              textColor: Colors.white,
+            )
+          : null,
       duration: const Duration(seconds: 5),
     );
   }
@@ -68,11 +70,13 @@ class WarningSnackBar {
       context,
       title: 'Maintenance Required',
       message: '$equipment requires $maintenanceType',
-      action: onSchedule != null ? SnackBarAction(
-        label: 'SCHEDULE',
-        onPressed: onSchedule,
-        textColor: Colors.white,
-      ) : null,
+      action: onSchedule != null
+          ? SnackBarAction(
+              label: 'SCHEDULE',
+              onPressed: onSchedule,
+              textColor: Colors.white,
+            )
+          : null,
       duration: const Duration(seconds: 6),
     );
   }
@@ -88,7 +92,8 @@ class WarningSnackBar {
     show(
       context,
       title: 'Temperature Alert',
-      message: '$zone temperature is ${isHigh ? "too high" : "too low"} (${temperature.toStringAsFixed(1)}°$unit)',
+      message:
+          '$zone temperature is ${isHigh ? "too high" : "too low"} (${temperature.toStringAsFixed(1)}°$unit)',
       duration: const Duration(seconds: 5),
       showCloseButton: true,
     );
@@ -104,11 +109,13 @@ class WarningSnackBar {
       context,
       title: 'System Warning',
       message: message,
-      action: onViewDetails != null ? SnackBarAction(
-        label: 'DETAILS',
-        onPressed: onViewDetails,
-        textColor: Colors.white,
-      ) : null,
+      action: onViewDetails != null
+          ? SnackBarAction(
+              label: 'DETAILS',
+              onPressed: onViewDetails,
+              textColor: Colors.white,
+            )
+          : null,
       duration: const Duration(seconds: 5),
     );
   }
@@ -155,11 +162,13 @@ class WarningSnackBar {
       context,
       title: 'Resource Warning',
       message: '$resource usage is at $percentage%',
-      action: onManage != null ? SnackBarAction(
-        label: 'MANAGE',
-        onPressed: onManage,
-        textColor: Colors.white,
-      ) : null,
+      action: onManage != null
+          ? SnackBarAction(
+              label: 'MANAGE',
+              onPressed: onManage,
+              textColor: Colors.white,
+            )
+          : null,
       duration: const Duration(seconds: 5),
     );
   }
@@ -172,18 +181,20 @@ class WarningSnackBar {
     VoidCallback? onLearnMore,
   }) {
     final message = alternativeFeature != null
-      ? '$feature will be deprecated. Please use $alternativeFeature instead.'
-      : '$feature will be deprecated in a future version.';
+        ? '$feature will be deprecated. Please use $alternativeFeature instead.'
+        : '$feature will be deprecated in a future version.';
 
     show(
       context,
       title: 'Feature Deprecation',
       message: message,
-      action: onLearnMore != null ? SnackBarAction(
-        label: 'LEARN MORE',
-        onPressed: onLearnMore,
-        textColor: Colors.white,
-      ) : null,
+      action: onLearnMore != null
+          ? SnackBarAction(
+              label: 'LEARN MORE',
+              onPressed: onLearnMore,
+              textColor: Colors.white,
+            )
+          : null,
       duration: const Duration(seconds: 6),
     );
   }

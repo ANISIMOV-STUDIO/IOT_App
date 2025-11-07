@@ -21,7 +21,6 @@ class HeroAnimationExample extends StatelessWidget {
           const Text('Tap cards to see Hero animations:',
               style: TextStyle(color: HvacColors.textSecondary)),
           const SizedBox(height: HvacSpacing.lg),
-
           _buildDeviceCard(
             context,
             'Living Room AC',
@@ -29,7 +28,6 @@ class HeroAnimationExample extends StatelessWidget {
             'device_1',
           ),
           const SizedBox(height: HvacSpacing.md),
-
           _buildDeviceCard(
             context,
             'Bedroom Heater',
@@ -37,7 +35,6 @@ class HeroAnimationExample extends StatelessWidget {
             'device_2',
           ),
           const SizedBox(height: HvacSpacing.md),
-
           _buildDeviceCard(
             context,
             'Kitchen Fan',
@@ -164,7 +161,8 @@ class _DetailScreen extends StatelessWidget {
                 color: Colors.transparent,
                 child: Text(
                   name,
-                  style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 32, fontWeight: FontWeight.bold),
                 ),
               ),
             ),

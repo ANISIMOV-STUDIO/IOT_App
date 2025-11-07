@@ -82,8 +82,10 @@ class HvacAnimatedLineChart extends StatelessWidget {
                     },
                   ),
                 ),
-                rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                rightTitles:
+                    const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                topTitles:
+                    const AxisTitles(sideTitles: SideTitles(showTitles: false)),
               ),
               borderData: FlBorderData(show: false),
               lineBarsData: [
@@ -97,8 +99,10 @@ class HvacAnimatedLineChart extends StatelessWidget {
                     show: true,
                     gradient: LinearGradient(
                       colors: [
-                        (gradientStartColor ?? HvacColors.primaryOrange).withValues(alpha:0.3),
-                        (gradientEndColor ?? HvacColors.primaryOrange).withValues(alpha:0.0),
+                        (gradientStartColor ?? HvacColors.primaryOrange)
+                            .withValues(alpha: 0.3),
+                        (gradientEndColor ?? HvacColors.primaryOrange)
+                            .withValues(alpha: 0.0),
                       ],
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
@@ -162,7 +166,8 @@ class HvacAnimatedBarChart extends StatelessWidget {
                       toY: values[index],
                       color: barColor ?? HvacColors.primaryOrange,
                       width: 20,
-                      borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
+                      borderRadius:
+                          const BorderRadius.vertical(top: Radius.circular(4)),
                     ),
                   ],
                 ),
@@ -200,8 +205,10 @@ class HvacAnimatedBarChart extends StatelessWidget {
                     },
                   ),
                 ),
-                rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                rightTitles:
+                    const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                topTitles:
+                    const AxisTitles(sideTitles: SideTitles(showTitles: false)),
               ),
               borderData: FlBorderData(show: false),
               gridData: const FlGridData(show: true),
@@ -262,7 +269,7 @@ class _HvacPulsingDotState extends State<HvacPulsingDot>
           width: widget.size * _animation.value,
           height: widget.size * _animation.value,
           decoration: BoxDecoration(
-            color: widget.color.withValues(alpha:0.3),
+            color: widget.color.withValues(alpha: 0.3),
             shape: BoxShape.circle,
           ),
           child: Center(

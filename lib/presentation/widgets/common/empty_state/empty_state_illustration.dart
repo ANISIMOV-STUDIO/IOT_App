@@ -45,7 +45,8 @@ class EmptyStateIllustration extends StatelessWidget {
               alignment: Alignment.center,
               children: [
                 // Background pulse animation
-                if (showAnimation) _PulseAnimation(color: color, iconSize: iconSize),
+                if (showAnimation)
+                  _PulseAnimation(color: color, iconSize: iconSize),
                 Icon(
                   icon,
                   size: iconSize * 0.7,

@@ -23,7 +23,8 @@ class RoomStatusDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: isMobile ? MainAxisAlignment.start : MainAxisAlignment.center,
+      mainAxisAlignment:
+          isMobile ? MainAxisAlignment.start : MainAxisAlignment.center,
       children: [
         HvacTemperatureHero(
           tag: 'roomName_$roomName',

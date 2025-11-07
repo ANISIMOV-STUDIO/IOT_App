@@ -52,7 +52,8 @@ class DiagnosticsTab extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.play_arrow, color: HvacColors.textPrimary, size: 24.0),
+                  const Icon(Icons.play_arrow,
+                      color: HvacColors.textPrimary, size: 24.0),
                   const SizedBox(width: 8.0),
                   Text(
                     'Запустить диагностику',
@@ -83,7 +84,8 @@ class DiagnosticsTab extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(Icons.health_and_safety, color: HvacColors.success, size: 20.0),
+              const Icon(Icons.health_and_safety,
+                  color: HvacColors.success, size: 20.0),
               const SizedBox(width: 12.0),
               Text(
                 'Состояние системы',
@@ -95,7 +97,6 @@ class DiagnosticsTab extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16.0),
-
           _buildHealthItem('Приточный вентилятор', true),
           _buildHealthItem('Вытяжной вентилятор', true),
           _buildHealthItem('Нагреватель', true),
@@ -167,7 +168,6 @@ class DiagnosticsTab extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16.0),
-
           _buildSensorItem(
             'Температура притока',
             '${unit.supplyAirTemp?.toInt() ?? 0}°C',
@@ -232,7 +232,9 @@ class DiagnosticsTab extends StatelessWidget {
           Row(
             children: [
               Icon(
-                unit.wifiStatus?.isConnected == true ? Icons.wifi : Icons.wifi_off,
+                unit.wifiStatus?.isConnected == true
+                    ? Icons.wifi
+                    : Icons.wifi_off,
                 color: unit.wifiStatus?.isConnected == true
                     ? HvacColors.success
                     : HvacColors.error,
@@ -249,11 +251,17 @@ class DiagnosticsTab extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16.0),
-
-          _buildNetworkItem('Статус', unit.wifiStatus?.isConnected == true ? 'Подключено' : 'Отключено'),
-          _buildNetworkItem('Сеть', unit.wifiStatus?.connectedSSID ?? 'Не подключено'),
-          _buildNetworkItem('Сигнал', '${unit.wifiStatus?.signalQuality ?? 0}%'),
-          _buildNetworkItem('IP адрес', unit.wifiStatus?.ipAddress ?? 'Не назначен'),
+          _buildNetworkItem(
+              'Статус',
+              unit.wifiStatus?.isConnected == true
+                  ? 'Подключено'
+                  : 'Отключено'),
+          _buildNetworkItem(
+              'Сеть', unit.wifiStatus?.connectedSSID ?? 'Не подключено'),
+          _buildNetworkItem(
+              'Сигнал', '${unit.wifiStatus?.signalQuality ?? 0}%'),
+          _buildNetworkItem(
+              'IP адрес', unit.wifiStatus?.ipAddress ?? 'Не назначен'),
         ],
       ),
     );

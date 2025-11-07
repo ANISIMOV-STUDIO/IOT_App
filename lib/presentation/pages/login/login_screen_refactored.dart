@@ -69,11 +69,11 @@ class _LoginScreenState extends State<LoginScreen>
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (mounted) {
             context.read<AuthBloc>().add(
-              LoginEvent(
-                email: _emailController.text,
-                password: _passwordController.text,
-              ),
-            );
+                  LoginEvent(
+                    email: _emailController.text,
+                    password: _passwordController.text,
+                  ),
+                );
           }
         });
       }

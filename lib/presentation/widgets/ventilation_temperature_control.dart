@@ -35,7 +35,8 @@ class VentilationTemperatureControl extends StatelessWidget {
           child: LayoutBuilder(
             builder: (context, constraints) {
               // Check if we have a height constraint (desktop layout)
-              final hasHeightConstraint = constraints.maxHeight != double.infinity;
+              final hasHeightConstraint =
+                  constraints.maxHeight != double.infinity;
 
               if (hasHeightConstraint) {
                 // Desktop layout with constrained height - use scrollable content
@@ -43,7 +44,9 @@ class VentilationTemperatureControl extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildHeader(context, deviceSize),
-                    SizedBox(height: adaptive.AdaptiveLayout.spacing(context, base: 16)),
+                    SizedBox(
+                        height:
+                            adaptive.AdaptiveLayout.spacing(context, base: 16)),
                     Expanded(
                       child: SingleChildScrollView(
                         physics: const ClampingScrollPhysics(),
@@ -59,7 +62,9 @@ class VentilationTemperatureControl extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     _buildHeader(context, deviceSize),
-                    SizedBox(height: adaptive.AdaptiveLayout.spacing(context, base: 16)),
+                    SizedBox(
+                        height:
+                            adaptive.AdaptiveLayout.spacing(context, base: 16)),
                     _buildTemperatureGrid(context, deviceSize),
                   ],
                 );
@@ -75,7 +80,8 @@ class VentilationTemperatureControl extends StatelessWidget {
     return Row(
       children: [
         Container(
-          padding: EdgeInsets.all(adaptive.AdaptiveLayout.spacing(context, base: 8)),
+          padding:
+              EdgeInsets.all(adaptive.AdaptiveLayout.spacing(context, base: 8)),
           decoration: BoxDecoration(
             color: HvacColors.info.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(
@@ -225,7 +231,8 @@ class VentilationTemperatureControl extends StatelessWidget {
     Color color,
   ) {
     return Container(
-      padding: EdgeInsets.all(adaptive.AdaptiveLayout.spacing(context, base: 10)),
+      padding:
+          EdgeInsets.all(adaptive.AdaptiveLayout.spacing(context, base: 10)),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(
@@ -244,12 +251,14 @@ class VentilationTemperatureControl extends StatelessWidget {
                 size: adaptive.AdaptiveLayout.iconSize(context, base: 14),
                 color: color,
               ),
-              SizedBox(width: adaptive.AdaptiveLayout.spacing(context, base: 4)),
+              SizedBox(
+                  width: adaptive.AdaptiveLayout.spacing(context, base: 4)),
               Flexible(
                 child: Text(
                   label,
                   style: TextStyle(
-                    fontSize: adaptive.AdaptiveLayout.fontSize(context, base: 11),
+                    fontSize:
+                        adaptive.AdaptiveLayout.fontSize(context, base: 11),
                     color: HvacColors.textSecondary,
                   ),
                   overflow: TextOverflow.ellipsis,

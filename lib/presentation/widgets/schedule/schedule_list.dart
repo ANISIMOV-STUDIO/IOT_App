@@ -76,9 +76,8 @@ class _ScheduleListState extends State<ScheduleList> {
 
   void _selectSchedule(Schedule schedule) {
     setState(() {
-      _selectedSchedule = _selectedSchedule?.id == schedule.id
-          ? null
-          : schedule;
+      _selectedSchedule =
+          _selectedSchedule?.id == schedule.id ? null : schedule;
     });
   }
 
@@ -102,8 +101,8 @@ class _ScheduleListState extends State<ScheduleList> {
 
   void _moveFocus(int delta) {
     setState(() {
-      _focusedIndex = (_focusedIndex + delta)
-          .clamp(0, widget.schedules.length - 1);
+      _focusedIndex =
+          (_focusedIndex + delta).clamp(0, widget.schedules.length - 1);
     });
   }
 

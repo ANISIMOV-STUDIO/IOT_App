@@ -92,7 +92,8 @@ class AutomationPanel extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.settings, color: HvacColors.primaryOrange, size: 16),
+                  const Icon(Icons.settings,
+                      color: HvacColors.primaryOrange, size: 16),
                   const SizedBox(width: HvacSpacing.xs),
                   Text(
                     'Управление правилами',
@@ -131,7 +132,8 @@ class AutomationPanel extends StatelessWidget {
             width: 8,
             height: 8,
             decoration: BoxDecoration(
-              color: rule.enabled ? HvacColors.success : HvacColors.textTertiary,
+              color:
+                  rule.enabled ? HvacColors.success : HvacColors.textTertiary,
               shape: BoxShape.circle,
             ),
           ),

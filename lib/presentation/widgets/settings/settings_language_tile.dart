@@ -41,8 +41,12 @@ class SettingsLanguageTile extends StatelessWidget {
         child: Row(
           children: [
             Icon(
-              isSelected ? Icons.radio_button_checked : Icons.radio_button_unchecked,
-              color: isSelected ? HvacColors.primaryOrange : HvacColors.textSecondary,
+              isSelected
+                  ? Icons.radio_button_checked
+                  : Icons.radio_button_unchecked,
+              color: isSelected
+                  ? HvacColors.primaryOrange
+                  : HvacColors.textSecondary,
               size: 20.0,
             ),
             const SizedBox(width: 12.0),
@@ -51,7 +55,9 @@ class SettingsLanguageTile extends StatelessWidget {
               style: HvacTypography.bodyMedium.copyWith(
                 fontSize: 14.0,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                color: isSelected ? HvacColors.primaryOrange : HvacColors.textPrimary,
+                color: isSelected
+                    ? HvacColors.primaryOrange
+                    : HvacColors.textPrimary,
               ),
             ),
           ],

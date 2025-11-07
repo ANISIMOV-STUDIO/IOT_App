@@ -148,23 +148,29 @@ class HomeAppBar extends StatelessWidget {
         child: GestureDetector(
           onTap: () => onUnitSelected(label),
           child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          decoration: BoxDecoration(
-            color: isSelected ? HvacColors.backgroundCard : Colors.transparent,
-            borderRadius: HvacRadius.smRadius,
-            border: Border.all(
-              color: isSelected ? HvacColors.backgroundCardBorder : Colors.transparent,
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            decoration: BoxDecoration(
+              color:
+                  isSelected ? HvacColors.backgroundCard : Colors.transparent,
+              borderRadius: HvacRadius.smRadius,
+              border: Border.all(
+                color: isSelected
+                    ? HvacColors.backgroundCardBorder
+                    : Colors.transparent,
+              ),
+            ),
+            child: Text(
+              label,
+              style: TextStyle(
+                fontSize: 14.0,
+                color: isSelected
+                    ? HvacColors.textPrimary
+                    : HvacColors.textSecondary,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+              ),
             ),
           ),
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: 14.0,
-              color: isSelected ? HvacColors.textPrimary : HvacColors.textSecondary,
-              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-            ),
-          ),
-        ),
         ),
       ),
     );
@@ -180,21 +186,21 @@ class HomeAppBar extends StatelessWidget {
         child: GestureDetector(
           onTap: onAddUnitPressed,
           child: Container(
-          width: 36.0,
-          height: 36.0,
-          decoration: BoxDecoration(
-            color: HvacColors.backgroundCard,
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: HvacColors.backgroundCardBorder,
+            width: 36.0,
+            height: 36.0,
+            decoration: BoxDecoration(
+              color: HvacColors.backgroundCard,
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: HvacColors.backgroundCardBorder,
+              ),
+            ),
+            child: const Icon(
+              Icons.add,
+              size: 20.0,
+              color: HvacColors.textSecondary,
             ),
           ),
-          child: const Icon(
-            Icons.add,
-            size: 20.0,
-            color: HvacColors.textSecondary,
-          ),
-        ),
         ),
       ),
     );

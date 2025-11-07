@@ -86,7 +86,8 @@ class _VentilationModeControlState extends State<VentilationModeControl>
             child: LayoutBuilder(
               builder: (context, constraints) {
                 // Check if we have a height constraint (desktop layout)
-                final hasHeightConstraint = constraints.maxHeight != double.infinity;
+                final hasHeightConstraint =
+                    constraints.maxHeight != double.infinity;
 
                 if (hasHeightConstraint) {
                   // Desktop layout with constrained height - use scrollable content
@@ -94,9 +95,21 @@ class _VentilationModeControlState extends State<VentilationModeControl>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildHeader(context, deviceSize),
-                      SizedBox(height: isDesktop ? 8.0 : (deviceSize == DeviceSize.compact ? 12.0 : adaptive.AdaptiveLayout.spacing(context, base: 12))),
+                      SizedBox(
+                          height: isDesktop
+                              ? 8.0
+                              : (deviceSize == DeviceSize.compact
+                                  ? 12.0
+                                  : adaptive.AdaptiveLayout.spacing(context,
+                                      base: 12))),
                       _buildModeSelector(context, deviceSize),
-                      SizedBox(height: isDesktop ? 8.0 : (deviceSize == DeviceSize.compact ? 12.0 : adaptive.AdaptiveLayout.spacing(context, base: 12))),
+                      SizedBox(
+                          height: isDesktop
+                              ? 8.0
+                              : (deviceSize == DeviceSize.compact
+                                  ? 12.0
+                                  : adaptive.AdaptiveLayout.spacing(context,
+                                      base: 12))),
                       Expanded(
                         child: SingleChildScrollView(
                           physics: PerformanceUtils.getOptimalScrollPhysics(
@@ -116,9 +129,17 @@ class _VentilationModeControlState extends State<VentilationModeControl>
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       _buildHeader(context, deviceSize),
-                      SizedBox(height: deviceSize == DeviceSize.compact ? 12.0 : adaptive.AdaptiveLayout.spacing(context, base: 12)),
+                      SizedBox(
+                          height: deviceSize == DeviceSize.compact
+                              ? 12.0
+                              : adaptive.AdaptiveLayout.spacing(context,
+                                  base: 12)),
                       _buildModeSelector(context, deviceSize),
-                      SizedBox(height: deviceSize == DeviceSize.compact ? 12.0 : adaptive.AdaptiveLayout.spacing(context, base: 12)),
+                      SizedBox(
+                          height: deviceSize == DeviceSize.compact
+                              ? 12.0
+                              : adaptive.AdaptiveLayout.spacing(context,
+                                  base: 12)),
                       _buildFanSpeedControls(context, deviceSize),
                     ],
                   );
@@ -135,7 +156,8 @@ class _VentilationModeControlState extends State<VentilationModeControl>
     return Row(
       children: [
         Container(
-          padding: EdgeInsets.all(adaptive.AdaptiveLayout.spacing(context, base: 8)),
+          padding:
+              EdgeInsets.all(adaptive.AdaptiveLayout.spacing(context, base: 8)),
           decoration: BoxDecoration(
             color: HvacColors.primaryOrange.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(

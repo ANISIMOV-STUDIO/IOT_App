@@ -56,7 +56,8 @@ class AccessibilityUtils {
     bool isLargeText = false,
   }) {
     final ratio = calculateContrastRatio(textColor, backgroundColor);
-    return ratio >= (isLargeText ? minContrastLargeText : minContrastNormalText);
+    return ratio >=
+        (isLargeText ? minContrastLargeText : minContrastNormalText);
   }
 
   /// Get a color with sufficient contrast against background
@@ -78,7 +79,8 @@ class AccessibilityUtils {
           ? Color.lerp(color, Colors.white, i * 0.1)!
           : Color.lerp(color, Colors.black, i * 0.1)!;
 
-      if (meetsContrastStandard(adjustedColor, background, isLargeText: isLargeText)) {
+      if (meetsContrastStandard(adjustedColor, background,
+          isLargeText: isLargeText)) {
         return adjustedColor;
       }
     }
@@ -170,9 +172,8 @@ class AccessibilityUtils {
       onIncrease: onIncrease,
       onDecrease: onDecrease,
       onDismiss: onDismiss,
-      customSemanticsActions: customAction != null
-          ? {customAction: () {}}
-          : null,
+      customSemanticsActions:
+          customAction != null ? {customAction: () {}} : null,
       child: child,
     );
   }

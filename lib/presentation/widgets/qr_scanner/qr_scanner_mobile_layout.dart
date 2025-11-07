@@ -136,9 +136,7 @@ class _ToggleSection extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            controller.isManualMode
-                ? l10n.scanQrCode
-                : l10n.enterMacManually,
+            controller.isManualMode ? l10n.scanQrCode : l10n.enterMacManually,
             style: HvacTypography.bodyLarge,
           ),
           const SizedBox(height: AppSpacing.md),

@@ -96,7 +96,8 @@ class _HvacCardContainerState extends State<HvacCardContainer>
         BoxShadow(
           color: shadowColor,
           blurRadius: _isHovered ? 24.0 : (widget.isSelected ? 20.0 : 10.0),
-          offset: Offset(0, _isHovered ? 12.0 : (widget.isSelected ? 10.0 : 5.0)),
+          offset:
+              Offset(0, _isHovered ? 12.0 : (widget.isSelected ? 10.0 : 5.0)),
         ),
         if (widget.isSelected)
           BoxShadow(

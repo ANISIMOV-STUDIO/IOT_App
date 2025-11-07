@@ -55,12 +55,14 @@ class Validators {
     final List<String> errors = [];
 
     // Check uppercase requirement
-    if (SecurityConstants.requireUppercase && !value.contains(RegExp(r'[A-Z]'))) {
+    if (SecurityConstants.requireUppercase &&
+        !value.contains(RegExp(r'[A-Z]'))) {
       errors.add('one uppercase letter');
     }
 
     // Check lowercase requirement
-    if (SecurityConstants.requireLowercase && !value.contains(RegExp(r'[a-z]'))) {
+    if (SecurityConstants.requireLowercase &&
+        !value.contains(RegExp(r'[a-z]'))) {
       errors.add('one lowercase letter');
     }
 
@@ -168,7 +170,8 @@ class Validators {
   }
 
   /// Validate temperature input
-  static String? validateTemperature(String? value, {
+  static String? validateTemperature(
+    String? value, {
     double min = -50,
     double max = 100,
     String unit = '°C',
@@ -190,7 +193,8 @@ class Validators {
   }
 
   /// Validate numeric input
-  static String? validateNumber(String? value, {
+  static String? validateNumber(
+    String? value, {
     String fieldName = 'Value',
     double? min,
     double? max,
@@ -221,7 +225,8 @@ class Validators {
   }
 
   /// Validate alphanumeric input
-  static String? validateAlphanumeric(String? value, {
+  static String? validateAlphanumeric(
+    String? value, {
     String fieldName = 'Value',
     int? minLength,
     int? maxLength,
@@ -326,8 +331,10 @@ class Validators {
 
     // WEP requirements (deprecated but still supported)
     if (securityType.contains('WEP')) {
-      if (value.length != 5 && value.length != 13 &&
-          value.length != 10 && value.length != 26) {
+      if (value.length != 5 &&
+          value.length != 13 &&
+          value.length != 10 &&
+          value.length != 26) {
         return 'WEP key must be 5, 13 characters (ASCII) or 10, 26 characters (HEX)';
       }
     }
@@ -405,8 +412,9 @@ class Validators {
   /// Check for SQL injection patterns
   static bool _containsSQLInjection(String value) {
     final sqlPatterns = [
-      RegExp(r"('|(')|(--)|(/\*)|(\*/)|(\bor\b)|(\band\b)|(\bunion\b)|(\bselect\b)|(\binsert\b)|(\bupdate\b)|(\bdelete\b)|(\bdrop\b))",
-             caseSensitive: false),
+      RegExp(
+          r"('|(')|(--)|(/\*)|(\*/)|(\bor\b)|(\band\b)|(\bunion\b)|(\bselect\b)|(\binsert\b)|(\bupdate\b)|(\bdelete\b)|(\bdrop\b))",
+          caseSensitive: false),
     ];
 
     for (final pattern in sqlPatterns) {
@@ -421,11 +429,31 @@ class Validators {
   /// Check for weak passwords
   static bool _isWeakPassword(String password) {
     final weakPasswords = [
-      'password', '12345678', 'qwerty', 'abc123', 'password123',
-      'admin', 'letmein', 'welcome', 'monkey', '1234567890',
-      'password1', 'qwerty123', 'admin123', 'root', 'toor',
-      'pass', 'test', 'guest', 'master', 'dragon', 'baseball',
-      'football', 'letmein123', 'welcome123', 'admin1234',
+      'password',
+      '12345678',
+      'qwerty',
+      'abc123',
+      'password123',
+      'admin',
+      'letmein',
+      'welcome',
+      'monkey',
+      '1234567890',
+      'password1',
+      'qwerty123',
+      'admin123',
+      'root',
+      'toor',
+      'pass',
+      'test',
+      'guest',
+      'master',
+      'dragon',
+      'baseball',
+      'football',
+      'letmein123',
+      'welcome123',
+      'admin1234',
     ];
 
     final lowerPassword = password.toLowerCase();
@@ -439,9 +467,23 @@ class Validators {
 
   /// Check for sequential characters
   static bool _hasSequentialCharacters(String password) {
-    final sequences = ['abcd', 'bcde', 'cdef', 'defg', 'efgh',
-                       '1234', '2345', '3456', '4567', '5678',
-                       'qwer', 'wert', 'erty', 'rtyu', 'tyui'];
+    final sequences = [
+      'abcd',
+      'bcde',
+      'cdef',
+      'defg',
+      'efgh',
+      '1234',
+      '2345',
+      '3456',
+      '4567',
+      '5678',
+      'qwer',
+      'wert',
+      'erty',
+      'rtyu',
+      'tyui'
+    ];
 
     final lowerPassword = password.toLowerCase();
     for (final seq in sequences) {

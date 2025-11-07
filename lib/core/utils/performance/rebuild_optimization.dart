@@ -77,9 +77,10 @@ class _RebuildOptimizerState<T> extends State<RebuildOptimizer<T>> {
     super.didUpdateWidget(oldWidget);
 
     final shouldRebuild = widget.shouldRebuild?.call(
-      _cachedData,
-      widget.data,
-    ) ?? (_cachedData != widget.data);
+          _cachedData,
+          widget.data,
+        ) ??
+        (_cachedData != widget.data);
 
     if (shouldRebuild) {
       _cachedData = widget.data;

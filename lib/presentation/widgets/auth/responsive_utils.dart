@@ -40,7 +40,8 @@ class AuthResponsive {
   bool get isTablet => deviceType == DeviceType.tablet;
 
   /// Check if desktop
-  bool get isDesktop => deviceType == DeviceType.desktop || deviceType == DeviceType.largeDesktop;
+  bool get isDesktop =>
+      deviceType == DeviceType.desktop || deviceType == DeviceType.largeDesktop;
 
   /// Get form max width
   double get formMaxWidth {

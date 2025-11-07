@@ -156,9 +156,8 @@ class _TemperatureValueState extends State<_TemperatureValue>
                   widget.label,
                   style: TextStyle(
                     fontSize: widget.isCompact ? 11.0 : 12.0,
-                    color: _isHovered
-                        ? HvacColors.primaryOrange
-                        : Colors.white54,
+                    color:
+                        _isHovered ? HvacColors.primaryOrange : Colors.white54,
                   ),
                 ),
                 const SizedBox(height: 4.0),
@@ -259,9 +258,7 @@ class _AnimatedArrowState extends State<_AnimatedArrow>
           offset: Offset(_slideAnimation.value, 0),
           child: Icon(
             Icons.arrow_forward,
-            color: widget.isPowerOn
-                ? HvacColors.primaryOrange
-                : Colors.white54,
+            color: widget.isPowerOn ? HvacColors.primaryOrange : Colors.white54,
             size: 20.0,
           ),
         );

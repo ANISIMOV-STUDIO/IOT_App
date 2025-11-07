@@ -293,7 +293,8 @@ class _HomeScreenRefactoredState extends State<HomeScreenRefactored>
         children: [
           Text(
             AppLocalizations.of(context)!.quickActions,
-            style: ui_kit.HvacTypography.headlineSmall.copyWith(fontSize: 18.sp),
+            style:
+                ui_kit.HvacTypography.headlineSmall.copyWith(fontSize: 18.sp),
           ),
           SizedBox(height: 16.h),
           // Quick action buttons

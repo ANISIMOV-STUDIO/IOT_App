@@ -40,9 +40,7 @@ class LoginForm extends StatelessWidget {
           enabled: !isLoading,
           onSubmitted: (_) => onSubmit(),
         ),
-
         SizedBox(height: HvacSpacing.md.h),
-
         _LoginTextField(
           controller: passwordController,
           hintText: l10n.password,
@@ -102,33 +100,33 @@ class _LoginTextField extends StatelessWidget {
           enabled: enabled,
           inputFormatters: inputFormatters,
           keyboardType: keyboardType,
-        onFieldSubmitted: onSubmitted,
-        style: TextStyle(
-          fontSize: 16.sp,
-          color: HvacColors.textPrimary,
-        ),
-        decoration: InputDecoration(
-          prefixIcon: Icon(
-            icon,
-            color: HvacColors.textSecondary,
-            size: 20.w,
+          onFieldSubmitted: onSubmitted,
+          style: TextStyle(
+            fontSize: 16.sp,
+            color: HvacColors.textPrimary,
           ),
-          hintText: hintText,
-          hintStyle: TextStyle(
-            color: HvacColors.textSecondary,
-            fontSize: 14.sp,
+          decoration: InputDecoration(
+            prefixIcon: Icon(
+              icon,
+              color: HvacColors.textSecondary,
+              size: 20.w,
+            ),
+            hintText: hintText,
+            hintStyle: TextStyle(
+              color: HvacColors.textSecondary,
+              fontSize: 14.sp,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(HvacRadius.md),
+              borderSide: BorderSide.none,
+            ),
+            filled: true,
+            fillColor: HvacColors.backgroundCard,
+            contentPadding: EdgeInsets.symmetric(
+              horizontal: HvacSpacing.md.w,
+              vertical: HvacSpacing.sm.h,
+            ),
           ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(HvacRadius.md),
-            borderSide: BorderSide.none,
-          ),
-          filled: true,
-          fillColor: HvacColors.backgroundCard,
-          contentPadding: EdgeInsets.symmetric(
-            horizontal: HvacSpacing.md.w,
-            vertical: HvacSpacing.sm.h,
-          ),
-        ),
         ),
       ),
     );

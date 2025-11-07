@@ -40,7 +40,8 @@ class Logger {
   }
 
   /// Log error message
-  static void error(String message, {String? tag, Object? error, StackTrace? stackTrace}) {
+  static void error(String message,
+      {String? tag, Object? error, StackTrace? stackTrace}) {
     if (_enableLogging) {
       debugPrint('${_timestamp()} [ERROR] ${tag ?? _tag}: $message');
       if (error != null) {
@@ -121,9 +122,9 @@ class Logger {
   static String _timestamp() {
     final now = DateTime.now();
     return '${now.hour.toString().padLeft(2, '0')}:'
-           '${now.minute.toString().padLeft(2, '0')}:'
-           '${now.second.toString().padLeft(2, '0')}.'
-           '${now.millisecond.toString().padLeft(3, '0')}';
+        '${now.minute.toString().padLeft(2, '0')}:'
+        '${now.second.toString().padLeft(2, '0')}.'
+        '${now.millisecond.toString().padLeft(3, '0')}';
   }
 
   /// Sanitize sensitive data from logs
@@ -171,11 +172,26 @@ class Logger {
   /// Check if field name indicates sensitive data
   static bool _isSensitiveField(String fieldName) {
     final sensitiveFields = [
-      'password', 'passwd', 'pwd', 'secret', 'token',
-      'api_key', 'apikey', 'auth', 'authorization',
-      'credit_card', 'creditcard', 'cc_number', 'cvv',
-      'ssn', 'social_security', 'pin', 'private_key',
-      'refresh_token', 'access_token', 'bearer',
+      'password',
+      'passwd',
+      'pwd',
+      'secret',
+      'token',
+      'api_key',
+      'apikey',
+      'auth',
+      'authorization',
+      'credit_card',
+      'creditcard',
+      'cc_number',
+      'cvv',
+      'ssn',
+      'social_security',
+      'pin',
+      'private_key',
+      'refresh_token',
+      'access_token',
+      'bearer',
     ];
 
     final lowerField = fieldName.toLowerCase();
@@ -203,7 +219,8 @@ class Logger {
   }
 
   /// Send security events to monitoring service
-  static void _sendToSecurityMonitoring(String event, Map<String, dynamic>? details) {
+  static void _sendToSecurityMonitoring(
+      String event, Map<String, dynamic>? details) {
     // In production, implement actual security monitoring
     // This could send to services like Sentry, DataDog, or custom monitoring
     if (!kDebugMode) {

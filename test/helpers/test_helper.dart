@@ -26,8 +26,7 @@ class TestHelper {
     return MaterialApp(
       home: Scaffold(body: child),
       theme: theme ?? ThemeData.light(),
-      navigatorObservers:
-          navigatorObserver != null ? [navigatorObserver] : [],
+      navigatorObservers: navigatorObserver != null ? [navigatorObserver] : [],
     );
   }
 
@@ -230,8 +229,7 @@ extension WidgetTesterExtensions on WidgetTester {
       if (finder.evaluate().isNotEmpty) {
         break;
       }
-      await drag(scrollable ?? find.byType(Scrollable).first,
-          Offset(0, delta));
+      await drag(scrollable ?? find.byType(Scrollable).first, Offset(0, delta));
       await pump();
     }
   }

@@ -91,7 +91,9 @@ class _WebTooltipState extends State<WebTooltip>
   }
 
   void _showTooltip() {
-    if (!kIsWeb || (!widget.showOnHover && widget.trigger != TooltipTrigger.manual)) return;
+    if (!kIsWeb ||
+        (!widget.showOnHover && widget.trigger != TooltipTrigger.manual))
+      return;
 
     _removeOverlay();
     _createOverlay();
@@ -117,7 +119,8 @@ class _WebTooltipState extends State<WebTooltip>
         message: widget.message,
         richContent: widget.richContent,
         position: widget.position,
-        backgroundColor: widget.backgroundColor ?? HvacColors.backgroundElevated,
+        backgroundColor:
+            widget.backgroundColor ?? HvacColors.backgroundElevated,
         textStyle: widget.textStyle ??
             HvacTypography.bodySmall.copyWith(
               color: HvacColors.textPrimary,

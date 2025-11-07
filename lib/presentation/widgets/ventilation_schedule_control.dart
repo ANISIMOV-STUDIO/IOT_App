@@ -43,10 +43,12 @@ class VentilationScheduleControl extends StatelessWidget {
           child: LayoutBuilder(
             builder: (context, constraints) {
               // Check if we have a height constraint (desktop layout)
-              final hasHeightConstraint = constraints.maxHeight != double.infinity;
+              final hasHeightConstraint =
+                  constraints.maxHeight != double.infinity;
 
               if (hasHeightConstraint) {
-                return _buildDesktopLayout(deviceSize, dayOfWeek, todaySchedule);
+                return _buildDesktopLayout(
+                    deviceSize, dayOfWeek, todaySchedule);
               } else {
                 return _buildMobileLayout(deviceSize, dayOfWeek, todaySchedule);
               }
@@ -58,12 +60,15 @@ class VentilationScheduleControl extends StatelessWidget {
   }
 
   /// Desktop layout with constrained height - uses scrollable content
-  Widget _buildDesktopLayout(DeviceSize deviceSize, int dayOfWeek, dynamic todaySchedule) {
+  Widget _buildDesktopLayout(
+      DeviceSize deviceSize, int dayOfWeek, dynamic todaySchedule) {
     return AdaptiveControl(
       builder: (context, _) {
         final spacing = switch (deviceSize) {
           DeviceSize.compact => 12.0,
-          DeviceSize.medium || DeviceSize.expanded => adaptive.AdaptiveLayout.spacing(context, base: 12),
+          DeviceSize.medium ||
+          DeviceSize.expanded =>
+            adaptive.AdaptiveLayout.spacing(context, base: 12),
         };
 
         return Column(
@@ -99,12 +104,15 @@ class VentilationScheduleControl extends StatelessWidget {
   }
 
   /// Mobile layout without height constraint
-  Widget _buildMobileLayout(DeviceSize deviceSize, int dayOfWeek, dynamic todaySchedule) {
+  Widget _buildMobileLayout(
+      DeviceSize deviceSize, int dayOfWeek, dynamic todaySchedule) {
     return AdaptiveControl(
       builder: (context, _) {
         final spacing = switch (deviceSize) {
           DeviceSize.compact => 12.0,
-          DeviceSize.medium || DeviceSize.expanded => adaptive.AdaptiveLayout.spacing(context, base: 12),
+          DeviceSize.medium ||
+          DeviceSize.expanded =>
+            adaptive.AdaptiveLayout.spacing(context, base: 12),
         };
 
         return Column(

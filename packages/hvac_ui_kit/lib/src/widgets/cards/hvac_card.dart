@@ -5,17 +5,17 @@ import '../../theme/radius.dart';
 
 /// Card variant
 enum HvacCardVariant {
-  standard,     // Standard card
-  elevated,     // Card with shadow
-  glass,        // Glassmorphism
-  outlined,     // Outlined card
+  standard, // Standard card
+  elevated, // Card with shadow
+  glass, // Glassmorphism
+  outlined, // Outlined card
 }
 
 /// Card size variant
 enum HvacCardSize {
-  compact,   // Minimal padding
-  medium,    // Default padding
-  large,     // Generous padding
+  compact, // Minimal padding
+  medium, // Default padding
+  large, // Generous padding
 }
 
 /// Professional card component
@@ -74,9 +74,13 @@ class _HvacCardState extends State<HvacCard> {
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
-      onEnter: widget.enableHover ? (_) => setState(() => _isHovered = true) : null,
-      onExit: widget.enableHover ? (_) => setState(() => _isHovered = false) : null,
-      cursor: widget.onTap != null ? SystemMouseCursors.click : SystemMouseCursors.basic,
+      onEnter:
+          widget.enableHover ? (_) => setState(() => _isHovered = true) : null,
+      onExit:
+          widget.enableHover ? (_) => setState(() => _isHovered = false) : null,
+      cursor: widget.onTap != null
+          ? SystemMouseCursors.click
+          : SystemMouseCursors.basic,
       child: GestureDetector(
         onTap: widget.onTap,
         child: AnimatedContainer(
@@ -126,7 +130,8 @@ class _HvacCardState extends State<HvacCard> {
               : null,
           boxShadow: [
             BoxShadow(
-              color: HvacColors.primary.withValues(alpha: _isHovered ? 0.2 : 0.1),
+              color:
+                  HvacColors.primary.withValues(alpha: _isHovered ? 0.2 : 0.1),
               blurRadius: _isHovered ? 16 : 12,
               offset: Offset(0, _isHovered ? 8 : 4),
             ),

@@ -88,8 +88,9 @@ class QrScannerController extends ChangeNotifier {
       setMode(_mode == ScannerMode.web ? ScannerMode.manual : ScannerMode.web);
     } else {
       // On mobile, toggle between camera and manual
-      setMode(
-          _mode == ScannerMode.camera ? ScannerMode.manual : ScannerMode.camera);
+      setMode(_mode == ScannerMode.camera
+          ? ScannerMode.manual
+          : ScannerMode.camera);
     }
   }
 

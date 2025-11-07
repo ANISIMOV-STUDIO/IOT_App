@@ -56,20 +56,13 @@ class _GlassmorphicCardState extends State<GlassmorphicCard>
   void initState() {
     super.initState();
     _hoverController = AnimationController(
-      duration: const Duration(milliseconds: 200),
-      vsync: this);
+        duration: const Duration(milliseconds: 200), vsync: this);
 
-    _hoverScale = Tween<double>(
-      begin: 1.0,
-      end: 1.02).animate(CurvedAnimation(
-      parent: _hoverController,
-      curve: Curves.easeOutCubic));
+    _hoverScale = Tween<double>(begin: 1.0, end: 1.02).animate(
+        CurvedAnimation(parent: _hoverController, curve: Curves.easeOutCubic));
 
-    _shadowElevation = Tween<double>(
-      begin: 4,
-      end: 12).animate(CurvedAnimation(
-      parent: _hoverController,
-      curve: Curves.easeOutCubic));
+    _shadowElevation = Tween<double>(begin: 4, end: 12).animate(
+        CurvedAnimation(parent: _hoverController, curve: Curves.easeOutCubic));
   }
 
   @override
@@ -93,62 +86,60 @@ class _GlassmorphicCardState extends State<GlassmorphicCard>
     final elevation = _isHovered ? _shadowElevation.value : 4.0;
     return [
       BoxShadow(
-        color: Colors.black.withValues(alpha: 0.1),
-        blurRadius: elevation,
-        offset: Offset(0, elevation / 2)),
+          color: Colors.black.withValues(alpha: 0.1),
+          blurRadius: elevation,
+          offset: Offset(0, elevation / 2)),
       if (_isHovered)
         BoxShadow(
-          color: HvacColors.primaryBlue.withValues(alpha: 0.05),
-          blurRadius: elevation * 2,
-          offset: Offset(0, elevation)),
+            color: HvacColors.primaryBlue.withValues(alpha: 0.05),
+            blurRadius: elevation * 2,
+            offset: Offset(0, elevation)),
     ];
   }
 
   @override
   Widget build(BuildContext context) {
     Widget card = MouseRegion(
-      onEnter: (_) => _handleHover(true),
-      onExit: (_) => _handleHover(false),
-      cursor: widget.onTap != null
-          ? SystemMouseCursors.click
-          : SystemMouseCursors.basic,
-      child: AnimatedBuilder(
-        animation: _hoverController,
-        builder: (context, child) => Transform.scale(
-          scale: _hoverScale.value,
-          child: BaseGlassmorphicContainer(
-            width: widget.width,
-            height: widget.height,
-            margin: widget.margin,
-            padding: widget.padding,
-            blurAmount: widget.blurAmount,
-            borderOpacity: widget.borderOpacity,
-            backgroundColor: widget.backgroundColor,
-            gradient: widget.gradient,
-            boxShadow: _responsiveShadows,
-            child: widget.child))));
+        onEnter: (_) => _handleHover(true),
+        onExit: (_) => _handleHover(false),
+        cursor: widget.onTap != null
+            ? SystemMouseCursors.click
+            : SystemMouseCursors.basic,
+        child: AnimatedBuilder(
+            animation: _hoverController,
+            builder: (context, child) => Transform.scale(
+                scale: _hoverScale.value,
+                child: BaseGlassmorphicContainer(
+                    width: widget.width,
+                    height: widget.height,
+                    margin: widget.margin,
+                    padding: widget.padding,
+                    blurAmount: widget.blurAmount,
+                    borderOpacity: widget.borderOpacity,
+                    backgroundColor: widget.backgroundColor,
+                    gradient: widget.gradient,
+                    boxShadow: _responsiveShadows,
+                    child: widget.child))));
 
     // Add tap handler if provided
     if (widget.onTap != null) {
       card = InkWell(
-        onTap: widget.onTap,
-        borderRadius: BorderRadius.circular(HvacRadius.lg),
-        splashColor: HvacColors.primaryBlue.withValues(alpha: 0.1),
-        highlightColor: HvacColors.primaryBlue.withValues(alpha: 0.05),
-        child: card);
+          onTap: widget.onTap,
+          borderRadius: BorderRadius.circular(HvacRadius.lg),
+          splashColor: HvacColors.primaryBlue.withValues(alpha: 0.1),
+          highlightColor: HvacColors.primaryBlue.withValues(alpha: 0.05),
+          child: card);
     }
 
     // Add entrance animation if enabled
     if (widget.enableAnimation) {
       card = card
           .animate()
-          .fadeIn(
-            duration: widget.animationDuration,
-            curve: Curves.easeOut)
+          .fadeIn(duration: widget.animationDuration, curve: Curves.easeOut)
           .slideY(
-            begin: 0.05,
-            duration: widget.animationDuration,
-            curve: Curves.easeOut);
+              begin: 0.05,
+              duration: widget.animationDuration,
+              curve: Curves.easeOut);
     }
 
     return card;
@@ -179,13 +170,13 @@ class ElevatedGlassmorphicCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GlassmorphicCard(
-      padding: padding,
-      margin: margin,
-      width: width,
-      height: height,
-      onTap: onTap,
-      blurAmount: 15.0,
-      borderOpacity: 0.15,
-      child: child);
+        padding: padding,
+        margin: margin,
+        width: width,
+        height: height,
+        onTap: onTap,
+        blurAmount: 15.0,
+        borderOpacity: 0.15,
+        child: child);
   }
 }

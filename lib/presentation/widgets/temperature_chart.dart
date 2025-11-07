@@ -97,7 +97,8 @@ class TemperatureChart extends StatelessWidget {
                       reservedSize: 30,
                       interval: 1,
                       getTitlesWidget: (value, meta) {
-                        if (value.toInt() < 0 || value.toInt() >= readings.length) {
+                        if (value.toInt() < 0 ||
+                            value.toInt() >= readings.length) {
                           return const Text('');
                         }
                         final reading = readings[value.toInt()];
@@ -140,14 +141,21 @@ class TemperatureChart extends StatelessWidget {
                 ),
                 minX: 0,
                 maxX: (readings.length - 1).toDouble(),
-                minY: readings.map((r) => r.temperature).reduce((a, b) => a < b ? a : b) - 2,
-                maxY: readings.map((r) => r.temperature).reduce((a, b) => a > b ? a : b) + 2,
+                minY: readings
+                        .map((r) => r.temperature)
+                        .reduce((a, b) => a < b ? a : b) -
+                    2,
+                maxY: readings
+                        .map((r) => r.temperature)
+                        .reduce((a, b) => a > b ? a : b) +
+                    2,
                 lineBarsData: [
                   LineChartBarData(
                     spots: readings
                         .asMap()
                         .entries
-                        .map((e) => FlSpot(e.key.toDouble(), e.value.temperature))
+                        .map((e) =>
+                            FlSpot(e.key.toDouble(), e.value.temperature))
                         .toList(),
                     isCurved: true,
                     color: lineColor,

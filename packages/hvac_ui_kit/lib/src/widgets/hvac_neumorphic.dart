@@ -43,13 +43,13 @@ class HvacNeumorphicContainer extends StatelessWidget {
             ? [
                 // Inner shadows (pressed state)
                 BoxShadow(
-                  color: Colors.black.withValues(alpha:0.2),
+                  color: Colors.black.withValues(alpha: 0.2),
                   offset: const Offset(2, 2),
                   blurRadius: 4,
                   spreadRadius: -2,
                 ),
                 BoxShadow(
-                  color: Colors.white.withValues(alpha:0.05),
+                  color: Colors.white.withValues(alpha: 0.05),
                   offset: const Offset(-2, -2),
                   blurRadius: 4,
                   spreadRadius: -2,
@@ -58,12 +58,12 @@ class HvacNeumorphicContainer extends StatelessWidget {
             : [
                 // Outer shadows (normal state)
                 BoxShadow(
-                  color: Colors.black.withValues(alpha:0.3),
+                  color: Colors.black.withValues(alpha: 0.3),
                   offset: const Offset(6, 6),
                   blurRadius: 12,
                 ),
                 BoxShadow(
-                  color: Colors.white.withValues(alpha:0.05),
+                  color: Colors.white.withValues(alpha: 0.05),
                   offset: const Offset(-6, -6),
                   blurRadius: 12,
                 ),
@@ -184,12 +184,14 @@ class HvacNeumorphicToggle extends StatelessWidget {
       child: HvacNeumorphicContainer(
         isPressed: value,
         color: value
-            ? HvacColors.primaryOrange.withValues(alpha:0.2)
+            ? HvacColors.primaryOrange.withValues(alpha: 0.2)
             : HvacColors.backgroundCard,
         padding: const EdgeInsets.all(HvacSpacing.sm),
         child: value
-            ? (activeChild ?? const Icon(Icons.check, color: HvacColors.primaryOrange))
-            : (inactiveChild ?? const Icon(Icons.close, color: HvacColors.textSecondary)),
+            ? (activeChild ??
+                const Icon(Icons.check, color: HvacColors.primaryOrange))
+            : (inactiveChild ??
+                const Icon(Icons.close, color: HvacColors.textSecondary)),
       ),
     );
   }

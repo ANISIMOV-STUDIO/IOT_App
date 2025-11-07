@@ -5,6 +5,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+
 class TemperatureInfoCard extends StatelessWidget {
   final String value;
   final String label;
@@ -22,7 +23,8 @@ class TemperatureInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: HvacSpacing.md, vertical: HvacSpacing.md + 4),
+      padding: const EdgeInsets.symmetric(
+          horizontal: HvacSpacing.md, vertical: HvacSpacing.md + 4),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard,
         borderRadius: HvacRadius.mdRadius,

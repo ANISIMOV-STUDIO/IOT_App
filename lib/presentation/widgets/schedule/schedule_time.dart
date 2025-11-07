@@ -34,12 +34,14 @@ class ScheduleTime extends StatelessWidget {
                   size: adaptive.AdaptiveLayout.iconSize(context, base: 12),
                   color: HvacColors.textSecondary,
                 ),
-                SizedBox(width: adaptive.AdaptiveLayout.spacing(context, base: 4)),
+                SizedBox(
+                    width: adaptive.AdaptiveLayout.spacing(context, base: 4)),
                 Flexible(
                   child: Text(
                     label,
                     style: HvacTypography.labelSmall.copyWith(
-                      fontSize: adaptive.AdaptiveLayout.fontSize(context, base: 10),
+                      fontSize:
+                          adaptive.AdaptiveLayout.fontSize(context, base: 10),
                       color: HvacColors.textSecondary,
                     ),
                     overflow: TextOverflow.ellipsis,

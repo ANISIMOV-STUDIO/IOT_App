@@ -16,7 +16,8 @@ class ScheduleHeader extends StatelessWidget {
         return Row(
           children: [
             Container(
-              padding: EdgeInsets.all(adaptive.AdaptiveLayout.spacing(context, base: 8)),
+              padding: EdgeInsets.all(
+                  adaptive.AdaptiveLayout.spacing(context, base: 8)),
               decoration: BoxDecoration(
                 color: HvacColors.success.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(
@@ -38,7 +39,8 @@ class ScheduleHeader extends StatelessWidget {
                   Text(
                     'Расписание',
                     style: HvacTypography.titleLarge.copyWith(
-                      fontSize: adaptive.AdaptiveLayout.fontSize(context, base: 16),
+                      fontSize:
+                          adaptive.AdaptiveLayout.fontSize(context, base: 16),
                       color: HvacColors.textPrimary,
                     ),
                     overflow: TextOverflow.ellipsis,
@@ -48,7 +50,8 @@ class ScheduleHeader extends StatelessWidget {
                   Text(
                     'Автоматическое управление',
                     style: HvacTypography.labelLarge.copyWith(
-                      fontSize: adaptive.AdaptiveLayout.fontSize(context, base: 12),
+                      fontSize:
+                          adaptive.AdaptiveLayout.fontSize(context, base: 12),
                       color: HvacColors.textSecondary,
                     ),
                     overflow: TextOverflow.ellipsis,

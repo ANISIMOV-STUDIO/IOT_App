@@ -61,7 +61,8 @@ class _SettingsScreenState extends State<SettingsScreen>
         backgroundColor: HvacColors.backgroundCard,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: HvacColors.textPrimary, size: 24.0),
+          icon: const Icon(Icons.arrow_back,
+              color: HvacColors.textPrimary, size: 24.0),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -135,7 +136,10 @@ class _SettingsScreenState extends State<SettingsScreen>
           ),
         ),
       ],
-    ).animate().fadeIn(duration: 500.ms, delay: 100.ms).slideX(begin: -0.1, end: 0);
+    )
+        .animate()
+        .fadeIn(duration: 500.ms, delay: 100.ms)
+        .slideX(begin: -0.1, end: 0);
   }
 
   Widget _buildNotificationsSection() {
@@ -151,8 +155,8 @@ class _SettingsScreenState extends State<SettingsScreen>
             value: _pushNotifications,
             onChanged: (value) {
               setState(() => _pushNotifications = value);
-              _showSnackBar(
-                  l10n.notificationsState('Push', value ? l10n.enabled : l10n.disabled));
+              _showSnackBar(l10n.notificationsState(
+                  'Push', value ? l10n.enabled : l10n.disabled));
             },
           ),
         ),
@@ -164,13 +168,16 @@ class _SettingsScreenState extends State<SettingsScreen>
             value: _emailNotifications,
             onChanged: (value) {
               setState(() => _emailNotifications = value);
-              _showSnackBar(
-                  l10n.notificationsState('Email', value ? l10n.enabled : l10n.disabled));
+              _showSnackBar(l10n.notificationsState(
+                  'Email', value ? l10n.enabled : l10n.disabled));
             },
           ),
         ),
       ],
-    ).animate().fadeIn(duration: 500.ms, delay: 200.ms).slideX(begin: -0.1, end: 0);
+    )
+        .animate()
+        .fadeIn(duration: 500.ms, delay: 200.ms)
+        .slideX(begin: -0.1, end: 0);
   }
 
   Widget _buildLanguageSection() {
@@ -206,7 +213,10 @@ class _SettingsScreenState extends State<SettingsScreen>
           },
         ),
       ],
-    ).animate().fadeIn(duration: 500.ms, delay: 300.ms).slideX(begin: -0.1, end: 0);
+    )
+        .animate()
+        .fadeIn(duration: 500.ms, delay: 300.ms)
+        .slideX(begin: -0.1, end: 0);
   }
 
   Widget _buildAboutSection() {
@@ -242,7 +252,10 @@ class _SettingsScreenState extends State<SettingsScreen>
           ),
         ),
       ],
-    ).animate().fadeIn(duration: 500.ms, delay: 400.ms).slideX(begin: -0.1, end: 0);
+    )
+        .animate()
+        .fadeIn(duration: 500.ms, delay: 400.ms)
+        .slideX(begin: -0.1, end: 0);
   }
 
   void _showSnackBar(String message) {

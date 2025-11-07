@@ -7,6 +7,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+
 class EnergyChart extends StatelessWidget {
   const EnergyChart({super.key});
 

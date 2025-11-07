@@ -64,7 +64,8 @@ class HvacInteractiveElevation extends StatefulWidget {
   });
 
   @override
-  State<HvacInteractiveElevation> createState() => _HvacInteractiveElevationState();
+  State<HvacInteractiveElevation> createState() =>
+      _HvacInteractiveElevationState();
 }
 
 class _HvacInteractiveElevationState extends State<HvacInteractiveElevation> {
@@ -82,7 +83,8 @@ class _HvacInteractiveElevationState extends State<HvacInteractiveElevation> {
       child: AnimatedPhysicalModel(
         duration: widget.duration,
         curve: Curves.easeInOut,
-        elevation: _isPressed ? widget.pressedElevation : widget.normalElevation,
+        elevation:
+            _isPressed ? widget.pressedElevation : widget.normalElevation,
         color: Colors.transparent,
         shadowColor: Colors.black,
         borderRadius: BorderRadius.circular(12),
@@ -153,8 +155,10 @@ class HvacInteractiveRipple extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        splashColor: rippleColor ?? Theme.of(context).primaryColor.withValues(alpha:0.2),
-        highlightColor: rippleColor ?? Theme.of(context).primaryColor.withValues(alpha:0.1),
+        splashColor: rippleColor ??
+            Theme.of(context).primaryColor.withValues(alpha: 0.2),
+        highlightColor: rippleColor ??
+            Theme.of(context).primaryColor.withValues(alpha: 0.1),
         borderRadius: borderRadius ?? BorderRadius.circular(12),
         child: child,
       ),

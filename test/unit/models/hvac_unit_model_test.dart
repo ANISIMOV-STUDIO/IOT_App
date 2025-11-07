@@ -146,10 +146,8 @@ void main() {
 
         expect(reconstructedModel.id, originalModel.id);
         expect(reconstructedModel.name, originalModel.name);
-        expect(reconstructedModel.currentTemp,
-            originalModel.currentTemp);
-        expect(reconstructedModel.targetTemp,
-            originalModel.targetTemp);
+        expect(reconstructedModel.currentTemp, originalModel.currentTemp);
+        expect(reconstructedModel.targetTemp, originalModel.targetTemp);
         expect(reconstructedModel.power, originalModel.power);
       });
     });
@@ -212,8 +210,7 @@ void main() {
 
         expect(reconstructedModel.id, originalModel.id);
         expect(reconstructedModel.name, originalModel.name);
-        expect(reconstructedModel.currentTemp,
-            originalModel.currentTemp);
+        expect(reconstructedModel.currentTemp, originalModel.currentTemp);
       });
     });
 

@@ -279,7 +279,10 @@ class _SettingsScreenRefactoredState extends State<SettingsScreenRefactored>
             l10n.unitsChangedTo(value ? l10n.celsius : l10n.fahrenheit),
           );
         },
-      ).animate().fadeIn(duration: 500.ms, delay: 100.ms).slideX(begin: -0.1, end: 0),
+      )
+          .animate()
+          .fadeIn(duration: 500.ms, delay: 100.ms)
+          .slideX(begin: -0.1, end: 0),
       SizedBox(height: 20.h),
       NotificationsSection(
         pushNotifications: _controller.pushNotifications,
@@ -287,16 +290,21 @@ class _SettingsScreenRefactoredState extends State<SettingsScreenRefactored>
         onPushChanged: (value) {
           _controller.setPushNotifications(value);
           _showSnackBar(
-            l10n.notificationsState('Push', value ? l10n.enabled : l10n.disabled),
+            l10n.notificationsState(
+                'Push', value ? l10n.enabled : l10n.disabled),
           );
         },
         onEmailChanged: (value) {
           _controller.setEmailNotifications(value);
           _showSnackBar(
-            l10n.notificationsState('Email', value ? l10n.enabled : l10n.disabled),
+            l10n.notificationsState(
+                'Email', value ? l10n.enabled : l10n.disabled),
           );
         },
-      ).animate().fadeIn(duration: 500.ms, delay: 200.ms).slideX(begin: -0.1, end: 0),
+      )
+          .animate()
+          .fadeIn(duration: 500.ms, delay: 200.ms)
+          .slideX(begin: -0.1, end: 0),
       SizedBox(height: 20.h),
       LanguageSection(
         selectedLanguage: _controller.language,
@@ -304,13 +312,19 @@ class _SettingsScreenRefactoredState extends State<SettingsScreenRefactored>
           _controller.setLanguage(language);
           _showSnackBar(l10n.languageChangedTo(language));
         },
-      ).animate().fadeIn(duration: 500.ms, delay: 300.ms).slideX(begin: -0.1, end: 0),
+      )
+          .animate()
+          .fadeIn(duration: 500.ms, delay: 300.ms)
+          .slideX(begin: -0.1, end: 0),
       SizedBox(height: 20.h),
       AboutSection(
         onCheckUpdates: () {
           _showSnackBar(l10n.checkingUpdates);
         },
-      ).animate().fadeIn(duration: 500.ms, delay: 400.ms).slideX(begin: -0.1, end: 0),
+      )
+          .animate()
+          .fadeIn(duration: 500.ms, delay: 400.ms)
+          .slideX(begin: -0.1, end: 0),
     ];
   }
 
