@@ -48,6 +48,38 @@
                     "sizes": "192x192"
                 }
             ]
+        },
+        {
+            "name": "Settings",
+            "short_name": "Settings",
+            "description": "App settings and preferences",
+            "url": "/#/settings",
+            "icons": [
+                {
+                    "src": "icons/Icon-192.png",
+                    "sizes": "192x192"
+                }
+            ]
+        },
+        {
+            "name": "Analytics",
+            "short_name": "Analytics",
+            "description": "View system analytics",
+            "url": "/#/analytics",
+            "icons": [
+                {
+                    "src": "icons/Icon-192.png",
+                    "sizes": "192x192"
+                }
+            ]
         }
-    ]
+    ],
+    "display_override": ["window-controls-overlay", "standalone"],
+    "edge_side_panel": {
+        "preferred_width": 400
+    },
+    "related_applications": [],
+    "scope": "/",
+    "lang": "en-US",
+    "dir": "ltr"
 }
