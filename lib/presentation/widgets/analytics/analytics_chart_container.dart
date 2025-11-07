@@ -52,11 +52,7 @@ class AnalyticsChartContainer extends StatelessWidget {
               const SizedBox(width: HvacSpacing.xsR),
               Text(
                 title,
-                style: const TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w600,
-                  color: HvacColors.textPrimary,
-                ),
+                style: HvacTypography.titleSmall,
               ),
             ],
           ),

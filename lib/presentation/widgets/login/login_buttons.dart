@@ -131,7 +131,7 @@ class _LoginSecondaryButton extends StatelessWidget {
         onPressed: onPressed,
         style: OutlinedButton.styleFrom(
           foregroundColor: HvacColors.textPrimary,
-          side: BorderSide(
+          side: const BorderSide(
             color: HvacColors.borderSubtle,
             width: 1.5,
           ),

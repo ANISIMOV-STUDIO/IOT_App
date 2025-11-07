@@ -4,7 +4,6 @@
 /// Reduced from 430 lines to <200 lines through component extraction
 library;
 
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';

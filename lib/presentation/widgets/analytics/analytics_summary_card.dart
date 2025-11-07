@@ -6,6 +6,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+
 class AnalyticsSummaryCard extends StatelessWidget {
   final int index;
   final String label;
@@ -61,8 +62,7 @@ class AnalyticsSummaryCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     label,
-                    style: const TextStyle(
-                      fontSize: 11.0,
+                    style: HvacTypography.captionSmall.copyWith(
                       color: HvacColors.textSecondary,
                     ),
                     maxLines: 1,
@@ -74,9 +74,7 @@ class AnalyticsSummaryCard extends StatelessWidget {
             const SizedBox(height: HvacSpacing.xsR),
             Text(
               value,
-              style: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.w700,
+              style: HvacTypography.titleLarge.copyWith(
                 color: color,
               ),
             ),
@@ -91,8 +89,7 @@ class AnalyticsSummaryCard extends StatelessWidget {
                 const SizedBox(width: HvacSpacing.xxsR),
                 Text(
                   change,
-                  style: TextStyle(
-                    fontSize: 11.0,
+                  style: HvacTypography.captionSmall.copyWith(
                     fontWeight: FontWeight.w600,
                     color: isPositive ? HvacColors.success : HvacColors.error,
                   ),

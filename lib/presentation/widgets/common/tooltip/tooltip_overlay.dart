@@ -4,7 +4,6 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import 'tooltip_types.dart';
 
 /// Overlay widget that displays the tooltip content

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/physics.dart';
 import '../animation_durations.dart';
 import '../spring_curves.dart';
 import '../smooth_animations.dart';
