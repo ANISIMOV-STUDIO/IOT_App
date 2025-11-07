@@ -10,6 +10,7 @@ import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../bloc/hvac_list/hvac_list_bloc.dart';
 import '../../bloc/hvac_list/hvac_list_state.dart';
 import '../../../domain/entities/hvac_unit.dart';
+import '../../../core/utils/accessibility_helpers.dart';
 
 class HomeAppBar extends StatelessWidget {
   final String? selectedUnit;
@@ -43,13 +44,16 @@ class HomeAppBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             // Logo
-            SvgPicture.asset(
-              'assets/images/zilon-logo.svg',
-              height: 40.0,
-              colorFilter: const ColorFilter.mode(
-                HvacColors.primaryOrange,
-                BlendMode.srcIn,
+            AccessibilityHelpers.semanticImage(
+              image: SvgPicture.asset(
+                'assets/images/zilon-logo.svg',
+                height: 40.0,
+                colorFilter: const ColorFilter.mode(
+                  HvacColors.primaryOrange,
+                  BlendMode.srcIn,
+                ),
               ),
+              label: 'BREEZ Home Logo',
             ),
             // User profile and Settings
             _buildUserSection(),
@@ -134,11 +138,16 @@ class HomeAppBar extends StatelessWidget {
   }
 
   Widget _buildUnitTab(String label, bool isSelected) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () => onUnitSelected(label),
-        child: Container(
+    return Semantics(
+      label: 'Select $label unit',
+      hint: isSelected ? 'Currently selected' : AccessibilityHelpers.tapToOpen,
+      button: true,
+      selected: isSelected,
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          onTap: () => onUnitSelected(label),
+          child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
           decoration: BoxDecoration(
             color: isSelected ? HvacColors.backgroundCard : Colors.transparent,
@@ -156,16 +165,21 @@ class HomeAppBar extends StatelessWidget {
             ),
           ),
         ),
+        ),
       ),
     );
   }
 
   Widget _buildAddUnitButton() {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: onAddUnitPressed,
-        child: Container(
+    return Semantics(
+      label: 'Add new unit',
+      hint: AccessibilityHelpers.tapToOpen,
+      button: true,
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          onTap: onAddUnitPressed,
+          child: Container(
           width: 36.0,
           height: 36.0,
           decoration: BoxDecoration(
@@ -181,6 +195,7 @@ class HomeAppBar extends StatelessWidget {
             color: HvacColors.textSecondary,
           ),
         ),
+        ),
       ),
     );
   }
@@ -188,29 +203,36 @@ class HomeAppBar extends StatelessWidget {
   Widget _buildUserSection() {
     return Row(
       children: [
-        IconButton(
-          icon: const Icon(
-            Icons.settings_outlined,
-            color: HvacColors.textSecondary,
-            size: 24.0,
-          ),
+        AccessibilityHelpers.createSemanticIconButton(
+          icon: Icons.settings_outlined,
           onPressed: onSettingsPressed,
+          label: 'Settings',
+          hint: 'Open application settings',
+          color: HvacColors.textSecondary,
+          iconSize: 24.0,
         ),
         const SizedBox(width: 8.0),
-        const CircleAvatar(
-          radius: 18.0,
-          backgroundColor: HvacColors.backgroundCard,
-          child: Icon(
-            Icons.person_outline,
-            size: 20.0,
-            color: HvacColors.textSecondary,
+        Semantics(
+          label: 'User profile',
+          hint: 'Double tap to open user menu',
+          button: true,
+          child: const CircleAvatar(
+            radius: 18.0,
+            backgroundColor: HvacColors.backgroundCard,
+            child: Icon(
+              Icons.person_outline,
+              size: 20.0,
+              color: HvacColors.textSecondary,
+            ),
           ),
         ),
         const SizedBox(width: 8.0),
-        const Icon(
-          Icons.keyboard_arrow_down,
-          color: HvacColors.textSecondary,
-          size: 20.0,
+        ExcludeSemantics(
+          child: const Icon(
+            Icons.keyboard_arrow_down,
+            color: HvacColors.textSecondary,
+            size: 20.0,
+          ),
         ),
       ],
     );

@@ -92,12 +92,16 @@ class _LoginTextField extends StatelessWidget {
           ),
         ],
       ),
-      child: TextFormField(
-        controller: controller,
-        obscureText: obscureText,
-        enabled: enabled,
-        inputFormatters: inputFormatters,
-        keyboardType: keyboardType,
+      child: Semantics(
+        label: hintText,
+        hint: obscureText ? 'Enter your password' : 'Enter your email address',
+        textField: true,
+        child: TextFormField(
+          controller: controller,
+          obscureText: obscureText,
+          enabled: enabled,
+          inputFormatters: inputFormatters,
+          keyboardType: keyboardType,
         onFieldSubmitted: onSubmitted,
         style: TextStyle(
           fontSize: 16.sp,
@@ -124,6 +128,7 @@ class _LoginTextField extends StatelessWidget {
             horizontal: HvacSpacing.md.w,
             vertical: HvacSpacing.sm.h,
           ),
+        ),
         ),
       ),
     );
