@@ -3,6 +3,8 @@
 /// Provides smooth hover animations and cursor feedback for web platform
 library;
 
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
@@ -106,7 +108,7 @@ class _WebHoverCardState extends State<WebHoverCard>
               boxShadow: widget.showElevationOnHover
                   ? [
                       BoxShadow(
-                        color: HvacColors.primary.withOpacity(0.1),
+                        color: HvacColors.primaryOrange.withOpacity(0.1),
                         blurRadius: _elevationAnimation.value,
                         offset: Offset(0, _elevationAnimation.value / 2),
                       ),
@@ -120,19 +122,19 @@ class _WebHoverCardState extends State<WebHoverCard>
                 onTap: widget.onTap,
                 onLongPress: widget.onLongPress,
                 borderRadius: BorderRadius.circular(widget.borderRadius),
-                splashColor: HvacColors.primary.withOpacity(0.1),
-                highlightColor: HvacColors.primary.withOpacity(0.05),
+                splashColor: HvacColors.primaryOrange.withOpacity(0.1),
+                highlightColor: HvacColors.primaryOrange.withOpacity(0.05),
                 child: Container(
                   padding: widget.padding,
                   decoration: BoxDecoration(
                     color: widget.backgroundColor ??
                         (_isHovering
-                            ? HvacColors.surfaceLight.withOpacity(0.05)
+                            ? HvacColors.backgroundLight.withValues(alpha: 0.05)
                             : Colors.transparent),
                     borderRadius: BorderRadius.circular(widget.borderRadius),
                     border: _isHovering
                         ? Border.all(
-                            color: HvacColors.primary.withOpacity(0.3),
+                            color: HvacColors.primaryOrange.withOpacity(0.3),
                             width: 1,
                           )
                         : null,
@@ -142,7 +144,7 @@ class _WebHoverCardState extends State<WebHoverCard>
                           borderRadius:
                               BorderRadius.circular(widget.borderRadius),
                           child: BackdropFilter(
-                            filter: HvacGlassmorphism.lightBlur,
+                            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                             child: widget.child,
                           ),
                         )
@@ -237,7 +239,7 @@ class _WebHoverIconButtonState extends State<WebHoverIconButton>
             decoration: widget.showBackground
                 ? BoxDecoration(
                     color: _isHovering
-                        ? HvacColors.primary.withOpacity(0.1)
+                        ? HvacColors.primaryOrange.withOpacity(0.1)
                         : Colors.transparent,
                     borderRadius: BorderRadius.circular(8),
                   )
@@ -247,7 +249,7 @@ class _WebHoverIconButtonState extends State<WebHoverIconButton>
                 widget.icon,
                 size: widget.size,
                 color: _isHovering
-                    ? (widget.hoverColor ?? HvacColors.primary)
+                    ? (widget.hoverColor ?? HvacColors.primaryOrange)
                     : (widget.color ?? HvacColors.textSecondary),
               ),
               onPressed: widget.onPressed,

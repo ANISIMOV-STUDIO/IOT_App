@@ -60,7 +60,6 @@ class ErrorIconWidget extends StatelessWidget {
       case ErrorType.offline:
         return Icons.signal_wifi_off_rounded;
       case ErrorType.general:
-      default:
         return Icons.error_outline_rounded;
     }
   }
@@ -81,7 +80,6 @@ class ErrorIconWidget extends StatelessWidget {
       case ErrorType.notFound:
         return HvacColors.textSecondary;
       case ErrorType.general:
-      default:
         return HvacColors.error;
     }
   }

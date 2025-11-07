@@ -5,7 +5,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:responsive_framework/responsive_framework.dart';
+import 'package:flutter/services.dart';
 
 /// Responsive breakpoints for web
 class WebBreakpoints {
@@ -242,7 +242,7 @@ class WebResponsiveText extends StatelessWidget {
 /// Focus management for keyboard navigation
 class WebKeyboardNavigator extends StatelessWidget {
   final Widget child;
-  final Map<LogicalKeySet, VoidCallback>? shortcuts;
+  final Map<ShortcutActivator, Intent>? shortcuts;
 
   const WebKeyboardNavigator({
     super.key,

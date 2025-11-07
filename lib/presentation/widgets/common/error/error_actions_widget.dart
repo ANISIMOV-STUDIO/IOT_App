@@ -83,8 +83,8 @@ class ErrorActionsWidget extends StatelessWidget {
           : const SizedBox.shrink(),
       label: Text(action.label),
       style: ElevatedButton.styleFrom(
-        backgroundColor: HvacColors.primary,
-        foregroundColor: HvacColors.onPrimary,
+        backgroundColor: HvacColors.primaryOrange,
+        foregroundColor: Colors.white,
         padding: const EdgeInsets.symmetric(
           horizontal: HvacSpacing.lg,
           vertical: HvacSpacing.md,
