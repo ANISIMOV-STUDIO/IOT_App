@@ -51,6 +51,9 @@ export 'src/widgets/states/states.dart';
 // Cards
 export 'src/widgets/cards/cards.dart';
 
+// Shimmer & Skeleton Components
+export 'src/widgets/shimmer/shimmer.dart';
+
 // Other Widgets
 export 'src/widgets/adaptive_slider.dart';
 export 'src/widgets/status_indicator.dart';

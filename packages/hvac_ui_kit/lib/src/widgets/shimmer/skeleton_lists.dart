@@ -3,7 +3,8 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+import '../../theme/colors.dart';
+import '../../theme/spacing.dart';
 import 'base_shimmer.dart';
 import 'skeleton_primitives.dart';
 

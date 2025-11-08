@@ -16,6 +16,7 @@ dependencies:
 
   # Skeleton loading states
   skeletonizer: ^2.1.0
+  shimmer: ^3.0.0
 
   # Swipeable cards
   flutter_slidable: ^3.1.0

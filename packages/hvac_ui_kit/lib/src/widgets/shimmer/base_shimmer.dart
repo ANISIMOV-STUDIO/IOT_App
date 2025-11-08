@@ -4,7 +4,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+import '../../theme/colors.dart';
 
 /// Base shimmer wrapper with customizable gradient
 class BaseShimmer extends StatelessWidget {

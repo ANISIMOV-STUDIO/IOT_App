@@ -1,16 +1,21 @@
 /// Enhanced Shimmer Loading Components
-/// Main export file for shimmer and skeleton components
+/// DEPRECATED: This file is a redirect to the UI Kit package
+/// Use 'package:hvac_ui_kit/hvac_ui_kit.dart' instead
 library;
 
-// Export all shimmer components
-export 'shimmer/base_shimmer.dart';
-export 'shimmer/skeleton_primitives.dart';
-export 'shimmer/skeleton_cards.dart';
-export 'shimmer/skeleton_lists.dart';
-export 'shimmer/skeleton_screens.dart';
-export 'shimmer/pulse_skeleton.dart';
+@Deprecated('Import from package:hvac_ui_kit/hvac_ui_kit.dart instead')
+// Export all shimmer components from UI Kit
+export 'package:hvac_ui_kit/hvac_ui_kit.dart'
+    show
+        BaseShimmer,
+        PulseSkeleton,
+        SkeletonContainer,
+        SkeletonText,
+        DeviceCardSkeleton,
+        AnalyticsCardSkeleton,
+        ChartSkeleton,
+        ListItemSkeleton,
+        HomeDashboardSkeleton;
 
-// For backwards compatibility, re-export main components with original names
-import 'shimmer/base_shimmer.dart';
-
+// For backwards compatibility
 typedef EnhancedShimmer = BaseShimmer;
