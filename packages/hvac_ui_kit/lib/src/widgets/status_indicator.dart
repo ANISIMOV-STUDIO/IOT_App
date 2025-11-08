@@ -1,4 +1,5 @@
-/// Premium status indicator with glow and pulse animation
+/// Premium status indicator with glow effect
+/// Supports web with hover states and responsive sizing
 library;
 
 import 'package:flutter/material.dart';
@@ -6,7 +7,7 @@ import '../theme/colors.dart';
 import '../theme/spacing.dart';
 import '../theme/typography.dart';
 
-/// Premium status indicator with glow
+/// Status indicator with animated pulse and glow effects
 class StatusIndicator extends StatefulWidget {
   final bool isActive;
   final String activeLabel;
@@ -37,6 +38,7 @@ class _StatusIndicatorState extends State<StatusIndicator>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _pulseAnimation;
+  bool _isHovered = false;
 
   @override
   void initState() {
@@ -81,53 +83,70 @@ class _StatusIndicatorState extends State<StatusIndicator>
     final color = widget.isActive ? widget.activeColor : widget.inactiveColor;
     final label = widget.isActive ? widget.activeLabel : widget.inactiveLabel;
 
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        AnimatedBuilder(
-          animation: _pulseAnimation,
-          builder: (context, child) => Stack(
-            alignment: Alignment.center,
-            children: [
-              // Glow effect
-              if (widget.isActive && widget.enablePulse)
-                Container(
-                  width: widget.size * _pulseAnimation.value * 2,
-                  height: widget.size * _pulseAnimation.value * 2,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: color.withValues(alpha: 0.2),
-                  ),
-                ),
-              // Main dot
-              Container(
-                width: widget.size,
-                height: widget.size,
-                decoration: BoxDecoration(
-                  color: color,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: color.withValues(alpha: 0.5),
-                      blurRadius: widget.size,
-                      spreadRadius: 2,
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      cursor: SystemMouseCursors.click,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        transform: Matrix4.diagonal3Values(
+          _isHovered ? 1.1 : 1.0,
+          _isHovered ? 1.1 : 1.0,
+          1.0,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AnimatedBuilder(
+              animation: _pulseAnimation,
+              builder: (context, child) => Stack(
+                alignment: Alignment.center,
+                children: [
+                  // Glow effect with web optimization
+                  if (widget.isActive && widget.enablePulse)
+                    Container(
+                      width: widget.size * _pulseAnimation.value * 2,
+                      height: widget.size * _pulseAnimation.value * 2,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: color.withValues(alpha: _isHovered ? 0.3 : 0.2),
+                      ),
                     ),
-                  ],
+                  // Main dot with enhanced shadow on hover
+                  Container(
+                    width: widget.size,
+                    height: widget.size,
+                    decoration: BoxDecoration(
+                      color: _isHovered ? color.withValues(alpha: 0.9) : color,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color:
+                              color.withValues(alpha: _isHovered ? 0.7 : 0.5),
+                          blurRadius:
+                              _isHovered ? widget.size * 1.5 : widget.size,
+                          spreadRadius: _isHovered ? 3 : 2,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (widget.showLabel) ...[
+              const SizedBox(width: HvacSpacing.xs),
+              AnimatedDefaultTextStyle(
+                duration: const Duration(milliseconds: 200),
+                style: HvacTypography.captionMedium.copyWith(
+                  color: _isHovered ? color.withValues(alpha: 0.9) : color,
+                  fontWeight: _isHovered ? FontWeight.w600 : FontWeight.w500,
                 ),
+                child: Text(label),
               ),
             ],
-          ),
+          ],
         ),
-        if (widget.showLabel) ...[
-          const SizedBox(width: HvacSpacing.sm),
-          Text(
-            label,
-            style: HvacTypography.caption.copyWith(
-              color: color,
-            ),
-          ),
-        ],
-      ],
+      ),
     );
   }
 }

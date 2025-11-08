@@ -1,21 +1,13 @@
 {
   "permissions": {
-    "defaultMode": "bypassPermissions",
     "allow": [
-      "Read",
-      "Edit",
-      "MultiEdit",
-      "Glob",
-      "Grep",
-      "WebFetch",
-      "WebSearch",
-      "TodoRead",
-      "TodoWrite",
-      "Task",
-
-      "Bash(*)"
+      "Bash(dart analyze:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
-    "deny": []
+    "deny": [],
+    "ask": [],
+    "defaultMode": "bypassPermissions"
   },
   "statusLine": {
     "type": "command",

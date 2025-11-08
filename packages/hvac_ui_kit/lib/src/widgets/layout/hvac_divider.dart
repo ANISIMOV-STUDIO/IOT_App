@@ -3,26 +3,28 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+import '../../theme/colors.dart';
+import '../../theme/spacing.dart';
+import '../../theme/radius.dart';
 
 /// Divider style options
-enum DividerStyle { gradient, solid, primary, dashed }
+enum HvacDividerStyle { gradient, solid, primary, dashed }
 
 /// Premium divider with gradient and animation support
-class AnimatedDivider extends StatelessWidget {
+class HvacDivider extends StatelessWidget {
   final double height;
   final EdgeInsets? margin;
   final Gradient? gradient;
   final bool animate;
-  final DividerStyle style;
+  final HvacDividerStyle style;
 
-  const AnimatedDivider({
+  const HvacDivider({
     super.key,
     this.height = 1.0,
     this.margin,
     this.gradient,
     this.animate = true,
-    this.style = DividerStyle.gradient,
+    this.style = HvacDividerStyle.gradient,
   });
 
   @override
@@ -55,26 +57,26 @@ class AnimatedDivider extends StatelessWidget {
     const s = [0.0, 0.2, 0.8, 1.0];
 
     switch (style) {
-      case DividerStyle.gradient:
+      case HvacDividerStyle.gradient:
         return LinearGradient(colors: [
           Colors.transparent,
           bc.withValues(alpha: 0.5),
           bc.withValues(alpha: 0.5),
           Colors.transparent
         ], stops: s);
-      case DividerStyle.solid:
+      case HvacDividerStyle.solid:
         return LinearGradient(colors: [
           bc.withValues(alpha: 0.3),
           bc.withValues(alpha: 0.3),
         ]);
-      case DividerStyle.primary:
+      case HvacDividerStyle.primary:
         return LinearGradient(colors: [
           Colors.transparent,
           pc.withValues(alpha: 0.3),
           pc.withValues(alpha: 0.3),
           Colors.transparent
         ], stops: s);
-      case DividerStyle.dashed:
+      case HvacDividerStyle.dashed:
         return LinearGradient(colors: [
           bc.withValues(alpha: 0.4),
           bc.withValues(alpha: 0.4),
@@ -84,22 +86,22 @@ class AnimatedDivider extends StatelessWidget {
 }
 
 /// Vertical divider variant
-class AnimatedVerticalDivider extends StatelessWidget {
+class HvacVerticalDivider extends StatelessWidget {
   final double width;
   final double? height;
   final EdgeInsets? margin;
   final Gradient? gradient;
   final bool animate;
-  final DividerStyle style;
+  final HvacDividerStyle style;
 
-  const AnimatedVerticalDivider({
+  const HvacVerticalDivider({
     super.key,
     this.width = 1.0,
     this.height,
     this.margin,
     this.gradient,
     this.animate = true,
-    this.style = DividerStyle.gradient,
+    this.style = HvacDividerStyle.gradient,
   });
 
   @override
@@ -125,7 +127,7 @@ class AnimatedVerticalDivider extends StatelessWidget {
     if (gradient != null) return gradient!;
 
     const bc = HvacColors.backgroundCardBorder;
-    if (style == DividerStyle.gradient) {
+    if (style == HvacDividerStyle.gradient) {
       return LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,

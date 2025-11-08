@@ -1,4 +1,4 @@
-/// Premium progress indicator with smooth animations
+/// Premium progress indicator with gradient and web animations
 library;
 
 import 'package:flutter/material.dart';
@@ -6,14 +6,15 @@ import '../theme/colors.dart';
 import '../theme/spacing.dart';
 import '../theme/typography.dart';
 
-/// Premium progress indicator
+/// High-end progress indicator with gradient fill
 class PremiumProgressIndicator extends StatefulWidget {
-  final double value; // 0.0 to 1.0
+  final double value;
   final double height;
   final Color? backgroundColor;
   final Gradient? gradient;
   final bool showPercentage;
   final bool animate;
+  final String? label;
 
   const PremiumProgressIndicator({
     super.key,
@@ -23,6 +24,7 @@ class PremiumProgressIndicator extends StatefulWidget {
     this.gradient,
     this.showPercentage = false,
     this.animate = true,
+    this.label,
   });
 
   @override
@@ -34,39 +36,28 @@ class _PremiumProgressIndicatorState extends State<PremiumProgressIndicator>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _progressAnimation;
+  bool _isHovered = false;
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 1000),
-      vsync: this,
-    );
+        duration: const Duration(milliseconds: 1000), vsync: this);
+    _updateAnimation(0.0, widget.value.clamp(0.0, 1.0));
+    if (widget.animate) _controller.forward();
+  }
 
-    _progressAnimation = Tween<double>(
-      begin: 0.0,
-      end: widget.value,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
-    ));
-
-    if (widget.animate) {
-      _controller.forward();
-    }
+  void _updateAnimation(double from, double to) {
+    _progressAnimation = Tween<double>(begin: from, end: to)
+        .animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
   }
 
   @override
-  void didUpdateWidget(PremiumProgressIndicator oldWidget) {
+  void didUpdateWidget(covariant PremiumProgressIndicator oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.value != oldWidget.value) {
-      _progressAnimation = Tween<double>(
-        begin: oldWidget.value,
-        end: widget.value,
-      ).animate(CurvedAnimation(
-        parent: _controller,
-        curve: Curves.easeInOut,
-      ));
+      _updateAnimation(
+          oldWidget.value.clamp(0.0, 1.0), widget.value.clamp(0.0, 1.0));
       _controller.forward(from: 0);
     }
   }
@@ -79,55 +70,73 @@ class _PremiumProgressIndicatorState extends State<PremiumProgressIndicator>
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        AnimatedBuilder(
-          animation: _progressAnimation,
-          builder: (context, child) => Container(
-            height: widget.height,
-            decoration: BoxDecoration(
-              color: widget.backgroundColor ??
-                  HvacColors.backgroundCardBorder.withValues(alpha: 0.3),
-              borderRadius: BorderRadius.circular(widget.height / 2),
-            ),
-            child: LayoutBuilder(
-              builder: (context, constraints) => Stack(
-                children: [
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    width: constraints.maxWidth * _progressAnimation.value,
-                    decoration: BoxDecoration(
-                      gradient: widget.gradient ?? HvacColors.primaryGradient,
-                      borderRadius: BorderRadius.circular(widget.height / 2),
-                      boxShadow: [
-                        BoxShadow(
-                          color: HvacColors.accent.withValues(alpha: 0.3),
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        if (widget.showPercentage) ...[
-          const SizedBox(height: HvacSpacing.xs),
+    return MouseRegion(
+        onEnter: (_) => setState(() => _isHovered = true),
+        onExit: (_) => setState(() => _isHovered = false),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          if (widget.label != null) ...[
+            Text(widget.label!,
+                style: HvacTypography.captionMedium
+                    .copyWith(color: HvacColors.textSecondary)),
+            const SizedBox(height: HvacSpacing.xxs),
+          ],
           AnimatedBuilder(
-            animation: _progressAnimation,
-            builder: (context, child) => Text(
-              '${(_progressAnimation.value * 100).toInt()}%',
-              style: HvacTypography.caption.copyWith(
-                color: HvacColors.accent,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ],
-      ],
-    );
+              animation: _progressAnimation,
+              builder: (_, __) => AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  height: _isHovered ? widget.height * 1.2 : widget.height,
+                  decoration: BoxDecoration(
+                      color: widget.backgroundColor ??
+                          HvacColors.backgroundCardBorder
+                              .withValues(alpha: 0.3),
+                      borderRadius: BorderRadius.circular(widget.height),
+                      boxShadow: _isHovered
+                          ? [
+                              BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.05),
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 2))
+                            ]
+                          : null),
+                  child: LayoutBuilder(
+                      builder: (_, constraints) => Stack(children: [
+                            AnimatedContainer(
+                                duration: const Duration(milliseconds: 300),
+                                width: constraints.maxWidth *
+                                    _progressAnimation.value,
+                                decoration: BoxDecoration(
+                                    gradient: widget.gradient ??
+                                        HvacColors.primaryGradient,
+                                    borderRadius:
+                                        BorderRadius.circular(widget.height),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: HvacColors.primaryOrange
+                                              .withValues(
+                                                  alpha:
+                                                      _isHovered ? 0.4 : 0.3),
+                                          blurRadius: _isHovered ? 12 : 8,
+                                          offset: const Offset(0, 2)),
+                                    ])),
+                          ])))),
+          if (widget.showPercentage) ...[
+            const SizedBox(height: HvacSpacing.xs),
+            AnimatedBuilder(
+                animation: _progressAnimation,
+                builder: (_, __) => Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('${(_progressAnimation.value * 100).toInt()}%',
+                              style: HvacTypography.captionBold.copyWith(
+                                  color: _isHovered
+                                      ? HvacColors.primaryOrange
+                                      : HvacColors.primaryOrange
+                                          .withValues(alpha: 0.8))),
+                          if (_progressAnimation.value >= 1.0)
+                            const Icon(Icons.check_circle,
+                                size: 14.0, color: HvacColors.success),
+                        ])),
+          ],
+        ]));
   }
 }
