@@ -1,0 +1,87 @@
+ID,Component Name,Current Location,Destination,Classes,Type,Lines,Dependencies,Dependents,Effort (hrs),Priority,Phase,Status,Notes
+1,AnimatedBadge,lib/presentation/widgets/common/visual_polish/,packages/hvac_ui_kit/lib/src/widgets/badges/,AnimatedBadge,Badge,158,hvac_ui_kit theme,~12 files,4.5,CRITICAL,1,DUPLICATE,Merge with UI Kit version
+2,AnimatedBadge (UI Kit),packages/hvac_ui_kit/lib/src/widgets/,KEEP HERE,AnimatedBadge,Badge,146,hvac_ui_kit theme,~12 files,0,N/A,1,EXISTS,Base version - enhance with features from common/
+3,BaseShimmer,lib/presentation/widgets/common/shimmer/,packages/hvac_ui_kit/lib/src/widgets/shimmer/,BaseShimmer,Loading,92,hvac_ui_kit theme,~25 files,8,CRITICAL,1,TO MIGRATE,Move entire shimmer/ directory
+4,PulseSkeleton,lib/presentation/widgets/common/shimmer/,packages/hvac_ui_kit/lib/src/widgets/shimmer/,PulseSkeleton,Loading,87,BaseShimmer,Loading states,0,CRITICAL,1,TO MIGRATE,Part of shimmer system
+5,SkeletonPrimitives,lib/presentation/widgets/common/shimmer/,packages/hvac_ui_kit/lib/src/widgets/shimmer/,SkeletonContainer SkeletonText,Loading,124,BaseShimmer,Skeleton cards/lists,0,CRITICAL,1,TO MIGRATE,Part of shimmer system
+6,SkeletonCards,lib/presentation/widgets/common/shimmer/,packages/hvac_ui_kit/lib/src/widgets/shimmer/,DeviceCardSkeleton ChartSkeleton AnalyticsCardSkeleton,Loading,156,SkeletonPrimitives,Dashboard screens,0,CRITICAL,1,TO MIGRATE,Part of shimmer system
+7,SkeletonLists,lib/presentation/widgets/common/shimmer/,packages/hvac_ui_kit/lib/src/widgets/shimmer/,ListItemSkeleton,Loading,68,SkeletonPrimitives,List screens,0,CRITICAL,1,TO MIGRATE,Part of shimmer system
+8,SkeletonScreens,lib/presentation/widgets/common/shimmer/,packages/hvac_ui_kit/lib/src/widgets/shimmer/,HomeDashboardSkeleton,Loading,142,SkeletonCards SkeletonLists,Home screen,0,CRITICAL,1,TO MIGRATE,Part of shimmer system
+9,ErrorWidget,lib/presentation/widgets/common/error/,packages/hvac_ui_kit/lib/src/widgets/states/error/,AppErrorWidget,State,185,hvac_ui_kit theme,~30 files,9,CRITICAL,1,TO MIGRATE,Remove i18n dependency - make strings required params
+10,ErrorTypes,lib/presentation/widgets/common/error/,packages/hvac_ui_kit/lib/src/widgets/states/error/,ErrorType ErrorAction ErrorConfig,State,78,None,ErrorWidget,0,CRITICAL,1,TO MIGRATE,Part of error system
+11,ErrorIcon,lib/presentation/widgets/common/error/,packages/hvac_ui_kit/lib/src/widgets/states/error/,ErrorIcon,State,64,ErrorTypes,ErrorWidget,0,CRITICAL,1,TO MIGRATE,Part of error system
+12,ErrorActions,lib/presentation/widgets/common/error/,packages/hvac_ui_kit/lib/src/widgets/states/error/,ErrorActions,State,92,ErrorTypes,ErrorWidget,0,CRITICAL,1,TO MIGRATE,Part of error system
+13,ErrorDetails,lib/presentation/widgets/common/error/,packages/hvac_ui_kit/lib/src/widgets/states/error/,ErrorDetails,State,105,None,ErrorWidget,0,CRITICAL,1,TO MIGRATE,Part of error system
+14,ErrorWidget (alt),lib/presentation/widgets/common/error/,DELETE,AppErrorWidgetRefactored,State,247,All error components,None,0,N/A,1,DUPLICATE,Obsolete - delete after migration
+15,ErrorWidget (updated),lib/presentation/widgets/common/,DELETE,AppErrorWidget,State,120,None,None,0,N/A,1,DUPLICATE,Obsolete - delete after migration
+16,EmptyStateWidget,lib/presentation/widgets/common/,packages/hvac_ui_kit/lib/src/widgets/states/empty/,EmptyStateWidget,State,244,hvac_ui_kit theme,~18 files,8,CRITICAL,1,TO MIGRATE,Remove domain-specific factories
+17,EmptyStateTypes,lib/presentation/widgets/common/empty_state/,packages/hvac_ui_kit/lib/src/widgets/states/empty/,EmptyStateType,State,56,None,EmptyStateWidget,0,CRITICAL,1,TO MIGRATE,Part of empty state system
+18,EmptyStateIllustration,lib/presentation/widgets/common/empty_state/,packages/hvac_ui_kit/lib/src/widgets/states/empty/,EmptyStateIllustration,State,98,EmptyStateTypes,EmptyStateWidget,0,CRITICAL,1,TO MIGRATE,Part of empty state system
+19,CompactEmptyState,lib/presentation/widgets/common/empty_state/,packages/hvac_ui_kit/lib/src/widgets/states/empty/,CompactEmptyState,State,76,EmptyStateTypes,Various screens,0,CRITICAL,1,TO MIGRATE,Part of empty state system
+20,AnimatedIcons (Empty),lib/presentation/widgets/common/empty_states/,packages/hvac_ui_kit/lib/src/widgets/states/empty/,AnimatedDeviceIcon AnimatedChartIcon AnimatedBellIcon,State,187,flutter_animate,EmptyStateWidget,0,CRITICAL,1,TO MIGRATE,Part of empty state system
+21,BaseEmptyState,lib/presentation/widgets/common/empty_states/,MERGE WITH #16,BaseEmptyState,State,134,None,None,0,CRITICAL,1,DUPLICATE,Merge into EmptyStateWidget
+22,WebKeyboardShortcuts,lib/presentation/widgets/common/,packages/hvac_ui_kit/lib/src/widgets/keyboard/,WebKeyboardShortcuts CallbackIntent WebFocusableContainer,Utility,298,None,Web screens,3,HIGH,1,TO REFACTOR,Split into 4 files <300 lines each
+23,WebHoverCard,lib/presentation/widgets/common/,packages/hvac_ui_kit/lib/src/widgets/cards/hover/,WebHoverCard WebHoverIconButton,Card,294,hvac_ui_kit theme,~10 files,2,HIGH,1,TO REFACTOR,Split into 4 files
+24,WebResponsiveLayout,lib/presentation/widgets/common/,packages/hvac_ui_kit/lib/src/widgets/layout/responsive/,WebResponsiveLayout variants,Layout,273,ResponsiveUtils,Screens,2.5,HIGH,1,TO REFACTOR,Split into 3 files
+25,LoadingWidget,lib/presentation/widgets/common/,packages/hvac_ui_kit/lib/src/widgets/states/loading/,LoadingWidget LoadingOverlay,State,265,shimmer,All async screens,2,HIGH,1,TO REFACTOR,Split into 4 files
+26,AnimationConstants,lib/core/constants/,packages/hvac_ui_kit/lib/src/animations/,AnimationConstants,Constant,68,None,AnimatedCard Dialogs,1,CRITICAL,2,TO MIGRATE,Foundation dependency
+27,AnimatedCard,lib/presentation/widgets/common/,packages/hvac_ui_kit/lib/src/widgets/cards/,AnimatedCard,Card,90,AnimationConstants flutter_animate,~12 files,3,HIGH,2,TO MIGRATE,Remove AnimatedDeviceCard (domain-specific)
+28,AnimatedDeviceCard,lib/presentation/widgets/common/,KEEP IN APP,AnimatedDeviceCard,Card,25,AnimatedCard,Device screens,0,N/A,2,KEEP,Domain-specific - don't migrate
+29,AnimatedDivider,lib/presentation/widgets/common/visual_polish/,packages/hvac_ui_kit/lib/src/widgets/layout/,AnimatedDivider AnimatedVerticalDivider,Layout,87,hvac_ui_kit theme,~3 files,1.5,MEDIUM,2,TO MIGRATE,Simple migration
+30,TimePickerField,lib/presentation/widgets/common/,packages/hvac_ui_kit/lib/src/widgets/inputs/,TimePickerField,Input,99,Material,~6 files,2,MEDIUM,2,TO MIGRATE,Generic input component
+31,BaseGlassmorphic,lib/presentation/widgets/common/glassmorphic/,packages/hvac_ui_kit/lib/src/widgets/glassmorphic/,BaseGlassmorphicContainer GlassmorphicConfig,Card,142,dart:ui,Glassmorphic cards,8,HIGH,2,TO MIGRATE,Move entire glassmorphic/ dir
+32,GlassmorphicCard,lib/presentation/widgets/common/glassmorphic/,packages/hvac_ui_kit/lib/src/widgets/glassmorphic/,GlassmorphicCard ElevatedGlassmorphicCard,Card,178,BaseGlassmorphic,~8 files,0,HIGH,2,TO MIGRATE,Part of glassmorphic system
+33,GlowCard,lib/presentation/widgets/common/glassmorphic/,packages/hvac_ui_kit/lib/src/widgets/glassmorphic/,GlowCard StaticGlowCard NeonGlowCard,Card,234,BaseGlassmorphic,Premium screens,0,HIGH,2,TO MIGRATE,Part of glassmorphic system
+34,GradientCard,lib/presentation/widgets/common/glassmorphic/,packages/hvac_ui_kit/lib/src/widgets/glassmorphic/,GradientCard,Card,156,BaseGlassmorphic,Various screens,0,HIGH,2,TO MIGRATE,Part of glassmorphic system
+35,NeumorphicCard,lib/presentation/widgets/common/glassmorphic/,packages/hvac_ui_kit/lib/src/widgets/glassmorphic/,NeumorphicCard SoftNeumorphicCard ConcaveNeumorphicCard,Card,267,BaseGlassmorphic,Settings screens,0,HIGH,2,TO MIGRATE,Part of glassmorphic system
+36,AnimatedGradientBg,lib/presentation/widgets/common/glassmorphic/,packages/hvac_ui_kit/lib/src/widgets/glassmorphic/,AnimatedGradientBackground,Background,134,BaseGlassmorphic,Login/Auth screens,0,HIGH,2,TO MIGRATE,Part of glassmorphic system
+37,StatusIndicator,lib/presentation/widgets/common/visual_polish/,packages/hvac_ui_kit/lib/src/widgets/indicators/,StatusIndicator,Indicator,112,flutter_animate,~5 files,5.5,MEDIUM,2,TO MIGRATE,Merge with UI Kit status_indicator.dart
+38,StatusIndicator (UI Kit),packages/hvac_ui_kit/lib/src/widgets/,MERGE INTO #37,StatusIndicator,Indicator,98,hvac_ui_kit theme,~3 files,0,N/A,2,EXISTS,Base version - merge with common/ version
+39,PremiumProgressIndicator,lib/presentation/widgets/common/visual_polish/,packages/hvac_ui_kit/lib/src/widgets/indicators/,PremiumProgressIndicator,Progress,145,flutter_animate,~3 files,0,MEDIUM,2,TO MIGRATE,Part of indicators system
+40,FloatingTooltip,lib/presentation/widgets/common/visual_polish/,packages/hvac_ui_kit/lib/src/widgets/tooltips/,FloatingTooltip,Tooltip,127,flutter_animate,~2 files,0,MEDIUM,2,TO MIGRATE,Part of tooltip system
+41,WebTooltip,lib/presentation/widgets/common/tooltip/,packages/hvac_ui_kit/lib/src/widgets/tooltips/,WebTooltip TooltipIconButton RichTooltip,Tooltip,256,TooltipController,~8 files,4,HIGH,2,TO MIGRATE,Main tooltip component
+42,TooltipController,lib/presentation/widgets/common/tooltip/,packages/hvac_ui_kit/lib/src/widgets/tooltips/,TooltipController,Utility,89,None,WebTooltip,0,HIGH,2,TO MIGRATE,Part of tooltip system
+43,TooltipOverlay,lib/presentation/widgets/common/tooltip/,packages/hvac_ui_kit/lib/src/widgets/tooltips/,WebTooltipOverlay,Tooltip,134,TooltipController,WebTooltip,0,HIGH,2,TO MIGRATE,Part of tooltip system
+44,TooltipTypes,lib/presentation/widgets/common/tooltip/,packages/hvac_ui_kit/lib/src/widgets/tooltips/,TooltipPosition TooltipStyle,Tooltip,67,None,All tooltips,0,HIGH,2,TO MIGRATE,Part of tooltip system
+45,HvacIconButton,CREATE NEW,packages/hvac_ui_kit/lib/src/widgets/buttons/,HvacIconButton,Button,0,Tooltips Badges,Navigation App bars,4,CRITICAL,3,TO CREATE,Material 3 icon button
+46,HvacFab,CREATE NEW,packages/hvac_ui_kit/lib/src/widgets/buttons/,HvacFab HvacExtendedFab,Button,0,Badges Animations,Screens,3,HIGH,3,TO CREATE,Material 3 FAB
+47,HvacToggleButtons,CREATE NEW,packages/hvac_ui_kit/lib/src/widgets/buttons/,HvacToggleButtons,Button,0,Theme,Mode selectors,3,MEDIUM,3,TO CREATE,Toggle button group
+48,AuthInputField,lib/presentation/widgets/auth/,packages/hvac_ui_kit/lib/src/widgets/inputs/,HvacEnhancedTextField,Input,190,ResponsiveUtils flutter_animate,~8 files,7.5,HIGH,3,TO MIGRATE,Rename remove Auth prefix
+49,AuthResponsiveUtils,lib/presentation/widgets/auth/,packages/hvac_ui_kit/lib/src/utils/,AuthResponsive,Utility,145,None,AuthInputField,0,HIGH,3,TO MIGRATE,Merge with existing responsive_utils
+50,PasswordStrengthIndicator,lib/presentation/widgets/auth/,packages/hvac_ui_kit/lib/src/widgets/inputs/,PasswordStrengthIndicator,Input,87,None,Password fields,2.5,MEDIUM,3,TO MIGRATE,Generic password strength UI
+51,HvacCheckbox,CREATE NEW,packages/hvac_ui_kit/lib/src/widgets/inputs/,HvacCheckbox,Input,0,Theme,Forms Lists,3,HIGH,3,TO CREATE,Material 3 checkbox
+52,HvacRadioGroup,CREATE NEW,packages/hvac_ui_kit/lib/src/widgets/inputs/,HvacRadioGroup,Input,0,Theme,Forms,3,MEDIUM,3,TO CREATE,Radio button group
+53,HvacSwitch,CREATE NEW,packages/hvac_ui_kit/lib/src/widgets/inputs/,HvacSwitch,Input,0,Theme Animations,Settings,2,HIGH,3,TO CREATE,Material 3 switch
+54,HvacDropdown,CREATE NEW,packages/hvac_ui_kit/lib/src/widgets/inputs/,HvacDropdown,Input,0,Theme Search,Forms Filters,5,HIGH,3,TO CREATE,Dropdown with search
+55,AdaptiveSlider (enhance),packages/hvac_ui_kit/lib/src/widgets/,ENHANCE EXISTING,AdaptiveSlider,Input,156,Theme,Temperature controls,2,MEDIUM,3,TO ENHANCE,Add Material 3 features
+56,HvacChip,CREATE NEW,packages/hvac_ui_kit/lib/src/widgets/chips/,HvacChip HvacFilterChip HvacInputChip HvacChoiceChip,Chip,0,Theme Badges,Filters Tags,5,HIGH,3,TO CREATE,Material 3 chip variants
+57,NotificationBadge,lib/presentation/widgets/home/notifications/,packages/hvac_ui_kit/lib/src/widgets/badges/,NotificationBadge,Badge,76,Theme,~4 files,3.5,MEDIUM,3,TO MIGRATE,Generic badge component
+58,HvacExpansionCard,CREATE NEW,packages/hvac_ui_kit/lib/src/widgets/cards/,HvacExpansionCard,Card,0,Cards Animations,Settings Lists,3,MEDIUM,4,TO CREATE,Expandable card
+59,HvacSwipeableCard (audit),packages/hvac_ui_kit/lib/src/widgets/,AUDIT EXISTING,HvacSwipeableCard,Card,165,Theme,Lists,1,LOW,4,TO AUDIT,Verify Material 3 compliance
+60,HvacListTile,CREATE NEW,packages/hvac_ui_kit/lib/src/widgets/lists/,HvacListTile HvacSwitchListTile HvacCheckboxListTile,List,0,Switches Checkboxes,Lists Drawers,4,HIGH,4,TO CREATE,Material 3 list tiles
+61,HvacReorderableList,CREATE NEW,packages/hvac_ui_kit/lib/src/widgets/lists/,HvacReorderableList,List,0,List tiles Animations,Reorder UIs,4,LOW,4,TO CREATE,Drag-and-drop list
+62,ChartCard,CREATE NEW,packages/hvac_ui_kit/lib/src/widgets/cards/,ChartCard,Card,0,HvacCard,Dashboard Analytics,2,MEDIUM,4,TO CREATE,Generic chart wrapper
+63,HvacDataTable,CREATE NEW,packages/hvac_ui_kit/lib/src/widgets/tables/,HvacDataTable,Table,0,Lists Badges Pagination,Reports,8,MEDIUM,4,TO CREATE,Material 3 data table
+64,HvacTimeline,CREATE NEW,packages/hvac_ui_kit/lib/src/widgets/display/,HvacTimeline,Display,0,Theme Animations,Activity History,4,LOW,4,TO CREATE,Vertical timeline
+65,AppSnackBar,lib/presentation/widgets/common/snackbar/,packages/hvac_ui_kit/lib/src/widgets/feedback/snackbar/,AppSnackBar AppToast,Feedback,226,All snackbar variants,~35 files,10,CRITICAL,5,TO MIGRATE,Main snackbar API
+66,BaseSnackBar,lib/presentation/widgets/common/snackbar/,packages/hvac_ui_kit/lib/src/widgets/feedback/snackbar/,BaseSnackBar,Feedback,134,Theme,Snackbar variants,0,CRITICAL,5,TO MIGRATE,Part of snackbar system
+67,SuccessSnackBar,lib/presentation/widgets/common/snackbar/,packages/hvac_ui_kit/lib/src/widgets/feedback/snackbar/,SuccessSnackBar,Feedback,78,BaseSnackBar,AppSnackBar,0,CRITICAL,5,TO MIGRATE,Part of snackbar system
+68,ErrorSnackBar,lib/presentation/widgets/common/snackbar/,packages/hvac_ui_kit/lib/src/widgets/feedback/snackbar/,ErrorSnackBar,Feedback,82,BaseSnackBar,AppSnackBar,0,CRITICAL,5,TO MIGRATE,Part of snackbar system
+69,WarningSnackBar,lib/presentation/widgets/common/snackbar/,packages/hvac_ui_kit/lib/src/widgets/feedback/snackbar/,WarningSnackBar,Feedback,76,BaseSnackBar,AppSnackBar,0,CRITICAL,5,TO MIGRATE,Part of snackbar system
+70,InfoSnackBar,lib/presentation/widgets/common/snackbar/,packages/hvac_ui_kit/lib/src/widgets/feedback/snackbar/,InfoSnackBar,Feedback,74,BaseSnackBar,AppSnackBar,0,CRITICAL,5,TO MIGRATE,Part of snackbar system
+71,LoadingSnackBar,lib/presentation/widgets/common/snackbar/,packages/hvac_ui_kit/lib/src/widgets/feedback/snackbar/,LoadingSnackBar,Feedback,89,BaseSnackBar,AppSnackBar,0,CRITICAL,5,TO MIGRATE,Part of snackbar system
+72,ToastNotification,lib/presentation/widgets/common/snackbar/,packages/hvac_ui_kit/lib/src/widgets/feedback/snackbar/,ToastNotification,Feedback,167,ToastWidget,AppToast,0,CRITICAL,5,TO MIGRATE,Part of snackbar system
+73,ToastWidget,lib/presentation/widgets/common/snackbar/,packages/hvac_ui_kit/lib/src/widgets/feedback/snackbar/,ToastWidget,Feedback,123,Theme Animations,ToastNotification,0,CRITICAL,5,TO MIGRATE,Part of snackbar system
+74,SnackBarTypes,lib/presentation/widgets/common/snackbar/,packages/hvac_ui_kit/lib/src/widgets/feedback/snackbar/,SnackBarType ToastPosition,Feedback,92,None,All snackbars,0,CRITICAL,5,TO MIGRATE,Part of snackbar system
+75,HvacDialog,CREATE NEW,packages/hvac_ui_kit/lib/src/widgets/feedback/dialogs/,HvacDialog HvacAlertDialog HvacConfirmDialog HvacFullscreenDialog,Dialog,0,Buttons Inputs,Confirmations Forms,6,HIGH,5,TO CREATE,Material 3 dialog system
+76,HvacBottomSheet,CREATE NEW,packages/hvac_ui_kit/lib/src/widgets/feedback/,HvacBottomSheet,Overlay,0,Animations,Detail views,5,MEDIUM,5,TO CREATE,Material 3 bottom sheet
+77,HvacBanner,CREATE NEW,packages/hvac_ui_kit/lib/src/widgets/feedback/,HvacBanner,Feedback,0,Buttons,Persistent messages,2,LOW,5,TO CREATE,Material 3 banner
+78,HvacAppBar,CREATE NEW,packages/hvac_ui_kit/lib/src/widgets/navigation/,HvacAppBar HvacSliverAppBar,Navigation,0,Buttons Badges Search,All screens,4,HIGH,6,TO CREATE,Material 3 app bar
+79,HvacBottomNav,CREATE NEW,packages/hvac_ui_kit/lib/src/widgets/navigation/,HvacBottomNav,Navigation,0,Badges Icons,Main scaffold,3,HIGH,6,TO CREATE,Material 3 bottom nav
+80,HvacTabs,CREATE NEW,packages/hvac_ui_kit/lib/src/widgets/navigation/,HvacTabBar HvacTabBarView,Navigation,0,Badges Icons,Tabbed screens,3,MEDIUM,6,TO CREATE,Material 3 tabs
+81,HvacDrawer,CREATE NEW,packages/hvac_ui_kit/lib/src/widgets/navigation/,HvacDrawer,Navigation,0,List tiles Badges,Main navigation,3,LOW,6,TO CREATE,Material 3 nav drawer
+82,HvacGrid,CREATE NEW,packages/hvac_ui_kit/lib/src/widgets/layout/,HvacGrid,Layout,0,ResponsiveUtils,Grid layouts,3,MEDIUM,7,TO CREATE,Responsive grid
+83,HvacSpacer,CREATE NEW,packages/hvac_ui_kit/lib/src/widgets/layout/,HvacSpacer,Layout,0,HvacSpacing,Layouts,1,LOW,7,TO CREATE,Responsive spacer
+84,HvacBadge (standard),CREATE NEW,packages/hvac_ui_kit/lib/src/widgets/badges/,HvacBadge,Badge,0,Theme,Icons Buttons,2,MEDIUM,8,TO CREATE,Material 3 standard badge
+85,HvacCarousel,CREATE NEW,packages/hvac_ui_kit/lib/src/widgets/display/,HvacCarousel,Display,0,Animations,Onboarding Images,4,LOW,8,TO CREATE,Image carousel
+86,HvacSegmentedButton,CREATE NEW,packages/hvac_ui_kit/lib/src/widgets/buttons/,HvacSegmentedButton,Button,0,Theme,Selection UIs,2,MEDIUM,8,TO CREATE,Material 3 segmented button
