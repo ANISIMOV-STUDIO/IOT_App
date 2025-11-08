@@ -116,7 +116,7 @@ class _HomeScreenRefactoredState extends State<HomeScreenRefactored>
         // Main content
         Expanded(
           child: Container(
-            constraints: BoxConstraints(maxWidth: 1200),
+            constraints: const BoxConstraints(maxWidth: 1200),
             child: _buildContent(),
           ),
         ),
@@ -143,7 +143,7 @@ class _HomeScreenRefactoredState extends State<HomeScreenRefactored>
   /// Main content area with BLoC state management
   Widget _buildContent() {
     return Padding(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: BlocBuilder<HvacListBloc, HvacListState>(
         builder: (context, state) {
           final isLoading = state is HvacListLoading;
@@ -227,7 +227,7 @@ class _HomeScreenRefactoredState extends State<HomeScreenRefactored>
         if (state is! HvacListLoaded) return const SizedBox.shrink();
 
         return ListView.builder(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           itemCount: state.units.length,
           itemBuilder: (context, index) {
             final unit = state.units[index];

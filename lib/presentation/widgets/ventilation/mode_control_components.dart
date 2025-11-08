@@ -5,18 +5,17 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
-import '../../../domain/entities/hvac_unit.dart';
 import '../../../domain/entities/ventilation_mode.dart';
 
 /// Mode Control Header
 class ModeControlHeader extends StatelessWidget {
-  final HvacUnit unit;
+  final String mode;
   final VoidCallback onModeToggle;
   final bool showModeSelector;
 
   const ModeControlHeader({
     super.key,
-    required this.unit,
+    required this.mode,
     required this.onModeToggle,
     required this.showModeSelector,
   });
@@ -40,7 +39,7 @@ class ModeControlHeader extends StatelessWidget {
                   borderRadius: HvacRadius.smRadius,
                 ),
                 child: Icon(
-                  _getModeIcon(unit.mode),
+                  Icons.air,
                   color: Colors.white,
                   size: isMobile ? 20.0 : 24.0,
                 ),
@@ -59,7 +58,7 @@ class ModeControlHeader extends StatelessWidget {
                     ),
                     const SizedBox(height: 2.0),
                     Text(
-                      _getModeName(unit.mode),
+                      mode.isEmpty ? 'Не выбран' : mode,
                       style: HvacTypography.titleLarge.copyWith(
                         fontSize: isMobile ? 16.0 : 18.0,
                         fontWeight: FontWeight.w600,
@@ -80,29 +79,6 @@ class ModeControlHeader extends StatelessWidget {
         ),
       ],
     );
-  }
-
-  IconData _getModeIcon(VentilationMode mode) => Icons.air;
-
-  String _getModeName(VentilationMode mode) {
-    switch (mode) {
-      case VentilationMode.basic:
-        return 'Базовый';
-      case VentilationMode.intensive:
-        return 'Интенсивный';
-      case VentilationMode.economic:
-        return 'Экономичный';
-      case VentilationMode.maximum:
-        return 'Максимальный';
-      case VentilationMode.kitchen:
-        return 'Кухня';
-      case VentilationMode.fireplace:
-        return 'Камин';
-      case VentilationMode.vacation:
-        return 'Отпуск';
-      case VentilationMode.custom:
-        return 'Пользовательский';
-    }
   }
 }
 

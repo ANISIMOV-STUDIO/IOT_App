@@ -5,7 +5,6 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../domain/entities/hvac_unit.dart';
 import 'temperature_display_compact.dart';

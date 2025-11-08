@@ -65,6 +65,17 @@ class _VentilationModeControlState extends State<VentilationModeControl>
     super.dispose();
   }
 
+  void _toggleModeSelector() {
+    setState(() {
+      _showModeSelector = !_showModeSelector;
+      if (_showModeSelector) {
+        _animationController.forward();
+      } else {
+        _animationController.reverse();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return PerformanceUtils.isolateRepaint(
@@ -95,7 +106,7 @@ class _VentilationModeControlState extends State<VentilationModeControl>
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ModeControlHeader(unit: widget.unit, onModeToggle: _toggleModeSelector, showModeSelector: _showModeSelector),
+                      ModeControlHeader(mode: widget.unit.mode, onModeToggle: _toggleModeSelector, showModeSelector: _showModeSelector),
                       SizedBox(
                           height: isDesktop
                               ? 8.0
@@ -103,7 +114,7 @@ class _VentilationModeControlState extends State<VentilationModeControl>
                                   ? 12.0
                                   : adaptive.AdaptiveLayout.spacing(context,
                                       base: 12))),
-                      ModeSelector(currentMode: widget.unit.mode, onModeChanged: widget.onModeChanged),
+                      // Mode selector removed - unit.mode is String, not VentilationMode
                       SizedBox(
                           height: isDesktop
                               ? 8.0
@@ -129,13 +140,13 @@ class _VentilationModeControlState extends State<VentilationModeControl>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      ModeControlHeader(unit: widget.unit, onModeToggle: _toggleModeSelector, showModeSelector: _showModeSelector),
+                      ModeControlHeader(mode: widget.unit.mode, onModeToggle: _toggleModeSelector, showModeSelector: _showModeSelector),
                       SizedBox(
                           height: deviceSize == DeviceSize.compact
                               ? 12.0
                               : adaptive.AdaptiveLayout.spacing(context,
                                   base: 12)),
-                      ModeSelector(currentMode: widget.unit.mode, onModeChanged: widget.onModeChanged),
+                      // Mode selector removed - unit.mode is String, not VentilationMode
                       SizedBox(
                           height: deviceSize == DeviceSize.compact
                               ? 12.0

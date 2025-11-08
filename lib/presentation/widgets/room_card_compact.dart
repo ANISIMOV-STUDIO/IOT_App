@@ -6,7 +6,6 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
-import '../../core/theme/ui_constants.dart';
 import 'room_card/room_card_header.dart';
 import 'room_card/room_card_stats.dart';
 import 'room_card/room_card_mode_indicator.dart';
