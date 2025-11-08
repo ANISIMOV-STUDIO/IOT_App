@@ -51,30 +51,20 @@ class ActivityTimeline extends StatelessWidget {
                 ],
               ),
               if (onSeeAll != null)
-                TextButton(
-                  onPressed: onSeeAll,
-                  style: TextButton.styleFrom(
-                    padding: const EdgeInsets.all(0),
-                    minimumSize: const Size(60, 30),
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'See All',
-                        style: HvacTypography.labelLarge.copyWith(
-                          color: HvacColors.textSecondary,
-                        ),
-                      ),
-                      const SizedBox(width: HvacSpacing.xxs),
-                      const Icon(
-                        Icons.arrow_forward,
-                        size: 14,
-                        color: HvacColors.textSecondary,
-                      ),
-                    ],
-                  ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    HvacTextButton(
+                      label: 'See All',
+                      onPressed: onSeeAll,
+                    ),
+                    const SizedBox(width: HvacSpacing.xxs),
+                    const Icon(
+                      Icons.arrow_forward,
+                      size: 14,
+                      color: HvacColors.textSecondary,
+                    ),
+                  ],
                 ),
             ],
           ),

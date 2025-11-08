@@ -240,14 +240,9 @@ class ErrorSnackBar {
         ),
       ),
       actions: [
-        TextButton(
+        HvacTextButton(
+          label: 'CLOSE',
           onPressed: () => Navigator.of(context).pop(),
-          child: Text(
-            'CLOSE',
-            style: HvacTypography.bodyMedium.copyWith(
-              color: HvacColors.primaryOrange,
-            ),
-          ),
         ),
       ],
     );

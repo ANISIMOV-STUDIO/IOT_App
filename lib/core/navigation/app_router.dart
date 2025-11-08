@@ -7,6 +7,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
 import '../../presentation/bloc/auth/auth_bloc.dart';
 import '../../presentation/pages/login_screen.dart';
@@ -109,9 +110,9 @@ GoRouter createRouter(AuthBloc authBloc) {
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 24),
-            ElevatedButton(
+            HvacPrimaryButton(
+              label: 'Go to Home',
               onPressed: () => context.go(AppRoutes.home),
-              child: const Text('Go to Home'),
             ),
           ],
         ),

@@ -87,25 +87,12 @@ class HomeErrorState extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: HvacSpacing.lgV),
-            ElevatedButton(
+            HvacPrimaryButton(
+              label: l10n.retry,
               onPressed: onRetry ??
                   () => context.read<HvacListBloc>().add(
                         const LoadHvacUnitsEvent(),
                       ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: HvacColors.primaryOrange,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: HvacSpacing.lgR,
-                  vertical: HvacSpacing.smV,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: HvacRadius.smRadius,
-                ),
-              ),
-              child: Text(
-                l10n.retry,
-                style: const TextStyle(fontSize: 14.0),
-              ),
             ),
           ],
         ),
@@ -158,23 +145,10 @@ class HomeEmptyState extends StatelessWidget {
             ),
             if (onAddDevice != null) ...[
               const SizedBox(height: HvacSpacing.lgV),
-              ElevatedButton.icon(
+              HvacPrimaryButton(
+                label: l10n.addDevice,
                 onPressed: onAddDevice,
-                icon: const Icon(Icons.add, size: 18.0),
-                label: Text(
-                  l10n.addDevice,
-                  style: const TextStyle(fontSize: 14.0),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: HvacColors.primaryOrange,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: HvacSpacing.lgR,
-                    vertical: HvacSpacing.smV,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: HvacRadius.smRadius,
-                  ),
-                ),
+                icon: Icons.add,
               ),
             ],
           ],

@@ -4,7 +4,6 @@ library;
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../domain/entities/day_schedule.dart';
-import '../common/time_picker_field.dart';
 
 /// Card widget for displaying and editing a single day's schedule
 class DayScheduleCard extends StatefulWidget {
@@ -219,11 +218,11 @@ class _DayScheduleCardState extends State<DayScheduleCard>
                 onTap: () {},
                 borderRadius: BorderRadius.circular(8.0),
                 rippleColor: HvacColors.success.withValues(alpha: 0.3),
-                child: TimePickerField(
+                child: HvacTimePicker(
                   label: 'Включение',
-                  currentTime: widget.schedule.turnOnTime,
+                  value: widget.schedule.turnOnTime,
                   icon: Icons.power_settings_new,
-                  onTimeChanged: (time) {
+                  onChanged: (time) {
                     widget.onScheduleChanged(
                       widget.schedule.copyWith(turnOnTime: time),
                     );
@@ -237,11 +236,11 @@ class _DayScheduleCardState extends State<DayScheduleCard>
                 onTap: () {},
                 borderRadius: BorderRadius.circular(8.0),
                 rippleColor: HvacColors.error.withValues(alpha: 0.3),
-                child: TimePickerField(
+                child: HvacTimePicker(
                   label: 'Отключение',
-                  currentTime: widget.schedule.turnOffTime,
+                  value: widget.schedule.turnOffTime,
                   icon: Icons.power_off,
-                  onTimeChanged: (time) {
+                  onChanged: (time) {
                     widget.onScheduleChanged(
                       widget.schedule.copyWith(turnOffTime: time),
                     );

@@ -72,9 +72,6 @@ class _UnsavedChangesDialog extends StatefulWidget {
 }
 
 class _UnsavedChangesDialogState extends State<_UnsavedChangesDialog> {
-  bool _cancelHovered = false;
-  bool _discardHovered = false;
-
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -101,47 +98,13 @@ class _UnsavedChangesDialogState extends State<_UnsavedChangesDialog> {
         style: HvacTypography.bodyMedium,
       ),
       actions: [
-        MouseRegion(
-          cursor: SystemMouseCursors.click,
-          onEnter: (_) => setState(() => _cancelHovered = true),
-          onExit: (_) => setState(() => _cancelHovered = false),
-          child: TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            style: TextButton.styleFrom(
-              backgroundColor: _cancelHovered
-                  ? HvacColors.primaryOrange.withValues(alpha: 0.1)
-                  : Colors.transparent,
-            ),
-            child: Text(
-              'Отмена',
-              style: HvacTypography.labelMedium.copyWith(
-                color: _cancelHovered
-                    ? HvacColors.primaryOrange
-                    : HvacColors.textSecondary,
-              ),
-            ),
-          ),
+        HvacTextButton(
+          label: 'Отмена',
+          onPressed: () => Navigator.pop(context, false),
         ),
-        MouseRegion(
-          cursor: SystemMouseCursors.click,
-          onEnter: (_) => setState(() => _discardHovered = true),
-          onExit: (_) => setState(() => _discardHovered = false),
-          child: TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            style: TextButton.styleFrom(
-              backgroundColor: _discardHovered
-                  ? HvacColors.error.withValues(alpha: 0.1)
-                  : Colors.transparent,
-            ),
-            child: Text(
-              'Выйти',
-              style: HvacTypography.labelMedium.copyWith(
-                color: _discardHovered
-                    ? HvacColors.error.withValues(alpha: 0.8)
-                    : HvacColors.error,
-              ),
-            ),
-          ),
+        HvacTextButton(
+          label: 'Выйти',
+          onPressed: () => Navigator.pop(context, true),
         ),
       ],
     );

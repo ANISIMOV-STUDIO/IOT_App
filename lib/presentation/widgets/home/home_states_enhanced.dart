@@ -16,7 +16,6 @@ import '../../../core/utils/responsive_builder.dart' show ResponsiveInfo;
 import '../../../generated/l10n/app_localizations.dart';
 import '../../bloc/hvac_list/hvac_list_bloc.dart';
 import '../../bloc/hvac_list/hvac_list_event.dart';
-import '../common/loading_widget.dart';
 import '../common/error_widget.dart' as app_error;
 
 /// Enhanced loading state with shimmer effect
@@ -47,10 +46,9 @@ class EnhancedHomeLoadingState extends StatelessWidget {
 
               // Loading indicator
               Expanded(
-                child: LoadingWidget(
-                  type: LoadingType.shimmer,
+                child: ui_kit.HvacLoadingState(
                   message: l10n.loadingDevices,
-                  showMessage: true,
+                  style: ui_kit.LoadingStyle.spinner,
                 ),
               ),
             ],
@@ -216,9 +214,8 @@ class QuickLoadingOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return LoadingOverlay(
+    return ui_kit.HvacLoadingOverlay(
       isLoading: isLoading,
-      loadingType: LoadingType.circular,
       message: l10n.refreshing,
       child: child,
     );

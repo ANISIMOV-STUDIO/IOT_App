@@ -44,14 +44,9 @@ class AlertsCard extends StatelessWidget {
                     ),
               ),
               if (onClearAlerts != null && alerts.isNotEmpty)
-                TextButton(
+                HvacTextButton(
+                  label: 'Сброс',
                   onPressed: onClearAlerts,
-                  child: Text(
-                    'Сброс',
-                    style: HvacTypography.titleSmall.copyWith(
-                      color: HvacColors.primaryOrange,
-                    ),
-                  ),
                 ),
             ],
           ),

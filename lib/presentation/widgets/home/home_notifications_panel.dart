@@ -168,37 +168,15 @@ class _HomeNotificationsPanelState extends State<HomeNotificationsPanel> {
     return Padding(
       padding: const EdgeInsets.only(top: 12.0),
       child: Center(
-        child: TextButton(
+        child: HvacTextButton(
+          label: _showAllNotifications
+              ? 'Свернуть'
+              : 'Показать все ($totalCount)',
           onPressed: () {
             setState(() {
               _showAllNotifications = !_showAllNotifications;
             });
           },
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                _showAllNotifications
-                    ? 'Свернуть'
-                    : 'Показать все ($totalCount)',
-                style: TextStyle(
-                  color: _showAllNotifications
-                      ? HvacColors.textSecondary
-                      : HvacColors.primaryOrange,
-                  fontSize: 13.0,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(width: 4.0),
-              Icon(
-                _showAllNotifications ? Icons.expand_less : Icons.expand_more,
-                color: _showAllNotifications
-                    ? HvacColors.textSecondary
-                    : HvacColors.primaryOrange,
-                size: 18.0,
-              ),
-            ],
-          ),
         ),
       ),
     );

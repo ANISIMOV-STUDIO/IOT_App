@@ -41,30 +41,10 @@ class DiagnosticsTab extends StatelessWidget {
           // Run diagnostics button
           SizedBox(
             width: double.infinity,
-            child: ElevatedButton(
+            child: HvacPrimaryButton(
+              label: 'Запустить диагностику',
               onPressed: () => _runDiagnostics(context),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: HvacColors.primaryOrange,
-                padding: const EdgeInsets.symmetric(vertical: 14.0),
-                shape: RoundedRectangleBorder(
-                  borderRadius: HvacRadius.mdRadius,
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.play_arrow,
-                      color: HvacColors.textPrimary, size: 24.0),
-                  const SizedBox(width: 8.0),
-                  Text(
-                    'Запустить диагностику',
-                    style: HvacTypography.buttonMedium.copyWith(
-                      color: HvacColors.textPrimary,
-                      fontSize: 15.0,
-                    ),
-                  ),
-                ],
-              ),
+              icon: Icons.play_arrow,
             ),
           ),
         ],

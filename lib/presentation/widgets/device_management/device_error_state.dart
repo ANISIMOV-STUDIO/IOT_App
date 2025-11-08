@@ -45,14 +45,10 @@ class DeviceErrorState extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: HvacSpacing.lg),
-                ElevatedButton.icon(
+                HvacPrimaryButton(
+                  label: l10n.retry,
                   onPressed: onRefresh,
-                  icon: const Icon(Icons.refresh_rounded),
-                  label: Text(l10n.retry),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: HvacColors.primaryBlue,
-                    foregroundColor: HvacColors.textPrimary,
-                  ),
+                  icon: Icons.refresh_rounded,
                 ),
               ],
             ),
