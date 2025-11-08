@@ -28,9 +28,8 @@ class AlertsCard extends StatelessWidget {
       displayAlerts.add(null);
     }
 
-    return Container(
-      padding: const EdgeInsets.all(HvacSpacing.xlR),
-      decoration: HvacTheme.deviceCard(),
+    return HvacCard(
+      size: HvacCardSize.large,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

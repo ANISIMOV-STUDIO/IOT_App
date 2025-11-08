@@ -9,8 +9,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart' as ui_kit;
-import 'package:hvac_ui_kit/src/theme/colors.dart';
-import 'package:hvac_ui_kit/src/theme/spacing.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../core/utils/accessibility_utils.dart';
 import '../../../core/utils/responsive_builder.dart' as core_resp;
 import '../../../core/utils/responsive_builder.dart' show ResponsiveInfo;
@@ -19,7 +18,6 @@ import '../../bloc/hvac_list/hvac_list_bloc.dart';
 import '../../bloc/hvac_list/hvac_list_event.dart';
 import '../common/loading_widget.dart';
 import '../common/error_widget.dart' as app_error;
-import '../common/empty_state_widget.dart';
 
 /// Enhanced loading state with shimmer effect
 class EnhancedHomeLoadingState extends StatelessWidget {
@@ -242,12 +240,9 @@ class AccessibleRefreshButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return IconButton(
+    return HvacIconButton(
+      icon: Icons.refresh,
       onPressed: isLoading ? null : onRefresh,
-      icon: Icon(
-        Icons.refresh,
-        color: isLoading ? HvacColors.textTertiary : HvacColors.accent,
-      ),
       tooltip: l10n.refreshDevices,
     );
   }

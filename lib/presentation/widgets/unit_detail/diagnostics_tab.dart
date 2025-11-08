@@ -79,34 +79,27 @@ class DiagnosticsTab extends StatelessWidget {
 
 
   void _runDiagnostics(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: HvacColors.backgroundCard,
-        title: Text(
-          'Диагностика',
-          style: HvacTypography.titleLarge.copyWith(
-            color: HvacColors.textPrimary,
+    HvacAlertDialog.show(
+      context,
+      title: 'Диагностика',
+      contentWidget: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const CircularProgressIndicator(
+            color: HvacColors.primaryOrange,
+            strokeWidth: 3.0,
           ),
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const CircularProgressIndicator(
-              color: HvacColors.primaryOrange,
-              strokeWidth: 3.0,
+          const SizedBox(height: 16.0),
+          Text(
+            'Выполняется диагностика системы...',
+            style: HvacTypography.bodyMedium.copyWith(
+              fontSize: 14.0,
+              color: HvacColors.textSecondary,
             ),
-            const SizedBox(height: 16.0),
-            Text(
-              'Выполняется диагностика системы...',
-              style: HvacTypography.bodyMedium.copyWith(
-                fontSize: 14.0,
-                color: HvacColors.textSecondary,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
+      actions: [], // No actions during loading
     );
 
     // Simulate diagnostics

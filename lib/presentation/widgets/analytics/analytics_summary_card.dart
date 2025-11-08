@@ -42,16 +42,8 @@ class AnalyticsSummaryCard extends StatelessWidget {
           ),
         );
       },
-      child: Container(
-        padding: const EdgeInsets.all(HvacSpacing.mdR),
-        decoration: BoxDecoration(
-          color: HvacColors.backgroundCard,
-          borderRadius: BorderRadius.circular(HvacRadius.mdR),
-          border: Border.all(
-            color: HvacColors.backgroundCardBorder,
-            width: 1,
-          ),
-        ),
+      child: HvacCard(
+        size: HvacCardSize.medium,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

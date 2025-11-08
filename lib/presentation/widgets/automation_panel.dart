@@ -77,32 +77,10 @@ class AutomationPanel extends StatelessWidget {
           // Manage button
           SizedBox(
             width: double.infinity,
-            child: OutlinedButton(
+            child: HvacOutlineButton(
+              label: 'Управление правилами',
               onPressed: onManageRules,
-              style: OutlinedButton.styleFrom(
-                side: const BorderSide(
-                  color: HvacColors.primaryOrange,
-                  width: 1,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: HvacRadius.smRadius,
-                ),
-                padding: const EdgeInsets.symmetric(vertical: HvacSpacing.smR),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.settings,
-                      color: HvacColors.primaryOrange, size: 16),
-                  const SizedBox(width: HvacSpacing.xs),
-                  Text(
-                    'Управление правилами',
-                    style: HvacTypography.labelLarge.copyWith(
-                      color: HvacColors.primaryOrange,
-                    ),
-                  ),
-                ],
-              ),
+              icon: Icons.settings,
             ),
           ),
         ],

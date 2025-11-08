@@ -1,6 +1,7 @@
 /// Authentication Input Field Widget
 ///
 /// Responsive, accessible input field for web authentication
+/// Now wraps HvacTextField from the HVAC UI Kit
 library;
 
 import 'package:flutter/material.dart';
@@ -8,9 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
-import 'responsive_utils.dart';
-
-class AuthInputField extends StatefulWidget {
+class AuthInputField extends StatelessWidget {
   final TextEditingController controller;
   final String labelText;
   final String? hintText;
@@ -47,143 +46,23 @@ class AuthInputField extends StatefulWidget {
   });
 
   @override
-  State<AuthInputField> createState() => _AuthInputFieldState();
-}
-
-class _AuthInputFieldState extends State<AuthInputField> {
-  bool _isFocused = false;
-  bool _isHovered = false;
-  late FocusNode _focusNode;
-
-  @override
-  void initState() {
-    super.initState();
-    _focusNode = widget.focusNode ?? FocusNode();
-    _focusNode.addListener(_handleFocusChange);
-  }
-
-  @override
-  void dispose() {
-    if (widget.focusNode == null) {
-      _focusNode.dispose();
-    }
-    super.dispose();
-  }
-
-  void _handleFocusChange() {
-    setState(() {
-      _isFocused = _focusNode.hasFocus;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final responsive = AuthResponsive(context);
-    final theme = Theme.of(context);
-
-    return MouseRegion(
-      cursor: SystemMouseCursors.text,
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        decoration: BoxDecoration(
-          borderRadius: HvacRadius.mdRadius,
-          boxShadow: _isFocused
-              ? [
-                  BoxShadow(
-                    color: HvacColors.primaryOrange.withAlpha(51),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ]
-              : null,
-        ),
-        child: TextFormField(
-          controller: widget.controller,
-          focusNode: _focusNode,
-          obscureText: widget.obscureText,
-          keyboardType: widget.keyboardType,
-          inputFormatters: widget.inputFormatters,
-          validator: widget.validator,
-          textCapitalization: widget.textCapitalization,
-          autofocus: widget.autofocus,
-          onChanged: widget.onChanged,
-          onFieldSubmitted: widget.onFieldSubmitted,
-          textInputAction: widget.textInputAction,
-          style: theme.textTheme.bodyLarge?.copyWith(
-            fontSize: (16 * responsive.fontMultiplier).rsp(context),
-          ),
-          decoration: InputDecoration(
-            labelText: widget.labelText,
-            hintText: widget.hintText,
-            prefixIcon: Icon(
-              widget.prefixIcon,
-              size: (20 * responsive.fontMultiplier).rsp(context),
-              color: _isFocused
-                  ? HvacColors.primaryOrange
-                  : _isHovered
-                      ? HvacColors.textPrimary
-                      : HvacColors.textSecondary,
-            ),
-            suffixIcon: widget.suffixIcon,
-            contentPadding: EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: responsive.inputHeight / 4,
-            ),
-            border: OutlineInputBorder(
-              borderRadius: HvacRadius.mdRadius,
-              borderSide: BorderSide(
-                color: HvacColors.backgroundCardBorder,
-                width: 1,
-              ),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: HvacRadius.mdRadius,
-              borderSide: BorderSide(
-                color: _isHovered
-                    ? HvacColors.textSecondary.withAlpha(102)
-                    : HvacColors.backgroundCardBorder,
-                width: (_isHovered ? 1.5 : 1).rw(context),
-              ),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: HvacRadius.mdRadius,
-              borderSide: BorderSide(
-                color: HvacColors.primaryOrange,
-                width: 2,
-              ),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: HvacRadius.mdRadius,
-              borderSide: BorderSide(
-                color: HvacColors.error,
-                width: 1,
-              ),
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderRadius: HvacRadius.mdRadius,
-              borderSide: BorderSide(
-                color: HvacColors.error,
-                width: 2,
-              ),
-            ),
-            labelStyle: HvacTypography.bodyMedium.copyWith(
-              fontSize: (14 * responsive.fontMultiplier).rsp(context),
-              color: _isFocused
-                  ? HvacColors.primaryOrange
-                  : HvacColors.textSecondary,
-            ),
-            hintStyle: HvacTypography.bodyMedium.copyWith(
-              fontSize: (14 * responsive.fontMultiplier).rsp(context),
-              color: HvacColors.textSecondary.withAlpha(153),
-            ),
-            errorStyle: HvacTypography.caption.copyWith(
-              fontSize: (12 * responsive.fontMultiplier).rsp(context),
-            ),
-          ),
-        ),
-      ).animate().fadeIn(duration: 300.ms).slideY(begin: 0.1, end: 0),
-    );
+    return HvacTextField(
+      controller: controller,
+      labelText: labelText,
+      hintText: hintText,
+      prefixIcon: prefixIcon,
+      suffixIcon: suffixIcon,
+      obscureText: obscureText,
+      keyboardType: keyboardType,
+      inputFormatters: inputFormatters,
+      validator: validator,
+      textCapitalization: textCapitalization,
+      autofocus: autofocus,
+      onChanged: onChanged,
+      onFieldSubmitted: onFieldSubmitted,
+      focusNode: focusNode,
+      textInputAction: textInputAction,
+    ).animate().fadeIn(duration: 300.ms).slideY(begin: 0.1, end: 0);
   }
 }

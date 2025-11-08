@@ -23,47 +23,11 @@ class SettingsSwitchTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: HvacTypography.titleMedium.copyWith(
-                  fontSize: 14.0,
-                  color: HvacColors.textPrimary,
-                ),
-              ),
-              const SizedBox(height: 4.0),
-              Text(
-                subtitle,
-                style: HvacTypography.labelLarge.copyWith(
-                  fontSize: 12.0,
-                  color: HvacColors.textSecondary,
-                ),
-              ),
-            ],
-          ),
-        ),
-        Switch(
-          value: value,
-          onChanged: onChanged,
-          thumbColor: WidgetStateProperty.resolveWith((states) {
-            if (states.contains(WidgetState.selected)) {
-              return HvacColors.primaryOrange;
-            }
-            return null;
-          }),
-          trackColor: WidgetStateProperty.resolveWith((states) {
-            if (!states.contains(WidgetState.selected)) {
-              return HvacColors.textSecondary.withValues(alpha: 0.3);
-            }
-            return null;
-          }),
-        ),
-      ],
+    return HvacSwitch(
+      value: value,
+      onChanged: onChanged,
+      label: title,
+      subtitle: subtitle,
     );
   }
 }

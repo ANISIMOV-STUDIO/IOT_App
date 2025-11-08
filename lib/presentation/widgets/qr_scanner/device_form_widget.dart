@@ -108,57 +108,33 @@ class _DeviceFormWidgetState extends State<DeviceFormWidget> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // MAC Address Field
-          TextFormField(
+          HvacTextField(
             controller: _macController,
-            decoration: InputDecoration(
-              labelText: l10n.macAddress,
-              hintText: 'XX:XX:XX:XX:XX:XX',
-              prefixIcon: const Icon(Icons.router, size: 24.0),
-              filled: widget.isWebMode,
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.md,
-                vertical: AppSpacing.sm,
-              ),
-            ),
-            readOnly: widget.initialMacAddress != null && !widget.isWebMode,
+            labelText: l10n.macAddress,
+            hintText: 'XX:XX:XX:XX:XX:XX',
+            prefixIcon: Icons.router,
+            enabled: !(widget.initialMacAddress != null && !widget.isWebMode),
             validator: (value) => _validateMacAddress(value, l10n),
             textCapitalization: TextCapitalization.characters,
-            style: HvacTypography.bodyMedium,
           ),
           SizedBox(height: responsive.verticalSpacing),
 
           // Device Name Field
-          TextFormField(
+          HvacTextField(
             controller: _nameController,
-            decoration: InputDecoration(
-              labelText: l10n.deviceName,
-              hintText: l10n.livingRoom,
-              prefixIcon: const Icon(Icons.label, size: 24.0),
-              filled: widget.isWebMode,
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.md,
-                vertical: AppSpacing.sm,
-              ),
-            ),
+            labelText: l10n.deviceName,
+            hintText: l10n.livingRoom,
+            prefixIcon: Icons.label,
             validator: (value) => _validateDeviceName(value, l10n),
-            style: HvacTypography.bodyMedium,
           ),
           SizedBox(height: responsive.verticalSpacing),
 
           // Location Field (Optional)
-          TextFormField(
+          HvacTextField(
             controller: _locationController,
-            decoration: InputDecoration(
-              labelText: l10n.location,
-              hintText: l10n.optional,
-              prefixIcon: const Icon(Icons.location_on, size: 24.0),
-              filled: widget.isWebMode,
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.md,
-                vertical: AppSpacing.sm,
-              ),
-            ),
-            style: HvacTypography.bodyMedium,
+            labelText: l10n.location,
+            hintText: l10n.optional,
+            prefixIcon: Icons.location_on,
           ),
           const SizedBox(height: AppSpacing.xl),
 

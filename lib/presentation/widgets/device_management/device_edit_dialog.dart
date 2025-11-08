@@ -16,6 +16,16 @@ class DeviceEditDialog extends StatefulWidget {
     required this.unit,
   });
 
+  /// Show the device edit dialog
+  static Future<void> show(BuildContext context, {required dynamic unit}) {
+    return HvacAlertDialog.show(
+      context,
+      title: AppLocalizations.of(context)!.editDevice,
+      contentWidget: _DeviceEditForm(unit: unit),
+      actions: [], // Actions are handled by the form itself
+    );
+  }
+
   @override
   State<DeviceEditDialog> createState() => _DeviceEditDialogState();
 }
@@ -48,83 +58,106 @@ class _DeviceEditDialogState extends State<DeviceEditDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return _DeviceEditForm(unit: widget.unit);
+  }
+}
 
-    return AlertDialog(
-      backgroundColor:
-          isDark ? HvacColors.backgroundCard : HvacColors.glassWhite,
-      title: Text(l10n.editDevice),
-      content: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _buildMacAddressField(l10n),
-            const SizedBox(height: HvacSpacing.md),
-            _buildNameField(l10n),
-            const SizedBox(height: HvacSpacing.md),
-            _buildLocationField(l10n),
-          ],
-        ),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(l10n.cancel),
-        ),
-        ElevatedButton(
-          onPressed: _handleEditDevice,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: HvacColors.primaryBlue,
-            foregroundColor: HvacColors.textPrimary,
-            shape: RoundedRectangleBorder(
-              borderRadius: HvacRadius.mdRadius,
-            ),
+class _DeviceEditForm extends StatefulWidget {
+  final dynamic unit;
+
+  const _DeviceEditForm({required this.unit});
+
+  @override
+  State<_DeviceEditForm> createState() => _DeviceEditFormState();
+}
+
+class _DeviceEditFormState extends State<_DeviceEditForm> {
+  late TextEditingController _nameController;
+  late TextEditingController _locationController;
+  late TextEditingController _macController;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController(text: widget.unit.name);
+    _locationController =
+        TextEditingController(text: widget.unit.location ?? '');
+    _macController = TextEditingController(
+      text: widget.unit.macAddress != null
+          ? DeviceUtils.formatMacAddress(widget.unit.macAddress!)
+          : widget.unit.id,
+    );
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _locationController.dispose();
+    _macController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildMacAddressField(l10n),
+              const SizedBox(height: HvacSpacing.md),
+              _buildNameField(l10n),
+              const SizedBox(height: HvacSpacing.md),
+              _buildLocationField(l10n),
+            ],
           ),
-          child: Text(l10n.save),
+        ),
+        const SizedBox(height: HvacSpacing.lg),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            HvacTextButton(
+              label: l10n.cancel,
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            const SizedBox(width: HvacSpacing.sm),
+            HvacPrimaryButton(
+              label: l10n.save,
+              onPressed: _handleEditDevice,
+            ),
+          ],
         ),
       ],
     );
   }
 
   Widget _buildMacAddressField(AppLocalizations l10n) {
-    return TextField(
+    return HvacTextField(
       controller: _macController,
       enabled: false, // MAC address is read-only
-      decoration: InputDecoration(
-        labelText: l10n.macAddress,
-        prefixIcon: const Icon(Icons.router_rounded),
-        border: OutlineInputBorder(
-          borderRadius: HvacRadius.mdRadius,
-        ),
-      ),
+      labelText: l10n.macAddress,
+      prefixIcon: Icons.router_rounded,
     );
   }
 
   Widget _buildNameField(AppLocalizations l10n) {
-    return TextField(
+    return HvacTextField(
       controller: _nameController,
-      decoration: InputDecoration(
-        labelText: l10n.deviceName,
-        prefixIcon: const Icon(Icons.label_outline_rounded),
-        border: OutlineInputBorder(
-          borderRadius: HvacRadius.mdRadius,
-        ),
-      ),
+      labelText: l10n.deviceName,
+      prefixIcon: Icons.label_outline_rounded,
     );
   }
 
   Widget _buildLocationField(AppLocalizations l10n) {
-    return TextField(
+    return HvacTextField(
       controller: _locationController,
-      decoration: InputDecoration(
-        labelText: l10n.location,
-        hintText: l10n.optional,
-        prefixIcon: const Icon(Icons.location_on_outlined),
-        border: OutlineInputBorder(
-          borderRadius: HvacRadius.mdRadius,
-        ),
-      ),
+      labelText: l10n.location,
+      hintText: l10n.optional,
+      prefixIcon: Icons.location_on_outlined,
     );
   }
 

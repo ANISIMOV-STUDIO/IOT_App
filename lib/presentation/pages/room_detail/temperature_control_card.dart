@@ -21,9 +21,8 @@ class TemperatureControlCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(20.0),
-      decoration: HvacTheme.deviceCard(),
+    return HvacCard(
+      size: HvacCardSize.large,
       child: Column(
         children: [
           _buildTemperatureDisplay(context),
@@ -85,33 +84,17 @@ class TemperatureControlCard extends StatelessWidget {
   Widget _buildTemperatureSlider(BuildContext context) {
     return MouseRegion(
       cursor: kIsWeb ? SystemMouseCursors.grab : MouseCursor.defer,
-      child: SliderTheme(
-        data: SliderTheme.of(context).copyWith(
-          trackHeight: 6.0,
-          thumbShape: const RoundSliderThumbShape(
-            enabledThumbRadius: 10.0,
-          ),
-          overlayShape: const RoundSliderOverlayShape(
-            overlayRadius: kIsWeb ? 20.0 : 24.0,
-          ),
-          valueIndicatorTextStyle: HvacTypography.bodyMedium.copyWith(
-            fontSize: 14.0,
-          ),
-        ),
-        child: Slider(
-          value: unit.targetTemp,
-          min: 16,
-          max: 30,
-          divisions: 28,
-          label: '${unit.targetTemp.toInt()}°',
-          onChanged: (value) {
-            context.read<HvacDetailBloc>().add(
-                  UpdateTargetTempEvent(value),
-                );
-          },
-          activeColor: HvacColors.primaryOrange,
-          inactiveColor: HvacColors.backgroundCardBorder,
-        ),
+      child: HvacSlider(
+        value: unit.targetTemp,
+        min: 16,
+        max: 30,
+        divisions: 28,
+        label: '${unit.targetTemp.toInt()}°',
+        onChanged: (value) {
+          context.read<HvacDetailBloc>().add(
+                UpdateTargetTempEvent(value),
+              );
+        },
       ),
     );
   }

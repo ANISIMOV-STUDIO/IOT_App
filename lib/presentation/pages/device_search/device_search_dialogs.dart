@@ -14,78 +14,93 @@ import '../../bloc/hvac_list/hvac_list_event.dart';
 class ManualDeviceEntryDialog {
   static void show(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final macController = TextEditingController();
-    final nameController = TextEditingController();
-    final locationController = TextEditingController();
 
-    showDialog(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(l10n.addDevice),
-        content: SingleChildScrollView(
+    HvacAlertDialog.show(
+      context,
+      title: l10n.addDevice,
+      contentWidget: const _ManualDeviceEntryForm(),
+      actions: [], // Actions are handled by the form
+    );
+  }
+}
+
+class _ManualDeviceEntryForm extends StatefulWidget {
+  const _ManualDeviceEntryForm();
+
+  @override
+  State<_ManualDeviceEntryForm> createState() => _ManualDeviceEntryFormState();
+}
+
+class _ManualDeviceEntryFormState extends State<_ManualDeviceEntryForm> {
+  final _macController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _locationController = TextEditingController();
+
+  @override
+  void dispose() {
+    _macController.dispose();
+    _nameController.dispose();
+    _locationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              TextField(
-                controller: macController,
-                decoration: InputDecoration(
-                  labelText: l10n.macAddress,
-                  hintText: 'XX:XX:XX:XX:XX:XX',
-                  prefixIcon: const Icon(Icons.router),
-                ),
+              HvacTextField(
+                controller: _macController,
+                labelText: l10n.macAddress,
+                hintText: 'XX:XX:XX:XX:XX:XX',
+                prefixIcon: Icons.router,
               ),
-              const SizedBox(height: 16.0),
-              TextField(
-                controller: nameController,
-                decoration: InputDecoration(
-                  labelText: l10n.deviceName,
-                  hintText: l10n.livingRoom,
-                  prefixIcon: const Icon(Icons.label),
-                ),
+              const SizedBox(height: HvacSpacing.md),
+              HvacTextField(
+                controller: _nameController,
+                labelText: l10n.deviceName,
+                hintText: l10n.livingRoom,
+                prefixIcon: Icons.label,
               ),
-              const SizedBox(height: 16.0),
-              TextField(
-                controller: locationController,
-                decoration: InputDecoration(
-                  labelText: l10n.location,
-                  hintText: l10n.optional,
-                  prefixIcon: const Icon(Icons.location_on),
-                ),
+              const SizedBox(height: HvacSpacing.md),
+              HvacTextField(
+                controller: _locationController,
+                labelText: l10n.location,
+                hintText: l10n.optional,
+                prefixIcon: Icons.location_on,
               ),
             ],
           ),
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(),
-            child: Text(l10n.cancel),
-          ),
-          ElevatedButton(
-            onPressed: () => _handleAddDevice(
-              context,
-              dialogContext,
-              l10n,
-              macController,
-              nameController,
-              locationController,
+        const SizedBox(height: HvacSpacing.lg),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            HvacTextButton(
+              label: l10n.cancel,
+              onPressed: () => Navigator.of(context).pop(),
             ),
-            child: Text(l10n.add),
-          ),
-        ],
-      ),
+            const SizedBox(width: HvacSpacing.sm),
+            HvacPrimaryButton(
+              label: l10n.add,
+              onPressed: _handleAddDevice,
+            ),
+          ],
+        ),
+      ],
     );
   }
 
-  static void _handleAddDevice(
-    BuildContext context,
-    BuildContext dialogContext,
-    AppLocalizations l10n,
-    TextEditingController macController,
-    TextEditingController nameController,
-    TextEditingController locationController,
-  ) {
-    final mac = macController.text.trim();
-    final name = nameController.text.trim();
+  void _handleAddDevice() {
+    final l10n = AppLocalizations.of(context)!;
+    final mac = _macController.text.trim();
+    final name = _nameController.text.trim();
 
     if (mac.isEmpty || name.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -101,14 +116,14 @@ class ManualDeviceEntryDialog {
           AddDeviceEvent(
             macAddress: mac,
             name: name,
-            location: locationController.text.isEmpty
+            location: _locationController.text.isEmpty
                 ? null
-                : locationController.text.trim(),
+                : _locationController.text.trim(),
           ),
         );
 
-    Navigator.of(dialogContext).pop();
-    Navigator.of(context).pop();
+    Navigator.of(context).pop(); // Close dialog
+    Navigator.of(context).pop(); // Close search screen
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

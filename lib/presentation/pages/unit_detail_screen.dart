@@ -138,9 +138,9 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
   }
 
   PreferredSizeWidget _buildMobileAppBar(HvacUnit unit) {
-    return AppBar(
+    return HvacAppBar(
       backgroundColor: HvacColors.backgroundCard,
-      elevation: 0,
+      centerTitle: false,
       leading: _buildBackButton(),
       title: _buildTitle(unit),
       actions: [_buildAnalyticsButton(unit)],
@@ -162,9 +162,9 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
   }
 
   PreferredSizeWidget _buildTabletAppBar(HvacUnit unit) {
-    return AppBar(
+    return HvacAppBar(
       backgroundColor: HvacColors.backgroundCard,
-      elevation: 0,
+      centerTitle: false,
       leading: _buildBackButton(),
       title: Row(
         children: [
@@ -178,9 +178,8 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
   }
 
   Widget _buildBackButton() {
-    return IconButton(
-      icon: const Icon(Icons.arrow_back,
-          color: HvacColors.textPrimary, size: 24.0),
+    return HvacIconButton(
+      icon: Icons.arrow_back,
       onPressed: () => Navigator.pop(context),
     );
   }
@@ -233,9 +232,9 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
   }
 
   Widget _buildAnalyticsButton(HvacUnit unit) {
-    return IconButton(
-      icon: const Icon(Icons.analytics,
-          color: HvacColors.primaryOrange, size: 24.0),
+    return HvacIconButton(
+      icon: Icons.analytics,
+      color: HvacColors.primaryOrange,
       onPressed: () {
         context.goToAnalytics();
       },
@@ -246,17 +245,17 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
   List<Widget> _buildTabletActions(HvacUnit unit) {
     return [
       _buildAnalyticsButton(unit),
-      IconButton(
-        icon: const Icon(Icons.settings,
-            color: HvacColors.textSecondary, size: 24.0),
+      HvacIconButton(
+        icon: Icons.settings,
+        color: HvacColors.textSecondary,
         onPressed: () {
           // Navigate to unit settings
         },
         tooltip: 'Настройки',
       ),
-      IconButton(
-        icon: const Icon(Icons.share,
-            color: HvacColors.textSecondary, size: 24.0),
+      HvacIconButton(
+        icon: Icons.share,
+        color: HvacColors.textSecondary,
         onPressed: () {
           // Share unit data
         },

@@ -46,16 +46,9 @@ class LoginButtons extends StatelessWidget {
         SizedBox(height: HvacSpacing.lg.h),
 
         // Skip button
-        TextButton(
+        HvacTextButton(
+          label: l10n.skip,
           onPressed: isLoading ? null : onSkip,
-          child: Text(
-            l10n.skip,
-            style: TextStyle(
-              fontSize: 14,
-              color: HvacColors.textSecondary,
-              decoration: TextDecoration.underline,
-            ),
-          ),
         ),
       ],
     );
@@ -79,34 +72,11 @@ class _LoginPrimaryButton extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       height: 56,
-      child: ElevatedButton(
+      child: HvacPrimaryButton(
+        label: label,
         onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: HvacColors.primaryOrange,
-          foregroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(HvacRadius.md),
-          ),
-          elevation: isLoading ? 0 : 8,
-          shadowColor: HvacColors.primaryOrange.withValues(alpha: 0.4),
-        ),
-        child: isLoading
-            ? SizedBox(
-                width: 24,
-                height: 24,
-                child: const CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: Colors.white,
-                ),
-              )
-            : Text(
-                label,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 0.5,
-                ),
-              ),
+        isExpanded: true,
+        isLoading: isLoading,
       ),
     );
   }
@@ -127,25 +97,9 @@ class _LoginSecondaryButton extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       height: 56,
-      child: OutlinedButton(
+      child: HvacOutlineButton(
+        label: label,
         onPressed: onPressed,
-        style: OutlinedButton.styleFrom(
-          foregroundColor: HvacColors.textPrimary,
-          side: const BorderSide(
-            color: HvacColors.borderSubtle,
-            width: 1.5,
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(HvacRadius.md),
-          ),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
       ),
     );
   }

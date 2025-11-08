@@ -26,9 +26,9 @@ class ScheduleAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
+    return HvacAppBar(
       backgroundColor: HvacColors.backgroundCard,
-      elevation: 0,
+      centerTitle: false,
       leading: _buildBackButton(context),
       title: _buildTitle(),
       actions: [_buildSaveButton()],
@@ -78,50 +78,27 @@ class ScheduleAppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 /// Back button with web-friendly hover state
-class _WebBackButton extends StatefulWidget {
+class _WebBackButton extends StatelessWidget {
   final VoidCallback onPressed;
 
   const _WebBackButton({required this.onPressed});
 
   @override
-  State<_WebBackButton> createState() => _WebBackButtonState();
-}
-
-class _WebBackButtonState extends State<_WebBackButton> {
-  bool _isHovered = false;
-
-  @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: Semantics(
-        button: true,
-        label: 'Navigate back',
-        child: Tooltip(
-          message: 'Назад',
-          child: IconButton(
-            onPressed: widget.onPressed,
-            icon: AnimatedScale(
-              scale: _isHovered ? 1.1 : 1.0,
-              duration: const Duration(milliseconds: 150),
-              child: Icon(
-                Icons.arrow_back,
-                color: _isHovered
-                    ? HvacColors.primaryOrange
-                    : HvacColors.textSecondary,
-              ),
-            ),
-          ),
-        ),
+    return Semantics(
+      button: true,
+      label: 'Navigate back',
+      child: HvacIconButton(
+        icon: Icons.arrow_back,
+        onPressed: onPressed,
+        tooltip: 'Назад',
       ),
     );
   }
 }
 
 /// Save button with hover state and loading animation
-class _SaveButton extends StatefulWidget {
+class _SaveButton extends StatelessWidget {
   final bool isSaving;
   final VoidCallback? onSave;
 
@@ -131,52 +108,21 @@ class _SaveButton extends StatefulWidget {
   });
 
   @override
-  State<_SaveButton> createState() => _SaveButtonState();
-}
-
-class _SaveButtonState extends State<_SaveButton> {
-  bool _isHovered = false;
-
-  @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      cursor: widget.isSaving
-          ? SystemMouseCursors.forbidden
-          : SystemMouseCursors.click,
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: TextButton(
-        onPressed: widget.isSaving ? null : widget.onSave,
-        style: TextButton.styleFrom(
-          foregroundColor: HvacColors.primaryOrange,
-          backgroundColor: _isHovered
-              ? HvacColors.primaryOrange.withValues(alpha: 0.1)
-              : Colors.transparent,
+    if (isSaving) {
+      return const SizedBox(
+        width: 20.0,
+        height: 20.0,
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+          valueColor: AlwaysStoppedAnimation<Color>(HvacColors.primaryOrange),
         ),
-        child: widget.isSaving ? _buildSavingIndicator() : _buildSaveText(),
-      ),
-    );
-  }
+      );
+    }
 
-  Widget _buildSavingIndicator() {
-    return const SizedBox(
-      width: 20.0,
-      height: 20.0,
-      child: CircularProgressIndicator(
-        strokeWidth: 2,
-        valueColor: AlwaysStoppedAnimation<Color>(HvacColors.primaryOrange),
-      ),
-    );
-  }
-
-  Widget _buildSaveText() {
-    return const Text(
-      'Сохранить',
-      style: TextStyle(
-        color: HvacColors.primaryOrange,
-        fontSize: 14.0,
-        fontWeight: FontWeight.w600,
-      ),
+    return HvacTextButton(
+      label: 'Сохранить',
+      onPressed: onSave,
     );
   }
 }

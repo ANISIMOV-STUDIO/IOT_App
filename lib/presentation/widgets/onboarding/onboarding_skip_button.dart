@@ -36,22 +36,9 @@ class OnboardingSkipButton extends StatelessWidget {
           cursor: SystemMouseCursors.click,
           child: HvacInteractiveScale(
             scaleDown: 0.95,
-            child: TextButton(
+            child: HvacTextButton(
+              label: skipText,
               onPressed: _handleSkip,
-              style: TextButton.styleFrom(
-                foregroundColor: HvacColors.textSecondary,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 12,
-                ),
-              ),
-              child: Text(
-                skipText,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
             ),
           ),
         ),

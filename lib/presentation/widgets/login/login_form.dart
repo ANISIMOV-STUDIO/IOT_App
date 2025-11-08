@@ -78,56 +78,31 @@ class _LoginTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: HvacColors.backgroundCard,
-        borderRadius: BorderRadius.circular(HvacRadius.md),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 5),
-          ),
-        ],
-      ),
-      child: Semantics(
+    if (obscureText) {
+      return Semantics(
         label: hintText,
-        hint: obscureText ? 'Enter your password' : 'Enter your email address',
+        hint: 'Enter your password',
         textField: true,
-        child: TextFormField(
+        child: HvacPasswordField(
           controller: controller,
-          obscureText: obscureText,
-          enabled: enabled,
-          inputFormatters: inputFormatters,
-          keyboardType: keyboardType,
+          labelText: hintText,
           onFieldSubmitted: onSubmitted,
-          style: TextStyle(
-            fontSize: 16,
-            color: HvacColors.textPrimary,
-          ),
-          decoration: InputDecoration(
-            prefixIcon: Icon(
-              icon,
-              color: HvacColors.textSecondary,
-              size: 20,
-            ),
-            hintText: hintText,
-            hintStyle: TextStyle(
-              color: HvacColors.textSecondary,
-              fontSize: 14,
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(HvacRadius.md),
-              borderSide: BorderSide.none,
-            ),
-            filled: true,
-            fillColor: HvacColors.backgroundCard,
-            contentPadding: EdgeInsets.symmetric(
-              horizontal: HvacSpacing.md.w,
-              vertical: HvacSpacing.sm.h,
-            ),
-          ),
         ),
+      );
+    }
+
+    return Semantics(
+      label: hintText,
+      hint: 'Enter your email address',
+      textField: true,
+      child: HvacTextField(
+        controller: controller,
+        labelText: hintText,
+        prefixIcon: icon,
+        enabled: enabled,
+        inputFormatters: inputFormatters,
+        keyboardType: keyboardType,
+        onFieldSubmitted: onSubmitted,
       ),
     );
   }

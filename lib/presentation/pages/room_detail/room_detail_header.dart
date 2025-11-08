@@ -21,7 +21,7 @@ class RoomDetailHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final modeColor = HvacColors.getModeColor(unit.mode);
 
-    return SliverAppBar(
+    return HvacSliverAppBar(
       expandedHeight: 300.0,
       pinned: true,
       backgroundColor: HvacColors.backgroundDark,
@@ -48,9 +48,8 @@ class RoomDetailHeader extends StatelessWidget {
     return Semantics(
       label: 'Back',
       button: true,
-      child: IconButton(
-        icon: const Icon(Icons.arrow_back, size: 24.0),
-        constraints: const BoxConstraints(minWidth: 48.0, minHeight: 48.0),
+      child: HvacIconButton(
+        icon: Icons.arrow_back,
         onPressed: () {
           if (!kIsWeb) {
             HapticFeedback.lightImpact();
@@ -65,9 +64,8 @@ class RoomDetailHeader extends StatelessWidget {
     Widget button = Semantics(
       label: 'Notifications',
       button: true,
-      child: IconButton(
-        icon: const Icon(Icons.notifications_outlined, size: 24.0),
-        constraints: const BoxConstraints(minWidth: 48.0, minHeight: 48.0),
+      child: HvacIconButton(
+        icon: Icons.notifications_outlined,
         onPressed: () {
           if (!kIsWeb) {
             HapticFeedback.lightImpact();

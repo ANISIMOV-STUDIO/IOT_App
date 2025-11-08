@@ -30,20 +30,12 @@ class DeviceControlCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return HvacCard(
       onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(HvacSpacing.lgR),
-        decoration: BoxDecoration(
-          color: HvacColors.backgroundCard,
-          borderRadius: BorderRadius.circular(HvacRadius.xlR),
-          border: Border.all(
-            color: HvacColors.backgroundCardBorder,
-          ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+      size: HvacCardSize.large,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -101,8 +93,7 @@ class DeviceControlCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: stats,
               ),
-          ],
-        ),
+        ],
       ),
     );
   }

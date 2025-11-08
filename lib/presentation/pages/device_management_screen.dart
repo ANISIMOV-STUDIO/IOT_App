@@ -5,6 +5,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../generated/l10n/app_localizations.dart';
 import '../bloc/hvac_list/hvac_list_bloc.dart';
 import '../bloc/hvac_list/hvac_list_event.dart';
@@ -46,10 +47,7 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
   }
 
   void _showAddDeviceDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => const DeviceAddDialog(),
-    );
+    DeviceAddDialog.show(context);
   }
 
   @override
@@ -57,9 +55,8 @@ class _DeviceManagementScreenState extends State<DeviceManagementScreen> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.deviceManagement),
-        elevation: 0,
+      appBar: HvacAppBar(
+        title: l10n.deviceManagement,
         backgroundColor: Colors.transparent,
       ),
       backgroundColor: Colors.transparent,

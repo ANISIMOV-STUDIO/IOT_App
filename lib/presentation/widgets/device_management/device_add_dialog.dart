@@ -14,6 +14,16 @@ import '../../bloc/hvac_list/hvac_list_event.dart';
 class DeviceAddDialog extends StatefulWidget {
   const DeviceAddDialog({super.key});
 
+  /// Show the device add dialog
+  static Future<void> show(BuildContext context) {
+    return HvacAlertDialog.show(
+      context,
+      title: AppLocalizations.of(context)!.addDevice,
+      contentWidget: const _DeviceAddForm(),
+      actions: [], // Actions are handled by the form itself
+    );
+  }
+
   @override
   State<DeviceAddDialog> createState() => _DeviceAddDialogState();
 }
@@ -33,56 +43,75 @@ class _DeviceAddDialogState extends State<DeviceAddDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return const _DeviceAddForm();
+  }
+}
 
-    return AlertDialog(
-      backgroundColor:
-          isDark ? HvacColors.backgroundCard : HvacColors.glassWhite,
-      title: Text(l10n.addDevice),
-      content: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _buildMacAddressField(l10n),
-            const SizedBox(height: HvacSpacing.md),
-            _buildNameField(l10n),
-            const SizedBox(height: HvacSpacing.md),
-            _buildLocationField(l10n),
-          ],
-        ),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(l10n.cancel),
-        ),
-        ElevatedButton(
-          onPressed: _handleAddDevice,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: HvacColors.primaryBlue,
-            foregroundColor: HvacColors.textPrimary,
-            shape: RoundedRectangleBorder(
-              borderRadius: HvacRadius.mdRadius,
-            ),
+class _DeviceAddForm extends StatefulWidget {
+  const _DeviceAddForm();
+
+  @override
+  State<_DeviceAddForm> createState() => _DeviceAddFormState();
+}
+
+class _DeviceAddFormState extends State<_DeviceAddForm> {
+  final _macController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _locationController = TextEditingController();
+
+  @override
+  void dispose() {
+    _macController.dispose();
+    _nameController.dispose();
+    _locationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildMacAddressField(l10n),
+              const SizedBox(height: HvacSpacing.md),
+              _buildNameField(l10n),
+              const SizedBox(height: HvacSpacing.md),
+              _buildLocationField(l10n),
+            ],
           ),
-          child: Text(l10n.add),
+        ),
+        const SizedBox(height: HvacSpacing.lg),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            HvacTextButton(
+              label: l10n.cancel,
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            const SizedBox(width: HvacSpacing.sm),
+            HvacPrimaryButton(
+              label: l10n.add,
+              onPressed: _handleAddDevice,
+            ),
+          ],
         ),
       ],
     );
   }
 
   Widget _buildMacAddressField(AppLocalizations l10n) {
-    return TextField(
+    return HvacTextField(
       controller: _macController,
-      decoration: InputDecoration(
-        labelText: l10n.macAddress,
-        hintText: 'XX:XX:XX:XX:XX:XX',
-        prefixIcon: const Icon(Icons.router_rounded),
-        border: OutlineInputBorder(
-          borderRadius: HvacRadius.mdRadius,
-        ),
-      ),
+      labelText: l10n.macAddress,
+      hintText: 'XX:XX:XX:XX:XX:XX',
+      prefixIcon: Icons.router_rounded,
+      textCapitalization: TextCapitalization.characters,
       inputFormatters: [
         FilteringTextInputFormatter.allow(
           RegExp(r'[0-9A-Fa-f:-]'),
@@ -99,30 +128,20 @@ class _DeviceAddDialogState extends State<DeviceAddDialog> {
   }
 
   Widget _buildNameField(AppLocalizations l10n) {
-    return TextField(
+    return HvacTextField(
       controller: _nameController,
-      decoration: InputDecoration(
-        labelText: l10n.deviceName,
-        hintText: l10n.livingRoom,
-        prefixIcon: const Icon(Icons.label_outline_rounded),
-        border: OutlineInputBorder(
-          borderRadius: HvacRadius.mdRadius,
-        ),
-      ),
+      labelText: l10n.deviceName,
+      hintText: l10n.livingRoom,
+      prefixIcon: Icons.label_outline_rounded,
     );
   }
 
   Widget _buildLocationField(AppLocalizations l10n) {
-    return TextField(
+    return HvacTextField(
       controller: _locationController,
-      decoration: InputDecoration(
-        labelText: l10n.location,
-        hintText: l10n.optional,
-        prefixIcon: const Icon(Icons.location_on_outlined),
-        border: OutlineInputBorder(
-          borderRadius: HvacRadius.mdRadius,
-        ),
-      ),
+      labelText: l10n.location,
+      hintText: l10n.optional,
+      prefixIcon: Icons.location_on_outlined,
     );
   }
 

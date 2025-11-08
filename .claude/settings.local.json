@@ -2,15 +2,11 @@
   "permissions": {
     "allow": [
       "Bash(dart analyze:*)",
-      "Bash(git add:*)",
-      "Bash(git commit:*)",
-      "Bash(packages/hvac_ui_kit/lib/src/widgets/shimmer/shimmer.dart)",
-      "Bash(packages/hvac_ui_kit/lib/src/widgets/inputs/inputs.dart)",
-      "Bash(git checkout:*)",
+      "Bash(while read f)",
+      "Bash(do wc -l \"$f\")",
+      "Bash(done)",
       "Bash(find:*)",
-      "Bash(cat:*)",
-      "Bash(flutter gen-l10n:*)",
-      "Bash(dart pub get:*)"
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": [],

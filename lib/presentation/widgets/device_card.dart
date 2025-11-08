@@ -26,62 +26,59 @@ class DeviceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return HvacCard(
       onTap: onTap,
-      child: Container(
-        decoration: HvacTheme.deviceCard(isSelected: isSelected),
-        padding: const EdgeInsets.all(HvacSpacing.lgR),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Device Image or Icon
-            Container(
-              width: 80,
-              height: 80,
-              decoration: HvacTheme.deviceImagePlaceholder(),
-              child: imageUrl != null
-                  ? ClipRRect(
-                      borderRadius: HvacRadius.mdRadius,
-                      child: Image.network(
-                        imageUrl!,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Icon(
-                            icon,
-                            size: 40,
-                            color: HvacColors.textSecondary,
-                          );
-                        },
-                      ),
-                    )
-                  : Icon(
-                      icon,
-                      size: 40,
-                      color: HvacColors.textSecondary,
+      size: HvacCardSize.large,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // Device Image or Icon
+          Container(
+            width: 80,
+            height: 80,
+            decoration: HvacTheme.deviceImagePlaceholder(),
+            child: imageUrl != null
+                ? ClipRRect(
+                    borderRadius: HvacRadius.mdRadius,
+                    child: Image.network(
+                      imageUrl!,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Icon(
+                          icon,
+                          size: 40,
+                          color: HvacColors.textSecondary,
+                        );
+                      },
                     ),
-            ),
-            const SizedBox(height: HvacSpacing.sm),
+                  )
+                : Icon(
+                    icon,
+                    size: 40,
+                    color: HvacColors.textSecondary,
+                  ),
+          ),
+          const SizedBox(height: HvacSpacing.sm),
 
-            // Device Name
-            Text(
-              name,
-              style: Theme.of(context).textTheme.titleMedium,
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(height: HvacSpacing.xxs),
+          // Device Name
+          Text(
+            name,
+            style: Theme.of(context).textTheme.titleMedium,
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: HvacSpacing.xxs),
 
-            // Device Subtitle
-            Text(
-              subtitle,
-              style: Theme.of(context).textTheme.bodySmall,
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
-        ),
+          // Device Subtitle
+          Text(
+            subtitle,
+            style: Theme.of(context).textTheme.bodySmall,
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
       ),
     );
   }
@@ -110,93 +107,91 @@ class DeviceStatusCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final modeColor = HvacColors.getModeColor(mode);
 
-    return GestureDetector(
+    return HvacCard(
       onTap: onTap,
-      child: Container(
-        decoration: HvacTheme.deviceCard(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header Image (if available)
-            if (imageUrl != null)
-              ClipRRect(
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(16),
-                ),
-                child: Image.network(
-                  imageUrl!,
-                  height: 120,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      height: 120,
-                      color: HvacColors.backgroundCard,
-                      child: const Icon(
-                        Icons.thermostat,
-                        size: 48,
-                        color: HvacColors.textTertiary,
-                      ),
-                    );
-                  },
-                ),
+      size: HvacCardSize.compact,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header Image (if available)
+          if (imageUrl != null)
+            ClipRRect(
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(16),
               ),
-
-            // Device Info
-            Padding(
-              padding: const EdgeInsets.all(HvacSpacing.lgR),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Name and Location
-                  Text(
-                    name,
-                    style: Theme.of(context).textTheme.titleMedium,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: HvacSpacing.xxs),
-                  Text(
-                    location,
-                    style: Theme.of(context).textTheme.bodySmall,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: HvacSpacing.md),
-
-                  // Temperature and Mode
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Temperature
-                      Text(
-                        '${temperature.toInt()}°',
-                        style: Theme.of(context).textTheme.displaySmall,
-                      ),
-
-                      // Mode Badge
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: HvacSpacing.mdR,
-                          vertical: HvacSpacing.xsR,
-                        ),
-                        decoration: HvacDecorations.modeBadge(
-                          modeColor: modeColor,
-                        ),
-                        child: Text(
-                          mode.toUpperCase(),
-                          style: HvacTypography.caption.copyWith(
-                            color: modeColor,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+              child: Image.network(
+                imageUrl!,
+                height: 120,
+                width: double.infinity,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    height: 120,
+                    color: HvacColors.backgroundCard,
+                    child: const Icon(
+                      Icons.thermostat,
+                      size: 48,
+                      color: HvacColors.textTertiary,
+                    ),
+                  );
+                },
               ),
             ),
-          ],
-        ),
+
+          // Device Info
+          Padding(
+            padding: const EdgeInsets.all(HvacSpacing.lgR),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Name and Location
+                Text(
+                  name,
+                  style: Theme.of(context).textTheme.titleMedium,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: HvacSpacing.xxs),
+                Text(
+                  location,
+                  style: Theme.of(context).textTheme.bodySmall,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: HvacSpacing.md),
+
+                // Temperature and Mode
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Temperature
+                    Text(
+                      '${temperature.toInt()}°',
+                      style: Theme.of(context).textTheme.displaySmall,
+                    ),
+
+                    // Mode Badge
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: HvacSpacing.mdR,
+                        vertical: HvacSpacing.xsR,
+                      ),
+                      decoration: HvacDecorations.modeBadge(
+                        modeColor: modeColor,
+                      ),
+                      child: Text(
+                        mode.toUpperCase(),
+                        style: HvacTypography.caption.copyWith(
+                          color: modeColor,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -21,15 +21,8 @@ class TodayScheduleCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AdaptiveControl(
       builder: (context, deviceSize) {
-        return Container(
-          padding: EdgeInsets.all(
-              adaptive.AdaptiveLayout.spacing(context, base: 10)),
-          decoration: BoxDecoration(
-            color: HvacColors.backgroundDark,
-            borderRadius: BorderRadius.circular(
-              adaptive.AdaptiveLayout.borderRadius(context, base: 12),
-            ),
-          ),
+        return HvacCard(
+          size: HvacCardSize.compact,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

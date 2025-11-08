@@ -26,9 +26,8 @@ class DeviceStatusCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      decoration: HvacTheme.deviceCard(),
+    return HvacCard(
+      size: HvacCardSize.medium,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

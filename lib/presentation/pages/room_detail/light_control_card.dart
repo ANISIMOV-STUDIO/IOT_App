@@ -59,27 +59,17 @@ class LightControlCard extends StatelessWidget {
   }
 
   Widget _buildSlider(BuildContext context) {
-    return SliderTheme(
-      data: SliderTheme.of(context).copyWith(
-        trackHeight: 4.0,
-        thumbShape: const RoundSliderThumbShape(
-          enabledThumbRadius: 8.0,
-        ),
-        overlayShape: const RoundSliderOverlayShape(
-          overlayRadius: kIsWeb ? 16.0 : 20.0,
-        ),
-      ),
-      child: Slider(
-        value: value,
-        onChanged: (newValue) {
-          if (!kIsWeb) {
-            HapticFeedback.selectionClick();
-          }
-          onChanged(newValue);
-        },
-        activeColor: HvacColors.primaryOrange,
-        inactiveColor: HvacColors.backgroundCardBorder,
-      ),
+    return HvacSlider(
+      value: value,
+      min: 0,
+      max: 1,
+      label: '${(value * 100).toInt()}%',
+      onChanged: (newValue) {
+        if (!kIsWeb) {
+          HapticFeedback.selectionClick();
+        }
+        onChanged(newValue);
+      },
     );
   }
 }

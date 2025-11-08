@@ -252,13 +252,12 @@ class _FanSpeedSlider extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 8.0),
-        Slider(
+        HvacSlider(
           value: value.toDouble(),
           min: 0,
           max: 100,
           divisions: 10,
-          activeColor: HvacColors.primaryOrange,
-          inactiveColor: HvacColors.backgroundCardBorder,
+          label: '$value%',
           onChanged: onChanged != null ? (val) => onChanged!(val.toInt()) : null,
         ),
       ],

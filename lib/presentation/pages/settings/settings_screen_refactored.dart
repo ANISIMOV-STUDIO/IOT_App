@@ -72,15 +72,10 @@ class _SettingsScreenRefactoredState extends State<SettingsScreenRefactored>
 
   /// App Bar with responsive sizing
   PreferredSizeWidget _buildAppBar(AppLocalizations l10n) {
-    return AppBar(
+    return ui_kit.HvacAppBar(
       backgroundColor: ui_kit.HvacColors.backgroundCard,
-      elevation: 0,
-      leading: IconButton(
-        icon: Icon(
-          Icons.arrow_back,
-          color: ui_kit.HvacColors.textPrimary,
-          size: 24,
-        ),
+      leading: ui_kit.HvacIconButton(
+        icon: Icons.arrow_back,
         onPressed: () => Navigator.pop(context),
       ),
       title: Text(

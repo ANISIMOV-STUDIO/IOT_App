@@ -75,28 +75,13 @@ class FanSpeedSlider extends StatelessWidget {
             ],
           ),
           const SizedBox(height: HvacSpacing.sm),
-          SliderTheme(
-            data: SliderTheme.of(context).copyWith(
-              trackHeight: 6,
-              thumbShape: const RoundSliderThumbShape(
-                enabledThumbRadius: 10,
-              ),
-              overlayShape: const RoundSliderOverlayShape(
-                overlayRadius: 20,
-              ),
-              activeTrackColor: HvacColors.primaryOrange,
-              inactiveTrackColor: HvacColors.backgroundCardBorder,
-              thumbColor: Colors.white,
-              overlayColor: HvacColors.primaryOrange.withValues(alpha: 0.2),
-            ),
-            child: Slider(
-              value: value.toDouble(),
-              min: 0,
-              max: 100,
-              divisions: 20,
-              label: '$value%',
-              onChanged: enabled ? (val) => onChanged(val.round()) : null,
-            ),
+          HvacSlider(
+            value: value.toDouble(),
+            min: 0,
+            max: 100,
+            divisions: 20,
+            label: '$value%',
+            onChanged: enabled ? (val) => onChanged(val.round()) : null,
           ),
         ],
       ),

@@ -22,14 +22,12 @@ class DashboardChartCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return HvacCard(
       onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(HvacSpacing.lgR),
-        decoration: HvacTheme.deviceCard(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+      size: HvacCardSize.large,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -69,7 +67,6 @@ class DashboardChartCard extends StatelessWidget {
             const SizedBox(height: HvacSpacing.lgR),
             chart,
           ],
-        ),
       ),
     );
   }

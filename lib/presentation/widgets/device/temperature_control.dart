@@ -49,25 +49,12 @@ class TemperatureControl extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: HvacSpacing.xsR),
-                  SliderTheme(
-                    data: SliderTheme.of(context).copyWith(
-                      trackHeight: 4.0,
-                      thumbShape: const RoundSliderThumbShape(
-                        enabledThumbRadius: 8.0,
-                      ),
-                      overlayShape: const RoundSliderOverlayShape(
-                        overlayRadius: 16.0,
-                      ),
-                      activeTrackColor: Colors.white,
-                      inactiveTrackColor: HvacColors.backgroundCardBorder,
-                      thumbColor: Colors.white,
-                    ),
-                    child: Slider(
-                      value: value,
-                      min: min,
-                      max: max,
-                      onChanged: onChanged,
-                    ),
+                  HvacSlider(
+                    value: value,
+                    min: min,
+                    max: max,
+                    label: '${value.toInt()}°',
+                    onChanged: onChanged,
                   ),
                 ],
               ),

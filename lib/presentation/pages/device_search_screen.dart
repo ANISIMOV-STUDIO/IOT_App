@@ -46,8 +46,8 @@ class _DeviceSearchScreenState extends State<DeviceSearchScreen> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Search'),
+      appBar: HvacAppBar(
+        title: 'Search',
         actions: [
           // WiFi indicator
           Padding(

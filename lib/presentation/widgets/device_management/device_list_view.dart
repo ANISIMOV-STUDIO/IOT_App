@@ -49,20 +49,15 @@ class DeviceListView extends StatelessWidget {
   }
 
   Future<void> _showEditDialog(BuildContext context, dynamic unit) async {
-    await showDialog(
-      context: context,
-      builder: (context) => DeviceEditDialog(unit: unit),
-    );
+    await DeviceEditDialog.show(context, unit: unit);
   }
 
   Future<void> _confirmRemoveDevice(BuildContext context, dynamic unit) async {
-    await showDialog<bool>(
-      context: context,
-      builder: (context) => DeviceRemoveDialog(
-        unitId: unit.id,
-        name: unit.name,
-        macAddress: unit.macAddress,
-      ),
+    await DeviceRemoveDialog.show(
+      context,
+      unitId: unit.id,
+      name: unit.name,
+      macAddress: unit.macAddress,
     );
   }
 }

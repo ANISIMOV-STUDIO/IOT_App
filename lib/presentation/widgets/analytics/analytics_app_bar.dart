@@ -26,15 +26,11 @@ class AnalyticsAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
+    return HvacAppBar(
       backgroundColor: HvacColors.backgroundCard,
-      elevation: 0,
-      leading: IconButton(
-        icon: const Icon(
-          Icons.arrow_back,
-          color: HvacColors.textPrimary,
-          size: 24.0,
-        ),
+      centerTitle: false,
+      leading: HvacIconButton(
+        icon: Icons.arrow_back,
         onPressed: onBack,
       ),
       title: Column(

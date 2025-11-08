@@ -41,39 +41,13 @@ class AuthCheckboxSectionState extends State<AuthCheckboxSection> {
   }
 
   Widget _buildRememberMe(BuildContext context, AuthResponsive responsive) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () {
-          setState(() => _rememberMe = !_rememberMe);
-          widget.onRememberMeChanged(_rememberMe);
-        },
-        child: Row(
-          children: [
-            SizedBox(
-              width: 24,
-              height: 24,
-              child: Checkbox(
-                value: _rememberMe,
-                onChanged: (value) {
-                  setState(() => _rememberMe = value ?? false);
-                  widget.onRememberMeChanged(_rememberMe);
-                },
-                activeColor: HvacColors.primaryOrange,
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              ),
-            ),
-            SizedBox(width: 8),
-            Text(
-              'Remember me',
-              style: TextStyle(
-                fontSize: (14 * responsive.fontMultiplier).rsp(context),
-                color: HvacColors.textPrimary,
-              ),
-            ),
-          ],
-        ),
-      ),
+    return HvacCheckbox(
+      value: _rememberMe,
+      onChanged: (value) {
+        setState(() => _rememberMe = value ?? false);
+        widget.onRememberMeChanged(_rememberMe);
+      },
+      label: 'Remember me',
     );
   }
 
@@ -82,52 +56,37 @@ class AuthCheckboxSectionState extends State<AuthCheckboxSection> {
     AuthResponsive responsive,
     ThemeData theme,
   ) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () {
-          setState(() => _acceptTerms = !_acceptTerms);
-          widget.onAcceptTermsChanged(_acceptTerms);
-        },
-        child: Row(
-          children: [
-            SizedBox(
-              width: 24,
-              height: 24,
-              child: Checkbox(
-                value: _acceptTerms,
-                onChanged: (value) {
-                  setState(() => _acceptTerms = value ?? false);
-                  widget.onAcceptTermsChanged(_acceptTerms);
-                },
-                activeColor: HvacColors.primaryOrange,
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+    return Row(
+      children: [
+        HvacCheckbox(
+          value: _acceptTerms,
+          onChanged: (value) {
+            setState(() => _acceptTerms = value ?? false);
+            widget.onAcceptTermsChanged(_acceptTerms);
+          },
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: RichText(
+            text: TextSpan(
+              style: theme.textTheme.bodyMedium?.copyWith(
+                fontSize: (14 * responsive.fontMultiplier).rsp(context),
               ),
-            ),
-            SizedBox(width: 8),
-            Expanded(
-              child: RichText(
-                text: TextSpan(
-                  style: theme.textTheme.bodyMedium?.copyWith(
+              children: [
+                const TextSpan(text: 'I accept the '),
+                TextSpan(
+                  text: 'Terms and Conditions',
+                  style: TextStyle(
+                    color: HvacColors.primaryOrange,
+                    decoration: TextDecoration.underline,
                     fontSize: (14 * responsive.fontMultiplier).rsp(context),
                   ),
-                  children: [
-                    const TextSpan(text: 'I accept the '),
-                    TextSpan(
-                      text: 'Terms and Conditions',
-                      style: TextStyle(
-                        color: HvacColors.primaryOrange,
-                        decoration: TextDecoration.underline,
-                        fontSize: (14 * responsive.fontMultiplier).rsp(context),
-                      ),
-                    ),
-                  ],
                 ),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 

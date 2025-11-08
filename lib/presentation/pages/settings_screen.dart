@@ -57,12 +57,10 @@ class _SettingsScreenState extends State<SettingsScreen>
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: HvacColors.backgroundDark,
-      appBar: AppBar(
+      appBar: HvacAppBar(
         backgroundColor: HvacColors.backgroundCard,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back,
-              color: HvacColors.textPrimary, size: 24.0),
+        leading: HvacIconButton(
+          icon: Icons.arrow_back,
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(

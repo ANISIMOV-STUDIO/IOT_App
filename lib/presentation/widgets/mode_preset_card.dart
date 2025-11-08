@@ -22,13 +22,13 @@ class ModePresetCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: HvacSpacing.lgR),
-      padding: const EdgeInsets.all(HvacSpacing.xlR),
-      decoration: HvacTheme.deviceCard(),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+    return Padding(
+      padding: const EdgeInsets.only(bottom: HvacSpacing.lgR),
+      child: HvacCard(
+        size: HvacCardSize.large,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
           // Header
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -103,6 +103,7 @@ class ModePresetCard extends StatelessWidget {
             ],
           ),
         ],
+        ),
       ),
     );
   }

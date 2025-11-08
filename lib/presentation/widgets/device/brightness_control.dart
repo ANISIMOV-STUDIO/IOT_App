@@ -36,20 +36,12 @@ class BrightnessControl extends StatelessWidget {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: HvacSpacing.mdR),
-            child: SliderTheme(
-              data: SliderTheme.of(context).copyWith(
-                trackHeight: 8.0,
-                thumbShape: const RoundSliderThumbShape(
-                  enabledThumbRadius: 6.0,
-                ),
-                activeTrackColor: HvacColors.warning,
-                inactiveTrackColor: HvacColors.backgroundCardBorder,
-                thumbColor: Colors.white,
-              ),
-              child: Slider(
-                value: value,
-                onChanged: onChanged,
-              ),
+            child: HvacSlider(
+              value: value,
+              min: 0,
+              max: 1,
+              label: '${(value * 100).toInt()}%',
+              onChanged: onChanged,
             ),
           ),
         ),

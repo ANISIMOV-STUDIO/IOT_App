@@ -200,53 +200,56 @@ class ErrorSnackBar {
     String message,
     String? technicalDetails,
   ) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Error Details'),
-        content: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
+    HvacAlertDialog.show(
+      context,
+      title: 'Error Details',
+      contentWidget: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Message:',
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+            const SizedBox(height: 8.0),
+            Text(message),
+            if (technicalDetails != null) ...[
+              const SizedBox(height: 16.0),
               Text(
-                'Message:',
+                'Technical Details:',
                 style: Theme.of(context).textTheme.titleSmall,
               ),
               const SizedBox(height: 8.0),
-              Text(message),
-              if (technicalDetails != null) ...[
-                const SizedBox(height: 16.0),
-                Text(
-                  'Technical Details:',
-                  style: Theme.of(context).textTheme.titleSmall,
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.grey.withValues(alpha: 0.1),
+                  borderRadius: HvacRadius.xsRadius,
                 ),
-                const SizedBox(height: 8.0),
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.withValues(alpha: 0.1),
-                    borderRadius: HvacRadius.xsRadius,
-                  ),
-                  child: SelectableText(
-                    technicalDetails,
-                    style: const TextStyle(
-                      fontFamily: 'monospace',
-                      fontSize: 12,
-                    ),
+                child: SelectableText(
+                  technicalDetails,
+                  style: const TextStyle(
+                    fontFamily: 'monospace',
+                    fontSize: 12,
                   ),
                 ),
-              ],
+              ),
             ],
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(
+            'CLOSE',
+            style: HvacTypography.bodyMedium.copyWith(
+              color: HvacColors.primaryOrange,
+            ),
           ),
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('CLOSE'),
-          ),
-        ],
-      ),
+      ],
     );
   }
 }

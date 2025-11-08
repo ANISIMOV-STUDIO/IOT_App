@@ -118,9 +118,8 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
         // Web layout
         if (kIsWeb) {
           return Scaffold(
-            appBar: AppBar(
-              title: Text(l10n.addDevice),
-              centerTitle: true,
+            appBar: HvacAppBar(
+              title: l10n.addDevice,
             ),
             body: QrScannerWebLayout(
               controller: _controller,
@@ -132,10 +131,8 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
 
         // Mobile/Tablet layout
         return Scaffold(
-          appBar: AppBar(
-            title: Text(
-                _controller.isManualMode ? l10n.addDevice : l10n.scanQrCode),
-            centerTitle: true,
+          appBar: HvacAppBar(
+            title: _controller.isManualMode ? l10n.addDevice : l10n.scanQrCode,
           ),
           body: QrScannerMobileLayout(
             controller: _controller,
