@@ -61,7 +61,7 @@ export 'src/widgets/glass/glass.dart';
 // Tooltip System
 export 'src/widgets/overlays/tooltip/tooltip.dart';
 // Web Components
-export 'src/widgets/web/web.dart';
+export 'src/widgets/web/web.dart' hide HvacResponsiveGrid;
 // Icon Components
 export 'src/widgets/icons/icons.dart';
 // Feedback Components
