@@ -64,6 +64,8 @@ export 'src/widgets/overlays/tooltip/tooltip.dart';
 export 'src/widgets/web/web.dart';
 n// Icon Components
 export 'src/widgets/icons/icons.dart';
+n// Feedback Components
+export 'src/widgets/feedback/feedback.dart';
 
 // Layout Components
 export 'src/widgets/layout/layout.dart';
