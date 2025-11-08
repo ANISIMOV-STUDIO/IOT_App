@@ -3,7 +3,6 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../theme/colors.dart';
 import '../../theme/spacing.dart';
 import 'base_shimmer.dart';
 import 'skeleton_primitives.dart';

@@ -3,6 +3,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart' hide StatusIndicator, PremiumProgressIndicator;
 import 'visual_polish_components.dart';
 
 class VisualPolishExample extends StatelessWidget {

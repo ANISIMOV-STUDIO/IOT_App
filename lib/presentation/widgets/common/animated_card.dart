@@ -6,7 +6,9 @@ library;
 // Export from UI Kit
 export 'package:hvac_ui_kit/src/widgets/cards/hvac_animated_card.dart';
 
-// For backward compatibility, re-export with old names
-export 'package:hvac_ui_kit/src/widgets/cards/hvac_animated_card.dart' show
-    HvacAnimatedCard as AnimatedCard,
-    HvacAnimatedDeviceCard as AnimatedDeviceCard;
+// For backward compatibility, create type aliases
+import 'package:hvac_ui_kit/src/widgets/cards/hvac_animated_card.dart'
+    as hvac_card;
+
+typedef AnimatedCard = hvac_card.HvacAnimatedCard;
+typedef AnimatedDeviceCard = hvac_card.HvacAnimatedDeviceCard;

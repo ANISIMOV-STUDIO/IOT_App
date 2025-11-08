@@ -7,7 +7,7 @@ library visual_polish_components;
 
 // Export all visual polish components
 export 'status_indicator.dart';
-export 'animated_badge.dart';
+// animated_badge is now in hvac_ui_kit
 export 'premium_progress_indicator.dart';
 export 'floating_tooltip.dart';
 export 'animated_divider.dart';
