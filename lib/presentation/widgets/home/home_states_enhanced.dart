@@ -159,11 +159,11 @@ class EnhancedHomeErrorState extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return app_error.AppErrorWidget(
+    return app_error.HvacErrorState(
       title: l10n.connectionError,
       message: message,
       errorCode: errorCode,
-      type: app_error.ErrorType.network,
+      errorType: app_error.ErrorType.network,
       onRetry: () {
         AccessibilityUtils.announce('Retrying connection');
         context.read<HvacListBloc>().add(const LoadHvacUnitsEvent());
@@ -177,6 +177,8 @@ class EnhancedHomeErrorState extends StatelessWidget {
           icon: Icons.settings,
         ),
       ],
+      retryLabel: l10n.retry,
+      errorCodeCopiedMessage: l10n.errorCodeCopied,
     );
   }
 }

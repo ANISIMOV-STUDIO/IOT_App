@@ -1,11 +1,7 @@
-/// Error Widget - Advanced error handling system
+/// Error Widget - Barrel file for error components
 ///
-/// Re-exports refactored error components
-/// Original file reduced from 437 lines to maintain <300 line limit
+/// Re-exports error components from hvac_ui_kit
 library;
 
-export 'error/error_widget_refactored.dart';
-export 'error/error_types.dart';
-export 'error/error_icon.dart';
-export 'error/error_actions.dart';
-export 'error/error_details.dart';
+// Export error widgets from UI Kit
+export 'package:hvac_ui_kit/src/widgets/states/hvac_error_state.dart';

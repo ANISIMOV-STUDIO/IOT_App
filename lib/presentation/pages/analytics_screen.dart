@@ -166,7 +166,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
 
   Widget _buildErrorState() {
     return const HvacErrorState(
-      icon: Icons.error_outline,
+      customIcon: Icons.error_outline,
       title: 'Ошибка загрузки',
       message: 'Не удалось загрузить данные аналитики',
       retryLabel: 'Повторить',
