@@ -13,6 +13,7 @@ import '../../widgets/settings/units_section.dart';
 import '../../widgets/settings/notifications_section.dart';
 import '../../widgets/settings/language_section.dart';
 import '../../widgets/settings/about_section.dart';
+import '../../widgets/settings/settings_sidebar.dart';
 import 'settings_controller.dart';
 
 /// Settings Screen - UI Only (Following SOLID principles)
@@ -78,14 +79,14 @@ class _SettingsScreenRefactoredState extends State<SettingsScreenRefactored>
         icon: Icon(
           Icons.arrow_back,
           color: ui_kit.HvacColors.textPrimary,
-          size: 24.w,
+          size: 24,
         ),
         onPressed: () => Navigator.pop(context),
       ),
       title: Text(
         l10n.settingsTitle,
         style: ui_kit.HvacTypography.headlineMedium.copyWith(
-          fontSize: 20.sp,
+          fontSize: 20,
           color: ui_kit.HvacColors.textPrimary,
         ),
       ),
@@ -93,7 +94,7 @@ class _SettingsScreenRefactoredState extends State<SettingsScreenRefactored>
         // Save button for tablet/desktop
         if (ui_kit.responsive.isTablet || ui_kit.responsive.isDesktop)
           Padding(
-            padding: EdgeInsets.only(right: 16.w),
+            padding: EdgeInsets.only(right: 16),
             child: ui_kit.HvacTextButton(
               onPressed: _saveSettings,
               label: l10n.save,
@@ -106,7 +107,7 @@ class _SettingsScreenRefactoredState extends State<SettingsScreenRefactored>
   /// Mobile Layout - Single Column
   Widget _buildMobileLayout(AppLocalizations l10n) {
     return SingleChildScrollView(
-      padding: EdgeInsets.all(20.w),
+      padding: EdgeInsets.all(20),
       child: Column(
         children: _buildSections(l10n),
       ),
@@ -118,7 +119,7 @@ class _SettingsScreenRefactoredState extends State<SettingsScreenRefactored>
     final sections = _buildSections(l10n);
 
     return SingleChildScrollView(
-      padding: EdgeInsets.all(24.w),
+      padding: EdgeInsets.all(24),
       child: Column(
         children: [
           Row(
@@ -128,24 +129,24 @@ class _SettingsScreenRefactoredState extends State<SettingsScreenRefactored>
                 child: Column(
                   children: [
                     sections[0], // Appearance
-                    SizedBox(height: 20.h),
+                    SizedBox(height: 20),
                     sections[2], // Notifications
                   ],
                 ),
               ),
-              SizedBox(width: 24.w),
+              SizedBox(width: 24),
               Expanded(
                 child: Column(
                   children: [
                     sections[1], // Units
-                    SizedBox(height: 20.h),
+                    SizedBox(height: 20),
                     sections[3], // Language
                   ],
                 ),
               ),
             ],
           ),
-          SizedBox(height: 20.h),
+          SizedBox(height: 20),
           sections[4], // About section full width
         ],
       ),
@@ -159,15 +160,15 @@ class _SettingsScreenRefactoredState extends State<SettingsScreenRefactored>
       children: [
         // Sidebar Navigation
         Container(
-          width: 240.w,
+          width: 240,
           color: ui_kit.HvacColors.backgroundCard,
           child: _buildDesktopSidebar(l10n),
         ),
         // Main Content
         Expanded(
           child: Container(
-            constraints: BoxConstraints(maxWidth: 800.w),
-            padding: EdgeInsets.all(32.w),
+            constraints: BoxConstraints(maxWidth: 800),
+            padding: EdgeInsets.all(32),
             child: SingleChildScrollView(
               child: Column(
                 children: _buildSections(l10n),
@@ -181,81 +182,9 @@ class _SettingsScreenRefactoredState extends State<SettingsScreenRefactored>
 
   /// Desktop Sidebar Navigation
   Widget _buildDesktopSidebar(AppLocalizations l10n) {
-    final menuItems = [
-      (Icons.palette_outlined, l10n.appearance, 0),
-      (Icons.straighten_outlined, l10n.units, 1),
-      (Icons.notifications_outlined, l10n.notifications, 2),
-      (Icons.language_outlined, l10n.language, 3),
-      (Icons.info_outline, l10n.about, 4),
-    ];
-
-    return ListView.builder(
-      padding: EdgeInsets.symmetric(vertical: 20.h),
-      itemCount: menuItems.length,
-      itemBuilder: (context, index) {
-        final item = menuItems[index];
-        return _buildSidebarItem(
-          icon: item.$1,
-          label: item.$2,
-          index: item.$3,
-        );
-      },
-    );
-  }
-
-  /// Sidebar Menu Item
-  Widget _buildSidebarItem({
-    required IconData icon,
-    required String label,
-    required int index,
-  }) {
-    final isSelected = _controller.selectedSection == index;
-
-    return InkWell(
-      onTap: () => _controller.selectSection(index),
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: 20.w,
-          vertical: 12.h,
-        ),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? ui_kit.HvacColors.primaryOrange.withValues(alpha: 0.1)
-              : Colors.transparent,
-          border: Border(
-            left: BorderSide(
-              color: isSelected
-                  ? ui_kit.HvacColors.primaryOrange
-                  : Colors.transparent,
-              width: 3.w,
-            ),
-          ),
-        ),
-        child: Row(
-          children: [
-            Icon(
-              icon,
-              size: 20.w,
-              color: isSelected
-                  ? ui_kit.HvacColors.primaryOrange
-                  : ui_kit.HvacColors.textSecondary,
-            ),
-            SizedBox(width: 12.w),
-            Expanded(
-              child: Text(
-                label,
-                style: ui_kit.HvacTypography.bodyMedium.copyWith(
-                  fontSize: 14.sp,
-                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                  color: isSelected
-                      ? ui_kit.HvacColors.primaryOrange
-                      : ui_kit.HvacColors.textPrimary,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+    return SettingsSidebar(
+      selectedSection: _controller.selectedSection,
+      onSectionSelected: _controller.selectSection,
     );
   }
 
@@ -270,7 +199,7 @@ class _SettingsScreenRefactoredState extends State<SettingsScreenRefactored>
           _showSnackBar(l10n.themeChangeNextVersion);
         },
       ).animate().fadeIn(duration: 500.ms).slideX(begin: -0.1, end: 0),
-      SizedBox(height: 20.h),
+      SizedBox(height: 20),
       UnitsSection(
         celsius: _controller.celsius,
         onCelsiusChanged: (value) {
@@ -283,7 +212,7 @@ class _SettingsScreenRefactoredState extends State<SettingsScreenRefactored>
           .animate()
           .fadeIn(duration: 500.ms, delay: 100.ms)
           .slideX(begin: -0.1, end: 0),
-      SizedBox(height: 20.h),
+      SizedBox(height: 20),
       NotificationsSection(
         pushNotifications: _controller.pushNotifications,
         emailNotifications: _controller.emailNotifications,
@@ -305,7 +234,7 @@ class _SettingsScreenRefactoredState extends State<SettingsScreenRefactored>
           .animate()
           .fadeIn(duration: 500.ms, delay: 200.ms)
           .slideX(begin: -0.1, end: 0),
-      SizedBox(height: 20.h),
+      SizedBox(height: 20),
       LanguageSection(
         selectedLanguage: _controller.language,
         onLanguageChanged: (language) {
@@ -316,7 +245,7 @@ class _SettingsScreenRefactoredState extends State<SettingsScreenRefactored>
           .animate()
           .fadeIn(duration: 500.ms, delay: 300.ms)
           .slideX(begin: -0.1, end: 0),
-      SizedBox(height: 20.h),
+      SizedBox(height: 20),
       AboutSection(
         onCheckUpdates: () {
           _showSnackBar(l10n.checkingUpdates);
@@ -345,21 +274,15 @@ class _SettingsScreenRefactoredState extends State<SettingsScreenRefactored>
     _showSnackBar(AppLocalizations.of(context)!.settingsSaved);
   }
 
-  /// Show snackbar with responsive sizing
+  /// Show snackbar using UI Kit component
   void _showSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(
-          message,
-          style: TextStyle(fontSize: 14.sp),
-        ),
+        content: Text(message),
         backgroundColor: ui_kit.HvacColors.success,
         duration: const Duration(seconds: 2),
         behavior: SnackBarBehavior.floating,
-        margin: EdgeInsets.all(16.w),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.r),
-        ),
+        margin: const EdgeInsets.all(16),
       ),
     );
   }

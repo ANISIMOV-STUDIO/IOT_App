@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart' as ui_kit;
-import '../../generated/l10n/app_localizations.dart';
 import '../../domain/entities/hvac_unit.dart';
 import '../bloc/hvac_list/hvac_list_bloc.dart';
 import '../bloc/hvac_list/hvac_list_state.dart';
@@ -17,6 +16,8 @@ import '../widgets/home/home_app_bar.dart';
 import '../widgets/home/home_states.dart';
 import '../widgets/home/home_dashboard_layout.dart';
 import '../widgets/home/home_control_cards.dart';
+import '../widgets/home/home_quick_actions.dart';
+import '../widgets/home/home_unit_list_item.dart';
 import '../mixins/snackbar_mixin.dart';
 import 'home_screen_logic.dart';
 
@@ -80,7 +81,7 @@ class _HomeScreenRefactoredState extends State<HomeScreenRefactored>
       children: [
         // Sidebar
         Container(
-          width: 280.w,
+          width: 280,
           color: ui_kit.HvacColors.backgroundCard,
           child: Column(
             children: [
@@ -103,7 +104,7 @@ class _HomeScreenRefactoredState extends State<HomeScreenRefactored>
       children: [
         // Left sidebar
         Container(
-          width: 320.w,
+          width: 320,
           color: ui_kit.HvacColors.backgroundCard,
           child: Column(
             children: [
@@ -115,13 +116,13 @@ class _HomeScreenRefactoredState extends State<HomeScreenRefactored>
         // Main content
         Expanded(
           child: Container(
-            constraints: BoxConstraints(maxWidth: 1200.w),
+            constraints: BoxConstraints(maxWidth: 1200),
             child: _buildContent(),
           ),
         ),
         // Right sidebar (notifications/quick actions)
         Container(
-          width: 320.w,
+          width: 320,
           color: ui_kit.HvacColors.backgroundCard,
           child: _buildQuickActionsPanel(),
         ),
@@ -142,7 +143,7 @@ class _HomeScreenRefactoredState extends State<HomeScreenRefactored>
   /// Main content area with BLoC state management
   Widget _buildContent() {
     return Padding(
-      padding: EdgeInsets.all(16.w),
+      padding: EdgeInsets.all(16),
       child: BlocBuilder<HvacListBloc, HvacListState>(
         builder: (context, state) {
           final isLoading = state is HvacListLoading;
@@ -226,7 +227,7 @@ class _HomeScreenRefactoredState extends State<HomeScreenRefactored>
         if (state is! HvacListLoaded) return const SizedBox.shrink();
 
         return ListView.builder(
-          padding: EdgeInsets.all(16.w),
+          padding: EdgeInsets.all(16),
           itemCount: state.units.length,
           itemBuilder: (context, index) {
             final unit = state.units[index];
@@ -239,94 +240,18 @@ class _HomeScreenRefactoredState extends State<HomeScreenRefactored>
 
   /// Unit list item for sidebar
   Widget _buildUnitListItem(HvacUnit unit) {
-    final isSelected = unit.name == _selectedUnit;
-
-    return Padding(
-      padding: EdgeInsets.only(bottom: 8.h),
-      child: ui_kit.HvacCard(
-        variant: ui_kit.HvacCardVariant.outlined,
-        onTap: () => _handleUnitSelection(unit.name),
-        child: Padding(
-          padding: EdgeInsets.all(12.w),
-          child: Row(
-            children: [
-              ui_kit.StatusIndicator(
-                isActive: unit.power,
-                size: 8.w,
-              ),
-              SizedBox(width: 12.w),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      unit.name,
-                      style: ui_kit.HvacTypography.titleMedium.copyWith(
-                        fontSize: 14.sp,
-                        fontWeight: isSelected ? FontWeight.bold : null,
-                      ),
-                    ),
-                    SizedBox(height: 4.h),
-                    Text(
-                      unit.location ?? '',
-                      style: ui_kit.HvacTypography.bodySmall.copyWith(
-                        fontSize: 12.sp,
-                        color: ui_kit.HvacColors.textSecondary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+    return HomeUnitListItem(
+      unit: unit,
+      isSelected: unit.name == _selectedUnit,
+      onTap: () => _handleUnitSelection(unit.name),
     );
   }
 
   /// Quick actions panel for desktop
   Widget _buildQuickActionsPanel() {
-    return Container(
-      padding: EdgeInsets.all(16.w),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            AppLocalizations.of(context)!.quickActions,
-            style:
-                ui_kit.HvacTypography.headlineSmall.copyWith(fontSize: 18.sp),
-          ),
-          SizedBox(height: 16.h),
-          // Quick action buttons
-          _buildQuickActionButton(
-            icon: Icons.power_settings_new,
-            label: AppLocalizations.of(context)!.allOn,
-            onPressed: () => _logic.powerAllOn(),
-          ),
-          SizedBox(height: 8.h),
-          _buildQuickActionButton(
-            icon: Icons.power_off,
-            label: AppLocalizations.of(context)!.allOff,
-            onPressed: () => _logic.powerAllOff(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  /// Quick action button
-  Widget _buildQuickActionButton({
-    required IconData icon,
-    required String label,
-    required VoidCallback onPressed,
-  }) {
-    return SizedBox(
-      width: double.infinity,
-      child: ui_kit.HvacOutlineButton(
-        onPressed: onPressed,
-        label: label,
-        icon: icon,
-      ),
+    return HomeQuickActionsPanel(
+      onPowerAllOn: () => _logic.powerAllOn(),
+      onPowerAllOff: () => _logic.powerAllOff(),
     );
   }
 
