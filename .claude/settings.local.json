@@ -5,7 +5,8 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(packages/hvac_ui_kit/lib/src/widgets/shimmer/shimmer.dart)",
-      "Bash(packages/hvac_ui_kit/lib/src/widgets/inputs/inputs.dart)"
+      "Bash(packages/hvac_ui_kit/lib/src/widgets/inputs/inputs.dart)",
+      "Bash(git checkout:*)"
     ],
     "deny": [],
     "ask": [],
