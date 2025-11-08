@@ -42,14 +42,15 @@ export 'src/theme/glassmorphism.dart';
 // Buttons
 export 'src/widgets/buttons/buttons.dart';
 
+// Cards
+export 'src/widgets/cards/hvac_animated_card.dart';
+export 'src/widgets/cards/hvac_card.dart';
+
 // Inputs
 export 'src/widgets/inputs/inputs.dart';
 
 // States (Empty, Error, Loading)
 export 'src/widgets/states/states.dart';
-
-// Cards
-export 'src/widgets/cards/cards.dart';
 
 // Shimmer & Skeleton Components
 export 'src/widgets/shimmer/shimmer.dart';
