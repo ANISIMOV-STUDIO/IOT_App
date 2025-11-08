@@ -4,5 +4,7 @@
 library;
 
 export 'hvac_empty_state.dart';
+export 'empty_state_types.dart';
+export 'empty_state_illustration.dart';
 export 'hvac_error_state.dart';
 export 'hvac_loading_state.dart';

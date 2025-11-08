@@ -135,7 +135,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
     // Empty state
     if (!_hasData && !_isLoading) {
       return HvacEmptyState(
-        icon: Icons.analytics_outlined,
+        customIcon: Icons.analytics_outlined,
         title: 'Нет данных',
         message: 'Статистика пока недоступна для выбранного периода',
         actionLabel: 'Обновить',

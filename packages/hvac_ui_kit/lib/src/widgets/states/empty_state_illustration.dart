@@ -4,24 +4,25 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
 /// Animated illustration widget for empty states
 class EmptyStateIllustration extends StatelessWidget {
   final IconData icon;
   final Color color;
   final bool showAnimation;
+  final double size;
 
   const EmptyStateIllustration({
     super.key,
     required this.icon,
     required this.color,
     this.showAnimation = true,
+    this.size = 120.0,
   });
 
   @override
   Widget build(BuildContext context) {
-    final iconSize = ResponsiveUtils.scaledIconSize(context, 120.0);
+    final iconSize = size;
 
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0.0, end: 1.0),

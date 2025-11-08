@@ -191,7 +191,8 @@ class EnhancedHomeEmptyState extends StatelessWidget {
   Widget build(BuildContext context) {
     return core_resp.ResponsiveBuilder(
       builder: (context, info) {
-        return EmptyStateWidget.noDevices(
+        return HvacEmptyState.noDevices(
+          message: 'Start by adding your first HVAC device to control it remotely',
           onAddDevice: () {
             AccessibilityUtils.announce('Opening device addition screen');
             // Navigate to add device screen
