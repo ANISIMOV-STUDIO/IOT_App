@@ -58,6 +58,9 @@ export 'src/widgets/shimmer/shimmer.dart';
 // Glassmorphic Components
 export 'src/widgets/glass/glass.dart';
 
+// Tooltip System
+export 'src/widgets/overlays/tooltip/tooltip.dart';
+
 // Other Widgets
 export 'src/widgets/adaptive_slider.dart';
 export 'src/widgets/status_indicator.dart';
