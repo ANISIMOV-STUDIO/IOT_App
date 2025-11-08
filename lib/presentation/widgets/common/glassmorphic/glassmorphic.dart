@@ -1,13 +1,20 @@
 /// Glassmorphic Components Library
-/// Export file for all glassmorphic card variants
+/// DEPRECATED: All components migrated to hvac_ui_kit
+///
+/// Use 'package:hvac_ui_kit/hvac_ui_kit.dart' instead
 library glassmorphic;
 
-// Base components
-export 'base_glassmorphic_container.dart';
-
-// Card variants
-export 'glassmorphic_card.dart';
-export 'gradient_card.dart';
-export 'neumorphic_card.dart';
-export 'glow_card.dart';
-export 'animated_gradient_background.dart';
+@Deprecated('Import from package:hvac_ui_kit/hvac_ui_kit.dart instead')
+// Re-export from UI Kit
+export 'package:hvac_ui_kit/hvac_ui_kit.dart'
+    show
+        BaseGlassmorphicContainer,
+        GlassmorphicConfig,
+        GlassmorphicCard,
+        ElevatedGlassmorphicCard,
+        GradientCard,
+        GlowCard,
+        StaticGlowCard,
+        NeonGlowCard,
+        NeumorphicCard,
+        AnimatedGradientBackground;

@@ -55,6 +55,9 @@ export 'src/widgets/states/states.dart';
 // Shimmer & Skeleton Components
 export 'src/widgets/shimmer/shimmer.dart';
 
+// Glassmorphic Components
+export 'src/widgets/glass/glass.dart';
+
 // Other Widgets
 export 'src/widgets/adaptive_slider.dart';
 export 'src/widgets/status_indicator.dart';

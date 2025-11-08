@@ -1,10 +1,20 @@
 /// Glassmorphic Card Components
-/// Backward compatibility wrapper - exports refactored components
+/// Backward compatibility wrapper - exports from hvac_ui_kit
 ///
-/// This file maintains backward compatibility while delegating
-/// to the new modular architecture in the glassmorphic/ directory
+/// DEPRECATED: Import directly from package:hvac_ui_kit/hvac_ui_kit.dart
 library;
 
-// Re-export all components from the glassmorphic directory
-// This ensures existing imports continue to work without modification
-export 'glassmorphic/glassmorphic.dart';
+@Deprecated('Import from package:hvac_ui_kit/hvac_ui_kit.dart instead')
+// Re-export all glassmorphic components from UI Kit
+export 'package:hvac_ui_kit/hvac_ui_kit.dart'
+    show
+        BaseGlassmorphicContainer,
+        GlassmorphicConfig,
+        GlassmorphicCard,
+        ElevatedGlassmorphicCard,
+        GradientCard,
+        GlowCard,
+        StaticGlowCard,
+        NeonGlowCard,
+        NeumorphicCard,
+        AnimatedGradientBackground;
