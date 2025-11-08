@@ -42,12 +42,23 @@ export 'src/theme/glassmorphism.dart';
 // Buttons
 export 'src/widgets/buttons/buttons.dart';
 
-// Cards
-export 'src/widgets/cards/hvac_animated_card.dart';
-export 'src/widgets/cards/hvac_card.dart';
+// Cards (Complete card system)
+export 'src/widgets/cards/cards.dart';
 
-// Inputs
+// Lists (Material 3 lists)
+export 'src/widgets/lists/lists.dart';
+
+// Tables (Data tables)
+export 'src/widgets/tables/tables.dart';
+
+// Navigation (Material 3 navigation)
+export 'src/widgets/navigation/navigation.dart';
+
+// Inputs (Material 3 inputs)
 export 'src/widgets/inputs/inputs.dart';
+
+// Material 3 Components (Segmented, Badge, Rail, Search, Menu, Date)
+export 'src/widgets/material3/material3.dart';
 
 // States (Empty, Error, Loading)
 export 'src/widgets/states/states.dart';
@@ -60,14 +71,17 @@ export 'src/widgets/glass/glass.dart';
 
 // Tooltip System
 export 'src/widgets/overlays/tooltip/tooltip.dart';
+
 // Web Components
 export 'src/widgets/web/web.dart' hide HvacResponsiveGrid;
+
 // Icon Components
 export 'src/widgets/icons/icons.dart';
-// Feedback Components
+
+// Feedback Components (Dialogs, Snackbar, Bottom sheets)
 export 'src/widgets/feedback/feedback.dart';
 
-// Layout Components
+// Layout Components (Grid, Containers, Spacing, Dividers)
 export 'src/widgets/layout/layout.dart';
 
 // Other Widgets
