@@ -4,12 +4,11 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../generated/l10n/app_localizations.dart';
-import '../bloc/hvac_list/hvac_list_bloc.dart';
-import '../bloc/hvac_list/hvac_list_event.dart';
 import '../widgets/device_card.dart';
+import 'device_search/device_search_widgets.dart';
+import 'device_search/device_search_dialogs.dart';
 
 class DeviceSearchScreen extends StatefulWidget {
   const DeviceSearchScreen({super.key});
@@ -114,7 +113,9 @@ class _DeviceSearchScreenState extends State<DeviceSearchScreen> {
                     );
                   } else {
                     // "Not found device?" card
-                    return _buildNotFoundCard(context);
+                    return NotFoundDeviceCard(
+                      onTap: () => ManualDeviceEntryDialog.show(context),
+                    );
                   }
                 },
               ),
@@ -129,169 +130,12 @@ class _DeviceSearchScreenState extends State<DeviceSearchScreen> {
               isExpanded: true,
               onPressed: _selectedDevices.isEmpty
                   ? null
-                  : () => _addSelectedDevices(context),
+                  : () => DeviceOperations.addSelectedDevices(
+                        context,
+                        _selectedDevices,
+                        _discoveredDevices,
+                      ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNotFoundCard(BuildContext context) {
-    return GestureDetector(
-      onTap: () => _showManualEntryDialog(context),
-      child: Container(
-        decoration: HvacTheme.deviceCard(),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 60,
-              height: 60,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: HvacColors.backgroundCardBorder,
-                  width: 2,
-                ),
-              ),
-              child: const Icon(
-                Icons.home_outlined,
-                size: 30,
-                color: HvacColors.textTertiary,
-              ),
-            ),
-            const SizedBox(height: 12.0),
-            Text(
-              'Not found\ndevice?',
-              style: Theme.of(context).textTheme.titleMedium,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 8.0),
-            Text(
-              'Select manually',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: HvacColors.primaryOrange,
-                  ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _addSelectedDevices(BuildContext context) {
-    // Add each selected device
-    for (final index in _selectedDevices) {
-      final device = _discoveredDevices[index];
-      context.read<HvacListBloc>().add(
-            AddDeviceEvent(
-              macAddress: device['macAddress'],
-              name: device['name'],
-              location: null,
-            ),
-          );
-    }
-
-    // Show success message
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          '${_selectedDevices.length} ${_selectedDevices.length == 1 ? 'device' : 'devices'} added',
-        ),
-        backgroundColor: HvacColors.success,
-      ),
-    );
-
-    // Go back
-    Navigator.of(context).pop();
-  }
-
-  void _showManualEntryDialog(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    final macController = TextEditingController();
-    final nameController = TextEditingController();
-    final locationController = TextEditingController();
-
-    showDialog(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(l10n.addDevice),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: macController,
-                decoration: InputDecoration(
-                  labelText: l10n.macAddress,
-                  hintText: 'XX:XX:XX:XX:XX:XX',
-                  prefixIcon: const Icon(Icons.router),
-                ),
-              ),
-              const SizedBox(height: 16.0),
-              TextField(
-                controller: nameController,
-                decoration: InputDecoration(
-                  labelText: l10n.deviceName,
-                  hintText: l10n.livingRoom,
-                  prefixIcon: const Icon(Icons.label),
-                ),
-              ),
-              const SizedBox(height: 16.0),
-              TextField(
-                controller: locationController,
-                decoration: InputDecoration(
-                  labelText: l10n.location,
-                  hintText: l10n.optional,
-                  prefixIcon: const Icon(Icons.location_on),
-                ),
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(),
-            child: Text(l10n.cancel),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              final mac = macController.text.trim();
-              final name = nameController.text.trim();
-
-              if (mac.isEmpty || name.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(l10n.fillRequiredFields),
-                    backgroundColor: HvacColors.error,
-                  ),
-                );
-                return;
-              }
-
-              context.read<HvacListBloc>().add(
-                    AddDeviceEvent(
-                      macAddress: mac,
-                      name: name,
-                      location: locationController.text.isEmpty
-                          ? null
-                          : locationController.text.trim(),
-                    ),
-                  );
-
-              Navigator.of(dialogContext).pop();
-              Navigator.of(context).pop();
-
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(l10n.deviceAdded),
-                  backgroundColor: HvacColors.success,
-                ),
-              );
-            },
-            child: Text(l10n.add),
           ),
         ],
       ),
