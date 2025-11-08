@@ -3,8 +3,8 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:hvac_ui_kit/hvac_ui_kit.dart' hide StatusIndicator, PremiumProgressIndicator;
-import 'visual_polish_components.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+import 'visual_polish_components.dart' hide StatusIndicator, PremiumProgressIndicator;
 
 class VisualPolishExample extends StatelessWidget {
   const VisualPolishExample({super.key});
@@ -63,7 +63,6 @@ class VisualPolishExample extends StatelessWidget {
             const PremiumProgressIndicator(
               value: 0.65,
               showPercentage: true,
-              label: 'Upload Progress',
             ),
             const SizedBox(height: 32),
 

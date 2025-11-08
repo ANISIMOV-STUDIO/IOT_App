@@ -7,7 +7,5 @@ library;
 // Export all shimmer components from UI Kit shimmer package
 export 'package:hvac_ui_kit/src/widgets/shimmer/shimmer.dart';
 
-// For backwards compatibility
-import 'package:hvac_ui_kit/src/widgets/shimmer/base_shimmer.dart'
-    show BaseShimmer;
-typedef EnhancedShimmer = BaseShimmer;
+// Re-export for backwards compatibility
+export 'package:hvac_ui_kit/src/widgets/shimmer/base_shimmer.dart' show BaseShimmer;

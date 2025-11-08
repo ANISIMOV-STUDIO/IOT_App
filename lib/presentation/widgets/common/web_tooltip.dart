@@ -12,5 +12,4 @@ export 'package:hvac_ui_kit/hvac_ui_kit.dart'
         TooltipPosition,
         TooltipTrigger,
         TooltipAnimation,
-        TooltipController,
-        TooltipOverlay;
+        TooltipController;
