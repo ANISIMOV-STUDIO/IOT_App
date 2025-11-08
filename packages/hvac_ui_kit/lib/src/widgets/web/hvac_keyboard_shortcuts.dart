@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 /// Keyboard shortcuts manager for web platform
-class WebKeyboardShortcuts extends StatelessWidget {
+class HvacKeyboardShortcuts extends StatelessWidget {
   final Widget child;
   final Map<LogicalKeySet, VoidCallback>? customShortcuts;
   final bool enableDefaultShortcuts;
@@ -95,7 +95,7 @@ class CallbackIntent extends Intent {
 }
 
 /// Focusable container with keyboard navigation
-class WebFocusableContainer extends StatefulWidget {
+class HvacFocusableContainer extends StatefulWidget {
   final Widget child;
   final VoidCallback? onEnter;
   final VoidCallback? onTap;
@@ -114,10 +114,10 @@ class WebFocusableContainer extends StatefulWidget {
   });
 
   @override
-  State<WebFocusableContainer> createState() => _WebFocusableContainerState();
+  State<WebFocusableContainer> createState() => _HvacFocusableContainerState();
 }
 
-class _WebFocusableContainerState extends State<WebFocusableContainer> {
+class _HvacFocusableContainerState extends State<WebFocusableContainer> {
   late FocusNode _focusNode;
   bool _isFocused = false;
 
@@ -194,7 +194,7 @@ class _WebFocusableContainerState extends State<WebFocusableContainer> {
 }
 
 /// Arrow key scrolling for web
-class WebArrowKeyScrolling extends StatefulWidget {
+class HvacArrowKeyScrolling extends StatefulWidget {
   final Widget child;
   final ScrollController? scrollController;
   final double scrollSpeed;
@@ -207,10 +207,10 @@ class WebArrowKeyScrolling extends StatefulWidget {
   });
 
   @override
-  State<WebArrowKeyScrolling> createState() => _WebArrowKeyScrollingState();
+  State<WebArrowKeyScrolling> createState() => _HvacArrowKeyScrollingState();
 }
 
-class _WebArrowKeyScrollingState extends State<WebArrowKeyScrolling> {
+class _HvacArrowKeyScrollingState extends State<WebArrowKeyScrolling> {
   late ScrollController _scrollController;
   late FocusNode _focusNode;
 
@@ -276,7 +276,7 @@ class _WebArrowKeyScrollingState extends State<WebArrowKeyScrolling> {
 }
 
 /// Tab traversal group for organized keyboard navigation
-class WebTabTraversalGroup extends StatelessWidget {
+class HvacTabTraversalGroup extends StatelessWidget {
   final Widget child;
   final FocusTraversalPolicy? policy;
 

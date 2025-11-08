@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 /// Responsive breakpoints for web
-class WebBreakpoints {
+class HvacBreakpoints {
   static const double mobile = 600;
   static const double tablet = 1024;
   static const double desktop = 1440;
@@ -51,7 +51,7 @@ class WebBreakpoints {
 }
 
 /// Web responsive scaffold with adaptive navigation
-class WebResponsiveScaffold extends StatelessWidget {
+class HvacResponsiveScaffold extends StatelessWidget {
   final Widget body;
   final Widget? drawer;
   final Widget? navigationRail;
@@ -108,7 +108,7 @@ class WebResponsiveScaffold extends StatelessWidget {
 }
 
 /// Responsive grid layout
-class WebResponsiveGrid extends StatelessWidget {
+class HvacResponsiveGrid extends StatelessWidget {
   final List<Widget> children;
   final double spacing;
   final double runSpacing;
@@ -156,7 +156,7 @@ class WebResponsiveGrid extends StatelessWidget {
 }
 
 /// Responsive container with max width constraints
-class WebResponsiveContainer extends StatelessWidget {
+class HvacResponsiveContainer extends StatelessWidget {
   final Widget child;
   final double? maxWidth;
   final EdgeInsetsGeometry? padding;
@@ -197,7 +197,7 @@ class WebResponsiveContainer extends StatelessWidget {
 }
 
 /// Responsive text that scales based on screen size
-class WebResponsiveText extends StatelessWidget {
+class HvacResponsiveText extends StatelessWidget {
   final String text;
   final TextStyle? style;
   final TextAlign? textAlign;
@@ -239,7 +239,7 @@ class WebResponsiveText extends StatelessWidget {
 }
 
 /// Focus management for keyboard navigation
-class WebKeyboardNavigator extends StatelessWidget {
+class HvacKeyboardNavigator extends StatelessWidget {
   final Widget child;
   final Map<ShortcutActivator, Intent>? shortcuts;
 

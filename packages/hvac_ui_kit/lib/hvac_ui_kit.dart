@@ -60,7 +60,10 @@ export 'src/widgets/glass/glass.dart';
 
 // Tooltip System
 export 'src/widgets/overlays/tooltip/tooltip.dart';
-n// Layout Components
+// Web Components
+export 'src/widgets/web/web.dart';
+
+// Layout Components
 export 'src/widgets/layout/layout.dart';
 
 // Other Widgets

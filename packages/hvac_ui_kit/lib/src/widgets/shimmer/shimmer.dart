@@ -8,3 +8,4 @@ export 'skeleton_primitives.dart';
 export 'skeleton_cards.dart';
 export 'skeleton_lists.dart';
 export 'skeleton_screens.dart';
+export 'hvac_skeleton_loader_advanced.dart';

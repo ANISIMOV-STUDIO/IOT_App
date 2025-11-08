@@ -7,9 +7,9 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+import '../../theme/colors.dart';
 
-class WebHoverCard extends StatefulWidget {
+class HvacHoverCard extends StatefulWidget {
   final Widget child;
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
@@ -40,10 +40,10 @@ class WebHoverCard extends StatefulWidget {
   });
 
   @override
-  State<WebHoverCard> createState() => _WebHoverCardState();
+  State<WebHoverCard> createState() => _HvacHoverCardState();
 }
 
-class _WebHoverCardState extends State<WebHoverCard>
+class _HvacHoverCardState extends State<WebHoverCard>
     with SingleTickerProviderStateMixin {
   bool _isHovering = false;
   late AnimationController _animationController;
@@ -176,7 +176,7 @@ class _WebHoverCardState extends State<WebHoverCard>
 }
 
 /// Web Hover Icon Button - Icon button with hover effects for web
-class WebHoverIconButton extends StatefulWidget {
+class HvacHoverIconButton extends StatefulWidget {
   final IconData icon;
   final VoidCallback? onPressed;
   final double size;
@@ -197,10 +197,10 @@ class WebHoverIconButton extends StatefulWidget {
   });
 
   @override
-  State<WebHoverIconButton> createState() => _WebHoverIconButtonState();
+  State<WebHoverIconButton> createState() => _HvacHoverIconButtonState();
 }
 
-class _WebHoverIconButtonState extends State<WebHoverIconButton>
+class _HvacHoverIconButtonState extends State<WebHoverIconButton>
     with SingleTickerProviderStateMixin {
   bool _isHovering = false;
   late AnimationController _animationController;

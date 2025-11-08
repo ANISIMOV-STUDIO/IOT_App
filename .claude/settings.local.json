@@ -3,7 +3,8 @@
     "allow": [
       "Bash(dart analyze:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(packages/hvac_ui_kit/lib/src/widgets/shimmer/shimmer.dart)"
     ],
     "deny": [],
     "ask": [],

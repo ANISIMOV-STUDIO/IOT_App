@@ -4,10 +4,12 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+import '../../theme/colors.dart';
+import '../../theme/spacing.dart';
+import '../../theme/radius.dart';
 
 /// Enhanced skeleton loader with customizable shimmer effect
-class WebSkeletonLoader extends StatefulWidget {
+class HvacSkeletonLoader extends StatefulWidget {
   final Widget child;
   final bool isLoading;
   final Color? baseColor;
@@ -26,10 +28,10 @@ class WebSkeletonLoader extends StatefulWidget {
   });
 
   @override
-  State<WebSkeletonLoader> createState() => _WebSkeletonLoaderState();
+  State<WebSkeletonLoader> createState() => _HvacSkeletonLoaderState();
 }
 
-class _WebSkeletonLoaderState extends State<WebSkeletonLoader>
+class _HvacSkeletonLoaderState extends State<WebSkeletonLoader>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
@@ -127,7 +129,7 @@ class _SlideGradientTransform extends GradientTransform {
 enum ShimmerDirection { ltr, ttb }
 
 /// Skeleton shapes for common UI elements
-class WebSkeletonShapes {
+class HvacSkeletonShapes {
   /// Skeleton for card
   static Widget card({
     double? width,
@@ -256,7 +258,7 @@ class WebSkeletonShapes {
 }
 
 /// Skeleton list builder
-class WebSkeletonList extends StatelessWidget {
+class HvacSkeletonList extends StatelessWidget {
   final int itemCount;
   final Widget Function(BuildContext context, int index) itemBuilder;
   final EdgeInsetsGeometry? padding;
@@ -287,7 +289,7 @@ class WebSkeletonList extends StatelessWidget {
 }
 
 /// Skeleton grid builder
-class WebSkeletonGrid extends StatelessWidget {
+class HvacSkeletonGrid extends StatelessWidget {
   final int itemCount;
   final Widget Function(BuildContext context, int index) itemBuilder;
   final int crossAxisCount;
@@ -327,7 +329,7 @@ class WebSkeletonGrid extends StatelessWidget {
 }
 
 /// Usage example widget
-class WebSkeletonLoaderExample extends StatelessWidget {
+class HvacSkeletonLoaderExample extends StatelessWidget {
   const WebSkeletonLoaderExample({super.key});
 
   @override
