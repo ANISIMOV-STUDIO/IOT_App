@@ -9,6 +9,7 @@ import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import 'package:hvac_ui_kit/src/utils/adaptive_layout.dart' as adaptive;
 import '../../domain/entities/hvac_unit.dart';
 import '../../domain/entities/ventilation_mode.dart';
+import 'ventilation/mode_control_components.dart';
 
 class VentilationModeControl extends StatefulWidget {
   final HvacUnit unit;
@@ -94,7 +95,7 @@ class _VentilationModeControlState extends State<VentilationModeControl>
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildHeader(context, deviceSize),
+                      ModeControlHeader(unit: widget.unit, onModeToggle: _toggleModeSelector, showModeSelector: _showModeSelector),
                       SizedBox(
                           height: isDesktop
                               ? 8.0
@@ -102,7 +103,7 @@ class _VentilationModeControlState extends State<VentilationModeControl>
                                   ? 12.0
                                   : adaptive.AdaptiveLayout.spacing(context,
                                       base: 12))),
-                      _buildModeSelector(context, deviceSize),
+                      ModeSelector(currentMode: widget.unit.mode, onModeChanged: widget.onModeChanged),
                       SizedBox(
                           height: isDesktop
                               ? 8.0
@@ -117,7 +118,7 @@ class _VentilationModeControlState extends State<VentilationModeControl>
                             bouncing: true,
                             alwaysScrollable: false,
                           ),
-                          child: _buildFanSpeedControls(context, deviceSize),
+                          child: FanSpeedControls(supplyFanSpeed: _supplyFanSpeed, exhaustFanSpeed: _exhaustFanSpeed, onSupplyFanChanged: widget.onSupplyFanChanged, onExhaustFanChanged: widget.onExhaustFanChanged),
                         ),
                       ),
                     ],
@@ -128,19 +129,19 @@ class _VentilationModeControlState extends State<VentilationModeControl>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      _buildHeader(context, deviceSize),
+                      ModeControlHeader(unit: widget.unit, onModeToggle: _toggleModeSelector, showModeSelector: _showModeSelector),
                       SizedBox(
                           height: deviceSize == DeviceSize.compact
                               ? 12.0
                               : adaptive.AdaptiveLayout.spacing(context,
                                   base: 12)),
-                      _buildModeSelector(context, deviceSize),
+                      ModeSelector(currentMode: widget.unit.mode, onModeChanged: widget.onModeChanged),
                       SizedBox(
                           height: deviceSize == DeviceSize.compact
                               ? 12.0
                               : adaptive.AdaptiveLayout.spacing(context,
                                   base: 12)),
-                      _buildFanSpeedControls(context, deviceSize),
+                      FanSpeedControls(supplyFanSpeed: _supplyFanSpeed, exhaustFanSpeed: _exhaustFanSpeed, onSupplyFanChanged: widget.onSupplyFanChanged, onExhaustFanChanged: widget.onExhaustFanChanged),
                     ],
                   );
                 }
@@ -152,174 +153,6 @@ class _VentilationModeControlState extends State<VentilationModeControl>
     );
   }
 
-  Widget _buildHeader(BuildContext context, DeviceSize deviceSize) {
-    return Row(
-      children: [
-        Container(
-          padding:
-              EdgeInsets.all(adaptive.AdaptiveLayout.spacing(context, base: 8)),
-          decoration: BoxDecoration(
-            color: HvacColors.primaryOrange.withValues(alpha: 0.2),
-            borderRadius: BorderRadius.circular(
-              adaptive.AdaptiveLayout.borderRadius(context, base: 8),
-            ),
-          ),
-          child: Icon(
-            Icons.tune,
-            color: HvacColors.primaryOrange,
-            size: adaptive.AdaptiveLayout.iconSize(context, base: 20),
-          ),
-        ),
-        SizedBox(width: adaptive.AdaptiveLayout.spacing(context)),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Режим работы',
-                style: TextStyle(
-                  fontSize: adaptive.AdaptiveLayout.fontSize(context, base: 16),
-                  fontWeight: FontWeight.w600,
-                  color: HvacColors.textPrimary,
-                ),
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-              ),
-              const SizedBox(height: 2.0),
-              Text(
-                widget.unit.ventMode?.displayName ?? 'Базовый',
-                style: TextStyle(
-                  fontSize: adaptive.AdaptiveLayout.fontSize(context, base: 12),
-                  color: HvacColors.textSecondary,
-                ),
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
 
-  Widget _buildModeSelector(BuildContext context, DeviceSize deviceSize) {
-    return GestureDetector(
-      onTap: () {
-        setState(() => _showModeSelector = !_showModeSelector);
-        if (_showModeSelector) {
-          _animationController.forward();
-        } else {
-          _animationController.reverse();
-        }
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: adaptive.AdaptiveLayout.spacing(context, base: 12),
-          vertical: adaptive.AdaptiveLayout.spacing(context, base: 10),
-        ),
-        decoration: BoxDecoration(
-          color: HvacColors.primaryOrange.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(
-            adaptive.AdaptiveLayout.borderRadius(context, base: 12),
-          ),
-          border: Border.all(
-            color: HvacColors.primaryOrange.withValues(alpha: 0.3),
-          ),
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Text(
-                widget.unit.ventMode?.displayName ?? 'Базовый',
-                style: TextStyle(
-                  fontSize: adaptive.AdaptiveLayout.fontSize(context, base: 14),
-                  fontWeight: FontWeight.w600,
-                  color: HvacColors.primaryOrange,
-                ),
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-              ),
-            ),
-            const SizedBox(width: 4.0),
-            Icon(
-              _showModeSelector
-                  ? Icons.keyboard_arrow_up
-                  : Icons.keyboard_arrow_down,
-              color: HvacColors.primaryOrange,
-              size: adaptive.AdaptiveLayout.iconSize(context, base: 20),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
-  Widget _buildFanSpeedControls(BuildContext context, DeviceSize deviceSize) {
-    // Adaptive layout: stack on mobile, side-by-side on tablet/desktop
-    // MONOCHROMATIC: Both sliders use same gold accent (no color parameter needed)
-    switch (deviceSize) {
-      case DeviceSize.compact:
-        return Column(
-          children: [
-            AdaptiveSlider(
-              label: 'Приточный вентилятор',
-              icon: Icons.air,
-              value: _supplyFanSpeed,
-              max: 100,
-              onChanged: (speed) {
-                setState(() => _supplyFanSpeed = speed);
-                widget.onSupplyFanChanged?.call(speed);
-              },
-            ),
-            const SizedBox(height: 12.0),
-            AdaptiveSlider(
-              label: 'Вытяжной вентилятор',
-              icon: Icons.upload,
-              value: _exhaustFanSpeed,
-              max: 100,
-              onChanged: (speed) {
-                setState(() => _exhaustFanSpeed = speed);
-                widget.onExhaustFanChanged?.call(speed);
-              },
-            ),
-          ],
-        );
-      case DeviceSize.medium:
-      case DeviceSize.expanded:
-        final isDesktop = deviceSize == DeviceSize.expanded;
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: AdaptiveSlider(
-                label: 'Приточный',
-                icon: Icons.air,
-                value: _supplyFanSpeed,
-                max: 100,
-                showTickMarks: !isDesktop,
-                onChanged: (speed) {
-                  setState(() => _supplyFanSpeed = speed);
-                  widget.onSupplyFanChanged?.call(speed);
-                },
-              ),
-            ),
-            SizedBox(width: adaptive.AdaptiveLayout.spacing(context, base: 16)),
-            Expanded(
-              child: AdaptiveSlider(
-                label: 'Вытяжной',
-                icon: Icons.upload,
-                value: _exhaustFanSpeed,
-                max: 100,
-                showTickMarks: !isDesktop,
-                onChanged: (speed) {
-                  setState(() => _exhaustFanSpeed = speed);
-                  widget.onExhaustFanChanged?.call(speed);
-                },
-              ),
-            ),
-          ],
-        );
-    }
-  }
 }
