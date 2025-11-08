@@ -155,7 +155,8 @@ class HvacSnackbar extends StatelessWidget {
         if (title != null) ...[
           Text(
             title!,
-            style: HvacTypography.bodyBold.copyWith(
+            style: HvacTypography.bodyMedium.copyWith(
+              fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
           ),

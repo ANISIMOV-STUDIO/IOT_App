@@ -42,6 +42,12 @@ class HvacLoadingState extends StatelessWidget {
   /// Custom color
   final Color? color;
 
+  /// Child widget (for backward compatibility with overlay mode)
+  final Widget? child;
+
+  /// Whether currently loading (for backward compatibility with overlay mode)
+  final bool? isLoading;
+
   const HvacLoadingState({
     super.key,
     this.message,
@@ -49,10 +55,21 @@ class HvacLoadingState extends StatelessWidget {
     this.size = LoadingStateSize.medium,
     this.isFullScreen = false,
     this.color,
+    this.child,
+    this.isLoading,
   });
 
   @override
   Widget build(BuildContext context) {
+    // Backward compatibility: if isLoading and child are provided, use overlay mode
+    if (child != null && isLoading != null) {
+      return HvacLoadingOverlay(
+        isLoading: isLoading!,
+        message: message,
+        child: child!,
+      );
+    }
+
     final content = _buildContent();
 
     if (isFullScreen) {

@@ -78,7 +78,8 @@ class HvacAvatar extends StatelessWidget {
         child: initials != null
             ? Text(
                 initials!,
-                style: HvacTypography.bodyBold.copyWith(
+                style: HvacTypography.bodyMedium.copyWith(
+                  fontWeight: FontWeight.bold,
                   fontSize: size * 0.4,
                   color: fgColor,
                 ),
@@ -91,7 +92,8 @@ class HvacAvatar extends StatelessWidget {
         backgroundColor: bgColor,
         child: Text(
           initials!,
-          style: HvacTypography.bodyBold.copyWith(
+          style: HvacTypography.bodyMedium.copyWith(
+            fontWeight: FontWeight.bold,
             fontSize: size * 0.4,
             color: fgColor,
           ),
@@ -175,7 +177,7 @@ class HvacAvatarGroup extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: HvacColors.backgroundMain,
+                      color: HvacColors.backgroundCard,
                       width: 2,
                     ),
                   ),
@@ -196,7 +198,7 @@ class HvacAvatarGroup extends StatelessWidget {
                     shape: BoxShape.circle,
                     color: HvacColors.backgroundCard,
                     border: Border.all(
-                      color: HvacColors.backgroundMain,
+                      color: HvacColors.backgroundDark,
                       width: 2,
                     ),
                   ),

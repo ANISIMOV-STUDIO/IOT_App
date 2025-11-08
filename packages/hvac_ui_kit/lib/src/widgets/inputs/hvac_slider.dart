@@ -75,7 +75,8 @@ class HvacSlider extends StatelessWidget {
                 if (showValue)
                   Text(
                     _formatValue(value),
-                    style: HvacTypography.bodyBold.copyWith(
+                    style: HvacTypography.bodyMedium.copyWith(
+                      fontWeight: FontWeight.bold,
                       color: activeColor ?? HvacColors.primaryOrange,
                     ),
                   ),
@@ -179,7 +180,8 @@ class HvacRangeSlider extends StatelessWidget {
                 if (showValues)
                   Text(
                     '${_formatValue(values.start)} - ${_formatValue(values.end)}',
-                    style: HvacTypography.bodyBold.copyWith(
+                    style: HvacTypography.bodyMedium.copyWith(
+                      fontWeight: FontWeight.bold,
                       color: activeColor ?? HvacColors.primaryOrange,
                     ),
                   ),

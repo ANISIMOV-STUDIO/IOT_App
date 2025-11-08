@@ -37,13 +37,13 @@ class HvacBreakpoints {
     T? widescreen,
   }) {
     final width = MediaQuery.of(context).size.width;
-    if (width >= WebBreakpoints.widescreen && widescreen != null) {
+    if (width >= HvacBreakpoints.widescreen && widescreen != null) {
       return widescreen;
     }
-    if (width >= WebBreakpoints.desktop && desktop != null) {
+    if (width >= HvacBreakpoints.desktop && desktop != null) {
       return desktop;
     }
-    if (width >= WebBreakpoints.tablet && tablet != null) {
+    if (width >= HvacBreakpoints.tablet && tablet != null) {
       return tablet;
     }
     return mobile;
@@ -62,7 +62,7 @@ class HvacResponsiveScaffold extends StatelessWidget {
   final ValueChanged<int>? onNavigationRailChanged;
   final Color? backgroundColor;
 
-  const WebResponsiveScaffold({
+  const HvacResponsiveScaffold({
     super.key,
     required this.body,
     this.drawer,
@@ -77,8 +77,8 @@ class HvacResponsiveScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDesktop = WebBreakpoints.isDesktop(context) ||
-        WebBreakpoints.isWidescreen(context);
+    final isDesktop = HvacBreakpoints.isDesktop(context) ||
+        HvacBreakpoints.isWidescreen(context);
 
     if (isDesktop && showNavigationRail && navigationRail != null) {
       // Desktop layout with navigation rail
@@ -114,7 +114,7 @@ class HvacResponsiveGrid extends StatelessWidget {
   final double runSpacing;
   final EdgeInsetsGeometry? padding;
 
-  const WebResponsiveGrid({
+  const HvacResponsiveGrid({
     super.key,
     required this.children,
     this.spacing = 16.0,
@@ -124,7 +124,7 @@ class HvacResponsiveGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final columns = WebBreakpoints.getValue<int>(
+    final columns = HvacBreakpoints.getValue<int>(
       context,
       mobile: 1,
       tablet: 2,
@@ -163,7 +163,7 @@ class HvacResponsiveContainer extends StatelessWidget {
   final EdgeInsetsGeometry? margin;
   final AlignmentGeometry alignment;
 
-  const WebResponsiveContainer({
+  const HvacResponsiveContainer({
     super.key,
     required this.child,
     this.maxWidth,
@@ -174,7 +174,7 @@ class HvacResponsiveContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final defaultMaxWidth = WebBreakpoints.getValue<double>(
+    final defaultMaxWidth = HvacBreakpoints.getValue<double>(
       context,
       mobile: double.infinity,
       tablet: 768,
@@ -207,7 +207,7 @@ class HvacResponsiveText extends StatelessWidget {
   final double? tabletFontSize;
   final double? desktopFontSize;
 
-  const WebResponsiveText(
+  const HvacResponsiveText(
     this.text, {
     super.key,
     this.style,
@@ -221,7 +221,7 @@ class HvacResponsiveText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fontSize = WebBreakpoints.getValue<double>(
+    final fontSize = HvacBreakpoints.getValue<double>(
       context,
       mobile: mobileFontSize ?? 14,
       tablet: tabletFontSize ?? 16,
@@ -243,7 +243,7 @@ class HvacKeyboardNavigator extends StatelessWidget {
   final Widget child;
   final Map<ShortcutActivator, Intent>? shortcuts;
 
-  const WebKeyboardNavigator({
+  const HvacKeyboardNavigator({
     super.key,
     required this.child,
     this.shortcuts,

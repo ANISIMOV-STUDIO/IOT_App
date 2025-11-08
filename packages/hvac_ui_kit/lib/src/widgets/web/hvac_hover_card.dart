@@ -23,7 +23,7 @@ class HvacHoverCard extends StatefulWidget {
   final Color? backgroundColor;
   final bool enableGlassmorphism;
 
-  const WebHoverCard({
+  const HvacHoverCard({
     super.key,
     required this.child,
     this.onTap,
@@ -40,10 +40,10 @@ class HvacHoverCard extends StatefulWidget {
   });
 
   @override
-  State<WebHoverCard> createState() => _HvacHoverCardState();
+  State<HvacHoverCard> createState() => _HvacHoverCardState();
 }
 
-class _HvacHoverCardState extends State<WebHoverCard>
+class _HvacHoverCardState extends State<HvacHoverCard>
     with SingleTickerProviderStateMixin {
   bool _isHovering = false;
   late AnimationController _animationController;
@@ -185,7 +185,7 @@ class HvacHoverIconButton extends StatefulWidget {
   final String? tooltip;
   final bool showBackground;
 
-  const WebHoverIconButton({
+  const HvacHoverIconButton({
     super.key,
     required this.icon,
     this.onPressed,
@@ -197,10 +197,10 @@ class HvacHoverIconButton extends StatefulWidget {
   });
 
   @override
-  State<WebHoverIconButton> createState() => _HvacHoverIconButtonState();
+  State<HvacHoverIconButton> createState() => _HvacHoverIconButtonState();
 }
 
-class _HvacHoverIconButtonState extends State<WebHoverIconButton>
+class _HvacHoverIconButtonState extends State<HvacHoverIconButton>
     with SingleTickerProviderStateMixin {
   bool _isHovering = false;
   late AnimationController _animationController;

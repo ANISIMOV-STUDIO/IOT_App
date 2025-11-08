@@ -152,7 +152,7 @@ class HvacTimePickerCompact extends StatelessWidget {
       builder: (context, child) {
         return Theme(
           data: ThemeData.dark().copyWith(
-            colorScheme: const ColorScheme.dark(
+            colorScheme: ColorScheme.dark(
               primary: color ?? HvacColors.primaryOrange,
               onPrimary: Colors.white,
               surface: HvacColors.backgroundCard,

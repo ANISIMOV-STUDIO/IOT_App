@@ -77,7 +77,7 @@ export 'src/widgets/temperature_badge.dart';
 export 'src/widgets/animated_badge.dart';
 export 'src/widgets/progress_indicator.dart';
 export 'src/widgets/hvac_interactive.dart';
-export 'src/widgets/hvac_skeleton_loader.dart';
+export 'src/widgets/hvac_skeleton_loader.dart' hide HvacSkeletonLoader;
 export 'src/widgets/hvac_swipeable_card.dart';
 export 'src/widgets/hvac_gradient_border.dart';
 export 'src/widgets/hvac_neumorphic.dart';

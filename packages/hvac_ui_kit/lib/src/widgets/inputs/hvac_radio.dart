@@ -10,7 +10,7 @@ import '../../theme/typography.dart';
 /// HVAC-themed radio button with Material 3 design
 class HvacRadio<T> extends StatelessWidget {
   final T value;
-  final T groupValue;
+  final T? groupValue;
   final ValueChanged<T?>? onChanged;
   final String? label;
   final String? subtitle;

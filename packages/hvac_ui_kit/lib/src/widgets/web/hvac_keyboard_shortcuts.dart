@@ -13,7 +13,7 @@ class HvacKeyboardShortcuts extends StatelessWidget {
   final Map<LogicalKeySet, VoidCallback>? customShortcuts;
   final bool enableDefaultShortcuts;
 
-  const WebKeyboardShortcuts({
+  const HvacKeyboardShortcuts({
     super.key,
     required this.child,
     this.customShortcuts,
@@ -103,7 +103,7 @@ class HvacFocusableContainer extends StatefulWidget {
   final bool autofocus;
   final FocusNode? focusNode;
 
-  const WebFocusableContainer({
+  const HvacFocusableContainer({
     super.key,
     required this.child,
     this.onEnter,
@@ -114,10 +114,10 @@ class HvacFocusableContainer extends StatefulWidget {
   });
 
   @override
-  State<WebFocusableContainer> createState() => _HvacFocusableContainerState();
+  State<HvacFocusableContainer> createState() => _HvacFocusableContainerState();
 }
 
-class _HvacFocusableContainerState extends State<WebFocusableContainer> {
+class _HvacFocusableContainerState extends State<HvacFocusableContainer> {
   late FocusNode _focusNode;
   bool _isFocused = false;
 
@@ -199,7 +199,7 @@ class HvacArrowKeyScrolling extends StatefulWidget {
   final ScrollController? scrollController;
   final double scrollSpeed;
 
-  const WebArrowKeyScrolling({
+  const HvacArrowKeyScrolling({
     super.key,
     required this.child,
     this.scrollController,
@@ -207,10 +207,10 @@ class HvacArrowKeyScrolling extends StatefulWidget {
   });
 
   @override
-  State<WebArrowKeyScrolling> createState() => _HvacArrowKeyScrollingState();
+  State<HvacArrowKeyScrolling> createState() => _HvacArrowKeyScrollingState();
 }
 
-class _HvacArrowKeyScrollingState extends State<WebArrowKeyScrolling> {
+class _HvacArrowKeyScrollingState extends State<HvacArrowKeyScrolling> {
   late ScrollController _scrollController;
   late FocusNode _focusNode;
 
@@ -280,7 +280,7 @@ class HvacTabTraversalGroup extends StatelessWidget {
   final Widget child;
   final FocusTraversalPolicy? policy;
 
-  const WebTabTraversalGroup({
+  const HvacTabTraversalGroup({
     super.key,
     required this.child,
     this.policy,

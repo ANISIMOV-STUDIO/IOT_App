@@ -60,7 +60,7 @@ class HvacIconBadge extends StatelessWidget {
                 shape: showDot ? BoxShape.circle : BoxShape.rectangle,
                 borderRadius: showDot ? null : BorderRadius.circular(8),
                 border: Border.all(
-                  color: HvacColors.backgroundMain,
+                  color: HvacColors.backgroundCard,
                   width: 1.5,
                 ),
               ),
@@ -145,7 +145,7 @@ class HvacStatusIcon extends StatelessWidget {
               color: statusColor,
               shape: BoxShape.circle,
               border: Border.all(
-                color: HvacColors.backgroundMain,
+                color: HvacColors.backgroundCard,
                 width: 2,
               ),
               boxShadow: showPulse

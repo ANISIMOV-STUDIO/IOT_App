@@ -5,7 +5,6 @@ library;
 
 import 'package:flutter/material.dart';
 import '../../theme/colors.dart';
-import '../../theme/spacing.dart';
 import '../../theme/radius.dart';
 
 /// Enhanced skeleton loader with customizable shimmer effect
@@ -17,7 +16,7 @@ class HvacSkeletonLoader extends StatefulWidget {
   final Duration duration;
   final ShimmerDirection direction;
 
-  const WebSkeletonLoader({
+  const HvacSkeletonLoader({
     super.key,
     required this.child,
     required this.isLoading,
@@ -28,10 +27,10 @@ class HvacSkeletonLoader extends StatefulWidget {
   });
 
   @override
-  State<WebSkeletonLoader> createState() => _HvacSkeletonLoaderState();
+  State<HvacSkeletonLoader> createState() => _HvacSkeletonLoaderState();
 }
 
-class _HvacSkeletonLoaderState extends State<WebSkeletonLoader>
+class _HvacSkeletonLoaderState extends State<HvacSkeletonLoader>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
@@ -54,7 +53,7 @@ class _HvacSkeletonLoaderState extends State<WebSkeletonLoader>
   }
 
   @override
-  void didUpdateWidget(WebSkeletonLoader oldWidget) {
+  void didUpdateWidget(HvacSkeletonLoader oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.isLoading != oldWidget.isLoading) {
       if (widget.isLoading) {
@@ -264,7 +263,7 @@ class HvacSkeletonList extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final double spacing;
 
-  const WebSkeletonList({
+  const HvacSkeletonList({
     super.key,
     this.itemCount = 5,
     required this.itemBuilder,
@@ -279,7 +278,7 @@ class HvacSkeletonList extends StatelessWidget {
       itemCount: itemCount,
       separatorBuilder: (context, index) => SizedBox(height: spacing),
       itemBuilder: (context, index) {
-        return WebSkeletonLoader(
+        return HvacSkeletonLoader(
           isLoading: true,
           child: itemBuilder(context, index),
         );
@@ -297,7 +296,7 @@ class HvacSkeletonGrid extends StatelessWidget {
   final double mainAxisSpacing;
   final EdgeInsetsGeometry? padding;
 
-  const WebSkeletonGrid({
+  const HvacSkeletonGrid({
     super.key,
     this.itemCount = 6,
     required this.itemBuilder,
@@ -319,7 +318,7 @@ class HvacSkeletonGrid extends StatelessWidget {
       ),
       itemCount: itemCount,
       itemBuilder: (context, index) {
-        return WebSkeletonLoader(
+        return HvacSkeletonLoader(
           isLoading: true,
           child: itemBuilder(context, index),
         );
@@ -330,33 +329,33 @@ class HvacSkeletonGrid extends StatelessWidget {
 
 /// Usage example widget
 class HvacSkeletonLoaderExample extends StatelessWidget {
-  const WebSkeletonLoaderExample({super.key});
+  const HvacSkeletonLoaderExample({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         // Single card with shimmer
-        WebSkeletonLoader(
+        HvacSkeletonLoader(
           isLoading: true,
-          child: WebSkeletonShapes.hvacCard(),
+          child: HvacSkeletonShapes.hvacCard(),
         ),
         const SizedBox(height: 20),
 
         // List of skeleton cards
         Expanded(
-          child: WebSkeletonList(
+          child: HvacSkeletonList(
             itemCount: 5,
-            itemBuilder: (context, index) => WebSkeletonShapes.hvacCard(),
+            itemBuilder: (context, index) => HvacSkeletonShapes.hvacCard(),
           ),
         ),
 
         // Grid of skeleton stat cards
         Expanded(
-          child: WebSkeletonGrid(
+          child: HvacSkeletonGrid(
             itemCount: 4,
             crossAxisCount: 2,
-            itemBuilder: (context, index) => WebSkeletonShapes.statCard(),
+            itemBuilder: (context, index) => HvacSkeletonShapes.statCard(),
           ),
         ),
       ],
