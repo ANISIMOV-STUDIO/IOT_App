@@ -43,11 +43,11 @@ class PasswordStrengthIndicator extends StatelessWidget {
                   valueColor: AlwaysStoppedAnimation<Color>(
                     _getStrengthColor(strength),
                   ),
-                  minHeight: 4.rh(context),
+                  minHeight: 4,
                 ),
               ),
             ),
-            SizedBox(width: 8.rw(context)),
+            SizedBox(width: 8),
             AnimatedSwitcher(
               duration: const Duration(milliseconds: 200),
               child: Text(
@@ -64,7 +64,7 @@ class PasswordStrengthIndicator extends StatelessWidget {
         ),
 
         if (showRequirements) ...[
-          SizedBox(height: 8.rh(context)),
+          SizedBox(height: 8),
           _buildRequirements(context, responsive, theme),
         ],
       ],
@@ -100,16 +100,16 @@ class PasswordStrengthIndicator extends StatelessWidget {
     ];
 
     return Wrap(
-      spacing: 8.rw(context),
-      runSpacing: 4.rh(context),
+      spacing: 8,
+      runSpacing: 4,
       children: requirements.map((req) {
         return MouseRegion(
           cursor: SystemMouseCursors.basic,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
             padding: EdgeInsets.symmetric(
-              horizontal: 8.rw(context),
-              vertical: 4.rh(context),
+              horizontal: 8,
+              vertical: 4,
             ),
             decoration: BoxDecoration(
               color: req.isMet
@@ -120,7 +120,7 @@ class PasswordStrengthIndicator extends StatelessWidget {
                 color: req.isMet
                     ? HvacColors.success.withValues(alpha: 0.4)
                     : HvacColors.textSecondary.withValues(alpha: 0.4),
-                width: 1.rw(context),
+                width: 1,
               ),
             ),
             child: Row(
@@ -132,7 +132,7 @@ class PasswordStrengthIndicator extends StatelessWidget {
                   color:
                       req.isMet ? HvacColors.success : HvacColors.textSecondary,
                 ),
-                SizedBox(width: 4.rw(context)),
+                SizedBox(width: 4),
                 Text(
                   req.label,
                   style: TextStyle(

@@ -159,7 +159,7 @@ class _AuthFormState extends State<AuthForm> {
           // Password strength indicator (register only)
           if (!widget.isLoginMode &&
               widget.passwordController.text.isNotEmpty) ...[
-            SizedBox(height: 8.rh(context)),
+            SizedBox(height: 8),
             PasswordStrengthIndicator(
               password: widget.passwordController.text,
               showRequirements: responsive.isDesktop,

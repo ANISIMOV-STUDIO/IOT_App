@@ -19,8 +19,8 @@ class LoginHeader extends StatelessWidget {
       children: [
         // Logo container
         Container(
-          width: 100.w,
-          height: 100.h,
+          width: 100,
+          height: 100,
           decoration: BoxDecoration(
             gradient: const LinearGradient(
               colors: [
@@ -41,7 +41,7 @@ class LoginHeader extends StatelessWidget {
           ),
           child: Icon(
             Icons.air,
-            size: 50.w,
+            size: 50,
             color: Colors.white,
           ),
         ),
@@ -52,7 +52,7 @@ class LoginHeader extends StatelessWidget {
         Text(
           l10n.welcomeBack,
           style: TextStyle(
-            fontSize: 28.sp,
+            fontSize: 28,
             fontWeight: FontWeight.bold,
             color: HvacColors.textPrimary,
             letterSpacing: -0.5,
@@ -65,7 +65,7 @@ class LoginHeader extends StatelessWidget {
         Text(
           l10n.loginSubtitle,
           style: TextStyle(
-            fontSize: 16.sp,
+            fontSize: 16,
             color: HvacColors.textSecondary,
           ),
         ),

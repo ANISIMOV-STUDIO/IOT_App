@@ -51,8 +51,8 @@ class AuthCheckboxSectionState extends State<AuthCheckboxSection> {
         child: Row(
           children: [
             SizedBox(
-              width: 24.rw(context),
-              height: 24.rh(context),
+              width: 24,
+              height: 24,
               child: Checkbox(
                 value: _rememberMe,
                 onChanged: (value) {
@@ -63,7 +63,7 @@ class AuthCheckboxSectionState extends State<AuthCheckboxSection> {
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
             ),
-            SizedBox(width: 8.rw(context)),
+            SizedBox(width: 8),
             Text(
               'Remember me',
               style: TextStyle(
@@ -92,8 +92,8 @@ class AuthCheckboxSectionState extends State<AuthCheckboxSection> {
         child: Row(
           children: [
             SizedBox(
-              width: 24.rw(context),
-              height: 24.rh(context),
+              width: 24,
+              height: 24,
               child: Checkbox(
                 value: _acceptTerms,
                 onChanged: (value) {
@@ -104,7 +104,7 @@ class AuthCheckboxSectionState extends State<AuthCheckboxSection> {
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
             ),
-            SizedBox(width: 8.rw(context)),
+            SizedBox(width: 8),
             Expanded(
               child: RichText(
                 text: TextSpan(

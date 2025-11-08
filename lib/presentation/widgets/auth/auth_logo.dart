@@ -70,14 +70,14 @@ class _AuthLogoState extends State<AuthLogo>
                   color: HvacColors.primaryOrange.withAlpha(
                     (76 + (_pulseController.value * 25)).toInt(),
                   ),
-                  blurRadius: 20.rw(context) + (_pulseController.value * 10),
-                  spreadRadius: 5.rw(context) + (_pulseController.value * 3),
+                  blurRadius: 20 + (_pulseController.value * 10),
+                  spreadRadius: 5 + (_pulseController.value * 3),
                 ),
                 if (_isHovered)
                   BoxShadow(
                     color: HvacColors.primaryOrangeLight.withAlpha(51),
-                    blurRadius: 30.rw(context),
-                    spreadRadius: 10.rw(context),
+                    blurRadius: 30,
+                    spreadRadius: 10,
                   ),
               ],
             ),
@@ -123,7 +123,7 @@ class AuthHeader extends StatelessWidget {
     return Column(
       children: [
         const AuthLogo(),
-        SizedBox(height: 32.rh(context)),
+        SizedBox(height: 32),
         Text(
           isLoginMode ? 'Welcome Back' : 'Create Account',
           style: theme.textTheme.headlineMedium?.copyWith(
@@ -133,7 +133,7 @@ class AuthHeader extends StatelessWidget {
           ),
           textAlign: TextAlign.center,
         ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.2, end: 0),
-        SizedBox(height: 8.rh(context)),
+        SizedBox(height: 8),
         Text(
           isLoginMode ? 'Sign in to your account' : 'Sign up for a new account',
           style: theme.textTheme.bodyMedium?.copyWith(

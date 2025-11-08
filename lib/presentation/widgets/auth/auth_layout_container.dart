@@ -38,7 +38,7 @@ class AuthLayoutContainer extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: responsive.horizontalPadding,
-                    vertical: 24.rh(context),
+                    vertical: 24,
                   ),
                   child: Center(
                     child: Container(
@@ -61,20 +61,20 @@ class AuthLayoutContainer extends StatelessWidget {
 
   Widget _buildDesktopCard(BuildContext context, Widget child) {
     return Container(
-      padding: EdgeInsets.all(48.rw(context)),
+      padding: EdgeInsets.all(48),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: HvacRadius.xxlRadius,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withAlpha(13),
-            blurRadius: 40.rw(context),
-            offset: Offset(0, 20.rh(context)),
+            blurRadius: 40,
+            offset: Offset(0, 20),
           ),
           BoxShadow(
             color: Colors.black.withAlpha(5),
-            blurRadius: 10.rw(context),
-            offset: Offset(0, 5.rh(context)),
+            blurRadius: 10,
+            offset: Offset(0, 5),
           ),
         ],
       ),
@@ -148,7 +148,7 @@ class AuthDivider extends StatelessWidget {
       children: [
         Expanded(
           child: Container(
-            height: 1.rh(context),
+            height: 1,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
@@ -161,7 +161,7 @@ class AuthDivider extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.rw(context)),
+          padding: EdgeInsets.symmetric(horizontal: 16),
           child: Text(
             text,
             style: TextStyle(
@@ -173,7 +173,7 @@ class AuthDivider extends StatelessWidget {
         ),
         Expanded(
           child: Container(
-            height: 1.rh(context),
+            height: 1,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [

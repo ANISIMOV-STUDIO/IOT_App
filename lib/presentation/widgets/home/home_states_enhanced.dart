@@ -178,7 +178,6 @@ class EnhancedHomeErrorState extends StatelessWidget {
         ),
       ],
       retryLabel: l10n.retry,
-      errorCodeCopiedMessage: l10n.errorCodeCopied,
     );
   }
 }

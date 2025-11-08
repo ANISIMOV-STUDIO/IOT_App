@@ -102,19 +102,19 @@ class _LoginTextField extends StatelessWidget {
           keyboardType: keyboardType,
           onFieldSubmitted: onSubmitted,
           style: TextStyle(
-            fontSize: 16.sp,
+            fontSize: 16,
             color: HvacColors.textPrimary,
           ),
           decoration: InputDecoration(
             prefixIcon: Icon(
               icon,
               color: HvacColors.textSecondary,
-              size: 20.w,
+              size: 20,
             ),
             hintText: hintText,
             hintStyle: TextStyle(
               color: HvacColors.textSecondary,
-              fontSize: 14.sp,
+              fontSize: 14,
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(HvacRadius.md),

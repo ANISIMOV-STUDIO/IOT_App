@@ -51,7 +51,7 @@ class LoginButtons extends StatelessWidget {
           child: Text(
             l10n.skip,
             style: TextStyle(
-              fontSize: 14.sp,
+              fontSize: 14,
               color: HvacColors.textSecondary,
               decoration: TextDecoration.underline,
             ),
@@ -78,7 +78,7 @@ class _LoginPrimaryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 56.h,
+      height: 56,
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
@@ -92,8 +92,8 @@ class _LoginPrimaryButton extends StatelessWidget {
         ),
         child: isLoading
             ? SizedBox(
-                width: 24.w,
-                height: 24.h,
+                width: 24,
+                height: 24,
                 child: const CircularProgressIndicator(
                   strokeWidth: 2,
                   color: Colors.white,
@@ -102,7 +102,7 @@ class _LoginPrimaryButton extends StatelessWidget {
             : Text(
                 label,
                 style: TextStyle(
-                  fontSize: 16.sp,
+                  fontSize: 16,
                   fontWeight: FontWeight.w600,
                   letterSpacing: 0.5,
                 ),
@@ -126,7 +126,7 @@ class _LoginSecondaryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 56.h,
+      height: 56,
       child: OutlinedButton(
         onPressed: onPressed,
         style: OutlinedButton.styleFrom(
@@ -142,7 +142,7 @@ class _LoginSecondaryButton extends StatelessWidget {
         child: Text(
           label,
           style: TextStyle(
-            fontSize: 16.sp,
+            fontSize: 16,
             fontWeight: FontWeight.w600,
           ),
         ),

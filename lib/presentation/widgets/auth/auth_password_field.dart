@@ -9,7 +9,6 @@ import 'package:flutter/services.dart';
 import '../../../core/constants/security_constants.dart';
 import '../../../core/utils/validators.dart';
 import 'auth_input_field.dart';
-import 'responsive_utils.dart';
 
 class AuthPasswordField extends StatefulWidget {
   final TextEditingController controller;
@@ -65,10 +64,10 @@ class _AuthPasswordFieldState extends State<AuthPasswordField> {
       suffixIcon: IconButton(
         icon: Icon(
           _obscureText ? Icons.visibility : Icons.visibility_off,
-          size: 20.rsp(context),
+          size: 20,
         ),
         onPressed: () => setState(() => _obscureText = !_obscureText),
-        splashRadius: 20.rw(context),
+        splashRadius: 20,
         tooltip: _obscureText ? 'Show password' : 'Hide password',
       ),
     );

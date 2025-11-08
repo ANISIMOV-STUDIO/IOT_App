@@ -30,30 +30,30 @@ class AboutSection extends StatelessWidget {
             value: '1.0.0',
           ),
         ),
-        SizedBox(height: 12.h),
+        SizedBox(height: 12),
         HvacInteractiveRipple(
           child: InfoRow(
             label: l10n.developer,
             value: 'BREEZ',
           ),
         ),
-        SizedBox(height: 12.h),
+        SizedBox(height: 12),
         HvacInteractiveRipple(
           child: InfoRow(
             label: l10n.license,
             value: 'MIT License',
           ),
         ),
-        SizedBox(height: 16.h),
+        SizedBox(height: 16),
         SizedBox(
           width: double.infinity,
-          height: 48.h, // Ensure minimum tap target
+          height: 48, // Ensure minimum tap target
           child: HvacNeumorphicButton(
             onPressed: onCheckUpdates,
             child: Text(
               l10n.checkUpdates,
               style: TextStyle(
-                fontSize: 16.sp,
+                fontSize: 16,
                 fontWeight: FontWeight.w600,
                 color: HvacColors.textPrimary,
               ),

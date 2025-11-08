@@ -22,35 +22,35 @@ class SettingsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return HvacGradientBorder(
-      borderWidth: 2.w,
+      borderWidth: 2,
       gradientColors: [
         HvacColors.primaryOrange.withValues(alpha: 0.3),
         HvacColors.primaryBlue.withValues(alpha: 0.3),
       ],
-      borderRadius: BorderRadius.circular(12.r),
+      borderRadius: BorderRadius.circular(12),
       child: Container(
-        padding: EdgeInsets.all(20.w),
+        padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: HvacColors.backgroundCard,
-          borderRadius: BorderRadius.circular(12.r),
+          borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                Icon(icon, color: HvacColors.primaryOrange, size: 24.w),
-                SizedBox(width: 12.w),
+                Icon(icon, color: HvacColors.primaryOrange, size: 24),
+                SizedBox(width: 12),
                 Text(
                   title,
                   style: HvacTypography.headlineSmall.copyWith(
-                    fontSize: 18.sp,
+                    fontSize: 18,
                     color: HvacColors.textPrimary,
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 16.h),
+            SizedBox(height: 16),
             ...children,
           ],
         ),
@@ -81,10 +81,10 @@ class SwitchTile extends StatelessWidget {
       toggled: value,
       hint: 'Tap to toggle',
       child: InkWell(
-        borderRadius: BorderRadius.circular(8.r),
+        borderRadius: BorderRadius.circular(8),
         onTap: () => onChanged(!value),
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 4.h),
+          padding: EdgeInsets.symmetric(vertical: 4),
           child: Row(
             children: [
               Expanded(
@@ -94,15 +94,15 @@ class SwitchTile extends StatelessWidget {
                     Text(
                       title,
                       style: HvacTypography.titleMedium.copyWith(
-                        fontSize: 14.sp,
+                        fontSize: 14,
                         color: HvacColors.textPrimary,
                       ),
                     ),
-                    SizedBox(height: 4.h),
+                    SizedBox(height: 4),
                     Text(
                       subtitle,
                       style: HvacTypography.labelLarge.copyWith(
-                        fontSize: 12.sp,
+                        fontSize: 12,
                         color: HvacColors.textSecondary,
                       ),
                     ),
@@ -111,8 +111,8 @@ class SwitchTile extends StatelessWidget {
               ),
               // Ensure minimum tap target of 48x48
               SizedBox(
-                width: 48.w,
-                height: 48.h,
+                width: 48,
+                height: 48,
                 child: Switch(
                   value: value,
                   onChanged: onChanged,
@@ -159,14 +159,14 @@ class InfoRow extends StatelessWidget {
         Text(
           label,
           style: HvacTypography.bodyMedium.copyWith(
-            fontSize: 14.sp,
+            fontSize: 14,
             color: HvacColors.textSecondary,
           ),
         ),
         Text(
           value,
           style: HvacTypography.titleMedium.copyWith(
-            fontSize: 14.sp,
+            fontSize: 14,
             color: HvacColors.textPrimary,
           ),
         ),
@@ -176,9 +176,9 @@ class InfoRow extends StatelessWidget {
     if (onTap != null) {
       return InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(4.r),
+        borderRadius: BorderRadius.circular(4),
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 4.h),
+          padding: EdgeInsets.symmetric(vertical: 4),
           child: content,
         ),
       );

@@ -93,7 +93,7 @@ class _AuthInputFieldState extends State<AuthInputField> {
               ? [
                   BoxShadow(
                     color: HvacColors.primaryOrange.withAlpha(51),
-                    blurRadius: 8.rw(context),
+                    blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
                 ]
@@ -128,14 +128,14 @@ class _AuthInputFieldState extends State<AuthInputField> {
             ),
             suffixIcon: widget.suffixIcon,
             contentPadding: EdgeInsets.symmetric(
-              horizontal: 16.rw(context),
+              horizontal: 16,
               vertical: responsive.inputHeight / 4,
             ),
             border: OutlineInputBorder(
               borderRadius: HvacRadius.mdRadius,
               borderSide: BorderSide(
                 color: HvacColors.backgroundCardBorder,
-                width: 1.rw(context),
+                width: 1,
               ),
             ),
             enabledBorder: OutlineInputBorder(
@@ -151,21 +151,21 @@ class _AuthInputFieldState extends State<AuthInputField> {
               borderRadius: HvacRadius.mdRadius,
               borderSide: BorderSide(
                 color: HvacColors.primaryOrange,
-                width: 2.rw(context),
+                width: 2,
               ),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: HvacRadius.mdRadius,
               borderSide: BorderSide(
                 color: HvacColors.error,
-                width: 1.rw(context),
+                width: 1,
               ),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderRadius: HvacRadius.mdRadius,
               borderSide: BorderSide(
                 color: HvacColors.error,
-                width: 2.rw(context),
+                width: 2,
               ),
             ),
             labelStyle: HvacTypography.bodyMedium.copyWith(

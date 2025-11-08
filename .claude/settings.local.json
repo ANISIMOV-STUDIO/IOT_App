@@ -8,7 +8,9 @@
       "Bash(packages/hvac_ui_kit/lib/src/widgets/inputs/inputs.dart)",
       "Bash(git checkout:*)",
       "Bash(find:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(flutter gen-l10n:*)",
+      "Bash(dart pub get:*)"
     ],
     "deny": [],
     "ask": [],

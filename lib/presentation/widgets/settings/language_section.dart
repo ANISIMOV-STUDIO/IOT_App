@@ -32,13 +32,13 @@ class LanguageSection extends StatelessWidget {
           isSelected: selectedLanguage == l10n.russian,
           onTap: () => onLanguageChanged(l10n.russian),
         ),
-        SizedBox(height: 8.h),
+        SizedBox(height: 8),
         _LanguageTile(
           language: l10n.english,
           isSelected: selectedLanguage == l10n.english,
           onTap: () => onLanguageChanged(l10n.english),
         ),
-        SizedBox(height: 8.h),
+        SizedBox(height: 8),
         _LanguageTile(
           language: l10n.german,
           isSelected: selectedLanguage == l10n.german,
@@ -71,19 +71,19 @@ class _LanguageTile extends StatelessWidget {
         onTap: onTap,
         child: Container(
           padding: EdgeInsets.symmetric(
-            horizontal: 16.w,
-            vertical: 12.h,
+            horizontal: 16,
+            vertical: 12,
           ),
           decoration: BoxDecoration(
             color: isSelected
                 ? HvacColors.primaryOrange.withValues(alpha: 0.1)
                 : HvacColors.backgroundDark,
-            borderRadius: BorderRadius.circular(8.r),
+            borderRadius: BorderRadius.circular(8),
             border: Border.all(
               color: isSelected
                   ? HvacColors.primaryOrange
                   : HvacColors.backgroundCardBorder,
-              width: 1.w,
+              width: 1,
             ),
           ),
           child: Row(
@@ -95,13 +95,13 @@ class _LanguageTile extends StatelessWidget {
                 color: isSelected
                     ? HvacColors.primaryOrange
                     : HvacColors.textSecondary,
-                size: 20.w,
+                size: 20,
               ),
-              SizedBox(width: 12.w),
+              SizedBox(width: 12),
               Text(
                 language,
                 style: HvacTypography.bodyMedium.copyWith(
-                  fontSize: 14.sp,
+                  fontSize: 14,
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                   color: isSelected
                       ? HvacColors.primaryOrange
@@ -113,7 +113,7 @@ class _LanguageTile extends StatelessWidget {
                 Icon(
                   Icons.check,
                   color: HvacColors.primaryOrange,
-                  size: 18.w,
+                  size: 18,
                 ),
             ],
           ),
