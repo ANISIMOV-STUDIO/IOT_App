@@ -201,6 +201,10 @@ class _HvacPrimaryButtonState extends State<HvacPrimaryButton>
       return BoxDecoration(
         color: HvacColors.backgroundCardBorder,
         borderRadius: BorderRadius.circular(HvacRadius.mdR),
+        border: Border.all(
+          color: HvacColors.backgroundCardBorder,
+          width: 1,
+        ),
       );
     }
 
@@ -208,34 +212,60 @@ class _HvacPrimaryButtonState extends State<HvacPrimaryButton>
       gradient: LinearGradient(
         colors: _isHovered
             ? [
-                HvacColors.accent.withValues(alpha: 0.9),
-                HvacColors.accentDark.withValues(alpha: 0.9),
+                const Color(0xFF1976D2), // Darker blue on hover
+                const Color(0xFF1565C0),
               ]
-            : [HvacColors.accent, HvacColors.accentDark],
+            : [
+                const Color(0xFF1E88E5), // Primary blue
+                const Color(0xFF1976D2),
+              ],
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
       ),
       borderRadius: BorderRadius.circular(HvacRadius.mdR),
+      border: Border.all(
+        color: _isHovered
+            ? const Color(0xFF1565C0).withValues(alpha: 0.8)
+            : Colors.transparent,
+        width: _isHovered ? 1.5 : 0,
+      ),
       boxShadow: _buildShadows(),
     );
   }
 
   List<BoxShadow> _buildShadows() {
-    if (_isPressed || !_isEnabled) return [];
+    if (_isPressed) return [];
+    if (!_isEnabled) return [];
 
-    final shadowOpacity = _isHovered ? 0.4 : 0.3;
-    return [
-      BoxShadow(
-        color: HvacColors.accent.withValues(alpha: shadowOpacity),
-        blurRadius: _isHovered ? 16 : 12,
-        offset: const Offset(0, 4),
-      ),
-      BoxShadow(
-        color: HvacColors.accent.withValues(alpha: shadowOpacity * 0.5),
-        blurRadius: _isHovered ? 28 : 24,
-        offset: const Offset(0, 8),
-      ),
-    ];
+    return _isHovered
+        ? [
+            BoxShadow(
+              color: const Color(0xFF1E88E5).withValues(alpha: 0.4),
+              blurRadius: 20,
+              offset: const Offset(0, 8),
+              spreadRadius: -2,
+            ),
+            BoxShadow(
+              color: const Color(0xFF1E88E5).withValues(alpha: 0.2),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+              spreadRadius: 0,
+            ),
+          ]
+        : [
+            BoxShadow(
+              color: const Color(0xFF1E88E5).withValues(alpha: 0.3),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+              spreadRadius: -1,
+            ),
+            BoxShadow(
+              color: const Color(0xFF1E88E5).withValues(alpha: 0.15),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+              spreadRadius: 0,
+            ),
+          ];
   }
 
   Widget _buildLoadingIndicator() {
@@ -244,14 +274,14 @@ class _HvacPrimaryButtonState extends State<HvacPrimaryButton>
       height: widget.size.iconSize,
       child: const CircularProgressIndicator(
         strokeWidth: 2,
-        valueColor: AlwaysStoppedAnimation<Color>(HvacColors.textPrimary),
+        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
       ),
     );
   }
 
   Widget _buildContent() {
     final textColor =
-        _isEnabled ? HvacColors.textPrimary : HvacColors.textDisabled;
+        _isEnabled ? Colors.white : HvacColors.textDisabled;
 
     if (widget.icon != null) {
       return Row(

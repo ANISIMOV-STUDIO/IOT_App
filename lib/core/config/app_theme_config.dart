@@ -8,6 +8,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+import 'package:hvac_ui_kit/src/theme/shadows.dart';
 
 /// Главная конфигурация темы приложения
 class AppThemeConfig {
@@ -20,7 +21,7 @@ class AppThemeConfig {
   /// Использовать светлую или темную тему
   ///
   /// Измените на `true` для светлой темы, `false` для темной
-  static const bool useLightTheme = false;
+  static const bool useLightTheme = true;
 
   /// Получить текущую тему приложения
   static ThemeData get theme => useLightTheme
@@ -154,9 +155,9 @@ class AppThemeConfig {
   /// Тень для карточек
   ///
   /// null = без тени (flat design)
-  /// HvacShadows.card = легкая тень
-  /// HvacShadows.elevated = поднятая тень
-  static const List<BoxShadow>? cardShadow = null; // Flat design
+  /// HvacShadows.sm = легкая тень
+  /// HvacShadows.md = средняя тень
+  static const List<BoxShadow>? cardShadow = HvacShadows.sm; // Modern с subtle shadow
 
   /// Blur для glassmorphism эффекта
   ///

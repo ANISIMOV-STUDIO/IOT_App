@@ -17,30 +17,51 @@ class HvacShadows {
   /// No shadow
   static const List<BoxShadow> none = [];
 
-  /// Extra small shadow - Subtle depth (1dp elevation)
+  /// Extra small shadow - Subtle depth (1dp elevation) - Modern soft shadow
   static List<BoxShadow> get xs => [
         BoxShadow(
-          color: HvacColors.backgroundDark.withValues(alpha: 0.1),
-          blurRadius: 2,
+          color: const Color(0xFF1E88E5).withValues(alpha: 0.04),
+          blurRadius: 3,
           offset: const Offset(0, 1),
+          spreadRadius: 0,
+        ),
+        BoxShadow(
+          color: const Color(0xFF000000).withValues(alpha: 0.02),
+          blurRadius: 2,
+          offset: const Offset(0, 0),
+          spreadRadius: 0,
         ),
       ];
 
-  /// Small shadow - Card at rest (2dp elevation)
+  /// Small shadow - Card at rest (2dp elevation) - Soft blue-tinted shadow
   static List<BoxShadow> get sm => [
         BoxShadow(
-          color: HvacColors.backgroundDark.withValues(alpha: 0.15),
-          blurRadius: 4,
+          color: const Color(0xFF1E88E5).withValues(alpha: 0.08),
+          blurRadius: 8,
           offset: const Offset(0, 2),
+          spreadRadius: -1,
+        ),
+        BoxShadow(
+          color: const Color(0xFF000000).withValues(alpha: 0.04),
+          blurRadius: 4,
+          offset: const Offset(0, 1),
+          spreadRadius: 0,
         ),
       ];
 
-  /// Medium shadow - Raised elements (4dp elevation)
+  /// Medium shadow - Raised elements (4dp elevation) - Enhanced depth
   static List<BoxShadow> get md => [
         BoxShadow(
-          color: HvacColors.backgroundDark.withValues(alpha: 0.2),
-          blurRadius: 8,
+          color: const Color(0xFF1E88E5).withValues(alpha: 0.12),
+          blurRadius: 16,
           offset: const Offset(0, 4),
+          spreadRadius: -2,
+        ),
+        BoxShadow(
+          color: const Color(0xFF000000).withValues(alpha: 0.06),
+          blurRadius: 8,
+          offset: const Offset(0, 2),
+          spreadRadius: -1,
         ),
       ];
 

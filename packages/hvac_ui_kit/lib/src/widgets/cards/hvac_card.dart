@@ -112,10 +112,37 @@ class _HvacCardState extends State<HvacCard> {
           borderRadius: BorderRadius.circular(HvacRadius.lgR),
           border: widget.showBorder
               ? Border.all(
-                  color: widget.borderColor ?? HvacColors.backgroundCardBorder,
-                  width: 1,
+                  color: _isHovered
+                      ? (widget.borderColor ??
+                          HvacColors.backgroundCardBorderHover)
+                      : (widget.borderColor ??
+                          HvacColors.backgroundCardBorder),
+                  width: _isHovered ? 1.5 : 1,
                 )
               : null,
+          boxShadow: _isHovered
+              ? [
+                  BoxShadow(
+                    color: const Color(0xFF1E88E5).withValues(alpha: 0.08),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                    spreadRadius: -2,
+                  ),
+                  BoxShadow(
+                    color: const Color(0xFF000000).withValues(alpha: 0.04),
+                    blurRadius: 6,
+                    offset: const Offset(0, 2),
+                    spreadRadius: 0,
+                  ),
+                ]
+              : [
+                  BoxShadow(
+                    color: const Color(0xFF1E88E5).withValues(alpha: 0.04),
+                    blurRadius: 6,
+                    offset: const Offset(0, 2),
+                    spreadRadius: 0,
+                  ),
+                ],
         );
 
       case HvacCardVariant.elevated:
@@ -124,18 +151,42 @@ class _HvacCardState extends State<HvacCard> {
           borderRadius: BorderRadius.circular(HvacRadius.lgR),
           border: widget.showBorder
               ? Border.all(
-                  color: widget.borderColor ?? HvacColors.backgroundCardBorder,
-                  width: 1,
+                  color: _isHovered
+                      ? HvacColors.backgroundCardBorderActive
+                      : (widget.borderColor ??
+                          HvacColors.backgroundCardBorder),
+                  width: _isHovered ? 2 : 1,
                 )
               : null,
-          boxShadow: [
-            BoxShadow(
-              color:
-                  HvacColors.primary.withValues(alpha: _isHovered ? 0.2 : 0.1),
-              blurRadius: _isHovered ? 16 : 12,
-              offset: Offset(0, _isHovered ? 8 : 4),
-            ),
-          ],
+          boxShadow: _isHovered
+              ? [
+                  BoxShadow(
+                    color: const Color(0xFF1E88E5).withValues(alpha: 0.16),
+                    blurRadius: 24,
+                    offset: const Offset(0, 8),
+                    spreadRadius: -4,
+                  ),
+                  BoxShadow(
+                    color: const Color(0xFF000000).withValues(alpha: 0.08),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                    spreadRadius: -2,
+                  ),
+                ]
+              : [
+                  BoxShadow(
+                    color: const Color(0xFF1E88E5).withValues(alpha: 0.12),
+                    blurRadius: 16,
+                    offset: const Offset(0, 4),
+                    spreadRadius: -2,
+                  ),
+                  BoxShadow(
+                    color: const Color(0xFF000000).withValues(alpha: 0.06),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                    spreadRadius: -1,
+                  ),
+                ],
         );
 
       case HvacCardVariant.glass:

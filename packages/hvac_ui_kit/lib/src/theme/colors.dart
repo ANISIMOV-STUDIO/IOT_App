@@ -17,17 +17,17 @@ class HvacColors {
   // CORPORATE PRIMARY COLORS - Blue & White (Equal Partners)
   // ============================================================================
 
-  /// Corporate primary color - Professional Blue
-  static const Color primary = Color(0xFF2563EB); // Vibrant Blue (not navy!)
+  /// Corporate primary color - Professional Blue (Material 3 inspired)
+  static const Color primary = Color(0xFF1E88E5); // Vivid Blue
 
   /// Primary dark variant
-  static const Color primaryDark = Color(0xFF1E40AF); // Deep Blue
+  static const Color primaryDark = Color(0xFF1565C0); // Deep Blue
 
   /// Primary light variant
-  static const Color primaryLight = Color(0xFF60A5FA); // Light Blue
+  static const Color primaryLight = Color(0xFF42A5F5); // Light Blue
 
   /// Primary extra light
-  static const Color primaryExtraLight = Color(0xFFDCEEFF); // Very Light Blue
+  static const Color primaryExtraLight = Color(0xFFE3F2FD); // Very Light Blue
 
   /// Corporate secondary color - Pure White
   static const Color secondary = Color(0xFFFFFFFF); // Pure White
@@ -64,8 +64,14 @@ class HvacColors {
   /// Card background - Pure White with elevation
   static const Color backgroundCard = Color(0xFFFFFFFF);
 
-  /// Card border color - Light Gray
-  static const Color backgroundCardBorder = Color(0xFFE2E8F0);
+  /// Card border color - Subtle Blue-Gray
+  static const Color backgroundCardBorder = Color(0xFFE1E8ED);
+
+  /// Card border color (hover state) - Soft Blue
+  static const Color backgroundCardBorderHover = Color(0xFFBBDEFB);
+
+  /// Card border color (active/selected) - Primary Blue
+  static const Color backgroundCardBorderActive = Color(0xFF1E88E5);
 
   /// Elevated surface background - Subtle Gray
   static const Color backgroundElevated = Color(0xFFFAFAFB);
