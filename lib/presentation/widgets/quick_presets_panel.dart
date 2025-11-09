@@ -180,7 +180,7 @@ class _PresetButtonState extends State<_PresetButton> {
             // Background: subtle lift on hover, but stay monochrome
             color: _isHovered
                 ? HvacColors.backgroundElevated // Subtle gray lift
-                : HvacColors.backgroundDark,
+                : HvacColors.backgroundCard,
             borderRadius: HvacRadius.smRadius,
             border: Border.all(
               // Border: always gray, never colored

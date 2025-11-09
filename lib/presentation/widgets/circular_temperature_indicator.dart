@@ -34,7 +34,7 @@ class CircularTemperatureIndicator extends StatelessWidget {
         gradient: const RadialGradient(
           colors: [
             HvacColors.backgroundCard,
-            HvacColors.backgroundDark,
+            HvacColors.backgroundSecondary,
           ],
           stops: [0.7, 1.0],
         ),

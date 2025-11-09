@@ -37,8 +37,8 @@ class OnboardingGetStartedPage extends StatelessWidget {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            HvacColors.primaryOrange.withValues(alpha: 0.1),
-            HvacColors.backgroundDark,
+            HvacColors.primaryLight.withValues(alpha: 0.1),
+            HvacColors.backgroundSecondary,
           ],
         ),
       ),

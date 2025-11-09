@@ -56,7 +56,7 @@ class _SettingsScreenState extends State<SettingsScreen>
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: HvacColors.backgroundDark,
+      backgroundColor: HvacColors.backgroundSecondary,
       appBar: HvacAppBar(
         backgroundColor: HvacColors.backgroundCard,
         leading: HvacIconButton(

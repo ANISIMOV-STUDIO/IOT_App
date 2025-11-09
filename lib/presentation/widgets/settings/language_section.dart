@@ -68,8 +68,8 @@ class _LanguageTile extends StatelessWidget {
           ),
           decoration: BoxDecoration(
             color: isSelected
-                ? HvacColors.primaryOrange.withValues(alpha: 0.1)
-                : HvacColors.backgroundDark,
+                ? HvacColors.primary.withValues(alpha: 0.1)
+                : HvacColors.backgroundCard,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
               color: isSelected

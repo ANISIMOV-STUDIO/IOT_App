@@ -36,7 +36,7 @@ class RoomStatusDisplay extends StatelessWidget {
             height: isMobile ? 1.1 : 1.2,
             shadows: [
               Shadow(
-                color: HvacColors.backgroundDark.withValues(alpha: 0.6),
+                color: HvacColors.textSecondary.withValues(alpha: 0.3),
                 blurRadius: 12,
               ),
             ],

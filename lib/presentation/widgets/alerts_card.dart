@@ -92,7 +92,7 @@ class AlertsCard extends StatelessWidget {
             decoration: BoxDecoration(
               color: hasAlert
                   ? _getSeverityColor(alert.severity).withValues(alpha: 0.2)
-                  : HvacColors.backgroundDark,
+                  : HvacColors.backgroundElevated,
               shape: BoxShape.circle,
             ),
             child: Icon(

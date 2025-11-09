@@ -77,7 +77,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     final isCompact = size.height < 700 || size.width < 600;
 
     return Scaffold(
-      backgroundColor: HvacColors.backgroundDark,
+      backgroundColor: HvacColors.backgroundSecondary,
       body: Stack(
         children: [
           // PageView for onboarding pages

@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: HvacColors.backgroundDark,
+      backgroundColor: HvacColors.backgroundSecondary,
       body: SafeArea(
         child: Column(
           children: [

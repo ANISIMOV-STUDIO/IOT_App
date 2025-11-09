@@ -28,8 +28,8 @@ class OnboardingControlPage extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            HvacColors.backgroundDark,
-            HvacColors.backgroundDark,
+            HvacColors.backgroundSecondary,
+            HvacColors.backgroundPrimary,
           ],
         ),
       ),

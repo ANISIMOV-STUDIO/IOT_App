@@ -129,8 +129,8 @@ class _ModeChip extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
         decoration: BoxDecoration(
           color: isSelected
-              ? HvacColors.primaryOrange.withValues(alpha: 0.1)
-              : HvacColors.backgroundDark,
+              ? HvacColors.primary.withValues(alpha: 0.1)
+              : HvacColors.backgroundCard,
           borderRadius: HvacRadius.smRadius,
           border: Border.all(
             color: isSelected

@@ -53,7 +53,7 @@ class _HomeScreenRefactoredState extends State<HomeScreenRefactored>
 
     return ui_kit.ResponsiveInit(
       child: Scaffold(
-        backgroundColor: ui_kit.HvacColors.backgroundDark,
+        backgroundColor: ui_kit.HvacColors.backgroundSecondary,
         body: SafeArea(
           child: _buildResponsiveLayout(),
         ),

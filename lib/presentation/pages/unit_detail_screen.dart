@@ -91,7 +91,7 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
 
   Widget _buildMobileLayout(HvacUnit unit) {
     return Scaffold(
-      backgroundColor: HvacColors.backgroundDark,
+      backgroundColor: HvacColors.backgroundSecondary,
       appBar: _buildMobileAppBar(unit),
       body: HvacRefreshIndicator(
         onRefresh: _refreshData,
@@ -105,7 +105,7 @@ class _UnitDetailScreenState extends State<UnitDetailScreen>
 
   Widget _buildTabletLayout(HvacUnit unit) {
     return Scaffold(
-      backgroundColor: HvacColors.backgroundDark,
+      backgroundColor: HvacColors.backgroundSecondary,
       appBar: _buildTabletAppBar(unit),
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.start,

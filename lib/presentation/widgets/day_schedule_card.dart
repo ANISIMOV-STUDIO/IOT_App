@@ -145,7 +145,7 @@ class DayScheduleCard extends StatelessWidget {
         padding: const EdgeInsets.symmetric(
             horizontal: HvacSpacing.sm, vertical: HvacSpacing.sm),
         decoration: HvacDecorations.cardFlat(
-          color: HvacColors.backgroundDark,
+          color: HvacColors.backgroundCard,
           radius: HvacRadius.sm,
         ),
         child: Column(

@@ -23,7 +23,7 @@ class NotificationItem extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12.0),
       padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
-        color: HvacColors.backgroundDark,
+        color: HvacColors.backgroundCard,
         borderRadius: HvacRadius.mdRadius,
         border: Border.all(
           color: severityColor.withValues(alpha: 0.3),

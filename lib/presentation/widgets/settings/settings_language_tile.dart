@@ -28,8 +28,8 @@ class SettingsLanguageTile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
         decoration: BoxDecoration(
           color: isSelected
-              ? HvacColors.primaryOrange.withValues(alpha: 0.1)
-              : HvacColors.backgroundDark,
+              ? HvacColors.primary.withValues(alpha: 0.1)
+              : HvacColors.backgroundCard,
           borderRadius: HvacRadius.mdRadius,
           border: Border.all(
             color: isSelected

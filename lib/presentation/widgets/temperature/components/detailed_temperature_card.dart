@@ -29,7 +29,7 @@ class DetailedTemperatureCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(isPrimary ? 16.0 : 14.0),
       decoration: BoxDecoration(
-        color: HvacColors.backgroundDark,
+        color: HvacColors.backgroundCard,
         borderRadius: HvacRadius.mdRadius,
         border: Border.all(
           color: isPrimary

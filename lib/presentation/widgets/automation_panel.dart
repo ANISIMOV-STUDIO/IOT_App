@@ -93,7 +93,7 @@ class AutomationPanel extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: HvacSpacing.smR),
       padding: const EdgeInsets.all(HvacSpacing.mdR),
       decoration: HvacDecorations.cardFlat(
-        color: HvacColors.backgroundDark,
+        color: HvacColors.backgroundCard,
         radius: HvacRadius.sm,
       ).copyWith(
         border: Border.all(

@@ -158,8 +158,8 @@ class GroupControlPanel extends StatelessWidget {
           padding: const EdgeInsets.symmetric(
               vertical: HvacSpacing.sm, horizontal: HvacSpacing.sm),
           decoration: BoxDecoration(
-            // Background: always dark gray, never colored
-            color: HvacColors.backgroundDark,
+            // Background: light card background for white theme
+            color: HvacColors.backgroundCard,
             borderRadius: HvacRadius.smRadius,
             border: Border.all(
               // Border: always neutral gray, never colored

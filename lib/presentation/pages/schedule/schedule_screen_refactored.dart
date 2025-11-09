@@ -90,7 +90,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
   Widget _buildContent(HvacUnit unit) {
     return Scaffold(
-      backgroundColor: HvacColors.backgroundDark,
+      backgroundColor: HvacColors.backgroundSecondary,
       appBar: ScheduleAppBar(
         unit: unit,
         hasChanges: _hasChanges,

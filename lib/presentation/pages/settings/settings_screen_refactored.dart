@@ -67,7 +67,7 @@ class _SettingsScreenRefactoredState extends State<SettingsScreenRefactored>
 
     return ui_kit.ResponsiveInit(
       child: Scaffold(
-        backgroundColor: ui_kit.HvacColors.backgroundDark,
+        backgroundColor: ui_kit.HvacColors.backgroundSecondary,
         appBar: _buildAppBar(l10n),
         body: SafeArea(
           child: _buildResponsiveLayout(l10n),

@@ -111,7 +111,7 @@ class ActivityTimeline extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(HvacSpacing.lgR),
               decoration: BoxDecoration(
-                color: HvacColors.backgroundDark,
+                color: HvacColors.backgroundElevated,
                 borderRadius: HvacRadius.mdRadius,
               ),
               child: Column(

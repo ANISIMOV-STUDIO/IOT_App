@@ -60,7 +60,7 @@ class FanSpeedSlider extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(
                     horizontal: HvacSpacing.sm, vertical: HvacSpacing.xxs + 2),
                 decoration: BoxDecoration(
-                  color: HvacColors.backgroundDark,
+                  color: HvacColors.backgroundCard,
                   borderRadius: HvacRadius.smRadius,
                 ),
                 child: Text(

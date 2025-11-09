@@ -78,7 +78,7 @@ class RoomPreviewCard extends StatelessWidget {
           colors: [
             HvacColors.backgroundCard,
             HvacColors.backgroundCard.withValues(alpha: 0.8),
-            HvacColors.backgroundDark,
+            HvacColors.backgroundCard,
           ],
         ),
         borderRadius: HvacRadius.xlRadius,
@@ -88,7 +88,7 @@ class RoomPreviewCard extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: HvacColors.backgroundDark.withValues(alpha: 0.5),
+            color: HvacColors.backgroundCard.withValues(alpha: 0.5),
             blurRadius: 20,
             offset: const Offset(0, 4),
           ),

@@ -46,7 +46,7 @@ class StatusBadgeWidget extends StatelessWidget {
           ),
           boxShadow: [
             BoxShadow(
-              color: HvacColors.backgroundDark.withValues(alpha: 0.5),
+              color: HvacColors.textSecondary.withValues(alpha: 0.2),
               blurRadius: 6,
               offset: const Offset(0, 1),
             ),

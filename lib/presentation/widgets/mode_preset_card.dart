@@ -117,7 +117,7 @@ class ModePresetCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(HvacSpacing.mdR),
       decoration: HvacDecorations.cardFlat(
-        color: HvacColors.backgroundDark,
+        color: HvacColors.backgroundCard,
         radius: HvacRadius.sm,
         withBorder: false,
       ),

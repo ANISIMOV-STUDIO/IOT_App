@@ -115,7 +115,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: HvacColors.backgroundDark,
+      backgroundColor: HvacColors.backgroundSecondary,
       appBar: AnalyticsAppBar(
         unitName: widget.unit.name,
         selectedPeriod: _selectedPeriod,

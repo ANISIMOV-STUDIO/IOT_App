@@ -22,7 +22,7 @@ class OnboardingWelcomePage extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return Container(
-      color: HvacColors.backgroundDark,
+      color: HvacColors.backgroundSecondary,
       child: SafeArea(
         child: Center(
           child: ConstrainedBox(

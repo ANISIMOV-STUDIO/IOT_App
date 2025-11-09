@@ -24,7 +24,7 @@ class BrightnessControl extends StatelessWidget {
           width: 40.0,
           height: 40.0,
           decoration: BoxDecoration(
-            color: HvacColors.backgroundDark,
+            color: HvacColors.backgroundElevated,
             borderRadius: BorderRadius.circular(HvacRadius.mdR),
           ),
           child: const Icon(

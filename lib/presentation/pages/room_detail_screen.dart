@@ -22,7 +22,7 @@ class RoomDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: HvacColors.backgroundDark,
+      backgroundColor: HvacColors.backgroundSecondary,
       body: BlocBuilder<HvacDetailBloc, HvacDetailState>(
         builder: (context, state) {
           if (state is HvacDetailLoading) {
