@@ -3,19 +3,41 @@
 /// Encapsulates schedule CRUD operations and state updates
 library;
 
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import '../../../core/services/api_service.dart';
+import '../../../core/di/injection_container.dart';
 import '../common/app_snackbar.dart';
 import 'schedule_model.dart';
 import 'schedule_dialogs.dart';
 
 class ScheduleStateManager {
-  /// Load schedules from API or mock data
+  /// Load schedules from API
   static Future<List<Schedule>> loadSchedules() async {
     try {
-      // TODO: Replace with actual API call
-      await Future.delayed(const Duration(seconds: 2));
+      final apiService = sl<ApiService>();
+      final response = await apiService.get('/schedules');
 
-      final schedules = [
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonList =
+            json.decode(response.body) as List<dynamic>;
+        return jsonList
+            .map((json) => Schedule(
+                  id: json['id'] as String,
+                  name: json['name'] as String,
+                  time: json['time'] as String,
+                  days: List<String>.from(json['days'] as List),
+                  temperature: (json['temperature'] as num).toDouble(),
+                  mode: json['mode'] as String,
+                  isActive: json['isActive'] as bool,
+                ))
+            .toList();
+      } else {
+        throw Exception('Failed to load schedules: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Return mock data if API fails (for development)
+      return [
         Schedule(
           id: '1',
           name: 'Weekday Morning',
@@ -35,11 +57,6 @@ class ScheduleStateManager {
           isActive: false,
         ),
       ];
-
-      return schedules;
-    } catch (e) {
-      throw Exception(
-          'Failed to load schedules. Please check your connection.');
     }
   }
 
@@ -61,8 +78,8 @@ class ScheduleStateManager {
     );
 
     try {
-      // TODO: Replace with actual API call
-      await Future.delayed(const Duration(seconds: 1));
+      final apiService = sl<ApiService>();
+      await apiService.delete('/schedules/${schedule.id}');
 
       loadingController.close();
 

@@ -24,6 +24,8 @@ class HvacListBloc extends Bloc<HvacListEvent, HvacListState> {
     on<RetryConnectionEvent>(_onRetryConnection);
     on<AddDeviceEvent>(_onAddDevice);
     on<RemoveDeviceEvent>(_onRemoveDevice);
+    on<UpdateDevicePowerEvent>(_onUpdateDevicePower);
+    on<UpdateDeviceModeEvent>(_onUpdateDeviceMode);
   }
 
   Future<void> _onLoadHvacUnits(
@@ -121,6 +123,54 @@ class HvacListBloc extends Bloc<HvacListEvent, HvacListState> {
       add(const RefreshHvacUnitsEvent());
     } catch (e) {
       emit(HvacListError('Failed to remove device: ${e.toString()}'));
+    }
+  }
+
+  Future<void> _onUpdateDevicePower(
+    UpdateDevicePowerEvent event,
+    Emitter<HvacListState> emit,
+  ) async {
+    if (state is! HvacListLoaded) return;
+
+    try {
+      final currentState = state as HvacListLoaded;
+      final unit = currentState.units.firstWhere(
+        (u) => u.id == event.deviceId,
+      );
+
+      // Create updated unit with new power state
+      final updatedUnit = unit.copyWith(power: event.power);
+
+      // Update via repository
+      await repository.updateUnitEntity(updatedUnit);
+
+      // State will update automatically via stream subscription
+    } catch (e) {
+      emit(HvacListError('Failed to update power: ${e.toString()}'));
+    }
+  }
+
+  Future<void> _onUpdateDeviceMode(
+    UpdateDeviceModeEvent event,
+    Emitter<HvacListState> emit,
+  ) async {
+    if (state is! HvacListLoaded) return;
+
+    try {
+      final currentState = state as HvacListLoaded;
+      final unit = currentState.units.firstWhere(
+        (u) => u.id == event.deviceId,
+      );
+
+      // Create updated unit with new mode
+      final updatedUnit = unit.copyWith(mode: event.mode);
+
+      // Update via repository
+      await repository.updateUnitEntity(updatedUnit);
+
+      // State will update automatically via stream subscription
+    } catch (e) {
+      emit(HvacListError('Failed to update mode: ${e.toString()}'));
     }
   }
 

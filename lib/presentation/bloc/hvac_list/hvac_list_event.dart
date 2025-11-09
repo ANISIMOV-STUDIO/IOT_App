@@ -56,3 +56,31 @@ class RemoveDeviceEvent extends HvacListEvent {
   @override
   List<Object?> get props => [deviceId, factoryReset];
 }
+
+/// Update device power state
+class UpdateDevicePowerEvent extends HvacListEvent {
+  final String deviceId;
+  final bool power;
+
+  const UpdateDevicePowerEvent({
+    required this.deviceId,
+    required this.power,
+  });
+
+  @override
+  List<Object?> get props => [deviceId, power];
+}
+
+/// Update device mode
+class UpdateDeviceModeEvent extends HvacListEvent {
+  final String deviceId;
+  final String mode;
+
+  const UpdateDeviceModeEvent({
+    required this.deviceId,
+    required this.mode,
+  });
+
+  @override
+  List<Object?> get props => [deviceId, mode];
+}

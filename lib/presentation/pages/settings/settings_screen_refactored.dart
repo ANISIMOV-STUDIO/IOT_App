@@ -7,6 +7,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart' as ui_kit;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../generated/l10n/app_localizations.dart';
 import '../../widgets/settings/appearance_section.dart';
 import '../../widgets/settings/units_section.dart';
@@ -33,12 +34,18 @@ class _SettingsScreenRefactoredState extends State<SettingsScreenRefactored>
   @override
   void initState() {
     super.initState();
-    _controller = SettingsController(
-      onSettingChanged: _handleSettingChanged,
-    );
+    _initializeController();
     _themeAnimationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 800),
+    );
+  }
+
+  Future<void> _initializeController() async {
+    final prefs = await SharedPreferences.getInstance();
+    _controller = SettingsController(
+      onSettingChanged: _handleSettingChanged,
+      prefs: prefs,
     );
   }
 

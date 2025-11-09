@@ -5,9 +5,11 @@
 library;
 
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsController extends ChangeNotifier {
   final VoidCallback onSettingChanged;
+  final SharedPreferences _prefs;
 
   // Settings state
   bool _darkMode = true;
@@ -17,7 +19,12 @@ class SettingsController extends ChangeNotifier {
   String _language = 'Russian'; // Default language
   int _selectedSection = 0; // For desktop navigation
 
-  SettingsController({required this.onSettingChanged});
+  SettingsController({
+    required this.onSettingChanged,
+    required SharedPreferences prefs,
+  }) : _prefs = prefs {
+    loadSettings();
+  }
 
   // Getters
   bool get darkMode => _darkMode;
@@ -65,20 +72,37 @@ class SettingsController extends ChangeNotifier {
 
   /// Load settings from persistent storage
   Future<void> loadSettings() async {
-    // TODO: Implement SharedPreferences loading
-    // For now, using default values
+    _darkMode = _prefs.getBool('darkMode') ?? true;
+    _celsius = _prefs.getBool('celsius') ?? true;
+    _pushNotifications = _prefs.getBool('pushNotifications') ?? true;
+    _emailNotifications = _prefs.getBool('emailNotifications') ?? false;
+    _language = _prefs.getString('language') ?? 'Russian';
+    notifyListeners();
   }
 
   /// Save all settings to persistent storage
   Future<void> saveSettings() async {
-    // TODO: Implement SharedPreferences saving
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.wait([
+      _prefs.setBool('darkMode', _darkMode),
+      _prefs.setBool('celsius', _celsius),
+      _prefs.setBool('pushNotifications', _pushNotifications),
+      _prefs.setBool('emailNotifications', _emailNotifications),
+      _prefs.setString('language', _language),
+    ]);
   }
 
   /// Persist individual setting
   void _persistSetting(String key, dynamic value) {
-    // TODO: Implement SharedPreferences for individual settings
-    debugPrint('Persisting $key: $value');
+    if (value is bool) {
+      _prefs.setBool(key, value);
+    } else if (value is String) {
+      _prefs.setString(key, value);
+    } else if (value is int) {
+      _prefs.setInt(key, value);
+    } else if (value is double) {
+      _prefs.setDouble(key, value);
+    }
+    notifyListeners();
   }
 
   @override
