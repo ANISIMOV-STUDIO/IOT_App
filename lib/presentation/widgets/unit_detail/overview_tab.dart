@@ -5,6 +5,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../domain/entities/hvac_unit.dart';
 import 'overview/overview_hero_temperature.dart';
 import 'overview/overview_temperature_chart.dart';
@@ -25,25 +26,25 @@ class OverviewTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.all(HvacSpacing.lg),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Hero Temperature Display with Gradient Border
           OverviewHeroTemperature(unit: unit),
-          const SizedBox(height: 20.0),
+          const HvacGap.lg(),
 
           // Temperature Chart
           OverviewTemperatureChart(unit: unit),
-          const SizedBox(height: 20.0),
+          const HvacGap.lg(),
 
           // Status card
           OverviewStatusCard(unit: unit),
-          const SizedBox(height: 20.0),
+          const HvacGap.lg(),
 
           // Quick stats
           OverviewQuickStats(unit: unit),
-          const SizedBox(height: 20.0),
+          const HvacGap.lg(),
 
           // Control Buttons with Neumorphic Design
           OverviewControlButtons(
@@ -55,11 +56,11 @@ class OverviewTab extends StatelessWidget {
               // TODO: Implement mode selector via BLoC
             },
           ),
-          const SizedBox(height: 20.0),
+          const HvacGap.lg(),
 
           // Fan speeds card
           OverviewFanSpeeds(unit: unit),
-          const SizedBox(height: 20.0),
+          const HvacGap.lg(),
 
           // Maintenance card
           const OverviewMaintenanceCard(),

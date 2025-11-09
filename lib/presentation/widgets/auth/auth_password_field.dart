@@ -1,16 +1,15 @@
 /// Authentication Password Field Component
 ///
-/// Specialized password input with visibility toggle
+/// Wrapper around HvacPasswordField for authentication screens
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
 import '../../../core/constants/security_constants.dart';
 import '../../../core/utils/validators.dart';
-import 'auth_input_field.dart';
 
-class AuthPasswordField extends StatefulWidget {
+class AuthPasswordField extends StatelessWidget {
   final TextEditingController controller;
   final String labelText;
   final String? hintText;
@@ -35,41 +34,21 @@ class AuthPasswordField extends StatefulWidget {
   });
 
   @override
-  State<AuthPasswordField> createState() => _AuthPasswordFieldState();
-}
-
-class _AuthPasswordFieldState extends State<AuthPasswordField> {
-  bool _obscureText = true;
-
-  @override
   Widget build(BuildContext context) {
-    return AuthInputField(
-      controller: widget.controller,
-      labelText: widget.labelText,
-      hintText: widget.hintText ?? '••••••••',
-      prefixIcon: Icons.lock_outlined,
-      focusNode: widget.focusNode,
-      textInputAction: widget.textInputAction,
-      onFieldSubmitted: widget.onFieldSubmitted,
-      obscureText: _obscureText,
-      validator: widget.isConfirmField
+    return HvacPasswordField(
+      controller: controller,
+      labelText: labelText,
+      hintText: hintText ?? '••••••••',
+      focusNode: focusNode,
+      textInputAction: textInputAction,
+      onFieldSubmitted: onFieldSubmitted,
+      validator: isConfirmField
           ? (value) => Validators.validatePasswordConfirmation(
                 value,
-                widget.passwordToMatch ?? '',
+                passwordToMatch ?? '',
               )
-          : widget.validator,
-      inputFormatters: [
-        LengthLimitingTextInputFormatter(SecurityConstants.maxPasswordLength),
-      ],
-      suffixIcon: IconButton(
-        icon: Icon(
-          _obscureText ? Icons.visibility : Icons.visibility_off,
-          size: 20,
-        ),
-        onPressed: () => setState(() => _obscureText = !_obscureText),
-        splashRadius: 20,
-        tooltip: _obscureText ? 'Show password' : 'Hide password',
-      ),
+          : validator,
+      maxLength: SecurityConstants.maxPasswordLength,
     );
   }
 }
