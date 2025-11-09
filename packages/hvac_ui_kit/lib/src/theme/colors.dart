@@ -1,33 +1,33 @@
 /// HVAC UI Kit - Color Palette
 ///
-/// Corporate color system: White & Deep Blue
-/// Philosophy: Professional, clean, trustworthy
+/// Corporate color system: Blue & White (50/50 balance)
+/// Philosophy: Professional, clean, balanced, modern
 library;
 
 import 'package:flutter/material.dart';
 
 /// Professional color palette for HVAC UI Kit
 ///
-/// Based on corporate identity: White & Deep Blue
-/// Inspired by: Modern corporate dashboards, professional tools
+/// Based on corporate identity: Blue & White on equal footing
+/// Design principle: Light backgrounds with blue accents, not dark blue everywhere
 class HvacColors {
   HvacColors._(); // Private constructor
 
   // ============================================================================
-  // CORPORATE PRIMARY COLORS - White & Deep Blue
+  // CORPORATE PRIMARY COLORS - Blue & White (Equal Partners)
   // ============================================================================
 
-  /// Corporate primary color - Deep Navy Blue
-  static const Color primary = Color(0xFF0A2647); // Deep Navy Blue
+  /// Corporate primary color - Professional Blue
+  static const Color primary = Color(0xFF2563EB); // Vibrant Blue (not navy!)
 
   /// Primary dark variant
-  static const Color primaryDark = Color(0xFF051729); // Darker Navy
+  static const Color primaryDark = Color(0xFF1E40AF); // Deep Blue
 
   /// Primary light variant
-  static const Color primaryLight = Color(0xFF144272); // Lighter Navy
+  static const Color primaryLight = Color(0xFF60A5FA); // Light Blue
 
   /// Primary extra light
-  static const Color primaryExtraLight = Color(0xFF205295); // Sky Blue
+  static const Color primaryExtraLight = Color(0xFFDCEEFF); // Very Light Blue
 
   /// Corporate secondary color - Pure White
   static const Color secondary = Color(0xFFFFFFFF); // Pure White
@@ -39,92 +39,104 @@ class HvacColors {
   // ACCENT COLORS - Modern Blue Palette
   // ============================================================================
 
-  /// Main accent color - Bright Blue
-  static const Color accent = Color(0xFF2C7BE5); // Vibrant Blue
+  /// Main accent color - Same as primary
+  static const Color accent = primary;
 
   /// Dark variant of accent
-  static const Color accentDark = Color(0xFF1A5CB8); // Deep Blue
+  static const Color accentDark = primaryDark;
 
   /// Light variant of accent
-  static const Color accentLight = Color(0xFF5A9FFF); // Light Blue
+  static const Color accentLight = primaryLight;
 
   /// Subtle accent with transparency
-  static const Color accentSubtle = Color(0x332C7BE5); // 20% opacity
+  static const Color accentSubtle = Color(0x332563EB); // 20% opacity
 
   // ============================================================================
-  // BACKGROUNDS - Blue Gradient
+  // BACKGROUNDS - Light theme with blue accents (NOT dark blue!)
   // ============================================================================
 
-  /// Primary dark background - Deep Navy
-  static const Color backgroundDark = Color(0xFF0A2647);
+  /// Primary background - Clean White
+  static const Color backgroundPrimary = Color(0xFFFFFFFF);
 
-  /// Card background - Navy with slight lightness
-  static const Color backgroundCard = Color(0xFF0F3460);
+  /// Secondary background - Very Light Gray
+  static const Color backgroundSecondary = Color(0xFFF8FAFC);
 
-  /// Card border color
-  static const Color backgroundCardBorder = Color(0xFF1A4680);
+  /// Card background - Pure White with elevation
+  static const Color backgroundCard = Color(0xFFFFFFFF);
 
-  /// Elevated surface background
-  static const Color backgroundElevated = Color(0xFF144272);
+  /// Card border color - Light Gray
+  static const Color backgroundCardBorder = Color(0xFFE2E8F0);
+
+  /// Elevated surface background - Subtle Gray
+  static const Color backgroundElevated = Color(0xFFFAFAFB);
+
+  /// Dark background (for special sections only) - Soft Dark Gray
+  static const Color backgroundDark = Color(0xFF1E293B);
 
   /// Light background for contrast sections
   static const Color backgroundLight = Color(0xFFF5F7FA);
 
   // ============================================================================
-  // TEXT - Optimized for white & dark backgrounds
+  // TEXT - Optimized for LIGHT backgrounds (primary use case)
   // ============================================================================
 
-  /// Primary text color (white for dark backgrounds)
-  static const Color textPrimary = Color(0xFFFFFFFF);
+  /// Primary text color - Dark Gray (for light backgrounds)
+  static const Color textPrimary = Color(0xFF0F172A);
 
-  /// Secondary text color (slightly transparent white)
-  static const Color textSecondary = Color(0xB3FFFFFF); // 70% White
+  /// Secondary text color - Medium Gray
+  static const Color textSecondary = Color(0xFF64748B);
 
-  /// Tertiary text color
-  static const Color textTertiary = Color(0x80FFFFFF); // 50% White
+  /// Tertiary text color - Light Gray
+  static const Color textTertiary = Color(0xFF94A3B8);
 
-  /// Disabled text color
-  static const Color textDisabled = Color(0x40FFFFFF); // 25% White
+  /// Disabled text color - Very Light Gray
+  static const Color textDisabled = Color(0xFFCBD5E1);
 
-  /// Text for light backgrounds
-  static const Color textDark = Color(0xFF0A2647); // Navy text
+  /// Text for light backgrounds (alias for consistency)
+  static const Color textDark = textPrimary;
 
   /// Secondary text for light backgrounds
-  static const Color textDarkSecondary = Color(0x800A2647); // 50% Navy
+  static const Color textDarkSecondary = textSecondary;
+
+  /// Text for dark backgrounds - White
+  static const Color textLight = Color(0xFFFFFFFF);
+
+  /// Secondary text for dark backgrounds
+  static const Color textLightSecondary = Color(0xB3FFFFFF); // 70% White
 
   // ============================================================================
-  // BLUE SHADES - For data visualization & UI elements
+  // BLUE SHADES - Professional Blue Scale
   // ============================================================================
 
-  /// Extra light blue
-  static const Color blue50 = Color(0xFFE3F2FD);
+  /// Extra light blue - backgrounds
+  static const Color blue50 = Color(0xFFEFF6FF);
 
-  /// Light blue
-  static const Color blue100 = Color(0xFFBBDEFB);
+  /// Light blue - hover states
+  static const Color blue100 = Color(0xFFDBEAFE);
 
-  /// Medium light blue
-  static const Color blue200 = Color(0xFF90CAF9);
+  /// Medium light blue - subtle accents
+  static const Color blue200 = Color(0xFFBFDBFE);
 
-  /// Medium blue
-  static const Color blue300 = Color(0xFF64B5F6);
+  /// Medium blue - icons
+  static const Color blue300 = Color(0xFF93C5FD);
 
-  /// Medium dark blue
-  static const Color blue400 = Color(0xFF42A5F5);
+  /// Medium dark blue - secondary buttons
+  static const Color blue400 = Color(0xFF60A5FA);
 
-  /// Dark blue
-  static const Color blue500 = Color(0xFF2C7BE5);
+  /// Main blue - primary actions
+  static const Color blue500 = primary;
 
-  /// Extra dark blue
-  static const Color blue600 = Color(0xFF1E5DB5);
+  /// Dark blue - hover on primary
+  static const Color blue600 = Color(0xFF2563EB);
 
-  /// Deep blue
-  static const Color blue700 = Color(0xFF144272);
+  /// Deep blue - pressed states
+  static const Color blue700 = primaryDark;
 
-  /// Navy blue
-  static const Color blue800 = Color(0xFF0F3460);
+  /// Very dark blue - text on light backgrounds
+  static const Color blue800 = Color(0xFF1E3A8A);
 
-  /// Deep navy
-  static const Color blue900 = Color(0xFF0A2647);
+  /// Deepest blue - special emphasis
+  static const Color blue900 = Color(0xFF1E40AF);
 
   // ============================================================================
   // SEMANTIC COLORS - Professional palette
@@ -182,17 +194,17 @@ class HvacColors {
   /// Dashboard accent - blue
   static const Color dashboardBlue = Color(0xFF2C7BE5);
 
-  /// Legacy compatibility - now maps to accent
-  static const Color primaryOrange = Color(0xFF2C7BE5); // Mapped to blue
-  static const Color primaryOrangeDark = Color(0xFF1A5CB8);
-  static const Color primaryOrangeLight = Color(0xFF5A9FFF);
+  /// Legacy compatibility - maps to primary blue
+  static const Color primaryOrange = primary;
+  static const Color primaryOrangeDark = primaryDark;
+  static const Color primaryOrangeLight = primaryLight;
 
-  /// Primary blue (main accent)
-  static const Color primaryBlue = accent;
+  /// Primary blue (main corporate color)
+  static const Color primaryBlue = primary;
 
-  /// Preset colors
-  static const Color presetOrange = Color(0xFF2C7BE5); // Now blue
-  static const Color presetDeepOrange = Color(0xFF1A5CB8); // Dark blue
+  /// Preset colors (blue)
+  static const Color presetOrange = primary;
+  static const Color presetDeepOrange = primaryDark;
 
   /// Alert dark
   static const Color alertDarkRed = Color(0xFFDC2626);
@@ -223,36 +235,36 @@ class HvacColors {
   /// Alias for error
   static const Color errorRed = error;
 
-  /// Neutral shades (blue-tinted)
-  static const Color neutral100 = blue200;
-  static const Color neutral200 = blue300;
-  static const Color neutral300 = blue500;
-  static const Color neutral400 = blue700;
+  /// Neutral shades (gray, not blue!)
+  static const Color neutral100 = Color(0xFFF1F5F9);
+  static const Color neutral200 = Color(0xFFE2E8F0);
+  static const Color neutral300 = Color(0xFFCBD5E1);
+  static const Color neutral400 = Color(0xFF94A3B8);
 
   // ============================================================================
-  // GLASSMORPHISM - Frosted Glass & Shimmer Effects
+  // GLASSMORPHISM - Frosted Glass & Shimmer Effects (Light Theme)
   // ============================================================================
 
   /// Pure white for glass elements
   static const Color glassWhite = Color(0xFFFFFFFF);
 
   /// Very light for glass
-  static const Color glassLight = Color(0xFFF8FAFC);
+  static const Color glassLight = Color(0xFFFAFAFB);
 
-  /// Glass border color (30% white)
-  static const Color glassBorder = Color(0x4DFFFFFF);
+  /// Glass border color (subtle gray)
+  static const Color glassBorder = Color(0xFFE2E8F0);
 
   /// Subtle border color
-  static const Color borderSubtle = Color(0x1AFFFFFF); // 10% white
+  static const Color borderSubtle = Color(0xFFF1F5F9);
 
-  /// Accent orange light (legacy mapping to blue)
+  /// Accent blue light (legacy compatibility)
   static const Color accentOrangeLight = accentLight;
 
-  /// Shimmer base color (15% white)
-  static const Color glassShimmerBase = Color(0x26FFFFFF);
+  /// Shimmer base color (very light gray)
+  static const Color glassShimmerBase = Color(0xFFF1F5F9);
 
-  /// Shimmer highlight color (40% white)
-  static const Color glassShimmerHighlight = Color(0x66FFFFFF);
+  /// Shimmer highlight color (white)
+  static const Color glassShimmerHighlight = Color(0xFFFFFFFF);
 
   // ============================================================================
   // BLUR SIGMA VALUES - For BackdropFilter
@@ -281,7 +293,7 @@ class HvacColors {
   static const Color tempWarm = Color(0xFFF59E0B);
 
   // ============================================================================
-  // GRADIENTS - Blue themed
+  // GRADIENTS - Professional & Clean
   // ============================================================================
 
   /// Primary gradient (blue shades)
@@ -293,31 +305,31 @@ class HvacColors {
 
   /// Accent gradient (vibrant blues)
   static const LinearGradient accentGradient = LinearGradient(
-    colors: [accent, accentLight],
+    colors: [primary, blue400],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
 
-  /// Subtle background gradient
+  /// Subtle background gradient (very light)
   static const LinearGradient subtleGradient = LinearGradient(
-    colors: [backgroundCard, backgroundElevated],
+    colors: [Color(0xFFFFFFFF), Color(0xFFF8FAFC)],
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
   );
 
-  /// Glass gradient for frosted effect
+  /// Glass gradient for frosted effect (light theme)
   static const LinearGradient glassGradient = LinearGradient(
     colors: [
-      Color(0x26FFFFFF), // 15% white
-      Color(0x0DFFFFFF), // 5% white
+      Color(0xFFFFFFFF), // White
+      Color(0xFFFAFAFB), // Very light gray
     ],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
 
-  /// Corporate gradient (navy to blue)
+  /// Corporate gradient (blue emphasis)
   static const LinearGradient corporateGradient = LinearGradient(
-    colors: [primaryDark, accent],
+    colors: [primaryDark, primary, primaryLight],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
@@ -359,11 +371,11 @@ class HvacColors {
 
   /// Get appropriate text color for background
   static Color getTextForBackground(Color background) {
-    return isDark(background) ? textPrimary : textDark;
+    return isDark(background) ? textLight : textPrimary;
   }
 
   /// Get secondary text color for background
   static Color getSecondaryTextForBackground(Color background) {
-    return isDark(background) ? textSecondary : textDarkSecondary;
+    return isDark(background) ? textLightSecondary : textSecondary;
   }
 }

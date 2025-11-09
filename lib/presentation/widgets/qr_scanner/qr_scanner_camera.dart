@@ -1,10 +1,11 @@
 /// QR Scanner Camera Widget
 ///
 /// Handles mobile camera functionality for QR code scanning
-/// Manages camera lifecycle and error states
+/// Manages camera lifecycle and error states using HVAC UI Kit
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'camera_state_widget.dart';
 import 'camera_toolbar.dart';
@@ -119,7 +120,7 @@ class _QrScannerCameraState extends State<QrScannerCamera>
   Widget build(BuildContext context) {
     if (_hasError) {
       return Container(
-        color: Theme.of(context).colorScheme.surface,
+        color: HvacColors.backgroundDark,
         child: CameraStateWidget(
           type: CameraStateType.error,
           message: _errorMessage ?? 'Failed to initialize camera',
@@ -130,7 +131,7 @@ class _QrScannerCameraState extends State<QrScannerCamera>
 
     if (!_isInitialized || _controller == null) {
       return Container(
-        color: Colors.black,
+        color: HvacColors.backgroundDark,
         child: const CameraStateWidget(
           type: CameraStateType.loading,
           message: 'Initializing camera...',

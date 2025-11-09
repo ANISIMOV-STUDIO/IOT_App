@@ -19,34 +19,27 @@ class LoginHeader extends StatelessWidget {
       children: [
         // Logo container
         Container(
-          width: 100,
-          height: 100,
+          width: 120,
+          height: 120,
           decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [
-                HvacColors.primaryOrange,
-                HvacColors.accentOrangeLight,
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            borderRadius: BorderRadius.circular(HvacRadius.xl),
+            gradient: HvacColors.primaryGradient,
+            borderRadius: BorderRadius.circular(HvacRadius.xxl),
             boxShadow: [
               BoxShadow(
-                color: HvacColors.primaryOrange.withValues(alpha: 0.3),
-                blurRadius: 20,
-                spreadRadius: 5,
+                color: HvacColors.primary.withValues(alpha: 0.2),
+                blurRadius: 24,
+                offset: const Offset(0, 8),
               ),
             ],
           ),
           child: const Icon(
             Icons.air,
-            size: 50,
-            color: Colors.white,
+            size: 60,
+            color: HvacColors.secondary,
           ),
         ),
 
-        SizedBox(height: HvacSpacing.xl.h),
+        const SizedBox(height: HvacSpacing.lg),
 
         // Welcome text
         Text(
@@ -59,7 +52,7 @@ class LoginHeader extends StatelessWidget {
           ),
         ),
 
-        SizedBox(height: HvacSpacing.xs.h),
+        const SizedBox(height: HvacSpacing.xs),
 
         // Subtitle
         Text(

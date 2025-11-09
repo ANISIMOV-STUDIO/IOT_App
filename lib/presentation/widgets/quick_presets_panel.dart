@@ -50,7 +50,7 @@ class QuickPresetsPanel extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    SizedBox(height: 2.0),
+                    const SizedBox(height: 2.0),
                     Text(
                       'Применить настройки одной кнопкой',
                       style: HvacTypography.bodySmall.copyWith(

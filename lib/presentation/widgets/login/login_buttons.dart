@@ -35,7 +35,7 @@ class LoginButtons extends StatelessWidget {
           onPressed: isLoading ? null : onLogin,
         ),
 
-        SizedBox(height: HvacSpacing.md.h),
+        const SizedBox(height: HvacSpacing.md),
 
         // Register button
         _LoginSecondaryButton(
@@ -43,7 +43,7 @@ class LoginButtons extends StatelessWidget {
           onPressed: isLoading ? null : onRegister,
         ),
 
-        SizedBox(height: HvacSpacing.lg.h),
+        const SizedBox(height: HvacSpacing.lg),
 
         // Skip button
         HvacTextButton(

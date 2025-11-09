@@ -1,8 +1,9 @@
 /// Lazy List Item Component
-/// Individual list item with visibility detection
+/// Individual list item with visibility detection using HVAC UI Kit
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../../domain/entities/hvac_unit.dart';
 import '../optimized_hvac_card.dart';
 
@@ -37,8 +38,8 @@ class _LazyListItemState extends State<LazyListItem>
   @override
   void initState() {
     super.initState();
-    // Stagger the appearance animation
-    Future.delayed(Duration(milliseconds: widget.index * 50), () {
+    // Stagger the appearance animation using UI Kit stagger delay
+    Future.delayed(AnimationDurations.staggerMedium * widget.index, () {
       if (mounted) {
         setState(() {
           _isVisible = true;
@@ -51,11 +52,14 @@ class _LazyListItemState extends State<LazyListItem>
   Widget build(BuildContext context) {
     super.build(context);
 
+    // Use HVAC UI Kit animations for smooth entrance
     return AnimatedOpacity(
-      duration: const Duration(milliseconds: 300),
+      duration: AnimationDurations.medium,
       opacity: _isVisible ? 1.0 : 0.0,
+      curve: SmoothCurves.emphasized,
       child: AnimatedSlide(
-        duration: const Duration(milliseconds: 300),
+        duration: AnimationDurations.medium,
+        curve: SmoothCurves.emphasized,
         offset: _isVisible ? Offset.zero : const Offset(0, 0.1),
         child: OptimizedHvacCard(
           unit: widget.unit,

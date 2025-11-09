@@ -99,14 +99,19 @@ class GlassCard extends StatelessWidget {
         padding: padding ?? const EdgeInsets.all(HvacSpacing.lg),
         margin: margin,
         borderRadius: HvacRadius.lg,
-        blurSigma: HvacColors.blurMedium,
-        backgroundColor: HvacColors.backgroundCard.withValues(alpha: 0.7),
+        blurSigma: HvacColors.blurLight,
+        backgroundColor: HvacColors.backgroundCard.withValues(alpha: 0.95),
         borderColor: HvacColors.glassBorder,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
+            color: HvacColors.primary.withValues(alpha: 0.08),
+            blurRadius: 24,
+            offset: const Offset(0, 8),
+          ),
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
           ),
         ],
         child: child,
@@ -119,7 +124,7 @@ class GlassCard extends StatelessWidget {
         padding: padding ?? const EdgeInsets.all(HvacSpacing.lg),
         margin: margin,
         decoration: BoxDecoration(
-          color: HvacColors.backgroundCard.withValues(alpha: 0.9),
+          color: HvacColors.backgroundCard,
           borderRadius: BorderRadius.circular(HvacRadius.lg),
           border: Border.all(
             color: HvacColors.backgroundCardBorder,
@@ -127,9 +132,14 @@ class GlassCard extends StatelessWidget {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
-              blurRadius: 20,
-              offset: const Offset(0, 10),
+              color: HvacColors.primary.withValues(alpha: 0.08),
+              blurRadius: 24,
+              offset: const Offset(0, 8),
+            ),
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
             ),
           ],
         ),
@@ -352,12 +362,12 @@ class GlassAppBar extends StatelessWidget implements PreferredSizeWidget {
     return ClipRRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(
-          sigmaX: HvacColors.blurMedium,
-          sigmaY: HvacColors.blurMedium,
+          sigmaX: HvacColors.blurLight,
+          sigmaY: HvacColors.blurLight,
         ),
         child: Container(
           decoration: BoxDecoration(
-            color: HvacColors.backgroundDark.withValues(alpha: 0.8),
+            color: HvacColors.backgroundCard.withValues(alpha: 0.95),
             border: const Border(
               bottom: BorderSide(
                 color: HvacColors.glassBorder,
@@ -366,12 +376,16 @@ class GlassAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
           child: AppBar(
-            title: Text(title),
+            title: Text(
+              title,
+              style: const TextStyle(color: HvacColors.textPrimary),
+            ),
             centerTitle: centerTitle,
             actions: actions,
             leading: leading,
             backgroundColor: Colors.transparent,
             elevation: 0,
+            iconTheme: const IconThemeData(color: HvacColors.textPrimary),
           ),
         ),
       ),

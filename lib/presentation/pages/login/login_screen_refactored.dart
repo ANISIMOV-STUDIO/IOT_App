@@ -112,14 +112,15 @@ class _LoginScreenState extends State<LoginScreen>
 
   Widget _buildBackground() {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            HvacColors.backgroundDark,
-            HvacColors.backgroundElevated,
+            HvacColors.primary.withValues(alpha: 0.05),
+            HvacColors.backgroundSecondary,
+            HvacColors.backgroundLight,
           ],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
       ),
     );
@@ -129,7 +130,7 @@ class _LoginScreenState extends State<LoginScreen>
     return SafeArea(
       child: Center(
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(HvacSpacing.xl.w),
+          padding: const EdgeInsets.all(HvacSpacing.xl),
           child: AnimatedBuilder(
             animation: _animationController,
             builder: (context, child) {
@@ -149,16 +150,31 @@ class _LoginScreenState extends State<LoginScreen>
 
   Widget _buildLoginCard() {
     return Container(
-      constraints: const BoxConstraints(maxWidth: 400),
-      padding: EdgeInsets.all(HvacSpacing.xl.w),
+      constraints: const BoxConstraints(
+        maxWidth: 450,
+        minWidth: 350,
+      ),
+      padding: const EdgeInsets.symmetric(
+        horizontal: HvacSpacing.xxl,
+        vertical: HvacSpacing.xxl,
+      ),
       decoration: BoxDecoration(
-        color: HvacColors.backgroundCard.withValues(alpha: 0.9),
+        color: HvacColors.backgroundCard,
         borderRadius: BorderRadius.circular(HvacRadius.xl),
+        border: Border.all(
+          color: HvacColors.backgroundCardBorder,
+          width: 1,
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
-            blurRadius: 30,
-            offset: const Offset(0, 10),
+            color: HvacColors.primary.withValues(alpha: 0.08),
+            blurRadius: 32,
+            offset: const Offset(0, 12),
+          ),
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 16,
+            offset: const Offset(0, 6),
           ),
         ],
       ),
@@ -166,14 +182,14 @@ class _LoginScreenState extends State<LoginScreen>
         mainAxisSize: MainAxisSize.min,
         children: [
           const LoginHeader(),
-          SizedBox(height: HvacSpacing.xxl.h),
+          const SizedBox(height: HvacSpacing.xl),
           LoginForm(
             emailController: _emailController,
             passwordController: _passwordController,
             isLoading: _isLoading,
             onSubmit: _handleLogin,
           ),
-          SizedBox(height: HvacSpacing.xl.h),
+          const SizedBox(height: HvacSpacing.xl),
           LoginButtons(
             isLoading: _isLoading,
             onLogin: _handleLogin,

@@ -40,7 +40,7 @@ class LoginForm extends StatelessWidget {
           enabled: !isLoading,
           onSubmitted: (_) => onSubmit(),
         ),
-        SizedBox(height: HvacSpacing.md.h),
+        const SizedBox(height: HvacSpacing.md),
         _LoginTextField(
           controller: passwordController,
           hintText: l10n.password,

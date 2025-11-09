@@ -76,10 +76,10 @@ class _HvacControlAppState extends State<HvacControlApp> {
             title: 'BREEZ Home',
             debugShowCheckedModeBanner: false,
 
-            // Theme - Dark with Orange Accents (Figma Design)
-            theme: HvacTheme.darkTheme(),
+            // Theme - Light with Blue & White Balance (Corporate Colors)
+            theme: HvacTheme.lightTheme(),
             darkTheme: HvacTheme.darkTheme(),
-            themeMode: ThemeMode.dark, // Always use dark theme
+            themeMode: ThemeMode.light, // Light theme - blue & white balanced
 
             // Localization
             locale: languageService.currentLocale,
@@ -93,7 +93,7 @@ class _HvacControlAppState extends State<HvacControlApp> {
 
             // Responsive Framework - Industry Standard Approach
             builder: (context, widget) => Container(
-              color: HvacColors.backgroundDark,
+              color: HvacColors.backgroundSecondary,
               child: ResponsiveBreakpoints(
                 breakpoints: const [
                   Breakpoint(start: 0, end: 599, name: MOBILE),

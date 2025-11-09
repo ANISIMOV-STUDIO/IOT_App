@@ -4,7 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../domain/entities/hvac_unit.dart';
 import '../../../domain/entities/ventilation_mode.dart';
 import '../room_preview_card.dart';
@@ -25,18 +25,20 @@ class HomeRoomPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RoomPreviewCard(
-      roomName: currentUnit?.location ?? selectedUnit ?? 'Unit',
-      isLive: currentUnit?.power ?? false,
-      onPowerChanged: onPowerChanged,
-      onDetailsPressed: onDetailsPressed,
-      badges: _buildStatusBadges(),
-    ).animate().fadeIn(duration: 400.ms).slideY(
-          begin: 0.1,
-          end: 0,
-          duration: 400.ms,
-          curve: Curves.easeOut,
-        );
+    return SmoothAnimations.slideIn(
+      duration: AnimationDurations.medium,
+      begin: const Offset(0, 0.1),
+      child: SmoothAnimations.fadeIn(
+        duration: AnimationDurations.medium,
+        child: RoomPreviewCard(
+          roomName: currentUnit?.location ?? selectedUnit ?? 'Unit',
+          isLive: currentUnit?.power ?? false,
+          onPowerChanged: onPowerChanged,
+          onDetailsPressed: onDetailsPressed,
+          badges: _buildStatusBadges(),
+        ),
+      ),
+    );
   }
 
   List<StatusBadge> _buildStatusBadges() {

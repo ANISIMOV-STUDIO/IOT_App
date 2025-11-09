@@ -1,9 +1,14 @@
 /// Performance monitoring utility for Flutter widgets
+/// Development tool for profiling and debugging
+///
+/// Note: This is a development/debugging utility.
+/// For production performance optimizations, use PerformanceUtils from HVAC UI Kit.
 library;
 
 import 'package:flutter/material.dart';
 
 /// Widget wrapper that monitors build performance
+/// Development tool - should only be enabled during profiling
 ///
 /// Usage:
 /// ```dart

@@ -1,9 +1,13 @@
 /// Custom ripple effect painter for buttons
+/// Uses HVAC UI Kit for consistency
 library;
 
 import 'package:flutter/material.dart';
 
 /// Custom painter for ripple effect animations
+///
+/// Note: This is a specialized component for custom ripple effects.
+/// For standard button interactions, consider using MicroInteraction from HVAC UI Kit.
 class RipplePainter extends CustomPainter {
   final double progress;
   final Color color;

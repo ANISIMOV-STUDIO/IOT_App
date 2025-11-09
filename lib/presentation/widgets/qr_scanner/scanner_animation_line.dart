@@ -1,9 +1,10 @@
 /// Scanner Animation Line Widget
 ///
-/// Animated scanning line for QR scanner overlay
+/// Animated scanning line for QR scanner overlay using HVAC UI Kit
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
 class ScannerAnimationLine extends StatefulWidget {
   final double frameSize;
@@ -27,16 +28,17 @@ class _ScannerAnimationLineState extends State<ScannerAnimationLine>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      duration: const Duration(seconds: 2),
+    // Use HVAC UI Kit's animation controller creation
+    _controller = SmoothAnimations.createController(
       vsync: this,
+      duration: const Duration(seconds: 2),
     );
     _animation = Tween<double>(
       begin: 0.0,
       end: widget.frameSize - 4.0,
     ).animate(CurvedAnimation(
       parent: _controller,
-      curve: Curves.easeInOut,
+      curve: SmoothCurves.emphasized,
     ));
     _controller.repeat(reverse: true);
   }
