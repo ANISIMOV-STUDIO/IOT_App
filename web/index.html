@@ -196,17 +196,20 @@
       border-radius: 50%;
       background: linear-gradient(135deg, #60A5FA, #14ffe9);
       box-shadow: 0 0 15px rgba(96, 165, 250, 0.8);
+      top: 50%;
+      left: 50%;
+      margin: -5px 0 0 -5px;
     }
 
-    .particle:nth-of-type(1) {
+    .particle-1 {
       animation: orbit1 4s linear infinite;
     }
 
-    .particle:nth-of-type(2) {
+    .particle-2 {
       animation: orbit2 4s linear infinite;
     }
 
-    .particle:nth-of-type(3) {
+    .particle-3 {
       animation: orbit3 4s linear infinite;
     }
 
@@ -352,9 +355,9 @@
         </div>
       </div>
       <!-- Orbiting particles -->
-      <div class="particle"></div>
-      <div class="particle"></div>
-      <div class="particle"></div>
+      <div class="particle particle-1"></div>
+      <div class="particle particle-2"></div>
+      <div class="particle particle-3"></div>
     </div>
 
     <!-- Text -->
