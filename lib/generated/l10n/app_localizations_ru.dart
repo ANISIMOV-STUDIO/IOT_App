@@ -345,9 +345,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get off => 'Выкл';
 
   @override
-  String current(Object temp) {
-    return 'Текущая';
-  }
+  String get current => 'Текущая';
 
   @override
   String get target => 'Целевая';
@@ -438,9 +436,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get presets => 'Пресеты';
 
   @override
-  String error(Object message) {
-    return 'Ошибка';
-  }
+  String get error => 'Ошибка';
 
   @override
   String get connectionError => 'Ошибка подключения';

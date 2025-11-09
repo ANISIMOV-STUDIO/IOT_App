@@ -343,9 +343,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get off => 'Off';
 
   @override
-  String current(Object temp) {
-    return 'Current';
-  }
+  String get current => 'Current';
 
   @override
   String get target => 'Target';
@@ -435,9 +433,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get presets => 'Presets';
 
   @override
-  String error(Object message) {
-    return 'Error';
-  }
+  String get error => 'Error';
 
   @override
   String get connectionError => 'Connection Error';

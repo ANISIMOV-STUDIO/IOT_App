@@ -100,1850 +100,1850 @@ abstract class AppLocalizations {
 
   /// Application title
   ///
-  /// In en, this message translates to:
+  /// In ru, this message translates to:
   /// **'BREEZ Home'**
   String get appTitle;
 
   /// Application tagline
   ///
-  /// In en, this message translates to:
-  /// **'Smart Climate Management'**
+  /// In ru, this message translates to:
+  /// **'Умное управление климатом'**
   String get smartClimateManagement;
 
   /// Login button text
   ///
-  /// In en, this message translates to:
-  /// **'Sign In'**
+  /// In ru, this message translates to:
+  /// **'Войти'**
   String get login;
 
   /// Register button text
   ///
-  /// In en, this message translates to:
-  /// **'Sign Up'**
+  /// In ru, this message translates to:
+  /// **'Регистрация'**
   String get register;
 
   /// Login screen subtitle
   ///
-  /// In en, this message translates to:
-  /// **'Welcome back! Sign in to continue'**
+  /// In ru, this message translates to:
+  /// **'С возвращением! Войдите, чтобы продолжить'**
   String get loginSubtitle;
 
   /// Register screen subtitle
   ///
-  /// In en, this message translates to:
-  /// **'Create an account to get started'**
+  /// In ru, this message translates to:
+  /// **'Создайте аккаунт, чтобы начать'**
   String get registerSubtitle;
 
   /// Email field label
   ///
-  /// In en, this message translates to:
+  /// In ru, this message translates to:
   /// **'Email'**
   String get email;
 
   /// Password field label
   ///
-  /// In en, this message translates to:
-  /// **'Password'**
+  /// In ru, this message translates to:
+  /// **'Пароль'**
   String get password;
 
   /// Confirm password field label
   ///
-  /// In en, this message translates to:
-  /// **'Confirm Password'**
+  /// In ru, this message translates to:
+  /// **'Подтвердите пароль'**
   String get confirmPassword;
 
   /// Name field label
   ///
-  /// In en, this message translates to:
-  /// **'Full Name'**
+  /// In ru, this message translates to:
+  /// **'Полное имя'**
   String get fullName;
 
   /// Welcome back message
   ///
-  /// In en, this message translates to:
-  /// **'Welcome Back'**
+  /// In ru, this message translates to:
+  /// **'С возвращением'**
   String get welcomeBack;
 
   /// Create account title
   ///
-  /// In en, this message translates to:
-  /// **'Create Account'**
+  /// In ru, this message translates to:
+  /// **'Создать аккаунт'**
   String get createAccount;
 
   /// Sign in subtitle
   ///
-  /// In en, this message translates to:
-  /// **'Sign in to your account'**
+  /// In ru, this message translates to:
+  /// **'Войдите в свой аккаунт'**
   String get signInToAccount;
 
   /// Sign up subtitle
   ///
-  /// In en, this message translates to:
-  /// **'Sign up for a new account'**
+  /// In ru, this message translates to:
+  /// **'Зарегистрируйтесь для нового аккаунта'**
   String get signUpForAccount;
 
   /// Skip authentication button
   ///
-  /// In en, this message translates to:
-  /// **'Skip for now'**
+  /// In ru, this message translates to:
+  /// **'Пропустить'**
   String get skipForNow;
 
   /// Skip authentication button alternative
   ///
-  /// In en, this message translates to:
-  /// **'Continue without registration'**
+  /// In ru, this message translates to:
+  /// **'Продолжить без регистрации'**
   String get skipAuth;
 
   /// Remember me checkbox
   ///
-  /// In en, this message translates to:
-  /// **'Remember me'**
+  /// In ru, this message translates to:
+  /// **'Запомнить меня'**
   String get rememberMe;
 
   /// Terms and conditions link
   ///
-  /// In en, this message translates to:
-  /// **'Terms and Conditions'**
+  /// In ru, this message translates to:
+  /// **'Условия и положения'**
   String get termsAndConditions;
 
   /// Guest user name
   ///
-  /// In en, this message translates to:
-  /// **'Guest User'**
+  /// In ru, this message translates to:
+  /// **'Гость'**
   String get guestUser;
 
   /// Registration coming soon message
   ///
-  /// In en, this message translates to:
-  /// **'Registration feature coming soon'**
+  /// In ru, this message translates to:
+  /// **'Функция регистрации скоро будет доступна'**
   String get registrationComingSoon;
 
   /// Show password tooltip
   ///
-  /// In en, this message translates to:
-  /// **'Show password'**
+  /// In ru, this message translates to:
+  /// **'Показать пароль'**
   String get showPassword;
 
   /// Hide password tooltip
   ///
-  /// In en, this message translates to:
-  /// **'Hide password'**
+  /// In ru, this message translates to:
+  /// **'Скрыть пароль'**
   String get hidePassword;
 
   /// Skip button
   ///
-  /// In en, this message translates to:
-  /// **'Skip'**
+  /// In ru, this message translates to:
+  /// **'Пропустить'**
   String get skip;
 
   /// Onboarding welcome title
   ///
-  /// In en, this message translates to:
-  /// **'Welcome to\nBREEZ Home'**
+  /// In ru, this message translates to:
+  /// **'Добро пожаловать в\nBREEZ Home'**
   String get welcomeToBreezHome;
 
   /// Onboarding welcome subtitle
   ///
-  /// In en, this message translates to:
-  /// **'Your smart home climate control\nat your fingertips'**
+  /// In ru, this message translates to:
+  /// **'Умное управление климатом\nвашего дома под рукой'**
   String get smartHomeClimateControl;
 
   /// Swipe instruction
   ///
-  /// In en, this message translates to:
-  /// **'Swipe to continue'**
+  /// In ru, this message translates to:
+  /// **'Свайпните для продолжения'**
   String get swipeToContinue;
 
   /// Onboarding control title
   ///
-  /// In en, this message translates to:
-  /// **'Control Your\nDevices'**
+  /// In ru, this message translates to:
+  /// **'Управляйте\nустройствами'**
   String get controlYourDevices;
 
   /// Onboarding control subtitle
   ///
-  /// In en, this message translates to:
-  /// **'Manage all your HVAC systems\nfrom anywhere, anytime'**
+  /// In ru, this message translates to:
+  /// **'Управляйте всеми системами HVAC\nиз любого места в любое время'**
   String get manageHvacSystems;
 
   /// Remote control feature
   ///
-  /// In en, this message translates to:
-  /// **'Turn on/off remotely'**
+  /// In ru, this message translates to:
+  /// **'Включение/выключение удаленно'**
   String get turnOnOffRemotely;
 
   /// Onboarding final title
   ///
-  /// In en, this message translates to:
-  /// **'Ready to\nGet Started?'**
+  /// In ru, this message translates to:
+  /// **'Готовы\nначать?'**
   String get readyToGetStarted;
 
   /// Onboarding final subtitle
   ///
-  /// In en, this message translates to:
-  /// **'Start controlling your home climate\nwith ease and efficiency'**
+  /// In ru, this message translates to:
+  /// **'Начните управлять климатом вашего дома\nлегко и эффективно'**
   String get startControllingClimate;
 
   /// Get started button
   ///
-  /// In en, this message translates to:
-  /// **'Get Started'**
+  /// In ru, this message translates to:
+  /// **'Начать'**
   String get getStarted;
 
   /// Terms and privacy agreement text
   ///
-  /// In en, this message translates to:
-  /// **'By continuing, you agree to our\nTerms of Service and Privacy Policy'**
+  /// In ru, this message translates to:
+  /// **'Продолжая, вы соглашаетесь с нашими\nУсловиями обслуживания и Политикой конфиденциальности'**
   String get termsPrivacyAgreement;
 
   /// Loading screen text
   ///
-  /// In en, this message translates to:
-  /// **'Loading BREEZ Home'**
+  /// In ru, this message translates to:
+  /// **'Загрузка BREEZ Home'**
   String get loadingBreezHome;
 
   /// Home tab label
   ///
-  /// In en, this message translates to:
-  /// **'Home'**
+  /// In ru, this message translates to:
+  /// **'Главная'**
   String get home;
 
   /// Settings tab label
   ///
-  /// In en, this message translates to:
-  /// **'Settings'**
+  /// In ru, this message translates to:
+  /// **'Настройки'**
   String get settings;
 
   /// Back button
   ///
-  /// In en, this message translates to:
-  /// **'Back'**
+  /// In ru, this message translates to:
+  /// **'Назад'**
   String get back;
 
   /// Next button
   ///
-  /// In en, this message translates to:
-  /// **'Next'**
+  /// In ru, this message translates to:
+  /// **'Далее'**
   String get next;
 
   /// Previous button
   ///
-  /// In en, this message translates to:
-  /// **'Previous'**
+  /// In ru, this message translates to:
+  /// **'Предыдущий'**
   String get previous;
 
   /// Navigate back label
   ///
-  /// In en, this message translates to:
-  /// **'Navigate back'**
+  /// In ru, this message translates to:
+  /// **'Вернуться назад'**
   String get navigateBack;
 
   /// Settings screen title (Russian: Настройки)
   ///
-  /// In en, this message translates to:
-  /// **'Settings'**
+  /// In ru, this message translates to:
+  /// **'Настройки'**
   String get settingsTitle;
 
   /// Appearance section title (Russian: Внешний вид)
   ///
-  /// In en, this message translates to:
-  /// **'Appearance'**
+  /// In ru, this message translates to:
+  /// **'Внешний вид'**
   String get appearance;
 
   /// Dark theme option (Russian: Темная тема)
   ///
-  /// In en, this message translates to:
-  /// **'Dark Theme'**
+  /// In ru, this message translates to:
+  /// **'Темная тема'**
   String get darkTheme;
 
   /// Dark theme description (Russian: Использовать темную цветовую схему)
   ///
-  /// In en, this message translates to:
-  /// **'Use dark color scheme'**
+  /// In ru, this message translates to:
+  /// **'Использовать темную цветовую схему'**
   String get useDarkColorScheme;
 
   /// Theme change message (Russian: Смена темы будет доступна в следующей версии)
   ///
-  /// In en, this message translates to:
-  /// **'Theme change will be available in the next version'**
+  /// In ru, this message translates to:
+  /// **'Смена темы будет доступна в следующей версии'**
   String get themeChangeNextVersion;
 
   /// Units section title (Russian: Единицы измерения)
   ///
-  /// In en, this message translates to:
-  /// **'Units'**
+  /// In ru, this message translates to:
+  /// **'Единицы измерения'**
   String get units;
 
   /// Temperature units label (Russian: Температура)
   ///
-  /// In en, this message translates to:
-  /// **'Temperature'**
+  /// In ru, this message translates to:
+  /// **'Температура'**
   String get temperatureUnits;
 
   /// Celsius option (Russian: Цельсий (°C))
   ///
-  /// In en, this message translates to:
-  /// **'Celsius (°C)'**
+  /// In ru, this message translates to:
+  /// **'Цельсий (°C)'**
   String get celsius;
 
   /// Fahrenheit option (Russian: Фаренгейт (°F))
   ///
-  /// In en, this message translates to:
-  /// **'Fahrenheit (°F)'**
+  /// In ru, this message translates to:
+  /// **'Фаренгейт (°F)'**
   String get fahrenheit;
 
   /// Units changed message
   ///
-  /// In en, this message translates to:
-  /// **'Units changed to {unit}'**
+  /// In ru, this message translates to:
+  /// **'Единицы изменены на {unit}'**
   String unitsChangedTo(String unit);
 
   /// Notifications section (Russian: Уведомления)
   ///
-  /// In en, this message translates to:
-  /// **'Notifications'**
+  /// In ru, this message translates to:
+  /// **'Уведомления'**
   String get notifications;
 
   /// Push notifications option (Russian: Push-уведомления)
   ///
-  /// In en, this message translates to:
-  /// **'Push Notifications'**
+  /// In ru, this message translates to:
+  /// **'Push-уведомления'**
   String get pushNotifications;
 
   /// Push notifications description (Russian: Получать мгновенные уведомления)
   ///
-  /// In en, this message translates to:
-  /// **'Receive instant notifications'**
+  /// In ru, this message translates to:
+  /// **'Получать мгновенные уведомления'**
   String get receiveInstantNotifications;
 
   /// Email notifications option (Russian: Email-уведомления)
   ///
-  /// In en, this message translates to:
-  /// **'Email Notifications'**
+  /// In ru, this message translates to:
+  /// **'Email-уведомления'**
   String get emailNotifications;
 
   /// Email notifications description (Russian: Получать отчеты на email)
   ///
-  /// In en, this message translates to:
-  /// **'Receive reports via email'**
+  /// In ru, this message translates to:
+  /// **'Получать отчеты на email'**
   String get receiveEmailReports;
 
   /// Notifications state message
   ///
-  /// In en, this message translates to:
-  /// **'{type} notifications {state}'**
+  /// In ru, this message translates to:
+  /// **'{type}-уведомления {state}'**
   String notificationsState(String type, String state);
 
   /// Language section (Russian: Язык)
   ///
-  /// In en, this message translates to:
-  /// **'Language'**
+  /// In ru, this message translates to:
+  /// **'Язык'**
   String get language;
 
   /// Russian language option
   ///
-  /// In en, this message translates to:
+  /// In ru, this message translates to:
   /// **'Русский'**
   String get russian;
 
   /// English language option
   ///
-  /// In en, this message translates to:
+  /// In ru, this message translates to:
   /// **'English'**
   String get english;
 
   /// Language changed message
   ///
-  /// In en, this message translates to:
-  /// **'Language changed to {language}'**
+  /// In ru, this message translates to:
+  /// **'Язык изменен на {language}'**
   String languageChangedTo(String language);
 
   /// About section (Russian: О приложении)
   ///
-  /// In en, this message translates to:
-  /// **'About'**
+  /// In ru, this message translates to:
+  /// **'О приложении'**
   String get about;
 
   /// Version label (Russian: Версия)
   ///
-  /// In en, this message translates to:
-  /// **'Version'**
+  /// In ru, this message translates to:
+  /// **'Версия'**
   String get version;
 
   /// Developer label (Russian: Разработчик)
   ///
-  /// In en, this message translates to:
-  /// **'Developer'**
+  /// In ru, this message translates to:
+  /// **'Разработчик'**
   String get developer;
 
   /// License label (Russian: Лицензия)
   ///
-  /// In en, this message translates to:
-  /// **'License'**
+  /// In ru, this message translates to:
+  /// **'Лицензия'**
   String get license;
 
   /// Check updates button (Russian: Проверить обновления)
   ///
-  /// In en, this message translates to:
-  /// **'Check for Updates'**
+  /// In ru, this message translates to:
+  /// **'Проверить обновления'**
   String get checkUpdates;
 
   /// Checking updates message (Russian: Проверка обновлений...)
   ///
-  /// In en, this message translates to:
-  /// **'Checking for updates...'**
+  /// In ru, this message translates to:
+  /// **'Проверка обновлений...'**
   String get checkingUpdates;
 
   /// Device management screen title
   ///
-  /// In en, this message translates to:
-  /// **'Device Management'**
+  /// In ru, this message translates to:
+  /// **'Управление устройствами'**
   String get deviceManagement;
 
   /// Search title
   ///
-  /// In en, this message translates to:
-  /// **'Search'**
+  /// In ru, this message translates to:
+  /// **'Поиск'**
   String get search;
 
   /// Scan for devices button
   ///
-  /// In en, this message translates to:
-  /// **'Scan for Devices'**
+  /// In ru, this message translates to:
+  /// **'Сканировать устройства'**
   String get scanForDevices;
 
   /// Add device button
   ///
-  /// In en, this message translates to:
-  /// **'Add Device'**
+  /// In ru, this message translates to:
+  /// **'Добавить устройство'**
   String get addDevice;
 
   /// Edit device dialog title
   ///
-  /// In en, this message translates to:
-  /// **'Edit Device'**
+  /// In ru, this message translates to:
+  /// **'Редактировать устройство'**
   String get editDevice;
 
   /// Remove device button
   ///
-  /// In en, this message translates to:
-  /// **'Remove Device'**
+  /// In ru, this message translates to:
+  /// **'Удалить устройство'**
   String get removeDevice;
 
   /// Device name label
   ///
-  /// In en, this message translates to:
-  /// **'Device Name'**
+  /// In ru, this message translates to:
+  /// **'Название устройства'**
   String get deviceName;
 
   /// MAC address label
   ///
-  /// In en, this message translates to:
-  /// **'MAC Address'**
+  /// In ru, this message translates to:
+  /// **'MAC-адрес'**
   String get macAddress;
 
   /// Location label
   ///
-  /// In en, this message translates to:
-  /// **'Location'**
+  /// In ru, this message translates to:
+  /// **'Расположение'**
   String get location;
 
   /// Device not found message
   ///
-  /// In en, this message translates to:
-  /// **'Not found\ndevice?'**
+  /// In ru, this message translates to:
+  /// **'Не нашли\nустройство?'**
   String get notFoundDevice;
 
   /// Select device manually button
   ///
-  /// In en, this message translates to:
-  /// **'Select manually'**
+  /// In ru, this message translates to:
+  /// **'Выбрать вручную'**
   String get selectManually;
 
   /// Device updated message
   ///
-  /// In en, this message translates to:
-  /// **'Device updated'**
+  /// In ru, this message translates to:
+  /// **'Устройство обновлено'**
   String get deviceUpdated;
 
   /// Device added success message
   ///
-  /// In en, this message translates to:
-  /// **'Device added successfully'**
+  /// In ru, this message translates to:
+  /// **'Устройство успешно добавлено'**
   String get deviceAdded;
 
   /// Device removed success message
   ///
-  /// In en, this message translates to:
-  /// **'Device removed successfully'**
+  /// In ru, this message translates to:
+  /// **'Устройство успешно удалено'**
   String get deviceRemoved;
 
   /// Scan QR code button
   ///
-  /// In en, this message translates to:
-  /// **'Scan QR Code'**
+  /// In ru, this message translates to:
+  /// **'Сканировать QR-код'**
   String get scanQrCode;
 
   /// Processing QR code message
   ///
-  /// In en, this message translates to:
-  /// **'Processing QR Code...'**
+  /// In ru, this message translates to:
+  /// **'Обработка QR-кода...'**
   String get processingQrCode;
 
   /// Invalid QR code error
   ///
-  /// In en, this message translates to:
-  /// **'Invalid QR code'**
+  /// In ru, this message translates to:
+  /// **'Неверный QR-код'**
   String get invalidQrCode;
 
   /// Device detected from QR message
   ///
-  /// In en, this message translates to:
-  /// **'Device detected from QR code'**
+  /// In ru, this message translates to:
+  /// **'Устройство обнаружено из QR-кода'**
   String get deviceDetectedFromQr;
 
   /// Manual MAC entry option
   ///
-  /// In en, this message translates to:
-  /// **'Or enter MAC address manually'**
+  /// In ru, this message translates to:
+  /// **'Или введите MAC-адрес вручную'**
   String get enterMacManually;
 
   /// Invalid MAC format error
   ///
-  /// In en, this message translates to:
-  /// **'Invalid MAC address format (e.g., AA:BB:CC:DD:EE:FF)'**
+  /// In ru, this message translates to:
+  /// **'Неверный формат MAC-адреса (например, AA:BB:CC:DD:EE:FF)'**
   String get invalidMacFormat;
 
   /// Device name validation error
   ///
-  /// In en, this message translates to:
-  /// **'Device name must be at least 3 characters'**
+  /// In ru, this message translates to:
+  /// **'Название устройства должно содержать минимум 3 символа'**
   String get deviceNameMinLength;
 
   /// Adding in progress
   ///
-  /// In en, this message translates to:
-  /// **'Adding...'**
+  /// In ru, this message translates to:
+  /// **'Добавление...'**
   String get adding;
 
   /// Pull to refresh hint
   ///
-  /// In en, this message translates to:
-  /// **'Pull to refresh'**
+  /// In ru, this message translates to:
+  /// **'Потяните для обновления'**
   String get pullToRefresh;
 
   /// Online status
   ///
-  /// In en, this message translates to:
-  /// **'Online'**
+  /// In ru, this message translates to:
+  /// **'В сети'**
   String get online;
 
   /// Offline status
   ///
-  /// In en, this message translates to:
-  /// **'Offline'**
+  /// In ru, this message translates to:
+  /// **'Не в сети'**
   String get offline;
 
   /// Edit action
   ///
-  /// In en, this message translates to:
-  /// **'Edit'**
+  /// In ru, this message translates to:
+  /// **'Редактировать'**
   String get edit;
 
   /// Delete action
   ///
-  /// In en, this message translates to:
-  /// **'Delete'**
+  /// In ru, this message translates to:
+  /// **'Удалить'**
   String get delete;
 
   /// Confirm device removal
   ///
-  /// In en, this message translates to:
-  /// **'Are you sure you want to remove {name}?'**
+  /// In ru, this message translates to:
+  /// **'Вы уверены, что хотите удалить {name}?'**
   String confirmRemoveDevice(String name);
 
   /// WiFi network display
   ///
-  /// In en, this message translates to:
+  /// In ru, this message translates to:
   /// **'WiFi: {network}'**
   String wifiNetwork(String network);
 
   /// Main screen title
   ///
-  /// In en, this message translates to:
+  /// In ru, this message translates to:
   /// **'BREEZ Home'**
   String get hvacControl;
 
   /// Temperature label
   ///
-  /// In en, this message translates to:
-  /// **'Temperature'**
+  /// In ru, this message translates to:
+  /// **'Температура'**
   String get temperature;
 
   /// Humidity label
   ///
-  /// In en, this message translates to:
-  /// **'Humidity'**
+  /// In ru, this message translates to:
+  /// **'Влажность'**
   String get humidity;
 
   /// Air quality label
   ///
-  /// In en, this message translates to:
-  /// **'Air Quality'**
+  /// In ru, this message translates to:
+  /// **'Качество воздуха'**
   String get airQuality;
 
   /// Fan speed label
   ///
-  /// In en, this message translates to:
-  /// **'Fan Speed'**
+  /// In ru, this message translates to:
+  /// **'Скорость вентилятора'**
   String get fanSpeed;
 
   /// Fan label short
   ///
-  /// In en, this message translates to:
-  /// **'Fan'**
+  /// In ru, this message translates to:
+  /// **'Вентилятор'**
   String get fan;
 
   /// Mode label
   ///
-  /// In en, this message translates to:
-  /// **'Mode'**
+  /// In ru, this message translates to:
+  /// **'Режим'**
   String get mode;
 
   /// Operating mode title
   ///
-  /// In en, this message translates to:
-  /// **'Operating Mode'**
+  /// In ru, this message translates to:
+  /// **'Режим работы'**
   String get operatingMode;
 
   /// Power label
   ///
-  /// In en, this message translates to:
-  /// **'Power'**
+  /// In ru, this message translates to:
+  /// **'Питание'**
   String get power;
 
   /// On state
   ///
-  /// In en, this message translates to:
-  /// **'On'**
+  /// In ru, this message translates to:
+  /// **'Вкл'**
   String get on;
 
   /// Off state
   ///
-  /// In en, this message translates to:
-  /// **'Off'**
+  /// In ru, this message translates to:
+  /// **'Выкл'**
   String get off;
 
   /// Current label
   ///
-  /// In en, this message translates to:
-  /// **'Current'**
-  String current(Object temp);
+  /// In ru, this message translates to:
+  /// **'Текущая'**
+  String get current;
 
   /// Target label
   ///
-  /// In en, this message translates to:
-  /// **'Target'**
+  /// In ru, this message translates to:
+  /// **'Целевая'**
   String get target;
 
   /// Cooling mode
   ///
-  /// In en, this message translates to:
-  /// **'Cooling'**
+  /// In ru, this message translates to:
+  /// **'Охлаждение'**
   String get cooling;
 
   /// Heating mode
   ///
-  /// In en, this message translates to:
-  /// **'Heating'**
+  /// In ru, this message translates to:
+  /// **'Обогрев'**
   String get heating;
 
   /// Auto mode
   ///
-  /// In en, this message translates to:
-  /// **'Auto'**
+  /// In ru, this message translates to:
+  /// **'Авто'**
   String get auto;
 
   /// Low speed
   ///
-  /// In en, this message translates to:
-  /// **'Low'**
+  /// In ru, this message translates to:
+  /// **'Низкая'**
   String get low;
 
   /// Password strength
   ///
-  /// In en, this message translates to:
-  /// **'Medium'**
+  /// In ru, this message translates to:
+  /// **'Средний'**
   String get medium;
 
   /// High speed
   ///
-  /// In en, this message translates to:
-  /// **'High'**
+  /// In ru, this message translates to:
+  /// **'Высокая'**
   String get high;
 
   /// Mode 2 label
   ///
-  /// In en, this message translates to:
-  /// **'Mode 2'**
+  /// In ru, this message translates to:
+  /// **'Режим 2'**
   String get mode2;
 
   /// Humidifier air label
   ///
-  /// In en, this message translates to:
-  /// **'Humidifier\nAir'**
+  /// In ru, this message translates to:
+  /// **'Увлажнитель\nвоздуха'**
   String get humidifierAir;
 
   /// Purifier air label
   ///
-  /// In en, this message translates to:
-  /// **'Purifier\nAir'**
+  /// In ru, this message translates to:
+  /// **'Очиститель\nвоздуха'**
   String get purifierAir;
 
   /// Lighting section
   ///
-  /// In en, this message translates to:
-  /// **'Lighting'**
+  /// In ru, this message translates to:
+  /// **'Освещение'**
   String get lighting;
 
   /// Main light label
   ///
-  /// In en, this message translates to:
-  /// **'Main light'**
+  /// In ru, this message translates to:
+  /// **'Основной свет'**
   String get mainLight;
 
   /// Floor lamp label
   ///
-  /// In en, this message translates to:
-  /// **'Floor lamp'**
+  /// In ru, this message translates to:
+  /// **'Торшер'**
   String get floorLamp;
 
   /// Unit label
   ///
-  /// In en, this message translates to:
-  /// **'Unit'**
+  /// In ru, this message translates to:
+  /// **'Блок'**
   String get unit;
 
   /// Notifications coming soon message
   ///
-  /// In en, this message translates to:
-  /// **'Notifications feature coming soon'**
+  /// In ru, this message translates to:
+  /// **'Функция уведомлений скоро будет доступна'**
   String get notificationsComingSoon;
 
   /// Favorite action
   ///
-  /// In en, this message translates to:
-  /// **'Favorite'**
+  /// In ru, this message translates to:
+  /// **'Избранное'**
   String get favorite;
 
   /// Activity label
   ///
-  /// In en, this message translates to:
-  /// **'Activity'**
+  /// In ru, this message translates to:
+  /// **'Активность'**
   String get activity;
 
   /// See all button
   ///
-  /// In en, this message translates to:
-  /// **'See All'**
+  /// In ru, this message translates to:
+  /// **'Смотреть все'**
   String get seeAll;
 
   /// Excellent air quality
   ///
-  /// In en, this message translates to:
-  /// **'Excellent'**
+  /// In ru, this message translates to:
+  /// **'Отлично'**
   String get excellent;
 
   /// Good air quality
   ///
-  /// In en, this message translates to:
-  /// **'Good'**
+  /// In ru, this message translates to:
+  /// **'Хорошо'**
   String get good;
 
   /// Moderate air quality
   ///
-  /// In en, this message translates to:
-  /// **'Moderate'**
+  /// In ru, this message translates to:
+  /// **'Умеренно'**
   String get moderate;
 
   /// Poor air quality
   ///
-  /// In en, this message translates to:
-  /// **'Poor'**
+  /// In ru, this message translates to:
+  /// **'Плохо'**
   String get poor;
 
   /// Very poor air quality
   ///
-  /// In en, this message translates to:
-  /// **'Very Poor'**
+  /// In ru, this message translates to:
+  /// **'Очень плохо'**
   String get veryPoor;
 
   /// Quick actions title
   ///
-  /// In en, this message translates to:
-  /// **'Quick Actions'**
+  /// In ru, this message translates to:
+  /// **'Быстрые действия'**
   String get quickActions;
 
   /// Turn all devices on
   ///
-  /// In en, this message translates to:
-  /// **'All On'**
+  /// In ru, this message translates to:
+  /// **'Все вкл'**
   String get allOn;
 
   /// Turn all devices off
   ///
-  /// In en, this message translates to:
-  /// **'All Off'**
+  /// In ru, this message translates to:
+  /// **'Все выкл'**
   String get allOff;
 
   /// Sync devices
   ///
-  /// In en, this message translates to:
-  /// **'Sync'**
+  /// In ru, this message translates to:
+  /// **'Синхр.'**
   String get sync;
 
   /// Schedule button
   ///
-  /// In en, this message translates to:
-  /// **'Schedule'**
+  /// In ru, this message translates to:
+  /// **'Расписание'**
   String get schedule;
 
   /// Presets title
   ///
-  /// In en, this message translates to:
-  /// **'Presets'**
+  /// In ru, this message translates to:
+  /// **'Пресеты'**
   String get presets;
 
   /// Error title
   ///
-  /// In en, this message translates to:
-  /// **'Error'**
-  String error(Object message);
+  /// In ru, this message translates to:
+  /// **'Ошибка'**
+  String get error;
 
   /// Connection error title
   ///
-  /// In en, this message translates to:
-  /// **'Connection Error'**
+  /// In ru, this message translates to:
+  /// **'Ошибка подключения'**
   String get connectionError;
 
   /// Server error title
   ///
-  /// In en, this message translates to:
-  /// **'Server Error'**
+  /// In ru, this message translates to:
+  /// **'Ошибка сервера'**
   String get serverError;
 
   /// Permission required title
   ///
-  /// In en, this message translates to:
-  /// **'Permission Required'**
+  /// In ru, this message translates to:
+  /// **'Требуется разрешение'**
   String get permissionRequired;
 
   /// Generic error title
   ///
-  /// In en, this message translates to:
-  /// **'Oops! Something went wrong'**
+  /// In ru, this message translates to:
+  /// **'Упс! Что-то пошло не так'**
   String get somethingWentWrong;
 
   /// Network error message
   ///
-  /// In en, this message translates to:
-  /// **'Unable to connect to the server. Please check your internet connection.'**
+  /// In ru, this message translates to:
+  /// **'Не удается подключиться к серверу. Проверьте интернет-соединение.'**
   String get unableToConnect;
 
   /// Server error message
   ///
-  /// In en, this message translates to:
-  /// **'Something went wrong on our end. Please try again later.'**
+  /// In ru, this message translates to:
+  /// **'На нашей стороне произошла ошибка. Попробуйте позже.'**
   String get serverErrorMessage;
 
   /// Permission required message
   ///
-  /// In en, this message translates to:
-  /// **'This feature requires additional permissions to work properly.'**
+  /// In ru, this message translates to:
+  /// **'Эта функция требует дополнительных разрешений для работы.'**
   String get permissionRequiredMessage;
 
   /// Network connection failed
   ///
-  /// In en, this message translates to:
-  /// **'Network connection failed. Please check your internet connection.'**
+  /// In ru, this message translates to:
+  /// **'Сбой сетевого подключения. Проверьте интернет-соединение.'**
   String get networkConnectionFailed;
 
   /// Request timeout error
   ///
-  /// In en, this message translates to:
-  /// **'Request timed out. Please try again.'**
+  /// In ru, this message translates to:
+  /// **'Время ожидания запроса истекло. Попробуйте еще раз.'**
   String get requestTimedOut;
 
   /// Device server connection error
   ///
-  /// In en, this message translates to:
-  /// **'Failed to connect to device server'**
+  /// In ru, this message translates to:
+  /// **'Не удалось подключиться к серверу устройств'**
   String get failedToConnect;
 
   /// Connection failed with error
   ///
-  /// In en, this message translates to:
-  /// **'Connection failed: {error}'**
+  /// In ru, this message translates to:
+  /// **'Подключение не удалось: {error}'**
   String connectionFailed(String error);
 
   /// Failed to add device
   ///
-  /// In en, this message translates to:
-  /// **'Failed to add device: {error}'**
+  /// In ru, this message translates to:
+  /// **'Не удалось добавить устройство: {error}'**
   String failedToAddDevice(String error);
 
   /// Failed to remove device
   ///
-  /// In en, this message translates to:
-  /// **'Failed to remove device: {error}'**
+  /// In ru, this message translates to:
+  /// **'Не удалось удалить устройство: {error}'**
   String failedToRemoveDevice(String error);
 
   /// Failed to load more items
   ///
-  /// In en, this message translates to:
-  /// **'Failed to load more items: {error}'**
+  /// In ru, this message translates to:
+  /// **'Не удалось загрузить больше элементов: {error}'**
   String failedToLoadMore(String error);
 
   /// Try again button
   ///
-  /// In en, this message translates to:
-  /// **'Try Again'**
+  /// In ru, this message translates to:
+  /// **'Попробовать снова'**
   String get tryAgain;
 
   /// Retry button
   ///
-  /// In en, this message translates to:
-  /// **'Retry'**
+  /// In ru, this message translates to:
+  /// **'Повторить'**
   String get retry;
 
   /// Retry connection button
   ///
-  /// In en, this message translates to:
-  /// **'Retry Connection'**
+  /// In ru, this message translates to:
+  /// **'Повторить подключение'**
   String get retryConnection;
 
   /// Refreshing message
   ///
-  /// In en, this message translates to:
-  /// **'Refreshing...'**
+  /// In ru, this message translates to:
+  /// **'Обновление...'**
   String get refreshing;
 
   /// Refresh devices tooltip
   ///
-  /// In en, this message translates to:
-  /// **'Refresh Devices'**
+  /// In ru, this message translates to:
+  /// **'Обновить устройства'**
   String get refreshDevices;
 
   /// Retrying connection announcement
   ///
-  /// In en, this message translates to:
-  /// **'Retrying connection'**
+  /// In ru, this message translates to:
+  /// **'Повторная попытка подключения'**
   String get retryingConnection;
 
   /// Error code display
   ///
-  /// In en, this message translates to:
-  /// **'Error Code: {code}'**
+  /// In ru, this message translates to:
+  /// **'Код ошибки: {code}'**
   String errorCode(String code);
 
   /// Error code copied message
   ///
-  /// In en, this message translates to:
-  /// **'Error code copied to clipboard'**
+  /// In ru, this message translates to:
+  /// **'Код ошибки скопирован в буфер обмена'**
   String get errorCodeCopied;
 
   /// Technical details label
   ///
-  /// In en, this message translates to:
-  /// **'Technical Details'**
+  /// In ru, this message translates to:
+  /// **'Технические детали'**
   String get technicalDetails;
 
   /// Double tap to retry hint
   ///
-  /// In en, this message translates to:
-  /// **'Double tap to retry'**
+  /// In ru, this message translates to:
+  /// **'Дважды нажмите для повтора'**
   String get doubleTapToRetry;
 
   /// Loading message
   ///
-  /// In en, this message translates to:
-  /// **'Loading...'**
+  /// In ru, this message translates to:
+  /// **'Загрузка...'**
   String get loading;
 
   /// Loading devices message
   ///
-  /// In en, this message translates to:
-  /// **'Loading devices...'**
+  /// In ru, this message translates to:
+  /// **'Загрузка устройств...'**
   String get loadingDevices;
 
   /// All units loaded message
   ///
-  /// In en, this message translates to:
-  /// **'All units loaded'**
+  /// In ru, this message translates to:
+  /// **'Все блоки загружены'**
   String get allUnitsLoaded;
 
   /// Connecting message
   ///
-  /// In en, this message translates to:
-  /// **'Connecting...'**
+  /// In ru, this message translates to:
+  /// **'Подключение...'**
   String get connecting;
 
   /// Reconnecting message
   ///
-  /// In en, this message translates to:
-  /// **'Reconnecting...'**
+  /// In ru, this message translates to:
+  /// **'Переподключение...'**
   String get reconnecting;
 
   /// No devices title
   ///
-  /// In en, this message translates to:
-  /// **'No Devices'**
+  /// In ru, this message translates to:
+  /// **'Нет устройств'**
   String get noDevices;
 
   /// No devices found message
   ///
-  /// In en, this message translates to:
-  /// **'No Devices Found'**
+  /// In ru, this message translates to:
+  /// **'Устройства не найдены'**
   String get noDevicesFound;
 
   /// Add first device prompt
   ///
-  /// In en, this message translates to:
-  /// **'Add your first device to get started'**
+  /// In ru, this message translates to:
+  /// **'Добавьте первое устройство, чтобы начать'**
   String get addFirstDevice;
 
   /// MQTT settings help text
   ///
-  /// In en, this message translates to:
-  /// **'Check your MQTT connection settings\nand make sure devices are online'**
+  /// In ru, this message translates to:
+  /// **'Проверьте настройки MQTT-подключения\nи убедитесь, что устройства в сети'**
   String get checkMqttSettings;
 
   /// No device selected message
   ///
-  /// In en, this message translates to:
-  /// **'No device selected'**
+  /// In ru, this message translates to:
+  /// **'Устройство не выбрано'**
   String get deviceNotSelected;
 
   /// Opening device addition announcement
   ///
-  /// In en, this message translates to:
-  /// **'Opening device addition screen'**
+  /// In ru, this message translates to:
+  /// **'Открытие экрана добавления устройства'**
   String get openDeviceAddition;
 
   /// Camera initialization message
   ///
-  /// In en, this message translates to:
-  /// **'Initializing camera...'**
+  /// In ru, this message translates to:
+  /// **'Инициализация камеры...'**
   String get initializingCamera;
 
   /// Camera permission message
   ///
-  /// In en, this message translates to:
-  /// **'Camera access is required to scan QR codes.\nPlease enable camera permissions in your browser settings.'**
+  /// In ru, this message translates to:
+  /// **'Для сканирования QR-кодов требуется доступ к камере.\nРазрешите доступ к камере в настройках браузера.'**
   String get cameraAccessRequired;
 
   /// Camera error title
   ///
-  /// In en, this message translates to:
-  /// **'Camera Error'**
+  /// In ru, this message translates to:
+  /// **'Ошибка камеры'**
   String get cameraError;
 
   /// Camera error message
   ///
-  /// In en, this message translates to:
-  /// **'An error occurred while accessing the camera.'**
+  /// In ru, this message translates to:
+  /// **'Произошла ошибка при доступе к камере.'**
   String get cameraErrorMessage;
 
   /// Web camera setup message
   ///
-  /// In en, this message translates to:
-  /// **'Web camera scanning requires additional setup. Please use manual entry or scan from mobile device.'**
+  /// In ru, this message translates to:
+  /// **'Сканирование веб-камерой требует дополнительной настройки. Используйте ручной ввод или сканируйте с мобильного устройства.'**
   String get webCameraSetupRequired;
 
   /// Camera view label
   ///
-  /// In en, this message translates to:
-  /// **'Camera View'**
+  /// In ru, this message translates to:
+  /// **'Вид с камеры'**
   String get cameraView;
 
   /// Email required validation
   ///
-  /// In en, this message translates to:
-  /// **'Email is required'**
+  /// In ru, this message translates to:
+  /// **'Email обязателен'**
   String get emailRequired;
 
   /// Invalid email validation
   ///
-  /// In en, this message translates to:
-  /// **'Please enter a valid email'**
+  /// In ru, this message translates to:
+  /// **'Введите корректный email'**
   String get invalidEmail;
 
   /// Password required validation
   ///
-  /// In en, this message translates to:
-  /// **'Password is required'**
+  /// In ru, this message translates to:
+  /// **'Пароль обязателен'**
   String get passwordRequired;
 
   /// Password too short validation
   ///
-  /// In en, this message translates to:
-  /// **'Password must be at least {length} characters'**
+  /// In ru, this message translates to:
+  /// **'Пароль должен содержать минимум {length} символов'**
   String passwordTooShort(int length);
 
   /// Name required validation
   ///
-  /// In en, this message translates to:
-  /// **'{fieldName} is required'**
+  /// In ru, this message translates to:
+  /// **'{fieldName} обязательно'**
   String nameRequired(String fieldName);
 
   /// Name too short validation
   ///
-  /// In en, this message translates to:
-  /// **'{fieldName} must be at least 2 characters'**
+  /// In ru, this message translates to:
+  /// **'{fieldName} должно содержать минимум 2 символа'**
   String nameTooShort(String fieldName);
 
   /// Fill required fields message
   ///
-  /// In en, this message translates to:
-  /// **'Please fill in all required fields'**
+  /// In ru, this message translates to:
+  /// **'Заполните все обязательные поля'**
   String get fillRequiredFields;
 
   /// Accept terms validation
   ///
-  /// In en, this message translates to:
-  /// **'Please accept the terms and conditions'**
+  /// In ru, this message translates to:
+  /// **'Примите условия и положения'**
   String get pleaseAcceptTerms;
 
   /// Minimum characters hint
   ///
-  /// In en, this message translates to:
-  /// **'Min {count} characters'**
+  /// In ru, this message translates to:
+  /// **'Мин. {count} символов'**
   String minCharacters(int count);
 
   /// Password requirement
   ///
-  /// In en, this message translates to:
-  /// **'At least 8 characters'**
+  /// In ru, this message translates to:
+  /// **'Минимум 8 символов'**
   String get atLeast8Characters;
 
   /// Password requirement
   ///
-  /// In en, this message translates to:
-  /// **'Uppercase letter'**
+  /// In ru, this message translates to:
+  /// **'Заглавная буква'**
   String get uppercaseLetter;
 
   /// Password requirement
   ///
-  /// In en, this message translates to:
-  /// **'Lowercase letter'**
+  /// In ru, this message translates to:
+  /// **'Строчная буква'**
   String get lowercaseLetter;
 
   /// Password requirement
   ///
-  /// In en, this message translates to:
-  /// **'Number'**
+  /// In ru, this message translates to:
+  /// **'Цифра'**
   String get number;
 
   /// Password requirement
   ///
-  /// In en, this message translates to:
-  /// **'Special character'**
+  /// In ru, this message translates to:
+  /// **'Специальный символ'**
   String get specialCharacter;
 
   /// Password strength
   ///
-  /// In en, this message translates to:
-  /// **'Weak'**
+  /// In ru, this message translates to:
+  /// **'Слабый'**
   String get weak;
 
   /// Password strength
   ///
-  /// In en, this message translates to:
-  /// **'Strong'**
+  /// In ru, this message translates to:
+  /// **'Сильный'**
   String get strong;
 
   /// Password strength
   ///
-  /// In en, this message translates to:
-  /// **'Very Strong'**
+  /// In ru, this message translates to:
+  /// **'Очень сильный'**
   String get veryStrong;
 
   /// Edit schedule semantic label
   ///
-  /// In en, this message translates to:
-  /// **'Edit {name}'**
+  /// In ru, this message translates to:
+  /// **'Редактировать {name}'**
   String editSchedule(String name);
 
   /// Delete schedule semantic label
   ///
-  /// In en, this message translates to:
-  /// **'Delete {name}'**
+  /// In ru, this message translates to:
+  /// **'Удалить {name}'**
   String deleteSchedule(String name);
 
   /// Edit schedule tooltip
   ///
-  /// In en, this message translates to:
-  /// **'Edit schedule'**
+  /// In ru, this message translates to:
+  /// **'Редактировать расписание'**
   String get editScheduleTooltip;
 
   /// Delete schedule tooltip
   ///
-  /// In en, this message translates to:
-  /// **'Delete schedule'**
+  /// In ru, this message translates to:
+  /// **'Удалить расписание'**
   String get deleteScheduleTooltip;
 
   /// Success title
   ///
-  /// In en, this message translates to:
-  /// **'Success'**
+  /// In ru, this message translates to:
+  /// **'Успешно'**
   String get success;
 
   /// Settings saved message
   ///
-  /// In en, this message translates to:
-  /// **'Settings saved. Restart app to apply changes.'**
+  /// In ru, this message translates to:
+  /// **'Настройки сохранены. Перезапустите приложение для применения изменений.'**
   String get settingsSaved;
 
   /// Preset applied message
   ///
-  /// In en, this message translates to:
-  /// **'Preset applied'**
+  /// In ru, this message translates to:
+  /// **'Пресет применен'**
   String get presetApplied;
 
   /// All units on message
   ///
-  /// In en, this message translates to:
-  /// **'All units turned on'**
+  /// In ru, this message translates to:
+  /// **'Все блоки включены'**
   String get allUnitsOn;
 
   /// All units off message
   ///
-  /// In en, this message translates to:
-  /// **'All units turned off'**
+  /// In ru, this message translates to:
+  /// **'Все блоки выключены'**
   String get allUnitsOff;
 
   /// Settings synced message
   ///
-  /// In en, this message translates to:
-  /// **'Settings synced to all units'**
+  /// In ru, this message translates to:
+  /// **'Настройки синхронизированы со всеми блоками'**
   String get settingsSynced;
 
   /// Schedule applied message
   ///
-  /// In en, this message translates to:
-  /// **'Schedule applied to all units'**
+  /// In ru, this message translates to:
+  /// **'Расписание применено ко всем блокам'**
   String get scheduleAppliedToAll;
 
   /// Power change error
   ///
-  /// In en, this message translates to:
-  /// **'Error changing power'**
+  /// In ru, this message translates to:
+  /// **'Ошибка изменения питания'**
   String get errorChangingPower;
 
   /// Mode update error
   ///
-  /// In en, this message translates to:
-  /// **'Error updating mode'**
+  /// In ru, this message translates to:
+  /// **'Ошибка обновления режима'**
   String get errorUpdatingMode;
 
   /// Fan speed update error
   ///
-  /// In en, this message translates to:
-  /// **'Error updating fan speed'**
+  /// In ru, this message translates to:
+  /// **'Ошибка обновления скорости вентилятора'**
   String get errorUpdatingFanSpeed;
 
   /// Preset apply error
   ///
-  /// In en, this message translates to:
-  /// **'Error applying preset'**
+  /// In ru, this message translates to:
+  /// **'Ошибка применения пресета'**
   String get errorApplyingPreset;
 
   /// Turn on units error
   ///
-  /// In en, this message translates to:
-  /// **'Error turning on units'**
+  /// In ru, this message translates to:
+  /// **'Ошибка включения блоков'**
   String get errorTurningOnUnits;
 
   /// Turn off units error
   ///
-  /// In en, this message translates to:
-  /// **'Error turning off units'**
+  /// In ru, this message translates to:
+  /// **'Ошибка выключения блоков'**
   String get errorTurningOffUnits;
 
   /// Settings sync error
   ///
-  /// In en, this message translates to:
-  /// **'Error syncing settings'**
+  /// In ru, this message translates to:
+  /// **'Ошибка синхронизации настроек'**
   String get errorSyncingSettings;
 
   /// Schedule apply error
   ///
-  /// In en, this message translates to:
-  /// **'Error applying schedule'**
+  /// In ru, this message translates to:
+  /// **'Ошибка применения расписания'**
   String get errorApplyingSchedule;
 
   /// Connected status
   ///
-  /// In en, this message translates to:
-  /// **'Connected'**
+  /// In ru, this message translates to:
+  /// **'Подключено'**
   String get connected;
 
   /// Disconnected status
   ///
-  /// In en, this message translates to:
-  /// **'Disconnected'**
+  /// In ru, this message translates to:
+  /// **'Отключено'**
   String get disconnected;
 
   /// Idle status
   ///
-  /// In en, this message translates to:
-  /// **'Idle'**
+  /// In ru, this message translates to:
+  /// **'Ожидание'**
   String get idle;
 
   /// Active status
   ///
-  /// In en, this message translates to:
-  /// **'Active'**
+  /// In ru, this message translates to:
+  /// **'Активно'**
   String get active;
 
   /// Inactive status
   ///
-  /// In en, this message translates to:
-  /// **'Inactive'**
+  /// In ru, this message translates to:
+  /// **'Неактивно'**
   String get inactive;
 
   /// Enabled status
   ///
-  /// In en, this message translates to:
-  /// **'Enabled'**
+  /// In ru, this message translates to:
+  /// **'Включено'**
   String get enabled;
 
   /// Disabled status
   ///
-  /// In en, this message translates to:
-  /// **'Disabled'**
+  /// In ru, this message translates to:
+  /// **'Выключено'**
   String get disabled;
 
   /// Available status
   ///
-  /// In en, this message translates to:
-  /// **'Available'**
+  /// In ru, this message translates to:
+  /// **'Доступно'**
   String get available;
 
   /// Unavailable status
   ///
-  /// In en, this message translates to:
-  /// **'Unavailable'**
+  /// In ru, this message translates to:
+  /// **'Недоступно'**
   String get unavailable;
 
   /// Maintenance status
   ///
-  /// In en, this message translates to:
-  /// **'Maintenance'**
+  /// In ru, this message translates to:
+  /// **'Обслуживание'**
   String get maintenance;
 
   /// Activated state
   ///
-  /// In en, this message translates to:
-  /// **'activated'**
+  /// In ru, this message translates to:
+  /// **'активировано'**
   String get activated;
 
   /// Deactivated state
   ///
-  /// In en, this message translates to:
-  /// **'deactivated'**
+  /// In ru, this message translates to:
+  /// **'деактивировано'**
   String get deactivated;
 
   /// Save button
   ///
-  /// In en, this message translates to:
-  /// **'Save'**
+  /// In ru, this message translates to:
+  /// **'Сохранить'**
   String get save;
 
   /// Cancel button
   ///
-  /// In en, this message translates to:
-  /// **'Cancel'**
+  /// In ru, this message translates to:
+  /// **'Отмена'**
   String get cancel;
 
   /// Close button
   ///
-  /// In en, this message translates to:
-  /// **'Close'**
+  /// In ru, this message translates to:
+  /// **'Закрыть'**
   String get close;
 
   /// Confirm button
   ///
-  /// In en, this message translates to:
-  /// **'Confirm'**
+  /// In ru, this message translates to:
+  /// **'Подтвердить'**
   String get confirm;
 
   /// Yes button
   ///
-  /// In en, this message translates to:
-  /// **'Yes'**
+  /// In ru, this message translates to:
+  /// **'Да'**
   String get yes;
 
   /// No button
   ///
-  /// In en, this message translates to:
-  /// **'No'**
+  /// In ru, this message translates to:
+  /// **'Нет'**
   String get no;
 
   /// OK button
   ///
-  /// In en, this message translates to:
-  /// **'OK'**
+  /// In ru, this message translates to:
+  /// **'ОК'**
   String get ok;
 
   /// Apply button
   ///
-  /// In en, this message translates to:
-  /// **'Apply'**
+  /// In ru, this message translates to:
+  /// **'Применить'**
   String get apply;
 
   /// Reset button
   ///
-  /// In en, this message translates to:
-  /// **'Reset'**
+  /// In ru, this message translates to:
+  /// **'Сбросить'**
   String get reset;
 
   /// Clear button
   ///
-  /// In en, this message translates to:
-  /// **'Clear'**
+  /// In ru, this message translates to:
+  /// **'Очистить'**
   String get clear;
 
   /// Done button
   ///
-  /// In en, this message translates to:
-  /// **'Done'**
+  /// In ru, this message translates to:
+  /// **'Готово'**
   String get done;
 
   /// Add button
   ///
-  /// In en, this message translates to:
-  /// **'Add'**
+  /// In ru, this message translates to:
+  /// **'Добавить'**
   String get add;
 
   /// Remove button
   ///
-  /// In en, this message translates to:
-  /// **'Remove'**
+  /// In ru, this message translates to:
+  /// **'Удалить'**
   String get remove;
 
   /// Filter button
   ///
-  /// In en, this message translates to:
-  /// **'Filter'**
+  /// In ru, this message translates to:
+  /// **'Фильтр'**
   String get filter;
 
   /// Sort button
   ///
-  /// In en, this message translates to:
-  /// **'Sort'**
+  /// In ru, this message translates to:
+  /// **'Сортировать'**
   String get sort;
 
   /// Refresh button
   ///
-  /// In en, this message translates to:
-  /// **'Refresh'**
+  /// In ru, this message translates to:
+  /// **'Обновить'**
   String get refresh;
 
   /// Logout button
   ///
-  /// In en, this message translates to:
-  /// **'Logout'**
+  /// In ru, this message translates to:
+  /// **'Выйти'**
   String get logout;
 
   /// Status label
   ///
-  /// In en, this message translates to:
-  /// **'Status'**
+  /// In ru, this message translates to:
+  /// **'Статус'**
   String get status;
 
   /// Details label
   ///
-  /// In en, this message translates to:
-  /// **'Details'**
+  /// In ru, this message translates to:
+  /// **'Детали'**
   String get details;
 
   /// More label
   ///
-  /// In en, this message translates to:
-  /// **'More'**
+  /// In ru, this message translates to:
+  /// **'Больше'**
   String get more;
 
   /// Less label
   ///
-  /// In en, this message translates to:
-  /// **'Less'**
+  /// In ru, this message translates to:
+  /// **'Меньше'**
   String get less;
 
   /// All label
   ///
-  /// In en, this message translates to:
-  /// **'All'**
+  /// In ru, this message translates to:
+  /// **'Все'**
   String get all;
 
   /// None label
   ///
-  /// In en, this message translates to:
-  /// **'None'**
+  /// In ru, this message translates to:
+  /// **'Ничего'**
   String get none;
 
   /// Optional field hint
   ///
-  /// In en, this message translates to:
-  /// **'Optional'**
+  /// In ru, this message translates to:
+  /// **'Опционально'**
   String get optional;
 
   /// Required field hint
   ///
-  /// In en, this message translates to:
-  /// **'Required'**
+  /// In ru, this message translates to:
+  /// **'Обязательно'**
   String get required;
 
   /// Information label
   ///
-  /// In en, this message translates to:
-  /// **'Information'**
+  /// In ru, this message translates to:
+  /// **'Информация'**
   String get info;
 
   /// Warning label
   ///
-  /// In en, this message translates to:
-  /// **'Warning'**
+  /// In ru, this message translates to:
+  /// **'Предупреждение'**
   String get warning;
 
   /// Notification label
   ///
-  /// In en, this message translates to:
-  /// **'Notification'**
+  /// In ru, this message translates to:
+  /// **'Уведомление'**
   String get notification;
 
   /// Today label
   ///
-  /// In en, this message translates to:
-  /// **'Today'**
+  /// In ru, this message translates to:
+  /// **'Сегодня'**
   String get today;
 
   /// Yesterday label
   ///
-  /// In en, this message translates to:
-  /// **'Yesterday'**
+  /// In ru, this message translates to:
+  /// **'Вчера'**
   String get yesterday;
 
   /// Week label
   ///
-  /// In en, this message translates to:
-  /// **'Week'**
+  /// In ru, this message translates to:
+  /// **'Неделя'**
   String get week;
 
   /// Month label
   ///
-  /// In en, this message translates to:
-  /// **'Month'**
+  /// In ru, this message translates to:
+  /// **'Месяц'**
   String get month;
 
   /// Year label
   ///
-  /// In en, this message translates to:
-  /// **'Year'**
+  /// In ru, this message translates to:
+  /// **'Год'**
   String get year;
 
   /// Date format
   ///
-  /// In en, this message translates to:
+  /// In ru, this message translates to:
   /// **'{date}'**
   String date(String date);
 
   /// Manage rules button/message
   ///
-  /// In en, this message translates to:
-  /// **'Manage Rules (Coming Soon)'**
+  /// In ru, this message translates to:
+  /// **'Управление правилами (Скоро)'**
   String get manageRules;
 
   /// Manage rules coming soon
   ///
-  /// In en, this message translates to:
-  /// **'Manage Rules (Coming Soon)'**
+  /// In ru, this message translates to:
+  /// **'Управление правилами (Скоро)'**
   String get manageRulesComingSoon;
 
   /// Add unit coming soon
   ///
-  /// In en, this message translates to:
-  /// **'Add unit feature coming soon'**
+  /// In ru, this message translates to:
+  /// **'Функция добавления блока скоро будет доступна'**
   String get addUnitComingSoon;
 
   /// Living room name
   ///
-  /// In en, this message translates to:
-  /// **'Living Room'**
+  /// In ru, this message translates to:
+  /// **'Гостиная'**
   String get livingRoom;
 
   /// Bedroom name
   ///
-  /// In en, this message translates to:
-  /// **'Bedroom'**
+  /// In ru, this message translates to:
+  /// **'Спальня'**
   String get bedroom;
 
   /// Kitchen name
   ///
-  /// In en, this message translates to:
-  /// **'Kitchen'**
+  /// In ru, this message translates to:
+  /// **'Кухня'**
   String get kitchen;
 
   /// Vacuum cleaner device type
   ///
-  /// In en, this message translates to:
-  /// **'Vacuum cleaner'**
+  /// In ru, this message translates to:
+  /// **'Пылесос'**
   String get vacuumCleaner;
 
   /// Smart bulb device type
   ///
-  /// In en, this message translates to:
-  /// **'Smart bulb'**
+  /// In ru, this message translates to:
+  /// **'Умная лампа'**
   String get smartBulb;
 
   /// Humidifier device type
   ///
-  /// In en, this message translates to:
-  /// **'Humidifier'**
+  /// In ru, this message translates to:
+  /// **'Увлажнитель'**
   String get humidifier;
 
   /// Average label
   ///
-  /// In en, this message translates to:
-  /// **'Average'**
+  /// In ru, this message translates to:
+  /// **'Среднее'**
   String get average;
 
   /// Minimum label
   ///
-  /// In en, this message translates to:
-  /// **'Min'**
+  /// In ru, this message translates to:
+  /// **'Мин'**
   String get min;
 
   /// Maximum label
   ///
-  /// In en, this message translates to:
-  /// **'Max'**
+  /// In ru, this message translates to:
+  /// **'Макс'**
   String get max;
 
   /// Temperature history title
   ///
-  /// In en, this message translates to:
-  /// **'Temperature History'**
+  /// In ru, this message translates to:
+  /// **'История температуры'**
   String get temperatureHistory;
 
   /// Last 24 hours label
   ///
-  /// In en, this message translates to:
-  /// **'Last 24 hours'**
+  /// In ru, this message translates to:
+  /// **'Последние 24 часа'**
   String get last24Hours;
 
   /// Active devices count
   ///
-  /// In en, this message translates to:
-  /// **'{count} of {total} active'**
+  /// In ru, this message translates to:
+  /// **'{count} из {total} активно'**
   String activeDevices(int count, int total);
 
   /// Run diagnostics button
   ///
-  /// In en, this message translates to:
-  /// **'Run Diagnostics'**
+  /// In ru, this message translates to:
+  /// **'Запустить диагностику'**
   String get runDiagnostics;
 
   /// System health title
   ///
-  /// In en, this message translates to:
-  /// **'System Health'**
+  /// In ru, this message translates to:
+  /// **'Состояние системы'**
   String get systemHealth;
 
   /// Supply fan component
   ///
-  /// In en, this message translates to:
-  /// **'Supply Fan'**
+  /// In ru, this message translates to:
+  /// **'Приточный вентилятор'**
   String get supplyFan;
 
   /// Exhaust fan component
   ///
-  /// In en, this message translates to:
-  /// **'Exhaust Fan'**
+  /// In ru, this message translates to:
+  /// **'Вытяжной вентилятор'**
   String get exhaustFan;
 
   /// Heater component
   ///
-  /// In en, this message translates to:
-  /// **'Heater'**
+  /// In ru, this message translates to:
+  /// **'Нагреватель'**
   String get heater;
 
   /// Heat recuperator
   ///
-  /// In en, this message translates to:
-  /// **'Recuperator'**
+  /// In ru, this message translates to:
+  /// **'Рекуператор'**
   String get recuperator;
 
   /// Sensors component
   ///
-  /// In en, this message translates to:
-  /// **'Sensors'**
+  /// In ru, this message translates to:
+  /// **'Датчики'**
   String get sensors;
 
   /// Normal status
   ///
-  /// In en, this message translates to:
-  /// **'Normal'**
+  /// In ru, this message translates to:
+  /// **'Норма'**
   String get normal;
 
   /// Sensor readings title
   ///
-  /// In en, this message translates to:
-  /// **'Sensor Readings'**
+  /// In ru, this message translates to:
+  /// **'Показания датчиков'**
   String get sensorReadings;
 
   /// Supply air temperature
   ///
-  /// In en, this message translates to:
-  /// **'Supply Air Temperature'**
+  /// In ru, this message translates to:
+  /// **'Температура притока'**
   String get supplyAirTemp;
 
   /// Outdoor temperature
   ///
-  /// In en, this message translates to:
-  /// **'Outdoor Temperature'**
+  /// In ru, this message translates to:
+  /// **'Температура улицы'**
   String get outdoorTemp;
 
   /// Pressure reading
   ///
-  /// In en, this message translates to:
-  /// **'Pressure'**
+  /// In ru, this message translates to:
+  /// **'Давление'**
   String get pressure;
 
   /// Network connection title
   ///
-  /// In en, this message translates to:
-  /// **'Network Connection'**
+  /// In ru, this message translates to:
+  /// **'Сетевое подключение'**
   String get networkConnection;
 
   /// Network label
   ///
-  /// In en, this message translates to:
-  /// **'Network'**
+  /// In ru, this message translates to:
+  /// **'Сеть'**
   String get network;
 
   /// Signal strength
   ///
-  /// In en, this message translates to:
-  /// **'Signal'**
+  /// In ru, this message translates to:
+  /// **'Сигнал'**
   String get signal;
 
   /// IP address label
   ///
-  /// In en, this message translates to:
-  /// **'IP Address'**
+  /// In ru, this message translates to:
+  /// **'IP адрес'**
   String get ipAddress;
 
   /// Not connected status
   ///
-  /// In en, this message translates to:
-  /// **'Not Connected'**
+  /// In ru, this message translates to:
+  /// **'Не подключено'**
   String get notConnected;
 
   /// Not assigned status
   ///
-  /// In en, this message translates to:
-  /// **'Not Assigned'**
+  /// In ru, this message translates to:
+  /// **'Не назначен'**
   String get notAssigned;
 
   /// Diagnostics title
   ///
-  /// In en, this message translates to:
-  /// **'Diagnostics'**
+  /// In ru, this message translates to:
+  /// **'Диагностика'**
   String get diagnosticsTitle;
 
   /// Diagnostics running message
   ///
-  /// In en, this message translates to:
-  /// **'Running system diagnostics...'**
+  /// In ru, this message translates to:
+  /// **'Выполняется диагностика системы...'**
   String get diagnosticsRunning;
 
   /// Diagnostics complete message
   ///
-  /// In en, this message translates to:
-  /// **'Diagnostics complete. System is normal.'**
+  /// In ru, this message translates to:
+  /// **'Диагностика завершена. Система в норме.'**
   String get diagnosticsComplete;
 
   /// Schedule saved message
   ///
-  /// In en, this message translates to:
-  /// **'Schedule saved successfully'**
+  /// In ru, this message translates to:
+  /// **'Расписание успешно сохранено'**
   String get scheduleSaved;
 
   /// Save error message
   ///
-  /// In en, this message translates to:
-  /// **'Save error: {error}'**
+  /// In ru, this message translates to:
+  /// **'Ошибка сохранения: {error}'**
   String saveError(String error);
 
   /// Unsaved changes title
   ///
-  /// In en, this message translates to:
-  /// **'Unsaved Changes'**
+  /// In ru, this message translates to:
+  /// **'Несохранённые изменения'**
   String get unsavedChanges;
 
   /// Unsaved changes confirmation
   ///
-  /// In en, this message translates to:
-  /// **'You have unsaved changes. Exit without saving?'**
+  /// In ru, this message translates to:
+  /// **'У вас есть несохранённые изменения. Выйти без сохранения?'**
   String get unsavedChangesMessage;
 
   /// Exit button
   ///
-  /// In en, this message translates to:
-  /// **'Exit'**
+  /// In ru, this message translates to:
+  /// **'Выйти'**
   String get exit;
 
   /// New devices found
   ///
-  /// In en, this message translates to:
-  /// **'{count} new devices'**
+  /// In ru, this message translates to:
+  /// **'{count} новых устройств'**
   String devicesFound(int count);
 
   /// Single device found
   ///
-  /// In en, this message translates to:
-  /// **'{count} new device'**
+  /// In ru, this message translates to:
+  /// **'{count} новое устройство'**
   String deviceFound(int count);
 
   /// Device not found message
   ///
-  /// In en, this message translates to:
-  /// **'Not found\ndevice?'**
+  /// In ru, this message translates to:
+  /// **'Не нашли\nустройство?'**
   String get notFoundDeviceTitle;
 
   /// Select manually button
   ///
-  /// In en, this message translates to:
-  /// **'Select manually'**
+  /// In ru, this message translates to:
+  /// **'Выбрать вручную'**
   String get selectManuallyButton;
 
   /// Devices added confirmation
   ///
-  /// In en, this message translates to:
-  /// **'{count} {plural} added'**
+  /// In ru, this message translates to:
+  /// **'{count} {plural} добавлено'**
   String devicesAdded(int count, String plural);
 
   /// Device singular
   ///
-  /// In en, this message translates to:
-  /// **'device'**
+  /// In ru, this message translates to:
+  /// **'устройство'**
   String get device;
 
   /// Devices plural
   ///
-  /// In en, this message translates to:
-  /// **'devices'**
+  /// In ru, this message translates to:
+  /// **'устройства'**
   String get devices;
 }
 
@@ -1958,7 +1958,7 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) =>
-      <String>['ru', 'en'].contains(locale.languageCode);
+      <String>['en', 'ru'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
