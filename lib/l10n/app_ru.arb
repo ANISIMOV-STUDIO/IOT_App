@@ -1,5 +1,5 @@
 {
-  "@@locale": "en",
+  "@@locale": "ru",
   "@@_README": "Complete localization file with all hardcoded strings found in the application",
   "@@_APPLICATION": "=== Application Metadata ===",
   "appTitle": "BREEZ Home",
