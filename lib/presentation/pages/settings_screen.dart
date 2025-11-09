@@ -201,15 +201,6 @@ class _SettingsScreenState extends State<SettingsScreen>
             _showSnackBar(l10n.languageChangedTo(l10n.english));
           },
         ),
-        const SizedBox(height: 8.0),
-        SettingsLanguageTile(
-          language: l10n.german,
-          isSelected: _language == l10n.german,
-          onTap: () {
-            setState(() => _language = l10n.german);
-            _showSnackBar(l10n.languageChangedTo(l10n.german));
-          },
-        ),
       ],
     )
         .animate()

@@ -62,6 +62,9 @@ Future<void> init() async {
   // Initialize language service with SharedPreferences
   sl.registerLazySingleton(() => LanguageService(sl()));
 
+  // Set Russian as default language on first launch
+  await sl<LanguageService>().initializeDefaults();
+
   // Initialize cache service
   sl.registerLazySingleton(() => CacheService());
 

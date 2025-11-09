@@ -9,9 +9,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 /// Supported languages in the application
 enum AppLanguage {
-  english('en', 'English', 'EN'),
   russian('ru', 'Русский', 'RU'),
-  chinese('zh', '中文', 'ZH');
+  english('en', 'English', 'EN');
 
   const AppLanguage(this.code, this.nativeName, this.shortCode);
 
@@ -24,7 +23,7 @@ enum AppLanguage {
   static AppLanguage fromCode(String code) {
     return AppLanguage.values.firstWhere(
       (lang) => lang.code == code,
-      orElse: () => AppLanguage.english,
+      orElse: () => AppLanguage.russian, // Default to Russian
     );
   }
 }
@@ -49,6 +48,14 @@ class LanguageService extends ChangeNotifier {
     _loadSavedLocale();
   }
 
+  /// Initialize with Russian as default
+  Future<void> initializeDefaults() async {
+    if (!_prefs.containsKey(_localeKey)) {
+      // First launch - set Russian as default
+      await setLanguage(AppLanguage.russian);
+    }
+  }
+
   /// Detect system locale
   void _detectSystemLocale() {
     final window = WidgetsBinding.instance.platformDispatcher;
@@ -64,11 +71,11 @@ class LanguageService extends ChangeNotifier {
   /// Currently selected language
   AppLanguage get currentLanguage {
     if (_currentLocale == null) {
-      // Use system locale if available
-      if (_systemLocale != null) {
+      // Use system locale if available and supported
+      if (_systemLocale != null && isSupported(_systemLocale!)) {
         return AppLanguage.fromCode(_systemLocale!.languageCode);
       }
-      return AppLanguage.english; // Default fallback
+      return AppLanguage.russian; // Default to Russian
     }
     return AppLanguage.fromCode(_currentLocale!.languageCode);
   }

@@ -81,7 +81,8 @@ class _HvacControlAppState extends State<HvacControlApp> {
             darkTheme: HvacTheme.darkTheme(),
             themeMode: ThemeMode.light, // Light theme - blue & white balanced
 
-            // Localization
+            // Localization - Russian (default) and English
+            // Automatically switches based on LanguageService.currentLocale
             locale: languageService.currentLocale,
             localizationsDelegates: const [
               AppLocalizations.delegate,
@@ -89,7 +90,7 @@ class _HvacControlAppState extends State<HvacControlApp> {
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
-            supportedLocales: LanguageService.supportedLocales,
+            supportedLocales: LanguageService.supportedLocales, // ['ru', 'en']
 
             // Responsive Framework - Industry Standard Approach
             builder: (context, widget) => Container(

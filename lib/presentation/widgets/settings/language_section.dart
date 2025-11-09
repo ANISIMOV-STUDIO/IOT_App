@@ -7,11 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../generated/l10n/app_localizations.dart';
+import '../../../core/services/language_service.dart';
 import 'settings_section.dart';
 
 class LanguageSection extends StatelessWidget {
-  final String selectedLanguage;
-  final ValueChanged<String> onLanguageChanged;
+  final AppLanguage selectedLanguage;
+  final ValueChanged<AppLanguage> onLanguageChanged;
 
   const LanguageSection({
     super.key,
@@ -26,32 +27,23 @@ class LanguageSection extends StatelessWidget {
     return SettingsSection(
       title: l10n.language,
       icon: Icons.language_outlined,
-      children: [
-        _LanguageTile(
-          language: 'English',
-          isSelected: selectedLanguage == 'English',
-          onTap: () => onLanguageChanged('English'),
-        ),
-        const SizedBox(height: 8),
-        _LanguageTile(
-          language: 'Русский',
-          isSelected: selectedLanguage == 'Русский',
-          onTap: () => onLanguageChanged('Русский'),
-        ),
-        const SizedBox(height: 8),
-        _LanguageTile(
-          language: '中文',
-          isSelected: selectedLanguage == '中文',
-          onTap: () => onLanguageChanged('中文'),
-        ),
-      ],
+      children: AppLanguage.values.map((language) {
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: _LanguageTile(
+            language: language,
+            isSelected: selectedLanguage == language,
+            onTap: () => onLanguageChanged(language),
+          ),
+        );
+      }).toList(),
     );
   }
 }
 
 /// Language Selection Tile
 class _LanguageTile extends StatelessWidget {
-  final String language;
+  final AppLanguage language;
   final bool isSelected;
   final VoidCallback onTap;
 
@@ -64,7 +56,7 @@ class _LanguageTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Semantics(
-      label: language,
+      label: language.nativeName,
       selected: isSelected,
       hint: 'Tap to select this language',
       child: HvacInteractiveScale(
@@ -99,7 +91,7 @@ class _LanguageTile extends StatelessWidget {
               ),
               const SizedBox(width: 12),
               Text(
-                language,
+                language.nativeName,
                 style: HvacTypography.bodyMedium.copyWith(
                   fontSize: 14,
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,

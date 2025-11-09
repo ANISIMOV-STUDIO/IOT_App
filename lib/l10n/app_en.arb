@@ -1,8 +1,6 @@
 {
   "@@locale": "en",
-
   "@@_README": "Complete localization file with all hardcoded strings found in the application",
-
   "@@_APPLICATION": "=== Application Metadata ===",
   "appTitle": "BREEZ Home",
   "@appTitle": {
@@ -12,7 +10,6 @@
   "@smartClimateManagement": {
     "description": "Application tagline"
   },
-
   "@@_AUTHENTICATION": "=== Authentication ===",
   "login": "Sign In",
   "@login": {
@@ -94,7 +91,6 @@
   "@hidePassword": {
     "description": "Hide password tooltip"
   },
-
   "@@_ONBOARDING": "=== Onboarding ===",
   "skip": "Skip",
   "@skip": {
@@ -144,7 +140,6 @@
   "@loadingBreezHome": {
     "description": "Loading screen text"
   },
-
   "@@_NAVIGATION": "=== Navigation ===",
   "home": "Home",
   "@home": {
@@ -170,7 +165,6 @@
   "@navigateBack": {
     "description": "Navigate back label"
   },
-
   "@@_SETTINGS": "=== Settings Screen ===",
   "settingsTitle": "Settings",
   "@settingsTitle": {
@@ -241,8 +235,12 @@
   "@notificationsState": {
     "description": "Notifications state message",
     "placeholders": {
-      "type": {"type": "String"},
-      "state": {"type": "String"}
+      "type": {
+        "type": "String"
+      },
+      "state": {
+        "type": "String"
+      }
     }
   },
   "language": "Language",
@@ -256,10 +254,6 @@
   "english": "English",
   "@english": {
     "description": "English language option"
-  },
-  "german": "Deutsch",
-  "@german": {
-    "description": "German language option"
   },
   "languageChangedTo": "Language changed to {language}",
   "@languageChangedTo": {
@@ -294,7 +288,6 @@
   "@checkingUpdates": {
     "description": "Checking updates message (Russian: Проверка обновлений...)"
   },
-
   "@@_DEVICE_MANAGEMENT": "=== Device Management ===",
   "deviceManagement": "Device Management",
   "@deviceManagement": {
@@ -422,7 +415,6 @@
       }
     }
   },
-
   "@@_HVAC_CONTROL": "=== HVAC Control ===",
   "hvacControl": "BREEZ Home",
   "@hvacControl": {
@@ -492,9 +484,9 @@
   "@low": {
     "description": "Low speed"
   },
-  "medium": "Med",
+  "medium": "Medium",
   "@medium": {
-    "description": "Medium speed"
+    "description": "Password strength"
   },
   "high": "High",
   "@high": {
@@ -504,7 +496,6 @@
   "@mode2": {
     "description": "Mode 2 label"
   },
-
   "@@_ROOM_CONTROL": "=== Room Control ===",
   "humidifierAir": "Humidifier\nAir",
   "@humidifierAir": {
@@ -538,7 +529,6 @@
   "@favorite": {
     "description": "Favorite action"
   },
-
   "@@_ANALYTICS": "=== Analytics ===",
   "activity": "Activity",
   "@activity": {
@@ -568,7 +558,6 @@
   "@veryPoor": {
     "description": "Very poor air quality"
   },
-
   "@@_QUICK_ACTIONS": "=== Quick Actions ===",
   "quickActions": "Quick Actions",
   "@quickActions": {
@@ -594,7 +583,6 @@
   "@presets": {
     "description": "Presets title"
   },
-
   "@@_ERRORS": "=== Error Messages ===",
   "error": "Error",
   "@error": {
@@ -721,7 +709,6 @@
   "@doubleTapToRetry": {
     "description": "Double tap to retry hint"
   },
-
   "@@_LOADING_STATES": "=== Loading States ===",
   "loading": "Loading...",
   "@loading": {
@@ -743,7 +730,6 @@
   "@reconnecting": {
     "description": "Reconnecting message"
   },
-
   "@@_EMPTY_STATES": "=== Empty States ===",
   "noDevices": "No Devices",
   "@noDevices": {
@@ -769,7 +755,6 @@
   "@openDeviceAddition": {
     "description": "Opening device addition announcement"
   },
-
   "@@_CAMERA": "=== Camera ===",
   "initializingCamera": "Initializing camera...",
   "@initializingCamera": {
@@ -795,7 +780,6 @@
   "@cameraView": {
     "description": "Camera view label"
   },
-
   "@@_VALIDATION": "=== Validation Messages ===",
   "emailRequired": "Email is required",
   "@emailRequired": {
@@ -853,7 +837,6 @@
       }
     }
   },
-
   "@@_PASSWORD_STRENGTH": "=== Password Strength ===",
   "atLeast8Characters": "At least 8 characters",
   "@atLeast8Characters": {
@@ -879,10 +862,6 @@
   "@weak": {
     "description": "Password strength"
   },
-  "medium": "Medium",
-  "@medium": {
-    "description": "Password strength"
-  },
   "strong": "Strong",
   "@strong": {
     "description": "Password strength"
@@ -891,7 +870,6 @@
   "@veryStrong": {
     "description": "Password strength"
   },
-
   "@@_SCHEDULE": "=== Schedule ===",
   "editSchedule": "Edit {name}",
   "@editSchedule": {
@@ -919,7 +897,6 @@
   "@deleteScheduleTooltip": {
     "description": "Delete schedule tooltip"
   },
-
   "@@_SUCCESS_MESSAGES": "=== Success Messages ===",
   "success": "Success",
   "@success": {
@@ -949,7 +926,6 @@
   "@scheduleAppliedToAll": {
     "description": "Schedule applied message"
   },
-
   "@@_ERROR_ACTIONS": "=== Error Action Messages ===",
   "errorChangingPower": "Error changing power",
   "@errorChangingPower": {
@@ -983,7 +959,6 @@
   "@errorApplyingSchedule": {
     "description": "Schedule apply error"
   },
-
   "@@_DEVICE_STATUS": "=== Device Status ===",
   "connected": "Connected",
   "@connected": {
@@ -1033,7 +1008,6 @@
   "@deactivated": {
     "description": "Deactivated state"
   },
-
   "@@_COMMON_ACTIONS": "=== Common Actions ===",
   "save": "Save",
   "@save": {
@@ -1103,7 +1077,6 @@
   "@logout": {
     "description": "Logout button"
   },
-
   "@@_COMMON_LABELS": "=== Common Labels ===",
   "status": "Status",
   "@status": {
@@ -1149,7 +1122,6 @@
   "@notification": {
     "description": "Notification label"
   },
-
   "@@_TIME": "=== Time Labels ===",
   "today": "Today",
   "@today": {
@@ -1180,7 +1152,6 @@
       }
     }
   },
-
   "@@_COMING_SOON": "=== Coming Soon Messages ===",
   "manageRules": "Manage Rules (Coming Soon)",
   "@manageRules": {
@@ -1194,7 +1165,6 @@
   "@addUnitComingSoon": {
     "description": "Add unit coming soon"
   },
-
   "@@_ROOMS": "=== Room Names ===",
   "livingRoom": "Living Room",
   "@livingRoom": {
@@ -1208,7 +1178,6 @@
   "@kitchen": {
     "description": "Kitchen name"
   },
-
   "@@_DEVICES": "=== Device Types ===",
   "vacuumCleaner": "Vacuum cleaner",
   "@vacuumCleaner": {
@@ -1222,7 +1191,6 @@
   "@humidifier": {
     "description": "Humidifier device type"
   },
-
   "@@_STATISTICS": "=== Statistics ===",
   "average": "Average",
   "@average": {
@@ -1248,19 +1216,14 @@
   "@activeDevices": {
     "description": "Active devices count",
     "placeholders": {
-      "count": {"type": "int"},
-      "total": {"type": "int"}
+      "count": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
-  "refreshing": "Refreshing...",
-  "@refreshing": {
-    "description": "Refreshing message"
-  },
-  "refreshDevices": "Refresh Devices",
-  "@refreshDevices": {
-    "description": "Refresh devices tooltip"
-  },
-
   "@@_DIAGNOSTICS": "=== Diagnostics ===",
   "runDiagnostics": "Run Diagnostics",
   "@runDiagnostics": {
@@ -1346,7 +1309,6 @@
   "@diagnosticsComplete": {
     "description": "Diagnostics complete message"
   },
-
   "@@_SCHEDULE_DIALOGS": "=== Schedule Dialogs ===",
   "scheduleSaved": "Schedule saved successfully",
   "@scheduleSaved": {
@@ -1356,7 +1318,9 @@
   "@saveError": {
     "description": "Save error message",
     "placeholders": {
-      "error": {"type": "String"}
+      "error": {
+        "type": "String"
+      }
     }
   },
   "unsavedChanges": "Unsaved Changes",
@@ -1371,20 +1335,23 @@
   "@exit": {
     "description": "Exit button"
   },
-
   "@@_DEVICE_SEARCH": "=== Device Search ===",
   "devicesFound": "{count} new devices",
   "@devicesFound": {
     "description": "New devices found",
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "deviceFound": "{count} new device",
   "@deviceFound": {
     "description": "Single device found",
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "notFoundDeviceTitle": "Not found\ndevice?",
@@ -1399,8 +1366,12 @@
   "@devicesAdded": {
     "description": "Devices added confirmation",
     "placeholders": {
-      "count": {"type": "int"},
-      "plural": {"type": "String"}
+      "count": {
+        "type": "int"
+      },
+      "plural": {
+        "type": "String"
+      }
     }
   },
   "device": "device",

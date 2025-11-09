@@ -9,6 +9,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart' as ui_kit;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../generated/l10n/app_localizations.dart';
+import '../../../core/di/injection_container.dart' as di;
+import '../../../core/services/language_service.dart';
 import '../../widgets/settings/appearance_section.dart';
 import '../../widgets/settings/units_section.dart';
 import '../../widgets/settings/notifications_section.dart';
@@ -46,6 +48,7 @@ class _SettingsScreenRefactoredState extends State<SettingsScreenRefactored>
     _controller = SettingsController(
       onSettingChanged: _handleSettingChanged,
       prefs: prefs,
+      languageService: di.sl<LanguageService>(),
     );
   }
 
@@ -245,10 +248,10 @@ class _SettingsScreenRefactoredState extends State<SettingsScreenRefactored>
           .slideX(begin: -0.1, end: 0),
       const SizedBox(height: 20),
       LanguageSection(
-        selectedLanguage: _controller.language,
+        selectedLanguage: _controller.currentLanguage,
         onLanguageChanged: (language) {
           _controller.setLanguage(language);
-          _showSnackBar(l10n.languageChangedTo(language));
+          _showSnackBar(l10n.languageChangedTo(language.nativeName));
         },
       )
           .animate()

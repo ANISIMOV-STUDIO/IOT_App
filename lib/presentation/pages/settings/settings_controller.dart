@@ -6,24 +6,33 @@ library;
 
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../core/services/language_service.dart';
 
 class SettingsController extends ChangeNotifier {
   final VoidCallback onSettingChanged;
   final SharedPreferences _prefs;
+  final LanguageService _languageService;
 
   // Settings state
   bool _darkMode = true;
   bool _celsius = true;
   bool _pushNotifications = true;
   bool _emailNotifications = false;
-  String _language = 'Russian'; // Default language
   int _selectedSection = 0; // For desktop navigation
 
   SettingsController({
     required this.onSettingChanged,
     required SharedPreferences prefs,
-  }) : _prefs = prefs {
+    required LanguageService languageService,
+  })  : _prefs = prefs,
+        _languageService = languageService {
     loadSettings();
+    // Listen to language service changes
+    _languageService.addListener(_onLanguageChanged);
+  }
+
+  void _onLanguageChanged() {
+    notifyListeners();
   }
 
   // Getters
@@ -31,7 +40,7 @@ class SettingsController extends ChangeNotifier {
   bool get celsius => _celsius;
   bool get pushNotifications => _pushNotifications;
   bool get emailNotifications => _emailNotifications;
-  String get language => _language;
+  AppLanguage get currentLanguage => _languageService.currentLanguage;
   int get selectedSection => _selectedSection;
 
   // Setters with notification
@@ -59,10 +68,9 @@ class SettingsController extends ChangeNotifier {
     _persistSetting('emailNotifications', value);
   }
 
-  void setLanguage(String value) {
-    _language = value;
+  Future<void> setLanguage(AppLanguage language) async {
+    await _languageService.setLanguage(language);
     onSettingChanged();
-    _persistSetting('language', value);
   }
 
   void selectSection(int index) {
@@ -76,7 +84,6 @@ class SettingsController extends ChangeNotifier {
     _celsius = _prefs.getBool('celsius') ?? true;
     _pushNotifications = _prefs.getBool('pushNotifications') ?? true;
     _emailNotifications = _prefs.getBool('emailNotifications') ?? false;
-    _language = _prefs.getString('language') ?? 'Russian';
     notifyListeners();
   }
 
@@ -87,7 +94,6 @@ class SettingsController extends ChangeNotifier {
       _prefs.setBool('celsius', _celsius),
       _prefs.setBool('pushNotifications', _pushNotifications),
       _prefs.setBool('emailNotifications', _emailNotifications),
-      _prefs.setString('language', _language),
     ]);
   }
 
@@ -107,6 +113,7 @@ class SettingsController extends ChangeNotifier {
 
   @override
   void dispose() {
+    _languageService.removeListener(_onLanguageChanged);
     saveSettings();
     super.dispose();
   }
