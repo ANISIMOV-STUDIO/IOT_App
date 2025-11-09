@@ -40,23 +40,20 @@ class QuickPresetsPanel extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 12.0),
-              const Expanded(
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       'Быстрые режимы',
-                      style: TextStyle(
-                        fontSize: 16,
+                      style: HvacTypography.titleMedium.copyWith(
                         fontWeight: FontWeight.w600,
-                        color: HvacColors.textPrimary,
                       ),
                     ),
                     SizedBox(height: 2.0),
                     Text(
                       'Применить настройки одной кнопкой',
-                      style: TextStyle(
-                        fontSize: 12,
+                      style: HvacTypography.bodySmall.copyWith(
                         color: HvacColors.textSecondary,
                       ),
                     ),
@@ -211,16 +208,14 @@ class _PresetButtonState extends State<_PresetButton> {
                   // Text: ALWAYS white, never colored
                   Text(
                     widget.label,
-                    style: const TextStyle(
-                      fontSize: 13,
+                    style: HvacTypography.bodyMedium.copyWith(
                       fontWeight: FontWeight.w600,
                       color: HvacColors.textPrimary, // Always white
                     ),
                   ),
                   Text(
                     '${widget.preset.supplyFanSpeed}% / ${widget.preset.exhaustFanSpeed}%',
-                    style: const TextStyle(
-                      fontSize: 10,
+                    style: HvacTypography.caption.copyWith(
                       color: HvacColors.textSecondary, // Always gray
                     ),
                   ),

@@ -89,7 +89,7 @@ class DashboardAirQuality extends StatelessWidget {
                     const SizedBox(width: HvacSpacing.sm),
                     Text(
                       'Air Quality',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      style: HvacTypography.titleMedium.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
                     ),
@@ -111,8 +111,7 @@ class DashboardAirQuality extends StatelessWidget {
               children: [
                 Text(
                   aqi.toString(),
-                  style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                        fontSize: 48,
+                  style: HvacTypography.displayLarge.copyWith(
                         fontWeight: FontWeight.w700,
                         color: _levelColor,
                         height: 1,
@@ -123,7 +122,7 @@ class DashboardAirQuality extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: HvacSpacing.smR),
                   child: Text(
                     'AQI',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    style: HvacTypography.bodyMedium.copyWith(
                           color: HvacColors.textSecondary,
                         ),
                   ),
@@ -168,7 +167,7 @@ class DashboardAirQuality extends StatelessWidget {
                 const SizedBox(width: HvacSpacing.xxs),
                 Text(
                   location,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  style: HvacTypography.bodySmall.copyWith(
                         color: HvacColors.textSecondary,
                       ),
                 ),

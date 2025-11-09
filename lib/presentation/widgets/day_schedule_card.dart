@@ -33,7 +33,7 @@ class DayScheduleCard extends StatelessWidget {
           // Day name
           Text(
             dayName,
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+            style: HvacTypography.titleSmall.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
           ),
