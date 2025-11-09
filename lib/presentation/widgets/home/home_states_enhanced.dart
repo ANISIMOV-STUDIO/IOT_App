@@ -60,8 +60,8 @@ class EnhancedHomeLoadingState extends StatelessWidget {
 
   Widget _buildHeaderSkeleton(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: Colors.grey.shade800,
-      highlightColor: Colors.grey.shade700,
+      baseColor: HvacColors.neutral300,
+      highlightColor: HvacColors.neutral200,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -103,8 +103,8 @@ class EnhancedHomeLoadingState extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.only(right: HvacSpacing.md),
             child: Shimmer.fromColors(
-              baseColor: Colors.grey.shade800,
-              highlightColor: Colors.grey.shade700,
+              baseColor: HvacColors.neutral300,
+              highlightColor: HvacColors.neutral200,
               child: Container(
                 width: 150.0,
                 decoration: BoxDecoration(
@@ -121,8 +121,8 @@ class EnhancedHomeLoadingState extends StatelessWidget {
 
   Widget _buildQuickControlsSkeleton(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: Colors.grey.shade800,
-      highlightColor: Colors.grey.shade700,
+      baseColor: HvacColors.neutral300,
+      highlightColor: HvacColors.neutral200,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: List.generate(4, (index) {

@@ -224,7 +224,7 @@ class ErrorSnackBar {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Colors.grey.withValues(alpha: 0.1),
+                  color: HvacColors.textSecondary.withValues(alpha: 0.1),
                   borderRadius: HvacRadius.xsRadius,
                 ),
                 child: SelectableText(

@@ -114,7 +114,7 @@ class _LazyHvacListState extends State<LazyHvacList> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: Colors.red,
+        backgroundColor: HvacColors.error,
       ),
     );
   }

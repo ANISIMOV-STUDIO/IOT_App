@@ -84,7 +84,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: Colors.green,
+        backgroundColor: HvacColors.success,
         behavior: SnackBarBehavior.floating,
         margin: const EdgeInsets.all(AppSpacing.md),
         shape: RoundedRectangleBorder(

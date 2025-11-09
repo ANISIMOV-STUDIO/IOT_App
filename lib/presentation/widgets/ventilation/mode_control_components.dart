@@ -34,7 +34,7 @@ class ModeControlHeader extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [Color(0xFF4A90E2), Color(0xFF357ABD)],
+                    colors: [HvacColors.blue400, HvacColors.primaryDark],
                   ),
                   borderRadius: HvacRadius.smRadius,
                 ),

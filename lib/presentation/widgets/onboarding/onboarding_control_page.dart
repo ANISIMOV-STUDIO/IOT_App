@@ -28,7 +28,7 @@ class OnboardingControlPage extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Color(0xFF1A1D2E),
+            HvacColors.backgroundDark,
             HvacColors.backgroundDark,
           ],
         ),

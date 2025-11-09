@@ -16,34 +16,51 @@ from typing import Dict, List, Tuple
 if sys.platform == 'win32':
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
-# Color mappings from standard Flutter Colors to HvacColors
+# Color mappings: Colors.* that are already HvacColors-compatible
+# These are colors that exist in both Flutter's Colors and HvacColors
 COLOR_MAPPINGS = {
-    # Note: Colors.white, .black, .transparent are NOT replaced
-    # because HvacColors uses different names and transparent doesn't exist
+    # Direct HvacColors mappings (these exist in HvacColors with same name)
+    r'(?<!Hvac)Colors\.textSecondary(?!\w)': 'HvacColors.textSecondary',
+    r'(?<!Hvac)Colors\.textPrimary(?!\w)': 'HvacColors.textPrimary',
+    r'(?<!Hvac)Colors\.textTertiary(?!\w)': 'HvacColors.textTertiary',
+    r'(?<!Hvac)Colors\.primaryOrange(?!\w)': 'HvacColors.primaryOrange',
+    r'(?<!Hvac)Colors\.primaryBlue(?!\w)': 'HvacColors.primaryBlue',
+    r'(?<!Hvac)Colors\.primary(?!\w)': 'HvacColors.primary',
+    r'(?<!Hvac)Colors\.success(?!\w)': 'HvacColors.success',
+    r'(?<!Hvac)Colors\.error(?!\w)': 'HvacColors.error',
+    r'(?<!Hvac)Colors\.warning(?!\w)': 'HvacColors.warning',
+    r'(?<!Hvac)Colors\.info(?!\w)': 'HvacColors.info',
+    r'(?<!Hvac)Colors\.backgroundCard(?!\w)': 'HvacColors.backgroundCard',
+    r'(?<!Hvac)Colors\.backgroundCardBorder(?!\w)': 'HvacColors.backgroundCardBorder',
+    r'(?<!Hvac)Colors\.backgroundDark(?!\w)': 'HvacColors.backgroundDark',
+    r'(?<!Hvac)Colors\.backgroundElevated(?!\w)': 'HvacColors.backgroundElevated',
+    r'(?<!Hvac)Colors\.cardDark(?!\w)': 'HvacColors.cardDark',
+    r'(?<!Hvac)Colors\.accent(?!\w)': 'HvacColors.accent',
+    r'(?<!Hvac)Colors\.neutral(?!\w)': 'HvacColors.neutral200',
+
+    # Standard Flutter Colors to HvacColors mappings
     r'Colors\.grey(?!\w)': 'HvacColors.textSecondary',
     r'Colors\.red(?!\w)': 'HvacColors.error',
     r'Colors\.green(?!\w)': 'HvacColors.success',
     r'Colors\.blue(?!\w)': 'HvacColors.info',
     r'Colors\.orange(?!\w)': 'HvacColors.primaryOrange',
+
+    # Special cases - keep Colors.* for these (no HvacColors equivalent)
+    # Colors.white, Colors.black, Colors.transparent - not replaced
 }
 
 # Common hex color patterns to HvacColors
 HEX_COLOR_MAPPINGS = {
-    # Primary colors
-    r'Color\(0xFFFF6B35\)': 'HvacColors.primaryOrange',
-    r'Color\(0xFF6C63FF\)': 'HvacColors.primary',
-
     # Background colors
     r'Color\(0xFF1A1D2E\)': 'HvacColors.backgroundDark',
     r'Color\(0xFF16213E\)': 'HvacColors.backgroundDark',
-    r'Color\(0xFF0D1B2A\)': 'HvacColors.backgroundDark',
 
-    # Text colors
-    r'Color\(0xFFFFFFFF\)': 'HvacColors.white',
-    r'Color\(0xFF000000\)': 'HvacColors.black',
+    # Blue colors (mode control)
+    r'Color\(0xFF4A90E2\)': 'HvacColors.blue400',
+    r'Color\(0xFF357ABD\)': 'HvacColors.primaryDark',
 
-    # Transparent
-    r'Color\(0x00000000\)': 'HvacColors.transparent',
+    # Purple (analytics - might need custom handling)
+    # r'Color\(0xFF9C27B0\)': Leave as-is, it's a custom purple color
 }
 
 def should_process_file(file_path: Path) -> bool:

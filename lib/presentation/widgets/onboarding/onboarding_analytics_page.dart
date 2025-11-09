@@ -24,7 +24,7 @@ class OnboardingAnalyticsPage extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Color(0xFF16213E),
+            HvacColors.backgroundDark,
             HvacColors.backgroundDark,
           ],
         ),
