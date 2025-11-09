@@ -178,8 +178,7 @@ class _StatusChipState extends State<_StatusChip>
                       children: [
                         Text(
                           widget.value,
-                          style: TextStyle(
-                            fontSize: widget.isCompact ? 11.0 : 12.0,
+                          style: (widget.isCompact ? HvacTypography.bodySmall : HvacTypography.bodyMedium).copyWith(
                             fontWeight: FontWeight.bold,
                             color: _isHovered
                                 ? widget.color
@@ -188,8 +187,7 @@ class _StatusChipState extends State<_StatusChip>
                         ),
                         Text(
                           widget.label,
-                          style: TextStyle(
-                            fontSize: widget.isCompact ? 9.0 : 10.0,
+                          style: HvacTypography.caption.copyWith(
                             color: _isHovered
                                 ? widget.color.withValues(alpha: 0.8)
                                 : HvacColors.textSecondary,

@@ -79,7 +79,7 @@ class DashboardAlertItem extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    style: HvacTypography.titleSmall.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
                     maxLines: 1,
@@ -88,7 +88,7 @@ class DashboardAlertItem extends StatelessWidget {
                   const SizedBox(height: HvacSpacing.xxs),
                   Text(
                     message,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    style: HvacTypography.bodySmall.copyWith(
                           color: HvacColors.textSecondary,
                         ),
                     maxLines: 1,
@@ -101,9 +101,8 @@ class DashboardAlertItem extends StatelessWidget {
             // Timestamp
             Text(
               timestamp,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              style: HvacTypography.caption.copyWith(
                     color: HvacColors.textTertiary,
-                    fontSize: 11,
                   ),
             ),
           ],

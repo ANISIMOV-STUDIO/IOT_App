@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
 /// Animated icon with pulse effect on hover
 class AnimatedPulseIcon extends StatefulWidget {
@@ -71,7 +72,7 @@ class _AnimatedPulseIconState extends State<AnimatedPulseIcon>
           child: Icon(
             widget.icon,
             size: widget.size,
-            color: widget.isHovered ? widget.color : Colors.white70,
+            color: widget.isHovered ? widget.color : HvacColors.textSecondary,
           ),
         );
       },

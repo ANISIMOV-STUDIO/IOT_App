@@ -154,36 +154,33 @@ class _TemperatureValueState extends State<_TemperatureValue>
               children: [
                 Text(
                   widget.label,
-                  style: TextStyle(
-                    fontSize: widget.isCompact ? 11.0 : 12.0,
-                    color:
-                        _isHovered ? HvacColors.primaryOrange : Colors.white54,
+                  style: (widget.isCompact ? HvacTypography.bodySmall : HvacTypography.bodyMedium).copyWith(
+                    color: _isHovered ? HvacColors.primaryOrange : HvacColors.textSecondary,
                   ),
                 ),
-                const SizedBox(height: 4.0),
+                const HvacGap.xs(),
                 Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 8.0,
-                    vertical: 4.0,
+                    horizontal: HvacSpacing.sm,
+                    vertical: HvacSpacing.xs,
                   ),
                   decoration: _isHovered
                       ? BoxDecoration(
                           color: widget.isPrimary
                               ? HvacColors.primaryBlue.withValues(alpha: 0.1)
-                              : Colors.white.withValues(alpha: 0.05),
-                          borderRadius: BorderRadius.circular(6.0),
+                              : HvacColors.textPrimary.withValues(alpha: 0.05),
+                          borderRadius: HvacRadius.smRadius,
                         )
                       : null,
                   child: Text(
                     '${widget.value.toStringAsFixed(1)}°',
-                    style: TextStyle(
-                      fontSize: widget.isPrimary
-                          ? (widget.isCompact ? 24.0 : 28.0)
-                          : (widget.isCompact ? 20.0 : 24.0),
+                    style: (widget.isPrimary
+                        ? (widget.isCompact ? HvacTypography.h2 : HvacTypography.h1)
+                        : (widget.isCompact ? HvacTypography.h3 : HvacTypography.h2)).copyWith(
                       fontWeight: FontWeight.bold,
                       color: widget.isPrimary
                           ? HvacColors.primaryBlue
-                          : Colors.white,
+                          : HvacColors.textPrimary,
                     ),
                   ),
                 ),
@@ -258,7 +255,7 @@ class _AnimatedArrowState extends State<_AnimatedArrow>
           offset: Offset(_slideAnimation.value, 0),
           child: Icon(
             Icons.arrow_forward,
-            color: widget.isPowerOn ? HvacColors.primaryOrange : Colors.white54,
+            color: widget.isPowerOn ? HvacColors.primaryOrange : HvacColors.textSecondary,
             size: 20.0,
           ),
         );
