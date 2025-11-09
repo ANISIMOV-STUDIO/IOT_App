@@ -1,5 +1,5 @@
 name: hvac_control
-description: BREEZ Home - Smart ventilation control for ZILON systems (iOS, Android, Web)
+description: BREEZ Home - Smart ventilation control for ZILON systems (Web)
 publish_to: 'none'
 
 version: 1.0.0+1
@@ -92,22 +92,19 @@ flutter:
     - assets/
     - assets/images/
 
-# App Icons Configuration
+# App Icons Configuration (Web Only)
 flutter_launcher_icons:
-  android: true
-  ios: true
-  image_path: "assets/icon.png"
-  adaptive_icon_background: "#6C63FF"
-  adaptive_icon_foreground: "assets/icon_foreground.png"
+  android: false
+  ios: false
   web:
     generate: true
     image_path: "assets/icon.png"
     background_color: "#6C63FF"
 
-# Splash Screen Configuration
+# Splash Screen Configuration (Web Only)
 flutter_native_splash:
   color: "#6C63FF"
   image: assets/splash_logo.png
-  android: true
-  ios: true
+  android: false
+  ios: false
   web: true
