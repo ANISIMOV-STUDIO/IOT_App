@@ -2,9 +2,13 @@
 ///
 /// Provides responsive design utilities for QR scanner screens
 /// Supporting mobile, tablet, and desktop/web layouts
+///
+/// Note: This class provides QR-scanner-specific responsive utilities.
+/// For general responsive design, prefer using `responsive` from hvac_ui_kit.
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
 /// Responsive breakpoints for QR scanner
 class QrScannerBreakpoints {

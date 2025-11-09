@@ -1,9 +1,13 @@
 /// Responsive Utilities for Web Authentication
 ///
 /// Provides responsive design utilities for web-first authentication screens
+///
+/// Note: This class provides auth-specific responsive utilities.
+/// For general responsive design, prefer using `responsive` from hvac_ui_kit.
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
 /// Responsive breakpoints for web
 class WebBreakpoints {

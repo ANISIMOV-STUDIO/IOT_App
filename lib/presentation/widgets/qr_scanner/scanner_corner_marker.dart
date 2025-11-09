@@ -4,6 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
 class ScannerCornerMarker extends StatelessWidget {
   final double size;
