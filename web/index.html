@@ -123,16 +123,17 @@
       border-radius: 50%;
       background: conic-gradient(
         from 0deg,
-        transparent 0deg 270deg,
-        #2563EB 270deg 310deg,
-        #FFFFFF 310deg 350deg,
-        #60A5FA 350deg 360deg
+        transparent 0deg 260deg,
+        #2563EB 260deg 300deg,
+        #60A5FA 300deg 330deg,
+        #93C5FD 330deg 360deg
       );
       animation: rotate 2s linear infinite;
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
+      filter: drop-shadow(0 2px 10px rgba(37, 99, 235, 0.3));
     }
 
     .gradient-ring::before {
@@ -143,13 +144,13 @@
       border-radius: 50%;
       background: conic-gradient(
         from 0deg,
-        transparent 0deg 270deg,
-        #2563EB 270deg 310deg,
-        #FFFFFF 310deg 350deg,
-        #60A5FA 350deg 360deg
+        transparent 0deg 260deg,
+        #2563EB 260deg 300deg,
+        #60A5FA 300deg 330deg,
+        #93C5FD 330deg 360deg
       );
       filter: blur(20px);
-      opacity: 0.8;
+      opacity: 0.6;
       animation: rotate 2s linear infinite;
     }
 
@@ -163,6 +164,9 @@
       justify-content: center;
       position: relative;
       z-index: 1;
+      box-shadow:
+        0 4px 20px rgba(37, 99, 235, 0.15),
+        inset 0 2px 10px rgba(37, 99, 235, 0.05);
     }
 
     /* Logo in center */
@@ -202,20 +206,20 @@
     }
 
     .particle-1 {
-      background: radial-gradient(circle, #FFFFFF, #60A5FA);
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+      background: radial-gradient(circle, #93C5FD, #60A5FA);
+      box-shadow: 0 0 20px rgba(147, 197, 253, 0.6);
       animation: chaotic1 5s ease-in-out infinite;
     }
 
     .particle-2 {
-      background: radial-gradient(circle, #2563EB, #FFFFFF);
-      box-shadow: 0 0 20px rgba(37, 99, 235, 0.8);
+      background: radial-gradient(circle, #2563EB, #60A5FA);
+      box-shadow: 0 0 20px rgba(37, 99, 235, 0.6);
       animation: chaotic2 6s ease-in-out infinite;
     }
 
     .particle-3 {
       background: radial-gradient(circle, #60A5FA, #2563EB);
-      box-shadow: 0 0 20px rgba(96, 165, 250, 0.8);
+      box-shadow: 0 0 20px rgba(96, 165, 250, 0.6);
       animation: chaotic3 7s ease-in-out infinite;
     }
 
@@ -286,17 +290,18 @@
 
     /* Loading text */
     .loading-text {
-      color: rgba(255, 255, 255, 0.9);
+      color: rgba(37, 99, 235, 0.9);
       font-size: 20px;
       font-weight: 600;
       letter-spacing: 3px;
       text-transform: uppercase;
-      background: linear-gradient(90deg, #FFFFFF, #60A5FA, #2563EB, #FFFFFF);
+      background: linear-gradient(90deg, #93C5FD, #60A5FA, #2563EB, #93C5FD);
       background-size: 300% 100%;
       background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       animation: fadeInUp 1s ease-out 0.3s both, gradientMove 3s ease infinite;
+      text-shadow: 0 2px 8px rgba(37, 99, 235, 0.15);
     }
 
     @keyframes gradientMove {
@@ -444,7 +449,7 @@
           <svg class="logo-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1" />
+                <stop offset="0%" style="stop-color:#93C5FD;stop-opacity:1" />
                 <stop offset="50%" style="stop-color:#60A5FA;stop-opacity:1" />
                 <stop offset="100%" style="stop-color:#2563EB;stop-opacity:1" />
               </linearGradient>
