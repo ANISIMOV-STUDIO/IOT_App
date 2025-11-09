@@ -231,53 +231,72 @@
       100% { transform: rotate(600deg) translateX(80px) rotate(-600deg); }
     }
 
-    /* Loading text */
+    /* Loading text container */
     .loading-text {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Main text */
+    .loading-text-content {
       color: rgba(255, 255, 255, 0.9);
-      font-size: 18px;
+      font-size: 20px;
       font-weight: 600;
-      letter-spacing: 2px;
+      letter-spacing: 3px;
       text-transform: uppercase;
-      animation: fadeInUp 1s ease-out 0.3s both;
-      text-shadow: 0 0 20px rgba(96, 165, 250, 0.5);
+      animation: fadeInUp 1s ease-out 0.3s both, textGlow 2s ease-in-out infinite;
+      background: linear-gradient(90deg, #60A5FA, #2563EB, #14ffe9, #60A5FA);
+      background-size: 300% 100%;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: fadeInUp 1s ease-out 0.3s both, gradientMove 3s ease infinite;
     }
 
-    /* Loading dots animation */
+    @keyframes gradientMove {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    /* Animated dots */
     .loading-dots {
-      display: inline-block;
-      margin-left: 4px;
+      display: flex;
+      gap: 6px;
+      align-items: center;
     }
 
-    .loading-dots::after {
-      content: '';
-      animation: dots 1.5s steps(4, end) infinite;
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #60A5FA, #14ffe9);
+      box-shadow: 0 0 10px rgba(96, 165, 250, 0.8);
+      animation: dotBounce 1.4s ease-in-out infinite;
     }
 
-    /* Progress bar */
-    .progress-bar {
-      width: 250px;
-      height: 4px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      overflow: hidden;
-      margin-top: 30px;
-      position: relative;
+    .dot:nth-child(1) {
+      animation-delay: 0s;
     }
 
-    .progress-bar::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, #60A5FA, #14ffe9, transparent);
-      animation: progressSlide 2s ease-in-out infinite;
+    .dot:nth-child(2) {
+      animation-delay: 0.2s;
     }
 
-    @keyframes progressSlide {
-      0% { left: -100%; }
-      100% { left: 100%; }
+    .dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes dotBounce {
+      0%, 60%, 100% {
+        transform: translateY(0) scale(1);
+        opacity: 0.7;
+      }
+      30% {
+        transform: translateY(-15px) scale(1.2);
+        opacity: 1;
+        box-shadow: 0 0 20px rgba(96, 165, 250, 1);
+      }
     }
 
     /* Animations */
@@ -332,13 +351,14 @@
         height: 60px;
       }
 
-      .loading-text {
-        font-size: 14px;
-        letter-spacing: 1.5px;
+      .loading-text-content {
+        font-size: 16px;
+        letter-spacing: 2px;
       }
 
-      .progress-bar {
-        width: 200px;
+      .dot {
+        width: 6px;
+        height: 6px;
       }
 
       .particle {
@@ -392,11 +412,13 @@
 
     <!-- Text -->
     <div class="loading-text">
-      Загрузка<span class="loading-dots"></span>
+      <span class="loading-text-content">Загрузка</span>
+      <div class="loading-dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
     </div>
-
-    <!-- Progress bar -->
-    <div class="progress-bar"></div>
   </div>
 
   <script>
