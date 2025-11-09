@@ -28,21 +28,21 @@ class LanguageSection extends StatelessWidget {
       icon: Icons.language_outlined,
       children: [
         _LanguageTile(
-          language: l10n.russian,
-          isSelected: selectedLanguage == l10n.russian,
-          onTap: () => onLanguageChanged(l10n.russian),
+          language: 'English',
+          isSelected: selectedLanguage == 'English',
+          onTap: () => onLanguageChanged('English'),
         ),
         const SizedBox(height: 8),
         _LanguageTile(
-          language: l10n.english,
-          isSelected: selectedLanguage == l10n.english,
-          onTap: () => onLanguageChanged(l10n.english),
+          language: 'Русский',
+          isSelected: selectedLanguage == 'Русский',
+          onTap: () => onLanguageChanged('Русский'),
         ),
         const SizedBox(height: 8),
         _LanguageTile(
-          language: l10n.german,
-          isSelected: selectedLanguage == l10n.german,
-          onTap: () => onLanguageChanged(l10n.german),
+          language: '中文',
+          isSelected: selectedLanguage == '中文',
+          onTap: () => onLanguageChanged('中文'),
         ),
       ],
     );
