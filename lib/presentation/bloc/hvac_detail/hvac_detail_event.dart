@@ -1,6 +1,7 @@
 /// HVAC Detail Events
 library;
 
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class HvacDetailEvent extends Equatable {

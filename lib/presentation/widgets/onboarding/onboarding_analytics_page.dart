@@ -46,11 +46,11 @@ class OnboardingAnalyticsPage extends StatelessWidget {
                     width: isCompact ? 80 : 120,
                     height: isCompact ? 80 : 120,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF9C27B0).withValues(alpha: 0.2),
+                      color: HvacColors.primaryLight.withValues(alpha: 0.2),
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFF9C27B0).withValues(alpha: 0.3),
+                          color: HvacColors.primaryLight.withValues(alpha: 0.3),
                           blurRadius: 40,
                           spreadRadius: 10,
                         ),
@@ -59,7 +59,7 @@ class OnboardingAnalyticsPage extends StatelessWidget {
                     child: Icon(
                       Icons.analytics,
                       size: isCompact ? 50 : 70,
-                      color: const Color(0xFF9C27B0),
+                      color: HvacColors.primary,
                     ),
                   ),
                   SizedBox(height: isCompact ? 30 : 50),

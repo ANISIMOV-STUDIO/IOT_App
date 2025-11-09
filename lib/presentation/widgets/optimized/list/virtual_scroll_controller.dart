@@ -3,6 +3,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
 /// Virtual scrolling controller for extremely large datasets
 class VirtualScrollController {

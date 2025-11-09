@@ -1,6 +1,7 @@
 /// Authentication BLoC
 library;
 
+import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import '../../../core/services/api_service.dart';
