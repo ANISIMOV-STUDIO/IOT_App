@@ -8,7 +8,6 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
-import 'package:hvac_ui_kit/src/theme/shadows.dart';
 
 /// Главная конфигурация темы приложения
 class AppThemeConfig {
@@ -157,7 +156,7 @@ class AppThemeConfig {
   /// null = без тени (flat design)
   /// HvacShadows.sm = легкая тень
   /// HvacShadows.md = средняя тень
-  static const List<BoxShadow>? cardShadow = HvacShadows.sm; // Modern с subtle shadow
+  static final List<BoxShadow> cardShadow = HvacShadows.sm; // Modern с subtle shadow
 
   /// Blur для glassmorphism эффекта
   ///
