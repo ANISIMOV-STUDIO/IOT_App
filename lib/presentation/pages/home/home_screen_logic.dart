@@ -5,7 +5,6 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../generated/l10n/app_localizations.dart';
 import '../../../core/di/injection_container.dart';
 import '../../../core/navigation/app_router.dart';

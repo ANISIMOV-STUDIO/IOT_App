@@ -8,7 +8,6 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
 /// Responsive breakpoints for QR scanner
 class QrScannerBreakpoints {

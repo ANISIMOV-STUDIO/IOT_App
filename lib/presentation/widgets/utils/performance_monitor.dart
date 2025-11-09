@@ -6,7 +6,6 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
 /// Widget wrapper that monitors build performance
 /// Development tool - should only be enabled during profiling

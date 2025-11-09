@@ -4,7 +4,6 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../bloc/hvac_detail/hvac_detail_bloc.dart';
 import '../../bloc/hvac_detail/hvac_detail_event.dart';
 import '../../bloc/hvac_detail/hvac_detail_state.dart';

@@ -5,7 +5,6 @@
 library;
 
 import 'package:flutter/foundation.dart';
-import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
 /// QR code data model
 class QrCodeData {

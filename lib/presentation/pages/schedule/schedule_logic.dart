@@ -2,7 +2,6 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../domain/entities/day_schedule.dart';
 import '../../../domain/entities/week_schedule.dart';
 

@@ -2,7 +2,6 @@
 library;
 
 import 'dart:async';
-import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/services/api_service.dart';
 import '../../../core/di/injection_container.dart';

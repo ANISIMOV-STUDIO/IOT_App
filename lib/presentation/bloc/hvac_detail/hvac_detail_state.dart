@@ -1,7 +1,6 @@
 /// HVAC Detail States
 library;
 
-import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import 'package:equatable/equatable.dart';
 import '../../../domain/entities/hvac_unit.dart';
 import '../../../domain/entities/temperature_reading.dart';

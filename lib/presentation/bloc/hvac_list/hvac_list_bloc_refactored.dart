@@ -5,7 +5,6 @@
 library;
 
 import 'dart:async';
-import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../domain/entities/hvac_unit.dart';
 import '../../../domain/usecases/get_all_units.dart';

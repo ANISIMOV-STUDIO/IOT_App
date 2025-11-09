@@ -5,7 +5,6 @@
 library;
 
 import 'package:flutter/foundation.dart';
-import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/services/language_service.dart';
 

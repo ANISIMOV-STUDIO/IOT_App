@@ -3,7 +3,6 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
 /// Custom painter for ripple effect animations
 ///

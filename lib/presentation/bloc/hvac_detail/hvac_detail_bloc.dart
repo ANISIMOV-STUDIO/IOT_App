@@ -3,7 +3,6 @@ library;
 
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../domain/entities/hvac_unit.dart';
 import '../../../domain/entities/ventilation_mode.dart';

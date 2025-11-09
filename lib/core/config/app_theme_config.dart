@@ -156,7 +156,7 @@ class AppThemeConfig {
   /// null = без тени (flat design)
   /// HvacShadows.card = легкая тень
   /// HvacShadows.elevated = поднятая тень
-  static final List<BoxShadow>? cardShadow = null; // Flat design
+  static const List<BoxShadow>? cardShadow = null; // Flat design
 
   /// Blur для glassmorphism эффекта
   ///

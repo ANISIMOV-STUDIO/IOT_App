@@ -5,7 +5,6 @@ library;
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../core/services/api_service.dart';
 import '../../../core/di/injection_container.dart';
 import '../common/app_snackbar.dart';
