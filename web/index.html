@@ -150,7 +150,7 @@
         transparent 240deg,
         transparent 360deg
       );
-      animation: counterRotate 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      animation: liquidSway 2.5s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
     }
 
     .gradient-ring::before {
@@ -177,13 +177,42 @@
       );
       filter: blur(25px);
       opacity: 0.7;
-      animation: counterRotate 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      animation: liquidSway 2.5s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
       z-index: -1;
     }
 
-    @keyframes counterRotate {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(-360deg); }
+    /* Liquid sway animation - имитация жидкости в цистерне */
+    @keyframes liquidSway {
+      0% {
+        transform: rotate(0deg);
+      }
+      10% {
+        transform: rotate(-15deg);
+      }
+      25% {
+        transform: rotate(-45deg);
+      }
+      35% {
+        transform: rotate(-75deg);
+      }
+      50% {
+        transform: rotate(-105deg);
+      }
+      60% {
+        transform: rotate(-120deg);
+      }
+      75% {
+        transform: rotate(-165deg);
+      }
+      85% {
+        transform: rotate(-195deg);
+      }
+      95% {
+        transform: rotate(-330deg);
+      }
+      100% {
+        transform: rotate(-360deg);
+      }
     }
 
     .gradient-ring-inner {
