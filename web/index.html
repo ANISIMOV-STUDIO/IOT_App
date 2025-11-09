@@ -575,6 +575,21 @@
 
     /* Responsive */
     @media (max-width: 768px) {
+      /* Hide most wind streams on mobile */
+      .loading::after,
+      .swirl-3,
+      .swirl-4,
+      .swirl-5 {
+        display: none;
+      }
+
+      /* Make remaining wind stream more subtle */
+      .loading::before {
+        opacity: 0.5;
+        height: 30px;
+        filter: blur(12px);
+      }
+
       .gradient-ring {
         width: 120px;
         height: 120px;
