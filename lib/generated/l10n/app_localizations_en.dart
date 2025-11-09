@@ -195,9 +195,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get english => 'English';
 
   @override
-  String get german => 'Deutsch';
-
-  @override
   String languageChangedTo(String language) {
     return 'Language changed to $language';
   }

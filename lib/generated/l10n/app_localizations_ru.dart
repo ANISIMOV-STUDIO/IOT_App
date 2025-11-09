@@ -196,9 +196,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get english => 'English';
 
   @override
-  String get german => 'Deutsch';
-
-  @override
   String languageChangedTo(String language) {
     return 'Язык изменен на $language';
   }
