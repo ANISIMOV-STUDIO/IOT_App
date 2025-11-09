@@ -75,7 +75,7 @@ class HvacChip extends StatelessWidget {
         labelStyle: HvacTypography.caption.copyWith(
           color: labelColor ?? HvacColors.primaryOrange,
         ),
-        side: BorderSide(
+        side: const BorderSide(
           color: HvacColors.primaryOrange,
           width: 1,
         ),
@@ -94,7 +94,7 @@ class HvacChip extends StatelessWidget {
       labelStyle: HvacTypography.caption.copyWith(
         color: labelColor ?? HvacColors.textPrimary,
       ),
-      side: BorderSide(
+      side: const BorderSide(
         color: HvacColors.backgroundCardBorder,
         width: 1,
       ),

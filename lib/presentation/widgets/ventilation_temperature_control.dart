@@ -6,7 +6,6 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
-import 'package:hvac_ui_kit/src/utils/adaptive_layout.dart' as adaptive;
 import '../../domain/entities/hvac_unit.dart';
 
 class VentilationTemperatureControl extends StatelessWidget {
@@ -22,11 +21,11 @@ class VentilationTemperatureControl extends StatelessWidget {
     return AdaptiveControl(
       builder: (context, deviceSize) {
         return Container(
-          padding: adaptive.AdaptiveLayout.controlPadding(context),
+          padding: AdaptiveLayout.controlPadding(context),
           decoration: BoxDecoration(
             color: HvacColors.backgroundCard,
             borderRadius: BorderRadius.circular(
-              adaptive.AdaptiveLayout.borderRadius(context, base: 16),
+              AdaptiveLayout.borderRadius(context, base: 16),
             ),
             border: Border.all(
               color: HvacColors.backgroundCardBorder,
@@ -46,7 +45,7 @@ class VentilationTemperatureControl extends StatelessWidget {
                     _buildHeader(context, deviceSize),
                     SizedBox(
                         height:
-                            adaptive.AdaptiveLayout.spacing(context, base: 16)),
+                            AdaptiveLayout.spacing(context, base: 16)),
                     Expanded(
                       child: SingleChildScrollView(
                         physics: const ClampingScrollPhysics(),
@@ -64,7 +63,7 @@ class VentilationTemperatureControl extends StatelessWidget {
                     _buildHeader(context, deviceSize),
                     SizedBox(
                         height:
-                            adaptive.AdaptiveLayout.spacing(context, base: 16)),
+                            AdaptiveLayout.spacing(context, base: 16)),
                     _buildTemperatureGrid(context, deviceSize),
                   ],
                 );
@@ -81,20 +80,20 @@ class VentilationTemperatureControl extends StatelessWidget {
       children: [
         Container(
           padding:
-              EdgeInsets.all(adaptive.AdaptiveLayout.spacing(context, base: 8)),
+              EdgeInsets.all(AdaptiveLayout.spacing(context, base: 8)),
           decoration: BoxDecoration(
             color: HvacColors.info.withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(
-              adaptive.AdaptiveLayout.borderRadius(context, base: 8),
+              AdaptiveLayout.borderRadius(context, base: 8),
             ),
           ),
           child: Icon(
             Icons.thermostat,
             color: HvacColors.info,
-            size: adaptive.AdaptiveLayout.iconSize(context, base: 20),
+            size: AdaptiveLayout.iconSize(context, base: 20),
           ),
         ),
-        SizedBox(width: adaptive.AdaptiveLayout.spacing(context)),
+        SizedBox(width: AdaptiveLayout.spacing(context)),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,7 +102,7 @@ class VentilationTemperatureControl extends StatelessWidget {
               Text(
                 'Температуры',
                 style: TextStyle(
-                  fontSize: adaptive.AdaptiveLayout.fontSize(context, base: 16),
+                  fontSize: AdaptiveLayout.fontSize(context, base: 16),
                   fontWeight: FontWeight.w600,
                   color: HvacColors.textPrimary,
                 ),
@@ -114,7 +113,7 @@ class VentilationTemperatureControl extends StatelessWidget {
               Text(
                 'Мониторинг и уставки',
                 style: TextStyle(
-                  fontSize: adaptive.AdaptiveLayout.fontSize(context, base: 12),
+                  fontSize: AdaptiveLayout.fontSize(context, base: 12),
                   color: HvacColors.textSecondary,
                 ),
                 overflow: TextOverflow.ellipsis,
@@ -232,11 +231,11 @@ class VentilationTemperatureControl extends StatelessWidget {
   ) {
     return Container(
       padding:
-          EdgeInsets.all(adaptive.AdaptiveLayout.spacing(context, base: 10)),
+          EdgeInsets.all(AdaptiveLayout.spacing(context, base: 10)),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(
-          adaptive.AdaptiveLayout.borderRadius(context, base: 12),
+          AdaptiveLayout.borderRadius(context, base: 12),
         ),
       ),
       child: Column(
@@ -248,17 +247,17 @@ class VentilationTemperatureControl extends StatelessWidget {
             children: [
               Icon(
                 icon,
-                size: adaptive.AdaptiveLayout.iconSize(context, base: 14),
+                size: AdaptiveLayout.iconSize(context, base: 14),
                 color: color,
               ),
               SizedBox(
-                  width: adaptive.AdaptiveLayout.spacing(context, base: 4)),
+                  width: AdaptiveLayout.spacing(context, base: 4)),
               Flexible(
                 child: Text(
                   label,
                   style: TextStyle(
                     fontSize:
-                        adaptive.AdaptiveLayout.fontSize(context, base: 11),
+                        AdaptiveLayout.fontSize(context, base: 11),
                     color: HvacColors.textSecondary,
                   ),
                   overflow: TextOverflow.ellipsis,
@@ -267,11 +266,11 @@ class VentilationTemperatureControl extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: adaptive.AdaptiveLayout.spacing(context, base: 6)),
+          SizedBox(height: AdaptiveLayout.spacing(context, base: 6)),
           Text(
             temperature != null ? '${temperature.toStringAsFixed(1)}°C' : '--',
             style: TextStyle(
-              fontSize: adaptive.AdaptiveLayout.fontSize(context, base: 20),
+              fontSize: AdaptiveLayout.fontSize(context, base: 20),
               fontWeight: FontWeight.w700,
               color: color,
             ),

@@ -6,7 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
-import 'base_glassmorphic_container.dart';
 
 /// Standard glassmorphic card with hover effects and animations
 class GlassmorphicCard extends StatefulWidget {

@@ -60,11 +60,7 @@ class _SettingsScreenRefactoredState extends State<SettingsScreenRefactored>
         backgroundColor: ui_kit.HvacColors.backgroundDark,
         appBar: _buildAppBar(l10n),
         body: SafeArea(
-          child: ui_kit.AdaptiveLayout(
-            mobile: _buildMobileLayout(l10n),
-            tablet: _buildTabletLayout(l10n),
-            desktop: _buildDesktopLayout(l10n),
-          ),
+          child: _buildResponsiveLayout(l10n),
         ),
       ),
     );
@@ -89,7 +85,7 @@ class _SettingsScreenRefactoredState extends State<SettingsScreenRefactored>
         // Save button for tablet/desktop
         if (ui_kit.responsive.isTablet || ui_kit.responsive.isDesktop)
           Padding(
-            padding: EdgeInsets.only(right: 16),
+            padding: const EdgeInsets.only(right: 16),
             child: ui_kit.HvacTextButton(
               onPressed: _saveSettings,
               label: l10n.save,
@@ -99,10 +95,21 @@ class _SettingsScreenRefactoredState extends State<SettingsScreenRefactored>
     );
   }
 
+  /// Build responsive layout based on device size
+  Widget _buildResponsiveLayout(AppLocalizations l10n) {
+    if (ui_kit.responsive.isDesktop) {
+      return _buildDesktopLayout(l10n);
+    } else if (ui_kit.responsive.isTablet) {
+      return _buildTabletLayout(l10n);
+    } else {
+      return _buildMobileLayout(l10n);
+    }
+  }
+
   /// Mobile Layout - Single Column
   Widget _buildMobileLayout(AppLocalizations l10n) {
     return SingleChildScrollView(
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       child: Column(
         children: _buildSections(l10n),
       ),
@@ -114,7 +121,7 @@ class _SettingsScreenRefactoredState extends State<SettingsScreenRefactored>
     final sections = _buildSections(l10n);
 
     return SingleChildScrollView(
-      padding: EdgeInsets.all(24),
+      padding: const EdgeInsets.all(24),
       child: Column(
         children: [
           Row(
@@ -124,24 +131,24 @@ class _SettingsScreenRefactoredState extends State<SettingsScreenRefactored>
                 child: Column(
                   children: [
                     sections[0], // Appearance
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     sections[2], // Notifications
                   ],
                 ),
               ),
-              SizedBox(width: 24),
+              const SizedBox(width: 24),
               Expanded(
                 child: Column(
                   children: [
                     sections[1], // Units
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     sections[3], // Language
                   ],
                 ),
               ),
             ],
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           sections[4], // About section full width
         ],
       ),
@@ -162,8 +169,8 @@ class _SettingsScreenRefactoredState extends State<SettingsScreenRefactored>
         // Main Content
         Expanded(
           child: Container(
-            constraints: BoxConstraints(maxWidth: 800),
-            padding: EdgeInsets.all(32),
+            constraints: const BoxConstraints(maxWidth: 800),
+            padding: const EdgeInsets.all(32),
             child: SingleChildScrollView(
               child: Column(
                 children: _buildSections(l10n),
@@ -194,7 +201,7 @@ class _SettingsScreenRefactoredState extends State<SettingsScreenRefactored>
           _showSnackBar(l10n.themeChangeNextVersion);
         },
       ).animate().fadeIn(duration: 500.ms).slideX(begin: -0.1, end: 0),
-      SizedBox(height: 20),
+      const SizedBox(height: 20),
       UnitsSection(
         celsius: _controller.celsius,
         onCelsiusChanged: (value) {
@@ -207,7 +214,7 @@ class _SettingsScreenRefactoredState extends State<SettingsScreenRefactored>
           .animate()
           .fadeIn(duration: 500.ms, delay: 100.ms)
           .slideX(begin: -0.1, end: 0),
-      SizedBox(height: 20),
+      const SizedBox(height: 20),
       NotificationsSection(
         pushNotifications: _controller.pushNotifications,
         emailNotifications: _controller.emailNotifications,
@@ -229,7 +236,7 @@ class _SettingsScreenRefactoredState extends State<SettingsScreenRefactored>
           .animate()
           .fadeIn(duration: 500.ms, delay: 200.ms)
           .slideX(begin: -0.1, end: 0),
-      SizedBox(height: 20),
+      const SizedBox(height: 20),
       LanguageSection(
         selectedLanguage: _controller.language,
         onLanguageChanged: (language) {
@@ -240,7 +247,7 @@ class _SettingsScreenRefactoredState extends State<SettingsScreenRefactored>
           .animate()
           .fadeIn(duration: 500.ms, delay: 300.ms)
           .slideX(begin: -0.1, end: 0),
-      SizedBox(height: 20),
+      const SizedBox(height: 20),
       AboutSection(
         onCheckUpdates: () {
           _showSnackBar(l10n.checkingUpdates);

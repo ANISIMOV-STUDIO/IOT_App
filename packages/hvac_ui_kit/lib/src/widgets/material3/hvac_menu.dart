@@ -48,7 +48,7 @@ class HvacMenu<T> extends StatelessWidget {
       color: HvacColors.backgroundCard,
       shape: RoundedRectangleBorder(
         borderRadius: HvacRadius.lgRadius,
-        side: BorderSide(
+        side: const BorderSide(
           color: HvacColors.backgroundCardBorder,
           width: 1,
         ),
@@ -174,21 +174,21 @@ class HvacDropdownMenu<T> extends StatelessWidget {
         fillColor: HvacColors.backgroundCard,
         border: OutlineInputBorder(
           borderRadius: HvacRadius.lgRadius,
-          borderSide: BorderSide(
+          borderSide: const BorderSide(
             color: HvacColors.backgroundCardBorder,
             width: 1,
           ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: HvacRadius.lgRadius,
-          borderSide: BorderSide(
+          borderSide: const BorderSide(
             color: HvacColors.backgroundCardBorder,
             width: 1,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: HvacRadius.lgRadius,
-          borderSide: BorderSide(
+          borderSide: const BorderSide(
             color: HvacColors.primary,
             width: 2,
           ),
@@ -199,7 +199,7 @@ class HvacDropdownMenu<T> extends StatelessWidget {
         shape: WidgetStateProperty.all(
           RoundedRectangleBorder(
             borderRadius: HvacRadius.lgRadius,
-            side: BorderSide(
+            side: const BorderSide(
               color: HvacColors.backgroundCardBorder,
               width: 1,
             ),

@@ -34,9 +34,9 @@ class HvacBottomSheet extends StatelessWidget {
       constraints: BoxConstraints(
         maxHeight: maxHeight,
       ),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: HvacColors.backgroundCard,
-        borderRadius: const BorderRadius.vertical(
+        borderRadius: BorderRadius.vertical(
           top: Radius.circular(HvacRadius.lg),
         ),
       ),
@@ -80,7 +80,7 @@ class HvacBottomSheet extends StatelessWidget {
           if (actions != null && actions!.isNotEmpty)
             Container(
               padding: const EdgeInsets.all(HvacSpacing.md),
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: HvacColors.backgroundCard,
                 border: Border(
                   top: BorderSide(
@@ -118,10 +118,10 @@ class HvacBottomSheet extends StatelessWidget {
       isScrollControlled: true,
       builder: (context) => HvacBottomSheet(
         title: title,
-        child: child,
         actions: actions,
         showDragHandle: showDragHandle,
         height: height,
+        child: child,
       ),
     );
   }

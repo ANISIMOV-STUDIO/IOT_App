@@ -39,7 +39,7 @@ class LoginHeader extends StatelessWidget {
               ),
             ],
           ),
-          child: Icon(
+          child: const Icon(
             Icons.air,
             size: 50,
             color: Colors.white,
@@ -51,7 +51,7 @@ class LoginHeader extends StatelessWidget {
         // Welcome text
         Text(
           l10n.welcomeBack,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.bold,
             color: HvacColors.textPrimary,
@@ -64,7 +64,7 @@ class LoginHeader extends StatelessWidget {
         // Subtitle
         Text(
           l10n.loginSubtitle,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 16,
             color: HvacColors.textSecondary,
           ),

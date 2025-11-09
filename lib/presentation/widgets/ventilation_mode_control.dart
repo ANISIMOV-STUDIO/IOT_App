@@ -6,7 +6,6 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
-import 'package:hvac_ui_kit/src/utils/adaptive_layout.dart' as adaptive;
 import '../../domain/entities/hvac_unit.dart';
 import '../../domain/entities/ventilation_mode.dart';
 import 'ventilation/mode_control_components.dart';
@@ -85,11 +84,11 @@ class _VentilationModeControlState extends State<VentilationModeControl>
           return Container(
             padding: isDesktop
                 ? const EdgeInsets.all(12.0)
-                : adaptive.AdaptiveLayout.controlPadding(context),
+                : AdaptiveLayout.controlPadding(context),
             decoration: BoxDecoration(
               color: HvacColors.backgroundCard,
               borderRadius: BorderRadius.circular(
-                adaptive.AdaptiveLayout.borderRadius(context, base: 16),
+                AdaptiveLayout.borderRadius(context, base: 16),
               ),
               border: Border.all(
                 color: HvacColors.backgroundCardBorder,
@@ -112,7 +111,7 @@ class _VentilationModeControlState extends State<VentilationModeControl>
                               ? 8.0
                               : (deviceSize == DeviceSize.compact
                                   ? 12.0
-                                  : adaptive.AdaptiveLayout.spacing(context,
+                                  : AdaptiveLayout.spacing(context,
                                       base: 12))),
                       // Mode selector removed - unit.mode is String, not VentilationMode
                       SizedBox(
@@ -120,7 +119,7 @@ class _VentilationModeControlState extends State<VentilationModeControl>
                               ? 8.0
                               : (deviceSize == DeviceSize.compact
                                   ? 12.0
-                                  : adaptive.AdaptiveLayout.spacing(context,
+                                  : AdaptiveLayout.spacing(context,
                                       base: 12))),
                       Expanded(
                         child: SingleChildScrollView(
@@ -144,13 +143,13 @@ class _VentilationModeControlState extends State<VentilationModeControl>
                       SizedBox(
                           height: deviceSize == DeviceSize.compact
                               ? 12.0
-                              : adaptive.AdaptiveLayout.spacing(context,
+                              : AdaptiveLayout.spacing(context,
                                   base: 12)),
                       // Mode selector removed - unit.mode is String, not VentilationMode
                       SizedBox(
                           height: deviceSize == DeviceSize.compact
                               ? 12.0
-                              : adaptive.AdaptiveLayout.spacing(context,
+                              : AdaptiveLayout.spacing(context,
                                   base: 12)),
                       FanSpeedControls(supplyFanSpeed: _supplyFanSpeed, exhaustFanSpeed: _exhaustFanSpeed, onSupplyFanChanged: widget.onSupplyFanChanged, onExhaustFanChanged: widget.onExhaustFanChanged),
                     ],

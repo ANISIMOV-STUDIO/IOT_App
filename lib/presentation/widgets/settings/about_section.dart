@@ -30,21 +30,21 @@ class AboutSection extends StatelessWidget {
             value: '1.0.0',
           ),
         ),
-        SizedBox(height: 12),
+        const SizedBox(height: 12),
         HvacInteractiveRipple(
           child: InfoRow(
             label: l10n.developer,
             value: 'BREEZ',
           ),
         ),
-        SizedBox(height: 12),
+        const SizedBox(height: 12),
         HvacInteractiveRipple(
           child: InfoRow(
             label: l10n.license,
             value: 'MIT License',
           ),
         ),
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
         SizedBox(
           width: double.infinity,
           height: 48, // Ensure minimum tap target
@@ -52,7 +52,7 @@ class AboutSection extends StatelessWidget {
             onPressed: onCheckUpdates,
             child: Text(
               l10n.checkUpdates,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
                 color: HvacColors.textPrimary,

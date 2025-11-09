@@ -114,7 +114,7 @@ class HvacAppBar extends StatelessWidget implements PreferredSizeWidget {
       shadowColor: showShadow ? HvacColors.textPrimary.withValues(alpha: 0.1) : Colors.transparent,
       automaticallyImplyLeading: automaticallyImplyLeading,
       systemOverlayStyle: systemOverlayStyle ??
-          SystemUiOverlayStyle(
+          const SystemUiOverlayStyle(
             statusBarColor: Colors.transparent,
             statusBarIconBrightness: Brightness.dark,
             statusBarBrightness: Brightness.light,

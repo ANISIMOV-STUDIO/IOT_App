@@ -38,7 +38,7 @@ class NotificationsSection extends StatelessWidget {
             onChanged: onPushChanged,
           ),
         ),
-        SizedBox(height: 12),
+        const SizedBox(height: 12),
         HvacInteractiveRipple(
           child: SwitchTile(
             title: l10n.emailNotifications,

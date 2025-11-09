@@ -3,7 +3,6 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
-import 'package:hvac_ui_kit/src/utils/adaptive_layout.dart' as adaptive;
 
 /// Quick stats row
 class ScheduleQuickStats extends StatelessWidget {
@@ -29,7 +28,7 @@ class ScheduleQuickStats extends StatelessWidget {
                 color: isPowerOn ? HvacColors.success : HvacColors.error,
               ),
             ),
-            SizedBox(width: adaptive.AdaptiveLayout.spacing(context)),
+            SizedBox(width: AdaptiveLayout.spacing(context)),
             Expanded(
               child: ScheduleStat(
                 label: 'Время работы',
@@ -63,11 +62,11 @@ class ScheduleStat extends StatelessWidget {
       builder: (context, deviceSize) {
         return Container(
           padding:
-              EdgeInsets.all(adaptive.AdaptiveLayout.spacing(context, base: 8)),
+              EdgeInsets.all(AdaptiveLayout.spacing(context, base: 8)),
           decoration: BoxDecoration(
             color: color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(
-              adaptive.AdaptiveLayout.borderRadius(context, base: 8),
+              AdaptiveLayout.borderRadius(context, base: 8),
             ),
           ),
           child: Column(
@@ -77,16 +76,16 @@ class ScheduleStat extends StatelessWidget {
               Text(
                 label,
                 style: HvacTypography.labelSmall.copyWith(
-                  fontSize: adaptive.AdaptiveLayout.fontSize(context, base: 10),
+                  fontSize: AdaptiveLayout.fontSize(context, base: 10),
                   color: HvacColors.textSecondary,
                 ),
               ),
               SizedBox(
-                  height: adaptive.AdaptiveLayout.spacing(context, base: 4)),
+                  height: AdaptiveLayout.spacing(context, base: 4)),
               Text(
                 value,
                 style: HvacTypography.labelLarge.copyWith(
-                  fontSize: adaptive.AdaptiveLayout.fontSize(context, base: 12),
+                  fontSize: AdaptiveLayout.fontSize(context, base: 12),
                   fontWeight: FontWeight.w600,
                   color: color,
                 ),

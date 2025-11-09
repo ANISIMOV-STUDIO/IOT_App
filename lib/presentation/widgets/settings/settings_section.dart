@@ -29,7 +29,7 @@ class SettingsSection extends StatelessWidget {
       ],
       borderRadius: BorderRadius.circular(12),
       child: Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: HvacColors.backgroundCard,
           borderRadius: BorderRadius.circular(12),
@@ -40,7 +40,7 @@ class SettingsSection extends StatelessWidget {
             Row(
               children: [
                 Icon(icon, color: HvacColors.primaryOrange, size: 24),
-                SizedBox(width: 12),
+                const SizedBox(width: 12),
                 Text(
                   title,
                   style: HvacTypography.headlineSmall.copyWith(
@@ -50,7 +50,7 @@ class SettingsSection extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             ...children,
           ],
         ),
@@ -84,7 +84,7 @@ class SwitchTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         onTap: () => onChanged(!value),
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 4),
+          padding: const EdgeInsets.symmetric(vertical: 4),
           child: Row(
             children: [
               Expanded(
@@ -98,7 +98,7 @@ class SwitchTile extends StatelessWidget {
                         color: HvacColors.textPrimary,
                       ),
                     ),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     Text(
                       subtitle,
                       style: HvacTypography.labelLarge.copyWith(
@@ -178,7 +178,7 @@ class InfoRow extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(4),
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 4),
+          padding: const EdgeInsets.symmetric(vertical: 4),
           child: content,
         ),
       );

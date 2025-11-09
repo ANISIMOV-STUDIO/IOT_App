@@ -149,7 +149,7 @@ class _LoginScreenState extends State<LoginScreen>
 
   Widget _buildLoginCard() {
     return Container(
-      constraints: BoxConstraints(maxWidth: 400),
+      constraints: const BoxConstraints(maxWidth: 400),
       padding: EdgeInsets.all(HvacSpacing.xl.w),
       decoration: BoxDecoration(
         color: HvacColors.backgroundCard.withValues(alpha: 0.9),

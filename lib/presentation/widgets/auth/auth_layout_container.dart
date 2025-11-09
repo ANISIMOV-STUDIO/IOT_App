@@ -61,7 +61,7 @@ class AuthLayoutContainer extends StatelessWidget {
 
   Widget _buildDesktopCard(BuildContext context, Widget child) {
     return Container(
-      padding: EdgeInsets.all(48),
+      padding: const EdgeInsets.all(48),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: HvacRadius.xxlRadius,
@@ -69,12 +69,12 @@ class AuthLayoutContainer extends StatelessWidget {
           BoxShadow(
             color: Colors.black.withAlpha(13),
             blurRadius: 40,
-            offset: Offset(0, 20),
+            offset: const Offset(0, 20),
           ),
           BoxShadow(
             color: Colors.black.withAlpha(5),
             blurRadius: 10,
-            offset: Offset(0, 5),
+            offset: const Offset(0, 5),
           ),
         ],
       ),
@@ -161,7 +161,7 @@ class AuthDivider extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
             text,
             style: TextStyle(

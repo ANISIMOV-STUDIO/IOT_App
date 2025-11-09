@@ -32,7 +32,9 @@ class HvacRadio<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     final radio = Radio<T>(
       value: value,
+      // ignore: deprecated_member_use
       groupValue: groupValue,
+      // ignore: deprecated_member_use
       onChanged: enabled ? onChanged : null,
       activeColor: activeColor ?? HvacColors.primaryOrange,
     );
@@ -177,7 +179,9 @@ class HvacRadioTile<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return RadioListTile<T>(
       value: value,
+      // ignore: deprecated_member_use
       groupValue: groupValue,
+      // ignore: deprecated_member_use
       onChanged: enabled ? onChanged : null,
       title: Text(
         title,

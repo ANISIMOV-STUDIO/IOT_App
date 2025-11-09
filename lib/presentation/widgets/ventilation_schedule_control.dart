@@ -7,7 +7,6 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
-import 'package:hvac_ui_kit/src/utils/adaptive_layout.dart' as adaptive;
 import '../../domain/entities/hvac_unit.dart';
 import 'schedule/schedule_components.dart';
 
@@ -30,11 +29,11 @@ class VentilationScheduleControl extends StatelessWidget {
         final todaySchedule = unit.schedule?.getDaySchedule(dayOfWeek);
 
         return Container(
-          padding: adaptive.AdaptiveLayout.controlPadding(context),
+          padding: AdaptiveLayout.controlPadding(context),
           decoration: BoxDecoration(
             color: HvacColors.backgroundCard,
             borderRadius: BorderRadius.circular(
-              adaptive.AdaptiveLayout.borderRadius(context, base: 16),
+              AdaptiveLayout.borderRadius(context, base: 16),
             ),
             border: Border.all(
               color: HvacColors.backgroundCardBorder,
@@ -68,7 +67,7 @@ class VentilationScheduleControl extends StatelessWidget {
           DeviceSize.compact => 12.0,
           DeviceSize.medium ||
           DeviceSize.expanded =>
-            adaptive.AdaptiveLayout.spacing(context, base: 12),
+            AdaptiveLayout.spacing(context, base: 12),
         };
 
         return Column(
@@ -112,7 +111,7 @@ class VentilationScheduleControl extends StatelessWidget {
           DeviceSize.compact => 12.0,
           DeviceSize.medium ||
           DeviceSize.expanded =>
-            adaptive.AdaptiveLayout.spacing(context, base: 12),
+            AdaptiveLayout.spacing(context, base: 12),
         };
 
         return Column(

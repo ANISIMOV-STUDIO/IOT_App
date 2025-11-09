@@ -42,7 +42,7 @@ class HvacDatePicker {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.dark(
+            colorScheme: const ColorScheme.dark(
               primary: HvacColors.primary,
               onPrimary: Colors.white,
               surface: HvacColors.backgroundCard,
@@ -170,7 +170,7 @@ class HvacDatePickerField extends StatelessWidget {
                 ],
               ),
             ),
-            Icon(
+            const Icon(
               Icons.chevron_right,
               color: HvacColors.textSecondary,
             ),
@@ -219,7 +219,7 @@ class HvacDateRangePicker {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.dark(
+            colorScheme: const ColorScheme.dark(
               primary: HvacColors.primary,
               onPrimary: Colors.white,
               surface: HvacColors.backgroundCard,

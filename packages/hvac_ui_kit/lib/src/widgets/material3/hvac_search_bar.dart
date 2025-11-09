@@ -136,7 +136,7 @@ class _HvacSearchBarState extends State<HvacSearchBar> {
           ),
           border: InputBorder.none,
           prefixIcon: widget.leading ??
-              Icon(
+              const Icon(
                 Icons.search,
                 color: HvacColors.textSecondary,
               ),

@@ -119,7 +119,7 @@ class HvacListSection extends StatelessWidget {
                 .expand(
                   (child) => [
                     child,
-                    Divider(
+                    const Divider(
                       height: 1,
                       thickness: 1,
                       color: HvacColors.backgroundCardBorder,
@@ -184,7 +184,6 @@ class HvacCompactListSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return HvacListSection(
       title: title,
-      children: children,
       showDividers: showDividers,
       backgroundColor: HvacColors.backgroundCard,
       borderRadius: HvacRadius.lgRadius,
@@ -195,6 +194,7 @@ class HvacCompactListSection extends StatelessWidget {
         HvacSpacing.md,
         HvacSpacing.sm,
       ),
+      children: children,
     );
   }
 }
@@ -266,7 +266,7 @@ class HvacInsetListSection extends StatelessWidget {
                 .expand(
                   (child) => [
                     child,
-                    Divider(
+                    const Divider(
                       height: 1,
                       thickness: 1,
                       color: HvacColors.backgroundCardBorder,

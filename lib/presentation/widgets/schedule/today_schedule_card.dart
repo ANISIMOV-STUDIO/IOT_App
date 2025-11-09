@@ -3,7 +3,6 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
-import 'package:hvac_ui_kit/src/utils/adaptive_layout.dart' as adaptive;
 import 'schedule_time.dart';
 
 /// Today's schedule display card
@@ -34,7 +33,7 @@ class TodayScheduleCard extends StatelessWidget {
                       _getDayName(dayOfWeek),
                       style: HvacTypography.labelMedium.copyWith(
                         fontSize:
-                            adaptive.AdaptiveLayout.fontSize(context, base: 11),
+                            AdaptiveLayout.fontSize(context, base: 11),
                         color: HvacColors.textSecondary,
                       ),
                       overflow: TextOverflow.ellipsis,
@@ -56,7 +55,7 @@ class TodayScheduleCard extends StatelessWidget {
                       schedule?.timerEnabled == true ? 'Включен' : 'Выключен',
                       style: HvacTypography.labelSmall.copyWith(
                         fontSize:
-                            adaptive.AdaptiveLayout.fontSize(context, base: 10),
+                            AdaptiveLayout.fontSize(context, base: 10),
                         fontWeight: FontWeight.w600,
                         color: schedule?.timerEnabled == true
                             ? HvacColors.success
@@ -67,7 +66,7 @@ class TodayScheduleCard extends StatelessWidget {
                 ],
               ),
               SizedBox(
-                  height: adaptive.AdaptiveLayout.spacing(context, base: 10)),
+                  height: AdaptiveLayout.spacing(context, base: 10)),
               Row(
                 children: [
                   Expanded(
@@ -77,7 +76,7 @@ class TodayScheduleCard extends StatelessWidget {
                       icon: Icons.power_settings_new,
                     ),
                   ),
-                  SizedBox(width: adaptive.AdaptiveLayout.spacing(context)),
+                  SizedBox(width: AdaptiveLayout.spacing(context)),
                   Expanded(
                     child: ScheduleTime(
                       label: 'Отключение',

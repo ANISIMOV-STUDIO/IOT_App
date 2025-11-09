@@ -32,13 +32,13 @@ class LanguageSection extends StatelessWidget {
           isSelected: selectedLanguage == l10n.russian,
           onTap: () => onLanguageChanged(l10n.russian),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         _LanguageTile(
           language: l10n.english,
           isSelected: selectedLanguage == l10n.english,
           onTap: () => onLanguageChanged(l10n.english),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         _LanguageTile(
           language: l10n.german,
           isSelected: selectedLanguage == l10n.german,
@@ -70,7 +70,7 @@ class _LanguageTile extends StatelessWidget {
       child: HvacInteractiveScale(
         onTap: onTap,
         child: Container(
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             horizontal: 16,
             vertical: 12,
           ),
@@ -97,7 +97,7 @@ class _LanguageTile extends StatelessWidget {
                     : HvacColors.textSecondary,
                 size: 20,
               ),
-              SizedBox(width: 12),
+              const SizedBox(width: 12),
               Text(
                 language,
                 style: HvacTypography.bodyMedium.copyWith(
@@ -110,7 +110,7 @@ class _LanguageTile extends StatelessWidget {
               ),
               const Spacer(),
               if (isSelected)
-                Icon(
+                const Icon(
                   Icons.check,
                   color: HvacColors.primaryOrange,
                   size: 18,

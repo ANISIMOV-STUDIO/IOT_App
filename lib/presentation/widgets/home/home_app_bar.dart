@@ -233,8 +233,8 @@ class HomeAppBar extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 8.0),
-        ExcludeSemantics(
-          child: const Icon(
+        const ExcludeSemantics(
+          child: Icon(
             Icons.keyboard_arrow_down,
             color: HvacColors.textSecondary,
             size: 20.0,

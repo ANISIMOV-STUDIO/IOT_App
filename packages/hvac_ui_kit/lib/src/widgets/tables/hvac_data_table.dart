@@ -309,7 +309,7 @@ class HvacKeyValueTable extends StatelessWidget {
                   ),
                 ),
                 if (showDividers && index < entries.length - 1)
-                  Divider(
+                  const Divider(
                     height: 1,
                     thickness: 1,
                     color: HvacColors.backgroundCardBorder,

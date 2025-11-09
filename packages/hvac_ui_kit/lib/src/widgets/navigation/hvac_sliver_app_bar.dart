@@ -138,7 +138,7 @@ class HvacSliverAppBar extends StatelessWidget {
       centerTitle: centerTitle,
       stretch: stretch,
       systemOverlayStyle: systemOverlayStyle ??
-          SystemUiOverlayStyle(
+          const SystemUiOverlayStyle(
             statusBarColor: Colors.transparent,
             statusBarIconBrightness: Brightness.dark,
             statusBarBrightness: Brightness.light,

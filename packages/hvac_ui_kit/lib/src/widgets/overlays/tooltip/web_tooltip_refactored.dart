@@ -7,9 +7,6 @@ library;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
-import 'tooltip_types.dart';
-import 'tooltip_overlay.dart';
-import 'tooltip_controller.dart';
 
 /// Enhanced tooltip for web with rich content support
 class WebTooltip extends StatefulWidget {
@@ -92,8 +89,9 @@ class _WebTooltipState extends State<WebTooltip>
 
   void _showTooltip() {
     if (!kIsWeb ||
-        (!widget.showOnHover && widget.trigger != TooltipTrigger.manual))
+        (!widget.showOnHover && widget.trigger != TooltipTrigger.manual)) {
       return;
+    }
 
     _removeOverlay();
     _createOverlay();

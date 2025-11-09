@@ -84,8 +84,8 @@ class HvacStaticTabView extends StatelessWidget {
   Widget build(BuildContext context) {
     return HvacTabView(
       controller: controller,
-      children: children,
       physics: const NeverScrollableScrollPhysics(),
+      children: children,
     );
   }
 }

@@ -55,14 +55,21 @@ class _HomeScreenRefactoredState extends State<HomeScreenRefactored>
       child: Scaffold(
         backgroundColor: ui_kit.HvacColors.backgroundDark,
         body: SafeArea(
-          child: ui_kit.AdaptiveLayout(
-            mobile: _buildMobileLayout(),
-            tablet: _buildTabletLayout(),
-            desktop: _buildDesktopLayout(),
-          ),
+          child: _buildResponsiveLayout(),
         ),
       ),
     );
+  }
+
+  /// Build responsive layout based on device size
+  Widget _buildResponsiveLayout() {
+    if (ui_kit.responsive.isDesktop) {
+      return _buildDesktopLayout();
+    } else if (ui_kit.responsive.isTablet) {
+      return _buildTabletLayout();
+    } else {
+      return _buildMobileLayout();
+    }
   }
 
   /// Mobile Layout (Single Column)

@@ -37,7 +37,7 @@ class HvacSwitch extends StatelessWidget {
     final switchWidget = Switch(
       value: value,
       onChanged: enabled ? onChanged : null,
-      activeColor: activeColor ?? HvacColors.primaryOrange,
+      activeThumbColor: activeColor ?? HvacColors.primaryOrange,
       inactiveThumbColor: inactiveThumbColor ??
           HvacColors.backgroundCardBorder.withValues(alpha: 0.5),
       inactiveTrackColor: inactiveTrackColor ??
@@ -132,7 +132,7 @@ class HvacSwitchTile extends StatelessWidget {
             )
           : null,
       secondary: leading,
-      activeColor: activeColor ?? HvacColors.primaryOrange,
+      activeThumbColor: activeColor ?? HvacColors.primaryOrange,
       inactiveThumbColor:
           HvacColors.backgroundCardBorder.withValues(alpha: 0.5),
       inactiveTrackColor:

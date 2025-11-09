@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
-import '../../../core/constants/security_constants.dart';
 import '../../../core/utils/validators.dart';
 import 'responsive_utils.dart';
 
@@ -47,7 +46,7 @@ class PasswordStrengthIndicator extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
             AnimatedSwitcher(
               duration: const Duration(milliseconds: 200),
               child: Text(
@@ -64,7 +63,7 @@ class PasswordStrengthIndicator extends StatelessWidget {
         ),
 
         if (showRequirements) ...[
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           _buildRequirements(context, responsive, theme),
         ],
       ],
@@ -107,7 +106,7 @@ class PasswordStrengthIndicator extends StatelessWidget {
           cursor: SystemMouseCursors.basic,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
-            padding: EdgeInsets.symmetric(
+            padding: const EdgeInsets.symmetric(
               horizontal: 8,
               vertical: 4,
             ),
@@ -132,7 +131,7 @@ class PasswordStrengthIndicator extends StatelessWidget {
                   color:
                       req.isMet ? HvacColors.success : HvacColors.textSecondary,
                 ),
-                SizedBox(width: 4),
+                const SizedBox(width: 4),
                 Text(
                   req.label,
                   style: TextStyle(

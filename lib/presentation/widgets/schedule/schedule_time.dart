@@ -3,7 +3,6 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
-import 'package:hvac_ui_kit/src/utils/adaptive_layout.dart' as adaptive;
 
 /// Schedule time display
 class ScheduleTime extends StatelessWidget {
@@ -31,17 +30,17 @@ class ScheduleTime extends StatelessWidget {
               children: [
                 Icon(
                   icon,
-                  size: adaptive.AdaptiveLayout.iconSize(context, base: 12),
+                  size: AdaptiveLayout.iconSize(context, base: 12),
                   color: HvacColors.textSecondary,
                 ),
                 SizedBox(
-                    width: adaptive.AdaptiveLayout.spacing(context, base: 4)),
+                    width: AdaptiveLayout.spacing(context, base: 4)),
                 Flexible(
                   child: Text(
                     label,
                     style: HvacTypography.labelSmall.copyWith(
                       fontSize:
-                          adaptive.AdaptiveLayout.fontSize(context, base: 10),
+                          AdaptiveLayout.fontSize(context, base: 10),
                       color: HvacColors.textSecondary,
                     ),
                     overflow: TextOverflow.ellipsis,
@@ -49,13 +48,13 @@ class ScheduleTime extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: adaptive.AdaptiveLayout.spacing(context, base: 4)),
+            SizedBox(height: AdaptiveLayout.spacing(context, base: 4)),
             Text(
               time != null
                   ? '${time!.hour.toString().padLeft(2, '0')}:${time!.minute.toString().padLeft(2, '0')}'
                   : '--:--',
               style: HvacTypography.titleMedium.copyWith(
-                fontSize: adaptive.AdaptiveLayout.fontSize(context, base: 15),
+                fontSize: AdaptiveLayout.fontSize(context, base: 15),
                 fontWeight: FontWeight.w700,
                 color: HvacColors.textPrimary,
               ),

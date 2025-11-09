@@ -3,7 +3,6 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
-import 'package:hvac_ui_kit/src/utils/adaptive_layout.dart' as adaptive;
 
 /// Header for schedule control card
 class ScheduleHeader extends StatelessWidget {
@@ -17,20 +16,20 @@ class ScheduleHeader extends StatelessWidget {
           children: [
             Container(
               padding: EdgeInsets.all(
-                  adaptive.AdaptiveLayout.spacing(context, base: 8)),
+                  AdaptiveLayout.spacing(context, base: 8)),
               decoration: BoxDecoration(
                 color: HvacColors.success.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(
-                  adaptive.AdaptiveLayout.borderRadius(context, base: 8),
+                  AdaptiveLayout.borderRadius(context, base: 8),
                 ),
               ),
               child: Icon(
                 Icons.schedule,
                 color: HvacColors.success,
-                size: adaptive.AdaptiveLayout.iconSize(context, base: 20),
+                size: AdaptiveLayout.iconSize(context, base: 20),
               ),
             ),
-            SizedBox(width: adaptive.AdaptiveLayout.spacing(context)),
+            SizedBox(width: AdaptiveLayout.spacing(context)),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,7 +39,7 @@ class ScheduleHeader extends StatelessWidget {
                     'Расписание',
                     style: HvacTypography.titleLarge.copyWith(
                       fontSize:
-                          adaptive.AdaptiveLayout.fontSize(context, base: 16),
+                          AdaptiveLayout.fontSize(context, base: 16),
                       color: HvacColors.textPrimary,
                     ),
                     overflow: TextOverflow.ellipsis,
@@ -51,7 +50,7 @@ class ScheduleHeader extends StatelessWidget {
                     'Автоматическое управление',
                     style: HvacTypography.labelLarge.copyWith(
                       fontSize:
-                          adaptive.AdaptiveLayout.fontSize(context, base: 12),
+                          AdaptiveLayout.fontSize(context, base: 12),
                       color: HvacColors.textSecondary,
                     ),
                     overflow: TextOverflow.ellipsis,

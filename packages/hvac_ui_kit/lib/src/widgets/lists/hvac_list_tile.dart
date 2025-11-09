@@ -242,7 +242,7 @@ class HvacSwitchListTile extends StatelessWidget {
       trailing: Switch(
         value: value,
         onChanged: onChanged,
-        activeColor: activeColor ?? HvacColors.primary,
+        activeThumbColor: activeColor ?? HvacColors.primary,
       ),
       onTap: onChanged != null ? () => onChanged!(!value) : null,
     );

@@ -123,7 +123,7 @@ class AuthHeader extends StatelessWidget {
     return Column(
       children: [
         const AuthLogo(),
-        SizedBox(height: 32),
+        const SizedBox(height: 32),
         Text(
           isLoginMode ? 'Welcome Back' : 'Create Account',
           style: theme.textTheme.headlineMedium?.copyWith(
@@ -133,7 +133,7 @@ class AuthHeader extends StatelessWidget {
           ),
           textAlign: TextAlign.center,
         ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.2, end: 0),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Text(
           isLoginMode ? 'Sign in to your account' : 'Sign up for a new account',
           style: theme.textTheme.bodyMedium?.copyWith(

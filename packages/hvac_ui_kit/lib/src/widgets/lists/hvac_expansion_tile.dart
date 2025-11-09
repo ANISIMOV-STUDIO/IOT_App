@@ -304,11 +304,11 @@ class HvacCompactExpansionTile extends StatelessWidget {
     return HvacExpansionTile(
       title: Text(title),
       leading: leading,
-      children: children,
       backgroundColor: HvacColors.backgroundCard.withValues(alpha: 0.5),
       tilePadding: const EdgeInsets.all(HvacSpacing.sm),
       childrenPadding: const EdgeInsets.all(HvacSpacing.sm),
       showBorder: true,
+      children: children,
     );
   }
 }
