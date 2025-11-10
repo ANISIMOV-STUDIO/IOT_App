@@ -372,6 +372,54 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mode2 => 'Режим 2';
 
   @override
+  String get ventilationMode => 'Режим вентиляции';
+
+  @override
+  String get notSelected => 'Не выбран';
+
+  @override
+  String get modeBasic => 'Базовый';
+
+  @override
+  String get modeIntensive => 'Интенсивный';
+
+  @override
+  String get modeEconomic => 'Экономичный';
+
+  @override
+  String get modeMaximum => 'Максимальный';
+
+  @override
+  String get modeKitchen => 'Кухня';
+
+  @override
+  String get modeFireplace => 'Камин';
+
+  @override
+  String get modeVacation => 'Отпуск';
+
+  @override
+  String get modeCustom => 'Пользовательский';
+
+  @override
+  String get supplyAir => 'Приток';
+
+  @override
+  String get exhaustAir => 'Вытяжка';
+
+  @override
+  String get temperatures => 'Температуры';
+
+  @override
+  String get monitoringAndSettings => 'Мониторинг и уставки';
+
+  @override
+  String get outdoor => 'Наружный';
+
+  @override
+  String get indoor => 'Внутренний';
+
+  @override
   String get humidifierAir => 'Увлажнитель\nвоздуха';
 
   @override
@@ -428,9 +476,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get sync => 'Синхр.';
-
-  @override
-  String get schedule => 'Расписание';
 
   @override
   String get presets => 'Пресеты';
@@ -639,6 +684,51 @@ class AppLocalizationsRu extends AppLocalizations {
   String get veryStrong => 'Очень сильный';
 
   @override
+  String get schedule => 'Расписание';
+
+  @override
+  String get automaticControl => 'Автоматическое управление';
+
+  @override
+  String get configureSchedule => 'Настроить расписание';
+
+  @override
+  String get operatingTime => 'Время работы';
+
+  @override
+  String get running => 'Работает';
+
+  @override
+  String get stopped => 'Выключено';
+
+  @override
+  String get turnOn => 'Включение';
+
+  @override
+  String get turnOff => 'Отключение';
+
+  @override
+  String get monday => 'Понедельник';
+
+  @override
+  String get tuesday => 'Вторник';
+
+  @override
+  String get wednesday => 'Среда';
+
+  @override
+  String get thursday => 'Четверг';
+
+  @override
+  String get friday => 'Пятница';
+
+  @override
+  String get saturday => 'Суббота';
+
+  @override
+  String get sunday => 'Воскресенье';
+
+  @override
   String editSchedule(String name) {
     return 'Редактировать $name';
   }
@@ -841,7 +931,35 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get manageRules => 'Управление правилами (Скоро)';
+  String get automation => 'Автоматизация';
+
+  @override
+  String get manageRules => 'Управление правилами';
+
+  @override
+  String activeRulesFormat(int active, int total) {
+    return 'Активно: $active из $total';
+  }
+
+  @override
+  String get critical => 'Критические';
+
+  @override
+  String get errors => 'Ошибки';
+
+  @override
+  String get warnings => 'Предупреждения';
+
+  @override
+  String get infoLabel => 'Инфо';
+
+  @override
+  String showAll(int count) {
+    return 'Показать все ($count)';
+  }
+
+  @override
+  String get collapse => 'Свернуть';
 
   @override
   String get manageRulesComingSoon => 'Управление правилами (Скоро)';

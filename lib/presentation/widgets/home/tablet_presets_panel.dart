@@ -1,12 +1,13 @@
 /// Tablet Presets Panel
 ///
-/// Mode preset selector for tablet home layout
+/// Mode preset selector for tablet home layout with consistent HVAC UI Kit styling
 library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../domain/entities/mode_preset.dart';
 import '../../../domain/entities/ventilation_mode.dart';
+import '../../../generated/l10n/app_localizations.dart';
 
 class TabletPresetsPanel extends StatelessWidget {
   final Function(ModePreset) onPresetSelected;
@@ -18,6 +19,7 @@ class TabletPresetsPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final presets = [
       ModePreset.defaults[VentilationMode.economic]!,
       ModePreset.defaults[VentilationMode.basic]!,
@@ -25,30 +27,20 @@ class TabletPresetsPanel extends StatelessWidget {
       ModePreset.defaults[VentilationMode.vacation]!,
     ];
 
-    return Container(
-      decoration: BoxDecoration(
-        color: HvacColors.backgroundCard,
-        borderRadius: HvacRadius.lgRadius,
-        border: Border.all(
-          color: HvacColors.backgroundCardBorder,
-          width: 1.0,
-        ),
-      ),
-      padding: const EdgeInsets.all(HvacSpacing.lgR),
+    return HvacCard(
+      padding: const EdgeInsets.all(HvacSpacing.lg),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Text(
-            'Presets',
-            style: TextStyle(
-              fontSize: 16.0,
+          Text(
+            l10n.presets,
+            style: HvacTypography.titleMedium.copyWith(
               fontWeight: FontWeight.w600,
-              color: HvacColors.textPrimary,
             ),
           ),
-          const SizedBox(height: HvacSpacing.mdV),
+          const SizedBox(height: HvacSpacing.md),
           ...presets.map((preset) => Padding(
-                padding: const EdgeInsets.only(bottom: HvacSpacing.smV),
+                padding: const EdgeInsets.only(bottom: HvacSpacing.sm),
                 child: _buildPresetButton(preset),
               )),
         ],
@@ -65,8 +57,8 @@ class TabletPresetsPanel extends StatelessWidget {
         borderRadius: HvacRadius.mdRadius,
         child: Container(
           padding: const EdgeInsets.symmetric(
-            horizontal: HvacSpacing.mdR,
-            vertical: HvacSpacing.smV,
+            horizontal: HvacSpacing.md,
+            vertical: HvacSpacing.sm,
           ),
           decoration: BoxDecoration(
             border: Border.all(
@@ -82,12 +74,11 @@ class TabletPresetsPanel extends StatelessWidget {
                 size: 20.0,
                 color: _getPresetColor(preset),
               ),
-              const SizedBox(width: HvacSpacing.smR),
+              const SizedBox(width: HvacSpacing.sm),
               Expanded(
                 child: Text(
                   preset.mode.displayName,
-                  style: const TextStyle(
-                    fontSize: 14.0,
+                  style: HvacTypography.labelMedium.copyWith(
                     fontWeight: FontWeight.w500,
                     color: HvacColors.textPrimary,
                   ),
@@ -131,11 +122,11 @@ class TabletPresetsPanel extends StatelessWidget {
       case VentilationMode.economic:
         return HvacColors.success;
       case VentilationMode.basic:
-        return HvacColors.primaryOrange;
+        return HvacColors.primary;
       case VentilationMode.maximum:
         return HvacColors.error;
       case VentilationMode.vacation:
-        return HvacColors.primaryBlue;
+        return HvacColors.info;
       case VentilationMode.intensive:
         return HvacColors.warning;
       case VentilationMode.kitchen:

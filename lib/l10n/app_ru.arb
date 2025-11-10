@@ -496,6 +496,70 @@
   "@mode2": {
     "description": "Mode 2 label"
   },
+  "ventilationMode": "Режим вентиляции",
+  "@ventilationMode": {
+    "description": "Ventilation mode label"
+  },
+  "notSelected": "Не выбран",
+  "@notSelected": {
+    "description": "Not selected state"
+  },
+  "modeBasic": "Базовый",
+  "@modeBasic": {
+    "description": "Basic ventilation mode"
+  },
+  "modeIntensive": "Интенсивный",
+  "@modeIntensive": {
+    "description": "Intensive ventilation mode"
+  },
+  "modeEconomic": "Экономичный",
+  "@modeEconomic": {
+    "description": "Economic ventilation mode"
+  },
+  "modeMaximum": "Максимальный",
+  "@modeMaximum": {
+    "description": "Maximum ventilation mode"
+  },
+  "modeKitchen": "Кухня",
+  "@modeKitchen": {
+    "description": "Kitchen ventilation mode"
+  },
+  "modeFireplace": "Камин",
+  "@modeFireplace": {
+    "description": "Fireplace ventilation mode"
+  },
+  "modeVacation": "Отпуск",
+  "@modeVacation": {
+    "description": "Vacation ventilation mode"
+  },
+  "modeCustom": "Пользовательский",
+  "@modeCustom": {
+    "description": "Custom ventilation mode"
+  },
+  "supplyAir": "Приток",
+  "@supplyAir": {
+    "description": "Supply air label"
+  },
+  "exhaustAir": "Вытяжка",
+  "@exhaustAir": {
+    "description": "Exhaust air label"
+  },
+  "temperatures": "Температуры",
+  "@temperatures": {
+    "description": "Temperatures label"
+  },
+  "monitoringAndSettings": "Мониторинг и уставки",
+  "@monitoringAndSettings": {
+    "description": "Monitoring and settings label"
+  },
+  "outdoor": "Наружный",
+  "@outdoor": {
+    "description": "Outdoor label"
+  },
+  "indoor": "Внутренний",
+  "@indoor": {
+    "description": "Indoor label"
+  },
   "@@_ROOM_CONTROL": "=== Room Control ===",
   "humidifierAir": "Увлажнитель\nвоздуха",
   "@humidifierAir": {
@@ -574,10 +638,6 @@
   "sync": "Синхр.",
   "@sync": {
     "description": "Sync devices"
-  },
-  "schedule": "Расписание",
-  "@schedule": {
-    "description": "Schedule button"
   },
   "presets": "Пресеты",
   "@presets": {
@@ -871,6 +931,66 @@
     "description": "Password strength"
   },
   "@@_SCHEDULE": "=== Schedule ===",
+  "schedule": "Расписание",
+  "@schedule": {
+    "description": "Schedule label"
+  },
+  "automaticControl": "Автоматическое управление",
+  "@automaticControl": {
+    "description": "Automatic control label"
+  },
+  "configureSchedule": "Настроить расписание",
+  "@configureSchedule": {
+    "description": "Configure schedule button"
+  },
+  "operatingTime": "Время работы",
+  "@operatingTime": {
+    "description": "Operating time label"
+  },
+  "running": "Работает",
+  "@running": {
+    "description": "Running status"
+  },
+  "stopped": "Выключено",
+  "@stopped": {
+    "description": "Stopped status"
+  },
+  "turnOn": "Включение",
+  "@turnOn": {
+    "description": "Turn on action"
+  },
+  "turnOff": "Отключение",
+  "@turnOff": {
+    "description": "Turn off action"
+  },
+  "monday": "Понедельник",
+  "@monday": {
+    "description": "Monday"
+  },
+  "tuesday": "Вторник",
+  "@tuesday": {
+    "description": "Tuesday"
+  },
+  "wednesday": "Среда",
+  "@wednesday": {
+    "description": "Wednesday"
+  },
+  "thursday": "Четверг",
+  "@thursday": {
+    "description": "Thursday"
+  },
+  "friday": "Пятница",
+  "@friday": {
+    "description": "Friday"
+  },
+  "saturday": "Суббота",
+  "@saturday": {
+    "description": "Saturday"
+  },
+  "sunday": "Воскресенье",
+  "@sunday": {
+    "description": "Sunday"
+  },
   "editSchedule": "Редактировать {name}",
   "@editSchedule": {
     "description": "Edit schedule semantic label",
@@ -1152,11 +1272,57 @@
       }
     }
   },
-  "@@_COMING_SOON": "=== Coming Soon Messages ===",
-  "manageRules": "Управление правилами (Скоро)",
-  "@manageRules": {
-    "description": "Manage rules button/message"
+  "@@_AUTOMATION": "=== Automation ===",
+  "automation": "Автоматизация",
+  "@automation": {
+    "description": "Automation panel title"
   },
+  "manageRules": "Управление правилами",
+  "@manageRules": {
+    "description": "Manage rules button"
+  },
+  "activeRulesFormat": "Активно: {active} из {total}",
+  "@activeRulesFormat": {
+    "description": "Active rules count format",
+    "placeholders": {
+      "active": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "critical": "Критические",
+  "@critical": {
+    "description": "Critical notification label"
+  },
+  "errors": "Ошибки",
+  "@errors": {
+    "description": "Errors notification label"
+  },
+  "warnings": "Предупреждения",
+  "@warnings": {
+    "description": "Warnings notification label"
+  },
+  "infoLabel": "Инфо",
+  "@infoLabel": {
+    "description": "Info notification label"
+  },
+  "showAll": "Показать все ({count})",
+  "@showAll": {
+    "description": "Show all notifications button",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "collapse": "Свернуть",
+  "@collapse": {
+    "description": "Collapse button"
+  },
+  "@@_COMING_SOON": "=== Coming Soon Messages ===",
   "manageRulesComingSoon": "Управление правилами (Скоро)",
   "@manageRulesComingSoon": {
     "description": "Manage rules coming soon"

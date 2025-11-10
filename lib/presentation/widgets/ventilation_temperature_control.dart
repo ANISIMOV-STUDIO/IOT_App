@@ -1,12 +1,12 @@
 /// Ventilation Temperature Control Widget
 ///
 /// Adaptive card for temperature monitoring and setpoints
-/// Uses big-tech adaptive layout approach
 library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../domain/entities/hvac_unit.dart';
+import '../../generated/l10n/app_localizations.dart';
 
 class VentilationTemperatureControl extends StatelessWidget {
   final HvacUnit unit;
@@ -18,93 +18,48 @@ class VentilationTemperatureControl extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AdaptiveControl(
-      builder: (context, deviceSize) {
-        return Container(
-          padding: AdaptiveLayout.controlPadding(context),
-          decoration: BoxDecoration(
-            color: HvacColors.backgroundCard,
-            borderRadius: BorderRadius.circular(
-              AdaptiveLayout.borderRadius(context, base: 16),
-            ),
-            border: Border.all(
-              color: HvacColors.backgroundCardBorder,
-            ),
-          ),
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              // Check if we have a height constraint (desktop layout)
-              final hasHeightConstraint =
-                  constraints.maxHeight != double.infinity;
+    final l10n = AppLocalizations.of(context)!;
+    final isMobile = ResponsiveUtils.isMobile(context);
+    final isTablet = ResponsiveUtils.isTablet(context);
 
-              if (hasHeightConstraint) {
-                // Desktop layout with constrained height - use scrollable content
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildHeader(context, deviceSize),
-                    SizedBox(
-                        height:
-                            AdaptiveLayout.spacing(context, base: 16)),
-                    Expanded(
-                      child: SingleChildScrollView(
-                        physics: const ClampingScrollPhysics(),
-                        child: _buildTemperatureGrid(context, deviceSize),
-                      ),
-                    ),
-                  ],
-                );
-              } else {
-                // Mobile layout without height constraint
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _buildHeader(context, deviceSize),
-                    SizedBox(
-                        height:
-                            AdaptiveLayout.spacing(context, base: 16)),
-                    _buildTemperatureGrid(context, deviceSize),
-                  ],
-                );
-              }
-            },
-          ),
-        );
-      },
+    return HvacCard(
+      padding: EdgeInsets.all(isMobile ? HvacSpacing.md : HvacSpacing.lg),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildHeader(context, l10n),
+          SizedBox(height: HvacSpacing.md),
+          _buildTemperatureGrid(context, l10n, isMobile, isTablet),
+        ],
+      ),
     );
   }
 
-  Widget _buildHeader(BuildContext context, DeviceSize deviceSize) {
+  Widget _buildHeader(BuildContext context, AppLocalizations l10n) {
     return Row(
       children: [
         Container(
-          padding:
-              EdgeInsets.all(AdaptiveLayout.spacing(context, base: 8)),
+          padding: const EdgeInsets.all(HvacSpacing.sm),
           decoration: BoxDecoration(
             color: HvacColors.info.withValues(alpha: 0.2),
-            borderRadius: BorderRadius.circular(
-              AdaptiveLayout.borderRadius(context, base: 8),
-            ),
+            borderRadius: HvacRadius.smRadius,
           ),
           child: Icon(
             Icons.thermostat,
             color: HvacColors.info,
-            size: AdaptiveLayout.iconSize(context, base: 20),
+            size: 20.0,
           ),
         ),
-        SizedBox(width: AdaptiveLayout.spacing(context)),
+        const SizedBox(width: HvacSpacing.sm),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Температуры',
-                style: TextStyle(
-                  fontSize: AdaptiveLayout.fontSize(context, base: 16),
+                l10n.temperatures,
+                style: HvacTypography.titleMedium.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: HvacColors.textPrimary,
                 ),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
@@ -112,8 +67,7 @@ class VentilationTemperatureControl extends StatelessWidget {
               const SizedBox(height: 2.0),
               Text(
                 'Мониторинг и уставки',
-                style: TextStyle(
-                  fontSize: AdaptiveLayout.fontSize(context, base: 12),
+                style: HvacTypography.labelSmall.copyWith(
                   color: HvacColors.textSecondary,
                 ),
                 overflow: TextOverflow.ellipsis,
@@ -126,100 +80,92 @@ class VentilationTemperatureControl extends StatelessWidget {
     );
   }
 
-  Widget _buildTemperatureGrid(BuildContext context, DeviceSize deviceSize) {
-    // Adaptive layout: single column on mobile, grid on tablet/desktop
-    switch (deviceSize) {
-      case DeviceSize.compact:
-        return Column(
-          children: [
-            _buildTempIndicator(
-              context,
-              'Приток',
-              unit.supplyAirTemp,
-              Icons.air,
-              HvacColors.info,
-            ),
-            const SizedBox(height: 8.0),
-            _buildTempIndicator(
-              context,
-              'Вытяжка',
-              unit.roomTemp, // Используем roomTemp как температуру вытяжки
-              Icons.upload,
-              HvacColors.warning,
-            ),
-            const SizedBox(height: 8.0),
-            _buildTempIndicator(
-              context,
-              'Наружный',
-              unit.outdoorTemp,
-              Icons.landscape,
-              HvacColors.textSecondary,
-            ),
-            const SizedBox(height: 8.0),
-            _buildTempIndicator(
-              context,
-              'Внутренний',
-              unit.roomTemp,
-              Icons.home,
-              HvacColors.success,
-            ),
-          ],
-        );
-      case DeviceSize.medium:
-      case DeviceSize.expanded:
-        // Grid for tablet/desktop - use flexible layout
-        return LayoutBuilder(
-          builder: (context, constraints) {
-            final itemWidth = (constraints.maxWidth - HvacSpacing.mdR) / 2;
-            return Wrap(
-              spacing: HvacSpacing.mdR,
-              runSpacing: HvacSpacing.mdR,
-              children: [
-                SizedBox(
-                  width: itemWidth,
-                  child: _buildTempIndicator(
-                    context,
-                    'Приток',
-                    unit.supplyAirTemp,
-                    Icons.air,
-                    HvacColors.info,
-                  ),
-                ),
-                SizedBox(
-                  width: itemWidth,
-                  child: _buildTempIndicator(
-                    context,
-                    'Вытяжка',
-                    unit.roomTemp,
-                    Icons.upload,
-                    HvacColors.warning,
-                  ),
-                ),
-                SizedBox(
-                  width: itemWidth,
-                  child: _buildTempIndicator(
-                    context,
-                    'Наружный',
-                    unit.outdoorTemp,
-                    Icons.landscape,
-                    HvacColors.textSecondary,
-                  ),
-                ),
-                SizedBox(
-                  width: itemWidth,
-                  child: _buildTempIndicator(
-                    context,
-                    'Внутренний',
-                    unit.roomTemp,
-                    Icons.home,
-                    HvacColors.success,
-                  ),
-                ),
-              ],
-            );
-          },
-        );
+  Widget _buildTemperatureGrid(
+      BuildContext context, AppLocalizations l10n, bool isMobile, bool isTablet) {
+    if (isMobile) {
+      return Column(
+        children: [
+          _buildTempIndicator(
+            context,
+            l10n.supplyAir,
+            unit.supplyAirTemp,
+            Icons.air,
+            HvacColors.info,
+          ),
+          const SizedBox(height: HvacSpacing.sm),
+          _buildTempIndicator(
+            context,
+            l10n.exhaustAir,
+            unit.roomTemp,
+            Icons.upload,
+            HvacColors.warning,
+          ),
+          const SizedBox(height: HvacSpacing.sm),
+          _buildTempIndicator(
+            context,
+            l10n.outdoor,
+            unit.outdoorTemp,
+            Icons.landscape,
+            HvacColors.textSecondary,
+          ),
+          const SizedBox(height: HvacSpacing.sm),
+          _buildTempIndicator(
+            context,
+            l10n.indoor,
+            unit.roomTemp,
+            Icons.home,
+            HvacColors.success,
+          ),
+        ],
+      );
     }
+
+    return Wrap(
+      spacing: HvacSpacing.sm,
+      runSpacing: HvacSpacing.sm,
+      children: [
+        SizedBox(
+          width: (MediaQuery.of(context).size.width * 0.45) - HvacSpacing.lg * 2,
+          child: _buildTempIndicator(
+            context,
+            l10n.supplyAir,
+            unit.supplyAirTemp,
+            Icons.air,
+            HvacColors.info,
+          ),
+        ),
+        SizedBox(
+          width: (MediaQuery.of(context).size.width * 0.45) - HvacSpacing.lg * 2,
+          child: _buildTempIndicator(
+            context,
+            l10n.exhaustAir,
+            unit.roomTemp,
+            Icons.upload,
+            HvacColors.warning,
+          ),
+        ),
+        SizedBox(
+          width: (MediaQuery.of(context).size.width * 0.45) - HvacSpacing.lg * 2,
+          child: _buildTempIndicator(
+            context,
+            l10n.outdoor,
+            unit.outdoorTemp,
+            Icons.landscape,
+            HvacColors.textSecondary,
+          ),
+        ),
+        SizedBox(
+          width: (MediaQuery.of(context).size.width * 0.45) - HvacSpacing.lg * 2,
+          child: _buildTempIndicator(
+            context,
+            l10n.indoor,
+            unit.roomTemp,
+            Icons.home,
+            HvacColors.success,
+          ),
+        ),
+      ],
+    );
   }
 
   Widget _buildTempIndicator(
@@ -230,13 +176,10 @@ class VentilationTemperatureControl extends StatelessWidget {
     Color color,
   ) {
     return Container(
-      padding:
-          EdgeInsets.all(AdaptiveLayout.spacing(context, base: 10)),
+      padding: const EdgeInsets.all(HvacSpacing.sm),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(
-          AdaptiveLayout.borderRadius(context, base: 12),
-        ),
+        borderRadius: HvacRadius.smRadius,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -247,17 +190,14 @@ class VentilationTemperatureControl extends StatelessWidget {
             children: [
               Icon(
                 icon,
-                size: AdaptiveLayout.iconSize(context, base: 14),
+                size: 14.0,
                 color: color,
               ),
-              SizedBox(
-                  width: AdaptiveLayout.spacing(context, base: 4)),
+              const SizedBox(width: HvacSpacing.xs),
               Flexible(
                 child: Text(
                   label,
-                  style: TextStyle(
-                    fontSize:
-                        AdaptiveLayout.fontSize(context, base: 11),
+                  style: HvacTypography.labelSmall.copyWith(
                     color: HvacColors.textSecondary,
                   ),
                   overflow: TextOverflow.ellipsis,
@@ -266,11 +206,10 @@ class VentilationTemperatureControl extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: AdaptiveLayout.spacing(context, base: 6)),
+          const SizedBox(height: HvacSpacing.xs),
           Text(
             temperature != null ? '${temperature.toStringAsFixed(1)}°C' : '--',
-            style: TextStyle(
-              fontSize: AdaptiveLayout.fontSize(context, base: 20),
+            style: HvacTypography.headlineMedium.copyWith(
               fontWeight: FontWeight.w700,
               color: color,
             ),

@@ -212,12 +212,12 @@ class _HvacPrimaryButtonState extends State<HvacPrimaryButton>
       gradient: LinearGradient(
         colors: _isHovered
             ? [
-                const Color(0xFF1976D2), // Darker blue on hover
-                const Color(0xFF1565C0),
+                const Color(0xFF1565C0), // Deeper blue on hover
+                const Color(0xFF0D47A1),
               ]
             : [
-                const Color(0xFF1E88E5), // Primary blue
-                const Color(0xFF1976D2),
+                const Color(0xFF1976D2), // Primary blue (more saturated)
+                const Color(0xFF1565C0),
               ],
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
@@ -225,9 +225,9 @@ class _HvacPrimaryButtonState extends State<HvacPrimaryButton>
       borderRadius: BorderRadius.circular(HvacRadius.mdR),
       border: Border.all(
         color: _isHovered
-            ? const Color(0xFF1565C0).withValues(alpha: 0.8)
+            ? const Color(0xFF0D47A1).withValues(alpha: 0.9)
             : Colors.transparent,
-        width: _isHovered ? 1.5 : 0,
+        width: _isHovered ? 2 : 0,
       ),
       boxShadow: _buildShadows(),
     );
@@ -240,13 +240,13 @@ class _HvacPrimaryButtonState extends State<HvacPrimaryButton>
     return _isHovered
         ? [
             BoxShadow(
-              color: const Color(0xFF1E88E5).withValues(alpha: 0.4),
+              color: const Color(0xFF1976D2).withValues(alpha: 0.5),
               blurRadius: 20,
               offset: const Offset(0, 8),
               spreadRadius: -2,
             ),
             BoxShadow(
-              color: const Color(0xFF1E88E5).withValues(alpha: 0.2),
+              color: const Color(0xFF1976D2).withValues(alpha: 0.25),
               blurRadius: 12,
               offset: const Offset(0, 4),
               spreadRadius: 0,
@@ -254,13 +254,13 @@ class _HvacPrimaryButtonState extends State<HvacPrimaryButton>
           ]
         : [
             BoxShadow(
-              color: const Color(0xFF1E88E5).withValues(alpha: 0.3),
+              color: const Color(0xFF1976D2).withValues(alpha: 0.4),
               blurRadius: 12,
               offset: const Offset(0, 4),
               spreadRadius: -1,
             ),
             BoxShadow(
-              color: const Color(0xFF1E88E5).withValues(alpha: 0.15),
+              color: const Color(0xFF1976D2).withValues(alpha: 0.2),
               blurRadius: 8,
               offset: const Offset(0, 2),
               spreadRadius: 0,

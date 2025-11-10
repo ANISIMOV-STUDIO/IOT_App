@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+import '../../../generated/l10n/app_localizations.dart';
 import 'schedule_time.dart';
 
 /// Today's schedule display card
@@ -18,97 +19,90 @@ class TodayScheduleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AdaptiveControl(
-      builder: (context, deviceSize) {
-        return HvacCard(
-          size: HvacCardSize.compact,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    final l10n = AppLocalizations.of(context)!;
+
+    return HvacCard(
+      size: HvacCardSize.compact,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Flexible(
-                    child: Text(
-                      _getDayName(dayOfWeek),
-                      style: HvacTypography.labelMedium.copyWith(
-                        fontSize:
-                            AdaptiveLayout.fontSize(context, base: 11),
-                        color: HvacColors.textSecondary,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
+              Flexible(
+                child: Text(
+                  _getDayName(dayOfWeek, l10n),
+                  style: HvacTypography.labelMedium.copyWith(
+                    color: HvacColors.textSecondary,
                   ),
-                  const SizedBox(width: 8.0),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 6.0,
-                      vertical: 3.0,
-                    ),
-                    decoration: BoxDecoration(
-                      color: schedule?.timerEnabled == true
-                          ? HvacColors.success.withValues(alpha: 0.2)
-                          : HvacColors.textSecondary.withValues(alpha: 0.2),
-                      borderRadius: HvacRadius.xsRadius,
-                    ),
-                    child: Text(
-                      schedule?.timerEnabled == true ? 'Включен' : 'Выключен',
-                      style: HvacTypography.labelSmall.copyWith(
-                        fontSize:
-                            AdaptiveLayout.fontSize(context, base: 10),
-                        fontWeight: FontWeight.w600,
-                        color: schedule?.timerEnabled == true
-                            ? HvacColors.success
-                            : HvacColors.textSecondary,
-                      ),
-                    ),
-                  ),
-                ],
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-              SizedBox(
-                  height: AdaptiveLayout.spacing(context, base: 10)),
-              Row(
-                children: [
-                  Expanded(
-                    child: ScheduleTime(
-                      label: 'Включение',
-                      time: schedule?.turnOnTime,
-                      icon: Icons.power_settings_new,
-                    ),
+              SizedBox(width: HvacSpacing.xs),
+              Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: HvacSpacing.xs,
+                  vertical: HvacSpacing.xxs,
+                ),
+                decoration: BoxDecoration(
+                  color: schedule?.timerEnabled == true
+                      ? HvacColors.success.withValues(alpha: 0.2)
+                      : HvacColors.textSecondary.withValues(alpha: 0.2),
+                  borderRadius: HvacRadius.xsRadius,
+                ),
+                child: Text(
+                  schedule?.timerEnabled == true ? l10n.enabled : l10n.disabled,
+                  style: HvacTypography.labelSmall.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: schedule?.timerEnabled == true
+                        ? HvacColors.success
+                        : HvacColors.textSecondary,
                   ),
-                  SizedBox(width: AdaptiveLayout.spacing(context)),
-                  Expanded(
-                    child: ScheduleTime(
-                      label: 'Отключение',
-                      time: schedule?.turnOffTime,
-                      icon: Icons.power_off,
-                    ),
-                  ),
-                ],
+                ),
               ),
             ],
           ),
-        );
-      },
+          SizedBox(height: HvacSpacing.sm),
+          Row(
+            children: [
+              Expanded(
+                child: ScheduleTime(
+                  label: l10n.turnOn,
+                  time: schedule?.turnOnTime,
+                  icon: Icons.power_settings_new,
+                ),
+              ),
+              SizedBox(width: HvacSpacing.md),
+              Expanded(
+                child: ScheduleTime(
+                  label: l10n.turnOff,
+                  time: schedule?.turnOffTime,
+                  icon: Icons.power_off,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
-  String _getDayName(int dayOfWeek) {
+  String _getDayName(int dayOfWeek, AppLocalizations l10n) {
     switch (dayOfWeek) {
       case 1:
-        return 'Понедельник';
+        return l10n.monday;
       case 2:
-        return 'Вторник';
+        return l10n.tuesday;
       case 3:
-        return 'Среда';
+        return l10n.wednesday;
       case 4:
-        return 'Четверг';
+        return l10n.thursday;
       case 5:
-        return 'Пятница';
+        return l10n.friday;
       case 6:
-        return 'Суббота';
+        return l10n.saturday;
       case 7:
-        return 'Воскресенье';
+        return l10n.sunday;
       default:
         return '';
     }

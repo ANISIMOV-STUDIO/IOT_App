@@ -1,11 +1,12 @@
 /// Automation Panel Widget
 ///
-/// Displays and manages automation rules
+/// Displays and manages automation rules with consistent HVAC UI Kit styling
 library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../domain/entities/automation_rule.dart';
+import '../../generated/l10n/app_localizations.dart';
 
 class AutomationPanel extends StatelessWidget {
   final List<AutomationRule> rules;
@@ -21,11 +22,11 @@ class AutomationPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final activeRules = rules.where((r) => r.enabled).length;
 
-    return Container(
-      padding: const EdgeInsets.all(HvacSpacing.lgR),
-      decoration: HvacDecorations.card(),
+    return HvacCard(
+      padding: const EdgeInsets.all(HvacSpacing.lg),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -33,7 +34,7 @@ class AutomationPanel extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(HvacSpacing.smR),
+                padding: const EdgeInsets.all(HvacSpacing.sm),
                 decoration: HvacDecorations.iconContainer(
                   color: HvacColors.warning,
                 ),
@@ -49,15 +50,16 @@ class AutomationPanel extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Автоматизация',
+                      l10n.automation,
                       style: HvacTypography.titleMedium.copyWith(
+                        fontWeight: FontWeight.w600,
                         color: HvacColors.textPrimary,
                       ),
                     ),
                     const SizedBox(height: HvacSpacing.xxs),
                     Text(
-                      'Активно: $activeRules из ${rules.length}',
-                      style: HvacTypography.caption.copyWith(
+                      l10n.activeRulesFormat(activeRules, rules.length),
+                      style: HvacTypography.labelSmall.copyWith(
                         color: HvacColors.textSecondary,
                       ),
                     ),
@@ -70,7 +72,7 @@ class AutomationPanel extends StatelessWidget {
           const SizedBox(height: HvacSpacing.md),
 
           // Rules list
-          ...rules.take(3).map((rule) => _buildRuleItem(rule)),
+          ...rules.take(3).map((rule) => _buildRuleItem(context, rule)),
 
           const SizedBox(height: HvacSpacing.sm),
 
@@ -78,7 +80,7 @@ class AutomationPanel extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: HvacOutlineButton(
-              label: 'Управление правилами',
+              label: l10n.manageRules,
               onPressed: onManageRules,
               icon: Icons.settings,
             ),
@@ -88,22 +90,16 @@ class AutomationPanel extends StatelessWidget {
     );
   }
 
-  Widget _buildRuleItem(AutomationRule rule) {
+  Widget _buildRuleItem(BuildContext context, AutomationRule rule) {
     return Container(
-      margin: const EdgeInsets.only(bottom: HvacSpacing.smR),
-      padding: const EdgeInsets.all(HvacSpacing.mdR),
-      decoration: HvacDecorations.cardFlat(
-        color: HvacColors.backgroundCard,
-        radius: HvacRadius.sm,
-      ).copyWith(
-        border: Border.all(
-          color: rule.enabled
-              ? HvacColors.success.withValues(alpha: 0.3)
-              : HvacColors.backgroundCardBorder,
-          width: 1,
-        ),
-      ),
-      child: Row(
+      margin: const EdgeInsets.only(bottom: HvacSpacing.sm),
+      child: HvacCard(
+        padding: const EdgeInsets.all(HvacSpacing.md),
+        backgroundColor: HvacColors.backgroundCard,
+        borderColor: rule.enabled
+            ? HvacColors.success.withValues(alpha: 0.3)
+            : HvacColors.backgroundCardBorder,
+        child: Row(
         children: [
           // Status indicator
           Container(
@@ -124,14 +120,14 @@ class AutomationPanel extends StatelessWidget {
               children: [
                 Text(
                   rule.name,
-                  style: HvacTypography.labelLarge.copyWith(
+                  style: HvacTypography.labelMedium.copyWith(
                     color: HvacColors.textPrimary,
                   ),
                 ),
                 const SizedBox(height: HvacSpacing.xxs),
                 Text(
                   '${rule.conditionDescription} → ${rule.actionDescription}',
-                  style: HvacTypography.caption.copyWith(
+                  style: HvacTypography.bodySmall.copyWith(
                     color: HvacColors.textSecondary,
                   ),
                   maxLines: 1,
@@ -164,6 +160,7 @@ class AutomationPanel extends StatelessWidget {
             ),
           ),
         ],
+      ),
       ),
     );
   }

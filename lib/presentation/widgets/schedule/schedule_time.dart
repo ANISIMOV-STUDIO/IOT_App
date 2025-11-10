@@ -19,49 +19,41 @@ class ScheduleTime extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AdaptiveControl(
-      builder: (context, deviceSize) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  icon,
-                  size: AdaptiveLayout.iconSize(context, base: 12),
+            Icon(
+              icon,
+              size: 12,
+              color: HvacColors.textSecondary,
+            ),
+            SizedBox(width: HvacSpacing.xxs),
+            Flexible(
+              child: Text(
+                label,
+                style: HvacTypography.labelSmall.copyWith(
                   color: HvacColors.textSecondary,
                 ),
-                SizedBox(
-                    width: AdaptiveLayout.spacing(context, base: 4)),
-                Flexible(
-                  child: Text(
-                    label,
-                    style: HvacTypography.labelSmall.copyWith(
-                      fontSize:
-                          AdaptiveLayout.fontSize(context, base: 10),
-                      color: HvacColors.textSecondary,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: AdaptiveLayout.spacing(context, base: 4)),
-            Text(
-              time != null
-                  ? '${time!.hour.toString().padLeft(2, '0')}:${time!.minute.toString().padLeft(2, '0')}'
-                  : '--:--',
-              style: HvacTypography.titleMedium.copyWith(
-                fontSize: AdaptiveLayout.fontSize(context, base: 15),
-                fontWeight: FontWeight.w700,
-                color: HvacColors.textPrimary,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
           ],
-        );
-      },
+        ),
+        SizedBox(height: HvacSpacing.xxs),
+        Text(
+          time != null
+              ? '${time!.hour.toString().padLeft(2, '0')}:${time!.minute.toString().padLeft(2, '0')}'
+              : '--:--',
+          style: HvacTypography.titleMedium.copyWith(
+            fontWeight: FontWeight.w700,
+            color: HvacColors.textPrimary,
+          ),
+        ),
+      ],
     );
   }
 }

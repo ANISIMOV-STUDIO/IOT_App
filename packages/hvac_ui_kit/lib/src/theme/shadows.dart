@@ -36,13 +36,13 @@ class HvacShadows {
   /// Small shadow - Card at rest (2dp elevation) - Soft blue-tinted shadow
   static List<BoxShadow> get sm => [
         BoxShadow(
-          color: const Color(0xFF1E88E5).withValues(alpha: 0.08),
+          color: const Color(0xFF1976D2).withValues(alpha: 0.12),
           blurRadius: 8,
           offset: const Offset(0, 2),
           spreadRadius: -1,
         ),
         BoxShadow(
-          color: const Color(0xFF000000).withValues(alpha: 0.04),
+          color: const Color(0xFF000000).withValues(alpha: 0.06),
           blurRadius: 4,
           offset: const Offset(0, 1),
           spreadRadius: 0,
@@ -52,13 +52,13 @@ class HvacShadows {
   /// Medium shadow - Raised elements (4dp elevation) - Enhanced depth
   static List<BoxShadow> get md => [
         BoxShadow(
-          color: const Color(0xFF1E88E5).withValues(alpha: 0.12),
+          color: const Color(0xFF1976D2).withValues(alpha: 0.16),
           blurRadius: 16,
           offset: const Offset(0, 4),
           spreadRadius: -2,
         ),
         BoxShadow(
-          color: const Color(0xFF000000).withValues(alpha: 0.06),
+          color: const Color(0xFF000000).withValues(alpha: 0.08),
           blurRadius: 8,
           offset: const Offset(0, 2),
           spreadRadius: -1,

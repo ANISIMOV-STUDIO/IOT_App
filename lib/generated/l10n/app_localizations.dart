@@ -788,6 +788,102 @@ abstract class AppLocalizations {
   /// **'Режим 2'**
   String get mode2;
 
+  /// Ventilation mode label
+  ///
+  /// In ru, this message translates to:
+  /// **'Режим вентиляции'**
+  String get ventilationMode;
+
+  /// Not selected state
+  ///
+  /// In ru, this message translates to:
+  /// **'Не выбран'**
+  String get notSelected;
+
+  /// Basic ventilation mode
+  ///
+  /// In ru, this message translates to:
+  /// **'Базовый'**
+  String get modeBasic;
+
+  /// Intensive ventilation mode
+  ///
+  /// In ru, this message translates to:
+  /// **'Интенсивный'**
+  String get modeIntensive;
+
+  /// Economic ventilation mode
+  ///
+  /// In ru, this message translates to:
+  /// **'Экономичный'**
+  String get modeEconomic;
+
+  /// Maximum ventilation mode
+  ///
+  /// In ru, this message translates to:
+  /// **'Максимальный'**
+  String get modeMaximum;
+
+  /// Kitchen ventilation mode
+  ///
+  /// In ru, this message translates to:
+  /// **'Кухня'**
+  String get modeKitchen;
+
+  /// Fireplace ventilation mode
+  ///
+  /// In ru, this message translates to:
+  /// **'Камин'**
+  String get modeFireplace;
+
+  /// Vacation ventilation mode
+  ///
+  /// In ru, this message translates to:
+  /// **'Отпуск'**
+  String get modeVacation;
+
+  /// Custom ventilation mode
+  ///
+  /// In ru, this message translates to:
+  /// **'Пользовательский'**
+  String get modeCustom;
+
+  /// Supply air label
+  ///
+  /// In ru, this message translates to:
+  /// **'Приток'**
+  String get supplyAir;
+
+  /// Exhaust air label
+  ///
+  /// In ru, this message translates to:
+  /// **'Вытяжка'**
+  String get exhaustAir;
+
+  /// Temperatures label
+  ///
+  /// In ru, this message translates to:
+  /// **'Температуры'**
+  String get temperatures;
+
+  /// Monitoring and settings label
+  ///
+  /// In ru, this message translates to:
+  /// **'Мониторинг и уставки'**
+  String get monitoringAndSettings;
+
+  /// Outdoor label
+  ///
+  /// In ru, this message translates to:
+  /// **'Наружный'**
+  String get outdoor;
+
+  /// Indoor label
+  ///
+  /// In ru, this message translates to:
+  /// **'Внутренний'**
+  String get indoor;
+
   /// Humidifier air label
   ///
   /// In ru, this message translates to:
@@ -901,12 +997,6 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Синхр.'**
   String get sync;
-
-  /// Schedule button
-  ///
-  /// In ru, this message translates to:
-  /// **'Расписание'**
-  String get schedule;
 
   /// Presets title
   ///
@@ -1267,6 +1357,96 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Очень сильный'**
   String get veryStrong;
+
+  /// Schedule label
+  ///
+  /// In ru, this message translates to:
+  /// **'Расписание'**
+  String get schedule;
+
+  /// Automatic control label
+  ///
+  /// In ru, this message translates to:
+  /// **'Автоматическое управление'**
+  String get automaticControl;
+
+  /// Configure schedule button
+  ///
+  /// In ru, this message translates to:
+  /// **'Настроить расписание'**
+  String get configureSchedule;
+
+  /// Operating time label
+  ///
+  /// In ru, this message translates to:
+  /// **'Время работы'**
+  String get operatingTime;
+
+  /// Running status
+  ///
+  /// In ru, this message translates to:
+  /// **'Работает'**
+  String get running;
+
+  /// Stopped status
+  ///
+  /// In ru, this message translates to:
+  /// **'Выключено'**
+  String get stopped;
+
+  /// Turn on action
+  ///
+  /// In ru, this message translates to:
+  /// **'Включение'**
+  String get turnOn;
+
+  /// Turn off action
+  ///
+  /// In ru, this message translates to:
+  /// **'Отключение'**
+  String get turnOff;
+
+  /// Monday
+  ///
+  /// In ru, this message translates to:
+  /// **'Понедельник'**
+  String get monday;
+
+  /// Tuesday
+  ///
+  /// In ru, this message translates to:
+  /// **'Вторник'**
+  String get tuesday;
+
+  /// Wednesday
+  ///
+  /// In ru, this message translates to:
+  /// **'Среда'**
+  String get wednesday;
+
+  /// Thursday
+  ///
+  /// In ru, this message translates to:
+  /// **'Четверг'**
+  String get thursday;
+
+  /// Friday
+  ///
+  /// In ru, this message translates to:
+  /// **'Пятница'**
+  String get friday;
+
+  /// Saturday
+  ///
+  /// In ru, this message translates to:
+  /// **'Суббота'**
+  String get saturday;
+
+  /// Sunday
+  ///
+  /// In ru, this message translates to:
+  /// **'Воскресенье'**
+  String get sunday;
 
   /// Edit schedule semantic label
   ///
@@ -1658,11 +1838,59 @@ abstract class AppLocalizations {
   /// **'{date}'**
   String date(String date);
 
-  /// Manage rules button/message
+  /// Automation panel title
   ///
   /// In ru, this message translates to:
-  /// **'Управление правилами (Скоро)'**
+  /// **'Автоматизация'**
+  String get automation;
+
+  /// Manage rules button
+  ///
+  /// In ru, this message translates to:
+  /// **'Управление правилами'**
   String get manageRules;
+
+  /// Active rules count format
+  ///
+  /// In ru, this message translates to:
+  /// **'Активно: {active} из {total}'**
+  String activeRulesFormat(int active, int total);
+
+  /// Critical notification label
+  ///
+  /// In ru, this message translates to:
+  /// **'Критические'**
+  String get critical;
+
+  /// Errors notification label
+  ///
+  /// In ru, this message translates to:
+  /// **'Ошибки'**
+  String get errors;
+
+  /// Warnings notification label
+  ///
+  /// In ru, this message translates to:
+  /// **'Предупреждения'**
+  String get warnings;
+
+  /// Info notification label
+  ///
+  /// In ru, this message translates to:
+  /// **'Инфо'**
+  String get infoLabel;
+
+  /// Show all notifications button
+  ///
+  /// In ru, this message translates to:
+  /// **'Показать все ({count})'**
+  String showAll(int count);
+
+  /// Collapse button
+  ///
+  /// In ru, this message translates to:
+  /// **'Свернуть'**
+  String get collapse;
 
   /// Manage rules coming soon
   ///

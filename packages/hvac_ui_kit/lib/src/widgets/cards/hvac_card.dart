@@ -52,6 +52,12 @@ class HvacCard extends StatefulWidget {
   /// Enable border
   final bool showBorder;
 
+  /// Custom padding (overrides size padding)
+  final EdgeInsets? padding;
+
+  /// Minimum height constraint
+  final double? minHeight;
+
   const HvacCard({
     super.key,
     required this.child,
@@ -62,6 +68,8 @@ class HvacCard extends StatefulWidget {
     this.backgroundColor,
     this.borderColor,
     this.showBorder = true,
+    this.padding,
+    this.minHeight,
   });
 
   @override
@@ -85,6 +93,9 @@ class _HvacCardState extends State<HvacCard> {
         onTap: widget.onTap,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
+          constraints: widget.minHeight != null
+              ? BoxConstraints(minHeight: widget.minHeight!)
+              : null,
           padding: _getPadding(),
           decoration: _buildDecoration(),
           child: widget.child,
@@ -94,6 +105,8 @@ class _HvacCardState extends State<HvacCard> {
   }
 
   EdgeInsets _getPadding() {
+    if (widget.padding != null) return widget.padding!;
+
     switch (widget.size) {
       case HvacCardSize.compact:
         return const EdgeInsets.all(HvacSpacing.md);
@@ -117,19 +130,19 @@ class _HvacCardState extends State<HvacCard> {
                           HvacColors.backgroundCardBorderHover)
                       : (widget.borderColor ??
                           HvacColors.backgroundCardBorder),
-                  width: _isHovered ? 1.5 : 1,
+                  width: _isHovered ? 2 : 1.5,
                 )
               : null,
           boxShadow: _isHovered
               ? [
                   BoxShadow(
-                    color: const Color(0xFF1E88E5).withValues(alpha: 0.08),
+                    color: const Color(0xFF1976D2).withValues(alpha: 0.14),
                     blurRadius: 12,
                     offset: const Offset(0, 4),
                     spreadRadius: -2,
                   ),
                   BoxShadow(
-                    color: const Color(0xFF000000).withValues(alpha: 0.04),
+                    color: const Color(0xFF000000).withValues(alpha: 0.06),
                     blurRadius: 6,
                     offset: const Offset(0, 2),
                     spreadRadius: 0,
@@ -137,7 +150,7 @@ class _HvacCardState extends State<HvacCard> {
                 ]
               : [
                   BoxShadow(
-                    color: const Color(0xFF1E88E5).withValues(alpha: 0.04),
+                    color: const Color(0xFF1976D2).withValues(alpha: 0.08),
                     blurRadius: 6,
                     offset: const Offset(0, 2),
                     spreadRadius: 0,
@@ -155,19 +168,19 @@ class _HvacCardState extends State<HvacCard> {
                       ? HvacColors.backgroundCardBorderActive
                       : (widget.borderColor ??
                           HvacColors.backgroundCardBorder),
-                  width: _isHovered ? 2 : 1,
+                  width: _isHovered ? 2.5 : 1.5,
                 )
               : null,
           boxShadow: _isHovered
               ? [
                   BoxShadow(
-                    color: const Color(0xFF1E88E5).withValues(alpha: 0.16),
+                    color: const Color(0xFF1976D2).withValues(alpha: 0.22),
                     blurRadius: 24,
                     offset: const Offset(0, 8),
                     spreadRadius: -4,
                   ),
                   BoxShadow(
-                    color: const Color(0xFF000000).withValues(alpha: 0.08),
+                    color: const Color(0xFF000000).withValues(alpha: 0.10),
                     blurRadius: 12,
                     offset: const Offset(0, 4),
                     spreadRadius: -2,
@@ -175,13 +188,13 @@ class _HvacCardState extends State<HvacCard> {
                 ]
               : [
                   BoxShadow(
-                    color: const Color(0xFF1E88E5).withValues(alpha: 0.12),
+                    color: const Color(0xFF1976D2).withValues(alpha: 0.16),
                     blurRadius: 16,
                     offset: const Offset(0, 4),
                     spreadRadius: -2,
                   ),
                   BoxShadow(
-                    color: const Color(0xFF000000).withValues(alpha: 0.06),
+                    color: const Color(0xFF000000).withValues(alpha: 0.08),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                     spreadRadius: -1,

@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+import '../../../generated/l10n/app_localizations.dart';
 
 /// Schedule edit button
 class ScheduleEditButton extends StatelessWidget {
@@ -15,16 +16,14 @@ class ScheduleEditButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AdaptiveControl(
-      builder: (context, deviceSize) {
-        return SizedBox(
-          width: double.infinity,
-          child: HvacOutlineButton(
-            label: 'Настроить расписание',
-            onPressed: onPressed,
-          ),
-        );
-      },
+    final l10n = AppLocalizations.of(context)!;
+
+    return SizedBox(
+      width: double.infinity,
+      child: HvacOutlineButton(
+        label: l10n.configureSchedule,
+        onPressed: onPressed,
+      ),
     );
   }
 }

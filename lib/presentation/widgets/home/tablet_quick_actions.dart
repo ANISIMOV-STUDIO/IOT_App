@@ -1,10 +1,11 @@
 /// Tablet Quick Actions Panel
 ///
-/// Quick action buttons for tablet home layout
+/// Quick action buttons for tablet home layout with consistent HVAC UI Kit styling
 library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+import '../../../generated/l10n/app_localizations.dart';
 
 class TabletQuickActions extends StatelessWidget {
   final VoidCallback onPowerAllOn;
@@ -22,59 +23,55 @@ class TabletQuickActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: HvacColors.backgroundCard,
-        borderRadius: HvacRadius.lgRadius,
-        border: Border.all(
-          color: HvacColors.backgroundCardBorder,
-          width: 1.0,
-        ),
-      ),
-      padding: const EdgeInsets.all(HvacSpacing.lgR),
+    final l10n = AppLocalizations.of(context)!;
+
+    return HvacCard(
+      padding: const EdgeInsets.all(HvacSpacing.lg),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Text(
-            'Quick Actions',
-            style: TextStyle(
-              fontSize: 16.0,
+          Text(
+            l10n.quickActions,
+            style: HvacTypography.titleMedium.copyWith(
               fontWeight: FontWeight.w600,
-              color: HvacColors.textPrimary,
             ),
           ),
-          const SizedBox(height: HvacSpacing.mdV),
+          const SizedBox(height: HvacSpacing.md),
           GridView.count(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             crossAxisCount: 2,
-            mainAxisSpacing: HvacSpacing.smV,
-            crossAxisSpacing: HvacSpacing.smR,
+            mainAxisSpacing: HvacSpacing.sm,
+            crossAxisSpacing: HvacSpacing.sm,
             childAspectRatio: 2.5,
             children: [
               _buildActionButton(
+                context: context,
                 icon: Icons.power_settings_new,
-                label: 'All On',
+                label: l10n.allOn,
                 onTap: onPowerAllOn,
                 color: HvacColors.success,
               ),
               _buildActionButton(
+                context: context,
                 icon: Icons.power_off,
-                label: 'All Off',
+                label: l10n.allOff,
                 onTap: onPowerAllOff,
                 color: HvacColors.error,
               ),
               _buildActionButton(
+                context: context,
                 icon: Icons.sync,
-                label: 'Sync',
+                label: l10n.sync,
                 onTap: onSyncSettings,
-                color: HvacColors.primaryOrange,
+                color: HvacColors.primary,
               ),
               _buildActionButton(
+                context: context,
                 icon: Icons.schedule,
-                label: 'Schedule',
+                label: l10n.schedule,
                 onTap: onApplyScheduleToAll,
-                color: HvacColors.primaryBlue,
+                color: HvacColors.primary,
               ),
             ],
           ),
@@ -84,6 +81,7 @@ class TabletQuickActions extends StatelessWidget {
   }
 
   Widget _buildActionButton({
+    required BuildContext context,
     required IconData icon,
     required String label,
     required VoidCallback onTap,
@@ -97,8 +95,8 @@ class TabletQuickActions extends StatelessWidget {
         borderRadius: HvacRadius.mdRadius,
         child: Container(
           padding: const EdgeInsets.symmetric(
-            horizontal: HvacSpacing.smR,
-            vertical: HvacSpacing.smV,
+            horizontal: HvacSpacing.sm,
+            vertical: HvacSpacing.sm,
           ),
           decoration: BoxDecoration(
             border: Border.all(
@@ -115,13 +113,11 @@ class TabletQuickActions extends StatelessWidget {
                 size: 18.0,
                 color: color,
               ),
-              const SizedBox(width: HvacSpacing.xsR),
+              const SizedBox(width: HvacSpacing.xs),
               Text(
                 label,
-                style: const TextStyle(
-                  fontSize: 13.0,
+                style: HvacTypography.labelSmall.copyWith(
                   fontWeight: FontWeight.w500,
-                  color: HvacColors.textPrimary,
                 ),
               ),
             ],

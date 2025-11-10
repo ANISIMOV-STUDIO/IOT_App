@@ -199,6 +199,14 @@ class HvacTypography {
         letterSpacing: 0.5,
       );
 
+  /// Button small
+  static TextStyle get buttonSmall => const TextStyle(
+        fontSize: 14.0,
+        fontWeight: FontWeight.w600,
+        color: HvacColors.textPrimary,
+        letterSpacing: 0.5,
+      );
+
   // ============================================================================
   // HEADLINE ALIASES (h1-h6)
   // ============================================================================

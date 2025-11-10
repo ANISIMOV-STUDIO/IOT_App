@@ -1,7 +1,6 @@
 /// Ventilation Mode Control Widget
 ///
 /// Adaptive responsive card for mode selection and fan speed control
-/// Uses big-tech adaptive layout system
 library;
 
 import 'package:flutter/material.dart';
@@ -25,7 +24,8 @@ class VentilationModeControl extends StatefulWidget {
   });
 
   @override
-  State<VentilationModeControl> createState() => _VentilationModeControlState();
+  State<VentilationModeControl> createState() =>
+      _VentilationModeControlState();
 }
 
 class _VentilationModeControlState extends State<VentilationModeControl>
@@ -77,92 +77,28 @@ class _VentilationModeControlState extends State<VentilationModeControl>
 
   @override
   Widget build(BuildContext context) {
-    return PerformanceUtils.isolateRepaint(
-      child: AdaptiveControl(
-        builder: (context, deviceSize) {
-          final isDesktop = deviceSize == DeviceSize.expanded;
-          return Container(
-            padding: isDesktop
-                ? const EdgeInsets.all(12.0)
-                : AdaptiveLayout.controlPadding(context),
-            decoration: BoxDecoration(
-              color: HvacColors.backgroundCard,
-              borderRadius: BorderRadius.circular(
-                AdaptiveLayout.borderRadius(context, base: 16),
-              ),
-              border: Border.all(
-                color: HvacColors.backgroundCardBorder,
-              ),
-            ),
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                // Check if we have a height constraint (desktop layout)
-                final hasHeightConstraint =
-                    constraints.maxHeight != double.infinity;
+    final isMobile = ResponsiveUtils.isMobile(context);
 
-                if (hasHeightConstraint) {
-                  // Desktop layout with constrained height - use scrollable content
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ModeControlHeader(mode: widget.unit.mode, onModeToggle: _toggleModeSelector, showModeSelector: _showModeSelector),
-                      SizedBox(
-                          height: isDesktop
-                              ? 8.0
-                              : (deviceSize == DeviceSize.compact
-                                  ? 12.0
-                                  : AdaptiveLayout.spacing(context,
-                                      base: 12))),
-                      // Mode selector removed - unit.mode is String, not VentilationMode
-                      SizedBox(
-                          height: isDesktop
-                              ? 8.0
-                              : (deviceSize == DeviceSize.compact
-                                  ? 12.0
-                                  : AdaptiveLayout.spacing(context,
-                                      base: 12))),
-                      Expanded(
-                        child: SingleChildScrollView(
-                          physics: PerformanceUtils.getOptimalScrollPhysics(
-                            context,
-                            bouncing: true,
-                            alwaysScrollable: false,
-                          ),
-                          child: FanSpeedControls(supplyFanSpeed: _supplyFanSpeed, exhaustFanSpeed: _exhaustFanSpeed, onSupplyFanChanged: widget.onSupplyFanChanged, onExhaustFanChanged: widget.onExhaustFanChanged),
-                        ),
-                      ),
-                    ],
-                  );
-                } else {
-                  // Mobile layout without height constraint - smooth scrolling
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ModeControlHeader(mode: widget.unit.mode, onModeToggle: _toggleModeSelector, showModeSelector: _showModeSelector),
-                      SizedBox(
-                          height: deviceSize == DeviceSize.compact
-                              ? 12.0
-                              : AdaptiveLayout.spacing(context,
-                                  base: 12)),
-                      // Mode selector removed - unit.mode is String, not VentilationMode
-                      SizedBox(
-                          height: deviceSize == DeviceSize.compact
-                              ? 12.0
-                              : AdaptiveLayout.spacing(context,
-                                  base: 12)),
-                      FanSpeedControls(supplyFanSpeed: _supplyFanSpeed, exhaustFanSpeed: _exhaustFanSpeed, onSupplyFanChanged: widget.onSupplyFanChanged, onExhaustFanChanged: widget.onExhaustFanChanged),
-                    ],
-                  );
-                }
-              },
-            ),
-          );
-        },
+    return HvacCard(
+      padding: EdgeInsets.all(isMobile ? HvacSpacing.md : HvacSpacing.lg),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ModeControlHeader(
+            mode: widget.unit.mode,
+            onModeToggle: _toggleModeSelector,
+            showModeSelector: _showModeSelector,
+          ),
+          const SizedBox(height: HvacSpacing.md),
+          FanSpeedControls(
+            supplyFanSpeed: _supplyFanSpeed,
+            exhaustFanSpeed: _exhaustFanSpeed,
+            onSupplyFanChanged: widget.onSupplyFanChanged,
+            onExhaustFanChanged: widget.onExhaustFanChanged,
+          ),
+        ],
       ),
     );
   }
-
-
-
 }

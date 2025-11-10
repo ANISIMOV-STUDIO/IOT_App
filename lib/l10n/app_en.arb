@@ -496,6 +496,70 @@
   "@mode2": {
     "description": "Mode 2 label"
   },
+  "ventilationMode": "Ventilation Mode",
+  "@ventilationMode": {
+    "description": "Ventilation mode label"
+  },
+  "notSelected": "Not selected",
+  "@notSelected": {
+    "description": "Not selected state"
+  },
+  "modeBasic": "Basic",
+  "@modeBasic": {
+    "description": "Basic ventilation mode"
+  },
+  "modeIntensive": "Intensive",
+  "@modeIntensive": {
+    "description": "Intensive ventilation mode"
+  },
+  "modeEconomic": "Economic",
+  "@modeEconomic": {
+    "description": "Economic ventilation mode"
+  },
+  "modeMaximum": "Maximum",
+  "@modeMaximum": {
+    "description": "Maximum ventilation mode"
+  },
+  "modeKitchen": "Kitchen",
+  "@modeKitchen": {
+    "description": "Kitchen ventilation mode"
+  },
+  "modeFireplace": "Fireplace",
+  "@modeFireplace": {
+    "description": "Fireplace ventilation mode"
+  },
+  "modeVacation": "Vacation",
+  "@modeVacation": {
+    "description": "Vacation ventilation mode"
+  },
+  "modeCustom": "Custom",
+  "@modeCustom": {
+    "description": "Custom ventilation mode"
+  },
+  "supplyAir": "Supply",
+  "@supplyAir": {
+    "description": "Supply air label"
+  },
+  "exhaustAir": "Exhaust",
+  "@exhaustAir": {
+    "description": "Exhaust air label"
+  },
+  "temperatures": "Temperatures",
+  "@temperatures": {
+    "description": "Temperatures label"
+  },
+  "monitoringAndSettings": "Monitoring and settings",
+  "@monitoringAndSettings": {
+    "description": "Monitoring and settings label"
+  },
+  "outdoor": "Outdoor",
+  "@outdoor": {
+    "description": "Outdoor label"
+  },
+  "indoor": "Indoor",
+  "@indoor": {
+    "description": "Indoor label"
+  },
   "@@_ROOM_CONTROL": "=== Room Control ===",
   "humidifierAir": "Humidifier\nAir",
   "@humidifierAir": {
@@ -574,10 +638,6 @@
   "sync": "Sync",
   "@sync": {
     "description": "Sync devices"
-  },
-  "schedule": "Schedule",
-  "@schedule": {
-    "description": "Schedule button"
   },
   "presets": "Presets",
   "@presets": {
@@ -871,6 +931,66 @@
     "description": "Password strength"
   },
   "@@_SCHEDULE": "=== Schedule ===",
+  "schedule": "Schedule",
+  "@schedule": {
+    "description": "Schedule label"
+  },
+  "automaticControl": "Automatic control",
+  "@automaticControl": {
+    "description": "Automatic control label"
+  },
+  "configureSchedule": "Configure schedule",
+  "@configureSchedule": {
+    "description": "Configure schedule button"
+  },
+  "operatingTime": "Operating time",
+  "@operatingTime": {
+    "description": "Operating time label"
+  },
+  "running": "Running",
+  "@running": {
+    "description": "Running status"
+  },
+  "stopped": "Stopped",
+  "@stopped": {
+    "description": "Stopped status"
+  },
+  "turnOn": "Turn on",
+  "@turnOn": {
+    "description": "Turn on action"
+  },
+  "turnOff": "Turn off",
+  "@turnOff": {
+    "description": "Turn off action"
+  },
+  "monday": "Monday",
+  "@monday": {
+    "description": "Monday"
+  },
+  "tuesday": "Tuesday",
+  "@tuesday": {
+    "description": "Tuesday"
+  },
+  "wednesday": "Wednesday",
+  "@wednesday": {
+    "description": "Wednesday"
+  },
+  "thursday": "Thursday",
+  "@thursday": {
+    "description": "Thursday"
+  },
+  "friday": "Friday",
+  "@friday": {
+    "description": "Friday"
+  },
+  "saturday": "Saturday",
+  "@saturday": {
+    "description": "Saturday"
+  },
+  "sunday": "Sunday",
+  "@sunday": {
+    "description": "Sunday"
+  },
   "editSchedule": "Edit {name}",
   "@editSchedule": {
     "description": "Edit schedule semantic label",
@@ -1152,11 +1272,57 @@
       }
     }
   },
-  "@@_COMING_SOON": "=== Coming Soon Messages ===",
-  "manageRules": "Manage Rules (Coming Soon)",
-  "@manageRules": {
-    "description": "Manage rules button/message"
+  "@@_AUTOMATION": "=== Automation ===",
+  "automation": "Automation",
+  "@automation": {
+    "description": "Automation panel title"
   },
+  "manageRules": "Manage Rules",
+  "@manageRules": {
+    "description": "Manage rules button"
+  },
+  "activeRulesFormat": "Active: {active} of {total}",
+  "@activeRulesFormat": {
+    "description": "Active rules count format",
+    "placeholders": {
+      "active": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "critical": "Critical",
+  "@critical": {
+    "description": "Critical notification label"
+  },
+  "errors": "Errors",
+  "@errors": {
+    "description": "Errors notification label"
+  },
+  "warnings": "Warnings",
+  "@warnings": {
+    "description": "Warnings notification label"
+  },
+  "infoLabel": "Info",
+  "@infoLabel": {
+    "description": "Info notification label"
+  },
+  "showAll": "Show all ({count})",
+  "@showAll": {
+    "description": "Show all notifications button",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "collapse": "Collapse",
+  "@collapse": {
+    "description": "Collapse button"
+  },
+  "@@_COMING_SOON": "=== Coming Soon Messages ===",
   "manageRulesComingSoon": "Manage Rules (Coming Soon)",
   "@manageRulesComingSoon": {
     "description": "Manage rules coming soon"

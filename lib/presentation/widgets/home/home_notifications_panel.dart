@@ -5,13 +5,14 @@ library;
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 import '../../../domain/entities/hvac_unit.dart';
+import '../../../generated/l10n/app_localizations.dart';
 import 'notifications/notification_types.dart';
 import 'notifications/notification_item.dart';
 import 'notifications/notification_badge.dart';
 import 'notifications/notification_empty_state.dart';
 import 'notifications/notification_grouper.dart';
 
-/// Main notifications panel widget
+/// Main notifications panel widget with consistent HVAC UI Kit styling
 class HomeNotificationsPanel extends StatefulWidget {
   final HvacUnit unit;
 
@@ -44,33 +45,27 @@ class _HomeNotificationsPanelState extends State<HomeNotificationsPanel> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final groups = _grouper.groupNotifications();
     final totalCount = _grouper.getTotalCount();
 
-    return Container(
+    return SizedBox(
       height: 400.0,
-      padding: const EdgeInsets.all(20.0),
-      decoration: BoxDecoration(
-        color: HvacColors.backgroundCard,
-        borderRadius: HvacRadius.lgRadius,
-        border: Border.all(
-          color: HvacColors.backgroundCardBorder,
-          width: 1,
-        ),
-      ),
-      child: Column(
+      child: HvacCard(
+        padding: const EdgeInsets.all(HvacSpacing.lg),
+        child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           // Header
-          _buildHeader(totalCount),
+          _buildHeader(l10n, totalCount),
 
-          const SizedBox(height: 16.0),
+          const SizedBox(height: HvacSpacing.md),
 
           // Category badges
-          if (totalCount > 0) _buildCategoryBadges(groups),
+          if (totalCount > 0) _buildCategoryBadges(l10n, groups),
 
-          if (totalCount > 0) const SizedBox(height: 20.0),
+          if (totalCount > 0) const SizedBox(height: HvacSpacing.lg),
 
           // Notifications list
           Expanded(
@@ -80,36 +75,38 @@ class _HomeNotificationsPanelState extends State<HomeNotificationsPanel> {
           ),
 
           // Show all/collapse button
-          if (totalCount > 3) _buildToggleButton(totalCount),
+          if (totalCount > 3) _buildToggleButton(l10n, totalCount),
         ],
+      ),
       ),
     );
   }
 
-  Widget _buildHeader(int totalCount) {
+  Widget _buildHeader(AppLocalizations l10n, int totalCount) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text(
-          'Уведомления',
-          style: TextStyle(
-            fontSize: 18.0,
+        Text(
+          l10n.notifications,
+          style: HvacTypography.titleMedium.copyWith(
             fontWeight: FontWeight.w600,
             color: HvacColors.textPrimary,
           ),
         ),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+          padding: const EdgeInsets.symmetric(
+            horizontal: HvacSpacing.xs,
+            vertical: HvacSpacing.xxs,
+          ),
           decoration: BoxDecoration(
-            color: HvacColors.primaryOrange.withValues(alpha: 0.2),
+            color: HvacColors.primary.withValues(alpha: 0.2),
             borderRadius: HvacRadius.mdRadius,
           ),
           child: Text(
             '$totalCount',
-            style: const TextStyle(
-              fontSize: 12.0,
+            style: HvacTypography.labelSmall.copyWith(
               fontWeight: FontWeight.w700,
-              color: HvacColors.primaryOrange,
+              color: HvacColors.primary,
             ),
           ),
         ),
@@ -118,32 +115,34 @@ class _HomeNotificationsPanelState extends State<HomeNotificationsPanel> {
   }
 
   Widget _buildCategoryBadges(
-      Map<NotificationSeverity, List<ActivityItem>> groups) {
+    AppLocalizations l10n,
+    Map<NotificationSeverity, List<ActivityItem>> groups,
+  ) {
     return Wrap(
-      spacing: 8.0,
-      runSpacing: 8.0,
+      spacing: HvacSpacing.xs,
+      runSpacing: HvacSpacing.xs,
       children: [
         if (groups[NotificationSeverity.critical]!.isNotEmpty)
           NotificationBadge(
-            label: 'Критические',
+            label: l10n.critical,
             count: groups[NotificationSeverity.critical]!.length,
             color: HvacColors.error,
           ),
         if (groups[NotificationSeverity.error]!.isNotEmpty)
           NotificationBadge(
-            label: 'Ошибки',
+            label: l10n.errors,
             count: groups[NotificationSeverity.error]!.length,
             color: HvacColors.error,
           ),
         if (groups[NotificationSeverity.warning]!.isNotEmpty)
           NotificationBadge(
-            label: 'Предупреждения',
+            label: l10n.warnings,
             count: groups[NotificationSeverity.warning]!.length,
             color: HvacColors.warning,
           ),
         if (groups[NotificationSeverity.info]!.isNotEmpty)
           NotificationBadge(
-            label: 'Инфо',
+            label: l10n.infoLabel,
             count: groups[NotificationSeverity.info]!.length,
             color: HvacColors.info,
           ),
@@ -164,14 +163,14 @@ class _HomeNotificationsPanelState extends State<HomeNotificationsPanel> {
     );
   }
 
-  Widget _buildToggleButton(int totalCount) {
+  Widget _buildToggleButton(AppLocalizations l10n, int totalCount) {
     return Padding(
-      padding: const EdgeInsets.only(top: 12.0),
+      padding: const EdgeInsets.only(top: HvacSpacing.sm),
       child: Center(
         child: HvacTextButton(
           label: _showAllNotifications
-              ? 'Свернуть'
-              : 'Показать все ($totalCount)',
+              ? l10n.collapse
+              : l10n.showAll(totalCount),
           onPressed: () {
             setState(() {
               _showAllNotifications = !_showAllNotifications;

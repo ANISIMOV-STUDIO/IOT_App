@@ -370,6 +370,54 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mode2 => 'Mode 2';
 
   @override
+  String get ventilationMode => 'Ventilation Mode';
+
+  @override
+  String get notSelected => 'Not selected';
+
+  @override
+  String get modeBasic => 'Basic';
+
+  @override
+  String get modeIntensive => 'Intensive';
+
+  @override
+  String get modeEconomic => 'Economic';
+
+  @override
+  String get modeMaximum => 'Maximum';
+
+  @override
+  String get modeKitchen => 'Kitchen';
+
+  @override
+  String get modeFireplace => 'Fireplace';
+
+  @override
+  String get modeVacation => 'Vacation';
+
+  @override
+  String get modeCustom => 'Custom';
+
+  @override
+  String get supplyAir => 'Supply';
+
+  @override
+  String get exhaustAir => 'Exhaust';
+
+  @override
+  String get temperatures => 'Temperatures';
+
+  @override
+  String get monitoringAndSettings => 'Monitoring and settings';
+
+  @override
+  String get outdoor => 'Outdoor';
+
+  @override
+  String get indoor => 'Indoor';
+
+  @override
   String get humidifierAir => 'Humidifier\nAir';
 
   @override
@@ -425,9 +473,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sync => 'Sync';
-
-  @override
-  String get schedule => 'Schedule';
 
   @override
   String get presets => 'Presets';
@@ -636,6 +681,51 @@ class AppLocalizationsEn extends AppLocalizations {
   String get veryStrong => 'Very Strong';
 
   @override
+  String get schedule => 'Schedule';
+
+  @override
+  String get automaticControl => 'Automatic control';
+
+  @override
+  String get configureSchedule => 'Configure schedule';
+
+  @override
+  String get operatingTime => 'Operating time';
+
+  @override
+  String get running => 'Running';
+
+  @override
+  String get stopped => 'Stopped';
+
+  @override
+  String get turnOn => 'Turn on';
+
+  @override
+  String get turnOff => 'Turn off';
+
+  @override
+  String get monday => 'Monday';
+
+  @override
+  String get tuesday => 'Tuesday';
+
+  @override
+  String get wednesday => 'Wednesday';
+
+  @override
+  String get thursday => 'Thursday';
+
+  @override
+  String get friday => 'Friday';
+
+  @override
+  String get saturday => 'Saturday';
+
+  @override
+  String get sunday => 'Sunday';
+
+  @override
   String editSchedule(String name) {
     return 'Edit $name';
   }
@@ -837,7 +927,35 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get manageRules => 'Manage Rules (Coming Soon)';
+  String get automation => 'Automation';
+
+  @override
+  String get manageRules => 'Manage Rules';
+
+  @override
+  String activeRulesFormat(int active, int total) {
+    return 'Active: $active of $total';
+  }
+
+  @override
+  String get critical => 'Critical';
+
+  @override
+  String get errors => 'Errors';
+
+  @override
+  String get warnings => 'Warnings';
+
+  @override
+  String get infoLabel => 'Info';
+
+  @override
+  String showAll(int count) {
+    return 'Show all ($count)';
+  }
+
+  @override
+  String get collapse => 'Collapse';
 
   @override
   String get manageRulesComingSoon => 'Manage Rules (Coming Soon)';

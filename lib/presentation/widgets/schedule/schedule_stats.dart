@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+import '../../../generated/l10n/app_localizations.dart';
 
 /// Quick stats row
 class ScheduleQuickStats extends StatelessWidget {
@@ -17,33 +18,31 @@ class ScheduleQuickStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AdaptiveControl(
-      builder: (context, deviceSize) {
-        return Row(
-          children: [
-            Expanded(
-              child: ScheduleStat(
-                label: 'Статус',
-                value: isPowerOn ? 'Работает' : 'Выключено',
-                color: isPowerOn ? HvacColors.success : HvacColors.error,
-              ),
-            ),
-            SizedBox(width: AdaptiveLayout.spacing(context)),
-            Expanded(
-              child: ScheduleStat(
-                label: 'Время работы',
-                value: (fanSpeed ?? 0) > 0 ? '2ч 15м' : '0м',
-                color: HvacColors.info,
-              ),
-            ),
-          ],
-        );
-      },
+    final l10n = AppLocalizations.of(context)!;
+
+    return Row(
+      children: [
+        Expanded(
+          child: ScheduleStat(
+            label: l10n.status,
+            value: isPowerOn ? l10n.running : l10n.stopped,
+            color: isPowerOn ? HvacColors.success : HvacColors.error,
+          ),
+        ),
+        SizedBox(width: HvacSpacing.md),
+        Expanded(
+          child: ScheduleStat(
+            label: l10n.operatingTime,
+            value: (fanSpeed ?? 0) > 0 ? '2ч 15м' : '0м',
+            color: HvacColors.info,
+          ),
+        ),
+      ],
     );
   }
 }
 
-/// Single stat display
+/// Single stat display using HvacStatCard
 class ScheduleStat extends StatelessWidget {
   final String label;
   final String value;
@@ -58,42 +57,32 @@ class ScheduleStat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AdaptiveControl(
-      builder: (context, deviceSize) {
-        return Container(
-          padding:
-              EdgeInsets.all(AdaptiveLayout.spacing(context, base: 8)),
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(
-              AdaptiveLayout.borderRadius(context, base: 8),
+    return Container(
+      padding: EdgeInsets.all(HvacSpacing.xs),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1),
+        borderRadius: HvacRadius.smRadius,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            label,
+            style: HvacTypography.labelSmall.copyWith(
+              color: HvacColors.textSecondary,
             ),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                label,
-                style: HvacTypography.labelSmall.copyWith(
-                  fontSize: AdaptiveLayout.fontSize(context, base: 10),
-                  color: HvacColors.textSecondary,
-                ),
-              ),
-              SizedBox(
-                  height: AdaptiveLayout.spacing(context, base: 4)),
-              Text(
-                value,
-                style: HvacTypography.labelLarge.copyWith(
-                  fontSize: AdaptiveLayout.fontSize(context, base: 12),
-                  fontWeight: FontWeight.w600,
-                  color: color,
-                ),
-              ),
-            ],
+          SizedBox(height: HvacSpacing.xxs),
+          Text(
+            value,
+            style: HvacTypography.labelLarge.copyWith(
+              fontWeight: FontWeight.w600,
+              color: color,
+            ),
           ),
-        );
-      },
+        ],
+      ),
     );
   }
 }
