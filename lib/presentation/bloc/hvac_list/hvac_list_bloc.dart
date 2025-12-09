@@ -7,8 +7,10 @@ import '../../../core/services/api_service.dart';
 import '../../../core/di/injection_container.dart';
 import '../../../domain/repositories/hvac_repository.dart';
 import '../../../domain/usecases/get_all_units.dart';
+import '../../../domain/entities/hvac_unit.dart';
 import 'hvac_list_event.dart';
 import 'hvac_list_state.dart';
+
 
 class HvacListBloc extends Bloc<HvacListEvent, HvacListState> {
   final GetAllUnits getAllUnits;
@@ -26,6 +28,9 @@ class HvacListBloc extends Bloc<HvacListEvent, HvacListState> {
     on<RemoveDeviceEvent>(_onRemoveDevice);
     on<UpdateDevicePowerEvent>(_onUpdateDevicePower);
     on<UpdateDeviceModeEvent>(_onUpdateDeviceMode);
+    on<UpdateDeviceTargetTemperatureEvent>(_onUpdateDeviceTargetTemperature);
+    on<UpdateDeviceFanSpeedEvent>(_onUpdateDeviceFanSpeed);
+    on<UpdateDeviceScheduleEvent>(_onUpdateDeviceSchedule);
   }
 
   Future<void> _onLoadHvacUnits(
@@ -171,6 +176,81 @@ class HvacListBloc extends Bloc<HvacListEvent, HvacListState> {
       // State will update automatically via stream subscription
     } catch (e) {
       emit(HvacListError('Failed to update mode: ${e.toString()}'));
+    }
+  }
+
+  Future<void> _onUpdateDeviceTargetTemperature(
+    UpdateDeviceTargetTemperatureEvent event,
+    Emitter<HvacListState> emit,
+  ) async {
+    if (state is! HvacListLoaded) return;
+
+    try {
+      final currentState = state as HvacListLoaded;
+      final unit = currentState.units.firstWhere((u) => u.id == event.deviceId);
+
+      // Create updated unit with new temp
+      // HvacUnit uses targetTemp
+      final updatedUnit = unit.copyWith(targetTemp: event.temperature);
+
+      // Update via repository
+      await repository.updateUnitEntity(updatedUnit);
+    } catch (e) {
+      emit(HvacListError('Failed to update temperature: ${e.toString()}'));
+    }
+  }
+
+  Future<void> _onUpdateDeviceFanSpeed(
+    UpdateDeviceFanSpeedEvent event,
+    Emitter<HvacListState> emit,
+  ) async {
+    if (state is! HvacListLoaded) return;
+
+    try {
+      final currentState = state as HvacListLoaded;
+      final unit = currentState.units.firstWhere((u) => u.id == event.deviceId);
+      
+      // Update supply/exhaust fan speed if it's a ventilation unit
+      // Or map to string fanSpeed if legacy
+      HvacUnit updatedUnit;
+      if (unit.isVentilation) {
+         updatedUnit = unit.copyWith(
+           supplyFanSpeed: event.speed,
+           exhaustFanSpeed: event.speed,
+         );
+      } else {
+         // Fallback map int to string for simple ACs
+         String speedStr = 'auto';
+         if (event.speed < 30) speedStr = 'low';
+         else if (event.speed < 70) speedStr = 'medium';
+         else speedStr = 'high';
+         
+         updatedUnit = unit.copyWith(fanSpeed: speedStr);
+      }
+      
+      await repository.updateUnitEntity(updatedUnit);
+    } catch (e) {
+      emit(HvacListError('Failed to update fan speed: ${e.toString()}'));
+    }
+  }
+  
+  Future<void> _onUpdateDeviceSchedule(
+    UpdateDeviceScheduleEvent event,
+    Emitter<HvacListState> emit,
+  ) async {
+    if (state is! HvacListLoaded) return;
+
+    try {
+      final currentState = state as HvacListLoaded;
+      final unit = currentState.units.firstWhere((u) => u.id == event.deviceId);
+
+      // Create updated unit with new schedule
+      final updatedUnit = unit.copyWith(schedule: event.schedule);
+
+      // Update via repository
+      await repository.updateUnitEntity(updatedUnit);
+    } catch (e) {
+      emit(HvacListError('Failed to update schedule: ${e.toString()}'));
     }
   }
 

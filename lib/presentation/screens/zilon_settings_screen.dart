@@ -214,20 +214,29 @@ class _ZilonSettingsScreenState extends State<ZilonSettingsScreen> {
   }
 
   Widget _buildLanguageSelector(BuildContext context) {
-     // Simplification for UI demo
      return Column(
-       children: AppLanguage.values.map((lang) {
-         final isSelected = _controller!.currentLanguage == lang;
-         return RadioListTile<AppLanguage>(
-           value: lang,
-           groupValue: _controller!.currentLanguage,
-           onChanged: (v) {
-             if (v != null) _controller!.setLanguage(v);
-           },
-           title: Text(lang.nativeName),
+       children: [
+         // System Default Option
+         RadioListTile<AppLanguage?>(
+           value: null,
+           groupValue: _controller!.usingSystemLanguage ? null : _controller!.currentLanguage,
+           onChanged: (v) => _controller!.useSystemLanguage(),
+           title: Text('System (Auto)'),
            activeColor: Theme.of(context).colorScheme.primary,
-         );
-       }).toList(),
+         ),
+         // Explicit Languages
+         ...AppLanguage.values.map((lang) {
+           return RadioListTile<AppLanguage?>(
+             value: lang,
+             groupValue: _controller!.usingSystemLanguage ? null : _controller!.currentLanguage,
+             onChanged: (v) {
+               if (v != null) _controller!.setLanguage(v);
+             },
+             title: Text(lang.nativeName),
+             activeColor: Theme.of(context).colorScheme.primary,
+           );
+         }),
+       ],
      );
   }
 }

@@ -6,6 +6,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:ui' as ui;
 
 /// Supported languages in the application
 enum AppLanguage {
@@ -20,84 +21,68 @@ enum AppLanguage {
 
   Locale get locale => Locale(code);
 
-  static AppLanguage fromCode(String code) {
+  static AppLanguage? fromCode(String? code) {
+    if (code == null) return null;
     return AppLanguage.values.firstWhere(
       (lang) => lang.code == code,
-      orElse: () => AppLanguage.russian, // Default to Russian
+      orElse: () => AppLanguage.english, // Fallback to English if code not found
     );
   }
 }
 
 /// Service for managing application locale
-///
-/// Best practices implemented:
-/// - Persistent storage of user preference
-/// - System locale detection
-/// - Reactive updates via ChangeNotifier
-/// - Fallback to system locale
-/// - Type-safe language selection
 class LanguageService extends ChangeNotifier {
   static const String _localeKey = 'app_locale';
 
   final SharedPreferences _prefs;
-  Locale? _currentLocale;
-  Locale? _systemLocale;
+  Locale? _currentLocale; // If null, use system
 
   LanguageService(this._prefs) {
-    _detectSystemLocale();
     _loadSavedLocale();
   }
 
-  /// Initialize with Russian as default
+  /// Initialize default - do nothing, let system default take over
   Future<void> initializeDefaults() async {
-    if (!_prefs.containsKey(_localeKey)) {
-      // First launch - set Russian as default
-      await setLanguage(AppLanguage.russian);
-    }
+    // No-op: Do not force any language.
+    // If prefs are empty, _currentLocale is null, which means use system.
   }
 
-  /// Detect system locale
-  void _detectSystemLocale() {
-    final window = WidgetsBinding.instance.platformDispatcher;
-    if (window.locales.isNotEmpty) {
-      _systemLocale = window.locales.first;
-    }
-  }
-
-  /// Currently selected locale
-  /// Returns null if system default should be used
+  /// Currently selected locale to be used by MaterialApp
+  /// Returns null if system default should be used (MaterialApp handles null by using device locale)
   Locale? get currentLocale => _currentLocale;
 
-  /// Currently selected language
+  /// Currently active language (resolved)
   AppLanguage get currentLanguage {
-    if (_currentLocale == null) {
-      // Use system locale if available and supported
-      if (_systemLocale != null && isSupported(_systemLocale!)) {
-        return AppLanguage.fromCode(_systemLocale!.languageCode);
-      }
-      return AppLanguage.russian; // Default to Russian
+    if (_currentLocale != null) {
+      return AppLanguage.fromCode(_currentLocale!.languageCode) ?? AppLanguage.english;
     }
-    return AppLanguage.fromCode(_currentLocale!.languageCode);
+    
+    // Resolve system locale
+    final systemLocale = ui.PlatformDispatcher.instance.locale;
+    // Check if system locale is supported
+    try {
+      return AppLanguage.values.firstWhere(
+        (lang) => lang.code == systemLocale.languageCode,
+      );
+    } catch (_) {
+      // If system locale is not Russian or English, default to English (standard practice)
+      return AppLanguage.english;
+    }
   }
 
   /// List of supported locales for MaterialApp
   static List<Locale> get supportedLocales =>
       AppLanguage.values.map((lang) => lang.locale).toList();
 
-  /// Check if a locale is supported
-  static bool isSupported(Locale locale) {
-    return AppLanguage.values.any(
-      (lang) => lang.code == locale.languageCode,
-    );
-  }
-
   /// Load saved locale from persistent storage
-  Future<void> _loadSavedLocale() async {
+  void _loadSavedLocale() {
     final savedCode = _prefs.getString(_localeKey);
     if (savedCode != null) {
       _currentLocale = Locale(savedCode);
-      notifyListeners();
+    } else {
+      _currentLocale = null; // Use system
     }
+    notifyListeners();
   }
 
   /// Set locale and persist to storage

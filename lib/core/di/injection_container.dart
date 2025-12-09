@@ -36,6 +36,12 @@ import '../../domain/usecases/apply_schedule_to_all.dart';
 import '../../presentation/bloc/hvac_list/hvac_list_bloc.dart';
 import '../../presentation/bloc/hvac_detail/hvac_detail_bloc.dart';
 import '../../presentation/bloc/auth/auth_bloc.dart';
+import '../../presentation/bloc/statistics/statistics_bloc.dart';
+
+// Data
+import '../../data/repositories/mock_hvac_repository.dart';
+import '../../data/repositories/mock_history_repository.dart';
+import '../../domain/repositories/history_repository.dart';
 
 final sl = GetIt.instance;
 
@@ -119,6 +125,16 @@ Future<void> init() async {
   // Repository - Using Mock for now, will be replaced with REST implementation
   sl.registerLazySingleton<HvacRepository>(
     () => MockHvacRepository(),
+  );
+  
+  // History Repository
+  sl.registerLazySingleton<HistoryRepository>(
+    () => MockHistoryRepository(),
+  );
+  
+  // Statistics Bloc
+  sl.registerFactory(
+    () => StatisticsBloc(repository: sl()),
   );
 
   // Connect to repository (for compatibility)

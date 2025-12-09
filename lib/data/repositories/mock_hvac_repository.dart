@@ -374,6 +374,7 @@ class MockHvacRepository implements HvacRepository {
       readings.add(TemperatureReading(
         timestamp: time,
         temperature: temp,
+        humidity: 45.0 + (random.nextDouble() - 0.5) * 10,
       ));
     }
 

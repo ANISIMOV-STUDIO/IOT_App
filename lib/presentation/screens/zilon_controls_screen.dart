@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_ui_kit/smart_ui_kit.dart';
+import '../bloc/hvac_list/hvac_list_bloc.dart';
+import '../bloc/hvac_list/hvac_list_state.dart';
+import '../bloc/hvac_list/hvac_list_event.dart';
+import '../../domain/entities/hvac_unit.dart';
 
 class ZilonControlsScreen extends StatefulWidget {
   const ZilonControlsScreen({super.key});
@@ -9,79 +14,108 @@ class ZilonControlsScreen extends StatefulWidget {
 }
 
 class _ZilonControlsScreenState extends State<ZilonControlsScreen> {
-  double _temp = 21.5;
-  double _fanSpeed = 40;
-  String _mode = 'Auto';
+  // Local state for smooth slider interaction
+  // We sync this with BLoC state when not dragging
+  double? _dragTemp;
+  double? _dragFanSpeed;
 
   @override
   Widget build(BuildContext context) {
      final theme = Theme.of(context);
     
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(AppSpacing.v24),
-      child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 800),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Manual Control', style: AppTypography.displayMedium.copyWith(color: theme.colorScheme.onSurface)),
-              const SizedBox(height: 24),
-              
-              // Main Temp Control
-              _buildTempControl(context),
-              const SizedBox(height: 24),
-              
-              // Mode Grid
-              Text('Operation Mode', style: AppTypography.titleMedium.copyWith(color: theme.colorScheme.onSurface)),
-              const SizedBox(height: 12),
-              _buildModeGrid(context),
-              const SizedBox(height: 32),
-              
-              // Fan Speed
-              Text('Fan Speed', style: AppTypography.titleMedium.copyWith(color: theme.colorScheme.onSurface)),
-              const SizedBox(height: 12),
-              SmartCard(
+    return BlocBuilder<HvacListBloc, HvacListState>(
+      builder: (context, state) {
+        if (state is HvacListLoading) {
+           return const Center(child: CircularProgressIndicator());
+        }
+        
+        if (state is HvacListLoaded && state.units.isNotEmpty) {
+           // Target the first unit for demo controls
+           final device = state.units.first;
+           
+           final currentTemp = _dragTemp ?? device.targetTemp;
+           // Use supplyFanSpeed if available, else 0
+           final currentFan = _dragFanSpeed ?? (device.supplyFanSpeed?.toDouble() ?? 50.0);
+           final currentMode = device.mode;
+
+           return SingleChildScrollView(
+            padding: const EdgeInsets.all(AppSpacing.v24),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 800),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Icon(Icons.wind_power),
-                        Text('${_fanSpeed.round()}%', style: AppTypography.headlineMedium.copyWith(color: theme.colorScheme.primary)),
-                      ],
+                    Text('Manual Control', style: AppTypography.displayMedium.copyWith(color: theme.colorScheme.onSurface)),
+                    const SizedBox(height: 24),
+                    
+                    // Main Temp Control
+                    _buildTempControl(context, device, currentTemp),
+                    const SizedBox(height: 24),
+                    
+                    // Mode Grid
+                    Text('Operation Mode', style: AppTypography.titleMedium.copyWith(color: theme.colorScheme.onSurface)),
+                    const SizedBox(height: 12),
+                    _buildModeGrid(context, device, currentMode),
+                    const SizedBox(height: 32),
+                    
+                    // Fan Speed
+                    Text('Fan Speed', style: AppTypography.titleMedium.copyWith(color: theme.colorScheme.onSurface)),
+                    const SizedBox(height: 12),
+                    SmartCard(
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Icon(Icons.wind_power),
+                              Text('${currentFan.round()}%', style: AppTypography.headlineMedium.copyWith(color: theme.colorScheme.primary)),
+                            ],
+                          ),
+                          Slider(
+                            value: currentFan.clamp(0.0, 100.0),
+                            min: 0,
+                            max: 100,
+                            activeColor: theme.colorScheme.primary,
+                            onChanged: (v) {
+                              setState(() => _dragFanSpeed = v);
+                            },
+                            onChangeEnd: (v) {
+                               setState(() => _dragFanSpeed = null);
+                               context.read<HvacListBloc>().add(
+                                 UpdateDeviceFanSpeedEvent(deviceId: device.id, speed: v.round())
+                               );
+                            },
+                          ),
+                        ],
+                      ),
                     ),
-                    Slider(
-                      value: _fanSpeed,
-                      min: 0,
-                      max: 100,
-                      activeColor: theme.colorScheme.primary,
-                      onChanged: (v) => setState(() => _fanSpeed = v),
-                    ),
+                    
+                    const SizedBox(height: 32),
+                     Text('Advanced', style: AppTypography.titleMedium.copyWith(color: theme.colorScheme.onSurface)),
+                     const SizedBox(height: 12),
+                     Row(
+                       children: [
+                         Expanded(child: _buildToggleCard(context, 'Eco Mode', Icons.eco, true)),
+                         const SizedBox(width: 16),
+                         Expanded(child: _buildToggleCard(context, 'Turbo', Icons.rocket_launch, false)),
+                         const SizedBox(width: 16),
+                         Expanded(child: _buildToggleCard(context, 'Quiet', Icons.volume_off, false)),
+                       ],
+                     ),
                   ],
                 ),
               ),
-              
-              const SizedBox(height: 32),
-               Text('Advanced', style: AppTypography.titleMedium.copyWith(color: theme.colorScheme.onSurface)),
-               const SizedBox(height: 12),
-               Row(
-                 children: [
-                   Expanded(child: _buildToggleCard(context, 'Eco Mode', Icons.eco, true)),
-                   const SizedBox(width: 16),
-                   Expanded(child: _buildToggleCard(context, 'Turbo', Icons.rocket_launch, false)),
-                   const SizedBox(width: 16),
-                   Expanded(child: _buildToggleCard(context, 'Quiet', Icons.volume_off, false)),
-                 ],
-               ),
-            ],
-          ),
-        ),
-      ),
+            ),
+          );
+        }
+
+        return const Center(child: Text('No devices found'));
+      },
     );
   }
 
-  Widget _buildTempControl(BuildContext context) {
+  Widget _buildTempControl(BuildContext context, HvacUnit device, double temp) {
     final theme = Theme.of(context);
     return SmartCard(
       padding: const EdgeInsets.all(32),
@@ -92,18 +126,28 @@ class _ZilonControlsScreenState extends State<ZilonControlsScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildCircularButton(Icons.remove, () => setState(() => _temp -= 0.5)),
+              _buildCircularButton(Icons.remove, () {
+                 final newTemp = temp - 0.5;
+                 context.read<HvacListBloc>().add(
+                   UpdateDeviceTargetTemperatureEvent(deviceId: device.id, temperature: newTemp)
+                 );
+              }),
               const SizedBox(width: 32),
               Text(
-                '${_temp.toStringAsFixed(1)}°',
+                '${temp.toStringAsFixed(1)}°',
                 style: AppTypography.displayLarge.copyWith(fontSize: 64, color: theme.colorScheme.primary),
               ),
               const SizedBox(width: 32),
-              _buildCircularButton(Icons.add, () => setState(() => _temp += 0.5)),
+              _buildCircularButton(Icons.add, () {
+                  final newTemp = temp + 0.5;
+                 context.read<HvacListBloc>().add(
+                   UpdateDeviceTargetTemperatureEvent(deviceId: device.id, temperature: newTemp)
+                 );
+              }),
             ],
           ),
           const SizedBox(height: 8),
-          Text('Current: 19.5°', style: AppTypography.bodyMedium.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.6))),
+          Text('Current: ${device.currentTemp}°', style: AppTypography.bodyMedium.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.6))),
         ],
       ),
     );
@@ -124,7 +168,7 @@ class _ZilonControlsScreenState extends State<ZilonControlsScreen> {
     );
   }
 
-  Widget _buildModeGrid(BuildContext context) {
+  Widget _buildModeGrid(BuildContext context, HvacUnit device, String currentMode) {
     final modes = [
       {'name': 'Auto', 'icon': Icons.hdr_auto},
       {'name': 'Cool', 'icon': Icons.ac_unit},
@@ -134,21 +178,25 @@ class _ZilonControlsScreenState extends State<ZilonControlsScreen> {
 
     return Row(
       children: modes.map((m) {
-        final isSelected = _mode == m['name'];
+        final isSelected = currentMode.toLowerCase() == m['name'].toString().toLowerCase();
         return Expanded(
           child: Padding(
             padding: const EdgeInsets.only(right: 8.0),
-            child: _buildModeCard(context, m['name'] as String, m['icon'] as IconData, isSelected),
+            child: _buildModeCard(context, device, m['name'] as String, m['icon'] as IconData, isSelected),
           ),
         );
       }).toList(),
     );
   }
 
-  Widget _buildModeCard(BuildContext context, String name, IconData icon, bool isSelected) {
+  Widget _buildModeCard(BuildContext context, HvacUnit device, String name, IconData icon, bool isSelected) {
      final theme = Theme.of(context);
      return InkWell(
-        onTap: () => setState(() => _mode = name),
+        onTap: () {
+           context.read<HvacListBloc>().add(
+              UpdateDeviceModeEvent(deviceId: device.id, mode: name)
+           );
+        },
         borderRadius: BorderRadius.circular(12),
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 24),

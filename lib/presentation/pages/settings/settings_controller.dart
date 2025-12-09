@@ -73,6 +73,13 @@ class SettingsController extends ChangeNotifier {
     onSettingChanged();
   }
 
+  Future<void> useSystemLanguage() async {
+    await _languageService.useSystemDefault();
+    onSettingChanged();
+  }
+  
+  bool get usingSystemLanguage => _languageService.currentLocale == null;
+
   void selectSection(int index) {
     _selectedSection = index;
     onSettingChanged();

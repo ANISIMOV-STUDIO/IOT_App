@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_ui_kit/smart_ui_kit.dart';
-import '../../domain/entities/week_schedule.dart'; // Mock/Real entity import
+import '../bloc/hvac_list/hvac_list_bloc.dart';
+import '../bloc/hvac_list/hvac_list_state.dart';
+import '../bloc/hvac_list/hvac_list_event.dart';
+import '../../domain/entities/week_schedule.dart';
 import '../../domain/entities/day_schedule.dart';
 
 class ZilonScheduleScreen extends StatefulWidget {
@@ -11,79 +15,116 @@ class ZilonScheduleScreen extends StatefulWidget {
 }
 
 class _ZilonScheduleScreenState extends State<ZilonScheduleScreen> {
-  // Mock Schedule Data for now (or load from BLoC later)
-  final WeekSchedule _schedule = WeekSchedule.defaultSchedule;
   String _selectedDay = 'Monday';
+  WeekSchedule? _editingSchedule;
+  bool _isDirty = false;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-    final isDesktop = MediaQuery.of(context).size.width > 1000;
+    return BlocBuilder<HvacListBloc, HvacListState>(
+      builder: (context, state) {
+        if (state is HvacListLoaded && state.units.isNotEmpty) {
+          final device = state.units.first;
+          
+          // Initialize local schedule if needed
+          if (_editingSchedule == null && device.schedule != null) {
+            _editingSchedule = device.schedule;
+          }
+          final schedule = _editingSchedule ?? WeekSchedule.defaultSchedule;
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(AppSpacing.v24),
-      child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1200),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeader(context),
-              const SizedBox(height: 24),
-              isDesktop 
-               ? Row(
+          final theme = Theme.of(context);
+          final isDesktop = MediaQuery.of(context).size.width > 1000;
+
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(AppSpacing.v24),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 1200),
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(flex: 2, child: _buildWeeklyCalendar(context)),
-                    const SizedBox(width: 24),
-                    Expanded(flex: 1, child: _buildDayEditor(context)),
+                    _buildHeader(context, device.id),
+                    const SizedBox(height: 24),
+                    isDesktop 
+                     ? Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(flex: 2, child: _buildWeeklyCalendar(context, schedule)),
+                          const SizedBox(width: 24),
+                          Expanded(flex: 1, child: _buildDayEditor(context, schedule)),
+                        ],
+                       )
+                     : Column(
+                         children: [
+                           _buildDayEditor(context, schedule),
+                           const SizedBox(height: 24),
+                           _buildWeeklyCalendar(context, schedule),
+                         ],
+                       ),
                   ],
-                 )
-               : Column(
-                   children: [
-                     _buildDayEditor(context), // Editor first on mobile
-                     const SizedBox(height: 24),
-                     _buildWeeklyCalendar(context),
-                   ],
-                 ),
-            ],
-          ),
-        ),
-      ),
+                ),
+              ),
+            ),
+          );
+        }
+        return const Center(child: CircularProgressIndicator());
+      },
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
+  Widget _buildHeader(BuildContext context, String deviceId) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text('Weekly Schedule', style: AppTypography.displayMedium.copyWith(color: Theme.of(context).colorScheme.onSurface)),
         SmartButton(
-          label: 'Save Changes',
-          icon: const Icon(Icons.save, size: 18, color: Colors.white), 
-          onPressed: () {},
+          label: _isDirty ? 'Save Changes' : 'Saved',
+          icon: Icon(_isDirty ? Icons.save : Icons.check, size: 18, color: Colors.white), 
+          onPressed: _isDirty ? () {
+             if (_editingSchedule != null) {
+               context.read<HvacListBloc>().add(
+                 UpdateDeviceScheduleEvent(deviceId: deviceId, schedule: _editingSchedule!)
+               );
+               setState(() => _isDirty = false);
+               
+               ScaffoldMessenger.of(context).showSnackBar(
+                 const SnackBar(content: Text('Schedule saved successfully'))
+               );
+             }
+          } : null,
         ),
       ],
     );
   }
 
-  Widget _buildWeeklyCalendar(BuildContext context) {
+  Widget _buildWeeklyCalendar(BuildContext context, WeekSchedule schedule) {
     return Column(
       children: [
         for (var day in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'])
           Padding(
             padding: const EdgeInsets.only(bottom: 12),
-            child: _buildDayRow(context, day),
+            child: _buildDayRow(context, day, schedule),
           ),
       ],
     );
   }
 
-  Widget _buildDayRow(BuildContext context, String day) {
+  Widget _buildDayRow(BuildContext context, String day, WeekSchedule schedule) {
     final theme = Theme.of(context);
     final isSelected = _selectedDay == day;
+    final dayIndex = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].indexOf(day) + 1;
+    final daySchedule = schedule.getDaySchedule(dayIndex);
     
+    // Convert DaySchedule to TimePeriods
+    List<TimePeriod> periods = [];
+    if (daySchedule.timerEnabled && daySchedule.turnOnTime != null && daySchedule.turnOffTime != null) {
+       periods.add(TimePeriod(
+         start: _timeToDouble(daySchedule.turnOnTime!),
+         end: _timeToDouble(daySchedule.turnOffTime!),
+         isActive: true
+       ));
+    }
+
     return InkWell(
       onTap: () => setState(() => _selectedDay = day),
       borderRadius: BorderRadius.circular(16),
@@ -100,7 +141,7 @@ class _ZilonScheduleScreenState extends State<ZilonScheduleScreen> {
         child: Row(
           children: [
             SizedBox(
-              width: 120, // Increased from 100 to fix wrapping
+              width: 120,
               child: Text(day, style: AppTypography.titleMedium.copyWith(
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                 color: isSelected ? theme.colorScheme.primary : theme.colorScheme.onSurface 
@@ -108,15 +149,11 @@ class _ZilonScheduleScreenState extends State<ZilonScheduleScreen> {
             ),
             Expanded(
               child: SizedBox(
-                height: 50, // Increased height for ticks
+                height: 50,
                 child: CustomPaint(
                   painter: ScheduleTimelinePainter(
                     theme: theme, 
-                    periods: [
-                      // Mock periods for demo
-                      TimePeriod(start: 7, end: 9, isActive: true),
-                      TimePeriod(start: 18, end: 22, isActive: true),
-                    ]
+                    periods: periods
                   ),
                 ),
               ),
@@ -127,8 +164,11 @@ class _ZilonScheduleScreenState extends State<ZilonScheduleScreen> {
     );
   }
 
-  Widget _buildDayEditor(BuildContext context) {
+  Widget _buildDayEditor(BuildContext context, WeekSchedule schedule) {
     final theme = Theme.of(context);
+    final dayIndex = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].indexOf(_selectedDay) + 1;
+    final daySchedule = schedule.getDaySchedule(dayIndex);
+
     return SmartCard(
       padding: const EdgeInsets.all(24),
       child: Column(
@@ -138,29 +178,35 @@ class _ZilonScheduleScreenState extends State<ZilonScheduleScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('Edit $_selectedDay', style: AppTypography.titleLarge.copyWith(color: theme.colorScheme.onSurface)),
-              Switch(value: true, onChanged: (v){}),
+              Switch(
+                value: daySchedule.timerEnabled, 
+                onChanged: (v) => _updateDaySchedule(dayIndex, daySchedule.copyWith(timerEnabled: v))
+              ),
             ],
           ),
           const SizedBox(height: 24),
-          _buildTimeInput(context, 'Wake Up', '07:00'),
-          const SizedBox(height: 16),
-          _buildTimeInput(context, 'Leave', '09:00'),
-          const SizedBox(height: 16),
-          _buildTimeInput(context, 'Return', '18:00'),
-          const SizedBox(height: 16),
-          _buildTimeInput(context, 'Sleep', '22:00'),
+          if (daySchedule.timerEnabled) ...[
+            _buildTimeInput(context, 'Turn On', daySchedule.turnOnTime, (t) => _updateDaySchedule(dayIndex, daySchedule.copyWith(turnOnTime: t))),
+            const SizedBox(height: 16),
+            _buildTimeInput(context, 'Turn Off', daySchedule.turnOffTime, (t) => _updateDaySchedule(dayIndex, daySchedule.copyWith(turnOffTime: t))),
+          ] else 
+            const Padding(
+              padding: EdgeInsets.all(24.0),
+              child: Text('Timer is disabled for this day'),
+            ),
+          
           const SizedBox(height: 24),
           const Divider(),
           const SizedBox(height: 16),
-          Text('Presets', style: AppTypography.titleSmall),
+          Text('Apply Preset', style: AppTypography.titleSmall),
           const SizedBox(height: 12),
           Wrap(
             spacing: 8,
             runSpacing: 8,
             children: [
-              _buildPresetTag(context, 'Workday'),
-              _buildPresetTag(context, 'Weekend'),
-              _buildPresetTag(context, 'Holiday'),
+              _buildPresetTag(context, 'Workday (09-18)', () => _applyPreset(dayIndex, 9, 18)),
+              _buildPresetTag(context, 'Full Day (07-23)', () => _applyPreset(dayIndex, 7, 23)),
+              _buildPresetTag(context, 'Off', () => _updateDaySchedule(dayIndex, const DaySchedule(timerEnabled: false))),
             ],
           ),
         ],
@@ -168,28 +214,44 @@ class _ZilonScheduleScreenState extends State<ZilonScheduleScreen> {
     );
   }
 
-  Widget _buildTimeInput(BuildContext context, String label, String time) {
-    return Row(
-      children: [
-        Icon(Icons.access_time, size: 20, color: Theme.of(context).colorScheme.primary),
-        const SizedBox(width: 12),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(label, style: AppTypography.labelSmall),
-            Text(time, style: AppTypography.titleMedium),
-          ],
-        ),
-        const Spacer(),
-        IconButton(icon: const Icon(Icons.edit_outlined, size: 20), onPressed: (){}),
-      ],
+  Widget _buildTimeInput(BuildContext context, String label, TimeOfDay? time, Function(TimeOfDay) onChanged) {
+    final timeStr = time != null ? '${time.hour.toString().padLeft(2,'0')}:${time.minute.toString().padLeft(2,'0')}' : '--:--';
+    
+    return InkWell(
+      onTap: () async {
+         final picked = await showTimePicker(
+           context: context, 
+           initialTime: time ?? const TimeOfDay(hour: 9, minute: 0),
+           builder: (context, child) {
+             return Theme(data: Theme.of(context).copyWith(
+               colorScheme: Theme.of(context).colorScheme, // Ensure dialog matches theme
+             ), child: child!);
+           }
+         );
+         if (picked != null) onChanged(picked);
+      },
+      child: Row(
+        children: [
+          Icon(Icons.access_time, size: 20, color: Theme.of(context).colorScheme.primary),
+          const SizedBox(width: 12),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(label, style: AppTypography.labelSmall),
+              Text(timeStr, style: AppTypography.titleMedium),
+            ],
+          ),
+          const Spacer(),
+          const Icon(Icons.edit_outlined, size: 20),
+        ],
+      ),
     );
   }
-
-  Widget _buildPresetTag(BuildContext context, String label) {
+  
+  Widget _buildPresetTag(BuildContext context, String label, VoidCallback onTap) {
     final theme = Theme.of(context);
     return InkWell(
-      onTap: () {},
+      onTap: onTap,
       borderRadius: BorderRadius.circular(20),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -205,6 +267,25 @@ class _ZilonScheduleScreenState extends State<ZilonScheduleScreen> {
       ),
     );
   }
+
+  void _updateDaySchedule(int dayIndex, DaySchedule newDaySchedule) {
+      if (_editingSchedule == null) return;
+      
+      setState(() {
+        _editingSchedule = _editingSchedule!.updateDay(dayIndex, newDaySchedule);
+        _isDirty = true;
+      });
+  }
+
+  void _applyPreset(int dayIndex, int startHour, int endHour) {
+      _updateDaySchedule(dayIndex, DaySchedule(
+        timerEnabled: true,
+        turnOnTime: TimeOfDay(hour: startHour, minute: 0),
+        turnOffTime: TimeOfDay(hour: endHour, minute: 0),
+      ));
+  }
+
+  double _timeToDouble(TimeOfDay t) => t.hour + t.minute / 60.0;
 }
 
 class TimePeriod {
@@ -240,14 +321,16 @@ class ScheduleTimelinePainter extends CustomPainter {
     paint.color = theme.colorScheme.primary;
     for (var period in periods) {
       final startX = (period.start / 24) * size.width;
-      final endX = (period.end / 24) * size.width;
+      final endX = (period.end / 24) * size.width; // Fix: use end time
       final width = endX - startX;
       
-      final rect = RRect.fromRectAndRadius(
-        Rect.fromLTWH(startX, trackTop, width, trackHeight), 
-        const Radius.circular(8)
-      );
-      canvas.drawRRect(rect, paint);
+      if (width > 0) {
+        final rect = RRect.fromRectAndRadius(
+          Rect.fromLTWH(startX, trackTop, width, trackHeight), 
+          const Radius.circular(8)
+        );
+        canvas.drawRRect(rect, paint);
+      }
     }
     
     // Hour Ticks
@@ -282,5 +365,5 @@ class ScheduleTimelinePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true; // Needs repaint on periods change
 }

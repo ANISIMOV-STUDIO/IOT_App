@@ -14,7 +14,8 @@ class VentilationDevice extends Device with PowerTrait, TemperatureTrait {
   final double? targetTemperature;
   
   final int fanSpeed; // 0-100
-  
+  final String mode; // Auto, Cool, Heat, Vent
+
   const VentilationDevice({
     required super.id,
     required super.name,
@@ -22,6 +23,7 @@ class VentilationDevice extends Device with PowerTrait, TemperatureTrait {
     this.currentTemperature = 0.0,
     this.targetTemperature,
     this.fanSpeed = 0,
+    this.mode = 'Auto',
   }) : super(type: 'ventilation');
 
   @override
@@ -32,6 +34,7 @@ class VentilationDevice extends Device with PowerTrait, TemperatureTrait {
     double? currentTemperature,
     double? targetTemperature,
     int? fanSpeed,
+    String? mode,
   }) {
     return VentilationDevice(
       id: id ?? this.id,
@@ -40,6 +43,7 @@ class VentilationDevice extends Device with PowerTrait, TemperatureTrait {
       currentTemperature: currentTemperature ?? this.currentTemperature,
       targetTemperature: targetTemperature ?? this.targetTemperature,
       fanSpeed: fanSpeed ?? this.fanSpeed,
+      mode: mode ?? this.mode,
     );
   }
 
@@ -60,5 +64,6 @@ class VentilationDevice extends Device with PowerTrait, TemperatureTrait {
     currentTemperature,
     targetTemperature,
     fanSpeed,
+    mode,
   ];
 }
