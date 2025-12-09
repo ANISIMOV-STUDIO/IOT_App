@@ -11,7 +11,7 @@ import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
 import '../../presentation/bloc/auth/auth_bloc.dart';
 import '../../presentation/pages/login_screen.dart';
-import '../../presentation/pages/home_screen.dart';
+import '../../presentation/screens/zilon_dashboard_screen.dart';
 import '../../presentation/pages/unit_detail_screen.dart';
 import '../../presentation/pages/room_detail_screen.dart';
 import '../../presentation/pages/schedule_screen.dart';
@@ -20,20 +20,30 @@ import '../../presentation/pages/device_management_screen.dart';
 import '../../presentation/pages/device_search_screen.dart';
 import '../../presentation/pages/qr_scanner_screen.dart';
 import '../../presentation/pages/onboarding_screen.dart';
+import '../../presentation/screens/zilon_controls_screen.dart';
+import '../../presentation/screens/zilon_schedule_screen.dart';
+import '../../presentation/screens/zilon_statistics_screen.dart';
+import '../../presentation/screens/zilon_settings_screen.dart';
+import '../../presentation/widgets/zilon_shell.dart';
 
 /// App route names
 class AppRoutes {
   static const String login = '/login';
+  static const String onboarding = '/onboarding';
+  
+  // Shell Routes
   static const String home = '/';
+  static const String controls = '/controls';
+  static const String schedule = '/schedule';
+  static const String statistics = '/statistics';
+  static const String settings = '/settings';
+
+  // Detail Routes (kept for backward compat or deep linking)
   static const String unitDetail = '/unit/:id';
   static const String roomDetail = '/room/:id';
-  static const String analytics = '/analytics';
-  static const String schedule = '/schedule/:unitId';
-  static const String settings = '/settings';
   static const String deviceManagement = '/devices';
   static const String deviceSearch = '/devices/search';
   static const String qrScanner = '/qr-scanner';
-  static const String onboarding = '/onboarding';
 }
 
 /// Global router configuration
@@ -120,100 +130,67 @@ GoRouter createRouter(AuthBloc authBloc) {
     ),
 
     routes: [
-      // Login route
+      // Login & Onboarding (Standalone)
       GoRoute(
         path: AppRoutes.login,
         builder: (context, state) => const LoginScreen(),
       ),
-
-      // Onboarding route
       GoRoute(
         path: AppRoutes.onboarding,
         builder: (context, state) => const OnboardingScreen(),
       ),
 
-      // Home route
-      GoRoute(
-        path: AppRoutes.home,
-        builder: (context, state) => const HomeScreen(),
+      // ZILON Shell (Sidebar Navigation)
+      ShellRoute(
+        builder: (context, state, child) => ZilonShell(child: child),
+        routes: [
+          GoRoute(
+            path: AppRoutes.home,
+            builder: (context, state) => const ZilonDashboardScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.controls,
+            builder: (context, state) => const ZilonControlsScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.schedule,
+            builder: (context, state) => const ZilonScheduleScreen(), 
+            // Note: Use global schedule for now, or adapt to handle unitId if needed later
+          ),
+          GoRoute(
+            path: AppRoutes.statistics,
+            builder: (context, state) => const ZilonStatisticsScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.settings,
+            builder: (context, state) => const ZilonSettingsScreen(),
+          ),
+          // Keep these under Shell if you want them to have sidebar, 
+          // or move out if they should be full screen. 
+          // For now, let's keep them accessible but maybe refactor later.
+          GoRoute(
+            path: AppRoutes.deviceManagement,
+            builder: (context, state) => const DeviceManagementScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.deviceSearch,
+            builder: (context, state) => const DeviceSearchScreen(),
+          ),
+          GoRoute(
+            path: AppRoutes.qrScanner,
+            builder: (context, state) => const QrScannerScreen(),
+          ),
+        ],
       ),
-
-      // Unit detail route with ID parameter
+      
+      // Detail routes (can be outside shell or inside)
+      // For ZILON style, details usually overlay or replace content.
       GoRoute(
         path: AppRoutes.unitDetail,
         builder: (context, state) {
-          final unitId = state.pathParameters['id'];
-          if (unitId == null) {
-            return const Scaffold(
-              body: Center(child: Text('Invalid unit ID')),
-            );
-          }
-          return UnitDetailScreen(unitId: unitId);
-        },
-      ),
-
-      // Room detail route with ID parameter
-      GoRoute(
-        path: AppRoutes.roomDetail,
-        builder: (context, state) {
-          final roomId = state.pathParameters['id'];
-          if (roomId == null) {
-            return const Scaffold(
-              body: Center(child: Text('Invalid room ID')),
-            );
-          }
-          return RoomDetailScreen(unitId: roomId);
-        },
-      ),
-
-      // Analytics route
-      GoRoute(
-        path: AppRoutes.analytics,
-        builder: (context, state) {
-          // Analytics screen shows data for all units, no specific unit needed
-          // For now, we'll pass a dummy unit or refactor AnalyticsScreen to not require unit
-          return const Scaffold(
-            body: Center(child: Text('Analytics - Coming Soon')),
-          );
-        },
-      ),
-
-      // Schedule route with unit ID parameter
-      GoRoute(
-        path: AppRoutes.schedule,
-        builder: (context, state) {
-          final unitId = state.pathParameters['unitId'];
-          if (unitId == null) {
-            return const Scaffold(
-              body: Center(child: Text('Invalid unit ID')),
-            );
-          }
-          return ScheduleScreen(unitId: unitId);
-        },
-      ),
-
-      // Settings route
-      GoRoute(
-        path: AppRoutes.settings,
-        builder: (context, state) => const SettingsScreen(),
-      ),
-
-      // Device management route
-      GoRoute(
-        path: AppRoutes.deviceManagement,
-        builder: (context, state) => const DeviceManagementScreen(),
-      ),
-
-      // Device search route
-      GoRoute(
-        path: AppRoutes.deviceSearch,
-        builder: (context, state) => const DeviceSearchScreen(),
-      ),
-
-      // QR Scanner route
-      GoRoute(
-        path: AppRoutes.qrScanner,
-        builder: (context, state) => const QrScannerScreen(),
+           final unitId = state.pathParameters['id'];
+           return UnitDetailScreen(unitId: unitId ?? '');
+        }
       ),
     ],
   );
@@ -233,12 +210,13 @@ extension GoRouterExtensions on BuildContext {
 
   /// Navigate to schedule page
   void goToSchedule(String unitId) {
-    go('/schedule/$unitId');
+    // go('/schedule/$unitId'); // Old
+    go(AppRoutes.schedule); // New global schedule
   }
 
   /// Navigate to analytics page
   void goToAnalytics() {
-    go(AppRoutes.analytics);
+    go(AppRoutes.statistics);
   }
 
   /// Navigate to settings page

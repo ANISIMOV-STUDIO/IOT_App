@@ -9,7 +9,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+import 'package:smart_ui_kit/smart_ui_kit.dart';
 import 'generated/l10n/app_localizations.dart';
 import 'core/di/injection_container.dart' as di;
 import 'core/services/theme_service.dart';
@@ -18,10 +18,11 @@ import 'core/navigation/app_router.dart';
 import 'presentation/bloc/hvac_list/hvac_list_bloc.dart';
 import 'presentation/bloc/hvac_list/hvac_list_event.dart';
 import 'presentation/bloc/auth/auth_bloc.dart';
+import 'presentation/screens/zilon_dashboard_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  // Add comment to force rebuild
   // Initialize dependencies
   await di.init();
 
@@ -77,8 +78,8 @@ class _HvacControlAppState extends State<HvacControlApp> {
             debugShowCheckedModeBanner: false,
 
             // Theme - Light with Blue & White Balance (Corporate Colors)
-            theme: HvacTheme.lightTheme(),
-            darkTheme: HvacTheme.darkTheme(),
+            theme: AppTheme.light,
+            darkTheme: AppTheme.dark,
             themeMode: ThemeMode.light, // Light theme - blue & white balanced
 
             // Localization - Russian (default) and English
@@ -94,7 +95,7 @@ class _HvacControlAppState extends State<HvacControlApp> {
 
             // Responsive Framework - Industry Standard Approach
             builder: (context, widget) => Container(
-              color: HvacColors.backgroundSecondary,
+              color: Theme.of(context).scaffoldBackgroundColor,
               child: ResponsiveBreakpoints(
                 breakpoints: const [
                   Breakpoint(start: 0, end: 599, name: MOBILE),

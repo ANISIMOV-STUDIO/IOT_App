@@ -16,6 +16,12 @@ dependencies:
   # UI Kit (Internal Package - Now in repository)
   hvac_ui_kit:
     path: packages/hvac_ui_kit
+  
+  # New Architecture Packages
+  smart_home_core:
+    path: packages/smart_home_core
+  smart_ui_kit:
+    path: packages/smart_ui_kit
 
   # State Management
   flutter_bloc: ^8.1.3
