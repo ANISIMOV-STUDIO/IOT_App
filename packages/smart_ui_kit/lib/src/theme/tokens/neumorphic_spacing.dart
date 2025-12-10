@@ -23,25 +23,25 @@ abstract class NeumorphicSpacing {
   // ============================================
   
   /// Padding inside cards
-  static const double cardPadding = 20.0;
+  static const double cardPadding = 16.0;
   
   /// Gap between cards in grid
-  static const double cardGap = 16.0;
+  static const double cardGap = 12.0;
   
   /// Sidebar width (collapsed)
   static const double sidebarCollapsed = 80.0;
   
   /// Sidebar width (expanded)
-  static const double sidebarExpanded = 240.0;
+  static const double sidebarExpanded = 200.0;
   
   /// Right panel width
-  static const double rightPanelWidth = 320.0;
+  static const double rightPanelWidth = 300.0;
   
   /// Screen edge padding
-  static const double screenPadding = 24.0;
+  static const double screenPadding = 20.0;
   
   /// Section gap (between major sections)
-  static const double sectionGap = 32.0;
+  static const double sectionGap = 20.0;
 
   // ============================================
   // BORDER RADIUS

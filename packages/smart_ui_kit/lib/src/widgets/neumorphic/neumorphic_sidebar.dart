@@ -178,35 +178,37 @@ class NeumorphicSidebar extends StatelessWidget {
                   size: NeumorphicSpacing.navIconSize,
                 ),
                 if (!isCollapsed) ...[
-                  const SizedBox(width: NeumorphicSpacing.sm),
-                  Text(
-                    item.label,
-                    style: theme.typography.bodyMedium.copyWith(
-                      color: isSelected 
-                          ? theme.colors.textPrimary 
-                          : theme.colors.textSecondary,
-                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                  const SizedBox(width: NeumorphicSpacing.xs),
+                  Expanded(
+                    child: Text(
+                      item.label,
+                      style: theme.typography.bodyMedium.copyWith(
+                        color: isSelected 
+                            ? theme.colors.textPrimary 
+                            : theme.colors.textSecondary,
+                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                ],
-                if (!isCollapsed && item.badge != null) ...[
-                  const Spacer(),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 2,
-                    ),
-                    decoration: BoxDecoration(
-                      color: NeumorphicColors.accentPrimary,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Text(
-                      item.badge!,
-                      style: theme.typography.labelSmall.copyWith(
-                        color: Colors.white,
+                  if (item.badge != null)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: NeumorphicColors.accentPrimary,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(
+                        item.badge!,
+                        style: theme.typography.labelSmall.copyWith(
+                          color: Colors.white,
+                          fontSize: 10,
+                        ),
                       ),
                     ),
-                  ),
                 ],
               ],
             ),

@@ -92,32 +92,15 @@ class _HvacControlAppState extends State<HvacControlApp> {
             ],
             supportedLocales: LanguageService.supportedLocales, // ['ru', 'en']
 
-            // Responsive Framework - Industry Standard Approach
-            builder: (context, widget) => Container(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              child: ResponsiveBreakpoints(
-                breakpoints: const [
-                  Breakpoint(start: 0, end: 599, name: MOBILE),
-                  Breakpoint(start: 600, end: 1023, name: TABLET),
-                  Breakpoint(start: 1024, end: 1919, name: DESKTOP),
-                  Breakpoint(start: 1920, end: double.infinity, name: '4K'),
-                ],
-                child: Builder(
-                  builder: (context) => ResponsiveScaledBox(
-                    width: ResponsiveValue<double>(
-                      context,
-                      defaultValue: 1920,
-                      conditionalValues: [
-                        const Condition.equals(name: MOBILE, value: 375),
-                        const Condition.between(
-                            start: 600, end: 1024, value: 768),
-                        const Condition.largerThan(name: TABLET, value: 1920),
-                      ],
-                    ).value,
-                    child: widget!,
-                  ),
-                ),
-              ),
+            // Responsive Framework - breakpoints only, no scaling
+            builder: (context, widget) => ResponsiveBreakpoints.builder(
+              breakpoints: const [
+                Breakpoint(start: 0, end: 599, name: MOBILE),
+                Breakpoint(start: 600, end: 1023, name: TABLET),
+                Breakpoint(start: 1024, end: 1919, name: DESKTOP),
+                Breakpoint(start: 1920, end: double.infinity, name: '4K'),
+              ],
+              child: widget!,
             ),
           );
         },

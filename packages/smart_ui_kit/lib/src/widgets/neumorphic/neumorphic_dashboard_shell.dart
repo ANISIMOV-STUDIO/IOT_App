@@ -3,11 +3,15 @@ import '../../theme/neumorphic_theme.dart';
 import '../../theme/tokens/neumorphic_spacing.dart';
 
 /// Neumorphic Dashboard Shell - 3-column responsive layout
+/// Max width 1920px, centered on larger screens
 class NeumorphicDashboardShell extends StatelessWidget {
   final Widget sidebar;
   final Widget mainContent;
   final Widget? rightPanel;
   final bool showRightPanel;
+
+  static const double maxWidth = 1920.0;
+  static const double rightPanelWidth = 360.0; // Wider panel
 
   const NeumorphicDashboardShell({
     super.key,
@@ -29,38 +33,51 @@ class NeumorphicDashboardShell extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: theme.colors.surface,
-      body: Row(
-        children: [
-          // Sidebar
-          sidebar,
-          
-          // Main content area
-          Expanded(
-            child: Container(
-              color: theme.colors.surface,
-              child: mainContent,
-            ),
-          ),
-          
-          // Right panel (optional, responsive)
-          if (showRight)
-            Container(
-              width: isDesktop 
-                  ? NeumorphicSpacing.rightPanelWidth 
-                  : NeumorphicSpacing.rightPanelWidth * 0.85,
-              decoration: BoxDecoration(
-                color: theme.colors.cardSurface,
-                boxShadow: [
-                  BoxShadow(
-                    color: theme.colors.shadowDark.withValues(alpha: 0.1),
-                    blurRadius: 20,
-                    offset: const Offset(-5, 0),
-                  ),
-                ],
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: maxWidth),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start, // Align to top
+            children: [
+              // Sidebar
+              sidebar,
+              
+              // Main content area
+              Expanded(
+                child: Container(
+                  color: theme.colors.surface,
+                  child: mainContent,
+                ),
               ),
-              child: rightPanel,
-            ),
-        ],
+              
+              // Right panel - aligned to top with margin
+              if (showRight)
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 16,
+                    right: 16,
+                    bottom: 16,
+                  ),
+                  child: Container(
+                    width: isDesktop ? rightPanelWidth : rightPanelWidth * 0.85,
+                    decoration: BoxDecoration(
+                      color: theme.colors.cardSurface,
+                      borderRadius: BorderRadius.circular(24), // Both sides rounded
+                      boxShadow: [
+                        BoxShadow(
+                          color: theme.colors.shadowDark.withValues(alpha: 0.08),
+                          blurRadius: 20,
+                          offset: const Offset(-5, 0),
+                        ),
+                      ],
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    child: rightPanel,
+                  ),
+                ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -91,16 +108,17 @@ class NeumorphicMainContent extends StatelessWidget {
         // Header
         if (title != null)
           Padding(
-            padding: const EdgeInsets.all(NeumorphicSpacing.screenPadding),
+            padding: const EdgeInsets.fromLTRB(
+              NeumorphicSpacing.lg,
+              NeumorphicSpacing.lg,
+              NeumorphicSpacing.lg,
+              NeumorphicSpacing.md,
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  title!,
-                  style: theme.typography.headlineLarge,
-                ),
-                if (actions != null)
-                  Row(children: actions!),
+                Text(title!, style: theme.typography.headlineLarge),
+                if (actions != null) Row(children: actions!),
               ],
             ),
           ),
@@ -109,7 +127,7 @@ class NeumorphicMainContent extends StatelessWidget {
         Expanded(
           child: SingleChildScrollView(
             padding: padding ?? const EdgeInsets.symmetric(
-              horizontal: NeumorphicSpacing.screenPadding,
+              horizontal: NeumorphicSpacing.lg,
             ),
             child: child,
           ),
@@ -133,9 +151,9 @@ class NeumorphicRightPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: padding ?? const EdgeInsets.all(NeumorphicSpacing.screenPadding),
+      padding: padding ?? const EdgeInsets.all(NeumorphicSpacing.md),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: children,
       ),
     );

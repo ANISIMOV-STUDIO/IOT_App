@@ -112,27 +112,36 @@ class _DashboardViewState extends State<_DashboardView> {
       builder: (context, state) {
         final climate = state.climate;
         return NeumorphicRightPanel(children: [
-          Text(s.temperature, style: t.typography.headlineMedium),
-          const SizedBox(height: NeumorphicSpacing.lg),
-          Center(child: NeumorphicTemperatureDial(
-            value: climate?.targetTemperature ?? 22,
-            minValue: 10, maxValue: 30,
-            mode: _mapMode(climate?.mode),
-            label: _modeLabel(context, climate?.mode ?? ClimateMode.heating),
-            onChanged: (v) => context.read<DashboardBloc>().add(TemperatureChanged(v)),
+          // Temperature section
+          Text(s.temperature, style: t.typography.titleLarge),
+          const SizedBox(height: NeumorphicSpacing.md),
+          Center(child: SizedBox(
+            width: 220,
+            height: 220,
+            child: NeumorphicTemperatureDial(
+              value: climate?.targetTemperature ?? 22,
+              minValue: 10, maxValue: 30,
+              mode: _mapMode(climate?.mode),
+              label: _modeLabel(context, climate?.mode ?? ClimateMode.heating),
+              onChanged: (v) => context.read<DashboardBloc>().add(TemperatureChanged(v)),
+            ),
           )),
-          const SizedBox(height: NeumorphicSpacing.lg),
+          const SizedBox(height: NeumorphicSpacing.md),
           _modeSelector(context, climate?.mode ?? ClimateMode.heating),
-          const SizedBox(height: NeumorphicSpacing.xl),
+          const SizedBox(height: NeumorphicSpacing.lg),
+          
+          // Humidity section
           NeumorphicSlider(label: s.humidity, value: climate?.humidity ?? 60, suffix: '%',
             onChanged: (v) => context.read<DashboardBloc>().add(HumidityChanged(v))),
-          const SizedBox(height: NeumorphicSpacing.md),
+          const SizedBox(height: NeumorphicSpacing.sm),
           NeumorphicSliderPresets(currentValue: climate?.humidity ?? 60, presets: [
             SliderPreset(label: s.auto, value: 50),
             const SliderPreset(label: '30%', value: 30),
             const SliderPreset(label: '60%', value: 60),
           ], onPresetSelected: (v) => context.read<DashboardBloc>().add(HumidityChanged(v))),
-          const SizedBox(height: NeumorphicSpacing.xl),
+          const SizedBox(height: NeumorphicSpacing.lg),
+          
+          // Air quality section
           _airQualityCard(context, state),
         ]);
       },
@@ -187,21 +196,23 @@ class _DashboardViewState extends State<_DashboardView> {
 
   Widget _modeSelector(BuildContext context, ClimateMode current) {
     final t = NeumorphicThemeData.light();
-    return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: ClimateMode.values.where((m) => m != ClimateMode.off).map((m) {
+    // Только основные 4 режима для компактности
+    final modes = [ClimateMode.heating, ClimateMode.cooling, ClimateMode.auto, ClimateMode.dry];
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: modes.map((m) {
       final sel = m == current;
       return GestureDetector(
         onTap: () => context.read<DashboardBloc>().add(ClimateModeChanged(m)),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           decoration: BoxDecoration(
             color: sel ? t.colors.cardSurface : Colors.transparent,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(12),
             boxShadow: sel ? t.shadows.convexSmall : null,
           ),
-          child: Column(children: [
-            Icon(_modeIcon(m), color: sel ? _modeColor(m) : t.colors.textTertiary, size: 28),
-            const SizedBox(height: 4),
-            Text(_modeLabel(context, m), style: t.typography.labelMedium.copyWith(color: sel ? t.colors.textPrimary : t.colors.textTertiary)),
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            Icon(_modeIcon(m), color: sel ? _modeColor(m) : t.colors.textTertiary, size: 22),
+            const SizedBox(height: 2),
+            Text(_modeLabel(context, m), style: t.typography.labelSmall.copyWith(color: sel ? t.colors.textPrimary : t.colors.textTertiary, fontSize: 10)),
           ]),
         ),
       );
@@ -275,7 +286,7 @@ class _DashboardViewState extends State<_DashboardView> {
     final t = NeumorphicThemeData.light();
     return NeumorphicCard(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Text(s.devicePowerConsumption, style: t.typography.titleMedium),
-      const SizedBox(height: 16),
+      const SizedBox(height: 12),
       ...state.powerUsage.map((p) => _pwrRow(t, _pwrIcon(p.deviceType), p.deviceName, s.units(p.unitCount), '${p.totalKwh.toStringAsFixed(0)}кВт')),
     ]));
   }
@@ -298,10 +309,16 @@ class _DashboardViewState extends State<_DashboardView> {
 
   // Helpers
   Widget _statCard(NeumorphicThemeData t, String st, String lb, String v, String u) => NeumorphicCard(
-    padding: const EdgeInsets.all(12), variant: NeumorphicCardVariant.flat,
+    padding: const EdgeInsets.all(10), variant: NeumorphicCardVariant.flat,
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text(st, style: t.typography.labelSmall), const SizedBox(height: 4),
-      Row(children: [Text(lb, style: t.typography.bodySmall), const Spacer(), Text(v, style: t.typography.numericMedium), Text(u, style: t.typography.unit)]),
+      Text(st, style: t.typography.labelSmall, overflow: TextOverflow.ellipsis),
+      const SizedBox(height: 4),
+      Row(children: [
+        Flexible(child: Text(lb, style: t.typography.bodySmall, overflow: TextOverflow.ellipsis)),
+        const SizedBox(width: 4),
+        Text(v, style: t.typography.numericMedium),
+        Text(u, style: t.typography.labelSmall),
+      ]),
     ]));
 
   Widget _appRow(NeumorphicThemeData t, String l, String r, bool on, int p) => Padding(
@@ -313,11 +330,11 @@ class _DashboardViewState extends State<_DashboardView> {
     ]));
 
   Widget _pwrRow(NeumorphicThemeData t, IconData ic, String nm, String un, String pw) => Padding(
-    padding: const EdgeInsets.only(bottom: 12),
+    padding: const EdgeInsets.only(bottom: 8),
     child: Row(children: [
-      Container(width: 36, height: 36, decoration: BoxDecoration(color: NeumorphicColors.lightSurface, borderRadius: BorderRadius.circular(8)), child: Icon(ic, size: 18)),
-      const SizedBox(width: 12),
-      Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(nm, style: t.typography.bodyMedium), Text(un, style: t.typography.labelSmall)])),
+      Container(width: 32, height: 32, decoration: BoxDecoration(color: NeumorphicColors.lightSurface, borderRadius: BorderRadius.circular(8)), child: Icon(ic, size: 16)),
+      const SizedBox(width: 10),
+      Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(nm, style: t.typography.bodySmall), Text(un, style: t.typography.labelSmall)])),
       Text(pw, style: t.typography.numericMedium),
     ]));
 
