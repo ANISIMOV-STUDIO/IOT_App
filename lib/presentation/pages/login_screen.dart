@@ -20,7 +20,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
 
     return BlocListener<auth.AuthBloc, auth.AuthState>(
       listener: (context, state) {
@@ -63,7 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Text(
                   'Climate Control System',
                   style: AppTypography.bodyMedium.copyWith(
-                    color: theme.colorScheme.onSurface.withOpacity(0.6),
+                    color: theme.colorScheme.onSurface.withValues(alpha:0.6),
                   ),
                 ),
                 const SizedBox(height: 48),
@@ -167,7 +166,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: RichText(
                     text: TextSpan(
                       text: "Don't have an account? ",
-                      style: AppTypography.bodyMedium.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.6)),
+                      style: AppTypography.bodyMedium.copyWith(color: theme.colorScheme.onSurface.withValues(alpha:0.6)),
                       children: [
                         TextSpan(
                           text: 'Register',
@@ -201,14 +200,14 @@ class _LoginScreenState extends State<LoginScreen> {
       obscureText: isPassword,
       decoration: InputDecoration(
         labelText: label,
-        prefixIcon: Icon(icon, color: theme.colorScheme.onSurface.withOpacity(0.4)),
+        prefixIcon: Icon(icon, color: theme.colorScheme.onSurface.withValues(alpha:0.4)),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: theme.colorScheme.outline),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: theme.colorScheme.outline.withOpacity(0.5)),
+          borderSide: BorderSide(color: theme.colorScheme.outline.withValues(alpha:0.5)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),

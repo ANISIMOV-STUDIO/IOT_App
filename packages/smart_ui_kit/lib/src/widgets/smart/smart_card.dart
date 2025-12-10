@@ -26,13 +26,13 @@ class SmartCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08), // Slightly stronger shadow
+            color: Colors.black.withAlpha(20), // Slightly stronger shadow
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
         ],
         border: Border.all(
-          color: colorScheme.outline.withOpacity(0.5),
+          color: colorScheme.outline.withValues(alpha: 0.5),
           width: 1,
         ),
       ),

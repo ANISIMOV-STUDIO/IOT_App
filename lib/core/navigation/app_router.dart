@@ -11,11 +11,8 @@ import 'package:hvac_ui_kit/hvac_ui_kit.dart';
 
 import '../../presentation/bloc/auth/auth_bloc.dart';
 import '../../presentation/pages/login_screen.dart';
-import '../../presentation/screens/zilon_dashboard_screen.dart';
+import '../../presentation/screens/neumorphic_dashboard_screen.dart';
 import '../../presentation/pages/unit_detail_screen.dart';
-import '../../presentation/pages/room_detail_screen.dart';
-import '../../presentation/pages/schedule_screen.dart';
-import '../../presentation/pages/settings_screen.dart';
 import '../../presentation/pages/device_management_screen.dart';
 import '../../presentation/pages/device_search_screen.dart';
 import '../../presentation/pages/qr_scanner_screen.dart';
@@ -140,14 +137,16 @@ GoRouter createRouter(AuthBloc authBloc) {
         builder: (context, state) => const OnboardingScreen(),
       ),
 
-      // ZILON Shell (Sidebar Navigation)
+      // Neumorphic Dashboard (Standalone - has its own shell)
+      GoRoute(
+        path: AppRoutes.home,
+        builder: (context, state) => const NeumorphicDashboardScreen(),
+      ),
+
+      // ZILON Shell (Sidebar Navigation) - for other screens
       ShellRoute(
         builder: (context, state, child) => ZilonShell(child: child),
         routes: [
-          GoRoute(
-            path: AppRoutes.home,
-            builder: (context, state) => const ZilonDashboardScreen(),
-          ),
           GoRoute(
             path: AppRoutes.controls,
             builder: (context, state) => const ZilonControlsScreen(),

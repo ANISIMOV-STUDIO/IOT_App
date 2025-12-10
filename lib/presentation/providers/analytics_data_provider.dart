@@ -14,6 +14,7 @@ class AnalyticsDataProvider {
       return TemperatureReading(
         timestamp: now.subtract(Duration(hours: 23 - index)),
         temperature: 20.0 + (index % 5) * 0.8 + (index % 3) * 0.3,
+        humidity: 0.0,
       );
     });
   }
@@ -25,6 +26,7 @@ class AnalyticsDataProvider {
       return TemperatureReading(
         timestamp: now.subtract(Duration(hours: 23 - index)),
         temperature: 45.0 + (index % 7) * 2.5,
+        humidity: 0.0,
       );
     });
   }

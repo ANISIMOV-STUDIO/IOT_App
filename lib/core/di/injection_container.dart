@@ -15,11 +15,15 @@ import '../services/language_service.dart';
 import '../services/cache_service.dart';
 import '../config/env_config.dart';
 
-// Data
-import '../../data/repositories/mock_hvac_repository.dart';
-
-// Domain
+// Domain - Repositories
 import '../../domain/repositories/hvac_repository.dart';
+import '../../domain/repositories/history_repository.dart';
+import '../../domain/repositories/smart_device_repository.dart';
+import '../../domain/repositories/climate_repository.dart';
+import '../../domain/repositories/energy_repository.dart';
+import '../../domain/repositories/occupant_repository.dart';
+
+// Domain - Use Cases
 import '../../domain/usecases/get_all_units.dart';
 import '../../domain/usecases/get_unit_by_id.dart';
 import '../../domain/usecases/update_unit.dart';
@@ -32,16 +36,20 @@ import '../../domain/usecases/group_power_control.dart';
 import '../../domain/usecases/sync_settings_to_all.dart';
 import '../../domain/usecases/apply_schedule_to_all.dart';
 
-// Presentation
+// Presentation - BLoCs
 import '../../presentation/bloc/hvac_list/hvac_list_bloc.dart';
 import '../../presentation/bloc/hvac_detail/hvac_detail_bloc.dart';
 import '../../presentation/bloc/auth/auth_bloc.dart';
 import '../../presentation/bloc/statistics/statistics_bloc.dart';
+import '../../presentation/bloc/dashboard/dashboard_bloc.dart';
 
-// Data
+// Data - Mock Repositories
 import '../../data/repositories/mock_hvac_repository.dart';
 import '../../data/repositories/mock_history_repository.dart';
-import '../../domain/repositories/history_repository.dart';
+import '../../data/repositories/mock_smart_device_repository.dart';
+import '../../data/repositories/mock_climate_repository.dart';
+import '../../data/repositories/mock_energy_repository.dart';
+import '../../data/repositories/mock_occupant_repository.dart';
 
 final sl = GetIt.instance;
 
@@ -51,27 +59,15 @@ Future<void> init() async {
   EnvConfig.printConfig();
 
   //! External Dependencies
-  // Initialize SharedPreferences
   final sharedPreferences = await SharedPreferences.getInstance();
   sl.registerLazySingleton(() => sharedPreferences);
 
   //! Core - Services
-  // Initialize gRPC service
   sl.registerLazySingleton(() => GrpcService());
-
-  // Initialize API service (REST)
   sl.registerLazySingleton(() => ApiService(sl()));
-
-  // Initialize theme service
   sl.registerLazySingleton(() => ThemeService());
-
-  // Initialize language service with SharedPreferences
   sl.registerLazySingleton(() => LanguageService(sl()));
-
-  // Set Russian as default language on first launch
   await sl<LanguageService>().initializeDefaults();
-
-  // Initialize cache service
   sl.registerLazySingleton(() => CacheService());
 
   // Initialize gRPC connection
@@ -81,14 +77,68 @@ Future<void> init() async {
     debugPrint('⚠️  gRPC initialization failed (will use Mock/REST): $e');
   }
 
-  //! Features - Auth
-  // Auth Bloc
+  //! =====================================================
+  //! DASHBOARD FEATURE (NEW)
+  //! =====================================================
+  
+  // Repositories - Mock implementations
+  sl.registerLazySingleton<SmartDeviceRepository>(
+    () => MockSmartDeviceRepository(),
+  );
+  sl.registerLazySingleton<ClimateRepository>(
+    () => MockClimateRepository(),
+  );
+  sl.registerLazySingleton<EnergyRepository>(
+    () => MockEnergyRepository(),
+  );
+  sl.registerLazySingleton<OccupantRepository>(
+    () => MockOccupantRepository(),
+  );
+
+  // Dashboard BLoC
+  sl.registerFactory(
+    () => DashboardBloc(
+      deviceRepository: sl(),
+      climateRepository: sl(),
+      energyRepository: sl(),
+      occupantRepository: sl(),
+    ),
+  );
+
+  //! =====================================================
+  //! AUTH FEATURE
+  //! =====================================================
   sl.registerFactory(
     () => AuthBloc(apiService: sl()),
   );
 
-  //! Features - HVAC
-  // Bloc
+  //! =====================================================
+  //! HVAC FEATURE
+  //! =====================================================
+  
+  // Repository
+  sl.registerLazySingleton<HvacRepository>(
+    () => MockHvacRepository(),
+  );
+  sl.registerLazySingleton<HistoryRepository>(
+    () => MockHistoryRepository(),
+  );
+
+  // Use cases
+  sl.registerLazySingleton(() => GetAllUnits(sl()));
+  sl.registerLazySingleton(() => GetUnitById(sl()));
+  // ignore: deprecated_member_use_from_same_package
+  sl.registerLazySingleton(() => UpdateUnit(sl()));
+  sl.registerLazySingleton(() => GetTemperatureHistory(sl()));
+  sl.registerLazySingleton(() => UpdateVentilationMode(sl()));
+  sl.registerLazySingleton(() => UpdateFanSpeeds(sl()));
+  sl.registerLazySingleton(() => UpdateSchedule(sl()));
+  sl.registerLazySingleton(() => ApplyPreset(sl()));
+  sl.registerLazySingleton(() => GroupPowerControl(sl()));
+  sl.registerLazySingleton(() => SyncSettingsToAll(sl()));
+  sl.registerLazySingleton(() => ApplyScheduleToAll(sl()));
+
+  // BLoCs
   sl.registerFactory(
     () => HvacListBloc(
       getAllUnits: sl(),
@@ -108,36 +158,12 @@ Future<void> init() async {
     ),
   );
 
-  // Use cases
-  sl.registerLazySingleton(() => GetAllUnits(sl()));
-  sl.registerLazySingleton(() => GetUnitById(sl()));
-  // ignore: deprecated_member_use_from_same_package
-  sl.registerLazySingleton(() => UpdateUnit(sl()));
-  sl.registerLazySingleton(() => GetTemperatureHistory(sl()));
-  sl.registerLazySingleton(() => UpdateVentilationMode(sl()));
-  sl.registerLazySingleton(() => UpdateFanSpeeds(sl()));
-  sl.registerLazySingleton(() => UpdateSchedule(sl()));
-  sl.registerLazySingleton(() => ApplyPreset(sl()));
-  sl.registerLazySingleton(() => GroupPowerControl(sl()));
-  sl.registerLazySingleton(() => SyncSettingsToAll(sl()));
-  sl.registerLazySingleton(() => ApplyScheduleToAll(sl()));
-
-  // Repository - Using Mock for now, will be replaced with REST implementation
-  sl.registerLazySingleton<HvacRepository>(
-    () => MockHvacRepository(),
-  );
-  
-  // History Repository
-  sl.registerLazySingleton<HistoryRepository>(
-    () => MockHistoryRepository(),
-  );
-  
   // Statistics Bloc
   sl.registerFactory(
     () => StatisticsBloc(repository: sl()),
   );
 
-  // Connect to repository (for compatibility)
+  // Connect to repository
   try {
     await sl<HvacRepository>().connect();
   } catch (e) {

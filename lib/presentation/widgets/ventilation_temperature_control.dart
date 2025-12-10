@@ -28,7 +28,7 @@ class VentilationTemperatureControl extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildHeader(context, l10n),
-          SizedBox(height: HvacSpacing.md),
+          const SizedBox(height: HvacSpacing.md),
           _buildTemperatureGrid(context, l10n, isMobile, isTablet),
         ],
       ),
@@ -44,7 +44,7 @@ class VentilationTemperatureControl extends StatelessWidget {
             color: HvacColors.info.withValues(alpha: 0.2),
             borderRadius: HvacRadius.smRadius,
           ),
-          child: Icon(
+          child: const Icon(
             Icons.thermostat,
             color: HvacColors.info,
             size: 20.0,

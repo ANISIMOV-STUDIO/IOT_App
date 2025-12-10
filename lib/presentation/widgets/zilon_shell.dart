@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smart_ui_kit/smart_ui_kit.dart';
@@ -23,7 +25,6 @@ class _ZilonShellState extends State<ZilonShell> {
     final showSidebar = width >= 700; // Lowered from 900 to support Tablets/Split view
     
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,

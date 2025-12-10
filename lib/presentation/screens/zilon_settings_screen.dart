@@ -129,7 +129,7 @@ class _ZilonSettingsScreenState extends State<ZilonSettingsScreen> {
               Center(
                 child: Text(
                   'Version 2.0.1 (ZILON Build)',
-                  style: AppTypography.labelSmall.copyWith(color: colorScheme.onSurface.withOpacity(0.5)),
+                  style: AppTypography.labelSmall.copyWith(color: colorScheme.onSurface.withValues(alpha:0.5)),
                 ),
               ),
             ],
@@ -170,7 +170,7 @@ class _ZilonSettingsScreenState extends State<ZilonSettingsScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('Admin User', style: AppTypography.titleLarge.copyWith(color: theme.colorScheme.onSurface)),
-              Text('admin@zilon.com', style: AppTypography.bodyMedium.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.6))),
+              Text('admin@zilon.com', style: AppTypography.bodyMedium.copyWith(color: theme.colorScheme.onSurface.withValues(alpha:0.6))),
             ],
           ),
           const Spacer(),
@@ -198,13 +198,13 @@ class _ZilonSettingsScreenState extends State<ZilonSettingsScreen> {
       leading: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: theme.colorScheme.primary.withOpacity(0.1),
+          color: theme.colorScheme.primary.withValues(alpha:0.1),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Icon(icon, color: theme.colorScheme.primary),
       ),
       title: Text(title, style: AppTypography.titleSmall.copyWith(color: theme.colorScheme.onSurface)),
-      subtitle: Text(subtitle, style: AppTypography.bodySmall.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.6))),
+      subtitle: Text(subtitle, style: AppTypography.bodySmall.copyWith(color: theme.colorScheme.onSurface.withValues(alpha:0.6))),
       trailing: Switch(
         value: value,
         onChanged: onChanged,
@@ -221,7 +221,7 @@ class _ZilonSettingsScreenState extends State<ZilonSettingsScreen> {
            value: null,
            groupValue: _controller!.usingSystemLanguage ? null : _controller!.currentLanguage,
            onChanged: (v) => _controller!.useSystemLanguage(),
-           title: Text('System (Auto)'),
+           title: const Text('System (Auto)'),
            activeColor: Theme.of(context).colorScheme.primary,
          ),
          // Explicit Languages

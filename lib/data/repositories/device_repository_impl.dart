@@ -5,14 +5,13 @@
 library;
 
 import 'dart:convert';
+import '../../domain/entities/device.dart';
 import '../../core/services/api_service.dart';
-import '../../domain/entities/hvac_unit.dart';
 import '../../domain/repositories/device_repository.dart';
 import '../../domain/repositories/hvac_repository.dart';
-import '../models/hvac_unit_model.dart';
 
-/// Implementation of DeviceRepository
-class DeviceRepositoryImpl implements DeviceRepository {
+/// Implementation of HvacDeviceRepository
+class DeviceRepositoryImpl implements HvacDeviceRepository {
   final ApiService _apiService;
   final HvacRepository _hvacRepository;
 
@@ -23,7 +22,7 @@ class DeviceRepositoryImpl implements DeviceRepository {
         _hvacRepository = hvacRepository;
 
   @override
-  Future<HvacUnit> addDevice(DeviceInfo deviceInfo) async {
+  Future<Device> addDevice(DeviceInfo deviceInfo) async {
     try {
       final response = await _apiService.post('/devices', body: {
         'mac_address': deviceInfo.macAddress,
@@ -33,16 +32,19 @@ class DeviceRepositoryImpl implements DeviceRepository {
         if (deviceInfo.firmware != null) 'firmware': deviceInfo.firmware,
       });
 
-      // Parse response body since post() returns http.Response
       if (response.statusCode != 200 && response.statusCode != 201) {
         throw Exception('Failed to add device');
       }
       final responseData = json.decode(response.body) as Map<String, dynamic>;
 
-      // Convert response to HVAC unit
-      final unitModel =
-          HvacUnitModel.fromJson(responseData['device'] ?? responseData);
-      return unitModel.toEntity();
+      // Convert to Device entity
+      return Device(
+        id: responseData['id']?.toString() ?? deviceInfo.macAddress,
+        name: deviceInfo.name,
+        type: DeviceType.airConditioner,
+        isOn: false,
+        roomId: deviceInfo.location ?? 'unknown',
+      );
     } catch (e) {
       throw _handleError(e);
     }
@@ -258,5 +260,51 @@ class DeviceRepositoryImpl implements DeviceRepository {
     } else {
       return Exception(errorStr.replaceAll('Exception: ', ''));
     }
+  }
+
+  // ============================================
+  // DeviceRepository base methods (stubs)
+  // ============================================
+
+  @override
+  Future<List<Device>> getDevices() async {
+    // TODO: Implement via _hvacRepository
+    return [];
+  }
+
+  @override
+  Future<List<Device>> getDevicesByRoom(String roomId) async {
+    // TODO: Implement
+    return [];
+  }
+
+  @override
+  Future<Device?> getDevice(String id) async {
+    // TODO: Implement
+    return null;
+  }
+
+  @override
+  Future<Device> toggleDevice(String id) async {
+    // TODO: Implement
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Device> updateDevice(String id, Map<String, dynamic> settings) async {
+    // TODO: Implement
+    throw UnimplementedError();
+  }
+
+  @override
+  Stream<List<Device>> watchDevices() {
+    // TODO: Implement
+    return Stream.value([]);
+  }
+
+  @override
+  Stream<Device> watchDevice(String id) {
+    // TODO: Implement
+    return const Stream.empty();
   }
 }

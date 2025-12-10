@@ -29,7 +29,7 @@ class ScheduleQuickStats extends StatelessWidget {
             color: isPowerOn ? HvacColors.success : HvacColors.error,
           ),
         ),
-        SizedBox(width: HvacSpacing.md),
+        const SizedBox(width: HvacSpacing.md),
         Expanded(
           child: ScheduleStat(
             label: l10n.operatingTime,
@@ -58,7 +58,7 @@ class ScheduleStat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(HvacSpacing.xs),
+      padding: const EdgeInsets.all(HvacSpacing.xs),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
         borderRadius: HvacRadius.smRadius,
@@ -73,7 +73,7 @@ class ScheduleStat extends StatelessWidget {
               color: HvacColors.textSecondary,
             ),
           ),
-          SizedBox(height: HvacSpacing.xxs),
+          const SizedBox(height: HvacSpacing.xxs),
           Text(
             value,
             style: HvacTypography.labelLarge.copyWith(

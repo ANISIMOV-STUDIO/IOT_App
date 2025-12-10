@@ -33,7 +33,7 @@ class ModeControlHeader extends StatelessWidget {
           child: Row(
             children: [
               Container(
-                padding: EdgeInsets.all(HvacSpacing.xs),
+                padding: const EdgeInsets.all(HvacSpacing.xs),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
                     colors: [HvacColors.blue400, HvacColors.primaryDark],
@@ -46,7 +46,7 @@ class ModeControlHeader extends StatelessWidget {
                   size: isMobile ? 20.0 : 24.0,
                 ),
               ),
-              SizedBox(width: HvacSpacing.sm),
+              const SizedBox(width: HvacSpacing.sm),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,7 +57,7 @@ class ModeControlHeader extends StatelessWidget {
                         color: HvacColors.textSecondary,
                       ),
                     ),
-                    SizedBox(height: HvacSpacing.xxs),
+                    const SizedBox(height: HvacSpacing.xxs),
                     Text(
                       mode.isEmpty ? l10n.notSelected : _getModeLabelFromString(mode, l10n),
                       style: HvacTypography.titleMedium.copyWith(
@@ -168,7 +168,7 @@ class FanSpeedControls extends StatelessWidget {
               ? (val) => onSupplyFanChanged!(val.toInt())
               : null,
         ),
-        SizedBox(height: HvacSpacing.md),
+        const SizedBox(height: HvacSpacing.md),
         HvacLabeledSlider(
           label: l10n.exhaustAir,
           icon: Icons.upload,

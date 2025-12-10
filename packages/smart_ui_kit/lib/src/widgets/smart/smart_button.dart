@@ -78,7 +78,7 @@ class SmartButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: colorScheme.primary.withOpacity(0.3),
+              color: colorScheme.primary.withAlpha(77),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),

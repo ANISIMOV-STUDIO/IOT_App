@@ -3,7 +3,7 @@
 /// Business logic for adding new HVAC devices to the system
 library;
 
-import '../../entities/hvac_unit.dart';
+import '../../entities/device.dart';
 import '../../repositories/device_repository.dart';
 
 /// Parameters for adding a device
@@ -27,16 +27,16 @@ class AddDeviceParams {
 ///
 /// Handles business logic for device registration and pairing
 class AddDevice {
-  final DeviceRepository _repository;
+  final HvacDeviceRepository _repository;
 
   const AddDevice(this._repository);
 
   /// Execute the add device use case
   ///
   /// Validates input and adds device to system
-  /// Returns newly added [HvacUnit] on success
+  /// Returns newly added [Device] on success
   /// Throws [Exception] with descriptive message on failure
-  Future<HvacUnit> call(AddDeviceParams params) async {
+  Future<Device> call(AddDeviceParams params) async {
     // Validate MAC address format
     if (!_isValidMacAddress(params.macAddress)) {
       throw Exception('Invalid MAC address format. Use XX:XX:XX:XX:XX:XX');

@@ -10,7 +10,7 @@ import '../../../core/utils/logger.dart';
 ///
 /// Cleanly closes connection to device updates (MQTT/WebSocket)
 class DisconnectFromDevices {
-  final DeviceRepository _repository;
+  final HvacDeviceRepository _repository;
 
   const DisconnectFromDevices(this._repository);
 

@@ -157,16 +157,10 @@ class HvacListBloc extends Bloc<HvacListEvent, HvacListState> {
         pairingCode: event.pairingCode,
       );
 
-      final newDevice = await _addDevice(params);
+      await _addDevice(params);
 
-      // Update list with new device
-      if (previousState is HvacListLoaded) {
-        final updatedUnits = [...previousState.units, newDevice];
-        emit(HvacListLoaded(updatedUnits));
-      } else {
-        // Refresh the entire list
-        add(const RefreshHvacUnitsEvent());
-      }
+      // Refresh the list to get updated data with proper HvacUnit type
+      add(const RefreshHvacUnitsEvent());
 
       // Show success message (handled by UI layer)
     } catch (e) {

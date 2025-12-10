@@ -38,9 +38,9 @@ class TodayScheduleCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              SizedBox(width: HvacSpacing.xs),
+              const SizedBox(width: HvacSpacing.xs),
               Container(
-                padding: EdgeInsets.symmetric(
+                padding: const EdgeInsets.symmetric(
                   horizontal: HvacSpacing.xs,
                   vertical: HvacSpacing.xxs,
                 ),
@@ -62,7 +62,7 @@ class TodayScheduleCard extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: HvacSpacing.sm),
+          const SizedBox(height: HvacSpacing.sm),
           Row(
             children: [
               Expanded(
@@ -72,7 +72,7 @@ class TodayScheduleCard extends StatelessWidget {
                   icon: Icons.power_settings_new,
                 ),
               ),
-              SizedBox(width: HvacSpacing.md),
+              const SizedBox(width: HvacSpacing.md),
               Expanded(
                 child: ScheduleTime(
                   label: l10n.turnOff,

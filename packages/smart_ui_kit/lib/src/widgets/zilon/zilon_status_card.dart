@@ -29,12 +29,12 @@ class ZilonStatusCard extends StatelessWidget {
               // Switch Icon
               Icon(
                 Icons.power_settings_new,
-                color: isPowerOn ? colorScheme.primary : colorScheme.onSurface.withOpacity(0.5),
+                color: isPowerOn ? colorScheme.primary : colorScheme.onSurface.withAlpha(128),
               ),
               Switch(
                 value: isPowerOn, 
                 onChanged: (_) => onToggle(),
-                activeColor: colorScheme.primary,
+                activeThumbColor: colorScheme.primary,
               ),
             ],
           ),
@@ -48,7 +48,7 @@ class ZilonStatusCard extends StatelessWidget {
           Text(
             isPowerOn ? 'Active' : 'Standby',
             style: AppTypography.bodyMedium.copyWith(
-              color: isPowerOn ? colorScheme.primary : colorScheme.onSurface.withOpacity(0.5),
+              color: isPowerOn ? colorScheme.primary : colorScheme.onSurface.withAlpha(128),
             ),
           ),
         ],

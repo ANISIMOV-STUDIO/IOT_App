@@ -16,7 +16,7 @@ class ScheduleHeader extends StatelessWidget {
     return Row(
       children: [
         Container(
-          padding: EdgeInsets.all(HvacSpacing.xs),
+          padding: const EdgeInsets.all(HvacSpacing.xs),
           decoration: BoxDecoration(
             color: HvacColors.success.withValues(alpha: 0.2),
             borderRadius: HvacRadius.smRadius,
@@ -27,7 +27,7 @@ class ScheduleHeader extends StatelessWidget {
             size: 20,
           ),
         ),
-        SizedBox(width: HvacSpacing.sm),
+        const SizedBox(width: HvacSpacing.sm),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,7 +41,7 @@ class ScheduleHeader extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
               ),
-              SizedBox(height: HvacSpacing.xxs),
+              const SizedBox(height: HvacSpacing.xxs),
               Text(
                 l10n.automaticControl,
                 style: HvacTypography.labelSmall.copyWith(

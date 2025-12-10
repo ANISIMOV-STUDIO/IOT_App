@@ -30,7 +30,7 @@ class DeviceScanResult {
 ///
 /// Discovers HVAC devices on the local network
 class ScanForDevices {
-  final DeviceRepository _repository;
+  final HvacDeviceRepository _repository;
 
   const ScanForDevices(this._repository);
 

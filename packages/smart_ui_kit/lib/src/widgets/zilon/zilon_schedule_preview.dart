@@ -52,7 +52,7 @@ class ZilonSchedulePreview extends StatelessWidget {
               Container(
                 width: 2,
                 height: 40,
-                color: colorScheme.outline.withOpacity(0.5),
+                color: colorScheme.outline.withAlpha(128),
               ),
           ],
         ),
@@ -77,7 +77,7 @@ class ZilonSchedulePreview extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                     decoration: BoxDecoration(
-                      color: colorScheme.primary.withOpacity(0.1),
+                      color: colorScheme.primary.withAlpha(26),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text('Active', style: AppTypography.labelSmall.copyWith(color: colorScheme.primary, fontSize: 10)),

@@ -21,7 +21,7 @@ class RemoveDeviceParams {
 ///
 /// Handles business logic for device removal with optional factory reset
 class RemoveDevice {
-  final DeviceRepository _repository;
+  final HvacDeviceRepository _repository;
 
   const RemoveDevice(this._repository);
 

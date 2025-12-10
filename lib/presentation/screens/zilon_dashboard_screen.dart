@@ -140,9 +140,9 @@ class _ZilonDashboardScreenState extends State<ZilonDashboardScreen> {
                         ),
                       ),
                       const SizedBox(width: AppSpacing.sectionSpacing),
-                      Expanded(
+                      const Expanded(
                         flex: 4,
-                        child: const ZilonQuickActions(),
+                        child: ZilonQuickActions(),
                       ),
                     ],
                   ),

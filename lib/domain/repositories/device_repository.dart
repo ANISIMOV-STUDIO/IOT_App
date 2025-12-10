@@ -1,12 +1,6 @@
-/// Device Repository Interface
-///
-/// Abstract repository defining the contract for device management operations
-/// following clean architecture principles
-library;
+import '../entities/device.dart';
 
-import '../entities/hvac_unit.dart';
-
-/// Device information for adding new devices
+/// Информация об устройстве для сканирования/pairing
 class DeviceInfo {
   final String macAddress;
   final String name;
@@ -23,47 +17,59 @@ class DeviceInfo {
   });
 }
 
-/// Interface for device management operations
+/// Репозиторий устройств — контракт для работы с устройствами
 abstract class DeviceRepository {
-  /// Add a new device to the system
-  /// Returns the newly added [HvacUnit] on success
-  /// Throws [Exception] on failure
-  Future<HvacUnit> addDevice(DeviceInfo deviceInfo);
+  /// Получить все устройства
+  Future<List<Device>> getDevices();
 
-  /// Remove a device from the system
-  /// Returns true on successful removal
-  /// Throws [Exception] on failure
-  Future<bool> removeDevice(String deviceId);
+  /// Получить устройства по комнате
+  Future<List<Device>> getDevicesByRoom(String roomId);
 
-  /// Connect to device communication system (MQTT/WebSocket)
-  /// Establishes connection for real-time updates
+  /// Получить устройство по ID
+  Future<Device?> getDevice(String id);
+
+  /// Включить/выключить устройство
+  Future<Device> toggleDevice(String id);
+
+  /// Обновить настройки устройства
+  Future<Device> updateDevice(String id, Map<String, dynamic> settings);
+
+  /// Стрим изменений устройств (для real-time обновлений)
+  Stream<List<Device>> watchDevices();
+
+  /// Стрим одного устройства
+  Stream<Device> watchDevice(String id);
+}
+
+/// Расширенный репозиторий для HVAC устройств (hardware-специфичный)
+abstract class HvacDeviceRepository extends DeviceRepository {
+  /// Подключиться к устройствам
   Future<void> connect();
 
-  /// Disconnect from device communication system
-  /// Closes active connections cleanly
+  /// Отключиться
   Future<void> disconnect();
 
-  /// Check if connected to device communication system
-  /// Returns true if actively connected
+  /// Проверить подключение
   bool isConnected();
 
-  /// Scan for available devices on the network
-  /// Returns list of discovered devices
+  /// Сканировать новые устройства
   Future<List<DeviceInfo>> scanForDevices();
 
-  /// Pair with a new device
-  /// Performs device pairing/provisioning process
+  /// Добавить устройство
+  Future<Device> addDevice(DeviceInfo deviceInfo);
+
+  /// Удалить устройство
+  Future<bool> removeDevice(String deviceId);
+
+  /// Связать устройство
   Future<bool> pairDevice(String macAddress, String pairingCode);
 
-  /// Reset device to factory settings
-  /// WARNING: This will remove all device configurations
+  /// Сброс к заводским настройкам
   Future<bool> factoryReset(String deviceId);
 
-  /// Update device firmware
-  /// Returns true if update initiated successfully
+  /// Обновить прошивку
   Future<bool> updateFirmware(String deviceId, String firmwareVersion);
 
-  /// Get device diagnostics information
-  /// Returns diagnostic data as key-value pairs
+  /// Получить диагностику
   Future<Map<String, dynamic>> getDeviceDiagnostics(String deviceId);
 }

@@ -9,7 +9,7 @@ import '../../repositories/device_repository.dart';
 ///
 /// Establishes connection for real-time device updates (MQTT/WebSocket)
 class ConnectToDevices {
-  final DeviceRepository _repository;
+  final HvacDeviceRepository _repository;
 
   const ConnectToDevices(this._repository);
 

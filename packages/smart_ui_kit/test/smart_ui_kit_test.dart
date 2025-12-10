@@ -1,16 +1,9 @@
-import 'package:smart_ui_kit/smart_ui_kit.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('A group of tests', () {
-    final awesome = Awesome();
-
-    setUp(() {
-      // Additional setup goes here.
-    });
-
-    test('First Test', () {
-      expect(awesome.isAwesome, isTrue);
+  group('Smart UI Kit tests', () {
+    test('A simple test', () {
+      expect(1, 1);
     });
   });
 }

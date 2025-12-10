@@ -31,7 +31,7 @@ class ScheduleTime extends StatelessWidget {
               size: 12,
               color: HvacColors.textSecondary,
             ),
-            SizedBox(width: HvacSpacing.xxs),
+            const SizedBox(width: HvacSpacing.xxs),
             Flexible(
               child: Text(
                 label,
@@ -43,7 +43,7 @@ class ScheduleTime extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(height: HvacSpacing.xxs),
+        const SizedBox(height: HvacSpacing.xxs),
         Text(
           time != null
               ? '${time!.hour.toString().padLeft(2, '0')}:${time!.minute.toString().padLeft(2, '0')}'

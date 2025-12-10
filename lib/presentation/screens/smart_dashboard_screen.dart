@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:smart_home_core/domain/entities/device.dart';
 import 'package:smart_home_core/domain/entities/ventilation_device.dart';
@@ -30,7 +32,7 @@ class _SmartDashboardScreenState extends State<SmartDashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Colors.grey[100],
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(AppSpacing.pageMargin),
@@ -92,18 +94,16 @@ class _SmartDashboardScreenState extends State<SmartDashboardScreen> {
   }
 
   Widget _buildDeviceCard(Device device) {
-    // Cast to specific device type for details
     final isVentilation = device is VentilationDevice;
-    final isOn = isVentilation ? (device as VentilationDevice).isPowerOn : false;
-    final temp = isVentilation ? (device as VentilationDevice).currentTemperature : 0.0;
+    final isOn = isVentilation ? device.isPowerOn : false;
+    final temp = isVentilation ? device.currentTemperature : 0.0;
 
     return SmartCard(
-      backgroundColor: isOn ? AppColors.primaryVariant.withOpacity(0.2) : null,
+      backgroundColor: isOn ? Theme.of(context).colorScheme.primary.withOpacity(0.2) : null,
       onTap: () {
-        if (isVentilation) {
-          final vDevice = device as VentilationDevice;
+        if (device is VentilationDevice) {
           _repository.updateDevice(
-            vDevice.copyWithPower(!vDevice.isPowerOn),
+            device.copyWithPower(!device.isPowerOn),
           );
         }
       },
@@ -115,7 +115,7 @@ class _SmartDashboardScreenState extends State<SmartDashboardScreen> {
             children: [
               Icon(
                 Icons.air,
-                color: isOn ? AppColors.primary : AppColors.textDisabled,
+                color: isOn ? Theme.of(context).colorScheme.primary : AppColors.textDisabled,
                 size: 32,
               ),
               if (isOn)

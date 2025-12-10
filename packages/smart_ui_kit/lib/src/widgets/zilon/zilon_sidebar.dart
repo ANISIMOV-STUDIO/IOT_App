@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../theme/tokens/app_typography.dart';
-import '../../theme/tokens/app_spacing.dart';
 
 class ZilonSidebar extends StatelessWidget {
   final int selectedIndex;
@@ -16,7 +15,6 @@ class ZilonSidebar extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final isDark = theme.brightness == Brightness.dark;
 
     return Container(
       width: 240, // Fixed width for sidebar
@@ -69,13 +67,13 @@ class ZilonSidebar extends StatelessWidget {
             decoration: BoxDecoration(
               color: colorScheme.surface,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: colorScheme.outline.withOpacity(0.5)),
+              border: Border.all(color: colorScheme.outline.withAlpha(128)),
             ),
             child: Row(
               children: [
                 CircleAvatar(
                   radius: 16,
-                  backgroundColor: colorScheme.primary.withOpacity(0.2),
+                  backgroundColor: colorScheme.primary.withAlpha(51),
                   child: Text('U', style: TextStyle(color: colorScheme.primary)),
                 ),
                 const SizedBox(width: 12),
@@ -109,21 +107,20 @@ class ZilonSidebar extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
-              color: isSelected ? colorScheme.primary.withOpacity(0.1) : Colors.transparent,
+              color: isSelected ? colorScheme.primary.withAlpha(26) : Colors.transparent,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
               children: [
                 Icon(
                   icon,
-                  size: 20,
-                  color: isSelected ? colorScheme.primary : colorScheme.onSurface.withOpacity(0.7),
+                  color: isSelected ? colorScheme.primary : colorScheme.onSurface.withAlpha(179),
                 ),
                 const SizedBox(width: 12),
                 Text(
                   label,
                   style: AppTypography.bodyMedium.copyWith(
-                    color: isSelected ? colorScheme.primary : colorScheme.onSurface.withOpacity(0.7),
+                    color: isSelected ? colorScheme.primary : colorScheme.onSurface.withAlpha(179),
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                   ),
                 ),

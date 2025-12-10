@@ -31,17 +31,17 @@ class VentilationScheduleControl extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const ScheduleHeader(),
-          SizedBox(height: HvacSpacing.sm),
+          const SizedBox(height: HvacSpacing.sm),
           TodayScheduleCard(
             dayOfWeek: dayOfWeek,
             schedule: todaySchedule,
           ),
-          SizedBox(height: HvacSpacing.sm),
+          const SizedBox(height: HvacSpacing.sm),
           ScheduleQuickStats(
             isPowerOn: unit.power,
             fanSpeed: unit.supplyFanSpeed,
           ),
-          SizedBox(height: HvacSpacing.sm),
+          const SizedBox(height: HvacSpacing.sm),
           ScheduleEditButton(onPressed: onSchedulePressed),
         ],
       ),

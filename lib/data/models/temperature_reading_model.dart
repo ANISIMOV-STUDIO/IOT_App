@@ -9,6 +9,7 @@ class TemperatureReadingModel extends TemperatureReading {
   const TemperatureReadingModel({
     required super.timestamp,
     required super.temperature,
+    required super.humidity,
   });
 
   /// Create from JSON
@@ -16,6 +17,7 @@ class TemperatureReadingModel extends TemperatureReading {
     return TemperatureReadingModel(
       timestamp: DateTime.parse(json['timestamp'] as String),
       temperature: (json['temperature'] as num).toDouble(),
+      humidity: (json['humidity'] as num).toDouble(),
     );
   }
 
@@ -24,6 +26,7 @@ class TemperatureReadingModel extends TemperatureReading {
     return {
       'timestamp': timestamp.toIso8601String(),
       'temperature': temperature,
+      'humidity': humidity,
     };
   }
 
@@ -32,6 +35,7 @@ class TemperatureReadingModel extends TemperatureReading {
     return TemperatureReadingModel(
       timestamp: entity.timestamp,
       temperature: entity.temperature,
+      humidity: entity.humidity,
     );
   }
 
@@ -40,6 +44,19 @@ class TemperatureReadingModel extends TemperatureReading {
     return TemperatureReading(
       timestamp: timestamp,
       temperature: temperature,
+      humidity: humidity,
+    );
+  }
+
+  TemperatureReadingModel copyWith({
+    DateTime? timestamp,
+    double? temperature,
+    double? humidity,
+  }) {
+    return TemperatureReadingModel(
+      timestamp: timestamp ?? this.timestamp,
+      temperature: temperature ?? this.temperature,
+      humidity: humidity ?? this.humidity,
     );
   }
 }

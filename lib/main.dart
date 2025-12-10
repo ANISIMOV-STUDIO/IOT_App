@@ -18,7 +18,6 @@ import 'core/navigation/app_router.dart';
 import 'presentation/bloc/hvac_list/hvac_list_bloc.dart';
 import 'presentation/bloc/hvac_list/hvac_list_event.dart';
 import 'presentation/bloc/auth/auth_bloc.dart';
-import 'presentation/screens/zilon_dashboard_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

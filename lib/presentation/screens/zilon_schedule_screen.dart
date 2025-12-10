@@ -32,7 +32,6 @@ class _ZilonScheduleScreenState extends State<ZilonScheduleScreen> {
           }
           final schedule = _editingSchedule ?? WeekSchedule.defaultSchedule;
 
-          final theme = Theme.of(context);
           final isDesktop = MediaQuery.of(context).size.width > 1000;
 
           return SingleChildScrollView(
@@ -130,10 +129,10 @@ class _ZilonScheduleScreenState extends State<ZilonScheduleScreen> {
       borderRadius: BorderRadius.circular(16),
       child: Container(
         decoration: BoxDecoration(
-          color: isSelected ? theme.colorScheme.primary.withOpacity(0.05) : theme.colorScheme.surface,
+          color: isSelected ? theme.colorScheme.primary.withValues(alpha:0.05) : theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected ? theme.colorScheme.primary : theme.colorScheme.outline.withOpacity(0.3),
+            color: isSelected ? theme.colorScheme.primary : theme.colorScheme.outline.withValues(alpha:0.3),
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -258,7 +257,7 @@ class _ZilonScheduleScreenState extends State<ZilonScheduleScreen> {
         decoration: BoxDecoration(
           color: theme.colorScheme.secondaryContainer,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: theme.colorScheme.secondary.withOpacity(0.5)),
+          border: Border.all(color: theme.colorScheme.secondary.withValues(alpha:  0.5)),
         ),
         child: Text(
           label,
@@ -335,7 +334,7 @@ class ScheduleTimelinePainter extends CustomPainter {
     
     // Hour Ticks
     final tickPaint = Paint()
-      ..color = theme.colorScheme.onSurface.withOpacity(0.3)
+      ..color = theme.colorScheme.onSurface.withValues(alpha:0.3)
       ..strokeWidth = 1.0;
       
     final textPainter = TextPainter(
@@ -355,7 +354,7 @@ class ScheduleTimelinePainter extends CustomPainter {
       textPainter.text = TextSpan(
         text: '$i',
         style: TextStyle(
-          color: theme.colorScheme.onSurface.withOpacity(0.5),
+          color: theme.colorScheme.onSurface.withValues(alpha:0.5),
           fontSize: 10,
         ),
       );
