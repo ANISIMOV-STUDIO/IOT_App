@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import '../../theme/neumorphic_theme.dart';
 import '../../theme/tokens/neumorphic_colors.dart';
-import '../../theme/tokens/neumorphic_spacing.dart';
 
-/// Neumorphic Slider - Soft UI slider with track shadow
-class NeumorphicSlider extends StatefulWidget {
+/// Neumorphic Slider - optimized using Flutter's native Slider with custom theme
+class NeumorphicSlider extends StatelessWidget {
   final double value;
   final double min;
   final double max;
   final ValueChanged<double>? onChanged;
+  final ValueChanged<double>? onChangeEnd;
   final Color? activeColor;
   final String? label;
   final String? suffix;
@@ -20,6 +20,7 @@ class NeumorphicSlider extends StatefulWidget {
     this.min = 0,
     this.max = 100,
     this.onChanged,
+    this.onChangeEnd,
     this.activeColor,
     this.label,
     this.suffix,
@@ -27,153 +28,108 @@ class NeumorphicSlider extends StatefulWidget {
   });
 
   @override
-  State<NeumorphicSlider> createState() => _NeumorphicSliderState();
-}
-
-class _NeumorphicSliderState extends State<NeumorphicSlider> {
-  late double _currentValue;
-
-  @override
-  void initState() {
-    super.initState();
-    _currentValue = widget.value;
-  }
-
-  @override
-  void didUpdateWidget(NeumorphicSlider oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.value != oldWidget.value) {
-      _currentValue = widget.value;
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     final theme = NeumorphicTheme.of(context);
-    final activeColor = widget.activeColor ?? NeumorphicColors.accentPrimary;
+    final color = activeColor ?? NeumorphicColors.accentPrimary;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
         // Label and value row
-        if (widget.label != null || widget.showValue)
+        if (label != null || showValue)
           Padding(
-            padding: const EdgeInsets.only(bottom: NeumorphicSpacing.sm),
+            padding: const EdgeInsets.only(bottom: 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if (widget.label != null)
+                if (label != null)
+                  Text(label!, style: theme.typography.titleMedium),
+                if (showValue)
                   Text(
-                    widget.label!,
-                    style: theme.typography.titleMedium,
-                  ),
-                if (widget.showValue)
-                  Row(
-                    children: [
-                      Text(
-                        _currentValue.round().toString(),
-                        style: theme.typography.numericMedium,
-                      ),
-                      if (widget.suffix != null)
-                        Text(
-                          widget.suffix!,
-                          style: theme.typography.unit,
-                        ),
-                    ],
+                    '${value.round()}${suffix ?? ''}',
+                    style: theme.typography.numericMedium,
                   ),
               ],
             ),
           ),
 
-        // Slider track
-        LayoutBuilder(
-          builder: (context, constraints) {
-            final trackWidth = constraints.maxWidth;
-            final progress = (_currentValue - widget.min) / (widget.max - widget.min);
-            final thumbPosition = progress * (trackWidth - 24); // 24 = thumb width
-
-            return GestureDetector(
-              onHorizontalDragUpdate: (details) {
-                if (widget.onChanged == null) return;
-                
-                final newProgress = (details.localPosition.dx / trackWidth)
-                    .clamp(0.0, 1.0);
-                final newValue = widget.min + newProgress * (widget.max - widget.min);
-                
-                setState(() {
-                  _currentValue = newValue;
-                });
-                widget.onChanged?.call(newValue);
-              },
-              onTapDown: (details) {
-                if (widget.onChanged == null) return;
-                
-                final newProgress = (details.localPosition.dx / trackWidth)
-                    .clamp(0.0, 1.0);
-                final newValue = widget.min + newProgress * (widget.max - widget.min);
-                
-                setState(() {
-                  _currentValue = newValue;
-                });
-                widget.onChanged?.call(newValue);
-              },
-              child: Container(
-                height: 32,
-                decoration: BoxDecoration(
-                  color: theme.colors.surface,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: theme.shadows.concaveSmall,
-                ),
-                child: Stack(
-                  children: [
-                    // Active track
-                    Positioned(
-                      left: 4,
-                      top: 4,
-                      bottom: 4,
-                      width: thumbPosition + 16,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: activeColor.withValues(alpha: 0.3),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
-                    
-                    // Thumb
-                    Positioned(
-                      left: thumbPosition,
-                      top: 2,
-                      child: Container(
-                        width: 28,
-                        height: 28,
-                        decoration: BoxDecoration(
-                          color: activeColor,
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: activeColor.withValues(alpha: 0.3),
-                              blurRadius: 8,
-                              offset: const Offset(0, 2),
-                            ),
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.15),
-                              blurRadius: 4,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
+        // Slider with neumorphic track
+        Container(
+          height: 32,
+          decoration: BoxDecoration(
+            color: theme.colors.surface,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: theme.shadows.concaveSmall,
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: SliderTheme(
+            data: SliderThemeData(
+              trackHeight: 24,
+              activeTrackColor: color.withValues(alpha: 0.3),
+              inactiveTrackColor: Colors.transparent,
+              thumbColor: color,
+              overlayColor: color.withValues(alpha: 0.1),
+              thumbShape: _NeumorphicThumbShape(color: color),
+              trackShape: const RoundedRectSliderTrackShape(),
+              overlayShape: const RoundSliderOverlayShape(overlayRadius: 20),
+            ),
+            child: Slider(
+              value: value.clamp(min, max),
+              min: min,
+              max: max,
+              onChanged: onChanged,
+              onChangeEnd: onChangeEnd,
+            ),
+          ),
         ),
       ],
     );
+  }
+}
+
+/// Custom thumb shape for neumorphic slider
+class _NeumorphicThumbShape extends SliderComponentShape {
+  final Color color;
+  
+  const _NeumorphicThumbShape({required this.color});
+
+  @override
+  Size getPreferredSize(bool isEnabled, bool isDiscrete) => const Size(24, 24);
+
+  @override
+  void paint(
+    PaintingContext context,
+    Offset center, {
+    required Animation<double> activationAnimation,
+    required Animation<double> enableAnimation,
+    required bool isDiscrete,
+    required TextPainter labelPainter,
+    required RenderBox parentBox,
+    required SliderThemeData sliderTheme,
+    required TextDirection textDirection,
+    required double value,
+    required double textScaleFactor,
+    required Size sizeWithOverflow,
+  }) {
+    final canvas = context.canvas;
+    
+    // Shadow
+    final shadowPaint = Paint()
+      ..color = Colors.black.withValues(alpha: 0.15)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
+    canvas.drawCircle(center + const Offset(0, 2), 11, shadowPaint);
+    
+    // Thumb
+    final paint = Paint()..color = color;
+    canvas.drawCircle(center, 12, paint);
+    
+    // Highlight
+    final highlightPaint = Paint()
+      ..color = Colors.white.withValues(alpha: 0.3)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2;
+    canvas.drawCircle(center, 10, highlightPaint);
   }
 }
 
@@ -196,40 +152,29 @@ class NeumorphicSliderPresets extends StatelessWidget {
 
     return Row(
       children: presets.map((preset) {
-        final isSelected = (currentValue - preset.value).abs() < 0.5;
+        final isSelected = (currentValue - preset.value).abs() < 1;
 
         return Expanded(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 3),
             child: GestureDetector(
               onTap: () => onPresetSelected?.call(preset.value),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 150),
-                padding: const EdgeInsets.symmetric(
-                  vertical: NeumorphicSpacing.sm,
-                ),
+                padding: const EdgeInsets.symmetric(vertical: 10),
                 decoration: BoxDecoration(
-                  color: isSelected 
-                      ? theme.colors.cardSurface 
-                      : theme.colors.surface,
-                  borderRadius: BorderRadius.circular(NeumorphicSpacing.radiusSm),
-                  boxShadow: isSelected 
-                      ? theme.shadows.convexSmall 
-                      : theme.shadows.flat,
-                  border: isSelected 
-                      ? Border.all(
-                          color: NeumorphicColors.accentPrimary.withValues(alpha: 0.3),
-                          width: 1,
-                        )
+                  color: isSelected ? theme.colors.cardSurface : theme.colors.surface,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: isSelected ? theme.shadows.convexSmall : theme.shadows.flat,
+                  border: isSelected
+                      ? Border.all(color: NeumorphicColors.accentPrimary.withValues(alpha: 0.3))
                       : null,
                 ),
                 child: Center(
                   child: Text(
                     preset.label,
-                    style: theme.typography.labelLarge.copyWith(
-                      color: isSelected 
-                          ? theme.colors.textPrimary 
-                          : theme.colors.textSecondary,
+                    style: theme.typography.labelMedium.copyWith(
+                      color: isSelected ? theme.colors.textPrimary : theme.colors.textSecondary,
                     ),
                   ),
                 ),
@@ -245,9 +190,5 @@ class NeumorphicSliderPresets extends StatelessWidget {
 class SliderPreset {
   final String label;
   final double value;
-
-  const SliderPreset({
-    required this.label,
-    required this.value,
-  });
+  const SliderPreset({required this.label, required this.value});
 }

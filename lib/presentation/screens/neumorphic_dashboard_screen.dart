@@ -123,16 +123,17 @@ class _DashboardViewState extends State<_DashboardView> {
               minValue: 10, maxValue: 30,
               mode: _mapMode(climate?.mode),
               label: _modeLabel(context, climate?.mode ?? ClimateMode.heating),
-              onChanged: (v) => context.read<DashboardBloc>().add(TemperatureChanged(v)),
+              // Use onChangeEnd for better performance - fires only when user releases
+              onChangeEnd: (v) => context.read<DashboardBloc>().add(TemperatureChanged(v)),
             ),
           )),
           const SizedBox(height: NeumorphicSpacing.md),
           _modeSelector(context, climate?.mode ?? ClimateMode.heating),
           const SizedBox(height: NeumorphicSpacing.lg),
           
-          // Humidity section
+          // Humidity section - use onChangeEnd for performance
           NeumorphicSlider(label: s.humidity, value: climate?.humidity ?? 60, suffix: '%',
-            onChanged: (v) => context.read<DashboardBloc>().add(HumidityChanged(v))),
+            onChangeEnd: (v) => context.read<DashboardBloc>().add(HumidityChanged(v))),
           const SizedBox(height: NeumorphicSpacing.sm),
           NeumorphicSliderPresets(currentValue: climate?.humidity ?? 60, presets: [
             SliderPreset(label: s.auto, value: 50),

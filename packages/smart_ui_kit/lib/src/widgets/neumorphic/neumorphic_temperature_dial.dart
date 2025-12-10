@@ -1,15 +1,18 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import '../../theme/neumorphic_theme.dart';
 import '../../theme/tokens/neumorphic_colors.dart';
-import '../../theme/tokens/neumorphic_spacing.dart';
 
-/// Neumorphic Temperature Dial - Circular thermostat control
-class NeumorphicTemperatureDial extends StatefulWidget {
+/// Temperature mode enum
+enum TemperatureMode { heating, cooling, auto, dry }
+
+/// Neumorphic Temperature Dial using sleek_circular_slider for smooth performance
+class NeumorphicTemperatureDial extends StatelessWidget {
   final double value;
   final double minValue;
   final double maxValue;
   final ValueChanged<double>? onChanged;
+  final ValueChanged<double>? onChangeEnd;
   final String? label;
   final TemperatureMode mode;
   final double size;
@@ -20,251 +23,150 @@ class NeumorphicTemperatureDial extends StatefulWidget {
     this.minValue = 10,
     this.maxValue = 30,
     this.onChanged,
+    this.onChangeEnd,
     this.label,
     this.mode = TemperatureMode.heating,
-    this.size = NeumorphicSpacing.temperatureDialSize,
+    this.size = 200,
   });
-
-  @override
-  State<NeumorphicTemperatureDial> createState() => _NeumorphicTemperatureDialState();
-}
-
-class _NeumorphicTemperatureDialState extends State<NeumorphicTemperatureDial> {
-  late double _currentValue;
-
-  @override
-  void initState() {
-    super.initState();
-    _currentValue = widget.value;
-  }
-
-  @override
-  void didUpdateWidget(NeumorphicTemperatureDial oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.value != oldWidget.value) {
-      _currentValue = widget.value;
-    }
-  }
-
-  void _handlePanUpdate(DragUpdateDetails details, Offset center) {
-    if (widget.onChanged == null) return;
-
-    final position = details.localPosition - center;
-    var angle = math.atan2(position.dy, position.dx);
-    
-    // Convert angle to value (map -135° to 135° => minValue to maxValue)
-    // Adjust for dial starting position
-    angle = angle + math.pi / 2; // Rotate so top is 0
-    if (angle < -math.pi) angle += 2 * math.pi;
-    if (angle > math.pi) angle -= 2 * math.pi;
-
-    // Map angle (-135° to 135°) to value range
-    const startAngle = -math.pi * 0.75; // -135°
-    const endAngle = math.pi * 0.75;    // 135°
-    const totalAngle = endAngle - startAngle;
-
-    if (angle >= startAngle && angle <= endAngle) {
-      final normalizedAngle = (angle - startAngle) / totalAngle;
-      final newValue = widget.minValue + 
-          normalizedAngle * (widget.maxValue - widget.minValue);
-      
-      setState(() {
-        _currentValue = newValue.clamp(widget.minValue, widget.maxValue);
-      });
-      widget.onChanged?.call(_currentValue);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     final theme = NeumorphicTheme.of(context);
+    final modeColor = _getModeColor();
 
     return SizedBox(
-      width: widget.size,
-      height: widget.size,
-      child: GestureDetector(
-        onPanUpdate: (details) => _handlePanUpdate(
-          details, 
-          Offset(widget.size / 2, widget.size / 2),
-        ),
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            // Outer ring with shadow
-            Container(
-              width: widget.size,
-              height: widget.size,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: theme.colors.cardSurface,
-                boxShadow: theme.shadows.convexLarge,
+      width: size,
+      height: size,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          // Outer neumorphic container
+          Container(
+            width: size,
+            height: size,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: theme.colors.cardSurface,
+              boxShadow: theme.shadows.convexLarge,
+            ),
+          ),
+          
+          // Sleek circular slider
+          SleekCircularSlider(
+            min: minValue,
+            max: maxValue,
+            initialValue: value.clamp(minValue, maxValue),
+            appearance: CircularSliderAppearance(
+              size: size - 16,
+              startAngle: 135,
+              angleRange: 270,
+              animationEnabled: true,
+              customWidths: CustomSliderWidths(
+                trackWidth: 6,
+                progressBarWidth: 6,
+                shadowWidth: 0,
+                handlerSize: 8,
+              ),
+              customColors: CustomSliderColors(
+                trackColor: theme.colors.textTertiary.withValues(alpha: 0.15),
+                progressBarColor: modeColor,
+                dotColor: modeColor,
+                shadowColor: Colors.transparent,
+                shadowMaxOpacity: 0,
+              ),
+              infoProperties: InfoProperties(
+                modifier: (v) => '', // Hide default text
               ),
             ),
-            
-            // Progress arc
-            CustomPaint(
-              size: Size(widget.size - 20, widget.size - 20),
-              painter: _DialArcPainter(
-                progress: (_currentValue - widget.minValue) / 
-                    (widget.maxValue - widget.minValue),
-                activeColor: _getModeColor(),
-                inactiveColor: theme.colors.textTertiary.withValues(alpha: 0.2),
-                strokeWidth: 6,
+            onChange: onChanged,
+            onChangeEnd: onChangeEnd,
+            innerWidget: (percentage) => _buildInnerContent(theme, modeColor),
+          ),
+          
+          // Min/Max labels
+          Positioned(
+            left: 12,
+            bottom: size * 0.28,
+            child: Text(
+              '${minValue.round()}°',
+              style: theme.typography.labelSmall.copyWith(
+                color: theme.colors.textTertiary,
               ),
             ),
-            
-            // Inner circle (concave)
-            Container(
-              width: widget.size * 0.65,
-              height: widget.size * 0.65,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: theme.colors.cardSurface,
-                boxShadow: theme.shadows.concaveMedium,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Mode label
-                  if (widget.label != null)
-                    Text(
-                      widget.label!.toUpperCase(),
-                      style: theme.typography.labelSmall.copyWith(
-                        letterSpacing: 2,
-                        color: theme.colors.textTertiary,
-                      ),
-                    ),
-                  
-                  // Temperature value
-                  Text(
-                    _currentValue.round().toString(),
-                    style: theme.typography.displayLarge.copyWith(
-                      fontSize: widget.size * 0.2,
-                    ),
-                  ),
-                  
-                  // Mode icon
-                  Icon(
-                    _getModeIcon(),
-                    color: _getModeColor(),
-                    size: 24,
-                  ),
-                ],
+          ),
+          Positioned(
+            right: 12,
+            bottom: size * 0.28,
+            child: Text(
+              '${maxValue.round()}°',
+              style: theme.typography.labelSmall.copyWith(
+                color: theme.colors.textTertiary,
               ),
             ),
-            
-            // Min/Max labels
-            Positioned(
-              left: 8,
-              bottom: widget.size * 0.3,
-              child: Text(
-                '${widget.minValue.round()}°',
-                style: theme.typography.labelSmall,
-              ),
-            ),
-            Positioned(
-              right: 8,
-              bottom: widget.size * 0.3,
-              child: Text(
-                '${widget.maxValue.round()}°',
-                style: theme.typography.labelSmall,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-  Color _getModeColor() {
-    switch (widget.mode) {
-      case TemperatureMode.heating:
-        return NeumorphicColors.modeHeating;
-      case TemperatureMode.cooling:
-        return NeumorphicColors.modeCooling;
-      case TemperatureMode.auto:
-        return NeumorphicColors.modeAuto;
-      case TemperatureMode.dry:
-        return NeumorphicColors.modeDry;
-    }
-  }
-
-  IconData _getModeIcon() {
-    switch (widget.mode) {
-      case TemperatureMode.heating:
-        return Icons.whatshot_outlined;
-      case TemperatureMode.cooling:
-        return Icons.ac_unit;
-      case TemperatureMode.auto:
-        return Icons.autorenew;
-      case TemperatureMode.dry:
-        return Icons.water_drop_outlined;
-    }
-  }
-}
-
-enum TemperatureMode {
-  heating,
-  cooling,
-  auto,
-  dry,
-}
-
-/// Custom painter for the arc progress indicator
-class _DialArcPainter extends CustomPainter {
-  final double progress;
-  final Color activeColor;
-  final Color inactiveColor;
-  final double strokeWidth;
-
-  _DialArcPainter({
-    required this.progress,
-    required this.activeColor,
-    required this.inactiveColor,
-    required this.strokeWidth,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final center = Offset(size.width / 2, size.height / 2);
-    final radius = (size.width - strokeWidth) / 2;
-
-    const startAngle = math.pi * 0.75;  // 135° from top
-    const sweepAngle = math.pi * 1.5;   // 270° total arc
-
-    // Background arc
-    final bgPaint = Paint()
-      ..color = inactiveColor
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth
-      ..strokeCap = StrokeCap.round;
-
-    canvas.drawArc(
-      Rect.fromCircle(center: center, radius: radius),
-      startAngle,
-      sweepAngle,
-      false,
-      bgPaint,
-    );
-
-    // Active arc
-    final activePaint = Paint()
-      ..color = activeColor
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth
-      ..strokeCap = StrokeCap.round;
-
-    canvas.drawArc(
-      Rect.fromCircle(center: center, radius: radius),
-      startAngle,
-      sweepAngle * progress,
-      false,
-      activePaint,
+  Widget _buildInnerContent(NeumorphicThemeData theme, Color modeColor) {
+    return Container(
+      margin: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: theme.colors.cardSurface,
+        boxShadow: theme.shadows.concaveMedium,
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // Mode label
+          if (label != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 4),
+              child: Text(
+                label!.toUpperCase(),
+                style: theme.typography.labelSmall.copyWith(
+                  letterSpacing: 1.5,
+                  color: theme.colors.textTertiary,
+                  fontSize: 9,
+                ),
+              ),
+            ),
+          
+          // Temperature value
+          Text(
+            value.round().toString(),
+            style: theme.typography.displayLarge.copyWith(
+              fontSize: size * 0.18,
+              fontWeight: FontWeight.w300,
+            ),
+          ),
+          
+          const SizedBox(height: 4),
+          
+          // Mode icon
+          Icon(
+            _getModeIcon(),
+            color: modeColor,
+            size: 20,
+          ),
+        ],
+      ),
     );
   }
 
-  @override
-  bool shouldRepaint(_DialArcPainter oldDelegate) =>
-      oldDelegate.progress != progress ||
-      oldDelegate.activeColor != activeColor;
+  Color _getModeColor() => switch (mode) {
+    TemperatureMode.heating => NeumorphicColors.modeHeating,
+    TemperatureMode.cooling => NeumorphicColors.modeCooling,
+    TemperatureMode.auto => NeumorphicColors.modeAuto,
+    TemperatureMode.dry => NeumorphicColors.modeDry,
+  };
+
+  IconData _getModeIcon() => switch (mode) {
+    TemperatureMode.heating => Icons.whatshot_outlined,
+    TemperatureMode.cooling => Icons.ac_unit,
+    TemperatureMode.auto => Icons.autorenew,
+    TemperatureMode.dry => Icons.water_drop_outlined,
+  };
 }
