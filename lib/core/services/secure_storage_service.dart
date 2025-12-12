@@ -1,12 +1,14 @@
 /// Secure Storage Service
 ///
 /// Provides encrypted storage for sensitive data using flutter_secure_storage
-/// Implements proper error handling and fallback mechanisms
+/// with AES-256 encryption for additional security layer
 library;
 
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:crypto/crypto.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
 import '../constants/security_constants.dart';
 import 'talker_service.dart';
 
@@ -346,35 +348,45 @@ class SecureStorageService {
     return digest.toString();
   }
 
-  /// Encrypt sensitive data (additional layer)
-  String _encryptSensitiveData(String data) {
-    // For additional security, you can implement AES encryption here
-    // This is a simplified version - in production use proper AES encryption
-    final bytes = utf8.encode(data);
-    final key = utf8.encode(SecurityConstants.encryptionKey);
-
-    // XOR encryption (simple example - use AES in production)
-    final encrypted = bytes.asMap().entries.map((entry) {
-      final index = entry.key % key.length;
-      return entry.value ^ key[index];
-    }).toList();
-
-    return base64.encode(encrypted);
+  /// Get AES key from encryption key (derive 32-byte key using SHA256)
+  encrypt.Key _getAesKey() {
+    final keyBytes = sha256.convert(utf8.encode(SecurityConstants.encryptionKey)).bytes;
+    return encrypt.Key(Uint8List.fromList(keyBytes));
   }
 
-  /// Decrypt sensitive data
+  /// Encrypt sensitive data using AES-256-CBC
+  String _encryptSensitiveData(String data) {
+    try {
+      final key = _getAesKey();
+      final iv = encrypt.IV.fromSecureRandom(16);
+      final encrypter = encrypt.Encrypter(encrypt.AES(key, mode: encrypt.AESMode.cbc));
+
+      final encrypted = encrypter.encrypt(data, iv: iv);
+
+      // Store IV with encrypted data (IV:EncryptedData)
+      return '${iv.base64}:${encrypted.base64}';
+    } catch (e) {
+      talker.error('Failed to encrypt data: $e');
+      throw const SecurityException('Failed to encrypt sensitive data');
+    }
+  }
+
+  /// Decrypt sensitive data using AES-256-CBC
   String _decryptSensitiveData(String encryptedData) {
     try {
-      final encrypted = base64.decode(encryptedData);
-      final key = utf8.encode(SecurityConstants.encryptionKey);
+      // Parse IV and encrypted data
+      final parts = encryptedData.split(':');
+      if (parts.length != 2) {
+        throw const SecurityException('Invalid encrypted data format');
+      }
 
-      // XOR decryption (simple example - use AES in production)
-      final decrypted = encrypted.asMap().entries.map((entry) {
-        final index = entry.key % key.length;
-        return entry.value ^ key[index];
-      }).toList();
+      final iv = encrypt.IV.fromBase64(parts[0]);
+      final encrypted = encrypt.Encrypted.fromBase64(parts[1]);
 
-      return utf8.decode(decrypted);
+      final key = _getAesKey();
+      final encrypter = encrypt.Encrypter(encrypt.AES(key, mode: encrypt.AESMode.cbc));
+
+      return encrypter.decrypt(encrypted, iv: iv);
     } catch (e) {
       talker.error('Failed to decrypt data: $e');
       throw const SecurityException('Failed to decrypt sensitive data');

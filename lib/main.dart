@@ -9,11 +9,11 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:go_router/go_router.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:adaptive_theme/adaptive_theme.dart';
 
 import 'package:smart_ui_kit/smart_ui_kit.dart';
 import 'generated/l10n/app_localizations.dart';
 import 'core/di/injection_container.dart' as di;
-import 'core/services/theme_service.dart';
 import 'core/services/language_service.dart';
 import 'core/navigation/app_router.dart';
 import 'presentation/bloc/hvac_list/hvac_list_bloc.dart';
@@ -22,7 +22,7 @@ import 'presentation/bloc/auth/auth_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // Add comment to force rebuild
+
   // Initialize dependencies
   await di.init();
 
@@ -65,44 +65,44 @@ class _HvacControlAppState extends State<HvacControlApp> {
         ),
       ],
       child: ListenableBuilder(
-        listenable: Listenable.merge([
-          di.sl<ThemeService>(),
-          di.sl<LanguageService>(),
-        ]),
+        listenable: di.sl<LanguageService>(),
         builder: (context, child) {
           final languageService = di.sl<LanguageService>();
 
-          return MaterialApp.router(
-            routerConfig: _router,
-            title: 'BREEZ Home',
-            debugShowCheckedModeBanner: false,
+          return AdaptiveTheme(
+            light: AppTheme.light,
+            dark: AppTheme.dark,
+            initial: AdaptiveThemeMode.light,
+            builder: (theme, darkTheme) => MaterialApp.router(
+              routerConfig: _router,
+              title: 'BREEZ Home',
+              debugShowCheckedModeBanner: false,
 
-            // Theme - Light with Blue & White Balance (Corporate Colors)
-            theme: AppTheme.light,
-            darkTheme: AppTheme.dark,
-            themeMode: ThemeMode.light, // Light theme - blue & white balanced
+              // Theme - managed by AdaptiveTheme
+              theme: theme,
+              darkTheme: darkTheme,
 
-            // Localization - Russian (default) and English
-            // Automatically switches based on LanguageService.currentLocale
-            locale: languageService.currentLocale,
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-              FormBuilderLocalizations.delegate,
-            ],
-            supportedLocales: LanguageService.supportedLocales, // ['ru', 'en']
-
-            // Responsive Framework - breakpoints only, no scaling
-            builder: (context, widget) => ResponsiveBreakpoints.builder(
-              breakpoints: const [
-                Breakpoint(start: 0, end: 599, name: MOBILE),
-                Breakpoint(start: 600, end: 1023, name: TABLET),
-                Breakpoint(start: 1024, end: 1919, name: DESKTOP),
-                Breakpoint(start: 1920, end: double.infinity, name: '4K'),
+              // Localization - Russian (default) and English
+              locale: languageService.currentLocale,
+              localizationsDelegates: const [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+                FormBuilderLocalizations.delegate,
               ],
-              child: widget!,
+              supportedLocales: LanguageService.supportedLocales,
+
+              // Responsive Framework - breakpoints only, no scaling
+              builder: (context, widget) => ResponsiveBreakpoints.builder(
+                breakpoints: const [
+                  Breakpoint(start: 0, end: 599, name: MOBILE),
+                  Breakpoint(start: 600, end: 1023, name: TABLET),
+                  Breakpoint(start: 1024, end: 1919, name: DESKTOP),
+                  Breakpoint(start: 1920, end: double.infinity, name: '4K'),
+                ],
+                child: widget!,
+              ),
             ),
           );
         },

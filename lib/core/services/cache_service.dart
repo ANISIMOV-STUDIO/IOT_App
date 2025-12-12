@@ -1,82 +1,168 @@
 /// Cache Service
 ///
-/// Simple in-memory cache with expiration
+/// Persistent cache using Hive with in-memory fallback
 library;
 
+import 'package:hive_flutter/hive_flutter.dart';
+import 'talker_service.dart';
+
 class CacheService {
-  final Map<String, _CacheEntry> _cache = {};
+  static const String _boxName = 'app_cache';
+  static const String _expiryBoxName = 'cache_expiry';
+
+  Box<dynamic>? _box;
+  Box<int>? _expiryBox;
+
   final Duration defaultExpiration;
+  bool _initialized = false;
 
   CacheService({this.defaultExpiration = const Duration(minutes: 5)});
 
+  /// Initialize Hive storage
+  Future<void> init() async {
+    if (_initialized) return;
+
+    try {
+      await Hive.initFlutter();
+      _box = await Hive.openBox<dynamic>(_boxName);
+      _expiryBox = await Hive.openBox<int>(_expiryBoxName);
+      _initialized = true;
+      talker.info('CacheService initialized with Hive');
+    } catch (e) {
+      talker.error('Failed to initialize CacheService: $e');
+      _initialized = false;
+    }
+  }
+
   /// Get value from cache
   T? get<T>(String key) {
-    final entry = _cache[key];
-    if (entry == null) return null;
+    if (!_initialized || _box == null) return null;
 
-    // Check if expired
-    if (entry.isExpired) {
-      _cache.remove(key);
+    try {
+      // Check if expired
+      final expiryTime = _expiryBox?.get(key);
+      if (expiryTime != null) {
+        if (DateTime.now().millisecondsSinceEpoch > expiryTime) {
+          // Expired - remove and return null
+          remove(key);
+          return null;
+        }
+      }
+
+      return _box?.get(key) as T?;
+    } catch (e) {
+      talker.error('Cache get error: $e');
       return null;
     }
-
-    return entry.value as T?;
   }
 
   /// Set value in cache
-  void set<T>(String key, T value, {Duration? expiration}) {
-    _cache[key] = _CacheEntry(
-      value: value,
-      expiresAt: DateTime.now().add(expiration ?? defaultExpiration),
-    );
+  Future<void> set<T>(String key, T value, {Duration? expiration}) async {
+    if (!_initialized || _box == null) return;
+
+    try {
+      await _box?.put(key, value);
+
+      // Set expiry time
+      final expiryTime = DateTime.now()
+          .add(expiration ?? defaultExpiration)
+          .millisecondsSinceEpoch;
+      await _expiryBox?.put(key, expiryTime);
+    } catch (e) {
+      talker.error('Cache set error: $e');
+    }
   }
 
   /// Check if key exists and is not expired
   bool has(String key) {
-    final entry = _cache[key];
-    if (entry == null) return false;
+    if (!_initialized || _box == null) return false;
 
-    if (entry.isExpired) {
-      _cache.remove(key);
-      return false;
+    if (!_box!.containsKey(key)) return false;
+
+    // Check expiry
+    final expiryTime = _expiryBox?.get(key);
+    if (expiryTime != null) {
+      if (DateTime.now().millisecondsSinceEpoch > expiryTime) {
+        remove(key);
+        return false;
+      }
     }
 
     return true;
   }
 
   /// Remove specific key
-  void remove(String key) {
-    _cache.remove(key);
+  Future<void> remove(String key) async {
+    if (!_initialized) return;
+
+    try {
+      await _box?.delete(key);
+      await _expiryBox?.delete(key);
+    } catch (e) {
+      talker.error('Cache remove error: $e');
+    }
   }
 
   /// Clear all cache
-  void clear() {
-    _cache.clear();
+  Future<void> clear() async {
+    if (!_initialized) return;
+
+    try {
+      await _box?.clear();
+      await _expiryBox?.clear();
+      talker.info('Cache cleared');
+    } catch (e) {
+      talker.error('Cache clear error: $e');
+    }
   }
 
   /// Remove expired entries
-  void cleanExpired() {
-    _cache.removeWhere((key, entry) => entry.isExpired);
+  Future<void> cleanExpired() async {
+    if (!_initialized || _expiryBox == null) return;
+
+    try {
+      final now = DateTime.now().millisecondsSinceEpoch;
+      final expiredKeys = <String>[];
+
+      for (final key in _expiryBox!.keys) {
+        final expiryTime = _expiryBox!.get(key);
+        if (expiryTime != null && now > expiryTime) {
+          expiredKeys.add(key.toString());
+        }
+      }
+
+      for (final key in expiredKeys) {
+        await remove(key);
+      }
+
+      if (expiredKeys.isNotEmpty) {
+        talker.info('Cleaned ${expiredKeys.length} expired cache entries');
+      }
+    } catch (e) {
+      talker.error('Cache cleanExpired error: $e');
+    }
   }
 
   /// Get cache statistics
   Map<String, dynamic> getStats() {
-    cleanExpired();
+    if (!_initialized || _box == null) {
+      return {'totalEntries': 0, 'keys': <String>[]};
+    }
+
     return {
-      'totalEntries': _cache.length,
-      'keys': _cache.keys.toList(),
+      'totalEntries': _box!.length,
+      'keys': _box!.keys.map((k) => k.toString()).toList(),
     };
   }
-}
 
-class _CacheEntry {
-  final dynamic value;
-  final DateTime expiresAt;
-
-  _CacheEntry({
-    required this.value,
-    required this.expiresAt,
-  });
-
-  bool get isExpired => DateTime.now().isAfter(expiresAt);
+  /// Close cache (call on app dispose)
+  Future<void> close() async {
+    try {
+      await _box?.close();
+      await _expiryBox?.close();
+      _initialized = false;
+    } catch (e) {
+      talker.error('Cache close error: $e');
+    }
+  }
 }

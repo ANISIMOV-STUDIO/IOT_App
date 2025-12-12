@@ -9,7 +9,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // Core
 import '../services/grpc_service.dart';
-import '../services/theme_service.dart';
 import '../services/language_service.dart';
 import '../services/cache_service.dart';
 import '../services/secure_api_service.dart';
@@ -72,10 +71,12 @@ Future<void> init() async {
     secureStorage: sl(),
     envConfig: sl(),
   ));
-  sl.registerLazySingleton(() => ThemeService());
   sl.registerLazySingleton(() => LanguageService(sl()));
   await sl<LanguageService>().initializeDefaults();
+
+  // Cache with Hive (persistent)
   sl.registerLazySingleton(() => CacheService());
+  await sl<CacheService>().init();
 
   // Initialize gRPC connection
   try {
