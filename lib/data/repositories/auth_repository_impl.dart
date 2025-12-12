@@ -7,7 +7,7 @@ library;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/services/api_service.dart';
-import '../../core/utils/logger.dart';
+import '../../core/services/talker_service.dart';
 import '../../data/models/user_model.dart';
 import '../../domain/entities/user.dart';
 import '../../domain/repositories/auth_repository.dart';
@@ -85,7 +85,7 @@ class AuthRepositoryImpl implements AuthRepository {
       await _apiService.logout();
     } catch (e) {
       // Log error but continue with local logout
-      Logger.debug('Server logout failed: $e');
+      talker.debug('Server logout failed: $e');
     } finally {
       // Always clear local data
       await clearAuthToken();

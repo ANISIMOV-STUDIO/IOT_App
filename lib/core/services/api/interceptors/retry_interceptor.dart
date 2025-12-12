@@ -2,7 +2,7 @@
 library;
 
 import 'package:dio/dio.dart';
-import '../../../utils/logger.dart';
+import '../../talker_service.dart';
 
 class RetryInterceptor extends Interceptor {
   final Dio dio;
@@ -22,7 +22,7 @@ class RetryInterceptor extends Interceptor {
       final retryCount = err.requestOptions.extra['retryCount'] ?? 0;
 
       if (retryCount < maxRetries) {
-        Logger.info(
+        talker.info(
           'Retrying request (${retryCount + 1}/$maxRetries): ${err.requestOptions.uri}',
         );
 

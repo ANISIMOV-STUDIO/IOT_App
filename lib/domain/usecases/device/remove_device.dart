@@ -4,7 +4,7 @@
 library;
 
 import '../../repositories/device_repository.dart';
-import '../../../core/utils/logger.dart';
+import '../../../core/services/talker_service.dart';
 
 /// Parameters for removing a device
 class RemoveDeviceParams {
@@ -43,7 +43,7 @@ class RemoveDevice {
           await _repository.factoryReset(params.deviceId);
         } catch (e) {
           // Log factory reset failure but continue with removal
-          Logger.debug('Factory reset failed (continuing with removal): $e');
+          talker.debug('Factory reset failed (continuing with removal): $e');
         }
       }
 

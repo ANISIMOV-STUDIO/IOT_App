@@ -5,7 +5,7 @@ library;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import '../utils/logger.dart';
+import 'talker_service.dart';
 
 class EnvironmentConfig {
   static EnvironmentConfig? _instance;
@@ -45,16 +45,16 @@ class EnvironmentConfig {
       // Try to load environment-specific file, fall back to default .env
       try {
         await dotenv.load(fileName: envFile);
-        Logger.info('Loaded environment configuration from $envFile');
+        talker.info('Loaded environment configuration from $envFile');
       } catch (e) {
-        Logger.warning('Failed to load $envFile, trying default .env');
+        talker.warning('Failed to load $envFile, trying default .env');
         await dotenv.load(fileName: '.env');
       }
 
       // Initialize instance
       instance._loadConfiguration();
     } catch (e) {
-      Logger.error('Failed to initialize environment configuration', error: e);
+      talker.error('Failed to initialize environment configuration: $e');
 
       // Use default values as fallback
       instance._loadDefaultConfiguration();
@@ -77,7 +77,7 @@ class EnvironmentConfig {
     // Validate configuration
     _validateConfiguration();
 
-    Logger.info('Environment configuration loaded: $_environment');
+    talker.info('Environment configuration loaded: $_environment');
   }
 
   /// Load default configuration (fallback)
@@ -90,7 +90,7 @@ class EnvironmentConfig {
     _enableAnalytics = false;
     _enableCrashReporting = !kDebugMode;
 
-    Logger.warning('Using default environment configuration');
+    talker.warning('Using default environment configuration');
   }
 
   /// Validate configuration values
@@ -168,7 +168,7 @@ class EnvironmentConfig {
     try {
       return dotenv.get(key, fallback: fallback);
     } catch (e) {
-      Logger.warning('Failed to get custom config value for key: $key');
+      talker.warning('Failed to get custom config value for key: $key');
       return fallback;
     }
   }

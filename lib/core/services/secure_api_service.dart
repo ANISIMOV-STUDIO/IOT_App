@@ -5,18 +5,18 @@ library;
 
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:talker_dio_logger/talker_dio_logger.dart';
 
 import '../constants/security_constants.dart';
-import '../utils/logger.dart';
 import 'secure_storage_service.dart' hide SecurityException;
 import 'environment_config.dart';
 import 'api/token_manager.dart';
 import 'api/rate_limiter.dart';
 import 'api/request_signer.dart';
 import 'api/interceptors/security_interceptor.dart';
-import 'api/interceptors/logging_interceptor.dart';
 import 'api/interceptors/retry_interceptor.dart';
 import 'api/exceptions.dart';
+import 'talker_service.dart';
 
 export 'api/exceptions.dart';
 
@@ -74,7 +74,14 @@ class SecureApiService {
         rateLimiter: _rateLimiter,
         onTokenRefresh: _refreshAuthToken,
       ),
-      LoggingInterceptor(),
+      TalkerDioLogger(
+        talker: talker,
+        settings: const TalkerDioLoggerSettings(
+          printRequestHeaders: true,
+          printResponseHeaders: false,
+          printResponseMessage: true,
+        ),
+      ),
       RetryInterceptor(dio: _dio),
     ]);
   }
@@ -100,9 +107,9 @@ class SecureApiService {
       final newRefreshToken = response.data['refresh_token'];
 
       await _tokenManager.updateTokens(newAuthToken, newRefreshToken);
-      Logger.security('TOKEN_REFRESH', details: {'success': true});
+      talkerService.security('TOKEN_REFRESH', details: {'success': true});
     } catch (e) {
-      Logger.security('TOKEN_REFRESH',
+      talkerService.security('TOKEN_REFRESH',
           details: {'success': false, 'error': e.toString()});
       throw const SecurityException('Failed to refresh token');
     }
@@ -215,7 +222,7 @@ class SecureApiService {
         return const NetworkException('Connection timeout');
 
       case DioExceptionType.badCertificate:
-        Logger.security('CERTIFICATE_VALIDATION_FAILURE', details: {
+        talkerService.security('CERTIFICATE_VALIDATION_FAILURE', details: {
           'url': error.requestOptions.uri.toString(),
         });
         return const SecurityException('Certificate validation failed');
@@ -225,7 +232,7 @@ class SecureApiService {
         final message = error.response?.data?['message'] ?? 'Unknown error';
 
         if (statusCode == 401) {
-          Logger.security('UNAUTHORIZED_ACCESS', details: {
+          talkerService.security('UNAUTHORIZED_ACCESS', details: {
             'path': error.requestOptions.path,
           });
           return const AuthException('Unauthorized access');
@@ -275,10 +282,10 @@ class SecureApiService {
 
       await _tokenManager.updateTokens(authToken, refreshToken);
 
-      Logger.security('LOGIN_SUCCESS', details: {'email': email});
+      talkerService.security('LOGIN_SUCCESS', details: {'email': email});
       return response;
     } catch (e) {
-      Logger.security('LOGIN_FAILURE',
+      talkerService.security('LOGIN_FAILURE',
           details: {'email': email, 'error': e.toString()});
       rethrow;
     }
@@ -292,7 +299,7 @@ class SecureApiService {
       }
     } finally {
       await _tokenManager.clearTokens();
-      Logger.security('LOGOUT');
+      talkerService.security('LOGOUT');
     }
   }
 

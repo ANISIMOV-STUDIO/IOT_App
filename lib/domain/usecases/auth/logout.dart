@@ -4,7 +4,7 @@
 library;
 
 import '../../repositories/auth_repository.dart';
-import '../../../core/utils/logger.dart';
+import '../../../core/services/talker_service.dart';
 
 /// Use case for user logout
 ///
@@ -26,7 +26,7 @@ class Logout {
     } catch (e) {
       // Log error but don't throw - logout should always succeed locally
       // even if server notification fails
-      Logger.debug('Logout server notification failed: $e');
+      talker.debug('Logout server notification failed: $e');
     } finally {
       // Always clear local authentication state
       await _repository.clearAuthToken();

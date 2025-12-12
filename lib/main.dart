@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:go_router/go_router.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 
 import 'package:smart_ui_kit/smart_ui_kit.dart';
 import 'generated/l10n/app_localizations.dart';
@@ -89,6 +90,7 @@ class _HvacControlAppState extends State<HvacControlApp> {
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
+              FormBuilderLocalizations.delegate,
             ],
             supportedLocales: LanguageService.supportedLocales, // ['ru', 'en']
 

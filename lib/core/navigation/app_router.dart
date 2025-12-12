@@ -5,6 +5,7 @@ library;
 
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -15,6 +16,7 @@ import '../../presentation/pages/device_management_screen.dart';
 import '../../presentation/pages/device_search_screen.dart';
 import '../../presentation/pages/qr_scanner_screen.dart';
 import '../../presentation/pages/onboarding_screen.dart';
+import '../../presentation/pages/debug/debug_logs_page.dart';
 
 /// App route names
 class AppRoutes {
@@ -24,6 +26,7 @@ class AppRoutes {
   static const String deviceManagement = '/devices';
   static const String deviceSearch = '/devices/search';
   static const String qrScanner = '/qr-scanner';
+  static const String debugLogs = '/debug/logs';
 }
 
 /// Global router configuration
@@ -110,6 +113,12 @@ GoRouter createRouter(AuthBloc authBloc) {
         path: AppRoutes.qrScanner,
         builder: (context, state) => const QrScannerScreen(),
       ),
+      // Debug route - only available in debug mode
+      if (kDebugMode)
+        GoRoute(
+          path: AppRoutes.debugLogs,
+          builder: (context, state) => const DebugLogsPage(),
+        ),
     ],
   );
 }
@@ -121,4 +130,9 @@ extension GoRouterExtensions on BuildContext {
   void goToDeviceManagement() => go(AppRoutes.deviceManagement);
   void goToDeviceSearch() => go(AppRoutes.deviceSearch);
   void goToQrScanner() => go(AppRoutes.qrScanner);
+  void goToDebugLogs() {
+    if (kDebugMode) {
+      go(AppRoutes.debugLogs);
+    }
+  }
 }

@@ -2,7 +2,7 @@
 library;
 
 import 'package:jwt_decoder/jwt_decoder.dart';
-import '../../utils/logger.dart';
+import '../talker_service.dart';
 import '../secure_storage_service.dart';
 
 class TokenManager {
@@ -28,7 +28,7 @@ class TokenManager {
       try {
         _tokenExpiry = getTokenExpiry(_authToken!);
       } catch (e) {
-        Logger.warning('Failed to parse stored token expiry: $e');
+        talker.warning('Failed to parse stored token expiry: $e');
         await clearTokens();
       }
     }
@@ -46,7 +46,7 @@ class TokenManager {
         return DateTime.fromMillisecondsSinceEpoch(exp * 1000);
       }
     } catch (e) {
-      Logger.error('Failed to decode token expiry: $e');
+      talker.error('Failed to decode token expiry: $e');
     }
     return null;
   }

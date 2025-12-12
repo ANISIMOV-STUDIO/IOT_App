@@ -8,7 +8,7 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:crypto/crypto.dart';
 import '../constants/security_constants.dart';
-import '../utils/logger.dart';
+import 'talker_service.dart';
 
 class SecureStorageService {
   static const _storage = FlutterSecureStorage(
@@ -46,7 +46,7 @@ class SecureStorageService {
       await _storage.delete(key: 'test_key');
       return value == 'test_value';
     } catch (e) {
-      Logger.error('Secure storage not available: $e');
+      talker.error('Secure storage not available: $e');
       return false;
     }
   }
@@ -55,9 +55,9 @@ class SecureStorageService {
   Future<void> saveAuthToken(String token) async {
     try {
       await _storage.write(key: _authTokenKey, value: token);
-      Logger.info('Auth token saved securely');
+      talker.info('Auth token saved securely');
     } catch (e) {
-      Logger.error('Failed to save auth token: $e');
+      talker.error('Failed to save auth token: $e');
       throw const SecurityException('Failed to save authentication token');
     }
   }
@@ -67,7 +67,7 @@ class SecureStorageService {
     try {
       return await _storage.read(key: _authTokenKey);
     } catch (e) {
-      Logger.error('Failed to retrieve auth token: $e');
+      talker.error('Failed to retrieve auth token: $e');
       return null;
     }
   }
@@ -76,9 +76,9 @@ class SecureStorageService {
   Future<void> saveRefreshToken(String token) async {
     try {
       await _storage.write(key: _refreshTokenKey, value: token);
-      Logger.info('Refresh token saved securely');
+      talker.info('Refresh token saved securely');
     } catch (e) {
-      Logger.error('Failed to save refresh token: $e');
+      talker.error('Failed to save refresh token: $e');
       throw const SecurityException('Failed to save refresh token');
     }
   }
@@ -88,7 +88,7 @@ class SecureStorageService {
     try {
       return await _storage.read(key: _refreshTokenKey);
     } catch (e) {
-      Logger.error('Failed to retrieve refresh token: $e');
+      talker.error('Failed to retrieve refresh token: $e');
       return null;
     }
   }
@@ -111,9 +111,9 @@ class SecureStorageService {
       });
 
       await _storage.write(key: _userCredentialsKey, value: credentials);
-      Logger.info('User credentials saved securely');
+      talker.info('User credentials saved securely');
     } catch (e) {
-      Logger.error('Failed to save user credentials: $e');
+      talker.error('Failed to save user credentials: $e');
       throw const SecurityException('Failed to save user credentials');
     }
   }
@@ -130,7 +130,7 @@ class SecureStorageService {
         'password': credentials['password'],
       };
     } catch (e) {
-      Logger.error('Failed to retrieve user credentials: $e');
+      talker.error('Failed to retrieve user credentials: $e');
       return null;
     }
   }
@@ -150,9 +150,9 @@ class SecureStorageService {
       });
 
       await _storage.write(key: _wifiCredentialsKey, value: credentials);
-      Logger.info('WiFi credentials saved securely');
+      talker.info('WiFi credentials saved securely');
     } catch (e) {
-      Logger.error('Failed to save WiFi credentials: $e');
+      talker.error('Failed to save WiFi credentials: $e');
       throw const SecurityException('Failed to save WiFi credentials');
     }
   }
@@ -167,7 +167,7 @@ class SecureStorageService {
       credentials['password'] = _decryptSensitiveData(credentials['password']);
       return credentials;
     } catch (e) {
-      Logger.error('Failed to retrieve WiFi credentials: $e');
+      talker.error('Failed to retrieve WiFi credentials: $e');
       return null;
     }
   }
@@ -183,9 +183,9 @@ class SecureStorageService {
         key: _deviceSecretsKey,
         value: json.encode(encryptedSecrets),
       );
-      Logger.info('Device secrets saved securely');
+      talker.info('Device secrets saved securely');
     } catch (e) {
-      Logger.error('Failed to save device secrets: $e');
+      talker.error('Failed to save device secrets: $e');
       throw const SecurityException('Failed to save device secrets');
     }
   }
@@ -201,7 +201,7 @@ class SecureStorageService {
         (key, value) => MapEntry(key, _decryptSensitiveData(value)),
       );
     } catch (e) {
-      Logger.error('Failed to retrieve device secrets: $e');
+      talker.error('Failed to retrieve device secrets: $e');
       return null;
     }
   }
@@ -217,9 +217,9 @@ class SecureStorageService {
         key: _apiKeysKey,
         value: json.encode(encryptedKeys),
       );
-      Logger.info('API keys saved securely');
+      talker.info('API keys saved securely');
     } catch (e) {
-      Logger.error('Failed to save API keys: $e');
+      talker.error('Failed to save API keys: $e');
       throw const SecurityException('Failed to save API keys');
     }
   }
@@ -235,7 +235,7 @@ class SecureStorageService {
         (key, value) => MapEntry(key, _decryptSensitiveData(value.toString())),
       );
     } catch (e) {
-      Logger.error('Failed to retrieve API keys: $e');
+      talker.error('Failed to retrieve API keys: $e');
       return null;
     }
   }
@@ -247,9 +247,9 @@ class SecureStorageService {
         key: _certificatesKey,
         value: json.encode(certificates),
       );
-      Logger.info('Certificates saved securely');
+      talker.info('Certificates saved securely');
     } catch (e) {
-      Logger.error('Failed to save certificates: $e');
+      talker.error('Failed to save certificates: $e');
       throw const SecurityException('Failed to save certificates');
     }
   }
@@ -262,7 +262,7 @@ class SecureStorageService {
 
       return List<String>.from(json.decode(data));
     } catch (e) {
-      Logger.error('Failed to retrieve certificates: $e');
+      talker.error('Failed to retrieve certificates: $e');
       return null;
     }
   }
@@ -275,7 +275,7 @@ class SecureStorageService {
         value: json.encode(sessionData),
       );
     } catch (e) {
-      Logger.error('Failed to save session data: $e');
+      talker.error('Failed to save session data: $e');
       throw const SecurityException('Failed to save session data');
     }
   }
@@ -288,7 +288,7 @@ class SecureStorageService {
 
       return json.decode(data);
     } catch (e) {
-      Logger.error('Failed to retrieve session data: $e');
+      talker.error('Failed to retrieve session data: $e');
       return null;
     }
   }
@@ -297,9 +297,9 @@ class SecureStorageService {
   Future<void> deleteKey(String key) async {
     try {
       await _storage.delete(key: key);
-      Logger.info('Key deleted: $key');
+      talker.info('Key deleted: $key');
     } catch (e) {
-      Logger.error('Failed to delete key $key: $e');
+      talker.error('Failed to delete key $key: $e');
     }
   }
 
@@ -312,9 +312,9 @@ class SecureStorageService {
         _storage.delete(key: _userCredentialsKey),
         _storage.delete(key: _sessionKey),
       ]);
-      Logger.info('All auth data cleared');
+      talker.info('All auth data cleared');
     } catch (e) {
-      Logger.error('Failed to clear auth data: $e');
+      talker.error('Failed to clear auth data: $e');
     }
   }
 
@@ -322,9 +322,9 @@ class SecureStorageService {
   Future<void> clearAll() async {
     try {
       await _storage.deleteAll();
-      Logger.info('All secure storage cleared');
+      talker.info('All secure storage cleared');
     } catch (e) {
-      Logger.error('Failed to clear secure storage: $e');
+      talker.error('Failed to clear secure storage: $e');
       throw const SecurityException('Failed to clear secure storage');
     }
   }
@@ -334,7 +334,7 @@ class SecureStorageService {
     try {
       return await _storage.containsKey(key: key);
     } catch (e) {
-      Logger.error('Failed to check key existence: $e');
+      talker.error('Failed to check key existence: $e');
       return false;
     }
   }
@@ -376,7 +376,7 @@ class SecureStorageService {
 
       return utf8.decode(decrypted);
     } catch (e) {
-      Logger.error('Failed to decrypt data: $e');
+      talker.error('Failed to decrypt data: $e');
       throw const SecurityException('Failed to decrypt sensitive data');
     }
   }
@@ -386,9 +386,9 @@ class SecureStorageService {
     try {
       await _storage.delete(key: _authTokenKey);
       await _storage.delete(key: _refreshTokenKey);
-      Logger.info('Tokens cleared successfully');
+      talker.info('Tokens cleared successfully');
     } catch (e) {
-      Logger.error('Failed to clear tokens: $e');
+      talker.error('Failed to clear tokens: $e');
       throw const SecurityException('Failed to clear tokens');
     }
   }

@@ -4,7 +4,7 @@
 library;
 
 import '../../repositories/device_repository.dart';
-import '../../../core/utils/logger.dart';
+import '../../../core/services/talker_service.dart';
 
 /// Use case for disconnecting from device communication system
 ///
@@ -29,7 +29,7 @@ class DisconnectFromDevices {
       await _repository.disconnect();
     } catch (e) {
       // Log error but don't throw - disconnection should always succeed locally
-      Logger.debug('Graceful disconnection failed (forcing close): $e');
+      talker.debug('Graceful disconnection failed (forcing close): $e');
 
       // Force close if graceful disconnect fails
       try {
