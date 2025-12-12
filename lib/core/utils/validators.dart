@@ -1,145 +1,74 @@
-/// Input Validators - Barrel File
-///
-/// Comprehensive input validation utilities with security focus
-///
-/// This file provides backward compatibility while the implementation
-/// has been modularized into separate files for better maintainability.
-library;
-
-import 'validators/email_validator.dart';
-import 'validators/password_validator.dart';
-import 'validators/text_validator.dart';
-import 'validators/network_validator.dart';
-import 'validators/device_validator.dart';
-import '../constants/security_constants.dart';
-
-// Export all validator modules for external use
-export 'validators/email_validator.dart' show EmailValidator;
-export 'validators/password_validator.dart' show PasswordValidator;
-export 'validators/text_validator.dart' show TextValidator;
-export 'validators/network_validator.dart' show NetworkValidator;
-export 'validators/device_validator.dart' show DeviceValidator;
-export 'validators/security_helpers.dart';
-
-// Re-export PasswordStrength from security_constants for backward compatibility
-export '../constants/security_constants.dart' show PasswordStrength;
-
-/// Main Validators class for backward compatibility
-///
-/// All methods delegate to specialized validator classes
+/// Simplified validators for form fields
 class Validators {
-  // Prevent instantiation
   Validators._();
 
-  // ============================================================================
-  // EMAIL VALIDATION
-  // ============================================================================
+  /// Validate email format
+  static String? validateEmail(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Email is required';
+    }
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    if (!emailRegex.hasMatch(value)) {
+      return 'Please enter a valid email';
+    }
+    return null;
+  }
 
-  /// Validate email address
-  static String? validateEmail(String? value) =>
-      EmailValidator.validate(value);
+  /// Validate password
+  static String? validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Password is required';
+    }
+    if (value.length < 8) {
+      return 'Password must be at least 8 characters';
+    }
+    return null;
+  }
 
-  // ============================================================================
-  // PASSWORD VALIDATION
-  // ============================================================================
-
-  /// Validate password with strength requirements
-  static String? validatePassword(String? value) =>
-      PasswordValidator.validate(value);
+  /// Validate name
+  static String? validateName(String? value, {String fieldName = 'Name'}) {
+    if (value == null || value.trim().isEmpty) {
+      return '$fieldName is required';
+    }
+    if (value.trim().length < 2) {
+      return '$fieldName must be at least 2 characters';
+    }
+    return null;
+  }
 
   /// Validate password confirmation
-  static String? validatePasswordConfirmation(String? value, String? password) =>
-      PasswordValidator.validateConfirmation(value, password);
+  static String? validatePasswordConfirmation(String? value, String password) {
+    if (value == null || value.isEmpty) {
+      return 'Please confirm your password';
+    }
+    if (value != password) {
+      return 'Passwords do not match';
+    }
+    return null;
+  }
 
-  /// Calculate password strength
-  static PasswordStrength calculatePasswordStrength(String password) =>
-      PasswordValidator.calculateStrength(password);
+  /// Calculate password strength (alias for checkPasswordStrength)
+  static PasswordStrength calculatePasswordStrength(String password) {
+    return checkPasswordStrength(password);
+  }
 
-  // ============================================================================
-  // TEXT VALIDATION
-  // ============================================================================
+  /// Check password strength
+  static PasswordStrength checkPasswordStrength(String password) {
+    if (password.isEmpty) return PasswordStrength.weak;
+    
+    int score = 0;
+    if (password.length >= 8) score++;
+    if (password.length >= 12) score++;
+    if (RegExp(r'[A-Z]').hasMatch(password)) score++;
+    if (RegExp(r'[a-z]').hasMatch(password)) score++;
+    if (RegExp(r'[0-9]').hasMatch(password)) score++;
+    if (RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(password)) score++;
 
-  /// Validate name (first or last)
-  static String? validateName(String? value, {String fieldName = 'Name'}) =>
-      TextValidator.validateName(value, fieldName: fieldName);
-
-  /// Validate alphanumeric input
-  static String? validateAlphanumeric(
-    String? value, {
-    String fieldName = 'Value',
-    int? minLength,
-    int? maxLength,
-  }) =>
-      TextValidator.validateAlphanumeric(
-        value,
-        fieldName: fieldName,
-        minLength: minLength,
-        maxLength: maxLength,
-      );
-
-  /// Sanitize input to prevent injection attacks
-  static String sanitizeInput(String input) => TextValidator.sanitize(input);
-
-  // ============================================================================
-  // NETWORK VALIDATION
-  // ============================================================================
-
-  /// Validate phone number
-  static String? validatePhone(String? value) =>
-      NetworkValidator.validatePhone(value);
-
-  /// Validate URL
-  static String? validateUrl(String? value) =>
-      NetworkValidator.validateUrl(value);
-
-  /// Validate IP address (IPv4 or IPv6)
-  static String? validateIpAddress(String? value) =>
-      NetworkValidator.validateIpAddress(value);
-
-  /// Validate WiFi SSID
-  static String? validateSSID(String? value) =>
-      NetworkValidator.validateSSID(value);
-
-  /// Validate WiFi password
-  static String? validateWiFiPassword(String? value, String securityType) =>
-      NetworkValidator.validateWiFiPassword(value, securityType);
-
-  // ============================================================================
-  // DEVICE VALIDATION
-  // ============================================================================
-
-  /// Validate device ID
-  static String? validateDeviceId(String? value) =>
-      DeviceValidator.validateDeviceId(value);
-
-  /// Validate temperature input
-  static String? validateTemperature(
-    String? value, {
-    double min = -50,
-    double max = 100,
-    String unit = '°C',
-  }) =>
-      DeviceValidator.validateTemperature(
-        value,
-        min: min,
-        max: max,
-        unit: unit,
-      );
-
-  /// Validate numeric input
-  static String? validateNumber(
-    String? value, {
-    String fieldName = 'Value',
-    double? min,
-    double? max,
-    bool allowDecimal = true,
-  }) =>
-      DeviceValidator.validateNumber(
-        value,
-        fieldName: fieldName,
-        min: min,
-        max: max,
-        allowDecimal: allowDecimal,
-      );
-
+    if (score <= 2) return PasswordStrength.weak;
+    if (score <= 4) return PasswordStrength.medium;
+    return PasswordStrength.strong;
+  }
 }
+
+/// Password strength levels
+enum PasswordStrength { weak, medium, strong, veryStrong }
