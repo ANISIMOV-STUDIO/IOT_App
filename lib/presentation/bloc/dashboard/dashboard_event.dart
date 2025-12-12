@@ -23,6 +23,13 @@ class DeviceToggled extends DashboardEvent {
   List<Object?> get props => [deviceId, isOn];
 }
 
+class DevicePowerToggled extends DashboardEvent {
+  final bool isOn;
+  const DevicePowerToggled(this.isOn);
+  @override
+  List<Object?> get props => [isOn];
+}
+
 class TemperatureChanged extends DashboardEvent {
   final double temperature;
   const TemperatureChanged(this.temperature);
@@ -42,6 +49,31 @@ class ClimateModeChanged extends DashboardEvent {
   const ClimateModeChanged(this.mode);
   @override
   List<Object?> get props => [mode];
+}
+
+class SupplyAirflowChanged extends DashboardEvent {
+  final double value;
+  const SupplyAirflowChanged(this.value);
+  @override
+  List<Object?> get props => [value];
+}
+
+class ExhaustAirflowChanged extends DashboardEvent {
+  final double value;
+  const ExhaustAirflowChanged(this.value);
+  @override
+  List<Object?> get props => [value];
+}
+
+class PresetChanged extends DashboardEvent {
+  final String preset;
+  const PresetChanged(this.preset);
+  @override
+  List<Object?> get props => [preset];
+}
+
+class AllDevicesOff extends DashboardEvent {
+  const AllDevicesOff();
 }
 
 // Internal events from streams

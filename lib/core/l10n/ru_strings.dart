@@ -49,12 +49,23 @@ class RuStrings implements AppStrings {
   // КЛИМАТ
   // ============================================
   @override String get temperature => 'Температура';
+  @override String get targetTemperature => 'Целевая температура';
+  @override String get currentTemperature => 'Текущая температура';
   @override String get humidity => 'Влажность';
   @override String get heating => 'Обогрев';
   @override String get cooling => 'Охлаждение';
   @override String get dry => 'Осушение';
   @override String get auto => 'Авто';
   @override String get ventilation => 'Вентиляция';
+  @override String get deviceStatus => 'Статус устройства';
+  @override String get airflowControl => 'Управление воздухопотоком';
+  @override String get supplyAirflow => 'Приток';
+  @override String get exhaustAirflow => 'Вытяжка';
+  @override String get sensors => 'Датчики';
+  @override String get presets => 'Пресеты';
+  @override String get night => 'Ночной';
+  @override String get turbo => 'Турбо';
+  @override String get eco => 'Эко';
 
   // ============================================
   // КАЧЕСТВО ВОЗДУХА
@@ -69,9 +80,14 @@ class RuStrings implements AppStrings {
   @override String get pollutants => 'Загрязнители';
 
   // ============================================
-  // СТАТИСТИКА
+  // СТАТИСТИКА / ЭНЕРГИЯ
   // ============================================
+  @override String get statistics => 'Статистика';
   @override String get usageStatus => 'Статистика использования';
+  @override String get energyUsage => 'Потребление энергии';
+  @override String get consumed => 'Потрачено';
+  @override String get workTime => 'Время работы';
+  @override String get efficiencyGood => 'Отличная эффективность!';
   @override String get today => 'Сегодня';
   @override String get thisWeek => 'Эта неделя';
   @override String get thisMonth => 'Этот месяц';
@@ -82,6 +98,13 @@ class RuStrings implements AppStrings {
     if (count == 1) return '$count шт.';
     return '$count шт.';
   }
+
+  // ============================================
+  // БЫСТРЫЕ ДЕЙСТВИЯ
+  // ============================================
+  @override String get quickActions => 'Быстрые действия';
+  @override String get allOff => 'Выкл. всё';
+  @override String get sync => 'Синхр.';
 
   // ============================================
   // ПРИБОРЫ

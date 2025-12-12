@@ -43,12 +43,23 @@ abstract class AppStrings {
   // КЛИМАТ
   // ============================================
   String get temperature;
+  String get targetTemperature;
+  String get currentTemperature;
   String get humidity;
   String get heating;
   String get cooling;
   String get dry;
   String get auto;
   String get ventilation;
+  String get deviceStatus;
+  String get airflowControl;
+  String get supplyAirflow;
+  String get exhaustAirflow;
+  String get sensors;
+  String get presets;
+  String get night;
+  String get turbo;
+  String get eco;
 
   // ============================================
   // КАЧЕСТВО ВОЗДУХА
@@ -63,9 +74,14 @@ abstract class AppStrings {
   String get pollutants;
 
   // ============================================
-  // СТАТИСТИКА
+  // СТАТИСТИКА / ЭНЕРГИЯ
   // ============================================
+  String get statistics;
   String get usageStatus;
+  String get energyUsage;
+  String get consumed;
+  String get workTime;
+  String get efficiencyGood;
   String get today;
   String get thisWeek;
   String get thisMonth;
@@ -73,6 +89,13 @@ abstract class AppStrings {
   String get totalHours;
   String get devicePowerConsumption;
   String units(int count);
+
+  // ============================================
+  // БЫСТРЫЕ ДЕЙСТВИЯ
+  // ============================================
+  String get quickActions;
+  String get allOff;
+  String get sync;
 
   // ============================================
   // ПРИБОРЫ

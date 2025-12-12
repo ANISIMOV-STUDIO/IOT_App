@@ -45,12 +45,23 @@ class EnStrings implements AppStrings {
   // CLIMATE
   // ============================================
   @override String get temperature => 'Temperature';
+  @override String get targetTemperature => 'Target Temperature';
+  @override String get currentTemperature => 'Current Temperature';
   @override String get humidity => 'Humidity';
   @override String get heating => 'Heating';
   @override String get cooling => 'Cooling';
   @override String get dry => 'Dry';
   @override String get auto => 'Auto';
   @override String get ventilation => 'Ventilation';
+  @override String get deviceStatus => 'Device Status';
+  @override String get airflowControl => 'Airflow Control';
+  @override String get supplyAirflow => 'Supply';
+  @override String get exhaustAirflow => 'Exhaust';
+  @override String get sensors => 'Sensors';
+  @override String get presets => 'Presets';
+  @override String get night => 'Night';
+  @override String get turbo => 'Turbo';
+  @override String get eco => 'Eco';
 
   // ============================================
   // AIR QUALITY
@@ -65,9 +76,14 @@ class EnStrings implements AppStrings {
   @override String get pollutants => 'Pollutants';
 
   // ============================================
-  // STATISTICS
+  // STATISTICS / ENERGY
   // ============================================
+  @override String get statistics => 'Statistics';
   @override String get usageStatus => 'Usage Status';
+  @override String get energyUsage => 'Energy Usage';
+  @override String get consumed => 'Consumed';
+  @override String get workTime => 'Work Time';
+  @override String get efficiencyGood => 'Great efficiency!';
   @override String get today => 'Today';
   @override String get thisWeek => 'This Week';
   @override String get thisMonth => 'This Month';
@@ -75,6 +91,13 @@ class EnStrings implements AppStrings {
   @override String get totalHours => 'Total Hours';
   @override String get devicePowerConsumption => 'Device Power Consumption';
   @override String units(int count) => '$count ${count == 1 ? 'unit' : 'units'}';
+
+  // ============================================
+  // QUICK ACTIONS
+  // ============================================
+  @override String get quickActions => 'Quick Actions';
+  @override String get allOff => 'All Off';
+  @override String get sync => 'Sync';
 
   // ============================================
   // APPLIANCES

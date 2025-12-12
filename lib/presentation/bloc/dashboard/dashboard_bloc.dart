@@ -41,9 +41,14 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     on<DashboardStarted>(_onStarted);
     on<DashboardRefreshed>(_onRefreshed);
     on<DeviceToggled>(_onDeviceToggled);
+    on<DevicePowerToggled>(_onDevicePowerToggled);
     on<TemperatureChanged>(_onTemperatureChanged);
     on<HumidityChanged>(_onHumidityChanged);
     on<ClimateModeChanged>(_onClimateModeChanged);
+    on<SupplyAirflowChanged>(_onSupplyAirflowChanged);
+    on<ExhaustAirflowChanged>(_onExhaustAirflowChanged);
+    on<PresetChanged>(_onPresetChanged);
+    on<AllDevicesOff>(_onAllDevicesOff);
     on<DevicesUpdated>(_onDevicesUpdated);
     on<ClimateUpdated>(_onClimateUpdated);
     on<EnergyUpdated>(_onEnergyUpdated);
@@ -69,6 +74,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         energyStats: results[2] as EnergyStats,
         powerUsage: results[3] as List<DeviceEnergyUsage>,
         occupants: results[4] as List<Occupant>,
+        schedule: DashboardState.defaultSchedule,
       ));
 
       _subscribeToUpdates();
@@ -107,6 +113,14 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     }
   }
 
+  Future<void> _onDevicePowerToggled(DevicePowerToggled event, Emitter<DashboardState> emit) async {
+    try {
+      await _climateRepository.setPower(event.isOn);
+    } catch (e) {
+      emit(state.copyWith(errorMessage: 'Ошибка переключения питания: $e'));
+    }
+  }
+
   Future<void> _onTemperatureChanged(TemperatureChanged event, Emitter<DashboardState> emit) async {
     try {
       await _climateRepository.setTargetTemperature(event.temperature);
@@ -128,6 +142,43 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
       await _climateRepository.setMode(event.mode);
     } catch (e) {
       emit(state.copyWith(errorMessage: 'Ошибка смены режима: $e'));
+    }
+  }
+
+  Future<void> _onSupplyAirflowChanged(SupplyAirflowChanged event, Emitter<DashboardState> emit) async {
+    try {
+      await _climateRepository.setSupplyAirflow(event.value);
+    } catch (e) {
+      emit(state.copyWith(errorMessage: 'Ошибка настройки притока: $e'));
+    }
+  }
+
+  Future<void> _onExhaustAirflowChanged(ExhaustAirflowChanged event, Emitter<DashboardState> emit) async {
+    try {
+      await _climateRepository.setExhaustAirflow(event.value);
+    } catch (e) {
+      emit(state.copyWith(errorMessage: 'Ошибка настройки вытяжки: $e'));
+    }
+  }
+
+  Future<void> _onPresetChanged(PresetChanged event, Emitter<DashboardState> emit) async {
+    try {
+      await _climateRepository.setPreset(event.preset);
+    } catch (e) {
+      emit(state.copyWith(errorMessage: 'Ошибка смены пресета: $e'));
+    }
+  }
+
+  Future<void> _onAllDevicesOff(AllDevicesOff event, Emitter<DashboardState> emit) async {
+    try {
+      await _climateRepository.setPower(false);
+      for (final device in state.devices) {
+        if (device.isOn) {
+          await _deviceRepository.toggleDevice(device.id, false);
+        }
+      }
+    } catch (e) {
+      emit(state.copyWith(errorMessage: 'Ошибка выключения: $e'));
     }
   }
 

@@ -2,6 +2,24 @@ part of 'dashboard_bloc.dart';
 
 enum DashboardStatus { initial, loading, success, failure }
 
+/// Элемент расписания
+class ScheduleItem extends Equatable {
+  final String time;
+  final String event;
+  final double temperature;
+  final bool isActive;
+
+  const ScheduleItem({
+    required this.time,
+    required this.event,
+    required this.temperature,
+    this.isActive = false,
+  });
+
+  @override
+  List<Object?> get props => [time, event, temperature, isActive];
+}
+
 class DashboardState extends Equatable {
   final DashboardStatus status;
   final List<SmartDevice> devices;
@@ -9,6 +27,7 @@ class DashboardState extends Equatable {
   final EnergyStats? energyStats;
   final List<DeviceEnergyUsage> powerUsage;
   final List<Occupant> occupants;
+  final List<ScheduleItem> schedule;
   final String? errorMessage;
 
   const DashboardState({
@@ -18,8 +37,17 @@ class DashboardState extends Equatable {
     this.energyStats,
     this.powerUsage = const [],
     this.occupants = const [],
+    this.schedule = const [],
     this.errorMessage,
   });
+
+  // Default schedule for demo
+  static const defaultSchedule = [
+    ScheduleItem(time: '07:00', event: 'Подъём', temperature: 22, isActive: true),
+    ScheduleItem(time: '09:00', event: 'Уход', temperature: 18),
+    ScheduleItem(time: '18:00', event: 'Возвращение', temperature: 21),
+    ScheduleItem(time: '22:00', event: 'Сон', temperature: 19),
+  ];
 
   // Helpers
   AirQualityLevel? get airQuality => climate?.airQuality;
@@ -33,6 +61,7 @@ class DashboardState extends Equatable {
     EnergyStats? energyStats,
     List<DeviceEnergyUsage>? powerUsage,
     List<Occupant>? occupants,
+    List<ScheduleItem>? schedule,
     String? errorMessage,
   }) {
     return DashboardState(
@@ -42,10 +71,11 @@ class DashboardState extends Equatable {
       energyStats: energyStats ?? this.energyStats,
       powerUsage: powerUsage ?? this.powerUsage,
       occupants: occupants ?? this.occupants,
+      schedule: schedule ?? this.schedule,
       errorMessage: errorMessage,
     );
   }
 
   @override
-  List<Object?> get props => [status, devices, climate, energyStats, powerUsage, occupants, errorMessage];
+  List<Object?> get props => [status, devices, climate, energyStats, powerUsage, occupants, schedule, errorMessage];
 }

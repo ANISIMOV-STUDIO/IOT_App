@@ -7,7 +7,7 @@ import '../../core/l10n/l10n.dart';
 import '../../domain/entities/climate.dart';
 import '../bloc/dashboard/dashboard_bloc.dart';
 
-/// Главный экран Smart Home Dashboard
+/// Главный экран HVAC Dashboard
 class NeumorphicDashboardScreen extends StatelessWidget {
   const NeumorphicDashboardScreen({super.key});
 
@@ -52,10 +52,9 @@ class _DashboardViewState extends State<_DashboardView> {
       items: [
         NeumorphicNavItem(icon: Icons.dashboard, label: s.dashboard),
         NeumorphicNavItem(icon: Icons.meeting_room, label: s.rooms),
-        NeumorphicNavItem(icon: Icons.history, label: s.recent),
-        NeumorphicNavItem(icon: Icons.bookmark_outline, label: s.bookmarks),
-        NeumorphicNavItem(icon: Icons.notifications_outlined, label: s.notifications, badge: '3'),
-        NeumorphicNavItem(icon: Icons.download_outlined, label: s.downloads),
+        NeumorphicNavItem(icon: Icons.calendar_today, label: s.schedule),
+        NeumorphicNavItem(icon: Icons.bar_chart, label: s.statistics),
+        NeumorphicNavItem(icon: Icons.notifications_outlined, label: s.notifications, badge: '2'),
       ],
       bottomItems: [
         NeumorphicNavItem(icon: Icons.help_outline, label: s.support),
@@ -77,27 +76,35 @@ class _DashboardViewState extends State<_DashboardView> {
             children: [
               Text('${s.error}: ${state.errorMessage}'),
               const SizedBox(height: 16),
-              NeumorphicButton(onPressed: () => context.read<DashboardBloc>().add(const DashboardRefreshed()), child: Text(s.retry)),
+              NeumorphicButton(
+                onPressed: () => context.read<DashboardBloc>().add(const DashboardRefreshed()),
+                child: Text(s.retry),
+              ),
             ],
           ));
         }
         return NeumorphicMainContent(
-          title: s.myDevices,
+          title: s.dashboard,
           actions: [_langSwitch(context)],
           child: Column(children: [
-            _devicesGrid(context, state),
-            const SizedBox(height: NeumorphicSpacing.sectionGap),
+            // Row 1: Device Status + Sensors
             Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Expanded(flex: 2, child: _usageCard(context, state)),
+              Expanded(flex: 1, child: _deviceStatusCard(context, state)),
               const SizedBox(width: NeumorphicSpacing.cardGap),
-              Expanded(flex: 2, child: _appliancesCard(context)),
+              Expanded(flex: 2, child: _sensorsGrid(context, state)),
             ]),
             const SizedBox(height: NeumorphicSpacing.cardGap),
+            
+            // Row 2: Schedule + Quick Actions
             Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Expanded(child: _powerCard(context, state)),
+              Expanded(flex: 3, child: _scheduleCard(context, state)),
               const SizedBox(width: NeumorphicSpacing.cardGap),
-              Expanded(child: _occupantsCard(context, state)),
+              Expanded(flex: 2, child: _quickActionsCard(context)),
             ]),
+            const SizedBox(height: NeumorphicSpacing.cardGap),
+            
+            // Row 3: Energy Stats
+            _energyStatsCard(context, state),
             const SizedBox(height: NeumorphicSpacing.xl),
           ]),
         );
@@ -105,260 +112,596 @@ class _DashboardViewState extends State<_DashboardView> {
     );
   }
 
+  // ============================================
+  // 1. СТАТУС УСТРОЙСТВА
+  // ============================================
+  Widget _deviceStatusCard(BuildContext context, DashboardState state) {
+    final s = context.l10n;
+    final t = NeumorphicThemeData.light();
+    final climate = state.climate;
+    final isOn = climate?.isOn ?? false;
+
+    return NeumorphicCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Icon(
+                Icons.power_settings_new,
+                color: isOn ? NeumorphicColors.accentPrimary : t.colors.textTertiary,
+                size: 28,
+              ),
+              NeumorphicToggle(
+                value: isOn,
+                onChanged: (v) => context.read<DashboardBloc>().add(DevicePowerToggled(v)),
+              ),
+            ],
+          ),
+          const Spacer(),
+          Text(
+            climate?.deviceName ?? 'HVAC Unit',
+            style: t.typography.headlineMedium,
+          ),
+          const SizedBox(height: 4),
+          Row(children: [
+            Container(
+              width: 8, height: 8,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: isOn ? NeumorphicColors.accentSuccess : t.colors.textTertiary,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              isOn ? s.active : s.standby,
+              style: t.typography.bodyMedium.copyWith(
+                color: isOn ? NeumorphicColors.accentSuccess : t.colors.textTertiary,
+              ),
+            ),
+          ]),
+        ],
+      ),
+    );
+  }
+
+  // ============================================
+  // 2. СЕНСОРЫ (Температура, Влажность, CO2)
+  // ============================================
+  Widget _sensorsGrid(BuildContext context, DashboardState state) {
+    final s = context.l10n;
+    final climate = state.climate;
+
+    return Row(children: [
+      Expanded(child: _sensorCard(
+        icon: Icons.thermostat,
+        label: s.currentTemperature,
+        value: '${climate?.currentTemperature.toStringAsFixed(1) ?? '--'}',
+        unit: '°C',
+        color: NeumorphicColors.modeHeating,
+      )),
+      const SizedBox(width: NeumorphicSpacing.cardGap),
+      Expanded(child: _sensorCard(
+        icon: Icons.water_drop,
+        label: s.humidity,
+        value: '${climate?.humidity.toStringAsFixed(0) ?? '--'}',
+        unit: '%',
+        color: NeumorphicColors.modeCooling,
+      )),
+      const SizedBox(width: NeumorphicSpacing.cardGap),
+      Expanded(child: _sensorCard(
+        icon: Icons.cloud_outlined,
+        label: s.co2,
+        value: '${climate?.co2Ppm ?? '--'}',
+        unit: 'ppm',
+        color: _co2Color(climate?.co2Ppm),
+      )),
+    ]);
+  }
+
+  Widget _sensorCard({
+    required IconData icon,
+    required String label,
+    required String value,
+    required String unit,
+    required Color color,
+  }) {
+    final t = NeumorphicThemeData.light();
+    return NeumorphicCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(icon, color: color, size: 20),
+            ),
+            const Spacer(),
+          ]),
+          const SizedBox(height: 12),
+          Text(label, style: t.typography.labelSmall),
+          const SizedBox(height: 4),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(value, style: t.typography.numericLarge),
+              const SizedBox(width: 2),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 2),
+                child: Text(unit, style: t.typography.labelSmall),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ============================================
+  // 3. РАСПИСАНИЕ
+  // ============================================
+  Widget _scheduleCard(BuildContext context, DashboardState state) {
+    final s = context.l10n;
+    final t = NeumorphicThemeData.light();
+
+    return NeumorphicCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(s.schedule, style: t.typography.titleMedium),
+              Icon(Icons.calendar_month, color: t.colors.textTertiary, size: 20),
+            ],
+          ),
+          const SizedBox(height: 16),
+          ...state.schedule.asMap().entries.map((entry) {
+            final item = entry.value;
+            final isLast = entry.key == state.schedule.length - 1;
+            return _scheduleItem(t, item, isLast);
+          }),
+        ],
+      ),
+    );
+  }
+
+  Widget _scheduleItem(NeumorphicThemeData t, ScheduleItem item, bool isLast) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Timeline dot and line
+        Column(children: [
+          Container(
+            width: 10, height: 10,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: item.isActive ? NeumorphicColors.accentPrimary : t.colors.textTertiary,
+              border: item.isActive ? null : Border.all(color: t.colors.textTertiary, width: 2),
+            ),
+          ),
+          if (!isLast)
+            Container(
+              width: 2, height: 32,
+              color: t.colors.textTertiary.withValues(alpha: 0.3),
+            ),
+        ]),
+        const SizedBox(width: 12),
+        // Content
+        Expanded(
+          child: Padding(
+            padding: EdgeInsets.only(bottom: isLast ? 0 : 16),
+            child: Row(children: [
+              Text(item.time, style: t.typography.bodyMedium.copyWith(fontWeight: FontWeight.w600)),
+              const SizedBox(width: 16),
+              Expanded(child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(item.event, style: t.typography.bodyMedium),
+                  Text('${item.temperature.round()}°C', style: t.typography.labelSmall),
+                ],
+              )),
+              if (item.isActive)
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: NeumorphicColors.accentPrimary.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    'Активно',
+                    style: t.typography.labelSmall.copyWith(
+                      color: NeumorphicColors.accentPrimary,
+                      fontSize: 10,
+                    ),
+                  ),
+                ),
+            ]),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // ============================================
+  // 4. БЫСТРЫЕ ДЕЙСТВИЯ
+  // ============================================
+  Widget _quickActionsCard(BuildContext context) {
+    final s = context.l10n;
+
+    return Column(children: [
+      Row(children: [
+        Expanded(child: _actionButton(
+          icon: Icons.power_settings_new,
+          label: s.allOff,
+          color: NeumorphicColors.accentError,
+          onTap: () => context.read<DashboardBloc>().add(const AllDevicesOff()),
+        )),
+        const SizedBox(width: NeumorphicSpacing.sm),
+        Expanded(child: _actionButton(
+          icon: Icons.calendar_today,
+          label: s.schedule,
+          onTap: () {},
+        )),
+      ]),
+      const SizedBox(height: NeumorphicSpacing.sm),
+      Row(children: [
+        Expanded(child: _actionButton(
+          icon: Icons.sync,
+          label: s.sync,
+          onTap: () => context.read<DashboardBloc>().add(const DashboardRefreshed()),
+        )),
+        const SizedBox(width: NeumorphicSpacing.sm),
+        Expanded(child: _actionButton(
+          icon: Icons.settings,
+          label: s.settings,
+          onTap: () {},
+        )),
+      ]),
+    ]);
+  }
+
+  Widget _actionButton({
+    required IconData icon,
+    required String label,
+    Color? color,
+    required VoidCallback onTap,
+  }) {
+    final t = NeumorphicThemeData.light();
+    final c = color ?? NeumorphicColors.accentPrimary;
+
+    return NeumorphicButton(
+      onPressed: onTap,
+      size: NeumorphicButtonSize.large,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: c, size: 22),
+          const SizedBox(height: 4),
+          Text(label, style: t.typography.labelSmall),
+        ],
+      ),
+    );
+  }
+
+  // ============================================
+  // 5. СТАТИСТИКА ЭНЕРГИИ
+  // ============================================
+  Widget _energyStatsCard(BuildContext context, DashboardState state) {
+    final s = context.l10n;
+    final t = NeumorphicThemeData.light();
+    final stats = state.energyStats;
+
+    return NeumorphicCard(
+      child: Row(children: [
+        // Left: Stats
+        Expanded(
+          flex: 2,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(s.usageStatus, style: t.typography.titleMedium),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: t.colors.surface,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(s.today, style: t.typography.labelSmall),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Row(children: [
+                _statItem(t, s.totalSpent, '${stats?.totalKwh.toStringAsFixed(1) ?? '0'}', 'кВт⋅ч'),
+                const SizedBox(width: 40),
+                _statItem(t, s.totalHours, '${stats?.totalHours ?? 0}', 'ч'),
+              ]),
+            ],
+          ),
+        ),
+        const SizedBox(width: 24),
+        // Right: Chart placeholder
+        Expanded(
+          flex: 3,
+          child: Container(
+            height: 80,
+            decoration: BoxDecoration(
+              color: t.colors.surface,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Center(
+              child: Text('📊 График потребления', style: t.typography.labelSmall),
+            ),
+          ),
+        ),
+      ]),
+    );
+  }
+
+  Widget _statItem(NeumorphicThemeData t, String label, String value, String unit) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: t.typography.labelSmall),
+        const SizedBox(height: 4),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text(value, style: t.typography.numericLarge),
+            const SizedBox(width: 2),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 2),
+              child: Text(unit, style: t.typography.labelSmall),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  // ============================================
+  // RIGHT PANEL
+  // ============================================
   Widget _rightPanel(BuildContext context) {
     final s = context.l10n;
     final t = NeumorphicThemeData.light();
+
     return BlocBuilder<DashboardBloc, DashboardState>(
       builder: (context, state) {
         final climate = state.climate;
         return NeumorphicRightPanel(children: [
-          // Temperature section
-          Text(s.temperature, style: t.typography.titleLarge),
+          // 1. Temperature Control
+          Text(s.targetTemperature, style: t.typography.titleLarge),
           const SizedBox(height: NeumorphicSpacing.md),
           Center(child: SizedBox(
-            width: 220,
-            height: 220,
+            width: 200,
+            height: 200,
             child: NeumorphicTemperatureDial(
               value: climate?.targetTemperature ?? 22,
               minValue: 10, maxValue: 30,
               mode: _mapMode(climate?.mode),
-              label: _modeLabel(context, climate?.mode ?? ClimateMode.heating),
-              // Use onChangeEnd for better performance - fires only when user releases
+              label: _modeLabel(context, climate?.mode ?? ClimateMode.auto),
               onChangeEnd: (v) => context.read<DashboardBloc>().add(TemperatureChanged(v)),
             ),
           )),
           const SizedBox(height: NeumorphicSpacing.md),
-          _modeSelector(context, climate?.mode ?? ClimateMode.heating),
-          const SizedBox(height: NeumorphicSpacing.lg),
           
-          // Humidity section - use onChangeEnd for performance
-          NeumorphicSlider(label: s.humidity, value: climate?.humidity ?? 60, suffix: '%',
-            onChangeEnd: (v) => context.read<DashboardBloc>().add(HumidityChanged(v))),
+          // 2. Mode Selector
+          _modeSelector(context, climate?.mode ?? ClimateMode.auto),
+          const SizedBox(height: NeumorphicSpacing.xl),
+          
+          // 3. Airflow Control
+          Text(s.airflowControl, style: t.typography.titleMedium),
+          const SizedBox(height: NeumorphicSpacing.md),
+          NeumorphicSlider(
+            label: s.supplyAirflow,
+            value: climate?.supplyAirflow ?? 50,
+            suffix: '%',
+            activeColor: NeumorphicColors.accentPrimary,
+            onChangeEnd: (v) => context.read<DashboardBloc>().add(SupplyAirflowChanged(v)),
+          ),
+          const SizedBox(height: NeumorphicSpacing.md),
+          NeumorphicSlider(
+            label: s.exhaustAirflow,
+            value: climate?.exhaustAirflow ?? 40,
+            suffix: '%',
+            activeColor: NeumorphicColors.modeCooling,
+            onChangeEnd: (v) => context.read<DashboardBloc>().add(ExhaustAirflowChanged(v)),
+          ),
+          const SizedBox(height: NeumorphicSpacing.xl),
+          
+          // 4. Presets
+          Text(s.presets, style: t.typography.titleMedium),
           const SizedBox(height: NeumorphicSpacing.sm),
-          NeumorphicSliderPresets(currentValue: climate?.humidity ?? 60, presets: [
-            SliderPreset(label: s.auto, value: 50),
-            const SliderPreset(label: '30%', value: 30),
-            const SliderPreset(label: '60%', value: 60),
-          ], onPresetSelected: (v) => context.read<DashboardBloc>().add(HumidityChanged(v))),
-          const SizedBox(height: NeumorphicSpacing.lg),
-          
-          // Air quality section
-          _airQualityCard(context, state),
+          _presetsGrid(context, climate?.preset ?? 'auto'),
         ]);
       },
     );
   }
 
-  Widget _devicesGrid(BuildContext context, DashboardState state) {
+  Widget _modeSelector(BuildContext context, ClimateMode current) {
+    final t = NeumorphicThemeData.light();
+    final modes = [ClimateMode.heating, ClimateMode.cooling, ClimateMode.auto, ClimateMode.ventilation];
+    
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: modes.map((m) {
+        final sel = m == current;
+        return GestureDetector(
+          onTap: () => context.read<DashboardBloc>().add(ClimateModeChanged(m)),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: sel ? t.colors.cardSurface : Colors.transparent,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: sel ? t.shadows.convexSmall : null,
+            ),
+            child: Column(mainAxisSize: MainAxisSize.min, children: [
+              Icon(_modeIcon(m), color: sel ? _modeColor(m) : t.colors.textTertiary, size: 22),
+              const SizedBox(height: 2),
+              Text(
+                _modeLabel(context, m),
+                style: t.typography.labelSmall.copyWith(
+                  color: sel ? t.colors.textPrimary : t.colors.textTertiary,
+                  fontSize: 10,
+                ),
+              ),
+            ]),
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _presetsGrid(BuildContext context, String currentPreset) {
     final s = context.l10n;
-    final devices = state.devices;
-    final row1 = devices.take(3).toList();
-    final row2 = devices.skip(3).take(3).toList();
-    return Column(children: [
-      _deviceRow(context, row1, s),
-      const SizedBox(height: NeumorphicSpacing.cardGap),
-      _deviceRow(context, row2, s),
-    ]);
+    final presets = [
+      ('auto', s.auto, Icons.hdr_auto),
+      ('night', s.night, Icons.nights_stay),
+      ('turbo', s.turbo, Icons.rocket_launch),
+      ('eco', s.eco, Icons.eco),
+      ('away', s.away, Icons.sensor_door),
+    ];
+
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: presets.map((p) {
+        final isSelected = currentPreset == p.$1;
+        return _presetChip(
+          context,
+          label: p.$2,
+          icon: p.$3,
+          isSelected: isSelected,
+          onTap: () => context.read<DashboardBloc>().add(PresetChanged(p.$1)),
+        );
+      }).toList(),
+    );
   }
 
-  Widget _deviceRow(BuildContext context, List devices, AppStrings s) {
-    if (devices.isEmpty) return const SizedBox.shrink();
-    return Row(children: devices.map((d) => Expanded(child: Padding(
-      padding: EdgeInsets.only(right: d != devices.last ? NeumorphicSpacing.cardGap : 0),
-      child: SizedBox(height: 140, child: NeumorphicDeviceCard(
-        name: _deviceName(d.type, s),
-        icon: _deviceIcon(d.type),
-        isOn: d.isOn,
-        subtitle: '${s.activeFor} ${d.activeTime.inHours} ${s.hours(d.activeTime.inHours)}',
-        powerConsumption: '${d.powerConsumption.toStringAsFixed(0)}кВт',
-        onToggle: (v) => context.read<DashboardBloc>().add(DeviceToggled(d.id, v)),
-      )),
-    ))).toList());
+  Widget _presetChip(
+    BuildContext context, {
+    required String label,
+    required IconData icon,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    final t = NeumorphicThemeData.light();
+
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected ? NeumorphicColors.accentPrimary : Colors.transparent,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: isSelected ? NeumorphicColors.accentPrimary : t.colors.textTertiary,
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 14, color: isSelected ? Colors.white : t.colors.textSecondary),
+            const SizedBox(width: 6),
+            Text(
+              label,
+              style: t.typography.labelSmall.copyWith(
+                color: isSelected ? Colors.white : t.colors.textSecondary,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
+  // ============================================
+  // HELPERS
+  // ============================================
   Widget _langSwitch(BuildContext context) {
     final loc = context.locale;
     return PopupMenuButton<AppLocale>(
       initialValue: loc,
       onSelected: (l) => context.setLocale(l),
-      itemBuilder: (_) => AppLocale.values.map((l) => PopupMenuItem(value: l, child: Row(children: [
-        if (l == loc) const Icon(Icons.check, size: 16),
-        const SizedBox(width: 8), Text(l.name),
-      ]))).toList(),
+      itemBuilder: (_) => AppLocale.values.map((l) => PopupMenuItem(
+        value: l,
+        child: Row(children: [
+          if (l == loc) const Icon(Icons.check, size: 16),
+          const SizedBox(width: 8),
+          Text(l.name),
+        ]),
+      )).toList(),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-        decoration: BoxDecoration(color: NeumorphicColors.lightCardSurface, borderRadius: BorderRadius.circular(8)),
+        decoration: BoxDecoration(
+          color: NeumorphicColors.lightCardSurface,
+          borderRadius: BorderRadius.circular(8),
+        ),
         child: Row(mainAxisSize: MainAxisSize.min, children: [
-          const Icon(Icons.language, size: 18), const SizedBox(width: 6), Text(loc.code.toUpperCase()),
+          const Icon(Icons.language, size: 18),
+          const SizedBox(width: 6),
+          Text(loc.code.toUpperCase()),
         ]),
       ),
     );
   }
 
-  Widget _modeSelector(BuildContext context, ClimateMode current) {
-    final t = NeumorphicThemeData.light();
-    // Только основные 4 режима для компактности
-    final modes = [ClimateMode.heating, ClimateMode.cooling, ClimateMode.auto, ClimateMode.dry];
-    return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: modes.map((m) {
-      final sel = m == current;
-      return GestureDetector(
-        onTap: () => context.read<DashboardBloc>().add(ClimateModeChanged(m)),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          decoration: BoxDecoration(
-            color: sel ? t.colors.cardSurface : Colors.transparent,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: sel ? t.shadows.convexSmall : null,
-          ),
-          child: Column(mainAxisSize: MainAxisSize.min, children: [
-            Icon(_modeIcon(m), color: sel ? _modeColor(m) : t.colors.textTertiary, size: 22),
-            const SizedBox(height: 2),
-            Text(_modeLabel(context, m), style: t.typography.labelSmall.copyWith(color: sel ? t.colors.textPrimary : t.colors.textTertiary, fontSize: 10)),
-          ]),
-        ),
-      );
-    }).toList());
+  Color _co2Color(int? ppm) {
+    if (ppm == null) return NeumorphicColors.airQualityGood;
+    if (ppm < 600) return NeumorphicColors.airQualityExcellent;
+    if (ppm < 800) return NeumorphicColors.airQualityGood;
+    if (ppm < 1000) return NeumorphicColors.airQualityModerate;
+    return NeumorphicColors.airQualityPoor;
   }
-
-  Widget _airQualityCard(BuildContext context, DashboardState state) {
-    final s = context.l10n;
-    final t = NeumorphicThemeData.light();
-    final aq = state.airQuality;
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Text(s.airQuality, style: t.typography.titleLarge),
-        Text(_aqLevelText(aq, s), style: t.typography.titleMedium.copyWith(color: _aqLevelColor(aq))),
-      ]),
-      const SizedBox(height: 12),
-      Row(children: [
-        Expanded(child: _statCard(t, _co2Status(state.co2Ppm, s), s.co2, '${state.co2Ppm ?? 0}', 'ppm')),
-        const SizedBox(width: 8),
-        Expanded(child: _statCard(t, _aqiStatus(state.pollutantsAqi, s), s.pollutants, '${state.pollutantsAqi ?? 0}', 'AQI')),
-      ]),
-    ]);
-  }
-
-  Widget _usageCard(BuildContext context, DashboardState state) {
-    final s = context.l10n;
-    final t = NeumorphicThemeData.light();
-    final st = state.energyStats;
-    return NeumorphicCard(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Text(s.usageStatus, style: t.typography.titleMedium),
-        Container(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-          decoration: BoxDecoration(color: NeumorphicColors.lightSurface, borderRadius: BorderRadius.circular(8)),
-          child: Text(s.today, style: t.typography.labelSmall)),
-      ]),
-      const SizedBox(height: 16),
-      Row(children: [
-        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(s.totalSpent, style: t.typography.labelSmall),
-          Text('${st?.totalKwh.toStringAsFixed(2) ?? '0'}кВт⋅ч', style: t.typography.numericLarge),
-        ]),
-        const SizedBox(width: 32),
-        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(s.totalHours, style: t.typography.labelSmall),
-          Text('${st?.totalHours ?? 0}ч', style: t.typography.numericLarge),
-        ]),
-      ]),
-      const SizedBox(height: 24),
-      Container(height: 80, decoration: BoxDecoration(color: NeumorphicColors.lightSurface, borderRadius: BorderRadius.circular(8)),
-        child: const Center(child: Text('График'))),
-    ]));
-  }
-
-  Widget _appliancesCard(BuildContext context) {
-    final s = context.l10n;
-    final t = NeumorphicThemeData.light();
-    return NeumorphicCard(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text(s.appliances.toUpperCase(), style: t.typography.titleMedium),
-      const SizedBox(height: 12),
-      Wrap(spacing: 12, children: [s.all, s.hall, s.lounge, s.bedroom].map((x) => Text(x, style: t.typography.labelSmall)).toList()),
-      const SizedBox(height: 16),
-      _appRow(t, s.tvSet, s.lightFixture, false, 50),
-      _appRow(t, s.stereoSystem, s.backlight, true, 70),
-      _appRow(t, s.playStation, '${s.lamp} 1', false, 10),
-      _appRow(t, s.computer, '${s.lamp} 2', false, 30),
-    ]));
-  }
-
-  Widget _powerCard(BuildContext context, DashboardState state) {
-    final s = context.l10n;
-    final t = NeumorphicThemeData.light();
-    return NeumorphicCard(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text(s.devicePowerConsumption, style: t.typography.titleMedium),
-      const SizedBox(height: 12),
-      ...state.powerUsage.map((p) => _pwrRow(t, _pwrIcon(p.deviceType), p.deviceName, s.units(p.unitCount), '${p.totalKwh.toStringAsFixed(0)}кВт')),
-    ]));
-  }
-
-  Widget _occupantsCard(BuildContext context, DashboardState state) {
-    final s = context.l10n;
-    final t = NeumorphicThemeData.light();
-    return NeumorphicCard(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Text(s.occupants, style: t.typography.titleMedium),
-        Text('${s.seeAll} →', style: t.typography.labelSmall),
-      ]),
-      const SizedBox(height: 16),
-      Wrap(spacing: 8, runSpacing: 8, children: [
-        ...state.occupants.map((o) => _avatar(o.name, o.isHome)),
-        _avatarAdd(s.add),
-      ]),
-    ]));
-  }
-
-  // Helpers
-  Widget _statCard(NeumorphicThemeData t, String st, String lb, String v, String u) => NeumorphicCard(
-    padding: const EdgeInsets.all(10), variant: NeumorphicCardVariant.flat,
-    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text(st, style: t.typography.labelSmall, overflow: TextOverflow.ellipsis),
-      const SizedBox(height: 4),
-      Row(children: [
-        Flexible(child: Text(lb, style: t.typography.bodySmall, overflow: TextOverflow.ellipsis)),
-        const SizedBox(width: 4),
-        Text(v, style: t.typography.numericMedium),
-        Text(u, style: t.typography.labelSmall),
-      ]),
-    ]));
-
-  Widget _appRow(NeumorphicThemeData t, String l, String r, bool on, int p) => Padding(
-    padding: const EdgeInsets.only(bottom: 8),
-    child: Row(children: [
-      Expanded(child: Row(children: [Text(l, style: t.typography.bodySmall), const Spacer(), Switch(value: on, onChanged: null, activeThumbColor: NeumorphicColors.accentPrimary)])),
-      const SizedBox(width: 16),
-      Expanded(child: Row(children: [Text(r, style: t.typography.bodySmall), const Spacer(), Text('$p%', style: t.typography.labelSmall)])),
-    ]));
-
-  Widget _pwrRow(NeumorphicThemeData t, IconData ic, String nm, String un, String pw) => Padding(
-    padding: const EdgeInsets.only(bottom: 8),
-    child: Row(children: [
-      Container(width: 32, height: 32, decoration: BoxDecoration(color: NeumorphicColors.lightSurface, borderRadius: BorderRadius.circular(8)), child: Icon(ic, size: 16)),
-      const SizedBox(width: 10),
-      Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(nm, style: t.typography.bodySmall), Text(un, style: t.typography.labelSmall)])),
-      Text(pw, style: t.typography.numericMedium),
-    ]));
-
-  Widget _avatar(String n, bool home) => Column(children: [
-    CircleAvatar(radius: 22, backgroundColor: home ? NeumorphicColors.accentPrimary : NeumorphicColors.lightShadowDark, child: Text(n[0], style: const TextStyle(color: Colors.white))),
-    const SizedBox(height: 4), Text(n, style: NeumorphicThemeData.light().typography.labelSmall),
-  ]);
-
-  Widget _avatarAdd(String lb) => Column(children: [
-    const CircleAvatar(radius: 22, backgroundColor: NeumorphicColors.lightSurface, child: Icon(Icons.add, size: 18)),
-    const SizedBox(height: 4), Text(lb, style: NeumorphicThemeData.light().typography.labelSmall),
-  ]);
 
   // Mappers
-  TemperatureMode _mapMode(ClimateMode? m) => switch (m) { ClimateMode.heating => TemperatureMode.heating, ClimateMode.cooling => TemperatureMode.cooling, ClimateMode.auto => TemperatureMode.auto, ClimateMode.dry => TemperatureMode.dry, _ => TemperatureMode.auto };
-  String _modeLabel(BuildContext c, ClimateMode m) { final s = c.l10n; return switch (m) { ClimateMode.heating => s.heating, ClimateMode.cooling => s.cooling, ClimateMode.auto => s.auto, ClimateMode.dry => s.dry, ClimateMode.ventilation => s.ventilation, ClimateMode.off => s.turnedOff }; }
-  IconData _modeIcon(ClimateMode m) => switch (m) { ClimateMode.heating => Icons.whatshot_outlined, ClimateMode.cooling => Icons.ac_unit, ClimateMode.auto => Icons.autorenew, ClimateMode.dry => Icons.water_drop_outlined, ClimateMode.ventilation => Icons.air, ClimateMode.off => Icons.power_settings_new };
-  Color _modeColor(ClimateMode m) => switch (m) { ClimateMode.heating => NeumorphicColors.modeHeating, ClimateMode.cooling => NeumorphicColors.modeCooling, ClimateMode.auto => NeumorphicColors.modeAuto, ClimateMode.dry => NeumorphicColors.modeDry, ClimateMode.ventilation => NeumorphicColors.accentPrimary, ClimateMode.off => Colors.grey };
-  String _deviceName(dynamic t, AppStrings s) => switch (t.toString()) { 'SmartDeviceType.tv' => s.smartTv, 'SmartDeviceType.speaker' => s.speaker, 'SmartDeviceType.router' => s.router, 'SmartDeviceType.wifi' => s.wifi, 'SmartDeviceType.heater' => s.heater, 'SmartDeviceType.socket' => s.socket, 'SmartDeviceType.lamp' => s.smartLamp, 'SmartDeviceType.airCondition' => s.airCondition, _ => 'Устройство' };
-  IconData _deviceIcon(dynamic t) => switch (t.toString()) { 'SmartDeviceType.tv' => Icons.tv, 'SmartDeviceType.speaker' => Icons.speaker, 'SmartDeviceType.router' => Icons.router, 'SmartDeviceType.wifi' => Icons.wifi, 'SmartDeviceType.heater' => Icons.heat_pump, 'SmartDeviceType.socket' => Icons.power, 'SmartDeviceType.lamp' => Icons.lightbulb_outline, 'SmartDeviceType.airCondition' => Icons.ac_unit, _ => Icons.devices };
-  IconData _pwrIcon(String t) => switch (t) { 'airCondition' => Icons.ac_unit, 'lamp' => Icons.lightbulb_outline, 'tv' => Icons.tv, 'speaker' => Icons.speaker, _ => Icons.devices };
-  String _aqLevelText(AirQualityLevel? l, AppStrings s) => switch (l) { AirQualityLevel.excellent => s.excellent, AirQualityLevel.good => s.good, AirQualityLevel.moderate => s.moderate, AirQualityLevel.poor => s.poor, AirQualityLevel.hazardous => s.hazardous, _ => s.good };
-  Color _aqLevelColor(AirQualityLevel? l) => switch (l) { AirQualityLevel.excellent => NeumorphicColors.airQualityExcellent, AirQualityLevel.good => NeumorphicColors.airQualityGood, AirQualityLevel.moderate => NeumorphicColors.airQualityModerate, AirQualityLevel.poor => NeumorphicColors.airQualityPoor, AirQualityLevel.hazardous => NeumorphicColors.airQualityHazardous, _ => NeumorphicColors.airQualityGood };
-  String _co2Status(int? v, AppStrings s) { if (v == null) return s.good; if (v < 600) return s.excellent; if (v < 800) return s.good; if (v < 1000) return s.moderate; return s.poor; }
-  String _aqiStatus(int? v, AppStrings s) { if (v == null) return s.good; if (v < 50) return s.excellent; if (v < 100) return s.good; if (v < 150) return s.moderate; return s.poor; }
+  TemperatureMode _mapMode(ClimateMode? m) => switch (m) {
+    ClimateMode.heating => TemperatureMode.heating,
+    ClimateMode.cooling => TemperatureMode.cooling,
+    ClimateMode.auto => TemperatureMode.auto,
+    ClimateMode.dry => TemperatureMode.dry,
+    _ => TemperatureMode.auto,
+  };
+
+  String _modeLabel(BuildContext c, ClimateMode m) {
+    final s = c.l10n;
+    return switch (m) {
+      ClimateMode.heating => s.heating,
+      ClimateMode.cooling => s.cooling,
+      ClimateMode.auto => s.auto,
+      ClimateMode.dry => s.dry,
+      ClimateMode.ventilation => s.ventilation,
+      ClimateMode.off => s.turnedOff,
+    };
+  }
+
+  IconData _modeIcon(ClimateMode m) => switch (m) {
+    ClimateMode.heating => Icons.whatshot_outlined,
+    ClimateMode.cooling => Icons.ac_unit,
+    ClimateMode.auto => Icons.autorenew,
+    ClimateMode.dry => Icons.water_drop_outlined,
+    ClimateMode.ventilation => Icons.air,
+    ClimateMode.off => Icons.power_settings_new,
+  };
+
+  Color _modeColor(ClimateMode m) => switch (m) {
+    ClimateMode.heating => NeumorphicColors.modeHeating,
+    ClimateMode.cooling => NeumorphicColors.modeCooling,
+    ClimateMode.auto => NeumorphicColors.modeAuto,
+    ClimateMode.dry => NeumorphicColors.modeDry,
+    ClimateMode.ventilation => NeumorphicColors.accentPrimary,
+    ClimateMode.off => Colors.grey,
+  };
 }
