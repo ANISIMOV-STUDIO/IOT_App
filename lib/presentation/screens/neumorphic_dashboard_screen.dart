@@ -101,28 +101,24 @@ class _DashboardViewState extends State<_DashboardView> {
           actions: [_langSwitch(context)],
           child: Column(children: [
             // Row 1: Device Status + Sensors
-            IntrinsicHeight(
-              child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                Expanded(flex: 1, child: _deviceStatusCard(context, state)),
-                const SizedBox(width: NeumorphicSpacing.cardGap),
-                Expanded(flex: 2, child: _sensorsGrid(context, state)),
-              ]),
-            ),
+            Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Expanded(flex: 1, child: _deviceStatusCard(context, state)),
+              const SizedBox(width: NeumorphicSpacing.cardGap),
+              Expanded(flex: 2, child: _sensorsGrid(context, state)),
+            ]),
             const SizedBox(height: NeumorphicSpacing.cardGap),
             
             // Row 2: Schedule + Quick Actions
-            IntrinsicHeight(
-              child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                Expanded(flex: 3, child: _scheduleCard(context, state)),
-                const SizedBox(width: NeumorphicSpacing.cardGap),
-                Expanded(flex: 2, child: _quickActionsCard(context)),
-              ]),
-            ),
+            Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Expanded(flex: 3, child: _scheduleCard(context, state)),
+              const SizedBox(width: NeumorphicSpacing.cardGap),
+              Expanded(flex: 2, child: _quickActionsCard(context)),
+            ]),
             const SizedBox(height: NeumorphicSpacing.cardGap),
             
             // Row 3: Energy Stats
             _energyStatsCard(context, state),
-            const SizedBox(height: NeumorphicSpacing.xl),
+            const SizedBox(height: 24),
           ]),
         );
       },
@@ -422,36 +418,39 @@ class _DashboardViewState extends State<_DashboardView> {
   Widget _quickActionsCard(BuildContext context) {
     final s = context.l10n;
 
-    return Column(children: [
-      Row(children: [
-        Expanded(child: _actionButton(
-          icon: Icons.power_settings_new,
-          label: s.allOff,
-          color: NeumorphicColors.accentError,
-          onTap: () => context.read<DashboardBloc>().add(const AllDevicesOff()),
-        )),
-        const SizedBox(width: NeumorphicSpacing.sm),
-        Expanded(child: _actionButton(
-          icon: Icons.calendar_today,
-          label: s.schedule,
-          onTap: () {},
-        )),
-      ]),
-      const SizedBox(height: NeumorphicSpacing.sm),
-      Row(children: [
-        Expanded(child: _actionButton(
-          icon: Icons.sync,
-          label: s.sync,
-          onTap: () => context.read<DashboardBloc>().add(const DashboardRefreshed()),
-        )),
-        const SizedBox(width: NeumorphicSpacing.sm),
-        Expanded(child: _actionButton(
-          icon: Icons.settings,
-          label: s.settings,
-          onTap: () {},
-        )),
-      ]),
-    ]);
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Row(children: [
+          Expanded(child: _actionButton(
+            icon: Icons.power_settings_new,
+            label: s.allOff,
+            color: NeumorphicColors.accentError,
+            onTap: () => context.read<DashboardBloc>().add(const AllDevicesOff()),
+          )),
+          const SizedBox(width: 8),
+          Expanded(child: _actionButton(
+            icon: Icons.calendar_today,
+            label: s.schedule,
+            onTap: () => setState(() => _navIndex = 2),
+          )),
+        ]),
+        const SizedBox(height: 8),
+        Row(children: [
+          Expanded(child: _actionButton(
+            icon: Icons.sync,
+            label: s.sync,
+            onTap: () => context.read<DashboardBloc>().add(const DashboardRefreshed()),
+          )),
+          const SizedBox(width: 8),
+          Expanded(child: _actionButton(
+            icon: Icons.settings,
+            label: s.settings,
+            onTap: () {},
+          )),
+        ]),
+      ],
+    );
   }
 
   Widget _actionButton({
@@ -463,16 +462,28 @@ class _DashboardViewState extends State<_DashboardView> {
     final t = NeumorphicTheme.of(context);
     final c = color ?? NeumorphicColors.accentPrimary;
 
-    return NeumorphicButton(
-      onPressed: onTap,
-      size: NeumorphicButtonSize.large,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, color: c, size: 22),
-          const SizedBox(height: 4),
-          Text(label, style: t.typography.labelSmall),
-        ],
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+        decoration: BoxDecoration(
+          color: t.colors.cardSurface,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: t.shadows.convexSmall,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, color: c, size: 20),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: t.typography.labelSmall.copyWith(fontSize: 10),
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -564,15 +575,17 @@ class _DashboardViewState extends State<_DashboardView> {
     final t = NeumorphicTheme.of(context);
 
     return BlocBuilder<DashboardBloc, DashboardState>(
+      // Оптимизация: перестраивать только при изменении climate
+      buildWhen: (prev, curr) => prev.climate != curr.climate,
       builder: (context, state) {
         final climate = state.climate;
         return NeumorphicRightPanel(children: [
           // 1. Temperature Control
           Text(s.targetTemperature, style: t.typography.titleLarge),
-          const SizedBox(height: NeumorphicSpacing.md),
+          const SizedBox(height: 12),
           Center(child: SizedBox(
-            width: 200,
-            height: 200,
+            width: 180,
+            height: 180,
             child: NeumorphicTemperatureDial(
               value: climate?.targetTemperature ?? 22,
               minValue: 10, maxValue: 30,
@@ -581,15 +594,15 @@ class _DashboardViewState extends State<_DashboardView> {
               onChangeEnd: (v) => context.read<DashboardBloc>().add(TemperatureChanged(v)),
             ),
           )),
-          const SizedBox(height: NeumorphicSpacing.md),
+          const SizedBox(height: 12),
           
           // 2. Mode Selector
           _modeSelector(context, climate?.mode ?? ClimateMode.auto),
-          const SizedBox(height: NeumorphicSpacing.xl),
+          const SizedBox(height: 20),
           
           // 3. Airflow Control
           Text(s.airflowControl, style: t.typography.titleMedium),
-          const SizedBox(height: NeumorphicSpacing.md),
+          const SizedBox(height: 12),
           NeumorphicSlider(
             label: s.supplyAirflow,
             value: climate?.supplyAirflow ?? 50,
@@ -597,7 +610,7 @@ class _DashboardViewState extends State<_DashboardView> {
             activeColor: NeumorphicColors.accentPrimary,
             onChangeEnd: (v) => context.read<DashboardBloc>().add(SupplyAirflowChanged(v)),
           ),
-          const SizedBox(height: NeumorphicSpacing.md),
+          const SizedBox(height: 12),
           NeumorphicSlider(
             label: s.exhaustAirflow,
             value: climate?.exhaustAirflow ?? 40,
@@ -605,11 +618,11 @@ class _DashboardViewState extends State<_DashboardView> {
             activeColor: NeumorphicColors.modeCooling,
             onChangeEnd: (v) => context.read<DashboardBloc>().add(ExhaustAirflowChanged(v)),
           ),
-          const SizedBox(height: NeumorphicSpacing.xl),
+          const SizedBox(height: 20),
           
           // 4. Presets
           Text(s.presets, style: t.typography.titleMedium),
-          const SizedBox(height: NeumorphicSpacing.sm),
+          const SizedBox(height: 8),
           _presetsGrid(context, climate?.preset ?? 'auto'),
         ]);
       },

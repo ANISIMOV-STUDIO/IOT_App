@@ -1,172 +1,188 @@
 import 'package:flutter/material.dart';
-import 'package:sleek_circular_slider/sleek_circular_slider.dart';
-import '../../theme/neumorphic_theme.dart';
+import 'package:syncfusion_flutter_gauges/gauges.dart';
 import '../../theme/tokens/neumorphic_colors.dart';
 
 /// Temperature mode enum
 enum TemperatureMode { heating, cooling, auto, dry }
 
-/// Neumorphic Temperature Dial using sleek_circular_slider for smooth performance
-class NeumorphicTemperatureDial extends StatelessWidget {
+/// Premium Temperature Dial using Syncfusion Radial Gauge
+class NeumorphicTemperatureDial extends StatefulWidget {
   final double value;
   final double minValue;
   final double maxValue;
+  final TemperatureMode mode;
+  final String? label;
   final ValueChanged<double>? onChanged;
   final ValueChanged<double>? onChangeEnd;
-  final String? label;
-  final TemperatureMode mode;
-  final double size;
 
   const NeumorphicTemperatureDial({
     super.key,
     required this.value,
     this.minValue = 10,
     this.maxValue = 30,
+    this.mode = TemperatureMode.auto,
+    this.label,
     this.onChanged,
     this.onChangeEnd,
-    this.label,
-    this.mode = TemperatureMode.heating,
-    this.size = 200,
   });
 
   @override
+  State<NeumorphicTemperatureDial> createState() => _NeumorphicTemperatureDialState();
+}
+
+class _NeumorphicTemperatureDialState extends State<NeumorphicTemperatureDial> {
+  late double _currentValue;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentValue = widget.value;
+  }
+
+  @override
+  void didUpdateWidget(NeumorphicTemperatureDial oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.value != oldWidget.value) {
+      _currentValue = widget.value;
+    }
+  }
+
+  // Gradient colors based on mode
+  List<Color> get _gradientColors => switch (widget.mode) {
+    TemperatureMode.heating => [
+      const Color(0xFFFF6B6B),
+      const Color(0xFFFF8E53),
+    ],
+    TemperatureMode.cooling => [
+      const Color(0xFF4FACFE),
+      const Color(0xFF00F2FE),
+    ],
+    TemperatureMode.auto => [
+      NeumorphicColors.accentPrimary,
+      const Color(0xFF667EEA),
+    ],
+    TemperatureMode.dry => [
+      const Color(0xFFFECE00),
+      const Color(0xFFFF9500),
+    ],
+  };
+
+  Color get _primaryColor => _gradientColors[0];
+
+  @override
   Widget build(BuildContext context) {
-    final theme = NeumorphicTheme.of(context);
-    final modeColor = _getModeColor();
-
-    return SizedBox(
-      width: size,
-      height: size,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          // Outer neumorphic container
-          Container(
-            width: size,
-            height: size,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: theme.colors.cardSurface,
-              boxShadow: theme.shadows.convexLarge,
-            ),
+    return SfRadialGauge(
+      enableLoadingAnimation: true,
+      animationDuration: 800,
+      axes: <RadialAxis>[
+        RadialAxis(
+          minimum: widget.minValue,
+          maximum: widget.maxValue,
+          startAngle: 135,
+          endAngle: 45,
+          showLabels: true,
+          showTicks: true,
+          showAxisLine: true,
+          radiusFactor: 0.95,
+          
+          // Axis line (background track)
+          axisLineStyle: AxisLineStyle(
+            cornerStyle: CornerStyle.bothCurve,
+            color: Colors.grey.shade200,
+            thickness: 20,
           ),
           
-          // Sleek circular slider
-          SleekCircularSlider(
-            min: minValue,
-            max: maxValue,
-            initialValue: value.clamp(minValue, maxValue),
-            appearance: CircularSliderAppearance(
-              size: size - 16,
-              startAngle: 135,
-              angleRange: 270,
-              animationEnabled: true,
-              customWidths: CustomSliderWidths(
-                trackWidth: 6,
-                progressBarWidth: 6,
-                shadowWidth: 0,
-                handlerSize: 8,
-              ),
-              customColors: CustomSliderColors(
-                trackColor: theme.colors.textTertiary.withValues(alpha: 0.15),
-                progressBarColor: modeColor,
-                dotColor: modeColor,
-                shadowColor: Colors.transparent,
-                shadowMaxOpacity: 0,
-              ),
-              infoProperties: InfoProperties(
-                modifier: (v) => '', // Hide default text
-              ),
-            ),
-            onChange: onChanged,
-            onChangeEnd: onChangeEnd,
-            innerWidget: (percentage) => _buildInnerContent(theme, modeColor),
+          // Labels
+          labelOffset: 25,
+          axisLabelStyle: GaugeTextStyle(
+            fontSize: 11,
+            color: Colors.grey.shade500,
+            fontWeight: FontWeight.w500,
           ),
           
-          // Min/Max labels
-          Positioned(
-            left: 12,
-            bottom: size * 0.28,
-            child: Text(
-              '${minValue.round()}°',
-              style: theme.typography.labelSmall.copyWith(
-                color: theme.colors.textTertiary,
+          // Ticks
+          majorTickStyle: MajorTickStyle(
+            length: 8,
+            thickness: 2,
+            color: Colors.grey.shade300,
+          ),
+          minorTickStyle: MinorTickStyle(
+            length: 4,
+            thickness: 1,
+            color: Colors.grey.shade200,
+          ),
+          minorTicksPerInterval: 1,
+          interval: 5,
+          
+          pointers: <GaugePointer>[
+            // Range pointer (progress track)
+            RangePointer(
+              value: _currentValue,
+              cornerStyle: CornerStyle.bothCurve,
+              width: 20,
+              sizeUnit: GaugeSizeUnit.logicalPixel,
+              gradient: SweepGradient(
+                colors: _gradientColors,
+                stops: const [0.25, 0.75],
               ),
             ),
-          ),
-          Positioned(
-            right: 12,
-            bottom: size * 0.28,
-            child: Text(
-              '${maxValue.round()}°',
-              style: theme.typography.labelSmall.copyWith(
-                color: theme.colors.textTertiary,
+            
+            // Marker pointer (draggable thumb)
+            MarkerPointer(
+              value: _currentValue,
+              enableDragging: true,
+              onValueChanged: (v) {
+                setState(() => _currentValue = v);
+                widget.onChanged?.call(v);
+              },
+              onValueChangeEnd: (v) {
+                widget.onChangeEnd?.call(v);
+              },
+              markerHeight: 28,
+              markerWidth: 28,
+              markerType: MarkerType.circle,
+              color: Colors.white,
+              borderWidth: 3,
+              borderColor: _primaryColor,
+              elevation: 4,
+            ),
+          ],
+          
+          annotations: <GaugeAnnotation>[
+            // Temperature value
+            GaugeAnnotation(
+              angle: 90,
+              positionFactor: 0.0,
+              widget: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    '${_currentValue.round()}°',
+                    style: TextStyle(
+                      fontSize: 42,
+                      fontWeight: FontWeight.bold,
+                      color: _primaryColor,
+                      height: 1,
+                    ),
+                  ),
+                  if (widget.label != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Text(
+                        widget.label!,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey.shade600,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                ],
               ),
             ),
-          ),
-        ],
-      ),
+          ],
+        ),
+      ],
     );
   }
-
-  Widget _buildInnerContent(NeumorphicThemeData theme, Color modeColor) {
-    return Container(
-      margin: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: theme.colors.cardSurface,
-        boxShadow: theme.shadows.concaveMedium,
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // Mode label
-          if (label != null)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 4),
-              child: Text(
-                label!.toUpperCase(),
-                style: theme.typography.labelSmall.copyWith(
-                  letterSpacing: 1.5,
-                  color: theme.colors.textTertiary,
-                  fontSize: 9,
-                ),
-              ),
-            ),
-          
-          // Temperature value
-          Text(
-            value.round().toString(),
-            style: theme.typography.displayLarge.copyWith(
-              fontSize: size * 0.18,
-              fontWeight: FontWeight.w300,
-            ),
-          ),
-          
-          const SizedBox(height: 4),
-          
-          // Mode icon
-          Icon(
-            _getModeIcon(),
-            color: modeColor,
-            size: 20,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Color _getModeColor() => switch (mode) {
-    TemperatureMode.heating => NeumorphicColors.modeHeating,
-    TemperatureMode.cooling => NeumorphicColors.modeCooling,
-    TemperatureMode.auto => NeumorphicColors.modeAuto,
-    TemperatureMode.dry => NeumorphicColors.modeDry,
-  };
-
-  IconData _getModeIcon() => switch (mode) {
-    TemperatureMode.heating => Icons.whatshot_outlined,
-    TemperatureMode.cooling => Icons.ac_unit,
-    TemperatureMode.auto => Icons.autorenew,
-    TemperatureMode.dry => Icons.water_drop_outlined,
-  };
 }

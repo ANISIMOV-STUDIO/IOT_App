@@ -1032,14 +1032,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  sleek_circular_slider:
-    dependency: transitive
-    description:
-      name: sleek_circular_slider
-      sha256: "89c7d0d37befc9818a2b53ef6ff126c43b70485dabb189b734d46106db190931"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.0"
   smart_home_core:
     dependency: "direct main"
     description:
@@ -1126,6 +1118,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.3.1"
+  syncfusion_flutter_core:
+    dependency: transitive
+    description:
+      name: syncfusion_flutter_core
+      sha256: f1d2b52697543e13bdefdc62d15868124a265987577f53224a7dbe176c8448f0
+      url: "https://pub.dev"
+    source: hosted
+    version: "28.2.12"
+  syncfusion_flutter_gauges:
+    dependency: transitive
+    description:
+      name: syncfusion_flutter_gauges
+      sha256: "246a34dd74b6a41aed22315a1ecc773c883897450d5a0a5e7b9249c4f653b2fe"
+      url: "https://pub.dev"
+    source: hosted
+    version: "28.2.12"
   term_glyph:
     dependency: transitive
     description:
