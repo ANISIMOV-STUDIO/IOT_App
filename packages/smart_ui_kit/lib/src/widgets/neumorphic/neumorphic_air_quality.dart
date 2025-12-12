@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../theme/neumorphic_theme.dart';
+import 'neumorphic_theme_wrapper.dart';
 import '../../theme/tokens/neumorphic_colors.dart';
 import '../../theme/tokens/neumorphic_spacing.dart';
-import 'neumorphic_card.dart';
+import 'neumorphic_compat.dart';
 
 /// Air Quality Card - Shows CO2, pollutants, and quality status
 class NeumorphicAirQualityCard extends StatelessWidget {

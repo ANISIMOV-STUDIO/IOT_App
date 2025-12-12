@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../theme/neumorphic_theme.dart';
+import 'neumorphic_theme_wrapper.dart';
 import '../../theme/tokens/neumorphic_spacing.dart';
 
 /// Neumorphic Dashboard Shell - 3-column responsive layout

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../theme/neumorphic_theme.dart';
+import 'neumorphic_theme_wrapper.dart';
 import '../../theme/tokens/neumorphic_spacing.dart';
-import 'neumorphic_card.dart';
-import 'neumorphic_toggle.dart';
+import 'neumorphic_compat.dart';
 
 /// Neumorphic Device Card - Smart home device tile
 class NeumorphicDeviceCard extends StatelessWidget {

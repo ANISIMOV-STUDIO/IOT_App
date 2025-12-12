@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../theme/neumorphic_theme.dart';
+import 'neumorphic_theme_wrapper.dart';
 import '../../theme/tokens/neumorphic_colors.dart';
 
 /// Neumorphic Slider - optimized with local state for smooth dragging

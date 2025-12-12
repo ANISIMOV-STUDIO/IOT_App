@@ -2,6 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic_plus/flutter_neumorphic.dart' as np;
 import '../../theme/tokens/neumorphic_spacing.dart';
 
+/// Card variant styles
+enum NeumorphicCardVariant {
+  convex,  // Default raised look
+  flat,    // No shadow, subtle background
+  concave, // Pressed/inset look
+}
+
 /// Backwards-compatible NeumorphicCard using flutter_neumorphic_plus
 class NeumorphicCard extends StatelessWidget {
   final Widget child;
@@ -11,6 +18,7 @@ class NeumorphicCard extends StatelessWidget {
   final double borderRadius;
   final bool isPressed;
   final VoidCallback? onTap;
+  final NeumorphicCardVariant variant;
 
   const NeumorphicCard({
     super.key,
@@ -21,14 +29,21 @@ class NeumorphicCard extends StatelessWidget {
     this.borderRadius = NeumorphicSpacing.cardRadius,
     this.isPressed = false,
     this.onTap,
+    this.variant = NeumorphicCardVariant.convex,
   });
 
   @override
   Widget build(BuildContext context) {
+    final depth = switch (variant) {
+      NeumorphicCardVariant.convex => isPressed ? -2.0 : 4.0,
+      NeumorphicCardVariant.flat => 0.0,
+      NeumorphicCardVariant.concave => -3.0,
+    };
+
     Widget card = np.Neumorphic(
       style: np.NeumorphicStyle(
-        depth: isPressed ? -2 : 4,
-        intensity: 0.5,
+        depth: depth,
+        intensity: variant == NeumorphicCardVariant.flat ? 0.3 : 0.5,
         boxShape: np.NeumorphicBoxShape.roundRect(
           BorderRadius.circular(borderRadius),
         ),
@@ -45,6 +60,52 @@ class NeumorphicCard extends StatelessWidget {
       return GestureDetector(onTap: onTap, child: card);
     }
     return card;
+  }
+}
+
+/// Interactive card with tap animation
+class NeumorphicInteractiveCard extends StatefulWidget {
+  final Widget child;
+  final EdgeInsets? padding;
+  final VoidCallback? onTap;
+  final double borderRadius;
+
+  const NeumorphicInteractiveCard({
+    super.key,
+    required this.child,
+    this.padding,
+    this.onTap,
+    this.borderRadius = NeumorphicSpacing.cardRadius,
+  });
+
+  @override
+  State<NeumorphicInteractiveCard> createState() => _NeumorphicInteractiveCardState();
+}
+
+class _NeumorphicInteractiveCardState extends State<NeumorphicInteractiveCard> {
+  bool _isPressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: (_) => setState(() => _isPressed = true),
+      onTapUp: (_) {
+        setState(() => _isPressed = false);
+        widget.onTap?.call();
+      },
+      onTapCancel: () => setState(() => _isPressed = false),
+      child: np.Neumorphic(
+        style: np.NeumorphicStyle(
+          depth: _isPressed ? -2 : 4,
+          intensity: 0.5,
+          boxShape: np.NeumorphicBoxShape.roundRect(
+            BorderRadius.circular(widget.borderRadius),
+          ),
+        ),
+        padding: widget.padding ?? NeumorphicSpacing.cardInsets,
+        child: widget.child,
+      ),
+    );
   }
 }
 
