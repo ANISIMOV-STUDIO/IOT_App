@@ -13,6 +13,7 @@ dependencies:
   google_fonts: ^6.1.0
   flutter_animate: ^4.5.0
   syncfusion_flutter_gauges: ^28.1.33
+  flutter_neumorphic_plus: ^3.5.0
 
 dev_dependencies:
   flutter_test:
