@@ -1,12 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:http/http.dart' as http;
 import 'package:hvac_control/presentation/bloc/hvac_list/hvac_list_bloc_refactored.dart'
     hide HvacListLoaded;
 import 'package:hvac_control/presentation/bloc/hvac_list/hvac_list_event.dart';
 import 'package:hvac_control/presentation/bloc/hvac_list/hvac_list_state.dart';
-import 'package:hvac_control/core/services/api_service.dart';
+import 'package:hvac_control/core/services/secure_api_service.dart';
 import 'package:hvac_control/core/di/injection_container.dart';
 import '../../helpers/mocks.dart';
 import '../../helpers/test_helper.dart';
@@ -18,7 +17,7 @@ void main() {
   late MockRemoveDevice mockRemoveDevice;
   late MockConnectToDevices mockConnectToDevices;
   late MockHvacRepository mockRepository;
-  late MockApiService mockApiService;
+  late MockSecureApiService mockApiService;
 
   setUpAll(() {
     setupCommonMocks();
@@ -31,10 +30,10 @@ void main() {
     mockRemoveDevice = MockRemoveDevice();
     mockConnectToDevices = MockConnectToDevices();
     mockRepository = MockHvacRepository();
-    mockApiService = MockApiService();
+    mockApiService = MockSecureApiService();
 
     // Register mock API service
-    sl.registerLazySingleton<ApiService>(() => mockApiService);
+    sl.registerLazySingleton<SecureApiService>(() => mockApiService);
 
     bloc = HvacListBloc(
       getAllUnits: mockGetAllUnits,
@@ -191,11 +190,11 @@ void main() {
       blocTest<HvacListBloc, HvacListState>(
         'successfully adds device and refreshes list',
         build: () {
-          when(() => mockApiService.post(
+          when(() => mockApiService.post<Map<String, dynamic>>(
                     '/devices',
-                    body: any(named: 'body'),
+                    data: any(named: 'data'),
                   ))
-              .thenAnswer((_) async => http.Response('{"success": true}', 200));
+              .thenAnswer((_) async => {'success': true});
           when(() => mockGetAllUnits.call())
               .thenAnswer((_) => Stream.value(testUnits));
           return bloc;
@@ -210,9 +209,9 @@ void main() {
           HvacListLoaded(testUnits),
         ],
         verify: (_) {
-          verify(() => mockApiService.post(
+          verify(() => mockApiService.post<Map<String, dynamic>>(
                 '/devices',
-                body: {
+                data: {
                   'mac_address': testMacAddress,
                   'name': testDeviceName,
                   'location': testLocation,
@@ -224,9 +223,9 @@ void main() {
       blocTest<HvacListBloc, HvacListState>(
         'emits error when adding device fails',
         build: () {
-          when(() => mockApiService.post(
+          when(() => mockApiService.post<Map<String, dynamic>>(
                 '/devices',
-                body: any(named: 'body'),
+                data: any(named: 'data'),
               )).thenThrow(Exception('Network error'));
           return bloc;
         },
@@ -252,8 +251,8 @@ void main() {
       blocTest<HvacListBloc, HvacListState>(
         'successfully removes device and refreshes list',
         build: () {
-          when(() => mockApiService.delete('/devices/$testDeviceId'))
-              .thenAnswer((_) async => http.Response('{"success": true}', 200));
+          when(() => mockApiService.delete<Map<String, dynamic>>('/devices/$testDeviceId'))
+              .thenAnswer((_) async => {'success': true});
           when(() => mockGetAllUnits.call())
               .thenAnswer((_) => Stream.value(testUnits.skip(1).toList()));
           return bloc;
@@ -265,7 +264,7 @@ void main() {
           HvacListLoaded(testUnits.skip(1).toList()),
         ],
         verify: (_) {
-          verify(() => mockApiService.delete('/devices/$testDeviceId'))
+          verify(() => mockApiService.delete<Map<String, dynamic>>('/devices/$testDeviceId'))
               .called(1);
         },
       );
@@ -273,7 +272,7 @@ void main() {
       blocTest<HvacListBloc, HvacListState>(
         'emits error when removing device fails',
         build: () {
-          when(() => mockApiService.delete('/devices/$testDeviceId'))
+          when(() => mockApiService.delete<Map<String, dynamic>>('/devices/$testDeviceId'))
               .thenThrow(Exception('Device not found'));
           return bloc;
         },

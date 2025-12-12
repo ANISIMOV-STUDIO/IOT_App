@@ -8,11 +8,13 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // Core
-import '../services/api_service.dart';
 import '../services/grpc_service.dart';
 import '../services/theme_service.dart';
 import '../services/language_service.dart';
 import '../services/cache_service.dart';
+import '../services/secure_api_service.dart';
+import '../services/secure_storage_service.dart';
+import '../services/environment_config.dart';
 import '../config/env_config.dart';
 
 // Domain - Repositories
@@ -64,7 +66,12 @@ Future<void> init() async {
 
   //! Core - Services
   sl.registerLazySingleton(() => GrpcService());
-  sl.registerLazySingleton(() => ApiService(sl()));
+  sl.registerLazySingleton(() => SecureStorageService());
+  sl.registerLazySingleton(() => EnvironmentConfig.instance);
+  sl.registerLazySingleton(() => SecureApiService(
+    secureStorage: sl(),
+    envConfig: sl(),
+  ));
   sl.registerLazySingleton(() => ThemeService());
   sl.registerLazySingleton(() => LanguageService(sl()));
   await sl<LanguageService>().initializeDefaults();
@@ -109,7 +116,7 @@ Future<void> init() async {
   //! AUTH FEATURE
   //! =====================================================
   sl.registerFactory(
-    () => AuthBloc(apiService: sl()),
+    () => AuthBloc(apiService: sl<SecureApiService>()),
   );
 
   //! =====================================================

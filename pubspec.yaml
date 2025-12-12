@@ -30,14 +30,11 @@ dependencies:
   # Dependency Injection
   get_it: ^7.6.4
 
-  # HTTP Client
-  http: ^1.1.0
-
   # Retrofit & JSON Serialization
   retrofit: ^4.5.0
   json_annotation: ^4.9.0
 
-  # gRPC Client
+  # gRPC (для будущего API)
   grpc: ^5.0.0
   protobuf: ^5.0.0
 
@@ -45,7 +42,6 @@ dependencies:
   mobile_scanner: ^3.5.2
 
   # UI & Responsive
-  responsive_builder: ^0.7.0
   responsive_framework: ^1.5.1
   flutter_animate: ^4.5.0
   toastification: ^2.3.0
@@ -91,7 +87,7 @@ dev_dependencies:
 
   flutter_lints: ^3.0.1
 
-  # gRPC Code Generation
+  # Code Generation
   build_runner: ^2.4.0
 
   # Retrofit & JSON Code Generation

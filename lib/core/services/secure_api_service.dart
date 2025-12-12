@@ -308,6 +308,45 @@ class SecureApiService {
     return await get<Map<String, dynamic>>('/auth/me');
   }
 
+  /// Register new user
+  Future<Map<String, dynamic>> register({
+    required String email,
+    required String password,
+    required String name,
+  }) async {
+    try {
+      final response = await post<Map<String, dynamic>>(
+        '/auth/register',
+        data: {
+          'email': email,
+          'password': password,
+          'name': name,
+          'device_info': await _getDeviceInfo(),
+        },
+        requireAuth: false,
+      );
+
+      final authToken = response['access_token'];
+      final refreshToken = response['refresh_token'];
+
+      if (authToken != null) {
+        await _tokenManager.updateTokens(authToken, refreshToken);
+      }
+
+      talkerService.security('REGISTER_SUCCESS', details: {'email': email});
+      return response;
+    } catch (e) {
+      talkerService.security('REGISTER_FAILURE',
+          details: {'email': email, 'error': e.toString()});
+      rethrow;
+    }
+  }
+
+  /// Clear auth token (for error recovery)
+  Future<void> clearAuthToken() async {
+    await _tokenManager.clearTokens();
+  }
+
   /// Get device information for security tracking
   Future<Map<String, String>> _getDeviceInfo() async {
     return {

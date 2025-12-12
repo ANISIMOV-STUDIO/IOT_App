@@ -15,7 +15,7 @@ import 'package:hvac_control/domain/usecases/get_all_units.dart';
 import 'package:hvac_control/domain/usecases/device/add_device.dart';
 import 'package:hvac_control/domain/usecases/device/remove_device.dart';
 import 'package:hvac_control/domain/usecases/device/connect_to_devices.dart';
-import 'package:hvac_control/core/services/api_service.dart';
+import 'package:hvac_control/core/services/secure_api_service.dart';
 import 'package:hvac_control/core/services/cache_service.dart';
 import 'package:hvac_control/core/services/grpc_service.dart';
 import 'package:mocktail/mocktail.dart';
@@ -28,7 +28,7 @@ class MockHvacRepository extends Mock implements HvacRepository {}
 class MockAuthRepository extends Mock implements AuthRepository {}
 
 // Service Mocks
-class MockApiService extends Mock implements ApiService {}
+class MockSecureApiService extends Mock implements SecureApiService {}
 
 class MockCacheService extends Mock implements CacheService {}
 

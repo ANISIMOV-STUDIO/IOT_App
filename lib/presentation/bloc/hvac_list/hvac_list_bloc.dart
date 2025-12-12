@@ -3,7 +3,7 @@ library;
 
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../core/services/api_service.dart';
+import '../../../core/services/secure_api_service.dart';
 import '../../../core/di/injection_container.dart';
 import '../../../domain/repositories/hvac_repository.dart';
 import '../../../domain/usecases/get_all_units.dart';
@@ -98,10 +98,10 @@ class HvacListBloc extends Bloc<HvacListEvent, HvacListState> {
     Emitter<HvacListState> emit,
   ) async {
     try {
-      final apiService = sl<ApiService>();
+      final apiService = sl<SecureApiService>();
 
       // Call API to add device
-      await apiService.post('/devices', body: {
+      await apiService.post('/devices', data: {
         'mac_address': event.macAddress,
         'name': event.name,
         'location': event.location,
@@ -119,7 +119,7 @@ class HvacListBloc extends Bloc<HvacListEvent, HvacListState> {
     Emitter<HvacListState> emit,
   ) async {
     try {
-      final apiService = sl<ApiService>();
+      final apiService = sl<SecureApiService>();
 
       // Call API to remove device
       await apiService.delete('/devices/${event.deviceId}');

@@ -4,19 +4,18 @@
 /// Handles device management operations
 library;
 
-import 'dart:convert';
 import '../../domain/entities/device.dart';
-import '../../core/services/api_service.dart';
+import '../../core/services/secure_api_service.dart';
 import '../../domain/repositories/device_repository.dart';
 import '../../domain/repositories/hvac_repository.dart';
 
 /// Implementation of HvacDeviceRepository
 class DeviceRepositoryImpl implements HvacDeviceRepository {
-  final ApiService _apiService;
+  final SecureApiService _apiService;
   final HvacRepository _hvacRepository;
 
   DeviceRepositoryImpl({
-    required ApiService apiService,
+    required SecureApiService apiService,
     required HvacRepository hvacRepository,
   })  : _apiService = apiService,
         _hvacRepository = hvacRepository;
@@ -24,18 +23,16 @@ class DeviceRepositoryImpl implements HvacDeviceRepository {
   @override
   Future<Device> addDevice(DeviceInfo deviceInfo) async {
     try {
-      final response = await _apiService.post('/devices', body: {
-        'mac_address': deviceInfo.macAddress,
-        'name': deviceInfo.name,
-        if (deviceInfo.location != null) 'location': deviceInfo.location,
-        if (deviceInfo.model != null) 'model': deviceInfo.model,
-        if (deviceInfo.firmware != null) 'firmware': deviceInfo.firmware,
-      });
-
-      if (response.statusCode != 200 && response.statusCode != 201) {
-        throw Exception('Failed to add device');
-      }
-      final responseData = json.decode(response.body) as Map<String, dynamic>;
+      final responseData = await _apiService.post<Map<String, dynamic>>(
+        '/devices',
+        data: {
+          'mac_address': deviceInfo.macAddress,
+          'name': deviceInfo.name,
+          if (deviceInfo.location != null) 'location': deviceInfo.location,
+          if (deviceInfo.model != null) 'model': deviceInfo.model,
+          if (deviceInfo.firmware != null) 'firmware': deviceInfo.firmware,
+        },
+      );
 
       // Convert to Device entity
       return Device(
@@ -81,13 +78,7 @@ class DeviceRepositoryImpl implements HvacDeviceRepository {
   @override
   Future<List<DeviceInfo>> scanForDevices() async {
     try {
-      final response = await _apiService.get('/devices/scan');
-
-      // Parse response body since get() returns http.Response
-      if (response.statusCode != 200) {
-        throw Exception('Failed to scan for devices');
-      }
-      final responseData = json.decode(response.body) as Map<String, dynamic>;
+      final responseData = await _apiService.get<Map<String, dynamic>>('/devices/scan');
 
       final devices = (responseData['devices'] as List<dynamic>)
           .map((json) => DeviceInfo(
@@ -112,16 +103,13 @@ class DeviceRepositoryImpl implements HvacDeviceRepository {
   @override
   Future<bool> pairDevice(String macAddress, String pairingCode) async {
     try {
-      final response = await _apiService.post('/devices/pair', body: {
-        'mac_address': macAddress,
-        'pairing_code': pairingCode,
-      });
-
-      // Parse response body since post() returns http.Response
-      if (response.statusCode != 200 && response.statusCode != 201) {
-        throw Exception('Failed to pair device');
-      }
-      final responseData = json.decode(response.body) as Map<String, dynamic>;
+      final responseData = await _apiService.post<Map<String, dynamic>>(
+        '/devices/pair',
+        data: {
+          'mac_address': macAddress,
+          'pairing_code': pairingCode,
+        },
+      );
 
       return responseData['success'] == true;
     } catch (e) {
@@ -137,13 +125,9 @@ class DeviceRepositoryImpl implements HvacDeviceRepository {
   @override
   Future<bool> factoryReset(String deviceId) async {
     try {
-      final response = await _apiService.post('/devices/$deviceId/reset');
-
-      // Parse response body since post() returns http.Response
-      if (response.statusCode != 200) {
-        throw Exception('Failed to reset device');
-      }
-      final responseData = json.decode(response.body) as Map<String, dynamic>;
+      final responseData = await _apiService.post<Map<String, dynamic>>(
+        '/devices/$deviceId/reset',
+      );
 
       return responseData['success'] == true;
     } catch (e) {
@@ -159,16 +143,12 @@ class DeviceRepositoryImpl implements HvacDeviceRepository {
   @override
   Future<bool> updateFirmware(String deviceId, String firmwareVersion) async {
     try {
-      final response =
-          await _apiService.post('/devices/$deviceId/firmware', body: {
-        'version': firmwareVersion,
-      });
-
-      // Parse response body since post() returns http.Response
-      if (response.statusCode != 200) {
-        throw Exception('Failed to update firmware');
-      }
-      final responseData = json.decode(response.body) as Map<String, dynamic>;
+      final responseData = await _apiService.post<Map<String, dynamic>>(
+        '/devices/$deviceId/firmware',
+        data: {
+          'version': firmwareVersion,
+        },
+      );
 
       return responseData['success'] == true;
     } catch (e) {
@@ -179,13 +159,9 @@ class DeviceRepositoryImpl implements HvacDeviceRepository {
   @override
   Future<Map<String, dynamic>> getDeviceDiagnostics(String deviceId) async {
     try {
-      final response = await _apiService.get('/devices/$deviceId/diagnostics');
-
-      // Parse response body since get() returns http.Response
-      if (response.statusCode != 200) {
-        throw Exception('Failed to get device diagnostics');
-      }
-      final responseData = json.decode(response.body) as Map<String, dynamic>;
+      final responseData = await _apiService.get<Map<String, dynamic>>(
+        '/devices/$deviceId/diagnostics',
+      );
 
       return responseData;
     } catch (e) {

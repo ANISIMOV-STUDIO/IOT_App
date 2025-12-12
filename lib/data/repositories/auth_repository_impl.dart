@@ -4,9 +4,8 @@
 /// Handles actual API calls and data persistence
 library;
 
-import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../core/services/api_service.dart';
+import '../../core/services/secure_api_service.dart';
 import '../../core/services/talker_service.dart';
 import '../../data/models/user_model.dart';
 import '../../domain/entities/user.dart';
@@ -14,14 +13,13 @@ import '../../domain/repositories/auth_repository.dart';
 
 /// Implementation of AuthRepository using REST API
 class AuthRepositoryImpl implements AuthRepository {
-  final ApiService _apiService;
+  final SecureApiService _apiService;
   final SharedPreferences _prefs;
 
-  static const String _tokenKey = 'auth_token';
   static const String _userKey = 'cached_user';
 
   AuthRepositoryImpl({
-    required ApiService apiService,
+    required SecureApiService apiService,
     required SharedPreferences prefs,
   })  : _apiService = apiService,
         _prefs = prefs;
@@ -115,33 +113,24 @@ class AuthRepositoryImpl implements AuthRepository {
   bool get isAuthenticated => _apiService.isAuthenticated;
 
   @override
-  String? get authToken => _apiService.authToken;
+  String? get authToken => null; // Tokens are managed internally by SecureApiService
 
   @override
   Future<void> saveAuthToken(String token) async {
-    await _prefs.setString(_tokenKey, token);
-    // Update API service with new token
-    await _apiService.saveAuthToken(token);
+    // Tokens are managed internally by SecureApiService
+    // This method is kept for interface compatibility
   }
 
   @override
   Future<void> clearAuthToken() async {
-    await _prefs.remove(_tokenKey);
     await _apiService.clearAuthToken();
   }
 
   @override
   Future<String> refreshToken() async {
     try {
-      final response = await _apiService.post('/auth/refresh');
-      // Parse response body since post() returns http.Response
-      if (response.statusCode != 200) {
-        throw Exception('Token refresh failed');
-      }
-      final responseData = json.decode(response.body) as Map<String, dynamic>;
-      final newToken = responseData['token'] as String;
-
-      await saveAuthToken(newToken);
+      final response = await _apiService.post<Map<String, dynamic>>('/auth/refresh');
+      final newToken = response['token'] as String? ?? response['access_token'] as String;
       return newToken;
     } catch (e) {
       throw _handleError(e);

@@ -1,7 +1,7 @@
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import '../../../core/services/api_service.dart';
+import '../../../core/services/secure_api_service.dart';
 import '../../../data/models/user_model.dart';
 import '../../../domain/entities/user.dart';
 
@@ -93,9 +93,9 @@ class AuthError extends AuthState {
 
 // BLoC
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final ApiService _apiService;
+  final SecureApiService _apiService;
 
-  AuthBloc({required ApiService apiService})
+  AuthBloc({required SecureApiService apiService})
       : _apiService = apiService,
         super(const AuthInitial()) {
     on<CheckAuthStatusEvent>(_onCheckAuthStatus);
