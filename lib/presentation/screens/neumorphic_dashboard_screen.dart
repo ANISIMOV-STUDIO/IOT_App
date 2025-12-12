@@ -65,6 +65,19 @@ class _DashboardViewState extends State<_DashboardView> {
 
   Widget _mainContent(BuildContext context) {
     final s = context.l10n;
+    
+    // Переключение контента по вкладкам
+    return switch (_navIndex) {
+      0 => _dashboardContent(context, s),
+      1 => _roomsPlaceholder(context, s),
+      2 => _schedulePlaceholder(context, s),
+      3 => _statisticsPlaceholder(context, s),
+      4 => _notificationsPlaceholder(context, s),
+      _ => _dashboardContent(context, s),
+    };
+  }
+
+  Widget _dashboardContent(BuildContext context, AppStrings s) {
     return BlocBuilder<DashboardBloc, DashboardState>(
       builder: (context, state) {
         if (state.status == DashboardStatus.loading) {
@@ -88,19 +101,23 @@ class _DashboardViewState extends State<_DashboardView> {
           actions: [_langSwitch(context)],
           child: Column(children: [
             // Row 1: Device Status + Sensors
-            Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Expanded(flex: 1, child: _deviceStatusCard(context, state)),
-              const SizedBox(width: NeumorphicSpacing.cardGap),
-              Expanded(flex: 2, child: _sensorsGrid(context, state)),
-            ]),
+            IntrinsicHeight(
+              child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+                Expanded(flex: 1, child: _deviceStatusCard(context, state)),
+                const SizedBox(width: NeumorphicSpacing.cardGap),
+                Expanded(flex: 2, child: _sensorsGrid(context, state)),
+              ]),
+            ),
             const SizedBox(height: NeumorphicSpacing.cardGap),
             
             // Row 2: Schedule + Quick Actions
-            Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Expanded(flex: 3, child: _scheduleCard(context, state)),
-              const SizedBox(width: NeumorphicSpacing.cardGap),
-              Expanded(flex: 2, child: _quickActionsCard(context)),
-            ]),
+            IntrinsicHeight(
+              child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+                Expanded(flex: 3, child: _scheduleCard(context, state)),
+                const SizedBox(width: NeumorphicSpacing.cardGap),
+                Expanded(flex: 2, child: _quickActionsCard(context)),
+              ]),
+            ),
             const SizedBox(height: NeumorphicSpacing.cardGap),
             
             // Row 3: Energy Stats
@@ -112,12 +129,84 @@ class _DashboardViewState extends State<_DashboardView> {
     );
   }
 
+  Widget _roomsPlaceholder(BuildContext context, AppStrings s) {
+    final theme = NeumorphicTheme.of(context);
+    return NeumorphicMainContent(
+      title: s.rooms,
+      actions: [_langSwitch(context)],
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.meeting_room, size: 64, color: theme.colors.textTertiary),
+            const SizedBox(height: 16),
+            Text('Страница комнат в разработке', style: theme.typography.titleMedium),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _schedulePlaceholder(BuildContext context, AppStrings s) {
+    final theme = NeumorphicTheme.of(context);
+    return NeumorphicMainContent(
+      title: s.schedule,
+      actions: [_langSwitch(context)],
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.calendar_today, size: 64, color: theme.colors.textTertiary),
+            const SizedBox(height: 16),
+            Text('Страница расписания в разработке', style: theme.typography.titleMedium),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _statisticsPlaceholder(BuildContext context, AppStrings s) {
+    final theme = NeumorphicTheme.of(context);
+    return NeumorphicMainContent(
+      title: s.statistics,
+      actions: [_langSwitch(context)],
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.bar_chart, size: 64, color: theme.colors.textTertiary),
+            const SizedBox(height: 16),
+            Text('Страница статистики в разработке', style: theme.typography.titleMedium),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _notificationsPlaceholder(BuildContext context, AppStrings s) {
+    final theme = NeumorphicTheme.of(context);
+    return NeumorphicMainContent(
+      title: s.notifications,
+      actions: [_langSwitch(context)],
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.notifications_outlined, size: 64, color: theme.colors.textTertiary),
+            const SizedBox(height: 16),
+            Text('Страница уведомлений в разработке', style: theme.typography.titleMedium),
+          ],
+        ),
+      ),
+    );
+  }
+
   // ============================================
   // 1. СТАТУС УСТРОЙСТВА
   // ============================================
   Widget _deviceStatusCard(BuildContext context, DashboardState state) {
     final s = context.l10n;
-    final t = NeumorphicThemeData.light();
+    final t = NeumorphicTheme.of(context);
     final climate = state.climate;
     final isOn = climate?.isOn ?? false;
 
@@ -139,7 +228,7 @@ class _DashboardViewState extends State<_DashboardView> {
               ),
             ],
           ),
-          const Spacer(),
+          const SizedBox(height: 24),
           Text(
             climate?.deviceName ?? 'HVAC Unit',
             style: t.typography.headlineMedium,
@@ -207,7 +296,7 @@ class _DashboardViewState extends State<_DashboardView> {
     required String unit,
     required Color color,
   }) {
-    final t = NeumorphicThemeData.light();
+    final t = NeumorphicTheme.of(context);
     return NeumorphicCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -221,7 +310,6 @@ class _DashboardViewState extends State<_DashboardView> {
               ),
               child: Icon(icon, color: color, size: 20),
             ),
-            const Spacer(),
           ]),
           const SizedBox(height: 12),
           Text(label, style: t.typography.labelSmall),
@@ -247,7 +335,7 @@ class _DashboardViewState extends State<_DashboardView> {
   // ============================================
   Widget _scheduleCard(BuildContext context, DashboardState state) {
     final s = context.l10n;
-    final t = NeumorphicThemeData.light();
+    final t = NeumorphicTheme.of(context);
 
     return NeumorphicCard(
       child: Column(
@@ -372,7 +460,7 @@ class _DashboardViewState extends State<_DashboardView> {
     Color? color,
     required VoidCallback onTap,
   }) {
-    final t = NeumorphicThemeData.light();
+    final t = NeumorphicTheme.of(context);
     final c = color ?? NeumorphicColors.accentPrimary;
 
     return NeumorphicButton(
@@ -394,7 +482,7 @@ class _DashboardViewState extends State<_DashboardView> {
   // ============================================
   Widget _energyStatsCard(BuildContext context, DashboardState state) {
     final s = context.l10n;
-    final t = NeumorphicThemeData.light();
+    final t = NeumorphicTheme.of(context);
     final stats = state.energyStats;
 
     return NeumorphicCard(
@@ -473,7 +561,7 @@ class _DashboardViewState extends State<_DashboardView> {
   // ============================================
   Widget _rightPanel(BuildContext context) {
     final s = context.l10n;
-    final t = NeumorphicThemeData.light();
+    final t = NeumorphicTheme.of(context);
 
     return BlocBuilder<DashboardBloc, DashboardState>(
       builder: (context, state) {
@@ -529,7 +617,7 @@ class _DashboardViewState extends State<_DashboardView> {
   }
 
   Widget _modeSelector(BuildContext context, ClimateMode current) {
-    final t = NeumorphicThemeData.light();
+    final t = NeumorphicTheme.of(context);
     final modes = [ClimateMode.heating, ClimateMode.cooling, ClimateMode.auto, ClimateMode.ventilation];
     
     return Row(
@@ -595,7 +683,7 @@ class _DashboardViewState extends State<_DashboardView> {
     required bool isSelected,
     required VoidCallback onTap,
   }) {
-    final t = NeumorphicThemeData.light();
+    final t = NeumorphicTheme.of(context);
 
     return GestureDetector(
       onTap: onTap,
