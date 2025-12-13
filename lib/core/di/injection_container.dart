@@ -66,7 +66,11 @@ Future<void> init() async {
   //! Core - Services
   sl.registerLazySingleton(() => GrpcService());
   sl.registerLazySingleton(() => SecureStorageService());
+
+  // Initialize environment config before use
+  await EnvironmentConfig.initialize();
   sl.registerLazySingleton(() => EnvironmentConfig.instance);
+
   sl.registerLazySingleton(() => SecureApiService(
     secureStorage: sl(),
     envConfig: sl(),
