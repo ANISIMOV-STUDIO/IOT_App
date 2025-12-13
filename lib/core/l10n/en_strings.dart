@@ -133,6 +133,17 @@ class EnStrings implements AppStrings {
   @override String get sleep => 'Sleep';
 
   // ============================================
+  // SYSTEM
+  // ============================================
+  @override String get systemStatus => 'System Status';
+  @override String get device => 'Device';
+  @override String get firmware => 'Firmware';
+  @override String get connection => 'Connection';
+  @override String get efficiency => 'Efficiency';
+  @override String get filterStatus => 'Filter';
+  @override String get uptime => 'Uptime';
+
+  // ============================================
   // COMMON
   // ============================================
   @override String get save => 'Save';

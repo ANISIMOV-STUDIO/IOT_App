@@ -412,3 +412,66 @@ class NeumorphicProgressBar extends StatelessWidget {
     );
   }
 }
+
+/// Neumorphic Icon Button - small interactive button with icon
+class NeumorphicIconButton extends StatefulWidget {
+  final IconData icon;
+  final VoidCallback? onPressed;
+  final Color? iconColor;
+  final double size;
+  final String? tooltip;
+
+  const NeumorphicIconButton({
+    super.key,
+    required this.icon,
+    this.onPressed,
+    this.iconColor,
+    this.size = 40,
+    this.tooltip,
+  });
+
+  @override
+  State<NeumorphicIconButton> createState() => _NeumorphicIconButtonState();
+}
+
+class _NeumorphicIconButtonState extends State<NeumorphicIconButton> {
+  bool _isPressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final button = MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTapDown: (_) => setState(() => _isPressed = true),
+        onTapUp: (_) {
+          setState(() => _isPressed = false);
+          widget.onPressed?.call();
+        },
+        onTapCancel: () => setState(() => _isPressed = false),
+        child: np.Neumorphic(
+          style: np.NeumorphicStyle(
+            depth: _isPressed ? -2 : 3,
+            intensity: 0.5,
+            boxShape: np.NeumorphicBoxShape.roundRect(
+              BorderRadius.circular(10),
+            ),
+          ),
+          padding: EdgeInsets.all((widget.size - 20) / 2),
+          child: Icon(
+            widget.icon,
+            size: 20,
+            color: widget.iconColor,
+          ),
+        ),
+      ),
+    );
+
+    if (widget.tooltip != null) {
+      return Tooltip(
+        message: widget.tooltip!,
+        child: button,
+      );
+    }
+    return button;
+  }
+}

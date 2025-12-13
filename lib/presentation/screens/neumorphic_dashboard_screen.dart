@@ -53,6 +53,10 @@ class _DashboardViewState extends State<_DashboardView> {
         navItems: _navItems(s),
         userName: 'Артём',
         logoWidget: SvgPicture.asset('assets/images/breez-logo.svg'),
+        headerActions: [
+          _themeToggle(context),
+          _langSwitch(context),
+        ],
         pages: [
           _dashboardPage(context, s),
           _roomsPlaceholder(context, s),
@@ -286,23 +290,22 @@ class _DashboardViewState extends State<_DashboardView> {
 
         return NeumorphicMainContent(
           title: s.dashboard,
-          actions: [_langSwitch(context)],
           child: BentoGrid(
             columns: 4,
-            gap: 16,
-            cellHeight: 150,
+            gap: 12,
+            cellHeight: 180,
             items: [
-              // Row 1: Energy Stats (wide) + Device Status + Temp
+              // Row 1: Energy Stats (large 2x2) + Device + Temp
               BentoItem(
-                size: BentoSize.wide,
+                size: BentoSize.large,
                 child: _energyStatsCardBento(context, state),
               ),
               BentoItem(
-                size: BentoSize.square,
+                size: BentoSize.tall,
                 child: _deviceStatusCardBento(context, state),
               ),
               BentoItem(
-                size: BentoSize.square,
+                size: BentoSize.tall,
                 child: _sensorCardBento(
                   context,
                   icon: Icons.thermostat,
@@ -313,7 +316,7 @@ class _DashboardViewState extends State<_DashboardView> {
                 ),
               ),
 
-              // Row 2: Humidity + CO2 + Devices (wide)
+              // Row 2: Humidity + CO2 (fill under large card)
               BentoItem(
                 size: BentoSize.square,
                 child: _sensorCardBento(
@@ -336,24 +339,246 @@ class _DashboardViewState extends State<_DashboardView> {
                   color: _co2Color(climate?.co2Ppm),
                 ),
               ),
+
+              // Row 3: Full width cards
               BentoItem(
                 size: BentoSize.wide,
                 child: _deviceSwitcherCardHorizontal(context),
               ),
-
-              // Row 3: Schedule (wide) + Quick Actions (wide)
               BentoItem(
                 size: BentoSize.wide,
+                child: _airQualityCardBento(context, state),
+              ),
+
+              // Row 4: Schedule + Quick Actions + System Info
+              BentoItem(
+                size: BentoSize.square,
                 child: _scheduleCardBento(context, state),
               ),
               BentoItem(
-                size: BentoSize.wide,
+                size: BentoSize.square,
                 child: _quickActionsCardBento(context),
+              ),
+              BentoItem(
+                size: BentoSize.wide,
+                child: _systemInfoCardBento(context, state),
               ),
             ],
           ),
         );
       },
+    );
+  }
+
+  Widget _airQualityCardBento(BuildContext context, DashboardState state) {
+    final s = context.l10n;
+    final t = NeumorphicTheme.of(context);
+    final climate = state.climate;
+    final co2 = climate?.co2Ppm ?? 500;
+    final airQualityLabel = _getAirQualityLabel(co2);
+    final airQualityColor = _co2Color(co2);
+
+    return NeumorphicCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(s.airQuality, style: t.typography.titleLarge),
+              NeumorphicBadge(
+                text: airQualityLabel,
+                color: airQualityColor,
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Expanded(
+            child: Row(
+              children: [
+                // Air quality indicator
+                Expanded(
+                  flex: 2,
+                  child: _airQualityGauge(context, co2, airQualityColor),
+                ),
+                const SizedBox(width: 16),
+                // Additional metrics
+                Expanded(
+                  flex: 3,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _airMetricRow(t, 'PM2.5', '12', 'μg/m³', NeumorphicColors.airQualityGood),
+                      const SizedBox(height: 8),
+                      _airMetricRow(t, 'VOC', '0.3', 'ppm', NeumorphicColors.airQualityExcellent),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _airQualityGauge(BuildContext context, int co2, Color color) {
+    final t = NeumorphicTheme.of(context);
+    final percentage = ((2000 - co2) / 2000).clamp(0.0, 1.0);
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 70,
+          height: 70,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              CircularProgressIndicator(
+                value: percentage,
+                strokeWidth: 6,
+                backgroundColor: t.colors.textTertiary.withValues(alpha: 0.2),
+                valueColor: AlwaysStoppedAnimation(color),
+              ),
+              Text(
+                '$co2',
+                style: t.typography.numericMedium.copyWith(color: color),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text('CO₂ ppm', style: t.typography.labelSmall),
+      ],
+    );
+  }
+
+  Widget _airMetricRow(NeumorphicThemeData t, String label, String value, String unit, Color color) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(label, style: t.typography.bodyMedium),
+        Row(
+          children: [
+            Text(value, style: t.typography.titleMedium.copyWith(color: color)),
+            const SizedBox(width: 4),
+            Text(unit, style: t.typography.bodySmall),
+          ],
+        ),
+      ],
+    );
+  }
+
+  String _getAirQualityLabel(int co2) {
+    if (co2 < 600) return 'Отлично';
+    if (co2 < 800) return 'Хорошо';
+    if (co2 < 1000) return 'Умеренно';
+    if (co2 < 1500) return 'Плохо';
+    return 'Опасно';
+  }
+
+  Widget _systemInfoCardBento(BuildContext context, DashboardState state) {
+    final s = context.l10n;
+    final t = NeumorphicTheme.of(context);
+    final climate = state.climate;
+    final isOn = climate?.isOn ?? false;
+
+    return NeumorphicCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(s.systemStatus, style: t.typography.titleLarge),
+              Row(
+                children: [
+                  Text(
+                    isOn ? 'Online' : 'Offline',
+                    style: t.typography.bodyMedium.copyWith(
+                      color: isOn ? NeumorphicColors.accentSuccess : t.colors.textTertiary,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  _GlowingStatusDot(
+                    color: isOn ? NeumorphicColors.accentSuccess : t.colors.textTertiary,
+                    isGlowing: isOn,
+                    size: 10,
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Expanded(
+            child: Row(
+              children: [
+                // Left column - device info
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _systemInfoRow(t, s.device, climate?.deviceName ?? 'HVAC'),
+                      _systemInfoRow(t, s.firmware, 'v2.4.1'),
+                      _systemInfoRow(t, s.connection, 'Wi-Fi'),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 16),
+                // Right column - efficiency metrics
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _efficiencyRow(t, s.efficiency, 94, NeumorphicColors.accentSuccess),
+                      _efficiencyRow(t, s.filterStatus, 78, NeumorphicColors.airQualityGood),
+                      _efficiencyRow(t, s.uptime, 99, NeumorphicColors.accentPrimary),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _systemInfoRow(NeumorphicThemeData t, String label, String value) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(label, style: t.typography.bodySmall.copyWith(color: t.colors.textSecondary)),
+        Text(value, style: t.typography.bodySmall.copyWith(fontWeight: FontWeight.w600)),
+      ],
+    );
+  }
+
+  Widget _efficiencyRow(NeumorphicThemeData t, String label, int percent, Color color) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(label, style: t.typography.bodySmall.copyWith(color: t.colors.textSecondary)),
+            Text('$percent%', style: t.typography.bodySmall.copyWith(color: color, fontWeight: FontWeight.w600)),
+          ],
+        ),
+        const SizedBox(height: 2),
+        LinearProgressIndicator(
+          value: percent / 100,
+          backgroundColor: t.colors.textTertiary.withValues(alpha: 0.2),
+          valueColor: AlwaysStoppedAnimation(color),
+          minHeight: 4,
+          borderRadius: BorderRadius.circular(2),
+        ),
+      ],
     );
   }
 
@@ -487,28 +712,30 @@ class _DashboardViewState extends State<_DashboardView> {
     final t = NeumorphicTheme.of(context);
     return NeumorphicCard(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: color.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(10),
             ),
-            child: Icon(icon, color: color, size: 20),
+            child: Icon(icon, color: color, size: 24),
           ),
-          const Spacer(),
-          Text(label, style: t.typography.labelSmall),
-          const SizedBox(height: 4),
+          const SizedBox(height: 12),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.alphabetic,
             children: [
-              Text(value, style: t.typography.numericLarge),
+              Text(value, style: t.typography.numericLarge.copyWith(fontSize: 28)),
               const SizedBox(width: 4),
-              Text(unit, style: t.typography.labelSmall),
+              Text(unit, style: t.typography.bodySmall),
             ],
           ),
+          const SizedBox(height: 4),
+          Text(label, style: t.typography.bodySmall.copyWith(color: t.colors.textSecondary)),
         ],
       ),
     );
@@ -701,7 +928,6 @@ class _DashboardViewState extends State<_DashboardView> {
     final theme = NeumorphicTheme.of(context);
     return NeumorphicMainContent(
       title: s.rooms,
-      actions: [_langSwitch(context)],
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -719,7 +945,6 @@ class _DashboardViewState extends State<_DashboardView> {
     final theme = NeumorphicTheme.of(context);
     return NeumorphicMainContent(
       title: s.schedule,
-      actions: [_langSwitch(context)],
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -737,7 +962,6 @@ class _DashboardViewState extends State<_DashboardView> {
     final theme = NeumorphicTheme.of(context);
     return NeumorphicMainContent(
       title: s.statistics,
-      actions: [_langSwitch(context)],
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -755,7 +979,6 @@ class _DashboardViewState extends State<_DashboardView> {
     final theme = NeumorphicTheme.of(context);
     return NeumorphicMainContent(
       title: s.notifications,
-      actions: [_langSwitch(context)],
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -777,102 +1000,152 @@ class _DashboardViewState extends State<_DashboardView> {
     final t = NeumorphicTheme.of(context);
 
     return BlocBuilder<DashboardBloc, DashboardState>(
-      // Оптимизация: перестраивать только при изменении climate
       buildWhen: (prev, curr) => prev.climate != curr.climate,
       builder: (context, state) {
         final climate = state.climate;
-        return NeumorphicRightPanel(children: [
-          // 1. Temperature Control
-          Text(s.targetTemperature, style: t.typography.titleLarge),
-          const SizedBox(height: 12),
-          Center(child: SizedBox(
-            width: 180,
-            height: 180,
-            child: NeumorphicTemperatureDial(
-              value: climate?.targetTemperature ?? 22,
-              minValue: 10, maxValue: 30,
-              mode: _mapMode(climate?.mode),
-              label: _modeLabel(context, climate?.mode ?? ClimateMode.auto),
-              onChangeEnd: (v) => context.read<DashboardBloc>().add(TemperatureChanged(v)),
+        return Column(
+          children: [
+            // Card 1: Climate Control
+            Expanded(
+              child: NeumorphicCard(
+                variant: NeumorphicCardVariant.concave,
+                padding: const EdgeInsets.all(NeumorphicSpacing.md),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(s.targetTemperature, style: t.typography.titleLarge),
+                    const SizedBox(height: NeumorphicSpacing.sm),
+                    Center(child: SizedBox(
+                      width: 140,
+                      height: 140,
+                      child: NeumorphicTemperatureDial(
+                        value: climate?.targetTemperature ?? 22,
+                        minValue: 10, maxValue: 30,
+                        mode: _mapMode(climate?.mode),
+                        label: _modeLabel(context, climate?.mode ?? ClimateMode.auto),
+                        onChangeEnd: (v) => context.read<DashboardBloc>().add(TemperatureChanged(v)),
+                      ),
+                    )),
+                    const SizedBox(height: NeumorphicSpacing.sm),
+                    NeumorphicSegmentedControl<ClimateMode>(
+                      segments: [
+                        SegmentItem(value: ClimateMode.heating, label: s.heating, icon: Icons.whatshot_outlined, activeColor: NeumorphicColors.modeHeating),
+                        SegmentItem(value: ClimateMode.cooling, label: s.cooling, icon: Icons.ac_unit, activeColor: NeumorphicColors.modeCooling),
+                        SegmentItem(value: ClimateMode.auto, label: s.auto, icon: Icons.autorenew, activeColor: NeumorphicColors.modeAuto),
+                        SegmentItem(value: ClimateMode.ventilation, label: s.ventilation, icon: Icons.air, activeColor: NeumorphicColors.accentPrimary),
+                      ],
+                      selectedValue: climate?.mode ?? ClimateMode.auto,
+                      onSelected: (mode) => context.read<DashboardBloc>().add(ClimateModeChanged(mode)),
+                    ),
+                    const SizedBox(height: NeumorphicSpacing.md),
+                    Divider(color: t.colors.textTertiary.withValues(alpha: 0.2)),
+                    const SizedBox(height: NeumorphicSpacing.md),
+                    // Airflow Control
+                    Text(s.airflowControl, style: t.typography.titleMedium),
+                    const SizedBox(height: NeumorphicSpacing.sm),
+                    NeumorphicSlider(
+                      label: s.supplyAirflow,
+                      value: climate?.supplyAirflow ?? 50,
+                      suffix: '%',
+                      activeColor: NeumorphicColors.accentPrimary,
+                      onChangeEnd: (v) => context.read<DashboardBloc>().add(SupplyAirflowChanged(v)),
+                    ),
+                    const SizedBox(height: NeumorphicSpacing.xs),
+                    NeumorphicSlider(
+                      label: s.exhaustAirflow,
+                      value: climate?.exhaustAirflow ?? 40,
+                      suffix: '%',
+                      activeColor: NeumorphicColors.modeCooling,
+                      onChangeEnd: (v) => context.read<DashboardBloc>().add(ExhaustAirflowChanged(v)),
+                    ),
+                    const Spacer(),
+                    // Presets at bottom
+                    NeumorphicPresetGrid(
+                      presets: [
+                        PresetItem(id: 'auto', label: s.auto, icon: Icons.hdr_auto, activeColor: NeumorphicColors.modeAuto),
+                        PresetItem(id: 'night', label: s.night, icon: Icons.nights_stay, activeColor: NeumorphicColors.modeCooling),
+                        PresetItem(id: 'turbo', label: s.turbo, icon: Icons.rocket_launch, activeColor: NeumorphicColors.modeHeating),
+                        PresetItem(id: 'eco', label: s.eco, icon: Icons.eco, activeColor: NeumorphicColors.accentSuccess),
+                        PresetItem(id: 'away', label: s.away, icon: Icons.sensor_door, activeColor: NeumorphicColors.accentPrimary),
+                      ],
+                      selectedId: climate?.preset ?? 'auto',
+                      onSelected: (id) => context.read<DashboardBloc>().add(PresetChanged(id)),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          )),
-          const SizedBox(height: 12),
-          
-          // 2. Mode Selector (Segmented Control)
-          NeumorphicSegmentedControl<ClimateMode>(
-            segments: [
-              SegmentItem(
-                value: ClimateMode.heating,
-                label: s.heating,
-                icon: Icons.whatshot_outlined,
-                activeColor: NeumorphicColors.modeHeating,
+            const SizedBox(height: NeumorphicSpacing.md),
+            // Card 2: Notifications
+            Expanded(
+              child: NeumorphicCard(
+                variant: NeumorphicCardVariant.concave,
+                padding: const EdgeInsets.all(NeumorphicSpacing.md),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(s.notifications, style: t.typography.titleMedium),
+                        NeumorphicBadge(text: '2', color: NeumorphicColors.accentError),
+                      ],
+                    ),
+                    const SizedBox(height: NeumorphicSpacing.sm),
+                    _compactNotificationItem(t, Icons.filter_alt, 'Замена фильтра', 'Через 14 дней', NeumorphicColors.accentWarning),
+                    const SizedBox(height: NeumorphicSpacing.xs),
+                    _compactNotificationItem(t, Icons.update, 'Обновление', 'Доступна v2.5.0', NeumorphicColors.accentPrimary),
+                  ],
+                ),
               ),
-              SegmentItem(
-                value: ClimateMode.cooling,
-                label: s.cooling,
-                icon: Icons.ac_unit,
-                activeColor: NeumorphicColors.modeCooling,
-              ),
-              SegmentItem(
-                value: ClimateMode.auto,
-                label: s.auto,
-                icon: Icons.autorenew,
-                activeColor: NeumorphicColors.modeAuto,
-              ),
-              SegmentItem(
-                value: ClimateMode.ventilation,
-                label: s.ventilation,
-                icon: Icons.air,
-                activeColor: NeumorphicColors.accentPrimary,
-              ),
-            ],
-            selectedValue: climate?.mode ?? ClimateMode.auto,
-            onSelected: (mode) => context.read<DashboardBloc>().add(ClimateModeChanged(mode)),
-          ),
-          const SizedBox(height: 20),
-          
-          // 3. Airflow Control
-          Text(s.airflowControl, style: t.typography.titleMedium),
-          const SizedBox(height: 12),
-          NeumorphicSlider(
-            label: s.supplyAirflow,
-            value: climate?.supplyAirflow ?? 50,
-            suffix: '%',
-            activeColor: NeumorphicColors.accentPrimary,
-            onChangeEnd: (v) => context.read<DashboardBloc>().add(SupplyAirflowChanged(v)),
-          ),
-          const SizedBox(height: 12),
-          NeumorphicSlider(
-            label: s.exhaustAirflow,
-            value: climate?.exhaustAirflow ?? 40,
-            suffix: '%',
-            activeColor: NeumorphicColors.modeCooling,
-            onChangeEnd: (v) => context.read<DashboardBloc>().add(ExhaustAirflowChanged(v)),
-          ),
-          const SizedBox(height: 20),
-          
-          // 4. Presets (Icon Grid 2×3)
-          Text(s.presets, style: t.typography.titleMedium),
-          const SizedBox(height: 12),
-          NeumorphicPresetGrid(
-            presets: [
-              PresetItem(id: 'auto', label: s.auto, icon: Icons.hdr_auto, activeColor: NeumorphicColors.modeAuto),
-              PresetItem(id: 'night', label: s.night, icon: Icons.nights_stay, activeColor: NeumorphicColors.modeCooling),
-              PresetItem(id: 'turbo', label: s.turbo, icon: Icons.rocket_launch, activeColor: NeumorphicColors.modeHeating),
-              PresetItem(id: 'eco', label: s.eco, icon: Icons.eco, activeColor: NeumorphicColors.accentSuccess),
-              PresetItem(id: 'away', label: s.away, icon: Icons.sensor_door, activeColor: NeumorphicColors.accentPrimary),
-            ],
-            selectedId: climate?.preset ?? 'auto',
-            onSelected: (id) => context.read<DashboardBloc>().add(PresetChanged(id)),
-          ),
-        ]);
+            ),
+          ],
+        );
       },
+    );
+  }
+
+  Widget _compactNotificationItem(NeumorphicThemeData t, IconData icon, String title, String subtitle, Color color) {
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(icon, size: 18, color: color),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title, style: t.typography.bodyMedium.copyWith(fontWeight: FontWeight.w600)),
+              Text(subtitle, style: t.typography.bodySmall.copyWith(color: t.colors.textSecondary)),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
   // ============================================
   // HELPERS
   // ============================================
+  Widget _themeToggle(BuildContext context) {
+    final t = NeumorphicTheme.of(context);
+    // TODO: Implement actual theme switching
+    return NeumorphicIconButton(
+      icon: Icons.dark_mode_outlined,
+      iconColor: t.colors.textSecondary,
+      tooltip: 'Тёмная тема',
+      onPressed: () {
+        // Theme toggle will be implemented later
+      },
+    );
+  }
+
   Widget _langSwitch(BuildContext context) {
     final loc = context.locale;
     final t = NeumorphicTheme.of(context);

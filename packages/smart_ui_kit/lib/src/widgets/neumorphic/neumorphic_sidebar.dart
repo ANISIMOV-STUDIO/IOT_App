@@ -44,13 +44,13 @@ class NeumorphicSidebar extends StatelessWidget {
       duration: const Duration(milliseconds: 200),
       width: width,
       height: double.infinity,
-      padding: const EdgeInsets.all(NeumorphicSpacing.md),
+      margin: const EdgeInsets.only(right: NeumorphicSpacing.md),
       child: Column(
         children: [
           // Logo outside the neumorphic container
           _buildLogo(theme, compact: isCollapsed),
 
-          const SizedBox(height: NeumorphicSpacing.md),
+          const SizedBox(height: NeumorphicSpacing.sm),
 
           // Neumorphic container with navigation
           Expanded(
@@ -102,44 +102,46 @@ class NeumorphicSidebar extends StatelessWidget {
     );
   }
 
-  /// Logo row - flat, no neumorphic container
+  /// Logo row - flat, no neumorphic container, fixed 56px height
   Widget _buildLogo(NeumorphicThemeData theme, {required bool compact}) {
     final logo = compact ? (logoWidgetCompact ?? logoWidget) : logoWidget;
 
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: compact ? 4 : 8,
-        vertical: compact ? 8 : 12,
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // Logo widget or default icon
-          if (logo != null)
-            SizedBox(
-              width: compact ? 32 : 40,
-              height: compact ? 32 : 40,
-              child: logo,
-            )
-          else
-            Icon(
-              Icons.ac_unit_rounded,
-              color: NeumorphicColors.accentPrimary,
-              size: compact ? 28 : 36,
-            ),
-          if (!compact) ...[
-            const SizedBox(width: 12),
-            Text(
-              appName,
-              style: theme.typography.titleLarge.copyWith(
-                fontWeight: FontWeight.w700,
-                letterSpacing: 2,
-                color: theme.colors.textPrimary,
+    return SizedBox(
+      height: 56, // Match main content header height
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: compact ? 4 : 8,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Logo widget or default icon
+            if (logo != null)
+              SizedBox(
+                width: compact ? 32 : 40,
+                height: compact ? 32 : 40,
+                child: logo,
+              )
+            else
+              Icon(
+                Icons.ac_unit_rounded,
+                color: NeumorphicColors.accentPrimary,
+                size: compact ? 28 : 36,
               ),
-            ),
+            if (!compact) ...[
+              const SizedBox(width: 12),
+              Text(
+                appName,
+                style: theme.typography.titleLarge.copyWith(
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 2,
+                  color: theme.colors.textPrimary,
+                ),
+              ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }

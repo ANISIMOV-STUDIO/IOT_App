@@ -23,6 +23,7 @@ class ResponsiveDashboardShell extends StatelessWidget {
   final List<Widget> pages;
   final Widget Function(BuildContext)? rightPanelBuilder;
   final Widget Function(BuildContext)? mobileHeaderBuilder;
+  final List<Widget>? headerActions; // Actions in top-right corner (lang switch, theme toggle)
   final String? userName;
   final String? userAvatarUrl;
   final bool sidebarCollapsed;
@@ -41,6 +42,7 @@ class ResponsiveDashboardShell extends StatelessWidget {
     required this.pages,
     this.rightPanelBuilder,
     this.mobileHeaderBuilder,
+    this.headerActions,
     this.userName,
     this.userAvatarUrl,
     this.sidebarCollapsed = false,
@@ -163,56 +165,73 @@ class ResponsiveDashboardShell extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final isLargeDesktop = screenWidth >= 1440;
 
+    // Header row height (logo, title) + gap
+    const headerHeight = 56.0 + NeumorphicSpacing.sm;
+    final panelWidth = isLargeDesktop ? rightPanelWidth : rightPanelWidth * 0.85;
+
     return Scaffold(
       backgroundColor: theme.colors.surface,
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: maxWidth),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Stack(
             children: [
-              // Sidebar
-              NeumorphicSidebar(
-                selectedIndex: selectedIndex,
-                onItemSelected: onIndexChanged,
-                items: navItems,
-                userName: userName,
-                userAvatarUrl: userAvatarUrl,
-                isCollapsed: sidebarCollapsed,
-                onToggleSidebar: onToggleSidebar,
-                logoWidget: logoWidget,
-                appName: appName,
-              ),
-              // Main content
-              Expanded(
-                child: IndexedStack(
-                  index: selectedIndex.clamp(0, pages.length - 1),
-                  children: pages,
+              // Main layout
+              Padding(
+                padding: const EdgeInsets.all(NeumorphicSpacing.md),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // Sidebar
+                    NeumorphicSidebar(
+                      selectedIndex: selectedIndex,
+                      onItemSelected: onIndexChanged,
+                      items: navItems,
+                      userName: userName,
+                      userAvatarUrl: userAvatarUrl,
+                      isCollapsed: sidebarCollapsed,
+                      onToggleSidebar: onToggleSidebar,
+                      logoWidget: logoWidget,
+                      appName: appName,
+                    ),
+                    // Main content
+                    Expanded(
+                      child: IndexedStack(
+                        index: selectedIndex.clamp(0, pages.length - 1),
+                        children: pages,
+                      ),
+                    ),
+                    // Right panel area - starts below header row level
+                    if (rightPanelBuilder != null)
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: NeumorphicSpacing.md,
+                          top: headerHeight,
+                        ),
+                        child: SizedBox(
+                          width: panelWidth,
+                          child: rightPanelBuilder!(context),
+                        ),
+                      ),
+                  ],
                 ),
               ),
-              // Right panel (aligned with sidebar neumorphic area)
-              if (rightPanelBuilder != null)
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 72, // Logo height + spacing to align with sidebar
-                    right: 16,
-                    bottom: 16,
-                  ),
-                  child: Container(
-                    width: isLargeDesktop ? rightPanelWidth : rightPanelWidth * 0.85,
-                    decoration: BoxDecoration(
-                      color: theme.colors.cardSurface,
-                      borderRadius: BorderRadius.circular(24),
-                      boxShadow: [
-                        BoxShadow(
-                          color: theme.colors.shadowDark.withValues(alpha: 0.08),
-                          blurRadius: 20,
-                          offset: const Offset(-5, 0),
-                        ),
+              // Header actions (top-right corner, above right panel)
+              if (headerActions != null && headerActions!.isNotEmpty)
+                Positioned(
+                  top: NeumorphicSpacing.md,
+                  right: NeumorphicSpacing.md + (rightPanelBuilder != null ? panelWidth / 2 - 60 : 0),
+                  child: SizedBox(
+                    height: 56,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        for (int i = 0; i < headerActions!.length; i++) ...[
+                          if (i > 0) const SizedBox(width: NeumorphicSpacing.sm),
+                          headerActions![i],
+                        ],
                       ],
                     ),
-                    clipBehavior: Clip.antiAlias,
-                    child: rightPanelBuilder!(context),
                   ),
                 ),
             ],
@@ -310,22 +329,25 @@ class NeumorphicMainContent extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (title != null)
-          Padding(
-            padding: const EdgeInsets.fromLTRB(
-              NeumorphicSpacing.lg,
-              56, // Align with sidebar (logo height + spacing)
-              NeumorphicSpacing.lg,
-              NeumorphicSpacing.md,
+        // Header row - height matches sidebar logo area
+        SizedBox(
+          height: 56, // Match sidebar logo height
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: NeumorphicSpacing.lg,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(title!, style: theme.typography.headlineLarge),
+                if (title != null)
+                  Text(title!, style: theme.typography.headlineLarge),
                 if (actions != null) Row(children: actions!),
               ],
             ),
           ),
+        ),
+        const SizedBox(height: NeumorphicSpacing.sm),
         Expanded(
           child: SingleChildScrollView(
             padding: padding ?? const EdgeInsets.symmetric(
@@ -340,6 +362,7 @@ class NeumorphicMainContent extends StatelessWidget {
 }
 
 /// Right panel for climate controls
+/// Starts at the same level as main content (below header row)
 class NeumorphicRightPanel extends StatelessWidget {
   final List<Widget> children;
   final EdgeInsetsGeometry? padding;

@@ -140,6 +140,17 @@ class RuStrings implements AppStrings {
   @override String get sleep => 'Сон';
 
   // ============================================
+  // СИСТЕМА
+  // ============================================
+  @override String get systemStatus => 'Состояние системы';
+  @override String get device => 'Устройство';
+  @override String get firmware => 'Прошивка';
+  @override String get connection => 'Связь';
+  @override String get efficiency => 'КПД';
+  @override String get filterStatus => 'Фильтр';
+  @override String get uptime => 'Аптайм';
+
+  // ============================================
   // ОБЩИЕ
   // ============================================
   @override String get save => 'Сохранить';

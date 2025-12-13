@@ -131,6 +131,17 @@ abstract class AppStrings {
   String get sleep;
 
   // ============================================
+  // СИСТЕМА
+  // ============================================
+  String get systemStatus;
+  String get device;
+  String get firmware;
+  String get connection;
+  String get efficiency;
+  String get filterStatus;
+  String get uptime;
+
+  // ============================================
   // ОБЩИЕ
   // ============================================
   String get save;
