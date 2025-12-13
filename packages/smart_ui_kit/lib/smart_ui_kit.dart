@@ -38,7 +38,7 @@ export 'src/theme/tokens/neumorphic_typography.dart';
 // CUSTOM IOT WIDGETS
 // ============================================
 
-// Temperature control (Syncfusion)
+// Temperature control (custom neumorphic dial)
 export 'src/widgets/neumorphic/neumorphic_temperature_dial.dart';
 
 // Custom slider with local state
@@ -51,6 +51,10 @@ export 'src/widgets/neumorphic/neumorphic_dashboard_shell.dart';
 // IoT-specific components
 export 'src/widgets/neumorphic/neumorphic_device_card.dart';
 export 'src/widgets/neumorphic/neumorphic_air_quality.dart';
+
+// Preset & Mode selection
+export 'src/widgets/neumorphic/neumorphic_preset_grid.dart';
+export 'src/widgets/neumorphic/neumorphic_segmented_control.dart';
 
 // ============================================
 // LEGACY (for backwards compatibility)

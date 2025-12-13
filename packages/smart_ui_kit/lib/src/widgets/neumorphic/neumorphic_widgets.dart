@@ -11,3 +11,5 @@ export 'neumorphic_device_card.dart';
 export 'neumorphic_air_quality.dart';
 export 'neumorphic_temperature_dial.dart';
 export 'neumorphic_slider.dart';
+export 'neumorphic_preset_grid.dart';
+export 'neumorphic_segmented_control.dart';

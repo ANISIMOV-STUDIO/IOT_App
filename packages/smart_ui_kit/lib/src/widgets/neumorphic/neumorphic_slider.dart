@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic_plus/flutter_neumorphic.dart' as np;
 import 'neumorphic_theme_wrapper.dart';
 import '../../theme/tokens/neumorphic_colors.dart';
+import '../../theme/tokens/neumorphic_spacing.dart';
 
-/// Neumorphic Slider - optimized with local state for smooth dragging
+/// Neumorphic Slider with proper inset track and convex thumb
 class NeumorphicSlider extends StatefulWidget {
   final double value;
   final double min;
@@ -13,6 +15,7 @@ class NeumorphicSlider extends StatefulWidget {
   final String? label;
   final String? suffix;
   final bool showValue;
+  final double height;
 
   const NeumorphicSlider({
     super.key,
@@ -25,6 +28,7 @@ class NeumorphicSlider extends StatefulWidget {
     this.label,
     this.suffix,
     this.showValue = true,
+    this.height = 20,
   });
 
   @override
@@ -33,6 +37,7 @@ class NeumorphicSlider extends StatefulWidget {
 
 class _NeumorphicSliderState extends State<NeumorphicSlider> {
   late double _localValue;
+  bool _isDragging = false;
 
   @override
   void initState() {
@@ -43,11 +48,12 @@ class _NeumorphicSliderState extends State<NeumorphicSlider> {
   @override
   void didUpdateWidget(NeumorphicSlider oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // Sync with external value only when not dragging
-    if (widget.value != oldWidget.value) {
+    if (!_isDragging && widget.value != oldWidget.value) {
       _localValue = widget.value;
     }
   }
+
+  double get _progress => ((_localValue - widget.min) / (widget.max - widget.min)).clamp(0.0, 1.0);
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +67,7 @@ class _NeumorphicSliderState extends State<NeumorphicSlider> {
         // Label and value row
         if (widget.label != null || widget.showValue)
           Padding(
-            padding: const EdgeInsets.only(bottom: 6),
+            padding: const EdgeInsets.only(bottom: 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -70,95 +76,161 @@ class _NeumorphicSliderState extends State<NeumorphicSlider> {
                 if (widget.showValue)
                   Text(
                     '${_localValue.round()}${widget.suffix ?? ''}',
-                    style: theme.typography.numericMedium,
+                    style: theme.typography.numericMedium.copyWith(color: color),
                   ),
               ],
             ),
           ),
 
-        // Slider with neumorphic track
-        Container(
-          height: 28,
-          decoration: BoxDecoration(
-            color: theme.colors.surface,
-            borderRadius: BorderRadius.circular(14),
-            boxShadow: theme.shadows.concaveSmall,
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 2),
-          child: SliderTheme(
-            data: SliderThemeData(
-              trackHeight: 20,
-              activeTrackColor: color.withValues(alpha: 0.3),
-              inactiveTrackColor: Colors.transparent,
-              thumbColor: color,
-              overlayColor: color.withValues(alpha: 0.1),
-              thumbShape: _NeumorphicThumbShape(color: color),
-              trackShape: const RoundedRectSliderTrackShape(),
-              overlayShape: const RoundSliderOverlayShape(overlayRadius: 16),
-            ),
-            child: Slider(
-              value: _localValue.clamp(widget.min, widget.max),
-              min: widget.min,
-              max: widget.max,
-              onChanged: (v) {
-                setState(() => _localValue = v);
-                widget.onChanged?.call(v);
+        // Neumorphic slider track
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final trackWidth = constraints.maxWidth;
+            final thumbSize = widget.height + 8;
+            final thumbPosition = _progress * (trackWidth - thumbSize);
+
+            return GestureDetector(
+              onHorizontalDragStart: (_) {
+                setState(() => _isDragging = true);
               },
-              onChangeEnd: widget.onChangeEnd,
-            ),
-          ),
+              onHorizontalDragUpdate: (details) {
+                _updateValue(details.localPosition.dx, trackWidth, thumbSize);
+              },
+              onHorizontalDragEnd: (_) {
+                setState(() => _isDragging = false);
+                widget.onChangeEnd?.call(_localValue);
+              },
+              onTapDown: (details) {
+                _updateValue(details.localPosition.dx, trackWidth, thumbSize);
+                widget.onChangeEnd?.call(_localValue);
+              },
+              child: SizedBox(
+                height: thumbSize,
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    // Track background (concave/inset)
+                    Positioned.fill(
+                      top: (thumbSize - widget.height) / 2,
+                      bottom: (thumbSize - widget.height) / 2,
+                      child: np.Neumorphic(
+                        style: np.NeumorphicStyle(
+                          depth: -3,
+                          intensity: 0.7,
+                          boxShape: np.NeumorphicBoxShape.roundRect(
+                            BorderRadius.circular(widget.height / 2),
+                          ),
+                        ),
+                        child: const SizedBox.expand(),
+                      ),
+                    ),
+
+                    // Progress fill
+                    Positioned(
+                      left: 3,
+                      top: (thumbSize - widget.height) / 2 + 3,
+                      bottom: (thumbSize - widget.height) / 2 + 3,
+                      child: AnimatedContainer(
+                        duration: _isDragging
+                            ? Duration.zero
+                            : const Duration(milliseconds: 150),
+                        width: (_progress * (trackWidth - 6)).clamp(0.0, trackWidth - 6),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular((widget.height - 6) / 2),
+                          gradient: LinearGradient(
+                            colors: [
+                              color.withValues(alpha: 0.8),
+                              color,
+                            ],
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: color.withValues(alpha: 0.3),
+                              blurRadius: 4,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    // Thumb (convex/raised)
+                    Positioned(
+                      left: thumbPosition,
+                      top: 0,
+                      child: _NeumorphicThumb(
+                        size: thumbSize,
+                        color: color,
+                        isPressed: _isDragging,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
         ),
       ],
     );
   }
-}
 
-/// Custom thumb shape for neumorphic slider
-class _NeumorphicThumbShape extends SliderComponentShape {
-  final Color color;
-  
-  const _NeumorphicThumbShape({required this.color});
+  void _updateValue(double dx, double trackWidth, double thumbSize) {
+    final newProgress = ((dx - thumbSize / 2) / (trackWidth - thumbSize)).clamp(0.0, 1.0);
+    final newValue = widget.min + newProgress * (widget.max - widget.min);
 
-  @override
-  Size getPreferredSize(bool isEnabled, bool isDiscrete) => const Size(20, 20);
-
-  @override
-  void paint(
-    PaintingContext context,
-    Offset center, {
-    required Animation<double> activationAnimation,
-    required Animation<double> enableAnimation,
-    required bool isDiscrete,
-    required TextPainter labelPainter,
-    required RenderBox parentBox,
-    required SliderThemeData sliderTheme,
-    required TextDirection textDirection,
-    required double value,
-    required double textScaleFactor,
-    required Size sizeWithOverflow,
-  }) {
-    final canvas = context.canvas;
-    
-    // Shadow
-    final shadowPaint = Paint()
-      ..color = Colors.black.withValues(alpha: 0.12)
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 3);
-    canvas.drawCircle(center + const Offset(0, 1), 9, shadowPaint);
-    
-    // Thumb
-    final paint = Paint()..color = color;
-    canvas.drawCircle(center, 10, paint);
-    
-    // Highlight
-    final highlightPaint = Paint()
-      ..color = Colors.white.withValues(alpha: 0.25)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.5;
-    canvas.drawCircle(center, 8, highlightPaint);
+    setState(() => _localValue = newValue);
+    widget.onChanged?.call(newValue);
   }
 }
 
-/// Preset buttons for slider
+/// Convex neumorphic thumb
+class _NeumorphicThumb extends StatelessWidget {
+  final double size;
+  final Color color;
+  final bool isPressed;
+
+  const _NeumorphicThumb({
+    required this.size,
+    required this.color,
+    this.isPressed = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return np.Neumorphic(
+      style: np.NeumorphicStyle(
+        depth: isPressed ? 2 : 4,
+        intensity: 0.6,
+        surfaceIntensity: 0.15,
+        color: Colors.white,
+        boxShape: const np.NeumorphicBoxShape.circle(),
+      ),
+      child: Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: color.withValues(alpha: 0.5),
+            width: 2,
+          ),
+        ),
+        child: Center(
+          child: Container(
+            width: size * 0.35,
+            height: size * 0.35,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: color,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Preset buttons for slider (neumorphic style)
 class NeumorphicSliderPresets extends StatelessWidget {
   final List<SliderPreset> presets;
   final double currentValue;
@@ -173,33 +245,33 @@ class NeumorphicSliderPresets extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = NeumorphicTheme.of(context);
-
     return Row(
       children: presets.map((preset) {
         final isSelected = (currentValue - preset.value).abs() < 1;
 
         return Expanded(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 2),
+            padding: const EdgeInsets.symmetric(horizontal: 3),
             child: GestureDetector(
               onTap: () => onPresetSelected?.call(preset.value),
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                decoration: BoxDecoration(
-                  color: isSelected ? theme.colors.cardSurface : theme.colors.surface,
-                  borderRadius: BorderRadius.circular(8),
-                  boxShadow: isSelected ? theme.shadows.convexSmall : null,
-                  border: isSelected
-                      ? Border.all(color: NeumorphicColors.accentPrimary.withValues(alpha: 0.3))
-                      : null,
+              child: np.Neumorphic(
+                style: np.NeumorphicStyle(
+                  depth: isSelected ? -2 : 3,
+                  intensity: 0.5,
+                  boxShape: np.NeumorphicBoxShape.roundRect(
+                    BorderRadius.circular(NeumorphicSpacing.radiusSm),
+                  ),
                 ),
+                padding: const EdgeInsets.symmetric(vertical: 8),
                 child: Center(
                   child: Text(
                     preset.label,
-                    style: theme.typography.labelSmall.copyWith(
-                      color: isSelected ? theme.colors.textPrimary : theme.colors.textSecondary,
+                    style: TextStyle(
                       fontSize: 11,
+                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                      color: isSelected
+                          ? NeumorphicColors.accentPrimary
+                          : Colors.grey.shade600,
                     ),
                   ),
                 ),

@@ -596,8 +596,37 @@ class _DashboardViewState extends State<_DashboardView> {
           )),
           const SizedBox(height: 12),
           
-          // 2. Mode Selector
-          _modeSelector(context, climate?.mode ?? ClimateMode.auto),
+          // 2. Mode Selector (Segmented Control)
+          NeumorphicSegmentedControl<ClimateMode>(
+            segments: [
+              SegmentItem(
+                value: ClimateMode.heating,
+                label: s.heating,
+                icon: Icons.whatshot_outlined,
+                activeColor: NeumorphicColors.modeHeating,
+              ),
+              SegmentItem(
+                value: ClimateMode.cooling,
+                label: s.cooling,
+                icon: Icons.ac_unit,
+                activeColor: NeumorphicColors.modeCooling,
+              ),
+              SegmentItem(
+                value: ClimateMode.auto,
+                label: s.auto,
+                icon: Icons.autorenew,
+                activeColor: NeumorphicColors.modeAuto,
+              ),
+              SegmentItem(
+                value: ClimateMode.ventilation,
+                label: s.ventilation,
+                icon: Icons.air,
+                activeColor: NeumorphicColors.accentPrimary,
+              ),
+            ],
+            selectedValue: climate?.mode ?? ClimateMode.auto,
+            onSelected: (mode) => context.read<DashboardBloc>().add(ClimateModeChanged(mode)),
+          ),
           const SizedBox(height: 20),
           
           // 3. Airflow Control
@@ -620,111 +649,22 @@ class _DashboardViewState extends State<_DashboardView> {
           ),
           const SizedBox(height: 20),
           
-          // 4. Presets
+          // 4. Presets (Icon Grid 2×3)
           Text(s.presets, style: t.typography.titleMedium),
-          const SizedBox(height: 8),
-          _presetsGrid(context, climate?.preset ?? 'auto'),
+          const SizedBox(height: 12),
+          NeumorphicPresetGrid(
+            presets: [
+              PresetItem(id: 'auto', label: s.auto, icon: Icons.hdr_auto, activeColor: NeumorphicColors.modeAuto),
+              PresetItem(id: 'night', label: s.night, icon: Icons.nights_stay, activeColor: NeumorphicColors.modeCooling),
+              PresetItem(id: 'turbo', label: s.turbo, icon: Icons.rocket_launch, activeColor: NeumorphicColors.modeHeating),
+              PresetItem(id: 'eco', label: s.eco, icon: Icons.eco, activeColor: NeumorphicColors.accentSuccess),
+              PresetItem(id: 'away', label: s.away, icon: Icons.sensor_door, activeColor: NeumorphicColors.accentPrimary),
+            ],
+            selectedId: climate?.preset ?? 'auto',
+            onSelected: (id) => context.read<DashboardBloc>().add(PresetChanged(id)),
+          ),
         ]);
       },
-    );
-  }
-
-  Widget _modeSelector(BuildContext context, ClimateMode current) {
-    final t = NeumorphicTheme.of(context);
-    final modes = [ClimateMode.heating, ClimateMode.cooling, ClimateMode.auto, ClimateMode.ventilation];
-    
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: modes.map((m) {
-        final sel = m == current;
-        return GestureDetector(
-          onTap: () => context.read<DashboardBloc>().add(ClimateModeChanged(m)),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            decoration: BoxDecoration(
-              color: sel ? t.colors.cardSurface : Colors.transparent,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: sel ? t.shadows.convexSmall : null,
-            ),
-            child: Column(mainAxisSize: MainAxisSize.min, children: [
-              Icon(_modeIcon(m), color: sel ? _modeColor(m) : t.colors.textTertiary, size: 22),
-              const SizedBox(height: 2),
-              Text(
-                _modeLabel(context, m),
-                style: t.typography.labelSmall.copyWith(
-                  color: sel ? t.colors.textPrimary : t.colors.textTertiary,
-                  fontSize: 10,
-                ),
-              ),
-            ]),
-          ),
-        );
-      }).toList(),
-    );
-  }
-
-  Widget _presetsGrid(BuildContext context, String currentPreset) {
-    final s = context.l10n;
-    final presets = [
-      ('auto', s.auto, Icons.hdr_auto),
-      ('night', s.night, Icons.nights_stay),
-      ('turbo', s.turbo, Icons.rocket_launch),
-      ('eco', s.eco, Icons.eco),
-      ('away', s.away, Icons.sensor_door),
-    ];
-
-    return Wrap(
-      spacing: 8,
-      runSpacing: 8,
-      children: presets.map((p) {
-        final isSelected = currentPreset == p.$1;
-        return _presetChip(
-          context,
-          label: p.$2,
-          icon: p.$3,
-          isSelected: isSelected,
-          onTap: () => context.read<DashboardBloc>().add(PresetChanged(p.$1)),
-        );
-      }).toList(),
-    );
-  }
-
-  Widget _presetChip(
-    BuildContext context, {
-    required String label,
-    required IconData icon,
-    required bool isSelected,
-    required VoidCallback onTap,
-  }) {
-    final t = NeumorphicTheme.of(context);
-
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        decoration: BoxDecoration(
-          color: isSelected ? NeumorphicColors.accentPrimary : Colors.transparent,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: isSelected ? NeumorphicColors.accentPrimary : t.colors.textTertiary,
-          ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 14, color: isSelected ? Colors.white : t.colors.textSecondary),
-            const SizedBox(width: 6),
-            Text(
-              label,
-              style: t.typography.labelSmall.copyWith(
-                color: isSelected ? Colors.white : t.colors.textSecondary,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 
@@ -788,21 +728,4 @@ class _DashboardViewState extends State<_DashboardView> {
     };
   }
 
-  IconData _modeIcon(ClimateMode m) => switch (m) {
-    ClimateMode.heating => Icons.whatshot_outlined,
-    ClimateMode.cooling => Icons.ac_unit,
-    ClimateMode.auto => Icons.autorenew,
-    ClimateMode.dry => Icons.water_drop_outlined,
-    ClimateMode.ventilation => Icons.air,
-    ClimateMode.off => Icons.power_settings_new,
-  };
-
-  Color _modeColor(ClimateMode m) => switch (m) {
-    ClimateMode.heating => NeumorphicColors.modeHeating,
-    ClimateMode.cooling => NeumorphicColors.modeCooling,
-    ClimateMode.auto => NeumorphicColors.modeAuto,
-    ClimateMode.dry => NeumorphicColors.modeDry,
-    ClimateMode.ventilation => NeumorphicColors.accentPrimary,
-    ClimateMode.off => Colors.grey,
-  };
 }

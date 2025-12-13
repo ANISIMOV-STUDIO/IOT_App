@@ -3,8 +3,8 @@
 /// Enhanced API service with modular architecture
 library;
 
-import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform, TargetPlatform;
 import 'package:talker_dio_logger/talker_dio_logger.dart';
 
 import '../constants/security_constants.dart';
@@ -59,7 +59,7 @@ class SecureApiService {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'X-App-Version': _envConfig.appVersion,
-        'X-Platform': Platform.operatingSystem,
+        'X-Platform': _getPlatformName(),
         ...SecurityConstants.securityHeaders,
       },
     );
@@ -347,13 +347,30 @@ class SecureApiService {
     await _tokenManager.clearTokens();
   }
 
+  /// Get platform name (web-safe)
+  static String _getPlatformName() {
+    if (kIsWeb) return 'web';
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+        return 'android';
+      case TargetPlatform.iOS:
+        return 'ios';
+      case TargetPlatform.macOS:
+        return 'macos';
+      case TargetPlatform.windows:
+        return 'windows';
+      case TargetPlatform.linux:
+        return 'linux';
+      case TargetPlatform.fuchsia:
+        return 'fuchsia';
+    }
+  }
+
   /// Get device information for security tracking
   Future<Map<String, String>> _getDeviceInfo() async {
     return {
-      'platform': Platform.operatingSystem,
-      'version': Platform.version,
-      'locale': Platform.localeName,
-      'hostname': Platform.localHostname,
+      'platform': _getPlatformName(),
+      'is_web': kIsWeb.toString(),
     };
   }
 }
