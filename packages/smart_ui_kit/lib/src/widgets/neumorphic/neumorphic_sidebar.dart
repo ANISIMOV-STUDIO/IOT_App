@@ -146,58 +146,35 @@ class NeumorphicSidebar extends StatelessWidget {
   }
 
   Widget _buildUserProfile(NeumorphicThemeData theme) {
-    return np.Neumorphic(
-      style: np.NeumorphicStyle(
-        depth: -2, // Concave effect
-        intensity: 0.4,
-        boxShape: np.NeumorphicBoxShape.roundRect(
-          BorderRadius.circular(14),
-        ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: NeumorphicSpacing.xs,
+        vertical: NeumorphicSpacing.sm,
       ),
-      padding: const EdgeInsets.all(NeumorphicSpacing.sm),
       child: Row(
         children: [
           // Avatar
-          np.Neumorphic(
-            style: np.NeumorphicStyle(
-              depth: 3,
-              intensity: 0.5,
-              boxShape: const np.NeumorphicBoxShape.circle(),
-            ),
-            padding: const EdgeInsets.all(2),
-            child: CircleAvatar(
-              radius: 20,
-              backgroundColor: theme.colors.cardSurface,
-              backgroundImage: userAvatarUrl != null
-                  ? NetworkImage(userAvatarUrl!)
-                  : null,
-              child: userAvatarUrl == null
-                  ? Icon(Icons.person, color: theme.colors.textSecondary, size: 20)
-                  : null,
-            ),
+          CircleAvatar(
+            radius: 18,
+            backgroundColor: theme.colors.cardSurface,
+            backgroundImage: userAvatarUrl != null
+                ? NetworkImage(userAvatarUrl!)
+                : null,
+            child: userAvatarUrl == null
+                ? Icon(Icons.person, color: theme.colors.textSecondary, size: 18)
+                : null,
           ),
 
           const SizedBox(width: NeumorphicSpacing.sm),
 
-          // User info
+          // User name only
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'С возвращением',
-                  style: theme.typography.labelSmall.copyWith(
-                    color: theme.colors.textTertiary,
-                  ),
-                ),
-                Text(
-                  userName ?? 'Пользователь',
-                  style: theme.typography.titleSmall.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
+            child: Text(
+              userName ?? 'Пользователь',
+              style: theme.typography.titleSmall.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
+              overflow: TextOverflow.ellipsis,
             ),
           ),
         ],

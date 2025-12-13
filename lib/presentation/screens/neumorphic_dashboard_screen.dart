@@ -52,13 +52,7 @@ class _DashboardViewState extends State<_DashboardView> {
         onIndexChanged: (i) => setState(() => _navIndex = i),
         navItems: _navItems(s),
         userName: 'Артём',
-        logoWidget: SvgPicture.asset(
-          'assets/images/breez-logo.svg',
-          colorFilter: const ColorFilter.mode(
-            Color(0xFF00518E),
-            BlendMode.srcIn,
-          ),
-        ),
+        logoWidget: SvgPicture.asset('assets/images/breez-logo.svg'),
         pages: [
           _dashboardPage(context, s),
           _roomsPlaceholder(context, s),

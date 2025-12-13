@@ -57,8 +57,8 @@ abstract class NeumorphicColors {
   // ACCENT COLORS (shared)
   // ============================================
   
-  /// Primary accent - Blue
-  static const Color accentPrimary = Color(0xFF0984E3);
+  /// Primary accent - Corporate Blue (from BREEZ logo)
+  static const Color accentPrimary = Color(0xFF00518E);
   
   /// Success - Green
   static const Color accentSuccess = Color(0xFF00B894);
@@ -102,7 +102,7 @@ abstract class NeumorphicColors {
   // TOGGLE / SWITCH COLORS
   // ============================================
   
-  static const Color toggleActiveTrack = Color(0xFF0984E3);
+  static const Color toggleActiveTrack = Color(0xFF00518E);
   static const Color toggleActiveThumb = Color(0xFFFFFFFF);
   static const Color toggleInactiveTrack = Color(0xFFB2BEC3);
   static const Color toggleInactiveThumb = Color(0xFFFFFFFF);
