@@ -14,6 +14,9 @@ class NeumorphicSidebar extends StatelessWidget {
   final List<NeumorphicNavItem>? bottomItems;
   final bool isCollapsed;
   final VoidCallback? onToggleSidebar;
+  final Widget? logoWidget;
+  final Widget? logoWidgetCompact;
+  final String appName;
 
   const NeumorphicSidebar({
     super.key,
@@ -25,6 +28,9 @@ class NeumorphicSidebar extends StatelessWidget {
     this.bottomItems,
     this.isCollapsed = false,
     this.onToggleSidebar,
+    this.logoWidget,
+    this.logoWidgetCompact,
+    this.appName = 'BREEZ',
   });
 
   @override
@@ -97,8 +103,10 @@ class NeumorphicSidebar extends StatelessWidget {
     );
   }
 
-  /// Neumorphic BREEZ logo
+  /// Neumorphic logo container
   Widget _buildLogo(NeumorphicThemeData theme, {required bool compact}) {
+    final logo = compact ? (logoWidgetCompact ?? logoWidget) : logoWidget;
+
     return np.Neumorphic(
       style: np.NeumorphicStyle(
         depth: 3,
@@ -112,30 +120,37 @@ class NeumorphicSidebar extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Snowflake/wind icon for HVAC
-          Container(
-            padding: EdgeInsets.all(compact ? 6 : 8),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  NeumorphicColors.accentPrimary,
-                  NeumorphicColors.modeCooling,
-                ],
+          // Logo widget or default icon
+          if (logo != null)
+            SizedBox(
+              width: compact ? 30 : 36,
+              height: compact ? 30 : 36,
+              child: logo,
+            )
+          else
+            Container(
+              padding: EdgeInsets.all(compact ? 6 : 8),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    NeumorphicColors.accentPrimary,
+                    NeumorphicColors.modeCooling,
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(compact ? 8 : 10),
               ),
-              borderRadius: BorderRadius.circular(compact ? 8 : 10),
+              child: Icon(
+                Icons.ac_unit_rounded,
+                color: Colors.white,
+                size: compact ? 18 : 22,
+              ),
             ),
-            child: Icon(
-              Icons.ac_unit_rounded,
-              color: Colors.white,
-              size: compact ? 18 : 22,
-            ),
-          ),
           if (!compact) ...[
             const SizedBox(width: 12),
             Text(
-              'BREEZ',
+              appName,
               style: theme.typography.titleLarge.copyWith(
                 fontWeight: FontWeight.w700,
                 letterSpacing: 2,

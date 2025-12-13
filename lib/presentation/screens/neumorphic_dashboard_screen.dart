@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:smart_ui_kit/smart_ui_kit.dart';
 
 import '../../core/l10n/l10n.dart';
@@ -51,6 +52,7 @@ class _DashboardViewState extends State<_DashboardView> {
         onIndexChanged: (i) => setState(() => _navIndex = i),
         navItems: _navItems(s),
         userName: 'Артём',
+        logoWidget: SvgPicture.asset('assets/images/breez-logo.svg'),
         pages: [
           _dashboardPage(context, s),
           _roomsPlaceholder(context, s),

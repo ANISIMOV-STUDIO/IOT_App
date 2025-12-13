@@ -27,6 +27,8 @@ class ResponsiveDashboardShell extends StatelessWidget {
   final String? userAvatarUrl;
   final bool sidebarCollapsed;
   final VoidCallback? onToggleSidebar;
+  final Widget? logoWidget;
+  final String appName;
 
   static const double maxWidth = 1920.0;
   static const double rightPanelWidth = 360.0;
@@ -43,6 +45,8 @@ class ResponsiveDashboardShell extends StatelessWidget {
     this.userAvatarUrl,
     this.sidebarCollapsed = false,
     this.onToggleSidebar,
+    this.logoWidget,
+    this.appName = 'BREEZ',
   });
 
   /// Breakpoint constants
@@ -176,6 +180,8 @@ class ResponsiveDashboardShell extends StatelessWidget {
                 userAvatarUrl: userAvatarUrl,
                 isCollapsed: sidebarCollapsed,
                 onToggleSidebar: onToggleSidebar,
+                logoWidget: logoWidget,
+                appName: appName,
               ),
               // Main content
               Expanded(
