@@ -41,7 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
         backgroundColor: theme.scaffoldBackgroundColor,
         body: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(AppSpacing.pageMargin),
+            padding: const EdgeInsets.all(24),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -53,15 +53,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 24),
                 Text(
-                  'ZILON', 
-                  style: AppTypography.displayLarge.copyWith(
+                  'ZILON',
+                  style: theme.textTheme.displayLarge?.copyWith(
                     color: theme.colorScheme.onSurface,
                     letterSpacing: 2,
                   ),
                 ),
                 Text(
                   'Climate Control System',
-                  style: AppTypography.bodyMedium.copyWith(
+                  style: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.colorScheme.onSurface.withValues(alpha:0.6),
                   ),
                 ),
@@ -88,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         Text(
                           'Welcome Back',
-                          style: AppTypography.displayMedium.copyWith(fontSize: 24),
+                          style: theme.textTheme.headlineMedium?.copyWith(fontSize: 24),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 32),
@@ -140,7 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             const Expanded(child: Divider()),
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 16),
-                              child: Text('OR', style: AppTypography.labelSmall),
+                              child: Text('OR', style: theme.textTheme.labelSmall),
                             ),
                             const Expanded(child: Divider()),
                           ],
@@ -173,15 +173,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 
                 // Register Link
                 TextButton(
-                  onPressed: () {}, 
+                  onPressed: () {},
                   child: RichText(
                     text: TextSpan(
                       text: "Don't have an account? ",
-                      style: AppTypography.bodyMedium.copyWith(color: theme.colorScheme.onSurface.withValues(alpha:0.6)),
+                      style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurface.withValues(alpha:0.6)),
                       children: [
                         TextSpan(
                           text: 'Register',
-                          style: AppTypography.bodyMedium.copyWith(
+                          style: theme.textTheme.bodyMedium?.copyWith(
                             color: theme.colorScheme.primary,
                             fontWeight: FontWeight.bold,
                           ),

@@ -25,14 +25,14 @@ class NeumorphicTheme extends StatelessWidget {
     return np.NeumorphicTheme(
       themeMode: data.isDark ? ThemeMode.dark : ThemeMode.light,
       theme: np.NeumorphicThemeData(
-        baseColor: data.colors.surface,
+        baseColor: data.colors.cardSurface, // Cards should be lighter than surface
         accentColor: colors.NeumorphicColors.accentPrimary,
         depth: 4,
         intensity: 0.5,
         lightSource: np.LightSource.topLeft,
       ),
       darkTheme: np.NeumorphicThemeData(
-        baseColor: data.colors.surface,
+        baseColor: data.colors.cardSurface, // Cards should be lighter than surface
         accentColor: colors.NeumorphicColors.accentPrimary,
         depth: 4,
         intensity: 0.3,

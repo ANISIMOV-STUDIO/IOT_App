@@ -30,6 +30,10 @@ class DashboardState extends Equatable {
   final List<ScheduleItem> schedule;
   final String? errorMessage;
 
+  // HVAC устройства
+  final List<HvacDevice> hvacDevices;
+  final String? selectedHvacDeviceId;
+
   const DashboardState({
     this.status = DashboardStatus.initial,
     this.devices = const [],
@@ -39,7 +43,18 @@ class DashboardState extends Equatable {
     this.occupants = const [],
     this.schedule = const [],
     this.errorMessage,
+    this.hvacDevices = const [],
+    this.selectedHvacDeviceId,
   });
+
+  /// Получить выбранное HVAC устройство
+  HvacDevice? get selectedHvacDevice {
+    if (selectedHvacDeviceId == null || hvacDevices.isEmpty) return null;
+    return hvacDevices.firstWhere(
+      (d) => d.id == selectedHvacDeviceId,
+      orElse: () => hvacDevices.first,
+    );
+  }
 
   // Default schedule for demo
   static const defaultSchedule = [
@@ -63,6 +78,8 @@ class DashboardState extends Equatable {
     List<Occupant>? occupants,
     List<ScheduleItem>? schedule,
     String? errorMessage,
+    List<HvacDevice>? hvacDevices,
+    String? selectedHvacDeviceId,
   }) {
     return DashboardState(
       status: status ?? this.status,
@@ -73,9 +90,14 @@ class DashboardState extends Equatable {
       occupants: occupants ?? this.occupants,
       schedule: schedule ?? this.schedule,
       errorMessage: errorMessage,
+      hvacDevices: hvacDevices ?? this.hvacDevices,
+      selectedHvacDeviceId: selectedHvacDeviceId ?? this.selectedHvacDeviceId,
     );
   }
 
   @override
-  List<Object?> get props => [status, devices, climate, energyStats, powerUsage, occupants, schedule, errorMessage];
+  List<Object?> get props => [
+    status, devices, climate, energyStats, powerUsage,
+    occupants, schedule, errorMessage, hvacDevices, selectedHvacDeviceId,
+  ];
 }

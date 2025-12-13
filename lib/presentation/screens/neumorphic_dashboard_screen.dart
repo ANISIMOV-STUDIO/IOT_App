@@ -6,7 +6,9 @@ import '../../core/di/injection_container.dart';
 import '../../core/l10n/l10n.dart';
 import '../../domain/entities/climate.dart';
 import '../bloc/dashboard/dashboard_bloc.dart';
+import '../widgets/charts/energy_chart.dart';
 import '../widgets/climate/mobile_temperature_card.dart';
+import '../widgets/devices/device_switcher_card.dart';
 
 /// Главный экран HVAC Dashboard
 class NeumorphicDashboardScreen extends StatelessWidget {
@@ -270,7 +272,7 @@ class _DashboardViewState extends State<_DashboardView> {
     );
   }
 
-  // Desktop dashboard content (original layout)
+  // Desktop dashboard content with Bento Grid
   Widget _desktopDashboardContent(BuildContext context, AppStrings s) {
     return BlocBuilder<DashboardBloc, DashboardState>(
       builder: (context, state) {
@@ -280,32 +282,428 @@ class _DashboardViewState extends State<_DashboardView> {
         if (state.status == DashboardStatus.failure) {
           return _errorView(context, s, state.errorMessage);
         }
+
+        final climate = state.climate;
+
         return NeumorphicMainContent(
           title: s.dashboard,
           actions: [_langSwitch(context)],
-          child: Column(children: [
-            // Row 1: Device Status + Sensors
-            Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Expanded(flex: 1, child: _deviceStatusCard(context, state)),
-              const SizedBox(width: NeumorphicSpacing.cardGap),
-              Expanded(flex: 2, child: _sensorsGrid(context, state)),
-            ]),
-            const SizedBox(height: NeumorphicSpacing.cardGap),
+          child: BentoGrid(
+            columns: 4,
+            gap: 16,
+            cellHeight: 150,
+            items: [
+              // Row 1: Energy Stats (wide) + Device Status + Temp
+              BentoItem(
+                size: BentoSize.wide,
+                child: _energyStatsCardBento(context, state),
+              ),
+              BentoItem(
+                size: BentoSize.square,
+                child: _deviceStatusCardBento(context, state),
+              ),
+              BentoItem(
+                size: BentoSize.square,
+                child: _sensorCardBento(
+                  context,
+                  icon: Icons.thermostat,
+                  label: s.temperature,
+                  value: '${climate?.currentTemperature.toStringAsFixed(1) ?? '--'}',
+                  unit: '°C',
+                  color: NeumorphicColors.modeHeating,
+                ),
+              ),
 
-            // Row 2: Schedule + Quick Actions
-            Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Expanded(flex: 3, child: _scheduleCard(context, state)),
-              const SizedBox(width: NeumorphicSpacing.cardGap),
-              Expanded(flex: 2, child: _quickActionsCard(context)),
-            ]),
-            const SizedBox(height: NeumorphicSpacing.cardGap),
+              // Row 2: Humidity + CO2 + Devices (wide)
+              BentoItem(
+                size: BentoSize.square,
+                child: _sensorCardBento(
+                  context,
+                  icon: Icons.water_drop,
+                  label: s.humidity,
+                  value: '${climate?.humidity.toStringAsFixed(0) ?? '--'}',
+                  unit: '%',
+                  color: NeumorphicColors.modeCooling,
+                ),
+              ),
+              BentoItem(
+                size: BentoSize.square,
+                child: _sensorCardBento(
+                  context,
+                  icon: Icons.cloud_outlined,
+                  label: 'CO₂',
+                  value: '${climate?.co2Ppm ?? '--'}',
+                  unit: 'ppm',
+                  color: _co2Color(climate?.co2Ppm),
+                ),
+              ),
+              BentoItem(
+                size: BentoSize.wide,
+                child: _deviceSwitcherCardHorizontal(context),
+              ),
 
-            // Row 3: Energy Stats
-            _energyStatsCard(context, state),
-            const SizedBox(height: 24),
-          ]),
+              // Row 3: Schedule (wide) + Quick Actions (wide)
+              BentoItem(
+                size: BentoSize.wide,
+                child: _scheduleCardBento(context, state),
+              ),
+              BentoItem(
+                size: BentoSize.wide,
+                child: _quickActionsCardBento(context),
+              ),
+            ],
+          ),
         );
       },
+    );
+  }
+
+  // ============================================
+  // BENTO CARD VARIANTS (all use NeumorphicCard + unified typography)
+  // ============================================
+
+  Widget _energyStatsCardBento(BuildContext context, DashboardState state) {
+    final s = context.l10n;
+    final t = NeumorphicTheme.of(context);
+    final stats = state.energyStats;
+
+    return NeumorphicCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(s.usageStatus, style: t.typography.titleMedium),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: NeumorphicColors.accentPrimary.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Text(
+                  s.today,
+                  style: t.typography.labelSmall.copyWith(
+                    color: NeumorphicColors.accentPrimary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              _miniStat(context, s.totalSpent, '${stats?.totalKwh.toStringAsFixed(1) ?? '0'}', 'кВт⋅ч'),
+              const SizedBox(width: 24),
+              _miniStat(context, s.totalHours, '${stats?.totalHours ?? 0}', 'ч'),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Expanded(
+            child: EnergyConsumptionChart(
+              hourlyData: stats?.hourlyData.isNotEmpty == true
+                  ? stats!.hourlyData.map((h) => h.kwh).toList()
+                  : EnergyChartData.generateSampleHourlyData(),
+              height: 60,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _miniStat(BuildContext context, String label, String value, String unit) {
+    final t = NeumorphicTheme.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: t.typography.labelSmall),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.baseline,
+          textBaseline: TextBaseline.alphabetic,
+          children: [
+            Text(value, style: t.typography.numericMedium),
+            const SizedBox(width: 2),
+            Text(unit, style: t.typography.labelSmall),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _deviceStatusCardBento(BuildContext context, DashboardState state) {
+    final s = context.l10n;
+    final t = NeumorphicTheme.of(context);
+    final climate = state.climate;
+    final isOn = climate?.isOn ?? false;
+
+    return NeumorphicCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: (isOn ? NeumorphicColors.accentPrimary : Colors.grey)
+                      .withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(
+                  Icons.power_settings_new,
+                  color: isOn ? NeumorphicColors.accentPrimary : Colors.grey,
+                  size: 20,
+                ),
+              ),
+              NeumorphicToggle(
+                value: isOn,
+                onChanged: (v) => context.read<DashboardBloc>().add(DevicePowerToggled(v)),
+              ),
+            ],
+          ),
+          const Spacer(),
+          Text(climate?.deviceName ?? 'HVAC', style: t.typography.titleMedium),
+          const SizedBox(height: 4),
+          Row(
+            children: [
+              Container(
+                width: 8,
+                height: 8,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: isOn ? NeumorphicColors.accentSuccess : Colors.grey,
+                ),
+              ),
+              const SizedBox(width: 6),
+              Text(
+                isOn ? s.active : s.standby,
+                style: t.typography.labelSmall.copyWith(
+                  color: isOn ? NeumorphicColors.accentSuccess : Colors.grey,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _sensorCardBento(
+    BuildContext context, {
+    required IconData icon,
+    required String label,
+    required String value,
+    required String unit,
+    required Color color,
+  }) {
+    final t = NeumorphicTheme.of(context);
+    return NeumorphicCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(icon, color: color, size: 20),
+          ),
+          const Spacer(),
+          Text(label, style: t.typography.labelSmall),
+          const SizedBox(height: 4),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: [
+              Text(value, style: t.typography.numericLarge),
+              const SizedBox(width: 4),
+              Text(unit, style: t.typography.labelSmall),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _deviceSwitcherCardHorizontal(BuildContext context) {
+    return BlocBuilder<DashboardBloc, DashboardState>(
+      buildWhen: (prev, curr) =>
+          prev.hvacDevices != curr.hvacDevices ||
+          prev.selectedHvacDeviceId != curr.selectedHvacDeviceId,
+      builder: (context, state) {
+        // Конвертируем HvacDevice -> DeviceInfo для виджета
+        final devices = state.hvacDevices.map((d) => DeviceInfo(
+          id: d.id,
+          name: d.brand,
+          type: d.type,
+          isOnline: d.isOnline,
+          isActive: d.isActive,
+          icon: d.icon,
+        )).toList();
+
+        return DeviceSwitcherHorizontal(
+          devices: devices,
+          selectedDeviceId: state.selectedHvacDeviceId,
+          onDeviceSelected: (id) {
+            context.read<DashboardBloc>().add(HvacDeviceSelected(id));
+          },
+          onAddDevice: () {
+            // TODO: Navigate to add device screen
+          },
+        );
+      },
+    );
+  }
+
+  Widget _scheduleCardBento(BuildContext context, DashboardState state) {
+    final s = context.l10n;
+    final t = NeumorphicTheme.of(context);
+
+    return NeumorphicCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(s.schedule, style: t.typography.titleMedium),
+              Icon(Icons.calendar_month, color: t.colors.textTertiary, size: 20),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Expanded(
+            child: ListView.builder(
+              itemCount: state.schedule.length,
+              padding: EdgeInsets.zero,
+              itemBuilder: (context, index) {
+                final item = state.schedule[index];
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: _scheduleItemBento(context, item),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _scheduleItemBento(BuildContext context, ScheduleItem item) {
+    final t = NeumorphicTheme.of(context);
+    return Row(
+      children: [
+        Container(
+          width: 8,
+          height: 8,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: item.isActive ? NeumorphicColors.accentPrimary : t.colors.textTertiary,
+          ),
+        ),
+        const SizedBox(width: 8),
+        Text(
+          item.time,
+          style: t.typography.bodyMedium.copyWith(
+            fontWeight: FontWeight.w600,
+            color: item.isActive ? NeumorphicColors.accentPrimary : t.colors.textSecondary,
+          ),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            item.event,
+            style: t.typography.bodyMedium.copyWith(color: t.colors.textSecondary),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        Text(
+          '${item.temperature.round()}°',
+          style: t.typography.labelSmall,
+        ),
+      ],
+    );
+  }
+
+  Widget _quickActionsCardBento(BuildContext context) {
+    final s = context.l10n;
+    final t = NeumorphicTheme.of(context);
+
+    return NeumorphicCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(s.quickActions, style: t.typography.titleMedium),
+          const SizedBox(height: 12),
+          Expanded(
+            child: Row(
+              children: [
+                Expanded(child: _quickActionItem(
+                  context,
+                  icon: Icons.power_settings_new,
+                  label: s.allOff,
+                  color: NeumorphicColors.accentError,
+                  onTap: () => context.read<DashboardBloc>().add(const AllDevicesOff()),
+                )),
+                const SizedBox(width: 8),
+                Expanded(child: _quickActionItem(
+                  context,
+                  icon: Icons.sync,
+                  label: s.sync,
+                  onTap: () => context.read<DashboardBloc>().add(const DashboardRefreshed()),
+                )),
+                const SizedBox(width: 8),
+                Expanded(child: _quickActionItem(
+                  context,
+                  icon: Icons.calendar_today,
+                  label: s.schedule,
+                  onTap: () => setState(() => _navIndex = 2),
+                )),
+                const SizedBox(width: 8),
+                Expanded(child: _quickActionItem(
+                  context,
+                  icon: Icons.settings,
+                  label: s.settings,
+                  onTap: () {},
+                )),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _quickActionItem(
+    BuildContext context, {
+    required IconData icon,
+    required String label,
+    Color? color,
+    required VoidCallback onTap,
+  }) {
+    final t = NeumorphicTheme.of(context);
+    final c = color ?? NeumorphicColors.accentPrimary;
+    return NeumorphicInteractiveCard(
+      onTap: onTap,
+      borderRadius: 12,
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, color: c, size: 24),
+          const SizedBox(height: 8),
+          Text(
+            label,
+            style: t.typography.labelSmall.copyWith(color: c),
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
     );
   }
 
@@ -378,376 +776,6 @@ class _DashboardViewState extends State<_DashboardView> {
           ],
         ),
       ),
-    );
-  }
-
-  // ============================================
-  // 1. СТАТУС УСТРОЙСТВА
-  // ============================================
-  Widget _deviceStatusCard(BuildContext context, DashboardState state) {
-    final s = context.l10n;
-    final t = NeumorphicTheme.of(context);
-    final climate = state.climate;
-    final isOn = climate?.isOn ?? false;
-
-    return NeumorphicCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Icon(
-                Icons.power_settings_new,
-                color: isOn ? NeumorphicColors.accentPrimary : t.colors.textTertiary,
-                size: 28,
-              ),
-              NeumorphicToggle(
-                value: isOn,
-                onChanged: (v) => context.read<DashboardBloc>().add(DevicePowerToggled(v)),
-              ),
-            ],
-          ),
-          const SizedBox(height: 24),
-          Text(
-            climate?.deviceName ?? 'HVAC Unit',
-            style: t.typography.headlineMedium,
-          ),
-          const SizedBox(height: 4),
-          Row(children: [
-            Container(
-              width: 8, height: 8,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: isOn ? NeumorphicColors.accentSuccess : t.colors.textTertiary,
-              ),
-            ),
-            const SizedBox(width: 8),
-            Text(
-              isOn ? s.active : s.standby,
-              style: t.typography.bodyMedium.copyWith(
-                color: isOn ? NeumorphicColors.accentSuccess : t.colors.textTertiary,
-              ),
-            ),
-          ]),
-        ],
-      ),
-    );
-  }
-
-  // ============================================
-  // 2. СЕНСОРЫ (Температура, Влажность, CO2)
-  // ============================================
-  Widget _sensorsGrid(BuildContext context, DashboardState state) {
-    final s = context.l10n;
-    final climate = state.climate;
-
-    return Row(children: [
-      Expanded(child: _sensorCard(
-        icon: Icons.thermostat,
-        label: s.currentTemperature,
-        value: '${climate?.currentTemperature.toStringAsFixed(1) ?? '--'}',
-        unit: '°C',
-        color: NeumorphicColors.modeHeating,
-      )),
-      const SizedBox(width: NeumorphicSpacing.cardGap),
-      Expanded(child: _sensorCard(
-        icon: Icons.water_drop,
-        label: s.humidity,
-        value: '${climate?.humidity.toStringAsFixed(0) ?? '--'}',
-        unit: '%',
-        color: NeumorphicColors.modeCooling,
-      )),
-      const SizedBox(width: NeumorphicSpacing.cardGap),
-      Expanded(child: _sensorCard(
-        icon: Icons.cloud_outlined,
-        label: s.co2,
-        value: '${climate?.co2Ppm ?? '--'}',
-        unit: 'ppm',
-        color: _co2Color(climate?.co2Ppm),
-      )),
-    ]);
-  }
-
-  Widget _sensorCard({
-    required IconData icon,
-    required String label,
-    required String value,
-    required String unit,
-    required Color color,
-  }) {
-    final t = NeumorphicTheme.of(context);
-    return NeumorphicCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Icon(icon, color: color, size: 20),
-            ),
-          ]),
-          const SizedBox(height: 12),
-          Text(label, style: t.typography.labelSmall),
-          const SizedBox(height: 4),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(value, style: t.typography.numericLarge),
-              const SizedBox(width: 2),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 2),
-                child: Text(unit, style: t.typography.labelSmall),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ============================================
-  // 3. РАСПИСАНИЕ
-  // ============================================
-  Widget _scheduleCard(BuildContext context, DashboardState state) {
-    final s = context.l10n;
-    final t = NeumorphicTheme.of(context);
-
-    return NeumorphicCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(s.schedule, style: t.typography.titleMedium),
-              Icon(Icons.calendar_month, color: t.colors.textTertiary, size: 20),
-            ],
-          ),
-          const SizedBox(height: 16),
-          ...state.schedule.asMap().entries.map((entry) {
-            final item = entry.value;
-            final isLast = entry.key == state.schedule.length - 1;
-            return _scheduleItem(t, item, isLast);
-          }),
-        ],
-      ),
-    );
-  }
-
-  Widget _scheduleItem(NeumorphicThemeData t, ScheduleItem item, bool isLast) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Timeline dot and line
-        Column(children: [
-          Container(
-            width: 10, height: 10,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: item.isActive ? NeumorphicColors.accentPrimary : t.colors.textTertiary,
-              border: item.isActive ? null : Border.all(color: t.colors.textTertiary, width: 2),
-            ),
-          ),
-          if (!isLast)
-            Container(
-              width: 2, height: 32,
-              color: t.colors.textTertiary.withValues(alpha: 0.3),
-            ),
-        ]),
-        const SizedBox(width: 12),
-        // Content
-        Expanded(
-          child: Padding(
-            padding: EdgeInsets.only(bottom: isLast ? 0 : 16),
-            child: Row(children: [
-              Text(item.time, style: t.typography.bodyMedium.copyWith(fontWeight: FontWeight.w600)),
-              const SizedBox(width: 16),
-              Expanded(child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(item.event, style: t.typography.bodyMedium),
-                  Text('${item.temperature.round()}°C', style: t.typography.labelSmall),
-                ],
-              )),
-              if (item.isActive)
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: NeumorphicColors.accentPrimary.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    'Активно',
-                    style: t.typography.labelSmall.copyWith(
-                      color: NeumorphicColors.accentPrimary,
-                      fontSize: 10,
-                    ),
-                  ),
-                ),
-            ]),
-          ),
-        ),
-      ],
-    );
-  }
-
-  // ============================================
-  // 4. БЫСТРЫЕ ДЕЙСТВИЯ
-  // ============================================
-  Widget _quickActionsCard(BuildContext context) {
-    final s = context.l10n;
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Row(children: [
-          Expanded(child: _actionButton(
-            icon: Icons.power_settings_new,
-            label: s.allOff,
-            color: NeumorphicColors.accentError,
-            onTap: () => context.read<DashboardBloc>().add(const AllDevicesOff()),
-          )),
-          const SizedBox(width: 8),
-          Expanded(child: _actionButton(
-            icon: Icons.calendar_today,
-            label: s.schedule,
-            onTap: () => setState(() => _navIndex = 2),
-          )),
-        ]),
-        const SizedBox(height: 8),
-        Row(children: [
-          Expanded(child: _actionButton(
-            icon: Icons.sync,
-            label: s.sync,
-            onTap: () => context.read<DashboardBloc>().add(const DashboardRefreshed()),
-          )),
-          const SizedBox(width: 8),
-          Expanded(child: _actionButton(
-            icon: Icons.settings,
-            label: s.settings,
-            onTap: () {},
-          )),
-        ]),
-      ],
-    );
-  }
-
-  Widget _actionButton({
-    required IconData icon,
-    required String label,
-    Color? color,
-    required VoidCallback onTap,
-  }) {
-    final t = NeumorphicTheme.of(context);
-    final c = color ?? NeumorphicColors.accentPrimary;
-
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-        decoration: BoxDecoration(
-          color: t.colors.cardSurface,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: t.shadows.convexSmall,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, color: c, size: 20),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: t.typography.labelSmall.copyWith(fontSize: 10),
-              textAlign: TextAlign.center,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // ============================================
-  // 5. СТАТИСТИКА ЭНЕРГИИ
-  // ============================================
-  Widget _energyStatsCard(BuildContext context, DashboardState state) {
-    final s = context.l10n;
-    final t = NeumorphicTheme.of(context);
-    final stats = state.energyStats;
-
-    return NeumorphicCard(
-      child: Row(children: [
-        // Left: Stats
-        Expanded(
-          flex: 2,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(s.usageStatus, style: t.typography.titleMedium),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: t.colors.surface,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(s.today, style: t.typography.labelSmall),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Row(children: [
-                _statItem(t, s.totalSpent, '${stats?.totalKwh.toStringAsFixed(1) ?? '0'}', 'кВт⋅ч'),
-                const SizedBox(width: 40),
-                _statItem(t, s.totalHours, '${stats?.totalHours ?? 0}', 'ч'),
-              ]),
-            ],
-          ),
-        ),
-        const SizedBox(width: 24),
-        // Right: Chart placeholder
-        Expanded(
-          flex: 3,
-          child: Container(
-            height: 80,
-            decoration: BoxDecoration(
-              color: t.colors.surface,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Center(
-              child: Text('📊 График потребления', style: t.typography.labelSmall),
-            ),
-          ),
-        ),
-      ]),
-    );
-  }
-
-  Widget _statItem(NeumorphicThemeData t, String label, String value, String unit) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label, style: t.typography.labelSmall),
-        const SizedBox(height: 4),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text(value, style: t.typography.numericLarge),
-            const SizedBox(width: 2),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 2),
-              child: Text(unit, style: t.typography.labelSmall),
-            ),
-          ],
-        ),
-      ],
     );
   }
 

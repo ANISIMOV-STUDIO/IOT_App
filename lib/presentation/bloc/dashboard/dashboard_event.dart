@@ -104,3 +104,18 @@ class OccupantsUpdated extends DashboardEvent {
   @override
   List<Object?> get props => [occupants];
 }
+
+// HVAC Device events
+class HvacDeviceSelected extends DashboardEvent {
+  final String deviceId;
+  const HvacDeviceSelected(this.deviceId);
+  @override
+  List<Object?> get props => [deviceId];
+}
+
+class HvacDevicesUpdated extends DashboardEvent {
+  final List<HvacDevice> devices;
+  const HvacDevicesUpdated(this.devices);
+  @override
+  List<Object?> get props => [devices];
+}

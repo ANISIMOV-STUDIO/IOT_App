@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic_plus/flutter_neumorphic.dart' as np;
 import 'neumorphic_theme_wrapper.dart';
 import '../../theme/tokens/neumorphic_spacing.dart';
 
@@ -50,7 +51,7 @@ class NeumorphicDashboardShell extends StatelessWidget {
                 ),
               ),
               
-              // Right panel - aligned to top with margin
+              // Right panel - aligned to top with margin, uses theme defaults
               if (showRight)
                 Padding(
                   padding: const EdgeInsets.only(
@@ -58,21 +59,16 @@ class NeumorphicDashboardShell extends StatelessWidget {
                     right: 16,
                     bottom: 16,
                   ),
-                  child: Container(
+                  child: SizedBox(
                     width: isDesktop ? rightPanelWidth : rightPanelWidth * 0.85,
-                    decoration: BoxDecoration(
-                      color: theme.colors.cardSurface,
-                      borderRadius: BorderRadius.circular(24), // Both sides rounded
-                      boxShadow: [
-                        BoxShadow(
-                          color: theme.colors.shadowDark.withValues(alpha: 0.08),
-                          blurRadius: 20,
-                          offset: const Offset(-5, 0),
+                    child: np.Neumorphic(
+                      style: np.NeumorphicStyle(
+                        boxShape: np.NeumorphicBoxShape.roundRect(
+                          BorderRadius.circular(NeumorphicSpacing.cardRadius),
                         ),
-                      ],
+                      ),
+                      child: rightPanel,
                     ),
-                    clipBehavior: Clip.antiAlias,
-                    child: rightPanel,
                   ),
                 ),
             ],

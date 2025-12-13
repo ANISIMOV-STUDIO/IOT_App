@@ -34,6 +34,13 @@ export 'src/theme/tokens/neumorphic_shadows.dart';
 export 'src/theme/tokens/neumorphic_spacing.dart';
 export 'src/theme/tokens/neumorphic_typography.dart';
 
+// Mathematical Design System
+export 'src/theme/design_system.dart';
+
+// Layout Components (Golden Ratio based)
+export 'src/widgets/layout/golden_layout.dart';
+export 'src/widgets/layout/bento_grid.dart';
+
 // ============================================
 // CUSTOM IOT WIDGETS
 // ============================================
@@ -59,10 +66,6 @@ export 'src/widgets/neumorphic/neumorphic_preset_grid.dart';
 export 'src/widgets/neumorphic/neumorphic_segmented_control.dart';
 
 // ============================================
-// LEGACY (for backwards compatibility)
+// NOTE: Legacy files removed (app_theme, app_colors, app_spacing, app_typography)
+// Use NeumorphicTheme and NeumorphicColors instead
 // ============================================
-
-export 'src/theme/app_theme.dart';
-export 'src/theme/tokens/app_colors.dart';
-export 'src/theme/tokens/app_spacing.dart';
-export 'src/theme/tokens/app_typography.dart';

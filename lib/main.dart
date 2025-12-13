@@ -12,6 +12,7 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
 
 import 'package:smart_ui_kit/smart_ui_kit.dart';
+import 'core/theme/app_theme.dart';
 import 'generated/l10n/app_localizations.dart';
 import 'core/di/injection_container.dart' as di;
 import 'core/services/language_service.dart';

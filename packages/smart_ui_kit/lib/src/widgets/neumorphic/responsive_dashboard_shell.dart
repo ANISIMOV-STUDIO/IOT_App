@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 import 'neumorphic_theme_wrapper.dart';
 import 'neumorphic_sidebar.dart';
 import 'neumorphic_bottom_nav.dart';
@@ -46,12 +45,16 @@ class ResponsiveDashboardShell extends StatelessWidget {
     this.onToggleSidebar,
   });
 
+  /// Breakpoint constants
+  static const double mobileBreakpoint = 600.0;
+  static const double tabletBreakpoint = 1024.0;
+
   /// Get current layout mode based on screen width
   static DashboardLayoutMode getLayoutMode(BuildContext context) {
-    final breakpoints = ResponsiveBreakpoints.of(context);
-    if (breakpoints.smallerThan(TABLET)) {
+    final width = MediaQuery.of(context).size.width;
+    if (width < mobileBreakpoint) {
       return DashboardLayoutMode.mobile;
-    } else if (breakpoints.smallerThan(DESKTOP)) {
+    } else if (width < tabletBreakpoint) {
       return DashboardLayoutMode.tablet;
     }
     return DashboardLayoutMode.desktop;

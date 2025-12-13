@@ -7,6 +7,7 @@ import 'package:equatable/equatable.dart';
 
 import '../../../domain/entities/smart_device.dart';
 import '../../../domain/entities/climate.dart';
+import '../../../domain/entities/hvac_device.dart';
 import '../../../domain/entities/energy_stats.dart';
 import '../../../domain/entities/occupant.dart';
 import '../../../domain/repositories/smart_device_repository.dart';
@@ -27,6 +28,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   StreamSubscription<ClimateState>? _climateSubscription;
   StreamSubscription<EnergyStats>? _energySubscription;
   StreamSubscription<List<Occupant>>? _occupantsSubscription;
+  StreamSubscription<List<HvacDevice>>? _hvacDevicesSubscription;
 
   DashboardBloc({
     required SmartDeviceRepository deviceRepository,
@@ -53,12 +55,23 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     on<ClimateUpdated>(_onClimateUpdated);
     on<EnergyUpdated>(_onEnergyUpdated);
     on<OccupantsUpdated>(_onOccupantsUpdated);
+    on<HvacDeviceSelected>(_onHvacDeviceSelected);
+    on<HvacDevicesUpdated>(_onHvacDevicesUpdated);
   }
 
   Future<void> _onStarted(DashboardStarted event, Emitter<DashboardState> emit) async {
     emit(state.copyWith(status: DashboardStatus.loading));
 
     try {
+      // Загружаем HVAC устройства первыми
+      final hvacDevices = await _climateRepository.getAllHvacDevices();
+      final selectedId = hvacDevices.isNotEmpty ? hvacDevices.first.id : null;
+
+      // Устанавливаем выбранное устройство в репозитории
+      if (selectedId != null) {
+        _climateRepository.setSelectedDevice(selectedId);
+      }
+
       final results = await Future.wait([
         _deviceRepository.getAllDevices(),
         _climateRepository.getCurrentState(),
@@ -75,6 +88,8 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         powerUsage: results[3] as List<DeviceEnergyUsage>,
         occupants: results[4] as List<Occupant>,
         schedule: DashboardState.defaultSchedule,
+        hvacDevices: hvacDevices,
+        selectedHvacDeviceId: selectedId,
       ));
 
       _subscribeToUpdates();
@@ -98,6 +113,9 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     );
     _occupantsSubscription = _occupantRepository.watchOccupants().listen(
       (occupants) => add(OccupantsUpdated(occupants)),
+    );
+    _hvacDevicesSubscription = _climateRepository.watchHvacDevices().listen(
+      (devices) => add(HvacDevicesUpdated(devices)),
     );
   }
 
@@ -198,12 +216,34 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     emit(state.copyWith(occupants: event.occupants));
   }
 
+  Future<void> _onHvacDeviceSelected(HvacDeviceSelected event, Emitter<DashboardState> emit) async {
+    try {
+      // Устанавливаем выбранное устройство в репозитории
+      _climateRepository.setSelectedDevice(event.deviceId);
+
+      // Загружаем состояние выбранного устройства
+      final climate = await _climateRepository.getDeviceState(event.deviceId);
+
+      emit(state.copyWith(
+        selectedHvacDeviceId: event.deviceId,
+        climate: climate,
+      ));
+    } catch (e) {
+      emit(state.copyWith(errorMessage: 'Ошибка выбора устройства: $e'));
+    }
+  }
+
+  void _onHvacDevicesUpdated(HvacDevicesUpdated event, Emitter<DashboardState> emit) {
+    emit(state.copyWith(hvacDevices: event.devices));
+  }
+
   @override
   Future<void> close() {
     _devicesSubscription?.cancel();
     _climateSubscription?.cancel();
     _energySubscription?.cancel();
     _occupantsSubscription?.cancel();
+    _hvacDevicesSubscription?.cancel();
     return super.close();
   }
 }
