@@ -175,7 +175,7 @@ class ResponsiveDashboardShell extends StatelessWidget {
                 userName: userName,
                 userAvatarUrl: userAvatarUrl,
                 isCollapsed: sidebarCollapsed,
-                onToggleCollapse: onToggleSidebar,
+                onToggleSidebar: onToggleSidebar,
               ),
               // Main content
               Expanded(

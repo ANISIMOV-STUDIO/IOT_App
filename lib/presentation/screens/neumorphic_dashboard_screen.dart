@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_ui_kit/smart_ui_kit.dart';
 
-import '../../core/di/injection_container.dart';
 import '../../core/l10n/l10n.dart';
 import '../../domain/entities/climate.dart';
 import '../bloc/dashboard/dashboard_bloc.dart';
@@ -10,16 +9,15 @@ import '../widgets/climate/mobile_temperature_card.dart';
 import '../widgets/devices/device_switcher_card.dart';
 
 /// Главный экран HVAC Dashboard
+/// BLoC предоставляется на уровне приложения (main.dart)
 class NeumorphicDashboardScreen extends StatelessWidget {
   const NeumorphicDashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return L10nProvider(
-      child: BlocProvider(
-        create: (_) => sl<DashboardBloc>()..add(const DashboardStarted()),
-        child: const _DashboardView(),
-      ),
+    // BLoC уже предоставлен в main.dart - используем его напрямую
+    return const L10nProvider(
+      child: _DashboardView(),
     );
   }
 }
@@ -80,7 +78,7 @@ class _DashboardViewState extends State<_DashboardView> {
     return BlocBuilder<DashboardBloc, DashboardState>(
       builder: (context, state) {
         if (state.status == DashboardStatus.loading) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: NeumorphicLoadingIndicator());
         }
         if (state.status == DashboardStatus.failure) {
           return _errorView(context, s, state.errorMessage);
@@ -276,7 +274,7 @@ class _DashboardViewState extends State<_DashboardView> {
     return BlocBuilder<DashboardBloc, DashboardState>(
       builder: (context, state) {
         if (state.status == DashboardStatus.loading) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: NeumorphicLoadingIndicator());
         }
         if (state.status == DashboardStatus.failure) {
           return _errorView(context, s, state.errorMessage);
@@ -374,19 +372,9 @@ class _DashboardViewState extends State<_DashboardView> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(s.usageStatus, style: t.typography.titleMedium),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: NeumorphicColors.accentPrimary.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Text(
-                  s.today,
-                  style: t.typography.labelSmall.copyWith(
-                    color: NeumorphicColors.accentPrimary,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+              NeumorphicBadge(
+                text: s.today,
+                color: NeumorphicColors.accentPrimary,
               ),
             ],
           ),
@@ -468,19 +456,15 @@ class _DashboardViewState extends State<_DashboardView> {
           const SizedBox(height: 4),
           Row(
             children: [
-              Container(
-                width: 8,
-                height: 8,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: isOn ? NeumorphicColors.accentSuccess : Colors.grey,
-                ),
+              _GlowingStatusDot(
+                color: isOn ? NeumorphicColors.accentSuccess : t.colors.textTertiary,
+                isGlowing: isOn,
               ),
               const SizedBox(width: 6),
               Text(
                 isOn ? s.active : s.standby,
                 style: t.typography.labelSmall.copyWith(
-                  color: isOn ? NeumorphicColors.accentSuccess : Colors.grey,
+                  color: isOn ? NeumorphicColors.accentSuccess : t.colors.textTertiary,
                 ),
               ),
             ],
@@ -596,13 +580,9 @@ class _DashboardViewState extends State<_DashboardView> {
     final t = NeumorphicTheme.of(context);
     return Row(
       children: [
-        Container(
-          width: 8,
-          height: 8,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: item.isActive ? NeumorphicColors.accentPrimary : t.colors.textTertiary,
-          ),
+        _GlowingStatusDot(
+          color: item.isActive ? NeumorphicColors.accentPrimary : t.colors.textTertiary,
+          isGlowing: item.isActive,
         ),
         const SizedBox(width: 8),
         Text(
@@ -689,12 +669,21 @@ class _DashboardViewState extends State<_DashboardView> {
     return NeumorphicInteractiveCard(
       onTap: onTap,
       borderRadius: 12,
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, color: c, size: 24),
-          const SizedBox(height: 8),
+          // Neumorphic icon container
+          Neumorphic(
+            style: NeumorphicStyle(
+              depth: 2,
+              intensity: 0.5,
+              boxShape: const NeumorphicBoxShape.circle(),
+            ),
+            padding: const EdgeInsets.all(10),
+            child: Icon(icon, color: c, size: 22),
+          ),
+          const SizedBox(height: 6),
           Text(
             label,
             style: t.typography.labelSmall.copyWith(color: c),
@@ -884,27 +873,35 @@ class _DashboardViewState extends State<_DashboardView> {
   // ============================================
   Widget _langSwitch(BuildContext context) {
     final loc = context.locale;
+    final t = NeumorphicTheme.of(context);
+
     return PopupMenuButton<AppLocale>(
       initialValue: loc,
       onSelected: (l) => context.setLocale(l),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      color: t.colors.surface,
+      elevation: 0,
       itemBuilder: (_) => AppLocale.values.map((l) => PopupMenuItem(
         value: l,
         child: Row(children: [
-          if (l == loc) const Icon(Icons.check, size: 16),
+          if (l == loc)
+            Icon(Icons.check, size: 16, color: NeumorphicColors.accentPrimary)
+          else
+            const SizedBox(width: 16),
           const SizedBox(width: 8),
-          Text(l.name),
+          Text(l.name, style: t.typography.bodyMedium),
         ]),
       )).toList(),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-        decoration: BoxDecoration(
-          color: NeumorphicColors.lightCardSurface,
-          borderRadius: BorderRadius.circular(8),
-        ),
+      child: NeumorphicInteractiveCard(
+        borderRadius: 10,
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         child: Row(mainAxisSize: MainAxisSize.min, children: [
-          const Icon(Icons.language, size: 18),
+          Icon(Icons.language, size: 18, color: t.colors.textSecondary),
           const SizedBox(width: 6),
-          Text(loc.code.toUpperCase()),
+          Text(
+            loc.code.toUpperCase(),
+            style: t.typography.labelSmall.copyWith(fontWeight: FontWeight.w600),
+          ),
         ]),
       ),
     );
@@ -945,5 +942,38 @@ class _DashboardViewState extends State<_DashboardView> {
       ClimateMode.off => s.turnedOff,
     };
   }
+}
 
+/// Status dot with optional glow effect
+class _GlowingStatusDot extends StatelessWidget {
+  final Color color;
+  final double size;
+  final bool isGlowing;
+
+  const _GlowingStatusDot({
+    required this.color,
+    this.size = 8,
+    this.isGlowing = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: color,
+        boxShadow: isGlowing
+            ? [
+                BoxShadow(
+                  color: color.withValues(alpha: 0.6),
+                  blurRadius: size,
+                  spreadRadius: size * 0.3,
+                ),
+              ]
+            : null,
+      ),
+    );
+  }
 }

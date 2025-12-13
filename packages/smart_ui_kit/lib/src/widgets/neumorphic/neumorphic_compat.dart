@@ -255,3 +255,160 @@ class _ButtonSizeConfig {
 }
 
 enum NeumorphicButtonSize { small, medium, large }
+
+/// Neumorphic Loading Indicator - pulsing circles
+class NeumorphicLoadingIndicator extends StatefulWidget {
+  final double size;
+  final Color? color;
+
+  const NeumorphicLoadingIndicator({
+    super.key,
+    this.size = 60,
+    this.color,
+  });
+
+  @override
+  State<NeumorphicLoadingIndicator> createState() => _NeumorphicLoadingIndicatorState();
+}
+
+class _NeumorphicLoadingIndicatorState extends State<NeumorphicLoadingIndicator>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 1200),
+      vsync: this,
+    )..repeat(reverse: true);
+    _animation = Tween<double>(begin: -3, end: 3).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, child) {
+        return np.Neumorphic(
+          style: np.NeumorphicStyle(
+            depth: _animation.value,
+            intensity: 0.6,
+            boxShape: const np.NeumorphicBoxShape.circle(),
+            color: widget.color,
+          ),
+          child: SizedBox(
+            width: widget.size,
+            height: widget.size,
+            child: Padding(
+              padding: EdgeInsets.all(widget.size * 0.25),
+              child: np.Neumorphic(
+                style: np.NeumorphicStyle(
+                  depth: -_animation.value,
+                  intensity: 0.5,
+                  boxShape: const np.NeumorphicBoxShape.circle(),
+                ),
+                child: const SizedBox.expand(),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+/// Neumorphic Badge/Chip - small label with soft shadows
+class NeumorphicBadge extends StatelessWidget {
+  final String text;
+  final Color? color;
+  final Color? textColor;
+  final bool isConvex;
+
+  const NeumorphicBadge({
+    super.key,
+    required this.text,
+    this.color,
+    this.textColor,
+    this.isConvex = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final badgeColor = color ?? const Color(0xFF6366F1);
+
+    return np.Neumorphic(
+      style: np.NeumorphicStyle(
+        depth: isConvex ? 2 : -1,
+        intensity: 0.5,
+        color: badgeColor.withValues(alpha: 0.15),
+        boxShape: np.NeumorphicBoxShape.roundRect(
+          BorderRadius.circular(8),
+        ),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      child: Text(
+        text,
+        style: TextStyle(
+          color: textColor ?? badgeColor,
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
+}
+
+/// Neumorphic Progress Bar
+class NeumorphicProgressBar extends StatelessWidget {
+  final double progress; // 0.0 to 1.0
+  final double height;
+  final Color? activeColor;
+  final double borderRadius;
+
+  const NeumorphicProgressBar({
+    super.key,
+    required this.progress,
+    this.height = 8,
+    this.activeColor,
+    this.borderRadius = 4,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return np.Neumorphic(
+      style: np.NeumorphicStyle(
+        depth: -2,
+        intensity: 0.4,
+        boxShape: np.NeumorphicBoxShape.roundRect(
+          BorderRadius.circular(borderRadius),
+        ),
+      ),
+      child: SizedBox(
+        height: height,
+        child: Stack(
+          children: [
+            FractionallySizedBox(
+              widthFactor: progress.clamp(0.0, 1.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: activeColor ?? const Color(0xFF6366F1),
+                  borderRadius: BorderRadius.circular(borderRadius),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

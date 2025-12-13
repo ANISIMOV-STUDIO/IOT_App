@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:smart_ui_kit/smart_ui_kit.dart';
 
 /// Device model for the switcher
@@ -204,11 +203,12 @@ class _StatusIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = NeumorphicTheme.of(context);
     final color = !isOnline
-        ? Colors.grey
+        ? t.colors.textTertiary
         : isActive
             ? NeumorphicColors.accentSuccess
-            : Colors.orange;
+            : NeumorphicColors.accentWarning;
     final label = !isOnline
         ? 'Офлайн'
         : isActive
@@ -224,22 +224,45 @@ class _StatusIndicator extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            width: 6,
-            height: 6,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: color,
-            ),
-          ),
+          // Glowing status dot
+          _GlowingDot(color: color, size: 6),
           const SizedBox(width: 4),
           Text(
             label,
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w500,
+            style: t.typography.labelSmall.copyWith(
               color: color,
+              fontSize: 11,
             ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Status dot with glow effect
+class _GlowingDot extends StatelessWidget {
+  final Color color;
+  final double size;
+
+  const _GlowingDot({
+    required this.color,
+    this.size = 8,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: color,
+        boxShadow: [
+          BoxShadow(
+            color: color.withValues(alpha: 0.6),
+            blurRadius: size,
+            spreadRadius: size * 0.3,
           ),
         ],
       ),
@@ -254,6 +277,8 @@ class _EmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = NeumorphicTheme.of(context);
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -261,33 +286,28 @@ class _EmptyState extends StatelessWidget {
           Icon(
             Icons.devices_other,
             size: 48,
-            color: Colors.grey.shade300,
+            color: t.colors.textTertiary,
           ),
           const SizedBox(height: 12),
           Text(
             'Нет устройств',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey.shade500,
+            style: t.typography.titleSmall.copyWith(
+              color: t.colors.textSecondary,
             ),
           ),
           const SizedBox(height: 4),
           Text(
             'Добавьте первое устройство',
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey.shade400,
+            style: t.typography.bodySmall.copyWith(
+              color: t.colors.textTertiary,
             ),
           ),
           const SizedBox(height: 16),
-          TextButton.icon(
+          NeumorphicButton(
             onPressed: onAddDevice,
-            icon: const Icon(Icons.add, size: 18),
-            label: const Text('Добавить устройство'),
-            style: TextButton.styleFrom(
-              foregroundColor: NeumorphicColors.accentPrimary,
-            ),
+            size: NeumorphicButtonSize.small,
+            icon: Icons.add,
+            child: const Text('Добавить'),
           ),
         ],
       ),
@@ -323,12 +343,14 @@ class DeviceSwitcherHorizontal extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('Устройства', style: t.typography.titleMedium),
-              GestureDetector(
+              NeumorphicInteractiveCard(
                 onTap: onAddDevice,
+                borderRadius: 10,
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.add, size: 16, color: NeumorphicColors.accentPrimary),
+                    Icon(Icons.add, size: 14, color: NeumorphicColors.accentPrimary),
                     const SizedBox(width: 4),
                     Text(
                       'Добавить',
@@ -378,10 +400,10 @@ class _DeviceIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = NeumorphicTheme.of(context);
     final statusColor = !device.isOnline
-        ? Colors.grey
+        ? t.colors.textTertiary
         : device.isActive
             ? NeumorphicColors.accentSuccess
-            : Colors.orange;
+            : NeumorphicColors.accentWarning;
 
     return GestureDetector(
       onTap: onTap,
