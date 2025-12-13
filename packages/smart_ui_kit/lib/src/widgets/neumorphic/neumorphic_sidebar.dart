@@ -38,53 +38,47 @@ class NeumorphicSidebar extends StatelessWidget {
       duration: const Duration(milliseconds: 200),
       width: width,
       height: double.infinity,
-      padding: EdgeInsets.symmetric(
-        vertical: NeumorphicSpacing.lg,
-        horizontal: isCollapsed ? NeumorphicSpacing.sm : NeumorphicSpacing.md,
-      ),
-      decoration: BoxDecoration(
-        color: theme.colors.surface,
-        // Neumorphic shadow on right edge
-        boxShadow: [
-          BoxShadow(
-            color: theme.shadows.shadowDark.withValues(alpha: 0.1),
-            offset: const Offset(4, 0),
-            blurRadius: 8,
+      margin: const EdgeInsets.all(NeumorphicSpacing.md),
+      child: np.Neumorphic(
+        style: np.NeumorphicStyle(
+          depth: -4, // Concave (inset) effect
+          intensity: 0.5,
+          boxShape: np.NeumorphicBoxShape.roundRect(
+            BorderRadius.circular(NeumorphicSpacing.radiusLg),
           ),
-          BoxShadow(
-            color: theme.shadows.shadowLight.withValues(alpha: 0.7),
-            offset: const Offset(-2, 0),
-            blurRadius: 4,
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          // Logo and user profile
-          _buildHeader(context, theme),
+        ),
+        padding: EdgeInsets.symmetric(
+          vertical: NeumorphicSpacing.lg,
+          horizontal: isCollapsed ? NeumorphicSpacing.sm : NeumorphicSpacing.md,
+        ),
+        child: Column(
+          children: [
+            // Logo and user profile
+            _buildHeader(context, theme),
 
-          SizedBox(height: NeumorphicSpacing.xl),
+            SizedBox(height: NeumorphicSpacing.xl),
 
-          // Navigation items
-          Expanded(
-            child: ListView(
-              children: [
-                ...items.asMap().entries.map((entry) =>
-                  _buildNavItem(context, theme, entry.key, entry.value),
-                ),
-              ],
+            // Navigation items
+            Expanded(
+              child: ListView(
+                children: [
+                  ...items.asMap().entries.map((entry) =>
+                    _buildNavItem(context, theme, entry.key, entry.value),
+                  ),
+                ],
+              ),
             ),
-          ),
 
-          // Bottom items (Settings, etc.)
-          if (bottomItems != null) ...[
-            _buildNeumorphicDivider(theme),
-            const SizedBox(height: 16),
-            ...bottomItems!.asMap().entries.map((entry) =>
-              _buildNavItem(context, theme, items.length + entry.key, entry.value),
-            ),
+            // Bottom items (Settings, etc.)
+            if (bottomItems != null) ...[
+              _buildNeumorphicDivider(theme),
+              const SizedBox(height: 16),
+              ...bottomItems!.asMap().entries.map((entry) =>
+                _buildNavItem(context, theme, items.length + entry.key, entry.value),
+              ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
