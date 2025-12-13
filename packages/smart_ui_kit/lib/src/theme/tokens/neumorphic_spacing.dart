@@ -121,6 +121,22 @@ abstract class NeumorphicSpacing {
   static const double avatarLg = 64.0;
 
   // ============================================
+  // BOTTOM NAVIGATION
+  // ============================================
+
+  /// Bottom navigation bar height
+  static const double bottomNavHeight = 80.0;
+
+  /// Bottom navigation bar height (compact)
+  static const double bottomNavHeightCompact = 64.0;
+
+  /// Bottom navigation item width
+  static const double bottomNavItemWidth = 64.0;
+
+  /// Bottom navigation icon size
+  static const double bottomNavIconSize = 24.0;
+
+  // ============================================
   // HELPER METHODS
   // ============================================
   

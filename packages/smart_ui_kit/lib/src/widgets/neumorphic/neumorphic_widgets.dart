@@ -9,7 +9,9 @@ export 'neumorphic_touchable.dart';
 
 // Export custom components (IoT-specific, not in flutter_neumorphic_plus)
 export 'neumorphic_sidebar.dart';
+export 'neumorphic_bottom_nav.dart';
 export 'neumorphic_dashboard_shell.dart';
+export 'responsive_dashboard_shell.dart';
 export 'neumorphic_device_card.dart';
 export 'neumorphic_air_quality.dart';
 export 'neumorphic_temperature_dial.dart';

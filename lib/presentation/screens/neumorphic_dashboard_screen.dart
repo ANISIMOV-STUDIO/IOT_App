@@ -6,6 +6,7 @@ import '../../core/di/injection_container.dart';
 import '../../core/l10n/l10n.dart';
 import '../../domain/entities/climate.dart';
 import '../bloc/dashboard/dashboard_bloc.dart';
+import '../widgets/climate/mobile_temperature_card.dart';
 
 /// Главный экран HVAC Dashboard
 class NeumorphicDashboardScreen extends StatelessWidget {
@@ -31,70 +32,253 @@ class _DashboardView extends StatefulWidget {
 class _DashboardViewState extends State<_DashboardView> {
   int _navIndex = 0;
 
+  // Navigation items for both sidebar and bottom nav
+  List<NeumorphicNavItem> _navItems(AppStrings s) => [
+    NeumorphicNavItem(icon: Icons.dashboard, label: s.dashboard),
+    NeumorphicNavItem(icon: Icons.meeting_room, label: s.rooms),
+    NeumorphicNavItem(icon: Icons.calendar_today, label: s.schedule),
+    NeumorphicNavItem(icon: Icons.bar_chart, label: s.statistics),
+    NeumorphicNavItem(icon: Icons.notifications_outlined, label: s.notifications, badge: '2'),
+  ];
+
   @override
   Widget build(BuildContext context) {
+    final s = context.l10n;
+
     return NeumorphicTheme(
       data: NeumorphicThemeData.light(),
-      child: NeumorphicDashboardShell(
-        sidebar: _sidebar(context),
-        mainContent: _mainContent(context),
-        rightPanel: _rightPanel(context),
+      child: ResponsiveDashboardShell(
+        selectedIndex: _navIndex,
+        onIndexChanged: (i) => setState(() => _navIndex = i),
+        navItems: _navItems(s),
+        userName: 'Артём',
+        pages: [
+          _dashboardPage(context, s),
+          _roomsPlaceholder(context, s),
+          _schedulePlaceholder(context, s),
+          _statisticsPlaceholder(context, s),
+          _notificationsPlaceholder(context, s),
+        ],
+        rightPanelBuilder: (ctx) => _rightPanelContent(ctx),
       ),
     );
   }
 
-  Widget _sidebar(BuildContext context) {
-    final s = context.l10n;
-    return NeumorphicSidebar(
-      selectedIndex: _navIndex,
-      onItemSelected: (i) => setState(() => _navIndex = i),
-      userName: 'Артём',
-      items: [
-        NeumorphicNavItem(icon: Icons.dashboard, label: s.dashboard),
-        NeumorphicNavItem(icon: Icons.meeting_room, label: s.rooms),
-        NeumorphicNavItem(icon: Icons.calendar_today, label: s.schedule),
-        NeumorphicNavItem(icon: Icons.bar_chart, label: s.statistics),
-        NeumorphicNavItem(icon: Icons.notifications_outlined, label: s.notifications, badge: '2'),
-      ],
-      bottomItems: [
-        NeumorphicNavItem(icon: Icons.help_outline, label: s.support),
-        NeumorphicNavItem(icon: Icons.settings_outlined, label: s.settings),
-      ],
-    );
+  // Main dashboard page - adapts to mobile/desktop
+  Widget _dashboardPage(BuildContext context, AppStrings s) {
+    final isMobile = ResponsiveDashboardShell.isMobile(context);
+
+    if (isMobile) {
+      return _mobileDashboardContent(context, s);
+    }
+    return _desktopDashboardContent(context, s);
   }
 
-  Widget _mainContent(BuildContext context) {
-    final s = context.l10n;
-    
-    // Переключение контента по вкладкам
-    return switch (_navIndex) {
-      0 => _dashboardContent(context, s),
-      1 => _roomsPlaceholder(context, s),
-      2 => _schedulePlaceholder(context, s),
-      3 => _statisticsPlaceholder(context, s),
-      4 => _notificationsPlaceholder(context, s),
-      _ => _dashboardContent(context, s),
-    };
-  }
-
-  Widget _dashboardContent(BuildContext context, AppStrings s) {
+  // Mobile-optimized dashboard
+  Widget _mobileDashboardContent(BuildContext context, AppStrings s) {
     return BlocBuilder<DashboardBloc, DashboardState>(
       builder: (context, state) {
         if (state.status == DashboardStatus.loading) {
           return const Center(child: CircularProgressIndicator());
         }
         if (state.status == DashboardStatus.failure) {
-          return Center(child: Column(
+          return _errorView(context, s, state.errorMessage);
+        }
+
+        final climate = state.climate;
+
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(NeumorphicSpacing.md),
+            child: Column(
+              children: [
+                // Compact temperature card
+                MobileTemperatureCard(
+                  temperature: climate?.targetTemperature ?? 22,
+                  mode: _mapMode(climate?.mode),
+                  onTemperatureChanged: (v) =>
+                      context.read<DashboardBloc>().add(TemperatureChanged(v)),
+                  onModeChanged: (mode) {
+                    final climateMode = _reverseMapMode(mode);
+                    context.read<DashboardBloc>().add(ClimateModeChanged(climateMode));
+                  },
+                ),
+                const SizedBox(height: NeumorphicSpacing.md),
+
+                // Sensors row (horizontal)
+                _mobileSensorsRow(context, state),
+                const SizedBox(height: NeumorphicSpacing.md),
+
+                // Device cards grid (2 columns)
+                Expanded(
+                  child: _mobileDeviceGrid(context, state),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _mobileSensorsRow(BuildContext context, DashboardState state) {
+    final s = context.l10n;
+    final climate = state.climate;
+
+    return Row(
+      children: [
+        Expanded(child: _compactSensorCard(
+          icon: Icons.thermostat,
+          value: '${climate?.currentTemperature.toStringAsFixed(0) ?? '--'}°',
+          label: s.temperature,
+          color: NeumorphicColors.modeHeating,
+        )),
+        const SizedBox(width: 8),
+        Expanded(child: _compactSensorCard(
+          icon: Icons.water_drop,
+          value: '${climate?.humidity.toStringAsFixed(0) ?? '--'}%',
+          label: s.humidity,
+          color: NeumorphicColors.modeCooling,
+        )),
+        const SizedBox(width: 8),
+        Expanded(child: _compactSensorCard(
+          icon: Icons.cloud_outlined,
+          value: '${climate?.co2Ppm ?? '--'}',
+          label: 'CO₂',
+          color: _co2Color(climate?.co2Ppm),
+        )),
+      ],
+    );
+  }
+
+  Widget _compactSensorCard({
+    required IconData icon,
+    required String value,
+    required String label,
+    required Color color,
+  }) {
+    final t = NeumorphicTheme.of(context);
+    return NeumorphicCard(
+      padding: const EdgeInsets.symmetric(
+        horizontal: NeumorphicSpacing.sm,
+        vertical: NeumorphicSpacing.sm,
+      ),
+      child: Column(
+        children: [
+          Icon(icon, color: color, size: 20),
+          const SizedBox(height: 4),
+          Text(value, style: t.typography.numericMedium.copyWith(color: color)),
+          Text(label, style: t.typography.labelSmall),
+        ],
+      ),
+    );
+  }
+
+  Widget _mobileDeviceGrid(BuildContext context, DashboardState state) {
+    final t = NeumorphicTheme.of(context);
+    final climate = state.climate;
+    final isOn = climate?.isOn ?? false;
+
+    return GridView.count(
+      crossAxisCount: 2,
+      crossAxisSpacing: NeumorphicSpacing.sm,
+      mainAxisSpacing: NeumorphicSpacing.sm,
+      childAspectRatio: 1.3,
+      children: [
+        // Device status card
+        NeumorphicCard(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('${s.error}: ${state.errorMessage}'),
-              const SizedBox(height: 16),
-              NeumorphicButton(
-                onPressed: () => context.read<DashboardBloc>().add(const DashboardRefreshed()),
-                child: Text(s.retry),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Icon(
+                    Icons.power_settings_new,
+                    color: isOn ? NeumorphicColors.accentPrimary : t.colors.textTertiary,
+                  ),
+                  NeumorphicToggle(
+                    value: isOn,
+                    onChanged: (v) => context.read<DashboardBloc>().add(DevicePowerToggled(v)),
+                  ),
+                ],
+              ),
+              const Spacer(),
+              Text(climate?.deviceName ?? 'HVAC', style: t.typography.titleSmall),
+              Text(
+                isOn ? 'Активен' : 'Ожидание',
+                style: t.typography.labelSmall.copyWith(
+                  color: isOn ? NeumorphicColors.accentSuccess : t.colors.textTertiary,
+                ),
               ),
             ],
-          ));
+          ),
+        ),
+        // Quick actions
+        NeumorphicCard(
+          onTap: () => context.read<DashboardBloc>().add(const DashboardRefreshed()),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.sync, color: NeumorphicColors.accentPrimary, size: 28),
+              const SizedBox(height: 8),
+              Text('Синхронизация', style: t.typography.labelSmall),
+            ],
+          ),
+        ),
+        // Schedule shortcut
+        NeumorphicCard(
+          onTap: () => setState(() => _navIndex = 2),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.calendar_today, color: NeumorphicColors.accentPrimary, size: 28),
+              const SizedBox(height: 8),
+              Text('Расписание', style: t.typography.labelSmall),
+            ],
+          ),
+        ),
+        // Stats shortcut
+        NeumorphicCard(
+          onTap: () => setState(() => _navIndex = 3),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.bar_chart, color: NeumorphicColors.accentPrimary, size: 28),
+              const SizedBox(height: 8),
+              Text('Статистика', style: t.typography.labelSmall),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _errorView(BuildContext context, AppStrings s, String? message) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('${s.error}: $message'),
+          const SizedBox(height: 16),
+          NeumorphicButton(
+            onPressed: () => context.read<DashboardBloc>().add(const DashboardRefreshed()),
+            child: Text(s.retry),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Desktop dashboard content (original layout)
+  Widget _desktopDashboardContent(BuildContext context, AppStrings s) {
+    return BlocBuilder<DashboardBloc, DashboardState>(
+      builder: (context, state) {
+        if (state.status == DashboardStatus.loading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (state.status == DashboardStatus.failure) {
+          return _errorView(context, s, state.errorMessage);
         }
         return NeumorphicMainContent(
           title: s.dashboard,
@@ -107,7 +291,7 @@ class _DashboardViewState extends State<_DashboardView> {
               Expanded(flex: 2, child: _sensorsGrid(context, state)),
             ]),
             const SizedBox(height: NeumorphicSpacing.cardGap),
-            
+
             // Row 2: Schedule + Quick Actions
             Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Expanded(flex: 3, child: _scheduleCard(context, state)),
@@ -115,7 +299,7 @@ class _DashboardViewState extends State<_DashboardView> {
               Expanded(flex: 2, child: _quickActionsCard(context)),
             ]),
             const SizedBox(height: NeumorphicSpacing.cardGap),
-            
+
             // Row 3: Energy Stats
             _energyStatsCard(context, state),
             const SizedBox(height: 24),
@@ -570,7 +754,7 @@ class _DashboardViewState extends State<_DashboardView> {
   // ============================================
   // RIGHT PANEL
   // ============================================
-  Widget _rightPanel(BuildContext context) {
+  Widget _rightPanelContent(BuildContext context) {
     final s = context.l10n;
     final t = NeumorphicTheme.of(context);
 
@@ -714,6 +898,13 @@ class _DashboardViewState extends State<_DashboardView> {
     ClimateMode.auto => TemperatureMode.auto,
     ClimateMode.dry => TemperatureMode.dry,
     _ => TemperatureMode.auto,
+  };
+
+  ClimateMode _reverseMapMode(TemperatureMode m) => switch (m) {
+    TemperatureMode.heating => ClimateMode.heating,
+    TemperatureMode.cooling => ClimateMode.cooling,
+    TemperatureMode.auto => ClimateMode.auto,
+    TemperatureMode.dry => ClimateMode.dry,
   };
 
   String _modeLabel(BuildContext c, ClimateMode m) {

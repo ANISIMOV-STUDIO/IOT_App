@@ -46,7 +46,9 @@ export 'src/widgets/neumorphic/neumorphic_slider.dart';
 
 // Layout components
 export 'src/widgets/neumorphic/neumorphic_sidebar.dart';
+export 'src/widgets/neumorphic/neumorphic_bottom_nav.dart';
 export 'src/widgets/neumorphic/neumorphic_dashboard_shell.dart';
+export 'src/widgets/neumorphic/responsive_dashboard_shell.dart';
 
 // IoT-specific components
 export 'src/widgets/neumorphic/neumorphic_device_card.dart';
