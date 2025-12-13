@@ -1,5 +1,5 @@
 /// Smart UI Kit - Neumorphic Design System for Smart Home Apps
-/// 
+///
 /// Uses flutter_neumorphic_plus for base components
 /// with custom IoT-specific widgets and theme extensions
 library smart_ui_kit;
@@ -10,7 +10,7 @@ library smart_ui_kit;
 
 // Re-export flutter_neumorphic_plus but hide conflicting names
 export 'package:flutter_neumorphic_plus/flutter_neumorphic.dart'
-    hide 
+    hide
       NeumorphicTheme,      // We use our own wrapper
       NeumorphicThemeData,  // We use our own
       NeumorphicColors,     // We have our own colors
@@ -34,11 +34,7 @@ export 'src/theme/tokens/neumorphic_shadows.dart';
 export 'src/theme/tokens/neumorphic_spacing.dart';
 export 'src/theme/tokens/neumorphic_typography.dart';
 
-// Mathematical Design System
-export 'src/theme/design_system.dart';
-
-// Layout Components (Golden Ratio based)
-export 'src/widgets/layout/golden_layout.dart';
+// Layout Components
 export 'src/widgets/layout/bento_grid.dart';
 
 // ============================================
@@ -54,18 +50,8 @@ export 'src/widgets/neumorphic/neumorphic_slider.dart';
 // Layout components
 export 'src/widgets/neumorphic/neumorphic_sidebar.dart';
 export 'src/widgets/neumorphic/neumorphic_bottom_nav.dart';
-export 'src/widgets/neumorphic/neumorphic_dashboard_shell.dart';
 export 'src/widgets/neumorphic/responsive_dashboard_shell.dart';
-
-// IoT-specific components
-export 'src/widgets/neumorphic/neumorphic_device_card.dart';
-export 'src/widgets/neumorphic/neumorphic_air_quality.dart';
 
 // Preset & Mode selection
 export 'src/widgets/neumorphic/neumorphic_preset_grid.dart';
 export 'src/widgets/neumorphic/neumorphic_segmented_control.dart';
-
-// ============================================
-// NOTE: Legacy files removed (app_theme, app_colors, app_spacing, app_typography)
-// Use NeumorphicTheme and NeumorphicColors instead
-// ============================================

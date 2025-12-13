@@ -4,7 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+import 'package:smart_ui_kit/smart_ui_kit.dart';
 
 enum DeviceType { lamp, airConditioner, vacuum, other }
 
@@ -30,12 +30,13 @@ class DeviceControlCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return HvacCard(
+    return NeumorphicCard(
       onTap: onTap,
-      size: HvacCardSize.large,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+      child: Padding(
+        padding: const EdgeInsets.all(NeumorphicSpacing.lg),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -47,15 +48,15 @@ class DeviceControlCard extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 16.0,
                         fontWeight: FontWeight.w600,
-                        color: HvacColors.textPrimary,
+                        color: NeumorphicColors.lightTextPrimary,
                       ),
                     ),
-                    const SizedBox(height: HvacSpacing.xxsR),
+                    const SizedBox(height: NeumorphicSpacing.xxs),
                     Text(
                       subtitle,
                       style: const TextStyle(
                         fontSize: 12.0,
-                        color: HvacColors.textSecondary,
+                        color: NeumorphicColors.lightTextSecondary,
                       ),
                     ),
                   ],
@@ -64,14 +65,14 @@ class DeviceControlCard extends StatelessWidget {
                   width: 40.0,
                   height: 40.0,
                   decoration: BoxDecoration(
-                    color: HvacColors.warning.withValues(alpha: 0.2),
+                    color: NeumorphicColors.accentWarning.withValues(alpha: 0.2),
                     shape: BoxShape.circle,
                   ),
                   child: const Center(
                     child: Icon(
                       Icons.circle,
                       size: 8.0,
-                      color: HvacColors.warning,
+                      color: NeumorphicColors.accentWarning,
                     ),
                   ),
                 ),
@@ -87,13 +88,14 @@ class DeviceControlCard extends StatelessWidget {
               ),
             const Spacer(),
             if (controls.isNotEmpty) ...controls,
-            const SizedBox(height: HvacSpacing.mdR),
+            const SizedBox(height: NeumorphicSpacing.md),
             if (stats.isNotEmpty)
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: stats,
               ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -1,6 +1,6 @@
 /// BREEZ Home Application
 ///
-/// Cross-platform HVAC management app with MQTT integration
+/// Cross-platform HVAC dashboard
 library;
 
 import 'package:flutter/material.dart';
@@ -8,18 +8,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:go_router/go_router.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
 
-import 'package:smart_ui_kit/smart_ui_kit.dart';
 import 'core/theme/app_theme.dart';
 import 'generated/l10n/app_localizations.dart';
 import 'core/di/injection_container.dart' as di;
 import 'core/services/language_service.dart';
 import 'core/navigation/app_router.dart';
-import 'presentation/bloc/hvac_list/hvac_list_bloc.dart';
-import 'presentation/bloc/hvac_list/hvac_list_event.dart';
-import 'presentation/bloc/auth/auth_bloc.dart';
+import 'presentation/bloc/dashboard/dashboard_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,13 +26,6 @@ void main() async {
   runApp(const HvacControlApp());
 }
 
-/// Responsive breakpoints configuration
-/// Based on industry standards (Material Design, Bootstrap, Tailwind)
-/// - Mobile: < 600px
-/// - Tablet: 600px - 1024px
-/// - Desktop: 1024px - 1920px
-/// - Large Desktop: > 1920px (content max-width clamped to 1920px)
-
 class HvacControlApp extends StatefulWidget {
   const HvacControlApp({super.key});
 
@@ -46,23 +35,19 @@ class HvacControlApp extends StatefulWidget {
 
 class _HvacControlAppState extends State<HvacControlApp> {
   late final GoRouter _router;
-  late final AuthBloc _authBloc;
 
   @override
   void initState() {
     super.initState();
-    _authBloc = di.sl<AuthBloc>()..add(const CheckAuthStatusEvent());
-    _router = createRouter(_authBloc);
+    _router = createRouter();
   }
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider.value(value: _authBloc),
         BlocProvider(
-          create: (context) =>
-              di.sl<HvacListBloc>()..add(const LoadHvacUnitsEvent()),
+          create: (context) => di.sl<DashboardBloc>()..add(const DashboardStarted()),
         ),
       ],
       child: ListenableBuilder(
@@ -79,22 +64,21 @@ class _HvacControlAppState extends State<HvacControlApp> {
               title: 'BREEZ Home',
               debugShowCheckedModeBanner: false,
 
-              // Theme - managed by AdaptiveTheme
+              // Theme
               theme: theme,
               darkTheme: darkTheme,
 
-              // Localization - Russian (default) and English
+              // Localization
               locale: languageService.currentLocale,
               localizationsDelegates: const [
                 AppLocalizations.delegate,
                 GlobalMaterialLocalizations.delegate,
                 GlobalWidgetsLocalizations.delegate,
                 GlobalCupertinoLocalizations.delegate,
-                FormBuilderLocalizations.delegate,
               ],
               supportedLocales: LanguageService.supportedLocales,
 
-              // Responsive Framework - breakpoints only, no scaling
+              // Responsive breakpoints
               builder: (context, widget) => ResponsiveBreakpoints.builder(
                 breakpoints: const [
                   Breakpoint(start: 0, end: 599, name: MOBILE),
@@ -109,11 +93,5 @@ class _HvacControlAppState extends State<HvacControlApp> {
         },
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _authBloc.close();
-    super.dispose();
   }
 }

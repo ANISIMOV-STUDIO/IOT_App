@@ -4,7 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+import 'package:smart_ui_kit/smart_ui_kit.dart';
 
 class TemperatureControl extends StatelessWidget {
   final double value;
@@ -23,7 +23,7 @@ class TemperatureControl extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: HvacSpacing.lgR),
+      padding: const EdgeInsets.symmetric(vertical: NeumorphicSpacing.lg),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -31,12 +31,12 @@ class TemperatureControl extends StatelessWidget {
             min.toInt().toString(),
             style: const TextStyle(
               fontSize: 14.0,
-              color: HvacColors.textTertiary,
+              color: NeumorphicColors.lightTextTertiary,
             ),
           ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: HvacSpacing.mdR),
+              padding: const EdgeInsets.symmetric(horizontal: NeumorphicSpacing.md),
               child: Column(
                 children: [
                   Text(
@@ -45,11 +45,11 @@ class TemperatureControl extends StatelessWidget {
                       fontSize: 48.0,
                       fontWeight: FontWeight.w700,
                       height: 1,
-                      color: HvacColors.textPrimary,
+                      color: NeumorphicColors.lightTextPrimary,
                     ),
                   ),
-                  const SizedBox(height: HvacSpacing.xsR),
-                  HvacSlider(
+                  const SizedBox(height: NeumorphicSpacing.xs),
+                  Slider(
                     value: value,
                     min: min,
                     max: max,
@@ -64,7 +64,7 @@ class TemperatureControl extends StatelessWidget {
             max.toInt().toString(),
             style: const TextStyle(
               fontSize: 14.0,
-              color: HvacColors.textTertiary,
+              color: NeumorphicColors.lightTextTertiary,
             ),
           ),
         ],

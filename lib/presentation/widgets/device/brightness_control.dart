@@ -4,7 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+import 'package:smart_ui_kit/smart_ui_kit.dart';
 
 class BrightnessControl extends StatelessWidget {
   final double value;
@@ -24,19 +24,19 @@ class BrightnessControl extends StatelessWidget {
           width: 40.0,
           height: 40.0,
           decoration: BoxDecoration(
-            color: HvacColors.backgroundElevated,
-            borderRadius: BorderRadius.circular(HvacRadius.mdR),
+            color: NeumorphicColors.lightSurface,
+            borderRadius: BorderRadius.circular(12),
           ),
           child: const Icon(
             Icons.lightbulb_outline,
             size: 20.0,
-            color: HvacColors.textSecondary,
+            color: NeumorphicColors.lightTextSecondary,
           ),
         ),
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: HvacSpacing.mdR),
-            child: HvacSlider(
+            padding: const EdgeInsets.symmetric(horizontal: NeumorphicSpacing.md),
+            child: Slider(
               value: value,
               min: 0,
               max: 1,
@@ -50,7 +50,7 @@ class BrightnessControl extends StatelessWidget {
           style: const TextStyle(
             fontSize: 16.0,
             fontWeight: FontWeight.w600,
-            color: HvacColors.textPrimary,
+            color: NeumorphicColors.lightTextPrimary,
           ),
         ),
       ],

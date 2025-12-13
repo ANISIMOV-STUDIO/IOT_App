@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_ui_kit/smart_ui_kit.dart' hide AirQualityLevel;
+import 'package:smart_ui_kit/smart_ui_kit.dart';
 
 import '../../core/di/injection_container.dart';
 import '../../core/l10n/l10n.dart';

@@ -281,3 +281,77 @@ class _ClimateControlFAB extends StatelessWidget {
     );
   }
 }
+
+/// Main content area with header and scrollable content
+class NeumorphicMainContent extends StatelessWidget {
+  final String? title;
+  final List<Widget>? actions;
+  final Widget child;
+  final EdgeInsetsGeometry? padding;
+
+  const NeumorphicMainContent({
+    super.key,
+    this.title,
+    this.actions,
+    required this.child,
+    this.padding,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = NeumorphicTheme.of(context);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (title != null)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              NeumorphicSpacing.lg,
+              NeumorphicSpacing.lg,
+              NeumorphicSpacing.lg,
+              NeumorphicSpacing.md,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(title!, style: theme.typography.headlineLarge),
+                if (actions != null) Row(children: actions!),
+              ],
+            ),
+          ),
+        Expanded(
+          child: SingleChildScrollView(
+            padding: padding ?? const EdgeInsets.symmetric(
+              horizontal: NeumorphicSpacing.lg,
+            ),
+            child: child,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Right panel for climate controls
+class NeumorphicRightPanel extends StatelessWidget {
+  final List<Widget> children;
+  final EdgeInsetsGeometry? padding;
+
+  const NeumorphicRightPanel({
+    super.key,
+    required this.children,
+    this.padding,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: padding ?? const EdgeInsets.all(NeumorphicSpacing.md),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: children,
+      ),
+    );
+  }
+}

@@ -4,7 +4,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:hvac_ui_kit/hvac_ui_kit.dart';
+import 'package:smart_ui_kit/smart_ui_kit.dart';
 
 class DeviceStatItem extends StatelessWidget {
   final IconData icon;
@@ -28,25 +28,25 @@ class DeviceStatItem extends StatelessWidget {
             Icon(
               icon,
               size: 16.0,
-              color: HvacColors.textSecondary,
+              color: NeumorphicColors.lightTextSecondary,
             ),
-            const SizedBox(width: HvacSpacing.xxsR),
+            const SizedBox(width: NeumorphicSpacing.xxs),
             Text(
               value,
               style: const TextStyle(
                 fontSize: 14.0,
                 fontWeight: FontWeight.w600,
-                color: HvacColors.textPrimary,
+                color: NeumorphicColors.lightTextPrimary,
               ),
             ),
           ],
         ),
-        const SizedBox(height: HvacSpacing.xxsR),
+        const SizedBox(height: NeumorphicSpacing.xxs),
         Text(
           label,
           style: const TextStyle(
             fontSize: 11.0,
-            color: HvacColors.textTertiary,
+            color: NeumorphicColors.lightTextTertiary,
           ),
         ),
       ],
