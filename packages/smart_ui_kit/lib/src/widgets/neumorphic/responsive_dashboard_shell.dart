@@ -190,11 +190,11 @@ class ResponsiveDashboardShell extends StatelessWidget {
                   children: pages,
                 ),
               ),
-              // Right panel
+              // Right panel (aligned with sidebar neumorphic area)
               if (rightPanelBuilder != null)
                 Padding(
                   padding: const EdgeInsets.only(
-                    top: 16,
+                    top: 72, // Logo height + spacing to align with sidebar
                     right: 16,
                     bottom: 16,
                   ),
@@ -314,7 +314,7 @@ class NeumorphicMainContent extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(
               NeumorphicSpacing.lg,
-              NeumorphicSpacing.lg,
+              56, // Align with sidebar (logo height + spacing)
               NeumorphicSpacing.lg,
               NeumorphicSpacing.md,
             ),

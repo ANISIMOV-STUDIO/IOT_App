@@ -44,62 +44,61 @@ class NeumorphicSidebar extends StatelessWidget {
       duration: const Duration(milliseconds: 200),
       width: width,
       height: double.infinity,
-      margin: const EdgeInsets.all(NeumorphicSpacing.md),
-      child: np.Neumorphic(
-        style: np.NeumorphicStyle(
-          depth: -4, // Concave (inset) effect
-          intensity: 0.5,
-          boxShape: np.NeumorphicBoxShape.roundRect(
-            BorderRadius.circular(NeumorphicSpacing.radiusLg),
-          ),
-        ),
-        padding: EdgeInsets.symmetric(
-          vertical: NeumorphicSpacing.lg,
-          horizontal: isCollapsed ? NeumorphicSpacing.sm : NeumorphicSpacing.md,
-        ),
-        child: Column(
-          children: [
-            // Logo and user profile
-            _buildHeader(context, theme),
+      padding: const EdgeInsets.all(NeumorphicSpacing.md),
+      child: Column(
+        children: [
+          // Logo outside the neumorphic container
+          _buildLogo(theme, compact: isCollapsed),
 
-            SizedBox(height: NeumorphicSpacing.xl),
+          const SizedBox(height: NeumorphicSpacing.md),
 
-            // Navigation items
-            Expanded(
-              child: ListView(
+          // Neumorphic container with navigation
+          Expanded(
+            child: np.Neumorphic(
+              style: np.NeumorphicStyle(
+                depth: -4, // Concave (inset) effect
+                intensity: 0.5,
+                boxShape: np.NeumorphicBoxShape.roundRect(
+                  BorderRadius.circular(NeumorphicSpacing.radiusLg),
+                ),
+              ),
+              padding: EdgeInsets.symmetric(
+                vertical: NeumorphicSpacing.md,
+                horizontal: isCollapsed ? NeumorphicSpacing.sm : NeumorphicSpacing.md,
+              ),
+              child: Column(
                 children: [
-                  ...items.asMap().entries.map((entry) =>
-                    _buildNavItem(context, theme, entry.key, entry.value),
+                  // User profile
+                  if (!isCollapsed) ...[
+                    _buildUserProfile(theme),
+                    const SizedBox(height: NeumorphicSpacing.md),
+                  ],
+
+                  // Navigation items
+                  Expanded(
+                    child: ListView(
+                      children: [
+                        ...items.asMap().entries.map((entry) =>
+                          _buildNavItem(context, theme, entry.key, entry.value),
+                        ),
+                      ],
+                    ),
                   ),
+
+                  // Bottom items (Settings, etc.)
+                  if (bottomItems != null) ...[
+                    _buildNeumorphicDivider(theme),
+                    const SizedBox(height: 12),
+                    ...bottomItems!.asMap().entries.map((entry) =>
+                      _buildNavItem(context, theme, items.length + entry.key, entry.value),
+                    ),
+                  ],
                 ],
               ),
             ),
-
-            // Bottom items (Settings, etc.)
-            if (bottomItems != null) ...[
-              _buildNeumorphicDivider(theme),
-              const SizedBox(height: 16),
-              ...bottomItems!.asMap().entries.map((entry) =>
-                _buildNavItem(context, theme, items.length + entry.key, entry.value),
-              ),
-            ],
-          ],
-        ),
+          ),
+        ],
       ),
-    );
-  }
-
-  Widget _buildHeader(BuildContext context, NeumorphicThemeData theme) {
-    if (isCollapsed) {
-      return _buildLogo(theme, compact: true);
-    }
-
-    return Column(
-      children: [
-        _buildLogo(theme, compact: false),
-        const SizedBox(height: NeumorphicSpacing.md),
-        _buildUserProfile(theme),
-      ],
     );
   }
 
