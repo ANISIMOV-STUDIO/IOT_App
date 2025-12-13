@@ -89,7 +89,9 @@ class _NeumorphicSliderState extends State<NeumorphicSlider> {
             final thumbSize = widget.height + 8;
             final thumbPosition = _progress * (trackWidth - thumbSize);
 
-            return GestureDetector(
+            return MouseRegion(
+              cursor: _isDragging ? SystemMouseCursors.grabbing : SystemMouseCursors.grab,
+              child: GestureDetector(
               onHorizontalDragStart: (_) {
                 setState(() => _isDragging = true);
               },
@@ -167,6 +169,7 @@ class _NeumorphicSliderState extends State<NeumorphicSlider> {
                   ],
                 ),
               ),
+            ),
             );
           },
         ),
@@ -252,26 +255,30 @@ class NeumorphicSliderPresets extends StatelessWidget {
         return Expanded(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 3),
-            child: GestureDetector(
-              onTap: () => onPresetSelected?.call(preset.value),
-              child: np.Neumorphic(
-                style: np.NeumorphicStyle(
-                  depth: isSelected ? -2 : 3,
-                  intensity: 0.5,
-                  boxShape: np.NeumorphicBoxShape.roundRect(
-                    BorderRadius.circular(NeumorphicSpacing.radiusSm),
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: () => onPresetSelected?.call(preset.value),
+                child: np.Neumorphic(
+                  duration: Duration.zero, // No animation jank
+                  style: np.NeumorphicStyle(
+                    depth: isSelected ? -2 : 3,
+                    intensity: 0.5,
+                    boxShape: np.NeumorphicBoxShape.roundRect(
+                      BorderRadius.circular(NeumorphicSpacing.radiusSm),
+                    ),
                   ),
-                ),
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Center(
-                  child: Text(
-                    preset.label,
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                      color: isSelected
-                          ? NeumorphicColors.accentPrimary
-                          : Colors.grey.shade600,
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Center(
+                    child: Text(
+                      preset.label,
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                        color: isSelected
+                            ? NeumorphicColors.accentPrimary
+                            : Colors.grey.shade600,
+                      ),
                     ),
                   ),
                 ),

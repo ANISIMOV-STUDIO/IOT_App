@@ -152,15 +152,15 @@ class NeumorphicSidebar extends StatelessWidget {
         child: InkWell(
           onTap: () => onItemSelected(index),
           borderRadius: BorderRadius.circular(NeumorphicSpacing.radiusSm),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 150),
+          child: Container(
+            // No animation - instant state change to avoid jank
             padding: EdgeInsets.symmetric(
               horizontal: isCollapsed ? NeumorphicSpacing.sm : NeumorphicSpacing.md,
               vertical: NeumorphicSpacing.sm,
             ),
             decoration: BoxDecoration(
-              color: isSelected 
-                  ? theme.colors.cardSurface 
+              color: isSelected
+                  ? theme.colors.cardSurface
                   : Colors.transparent,
               borderRadius: BorderRadius.circular(NeumorphicSpacing.radiusSm),
               boxShadow: isSelected ? theme.shadows.convexSmall : null,

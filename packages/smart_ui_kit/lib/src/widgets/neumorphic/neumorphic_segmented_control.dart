@@ -91,55 +91,58 @@ class _SegmentButtonState<T> extends State<_SegmentButton<T>> {
     final color = widget.segment.activeColor ?? NeumorphicColors.accentPrimary;
     final textColor = widget.isSelected ? color : Colors.grey.shade500;
 
-    return GestureDetector(
-      onTapDown: (_) => setState(() => _isPressed = true),
-      onTapUp: (_) {
-        setState(() => _isPressed = false);
-        widget.onTap?.call();
-      },
-      onTapCancel: () => setState(() => _isPressed = false),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        decoration: widget.isSelected
-            ? BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(NeumorphicSpacing.radiusSm),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.08),
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                  ),
-                  BoxShadow(
-                    color: Colors.white.withValues(alpha: 0.8),
-                    blurRadius: 4,
-                    offset: const Offset(0, -1),
-                  ),
-                ],
-              )
-            : BoxDecoration(
-                color: _isPressed ? Colors.grey.shade100 : Colors.transparent,
-                borderRadius: BorderRadius.circular(NeumorphicSpacing.radiusSm),
-              ),
-        child: Center(
-          child: widget.showLabel
-              ? Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(widget.segment.icon, size: 18, color: textColor),
-                    const SizedBox(height: 2),
-                    Text(
-                      widget.segment.label,
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: widget.isSelected ? FontWeight.w600 : FontWeight.w500,
-                        color: textColor,
-                      ),
-                      overflow: TextOverflow.ellipsis,
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTapDown: (_) => setState(() => _isPressed = true),
+        onTapUp: (_) {
+          setState(() => _isPressed = false);
+          widget.onTap?.call();
+        },
+        onTapCancel: () => setState(() => _isPressed = false),
+        child: Container(
+          // No animation - instant state change to avoid jank
+          decoration: widget.isSelected
+              ? BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(NeumorphicSpacing.radiusSm),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.08),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                    BoxShadow(
+                      color: Colors.white.withValues(alpha: 0.8),
+                      blurRadius: 4,
+                      offset: const Offset(0, -1),
                     ),
                   ],
                 )
-              : Icon(widget.segment.icon, size: 22, color: textColor),
+              : BoxDecoration(
+                  color: _isPressed ? Colors.grey.shade100 : Colors.transparent,
+                  borderRadius: BorderRadius.circular(NeumorphicSpacing.radiusSm),
+                ),
+          child: Center(
+            child: widget.showLabel
+                ? Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(widget.segment.icon, size: 18, color: textColor),
+                      const SizedBox(height: 2),
+                      Text(
+                        widget.segment.label,
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: widget.isSelected ? FontWeight.w600 : FontWeight.w500,
+                          color: textColor,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  )
+                : Icon(widget.segment.icon, size: 22, color: textColor),
+          ),
         ),
       ),
     );

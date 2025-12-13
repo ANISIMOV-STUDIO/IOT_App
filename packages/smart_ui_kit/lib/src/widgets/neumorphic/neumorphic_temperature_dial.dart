@@ -163,16 +163,19 @@ class _NeumorphicTemperatureDialState extends State<NeumorphicTemperatureDial>
 
               // Draggable thumb
               Positioned.fill(
-                child: GestureDetector(
-                  onPanStart: _onPanStart,
-                  onPanUpdate: _onPanUpdate,
-                  onPanEnd: _onPanEnd,
-                  child: CustomPaint(
-                    painter: _ThumbPainter(
-                      progress: _progress,
-                      trackWidth: _trackWidth,
-                      color: _primaryColor,
-                      isPressed: _isDragging,
+                child: MouseRegion(
+                  cursor: _isDragging ? SystemMouseCursors.grabbing : SystemMouseCursors.grab,
+                  child: GestureDetector(
+                    onPanStart: _onPanStart,
+                    onPanUpdate: _onPanUpdate,
+                    onPanEnd: _onPanEnd,
+                    child: CustomPaint(
+                      painter: _ThumbPainter(
+                        progress: _progress,
+                        trackWidth: _trackWidth,
+                        color: _primaryColor,
+                        isPressed: _isDragging,
+                      ),
                     ),
                   ),
                 ),

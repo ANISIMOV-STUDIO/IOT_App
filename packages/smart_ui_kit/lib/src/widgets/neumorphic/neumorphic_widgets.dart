@@ -4,6 +4,9 @@
 // Export our custom theme wrapper
 export 'neumorphic_theme_wrapper.dart';
 
+// Core interaction wrapper (cursor + press state)
+export 'neumorphic_touchable.dart';
+
 // Export custom components (IoT-specific, not in flutter_neumorphic_plus)
 export 'neumorphic_sidebar.dart';
 export 'neumorphic_dashboard_shell.dart';

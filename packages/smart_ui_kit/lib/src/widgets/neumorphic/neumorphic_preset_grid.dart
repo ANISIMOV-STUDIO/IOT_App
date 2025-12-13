@@ -85,31 +85,34 @@ class _PresetButtonState extends State<_PresetButton> {
     return Tooltip(
       message: widget.preset.label,
       preferBelow: true,
-      child: GestureDetector(
-        onTapDown: (_) => setState(() => _isPressed = true),
-        onTapUp: (_) {
-          setState(() => _isPressed = false);
-          widget.onTap?.call();
-        },
-        onTapCancel: () => setState(() => _isPressed = false),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
-          width: widget.size,
-          height: widget.size,
-          child: np.Neumorphic(
-            style: np.NeumorphicStyle(
-              depth: depth,
-              intensity: 0.6,
-              surfaceIntensity: widget.isSelected ? 0.15 : 0.1,
-              boxShape: np.NeumorphicBoxShape.roundRect(
-                BorderRadius.circular(NeumorphicSpacing.radiusMd),
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          onTapDown: (_) => setState(() => _isPressed = true),
+          onTapUp: (_) {
+            setState(() => _isPressed = false);
+            widget.onTap?.call();
+          },
+          onTapCancel: () => setState(() => _isPressed = false),
+          child: SizedBox(
+            width: widget.size,
+            height: widget.size,
+            child: np.Neumorphic(
+              duration: Duration.zero, // No animation - instant state change
+              style: np.NeumorphicStyle(
+                depth: depth,
+                intensity: 0.6,
+                surfaceIntensity: widget.isSelected ? 0.15 : 0.1,
+                boxShape: np.NeumorphicBoxShape.roundRect(
+                  BorderRadius.circular(NeumorphicSpacing.radiusMd),
+                ),
               ),
-            ),
-            child: Center(
-              child: Icon(
-                widget.preset.icon,
-                size: 24,
-                color: widget.isSelected ? color : Colors.grey.shade500,
+              child: Center(
+                child: Icon(
+                  widget.preset.icon,
+                  size: 24,
+                  color: widget.isSelected ? color : Colors.grey.shade500,
+                ),
               ),
             ),
           ),

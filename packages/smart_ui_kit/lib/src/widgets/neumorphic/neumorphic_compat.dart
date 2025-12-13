@@ -57,7 +57,10 @@ class NeumorphicCard extends StatelessWidget {
     );
 
     if (onTap != null) {
-      return GestureDetector(onTap: onTap, child: card);
+      return MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(onTap: onTap, child: card),
+      );
     }
     return card;
   }
@@ -87,23 +90,27 @@ class _NeumorphicInteractiveCardState extends State<NeumorphicInteractiveCard> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTapDown: (_) => setState(() => _isPressed = true),
-      onTapUp: (_) {
-        setState(() => _isPressed = false);
-        widget.onTap?.call();
-      },
-      onTapCancel: () => setState(() => _isPressed = false),
-      child: np.Neumorphic(
-        style: np.NeumorphicStyle(
-          depth: _isPressed ? -2 : 4,
-          intensity: 0.5,
-          boxShape: np.NeumorphicBoxShape.roundRect(
-            BorderRadius.circular(widget.borderRadius),
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTapDown: (_) => setState(() => _isPressed = true),
+        onTapUp: (_) {
+          setState(() => _isPressed = false);
+          widget.onTap?.call();
+        },
+        onTapCancel: () => setState(() => _isPressed = false),
+        child: np.Neumorphic(
+          duration: Duration.zero, // No animation jank
+          style: np.NeumorphicStyle(
+            depth: _isPressed ? -2 : 4,
+            intensity: 0.5,
+            boxShape: np.NeumorphicBoxShape.roundRect(
+              BorderRadius.circular(widget.borderRadius),
+            ),
           ),
+          padding: widget.padding ?? NeumorphicSpacing.cardInsets,
+          child: widget.child,
         ),
-        padding: widget.padding ?? NeumorphicSpacing.cardInsets,
-        child: widget.child,
       ),
     );
   }
@@ -185,27 +192,31 @@ class NeumorphicButton extends StatelessWidget {
       ],
     );
 
-    return Opacity(
-      opacity: isDisabled ? 0.5 : 1.0,
-      child: np.NeumorphicButton(
-        onPressed: (isDisabled || isLoading) ? null : onPressed,
-        style: np.NeumorphicStyle(
-          depth: 4,
-          intensity: 0.5,
-          boxShape: np.NeumorphicBoxShape.roundRect(
-            BorderRadius.circular(sizeConfig.borderRadius),
+    return MouseRegion(
+      cursor: (isDisabled || isLoading) ? SystemMouseCursors.basic : SystemMouseCursors.click,
+      child: Opacity(
+        opacity: isDisabled ? 0.5 : 1.0,
+        child: np.NeumorphicButton(
+          onPressed: (isDisabled || isLoading) ? null : onPressed,
+          duration: Duration.zero, // No animation jank
+          style: np.NeumorphicStyle(
+            depth: 4,
+            intensity: 0.5,
+            boxShape: np.NeumorphicBoxShape.roundRect(
+              BorderRadius.circular(sizeConfig.borderRadius),
+            ),
+            color: backgroundColor,
           ),
-          color: backgroundColor,
-        ),
-        padding: EdgeInsets.symmetric(
-          horizontal: sizeConfig.horizontalPadding,
-          vertical: sizeConfig.verticalPadding,
-        ),
-        minDistance: -2,
-        child: SizedBox(
-          width: width,
-          height: sizeConfig.height - sizeConfig.verticalPadding * 2,
-          child: Center(child: content),
+          padding: EdgeInsets.symmetric(
+            horizontal: sizeConfig.horizontalPadding,
+            vertical: sizeConfig.verticalPadding,
+          ),
+          minDistance: -2,
+          child: SizedBox(
+            width: width,
+            height: sizeConfig.height - sizeConfig.verticalPadding * 2,
+            child: Center(child: content),
+          ),
         ),
       ),
     );
