@@ -65,6 +65,7 @@ class _DashboardViewState extends State<_DashboardView> {
           _notificationsPlaceholder(context, s),
         ],
         rightPanelBuilder: (ctx) => _rightPanelContent(ctx),
+        footerBuilder: (ctx) => _buildFooter(ctx),
       ),
     );
   }
@@ -340,7 +341,7 @@ class _DashboardViewState extends State<_DashboardView> {
                 ),
               ),
 
-              // Row 3: Full width cards
+              // Row 3: Devices + Air Quality
               BentoItem(
                 size: BentoSize.wide,
                 child: _deviceSwitcherCardHorizontal(context),
@@ -350,23 +351,69 @@ class _DashboardViewState extends State<_DashboardView> {
                 child: _airQualityCardBento(context, state),
               ),
 
-              // Row 4: Schedule + Quick Actions + System Info
+              // Row 4: Schedule + System Info
               BentoItem(
-                size: BentoSize.square,
+                size: BentoSize.wide,
                 child: _scheduleCardBento(context, state),
-              ),
-              BentoItem(
-                size: BentoSize.square,
-                child: _quickActionsCardBento(context),
               ),
               BentoItem(
                 size: BentoSize.wide,
                 child: _systemInfoCardBento(context, state),
               ),
+
+              // Row 5: Quick Actions (full width)
+              BentoItem(
+                size: BentoSize.wide,
+                child: _quickActionsCardBento(context),
+              ),
             ],
           ),
         );
       },
+    );
+  }
+
+  Widget _buildFooter(BuildContext context) {
+    final t = NeumorphicTheme.of(context);
+    final now = DateTime.now();
+    final syncTime = '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        // Weather info
+        Row(
+          children: [
+            Icon(Icons.wb_sunny_outlined, size: 16, color: NeumorphicColors.accentWarning),
+            const SizedBox(width: 6),
+            Text(
+              '+5°C',
+              style: t.typography.bodySmall.copyWith(fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(width: 4),
+            Text(
+              'На улице',
+              style: t.typography.bodySmall.copyWith(color: t.colors.textTertiary),
+            ),
+          ],
+        ),
+        // Sync time
+        Row(
+          children: [
+            Icon(Icons.sync, size: 14, color: t.colors.textTertiary),
+            const SizedBox(width: 4),
+            Text(
+              'Синхронизировано в $syncTime',
+              style: t.typography.labelSmall.copyWith(color: t.colors.textTertiary),
+            ),
+          ],
+        ),
+        // App version
+        Text(
+          'BREEZ Home v1.0.0',
+          style: t.typography.labelSmall.copyWith(color: t.colors.textTertiary),
+        ),
+      ],
     );
   }
 

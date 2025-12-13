@@ -23,6 +23,7 @@ class ResponsiveDashboardShell extends StatelessWidget {
   final List<Widget> pages;
   final Widget Function(BuildContext)? rightPanelBuilder;
   final Widget Function(BuildContext)? mobileHeaderBuilder;
+  final Widget Function(BuildContext)? footerBuilder;
   final List<Widget>? headerActions; // Actions in top-right corner (lang switch, theme toggle)
   final String? userName;
   final String? userAvatarUrl;
@@ -42,6 +43,7 @@ class ResponsiveDashboardShell extends StatelessWidget {
     required this.pages,
     this.rightPanelBuilder,
     this.mobileHeaderBuilder,
+    this.footerBuilder,
     this.headerActions,
     this.userName,
     this.userAvatarUrl,
@@ -159,7 +161,7 @@ class ResponsiveDashboardShell extends StatelessWidget {
     );
   }
 
-  /// Desktop layout: Sidebar + Content + Right Panel
+  /// Desktop layout: Sidebar + Content + Right Panel + Footer
   Widget _buildDesktopLayout(BuildContext context) {
     final theme = NeumorphicTheme.of(context);
     final screenWidth = MediaQuery.of(context).size.width;
@@ -174,67 +176,79 @@ class ResponsiveDashboardShell extends StatelessWidget {
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: maxWidth),
-          child: Stack(
-            children: [
-              // Main layout
-              Padding(
-                padding: const EdgeInsets.all(NeumorphicSpacing.md),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // Sidebar
-                    NeumorphicSidebar(
-                      selectedIndex: selectedIndex,
-                      onItemSelected: onIndexChanged,
-                      items: navItems,
-                      userName: userName,
-                      userAvatarUrl: userAvatarUrl,
-                      isCollapsed: sidebarCollapsed,
-                      onToggleSidebar: onToggleSidebar,
-                      logoWidget: logoWidget,
-                      appName: appName,
-                    ),
-                    // Main content
-                    Expanded(
-                      child: IndexedStack(
-                        index: selectedIndex.clamp(0, pages.length - 1),
-                        children: pages,
-                      ),
-                    ),
-                    // Right panel area - starts below header row level
-                    if (rightPanelBuilder != null)
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          left: NeumorphicSpacing.md,
-                          top: headerHeight,
-                        ),
-                        child: SizedBox(
-                          width: panelWidth,
-                          child: rightPanelBuilder!(context),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-              // Header actions (top-right corner, above right panel)
-              if (headerActions != null && headerActions!.isNotEmpty)
-                Positioned(
-                  top: NeumorphicSpacing.md,
-                  right: NeumorphicSpacing.md + (rightPanelBuilder != null ? panelWidth / 2 - 60 : 0),
-                  child: SizedBox(
-                    height: 56,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        for (int i = 0; i < headerActions!.length; i++) ...[
-                          if (i > 0) const SizedBox(width: NeumorphicSpacing.sm),
-                          headerActions![i],
+          child: Padding(
+            padding: const EdgeInsets.all(NeumorphicSpacing.md),
+            child: Column(
+              children: [
+                // Main content area (3 columns)
+                Expanded(
+                  child: Stack(
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          // Sidebar
+                          NeumorphicSidebar(
+                            selectedIndex: selectedIndex,
+                            onItemSelected: onIndexChanged,
+                            items: navItems,
+                            userName: userName,
+                            userAvatarUrl: userAvatarUrl,
+                            isCollapsed: sidebarCollapsed,
+                            onToggleSidebar: onToggleSidebar,
+                            logoWidget: logoWidget,
+                            appName: appName,
+                          ),
+                          // Main content
+                          Expanded(
+                            child: IndexedStack(
+                              index: selectedIndex.clamp(0, pages.length - 1),
+                              children: pages,
+                            ),
+                          ),
+                          // Right panel area - starts below header row level
+                          if (rightPanelBuilder != null)
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                left: NeumorphicSpacing.md,
+                                top: headerHeight,
+                              ),
+                              child: SizedBox(
+                                width: panelWidth,
+                                child: rightPanelBuilder!(context),
+                              ),
+                            ),
                         ],
-                      ],
-                    ),
+                      ),
+                      // Header actions (top-right corner, above right panel)
+                      if (headerActions != null && headerActions!.isNotEmpty)
+                        Positioned(
+                          top: 0,
+                          right: rightPanelBuilder != null ? panelWidth / 2 - 60 : 0,
+                          child: SizedBox(
+                            height: 56,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                for (int i = 0; i < headerActions!.length; i++) ...[
+                                  if (i > 0) const SizedBox(width: NeumorphicSpacing.sm),
+                                  headerActions![i],
+                                ],
+                              ],
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
                 ),
-            ],
+                // Footer (spans all columns)
+                if (footerBuilder != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: NeumorphicSpacing.md),
+                    child: footerBuilder!(context),
+                  ),
+              ],
+            ),
           ),
         ),
       ),
