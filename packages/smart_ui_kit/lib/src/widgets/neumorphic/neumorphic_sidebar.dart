@@ -103,19 +103,15 @@ class NeumorphicSidebar extends StatelessWidget {
     );
   }
 
-  /// Neumorphic logo container
+  /// Logo row - flat, no neumorphic container
   Widget _buildLogo(NeumorphicThemeData theme, {required bool compact}) {
     final logo = compact ? (logoWidgetCompact ?? logoWidget) : logoWidget;
 
-    return np.Neumorphic(
-      style: np.NeumorphicStyle(
-        depth: 3,
-        intensity: 0.6,
-        boxShape: np.NeumorphicBoxShape.roundRect(
-          BorderRadius.circular(compact ? 12 : 16),
-        ),
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: compact ? 4 : 8,
+        vertical: compact ? 8 : 12,
       ),
-      padding: EdgeInsets.all(compact ? 10 : 14),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -123,29 +119,15 @@ class NeumorphicSidebar extends StatelessWidget {
           // Logo widget or default icon
           if (logo != null)
             SizedBox(
-              width: compact ? 30 : 36,
-              height: compact ? 30 : 36,
+              width: compact ? 32 : 40,
+              height: compact ? 32 : 40,
               child: logo,
             )
           else
-            Container(
-              padding: EdgeInsets.all(compact ? 6 : 8),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    NeumorphicColors.accentPrimary,
-                    NeumorphicColors.modeCooling,
-                  ],
-                ),
-                borderRadius: BorderRadius.circular(compact ? 8 : 10),
-              ),
-              child: Icon(
-                Icons.ac_unit_rounded,
-                color: Colors.white,
-                size: compact ? 18 : 22,
-              ),
+            Icon(
+              Icons.ac_unit_rounded,
+              color: NeumorphicColors.accentPrimary,
+              size: compact ? 28 : 36,
             ),
           if (!compact) ...[
             const SizedBox(width: 12),
