@@ -6,7 +6,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../presentation/screens/neumorphic_dashboard_screen.dart';
+import '../../presentation/screens/dashboard/dashboard_screen.dart';
 
 /// App route names
 class AppRoutes {
@@ -45,7 +45,7 @@ GoRouter createRouter() {
     routes: [
       GoRoute(
         path: AppRoutes.home,
-        builder: (context, state) => const NeumorphicDashboardScreen(),
+        builder: (context, state) => const DashboardScreen(),
       ),
     ],
   );
