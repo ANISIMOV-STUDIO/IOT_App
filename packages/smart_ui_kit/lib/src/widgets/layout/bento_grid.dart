@@ -46,7 +46,9 @@ class BentoGrid extends StatelessWidget {
   final List<BentoItem> items;
   final int columns;
   final double gap;
-  final double cellHeight;
+
+  /// Cell height. If null, auto-calculates to fill available height.
+  final double? cellHeight;
 
   const BentoGrid({
     super.key,
@@ -61,15 +63,23 @@ class BentoGrid extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final availableWidth = constraints.maxWidth;
+        final availableHeight = constraints.maxHeight;
         final cellWidth = (availableWidth - (gap * (columns - 1))) / columns;
 
         // Build grid using a simple flow algorithm
         final List<_PlacedItem> placedItems = _placeItems(cellWidth);
 
-        // Calculate total height
+        // Calculate number of rows
         final maxRow = placedItems.fold<int>(0, (max, item) =>
           item.row + item.bentoItem.rowSpan > max ? item.row + item.bentoItem.rowSpan : max);
-        final totalHeight = maxRow * cellHeight + (maxRow - 1) * gap;
+
+        // Auto-calculate cell height if not specified and we have bounded height
+        final effectiveCellHeight = cellHeight ??
+            (availableHeight.isFinite && maxRow > 0
+                ? (availableHeight - (maxRow - 1) * gap) / maxRow
+                : 140);
+
+        final totalHeight = maxRow * effectiveCellHeight + (maxRow - 1) * gap;
 
         return SizedBox(
           height: totalHeight,
@@ -77,10 +87,10 @@ class BentoGrid extends StatelessWidget {
             children: placedItems.map((placed) {
               final width = placed.bentoItem.columnSpan * cellWidth +
                 (placed.bentoItem.columnSpan - 1) * gap;
-              final height = placed.bentoItem.rowSpan * cellHeight +
+              final height = placed.bentoItem.rowSpan * effectiveCellHeight +
                 (placed.bentoItem.rowSpan - 1) * gap;
               final left = placed.col * (cellWidth + gap);
-              final top = placed.row * (cellHeight + gap);
+              final top = placed.row * (effectiveCellHeight + gap);
 
               return Positioned(
                 left: left,

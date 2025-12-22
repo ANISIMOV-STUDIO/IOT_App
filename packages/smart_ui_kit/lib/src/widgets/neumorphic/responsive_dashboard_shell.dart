@@ -321,12 +321,16 @@ class _ClimateControlFAB extends StatelessWidget {
   }
 }
 
-/// Main content area with header and scrollable content
+/// Main content area with header and optionally scrollable content
 class NeumorphicMainContent extends StatelessWidget {
   final String? title;
   final List<Widget>? actions;
   final Widget child;
   final EdgeInsetsGeometry? padding;
+
+  /// If false, the content won't be wrapped in SingleChildScrollView.
+  /// Use this when child contains Expanded widgets that need bounded constraints.
+  final bool scrollable;
 
   const NeumorphicMainContent({
     super.key,
@@ -334,11 +338,15 @@ class NeumorphicMainContent extends StatelessWidget {
     this.actions,
     required this.child,
     this.padding,
+    this.scrollable = true,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = NeumorphicTheme.of(context);
+    final contentPadding = padding ?? const EdgeInsets.symmetric(
+      horizontal: NeumorphicSpacing.lg,
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -363,12 +371,15 @@ class NeumorphicMainContent extends StatelessWidget {
         ),
         const SizedBox(height: NeumorphicSpacing.sm),
         Expanded(
-          child: SingleChildScrollView(
-            padding: padding ?? const EdgeInsets.symmetric(
-              horizontal: NeumorphicSpacing.lg,
-            ),
-            child: child,
-          ),
+          child: scrollable
+              ? SingleChildScrollView(
+                  padding: contentPadding,
+                  child: child,
+                )
+              : Padding(
+                  padding: contentPadding,
+                  child: child,
+                ),
         ),
       ],
     );

@@ -121,43 +121,42 @@ class _DesktopDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final climate = state.climate;
-    final t = NeumorphicTheme.of(context);
 
     return NeumorphicMainContent(
       title: strings.dashboard,
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // === DEVICE ZONE ===
-            SectionHeader(
-              title: climate?.deviceName ?? 'Устройство',
-              subtitle: _getDeviceSubtitle(state),
-              icon: Icons.device_hub,
-              accentColor: NeumorphicColors.accentPrimary,
-              trailing: _DeviceSwitcherCompact(state: state),
-            ),
-            const SizedBox(height: 12),
-            _DeviceZoneGrid(state: state, strings: strings),
+      scrollable: false,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // === DEVICE ZONE ===
+          SectionHeader(
+            title: climate?.deviceName ?? 'Устройство',
+            subtitle: _getDeviceSubtitle(state),
+            icon: Icons.device_hub,
+            accentColor: NeumorphicColors.accentPrimary,
+            trailing: _DeviceSwitcherCompact(state: state),
+          ),
+          const SizedBox(height: 8),
+          Expanded(
+            flex: 5,
+            child: _DeviceZoneGrid(state: state, strings: strings),
+          ),
 
-            // === ZONE DIVIDER ===
-            const ZoneDivider(label: 'Общее'),
+          // === ZONE DIVIDER ===
+          const ZoneDivider(label: 'Общее'),
 
-            // === GLOBAL ZONE ===
-            SectionHeader(
-              title: 'Общая информация',
-              icon: Icons.public,
-              accentColor: t.colors.textSecondary,
-            ),
-            const SizedBox(height: 12),
-            _GlobalZoneGrid(state: state, strings: strings),
-          ],
-        ),
+          // === GLOBAL ZONE ===
+          Expanded(
+            flex: 4,
+            child: _GlobalZoneGrid(state: state, strings: strings),
+          ),
+        ],
       ),
     );
   }
 
   String? _getDeviceSubtitle(DashboardState state) {
+    if (state.hvacDevices.isEmpty) return null;
     final device = state.hvacDevices.firstWhere(
       (d) => d.id == state.selectedHvacDeviceId,
       orElse: () => state.hvacDevices.first,
@@ -239,12 +238,13 @@ class _DeviceZoneGrid extends StatelessWidget {
 
     return BentoGrid(
       columns: 4,
-      gap: 12,
-      cellHeight: 180,
+      gap: 16,
+      cellHeight: null, // Auto-expand to fill available space
       items: [
+        // Row 1: Device status + Sensors
         // Device status + power
         BentoItem(
-          size: BentoSize.tall,
+          size: BentoSize.square,
           child: DeviceHeaderCard(
             deviceName: climate?.deviceName ?? 'HVAC',
             deviceType: _getDeviceType(state),
@@ -279,22 +279,6 @@ class _DeviceZoneGrid extends StatelessWidget {
           ),
         ),
 
-        // System info
-        BentoItem(
-          size: BentoSize.tall,
-          child: DeviceSystemInfoCard(
-            deviceName: climate?.deviceName ?? 'HVAC',
-            isOnline: _isDeviceOnline(state),
-            title: strings.systemStatus,
-            deviceLabel: strings.device,
-            firmwareLabel: strings.firmware,
-            connectionLabel: strings.connection,
-            efficiencyLabel: strings.efficiency,
-            filterLabel: strings.filterStatus,
-            uptimeLabel: strings.uptime,
-          ),
-        ),
-
         // CO2 sensor
         BentoItem(
           size: BentoSize.square,
@@ -307,6 +291,7 @@ class _DeviceZoneGrid extends StatelessWidget {
           ),
         ),
 
+        // Row 2: Schedule + Alerts + System Info
         // Device schedule
         BentoItem(
           size: BentoSize.wide,
@@ -318,10 +303,21 @@ class _DeviceZoneGrid extends StatelessWidget {
 
         // Device alerts
         BentoItem(
-          size: BentoSize.wide,
+          size: BentoSize.square,
           child: DeviceAlertsCard(
             alerts: _getMockDeviceAlerts(state),
             title: strings.notifications,
+          ),
+        ),
+
+        // System info (compact)
+        BentoItem(
+          size: BentoSize.square,
+          child: _CompactSystemInfoCard(
+            deviceName: climate?.deviceName ?? 'HVAC',
+            isOnline: _isDeviceOnline(state),
+            filterPercent: 78,
+            strings: strings,
           ),
         ),
       ],
@@ -329,6 +325,7 @@ class _DeviceZoneGrid extends StatelessWidget {
   }
 
   String? _getDeviceType(DashboardState state) {
+    if (state.hvacDevices.isEmpty) return null;
     final device = state.hvacDevices.firstWhere(
       (d) => d.id == state.selectedHvacDeviceId,
       orElse: () => state.hvacDevices.first,
@@ -337,6 +334,7 @@ class _DeviceZoneGrid extends StatelessWidget {
   }
 
   bool _isDeviceOnline(DashboardState state) {
+    if (state.hvacDevices.isEmpty) return false;
     final device = state.hvacDevices.firstWhere(
       (d) => d.id == state.selectedHvacDeviceId,
       orElse: () => state.hvacDevices.first,
@@ -419,6 +417,92 @@ class _DeviceZoneGrid extends StatelessWidget {
       ];
 }
 
+/// Compact system info card for square bento cell
+class _CompactSystemInfoCard extends StatelessWidget {
+  final String deviceName;
+  final bool isOnline;
+  final int filterPercent;
+  final AppStrings strings;
+
+  const _CompactSystemInfoCard({
+    required this.deviceName,
+    required this.isOnline,
+    required this.filterPercent,
+    required this.strings,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final t = NeumorphicTheme.of(context);
+
+    return NeumorphicCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(strings.systemStatus, style: t.typography.titleSmall),
+              GlowingStatusDot(
+                color: isOnline
+                    ? NeumorphicColors.accentSuccess
+                    : t.colors.textTertiary,
+                isGlowing: isOnline,
+                size: 8,
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          // Device name
+          Text(
+            deviceName,
+            style: t.typography.bodySmall.copyWith(
+              fontWeight: FontWeight.w600,
+            ),
+            overflow: TextOverflow.ellipsis,
+          ),
+          const Spacer(),
+          // Filter status
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                strings.filterStatus,
+                style: t.typography.labelSmall.copyWith(
+                  color: t.colors.textSecondary,
+                ),
+              ),
+              Text(
+                '$filterPercent%',
+                style: t.typography.labelSmall.copyWith(
+                  color: _getFilterColor(filterPercent),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          LinearProgressIndicator(
+            value: filterPercent / 100,
+            backgroundColor: t.colors.textTertiary.withValues(alpha: 0.2),
+            valueColor: AlwaysStoppedAnimation(_getFilterColor(filterPercent)),
+            minHeight: 4,
+            borderRadius: BorderRadius.circular(2),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Color _getFilterColor(int percent) {
+    if (percent >= 80) return NeumorphicColors.accentSuccess;
+    if (percent >= 50) return NeumorphicColors.airQualityGood;
+    if (percent >= 30) return NeumorphicColors.accentWarning;
+    return NeumorphicColors.accentError;
+  }
+}
+
 /// Global Zone grid with shared widgets
 class _GlobalZoneGrid extends StatelessWidget {
   final DashboardState state;
@@ -433,8 +517,8 @@ class _GlobalZoneGrid extends StatelessWidget {
 
     return BentoGrid(
       columns: 4,
-      gap: 12,
-      cellHeight: 180,
+      gap: 16,
+      cellHeight: null, // Auto-expand to fill available space
       items: [
         // Energy statistics
         BentoItem(
@@ -475,15 +559,6 @@ class _GlobalZoneGrid extends StatelessWidget {
             onActionPressed: (id) => _handleQuickAction(context, id),
           ),
         ),
-
-        // Company notifications
-        BentoItem(
-          size: BentoSize.wide,
-          child: CompanyNotificationsCard(
-            notifications: _getMockCompanyNotifications(),
-            title: 'Новости BREEZ',
-          ),
-        ),
       ],
     );
   }
@@ -503,25 +578,6 @@ class _GlobalZoneGrid extends StatelessWidget {
         break;
     }
   }
-
-  List<CompanyNotification> _getMockCompanyNotifications() => [
-        CompanyNotification(
-          id: '1',
-          title: 'Новая версия приложения',
-          message: 'Обновите приложение до версии 2.0 для новых функций',
-          timestamp: DateTime.now().subtract(const Duration(hours: 2)),
-          type: CompanyNotificationType.update,
-          actionUrl: 'https://breez.ru/update',
-        ),
-        CompanyNotification(
-          id: '2',
-          title: 'Совет по энергосбережению',
-          message: 'Используйте ночной режим для экономии до 30% энергии',
-          timestamp: DateTime.now().subtract(const Duration(days: 1)),
-          type: CompanyNotificationType.tip,
-          isRead: true,
-        ),
-      ];
 }
 
 /// Mobile dashboard layout

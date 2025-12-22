@@ -47,19 +47,28 @@ class DeviceAlertsCard extends StatelessWidget {
           const SizedBox(height: NeumorphicSpacing.sm),
 
           // Alerts list
-          if (alerts.isEmpty)
-            _buildEmptyState(t)
-          else
-            ...alerts.take(3).map((alert) => Padding(
-                  padding: const EdgeInsets.only(bottom: NeumorphicSpacing.xs),
-                  child: _AlertItem(
-                    alert: alert,
-                    onDismiss:
-                        onDismiss != null ? () => onDismiss!(alert.id) : null,
-                    onAction:
-                        onAction != null ? () => onAction!(alert.id) : null,
+          Expanded(
+            child: alerts.isEmpty
+                ? _buildEmptyState(t)
+                : ListView.separated(
+                    physics: const ClampingScrollPhysics(),
+                    itemCount: alerts.length.clamp(0, 3),
+                    separatorBuilder: (_, __) =>
+                        const SizedBox(height: NeumorphicSpacing.xs),
+                    itemBuilder: (_, index) {
+                      final alert = alerts[index];
+                      return _AlertItem(
+                        alert: alert,
+                        onDismiss: onDismiss != null
+                            ? () => onDismiss!(alert.id)
+                            : null,
+                        onAction: onAction != null
+                            ? () => onAction!(alert.id)
+                            : null,
+                      );
+                    },
                   ),
-                )),
+          ),
 
           // View all button
           if (alerts.length > 3 && onViewAll != null) ...[
