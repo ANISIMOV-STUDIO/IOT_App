@@ -22,11 +22,11 @@ class SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
-    final color = accentColor ?? NeumorphicColors.accentPrimary;
+    final t = GlassTheme.of(context);
+    final color = accentColor ?? GlassColors.accentPrimary;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: NeumorphicSpacing.sm),
+      padding: const EdgeInsets.symmetric(vertical: GlassSpacing.sm),
       child: Row(
         children: [
           // Accent line

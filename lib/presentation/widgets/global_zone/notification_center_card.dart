@@ -38,9 +38,9 @@ class _NotificationCenterCardState extends State<NotificationCenterCard> {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
 
-    return NeumorphicCard(
+    return GlassCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -59,9 +59,9 @@ class _NotificationCenterCardState extends State<NotificationCenterCard> {
                     ),
                     if (_totalCount > 0) ...[
                       const SizedBox(width: 8),
-                      NeumorphicBadge(
+                      GlassBadge(
                         text: '$_totalCount',
-                        color: NeumorphicColors.accentPrimary,
+                        color: GlassColors.accentPrimary,
                       ),
                     ],
                   ],
@@ -69,7 +69,7 @@ class _NotificationCenterCardState extends State<NotificationCenterCard> {
               ),
               if (widget.onViewAll != null) ...[
                 const SizedBox(width: 8),
-                NeumorphicInteractiveCard(
+                GlassInteractiveCard(
                   onTap: widget.onViewAll,
                   borderRadius: 8,
                   padding:
@@ -77,13 +77,13 @@ class _NotificationCenterCardState extends State<NotificationCenterCard> {
                   child: Icon(
                     Icons.arrow_forward,
                     size: 16,
-                    color: NeumorphicColors.accentPrimary,
+                    color: GlassColors.accentPrimary,
                   ),
                 ),
               ],
             ],
           ),
-          const SizedBox(height: NeumorphicSpacing.md),
+          const SizedBox(height: GlassSpacing.md),
 
           // Content
           Expanded(
@@ -115,7 +115,7 @@ class _NotificationCenterCardState extends State<NotificationCenterCard> {
 
                       if (widget.deviceAlerts.isNotEmpty &&
                           widget.companyNotifications.isNotEmpty)
-                        const SizedBox(height: NeumorphicSpacing.sm),
+                        const SizedBox(height: GlassSpacing.sm),
 
                       // Company notifications section
                       if (widget.companyNotifications.isNotEmpty)
@@ -124,7 +124,7 @@ class _NotificationCenterCardState extends State<NotificationCenterCard> {
                           icon: Icons.campaign_outlined,
                           count: widget.companyNotifications.length,
                           isExpanded: _companyNotificationsExpanded,
-                          accentColor: NeumorphicColors.accentInfo,
+                          accentColor: GlassColors.accentInfo,
                           onToggle: () => setState(() {
                             _companyNotificationsExpanded =
                                 !_companyNotificationsExpanded;
@@ -149,7 +149,7 @@ class _NotificationCenterCardState extends State<NotificationCenterCard> {
     );
   }
 
-  Widget _buildEmptyState(NeumorphicThemeData t) {
+  Widget _buildEmptyState(GlassThemeData t) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -157,7 +157,7 @@ class _NotificationCenterCardState extends State<NotificationCenterCard> {
           Icon(
             Icons.notifications_none,
             size: 40,
-            color: NeumorphicColors.accentSuccess.withValues(alpha: 0.6),
+            color: GlassColors.accentSuccess.withValues(alpha: 0.6),
           ),
           const SizedBox(height: 12),
           Text(
@@ -199,8 +199,8 @@ class _NotificationGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
-    final color = accentColor ?? NeumorphicColors.accentWarning;
+    final t = GlassTheme.of(context);
+    final color = accentColor ?? GlassColors.accentWarning;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -270,7 +270,7 @@ class _DeviceAlertItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
     final color = _getAlertColor(alert.type);
     final icon = _getAlertIcon(alert.type);
 
@@ -359,12 +359,12 @@ class _DeviceAlertItem extends StatelessWidget {
   }
 
   Color _getAlertColor(DeviceAlertType type) => switch (type) {
-        DeviceAlertType.filterChange => NeumorphicColors.accentWarning,
-        DeviceAlertType.maintenance => NeumorphicColors.accentInfo,
-        DeviceAlertType.error => NeumorphicColors.accentError,
-        DeviceAlertType.offline => NeumorphicColors.airQualityPoor,
-        DeviceAlertType.connectionLost => NeumorphicColors.accentError,
-        DeviceAlertType.firmwareUpdate => NeumorphicColors.accentPrimary,
+        DeviceAlertType.filterChange => GlassColors.accentWarning,
+        DeviceAlertType.maintenance => GlassColors.accentInfo,
+        DeviceAlertType.error => GlassColors.accentError,
+        DeviceAlertType.offline => GlassColors.airQualityPoor,
+        DeviceAlertType.connectionLost => GlassColors.accentError,
+        DeviceAlertType.firmwareUpdate => GlassColors.accentPrimary,
       };
 
   IconData _getAlertIcon(DeviceAlertType type) => switch (type) {
@@ -388,7 +388,7 @@ class _CompanyNotificationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
     final color = _getNotificationColor(notification.type);
     final icon = _getNotificationIcon(notification.type);
 
@@ -464,11 +464,11 @@ class _CompanyNotificationItem extends StatelessWidget {
   }
 
   Color _getNotificationColor(CompanyNotificationType type) => switch (type) {
-        CompanyNotificationType.update => NeumorphicColors.accentPrimary,
-        CompanyNotificationType.news => NeumorphicColors.accentInfo,
-        CompanyNotificationType.promo => NeumorphicColors.accentSuccess,
-        CompanyNotificationType.tip => NeumorphicColors.accentWarning,
-        CompanyNotificationType.security => NeumorphicColors.accentError,
+        CompanyNotificationType.update => GlassColors.accentPrimary,
+        CompanyNotificationType.news => GlassColors.accentInfo,
+        CompanyNotificationType.promo => GlassColors.accentSuccess,
+        CompanyNotificationType.tip => GlassColors.accentWarning,
+        CompanyNotificationType.security => GlassColors.accentError,
       };
 
   IconData _getNotificationIcon(CompanyNotificationType type) => switch (type) {
@@ -495,7 +495,7 @@ class _DueDateBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
     final color = _getColor();
     final text = _getText();
 
@@ -517,9 +517,9 @@ class _DueDateBadge extends StatelessWidget {
   }
 
   Color _getColor() {
-    if (days <= 3) return NeumorphicColors.accentError;
-    if (days <= 7) return NeumorphicColors.accentWarning;
-    return NeumorphicColors.accentInfo;
+    if (days <= 3) return GlassColors.accentError;
+    if (days <= 7) return GlassColors.accentWarning;
+    return GlassColors.accentInfo;
   }
 
   String _getText() {

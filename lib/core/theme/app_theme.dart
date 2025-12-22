@@ -1,35 +1,35 @@
 import 'package:smart_ui_kit/smart_ui_kit.dart';
 
-/// App theme definitions based on neumorphic design system
+/// App theme definitions based on glass design system
 abstract class AppTheme {
   /// Light theme
   static ThemeData get light => ThemeData(
     useMaterial3: true,
     brightness: Brightness.light,
-    scaffoldBackgroundColor: NeumorphicColors.lightSurface,
+    scaffoldBackgroundColor: GlassColors.lightSurface,
     colorScheme: ColorScheme.light(
-      primary: NeumorphicColors.accentPrimary,
-      secondary: NeumorphicColors.accentInfo,
-      surface: NeumorphicColors.lightCardSurface,
-      error: NeumorphicColors.accentError,
+      primary: GlassColors.accentPrimary,
+      secondary: GlassColors.accentInfo,
+      surface: GlassColors.lightCardSurface,
+      error: GlassColors.accentError,
       onPrimary: Colors.white,
       onSecondary: Colors.white,
-      onSurface: NeumorphicColors.lightTextPrimary,
+      onSurface: GlassColors.lightTextPrimary,
       onError: Colors.white,
     ),
-    textTheme: _buildTextTheme(NeumorphicColors.lightTextPrimary),
+    textTheme: _buildTextTheme(GlassColors.lightTextPrimary),
     appBarTheme: AppBarTheme(
-      backgroundColor: NeumorphicColors.lightSurface,
-      foregroundColor: NeumorphicColors.lightTextPrimary,
+      backgroundColor: GlassColors.lightSurface,
+      foregroundColor: GlassColors.lightTextPrimary,
       elevation: 0,
     ),
     cardTheme: CardThemeData(
-      color: NeumorphicColors.lightCardSurface,
+      color: GlassColors.lightCardSurface,
       elevation: 0,
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: NeumorphicColors.lightCardSurface,
+      fillColor: GlassColors.lightCardSurface,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: BorderSide.none,
@@ -40,13 +40,13 @@ abstract class AppTheme {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: NeumorphicColors.accentPrimary, width: 2),
+        borderSide: BorderSide(color: GlassColors.accentPrimary, width: 2),
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: NeumorphicColors.accentPrimary,
+        backgroundColor: GlassColors.accentPrimary,
         foregroundColor: Colors.white,
         elevation: 0,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
@@ -59,30 +59,30 @@ abstract class AppTheme {
   static ThemeData get dark => ThemeData(
     useMaterial3: true,
     brightness: Brightness.dark,
-    scaffoldBackgroundColor: NeumorphicColors.darkSurface,
+    scaffoldBackgroundColor: GlassColors.darkSurface,
     colorScheme: ColorScheme.dark(
-      primary: NeumorphicColors.accentPrimary,
-      secondary: NeumorphicColors.accentInfo,
-      surface: NeumorphicColors.darkCardSurface,
-      error: NeumorphicColors.accentError,
+      primary: GlassColors.accentPrimary,
+      secondary: GlassColors.accentInfo,
+      surface: GlassColors.darkCardSurface,
+      error: GlassColors.accentError,
       onPrimary: Colors.white,
       onSecondary: Colors.white,
-      onSurface: NeumorphicColors.darkTextPrimary,
+      onSurface: GlassColors.darkTextPrimary,
       onError: Colors.white,
     ),
-    textTheme: _buildTextTheme(NeumorphicColors.darkTextPrimary),
+    textTheme: _buildTextTheme(GlassColors.darkTextPrimary),
     appBarTheme: AppBarTheme(
-      backgroundColor: NeumorphicColors.darkSurface,
-      foregroundColor: NeumorphicColors.darkTextPrimary,
+      backgroundColor: GlassColors.darkSurface,
+      foregroundColor: GlassColors.darkTextPrimary,
       elevation: 0,
     ),
     cardTheme: CardThemeData(
-      color: NeumorphicColors.darkCardSurface,
+      color: GlassColors.darkCardSurface,
       elevation: 0,
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: NeumorphicColors.darkCardSurface,
+      fillColor: GlassColors.darkCardSurface,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: BorderSide.none,
@@ -93,13 +93,13 @@ abstract class AppTheme {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(color: NeumorphicColors.accentPrimary, width: 2),
+        borderSide: BorderSide(color: GlassColors.accentPrimary, width: 2),
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: NeumorphicColors.accentPrimary,
+        backgroundColor: GlassColors.accentPrimary,
         foregroundColor: Colors.white,
         elevation: 0,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),

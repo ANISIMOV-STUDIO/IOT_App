@@ -1,5 +1,6 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_neumorphic_plus/flutter_neumorphic.dart' as np;
+import '../../theme/glass_theme.dart';
 
 /// Bento Grid sizes for cards
 enum BentoSize {
@@ -160,7 +161,7 @@ class _PlacedItem {
   _PlacedItem(this.bentoItem, this.row, this.col);
 }
 
-/// Bento Card wrapper with neumorphic styling
+/// Bento Card wrapper with glass styling
 class BentoCard extends StatelessWidget {
   final Widget child;
   final Color? backgroundColor;
@@ -177,30 +178,55 @@ class BentoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = np.NeumorphicTheme.currentTheme(context);
+    final theme = GlassTheme.of(context);
 
-    Widget card = np.Neumorphic(
-      style: np.NeumorphicStyle(
-        depth: theme.depth,
-        intensity: theme.intensity,
-        boxShape: np.NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
-        color: backgroundColor ?? theme.baseColor,
+    final bgColor = backgroundColor ??
+        (theme.isDark
+            ? const Color(0x1AFFFFFF)
+            : const Color(0xB3FFFFFF));
+
+    final borderColor = theme.isDark
+        ? const Color(0x33FFFFFF)
+        : const Color(0x66FFFFFF);
+
+    Widget card = ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                bgColor,
+                bgColor.withValues(alpha: bgColor.a * 0.8),
+              ],
+            ),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: borderColor, width: 1),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: theme.isDark ? 0.3 : 0.08),
+                blurRadius: 20,
+                offset: const Offset(0, 8),
+                spreadRadius: -4,
+              ),
+            ],
+          ),
+          padding: padding ?? const EdgeInsets.all(16),
+          child: child,
+        ),
       ),
-      padding: padding ?? const EdgeInsets.all(16),
-      child: child,
     );
 
     if (onTap != null) {
-      return np.NeumorphicButton(
-        style: np.NeumorphicStyle(
-          depth: theme.depth,
-          intensity: theme.intensity,
-          boxShape: np.NeumorphicBoxShape.roundRect(BorderRadius.circular(20)),
-          color: backgroundColor ?? theme.baseColor,
+      return MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          onTap: onTap,
+          child: card,
         ),
-        padding: padding ?? const EdgeInsets.all(16),
-        onPressed: onTap,
-        child: child,
       );
     }
 

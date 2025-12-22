@@ -61,24 +61,24 @@ class DeviceClimateControl extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
 
-    return NeumorphicCard(
-      variant: NeumorphicCardVariant.concave,
-      padding: const EdgeInsets.all(NeumorphicSpacing.md),
+    return GlassCard(
+      variant: GlassCardVariant.concave,
+      padding: const EdgeInsets.all(GlassSpacing.md),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Title
           Text(targetTempLabel, style: t.typography.titleLarge),
-          const SizedBox(height: NeumorphicSpacing.sm),
+          const SizedBox(height: GlassSpacing.sm),
 
           // Temperature dial
           Center(
             child: SizedBox(
               width: 140,
               height: 140,
-              child: NeumorphicTemperatureDial(
+              child: GlassTemperatureDial(
                 value: targetTemperature,
                 minValue: 10,
                 maxValue: 30,
@@ -88,100 +88,100 @@ class DeviceClimateControl extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: NeumorphicSpacing.sm),
+          const SizedBox(height: GlassSpacing.sm),
 
           // Mode selector
-          NeumorphicSegmentedControl<ClimateMode>(
+          GlassSegmentedControl<ClimateMode>(
             segments: [
               SegmentItem(
                 value: ClimateMode.heating,
                 label: heatingLabel,
                 icon: Icons.whatshot_outlined,
-                activeColor: NeumorphicColors.modeHeating,
+                activeColor: GlassColors.modeHeating,
               ),
               SegmentItem(
                 value: ClimateMode.cooling,
                 label: coolingLabel,
                 icon: Icons.ac_unit,
-                activeColor: NeumorphicColors.modeCooling,
+                activeColor: GlassColors.modeCooling,
               ),
               SegmentItem(
                 value: ClimateMode.auto,
                 label: autoLabel,
                 icon: Icons.autorenew,
-                activeColor: NeumorphicColors.modeAuto,
+                activeColor: GlassColors.modeAuto,
               ),
               SegmentItem(
                 value: ClimateMode.ventilation,
                 label: ventilationLabel,
                 icon: Icons.air,
-                activeColor: NeumorphicColors.accentPrimary,
+                activeColor: GlassColors.accentPrimary,
               ),
             ],
             selectedValue: mode,
             onSelected: onModeChanged,
           ),
-          const SizedBox(height: NeumorphicSpacing.md),
+          const SizedBox(height: GlassSpacing.md),
 
           // Divider
           Divider(color: t.colors.textTertiary.withValues(alpha: 0.2)),
-          const SizedBox(height: NeumorphicSpacing.md),
+          const SizedBox(height: GlassSpacing.md),
 
           // Airflow control
           Text(airflowControlLabel, style: t.typography.titleMedium),
-          const SizedBox(height: NeumorphicSpacing.sm),
+          const SizedBox(height: GlassSpacing.sm),
 
-          NeumorphicSlider(
+          GlassSlider(
             label: supplyLabel,
             value: supplyAirflow,
             suffix: '%',
-            activeColor: NeumorphicColors.accentPrimary,
+            activeColor: GlassColors.accentPrimary,
             onChangeEnd: onSupplyAirflowChanged,
           ),
-          const SizedBox(height: NeumorphicSpacing.xs),
+          const SizedBox(height: GlassSpacing.xs),
 
-          NeumorphicSlider(
+          GlassSlider(
             label: exhaustLabel,
             value: exhaustAirflow,
             suffix: '%',
-            activeColor: NeumorphicColors.modeCooling,
+            activeColor: GlassColors.modeCooling,
             onChangeEnd: onExhaustAirflowChanged,
           ),
 
           const Spacer(),
 
           // Presets
-          NeumorphicPresetGrid(
+          GlassPresetGrid(
             presets: [
               PresetItem(
                 id: 'auto',
                 label: autoLabel,
                 icon: Icons.hdr_auto,
-                activeColor: NeumorphicColors.modeAuto,
+                activeColor: GlassColors.modeAuto,
               ),
               PresetItem(
                 id: 'night',
                 label: nightLabel,
                 icon: Icons.nights_stay,
-                activeColor: NeumorphicColors.modeCooling,
+                activeColor: GlassColors.modeCooling,
               ),
               PresetItem(
                 id: 'turbo',
                 label: turboLabel,
                 icon: Icons.rocket_launch,
-                activeColor: NeumorphicColors.modeHeating,
+                activeColor: GlassColors.modeHeating,
               ),
               PresetItem(
                 id: 'eco',
                 label: ecoLabel,
                 icon: Icons.eco,
-                activeColor: NeumorphicColors.accentSuccess,
+                activeColor: GlassColors.accentSuccess,
               ),
               PresetItem(
                 id: 'away',
                 label: awayLabel,
                 icon: Icons.sensor_door,
-                activeColor: NeumorphicColors.accentPrimary,
+                activeColor: GlassColors.accentPrimary,
               ),
             ],
             selectedId: preset,

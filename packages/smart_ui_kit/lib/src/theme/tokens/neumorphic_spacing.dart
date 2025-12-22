@@ -153,3 +153,6 @@ abstract class NeumorphicSpacing {
   /// Screen safe area padding
   static EdgeInsets get screenInsets => const EdgeInsets.all(screenPadding);
 }
+
+// Backwards compatibility alias
+typedef GlassSpacing = NeumorphicSpacing;

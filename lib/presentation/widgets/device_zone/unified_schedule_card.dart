@@ -40,9 +40,9 @@ class UnifiedScheduleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
 
-    return NeumorphicCard(
+    return GlassCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -55,16 +55,16 @@ class UnifiedScheduleCard extends StatelessWidget {
                   Icon(
                     Icons.schedule,
                     size: 20,
-                    color: NeumorphicColors.accentPrimary,
+                    color: GlassColors.accentPrimary,
                   ),
                   const SizedBox(width: 8),
                   Text(title, style: t.typography.titleMedium),
                 ],
               ),
               if (onAddSchedule != null)
-                NeumorphicIconButton(
+                GlassIconButton(
                   icon: Icons.add,
-                  iconColor: NeumorphicColors.accentPrimary,
+                  iconColor: GlassColors.accentPrimary,
                   size: 32,
                   onPressed: onAddSchedule,
                 ),
@@ -84,7 +84,7 @@ class UnifiedScheduleCard extends StatelessWidget {
                         _SectionLabel(
                           label: currentDeviceName ?? 'Устройство',
                           icon: Icons.air,
-                          color: NeumorphicColors.accentPrimary,
+                          color: GlassColors.accentPrimary,
                         ),
                         const SizedBox(height: 8),
                         ..._deviceSchedules.map((schedule) => Padding(
@@ -141,7 +141,7 @@ class UnifiedScheduleCard extends StatelessWidget {
     );
   }
 
-  Widget _buildEmptyState(NeumorphicThemeData t) {
+  Widget _buildEmptyState(GlassThemeData t) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -167,9 +167,9 @@ class UnifiedScheduleCard extends StatelessWidget {
           ),
           if (onAddSchedule != null) ...[
             const SizedBox(height: 16),
-            NeumorphicButton(
+            GlassButton(
               onPressed: onAddSchedule,
-              size: NeumorphicButtonSize.small,
+              size: GlassButtonSize.small,
               icon: Icons.add,
               child: const Text('Добавить'),
             ),
@@ -193,7 +193,7 @@ class _SectionLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
 
     return Row(
       children: [
@@ -236,7 +236,7 @@ class _ScheduleItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
     final isActive = schedule.isEnabled;
     final actionColor = _getActionColor(schedule.action);
 
@@ -337,7 +337,7 @@ class _ScheduleItem extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
                   color: isActive
-                      ? NeumorphicColors.modeHeating.withValues(alpha: 0.15)
+                      ? GlassColors.modeHeating.withValues(alpha: 0.15)
                       : t.colors.textTertiary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(6),
                 ),
@@ -345,7 +345,7 @@ class _ScheduleItem extends StatelessWidget {
                   '${schedule.temperature!.round()}°',
                   style: t.typography.labelSmall.copyWith(
                     color: isActive
-                        ? NeumorphicColors.modeHeating
+                        ? GlassColors.modeHeating
                         : t.colors.textTertiary,
                     fontWeight: FontWeight.w700,
                   ),
@@ -359,10 +359,10 @@ class _ScheduleItem extends StatelessWidget {
   }
 
   Color _getActionColor(ScheduleAction action) => switch (action) {
-        ScheduleAction.turnOn => NeumorphicColors.accentSuccess,
-        ScheduleAction.turnOff => NeumorphicColors.accentError,
-        ScheduleAction.setTemperature => NeumorphicColors.modeHeating,
-        ScheduleAction.setMode => NeumorphicColors.accentPrimary,
+        ScheduleAction.turnOn => GlassColors.accentSuccess,
+        ScheduleAction.turnOff => GlassColors.accentError,
+        ScheduleAction.setTemperature => GlassColors.modeHeating,
+        ScheduleAction.setMode => GlassColors.accentPrimary,
       };
 
   IconData _getActionIcon(ScheduleAction action) => switch (action) {
@@ -401,7 +401,7 @@ class _DaysIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
 
     // If all days, show "Ежедневно"
     if (days.length == 7) {
@@ -459,7 +459,7 @@ class _DaysIndicator extends StatelessWidget {
             shape: BoxShape.circle,
             color: isIncluded
                 ? (isActive
-                    ? NeumorphicColors.accentPrimary
+                    ? GlassColors.accentPrimary
                     : t.colors.textSecondary)
                 : t.colors.textTertiary.withValues(alpha: 0.2),
           ),

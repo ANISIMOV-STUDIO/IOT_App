@@ -37,12 +37,12 @@ class _DashboardView extends StatefulWidget {
 class _DashboardViewState extends State<_DashboardView> {
   int _navIndex = 0;
 
-  List<NeumorphicNavItem> _navItems(AppStrings s) => [
-        NeumorphicNavItem(icon: Icons.dashboard, label: s.dashboard),
-        NeumorphicNavItem(icon: Icons.meeting_room, label: s.rooms),
-        NeumorphicNavItem(icon: Icons.calendar_today, label: s.schedule),
-        NeumorphicNavItem(icon: Icons.bar_chart, label: s.statistics),
-        NeumorphicNavItem(
+  List<GlassNavItem> _navItems(AppStrings s) => [
+        GlassNavItem(icon: Icons.dashboard, label: s.dashboard),
+        GlassNavItem(icon: Icons.meeting_room, label: s.rooms),
+        GlassNavItem(icon: Icons.calendar_today, label: s.schedule),
+        GlassNavItem(icon: Icons.bar_chart, label: s.statistics),
+        GlassNavItem(
           icon: Icons.notifications_outlined,
           label: s.notifications,
           badge: '2',
@@ -53,8 +53,8 @@ class _DashboardViewState extends State<_DashboardView> {
   Widget build(BuildContext context) {
     final s = context.l10n;
 
-    return NeumorphicTheme(
-      data: NeumorphicThemeData.light(),
+    return GlassTheme(
+      data: GlassThemeData.light(),
       child: ResponsiveDashboardShell(
         selectedIndex: _navIndex,
         onIndexChanged: (i) => setState(() => _navIndex = i),
@@ -96,7 +96,7 @@ class _DashboardPage extends StatelessWidget {
     return BlocBuilder<DashboardBloc, DashboardState>(
       builder: (context, state) {
         if (state.status == DashboardStatus.loading) {
-          return const Center(child: NeumorphicLoadingIndicator());
+          return const Center(child: GlassLoadingIndicator());
         }
         if (state.status == DashboardStatus.failure) {
           return _ErrorView(message: state.errorMessage);
@@ -120,7 +120,7 @@ class _DesktopDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return NeumorphicMainContent(
+    return GlassMainContent(
       title: strings.dashboard,
       scrollable: false,
       child: Column(
@@ -132,10 +132,10 @@ class _DesktopDashboard extends StatelessWidget {
             child: DeviceZoneContainer(
               header: _buildDeviceSelectorHeader(context),
               padding: const EdgeInsets.fromLTRB(
-                NeumorphicSpacing.md,
-                NeumorphicSpacing.sm,
-                NeumorphicSpacing.md,
-                NeumorphicSpacing.md,
+                GlassSpacing.md,
+                GlassSpacing.sm,
+                GlassSpacing.md,
+                GlassSpacing.md,
               ),
               child: _DeviceZoneGrid(state: state, strings: strings),
             ),
@@ -221,7 +221,7 @@ class _DeviceZoneGrid extends StatelessWidget {
             value: climate?.currentTemperature.toStringAsFixed(1) ?? '--',
             unit: '°C',
             label: strings.temperature,
-            color: NeumorphicColors.modeHeating,
+            color: GlassColors.modeHeating,
           ),
         ),
 
@@ -232,7 +232,7 @@ class _DeviceZoneGrid extends StatelessWidget {
             value: climate?.humidity.toStringAsFixed(0) ?? '--',
             unit: '%',
             label: strings.humidity,
-            color: NeumorphicColors.modeCooling,
+            color: GlassColors.modeCooling,
           ),
         ),
 
@@ -298,11 +298,11 @@ class _DeviceZoneGrid extends StatelessWidget {
   }
 
   Color _co2Color(int? ppm) {
-    if (ppm == null) return NeumorphicColors.airQualityGood;
-    if (ppm < 600) return NeumorphicColors.airQualityExcellent;
-    if (ppm < 800) return NeumorphicColors.airQualityGood;
-    if (ppm < 1000) return NeumorphicColors.airQualityModerate;
-    return NeumorphicColors.airQualityPoor;
+    if (ppm == null) return GlassColors.airQualityGood;
+    if (ppm < 600) return GlassColors.airQualityExcellent;
+    if (ppm < 800) return GlassColors.airQualityGood;
+    if (ppm < 1000) return GlassColors.airQualityModerate;
+    return GlassColors.airQualityPoor;
   }
 
   List<DeviceSchedule> _getMockSchedules() => [
@@ -393,9 +393,9 @@ class _CompactSystemInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
 
-    return NeumorphicCard(
+    return GlassCard(
       child: LayoutBuilder(
         builder: (context, constraints) {
           final isSmall = constraints.maxHeight < 100;
@@ -415,7 +415,7 @@ class _CompactSystemInfoCard extends StatelessWidget {
                   ),
                   GlowingStatusDot(
                     color: isOnline
-                        ? NeumorphicColors.accentSuccess
+                        ? GlassColors.accentSuccess
                         : t.colors.textTertiary,
                     isGlowing: isOnline,
                     size: isSmall ? 6 : 8,
@@ -468,10 +468,10 @@ class _CompactSystemInfoCard extends StatelessWidget {
   }
 
   Color _getFilterColor(int percent) {
-    if (percent >= 80) return NeumorphicColors.accentSuccess;
-    if (percent >= 50) return NeumorphicColors.airQualityGood;
-    if (percent >= 30) return NeumorphicColors.accentWarning;
-    return NeumorphicColors.accentError;
+    if (percent >= 80) return GlassColors.accentSuccess;
+    if (percent >= 50) return GlassColors.airQualityGood;
+    if (percent >= 30) return GlassColors.accentWarning;
+    return GlassColors.accentError;
   }
 }
 
@@ -623,16 +623,16 @@ class _MobileDashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     final s = context.l10n;
     final climate = state.climate;
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
 
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.all(NeumorphicSpacing.md),
+        padding: const EdgeInsets.all(GlassSpacing.md),
         child: Column(
           children: [
             // Device switcher horizontal
             _MobileDeviceSwitcher(state: state),
-            const SizedBox(height: NeumorphicSpacing.md),
+            const SizedBox(height: GlassSpacing.md),
 
             // Sensors row
             Row(
@@ -644,7 +644,7 @@ class _MobileDashboard extends StatelessWidget {
                         '${climate?.currentTemperature.toStringAsFixed(0) ?? '--'}°',
                     label: s.temperature,
                     unit: '',
-                    color: NeumorphicColors.modeHeating,
+                    color: GlassColors.modeHeating,
                     isCompact: true,
                   ),
                 ),
@@ -655,7 +655,7 @@ class _MobileDashboard extends StatelessWidget {
                     value: '${climate?.humidity.toStringAsFixed(0) ?? '--'}%',
                     label: s.humidity,
                     unit: '',
-                    color: NeumorphicColors.modeCooling,
+                    color: GlassColors.modeCooling,
                     isCompact: true,
                   ),
                 ),
@@ -672,18 +672,18 @@ class _MobileDashboard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: NeumorphicSpacing.md),
+            const SizedBox(height: GlassSpacing.md),
 
             // Quick actions grid
             Expanded(
               child: GridView.count(
                 crossAxisCount: 2,
-                crossAxisSpacing: NeumorphicSpacing.sm,
-                mainAxisSpacing: NeumorphicSpacing.sm,
+                crossAxisSpacing: GlassSpacing.sm,
+                mainAxisSpacing: GlassSpacing.sm,
                 childAspectRatio: 1.3,
                 children: [
                   // Power toggle
-                  NeumorphicCard(
+                  GlassCard(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -693,10 +693,10 @@ class _MobileDashboard extends StatelessWidget {
                             Icon(
                               Icons.power_settings_new,
                               color: climate?.isOn == true
-                                  ? NeumorphicColors.accentPrimary
+                                  ? GlassColors.accentPrimary
                                   : t.colors.textTertiary,
                             ),
-                            NeumorphicToggle(
+                            GlassToggle(
                               value: climate?.isOn ?? false,
                               onChanged: (v) => context
                                   .read<DashboardBloc>()
@@ -713,7 +713,7 @@ class _MobileDashboard extends StatelessWidget {
                           climate?.isOn == true ? 'Активен' : 'Ожидание',
                           style: t.typography.labelSmall.copyWith(
                             color: climate?.isOn == true
-                                ? NeumorphicColors.accentSuccess
+                                ? GlassColors.accentSuccess
                                 : t.colors.textTertiary,
                           ),
                         ),
@@ -721,7 +721,7 @@ class _MobileDashboard extends StatelessWidget {
                     ),
                   ),
                   // Sync
-                  NeumorphicCard(
+                  GlassCard(
                     onTap: () => context
                         .read<DashboardBloc>()
                         .add(const DashboardRefreshed()),
@@ -730,7 +730,7 @@ class _MobileDashboard extends StatelessWidget {
                       children: [
                         Icon(
                           Icons.sync,
-                          color: NeumorphicColors.accentPrimary,
+                          color: GlassColors.accentPrimary,
                           size: 28,
                         ),
                         const SizedBox(height: 8),
@@ -739,14 +739,14 @@ class _MobileDashboard extends StatelessWidget {
                     ),
                   ),
                   // Schedule
-                  NeumorphicCard(
+                  GlassCard(
                     onTap: () => onNavigate?.call(2),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
                           Icons.calendar_today,
-                          color: NeumorphicColors.accentPrimary,
+                          color: GlassColors.accentPrimary,
                           size: 28,
                         ),
                         const SizedBox(height: 8),
@@ -755,14 +755,14 @@ class _MobileDashboard extends StatelessWidget {
                     ),
                   ),
                   // Stats
-                  NeumorphicCard(
+                  GlassCard(
                     onTap: () => onNavigate?.call(3),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
                           Icons.bar_chart,
-                          color: NeumorphicColors.accentPrimary,
+                          color: GlassColors.accentPrimary,
                           size: 28,
                         ),
                         const SizedBox(height: 8),
@@ -780,11 +780,11 @@ class _MobileDashboard extends StatelessWidget {
   }
 
   Color _co2Color(int? ppm) {
-    if (ppm == null) return NeumorphicColors.airQualityGood;
-    if (ppm < 600) return NeumorphicColors.airQualityExcellent;
-    if (ppm < 800) return NeumorphicColors.airQualityGood;
-    if (ppm < 1000) return NeumorphicColors.airQualityModerate;
-    return NeumorphicColors.airQualityPoor;
+    if (ppm == null) return GlassColors.airQualityGood;
+    if (ppm < 600) return GlassColors.airQualityExcellent;
+    if (ppm < 800) return GlassColors.airQualityGood;
+    if (ppm < 1000) return GlassColors.airQualityModerate;
+    return GlassColors.airQualityPoor;
   }
 }
 
@@ -888,7 +888,7 @@ class _ErrorView extends StatelessWidget {
         children: [
           Text('${s.error}: $message'),
           const SizedBox(height: 16),
-          NeumorphicButton(
+          GlassButton(
             onPressed: () =>
                 context.read<DashboardBloc>().add(const DashboardRefreshed()),
             child: Text(s.retry),
@@ -903,7 +903,7 @@ class _ErrorView extends StatelessWidget {
 class _Footer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
     final now = DateTime.now();
     final syncTime =
         '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
@@ -917,7 +917,7 @@ class _Footer extends StatelessWidget {
             Icon(
               Icons.wb_sunny_outlined,
               size: 16,
-              color: NeumorphicColors.accentWarning,
+              color: GlassColors.accentWarning,
             ),
             const SizedBox(width: 6),
             Text(
@@ -960,9 +960,9 @@ class _Footer extends StatelessWidget {
 class _ThemeToggle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
 
-    return NeumorphicIconButton(
+    return GlassIconButton(
       icon: Icons.dark_mode_outlined,
       iconColor: t.colors.textSecondary,
       tooltip: 'Тёмная тема',
@@ -976,7 +976,7 @@ class _LanguageSwitch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loc = context.locale;
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
 
     return PopupMenuButton<AppLocale>(
       initialValue: loc,
@@ -993,7 +993,7 @@ class _LanguageSwitch extends StatelessWidget {
                       Icon(
                         Icons.check,
                         size: 16,
-                        color: NeumorphicColors.accentPrimary,
+                        color: GlassColors.accentPrimary,
                       )
                     else
                       const SizedBox(width: 16),
@@ -1003,7 +1003,7 @@ class _LanguageSwitch extends StatelessWidget {
                 ),
               ))
           .toList(),
-      child: NeumorphicInteractiveCard(
+      child: GlassInteractiveCard(
         borderRadius: 10,
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         child: Row(
@@ -1032,9 +1032,9 @@ class _PlaceholderPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
 
-    return NeumorphicMainContent(
+    return GlassMainContent(
       title: title,
       child: Center(
         child: Column(

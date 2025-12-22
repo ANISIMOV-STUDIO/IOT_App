@@ -22,7 +22,7 @@ class TemperatureControl extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: NeumorphicSpacing.lg),
+      padding: const EdgeInsets.symmetric(vertical: GlassSpacing.lg),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -30,12 +30,12 @@ class TemperatureControl extends StatelessWidget {
             min.toInt().toString(),
             style: const TextStyle(
               fontSize: 14.0,
-              color: NeumorphicColors.lightTextTertiary,
+              color: GlassColors.lightTextTertiary,
             ),
           ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: NeumorphicSpacing.md),
+              padding: const EdgeInsets.symmetric(horizontal: GlassSpacing.md),
               child: Column(
                 children: [
                   Text(
@@ -44,10 +44,10 @@ class TemperatureControl extends StatelessWidget {
                       fontSize: 48.0,
                       fontWeight: FontWeight.w700,
                       height: 1,
-                      color: NeumorphicColors.lightTextPrimary,
+                      color: GlassColors.lightTextPrimary,
                     ),
                   ),
-                  const SizedBox(height: NeumorphicSpacing.xs),
+                  const SizedBox(height: GlassSpacing.xs),
                   Slider(
                     value: value,
                     min: min,
@@ -63,7 +63,7 @@ class TemperatureControl extends StatelessWidget {
             max.toInt().toString(),
             style: const TextStyle(
               fontSize: 14.0,
-              color: NeumorphicColors.lightTextTertiary,
+              color: GlassColors.lightTextTertiary,
             ),
           ),
         ],

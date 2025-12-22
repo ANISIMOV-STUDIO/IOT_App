@@ -23,9 +23,9 @@ class DeviceHeaderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
 
-    return NeumorphicCard(
+    return GlassCard(
       child: LayoutBuilder(
         builder: (context, constraints) {
           final isSmall = constraints.maxHeight < 120;
@@ -41,18 +41,18 @@ class DeviceHeaderCard extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.all(isSmall ? 6 : 8),
                     decoration: BoxDecoration(
-                      color: (isOn ? NeumorphicColors.accentPrimary : Colors.grey)
+                      color: (isOn ? GlassColors.accentPrimary : Colors.grey)
                           .withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Icon(
                       Icons.power_settings_new,
-                      color: isOn ? NeumorphicColors.accentPrimary : Colors.grey,
+                      color: isOn ? GlassColors.accentPrimary : Colors.grey,
                       size: isSmall ? 16 : 20,
                     ),
                   ),
                   // Power toggle
-                  NeumorphicToggle(
+                  GlassToggle(
                     value: isOn,
                     onChanged: isOnline ? onPowerChanged : null,
                   ),
@@ -83,8 +83,8 @@ class DeviceHeaderCard extends StatelessWidget {
                     color: !isOnline
                         ? t.colors.textTertiary
                         : isOn
-                            ? NeumorphicColors.accentSuccess
-                            : NeumorphicColors.accentWarning,
+                            ? GlassColors.accentSuccess
+                            : GlassColors.accentWarning,
                     isGlowing: isOn && isOnline,
                     size: isSmall ? 6 : 8,
                   ),
@@ -95,8 +95,8 @@ class DeviceHeaderCard extends StatelessWidget {
                       color: !isOnline
                           ? t.colors.textTertiary
                           : isOn
-                              ? NeumorphicColors.accentSuccess
-                              : NeumorphicColors.accentWarning,
+                              ? GlassColors.accentSuccess
+                              : GlassColors.accentWarning,
                       fontSize: isSmall ? 10 : null,
                     ),
                   ),

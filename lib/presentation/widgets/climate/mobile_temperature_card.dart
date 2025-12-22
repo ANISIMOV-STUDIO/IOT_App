@@ -22,10 +22,10 @@ class MobileTemperatureCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = NeumorphicTheme.of(context);
+    final theme = GlassTheme.of(context);
 
-    return NeumorphicCard(
-      padding: const EdgeInsets.all(NeumorphicSpacing.md),
+    return GlassCard(
+      padding: const EdgeInsets.all(GlassSpacing.md),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -40,7 +40,7 @@ class MobileTemperatureCard extends StatelessWidget {
               _ModeIndicator(mode: mode),
             ],
           ),
-          const SizedBox(height: NeumorphicSpacing.md),
+          const SizedBox(height: GlassSpacing.md),
 
           // Temperature display + controls
           Row(
@@ -59,7 +59,7 @@ class MobileTemperatureCard extends StatelessWidget {
                       : null,
                 ),
               ),
-              const SizedBox(width: NeumorphicSpacing.md),
+              const SizedBox(width: GlassSpacing.md),
 
               // Mode buttons
               Expanded(
@@ -182,7 +182,7 @@ class _TempAdjustButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = NeumorphicTheme.of(context);
+    final theme = GlassTheme.of(context);
 
     return MouseRegion(
       cursor: onTap != null ? SystemMouseCursors.click : SystemMouseCursors.basic,
@@ -192,9 +192,12 @@ class _TempAdjustButton extends StatelessWidget {
           width: 36,
           height: 36,
           decoration: BoxDecoration(
-            color: theme.colors.cardSurface,
+            color: theme.colors.glassSurface,
             shape: BoxShape.circle,
-            boxShadow: theme.shadows.convexSmall,
+            border: Border.all(
+              color: theme.colors.glassBorder,
+              width: 1,
+            ),
           ),
           child: Icon(
             icon,
@@ -248,7 +251,7 @@ class _ModeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = NeumorphicTheme.of(context);
+    final theme = GlassTheme.of(context);
     final color = _getModeColor(mode);
 
     return MouseRegion(
@@ -261,12 +264,12 @@ class _ModeButton extends StatelessWidget {
             vertical: 8,
           ),
           decoration: BoxDecoration(
-            color: isSelected ? color.withValues(alpha: 0.15) : theme.colors.cardSurface,
+            color: isSelected ? color.withValues(alpha: 0.15) : theme.colors.glassSurface,
             borderRadius: BorderRadius.circular(10),
-            boxShadow: isSelected ? null : theme.shadows.convexSmall,
-            border: isSelected
-                ? Border.all(color: color, width: 1.5)
-                : null,
+            border: Border.all(
+              color: isSelected ? color : theme.colors.glassBorder,
+              width: isSelected ? 1.5 : 1,
+            ),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -295,10 +298,10 @@ class _ModeButton extends StatelessWidget {
 
 // Helper functions
 Color _getModeColor(TemperatureMode mode) => switch (mode) {
-  TemperatureMode.heating => NeumorphicColors.modeHeating,
-  TemperatureMode.cooling => NeumorphicColors.modeCooling,
-  TemperatureMode.auto => NeumorphicColors.modeAuto,
-  TemperatureMode.dry => NeumorphicColors.modeDry,
+  TemperatureMode.heating => GlassColors.modeHeating,
+  TemperatureMode.cooling => GlassColors.modeCooling,
+  TemperatureMode.auto => GlassColors.modeAuto,
+  TemperatureMode.dry => GlassColors.modeDry,
 };
 
 String _getModeLabel(TemperatureMode mode) => switch (mode) {

@@ -29,10 +29,10 @@ class DeviceControlCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return NeumorphicCard(
+    return GlassCard(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.all(NeumorphicSpacing.lg),
+        padding: const EdgeInsets.all(GlassSpacing.lg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -47,15 +47,15 @@ class DeviceControlCard extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 16.0,
                         fontWeight: FontWeight.w600,
-                        color: NeumorphicColors.lightTextPrimary,
+                        color: GlassColors.lightTextPrimary,
                       ),
                     ),
-                    const SizedBox(height: NeumorphicSpacing.xxs),
+                    const SizedBox(height: GlassSpacing.xxs),
                     Text(
                       subtitle,
                       style: const TextStyle(
                         fontSize: 12.0,
-                        color: NeumorphicColors.lightTextSecondary,
+                        color: GlassColors.lightTextSecondary,
                       ),
                     ),
                   ],
@@ -64,14 +64,14 @@ class DeviceControlCard extends StatelessWidget {
                   width: 40.0,
                   height: 40.0,
                   decoration: BoxDecoration(
-                    color: NeumorphicColors.accentWarning.withValues(alpha: 0.2),
+                    color: GlassColors.accentWarning.withValues(alpha: 0.2),
                     shape: BoxShape.circle,
                   ),
                   child: const Center(
                     child: Icon(
                       Icons.circle,
                       size: 8.0,
-                      color: NeumorphicColors.accentWarning,
+                      color: GlassColors.accentWarning,
                     ),
                   ),
                 ),
@@ -87,7 +87,7 @@ class DeviceControlCard extends StatelessWidget {
               ),
             const Spacer(),
             if (controls.isNotEmpty) ...controls,
-            const SizedBox(height: NeumorphicSpacing.md),
+            const SizedBox(height: GlassSpacing.md),
             if (stats.isNotEmpty)
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,

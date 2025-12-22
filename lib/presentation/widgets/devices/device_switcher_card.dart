@@ -90,7 +90,7 @@ class _AddDeviceButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return NeumorphicInteractiveCard(
+    return GlassInteractiveCard(
       onTap: onTap,
       borderRadius: 8,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -100,7 +100,7 @@ class _AddDeviceButton extends StatelessWidget {
           Icon(
             Icons.add,
             size: 18,
-            color: NeumorphicColors.accentPrimary,
+            color: GlassColors.accentPrimary,
           ),
           const SizedBox(width: 4),
           Text(
@@ -108,7 +108,7 @@ class _AddDeviceButton extends StatelessWidget {
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w600,
-              color: NeumorphicColors.accentPrimary,
+              color: GlassColors.accentPrimary,
             ),
           ),
         ],
@@ -130,12 +130,12 @@ class _DeviceListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
 
-    return NeumorphicCard(
+    return GlassCard(
       onTap: onTap,
       borderRadius: 12,
-      variant: isSelected ? NeumorphicCardVariant.concave : NeumorphicCardVariant.convex,
+      variant: isSelected ? GlassCardVariant.concave : GlassCardVariant.convex,
       padding: const EdgeInsets.all(12),
       child: Row(
         children: [
@@ -145,15 +145,15 @@ class _DeviceListItem extends StatelessWidget {
             height: 40,
             decoration: BoxDecoration(
               color: isSelected
-                  ? NeumorphicColors.accentPrimary.withValues(alpha: 0.2)
-                  : t.colors.cardSurface,
+                  ? GlassColors.accentPrimary.withValues(alpha: 0.2)
+                  : t.colors.glassSurface,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(
               device.icon,
               size: 20,
               color: isSelected
-                  ? NeumorphicColors.accentPrimary
+                  ? GlassColors.accentPrimary
                   : t.colors.textSecondary,
             ),
           ),
@@ -168,7 +168,7 @@ class _DeviceListItem extends StatelessWidget {
                   device.name,
                   style: t.typography.titleSmall.copyWith(
                     color: isSelected
-                        ? NeumorphicColors.accentPrimary
+                        ? GlassColors.accentPrimary
                         : t.colors.textPrimary,
                   ),
                 ),
@@ -203,12 +203,12 @@ class _StatusIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
     final color = !isOnline
         ? t.colors.textTertiary
         : isActive
-            ? NeumorphicColors.accentSuccess
-            : NeumorphicColors.accentWarning;
+            ? GlassColors.accentSuccess
+            : GlassColors.accentWarning;
     final label = !isOnline
         ? 'Офлайн'
         : isActive
@@ -277,7 +277,7 @@ class _EmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
 
     return Center(
       child: Column(
@@ -303,9 +303,9 @@ class _EmptyState extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          NeumorphicButton(
+          GlassButton(
             onPressed: onAddDevice,
-            size: NeumorphicButtonSize.small,
+            size: GlassButtonSize.small,
             icon: Icons.add,
             child: const Text('Добавить'),
           ),
@@ -332,9 +332,9 @@ class DeviceSwitcherHorizontal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
 
-    return NeumorphicCard(
+    return GlassCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -343,19 +343,19 @@ class DeviceSwitcherHorizontal extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('Устройства', style: t.typography.titleMedium),
-              NeumorphicInteractiveCard(
+              GlassInteractiveCard(
                 onTap: onAddDevice,
                 borderRadius: 10,
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.add, size: 14, color: NeumorphicColors.accentPrimary),
+                    Icon(Icons.add, size: 14, color: GlassColors.accentPrimary),
                     const SizedBox(width: 4),
                     Text(
                       'Добавить',
                       style: t.typography.labelSmall.copyWith(
-                        color: NeumorphicColors.accentPrimary,
+                        color: GlassColors.accentPrimary,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -398,25 +398,25 @@ class _DeviceIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
     final statusColor = !device.isOnline
         ? t.colors.textTertiary
         : device.isActive
-            ? NeumorphicColors.accentSuccess
-            : NeumorphicColors.accentWarning;
+            ? GlassColors.accentSuccess
+            : GlassColors.accentWarning;
 
     return GestureDetector(
       onTap: onTap,
       child: Column(
         children: [
-          // Neumorphic icon container
-          NeumorphicCard(
+          // Glass icon container
+          GlassCard(
             width: 56,
             height: 56,
             padding: EdgeInsets.zero,
             variant: isSelected
-                ? NeumorphicCardVariant.concave
-                : NeumorphicCardVariant.convex,
+                ? GlassCardVariant.concave
+                : GlassCardVariant.convex,
             child: Stack(
               children: [
                 Center(
@@ -424,7 +424,7 @@ class _DeviceIconButton extends StatelessWidget {
                     device.icon,
                     size: 24,
                     color: isSelected
-                        ? NeumorphicColors.accentPrimary
+                        ? GlassColors.accentPrimary
                         : t.colors.textSecondary,
                   ),
                 ),
@@ -453,7 +453,7 @@ class _DeviceIconButton extends StatelessWidget {
               style: t.typography.labelSmall.copyWith(
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                 color: isSelected
-                    ? NeumorphicColors.accentPrimary
+                    ? GlassColors.accentPrimary
                     : t.colors.textSecondary,
               ),
               textAlign: TextAlign.center,
@@ -465,4 +465,3 @@ class _DeviceIconButton extends StatelessWidget {
     );
   }
 }
-

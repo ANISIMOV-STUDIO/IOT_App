@@ -43,9 +43,9 @@ class DeviceSystemInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
 
-    return NeumorphicCard(
+    return GlassCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -60,7 +60,7 @@ class DeviceSystemInfoCard extends StatelessWidget {
                     isOnline ? 'Online' : 'Offline',
                     style: t.typography.bodyMedium.copyWith(
                       color: isOnline
-                          ? NeumorphicColors.accentSuccess
+                          ? GlassColors.accentSuccess
                           : t.colors.textTertiary,
                       fontWeight: FontWeight.w500,
                     ),
@@ -68,7 +68,7 @@ class DeviceSystemInfoCard extends StatelessWidget {
                   const SizedBox(width: 8),
                   GlowingStatusDot(
                     color: isOnline
-                        ? NeumorphicColors.accentSuccess
+                        ? GlassColors.accentSuccess
                         : t.colors.textTertiary,
                     isGlowing: isOnline,
                     size: 10,
@@ -105,7 +105,7 @@ class DeviceSystemInfoCard extends StatelessWidget {
                       _EfficiencyRow(
                         label: efficiencyLabel,
                         percent: efficiencyPercent,
-                        color: NeumorphicColors.accentSuccess,
+                        color: GlassColors.accentSuccess,
                       ),
                       _EfficiencyRow(
                         label: filterLabel,
@@ -115,7 +115,7 @@ class DeviceSystemInfoCard extends StatelessWidget {
                       _EfficiencyRow(
                         label: uptimeLabel,
                         percent: uptimePercent,
-                        color: NeumorphicColors.accentPrimary,
+                        color: GlassColors.accentPrimary,
                       ),
                     ],
                   ),
@@ -129,10 +129,10 @@ class DeviceSystemInfoCard extends StatelessWidget {
   }
 
   Color _getFilterColor(int percent) {
-    if (percent >= 80) return NeumorphicColors.accentSuccess;
-    if (percent >= 50) return NeumorphicColors.airQualityGood;
-    if (percent >= 30) return NeumorphicColors.accentWarning;
-    return NeumorphicColors.accentError;
+    if (percent >= 80) return GlassColors.accentSuccess;
+    if (percent >= 50) return GlassColors.airQualityGood;
+    if (percent >= 30) return GlassColors.accentWarning;
+    return GlassColors.accentError;
   }
 }
 
@@ -144,7 +144,7 @@ class _InfoRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -179,7 +179,7 @@ class _EfficiencyRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -20,11 +20,11 @@ class AirQualityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
     final qualityLabel = _getQualityLabel(co2Ppm);
     final qualityColor = _getCo2Color(co2Ppm);
 
-    return NeumorphicCard(
+    return GlassCard(
       child: LayoutBuilder(
         builder: (context, constraints) {
           final isCompact = constraints.maxWidth < 200;
@@ -45,7 +45,7 @@ class AirQualityCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  NeumorphicBadge(
+                  GlassBadge(
                     text: qualityLabel,
                     color: qualityColor,
                   ),
@@ -66,7 +66,7 @@ class AirQualityCard extends StatelessWidget {
     );
   }
 
-  Widget _buildCompactContent(NeumorphicThemeData t, Color qualityColor) {
+  Widget _buildCompactContent(GlassThemeData t, Color qualityColor) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -85,7 +85,7 @@ class AirQualityCard extends StatelessWidget {
     );
   }
 
-  Widget _buildFullContent(NeumorphicThemeData t, Color qualityColor) {
+  Widget _buildFullContent(GlassThemeData t, Color qualityColor) {
     return Row(
       children: [
         // CO2 gauge
@@ -129,22 +129,22 @@ class AirQualityCard extends StatelessWidget {
   }
 
   Color _getCo2Color(int ppm) {
-    if (ppm < 600) return NeumorphicColors.airQualityExcellent;
-    if (ppm < 800) return NeumorphicColors.airQualityGood;
-    if (ppm < 1000) return NeumorphicColors.airQualityModerate;
-    return NeumorphicColors.airQualityPoor;
+    if (ppm < 600) return GlassColors.airQualityExcellent;
+    if (ppm < 800) return GlassColors.airQualityGood;
+    if (ppm < 1000) return GlassColors.airQualityModerate;
+    return GlassColors.airQualityPoor;
   }
 
   Color _getPm25Color(double pm25) {
-    if (pm25 <= 12) return NeumorphicColors.airQualityGood;
-    if (pm25 <= 35) return NeumorphicColors.airQualityModerate;
-    return NeumorphicColors.airQualityPoor;
+    if (pm25 <= 12) return GlassColors.airQualityGood;
+    if (pm25 <= 35) return GlassColors.airQualityModerate;
+    return GlassColors.airQualityPoor;
   }
 
   Color _getVocColor(double voc) {
-    if (voc <= 0.5) return NeumorphicColors.airQualityExcellent;
-    if (voc <= 1.0) return NeumorphicColors.airQualityGood;
-    return NeumorphicColors.airQualityModerate;
+    if (voc <= 0.5) return GlassColors.airQualityExcellent;
+    if (voc <= 1.0) return GlassColors.airQualityGood;
+    return GlassColors.airQualityModerate;
   }
 }
 
@@ -156,7 +156,7 @@ class _Co2Gauge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
     final percentage = ((2000 - co2) / 2000).clamp(0.0, 1.0);
 
     return Column(
@@ -203,7 +203,7 @@ class _MetricRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

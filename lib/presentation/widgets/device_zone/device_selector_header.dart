@@ -52,16 +52,16 @@ class DeviceSelectorHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
     final selected = _selectedDevice;
 
     return Container(
       padding: const EdgeInsets.symmetric(
-        horizontal: NeumorphicSpacing.md,
-        vertical: NeumorphicSpacing.sm,
+        horizontal: GlassSpacing.md,
+        vertical: GlassSpacing.sm,
       ),
       decoration: BoxDecoration(
-        color: NeumorphicColors.accentPrimary.withValues(alpha: 0.05),
+        color: GlassColors.accentPrimary.withValues(alpha: 0.05),
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(16),
           topRight: Radius.circular(16),
@@ -74,12 +74,12 @@ class DeviceSelectorHeader extends StatelessWidget {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: NeumorphicColors.accentPrimary.withValues(alpha: 0.15),
+              color: GlassColors.accentPrimary.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(
               selected?.icon ?? Icons.device_hub,
-              color: NeumorphicColors.accentPrimary,
+              color: GlassColors.accentPrimary,
               size: 20,
             ),
           ),
@@ -105,7 +105,7 @@ class DeviceSelectorHeader extends StatelessWidget {
                     const SizedBox(width: 6),
                     GlowingStatusDot(
                       color: selected?.isOnline == true
-                          ? NeumorphicColors.accentSuccess
+                          ? GlassColors.accentSuccess
                           : t.colors.textTertiary,
                       isGlowing: selected?.isOnline == true,
                       size: 6,
@@ -138,7 +138,7 @@ class DeviceSelectorHeader extends StatelessWidget {
           // Manage button
           if (onManageDevices != null) ...[
             const SizedBox(width: 8),
-            NeumorphicIconButton(
+            GlassIconButton(
               icon: Icons.settings,
               size: 32,
               iconColor: t.colors.textTertiary,
@@ -213,12 +213,12 @@ class _DeviceTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
     final statusColor = !device.isOnline
         ? t.colors.textTertiary
         : device.isActive
-            ? NeumorphicColors.accentSuccess
-            : NeumorphicColors.accentWarning;
+            ? GlassColors.accentSuccess
+            : GlassColors.accentWarning;
 
     return GestureDetector(
       onTap: onTap,
@@ -227,7 +227,7 @@ class _DeviceTab extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(
           color: isSelected
-              ? NeumorphicColors.accentPrimary
+              ? GlassColors.accentPrimary
               : t.colors.cardSurface,
           borderRadius: BorderRadius.circular(8),
           boxShadow: isSelected ? null : t.shadows.convexSmall,
@@ -292,13 +292,13 @@ class _AddDeviceTab extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: NeumorphicColors.accentPrimary.withValues(alpha: 0.3),
+            color: GlassColors.accentPrimary.withValues(alpha: 0.3),
           ),
         ),
         child: Icon(
           Icons.add,
           size: 16,
-          color: NeumorphicColors.accentPrimary,
+          color: GlassColors.accentPrimary,
         ),
       ),
     );

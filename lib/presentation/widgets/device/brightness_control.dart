@@ -23,18 +23,18 @@ class BrightnessControl extends StatelessWidget {
           width: 40.0,
           height: 40.0,
           decoration: BoxDecoration(
-            color: NeumorphicColors.lightSurface,
+            color: GlassColors.lightSurface,
             borderRadius: BorderRadius.circular(12),
           ),
           child: const Icon(
             Icons.lightbulb_outline,
             size: 20.0,
-            color: NeumorphicColors.lightTextSecondary,
+            color: GlassColors.lightTextSecondary,
           ),
         ),
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: NeumorphicSpacing.md),
+            padding: const EdgeInsets.symmetric(horizontal: GlassSpacing.md),
             child: Slider(
               value: value,
               min: 0,
@@ -49,7 +49,7 @@ class BrightnessControl extends StatelessWidget {
           style: const TextStyle(
             fontSize: 16.0,
             fontWeight: FontWeight.w600,
-            color: NeumorphicColors.lightTextPrimary,
+            color: GlassColors.lightTextPrimary,
           ),
         ),
       ],

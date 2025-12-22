@@ -23,12 +23,12 @@ class DeviceAlertsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
     final unreadCount = alerts.where((a) => !a.isRead).length;
 
-    return NeumorphicCard(
-      variant: NeumorphicCardVariant.concave,
-      padding: const EdgeInsets.all(NeumorphicSpacing.md),
+    return GlassCard(
+      variant: GlassCardVariant.concave,
+      padding: const EdgeInsets.all(GlassSpacing.md),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -38,13 +38,13 @@ class DeviceAlertsCard extends StatelessWidget {
             children: [
               Text(title, style: t.typography.titleMedium),
               if (unreadCount > 0)
-                NeumorphicBadge(
+                GlassBadge(
                   text: '$unreadCount',
-                  color: NeumorphicColors.accentError,
+                  color: GlassColors.accentError,
                 ),
             ],
           ),
-          const SizedBox(height: NeumorphicSpacing.sm),
+          const SizedBox(height: GlassSpacing.sm),
 
           // Alerts list
           Expanded(
@@ -54,7 +54,7 @@ class DeviceAlertsCard extends StatelessWidget {
                     physics: const ClampingScrollPhysics(),
                     itemCount: alerts.length.clamp(0, 3),
                     separatorBuilder: (_, __) =>
-                        const SizedBox(height: NeumorphicSpacing.xs),
+                        const SizedBox(height: GlassSpacing.xs),
                     itemBuilder: (_, index) {
                       final alert = alerts[index];
                       return _AlertItem(
@@ -72,14 +72,14 @@ class DeviceAlertsCard extends StatelessWidget {
 
           // View all button
           if (alerts.length > 3 && onViewAll != null) ...[
-            const SizedBox(height: NeumorphicSpacing.xs),
+            const SizedBox(height: GlassSpacing.xs),
             Center(
               child: TextButton(
                 onPressed: onViewAll,
                 child: Text(
                   'Показать все (${alerts.length})',
                   style: t.typography.labelSmall.copyWith(
-                    color: NeumorphicColors.accentPrimary,
+                    color: GlassColors.accentPrimary,
                   ),
                 ),
               ),
@@ -90,16 +90,16 @@ class DeviceAlertsCard extends StatelessWidget {
     );
   }
 
-  Widget _buildEmptyState(NeumorphicThemeData t) {
+  Widget _buildEmptyState(GlassThemeData t) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: NeumorphicSpacing.md),
+      padding: const EdgeInsets.symmetric(vertical: GlassSpacing.md),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
             Icons.check_circle_outline,
             size: 20,
-            color: NeumorphicColors.accentSuccess,
+            color: GlassColors.accentSuccess,
           ),
           const SizedBox(width: 8),
           Text(
@@ -127,7 +127,7 @@ class _AlertItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
     final color = _getAlertColor(alert.type);
     final icon = _getAlertIcon(alert.type);
 
@@ -188,12 +188,12 @@ class _AlertItem extends StatelessWidget {
   }
 
   Color _getAlertColor(DeviceAlertType type) => switch (type) {
-        DeviceAlertType.filterChange => NeumorphicColors.accentWarning,
-        DeviceAlertType.maintenance => NeumorphicColors.accentInfo,
-        DeviceAlertType.error => NeumorphicColors.accentError,
-        DeviceAlertType.offline => NeumorphicColors.airQualityPoor,
-        DeviceAlertType.connectionLost => NeumorphicColors.accentError,
-        DeviceAlertType.firmwareUpdate => NeumorphicColors.accentPrimary,
+        DeviceAlertType.filterChange => GlassColors.accentWarning,
+        DeviceAlertType.maintenance => GlassColors.accentInfo,
+        DeviceAlertType.error => GlassColors.accentError,
+        DeviceAlertType.offline => GlassColors.airQualityPoor,
+        DeviceAlertType.connectionLost => GlassColors.accentError,
+        DeviceAlertType.firmwareUpdate => GlassColors.accentPrimary,
       };
 
   IconData _getAlertIcon(DeviceAlertType type) => switch (type) {
@@ -206,9 +206,9 @@ class _AlertItem extends StatelessWidget {
       };
 
   Color _getDueDateColor(int days) {
-    if (days <= 3) return NeumorphicColors.accentError;
-    if (days <= 7) return NeumorphicColors.accentWarning;
-    return NeumorphicColors.accentInfo;
+    if (days <= 3) return GlassColors.accentError;
+    if (days <= 7) return GlassColors.accentWarning;
+    return GlassColors.accentInfo;
   }
 
   String _getDueDateText(int days) {

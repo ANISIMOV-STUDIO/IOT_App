@@ -1,6 +1,6 @@
 name: smart_ui_kit
-description: Premium UI Kit for Smart Home applications.
-version: 0.0.1
+description: Premium UI Kit for Smart Home applications with Glassmorphism design.
+version: 0.0.2
 publish_to: 'none'
 
 environment:
@@ -12,7 +12,6 @@ dependencies:
     sdk: flutter
   google_fonts: ^6.1.0
   flutter_animate: ^4.5.0
-  flutter_neumorphic_plus: ^3.5.0
 
 dev_dependencies:
   flutter_test:

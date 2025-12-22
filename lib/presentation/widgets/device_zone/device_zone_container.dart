@@ -21,7 +21,7 @@ class DeviceZoneContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final accent = accentColor ?? NeumorphicColors.accentPrimary;
+    final accent = accentColor ?? GlassColors.accentPrimary;
 
     return Container(
       decoration: BoxDecoration(
@@ -40,7 +40,7 @@ class DeviceZoneContainer extends StatelessWidget {
           if (header != null) header!,
           Expanded(
             child: Padding(
-              padding: padding ?? const EdgeInsets.all(NeumorphicSpacing.md),
+              padding: padding ?? const EdgeInsets.all(GlassSpacing.md),
               child: child,
             ),
           ),
@@ -63,10 +63,10 @@ class ZoneDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: NeumorphicSpacing.md),
+      padding: const EdgeInsets.symmetric(vertical: GlassSpacing.md),
       child: Row(
         children: [
           Expanded(

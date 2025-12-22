@@ -24,7 +24,7 @@ class SensorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
 
     if (isCompact) {
       return _buildCompact(t);
@@ -32,11 +32,11 @@ class SensorCard extends StatelessWidget {
     return _buildFull(t);
   }
 
-  Widget _buildCompact(NeumorphicThemeData t) {
-    return NeumorphicCard(
+  Widget _buildCompact(GlassThemeData t) {
+    return GlassCard(
       padding: const EdgeInsets.symmetric(
-        horizontal: NeumorphicSpacing.sm,
-        vertical: NeumorphicSpacing.sm,
+        horizontal: GlassSpacing.sm,
+        vertical: GlassSpacing.sm,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -53,8 +53,8 @@ class SensorCard extends StatelessWidget {
     );
   }
 
-  Widget _buildFull(NeumorphicThemeData t) {
-    return NeumorphicCard(
+  Widget _buildFull(GlassThemeData t) {
+    return GlassCard(
       child: LayoutBuilder(
         builder: (context, constraints) {
           final isSmall = constraints.maxHeight < 120;

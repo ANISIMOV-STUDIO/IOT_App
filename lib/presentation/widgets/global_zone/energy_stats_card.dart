@@ -29,9 +29,9 @@ class EnergyStatsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
 
-    return NeumorphicCard(
+    return GlassCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -40,9 +40,9 @@ class EnergyStatsCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(title, style: t.typography.titleMedium),
-              NeumorphicBadge(
+              GlassBadge(
                 text: periodLabel,
-                color: NeumorphicColors.accentPrimary,
+                color: GlassColors.accentPrimary,
               ),
             ],
           ),
@@ -94,7 +94,7 @@ class _MiniStat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

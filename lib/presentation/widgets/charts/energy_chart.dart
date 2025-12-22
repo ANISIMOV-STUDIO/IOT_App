@@ -18,7 +18,7 @@ class EnergyConsumptionChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = lineColor ?? NeumorphicColors.accentPrimary;
+    final color = lineColor ?? GlassColors.accentPrimary;
     final gradient = gradientColor ?? color;
 
     return SizedBox(
@@ -123,7 +123,7 @@ class MiniSparkline extends StatelessWidget {
   Widget build(BuildContext context) {
     if (data.isEmpty) return SizedBox(height: height, width: width);
 
-    final lineColor = color ?? NeumorphicColors.accentPrimary;
+    final lineColor = color ?? GlassColors.accentPrimary;
     final maxVal = data.reduce((a, b) => a > b ? a : b);
     final minVal = data.reduce((a, b) => a < b ? a : b);
     final range = maxVal - minVal;

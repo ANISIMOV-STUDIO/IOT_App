@@ -26,9 +26,9 @@ class DeviceScheduleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
 
-    return NeumorphicCard(
+    return GlassCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -40,9 +40,9 @@ class DeviceScheduleCard extends StatelessWidget {
               Row(
                 children: [
                   if (onAddSchedule != null)
-                    NeumorphicIconButton(
+                    GlassIconButton(
                       icon: Icons.add,
-                      iconColor: NeumorphicColors.accentPrimary,
+                      iconColor: GlassColors.accentPrimary,
                       size: 32,
                       onPressed: onAddSchedule,
                     ),
@@ -86,7 +86,7 @@ class DeviceScheduleCard extends StatelessWidget {
     );
   }
 
-  Widget _buildEmptyState(NeumorphicThemeData t) {
+  Widget _buildEmptyState(GlassThemeData t) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -122,7 +122,7 @@ class _ScheduleItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
     final isActive = schedule.isEnabled;
 
     return GestureDetector(
@@ -134,7 +134,7 @@ class _ScheduleItem extends StatelessWidget {
             onTap: onToggle,
             child: GlowingStatusDot(
               color: isActive
-                  ? NeumorphicColors.accentPrimary
+                  ? GlassColors.accentPrimary
                   : t.colors.textTertiary,
               isGlowing: isActive,
             ),
@@ -147,7 +147,7 @@ class _ScheduleItem extends StatelessWidget {
             style: t.typography.bodyMedium.copyWith(
               fontWeight: FontWeight.w600,
               color: isActive
-                  ? NeumorphicColors.accentPrimary
+                  ? GlassColors.accentPrimary
                   : t.colors.textSecondary,
             ),
           ),
@@ -170,7 +170,7 @@ class _ScheduleItem extends StatelessWidget {
               '${schedule.temperature!.round()}°',
               style: t.typography.labelSmall.copyWith(
                 color: isActive
-                    ? NeumorphicColors.accentPrimary
+                    ? GlassColors.accentPrimary
                     : t.colors.textTertiary,
               ),
             ),

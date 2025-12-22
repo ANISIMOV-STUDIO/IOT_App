@@ -45,7 +45,7 @@ class QuickActionsCard extends StatelessWidget {
         id: 'all_off',
         icon: Icons.power_settings_new,
         label: allOffLabel,
-        color: NeumorphicColors.accentError,
+        color: GlassColors.accentError,
         requiresConfirmation: true,
       ),
       QuickActionItem(
@@ -68,9 +68,9 @@ class QuickActionsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
 
-    return NeumorphicCard(
+    return GlassCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -108,7 +108,7 @@ class QuickActionsCard extends StatelessWidget {
   }
 
   void _showConfirmationDialog(BuildContext context, QuickActionItem action) {
-    final t = NeumorphicTheme.of(context);
+    final t = GlassTheme.of(context);
 
     showDialog(
       context: context,
@@ -139,7 +139,7 @@ class QuickActionsCard extends StatelessWidget {
             child: Text(
               'Да',
               style: TextStyle(
-                color: action.color ?? NeumorphicColors.accentPrimary,
+                color: action.color ?? GlassColors.accentPrimary,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -161,10 +161,10 @@ class _QuickActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
-    final color = action.color ?? NeumorphicColors.accentPrimary;
+    final t = GlassTheme.of(context);
+    final color = action.color ?? GlassColors.accentPrimary;
 
-    return NeumorphicInteractiveCard(
+    return GlassInteractiveCard(
       onTap: onPressed,
       borderRadius: 12,
       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
@@ -198,13 +198,18 @@ class _QuickActionButton extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               // Icon container
-              Neumorphic(
-                style: const NeumorphicStyle(
-                  depth: 2,
-                  intensity: 0.5,
-                  boxShape: NeumorphicBoxShape.circle(),
-                ),
+              Container(
                 padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 4,
+                      offset: Offset(2, 2),
+                    ),
+                  ],
+                ),
                 child: Icon(action.icon, color: color, size: 18),
               ),
               const SizedBox(height: 4),

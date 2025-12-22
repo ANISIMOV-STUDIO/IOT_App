@@ -1,57 +1,75 @@
-/// Smart UI Kit - Neumorphic Design System for Smart Home Apps
+/// Smart UI Kit - Glassmorphism Design System for Smart Home Apps
 ///
-/// Uses flutter_neumorphic_plus for base components
-/// with custom IoT-specific widgets and theme extensions
+/// Modern glass-effect UI components with blur, transparency, and elegant shadows.
+/// All components are backwards-compatible with existing Neumorphic* names.
 library smart_ui_kit;
 
 // ============================================
-// FLUTTER_NEUMORPHIC_PLUS (base components)
+// FLUTTER CORE
 // ============================================
 
-// Re-export flutter_neumorphic_plus but hide conflicting names
-export 'package:flutter_neumorphic_plus/flutter_neumorphic.dart'
-    hide
-      NeumorphicTheme,      // We use our own wrapper
-      NeumorphicThemeData,  // We use our own
-      NeumorphicColors,     // We have our own colors
-      NeumorphicSlider,     // We have custom slider
-      NeumorphicToggle,     // We have compat wrapper
-      NeumorphicButton;     // We have compat wrapper
+export 'package:flutter/material.dart';
 
 // ============================================
-// CUSTOM THEME & TOKENS
+// THEME & TOKENS
 // ============================================
 
-// Our theme wrapper (includes NeumorphicTheme, NeumorphicThemeData)
-export 'src/widgets/neumorphic/neumorphic_theme_wrapper.dart';
+// Glass theme provider and data
+export 'src/theme/glass_theme.dart';
 
-// Backwards-compatible wrappers (NeumorphicCard, NeumorphicButton, NeumorphicToggle)
-export 'src/widgets/neumorphic/neumorphic_compat.dart';
+// Color palette
+export 'src/theme/glass_colors.dart';
 
-// Design tokens
-export 'src/theme/tokens/neumorphic_colors.dart';
-export 'src/theme/tokens/neumorphic_shadows.dart';
+// Spacing tokens (kept from neumorphic, still useful)
 export 'src/theme/tokens/neumorphic_spacing.dart';
+
+// Typography
 export 'src/theme/tokens/neumorphic_typography.dart';
 
-// Layout Components
+// ============================================
+// CORE COMPONENTS
+// ============================================
+
+// Card components (GlassCard, GlassInteractiveCard + Neumorphic* aliases)
+export 'src/widgets/glass/glass_card.dart';
+
+// Button components (GlassButton, GlassIconButton + Neumorphic* aliases)
+export 'src/widgets/glass/glass_button.dart';
+
+// Toggle switch (GlassToggle + NeumorphicToggle alias)
+export 'src/widgets/glass/glass_toggle.dart';
+
+// Badge, Progress, Loading (GlassBadge, GlassProgressBar, GlassLoadingIndicator, GlassMainContent)
+export 'src/widgets/glass/glass_components.dart';
+
+// ============================================
+// CONTROL COMPONENTS
+// ============================================
+
+// Slider (GlassSlider + NeumorphicSlider alias)
+export 'src/widgets/glass/glass_slider.dart';
+
+// Temperature dial (GlassTemperatureDial + NeumorphicTemperatureDial alias)
+export 'src/widgets/glass/glass_temperature_dial.dart';
+
+// Segmented control (GlassSegmentedControl + NeumorphicSegmentedControl alias)
+export 'src/widgets/glass/glass_segmented_control.dart';
+
+// Preset grid (GlassPresetGrid + NeumorphicPresetGrid alias)
+export 'src/widgets/glass/glass_preset_grid.dart';
+
+// ============================================
+// LAYOUT COMPONENTS
+// ============================================
+
+// Sidebar navigation (GlassSidebar, GlassNavItem + Neumorphic* aliases)
+export 'src/widgets/glass/glass_sidebar.dart';
+
+// Bottom navigation (GlassBottomNav + NeumorphicBottomNav alias)
+export 'src/widgets/glass/glass_bottom_nav.dart';
+
+// Responsive dashboard shell
+export 'src/widgets/glass/glass_dashboard_shell.dart';
+
+// Bento grid layout
 export 'src/widgets/layout/bento_grid.dart';
-
-// ============================================
-// CUSTOM IOT WIDGETS
-// ============================================
-
-// Temperature control (custom neumorphic dial)
-export 'src/widgets/neumorphic/neumorphic_temperature_dial.dart';
-
-// Custom slider with local state
-export 'src/widgets/neumorphic/neumorphic_slider.dart';
-
-// Layout components
-export 'src/widgets/neumorphic/neumorphic_sidebar.dart';
-export 'src/widgets/neumorphic/neumorphic_bottom_nav.dart';
-export 'src/widgets/neumorphic/responsive_dashboard_shell.dart';
-
-// Preset & Mode selection
-export 'src/widgets/neumorphic/neumorphic_preset_grid.dart';
-export 'src/widgets/neumorphic/neumorphic_segmented_control.dart';

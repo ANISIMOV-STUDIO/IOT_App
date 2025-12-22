@@ -27,25 +27,25 @@ class DeviceStatItem extends StatelessWidget {
             Icon(
               icon,
               size: 16.0,
-              color: NeumorphicColors.lightTextSecondary,
+              color: GlassColors.lightTextSecondary,
             ),
-            const SizedBox(width: NeumorphicSpacing.xxs),
+            const SizedBox(width: GlassSpacing.xxs),
             Text(
               value,
               style: const TextStyle(
                 fontSize: 14.0,
                 fontWeight: FontWeight.w600,
-                color: NeumorphicColors.lightTextPrimary,
+                color: GlassColors.lightTextPrimary,
               ),
             ),
           ],
         ),
-        const SizedBox(height: NeumorphicSpacing.xxs),
+        const SizedBox(height: GlassSpacing.xxs),
         Text(
           label,
           style: const TextStyle(
             fontSize: 11.0,
-            color: NeumorphicColors.lightTextTertiary,
+            color: GlassColors.lightTextTertiary,
           ),
         ),
       ],
