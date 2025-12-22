@@ -180,6 +180,10 @@ class _DeviceSwitcherCompact extends StatelessWidget {
       children: [
         ...state.hvacDevices.take(3).map((device) {
           final isSelected = device.id == state.selectedHvacDeviceId;
+          // Generate short name like "ПВ-1", "ПВ-2"
+          final index = state.hvacDevices.indexOf(device) + 1;
+          final shortName = 'ПВ-$index';
+
           return Padding(
             padding: const EdgeInsets.only(left: 4),
             child: GestureDetector(
@@ -187,8 +191,7 @@ class _DeviceSwitcherCompact extends StatelessWidget {
                     HvacDeviceSelected(device.id),
                   ),
               child: Container(
-                width: 36,
-                height: 36,
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
                   color: isSelected
                       ? NeumorphicColors.accentPrimary.withValues(alpha: 0.15)
@@ -202,12 +205,14 @@ class _DeviceSwitcherCompact extends StatelessWidget {
                       : null,
                   boxShadow: isSelected ? null : t.shadows.convexSmall,
                 ),
-                child: Icon(
-                  device.icon,
-                  size: 18,
-                  color: isSelected
-                      ? NeumorphicColors.accentPrimary
-                      : t.colors.textSecondary,
+                child: Text(
+                  shortName,
+                  style: t.typography.labelMedium.copyWith(
+                    color: isSelected
+                        ? NeumorphicColors.accentPrimary
+                        : t.colors.textSecondary,
+                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                  ),
                 ),
               ),
             ),
