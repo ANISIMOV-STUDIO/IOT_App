@@ -4,7 +4,6 @@
 library;
 
 import 'package:flutter_test/flutter_test.dart';
-import 'helpers/mocks.dart';
 import 'helpers/test_helper.dart';
 
 /// Global test configuration
@@ -35,9 +34,6 @@ class TestConfig {
   static void initialize() {
     // Set up test bindings
     TestWidgetsFlutterBinding.ensureInitialized();
-
-    // Register common mocks
-    setupCommonMocks();
 
     // Set up dependency injection
     TestHelper.setupTestDependencies();

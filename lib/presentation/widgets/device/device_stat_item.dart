@@ -3,7 +3,6 @@
 /// Responsive stat display for device cards
 library;
 
-import 'package:flutter/material.dart';
 import 'package:smart_ui_kit/smart_ui_kit.dart';
 
 class DeviceStatItem extends StatelessWidget {

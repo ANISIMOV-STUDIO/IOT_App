@@ -3,7 +3,6 @@
 /// Responsive temperature control for air conditioners
 library;
 
-import 'package:flutter/material.dart';
 import 'package:smart_ui_kit/smart_ui_kit.dart';
 
 class TemperatureControl extends StatelessWidget {

@@ -951,10 +951,10 @@ class _DashboardViewState extends State<_DashboardView> {
         children: [
           // Neumorphic icon container
           Neumorphic(
-            style: NeumorphicStyle(
+            style: const NeumorphicStyle(
               depth: 2,
               intensity: 0.5,
-              boxShape: const NeumorphicBoxShape.circle(),
+              boxShape: NeumorphicBoxShape.circle(),
             ),
             padding: const EdgeInsets.all(10),
             child: Icon(icon, color: c, size: 22),

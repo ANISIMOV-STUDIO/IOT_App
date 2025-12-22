@@ -42,7 +42,7 @@ class MockClimateRepository implements ClimateRepository {
       pollutantsAqi: 45,
       isOn: true,
     );
-    _deviceMeta['zilon-1'] = _DeviceMeta(
+    _deviceMeta['zilon-1'] = const _DeviceMeta(
       brand: 'ZILON',
       type: 'Приточная установка',
       icon: Icons.air,
@@ -66,7 +66,7 @@ class MockClimateRepository implements ClimateRepository {
       pollutantsAqi: 25,
       isOn: false,
     );
-    _deviceMeta['lg-1'] = _DeviceMeta(
+    _deviceMeta['lg-1'] = const _DeviceMeta(
       brand: 'LG',
       type: 'Сплит-система',
       icon: Icons.ac_unit,
@@ -90,7 +90,7 @@ class MockClimateRepository implements ClimateRepository {
       pollutantsAqi: 38,
       isOn: false,
     );
-    _deviceMeta['xiaomi-1'] = _DeviceMeta(
+    _deviceMeta['xiaomi-1'] = const _DeviceMeta(
       brand: 'Xiaomi',
       type: 'Увлажнитель',
       icon: Icons.water_drop,

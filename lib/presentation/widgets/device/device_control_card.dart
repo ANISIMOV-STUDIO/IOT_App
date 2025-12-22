@@ -3,7 +3,6 @@
 /// Responsive large card for controlling individual devices
 library;
 
-import 'package:flutter/material.dart';
 import 'package:smart_ui_kit/smart_ui_kit.dart';
 
 enum DeviceType { lamp, airConditioner, vacuum, other }

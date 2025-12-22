@@ -3,7 +3,6 @@
 /// Responsive brightness control for lamps
 library;
 
-import 'package:flutter/material.dart';
 import 'package:smart_ui_kit/smart_ui_kit.dart';
 
 class BrightnessControl extends StatelessWidget {

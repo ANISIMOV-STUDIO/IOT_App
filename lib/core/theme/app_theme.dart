@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:smart_ui_kit/smart_ui_kit.dart';
 
 /// App theme definitions based on neumorphic design system
