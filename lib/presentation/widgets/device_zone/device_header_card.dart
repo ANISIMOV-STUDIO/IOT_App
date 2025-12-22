@@ -26,71 +26,85 @@ class DeviceHeaderCard extends StatelessWidget {
     final t = NeumorphicTheme.of(context);
 
     return NeumorphicCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isSmall = constraints.maxHeight < 120;
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              // Power icon
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: (isOn ? NeumorphicColors.accentPrimary : Colors.grey)
-                      .withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Icon(
-                  Icons.power_settings_new,
-                  color: isOn ? NeumorphicColors.accentPrimary : Colors.grey,
-                  size: 20,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Power icon
+                  Container(
+                    padding: EdgeInsets.all(isSmall ? 6 : 8),
+                    decoration: BoxDecoration(
+                      color: (isOn ? NeumorphicColors.accentPrimary : Colors.grey)
+                          .withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Icon(
+                      Icons.power_settings_new,
+                      color: isOn ? NeumorphicColors.accentPrimary : Colors.grey,
+                      size: isSmall ? 16 : 20,
+                    ),
+                  ),
+                  // Power toggle
+                  NeumorphicToggle(
+                    value: isOn,
+                    onChanged: isOnline ? onPowerChanged : null,
+                  ),
+                ],
               ),
-              // Power toggle
-              NeumorphicToggle(
-                value: isOn,
-                onChanged: isOnline ? onPowerChanged : null,
-              ),
-            ],
-          ),
-          const Spacer(),
-          // Device name
-          Text(deviceName, style: t.typography.titleMedium),
-          if (deviceType != null) ...[
-            const SizedBox(height: 2),
-            Text(
-              deviceType!,
-              style: t.typography.bodySmall.copyWith(
-                color: t.colors.textSecondary,
-              ),
-            ),
-          ],
-          const SizedBox(height: 4),
-          // Status indicator
-          Row(
-            children: [
-              GlowingStatusDot(
-                color: !isOnline
-                    ? t.colors.textTertiary
-                    : isOn
-                        ? NeumorphicColors.accentSuccess
-                        : NeumorphicColors.accentWarning,
-                isGlowing: isOn && isOnline,
-              ),
-              const SizedBox(width: 6),
+              const Spacer(),
+              // Device name
               Text(
-                _statusLabel,
-                style: t.typography.labelSmall.copyWith(
-                  color: !isOnline
-                      ? t.colors.textTertiary
-                      : isOn
-                          ? NeumorphicColors.accentSuccess
-                          : NeumorphicColors.accentWarning,
+                deviceName,
+                style: isSmall ? t.typography.titleSmall : t.typography.titleMedium,
+                overflow: TextOverflow.ellipsis,
+              ),
+              if (deviceType != null && !isSmall) ...[
+                const SizedBox(height: 2),
+                Text(
+                  deviceType!,
+                  style: t.typography.labelSmall.copyWith(
+                    color: t.colors.textSecondary,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
+              ],
+              SizedBox(height: isSmall ? 2 : 4),
+              // Status indicator
+              Row(
+                children: [
+                  GlowingStatusDot(
+                    color: !isOnline
+                        ? t.colors.textTertiary
+                        : isOn
+                            ? NeumorphicColors.accentSuccess
+                            : NeumorphicColors.accentWarning,
+                    isGlowing: isOn && isOnline,
+                    size: isSmall ? 6 : 8,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    _statusLabel,
+                    style: t.typography.labelSmall.copyWith(
+                      color: !isOnline
+                          ? t.colors.textTertiary
+                          : isOn
+                              ? NeumorphicColors.accentSuccess
+                              : NeumorphicColors.accentWarning,
+                      fontSize: isSmall ? 10 : null,
+                    ),
+                  ),
+                ],
               ),
             ],
-          ),
-        ],
+          );
+        },
       ),
     );
   }

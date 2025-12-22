@@ -25,59 +25,98 @@ class AirQualityCard extends StatelessWidget {
     final qualityColor = _getCo2Color(co2Ppm);
 
     return NeumorphicCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Header
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isCompact = constraints.maxWidth < 200;
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title, style: t.typography.titleLarge),
-              NeumorphicBadge(
-                text: qualityLabel,
-                color: qualityColor,
+              // Header
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: isCompact
+                          ? t.typography.titleSmall
+                          : t.typography.titleMedium,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  NeumorphicBadge(
+                    text: qualityLabel,
+                    color: qualityColor,
+                  ),
+                ],
+              ),
+              SizedBox(height: isCompact ? 8 : 12),
+
+              // Content
+              Expanded(
+                child: isCompact
+                    ? _buildCompactContent(t, qualityColor)
+                    : _buildFullContent(t, qualityColor),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildCompactContent(NeumorphicThemeData t, Color qualityColor) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            '$co2Ppm',
+            style: t.typography.numericLarge.copyWith(
+              color: qualityColor,
+              fontSize: 24,
+            ),
+          ),
+          Text('CO₂ ppm', style: t.typography.labelSmall),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFullContent(NeumorphicThemeData t, Color qualityColor) {
+    return Row(
+      children: [
+        // CO2 gauge
+        Expanded(
+          flex: 2,
+          child: _Co2Gauge(co2: co2Ppm, color: qualityColor),
+        ),
+        const SizedBox(width: 12),
+        // Additional metrics
+        Expanded(
+          flex: 3,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _MetricRow(
+                label: 'PM2.5',
+                value: pm25.toString(),
+                unit: 'μg/m³',
+                color: _getPm25Color(pm25),
+              ),
+              const SizedBox(height: 8),
+              _MetricRow(
+                label: 'VOC',
+                value: voc.toString(),
+                unit: 'ppm',
+                color: _getVocColor(voc),
               ),
             ],
           ),
-          const SizedBox(height: 12),
-
-          // Content
-          Expanded(
-            child: Row(
-              children: [
-                // CO2 gauge
-                Expanded(
-                  flex: 2,
-                  child: _Co2Gauge(co2: co2Ppm, color: qualityColor),
-                ),
-                const SizedBox(width: 16),
-                // Additional metrics
-                Expanded(
-                  flex: 3,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _MetricRow(
-                        label: 'PM2.5',
-                        value: pm25.toString(),
-                        unit: 'μg/m³',
-                        color: _getPm25Color(pm25),
-                      ),
-                      const SizedBox(height: 8),
-                      _MetricRow(
-                        label: 'VOC',
-                        value: voc.toString(),
-                        unit: 'ppm',
-                        color: _getVocColor(voc),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

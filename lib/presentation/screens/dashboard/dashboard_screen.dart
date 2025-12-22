@@ -1,4 +1,4 @@
-/// Main dashboard screen - modular architecture
+/// Main dashboard screen - modular architecture with Device/Global zone separation
 library;
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -111,7 +111,7 @@ class _DashboardPage extends StatelessWidget {
   }
 }
 
-/// Desktop layout with Bento Grid and zone separation
+/// Desktop layout with clear Device Zone / Global Zone separation
 class _DesktopDashboard extends StatelessWidget {
   final DashboardState state;
   final AppStrings strings;
@@ -120,30 +120,32 @@ class _DesktopDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final climate = state.climate;
-
     return NeumorphicMainContent(
       title: strings.dashboard,
       scrollable: false,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // === DEVICE ZONE ===
-          SectionHeader(
-            title: climate?.deviceName ?? 'Устройство',
-            subtitle: _getDeviceSubtitle(state),
-            icon: Icons.device_hub,
-            accentColor: NeumorphicColors.accentPrimary,
-            trailing: _DeviceSwitcherCompact(state: state),
-          ),
-          const SizedBox(height: 8),
+          // === DEVICE ZONE with visual container ===
           Expanded(
-            flex: 5,
-            child: _DeviceZoneGrid(state: state, strings: strings),
+            flex: 6,
+            child: DeviceZoneContainer(
+              header: _buildDeviceSelectorHeader(context),
+              padding: const EdgeInsets.fromLTRB(
+                NeumorphicSpacing.md,
+                NeumorphicSpacing.sm,
+                NeumorphicSpacing.md,
+                NeumorphicSpacing.md,
+              ),
+              child: _DeviceZoneGrid(state: state, strings: strings),
+            ),
           ),
 
           // === ZONE DIVIDER ===
-          const ZoneDivider(label: 'Общее'),
+          const ZoneDivider(
+            label: 'ОБЩИЕ ДАННЫЕ',
+            icon: Icons.dashboard_outlined,
+          ),
 
           // === GLOBAL ZONE ===
           Expanded(
@@ -155,77 +157,30 @@ class _DesktopDashboard extends StatelessWidget {
     );
   }
 
-  String? _getDeviceSubtitle(DashboardState state) {
-    if (state.hvacDevices.isEmpty) return null;
-    final device = state.hvacDevices.firstWhere(
-      (d) => d.id == state.selectedHvacDeviceId,
-      orElse: () => state.hvacDevices.first,
-    );
-    return '${device.brand} • ${device.type}';
-  }
-}
+  Widget _buildDeviceSelectorHeader(BuildContext context) {
+    final devices = state.hvacDevices
+        .map((d) => DeviceSelectorItem(
+              id: d.id,
+              name: d.name,
+              brand: d.brand,
+              type: d.type,
+              isOnline: d.isOnline,
+              isActive: d.isActive,
+              icon: d.icon,
+            ))
+        .toList();
 
-/// Compact device switcher for header
-class _DeviceSwitcherCompact extends StatelessWidget {
-  final DashboardState state;
-
-  const _DeviceSwitcherCompact({required this.state});
-
-  @override
-  Widget build(BuildContext context) {
-    final t = NeumorphicTheme.of(context);
-
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        ...state.hvacDevices.take(3).map((device) {
-          final isSelected = device.id == state.selectedHvacDeviceId;
-          // Generate short name like "ПВ-1", "ПВ-2"
-          final index = state.hvacDevices.indexOf(device) + 1;
-          final shortName = 'ПВ-$index';
-
-          return Padding(
-            padding: const EdgeInsets.only(left: 4),
-            child: GestureDetector(
-              onTap: () => context.read<DashboardBloc>().add(
-                    HvacDeviceSelected(device.id),
-                  ),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? NeumorphicColors.accentPrimary.withValues(alpha: 0.15)
-                      : t.colors.cardSurface,
-                  borderRadius: BorderRadius.circular(8),
-                  border: isSelected
-                      ? Border.all(
-                          color: NeumorphicColors.accentPrimary,
-                          width: 2,
-                        )
-                      : null,
-                  boxShadow: isSelected ? null : t.shadows.convexSmall,
-                ),
-                child: Text(
-                  shortName,
-                  style: t.typography.labelMedium.copyWith(
-                    color: isSelected
-                        ? NeumorphicColors.accentPrimary
-                        : t.colors.textSecondary,
-                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                  ),
-                ),
-              ),
-            ),
-          );
-        }),
-        const SizedBox(width: 8),
-        NeumorphicIconButton(
-          icon: Icons.add,
-          size: 32,
-          iconColor: NeumorphicColors.accentPrimary,
-          onPressed: () {},
-        ),
-      ],
+    return DeviceSelectorHeader(
+      devices: devices,
+      selectedDeviceId: state.selectedHvacDeviceId,
+      onDeviceSelected: (id) =>
+          context.read<DashboardBloc>().add(HvacDeviceSelected(id)),
+      onAddDevice: () {
+        // TODO: Navigate to add device flow
+      },
+      onManageDevices: () {
+        // TODO: Navigate to device management
+      },
     );
   }
 }
@@ -244,10 +199,9 @@ class _DeviceZoneGrid extends StatelessWidget {
     return BentoGrid(
       columns: 4,
       gap: 16,
-      cellHeight: null, // Auto-expand to fill available space
+      cellHeight: null,
       items: [
         // Row 1: Device status + Sensors
-        // Device status + power
         BentoItem(
           size: BentoSize.square,
           child: DeviceHeaderCard(
@@ -260,7 +214,6 @@ class _DeviceZoneGrid extends StatelessWidget {
           ),
         ),
 
-        // Temperature sensor
         BentoItem(
           size: BentoSize.square,
           child: SensorCard(
@@ -272,7 +225,6 @@ class _DeviceZoneGrid extends StatelessWidget {
           ),
         ),
 
-        // Humidity sensor
         BentoItem(
           size: BentoSize.square,
           child: SensorCard(
@@ -284,7 +236,6 @@ class _DeviceZoneGrid extends StatelessWidget {
           ),
         ),
 
-        // CO2 sensor
         BentoItem(
           size: BentoSize.square,
           child: SensorCard(
@@ -297,16 +248,16 @@ class _DeviceZoneGrid extends StatelessWidget {
         ),
 
         // Row 2: Schedule + Alerts + System Info
-        // Device schedule
         BentoItem(
           size: BentoSize.wide,
-          child: DeviceScheduleCard(
+          child: UnifiedScheduleCard(
             schedules: _getMockSchedules(),
+            currentDeviceId: state.selectedHvacDeviceId,
+            currentDeviceName: climate?.deviceName,
             title: strings.schedule,
           ),
         ),
 
-        // Device alerts
         BentoItem(
           size: BentoSize.square,
           child: DeviceAlertsCard(
@@ -315,7 +266,6 @@ class _DeviceZoneGrid extends StatelessWidget {
           ),
         ),
 
-        // System info (compact)
         BentoItem(
           size: BentoSize.square,
           child: _CompactSystemInfoCard(
@@ -355,10 +305,11 @@ class _DeviceZoneGrid extends StatelessWidget {
     return NeumorphicColors.airQualityPoor;
   }
 
-  // Mock data - will be replaced with real data from BLoC
   List<DeviceSchedule> _getMockSchedules() => [
+        // Device-specific schedules
         DeviceSchedule(
           id: '1',
+          deviceId: 'zilon-1',
           time: const TimeOfDay(hour: 7, minute: 0),
           action: ScheduleAction.turnOn,
           temperature: 22,
@@ -373,27 +324,31 @@ class _DeviceZoneGrid extends StatelessWidget {
         ),
         DeviceSchedule(
           id: '2',
+          deviceId: 'zilon-1',
           time: const TimeOfDay(hour: 9, minute: 0),
           action: ScheduleAction.setTemperature,
           temperature: 18,
           repeatDays: DayOfWeek.values.toSet(),
-          label: 'Уход',
+          label: 'Уход на работу',
           isEnabled: false,
         ),
         DeviceSchedule(
           id: '3',
+          deviceId: 'zilon-1',
           time: const TimeOfDay(hour: 18, minute: 0),
           action: ScheduleAction.setTemperature,
           temperature: 21,
           repeatDays: DayOfWeek.values.toSet(),
           label: 'Возвращение',
         ),
+        // Global schedules (for all devices)
         DeviceSchedule(
           id: '4',
-          time: const TimeOfDay(hour: 22, minute: 0),
+          deviceId: null, // Global
+          time: const TimeOfDay(hour: 23, minute: 0),
           action: ScheduleAction.turnOff,
           repeatDays: DayOfWeek.values.toSet(),
-          label: 'Сон',
+          label: 'Ночной режим',
         ),
       ];
 
@@ -441,61 +396,73 @@ class _CompactSystemInfoCard extends StatelessWidget {
     final t = NeumorphicTheme.of(context);
 
     return NeumorphicCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Header
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isSmall = constraints.maxHeight < 100;
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Text(strings.systemStatus, style: t.typography.titleSmall),
-              GlowingStatusDot(
-                color: isOnline
-                    ? NeumorphicColors.accentSuccess
-                    : t.colors.textTertiary,
-                isGlowing: isOnline,
-                size: 8,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    strings.systemStatus,
+                    style: isSmall
+                        ? t.typography.labelMedium
+                        : t.typography.titleSmall,
+                  ),
+                  GlowingStatusDot(
+                    color: isOnline
+                        ? NeumorphicColors.accentSuccess
+                        : t.colors.textTertiary,
+                    isGlowing: isOnline,
+                    size: isSmall ? 6 : 8,
+                  ),
+                ],
               ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          // Device name
-          Text(
-            deviceName,
-            style: t.typography.bodySmall.copyWith(
-              fontWeight: FontWeight.w600,
-            ),
-            overflow: TextOverflow.ellipsis,
-          ),
-          const Spacer(),
-          // Filter status
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
+              SizedBox(height: isSmall ? 4 : 8),
               Text(
-                strings.filterStatus,
+                deviceName,
                 style: t.typography.labelSmall.copyWith(
-                  color: t.colors.textSecondary,
-                ),
-              ),
-              Text(
-                '$filterPercent%',
-                style: t.typography.labelSmall.copyWith(
-                  color: _getFilterColor(filterPercent),
                   fontWeight: FontWeight.w600,
                 ),
+                overflow: TextOverflow.ellipsis,
+              ),
+              const Spacer(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    strings.filterStatus,
+                    style: t.typography.labelSmall.copyWith(
+                      color: t.colors.textSecondary,
+                      fontSize: isSmall ? 10 : null,
+                    ),
+                  ),
+                  Text(
+                    '$filterPercent%',
+                    style: t.typography.labelSmall.copyWith(
+                      color: _getFilterColor(filterPercent),
+                      fontWeight: FontWeight.w600,
+                      fontSize: isSmall ? 10 : null,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: isSmall ? 2 : 4),
+              LinearProgressIndicator(
+                value: filterPercent / 100,
+                backgroundColor: t.colors.textTertiary.withValues(alpha: 0.2),
+                valueColor:
+                    AlwaysStoppedAnimation(_getFilterColor(filterPercent)),
+                minHeight: isSmall ? 3 : 4,
+                borderRadius: BorderRadius.circular(2),
               ),
             ],
-          ),
-          const SizedBox(height: 4),
-          LinearProgressIndicator(
-            value: filterPercent / 100,
-            backgroundColor: t.colors.textTertiary.withValues(alpha: 0.2),
-            valueColor: AlwaysStoppedAnimation(_getFilterColor(filterPercent)),
-            minHeight: 4,
-            borderRadius: BorderRadius.circular(2),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
@@ -523,7 +490,7 @@ class _GlobalZoneGrid extends StatelessWidget {
     return BentoGrid(
       columns: 4,
       gap: 16,
-      cellHeight: null, // Auto-expand to fill available space
+      cellHeight: null,
       items: [
         // Energy statistics
         BentoItem(
@@ -541,12 +508,25 @@ class _GlobalZoneGrid extends StatelessWidget {
 
         // Air quality
         BentoItem(
-          size: BentoSize.wide,
+          size: BentoSize.square,
           child: AirQualityCard(
             co2Ppm: climate?.co2Ppm ?? 500,
             pm25: 12,
             voc: 0.3,
             title: strings.airQuality,
+          ),
+        ),
+
+        // Unified notification center
+        BentoItem(
+          size: BentoSize.square,
+          child: NotificationCenterCard(
+            deviceAlerts: _getMockAllDeviceAlerts(state),
+            companyNotifications: _getMockCompanyNotifications(),
+            title: strings.notifications,
+            onViewAll: () {
+              // Navigate to notifications page
+            },
           ),
         ),
 
@@ -579,10 +559,57 @@ class _GlobalZoneGrid extends StatelessWidget {
         break;
       case 'schedule':
       case 'settings':
-        // Navigate to respective pages
         break;
     }
   }
+
+  List<DeviceAlert> _getMockAllDeviceAlerts(DashboardState state) => [
+        DeviceAlert(
+          id: '1',
+          title: 'Замена фильтра',
+          message: 'Рекомендуется заменить',
+          timestamp: DateTime.now(),
+          deviceId: 'zilon-1',
+          deviceName: 'ZILON ZPE-6000',
+          type: DeviceAlertType.filterChange,
+          dueDate: DateTime.now().add(const Duration(days: 14)),
+        ),
+        DeviceAlert(
+          id: '2',
+          title: 'Обновление',
+          message: 'Версия v2.5.0',
+          timestamp: DateTime.now(),
+          deviceId: 'lg-1',
+          deviceName: 'LG Dual Inverter',
+          type: DeviceAlertType.firmwareUpdate,
+        ),
+        DeviceAlert(
+          id: '3',
+          title: 'Офлайн',
+          message: 'Нет связи с устройством',
+          timestamp: DateTime.now(),
+          deviceId: 'xiaomi-1',
+          deviceName: 'Xiaomi Humidifier',
+          type: DeviceAlertType.offline,
+        ),
+      ];
+
+  List<CompanyNotification> _getMockCompanyNotifications() => [
+        CompanyNotification(
+          id: 'c1',
+          title: 'Зимние скидки',
+          message: 'Скидка 20% на обслуживание до конца января',
+          timestamp: DateTime.now().subtract(const Duration(hours: 2)),
+          type: CompanyNotificationType.promo,
+        ),
+        CompanyNotification(
+          id: 'c2',
+          title: 'Совет эксперта',
+          message: 'Оптимальная влажность зимой: 40-60%',
+          timestamp: DateTime.now().subtract(const Duration(days: 1)),
+          type: CompanyNotificationType.tip,
+        ),
+      ];
 }
 
 /// Mobile dashboard layout
@@ -613,7 +640,8 @@ class _MobileDashboard extends StatelessWidget {
                 Expanded(
                   child: SensorCard(
                     icon: Icons.thermostat,
-                    value: '${climate?.currentTemperature.toStringAsFixed(0) ?? '--'}°',
+                    value:
+                        '${climate?.currentTemperature.toStringAsFixed(0) ?? '--'}°',
                     label: s.temperature,
                     unit: '',
                     color: NeumorphicColors.modeHeating,
@@ -768,14 +796,16 @@ class _MobileDeviceSwitcher extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final devices = state.hvacDevices.map((d) => DeviceInfo(
-          id: d.id,
-          name: d.brand,
-          type: d.type,
-          isOnline: d.isOnline,
-          isActive: d.isActive,
-          icon: d.icon,
-        )).toList();
+    final devices = state.hvacDevices
+        .map((d) => DeviceInfo(
+              id: d.id,
+              name: d.brand,
+              type: d.type,
+              isOnline: d.isOnline,
+              isActive: d.isActive,
+              icon: d.icon,
+            ))
+        .toList();
 
     return DeviceSwitcherHorizontal(
       devices: devices,
@@ -798,50 +828,35 @@ class _RightPanel extends StatelessWidget {
       builder: (context, state) {
         final climate = state.climate;
 
-        return Column(
-          children: [
-            // Climate control
-            Expanded(
-              child: DeviceClimateControl(
-                targetTemperature: climate?.targetTemperature ?? 22,
-                mode: climate?.mode ?? ClimateMode.auto,
-                modeLabel: _getModeLabel(s, climate?.mode ?? ClimateMode.auto),
-                supplyAirflow: climate?.supplyAirflow ?? 50,
-                exhaustAirflow: climate?.exhaustAirflow ?? 40,
-                preset: climate?.preset ?? 'auto',
-                targetTempLabel: s.targetTemperature,
-                heatingLabel: s.heating,
-                coolingLabel: s.cooling,
-                autoLabel: s.auto,
-                ventilationLabel: s.ventilation,
-                airflowControlLabel: s.airflowControl,
-                supplyLabel: s.supplyAirflow,
-                exhaustLabel: s.exhaustAirflow,
-                nightLabel: s.night,
-                turboLabel: s.turbo,
-                ecoLabel: s.eco,
-                awayLabel: s.away,
-                onTemperatureChanged: (v) =>
-                    context.read<DashboardBloc>().add(TemperatureChanged(v)),
-                onModeChanged: (mode) =>
-                    context.read<DashboardBloc>().add(ClimateModeChanged(mode)),
-                onSupplyAirflowChanged: (v) =>
-                    context.read<DashboardBloc>().add(SupplyAirflowChanged(v)),
-                onExhaustAirflowChanged: (v) =>
-                    context.read<DashboardBloc>().add(ExhaustAirflowChanged(v)),
-                onPresetChanged: (id) =>
-                    context.read<DashboardBloc>().add(PresetChanged(id)),
-              ),
-            ),
-            const SizedBox(height: NeumorphicSpacing.md),
-            // Device alerts summary
-            Expanded(
-              child: DeviceAlertsCard(
-                alerts: _getMockDeviceAlerts(state),
-                title: s.notifications,
-              ),
-            ),
-          ],
+        return DeviceClimateControl(
+          targetTemperature: climate?.targetTemperature ?? 22,
+          mode: climate?.mode ?? ClimateMode.auto,
+          modeLabel: _getModeLabel(s, climate?.mode ?? ClimateMode.auto),
+          supplyAirflow: climate?.supplyAirflow ?? 50,
+          exhaustAirflow: climate?.exhaustAirflow ?? 40,
+          preset: climate?.preset ?? 'auto',
+          targetTempLabel: s.targetTemperature,
+          heatingLabel: s.heating,
+          coolingLabel: s.cooling,
+          autoLabel: s.auto,
+          ventilationLabel: s.ventilation,
+          airflowControlLabel: s.airflowControl,
+          supplyLabel: s.supplyAirflow,
+          exhaustLabel: s.exhaustAirflow,
+          nightLabel: s.night,
+          turboLabel: s.turbo,
+          ecoLabel: s.eco,
+          awayLabel: s.away,
+          onTemperatureChanged: (v) =>
+              context.read<DashboardBloc>().add(TemperatureChanged(v)),
+          onModeChanged: (mode) =>
+              context.read<DashboardBloc>().add(ClimateModeChanged(mode)),
+          onSupplyAirflowChanged: (v) =>
+              context.read<DashboardBloc>().add(SupplyAirflowChanged(v)),
+          onExhaustAirflowChanged: (v) =>
+              context.read<DashboardBloc>().add(ExhaustAirflowChanged(v)),
+          onPresetChanged: (id) =>
+              context.read<DashboardBloc>().add(PresetChanged(id)),
         );
       },
     );
@@ -855,28 +870,6 @@ class _RightPanel extends StatelessWidget {
         ClimateMode.ventilation => s.ventilation,
         ClimateMode.off => s.turnedOff,
       };
-
-  List<DeviceAlert> _getMockDeviceAlerts(DashboardState state) => [
-        DeviceAlert(
-          id: '1',
-          title: 'Замена фильтра',
-          message: 'Через 14 дней',
-          timestamp: DateTime.now(),
-          deviceId: state.selectedHvacDeviceId ?? 'zilon-1',
-          deviceName: state.climate?.deviceName ?? 'HVAC',
-          type: DeviceAlertType.filterChange,
-          dueDate: DateTime.now().add(const Duration(days: 14)),
-        ),
-        DeviceAlert(
-          id: '2',
-          title: 'Обновление',
-          message: 'Доступна v2.5.0',
-          timestamp: DateTime.now(),
-          deviceId: state.selectedHvacDeviceId ?? 'zilon-1',
-          deviceName: state.climate?.deviceName ?? 'HVAC',
-          type: DeviceAlertType.firmwareUpdate,
-        ),
-      ];
 }
 
 /// Error view

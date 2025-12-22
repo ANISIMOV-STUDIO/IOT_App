@@ -55,40 +55,52 @@ class SensorCard extends StatelessWidget {
 
   Widget _buildFull(NeumorphicThemeData t) {
     return NeumorphicCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Icon(icon, color: color, size: 24),
-          ),
-          const SizedBox(height: 12),
-          Row(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isSmall = constraints.maxHeight < 120;
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.baseline,
-            textBaseline: TextBaseline.alphabetic,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                value,
-                style: t.typography.numericLarge.copyWith(fontSize: 28),
+              Container(
+                padding: EdgeInsets.all(isSmall ? 6 : 10),
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(icon, color: color, size: isSmall ? 18 : 24),
               ),
-              const SizedBox(width: 4),
-              Text(unit, style: t.typography.bodySmall),
+              SizedBox(height: isSmall ? 6 : 12),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
+                  children: [
+                    Text(
+                      value,
+                      style: t.typography.numericLarge.copyWith(
+                        fontSize: isSmall ? 20 : 28,
+                      ),
+                    ),
+                    const SizedBox(width: 2),
+                    Text(unit, style: t.typography.labelSmall),
+                  ],
+                ),
+              ),
+              SizedBox(height: isSmall ? 2 : 4),
+              Text(
+                label,
+                style: t.typography.labelSmall.copyWith(
+                  color: t.colors.textSecondary,
+                ),
+              ),
             ],
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: t.typography.bodySmall.copyWith(
-              color: t.colors.textSecondary,
-            ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }

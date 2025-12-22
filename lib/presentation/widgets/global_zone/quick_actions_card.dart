@@ -167,28 +167,59 @@ class _QuickActionButton extends StatelessWidget {
     return NeumorphicInteractiveCard(
       onTap: onPressed,
       borderRadius: 12,
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // Icon container
-          Neumorphic(
-            style: const NeumorphicStyle(
-              depth: 2,
-              intensity: 0.5,
-              boxShape: NeumorphicBoxShape.circle(),
-            ),
-            padding: const EdgeInsets.all(10),
-            child: Icon(action.icon, color: color, size: 22),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            action.label,
-            style: t.typography.labelSmall.copyWith(color: color),
-            textAlign: TextAlign.center,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
+      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isCompact = constraints.maxHeight < 60;
+
+          if (isCompact) {
+            // Horizontal layout for very small heights
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(action.icon, color: color, size: 18),
+                const SizedBox(width: 4),
+                Flexible(
+                  child: Text(
+                    action.label,
+                    style: t.typography.labelSmall.copyWith(
+                      color: color,
+                      fontSize: 10,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            );
+          }
+
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Icon container
+              Neumorphic(
+                style: const NeumorphicStyle(
+                  depth: 2,
+                  intensity: 0.5,
+                  boxShape: NeumorphicBoxShape.circle(),
+                ),
+                padding: const EdgeInsets.all(8),
+                child: Icon(action.icon, color: color, size: 18),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                action.label,
+                style: t.typography.labelSmall.copyWith(
+                  color: color,
+                  fontSize: 10,
+                ),
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          );
+        },
       ),
     );
   }
