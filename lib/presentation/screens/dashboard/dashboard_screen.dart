@@ -646,10 +646,10 @@ class _MobileDashboard extends StatelessWidget {
 
   Color _co2Color(int? ppm) {
     if (ppm == null) return AppColors.airGood;
-    if (ppm < 600) return AppColors.airExcellent;
+    if (ppm < 600) return AppColors.success;
     if (ppm < 800) return AppColors.airGood;
-    if (ppm < 1000) return AppColors.airModerate;
-    return AppColors.airPoor;
+    if (ppm < 1000) return AppColors.warning;
+    return AppColors.error;
   }
 }
 

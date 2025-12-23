@@ -370,7 +370,7 @@ class _DeviceAlertItem extends StatelessWidget {
         DeviceAlertType.filterChange => AppColors.warning,
         DeviceAlertType.maintenance => AppColors.info,
         DeviceAlertType.error => AppColors.error,
-        DeviceAlertType.offline => AppColors.airPoor,
+        DeviceAlertType.offline => AppColors.error,
         DeviceAlertType.connectionLost => AppColors.error,
         DeviceAlertType.firmwareUpdate => AppColors.primary,
       };

@@ -27,9 +27,9 @@ class GlowingStatusDot extends StatelessWidget {
         boxShadow: isGlowing
             ? [
                 BoxShadow(
-                  color: color.withValues(alpha: 0.6),
-                  blurRadius: size,
-                  spreadRadius: size * 0.3,
+                  color: color.withValues(alpha: 0.3),
+                  blurRadius: size * 0.8,
+                  spreadRadius: size * 0.1,
                 ),
               ]
             : null,

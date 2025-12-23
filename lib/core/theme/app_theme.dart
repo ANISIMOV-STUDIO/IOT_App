@@ -15,11 +15,9 @@ abstract class AppColors {
   static const Color error = Color(0xFFFF3B30);
   static const Color info = Color(0xFF007AFF);
 
-  // Air quality indicators
-  static const Color airExcellent = Color(0xFF34C759);
+  // Air quality - only unique shade (others use status colors)
   static const Color airGood = Color(0xFF30D158);
-  static const Color airModerate = Color(0xFFFFCC00);
-  static const Color airPoor = Color(0xFFFF3B30);
+  // Use: success for excellent, airGood for good, warning for moderate, error for poor
 
   // Primary accent
   static const Color primary = Color(0xFF2563EB);

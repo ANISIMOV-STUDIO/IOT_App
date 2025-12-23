@@ -142,22 +142,22 @@ class AirQualityCard extends StatelessWidget {
   }
 
   Color _getCo2Color(int ppm) {
-    if (ppm < 600) return AppColors.airExcellent;
+    if (ppm < 600) return AppColors.success;
     if (ppm < 800) return AppColors.airGood;
-    if (ppm < 1000) return AppColors.airModerate;
-    return AppColors.airPoor;
+    if (ppm < 1000) return AppColors.warning;
+    return AppColors.error;
   }
 
   Color _getPm25Color(double pm25) {
     if (pm25 <= 12) return AppColors.airGood;
-    if (pm25 <= 35) return AppColors.airModerate;
-    return AppColors.airPoor;
+    if (pm25 <= 35) return AppColors.warning;
+    return AppColors.error;
   }
 
   Color _getVocColor(double voc) {
-    if (voc <= 0.5) return AppColors.airExcellent;
+    if (voc <= 0.5) return AppColors.success;
     if (voc <= 1.0) return AppColors.airGood;
-    return AppColors.airModerate;
+    return AppColors.warning;
   }
 }
 
