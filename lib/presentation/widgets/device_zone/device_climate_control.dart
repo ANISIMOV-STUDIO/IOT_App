@@ -190,15 +190,10 @@ class _TemperatureDisplay extends StatelessWidget {
       height: 140,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
+        color: _modeColor.withValues(alpha: 0.08),
         border: Border.all(
           color: _modeColor.withValues(alpha: 0.3),
-          width: 4,
-        ),
-        gradient: RadialGradient(
-          colors: [
-            _modeColor.withValues(alpha: 0.1),
-            _modeColor.withValues(alpha: 0.02),
-          ],
+          width: 3,
         ),
       ),
       child: Column(

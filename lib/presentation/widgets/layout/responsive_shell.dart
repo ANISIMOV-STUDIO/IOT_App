@@ -287,31 +287,50 @@ class ResponsiveShell extends StatelessWidget {
           // User profile
           if (userName != null)
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Row(
                 children: [
                   Container(
-                    width: 32,
-                    height: 32,
+                    width: 36,
+                    height: 36,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: theme.colorScheme.primary,
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          theme.colorScheme.primary,
+                          theme.colorScheme.primary.withValues(alpha: 0.7),
+                        ],
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: theme.colorScheme.primary.withValues(alpha: 0.2),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
                     ),
                     alignment: Alignment.center,
                     child: Text(
                       userName![0].toUpperCase(),
                       style: TextStyle(
+                        fontSize: 15,
                         color: theme.colorScheme.primaryForeground,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   ),
                   const SizedBox(width: 12),
-                  Text(
-                    userName!,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: theme.colorScheme.foreground,
+                  Expanded(
+                    child: Text(
+                      userName!,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: theme.colorScheme.foreground,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],

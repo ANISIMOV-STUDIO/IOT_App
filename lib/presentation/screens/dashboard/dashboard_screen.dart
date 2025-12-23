@@ -358,6 +358,7 @@ class _CompactSystemInfoCard extends StatelessWidget {
               fontWeight: FontWeight.w600,
               color: theme.colorScheme.foreground,
             ),
+            maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
           const Spacer(),

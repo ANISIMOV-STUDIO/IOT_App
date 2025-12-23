@@ -25,7 +25,7 @@ class EnergyStatsCard extends StatelessWidget {
     required this.totalHours,
     required this.hourlyData,
     this.periodLabel = 'Сегодня',
-    this.title = 'Статистика использования',
+    this.title = 'Энергия',
     this.spentLabel = 'Всего потрачено',
     this.hoursLabel = 'Всего часов',
   });

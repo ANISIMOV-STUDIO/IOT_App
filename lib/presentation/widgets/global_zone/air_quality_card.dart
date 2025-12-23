@@ -170,43 +170,36 @@ class _Co2Gauge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = ShadTheme.of(context);
-    final percentage = ((2000 - co2) / 2000).clamp(0.0, 1.0);
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        SizedBox(
-          width: 52,
-          height: 52,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              CircularProgressIndicator(
-                value: percentage,
-                strokeWidth: 4,
-                backgroundColor: theme.colorScheme.muted.withValues(alpha: 0.3),
-                valueColor: AlwaysStoppedAnimation(color),
-              ),
-              Text(
-                '$co2',
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                  color: color,
-                ),
-              ),
-            ],
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.cloud_outlined, size: 20, color: color),
+          const SizedBox(height: 4),
+          Text(
+            '$co2',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+              color: color,
+            ),
           ),
-        ),
-        Text(
-          'CO₂',
-          style: TextStyle(
-            fontSize: 10,
-            color: theme.colorScheme.mutedForeground,
+          Text(
+            'ppm',
+            style: TextStyle(
+              fontSize: 11,
+              color: theme.colorScheme.mutedForeground,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
