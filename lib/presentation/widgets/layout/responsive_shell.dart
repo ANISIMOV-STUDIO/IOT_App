@@ -348,13 +348,24 @@ class ResponsiveShell extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
       child: Material(
         color: isSelected
-            ? theme.colorScheme.secondary
+            ? theme.colorScheme.primary.withValues(alpha: 0.1)
             : Colors.transparent,
         borderRadius: BorderRadius.circular(6),
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(6),
-          child: Padding(
+          hoverColor: theme.colorScheme.muted.withValues(alpha: 0.3),
+          child: Container(
+            decoration: isSelected
+                ? BoxDecoration(
+                    border: Border(
+                      left: BorderSide(
+                        color: theme.colorScheme.primary,
+                        width: 3,
+                      ),
+                    ),
+                  )
+                : null,
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             child: Row(
               children: [
@@ -370,6 +381,7 @@ class ResponsiveShell extends StatelessWidget {
                   child: Text(
                     item.label,
                     style: TextStyle(
+                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                       color: isSelected
                           ? theme.colorScheme.foreground
                           : theme.colorScheme.mutedForeground,

@@ -84,8 +84,8 @@
 
 ### 6.2 Header/Sidebar polish
 - [ ] **P6-4**: Аватар - добавить настоящее фото или улучшить placeholder
-- [ ] **P6-5**: Sidebar hover states
-- [ ] **P6-6**: Active state более выраженный
+- [x] **P6-5**: Sidebar hover states - добавлен явный hoverColor
+- [x] **P6-6**: Active state - левый индикатор + bold text + primary background
 
 ---
 
@@ -116,8 +116,8 @@
 ## PROGRESS TRACKING
 
 Started: 2025-12-23
-Current Phase: 6
-Completed: 20/40 (Phase 1-2-3 + P6-1,2,3)
+Current Phase: 7
+Completed: 22/40 (Phase 1-2-3-6 почти готовы)
 
 ---
 
