@@ -1,4 +1,11 @@
-import 'package:smart_ui_kit/smart_ui_kit.dart';
+/// Device switcher card
+library;
+
+import 'package:flutter/material.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
+
+import '../../../core/theme/app_theme.dart';
+import '../common/glowing_status_dot.dart';
 
 /// Device model for the switcher
 class DeviceInfo {
@@ -38,7 +45,9 @@ class DeviceSwitcherCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BentoCard(
+    final theme = ShadTheme.of(context);
+
+    return ShadCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -48,9 +57,10 @@ class DeviceSwitcherCard extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
+                  color: theme.colorScheme.foreground,
                 ),
               ),
               // Add device button
@@ -90,25 +100,20 @@ class _AddDeviceButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GlassInteractiveCard(
-      onTap: onTap,
-      borderRadius: 8,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      child: Row(
+    return ShadButton.ghost(
+      onPressed: onTap,
+      size: ShadButtonSize.sm,
+      child: const Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            Icons.add,
-            size: 18,
-            color: GlassColors.accentPrimary,
-          ),
-          const SizedBox(width: 4),
+          Icon(Icons.add, size: 18, color: AppColors.primary),
+          SizedBox(width: 4),
           Text(
             'Добавить',
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w600,
-              color: GlassColors.accentPrimary,
+              color: AppColors.primary,
             ),
           ),
         ],
@@ -130,63 +135,77 @@ class _DeviceListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
 
-    return GlassCard(
+    return GestureDetector(
       onTap: onTap,
-      borderRadius: 12,
-      variant: isSelected ? GlassCardVariant.concave : GlassCardVariant.convex,
-      padding: const EdgeInsets.all(12),
-      child: Row(
-        children: [
-          // Device icon
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: isSelected
-                  ? GlassColors.accentPrimary.withValues(alpha: 0.2)
-                  : t.colors.glassSurface,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Icon(
-              device.icon,
-              size: 20,
-              color: isSelected
-                  ? GlassColors.accentPrimary
-                  : t.colors.textSecondary,
-            ),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? AppColors.primary.withValues(alpha: 0.1)
+              : theme.colorScheme.muted.withValues(alpha: 0.3),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected ? AppColors.primary : theme.colorScheme.border,
           ),
-          const SizedBox(width: 12),
+        ),
+        child: Row(
+          children: [
+            // Device icon
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? AppColors.primary.withValues(alpha: 0.2)
+                    : theme.colorScheme.muted.withValues(alpha: 0.3),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(
+                device.icon,
+                size: 20,
+                color: isSelected
+                    ? AppColors.primary
+                    : theme.colorScheme.mutedForeground,
+              ),
+            ),
+            const SizedBox(width: 12),
 
-          // Device info
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  device.name,
-                  style: t.typography.titleSmall.copyWith(
-                    color: isSelected
-                        ? GlassColors.accentPrimary
-                        : t.colors.textPrimary,
+            // Device info
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    device.name,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: isSelected
+                          ? AppColors.primary
+                          : theme.colorScheme.foreground,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  device.type,
-                  style: t.typography.bodySmall,
-                ),
-              ],
+                  const SizedBox(height: 2),
+                  Text(
+                    device.type,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: theme.colorScheme.mutedForeground,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
 
-          // Status indicator
-          _StatusIndicator(
-            isOnline: device.isOnline,
-            isActive: device.isActive,
-          ),
-        ],
+            // Status indicator
+            _StatusIndicator(
+              isOnline: device.isOnline,
+              isActive: device.isActive,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -203,12 +222,12 @@ class _StatusIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
     final color = !isOnline
-        ? t.colors.textTertiary
+        ? theme.colorScheme.mutedForeground
         : isActive
-            ? GlassColors.accentSuccess
-            : GlassColors.accentWarning;
+            ? AppColors.success
+            : AppColors.warning;
     final label = !isOnline
         ? 'Офлайн'
         : isActive
@@ -224,45 +243,14 @@ class _StatusIndicator extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Glowing status dot
-          _GlowingDot(color: color, size: 6),
+          GlowingStatusDot(color: color, size: 6),
           const SizedBox(width: 4),
           Text(
             label,
-            style: t.typography.labelSmall.copyWith(
-              color: color,
+            style: TextStyle(
               fontSize: 11,
+              color: color,
             ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-/// Status dot with glow effect
-class _GlowingDot extends StatelessWidget {
-  final Color color;
-  final double size;
-
-  const _GlowingDot({
-    required this.color,
-    this.size = 8,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: color,
-        boxShadow: [
-          BoxShadow(
-            color: color.withValues(alpha: 0.6),
-            blurRadius: size,
-            spreadRadius: size * 0.3,
           ),
         ],
       ),
@@ -277,7 +265,7 @@ class _EmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
 
     return Center(
       child: Column(
@@ -286,28 +274,37 @@ class _EmptyState extends StatelessWidget {
           Icon(
             Icons.devices_other,
             size: 48,
-            color: t.colors.textTertiary,
+            color: theme.colorScheme.mutedForeground,
           ),
           const SizedBox(height: 12),
           Text(
             'Нет устройств',
-            style: t.typography.titleSmall.copyWith(
-              color: t.colors.textSecondary,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: theme.colorScheme.mutedForeground,
             ),
           ),
           const SizedBox(height: 4),
           Text(
             'Добавьте первое устройство',
-            style: t.typography.bodySmall.copyWith(
-              color: t.colors.textTertiary,
+            style: TextStyle(
+              fontSize: 12,
+              color: theme.colorScheme.mutedForeground.withValues(alpha: 0.7),
             ),
           ),
           const SizedBox(height: 16),
-          GlassButton(
+          ShadButton.outline(
             onPressed: onAddDevice,
-            size: GlassButtonSize.small,
-            icon: Icons.add,
-            child: const Text('Добавить'),
+            size: ShadButtonSize.sm,
+            child: const Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.add, size: 16),
+                SizedBox(width: 4),
+                Text('Добавить'),
+              ],
+            ),
           ),
         ],
       ),
@@ -332,9 +329,9 @@ class DeviceSwitcherHorizontal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
 
-    return GlassCard(
+    return ShadCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -342,20 +339,27 @@ class DeviceSwitcherHorizontal extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Устройства', style: t.typography.titleMedium),
-              GlassInteractiveCard(
-                onTap: onAddDevice,
-                borderRadius: 10,
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                child: Row(
+              Text(
+                'Устройства',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: theme.colorScheme.foreground,
+                ),
+              ),
+              ShadButton.ghost(
+                onPressed: onAddDevice,
+                size: ShadButtonSize.sm,
+                child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.add, size: 14, color: GlassColors.accentPrimary),
-                    const SizedBox(width: 4),
+                    Icon(Icons.add, size: 14, color: AppColors.primary),
+                    SizedBox(width: 4),
                     Text(
                       'Добавить',
-                      style: t.typography.labelSmall.copyWith(
-                        color: GlassColors.accentPrimary,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: AppColors.primary,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -370,13 +374,13 @@ class DeviceSwitcherHorizontal extends StatelessWidget {
           Row(
             children: [
               ...devices.map((device) => Padding(
-                padding: const EdgeInsets.only(right: 12),
-                child: _DeviceIconButton(
-                  device: device,
-                  isSelected: device.id == selectedDeviceId,
-                  onTap: () => onDeviceSelected?.call(device.id),
-                ),
-              )),
+                    padding: const EdgeInsets.only(right: 12),
+                    child: _DeviceIconButton(
+                      device: device,
+                      isSelected: device.id == selectedDeviceId,
+                      onTap: () => onDeviceSelected?.call(device.id),
+                    ),
+                  )),
             ],
           ),
         ],
@@ -398,25 +402,30 @@ class _DeviceIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
     final statusColor = !device.isOnline
-        ? t.colors.textTertiary
+        ? theme.colorScheme.mutedForeground
         : device.isActive
-            ? GlassColors.accentSuccess
-            : GlassColors.accentWarning;
+            ? AppColors.success
+            : AppColors.warning;
 
     return GestureDetector(
       onTap: onTap,
       child: Column(
         children: [
-          // Glass icon container
-          GlassCard(
+          // Icon container
+          Container(
             width: 56,
             height: 56,
-            padding: EdgeInsets.zero,
-            variant: isSelected
-                ? GlassCardVariant.concave
-                : GlassCardVariant.convex,
+            decoration: BoxDecoration(
+              color: isSelected
+                  ? AppColors.primary.withValues(alpha: 0.1)
+                  : theme.colorScheme.muted.withValues(alpha: 0.3),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: isSelected ? AppColors.primary : theme.colorScheme.border,
+              ),
+            ),
             child: Stack(
               children: [
                 Center(
@@ -424,8 +433,8 @@ class _DeviceIconButton extends StatelessWidget {
                     device.icon,
                     size: 24,
                     color: isSelected
-                        ? GlassColors.accentPrimary
-                        : t.colors.textSecondary,
+                        ? AppColors.primary
+                        : theme.colorScheme.mutedForeground,
                   ),
                 ),
                 // Status dot
@@ -450,11 +459,12 @@ class _DeviceIconButton extends StatelessWidget {
             width: 60,
             child: Text(
               device.name.split(' ').first,
-              style: t.typography.labelSmall.copyWith(
+              style: TextStyle(
+                fontSize: 11,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                 color: isSelected
-                    ? GlassColors.accentPrimary
-                    : t.colors.textSecondary,
+                    ? AppColors.primary
+                    : theme.colorScheme.mutedForeground,
               ),
               textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,

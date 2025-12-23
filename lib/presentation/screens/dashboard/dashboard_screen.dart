@@ -1,11 +1,13 @@
 /// Main dashboard screen - modular architecture with Device/Global zone separation
 library;
 
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:smart_ui_kit/smart_ui_kit.dart';
 
+import '../../../core/di/injection_container.dart' as di;
 import '../../../core/l10n/l10n.dart';
+import '../../../core/services/theme_service.dart';
+import '../../../core/theme/app_theme.dart';
 import '../../../domain/entities/app_notification.dart';
 import '../../../domain/entities/climate.dart';
 import '../../../domain/entities/device_schedule.dart';
@@ -37,12 +39,12 @@ class _DashboardView extends StatefulWidget {
 class _DashboardViewState extends State<_DashboardView> {
   int _navIndex = 0;
 
-  List<GlassNavItem> _navItems(AppStrings s) => [
-        GlassNavItem(icon: Icons.dashboard, label: s.dashboard),
-        GlassNavItem(icon: Icons.meeting_room, label: s.rooms),
-        GlassNavItem(icon: Icons.calendar_today, label: s.schedule),
-        GlassNavItem(icon: Icons.bar_chart, label: s.statistics),
-        GlassNavItem(
+  List<NavItem> _navItems(AppStrings s) => [
+        NavItem(icon: Icons.dashboard, label: s.dashboard),
+        NavItem(icon: Icons.meeting_room, label: s.rooms),
+        NavItem(icon: Icons.calendar_today, label: s.schedule),
+        NavItem(icon: Icons.bar_chart, label: s.statistics),
+        NavItem(
           icon: Icons.notifications_outlined,
           label: s.notifications,
           badge: '2',
@@ -53,31 +55,28 @@ class _DashboardViewState extends State<_DashboardView> {
   Widget build(BuildContext context) {
     final s = context.l10n;
 
-    return GlassTheme(
-      data: GlassThemeData.light(),
-      child: ResponsiveDashboardShell(
-        selectedIndex: _navIndex,
-        onIndexChanged: (i) => setState(() => _navIndex = i),
-        navItems: _navItems(s),
-        userName: 'Артём',
-        logoWidget: SvgPicture.asset('assets/images/breez-logo.svg'),
-        headerActions: [
-          _ThemeToggle(),
-          _LanguageSwitch(),
-        ],
-        pages: [
-          _DashboardPage(onNavigate: (i) => setState(() => _navIndex = i)),
-          _PlaceholderPage(title: s.rooms, icon: Icons.meeting_room),
-          _PlaceholderPage(title: s.schedule, icon: Icons.calendar_today),
-          _PlaceholderPage(title: s.statistics, icon: Icons.bar_chart),
-          _PlaceholderPage(
-            title: s.notifications,
-            icon: Icons.notifications_outlined,
-          ),
-        ],
-        rightPanelBuilder: (ctx) => _RightPanel(),
-        footerBuilder: (ctx) => _Footer(),
-      ),
+    return ResponsiveShell(
+      selectedIndex: _navIndex,
+      onIndexChanged: (i) => setState(() => _navIndex = i),
+      navItems: _navItems(s),
+      userName: 'Артём',
+      logoWidget: SvgPicture.asset('assets/images/breez-logo.svg'),
+      headerActions: [
+        _ThemeToggle(),
+        _LanguageSwitch(),
+      ],
+      pages: [
+        _DashboardPage(onNavigate: (i) => setState(() => _navIndex = i)),
+        _PlaceholderPage(title: s.rooms, icon: Icons.meeting_room),
+        _PlaceholderPage(title: s.schedule, icon: Icons.calendar_today),
+        _PlaceholderPage(title: s.statistics, icon: Icons.bar_chart),
+        _PlaceholderPage(
+          title: s.notifications,
+          icon: Icons.notifications_outlined,
+        ),
+      ],
+      rightPanelBuilder: (ctx) => _RightPanel(),
+      footerBuilder: (ctx) => _Footer(),
     );
   }
 }
@@ -91,12 +90,12 @@ class _DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final s = context.l10n;
-    final isMobile = ResponsiveDashboardShell.isMobile(context);
+    final isMobile = ResponsiveShell.usesBottomNav(context);
 
     return BlocBuilder<DashboardBloc, DashboardState>(
       builder: (context, state) {
         if (state.status == DashboardStatus.loading) {
-          return const Center(child: GlassLoadingIndicator());
+          return const Center(child: ShadProgress());
         }
         if (state.status == DashboardStatus.failure) {
           return _ErrorView(message: state.errorMessage);
@@ -120,9 +119,10 @@ class _DesktopDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GlassMainContent(
+    final theme = ShadTheme.of(context);
+
+    return _MainContent(
       title: strings.dashboard,
-      scrollable: false,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -131,20 +131,43 @@ class _DesktopDashboard extends StatelessWidget {
             flex: 6,
             child: DeviceZoneContainer(
               header: _buildDeviceSelectorHeader(context),
-              padding: const EdgeInsets.fromLTRB(
-                GlassSpacing.md,
-                GlassSpacing.sm,
-                GlassSpacing.md,
-                GlassSpacing.md,
-              ),
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
               child: _DeviceZoneGrid(state: state, strings: strings),
             ),
           ),
 
           // === ZONE DIVIDER ===
-          const ZoneDivider(
-            label: 'ОБЩИЕ ДАННЫЕ',
-            icon: Icons.dashboard_outlined,
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Row(
+              children: [
+                Expanded(child: Divider(color: theme.colorScheme.border)),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.dashboard_outlined,
+                        size: 16,
+                        color: theme.colorScheme.mutedForeground,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        'ОБЩИЕ ДАННЫЕ',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          color: theme.colorScheme.mutedForeground,
+                          letterSpacing: 1,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(child: Divider(color: theme.colorScheme.border)),
+              ],
+            ),
           ),
 
           // === GLOBAL ZONE ===
@@ -175,11 +198,37 @@ class _DesktopDashboard extends StatelessWidget {
       selectedDeviceId: state.selectedHvacDeviceId,
       onDeviceSelected: (id) =>
           context.read<DashboardBloc>().add(HvacDeviceSelected(id)),
-      onAddDevice: () {
-        // TODO: Navigate to add device flow
-      },
-      onManageDevices: () {
-        // TODO: Navigate to device management
+      onAddDevice: () {},
+      onManageDevices: () {},
+    );
+  }
+}
+
+/// Simple responsive grid for bento-style layout
+class _ResponsiveGrid extends StatelessWidget {
+  final List<Widget> children;
+  final double gap;
+  final double minCellWidth;
+
+  const _ResponsiveGrid({
+    required this.children,
+    this.gap = 16,
+    this.minCellWidth = 300,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final columns = (constraints.maxWidth / minCellWidth).floor().clamp(1, 4);
+        return Wrap(
+          spacing: gap,
+          runSpacing: gap,
+          children: children.map((child) {
+            final width = (constraints.maxWidth - (gap * (columns - 1))) / columns;
+            return SizedBox(width: width, child: child);
+          }).toList(),
+        );
       },
     );
   }
@@ -196,86 +245,90 @@ class _DeviceZoneGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     final climate = state.climate;
 
-    return BentoGrid(
-      gap: 16,
-      minCellWidth: 260,
-      maxColumns: 4,
-      items: [
-        // Row 1: Device status + Sensors
-        BentoItem(
-          size: BentoSize.square,
-          child: DeviceHeaderCard(
-            deviceName: climate?.deviceName ?? 'HVAC',
-            deviceType: _getDeviceType(state),
-            isOn: climate?.isOn ?? false,
-            isOnline: _isDeviceOnline(state),
-            onPowerChanged: (v) =>
-                context.read<DashboardBloc>().add(DevicePowerToggled(v)),
+    return SingleChildScrollView(
+      child: _ResponsiveGrid(
+        children: [
+          // Device status
+          SizedBox(
+            height: 160,
+            child: DeviceHeaderCard(
+              deviceName: climate?.deviceName ?? 'HVAC',
+              deviceType: _getDeviceType(state),
+              isOn: climate?.isOn ?? false,
+              isOnline: _isDeviceOnline(state),
+              onPowerChanged: (v) =>
+                  context.read<DashboardBloc>().add(DevicePowerToggled(v)),
+            ),
           ),
-        ),
 
-        BentoItem(
-          size: BentoSize.square,
-          child: SensorCard(
-            icon: Icons.thermostat,
-            value: climate?.currentTemperature.toStringAsFixed(1) ?? '--',
-            unit: '°C',
-            label: strings.temperature,
-            color: GlassColors.modeHeating,
+          // Temperature sensor
+          SizedBox(
+            height: 160,
+            child: SensorCard(
+              icon: Icons.thermostat,
+              value: climate?.currentTemperature.toStringAsFixed(1) ?? '--',
+              unit: '°C',
+              label: strings.temperature,
+              color: AppColors.heating,
+            ),
           ),
-        ),
 
-        BentoItem(
-          size: BentoSize.square,
-          child: SensorCard(
-            icon: Icons.water_drop,
-            value: climate?.humidity.toStringAsFixed(0) ?? '--',
-            unit: '%',
-            label: strings.humidity,
-            color: GlassColors.modeCooling,
+          // Humidity sensor
+          SizedBox(
+            height: 160,
+            child: SensorCard(
+              icon: Icons.water_drop,
+              value: climate?.humidity.toStringAsFixed(0) ?? '--',
+              unit: '%',
+              label: strings.humidity,
+              color: AppColors.cooling,
+            ),
           ),
-        ),
 
-        BentoItem(
-          size: BentoSize.square,
-          child: SensorCard(
-            icon: Icons.cloud_outlined,
-            value: '${climate?.co2Ppm ?? '--'}',
-            unit: 'ppm',
-            label: 'CO₂',
-            color: _co2Color(climate?.co2Ppm),
+          // CO2 sensor
+          SizedBox(
+            height: 160,
+            child: SensorCard(
+              icon: Icons.cloud_outlined,
+              value: '${climate?.co2Ppm ?? '--'}',
+              unit: 'ppm',
+              label: 'CO₂',
+              color: _co2Color(climate?.co2Ppm),
+            ),
           ),
-        ),
 
-        // Row 2: Schedule + Alerts + System Info
-        BentoItem(
-          size: BentoSize.wide,
-          child: UnifiedScheduleCard(
-            schedules: _getMockSchedules(),
-            currentDeviceId: state.selectedHvacDeviceId,
-            currentDeviceName: climate?.deviceName,
-            title: strings.schedule,
+          // Schedule card (wide)
+          SizedBox(
+            height: 160,
+            child: UnifiedScheduleCard(
+              schedules: _getMockSchedules(),
+              currentDeviceId: state.selectedHvacDeviceId,
+              currentDeviceName: climate?.deviceName,
+              title: strings.schedule,
+            ),
           ),
-        ),
 
-        BentoItem(
-          size: BentoSize.square,
-          child: DeviceAlertsCard(
-            alerts: _getMockDeviceAlerts(state),
-            title: strings.notifications,
+          // Alerts
+          SizedBox(
+            height: 160,
+            child: DeviceAlertsCard(
+              alerts: _getMockDeviceAlerts(state),
+              title: strings.notifications,
+            ),
           ),
-        ),
 
-        BentoItem(
-          size: BentoSize.square,
-          child: _CompactSystemInfoCard(
-            deviceName: climate?.deviceName ?? 'HVAC',
-            isOnline: _isDeviceOnline(state),
-            filterPercent: 78,
-            strings: strings,
+          // System info
+          SizedBox(
+            height: 160,
+            child: _CompactSystemInfoCard(
+              deviceName: climate?.deviceName ?? 'HVAC',
+              isOnline: _isDeviceOnline(state),
+              filterPercent: 78,
+              strings: strings,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -298,19 +351,18 @@ class _DeviceZoneGrid extends StatelessWidget {
   }
 
   Color _co2Color(int? ppm) {
-    if (ppm == null) return GlassColors.airQualityGood;
-    if (ppm < 600) return GlassColors.airQualityExcellent;
-    if (ppm < 800) return GlassColors.airQualityGood;
-    if (ppm < 1000) return GlassColors.airQualityModerate;
-    return GlassColors.airQualityPoor;
+    if (ppm == null) return AppColors.airGood;
+    if (ppm < 600) return AppColors.airExcellent;
+    if (ppm < 800) return AppColors.airGood;
+    if (ppm < 1000) return AppColors.airModerate;
+    return AppColors.airPoor;
   }
 
   List<DeviceSchedule> _getMockSchedules() => [
-        // Device-specific schedules
-        DeviceSchedule(
+        const DeviceSchedule(
           id: '1',
           deviceId: 'zilon-1',
-          time: const TimeOfDay(hour: 7, minute: 0),
+          time: TimeOfDay(hour: 7, minute: 0),
           action: ScheduleAction.turnOn,
           temperature: 22,
           repeatDays: {
@@ -332,24 +384,6 @@ class _DeviceZoneGrid extends StatelessWidget {
           label: 'Уход на работу',
           isEnabled: false,
         ),
-        DeviceSchedule(
-          id: '3',
-          deviceId: 'zilon-1',
-          time: const TimeOfDay(hour: 18, minute: 0),
-          action: ScheduleAction.setTemperature,
-          temperature: 21,
-          repeatDays: DayOfWeek.values.toSet(),
-          label: 'Возвращение',
-        ),
-        // Global schedules (for all devices)
-        DeviceSchedule(
-          id: '4',
-          deviceId: null, // Global
-          time: const TimeOfDay(hour: 23, minute: 0),
-          action: ScheduleAction.turnOff,
-          repeatDays: DayOfWeek.values.toSet(),
-          label: 'Ночной режим',
-        ),
       ];
 
   List<DeviceAlert> _getMockDeviceAlerts(DashboardState state) => [
@@ -364,20 +398,10 @@ class _DeviceZoneGrid extends StatelessWidget {
           type: DeviceAlertType.filterChange,
           dueDate: DateTime.now().add(const Duration(days: 14)),
         ),
-        DeviceAlert(
-          id: '2',
-          title: 'Обновление прошивки',
-          message: 'Доступна версия v2.5.0',
-          timestamp: DateTime.now().subtract(const Duration(hours: 5)),
-          priority: NotificationPriority.low,
-          deviceId: state.selectedHvacDeviceId ?? 'zilon-1',
-          deviceName: state.climate?.deviceName ?? 'HVAC',
-          type: DeviceAlertType.firmwareUpdate,
-        ),
       ];
 }
 
-/// Compact system info card for square bento cell
+/// Compact system info card
 class _CompactSystemInfoCard extends StatelessWidget {
   final String deviceName;
   final bool isOnline;
@@ -393,85 +417,72 @@ class _CompactSystemInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
 
-    return GlassCard(
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final isSmall = constraints.maxHeight < 100;
-
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
+    return ShadCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    strings.systemStatus,
-                    style: isSmall
-                        ? t.typography.labelMedium
-                        : t.typography.titleSmall,
-                  ),
-                  GlowingStatusDot(
-                    color: isOnline
-                        ? GlassColors.accentSuccess
-                        : t.colors.textTertiary,
-                    isGlowing: isOnline,
-                    size: isSmall ? 6 : 8,
-                  ),
-                ],
-              ),
-              SizedBox(height: isSmall ? 4 : 8),
               Text(
-                deviceName,
-                style: t.typography.labelSmall.copyWith(
-                  fontWeight: FontWeight.w600,
+                strings.systemStatus,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: theme.colorScheme.foreground,
                 ),
-                overflow: TextOverflow.ellipsis,
               ),
-              const Spacer(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    strings.filterStatus,
-                    style: t.typography.labelSmall.copyWith(
-                      color: t.colors.textSecondary,
-                      fontSize: isSmall ? 10 : null,
-                    ),
-                  ),
-                  Text(
-                    '$filterPercent%',
-                    style: t.typography.labelSmall.copyWith(
-                      color: _getFilterColor(filterPercent),
-                      fontWeight: FontWeight.w600,
-                      fontSize: isSmall ? 10 : null,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: isSmall ? 2 : 4),
-              LinearProgressIndicator(
-                value: filterPercent / 100,
-                backgroundColor: t.colors.textTertiary.withValues(alpha: 0.2),
-                valueColor:
-                    AlwaysStoppedAnimation(_getFilterColor(filterPercent)),
-                minHeight: isSmall ? 3 : 4,
-                borderRadius: BorderRadius.circular(2),
+              GlowingStatusDot(
+                color: isOnline ? AppColors.success : theme.colorScheme.muted,
+                isGlowing: isOnline,
               ),
             ],
-          );
-        },
+          ),
+          const SizedBox(height: 8),
+          Text(
+            deviceName,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: theme.colorScheme.foreground,
+            ),
+            overflow: TextOverflow.ellipsis,
+          ),
+          const Spacer(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                strings.filterStatus,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: theme.colorScheme.mutedForeground,
+                ),
+              ),
+              Text(
+                '$filterPercent%',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: _getFilterColor(filterPercent),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          ShadProgress(value: filterPercent / 100),
+        ],
       ),
     );
   }
 
   Color _getFilterColor(int percent) {
-    if (percent >= 80) return GlassColors.accentSuccess;
-    if (percent >= 50) return GlassColors.airQualityGood;
-    if (percent >= 30) return GlassColors.accentWarning;
-    return GlassColors.accentError;
+    if (percent >= 80) return AppColors.success;
+    if (percent >= 50) return AppColors.airGood;
+    if (percent >= 30) return AppColors.warning;
+    return AppColors.error;
   }
 }
 
@@ -487,64 +498,61 @@ class _GlobalZoneGrid extends StatelessWidget {
     final stats = state.energyStats;
     final climate = state.climate;
 
-    return BentoGrid(
-      gap: 16,
-      minCellWidth: 260,
-      maxColumns: 4,
-      items: [
-        // Energy statistics
-        BentoItem(
-          size: BentoSize.large,
-          child: EnergyStatsCard(
-            totalKwh: stats?.totalKwh ?? 0,
-            totalHours: stats?.totalHours ?? 0,
-            hourlyData: stats?.hourlyData.map((h) => h.kwh).toList() ?? [],
-            title: strings.usageStatus,
-            spentLabel: strings.totalSpent,
-            hoursLabel: strings.totalHours,
-            periodLabel: strings.today,
-          ),
-        ),
-
-        // Air quality
-        BentoItem(
-          size: BentoSize.square,
-          child: AirQualityCard(
-            co2Ppm: climate?.co2Ppm ?? 500,
-            pm25: 12,
-            voc: 0.3,
-            title: strings.airQuality,
-          ),
-        ),
-
-        // Unified notification center
-        BentoItem(
-          size: BentoSize.square,
-          child: NotificationCenterCard(
-            deviceAlerts: _getMockAllDeviceAlerts(state),
-            companyNotifications: _getMockCompanyNotifications(),
-            title: strings.notifications,
-            onViewAll: () {
-              // Navigate to notifications page
-            },
-          ),
-        ),
-
-        // Quick actions
-        BentoItem(
-          size: BentoSize.wide,
-          child: QuickActionsCard(
-            actions: QuickActionsCard.defaultActions(
-              allOffLabel: strings.allOff,
-              syncLabel: strings.sync,
-              scheduleLabel: strings.schedule,
-              settingsLabel: strings.settings,
+    return SingleChildScrollView(
+      child: _ResponsiveGrid(
+        children: [
+          // Energy statistics
+          SizedBox(
+            height: 200,
+            child: EnergyStatsCard(
+              totalKwh: stats?.totalKwh ?? 0,
+              totalHours: stats?.totalHours ?? 0,
+              hourlyData: stats?.hourlyData.map((h) => h.kwh).toList() ?? [],
+              title: strings.usageStatus,
+              spentLabel: strings.totalSpent,
+              hoursLabel: strings.totalHours,
+              periodLabel: strings.today,
             ),
-            title: strings.quickActions,
-            onActionPressed: (id) => _handleQuickAction(context, id),
           ),
-        ),
-      ],
+
+          // Air quality
+          SizedBox(
+            height: 160,
+            child: AirQualityCard(
+              co2Ppm: climate?.co2Ppm ?? 500,
+              pm25: 12,
+              voc: 0.3,
+              title: strings.airQuality,
+            ),
+          ),
+
+          // Notifications
+          SizedBox(
+            height: 160,
+            child: NotificationCenterCard(
+              deviceAlerts: _getMockAllDeviceAlerts(state),
+              companyNotifications: _getMockCompanyNotifications(),
+              title: strings.notifications,
+              onViewAll: () {},
+            ),
+          ),
+
+          // Quick actions
+          SizedBox(
+            height: 160,
+            child: QuickActionsCard(
+              actions: QuickActionsCard.defaultActions(
+                allOffLabel: strings.allOff,
+                syncLabel: strings.sync,
+                scheduleLabel: strings.schedule,
+                settingsLabel: strings.settings,
+              ),
+              title: strings.quickActions,
+              onActionPressed: (id) => _handleQuickAction(context, id),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -556,9 +564,6 @@ class _GlobalZoneGrid extends StatelessWidget {
         break;
       case 'sync':
         bloc.add(const DashboardRefreshed());
-        break;
-      case 'schedule':
-      case 'settings':
         break;
     }
   }
@@ -574,40 +579,15 @@ class _GlobalZoneGrid extends StatelessWidget {
           type: DeviceAlertType.filterChange,
           dueDate: DateTime.now().add(const Duration(days: 14)),
         ),
-        DeviceAlert(
-          id: '2',
-          title: 'Обновление',
-          message: 'Версия v2.5.0',
-          timestamp: DateTime.now(),
-          deviceId: 'lg-1',
-          deviceName: 'LG Dual Inverter',
-          type: DeviceAlertType.firmwareUpdate,
-        ),
-        DeviceAlert(
-          id: '3',
-          title: 'Офлайн',
-          message: 'Нет связи с устройством',
-          timestamp: DateTime.now(),
-          deviceId: 'xiaomi-1',
-          deviceName: 'Xiaomi Humidifier',
-          type: DeviceAlertType.offline,
-        ),
       ];
 
   List<CompanyNotification> _getMockCompanyNotifications() => [
         CompanyNotification(
           id: 'c1',
           title: 'Зимние скидки',
-          message: 'Скидка 20% на обслуживание до конца января',
+          message: 'Скидка 20% на обслуживание',
           timestamp: DateTime.now().subtract(const Duration(hours: 2)),
           type: CompanyNotificationType.promo,
-        ),
-        CompanyNotification(
-          id: 'c2',
-          title: 'Совет эксперта',
-          message: 'Оптимальная влажность зимой: 40-60%',
-          timestamp: DateTime.now().subtract(const Duration(days: 1)),
-          type: CompanyNotificationType.tip,
         ),
       ];
 }
@@ -623,16 +603,16 @@ class _MobileDashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     final s = context.l10n;
     final climate = state.climate;
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
 
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.all(GlassSpacing.md),
+        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
             // Device switcher horizontal
             _MobileDeviceSwitcher(state: state),
-            const SizedBox(height: GlassSpacing.md),
+            const SizedBox(height: 16),
 
             // Sensors row
             Row(
@@ -644,7 +624,7 @@ class _MobileDashboard extends StatelessWidget {
                         '${climate?.currentTemperature.toStringAsFixed(0) ?? '--'}°',
                     label: s.temperature,
                     unit: '',
-                    color: GlassColors.modeHeating,
+                    color: AppColors.heating,
                     isCompact: true,
                   ),
                 ),
@@ -655,7 +635,7 @@ class _MobileDashboard extends StatelessWidget {
                     value: '${climate?.humidity.toStringAsFixed(0) ?? '--'}%',
                     label: s.humidity,
                     unit: '',
-                    color: GlassColors.modeCooling,
+                    color: AppColors.cooling,
                     isCompact: true,
                   ),
                 ),
@@ -672,18 +652,18 @@ class _MobileDashboard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: GlassSpacing.md),
+            const SizedBox(height: 16),
 
             // Quick actions grid
             Expanded(
               child: GridView.count(
                 crossAxisCount: 2,
-                crossAxisSpacing: GlassSpacing.sm,
-                mainAxisSpacing: GlassSpacing.sm,
+                crossAxisSpacing: 8,
+                mainAxisSpacing: 8,
                 childAspectRatio: 1.3,
                 children: [
                   // Power toggle
-                  GlassCard(
+                  ShadCard(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -693,10 +673,10 @@ class _MobileDashboard extends StatelessWidget {
                             Icon(
                               Icons.power_settings_new,
                               color: climate?.isOn == true
-                                  ? GlassColors.accentPrimary
-                                  : t.colors.textTertiary,
+                                  ? theme.colorScheme.primary
+                                  : theme.colorScheme.muted,
                             ),
-                            GlassToggle(
+                            ShadSwitch(
                               value: climate?.isOn ?? false,
                               onChanged: (v) => context
                                   .read<DashboardBloc>()
@@ -707,68 +687,43 @@ class _MobileDashboard extends StatelessWidget {
                         const Spacer(),
                         Text(
                           climate?.deviceName ?? 'HVAC',
-                          style: t.typography.titleSmall,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: theme.colorScheme.foreground,
+                          ),
                         ),
                         Text(
                           climate?.isOn == true ? 'Активен' : 'Ожидание',
-                          style: t.typography.labelSmall.copyWith(
+                          style: TextStyle(
+                            fontSize: 12,
                             color: climate?.isOn == true
-                                ? GlassColors.accentSuccess
-                                : t.colors.textTertiary,
+                                ? AppColors.success
+                                : theme.colorScheme.mutedForeground,
                           ),
                         ),
                       ],
                     ),
                   ),
                   // Sync
-                  GlassCard(
+                  _MobileActionCard(
+                    icon: Icons.sync,
+                    label: s.sync,
                     onTap: () => context
                         .read<DashboardBloc>()
                         .add(const DashboardRefreshed()),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.sync,
-                          color: GlassColors.accentPrimary,
-                          size: 28,
-                        ),
-                        const SizedBox(height: 8),
-                        Text(s.sync, style: t.typography.labelSmall),
-                      ],
-                    ),
                   ),
                   // Schedule
-                  GlassCard(
+                  _MobileActionCard(
+                    icon: Icons.calendar_today,
+                    label: s.schedule,
                     onTap: () => onNavigate?.call(2),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.calendar_today,
-                          color: GlassColors.accentPrimary,
-                          size: 28,
-                        ),
-                        const SizedBox(height: 8),
-                        Text(s.schedule, style: t.typography.labelSmall),
-                      ],
-                    ),
                   ),
                   // Stats
-                  GlassCard(
+                  _MobileActionCard(
+                    icon: Icons.bar_chart,
+                    label: s.statistics,
                     onTap: () => onNavigate?.call(3),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.bar_chart,
-                          color: GlassColors.accentPrimary,
-                          size: 28,
-                        ),
-                        const SizedBox(height: 8),
-                        Text(s.statistics, style: t.typography.labelSmall),
-                      ],
-                    ),
                   ),
                 ],
               ),
@@ -780,11 +735,49 @@ class _MobileDashboard extends StatelessWidget {
   }
 
   Color _co2Color(int? ppm) {
-    if (ppm == null) return GlassColors.airQualityGood;
-    if (ppm < 600) return GlassColors.airQualityExcellent;
-    if (ppm < 800) return GlassColors.airQualityGood;
-    if (ppm < 1000) return GlassColors.airQualityModerate;
-    return GlassColors.airQualityPoor;
+    if (ppm == null) return AppColors.airGood;
+    if (ppm < 600) return AppColors.airExcellent;
+    if (ppm < 800) return AppColors.airGood;
+    if (ppm < 1000) return AppColors.airModerate;
+    return AppColors.airPoor;
+  }
+}
+
+class _MobileActionCard extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback? onTap;
+
+  const _MobileActionCard({
+    required this.icon,
+    required this.label,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = ShadTheme.of(context);
+
+    return ShadCard(
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(8),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: theme.colorScheme.primary, size: 28),
+            const SizedBox(height: 8),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 12,
+                color: theme.colorScheme.foreground,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -886,9 +879,12 @@ class _ErrorView extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('${s.error}: $message'),
+          ShadAlert.destructive(
+            title: Text(s.error),
+            description: Text(message ?? 'Unknown error'),
+          ),
           const SizedBox(height: 16),
-          GlassButton(
+          ShadButton(
             onPressed: () =>
                 context.read<DashboardBloc>().add(const DashboardRefreshed()),
             child: Text(s.retry),
@@ -903,7 +899,7 @@ class _ErrorView extends StatelessWidget {
 class _Footer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
     final now = DateTime.now();
     final syncTime =
         '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
@@ -914,42 +910,47 @@ class _Footer extends StatelessWidget {
         // Weather
         Row(
           children: [
-            Icon(
-              Icons.wb_sunny_outlined,
-              size: 16,
-              color: GlassColors.accentWarning,
-            ),
+            const Icon(Icons.wb_sunny_outlined, size: 16, color: AppColors.warning),
             const SizedBox(width: 6),
             Text(
               '+5°C',
-              style:
-                  t.typography.bodySmall.copyWith(fontWeight: FontWeight.w600),
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: theme.colorScheme.foreground,
+              ),
             ),
             const SizedBox(width: 4),
             Text(
               'На улице',
-              style:
-                  t.typography.bodySmall.copyWith(color: t.colors.textTertiary),
+              style: TextStyle(
+                fontSize: 13,
+                color: theme.colorScheme.mutedForeground,
+              ),
             ),
           ],
         ),
         // Sync time
         Row(
           children: [
-            Icon(Icons.sync, size: 14, color: t.colors.textTertiary),
+            Icon(Icons.sync, size: 14, color: theme.colorScheme.mutedForeground),
             const SizedBox(width: 4),
             Text(
               'Синхронизировано в $syncTime',
-              style: t.typography.labelSmall
-                  .copyWith(color: t.colors.textTertiary),
+              style: TextStyle(
+                fontSize: 12,
+                color: theme.colorScheme.mutedForeground,
+              ),
             ),
           ],
         ),
         // Version
         Text(
           'BREEZ Home v1.0.0',
-          style:
-              t.typography.labelSmall.copyWith(color: t.colors.textTertiary),
+          style: TextStyle(
+            fontSize: 12,
+            color: theme.colorScheme.mutedForeground,
+          ),
         ),
       ],
     );
@@ -960,13 +961,17 @@ class _Footer extends StatelessWidget {
 class _ThemeToggle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
+    final themeService = di.sl<ThemeService>();
 
-    return GlassIconButton(
-      icon: Icons.dark_mode_outlined,
-      iconColor: t.colors.textSecondary,
-      tooltip: 'Тёмная тема',
-      onPressed: () {},
+    return ShadButton.outline(
+      size: ShadButtonSize.sm,
+      onPressed: themeService.toggleTheme,
+      child: Icon(
+        themeService.isDark ? Icons.light_mode_outlined : Icons.dark_mode_outlined,
+        size: 18,
+        color: theme.colorScheme.mutedForeground,
+      ),
     );
   }
 }
@@ -976,49 +981,82 @@ class _LanguageSwitch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loc = context.locale;
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
 
     return PopupMenuButton<AppLocale>(
       initialValue: loc,
       onSelected: (l) => context.setLocale(l),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      color: t.colors.surface,
-      elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      color: theme.colorScheme.card,
       itemBuilder: (_) => AppLocale.values
           .map((l) => PopupMenuItem(
                 value: l,
                 child: Row(
                   children: [
                     if (l == loc)
-                      Icon(
-                        Icons.check,
-                        size: 16,
-                        color: GlassColors.accentPrimary,
-                      )
+                      Icon(Icons.check, size: 16, color: theme.colorScheme.primary)
                     else
                       const SizedBox(width: 16),
                     const SizedBox(width: 8),
-                    Text(l.name, style: t.typography.bodyMedium),
+                    Text(l.name),
                   ],
                 ),
               ))
           .toList(),
-      child: GlassInteractiveCard(
-        borderRadius: 10,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      child: ShadButton.outline(
+        size: ShadButtonSize.sm,
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.language, size: 18, color: t.colors.textSecondary),
+            Icon(Icons.language, size: 16, color: theme.colorScheme.mutedForeground),
             const SizedBox(width: 6),
-            Text(
-              loc.code.toUpperCase(),
-              style:
-                  t.typography.labelSmall.copyWith(fontWeight: FontWeight.w600),
-            ),
+            Text(loc.code.toUpperCase()),
           ],
         ),
       ),
+    );
+  }
+}
+
+/// Main content wrapper
+class _MainContent extends StatelessWidget {
+  final String title;
+  final Widget child;
+
+  const _MainContent({required this.title, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = ShadTheme.of(context);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          height: 56,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w600,
+                  color: theme.colorScheme.foreground,
+                ),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: child,
+          ),
+        ),
+      ],
     );
   }
 }
@@ -1032,19 +1070,23 @@ class _PlaceholderPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
 
-    return GlassMainContent(
+    return _MainContent(
       title: title,
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 64, color: t.colors.textTertiary),
+            Icon(icon, size: 64, color: theme.colorScheme.muted),
             const SizedBox(height: 16),
             Text(
               'Страница в разработке',
-              style: t.typography.titleMedium,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: theme.colorScheme.foreground,
+              ),
             ),
           ],
         ),

@@ -1,7 +1,7 @@
 /// Glowing status dot widget
 library;
 
-import 'package:smart_ui_kit/smart_ui_kit.dart';
+import 'package:flutter/material.dart';
 
 /// Status dot with optional glow effect
 class GlowingStatusDot extends StatelessWidget {

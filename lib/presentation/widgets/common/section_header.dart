@@ -1,7 +1,8 @@
 /// Section header widget for zone separation
 library;
 
-import 'package:smart_ui_kit/smart_ui_kit.dart';
+import 'package:flutter/material.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 
 /// Visual section header for separating Device Zone and Global Zone
 class SectionHeader extends StatelessWidget {
@@ -22,11 +23,11 @@ class SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
-    final color = accentColor ?? GlassColors.accentPrimary;
+    final theme = ShadTheme.of(context);
+    final color = accentColor ?? theme.colorScheme.primary;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: GlassSpacing.sm),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
           // Accent line
@@ -51,15 +52,18 @@ class SectionHeader extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: t.typography.titleMedium.copyWith(
+                  style: TextStyle(
+                    fontSize: 16,
                     fontWeight: FontWeight.w600,
+                    color: theme.colorScheme.foreground,
                   ),
                 ),
                 if (subtitle != null)
                   Text(
                     subtitle!,
-                    style: t.typography.bodySmall.copyWith(
-                      color: t.colors.textSecondary,
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: theme.colorScheme.mutedForeground,
                     ),
                   ),
               ],

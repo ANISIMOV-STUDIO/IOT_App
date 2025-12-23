@@ -1,7 +1,10 @@
 /// Device system info card
 library;
 
-import 'package:smart_ui_kit/smart_ui_kit.dart';
+import 'package:flutter/material.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
+
+import '../../../core/theme/app_theme.dart';
 import '../common/glowing_status_dot.dart';
 
 /// Card showing device system information (firmware, connection, metrics)
@@ -43,9 +46,9 @@ class DeviceSystemInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
 
-    return GlassCard(
+    return ShadCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -53,23 +56,31 @@ class DeviceSystemInfoCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(title, style: t.typography.titleLarge),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: theme.colorScheme.foreground,
+                ),
+              ),
               Row(
                 children: [
                   Text(
                     isOnline ? 'Online' : 'Offline',
-                    style: t.typography.bodyMedium.copyWith(
+                    style: TextStyle(
+                      fontSize: 14,
                       color: isOnline
-                          ? GlassColors.accentSuccess
-                          : t.colors.textTertiary,
+                          ? AppColors.success
+                          : theme.colorScheme.mutedForeground,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                   const SizedBox(width: 8),
                   GlowingStatusDot(
                     color: isOnline
-                        ? GlassColors.accentSuccess
-                        : t.colors.textTertiary,
+                        ? AppColors.success
+                        : theme.colorScheme.mutedForeground,
                     isGlowing: isOnline,
                     size: 10,
                   ),
@@ -105,7 +116,7 @@ class DeviceSystemInfoCard extends StatelessWidget {
                       _EfficiencyRow(
                         label: efficiencyLabel,
                         percent: efficiencyPercent,
-                        color: GlassColors.accentSuccess,
+                        color: AppColors.success,
                       ),
                       _EfficiencyRow(
                         label: filterLabel,
@@ -115,7 +126,7 @@ class DeviceSystemInfoCard extends StatelessWidget {
                       _EfficiencyRow(
                         label: uptimeLabel,
                         percent: uptimePercent,
-                        color: GlassColors.accentPrimary,
+                        color: AppColors.primary,
                       ),
                     ],
                   ),
@@ -129,10 +140,10 @@ class DeviceSystemInfoCard extends StatelessWidget {
   }
 
   Color _getFilterColor(int percent) {
-    if (percent >= 80) return GlassColors.accentSuccess;
-    if (percent >= 50) return GlassColors.airQualityGood;
-    if (percent >= 30) return GlassColors.accentWarning;
-    return GlassColors.accentError;
+    if (percent >= 80) return AppColors.success;
+    if (percent >= 50) return AppColors.airGood;
+    if (percent >= 30) return AppColors.warning;
+    return AppColors.error;
   }
 }
 
@@ -144,21 +155,24 @@ class _InfoRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           label,
-          style: t.typography.bodySmall.copyWith(
-            color: t.colors.textSecondary,
+          style: TextStyle(
+            fontSize: 12,
+            color: theme.colorScheme.mutedForeground,
           ),
         ),
         Text(
           value,
-          style: t.typography.bodySmall.copyWith(
+          style: TextStyle(
+            fontSize: 12,
             fontWeight: FontWeight.w600,
+            color: theme.colorScheme.foreground,
           ),
         ),
       ],
@@ -179,7 +193,7 @@ class _EfficiencyRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -190,13 +204,15 @@ class _EfficiencyRow extends StatelessWidget {
           children: [
             Text(
               label,
-              style: t.typography.bodySmall.copyWith(
-                color: t.colors.textSecondary,
+              style: TextStyle(
+                fontSize: 12,
+                color: theme.colorScheme.mutedForeground,
               ),
             ),
             Text(
               '$percent%',
-              style: t.typography.bodySmall.copyWith(
+              style: TextStyle(
+                fontSize: 12,
                 color: color,
                 fontWeight: FontWeight.w600,
               ),
@@ -204,12 +220,8 @@ class _EfficiencyRow extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 2),
-        LinearProgressIndicator(
+        ShadProgress(
           value: percent / 100,
-          backgroundColor: t.colors.textTertiary.withValues(alpha: 0.2),
-          valueColor: AlwaysStoppedAnimation(color),
-          minHeight: 4,
-          borderRadius: BorderRadius.circular(2),
         ),
       ],
     );

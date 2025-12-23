@@ -1,7 +1,10 @@
 /// Device Selector Header - informative device switcher as zone header
 library;
 
-import 'package:smart_ui_kit/smart_ui_kit.dart';
+import 'package:flutter/material.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
+
+import '../../../core/theme/app_theme.dart';
 import '../common/glowing_status_dot.dart';
 
 /// Device info model for the selector
@@ -52,16 +55,16 @@ class DeviceSelectorHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
     final selected = _selectedDevice;
 
     return Container(
       padding: const EdgeInsets.symmetric(
-        horizontal: GlassSpacing.md,
-        vertical: GlassSpacing.sm,
+        horizontal: 16,
+        vertical: 12,
       ),
       decoration: BoxDecoration(
-        color: GlassColors.accentPrimary.withValues(alpha: 0.05),
+        color: AppColors.primary.withValues(alpha: 0.05),
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(16),
           topRight: Radius.circular(16),
@@ -74,12 +77,12 @@ class DeviceSelectorHeader extends StatelessWidget {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: GlassColors.accentPrimary.withValues(alpha: 0.15),
+              color: AppColors.primary.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(
               selected?.icon ?? Icons.device_hub,
-              color: GlassColors.accentPrimary,
+              color: AppColors.primary,
               size: 20,
             ),
           ),
@@ -96,8 +99,10 @@ class DeviceSelectorHeader extends StatelessWidget {
                     Flexible(
                       child: Text(
                         selected?.name ?? 'Устройство',
-                        style: t.typography.titleSmall.copyWith(
+                        style: TextStyle(
+                          fontSize: 14,
                           fontWeight: FontWeight.w700,
+                          color: theme.colorScheme.foreground,
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -105,8 +110,8 @@ class DeviceSelectorHeader extends StatelessWidget {
                     const SizedBox(width: 6),
                     GlowingStatusDot(
                       color: selected?.isOnline == true
-                          ? GlassColors.accentSuccess
-                          : t.colors.textTertiary,
+                          ? AppColors.success
+                          : theme.colorScheme.mutedForeground,
                       isGlowing: selected?.isOnline == true,
                       size: 6,
                     ),
@@ -114,8 +119,9 @@ class DeviceSelectorHeader extends StatelessWidget {
                 ),
                 Text(
                   '${selected?.brand ?? ''} • ${selected?.type ?? ''}',
-                  style: t.typography.labelSmall.copyWith(
-                    color: t.colors.textSecondary,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: theme.colorScheme.mutedForeground,
                   ),
                 ),
               ],
@@ -138,11 +144,14 @@ class DeviceSelectorHeader extends StatelessWidget {
           // Manage button
           if (onManageDevices != null) ...[
             const SizedBox(width: 8),
-            GlassIconButton(
-              icon: Icons.settings,
-              size: 32,
-              iconColor: t.colors.textTertiary,
+            ShadButton.ghost(
               onPressed: onManageDevices,
+              size: ShadButtonSize.sm,
+              child: Icon(
+                Icons.settings,
+                size: 18,
+                color: theme.colorScheme.mutedForeground,
+              ),
             ),
           ],
         ],
@@ -213,12 +222,12 @@ class _DeviceTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
     final statusColor = !device.isOnline
-        ? t.colors.textTertiary
+        ? theme.colorScheme.mutedForeground
         : device.isActive
-            ? GlassColors.accentSuccess
-            : GlassColors.accentWarning;
+            ? AppColors.success
+            : AppColors.warning;
 
     return GestureDetector(
       onTap: onTap,
@@ -227,14 +236,13 @@ class _DeviceTab extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(
           color: isSelected
-              ? GlassColors.accentPrimary
-              : t.colors.cardSurface,
+              ? AppColors.primary
+              : theme.colorScheme.card,
           borderRadius: BorderRadius.circular(8),
-          boxShadow: isSelected ? null : t.shadows.convexSmall,
           border: isSelected
               ? null
               : Border.all(
-                  color: t.colors.textTertiary.withValues(alpha: 0.1),
+                  color: theme.colorScheme.border,
                 ),
         ),
         child: Row(
@@ -254,8 +262,9 @@ class _DeviceTab extends StatelessWidget {
             // Device label
             Text(
               'ПВ-$index',
-              style: t.typography.labelSmall.copyWith(
-                color: isSelected ? Colors.white : t.colors.textPrimary,
+              style: TextStyle(
+                fontSize: 12,
+                color: isSelected ? Colors.white : theme.colorScheme.foreground,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -268,7 +277,7 @@ class _DeviceTab extends StatelessWidget {
                 size: 12,
                 color: isSelected
                     ? Colors.white.withValues(alpha: 0.7)
-                    : t.colors.textTertiary,
+                    : theme.colorScheme.mutedForeground,
               ),
             ],
           ],
@@ -292,13 +301,13 @@ class _AddDeviceTab extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: GlassColors.accentPrimary.withValues(alpha: 0.3),
+            color: AppColors.primary.withValues(alpha: 0.3),
           ),
         ),
-        child: Icon(
+        child: const Icon(
           Icons.add,
           size: 16,
-          color: GlassColors.accentPrimary,
+          color: AppColors.primary,
         ),
       ),
     );

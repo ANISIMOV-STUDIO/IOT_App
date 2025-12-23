@@ -3,7 +3,8 @@
 /// Responsive brightness control for lamps
 library;
 
-import 'package:smart_ui_kit/smart_ui_kit.dart';
+import 'package:flutter/material.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 
 class BrightnessControl extends StatelessWidget {
   final double value;
@@ -17,39 +18,40 @@ class BrightnessControl extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = ShadTheme.of(context);
+
     return Row(
       children: [
         Container(
-          width: 40.0,
-          height: 40.0,
+          width: 40,
+          height: 40,
           decoration: BoxDecoration(
-            color: GlassColors.lightSurface,
+            color: theme.colorScheme.muted.withValues(alpha: 0.3),
             borderRadius: BorderRadius.circular(12),
           ),
-          child: const Icon(
+          child: Icon(
             Icons.lightbulb_outline,
-            size: 20.0,
-            color: GlassColors.lightTextSecondary,
+            size: 20,
+            color: theme.colorScheme.mutedForeground,
           ),
         ),
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: GlassSpacing.md),
-            child: Slider(
-              value: value,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: ShadSlider(
+              initialValue: value,
               min: 0,
               max: 1,
-              label: '${(value * 100).toInt()}%',
-              onChanged: onChanged,
+              onChangeEnd: onChanged,
             ),
           ),
         ),
         Text(
           '${(value * 100).toInt()}%',
-          style: const TextStyle(
-            fontSize: 16.0,
+          style: TextStyle(
+            fontSize: 16,
             fontWeight: FontWeight.w600,
-            color: GlassColors.lightTextPrimary,
+            color: theme.colorScheme.foreground,
           ),
         ),
       ],

@@ -16,8 +16,9 @@ dependencies:
   # New Architecture Packages
   smart_home_core:
     path: packages/smart_home_core
-  smart_ui_kit:
-    path: packages/smart_ui_kit
+
+  # UI Framework - shadcn_ui (modern minimalist)
+  shadcn_ui: ^0.43.0
 
   # State Management
   flutter_bloc: ^8.1.3

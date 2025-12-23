@@ -1,7 +1,10 @@
 /// Air quality card
 library;
 
-import 'package:smart_ui_kit/smart_ui_kit.dart';
+import 'package:flutter/material.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
+
+import '../../../core/theme/app_theme.dart';
 
 /// Card showing indoor air quality metrics
 class AirQualityCard extends StatelessWidget {
@@ -20,11 +23,11 @@ class AirQualityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
     final qualityLabel = _getQualityLabel(co2Ppm);
     final qualityColor = _getCo2Color(co2Ppm);
 
-    return GlassCard(
+    return ShadCard(
       child: LayoutBuilder(
         builder: (context, constraints) {
           final isCompact = constraints.maxWidth < 200;
@@ -38,16 +41,19 @@ class AirQualityCard extends StatelessWidget {
                   Expanded(
                     child: Text(
                       title,
-                      style: isCompact
-                          ? t.typography.titleSmall
-                          : t.typography.titleMedium,
+                      style: TextStyle(
+                        fontSize: isCompact ? 14 : 16,
+                        fontWeight: FontWeight.w600,
+                        color: theme.colorScheme.foreground,
+                      ),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   const SizedBox(width: 8),
-                  GlassBadge(
-                    text: qualityLabel,
-                    color: qualityColor,
+                  ShadBadge(
+                    backgroundColor: qualityColor.withValues(alpha: 0.15),
+                    foregroundColor: qualityColor,
+                    child: Text(qualityLabel),
                   ),
                 ],
               ),
@@ -56,8 +62,8 @@ class AirQualityCard extends StatelessWidget {
               // Content
               Expanded(
                 child: isCompact
-                    ? _buildCompactContent(t, qualityColor)
-                    : _buildFullContent(t, qualityColor),
+                    ? _buildCompactContent(theme, qualityColor)
+                    : _buildFullContent(theme, qualityColor),
               ),
             ],
           );
@@ -66,7 +72,7 @@ class AirQualityCard extends StatelessWidget {
     );
   }
 
-  Widget _buildCompactContent(GlassThemeData t, Color qualityColor) {
+  Widget _buildCompactContent(ShadThemeData theme, Color qualityColor) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -74,18 +80,25 @@ class AirQualityCard extends StatelessWidget {
         children: [
           Text(
             '$co2Ppm',
-            style: t.typography.numericLarge.copyWith(
-              color: qualityColor,
+            style: TextStyle(
               fontSize: 24,
+              fontWeight: FontWeight.w700,
+              color: qualityColor,
             ),
           ),
-          Text('CO₂ ppm', style: t.typography.labelSmall),
+          Text(
+            'CO₂ ppm',
+            style: TextStyle(
+              fontSize: 12,
+              color: theme.colorScheme.mutedForeground,
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildFullContent(GlassThemeData t, Color qualityColor) {
+  Widget _buildFullContent(ShadThemeData theme, Color qualityColor) {
     return Row(
       children: [
         // CO2 gauge
@@ -129,22 +142,22 @@ class AirQualityCard extends StatelessWidget {
   }
 
   Color _getCo2Color(int ppm) {
-    if (ppm < 600) return GlassColors.airQualityExcellent;
-    if (ppm < 800) return GlassColors.airQualityGood;
-    if (ppm < 1000) return GlassColors.airQualityModerate;
-    return GlassColors.airQualityPoor;
+    if (ppm < 600) return AppColors.airExcellent;
+    if (ppm < 800) return AppColors.airGood;
+    if (ppm < 1000) return AppColors.airModerate;
+    return AppColors.airPoor;
   }
 
   Color _getPm25Color(double pm25) {
-    if (pm25 <= 12) return GlassColors.airQualityGood;
-    if (pm25 <= 35) return GlassColors.airQualityModerate;
-    return GlassColors.airQualityPoor;
+    if (pm25 <= 12) return AppColors.airGood;
+    if (pm25 <= 35) return AppColors.airModerate;
+    return AppColors.airPoor;
   }
 
   Color _getVocColor(double voc) {
-    if (voc <= 0.5) return GlassColors.airQualityExcellent;
-    if (voc <= 1.0) return GlassColors.airQualityGood;
-    return GlassColors.airQualityModerate;
+    if (voc <= 0.5) return AppColors.airExcellent;
+    if (voc <= 1.0) return AppColors.airGood;
+    return AppColors.airModerate;
   }
 }
 
@@ -156,33 +169,43 @@ class _Co2Gauge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
     final percentage = ((2000 - co2) / 2000).clamp(0.0, 1.0);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: [
         SizedBox(
-          width: 70,
-          height: 70,
+          width: 52,
+          height: 52,
           child: Stack(
             alignment: Alignment.center,
             children: [
               CircularProgressIndicator(
                 value: percentage,
-                strokeWidth: 6,
-                backgroundColor: t.colors.textTertiary.withValues(alpha: 0.2),
+                strokeWidth: 4,
+                backgroundColor: theme.colorScheme.muted.withValues(alpha: 0.3),
                 valueColor: AlwaysStoppedAnimation(color),
               ),
               Text(
                 '$co2',
-                style: t.typography.numericMedium.copyWith(color: color),
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  color: color,
+                ),
               ),
             ],
           ),
         ),
-        const SizedBox(height: 4),
-        Text('CO₂ ppm', style: t.typography.labelSmall),
+        Text(
+          'CO₂',
+          style: TextStyle(
+            fontSize: 10,
+            color: theme.colorScheme.mutedForeground,
+          ),
+        ),
       ],
     );
   }
@@ -203,20 +226,36 @@ class _MetricRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label, style: t.typography.bodyMedium),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 14,
+            color: theme.colorScheme.foreground,
+          ),
+        ),
         Row(
           children: [
             Text(
               value,
-              style: t.typography.titleMedium.copyWith(color: color),
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: color,
+              ),
             ),
             const SizedBox(width: 4),
-            Text(unit, style: t.typography.bodySmall),
+            Text(
+              unit,
+              style: TextStyle(
+                fontSize: 12,
+                color: theme.colorScheme.mutedForeground,
+              ),
+            ),
           ],
         ),
       ],

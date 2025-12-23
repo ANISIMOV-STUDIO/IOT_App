@@ -1,7 +1,10 @@
 /// Device header card with status and power toggle
 library;
 
-import 'package:smart_ui_kit/smart_ui_kit.dart';
+import 'package:flutter/material.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
+
+import '../../../core/theme/app_theme.dart';
 import '../common/glowing_status_dot.dart';
 
 /// Header card showing device name, status, and power control
@@ -23,9 +26,9 @@ class DeviceHeaderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
 
-    return GlassCard(
+    return ShadCard(
       child: LayoutBuilder(
         builder: (context, constraints) {
           final isSmall = constraints.maxHeight < 120;
@@ -41,18 +44,18 @@ class DeviceHeaderCard extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.all(isSmall ? 6 : 8),
                     decoration: BoxDecoration(
-                      color: (isOn ? GlassColors.accentPrimary : Colors.grey)
+                      color: (isOn ? AppColors.primary : Colors.grey)
                           .withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Icon(
                       Icons.power_settings_new,
-                      color: isOn ? GlassColors.accentPrimary : Colors.grey,
+                      color: isOn ? AppColors.primary : Colors.grey,
                       size: isSmall ? 16 : 20,
                     ),
                   ),
                   // Power toggle
-                  GlassToggle(
+                  ShadSwitch(
                     value: isOn,
                     onChanged: isOnline ? onPowerChanged : null,
                   ),
@@ -62,15 +65,20 @@ class DeviceHeaderCard extends StatelessWidget {
               // Device name
               Text(
                 deviceName,
-                style: isSmall ? t.typography.titleSmall : t.typography.titleMedium,
+                style: TextStyle(
+                  fontSize: isSmall ? 14 : 16,
+                  fontWeight: FontWeight.w600,
+                  color: theme.colorScheme.foreground,
+                ),
                 overflow: TextOverflow.ellipsis,
               ),
               if (deviceType != null && !isSmall) ...[
                 const SizedBox(height: 2),
                 Text(
                   deviceType!,
-                  style: t.typography.labelSmall.copyWith(
-                    color: t.colors.textSecondary,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: theme.colorScheme.mutedForeground,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -81,23 +89,23 @@ class DeviceHeaderCard extends StatelessWidget {
                 children: [
                   GlowingStatusDot(
                     color: !isOnline
-                        ? t.colors.textTertiary
+                        ? theme.colorScheme.mutedForeground
                         : isOn
-                            ? GlassColors.accentSuccess
-                            : GlassColors.accentWarning,
+                            ? AppColors.success
+                            : AppColors.warning,
                     isGlowing: isOn && isOnline,
                     size: isSmall ? 6 : 8,
                   ),
                   const SizedBox(width: 4),
                   Text(
                     _statusLabel,
-                    style: t.typography.labelSmall.copyWith(
+                    style: TextStyle(
+                      fontSize: isSmall ? 10 : 12,
                       color: !isOnline
-                          ? t.colors.textTertiary
+                          ? theme.colorScheme.mutedForeground
                           : isOn
-                              ? GlassColors.accentSuccess
-                              : GlassColors.accentWarning,
-                      fontSize: isSmall ? 10 : null,
+                              ? AppColors.success
+                              : AppColors.warning,
                     ),
                   ),
                 ],

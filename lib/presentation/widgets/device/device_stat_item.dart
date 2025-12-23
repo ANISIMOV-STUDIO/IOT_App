@@ -3,7 +3,8 @@
 /// Responsive stat display for device cards
 library;
 
-import 'package:smart_ui_kit/smart_ui_kit.dart';
+import 'package:flutter/material.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 
 class DeviceStatItem extends StatelessWidget {
   final IconData icon;
@@ -19,6 +20,8 @@ class DeviceStatItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = ShadTheme.of(context);
+
     return Column(
       children: [
         Row(
@@ -26,26 +29,26 @@ class DeviceStatItem extends StatelessWidget {
           children: [
             Icon(
               icon,
-              size: 16.0,
-              color: GlassColors.lightTextSecondary,
+              size: 16,
+              color: theme.colorScheme.mutedForeground,
             ),
-            const SizedBox(width: GlassSpacing.xxs),
+            const SizedBox(width: 4),
             Text(
               value,
-              style: const TextStyle(
-                fontSize: 14.0,
+              style: TextStyle(
+                fontSize: 14,
                 fontWeight: FontWeight.w600,
-                color: GlassColors.lightTextPrimary,
+                color: theme.colorScheme.foreground,
               ),
             ),
           ],
         ),
-        const SizedBox(height: GlassSpacing.xxs),
+        const SizedBox(height: 4),
         Text(
           label,
-          style: const TextStyle(
-            fontSize: 11.0,
-            color: GlassColors.lightTextTertiary,
+          style: TextStyle(
+            fontSize: 11,
+            color: theme.colorScheme.mutedForeground,
           ),
         ),
       ],

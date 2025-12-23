@@ -1,7 +1,8 @@
 /// Sensor display card widget
 library;
 
-import 'package:smart_ui_kit/smart_ui_kit.dart';
+import 'package:flutter/material.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 
 /// Compact sensor card for displaying temperature, humidity, CO2
 class SensorCard extends StatelessWidget {
@@ -24,20 +25,17 @@ class SensorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
 
     if (isCompact) {
-      return _buildCompact(t);
+      return _buildCompact(theme);
     }
-    return _buildFull(t);
+    return _buildFull(theme);
   }
 
-  Widget _buildCompact(GlassThemeData t) {
-    return GlassCard(
-      padding: const EdgeInsets.symmetric(
-        horizontal: GlassSpacing.sm,
-        vertical: GlassSpacing.sm,
-      ),
+  Widget _buildCompact(ShadThemeData theme) {
+    return ShadCard(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -45,16 +43,26 @@ class SensorCard extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             '$value$unit',
-            style: t.typography.numericMedium.copyWith(color: color),
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: color,
+            ),
           ),
-          Text(label, style: t.typography.labelSmall),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              color: theme.colorScheme.mutedForeground,
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildFull(GlassThemeData t) {
-    return GlassCard(
+  Widget _buildFull(ShadThemeData theme) {
+    return ShadCard(
       child: LayoutBuilder(
         builder: (context, constraints) {
           final isSmall = constraints.maxHeight < 120;
@@ -82,20 +90,29 @@ class SensorCard extends StatelessWidget {
                   children: [
                     Text(
                       value,
-                      style: t.typography.numericLarge.copyWith(
+                      style: TextStyle(
                         fontSize: isSmall ? 20 : 28,
+                        fontWeight: FontWeight.w600,
+                        color: theme.colorScheme.foreground,
                       ),
                     ),
                     const SizedBox(width: 2),
-                    Text(unit, style: t.typography.labelSmall),
+                    Text(
+                      unit,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: theme.colorScheme.mutedForeground,
+                      ),
+                    ),
                   ],
                 ),
               ),
               SizedBox(height: isSmall ? 2 : 4),
               Text(
                 label,
-                style: t.typography.labelSmall.copyWith(
-                  color: t.colors.textSecondary,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: theme.colorScheme.mutedForeground,
                 ),
               ),
             ],

@@ -1,7 +1,10 @@
 /// Company notifications card
 library;
 
-import 'package:smart_ui_kit/smart_ui_kit.dart';
+import 'package:flutter/material.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
+
+import '../../../core/theme/app_theme.dart';
 import '../../../domain/entities/app_notification.dart';
 
 /// Card showing company-wide notifications (updates, news, promos)
@@ -23,10 +26,10 @@ class CompanyNotificationsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
     final unreadCount = notifications.where((n) => !n.isRead).length;
 
-    return GlassCard(
+    return ShadCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -36,25 +39,29 @@ class CompanyNotificationsCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Text(title, style: t.typography.titleMedium),
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: theme.colorScheme.foreground,
+                    ),
+                  ),
                   if (unreadCount > 0) ...[
                     const SizedBox(width: 8),
-                    GlassBadge(
-                      text: '$unreadCount',
-                      color: GlassColors.accentPrimary,
+                    ShadBadge(
+                      backgroundColor: AppColors.primary.withValues(alpha: 0.15),
+                      foregroundColor: AppColors.primary,
+                      child: Text('$unreadCount'),
                     ),
                   ],
                 ],
               ),
               if (onViewAll != null)
-                TextButton(
+                ShadButton.ghost(
                   onPressed: onViewAll,
-                  child: Text(
-                    'Все',
-                    style: t.typography.labelSmall.copyWith(
-                      color: GlassColors.accentPrimary,
-                    ),
-                  ),
+                  size: ShadButtonSize.sm,
+                  child: const Text('Все'),
                 ),
             ],
           ),
@@ -62,13 +69,12 @@ class CompanyNotificationsCard extends StatelessWidget {
 
           // Notifications list
           if (notifications.isEmpty)
-            _buildEmptyState(t)
+            _buildEmptyState(theme)
           else
             Expanded(
               child: ListView.separated(
                 itemCount: notifications.take(5).length,
-                separatorBuilder: (_, __) =>
-                    const SizedBox(height: GlassSpacing.xs),
+                separatorBuilder: (_, __) => const SizedBox(height: 8),
                 itemBuilder: (context, index) {
                   final notification = notifications[index];
                   return _NotificationItem(
@@ -88,7 +94,7 @@ class CompanyNotificationsCard extends StatelessWidget {
     );
   }
 
-  Widget _buildEmptyState(GlassThemeData t) {
+  Widget _buildEmptyState(ShadThemeData theme) {
     return Expanded(
       child: Center(
         child: Column(
@@ -97,13 +103,14 @@ class CompanyNotificationsCard extends StatelessWidget {
             Icon(
               Icons.notifications_none,
               size: 32,
-              color: t.colors.textTertiary,
+              color: theme.colorScheme.mutedForeground,
             ),
             const SizedBox(height: 8),
             Text(
               'Нет новых уведомлений',
-              style: t.typography.bodySmall.copyWith(
-                color: t.colors.textTertiary,
+              style: TextStyle(
+                fontSize: 14,
+                color: theme.colorScheme.mutedForeground,
               ),
             ),
           ],
@@ -126,7 +133,7 @@ class _NotificationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
     final icon = _getTypeIcon(notification.type);
     final color = _getTypeColor(notification.type);
 
@@ -141,7 +148,7 @@ class _NotificationItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
             color: notification.isRead
-                ? t.colors.textTertiary.withValues(alpha: 0.1)
+                ? theme.colorScheme.border
                 : color.withValues(alpha: 0.2),
           ),
         ),
@@ -168,10 +175,12 @@ class _NotificationItem extends StatelessWidget {
                       Expanded(
                         child: Text(
                           notification.title,
-                          style: t.typography.bodyMedium.copyWith(
+                          style: TextStyle(
+                            fontSize: 14,
                             fontWeight: notification.isRead
                                 ? FontWeight.normal
                                 : FontWeight.w600,
+                            color: theme.colorScheme.foreground,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -179,8 +188,9 @@ class _NotificationItem extends StatelessWidget {
                       ),
                       Text(
                         notification.timeAgo,
-                        style: t.typography.labelSmall.copyWith(
-                          color: t.colors.textTertiary,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: theme.colorScheme.mutedForeground,
                         ),
                       ),
                     ],
@@ -188,8 +198,9 @@ class _NotificationItem extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     notification.message,
-                    style: t.typography.bodySmall.copyWith(
-                      color: t.colors.textSecondary,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: theme.colorScheme.mutedForeground,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -204,7 +215,7 @@ class _NotificationItem extends StatelessWidget {
               Icon(
                 Icons.arrow_forward_ios,
                 size: 14,
-                color: t.colors.textTertiary,
+                color: theme.colorScheme.mutedForeground,
               ),
             ],
           ],
@@ -222,10 +233,10 @@ class _NotificationItem extends StatelessWidget {
       };
 
   Color _getTypeColor(CompanyNotificationType type) => switch (type) {
-        CompanyNotificationType.update => GlassColors.accentPrimary,
-        CompanyNotificationType.news => GlassColors.accentInfo,
-        CompanyNotificationType.promo => GlassColors.accentSuccess,
-        CompanyNotificationType.tip => GlassColors.accentWarning,
-        CompanyNotificationType.security => GlassColors.accentError,
+        CompanyNotificationType.update => AppColors.primary,
+        CompanyNotificationType.news => AppColors.info,
+        CompanyNotificationType.promo => AppColors.success,
+        CompanyNotificationType.tip => AppColors.warning,
+        CompanyNotificationType.security => AppColors.error,
       };
 }

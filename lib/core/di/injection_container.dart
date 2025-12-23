@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // Core
 import '../services/language_service.dart';
+import '../services/theme_service.dart';
 
 // Domain - Repositories
 import '../../domain/repositories/climate_repository.dart';
@@ -34,6 +35,7 @@ Future<void> init() async {
 
   //! Core - Services
   sl.registerLazySingleton(() => LanguageService(sl()));
+  sl.registerLazySingleton(() => ThemeService());
   await sl<LanguageService>().initializeDefaults();
 
   //! Dashboard Feature

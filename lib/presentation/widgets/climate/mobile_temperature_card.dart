@@ -1,4 +1,13 @@
-import 'package:smart_ui_kit/smart_ui_kit.dart';
+/// Compact temperature control card for mobile layout
+library;
+
+import 'package:flutter/material.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
+
+import '../../../core/theme/app_theme.dart';
+
+/// Temperature mode enum
+enum TemperatureMode { heating, cooling, auto, dry }
 
 /// Compact temperature control card for mobile layout
 /// Shows temperature value with quick mode toggles
@@ -22,10 +31,10 @@ class MobileTemperatureCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
 
-    return GlassCard(
-      padding: const EdgeInsets.all(GlassSpacing.md),
+    return ShadCard(
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -35,12 +44,16 @@ class MobileTemperatureCard extends StatelessWidget {
             children: [
               Text(
                 'Climate Control',
-                style: theme.typography.titleMedium,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: theme.colorScheme.foreground,
+                ),
               ),
               _ModeIndicator(mode: mode),
             ],
           ),
-          const SizedBox(height: GlassSpacing.md),
+          const SizedBox(height: 16),
 
           // Temperature display + controls
           Row(
@@ -59,7 +72,7 @@ class MobileTemperatureCard extends StatelessWidget {
                       : null,
                 ),
               ),
-              const SizedBox(width: GlassSpacing.md),
+              const SizedBox(width: 16),
 
               // Mode buttons
               Expanded(
@@ -139,6 +152,7 @@ class _TemperatureDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ShadTheme.of(context);
     final color = _getModeColor(mode);
 
     return Row(
@@ -182,7 +196,7 @@ class _TempAdjustButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
 
     return MouseRegion(
       cursor: onTap != null ? SystemMouseCursors.click : SystemMouseCursors.basic,
@@ -192,19 +206,18 @@ class _TempAdjustButton extends StatelessWidget {
           width: 36,
           height: 36,
           decoration: BoxDecoration(
-            color: theme.colors.glassSurface,
+            color: theme.colorScheme.muted.withValues(alpha: 0.3),
             shape: BoxShape.circle,
             border: Border.all(
-              color: theme.colors.glassBorder,
-              width: 1,
+              color: theme.colorScheme.border,
             ),
           ),
           child: Icon(
             icon,
             size: 18,
             color: onTap != null
-                ? theme.colors.textPrimary
-                : theme.colors.textTertiary,
+                ? theme.colorScheme.foreground
+                : theme.colorScheme.mutedForeground,
           ),
         ),
       ),
@@ -251,7 +264,7 @@ class _ModeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
     final color = _getModeColor(mode);
 
     return MouseRegion(
@@ -264,10 +277,12 @@ class _ModeButton extends StatelessWidget {
             vertical: 8,
           ),
           decoration: BoxDecoration(
-            color: isSelected ? color.withValues(alpha: 0.15) : theme.colors.glassSurface,
+            color: isSelected
+                ? color.withValues(alpha: 0.15)
+                : theme.colorScheme.muted.withValues(alpha: 0.3),
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
-              color: isSelected ? color : theme.colors.glassBorder,
+              color: isSelected ? color : theme.colorScheme.border,
               width: isSelected ? 1.5 : 1,
             ),
           ),
@@ -277,7 +292,7 @@ class _ModeButton extends StatelessWidget {
               Icon(
                 _getModeIcon(mode),
                 size: 16,
-                color: isSelected ? color : theme.colors.textSecondary,
+                color: isSelected ? color : theme.colorScheme.mutedForeground,
               ),
               const SizedBox(width: 6),
               Text(
@@ -285,7 +300,7 @@ class _ModeButton extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                  color: isSelected ? color : theme.colors.textSecondary,
+                  color: isSelected ? color : theme.colorScheme.mutedForeground,
                 ),
               ),
             ],
@@ -298,22 +313,22 @@ class _ModeButton extends StatelessWidget {
 
 // Helper functions
 Color _getModeColor(TemperatureMode mode) => switch (mode) {
-  TemperatureMode.heating => GlassColors.modeHeating,
-  TemperatureMode.cooling => GlassColors.modeCooling,
-  TemperatureMode.auto => GlassColors.modeAuto,
-  TemperatureMode.dry => GlassColors.modeDry,
-};
+      TemperatureMode.heating => AppColors.heating,
+      TemperatureMode.cooling => AppColors.cooling,
+      TemperatureMode.auto => AppColors.modeAuto,
+      TemperatureMode.dry => AppColors.info,
+    };
 
 String _getModeLabel(TemperatureMode mode) => switch (mode) {
-  TemperatureMode.heating => 'Heat',
-  TemperatureMode.cooling => 'Cool',
-  TemperatureMode.auto => 'Auto',
-  TemperatureMode.dry => 'Dry',
-};
+      TemperatureMode.heating => 'Heat',
+      TemperatureMode.cooling => 'Cool',
+      TemperatureMode.auto => 'Auto',
+      TemperatureMode.dry => 'Dry',
+    };
 
 IconData _getModeIcon(TemperatureMode mode) => switch (mode) {
-  TemperatureMode.heating => Icons.whatshot,
-  TemperatureMode.cooling => Icons.ac_unit,
-  TemperatureMode.auto => Icons.autorenew,
-  TemperatureMode.dry => Icons.water_drop_outlined,
-};
+      TemperatureMode.heating => Icons.whatshot,
+      TemperatureMode.cooling => Icons.ac_unit,
+      TemperatureMode.auto => Icons.autorenew,
+      TemperatureMode.dry => Icons.water_drop_outlined,
+    };

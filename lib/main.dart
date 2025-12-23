@@ -6,14 +6,14 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 import 'package:go_router/go_router.dart';
-import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 
 import 'core/theme/app_theme.dart';
 import 'generated/l10n/app_localizations.dart';
 import 'core/di/injection_container.dart' as di;
 import 'core/services/language_service.dart';
+import 'core/services/theme_service.dart';
 import 'core/navigation/app_router.dart';
 import 'presentation/bloc/dashboard/dashboard_bloc.dart';
 
@@ -47,26 +47,32 @@ class _HvacControlAppState extends State<HvacControlApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => di.sl<DashboardBloc>()..add(const DashboardStarted()),
+          create: (context) =>
+              di.sl<DashboardBloc>()..add(const DashboardStarted()),
         ),
       ],
       child: ListenableBuilder(
-        listenable: di.sl<LanguageService>(),
+        listenable: Listenable.merge([
+          di.sl<LanguageService>(),
+          di.sl<ThemeService>(),
+        ]),
         builder: (context, child) {
           final languageService = di.sl<LanguageService>();
+          final themeService = di.sl<ThemeService>();
 
-          return AdaptiveTheme(
-            light: AppTheme.light,
-            dark: AppTheme.dark,
-            initial: AdaptiveThemeMode.light,
-            builder: (theme, darkTheme) => MaterialApp.router(
+          return ShadApp.custom(
+            themeMode: themeService.themeMode,
+            theme: AppTheme.shadLight,
+            darkTheme: AppTheme.shadDark,
+            appBuilder: (context) => MaterialApp.router(
               routerConfig: _router,
               title: 'BREEZ Home',
               debugShowCheckedModeBanner: false,
 
-              // Theme
-              theme: theme,
-              darkTheme: darkTheme,
+              // Material theme mapped from shadcn
+              theme: AppTheme.materialLight,
+              darkTheme: AppTheme.materialDark,
+              themeMode: themeService.themeMode,
 
               // Localization
               locale: languageService.currentLocale,
@@ -78,15 +84,9 @@ class _HvacControlAppState extends State<HvacControlApp> {
               ],
               supportedLocales: LanguageService.supportedLocales,
 
-              // Responsive breakpoints
-              builder: (context, widget) => ResponsiveBreakpoints.builder(
-                breakpoints: const [
-                  Breakpoint(start: 0, end: 599, name: MOBILE),
-                  Breakpoint(start: 600, end: 1023, name: TABLET),
-                  Breakpoint(start: 1024, end: 1919, name: DESKTOP),
-                  Breakpoint(start: 1920, end: double.infinity, name: '4K'),
-                ],
-                child: widget!,
+              // Wrap with ShadAppBuilder
+              builder: (context, child) => ShadAppBuilder(
+                child: child ?? const SizedBox.shrink(),
               ),
             ),
           );

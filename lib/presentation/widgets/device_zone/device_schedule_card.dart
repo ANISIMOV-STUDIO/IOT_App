@@ -1,7 +1,10 @@
 /// Device schedule card
 library;
 
-import 'package:smart_ui_kit/smart_ui_kit.dart';
+import 'package:flutter/material.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
+
+import '../../../core/theme/app_theme.dart';
 import '../../../domain/entities/device_schedule.dart';
 import '../common/glowing_status_dot.dart';
 
@@ -26,9 +29,9 @@ class DeviceScheduleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
 
-    return GlassCard(
+    return ShadCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -36,20 +39,26 @@ class DeviceScheduleCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(title, style: t.typography.titleMedium),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: theme.colorScheme.foreground,
+                ),
+              ),
               Row(
                 children: [
                   if (onAddSchedule != null)
-                    GlassIconButton(
-                      icon: Icons.add,
-                      iconColor: GlassColors.accentPrimary,
-                      size: 32,
+                    ShadButton.ghost(
                       onPressed: onAddSchedule,
+                      size: ShadButtonSize.sm,
+                      child: const Icon(Icons.add, size: 18),
                     ),
                   const SizedBox(width: 4),
                   Icon(
                     Icons.calendar_month,
-                    color: t.colors.textTertiary,
+                    color: theme.colorScheme.mutedForeground,
                     size: 20,
                   ),
                 ],
@@ -61,7 +70,7 @@ class DeviceScheduleCard extends StatelessWidget {
           // Schedule list
           Expanded(
             child: schedules.isEmpty
-                ? _buildEmptyState(t)
+                ? _buildEmptyState(theme)
                 : ListView.builder(
                     itemCount: schedules.length,
                     padding: EdgeInsets.zero,
@@ -86,7 +95,7 @@ class DeviceScheduleCard extends StatelessWidget {
     );
   }
 
-  Widget _buildEmptyState(GlassThemeData t) {
+  Widget _buildEmptyState(ShadThemeData theme) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -94,13 +103,14 @@ class DeviceScheduleCard extends StatelessWidget {
           Icon(
             Icons.schedule,
             size: 32,
-            color: t.colors.textTertiary,
+            color: theme.colorScheme.mutedForeground,
           ),
           const SizedBox(height: 8),
           Text(
             'Нет расписаний',
-            style: t.typography.bodySmall.copyWith(
-              color: t.colors.textTertiary,
+            style: TextStyle(
+              fontSize: 14,
+              color: theme.colorScheme.mutedForeground,
             ),
           ),
         ],
@@ -122,7 +132,7 @@ class _ScheduleItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
     final isActive = schedule.isEnabled;
 
     return GestureDetector(
@@ -134,8 +144,8 @@ class _ScheduleItem extends StatelessWidget {
             onTap: onToggle,
             child: GlowingStatusDot(
               color: isActive
-                  ? GlassColors.accentPrimary
-                  : t.colors.textTertiary,
+                  ? AppColors.primary
+                  : theme.colorScheme.mutedForeground,
               isGlowing: isActive,
             ),
           ),
@@ -144,11 +154,12 @@ class _ScheduleItem extends StatelessWidget {
           // Time
           Text(
             schedule.timeFormatted,
-            style: t.typography.bodyMedium.copyWith(
+            style: TextStyle(
+              fontSize: 14,
               fontWeight: FontWeight.w600,
               color: isActive
-                  ? GlassColors.accentPrimary
-                  : t.colors.textSecondary,
+                  ? AppColors.primary
+                  : theme.colorScheme.mutedForeground,
             ),
           ),
           const SizedBox(width: 8),
@@ -157,8 +168,9 @@ class _ScheduleItem extends StatelessWidget {
           Expanded(
             child: Text(
               schedule.label ?? schedule.actionDescription,
-              style: t.typography.bodyMedium.copyWith(
-                color: t.colors.textSecondary,
+              style: TextStyle(
+                fontSize: 14,
+                color: theme.colorScheme.mutedForeground,
               ),
               overflow: TextOverflow.ellipsis,
             ),
@@ -168,10 +180,11 @@ class _ScheduleItem extends StatelessWidget {
           if (schedule.temperature != null)
             Text(
               '${schedule.temperature!.round()}°',
-              style: t.typography.labelSmall.copyWith(
+              style: TextStyle(
+                fontSize: 12,
                 color: isActive
-                    ? GlassColors.accentPrimary
-                    : t.colors.textTertiary,
+                    ? AppColors.primary
+                    : theme.colorScheme.mutedForeground,
               ),
             ),
 
@@ -181,7 +194,7 @@ class _ScheduleItem extends StatelessWidget {
             Icon(
               Icons.public,
               size: 14,
-              color: t.colors.textTertiary,
+              color: theme.colorScheme.mutedForeground,
             ),
           ],
         ],

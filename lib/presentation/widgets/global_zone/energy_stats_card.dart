@@ -1,7 +1,10 @@
 /// Energy statistics card
 library;
 
-import 'package:smart_ui_kit/smart_ui_kit.dart';
+import 'package:flutter/material.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
+
+import '../../../core/theme/app_theme.dart';
 import '../charts/energy_chart.dart';
 
 /// Card showing energy consumption statistics
@@ -29,9 +32,9 @@ class EnergyStatsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
 
-    return GlassCard(
+    return ShadCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -39,10 +42,22 @@ class EnergyStatsCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(title, style: t.typography.titleMedium),
-              GlassBadge(
-                text: periodLabel,
-                color: GlassColors.accentPrimary,
+              Flexible(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: theme.colorScheme.foreground,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const SizedBox(width: 8),
+              ShadBadge(
+                backgroundColor: AppColors.primary.withValues(alpha: 0.15),
+                foregroundColor: AppColors.primary,
+                child: Text(periodLabel),
               ),
             ],
           ),
@@ -94,19 +109,38 @@ class _MiniStat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: t.typography.labelSmall),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 12,
+            color: theme.colorScheme.mutedForeground,
+          ),
+        ),
         Row(
           crossAxisAlignment: CrossAxisAlignment.baseline,
           textBaseline: TextBaseline.alphabetic,
           children: [
-            Text(value, style: t.typography.numericMedium),
+            Text(
+              value,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+                color: theme.colorScheme.foreground,
+              ),
+            ),
             const SizedBox(width: 2),
-            Text(unit, style: t.typography.labelSmall),
+            Text(
+              unit,
+              style: TextStyle(
+                fontSize: 12,
+                color: theme.colorScheme.mutedForeground,
+              ),
+            ),
           ],
         ),
       ],

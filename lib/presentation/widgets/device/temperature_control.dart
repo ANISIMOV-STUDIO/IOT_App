@@ -3,7 +3,8 @@
 /// Responsive temperature control for air conditioners
 library;
 
-import 'package:smart_ui_kit/smart_ui_kit.dart';
+import 'package:flutter/material.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 
 class TemperatureControl extends StatelessWidget {
   final double value;
@@ -21,39 +22,40 @@ class TemperatureControl extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = ShadTheme.of(context);
+
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: GlassSpacing.lg),
+      padding: const EdgeInsets.symmetric(vertical: 24),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             min.toInt().toString(),
-            style: const TextStyle(
-              fontSize: 14.0,
-              color: GlassColors.lightTextTertiary,
+            style: TextStyle(
+              fontSize: 14,
+              color: theme.colorScheme.mutedForeground,
             ),
           ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: GlassSpacing.md),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 children: [
                   Text(
                     '${value.toInt()}°',
-                    style: const TextStyle(
-                      fontSize: 48.0,
+                    style: TextStyle(
+                      fontSize: 48,
                       fontWeight: FontWeight.w700,
                       height: 1,
-                      color: GlassColors.lightTextPrimary,
+                      color: theme.colorScheme.foreground,
                     ),
                   ),
-                  const SizedBox(height: GlassSpacing.xs),
-                  Slider(
-                    value: value,
+                  const SizedBox(height: 8),
+                  ShadSlider(
+                    initialValue: value,
                     min: min,
                     max: max,
-                    label: '${value.toInt()}°',
-                    onChanged: onChanged,
+                    onChangeEnd: onChanged,
                   ),
                 ],
               ),
@@ -61,9 +63,9 @@ class TemperatureControl extends StatelessWidget {
           ),
           Text(
             max.toInt().toString(),
-            style: const TextStyle(
-              fontSize: 14.0,
-              color: GlassColors.lightTextTertiary,
+            style: TextStyle(
+              fontSize: 14,
+              color: theme.colorScheme.mutedForeground,
             ),
           ),
         ],

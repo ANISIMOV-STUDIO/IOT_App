@@ -89,6 +89,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  boxy:
+    dependency: transitive
+    description:
+      name: boxy
+      sha256: "569373f23560f5a5dbe53c08a7463a698635e7ac72ba355ff4fa52516c0d2e32"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.2"
   build:
     dependency: transitive
     description:
@@ -305,6 +313,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.7"
+  extended_image:
+    dependency: transitive
+    description:
+      name: extended_image
+      sha256: f6cbb1d798f51262ed1a3d93b4f1f2aa0d76128df39af18ecb77fa740f88b2e0
+      url: "https://pub.dev"
+    source: hosted
+    version: "10.0.1"
+  extended_image_library:
+    dependency: transitive
+    description:
+      name: extended_image_library
+      sha256: "1f9a24d3a00c2633891c6a7b5cab2807999eb2d5b597e5133b63f49d113811fe"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.1"
   fake_async:
     dependency: transitive
     description:
@@ -408,14 +432,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.7"
-  flutter_neumorphic_plus:
-    dependency: transitive
-    description:
-      name: flutter_neumorphic_plus
-      sha256: "39fb64ebaf60efec654c7bd3dd8fc56a3265e1b15e925f1d321f1f30ad090fbc"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.5.0"
   flutter_secure_storage:
     dependency: "direct main"
     description:
@@ -535,14 +551,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "14.8.1"
-  google_fonts:
-    dependency: transitive
-    description:
-      name: google_fonts
-      sha256: ba03d03bcaa2f6cb7bd920e3b5027181db75ab524f8891c8bc3aa603885b8055
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.3.3"
   google_identity_services_web:
     dependency: transitive
     description:
@@ -631,6 +639,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.1"
+  http_client_helper:
+    dependency: transitive
+    description:
+      name: http_client_helper
+      sha256: "8a9127650734da86b5c73760de2b404494c968a3fd55602045ffec789dac3cb1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
   http_multi_server:
     dependency: transitive
     description:
@@ -772,6 +788,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.2"
+  lucide_icons_flutter:
+    dependency: transitive
+    description:
+      name: lucide_icons_flutter
+      sha256: aaadab3b503d2cc4eb971661511c6053bfe7d52742ba46f551d508494822a0fa
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.8"
   matcher:
     dependency: transitive
     description:
@@ -1028,6 +1052,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "10.2.0"
+  shadcn_ui:
+    dependency: "direct main"
+    description:
+      name: shadcn_ui
+      sha256: "73c967ae9e587fee36abd3b720dc0228bb94d775d81bb72af08d5ebf709bdaee"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.43.0"
   share_plus:
     dependency: transitive
     description:
@@ -1152,13 +1184,6 @@ packages:
       relative: true
     source: path
     version: "1.0.0"
-  smart_ui_kit:
-    dependency: "direct main"
-    description:
-      path: "packages/smart_ui_kit"
-      relative: true
-    source: path
-    version: "0.0.1"
   source_gen:
     dependency: transitive
     description:
@@ -1311,6 +1336,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.11"
+  theme_extensions_builder_annotation:
+    dependency: transitive
+    description:
+      name: theme_extensions_builder_annotation
+      sha256: e14648a3318842992f14b207cb811df48a1d6f0bd742b77bcbf1b74557493c00
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.1.0"
   timing:
     dependency: transitive
     description:
@@ -1327,6 +1360,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.0"
+  two_dimensional_scrollables:
+    dependency: transitive
+    description:
+      name: two_dimensional_scrollables
+      sha256: "0f77ecb96596f2f82eec2b0a8e60d9305c58315557da9fa3b610c7dbf5ded621"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.7"
   typed_data:
     dependency: transitive
     description:
@@ -1335,6 +1376,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.2"
+  universal_image:
+    dependency: transitive
+    description:
+      name: universal_image
+      sha256: ef47a4a002158cf0b36ed3b7605af132d2476cc42703e41b8067d3603705c40d
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.11"
   universal_io:
     dependency: transitive
     description:

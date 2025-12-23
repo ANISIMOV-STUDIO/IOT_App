@@ -1,7 +1,11 @@
 /// Unified Schedule Card - shows device-specific and global schedules
 library;
 
-import 'package:smart_ui_kit/smart_ui_kit.dart';
+
+import 'package:flutter/material.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
+
+import '../../../core/theme/app_theme.dart';
 import '../../../domain/entities/device_schedule.dart';
 import '../common/glowing_status_dot.dart';
 
@@ -40,9 +44,9 @@ class UnifiedScheduleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
 
-    return GlassCard(
+    return ShadCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -52,21 +56,27 @@ class UnifiedScheduleCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.schedule,
                     size: 20,
-                    color: GlassColors.accentPrimary,
+                    color: AppColors.primary,
                   ),
                   const SizedBox(width: 8),
-                  Text(title, style: t.typography.titleMedium),
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: theme.colorScheme.foreground,
+                    ),
+                  ),
                 ],
               ),
               if (onAddSchedule != null)
-                GlassIconButton(
-                  icon: Icons.add,
-                  iconColor: GlassColors.accentPrimary,
-                  size: 32,
+                ShadButton.ghost(
                   onPressed: onAddSchedule,
+                  size: ShadButtonSize.sm,
+                  child: const Icon(Icons.add, size: 18),
                 ),
             ],
           ),
@@ -75,7 +85,7 @@ class UnifiedScheduleCard extends StatelessWidget {
           // Content
           Expanded(
             child: schedules.isEmpty
-                ? _buildEmptyState(t)
+                ? _buildEmptyState(theme)
                 : ListView(
                     physics: const ClampingScrollPhysics(),
                     children: [
@@ -84,7 +94,7 @@ class UnifiedScheduleCard extends StatelessWidget {
                         _SectionLabel(
                           label: currentDeviceName ?? 'Устройство',
                           icon: Icons.air,
-                          color: GlassColors.accentPrimary,
+                          color: AppColors.primary,
                         ),
                         const SizedBox(height: 8),
                         ..._deviceSchedules.map((schedule) => Padding(
@@ -105,9 +115,7 @@ class UnifiedScheduleCard extends StatelessWidget {
                       if (_deviceSchedules.isNotEmpty &&
                           _globalSchedules.isNotEmpty) ...[
                         const SizedBox(height: 8),
-                        Divider(
-                          color: t.colors.textTertiary.withValues(alpha: 0.2),
-                        ),
+                        Divider(color: theme.colorScheme.border),
                         const SizedBox(height: 8),
                       ],
 
@@ -116,7 +124,7 @@ class UnifiedScheduleCard extends StatelessWidget {
                         _SectionLabel(
                           label: 'Все устройства',
                           icon: Icons.public,
-                          color: t.colors.textSecondary,
+                          color: theme.colorScheme.mutedForeground,
                         ),
                         const SizedBox(height: 8),
                         ..._globalSchedules.map((schedule) => Padding(
@@ -141,7 +149,7 @@ class UnifiedScheduleCard extends StatelessWidget {
     );
   }
 
-  Widget _buildEmptyState(GlassThemeData t) {
+  Widget _buildEmptyState(ShadThemeData theme) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -149,29 +157,37 @@ class UnifiedScheduleCard extends StatelessWidget {
           Icon(
             Icons.event_available,
             size: 36,
-            color: t.colors.textTertiary.withValues(alpha: 0.5),
+            color: theme.colorScheme.mutedForeground.withValues(alpha: 0.5),
           ),
           const SizedBox(height: 12),
           Text(
             'Нет расписаний',
-            style: t.typography.bodyMedium.copyWith(
-              color: t.colors.textSecondary,
+            style: TextStyle(
+              fontSize: 14,
+              color: theme.colorScheme.mutedForeground,
             ),
           ),
           const SizedBox(height: 4),
           Text(
             'Добавьте автоматизацию',
-            style: t.typography.bodySmall.copyWith(
-              color: t.colors.textTertiary,
+            style: TextStyle(
+              fontSize: 12,
+              color: theme.colorScheme.mutedForeground.withValues(alpha: 0.7),
             ),
           ),
           if (onAddSchedule != null) ...[
             const SizedBox(height: 16),
-            GlassButton(
+            ShadButton.outline(
               onPressed: onAddSchedule,
-              size: GlassButtonSize.small,
-              icon: Icons.add,
-              child: const Text('Добавить'),
+              size: ShadButtonSize.sm,
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.add, size: 16),
+                  SizedBox(width: 4),
+                  Text('Добавить'),
+                ],
+              ),
             ),
           ],
         ],
@@ -193,8 +209,6 @@ class _SectionLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
-
     return Row(
       children: [
         Container(
@@ -210,7 +224,8 @@ class _SectionLabel extends StatelessWidget {
         const SizedBox(width: 6),
         Text(
           label,
-          style: t.typography.labelSmall.copyWith(
+          style: TextStyle(
+            fontSize: 12,
             color: color,
             fontWeight: FontWeight.w600,
             letterSpacing: 0.5,
@@ -236,7 +251,7 @@ class _ScheduleItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
     final isActive = schedule.isEnabled;
     final actionColor = _getActionColor(schedule.action);
 
@@ -247,12 +262,12 @@ class _ScheduleItem extends StatelessWidget {
         decoration: BoxDecoration(
           color: isActive
               ? actionColor.withValues(alpha: 0.05)
-              : t.colors.textTertiary.withValues(alpha: 0.03),
+              : theme.colorScheme.muted.withValues(alpha: 0.2),
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
             color: isActive
                 ? actionColor.withValues(alpha: 0.2)
-                : t.colors.textTertiary.withValues(alpha: 0.1),
+                : theme.colorScheme.border,
           ),
         ),
         child: Row(
@@ -261,7 +276,7 @@ class _ScheduleItem extends StatelessWidget {
             GestureDetector(
               onTap: onToggle,
               child: GlowingStatusDot(
-                color: isActive ? actionColor : t.colors.textTertiary,
+                color: isActive ? actionColor : theme.colorScheme.mutedForeground,
                 isGlowing: isActive,
                 size: 10,
               ),
@@ -269,14 +284,15 @@ class _ScheduleItem extends StatelessWidget {
             const SizedBox(width: 10),
 
             // Time
-            Container(
+            SizedBox(
               width: 48,
               child: Text(
                 schedule.timeFormatted,
-                style: t.typography.bodyMedium.copyWith(
+                style: TextStyle(
+                  fontSize: 14,
                   fontWeight: FontWeight.w700,
-                  color: isActive ? actionColor : t.colors.textTertiary,
-                  fontFeatures: [const FontFeature.tabularFigures()],
+                  color: isActive ? actionColor : theme.colorScheme.mutedForeground,
+                  fontFeatures: const [FontFeature.tabularFigures()],
                 ),
               ),
             ),
@@ -287,13 +303,13 @@ class _ScheduleItem extends StatelessWidget {
               decoration: BoxDecoration(
                 color: isActive
                     ? actionColor.withValues(alpha: 0.15)
-                    : t.colors.textTertiary.withValues(alpha: 0.1),
+                    : theme.colorScheme.muted.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(6),
               ),
               child: Icon(
                 _getActionIcon(schedule.action),
                 size: 14,
-                color: isActive ? actionColor : t.colors.textTertiary,
+                color: isActive ? actionColor : theme.colorScheme.mutedForeground,
               ),
             ),
             const SizedBox(width: 10),
@@ -306,18 +322,20 @@ class _ScheduleItem extends StatelessWidget {
                   if (schedule.label != null)
                     Text(
                       schedule.label!,
-                      style: t.typography.bodySmall.copyWith(
+                      style: TextStyle(
+                        fontSize: 12,
                         fontWeight: FontWeight.w600,
                         color: isActive
-                            ? t.colors.textPrimary
-                            : t.colors.textSecondary,
+                            ? theme.colorScheme.foreground
+                            : theme.colorScheme.mutedForeground,
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
                   Text(
                     _getActionDescription(schedule),
-                    style: t.typography.labelSmall.copyWith(
-                      color: t.colors.textSecondary,
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: theme.colorScheme.mutedForeground,
                     ),
                   ),
                 ],
@@ -337,16 +355,17 @@ class _ScheduleItem extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
                   color: isActive
-                      ? GlassColors.modeHeating.withValues(alpha: 0.15)
-                      : t.colors.textTertiary.withValues(alpha: 0.1),
+                      ? AppColors.heating.withValues(alpha: 0.15)
+                      : theme.colorScheme.muted.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(
                   '${schedule.temperature!.round()}°',
-                  style: t.typography.labelSmall.copyWith(
+                  style: TextStyle(
+                    fontSize: 12,
                     color: isActive
-                        ? GlassColors.modeHeating
-                        : t.colors.textTertiary,
+                        ? AppColors.heating
+                        : theme.colorScheme.mutedForeground,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -359,10 +378,10 @@ class _ScheduleItem extends StatelessWidget {
   }
 
   Color _getActionColor(ScheduleAction action) => switch (action) {
-        ScheduleAction.turnOn => GlassColors.accentSuccess,
-        ScheduleAction.turnOff => GlassColors.accentError,
-        ScheduleAction.setTemperature => GlassColors.modeHeating,
-        ScheduleAction.setMode => GlassColors.accentPrimary,
+        ScheduleAction.turnOn => AppColors.success,
+        ScheduleAction.turnOff => AppColors.error,
+        ScheduleAction.setTemperature => AppColors.heating,
+        ScheduleAction.setMode => AppColors.primary,
       };
 
   IconData _getActionIcon(ScheduleAction action) => switch (action) {
@@ -401,21 +420,21 @@ class _DaysIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
 
     // If all days, show "Ежедневно"
     if (days.length == 7) {
       return Container(
         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
         decoration: BoxDecoration(
-          color: t.colors.textTertiary.withValues(alpha: 0.1),
+          color: theme.colorScheme.muted.withValues(alpha: 0.3),
           borderRadius: BorderRadius.circular(4),
         ),
         child: Text(
           'Ежедн.',
-          style: t.typography.labelSmall.copyWith(
-            color: t.colors.textSecondary,
+          style: TextStyle(
             fontSize: 9,
+            color: theme.colorScheme.mutedForeground,
           ),
         ),
       );
@@ -433,14 +452,14 @@ class _DaysIndicator extends StatelessWidget {
       return Container(
         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
         decoration: BoxDecoration(
-          color: t.colors.textTertiary.withValues(alpha: 0.1),
+          color: theme.colorScheme.muted.withValues(alpha: 0.3),
           borderRadius: BorderRadius.circular(4),
         ),
         child: Text(
           'Пн-Пт',
-          style: t.typography.labelSmall.copyWith(
-            color: t.colors.textSecondary,
+          style: TextStyle(
             fontSize: 9,
+            color: theme.colorScheme.mutedForeground,
           ),
         ),
       );
@@ -459,9 +478,9 @@ class _DaysIndicator extends StatelessWidget {
             shape: BoxShape.circle,
             color: isIncluded
                 ? (isActive
-                    ? GlassColors.accentPrimary
-                    : t.colors.textSecondary)
-                : t.colors.textTertiary.withValues(alpha: 0.2),
+                    ? AppColors.primary
+                    : theme.colorScheme.mutedForeground)
+                : theme.colorScheme.muted.withValues(alpha: 0.3),
           ),
         );
       }).toList(),

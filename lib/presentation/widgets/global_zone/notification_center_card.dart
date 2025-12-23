@@ -1,7 +1,10 @@
 /// Unified Notification Center - groups device alerts and company notifications
 library;
 
-import 'package:smart_ui_kit/smart_ui_kit.dart';
+import 'package:flutter/material.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
+
+import '../../../core/theme/app_theme.dart';
 import '../../../domain/entities/app_notification.dart';
 
 /// Unified notification center that groups:
@@ -38,9 +41,9 @@ class _NotificationCenterCardState extends State<NotificationCenterCard> {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
 
-    return GlassCard(
+    return ShadCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -53,15 +56,20 @@ class _NotificationCenterCardState extends State<NotificationCenterCard> {
                     Flexible(
                       child: Text(
                         widget.title,
-                        style: t.typography.titleMedium,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: theme.colorScheme.foreground,
+                        ),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     if (_totalCount > 0) ...[
                       const SizedBox(width: 8),
-                      GlassBadge(
-                        text: '$_totalCount',
-                        color: GlassColors.accentPrimary,
+                      ShadBadge(
+                        backgroundColor: AppColors.primary.withValues(alpha: 0.15),
+                        foregroundColor: AppColors.primary,
+                        child: Text('$_totalCount'),
                       ),
                     ],
                   ],
@@ -69,26 +77,20 @@ class _NotificationCenterCardState extends State<NotificationCenterCard> {
               ),
               if (widget.onViewAll != null) ...[
                 const SizedBox(width: 8),
-                GlassInteractiveCard(
-                  onTap: widget.onViewAll,
-                  borderRadius: 8,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  child: Icon(
-                    Icons.arrow_forward,
-                    size: 16,
-                    color: GlassColors.accentPrimary,
-                  ),
+                ShadButton.ghost(
+                  onPressed: widget.onViewAll,
+                  size: ShadButtonSize.sm,
+                  child: const Icon(Icons.arrow_forward, size: 16),
                 ),
               ],
             ],
           ),
-          const SizedBox(height: GlassSpacing.md),
+          const SizedBox(height: 16),
 
           // Content
           Expanded(
             child: _totalCount == 0
-                ? _buildEmptyState(t)
+                ? _buildEmptyState(theme)
                 : ListView(
                     physics: const ClampingScrollPhysics(),
                     children: [
@@ -115,7 +117,7 @@ class _NotificationCenterCardState extends State<NotificationCenterCard> {
 
                       if (widget.deviceAlerts.isNotEmpty &&
                           widget.companyNotifications.isNotEmpty)
-                        const SizedBox(height: GlassSpacing.sm),
+                        const SizedBox(height: 12),
 
                       // Company notifications section
                       if (widget.companyNotifications.isNotEmpty)
@@ -124,7 +126,7 @@ class _NotificationCenterCardState extends State<NotificationCenterCard> {
                           icon: Icons.campaign_outlined,
                           count: widget.companyNotifications.length,
                           isExpanded: _companyNotificationsExpanded,
-                          accentColor: GlassColors.accentInfo,
+                          accentColor: AppColors.info,
                           onToggle: () => setState(() {
                             _companyNotificationsExpanded =
                                 !_companyNotificationsExpanded;
@@ -149,7 +151,7 @@ class _NotificationCenterCardState extends State<NotificationCenterCard> {
     );
   }
 
-  Widget _buildEmptyState(GlassThemeData t) {
+  Widget _buildEmptyState(ShadThemeData theme) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -157,19 +159,21 @@ class _NotificationCenterCardState extends State<NotificationCenterCard> {
           Icon(
             Icons.notifications_none,
             size: 40,
-            color: GlassColors.accentSuccess.withValues(alpha: 0.6),
+            color: AppColors.success.withValues(alpha: 0.6),
           ),
           const SizedBox(height: 12),
           Text(
             'Нет уведомлений',
-            style: t.typography.bodyMedium.copyWith(
-              color: t.colors.textSecondary,
+            style: TextStyle(
+              fontSize: 14,
+              color: theme.colorScheme.mutedForeground,
             ),
           ),
           Text(
             'Всё работает исправно',
-            style: t.typography.bodySmall.copyWith(
-              color: t.colors.textTertiary,
+            style: TextStyle(
+              fontSize: 12,
+              color: theme.colorScheme.mutedForeground.withValues(alpha: 0.7),
             ),
           ),
         ],
@@ -199,8 +203,8 @@ class _NotificationGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
-    final color = accentColor ?? GlassColors.accentWarning;
+    final theme = ShadTheme.of(context);
+    final color = accentColor ?? AppColors.warning;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -215,15 +219,16 @@ class _NotificationGroup extends StatelessWidget {
                 Icon(
                   isExpanded ? Icons.expand_less : Icons.expand_more,
                   size: 20,
-                  color: t.colors.textSecondary,
+                  color: theme.colorScheme.mutedForeground,
                 ),
                 const SizedBox(width: 4),
                 Icon(icon, size: 16, color: color),
                 const SizedBox(width: 6),
                 Text(
                   title,
-                  style: t.typography.labelMedium.copyWith(
-                    color: t.colors.textSecondary,
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: theme.colorScheme.mutedForeground,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -236,10 +241,10 @@ class _NotificationGroup extends StatelessWidget {
                   ),
                   child: Text(
                     '$count',
-                    style: t.typography.labelSmall.copyWith(
+                    style: TextStyle(
+                      fontSize: 11,
                       color: color,
                       fontWeight: FontWeight.w700,
-                      fontSize: 11,
                     ),
                   ),
                 ),
@@ -270,7 +275,7 @@ class _DeviceAlertItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
     final color = _getAlertColor(alert.type);
     final icon = _getAlertIcon(alert.type);
 
@@ -308,8 +313,10 @@ class _DeviceAlertItem extends StatelessWidget {
                       Expanded(
                         child: Text(
                           alert.title,
-                          style: t.typography.bodySmall.copyWith(
+                          style: TextStyle(
+                            fontSize: 12,
                             fontWeight: FontWeight.w600,
+                            color: theme.colorScheme.foreground,
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -321,14 +328,14 @@ class _DeviceAlertItem extends StatelessWidget {
                           vertical: 2,
                         ),
                         decoration: BoxDecoration(
-                          color: t.colors.textTertiary.withValues(alpha: 0.1),
+                          color: theme.colorScheme.muted.withValues(alpha: 0.3),
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: Text(
                           alert.deviceName.split(' ').first,
-                          style: t.typography.labelSmall.copyWith(
-                            color: t.colors.textSecondary,
+                          style: TextStyle(
                             fontSize: 9,
+                            color: theme.colorScheme.mutedForeground,
                           ),
                         ),
                       ),
@@ -337,8 +344,9 @@ class _DeviceAlertItem extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     alert.message,
-                    style: t.typography.labelSmall.copyWith(
-                      color: t.colors.textSecondary,
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: theme.colorScheme.mutedForeground,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -359,12 +367,12 @@ class _DeviceAlertItem extends StatelessWidget {
   }
 
   Color _getAlertColor(DeviceAlertType type) => switch (type) {
-        DeviceAlertType.filterChange => GlassColors.accentWarning,
-        DeviceAlertType.maintenance => GlassColors.accentInfo,
-        DeviceAlertType.error => GlassColors.accentError,
-        DeviceAlertType.offline => GlassColors.airQualityPoor,
-        DeviceAlertType.connectionLost => GlassColors.accentError,
-        DeviceAlertType.firmwareUpdate => GlassColors.accentPrimary,
+        DeviceAlertType.filterChange => AppColors.warning,
+        DeviceAlertType.maintenance => AppColors.info,
+        DeviceAlertType.error => AppColors.error,
+        DeviceAlertType.offline => AppColors.airPoor,
+        DeviceAlertType.connectionLost => AppColors.error,
+        DeviceAlertType.firmwareUpdate => AppColors.primary,
       };
 
   IconData _getAlertIcon(DeviceAlertType type) => switch (type) {
@@ -388,7 +396,7 @@ class _CompanyNotificationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
     final color = _getNotificationColor(notification.type);
     final icon = _getNotificationIcon(notification.type);
 
@@ -423,16 +431,19 @@ class _CompanyNotificationItem extends StatelessWidget {
                 children: [
                   Text(
                     notification.title,
-                    style: t.typography.bodySmall.copyWith(
+                    style: TextStyle(
+                      fontSize: 12,
                       fontWeight: FontWeight.w600,
+                      color: theme.colorScheme.foreground,
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 2),
                   Text(
                     notification.message,
-                    style: t.typography.labelSmall.copyWith(
-                      color: t.colors.textSecondary,
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: theme.colorScheme.mutedForeground,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -450,9 +461,9 @@ class _CompanyNotificationItem extends StatelessWidget {
               ),
               child: Text(
                 _getTypeLabel(notification.type),
-                style: t.typography.labelSmall.copyWith(
-                  color: color,
+                style: TextStyle(
                   fontSize: 9,
+                  color: color,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -464,11 +475,11 @@ class _CompanyNotificationItem extends StatelessWidget {
   }
 
   Color _getNotificationColor(CompanyNotificationType type) => switch (type) {
-        CompanyNotificationType.update => GlassColors.accentPrimary,
-        CompanyNotificationType.news => GlassColors.accentInfo,
-        CompanyNotificationType.promo => GlassColors.accentSuccess,
-        CompanyNotificationType.tip => GlassColors.accentWarning,
-        CompanyNotificationType.security => GlassColors.accentError,
+        CompanyNotificationType.update => AppColors.primary,
+        CompanyNotificationType.news => AppColors.info,
+        CompanyNotificationType.promo => AppColors.success,
+        CompanyNotificationType.tip => AppColors.warning,
+        CompanyNotificationType.security => AppColors.error,
       };
 
   IconData _getNotificationIcon(CompanyNotificationType type) => switch (type) {
@@ -495,7 +506,6 @@ class _DueDateBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
     final color = _getColor();
     final text = _getText();
 
@@ -507,19 +517,19 @@ class _DueDateBadge extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: t.typography.labelSmall.copyWith(
+        style: TextStyle(
+          fontSize: 10,
           color: color,
           fontWeight: FontWeight.w600,
-          fontSize: 10,
         ),
       ),
     );
   }
 
   Color _getColor() {
-    if (days <= 3) return GlassColors.accentError;
-    if (days <= 7) return GlassColors.accentWarning;
-    return GlassColors.accentInfo;
+    if (days <= 3) return AppColors.error;
+    if (days <= 7) return AppColors.warning;
+    return AppColors.info;
   }
 
   String _getText() {

@@ -1,7 +1,10 @@
 /// Quick actions card
 library;
 
-import 'package:smart_ui_kit/smart_ui_kit.dart';
+import 'package:flutter/material.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
+
+import '../../../core/theme/app_theme.dart';
 
 /// Quick action item definition
 class QuickActionItem {
@@ -45,7 +48,7 @@ class QuickActionsCard extends StatelessWidget {
         id: 'all_off',
         icon: Icons.power_settings_new,
         label: allOffLabel,
-        color: GlassColors.accentError,
+        color: AppColors.error,
         requiresConfirmation: true,
       ),
       QuickActionItem(
@@ -68,13 +71,20 @@ class QuickActionsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
 
-    return GlassCard(
+    return ShadCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: t.typography.titleMedium),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: theme.colorScheme.foreground,
+            ),
+          ),
           const SizedBox(height: 12),
           Expanded(
             child: Row(
@@ -108,41 +118,24 @@ class QuickActionsCard extends StatelessWidget {
   }
 
   void _showConfirmationDialog(BuildContext context, QuickActionItem action) {
-    final t = GlassTheme.of(context);
+    ShadTheme.of(context);
 
-    showDialog(
+    showShadDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: t.colors.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: Text(
-          'Подтверждение',
-          style: t.typography.titleMedium,
-        ),
-        content: Text(
-          'Вы уверены, что хотите ${action.label.toLowerCase()}?',
-          style: t.typography.bodyMedium,
-        ),
+      builder: (ctx) => ShadDialog.alert(
+        title: const Text('Подтверждение'),
+        description: Text('Вы уверены, что хотите ${action.label.toLowerCase()}?'),
         actions: [
-          TextButton(
+          ShadButton.outline(
             onPressed: () => Navigator.of(ctx).pop(),
-            child: Text(
-              'Отмена',
-              style: TextStyle(color: t.colors.textSecondary),
-            ),
+            child: const Text('Отмена'),
           ),
-          TextButton(
+          ShadButton(
             onPressed: () {
               Navigator.of(ctx).pop();
               onActionPressed?.call(action.id);
             },
-            child: Text(
-              'Да',
-              style: TextStyle(
-                color: action.color ?? GlassColors.accentPrimary,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
+            child: const Text('Да'),
           ),
         ],
       ),
@@ -161,70 +154,73 @@ class _QuickActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
-    final color = action.color ?? GlassColors.accentPrimary;
+    final theme = ShadTheme.of(context);
+    final color = action.color ?? AppColors.primary;
 
-    return GlassInteractiveCard(
+    return GestureDetector(
       onTap: onPressed,
-      borderRadius: 12,
-      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final isCompact = constraints.maxHeight < 60;
+      child: Container(
+        decoration: BoxDecoration(
+          color: theme.colorScheme.muted.withValues(alpha: 0.3),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: theme.colorScheme.border,
+          ),
+        ),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final isCompact = constraints.maxHeight < 60;
 
-          if (isCompact) {
-            // Horizontal layout for very small heights
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(action.icon, color: color, size: 18),
-                const SizedBox(width: 4),
-                Flexible(
-                  child: Text(
-                    action.label,
-                    style: t.typography.labelSmall.copyWith(
-                      color: color,
-                      fontSize: 10,
+            if (isCompact) {
+              // Horizontal layout for very small heights
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(action.icon, color: color, size: 18),
+                  const SizedBox(width: 4),
+                  Flexible(
+                    child: Text(
+                      action.label,
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: color,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    overflow: TextOverflow.ellipsis,
                   ),
+                ],
+              );
+            }
+
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Icon container
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: color.withValues(alpha: 0.1),
+                  ),
+                  child: Icon(action.icon, color: color, size: 18),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  action.label,
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: color,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             );
-          }
-
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Icon container
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 4,
-                      offset: Offset(2, 2),
-                    ),
-                  ],
-                ),
-                child: Icon(action.icon, color: color, size: 18),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                action.label,
-                style: t.typography.labelSmall.copyWith(
-                  color: color,
-                  fontSize: 10,
-                ),
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
-          );
-        },
+          },
+        ),
       ),
     );
   }

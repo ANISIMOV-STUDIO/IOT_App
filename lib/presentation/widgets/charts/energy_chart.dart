@@ -1,5 +1,11 @@
+/// Energy consumption chart for dashboard
+library;
+
 import 'package:fl_chart/fl_chart.dart';
-import 'package:smart_ui_kit/smart_ui_kit.dart';
+import 'package:flutter/material.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
+
+import '../../../core/theme/app_theme.dart';
 
 /// Energy consumption chart for dashboard
 class EnergyConsumptionChart extends StatelessWidget {
@@ -18,7 +24,8 @@ class EnergyConsumptionChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = lineColor ?? GlassColors.accentPrimary;
+    final theme = ShadTheme.of(context);
+    final color = lineColor ?? AppColors.primary;
     final gradient = gradientColor ?? color;
 
     return SizedBox(
@@ -30,7 +37,7 @@ class EnergyConsumptionChart extends StatelessWidget {
             drawVerticalLine: false,
             horizontalInterval: 1,
             getDrawingHorizontalLine: (value) => FlLine(
-              color: Colors.grey.shade200,
+              color: theme.colorScheme.muted.withValues(alpha: 0.3),
               strokeWidth: 1,
             ),
           ),
@@ -53,7 +60,7 @@ class EnergyConsumptionChart extends StatelessWidget {
                       '${hour.toString().padLeft(2, '0')}:00',
                       style: TextStyle(
                         fontSize: 10,
-                        color: Colors.grey.shade500,
+                        color: theme.colorScheme.mutedForeground,
                       ),
                     ),
                   );
@@ -123,7 +130,7 @@ class MiniSparkline extends StatelessWidget {
   Widget build(BuildContext context) {
     if (data.isEmpty) return SizedBox(height: height, width: width);
 
-    final lineColor = color ?? GlassColors.accentPrimary;
+    final lineColor = color ?? AppColors.primary;
     final maxVal = data.reduce((a, b) => a > b ? a : b);
     final minVal = data.reduce((a, b) => a < b ? a : b);
     final range = maxVal - minVal;

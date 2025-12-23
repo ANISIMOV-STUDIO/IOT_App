@@ -1,7 +1,10 @@
 /// Device Zone Container - visual wrapper for device-specific widgets
 library;
 
-import 'package:smart_ui_kit/smart_ui_kit.dart';
+import 'package:flutter/material.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
+
+import '../../../core/theme/app_theme.dart';
 
 /// Container that visually separates device-specific widgets from global ones
 /// Uses accent border and subtle background tint
@@ -21,7 +24,7 @@ class DeviceZoneContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final accent = accentColor ?? GlassColors.accentPrimary;
+    final accent = accentColor ?? AppColors.primary;
 
     return Container(
       decoration: BoxDecoration(
@@ -40,7 +43,7 @@ class DeviceZoneContainer extends StatelessWidget {
           if (header != null) header!,
           Expanded(
             child: Padding(
-              padding: padding ?? const EdgeInsets.all(GlassSpacing.md),
+              padding: padding ?? const EdgeInsets.all(16),
               child: child,
             ),
           ),
@@ -63,10 +66,10 @@ class ZoneDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: GlassSpacing.md),
+      padding: const EdgeInsets.symmetric(vertical: 16),
       child: Row(
         children: [
           Expanded(
@@ -76,7 +79,7 @@ class ZoneDivider extends StatelessWidget {
                 gradient: LinearGradient(
                   colors: [
                     Colors.transparent,
-                    t.colors.textTertiary.withValues(alpha: 0.3),
+                    theme.colorScheme.mutedForeground.withValues(alpha: 0.3),
                   ],
                 ),
               ),
@@ -87,22 +90,29 @@ class ZoneDivider extends StatelessWidget {
               margin: const EdgeInsets.symmetric(horizontal: 16),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
-                color: t.colors.cardSurface,
+                color: theme.colorScheme.card,
                 borderRadius: BorderRadius.circular(20),
-                boxShadow: t.shadows.convexSmall,
+                border: Border.all(
+                  color: theme.colorScheme.border,
+                ),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   if (icon != null) ...[
-                    Icon(icon, size: 14, color: t.colors.textTertiary),
+                    Icon(
+                      icon,
+                      size: 14,
+                      color: theme.colorScheme.mutedForeground,
+                    ),
                     const SizedBox(width: 6),
                   ],
                   if (label != null)
                     Text(
                       label!,
-                      style: t.typography.labelSmall.copyWith(
-                        color: t.colors.textTertiary,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: theme.colorScheme.mutedForeground,
                         fontWeight: FontWeight.w600,
                         letterSpacing: 1.2,
                       ),
@@ -116,7 +126,7 @@ class ZoneDivider extends StatelessWidget {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    t.colors.textTertiary.withValues(alpha: 0.3),
+                    theme.colorScheme.mutedForeground.withValues(alpha: 0.3),
                     Colors.transparent,
                   ],
                 ),

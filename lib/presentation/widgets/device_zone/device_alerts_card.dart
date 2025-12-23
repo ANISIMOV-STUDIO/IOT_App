@@ -1,7 +1,10 @@
 /// Device alerts card
 library;
 
-import 'package:smart_ui_kit/smart_ui_kit.dart';
+import 'package:flutter/material.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
+
+import '../../../core/theme/app_theme.dart';
 import '../../../domain/entities/app_notification.dart';
 
 /// Card showing device-specific alerts (filter change, errors, etc.)
@@ -23,12 +26,11 @@ class DeviceAlertsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
     final unreadCount = alerts.where((a) => !a.isRead).length;
 
-    return GlassCard(
-      variant: GlassCardVariant.concave,
-      padding: const EdgeInsets.all(GlassSpacing.md),
+    return ShadCard(
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -36,25 +38,30 @@ class DeviceAlertsCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(title, style: t.typography.titleMedium),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: theme.colorScheme.foreground,
+                ),
+              ),
               if (unreadCount > 0)
-                GlassBadge(
-                  text: '$unreadCount',
-                  color: GlassColors.accentError,
+                ShadBadge.destructive(
+                  child: Text('$unreadCount'),
                 ),
             ],
           ),
-          const SizedBox(height: GlassSpacing.sm),
+          const SizedBox(height: 12),
 
           // Alerts list
           Expanded(
             child: alerts.isEmpty
-                ? _buildEmptyState(t)
+                ? _buildEmptyState(theme)
                 : ListView.separated(
                     physics: const ClampingScrollPhysics(),
                     itemCount: alerts.length.clamp(0, 3),
-                    separatorBuilder: (_, __) =>
-                        const SizedBox(height: GlassSpacing.xs),
+                    separatorBuilder: (_, __) => const SizedBox(height: 8),
                     itemBuilder: (_, index) {
                       final alert = alerts[index];
                       return _AlertItem(
@@ -72,16 +79,12 @@ class DeviceAlertsCard extends StatelessWidget {
 
           // View all button
           if (alerts.length > 3 && onViewAll != null) ...[
-            const SizedBox(height: GlassSpacing.xs),
+            const SizedBox(height: 8),
             Center(
-              child: TextButton(
+              child: ShadButton.ghost(
                 onPressed: onViewAll,
-                child: Text(
-                  'Показать все (${alerts.length})',
-                  style: t.typography.labelSmall.copyWith(
-                    color: GlassColors.accentPrimary,
-                  ),
-                ),
+                size: ShadButtonSize.sm,
+                child: Text('Показать все (${alerts.length})'),
               ),
             ),
           ],
@@ -90,22 +93,23 @@ class DeviceAlertsCard extends StatelessWidget {
     );
   }
 
-  Widget _buildEmptyState(GlassThemeData t) {
+  Widget _buildEmptyState(ShadThemeData theme) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: GlassSpacing.md),
+      padding: const EdgeInsets.symmetric(vertical: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
+          const Icon(
             Icons.check_circle_outline,
             size: 20,
-            color: GlassColors.accentSuccess,
+            color: AppColors.success,
           ),
           const SizedBox(width: 8),
           Text(
             'Нет уведомлений',
-            style: t.typography.bodySmall.copyWith(
-              color: t.colors.textSecondary,
+            style: TextStyle(
+              fontSize: 14,
+              color: theme.colorScheme.mutedForeground,
             ),
           ),
         ],
@@ -127,7 +131,7 @@ class _AlertItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = GlassTheme.of(context);
+    final theme = ShadTheme.of(context);
     final color = _getAlertColor(alert.type);
     final icon = _getAlertIcon(alert.type);
 
@@ -151,14 +155,17 @@ class _AlertItem extends StatelessWidget {
             children: [
               Text(
                 alert.title,
-                style: t.typography.bodyMedium.copyWith(
+                style: TextStyle(
+                  fontSize: 14,
                   fontWeight: FontWeight.w600,
+                  color: theme.colorScheme.foreground,
                 ),
               ),
               Text(
                 alert.message,
-                style: t.typography.bodySmall.copyWith(
-                  color: t.colors.textSecondary,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: theme.colorScheme.mutedForeground,
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -177,7 +184,8 @@ class _AlertItem extends StatelessWidget {
             ),
             child: Text(
               _getDueDateText(alert.daysUntilDue!),
-              style: t.typography.labelSmall.copyWith(
+              style: TextStyle(
+                fontSize: 12,
                 color: _getDueDateColor(alert.daysUntilDue!),
                 fontWeight: FontWeight.w600,
               ),
@@ -188,12 +196,12 @@ class _AlertItem extends StatelessWidget {
   }
 
   Color _getAlertColor(DeviceAlertType type) => switch (type) {
-        DeviceAlertType.filterChange => GlassColors.accentWarning,
-        DeviceAlertType.maintenance => GlassColors.accentInfo,
-        DeviceAlertType.error => GlassColors.accentError,
-        DeviceAlertType.offline => GlassColors.airQualityPoor,
-        DeviceAlertType.connectionLost => GlassColors.accentError,
-        DeviceAlertType.firmwareUpdate => GlassColors.accentPrimary,
+        DeviceAlertType.filterChange => AppColors.warning,
+        DeviceAlertType.maintenance => AppColors.info,
+        DeviceAlertType.error => AppColors.error,
+        DeviceAlertType.offline => AppColors.airPoor,
+        DeviceAlertType.connectionLost => AppColors.error,
+        DeviceAlertType.firmwareUpdate => AppColors.primary,
       };
 
   IconData _getAlertIcon(DeviceAlertType type) => switch (type) {
@@ -206,9 +214,9 @@ class _AlertItem extends StatelessWidget {
       };
 
   Color _getDueDateColor(int days) {
-    if (days <= 3) return GlassColors.accentError;
-    if (days <= 7) return GlassColors.accentWarning;
-    return GlassColors.accentInfo;
+    if (days <= 3) return AppColors.error;
+    if (days <= 7) return AppColors.warning;
+    return AppColors.info;
   }
 
   String _getDueDateText(int days) {
