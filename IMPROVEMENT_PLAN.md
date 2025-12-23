@@ -97,8 +97,8 @@
 - [x] **P7-3**: Loading states - ShadProgress для dashboard loading
 
 ### 7.2 Accessibility
-- [ ] **P7-4**: Contrast ratio check (WCAG AA minimum)
-- [ ] **P7-5**: Focus states для keyboard navigation
+- [x] **P7-4**: Contrast - warning color изменён на amber-600 (#D97706) для WCAG AA
+- [~] **P7-5**: Focus states - navigation InkWell ✓, другие элементы требуют доработки
 - [x] **P7-6**: Touch targets - кнопки 64x64 (power), иконки 44x44
 
 ---
@@ -117,7 +117,7 @@
 
 Started: 2025-12-23
 Current Phase: Complete
-Completed: 38/40 (95% done - only accessibility items remain)
+Completed: 39/40 (97.5% - P7-5 focus states частично)
 
 ---
 

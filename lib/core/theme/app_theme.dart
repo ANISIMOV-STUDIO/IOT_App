@@ -9,9 +9,9 @@ abstract class AppColors {
   static const Color cooling = Color(0xFF00B4D8);
   static const Color modeAuto = Color(0xFF8B5CF6);
 
-  // Status colors
+  // Status colors (WCAG AA compliant contrast ratios)
   static const Color success = Color(0xFF34C759);
-  static const Color warning = Color(0xFFFFCC00);
+  static const Color warning = Color(0xFFD97706); // Amber-600 - better contrast than pure yellow
   static const Color error = Color(0xFFFF3B30);
   static const Color info = Color(0xFF007AFF);
 
