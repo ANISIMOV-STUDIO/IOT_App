@@ -197,9 +197,9 @@ class _DeviceZoneGrid extends StatelessWidget {
     final climate = state.climate;
 
     return BentoGrid(
-      columns: 4,
       gap: 16,
-      cellHeight: null,
+      minCellWidth: 260,
+      maxColumns: 4,
       items: [
         // Row 1: Device status + Sensors
         BentoItem(
@@ -488,9 +488,9 @@ class _GlobalZoneGrid extends StatelessWidget {
     final climate = state.climate;
 
     return BentoGrid(
-      columns: 4,
       gap: 16,
-      cellHeight: null,
+      minCellWidth: 260,
+      maxColumns: 4,
       items: [
         // Energy statistics
         BentoItem(

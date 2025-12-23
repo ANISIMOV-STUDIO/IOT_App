@@ -73,3 +73,6 @@ export 'src/widgets/glass/glass_dashboard_shell.dart';
 
 // Bento grid layout
 export 'src/widgets/layout/bento_grid.dart';
+
+// Responsive scaler
+export 'src/widgets/layout/responsive_scaler.dart';

@@ -6,14 +6,42 @@ import '../../theme/glass_colors.dart';
 import '../../theme/glass_theme.dart';
 import '../../theme/tokens/neumorphic_spacing.dart';
 
-/// Layout mode for the dashboard shell
-enum DashboardLayoutMode {
-  mobile,
-  tablet,
-  desktop,
+/// Material 3 Window Size Classes
+/// https://m3.material.io/foundations/layout/applying-layout/window-size-classes
+class WindowSizeClass {
+  /// Compact: 0-599dp (phones in portrait)
+  static const double compact = 600;
+
+  /// Medium: 600-839dp (tablets in portrait, foldables)
+  static const double medium = 840;
+
+  /// Expanded: 840-1199dp (tablets in landscape, small desktops)
+  static const double expanded = 1200;
+
+  /// Large: 1200-1599dp (desktop)
+  static const double large = 1600;
+
+  /// Extra-large: 1600+dp (large desktop, ultrawide)
+  static const double extraLarge = 1600;
 }
 
-/// Responsive Dashboard Shell with glassmorphism
+/// Layout mode for the dashboard shell
+enum DashboardLayoutMode {
+  /// Bottom navigation, single column
+  compact,
+
+  /// Bottom navigation, multi-column grid
+  medium,
+
+  /// Sidebar + content
+  expanded,
+
+  /// Sidebar + content + right panel inline
+  large,
+}
+
+/// Responsive Dashboard Shell following Material 3 guidelines
+/// Adapts layout based on available width, not device type
 class ResponsiveDashboardShell extends StatelessWidget {
   final int selectedIndex;
   final ValueChanged<int> onIndexChanged;
@@ -30,8 +58,25 @@ class ResponsiveDashboardShell extends StatelessWidget {
   final Widget? logoWidget;
   final String appName;
 
-  static const double maxWidth = 1920.0;
-  static const double rightPanelWidth = 360.0;
+  /// Maximum width for the entire dashboard content.
+  /// Beyond this width, content will be centered.
+  /// Set to null for no limit.
+  final double? maxContentWidth;
+
+  /// Width needed to show right panel inline (sidebar + content + panel)
+  static const double rightPanelInlineThreshold = 1400.0;
+
+  /// Sidebar width when expanded
+  static const double sidebarExpandedWidth = 220.0;
+
+  /// Sidebar width when collapsed
+  static const double sidebarCollapsedWidth = 72.0;
+
+  /// Right panel width
+  static const double rightPanelWidth = 340.0;
+
+  /// Default max content width (common for dashboards)
+  static const double defaultMaxContentWidth = 1600.0;
 
   const ResponsiveDashboardShell({
     super.key,
@@ -49,76 +94,84 @@ class ResponsiveDashboardShell extends StatelessWidget {
     this.onToggleSidebar,
     this.logoWidget,
     this.appName = 'BREEZ',
+    this.maxContentWidth = defaultMaxContentWidth,
   });
 
-  static const double mobileBreakpoint = 600.0;
-  static const double tabletBreakpoint = 1024.0;
-
+  /// Get layout mode based on available width
   static DashboardLayoutMode getLayoutMode(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    if (width < mobileBreakpoint) {
-      return DashboardLayoutMode.mobile;
-    } else if (width < tabletBreakpoint) {
-      return DashboardLayoutMode.tablet;
-    }
-    return DashboardLayoutMode.desktop;
+    final width = MediaQuery.sizeOf(context).width;
+    return getLayoutModeForWidth(width);
   }
 
-  static bool isMobile(BuildContext context) =>
-      getLayoutMode(context) == DashboardLayoutMode.mobile;
+  /// Get layout mode for a specific width
+  static DashboardLayoutMode getLayoutModeForWidth(double width) {
+    if (width < WindowSizeClass.compact) {
+      return DashboardLayoutMode.compact;
+    } else if (width < WindowSizeClass.medium) {
+      return DashboardLayoutMode.medium;
+    } else if (width < WindowSizeClass.expanded) {
+      return DashboardLayoutMode.expanded;
+    } else {
+      return DashboardLayoutMode.large;
+    }
+  }
 
-  static bool isTablet(BuildContext context) =>
-      getLayoutMode(context) == DashboardLayoutMode.tablet;
+  static bool isCompact(BuildContext context) =>
+      getLayoutMode(context) == DashboardLayoutMode.compact;
 
+  static bool isMedium(BuildContext context) =>
+      getLayoutMode(context) == DashboardLayoutMode.medium;
+
+  static bool isExpanded(BuildContext context) =>
+      getLayoutMode(context) == DashboardLayoutMode.expanded;
+
+  static bool isLarge(BuildContext context) =>
+      getLayoutMode(context) == DashboardLayoutMode.large;
+
+  /// Returns true if layout uses bottom navigation
+  static bool usesBottomNav(BuildContext context) {
+    final mode = getLayoutMode(context);
+    return mode == DashboardLayoutMode.compact ||
+        mode == DashboardLayoutMode.medium;
+  }
+
+  /// Returns true if layout shows sidebar
+  static bool showsSidebar(BuildContext context) {
+    final mode = getLayoutMode(context);
+    return mode == DashboardLayoutMode.expanded ||
+        mode == DashboardLayoutMode.large;
+  }
+
+  // Legacy compatibility
+  static bool isMobile(BuildContext context) => isCompact(context);
+  static bool isTablet(BuildContext context) => isMedium(context);
   static bool isDesktop(BuildContext context) =>
-      getLayoutMode(context) == DashboardLayoutMode.desktop;
+      isExpanded(context) || isLarge(context);
 
   @override
   Widget build(BuildContext context) {
-    final layoutMode = getLayoutMode(context);
+    // Use LayoutBuilder for responsive layout based on actual available space
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = constraints.maxWidth;
+        final layoutMode = getLayoutModeForWidth(width);
 
-    switch (layoutMode) {
-      case DashboardLayoutMode.mobile:
-        return _buildMobileLayout(context);
-      case DashboardLayoutMode.tablet:
-        return _buildTabletLayout(context);
-      case DashboardLayoutMode.desktop:
-        return _buildDesktopLayout(context);
-    }
-  }
-
-  Widget _buildMobileLayout(BuildContext context) {
-    final theme = GlassTheme.of(context);
-
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: theme.colors.backgroundGradient,
-        ),
-        child: SafeArea(
-          bottom: false,
-          child: Column(
-            children: [
-              if (mobileHeaderBuilder != null) mobileHeaderBuilder!(context),
-              Expanded(
-                child: IndexedStack(
-                  index: selectedIndex.clamp(0, pages.length - 1),
-                  children: pages,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      bottomNavigationBar: GlassBottomNav(
-        selectedIndex: selectedIndex,
-        onItemSelected: onIndexChanged,
-        items: navItems,
-      ),
+        switch (layoutMode) {
+          case DashboardLayoutMode.compact:
+          case DashboardLayoutMode.medium:
+            return _buildCompactMediumLayout(context, layoutMode);
+          case DashboardLayoutMode.expanded:
+            return _buildExpandedLayout(context, constraints);
+          case DashboardLayoutMode.large:
+            return _buildLargeLayout(context, constraints);
+        }
+      },
     );
   }
 
-  Widget _buildTabletLayout(BuildContext context) {
+  /// Compact/Medium: Bottom navigation + full-width content
+  Widget _buildCompactMediumLayout(
+      BuildContext context, DashboardLayoutMode mode) {
     final theme = GlassTheme.of(context);
 
     return Scaffold(
@@ -155,133 +208,242 @@ class ResponsiveDashboardShell extends StatelessWidget {
     );
   }
 
-  Widget _buildDesktopLayout(BuildContext context) {
+  /// Expanded: Sidebar + content, right panel as FAB/bottom sheet
+  Widget _buildExpandedLayout(
+      BuildContext context, BoxConstraints constraints) {
     final theme = GlassTheme.of(context);
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isLargeDesktop = screenWidth >= 1440;
+    final showRightPanelInline =
+        constraints.maxWidth >= rightPanelInlineThreshold &&
+            rightPanelBuilder != null;
 
-    const headerHeight = 56.0 + NeumorphicSpacing.sm;
-    final panelWidth = isLargeDesktop ? rightPanelWidth : rightPanelWidth * 0.85;
+    Widget content = Padding(
+      padding: const EdgeInsets.all(NeumorphicSpacing.md),
+      child: Column(
+        children: [
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Sidebar
+                GlassSidebar(
+                  selectedIndex: selectedIndex,
+                  onItemSelected: onIndexChanged,
+                  items: navItems,
+                  userName: userName,
+                  userAvatarUrl: userAvatarUrl,
+                  isCollapsed: sidebarCollapsed,
+                  onToggleSidebar: onToggleSidebar,
+                  logoWidget: logoWidget,
+                  appName: appName,
+                ),
+                const SizedBox(width: NeumorphicSpacing.md),
+                // Main content - takes remaining space
+                Expanded(
+                  child: Column(
+                    children: [
+                      // Header actions row
+                      if (headerActions != null && headerActions!.isNotEmpty)
+                        SizedBox(
+                          height: 56,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              for (int i = 0;
+                                  i < headerActions!.length;
+                                  i++) ...[
+                                if (i > 0)
+                                  const SizedBox(width: NeumorphicSpacing.sm),
+                                headerActions![i],
+                              ],
+                            ],
+                          ),
+                        ),
+                      // Page content
+                      Expanded(
+                        child: IndexedStack(
+                          index: selectedIndex.clamp(0, pages.length - 1),
+                          children: pages,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // Right panel inline (only on large enough screens)
+                if (showRightPanelInline) ...[
+                  const SizedBox(width: NeumorphicSpacing.md),
+                  SizedBox(
+                    width: rightPanelWidth,
+                    child: _buildRightPanelContainer(context),
+                  ),
+                ],
+              ],
+            ),
+          ),
+          // Footer
+          if (footerBuilder != null) ...[
+            const SizedBox(height: NeumorphicSpacing.md),
+            footerBuilder!(context),
+          ],
+        ],
+      ),
+    );
+
+    // Apply max width constraint if set
+    if (maxContentWidth != null) {
+      content = Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: maxContentWidth!),
+          child: content,
+        ),
+      );
+    }
 
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
           gradient: theme.colors.backgroundGradient,
         ),
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: maxWidth),
-            child: Padding(
-              padding: const EdgeInsets.all(NeumorphicSpacing.md),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: Stack(
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            // Sidebar
-                            GlassSidebar(
-                              selectedIndex: selectedIndex,
-                              onItemSelected: onIndexChanged,
-                              items: navItems,
-                              userName: userName,
-                              userAvatarUrl: userAvatarUrl,
-                              isCollapsed: sidebarCollapsed,
-                              onToggleSidebar: onToggleSidebar,
-                              logoWidget: logoWidget,
-                              appName: appName,
-                            ),
-                            // Main content
-                            Expanded(
-                              child: IndexedStack(
-                                index: selectedIndex.clamp(0, pages.length - 1),
-                                children: pages,
-                              ),
-                            ),
-                            // Right panel
-                            if (rightPanelBuilder != null)
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                  left: NeumorphicSpacing.md,
-                                  top: headerHeight,
-                                ),
-                                child: SizedBox(
-                                  width: panelWidth,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(20),
-                                    child: BackdropFilter(
-                                      filter: ImageFilter.blur(
-                                          sigmaX: 10, sigmaY: 10),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          gradient: LinearGradient(
-                                            begin: Alignment.topLeft,
-                                            end: Alignment.bottomRight,
-                                            colors: theme.isDark
-                                                ? [
-                                                    const Color(0x1AFFFFFF),
-                                                    const Color(0x0DFFFFFF),
-                                                  ]
-                                                : [
-                                                    const Color(0xB3FFFFFF),
-                                                    const Color(0x80FFFFFF),
-                                                  ],
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          border: Border.all(
-                                            color: theme.isDark
-                                                ? const Color(0x33FFFFFF)
-                                                : const Color(0x66FFFFFF),
-                                            width: 1,
-                                          ),
-                                        ),
-                                        padding: const EdgeInsets.all(
-                                            NeumorphicSpacing.md),
-                                        child: rightPanelBuilder!(context),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
-                        // Header actions
-                        if (headerActions != null && headerActions!.isNotEmpty)
-                          Positioned(
-                            top: 0,
-                            right: rightPanelBuilder != null
-                                ? panelWidth / 2 - 60
-                                : 0,
-                            child: SizedBox(
-                              height: 56,
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  for (int i = 0; i < headerActions!.length; i++) ...[
-                                    if (i > 0)
-                                      const SizedBox(width: NeumorphicSpacing.sm),
-                                    headerActions![i],
-                                  ],
-                                ],
-                              ),
-                            ),
+        child: SafeArea(child: content),
+      ),
+      // FAB for right panel if not shown inline
+      floatingActionButton: rightPanelBuilder != null && !showRightPanelInline
+          ? _GlassClimateControlFAB(
+              onPressed: () => _showClimateBottomSheet(context),
+            )
+          : null,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+    );
+  }
+
+  /// Large: Sidebar + content + right panel always inline
+  Widget _buildLargeLayout(BuildContext context, BoxConstraints constraints) {
+    final theme = GlassTheme.of(context);
+
+    Widget content = Padding(
+      padding: const EdgeInsets.all(NeumorphicSpacing.lg),
+      child: Column(
+        children: [
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Sidebar
+                GlassSidebar(
+                  selectedIndex: selectedIndex,
+                  onItemSelected: onIndexChanged,
+                  items: navItems,
+                  userName: userName,
+                  userAvatarUrl: userAvatarUrl,
+                  isCollapsed: sidebarCollapsed,
+                  onToggleSidebar: onToggleSidebar,
+                  logoWidget: logoWidget,
+                  appName: appName,
+                ),
+                const SizedBox(width: NeumorphicSpacing.lg),
+                // Main content - takes remaining space
+                Expanded(
+                  child: Column(
+                    children: [
+                      // Header actions row
+                      if (headerActions != null && headerActions!.isNotEmpty)
+                        SizedBox(
+                          height: 56,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              for (int i = 0;
+                                  i < headerActions!.length;
+                                  i++) ...[
+                                if (i > 0)
+                                  const SizedBox(width: NeumorphicSpacing.sm),
+                                headerActions![i],
+                              ],
+                            ],
                           ),
-                      ],
-                    ),
+                        ),
+                      // Page content
+                      Expanded(
+                        child: IndexedStack(
+                          index: selectedIndex.clamp(0, pages.length - 1),
+                          children: pages,
+                        ),
+                      ),
+                    ],
                   ),
-                  // Footer
-                  if (footerBuilder != null)
-                    Padding(
-                      padding: const EdgeInsets.only(top: NeumorphicSpacing.md),
-                      child: footerBuilder!(context),
-                    ),
+                ),
+                // Right panel always shown on large screens
+                if (rightPanelBuilder != null) ...[
+                  const SizedBox(width: NeumorphicSpacing.lg),
+                  SizedBox(
+                    width: rightPanelWidth,
+                    child: _buildRightPanelContainer(context),
+                  ),
                 ],
-              ),
+              ],
             ),
           ),
+          // Footer
+          if (footerBuilder != null) ...[
+            const SizedBox(height: NeumorphicSpacing.md),
+            footerBuilder!(context),
+          ],
+        ],
+      ),
+    );
+
+    // Apply max width constraint if set
+    if (maxContentWidth != null) {
+      content = Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: maxContentWidth!),
+          child: content,
+        ),
+      );
+    }
+
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: theme.colors.backgroundGradient,
+        ),
+        child: SafeArea(child: content),
+      ),
+    );
+  }
+
+  /// Build the right panel container with glass effect
+  Widget _buildRightPanelContainer(BuildContext context) {
+    final theme = GlassTheme.of(context);
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: theme.isDark
+                  ? [
+                      const Color(0x1AFFFFFF),
+                      const Color(0x0DFFFFFF),
+                    ]
+                  : [
+                      const Color(0xB3FFFFFF),
+                      const Color(0x80FFFFFF),
+                    ],
+            ),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: theme.isDark
+                  ? const Color(0x33FFFFFF)
+                  : const Color(0x66FFFFFF),
+              width: 1,
+            ),
+          ),
+          padding: const EdgeInsets.all(NeumorphicSpacing.md),
+          child: rightPanelBuilder!(context),
         ),
       ),
     );

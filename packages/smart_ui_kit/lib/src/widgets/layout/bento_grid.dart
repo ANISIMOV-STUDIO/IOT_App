@@ -6,10 +6,13 @@ import '../../theme/glass_theme.dart';
 enum BentoSize {
   /// 1x1 - small square
   square,
+
   /// 2x1 - wide horizontal
   wide,
+
   /// 1x2 - tall vertical
   tall,
+
   /// 2x2 - large square
   large,
 }
@@ -27,36 +30,49 @@ class BentoItem {
   });
 
   int get columnSpan => switch (size) {
-    BentoSize.square => 1,
-    BentoSize.wide => 2,
-    BentoSize.tall => 1,
-    BentoSize.large => 2,
-  };
+        BentoSize.square => 1,
+        BentoSize.wide => 2,
+        BentoSize.tall => 1,
+        BentoSize.large => 2,
+      };
 
   int get rowSpan => switch (size) {
-    BentoSize.square => 1,
-    BentoSize.wide => 1,
-    BentoSize.tall => 2,
-    BentoSize.large => 2,
-  };
+        BentoSize.square => 1,
+        BentoSize.wide => 1,
+        BentoSize.tall => 2,
+        BentoSize.large => 2,
+      };
 }
 
-/// Bento Grid layout widget
+/// Responsive Bento Grid layout widget
 /// Creates Apple-style mosaic layout with different sized cards
+/// Automatically adjusts columns based on available width
 class BentoGrid extends StatelessWidget {
   final List<BentoItem> items;
-  final int columns;
+
+  /// Number of columns. If null, auto-calculated from minCellWidth.
+  final int? columns;
+
+  /// Gap between cells
   final double gap;
 
-  /// Cell height. If null, auto-calculates to fill available height.
-  final double? cellHeight;
+  /// Cell height
+  final double cellHeight;
+
+  /// Minimum cell width for auto-column calculation
+  final double minCellWidth;
+
+  /// Maximum columns allowed
+  final int maxColumns;
 
   const BentoGrid({
     super.key,
     required this.items,
-    this.columns = 4,
+    this.columns,
     this.gap = 16,
-    this.cellHeight = 140,
+    this.cellHeight = 160,
+    this.minCellWidth = 280,
+    this.maxColumns = 4,
   });
 
   @override
@@ -64,34 +80,42 @@ class BentoGrid extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final availableWidth = constraints.maxWidth;
-        final availableHeight = constraints.maxHeight;
-        final cellWidth = (availableWidth - (gap * (columns - 1))) / columns;
+
+        // Auto-calculate columns based on available width
+        final effectiveColumns = columns ??
+            _calculateColumns(availableWidth, minCellWidth, gap, maxColumns);
+
+        // Ensure at least 1 column
+        final cols = effectiveColumns.clamp(1, maxColumns);
+
+        final cellWidth = (availableWidth - (gap * (cols - 1))) / cols;
 
         // Build grid using a simple flow algorithm
-        final List<_PlacedItem> placedItems = _placeItems(cellWidth);
+        final List<_PlacedItem> placedItems = _placeItems(cols);
 
         // Calculate number of rows
-        final maxRow = placedItems.fold<int>(0, (max, item) =>
-          item.row + item.bentoItem.rowSpan > max ? item.row + item.bentoItem.rowSpan : max);
+        final maxRow = placedItems.fold<int>(
+            0,
+            (max, item) => item.row + item.bentoItem.rowSpan > max
+                ? item.row + item.bentoItem.rowSpan
+                : max);
 
-        // Auto-calculate cell height if not specified and we have bounded height
-        final effectiveCellHeight = cellHeight ??
-            (availableHeight.isFinite && maxRow > 0
-                ? (availableHeight - (maxRow - 1) * gap) / maxRow
-                : 140);
-
-        final totalHeight = maxRow * effectiveCellHeight + (maxRow - 1) * gap;
+        final totalHeight = maxRow * cellHeight + (maxRow - 1) * gap;
 
         return SizedBox(
           height: totalHeight,
           child: Stack(
             children: placedItems.map((placed) {
-              final width = placed.bentoItem.columnSpan * cellWidth +
-                (placed.bentoItem.columnSpan - 1) * gap;
-              final height = placed.bentoItem.rowSpan * effectiveCellHeight +
-                (placed.bentoItem.rowSpan - 1) * gap;
+              // Clamp column span to available columns
+              final effectiveColSpan =
+                  placed.bentoItem.columnSpan.clamp(1, cols);
+
+              final width =
+                  effectiveColSpan * cellWidth + (effectiveColSpan - 1) * gap;
+              final height = placed.bentoItem.rowSpan * cellHeight +
+                  (placed.bentoItem.rowSpan - 1) * gap;
               final left = placed.col * (cellWidth + gap);
-              final top = placed.row * (effectiveCellHeight + gap);
+              final top = placed.row * (cellHeight + gap);
 
               return Positioned(
                 left: left,
@@ -107,19 +131,40 @@ class BentoGrid extends StatelessWidget {
     );
   }
 
-  List<_PlacedItem> _placeItems(double cellWidth) {
+  /// Calculate optimal number of columns based on available width
+  static int _calculateColumns(
+      double availableWidth, double minCellWidth, double gap, int maxColumns) {
+    // Start with max columns and reduce until cells fit
+    for (int cols = maxColumns; cols >= 1; cols--) {
+      final cellWidth = (availableWidth - (gap * (cols - 1))) / cols;
+      if (cellWidth >= minCellWidth) {
+        return cols;
+      }
+    }
+    return 1;
+  }
+
+  List<_PlacedItem> _placeItems(int cols) {
     // Grid occupancy tracker
     final grid = <int, Set<int>>{}; // row -> occupied columns
     final placed = <_PlacedItem>[];
 
     for (final item in items) {
-      final position = _findPosition(grid, item);
+      // Clamp column span to available columns
+      final effectiveColSpan = item.columnSpan.clamp(1, cols);
+      final adjustedItem = effectiveColSpan != item.columnSpan
+          ? _AdjustedBentoItem(item, effectiveColSpan)
+          : item;
+
+      final position = _findPosition(grid, adjustedItem, cols);
       placed.add(_PlacedItem(item, position.$1, position.$2));
 
       // Mark cells as occupied
       for (int r = position.$1; r < position.$1 + item.rowSpan; r++) {
         grid.putIfAbsent(r, () => <int>{});
-        for (int c = position.$2; c < position.$2 + item.columnSpan; c++) {
+        for (int c = position.$2;
+            c < position.$2 + effectiveColSpan.clamp(1, cols);
+            c++) {
           grid[r]!.add(c);
         }
       }
@@ -128,11 +173,14 @@ class BentoGrid extends StatelessWidget {
     return placed;
   }
 
-  (int row, int col) _findPosition(Map<int, Set<int>> grid, BentoItem item) {
+  (int row, int col) _findPosition(
+      Map<int, Set<int>> grid, BentoItem item, int cols) {
+    final effectiveColSpan = item.columnSpan.clamp(1, cols);
+
     int row = 0;
     while (true) {
-      for (int col = 0; col <= columns - item.columnSpan; col++) {
-        if (_canPlace(grid, row, col, item)) {
+      for (int col = 0; col <= cols - effectiveColSpan; col++) {
+        if (_canPlace(grid, row, col, item.rowSpan, effectiveColSpan, cols)) {
           return (row, col);
         }
       }
@@ -142,15 +190,27 @@ class BentoGrid extends StatelessWidget {
     return (0, 0);
   }
 
-  bool _canPlace(Map<int, Set<int>> grid, int row, int col, BentoItem item) {
-    for (int r = row; r < row + item.rowSpan; r++) {
-      for (int c = col; c < col + item.columnSpan; c++) {
-        if (c >= columns) return false;
+  bool _canPlace(Map<int, Set<int>> grid, int row, int col, int rowSpan,
+      int colSpan, int cols) {
+    for (int r = row; r < row + rowSpan; r++) {
+      for (int c = col; c < col + colSpan; c++) {
+        if (c >= cols) return false;
         if (grid[r]?.contains(c) ?? false) return false;
       }
     }
     return true;
   }
+}
+
+/// Helper class for adjusted column span
+class _AdjustedBentoItem extends BentoItem {
+  final int _adjustedColSpan;
+
+  _AdjustedBentoItem(BentoItem original, this._adjustedColSpan)
+      : super(size: original.size, child: original.child, order: original.order);
+
+  @override
+  int get columnSpan => _adjustedColSpan;
 }
 
 class _PlacedItem {
@@ -181,13 +241,10 @@ class BentoCard extends StatelessWidget {
     final theme = GlassTheme.of(context);
 
     final bgColor = backgroundColor ??
-        (theme.isDark
-            ? const Color(0x1AFFFFFF)
-            : const Color(0xB3FFFFFF));
+        (theme.isDark ? const Color(0x1AFFFFFF) : const Color(0xB3FFFFFF));
 
-    final borderColor = theme.isDark
-        ? const Color(0x33FFFFFF)
-        : const Color(0x66FFFFFF);
+    final borderColor =
+        theme.isDark ? const Color(0x33FFFFFF) : const Color(0x66FFFFFF);
 
     Widget card = ClipRRect(
       borderRadius: BorderRadius.circular(20),
@@ -207,7 +264,8 @@ class BentoCard extends StatelessWidget {
             border: Border.all(color: borderColor, width: 1),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: theme.isDark ? 0.3 : 0.08),
+                color:
+                    Colors.black.withValues(alpha: theme.isDark ? 0.3 : 0.08),
                 blurRadius: 20,
                 offset: const Offset(0, 8),
                 spreadRadius: -4,
