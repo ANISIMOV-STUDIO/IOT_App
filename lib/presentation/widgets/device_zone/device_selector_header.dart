@@ -229,58 +229,67 @@ class _DeviceTab extends StatelessWidget {
             ? AppColors.success
             : AppColors.warning;
 
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? AppColors.primary
-              : theme.colorScheme.card,
+    return Semantics(
+      label: 'ПВ-$index${!device.isOnline ? ", офлайн" : ""}',
+      button: true,
+      selected: isSelected,
+      child: Material(
+        color: isSelected ? AppColors.primary : theme.colorScheme.card,
+        borderRadius: BorderRadius.circular(8),
+        child: InkWell(
+          onTap: onTap,
           borderRadius: BorderRadius.circular(8),
-          border: isSelected
-              ? null
-              : Border.all(
-                  color: theme.colorScheme.border,
+          focusColor: AppColors.primary.withValues(alpha: 0.2),
+          hoverColor: theme.colorScheme.muted.withValues(alpha: 0.3),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              border: isSelected
+                  ? null
+                  : Border.all(
+                      color: theme.colorScheme.border,
+                    ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Status dot
+                Container(
+                  width: 6,
+                  height: 6,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: isSelected ? Colors.white.withValues(alpha: 0.9) : statusColor,
+                  ),
                 ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Status dot
-            Container(
-              width: 6,
-              height: 6,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: isSelected ? Colors.white.withValues(alpha: 0.9) : statusColor,
-              ),
-            ),
-            const SizedBox(width: 6),
+                const SizedBox(width: 6),
 
-            // Device label
-            Text(
-              'ПВ-$index',
-              style: TextStyle(
-                fontSize: 12,
-                color: isSelected ? Colors.white : theme.colorScheme.foreground,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
+                // Device label
+                Text(
+                  'ПВ-$index',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: isSelected ? Colors.white : theme.colorScheme.foreground,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
 
-            // Offline indicator
-            if (!device.isOnline) ...[
-              const SizedBox(width: 4),
-              Icon(
-                Icons.cloud_off,
-                size: 12,
-                color: isSelected
-                    ? Colors.white.withValues(alpha: 0.7)
-                    : theme.colorScheme.mutedForeground,
-              ),
-            ],
-          ],
+                // Offline indicator
+                if (!device.isOnline) ...[
+                  const SizedBox(width: 4),
+                  Icon(
+                    Icons.cloud_off,
+                    size: 12,
+                    color: isSelected
+                        ? Colors.white.withValues(alpha: 0.7)
+                        : theme.colorScheme.mutedForeground,
+                  ),
+                ],
+              ],
+            ),
+          ),
         ),
       ),
     );

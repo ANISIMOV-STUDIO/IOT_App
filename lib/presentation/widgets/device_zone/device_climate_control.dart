@@ -299,10 +299,10 @@ class _ModeSelector extends StatelessWidget {
   }
 }
 
-/// Mode button - icon only (mode name shown in temperature display)
+/// Mode button - icon only with keyboard accessibility
 class _ModeButton extends StatelessWidget {
   final IconData icon;
-  final String label; // Kept for tooltip/accessibility
+  final String label; // For tooltip and screen readers
   final Color color;
   final bool isSelected;
   final VoidCallback? onTap;
@@ -320,27 +320,39 @@ class _ModeButton extends StatelessWidget {
     final theme = ShadTheme.of(context);
 
     return Expanded(
-      child: Tooltip(
-        message: label,
-        child: GestureDetector(
-          onTap: onTap,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            decoration: BoxDecoration(
-              color: isSelected
-                  ? color.withValues(alpha: 0.15)
-                  : theme.colorScheme.muted.withValues(alpha: 0.3),
+      child: Semantics(
+        label: label,
+        button: true,
+        selected: isSelected,
+        child: Tooltip(
+          message: label,
+          child: Material(
+            color: Colors.transparent,
+            borderRadius: BorderRadius.circular(8),
+            child: InkWell(
+              onTap: onTap,
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(
-                color: isSelected ? color : Colors.transparent,
-                width: 1.5,
+              focusColor: color.withValues(alpha: 0.2),
+              hoverColor: theme.colorScheme.muted.withValues(alpha: 0.2),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? color.withValues(alpha: 0.15)
+                      : theme.colorScheme.muted.withValues(alpha: 0.3),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: isSelected ? color : Colors.transparent,
+                    width: 1.5,
+                  ),
+                ),
+                child: Icon(
+                  icon,
+                  size: 22,
+                  color: isSelected ? color : theme.colorScheme.mutedForeground,
+                ),
               ),
-            ),
-            child: Icon(
-              icon,
-              size: 22,
-              color: isSelected ? color : theme.colorScheme.mutedForeground,
             ),
           ),
         ),

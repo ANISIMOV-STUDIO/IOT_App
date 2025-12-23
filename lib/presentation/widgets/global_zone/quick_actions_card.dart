@@ -157,69 +157,79 @@ class _QuickActionButton extends StatelessWidget {
     final theme = ShadTheme.of(context);
     final color = action.color ?? AppColors.primary;
 
-    return GestureDetector(
-      onTap: onPressed,
-      child: Container(
-        decoration: BoxDecoration(
-          color: theme.colorScheme.muted.withValues(alpha: 0.3),
+    return Semantics(
+      label: action.label,
+      button: true,
+      child: Material(
+        color: theme.colorScheme.muted.withValues(alpha: 0.3),
+        borderRadius: BorderRadius.circular(12),
+        child: InkWell(
+          onTap: onPressed,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: theme.colorScheme.border,
-          ),
-        ),
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final isCompact = constraints.maxHeight < 60;
+          focusColor: color.withValues(alpha: 0.15),
+          hoverColor: color.withValues(alpha: 0.1),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: theme.colorScheme.border,
+              ),
+            ),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final isCompact = constraints.maxHeight < 60;
 
-            if (isCompact) {
-              // Horizontal layout for very small heights
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(action.icon, color: color, size: 18),
-                  const SizedBox(width: 4),
-                  Flexible(
-                    child: Text(
+                if (isCompact) {
+                  // Horizontal layout for very small heights
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(action.icon, color: color, size: 18),
+                      const SizedBox(width: 4),
+                      Flexible(
+                        child: Text(
+                          action.label,
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: color,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  );
+                }
+
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Icon container
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: color.withValues(alpha: 0.1),
+                      ),
+                      child: Icon(action.icon, color: color, size: 18),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
                       action.label,
                       style: TextStyle(
                         fontSize: 10,
                         color: color,
                         fontWeight: FontWeight.w500,
                       ),
+                      textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                ],
-              );
-            }
-
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Icon container
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: color.withValues(alpha: 0.1),
-                  ),
-                  child: Icon(action.icon, color: color, size: 18),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  action.label,
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: color,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  textAlign: TextAlign.center,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            );
-          },
+                  ],
+                );
+              },
+            ),
+          ),
         ),
       ),
     );

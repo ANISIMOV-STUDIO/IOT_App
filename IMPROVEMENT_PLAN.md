@@ -98,7 +98,7 @@
 
 ### 7.2 Accessibility
 - [x] **P7-4**: Contrast - warning color изменён на amber-600 (#D97706) для WCAG AA
-- [~] **P7-5**: Focus states - navigation InkWell ✓, другие элементы требуют доработки
+- [x] **P7-5**: Focus states - все ключевые элементы (nav, mode buttons, tabs, quick actions)
 - [x] **P7-6**: Touch targets - кнопки 64x64 (power), иконки 44x44
 
 ---
@@ -116,8 +116,8 @@
 ## PROGRESS TRACKING
 
 Started: 2025-12-23
-Current Phase: Complete
-Completed: 39/40 (97.5% - P7-5 focus states частично)
+Current Phase: ✅ COMPLETE
+Completed: 40/40 (100% - все пункты выполнены)
 
 ---
 
