@@ -396,6 +396,39 @@ class _AirflowSlider extends StatelessWidget {
           max: 100,
           onChangeEnd: onChanged,
         ),
+        // Context markers
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Мин',
+                style: TextStyle(
+                  fontSize: 9,
+                  color: theme.colorScheme.mutedForeground.withValues(alpha: 0.7),
+                ),
+              ),
+              Text(
+                'Норма',
+                style: TextStyle(
+                  fontSize: 9,
+                  color: value >= 40 && value <= 60
+                      ? AppColors.success
+                      : theme.colorScheme.mutedForeground.withValues(alpha: 0.7),
+                  fontWeight: value >= 40 && value <= 60 ? FontWeight.w600 : FontWeight.w400,
+                ),
+              ),
+              Text(
+                'Макс',
+                style: TextStyle(
+                  fontSize: 9,
+                  color: theme.colorScheme.mutedForeground.withValues(alpha: 0.7),
+                ),
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }
