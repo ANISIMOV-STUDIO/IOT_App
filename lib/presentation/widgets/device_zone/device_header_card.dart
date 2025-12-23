@@ -1,4 +1,4 @@
-/// Device header card with status and power toggle
+/// Device power control card - compact toggle with status
 library;
 
 import 'package:flutter/material.dart';
@@ -7,7 +7,8 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 import '../../../core/theme/app_theme.dart';
 import '../common/glowing_status_dot.dart';
 
-/// Header card showing device name, status, and power control
+/// Compact power control card - toggle + status only
+/// Device name is shown in DeviceSelectorHeader, no need to repeat
 class DeviceHeaderCard extends StatelessWidget {
   final String deviceName;
   final String? deviceType;
@@ -27,92 +28,66 @@ class DeviceHeaderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = ShadTheme.of(context);
+    final statusColor = !isOnline
+        ? theme.colorScheme.mutedForeground
+        : isOn
+            ? AppColors.success
+            : AppColors.warning;
 
     return ShadCard(
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final isSmall = constraints.maxHeight < 120;
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // Large power button
+          GestureDetector(
+            onTap: isOnline && onPowerChanged != null
+                ? () => onPowerChanged!(!isOn)
+                : null,
+            child: Container(
+              width: 64,
+              height: 64,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: isOn
+                    ? AppColors.primary.withValues(alpha: 0.15)
+                    : theme.colorScheme.muted.withValues(alpha: 0.3),
+                border: Border.all(
+                  color: isOn ? AppColors.primary : theme.colorScheme.border,
+                  width: 2,
+                ),
+              ),
+              child: Icon(
+                Icons.power_settings_new,
+                size: 28,
+                color: isOn ? AppColors.primary : theme.colorScheme.mutedForeground,
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
 
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          // Status row
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Power icon
-                  Container(
-                    padding: EdgeInsets.all(isSmall ? 6 : 8),
-                    decoration: BoxDecoration(
-                      color: (isOn ? AppColors.primary : Colors.grey)
-                          .withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Icon(
-                      Icons.power_settings_new,
-                      color: isOn ? AppColors.primary : Colors.grey,
-                      size: isSmall ? 16 : 20,
-                    ),
-                  ),
-                  // Power toggle
-                  ShadSwitch(
-                    value: isOn,
-                    onChanged: isOnline ? onPowerChanged : null,
-                  ),
-                ],
+              GlowingStatusDot(
+                color: statusColor,
+                isGlowing: isOn && isOnline,
+                size: 8,
               ),
-              const Spacer(),
-              // Device name
+              const SizedBox(width: 6),
               Text(
-                deviceName,
+                _statusLabel,
                 style: TextStyle(
-                  fontSize: isSmall ? 14 : 16,
+                  fontSize: 13,
                   fontWeight: FontWeight.w600,
-                  color: theme.colorScheme.foreground,
+                  color: statusColor,
                 ),
-                overflow: TextOverflow.ellipsis,
-              ),
-              if (deviceType != null && !isSmall) ...[
-                const SizedBox(height: 2),
-                Text(
-                  deviceType!,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: theme.colorScheme.mutedForeground,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-              SizedBox(height: isSmall ? 2 : 4),
-              // Status indicator
-              Row(
-                children: [
-                  GlowingStatusDot(
-                    color: !isOnline
-                        ? theme.colorScheme.mutedForeground
-                        : isOn
-                            ? AppColors.success
-                            : AppColors.warning,
-                    isGlowing: isOn && isOnline,
-                    size: isSmall ? 6 : 8,
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    _statusLabel,
-                    style: TextStyle(
-                      fontSize: isSmall ? 10 : 12,
-                      color: !isOnline
-                          ? theme.colorScheme.mutedForeground
-                          : isOn
-                              ? AppColors.success
-                              : AppColors.warning,
-                    ),
-                  ),
-                ],
               ),
             ],
-          );
-        },
+          ),
+        ],
       ),
     );
   }

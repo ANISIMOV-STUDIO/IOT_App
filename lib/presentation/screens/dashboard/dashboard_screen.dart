@@ -119,8 +119,6 @@ class _DesktopDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = ShadTheme.of(context);
-
     return _MainContent(
       title: strings.dashboard,
       child: Column(
@@ -136,39 +134,8 @@ class _DesktopDashboard extends StatelessWidget {
             ),
           ),
 
-          // === ZONE DIVIDER ===
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Row(
-              children: [
-                Expanded(child: Divider(color: theme.colorScheme.border)),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.dashboard_outlined,
-                        size: 16,
-                        color: theme.colorScheme.mutedForeground,
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        'ОБЩИЕ ДАННЫЕ',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: theme.colorScheme.mutedForeground,
-                          letterSpacing: 1,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(child: Divider(color: theme.colorScheme.border)),
-              ],
-            ),
-          ),
+          // Zone spacing
+          const SizedBox(height: 8),
 
           // === GLOBAL ZONE ===
           Expanded(
@@ -206,26 +173,23 @@ class _DesktopDashboard extends StatelessWidget {
 
 /// Simple responsive grid for bento-style layout
 class _ResponsiveGrid extends StatelessWidget {
-  final List<Widget> children;
-  final double gap;
-  final double minCellWidth;
+  static const double _gap = 16;
+  static const double _minCellWidth = 300;
 
-  const _ResponsiveGrid({
-    required this.children,
-    this.gap = 16,
-    this.minCellWidth = 300,
-  });
+  final List<Widget> children;
+
+  const _ResponsiveGrid({required this.children});
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final columns = (constraints.maxWidth / minCellWidth).floor().clamp(1, 4);
+        final columns = (constraints.maxWidth / _minCellWidth).floor().clamp(1, 4);
         return Wrap(
-          spacing: gap,
-          runSpacing: gap,
+          spacing: _gap,
+          runSpacing: _gap,
           children: children.map((child) {
-            final width = (constraints.maxWidth - (gap * (columns - 1))) / columns;
+            final width = (constraints.maxWidth - (_gap * (columns - 1))) / columns;
             return SizedBox(width: width, child: child);
           }).toList(),
         );
@@ -248,9 +212,9 @@ class _DeviceZoneGrid extends StatelessWidget {
     return SingleChildScrollView(
       child: _ResponsiveGrid(
         children: [
-          // Device status
+          // Power control
           SizedBox(
-            height: 160,
+            height: 130,
             child: DeviceHeaderCard(
               deviceName: climate?.deviceName ?? 'HVAC',
               deviceType: _getDeviceType(state),
@@ -261,39 +225,15 @@ class _DeviceZoneGrid extends StatelessWidget {
             ),
           ),
 
-          // Temperature sensor
+          // Environment metrics (Temperature + Humidity + CO2)
           SizedBox(
-            height: 160,
-            child: SensorCard(
-              icon: Icons.thermostat,
-              value: climate?.currentTemperature.toStringAsFixed(1) ?? '--',
-              unit: '°C',
-              label: strings.temperature,
-              color: AppColors.heating,
-            ),
-          ),
-
-          // Humidity sensor
-          SizedBox(
-            height: 160,
-            child: SensorCard(
-              icon: Icons.water_drop,
-              value: climate?.humidity.toStringAsFixed(0) ?? '--',
-              unit: '%',
-              label: strings.humidity,
-              color: AppColors.cooling,
-            ),
-          ),
-
-          // CO2 sensor
-          SizedBox(
-            height: 160,
-            child: SensorCard(
-              icon: Icons.cloud_outlined,
-              value: '${climate?.co2Ppm ?? '--'}',
-              unit: 'ppm',
-              label: 'CO₂',
-              color: _co2Color(climate?.co2Ppm),
+            height: 130,
+            child: EnvironmentCard(
+              temperature: climate?.currentTemperature,
+              humidity: climate?.humidity.toInt(),
+              co2: climate?.co2Ppm,
+              temperatureLabel: strings.temperature,
+              humidityLabel: strings.humidity,
             ),
           ),
 
@@ -305,15 +245,6 @@ class _DeviceZoneGrid extends StatelessWidget {
               currentDeviceId: state.selectedHvacDeviceId,
               currentDeviceName: climate?.deviceName,
               title: strings.schedule,
-            ),
-          ),
-
-          // Alerts
-          SizedBox(
-            height: 160,
-            child: DeviceAlertsCard(
-              alerts: _getMockDeviceAlerts(state),
-              title: strings.notifications,
             ),
           ),
 
@@ -350,14 +281,6 @@ class _DeviceZoneGrid extends StatelessWidget {
     return device.isOnline;
   }
 
-  Color _co2Color(int? ppm) {
-    if (ppm == null) return AppColors.airGood;
-    if (ppm < 600) return AppColors.airExcellent;
-    if (ppm < 800) return AppColors.airGood;
-    if (ppm < 1000) return AppColors.airModerate;
-    return AppColors.airPoor;
-  }
-
   List<DeviceSchedule> _getMockSchedules() => [
         const DeviceSchedule(
           id: '1',
@@ -386,19 +309,6 @@ class _DeviceZoneGrid extends StatelessWidget {
         ),
       ];
 
-  List<DeviceAlert> _getMockDeviceAlerts(DashboardState state) => [
-        DeviceAlert(
-          id: '1',
-          title: 'Замена фильтра',
-          message: 'Рекомендуется заменить фильтр',
-          timestamp: DateTime.now().subtract(const Duration(days: 1)),
-          priority: NotificationPriority.normal,
-          deviceId: state.selectedHvacDeviceId ?? 'zilon-1',
-          deviceName: state.climate?.deviceName ?? 'HVAC',
-          type: DeviceAlertType.filterChange,
-          dueDate: DateTime.now().add(const Duration(days: 14)),
-        ),
-      ];
 }
 
 /// Compact system info card

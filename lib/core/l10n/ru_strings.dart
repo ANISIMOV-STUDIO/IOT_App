@@ -83,7 +83,7 @@ class RuStrings implements AppStrings {
   // СТАТИСТИКА / ЭНЕРГИЯ
   // ============================================
   @override String get statistics => 'Статистика';
-  @override String get usageStatus => 'Статистика использования';
+  @override String get usageStatus => 'Энергия';
   @override String get energyUsage => 'Потребление энергии';
   @override String get consumed => 'Потрачено';
   @override String get workTime => 'Время работы';

@@ -299,9 +299,10 @@ class _ModeSelector extends StatelessWidget {
   }
 }
 
+/// Mode button - icon only (mode name shown in temperature display)
 class _ModeButton extends StatelessWidget {
   final IconData icon;
-  final String label;
+  final String label; // Kept for tooltip/accessibility
   final Color color;
   final bool isSelected;
   final VoidCallback? onTap;
@@ -319,42 +320,28 @@ class _ModeButton extends StatelessWidget {
     final theme = ShadTheme.of(context);
 
     return Expanded(
-      child: GestureDetector(
-        onTap: onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          decoration: BoxDecoration(
-            color: isSelected
-                ? color.withValues(alpha: 0.15)
-                : theme.colorScheme.muted.withValues(alpha: 0.3),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              color: isSelected ? color : Colors.transparent,
-              width: 1.5,
+      child: Tooltip(
+        message: label,
+        child: GestureDetector(
+          onTap: onTap,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            decoration: BoxDecoration(
+              color: isSelected
+                  ? color.withValues(alpha: 0.15)
+                  : theme.colorScheme.muted.withValues(alpha: 0.3),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                color: isSelected ? color : Colors.transparent,
+                width: 1.5,
+              ),
             ),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                icon,
-                size: 20,
-                color: isSelected ? color : theme.colorScheme.mutedForeground,
-              ),
-              const SizedBox(height: 4),
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                  color: isSelected ? color : theme.colorScheme.mutedForeground,
-                ),
-                textAlign: TextAlign.center,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
+            child: Icon(
+              icon,
+              size: 22,
+              color: isSelected ? color : theme.colorScheme.mutedForeground,
+            ),
           ),
         ),
       ),

@@ -79,7 +79,7 @@ class EnStrings implements AppStrings {
   // STATISTICS / ENERGY
   // ============================================
   @override String get statistics => 'Statistics';
-  @override String get usageStatus => 'Usage Status';
+  @override String get usageStatus => 'Energy';
   @override String get energyUsage => 'Energy Usage';
   @override String get consumed => 'Consumed';
   @override String get workTime => 'Work Time';
