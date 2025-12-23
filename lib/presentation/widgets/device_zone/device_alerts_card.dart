@@ -47,7 +47,9 @@ class DeviceAlertsCard extends StatelessWidget {
                 ),
               ),
               if (unreadCount > 0)
-                ShadBadge.destructive(
+                ShadBadge(
+                  backgroundColor: AppColors.warning.withValues(alpha: 0.15),
+                  foregroundColor: AppColors.warning,
                   child: Text('$unreadCount'),
                 ),
             ],

@@ -805,60 +805,31 @@ class _ErrorView extends StatelessWidget {
   }
 }
 
-/// Footer
+/// Footer - clean and minimal
 class _Footer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = ShadTheme.of(context);
-    final now = DateTime.now();
-    final syncTime =
-        '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        // Weather
-        Row(
-          children: [
-            const Icon(Icons.wb_sunny_outlined, size: 16, color: AppColors.warning),
-            const SizedBox(width: 6),
-            Text(
-              '+5°C',
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-                color: theme.colorScheme.foreground,
-              ),
-            ),
-            const SizedBox(width: 4),
-            Text(
-              'На улице',
-              style: TextStyle(
-                fontSize: 13,
-                color: theme.colorScheme.mutedForeground,
-              ),
-            ),
-          ],
-        ),
-        // Sync time
-        Row(
-          children: [
-            Icon(Icons.sync, size: 14, color: theme.colorScheme.mutedForeground),
-            const SizedBox(width: 4),
-            Text(
-              'Синхронизировано в $syncTime',
-              style: TextStyle(
-                fontSize: 12,
-                color: theme.colorScheme.mutedForeground,
-              ),
-            ),
-          ],
-        ),
-        // Version
+        // Weather only - the most useful info for HVAC context
+        const Icon(Icons.wb_sunny_outlined, size: 16, color: AppColors.warning),
+        const SizedBox(width: 6),
         Text(
-          'BREEZ Home v1.0.0',
+          '+5°C',
           style: TextStyle(
-            fontSize: 12,
+            fontSize: 13,
+            fontWeight: FontWeight.w600,
+            color: theme.colorScheme.foreground,
+          ),
+        ),
+        const SizedBox(width: 4),
+        Text(
+          'На улице',
+          style: TextStyle(
+            fontSize: 13,
             color: theme.colorScheme.mutedForeground,
           ),
         ),

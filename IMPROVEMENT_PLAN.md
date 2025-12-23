@@ -39,7 +39,7 @@
 - [x] **P3-1**: Semantic colors: success/warning/error/info - определены
 - [x] **P3-2**: Palette упрощена: удалены airExcellent/airModerate/airPoor → используются status colors
 - [x] **P3-3**: GlowingStatusDot - уменьшена яркость (alpha 0.6→0.3, spread 0.3→0.1)
-- [ ] **P3-4**: Badge colors - красный только для errors/alerts
+- [x] **P3-4**: Badge colors - alerts badge изменён с destructive на warning
 
 ### 3.2 Визуальная консистентность
 - [ ] **P3-5**: CO₂ gauge - редизайн в стиле остальных компонентов
@@ -75,12 +75,12 @@
 
 ---
 
-## PHASE 6: FOOTER & CHROME - Убрать шум
+## PHASE 6: FOOTER & CHROME - Убрать шум ✅
 
 ### 6.1 Footer cleanup
-- [ ] **P6-1**: Погода (+5°C) - переместить в более видное место или убрать
-- [ ] **P6-2**: "Синхронизировано в XX:XX" - убрать или сделать subtle
-- [ ] **P6-3**: Версия v1.0.0 - убрать из основного UI (оставить в Settings)
+- [x] **P6-1**: Погода - оставлена как единственный элемент (контекст для HVAC)
+- [x] **P6-2**: Синхронизация - удалена (шум)
+- [x] **P6-3**: Версия - удалена (перенести в Settings)
 
 ### 6.2 Header/Sidebar polish
 - [ ] **P6-4**: Аватар - добавить настоящее фото или улучшить placeholder
@@ -116,8 +116,8 @@
 ## PROGRESS TRACKING
 
 Started: 2025-12-23
-Current Phase: 3
-Completed: 16/40 (Phase 1-2 done + P3-1,2,3)
+Current Phase: 6
+Completed: 20/40 (Phase 1-2-3 + P6-1,2,3)
 
 ---
 
