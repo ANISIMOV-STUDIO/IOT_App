@@ -406,8 +406,8 @@ class _DevicesGrid extends StatelessWidget {
         id: d.id.toString(),
         label: d.name ?? 'Device',
         icon: Icons.air,
-        isOn: d.isActive ?? false,
-        isOnline: d.isOnline ?? true,
+        isOn: d.isOn,
+        isOnline: true,
       );
     }).toList();
   }
