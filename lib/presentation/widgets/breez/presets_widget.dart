@@ -3,28 +3,10 @@ library;
 
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../domain/entities/preset_data.dart';
 import 'breez_card.dart';
 
-/// Preset data
-class PresetData {
-  final String id;
-  final String name;
-  final String description;
-  final IconData icon;
-  final int temperature;
-  final int airflow;
-  final Color? color;
-
-  const PresetData({
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.icon,
-    required this.temperature,
-    required this.airflow,
-    this.color,
-  });
-}
+export '../../../domain/entities/preset_data.dart';
 
 /// Presets widget - icon-only horizontal layout
 class PresetsWidget extends StatelessWidget {
@@ -166,64 +148,4 @@ class _IconPresetState extends State<_IconPreset> {
       ),
     );
   }
-}
-
-/// Default presets list
-class DefaultPresets {
-  static const List<PresetData> all = [
-    PresetData(
-      id: 'comfort',
-      name: 'Комфорт',
-      description: 'Оптимальный режим',
-      icon: Icons.spa_outlined,
-      temperature: 22,
-      airflow: 60,
-      color: Color(0xFF2D7DFF),
-    ),
-    PresetData(
-      id: 'eco',
-      name: 'Эко',
-      description: 'Энергосбережение',
-      icon: Icons.eco_outlined,
-      temperature: 20,
-      airflow: 40,
-      color: Color(0xFF22C55E),
-    ),
-    PresetData(
-      id: 'night',
-      name: 'Ночь',
-      description: 'Тихий режим',
-      icon: Icons.nightlight_outlined,
-      temperature: 19,
-      airflow: 30,
-      color: Color(0xFF8B5CF6),
-    ),
-    PresetData(
-      id: 'turbo',
-      name: 'Турбо',
-      description: 'Максимальная мощность',
-      icon: Icons.bolt_outlined,
-      temperature: 18,
-      airflow: 100,
-      color: Color(0xFFF97316),
-    ),
-    PresetData(
-      id: 'away',
-      name: 'Нет дома',
-      description: 'Минимальный режим',
-      icon: Icons.home_outlined,
-      temperature: 16,
-      airflow: 20,
-      color: Color(0xFF64748B),
-    ),
-    PresetData(
-      id: 'sleep',
-      name: 'Сон',
-      description: 'Комфортный сон',
-      icon: Icons.bedtime_outlined,
-      temperature: 20,
-      airflow: 25,
-      color: Color(0xFF6366F1),
-    ),
-  ];
 }

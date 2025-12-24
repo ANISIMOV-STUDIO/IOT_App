@@ -4,21 +4,10 @@ library;
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../domain/entities/graph_data.dart';
 import 'breez_card.dart';
 
-/// Graph data point
-class GraphDataPoint {
-  final String label;
-  final double value;
-
-  const GraphDataPoint({
-    required this.label,
-    required this.value,
-  });
-}
-
-/// Graph metric type
-enum GraphMetric { temperature, humidity, airflow }
+export '../../../domain/entities/graph_data.dart';
 
 /// Operation graph widget with smooth curve
 class OperationGraph extends StatefulWidget {

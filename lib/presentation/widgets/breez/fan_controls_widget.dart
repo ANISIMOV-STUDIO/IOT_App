@@ -4,7 +4,6 @@ library;
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import 'breez_card.dart';
-import 'airflow_slider.dart';
 
 /// Compact fan controls widget with supply and exhaust sliders
 class FanControlsWidget extends StatelessWidget {

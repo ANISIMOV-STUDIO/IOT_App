@@ -3,29 +3,10 @@ library;
 
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../domain/entities/unit_notification.dart';
 import 'breez_card.dart';
 
-/// Notification item data
-class UnitNotification {
-  final String id;
-  final String title;
-  final String message;
-  final NotificationType type;
-  final DateTime timestamp;
-  final bool isRead;
-
-  const UnitNotification({
-    required this.id,
-    required this.title,
-    required this.message,
-    required this.type,
-    required this.timestamp,
-    this.isRead = false,
-  });
-}
-
-/// Notification type
-enum NotificationType { info, warning, error, success }
+export '../../../domain/entities/unit_notification.dart';
 
 /// Unit notifications widget
 class UnitNotificationsWidget extends StatelessWidget {

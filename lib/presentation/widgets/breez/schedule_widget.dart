@@ -3,26 +3,10 @@ library;
 
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../domain/entities/schedule_entry.dart';
 import 'breez_card.dart';
 
-/// Schedule entry data
-class ScheduleEntry {
-  final String day;
-  final String mode;
-  final String timeRange;
-  final int tempDay;
-  final int tempNight;
-  final bool isActive;
-
-  const ScheduleEntry({
-    required this.day,
-    required this.mode,
-    required this.timeRange,
-    required this.tempDay,
-    required this.tempNight,
-    this.isActive = false,
-  });
-}
+export '../../../domain/entities/schedule_entry.dart';
 
 /// Weekly schedule widget
 class ScheduleWidget extends StatelessWidget {

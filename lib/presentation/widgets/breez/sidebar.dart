@@ -47,7 +47,7 @@ class Sidebar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 80,
-      margin: const EdgeInsets.all(12),
+      margin: const EdgeInsets.only(left: 20, top: 20, bottom: 20),
       decoration: BoxDecoration(
         color: AppColors.darkCard,
         borderRadius: BorderRadius.circular(24),
