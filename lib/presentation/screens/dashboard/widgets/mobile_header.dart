@@ -17,6 +17,7 @@ class MobileHeader extends StatelessWidget {
   final VoidCallback? onAddUnit;
   final bool isDark;
   final VoidCallback? onThemeToggle;
+  final VoidCallback? onMenuTap;
 
   const MobileHeader({
     super.key,
@@ -26,6 +27,7 @@ class MobileHeader extends StatelessWidget {
     this.onAddUnit,
     required this.isDark,
     this.onThemeToggle,
+    this.onMenuTap,
   });
 
   @override
@@ -34,9 +36,15 @@ class MobileHeader extends StatelessWidget {
       padding: EdgeInsets.all(AppSpacing.sm),
       child: Column(
         children: [
-          // Top row: Logo + controls
+          // Top row: Menu + Logo + controls
           Row(
             children: [
+              // Menu button
+              HeaderIconButton(
+                icon: Icons.menu,
+                onTap: onMenuTap,
+              ),
+              const SizedBox(width: 12),
               // Logo
               const _Logo(),
               const Spacer(),

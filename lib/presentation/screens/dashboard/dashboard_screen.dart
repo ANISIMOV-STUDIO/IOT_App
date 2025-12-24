@@ -26,8 +26,10 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   int _activeUnitIndex = 0;
+  int _sidebarIndex = 0;
   late List<UnitState> _units;
   late ThemeService _themeService;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   // Repositories
   late ScheduleRepository _scheduleRepository;
@@ -131,7 +133,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final isDesktop = width > 900;
 
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: isDark ? AppColors.darkBg : AppColors.lightBg,
+      drawer: isDesktop
+          ? null
+          : Drawer(
+              backgroundColor: AppColors.darkCard,
+              child: Sidebar(
+                selectedIndex: _sidebarIndex,
+                onItemSelected: (index) {
+                  setState(() => _sidebarIndex = index);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ),
       body: SafeArea(
         child: isDesktop ? _buildDesktopLayout(isDark) : _buildMobileLayout(isDark, width),
       ),
@@ -182,6 +197,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           onAddUnit: _showAddUnitDialog,
           isDark: isDark,
           onThemeToggle: _toggleTheme,
+          onMenuTap: () => _scaffoldKey.currentState?.openDrawer(),
         ),
 
         // Content (no footer)
