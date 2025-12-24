@@ -40,46 +40,57 @@ class ScheduleWidget extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
-              MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: GestureDetector(
-                  onTap: onSeeAll,
-                  child: Text(
-                    'Все',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.accent,
+              if (entries.length > 3)
+                MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: GestureDetector(
+                    onTap: onSeeAll,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: AppColors.accent.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        'Все (+${entries.length - 3})',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.accent,
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
             ],
           ),
 
           const SizedBox(height: 16),
 
-          // Schedule entries
+          // Schedule entries (no scroll, max 3 visible)
           Expanded(
-            child: ListView.separated(
-              itemCount: entries.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 8),
-              itemBuilder: (context, index) {
-                final entry = entries[index];
-                return _ScheduleRow(
-                  entry: entry,
-                  onTap: () => onEntryTap?.call(index),
+            child: Column(
+              children: entries.take(3).toList().asMap().entries.map((entry) {
+                final index = entry.key;
+                final scheduleEntry = entry.value;
+                return Padding(
+                  padding: EdgeInsets.only(bottom: index < 2 ? 8 : 0),
+                  child: _ScheduleRow(
+                    entry: scheduleEntry,
+                    onTap: () => onEntryTap?.call(index),
+                  ),
                 );
-              },
+              }).toList(),
             ),
           ),
 
-          const SizedBox(height: 12),
-
           // Active schedule highlight
           if (entries.any((e) => e.isActive))
-            _ActiveScheduleCard(
-              entry: entries.firstWhere((e) => e.isActive),
+            Padding(
+              padding: const EdgeInsets.only(top: 12),
+              child: _ActiveScheduleCard(
+                entry: entries.firstWhere((e) => e.isActive),
+              ),
             ),
         ],
       ),

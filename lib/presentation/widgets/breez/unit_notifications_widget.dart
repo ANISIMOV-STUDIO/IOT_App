@@ -73,25 +73,27 @@ class UnitNotificationsWidget extends StatelessWidget {
 
           const SizedBox(height: 16),
 
-          // Notifications list
+          // Notifications list (no scroll, max 3 visible)
           Expanded(
             child: notifications.isEmpty
                 ? _EmptyState()
-                : ListView.separated(
-                    itemCount: notifications.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 8),
-                    itemBuilder: (context, index) {
-                      final notification = notifications[index];
-                      return _NotificationCard(
-                        notification: notification,
-                        onTap: () => onNotificationTap?.call(notification.id),
+                : Column(
+                    children: notifications.take(3).toList().asMap().entries.map((entry) {
+                      final index = entry.key;
+                      final notification = entry.value;
+                      return Padding(
+                        padding: EdgeInsets.only(bottom: index < 2 ? 8 : 0),
+                        child: _NotificationCard(
+                          notification: notification,
+                          onTap: () => onNotificationTap?.call(notification.id),
+                        ),
                       );
-                    },
+                    }).toList(),
                   ),
           ),
 
-          // See all button
-          if (notifications.isNotEmpty) ...[
+          // See all button (48px min touch target)
+          if (notifications.length > 3) ...[
             const SizedBox(height: 12),
             MouseRegion(
               cursor: SystemMouseCursors.click,
@@ -99,7 +101,7 @@ class UnitNotificationsWidget extends StatelessWidget {
                 onTap: onSeeAll,
                 child: Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  height: 48, // Minimum touch target
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.03),
                     borderRadius: BorderRadius.circular(10),
@@ -107,7 +109,7 @@ class UnitNotificationsWidget extends StatelessWidget {
                   ),
                   child: Center(
                     child: Text(
-                      'Все уведомления',
+                      'Все уведомления (+${notifications.length - 3})',
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,

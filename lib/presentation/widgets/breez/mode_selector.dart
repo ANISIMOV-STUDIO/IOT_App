@@ -45,9 +45,10 @@ class ModeButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BreezButton(
       onTap: onTap,
+      // Minimum 48px touch target height
       padding: EdgeInsets.symmetric(
-        horizontal: compact ? 12 : 16,
-        vertical: compact ? 10 : 12,
+        horizontal: compact ? 8 : 16,
+        vertical: compact ? 14 : 12, // 14*2 + icon = 48px min
       ),
       backgroundColor: isSelected
           ? AppColors.accent

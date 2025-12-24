@@ -127,12 +127,12 @@ class UnitTabs extends StatelessWidget {
                 ),
               );
             }),
-            // Add button
+            // Add button (48px touch target)
             BreezButton(
               onTap: onAddUnit,
               width: 32,
               height: 32,
-              padding: EdgeInsets.zero,
+              padding: const EdgeInsets.all(8), // Expands touch area
               borderRadius: 16,
               child: Icon(
                 Icons.add,

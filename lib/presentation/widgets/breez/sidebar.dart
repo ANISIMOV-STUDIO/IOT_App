@@ -67,23 +67,25 @@ class Sidebar extends StatelessWidget {
 
           const SizedBox(height: 32),
 
-          // Navigation items
+          // Navigation items (no scroll)
           Expanded(
-            child: ListView.separated(
+            child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              itemCount: items.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 6),
-              itemBuilder: (context, index) {
-                final item = items[index];
-                final isSelected = index == selectedIndex;
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: items.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final item = entry.value;
+                  final isSelected = index == selectedIndex;
 
-                return _SidebarButton(
-                  icon: item.icon,
-                  isSelected: isSelected,
-                  badge: item.badge,
-                  onTap: () => onItemSelected?.call(index),
-                );
-              },
+                  return _SidebarButton(
+                    icon: item.icon,
+                    isSelected: isSelected,
+                    badge: item.badge,
+                    onTap: () => onItemSelected?.call(index),
+                  );
+                }).toList(),
+              ),
             ),
           ),
 

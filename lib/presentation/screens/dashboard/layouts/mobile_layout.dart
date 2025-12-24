@@ -1,11 +1,12 @@
-/// Mobile Layout - Single column layout for mobile devices
+/// Mobile Layout - Single column layout for mobile devices (no-scroll)
 library;
 
 import 'package:flutter/material.dart';
+import '../../../../core/theme/spacing.dart';
 import '../../../../domain/entities/unit_state.dart';
 import '../../../widgets/breez/breez.dart';
 
-/// Mobile layout (single column)
+/// Mobile layout (single column, no scroll)
 class MobileLayout extends StatelessWidget {
   final UnitState unit;
   final ValueChanged<int>? onTemperatureIncrease;
@@ -30,13 +31,13 @@ class MobileLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(12),
+    return Padding(
+      padding: EdgeInsets.all(AppSpacing.sm),
       child: Column(
         children: [
-          // Climate card
-          SizedBox(
-            height: 480,
+          // Climate card - takes most of the space
+          Expanded(
+            flex: 5,
             child: ClimateCard(
               unitName: unit.name,
               isPowered: unit.power,
@@ -53,9 +54,9 @@ class MobileLayout extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 12),
+          SizedBox(height: AppSpacing.sm),
 
-          // Mode selector
+          // Mode selector - compact row at bottom
           AnimatedOpacity(
             duration: const Duration(milliseconds: 300),
             opacity: unit.power ? 1.0 : 0.3,
@@ -65,7 +66,7 @@ class MobileLayout extends StatelessWidget {
                 unitName: unit.name,
                 selectedMode: unit.mode,
                 onModeChanged: onModeChanged,
-                compact: compact,
+                compact: true, // Always compact on mobile
               ),
             ),
           ),

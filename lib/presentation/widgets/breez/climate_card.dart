@@ -43,16 +43,22 @@ class ClimateCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isWide = MediaQuery.sizeOf(context).width > 600;
+    final width = MediaQuery.sizeOf(context).width;
+    final isWide = width > 600;
+    final isCompact = width < 400;
+
+    // Adaptive padding based on screen size
+    final padding = isCompact ? 12.0 : (isWide ? 32.0 : 20.0);
+    final sliderSpacing = isCompact ? 8.0 : 12.0;
 
     return BreezCard(
-      padding: EdgeInsets.all(isWide ? 32 : 20),
+      padding: EdgeInsets.all(padding),
       child: Column(
         children: [
           // Header row
           _buildHeader(context, isWide),
 
-          // Temperature dial
+          // Temperature dial - takes available space
           Expanded(
             child: Center(
               child: TemperatureDial(
@@ -76,7 +82,7 @@ class ClimateCard extends StatelessWidget {
                     value: supplyFan,
                     onChanged: onSupplyFanChanged,
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: sliderSpacing),
                   ExhaustAirflowSlider(
                     value: exhaustFan,
                     onChanged: onExhaustFanChanged,
@@ -86,7 +92,7 @@ class ClimateCard extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 16),
+          SizedBox(height: isCompact ? 12 : 16),
 
           // Footer stats
           _buildFooter(),
