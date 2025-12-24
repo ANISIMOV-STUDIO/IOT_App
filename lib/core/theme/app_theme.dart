@@ -1,102 +1,138 @@
 import 'package:flutter/material.dart';
-import 'package:shadcn_ui/shadcn_ui.dart';
 
-/// Design system colors - BREEZ Blue theme
-/// Corporate blue matching the BREEZ logo
+/// BREEZ Design System Colors
+/// Dark industrial theme for HVAC control
 abstract class AppColors {
-  // Primary palette - BREEZ Blue
-  static const Color primary = Color(0xFF2563EB); // Blue-600
-  static const Color primaryLight = Color(0xFF3B82F6); // Blue-500
-  static const Color primaryDark = Color(0xFF1D4ED8); // Blue-700
+  // === DARK THEME (Primary) ===
+  static const Color darkBg = Color(0xFF000D1A);
+  static const Color darkCard = Color(0xFF0F1D2E);
+  static const Color darkCardLight = Color(0xFF162942);
+  static const Color darkBorder = Color(0x0DFFFFFF); // white/5%
+  static const Color darkText = Color(0xFFFFFFFF);
+  static const Color darkTextMuted = Color(0x66FFFFFF); // white/40%
 
-  // Accent (cyan for secondary actions)
-  static const Color accent = Color(0xFF06B6D4); // Cyan-500
-  static const Color accentLight = Color(0xFF22D3EE); // Cyan-400
+  // === LIGHT THEME ===
+  static const Color lightBg = Color(0xFFEDF1F5);
+  static const Color lightCard = Color(0xFFFFFFFF);
+  static const Color lightBorder = Color(0xFFCBD5E1); // slate-300
+  static const Color lightText = Color(0xFF001B3D);
+  static const Color lightTextMuted = Color(0x80001B3D); // 50%
 
-  // Gradient colors
-  static const LinearGradient primaryGradient = LinearGradient(
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-    colors: [primary, accent],
+  // === ACCENT COLORS ===
+  static const Color accent = Color(0xFF2D7DFF); // Primary blue
+  static const Color accentLight = Color(0xFF5B9AFF);
+  static const Color accentRed = Color(0xFFD64545); // Power off / Critical
+  static const Color accentOrange = Color(0xFFF97316); // Exhaust / Warning
+  static const Color accentGreen = Color(0xFF22C55E); // Online / Success
+
+  // === STATUS COLORS ===
+  static const Color critical = Color(0xFFD64545);
+  static const Color warning = Color(0xFFF97316);
+  static const Color info = Color(0xFF2D7DFF);
+  static const Color success = Color(0xFF22C55E);
+
+  // === GRADIENTS ===
+  static const LinearGradient glowGradient = LinearGradient(
+    colors: [Color(0x3360A5FA), Color(0x002D7DFF)],
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
   );
 
-  static const LinearGradient bannerGradient = LinearGradient(
-    begin: Alignment.centerLeft,
-    end: Alignment.centerRight,
-    colors: [Color(0xFF1D4ED8), Color(0xFF0891B2)],
-  );
+  // === STYLING ===
+  static const double cardRadius = 32.0;
+  static const double cardRadiusSmall = 16.0;
+  static const double buttonRadius = 16.0;
 
-  // Background colors (light theme)
-  static const Color background = Color(0xFFF8FAFC); // Slate-50
-  static const Color surface = Color(0xFFFFFFFF); // White cards
-  static const Color surfaceVariant = Color(0xFFEFF6FF); // Blue-50
-
-  // Text colors
-  static const Color textPrimary = Color(0xFF0F172A); // Slate-900
-  static const Color textSecondary = Color(0xFF475569); // Slate-600
-  static const Color textMuted = Color(0xFF94A3B8); // Slate-400
-
-  // Climate modes
-  static const Color heating = Color(0xFFEF4444); // Red-500
-  static const Color cooling = Color(0xFF3B82F6); // Blue-500
-  static const Color modeAuto = Color(0xFF8B5CF6); // Violet-500 (for auto only)
-  static const Color ventilation = Color(0xFF06B6D4); // Cyan-500
-
-  // Status colors
-  static const Color success = Color(0xFF22C55E); // Green-500
-  static const Color warning = Color(0xFFF59E0B); // Amber-500
-  static const Color error = Color(0xFFEF4444); // Red-500
-  static const Color info = Color(0xFF3B82F6); // Blue-500
-
-  // Card styling
-  static const double cardRadius = 20.0;
-  static const double cardRadiusSmall = 12.0;
   static List<BoxShadow> get cardShadow => [
-        BoxShadow(
-          color: Colors.black.withValues(alpha: 0.04),
-          blurRadius: 10,
-          offset: const Offset(0, 4),
-        ),
-      ];
+    BoxShadow(
+      color: Colors.black.withValues(alpha: 0.3),
+      blurRadius: 20,
+      offset: const Offset(0, 8),
+    ),
+  ];
+
+  static List<BoxShadow> get glowShadow => [
+    BoxShadow(
+      color: accent.withValues(alpha: 0.3),
+      blurRadius: 40,
+      spreadRadius: 0,
+    ),
+  ];
 }
 
-/// App theme configuration
-/// Light theme with blue accents (BREEZ corporate)
-abstract class AppTheme {
-  /// Light theme - primary theme
-  static ShadThemeData get shadLight => ShadThemeData(
-        brightness: Brightness.light,
-        colorScheme: const ShadBlueColorScheme.light(),
-      );
+/// Theme configuration
+class AppTheme {
+  final bool isDark;
 
-  /// Dark theme
-  static ShadThemeData get shadDark => ShadThemeData(
-        brightness: Brightness.dark,
-        colorScheme: const ShadBlueColorScheme.dark(),
-      );
+  AppTheme({required this.isDark});
 
-  /// Material light theme
-  static ThemeData get materialLight => ThemeData(
-        useMaterial3: true,
-        brightness: Brightness.light,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: AppColors.primary,
-          brightness: Brightness.light,
-        ),
-        scaffoldBackgroundColor: AppColors.background,
-        cardTheme: const CardThemeData(
-          elevation: 0,
-          color: AppColors.surface,
-        ),
-      );
+  // Getters for current theme colors
+  Color get bg => isDark ? AppColors.darkBg : AppColors.lightBg;
+  Color get card => isDark ? AppColors.darkCard : AppColors.lightCard;
+  Color get cardLight => isDark ? AppColors.darkCardLight : AppColors.lightCard;
+  Color get border => isDark ? AppColors.darkBorder : AppColors.lightBorder;
+  Color get text => isDark ? AppColors.darkText : AppColors.lightText;
+  Color get textMuted => isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted;
 
-  /// Material dark theme
-  static ThemeData get materialDark => ThemeData(
-        useMaterial3: true,
-        brightness: Brightness.dark,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: AppColors.primary,
-          brightness: Brightness.dark,
+  // Button background
+  Color get buttonBg => isDark
+      ? Colors.white.withValues(alpha: 0.05)
+      : const Color(0xFFF8FAFC);
+
+  /// Material theme
+  ThemeData get materialTheme => ThemeData(
+    useMaterial3: true,
+    brightness: isDark ? Brightness.dark : Brightness.light,
+    scaffoldBackgroundColor: bg,
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: AppColors.accent,
+      brightness: isDark ? Brightness.dark : Brightness.light,
+      surface: card,
+      onSurface: text,
+    ),
+    fontFamily: 'Inter',
+    cardTheme: CardThemeData(
+      color: card,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppColors.cardRadius),
+        side: BorderSide(color: border),
+      ),
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.accent,
+        foregroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppColors.buttonRadius),
         ),
-      );
+      ),
+    ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        foregroundColor: text,
+        side: BorderSide(color: border),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppColors.buttonRadius),
+        ),
+      ),
+    ),
+    sliderTheme: SliderThemeData(
+      activeTrackColor: AppColors.accent,
+      inactiveTrackColor: isDark
+          ? Colors.white.withValues(alpha: 0.1)
+          : Colors.black.withValues(alpha: 0.1),
+      thumbColor: Colors.white,
+      overlayColor: AppColors.accent.withValues(alpha: 0.2),
+      trackHeight: 8,
+    ),
+  );
+
+  // === STATIC INSTANCES ===
+  static final _light = AppTheme(isDark: false);
+  static final _dark = AppTheme(isDark: true);
+
+  /// Static Material themes for main.dart
+  static ThemeData get materialLight => _light.materialTheme;
+  static ThemeData get materialDark => _dark.materialTheme;
 }

@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shadcn_ui/shadcn_ui.dart';
 
 import 'core/theme/app_theme.dart';
 import 'generated/l10n/app_localizations.dart';
@@ -60,35 +59,25 @@ class _HvacControlAppState extends State<HvacControlApp> {
           final languageService = di.sl<LanguageService>();
           final themeService = di.sl<ThemeService>();
 
-          return ShadApp.custom(
+          return MaterialApp.router(
+            routerConfig: _router,
+            title: 'BREEZ Home',
+            debugShowCheckedModeBanner: false,
+
+            // Material theme
+            theme: AppTheme.materialLight,
+            darkTheme: AppTheme.materialDark,
             themeMode: themeService.themeMode,
-            theme: AppTheme.shadLight,
-            darkTheme: AppTheme.shadDark,
-            appBuilder: (context) => MaterialApp.router(
-              routerConfig: _router,
-              title: 'BREEZ Home',
-              debugShowCheckedModeBanner: false,
 
-              // Material theme mapped from shadcn
-              theme: AppTheme.materialLight,
-              darkTheme: AppTheme.materialDark,
-              themeMode: themeService.themeMode,
-
-              // Localization
-              locale: languageService.currentLocale,
-              localizationsDelegates: const [
-                AppLocalizations.delegate,
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-              ],
-              supportedLocales: LanguageService.supportedLocales,
-
-              // Wrap with ShadAppBuilder
-              builder: (context, child) => ShadAppBuilder(
-                child: child ?? const SizedBox.shrink(),
-              ),
-            ),
+            // Localization
+            locale: languageService.currentLocale,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: LanguageService.supportedLocales,
           );
         },
       ),

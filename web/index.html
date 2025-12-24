@@ -80,12 +80,12 @@
     body {
       margin: 0;
       padding: 0;
-      background: #0A0E1A;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: #000D1A;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       overflow: hidden;
     }
 
-    /* Loading screen */
+    /* Loading screen - Dark theme */
     .loading {
       position: fixed;
       top: 0;
@@ -96,625 +96,274 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #FFFFFF, #F8FAFC, #F1F5F9);
-      background-size: 400% 400%;
-      animation: gradientShift 15s ease infinite;
+      background: #000D1A;
       z-index: 9999;
       overflow: hidden;
     }
 
-    /* Horizontal wind stream 1 */
+    /* Ambient glow effect */
     .loading::before {
       content: '';
       position: absolute;
-      top: 20%;
-      left: -30%;
+      top: 50%;
+      left: 50%;
       width: 600px;
-      height: 40px;
-      background: linear-gradient(90deg,
-        transparent 0%,
-        rgba(96, 165, 250, 0.15) 20%,
-        rgba(147, 197, 253, 0.25) 40%,
-        rgba(96, 165, 250, 0.3) 50%,
-        rgba(147, 197, 253, 0.25) 60%,
-        rgba(96, 165, 250, 0.15) 80%,
-        transparent 100%);
-      border-radius: 50%;
-      filter: blur(15px);
-      animation: windFlow1 12s linear infinite;
-      animation-delay: 0s;
+      height: 600px;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle,
+        rgba(45, 125, 255, 0.15) 0%,
+        rgba(45, 125, 255, 0.05) 40%,
+        transparent 70%);
+      animation: ambientPulse 4s ease-in-out infinite;
       pointer-events: none;
-      z-index: 1;
     }
 
-    /* Horizontal wind stream 2 */
-    .loading::after {
-      content: '';
-      position: absolute;
-      top: 65%;
-      left: -25%;
-      width: 500px;
-      height: 35px;
-      background: linear-gradient(90deg,
-        transparent 0%,
-        rgba(59, 130, 246, 0.12) 20%,
-        rgba(96, 165, 250, 0.22) 40%,
-        rgba(147, 197, 253, 0.28) 50%,
-        rgba(96, 165, 250, 0.22) 60%,
-        rgba(59, 130, 246, 0.12) 80%,
-        transparent 100%);
-      border-radius: 50%;
-      filter: blur(15px);
-      animation: windFlow2 14s linear infinite;
-      animation-delay: 4s;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    @keyframes windFlow1 {
-      0% {
-        transform: translateX(0) translateY(0);
-        opacity: 0.7;
-      }
-      50% {
-        transform: translateX(130vw) translateY(8px);
-        opacity: 1;
-      }
-      100% {
-        transform: translateX(130vw) translateY(8px);
-        opacity: 0;
-      }
-    }
-
-    @keyframes windFlow2 {
-      0% {
-        transform: translateX(0) translateY(0);
-        opacity: 0;
-      }
-      10% {
-        opacity: 0.6;
-      }
-      50% {
-        transform: translateX(130vw) translateY(-5px);
-        opacity: 1;
-      }
-      100% {
-        transform: translateX(130vw) translateY(-5px);
-        opacity: 0;
-      }
-    }
-
-    /* Additional wind streams */
-    .swirl {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(14px);
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    .swirl-3 {
-      top: 40%;
-      left: -25%;
-      width: 550px;
-      height: 38px;
-      background: linear-gradient(90deg,
-        transparent 0%,
-        rgba(37, 99, 235, 0.1) 20%,
-        rgba(60, 165, 250, 0.18) 40%,
-        rgba(147, 197, 253, 0.22) 50%,
-        rgba(60, 165, 250, 0.18) 60%,
-        rgba(37, 99, 235, 0.1) 80%,
-        transparent 100%);
-      animation: windFlow3 16s linear infinite;
-      animation-delay: 2s;
-    }
-
-    .swirl-4 {
-      top: 78%;
-      left: -35%;
-      width: 650px;
-      height: 42px;
-      background: linear-gradient(90deg,
-        transparent 0%,
-        rgba(147, 197, 253, 0.14) 20%,
-        rgba(96, 165, 250, 0.24) 40%,
-        rgba(59, 130, 246, 0.3) 50%,
-        rgba(96, 165, 250, 0.24) 60%,
-        rgba(147, 197, 253, 0.14) 80%,
-        transparent 100%);
-      animation: windFlow4 18s linear infinite;
-      animation-delay: 6s;
-    }
-
-    .swirl-5 {
-      top: 52%;
-      left: -28%;
-      width: 580px;
-      height: 36px;
-      background: linear-gradient(90deg,
-        transparent 0%,
-        rgba(59, 130, 246, 0.12) 20%,
-        rgba(147, 197, 253, 0.2) 40%,
-        rgba(96, 165, 250, 0.26) 50%,
-        rgba(147, 197, 253, 0.2) 60%,
-        rgba(59, 130, 246, 0.12) 80%,
-        transparent 100%);
-      animation: windFlow5 15s linear infinite;
-      animation-delay: 8s;
-    }
-
-    @keyframes windFlow3 {
-      0% {
-        transform: translateX(0) translateY(0);
-        opacity: 0;
-      }
-      15% {
-        opacity: 0.8;
-      }
-      50% {
-        transform: translateX(130vw) translateY(6px);
-        opacity: 1;
-      }
-      100% {
-        transform: translateX(130vw) translateY(6px);
-        opacity: 0;
-      }
-    }
-
-    @keyframes windFlow4 {
-      0% {
-        transform: translateX(0) translateY(0);
-        opacity: 0.6;
-      }
-      50% {
-        transform: translateX(130vw) translateY(-8px);
-        opacity: 1;
-      }
-      100% {
-        transform: translateX(130vw) translateY(-8px);
-        opacity: 0;
-      }
-    }
-
-    @keyframes windFlow5 {
-      0% {
-        transform: translateX(0) translateY(0);
-        opacity: 0;
-      }
-      20% {
-        opacity: 0.7;
-      }
-      50% {
-        transform: translateX(130vw) translateY(4px);
-        opacity: 1;
-      }
-      100% {
-        transform: translateX(130vw) translateY(4px);
-        opacity: 0;
-      }
-    }
-
-    /* Animated background gradient */
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    @keyframes ambientPulse {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+      50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
     }
 
     /* Logo container */
     .logo-container {
       position: relative;
-      margin-bottom: 60px;
-      animation: fadeInScale 1s ease-out, rotate 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      margin-bottom: 48px;
       z-index: 10;
     }
 
-    /* Gradient ring loader */
-    .gradient-ring {
-      width: 150px;
-      height: 150px;
+    /* Outer spinning ring */
+    .loader-ring {
+      width: 140px;
+      height: 140px;
       border-radius: 50%;
       position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      filter: drop-shadow(0 4px 15px rgba(37, 99, 235, 0.25));
     }
 
-    .gradient-ring::after {
+    /* Spinning arc */
+    .loader-ring::before {
       content: '';
       position: absolute;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       border-radius: 50%;
-      background: conic-gradient(
-        from 90deg,
-        transparent 0deg,
-        transparent 40deg,
-        rgba(37, 99, 235, 0.1) 60deg,
-        rgba(37, 99, 235, 0.3) 80deg,
-        rgba(37, 99, 235, 0.6) 100deg,
-        #2563EB 120deg,
-        #3B82F6 140deg,
-        #60A5FA 160deg,
-        #93C5FD 180deg,
-        rgba(147, 197, 253, 0.5) 200deg,
-        rgba(147, 197, 253, 0.2) 220deg,
-        transparent 240deg,
-        transparent 360deg
-      );
-      animation: reverseRotate 2.5s linear infinite;
+      border: 2px solid rgba(255, 255, 255, 0.05);
     }
 
-    .gradient-ring::before {
+    .loader-ring::after {
       content: '';
       position: absolute;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       border-radius: 50%;
-      background: conic-gradient(
-        from 90deg,
-        transparent 0deg,
-        transparent 40deg,
-        rgba(37, 99, 235, 0.05) 60deg,
-        rgba(37, 99, 235, 0.15) 80deg,
-        rgba(37, 99, 235, 0.3) 100deg,
-        rgba(37, 99, 235, 0.6) 120deg,
-        rgba(59, 130, 246, 0.7) 140deg,
-        rgba(96, 165, 250, 0.8) 160deg,
-        rgba(147, 197, 253, 0.6) 180deg,
-        rgba(147, 197, 253, 0.3) 200deg,
-        rgba(147, 197, 253, 0.1) 220deg,
-        transparent 240deg,
-        transparent 360deg
-      );
-      filter: blur(25px);
-      opacity: 0.7;
-      animation: reverseRotate 2.5s linear infinite;
-      z-index: -1;
+      border: 2px solid transparent;
+      border-top-color: #2D7DFF;
+      border-right-color: rgba(45, 125, 255, 0.5);
+      animation: spin 1.2s linear infinite;
+      filter: drop-shadow(0 0 8px rgba(45, 125, 255, 0.5));
     }
 
-    /* Reverse rotation - градиент вращается в обратную сторону */
-    @keyframes reverseRotate {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(-360deg); }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
 
-    .gradient-ring-inner {
-      width: 120px;
-      height: 120px;
+    /* Inner logo area */
+    .logo-inner {
+      width: 110px;
+      height: 110px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #FFFFFF, #F8FAFC);
+      background: #0F1D2E;
+      border: 1px solid rgba(255, 255, 255, 0.05);
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
-      z-index: 1;
-      box-shadow:
-        0 4px 20px rgba(37, 99, 235, 0.15),
-        inset 0 2px 10px rgba(37, 99, 235, 0.05);
     }
 
-    /* Logo in center */
+    /* SVG Logo */
     .logo-svg {
-      width: 80px;
-      height: 80px;
-      animation: shimmer 3s ease-in-out infinite;
-      filter: drop-shadow(0 0 10px rgba(96, 165, 250, 0.6));
+      width: 65px;
+      height: 65px;
+      animation: logoPulse 2s ease-in-out infinite;
     }
 
     .logo-svg path {
-      fill: url(#logoGradient);
-      transition: fill 0.3s ease;
+      fill: #2D7DFF;
     }
 
-    @keyframes shimmer {
-      0%, 100% {
-        opacity: 1;
-        filter: drop-shadow(0 0 10px rgba(96, 165, 250, 0.6));
-      }
-      50% {
-        opacity: 0.8;
-        filter: drop-shadow(0 0 20px rgba(96, 165, 250, 0.8));
-      }
+    @keyframes logoPulse {
+      0%, 100% { opacity: 0.8; filter: drop-shadow(0 0 4px rgba(45, 125, 255, 0.3)); }
+      50% { opacity: 1; filter: drop-shadow(0 0 12px rgba(45, 125, 255, 0.6)); }
     }
 
-    /* Chaotic particles */
-    .particle {
-      position: absolute;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      top: 50%;
-      left: 50%;
-      margin: -6px 0 0 -6px;
-      opacity: 0.8;
+    /* Loading bar */
+    .loading-bar-container {
+      width: 200px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 24px;
     }
 
-    .particle-1 {
-      background: radial-gradient(circle, #93C5FD, #60A5FA);
-      box-shadow: 0 0 20px rgba(147, 197, 253, 0.6);
-      animation: chaotic1 5s ease-in-out infinite;
+    .loading-bar {
+      height: 100%;
+      width: 40%;
+      background: linear-gradient(90deg, #2D7DFF, #5B9AFF);
+      border-radius: 2px;
+      animation: loadingBar 1.5s ease-in-out infinite;
+      box-shadow: 0 0 10px rgba(45, 125, 255, 0.5);
     }
 
-    .particle-2 {
-      background: radial-gradient(circle, #2563EB, #60A5FA);
-      box-shadow: 0 0 20px rgba(37, 99, 235, 0.6);
-      animation: chaotic2 6s ease-in-out infinite;
-    }
-
-    .particle-3 {
-      background: radial-gradient(circle, #60A5FA, #2563EB);
-      box-shadow: 0 0 20px rgba(96, 165, 250, 0.6);
-      animation: chaotic3 7s ease-in-out infinite;
-    }
-
-    @keyframes chaotic1 {
-      0%, 100% {
-        transform: translate(-90px, -60px) scale(1);
-        opacity: 0.6;
-      }
-      25% {
-        transform: translate(80px, -40px) scale(1.5);
-        opacity: 1;
-      }
-      50% {
-        transform: translate(60px, 70px) scale(0.8);
-        opacity: 0.5;
-      }
-      75% {
-        transform: translate(-70px, 50px) scale(1.2);
-        opacity: 0.9;
-      }
-    }
-
-    @keyframes chaotic2 {
-      0%, 100% {
-        transform: translate(70px, 80px) scale(0.9);
-        opacity: 0.7;
-      }
-      20% {
-        transform: translate(-80px, 30px) scale(1.3);
-        opacity: 1;
-      }
-      40% {
-        transform: translate(-50px, -70px) scale(1.1);
-        opacity: 0.6;
-      }
-      60% {
-        transform: translate(90px, -50px) scale(0.8);
-        opacity: 0.8;
-      }
-      80% {
-        transform: translate(40px, 60px) scale(1.4);
-        opacity: 0.9;
-      }
-    }
-
-    @keyframes chaotic3 {
-      0%, 100% {
-        transform: translate(-60px, 85px) scale(1.1);
-        opacity: 0.5;
-      }
-      30% {
-        transform: translate(85px, 20px) scale(0.9);
-        opacity: 0.8;
-      }
-      45% {
-        transform: translate(-75px, -55px) scale(1.4);
-        opacity: 1;
-      }
-      70% {
-        transform: translate(50px, -80px) scale(0.7);
-        opacity: 0.6;
-      }
-      85% {
-        transform: translate(-40px, 40px) scale(1.2);
-        opacity: 0.9;
-      }
+    @keyframes loadingBar {
+      0% { transform: translateX(-100%); }
+      50% { transform: translateX(150%); }
+      100% { transform: translateX(400%); }
     }
 
     /* Loading text */
     .loading-text {
-      position: relative;
-      color: rgba(37, 99, 235, 0.9);
-      font-size: 20px;
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 11px;
       font-weight: 600;
       letter-spacing: 3px;
       text-transform: uppercase;
-      background: linear-gradient(90deg, #93C5FD, #60A5FA, #2563EB, #93C5FD);
-      background-size: 300% 100%;
-      background-clip: text;
-      z-index: 10;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: fadeInUp 1s ease-out 0.3s both, gradientMove 3s ease infinite;
-      text-shadow: 0 2px 8px rgba(37, 99, 235, 0.15);
     }
 
-    @keyframes gradientMove {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
+    /* Decorative corner lines */
+    .corner-line {
+      position: absolute;
+      background: linear-gradient(90deg, rgba(45, 125, 255, 0.3), transparent);
+      height: 1px;
+      pointer-events: none;
     }
 
-    /* Animations */
-    @keyframes rotate {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
+    .corner-line-1 {
+      top: 15%;
+      left: 0;
+      width: 120px;
+      animation: lineFade 3s ease-in-out infinite;
     }
 
-    @keyframes fadeInScale {
-      from {
-        opacity: 0;
-        transform: scale(0.8);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
+    .corner-line-2 {
+      bottom: 15%;
+      right: 0;
+      width: 150px;
+      background: linear-gradient(270deg, rgba(45, 125, 255, 0.3), transparent);
+      animation: lineFade 3s ease-in-out infinite 1s;
     }
 
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .corner-line-3 {
+      top: 35%;
+      left: 0;
+      width: 80px;
+      opacity: 0.5;
+      animation: lineFade 3s ease-in-out infinite 0.5s;
     }
 
-    @keyframes dots {
-      0%, 20% { content: ''; }
-      40% { content: '.'; }
-      60% { content: '..'; }
-      80%, 100% { content: '...'; }
+    .corner-line-4 {
+      bottom: 35%;
+      right: 0;
+      width: 100px;
+      background: linear-gradient(270deg, rgba(45, 125, 255, 0.2), transparent);
+      animation: lineFade 3s ease-in-out infinite 1.5s;
     }
 
-    /* Responsive - Tablet and Mobile */
-    @media (max-width: 1024px) {
-      /* Hide all wind streams on tablets and mobile devices */
-      .loading::before,
-      .loading::after,
-      .swirl-3,
-      .swirl-4,
-      .swirl-5 {
-        display: none;
-      }
+    @keyframes lineFade {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.8; }
     }
 
-    /* Responsive - Mobile */
+    /* Status dots */
+    .status-dots {
+      position: absolute;
+      bottom: 40px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(45, 125, 255, 0.3);
+      animation: dotPulse 1.5s ease-in-out infinite;
+    }
+
+    .status-dot:nth-child(1) { animation-delay: 0s; }
+    .status-dot:nth-child(2) { animation-delay: 0.2s; }
+    .status-dot:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes dotPulse {
+      0%, 100% { background: rgba(45, 125, 255, 0.3); transform: scale(1); }
+      50% { background: #2D7DFF; transform: scale(1.2); }
+    }
+
+    /* Responsive */
     @media (max-width: 768px) {
-
-      .gradient-ring {
+      .loader-ring {
         width: 120px;
         height: 120px;
       }
 
-      .gradient-ring-inner {
+      .logo-inner {
         width: 95px;
         height: 95px;
       }
 
       .logo-svg {
-        width: 60px;
-        height: 60px;
+        width: 55px;
+        height: 55px;
+      }
+
+      .loading-bar-container {
+        width: 160px;
       }
 
       .loading-text {
-        font-size: 16px;
+        font-size: 10px;
         letter-spacing: 2px;
       }
 
-      .particle {
-        width: 10px;
-        height: 10px;
-        margin: -5px 0 0 -5px;
-      }
-
-      @keyframes chaotic1 {
-        0%, 100% {
-          transform: translate(-60px, -40px) scale(1);
-          opacity: 0.6;
-        }
-        25% {
-          transform: translate(50px, -30px) scale(1.3);
-          opacity: 1;
-        }
-        50% {
-          transform: translate(40px, 50px) scale(0.8);
-          opacity: 0.5;
-        }
-        75% {
-          transform: translate(-50px, 35px) scale(1.1);
-          opacity: 0.9;
-        }
-      }
-
-      @keyframes chaotic2 {
-        0%, 100% {
-          transform: translate(50px, 60px) scale(0.9);
-          opacity: 0.7;
-        }
-        20% {
-          transform: translate(-60px, 20px) scale(1.2);
-          opacity: 1;
-        }
-        40% {
-          transform: translate(-35px, -50px) scale(1);
-          opacity: 0.6;
-        }
-        60% {
-          transform: translate(65px, -35px) scale(0.8);
-          opacity: 0.8;
-        }
-        80% {
-          transform: translate(30px, 45px) scale(1.3);
-          opacity: 0.9;
-        }
-      }
-
-      @keyframes chaotic3 {
-        0%, 100% {
-          transform: translate(-45px, 65px) scale(1);
-          opacity: 0.5;
-        }
-        30% {
-          transform: translate(60px, 15px) scale(0.9);
-          opacity: 0.8;
-        }
-        45% {
-          transform: translate(-55px, -40px) scale(1.3);
-          opacity: 1;
-        }
-        70% {
-          transform: translate(35px, -60px) scale(0.7);
-          opacity: 0.6;
-        }
-        85% {
-          transform: translate(-30px, 30px) scale(1.1);
-          opacity: 0.9;
-        }
-      }
+      .corner-line { display: none; }
     }
   </style>
 </head>
 <body>
   <!-- Loading Screen -->
   <div class="loading" id="loading">
-    <!-- Additional swirl vortices -->
-    <div class="swirl swirl-3"></div>
-    <div class="swirl swirl-4"></div>
-    <div class="swirl swirl-5"></div>
+    <!-- Decorative lines -->
+    <div class="corner-line corner-line-1"></div>
+    <div class="corner-line corner-line-2"></div>
+    <div class="corner-line corner-line-3"></div>
+    <div class="corner-line corner-line-4"></div>
 
-    <!-- Logo with gradient ring -->
+    <!-- Logo with spinning ring -->
     <div class="logo-container">
-      <div class="gradient-ring">
-        <div class="gradient-ring-inner">
+      <div class="loader-ring">
+        <div class="logo-inner">
           <svg class="logo-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#93C5FD;stop-opacity:1" />
-                <stop offset="50%" style="stop-color:#60A5FA;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#2563EB;stop-opacity:1" />
-              </linearGradient>
-            </defs>
             <path d="M19.7718 38.2255L20.0148 38.2842C22.2015 38.857 24.4582 39.1168 26.7178 39.0557V39.0557C32.65 39.0557 41.1125 37.823 51.8541 35.408C54.3258 34.8545 68 31.5674 70.765 30.8714C95.8092 24.5823 114.175 24.0205 114.335 24.0121L115.625 23.836L115.298 21.7396C114.81 18.4632 113.481 15.3695 111.441 12.7607C109.402 10.1519 106.721 8.11725 103.66 6.85539C100.091 5.53546 96.3031 4.90933 92.4996 5.01058C86.2658 5.01058 78.3813 6.20132 68.4022 8.65827L67.2794 8.93499C63.1906 9.93287 52.3317 12.5995 50.0108 13.2451C27.6227 19.4756 5 20.3728 5 20.3728L5.31837 22.4021C5.91181 26.1674 7.59837 29.6749 10.1682 32.4883C12.738 35.3018 16.0777 37.2969 19.7718 38.2255V38.2255Z"/>
             <path d="M103.683 44.9014C100.114 43.5951 96.3253 42.9752 92.5212 43.0748C86.2781 43.0748 78.4008 44.2538 68.4118 46.6864L67.2973 46.9604C63.2078 47.9484 52.3473 50.5886 50.0176 51.2279C27.6345 57.3967 5 58.2602 5 58.2602L5.31842 60.2943C5.91153 64.0238 7.59923 67.498 10.1712 70.2839C12.7432 73.0698 16.0857 75.0443 19.7824 75.9613L20.017 76.0194C22.2043 76.5854 24.4612 76.8426 26.7211 76.7832C32.6458 76.7832 41.118 75.5628 51.8612 73.1716C54.2998 72.6236 67.9844 69.369 70.7666 68.6799C95.8229 62.453 114.184 61.8967 114.343 61.8884L115.625 61.7058L115.298 59.6384C114.812 56.3974 113.486 53.3364 111.451 50.7538C109.415 48.1712 106.739 46.1549 103.683 44.9014V44.9014Z"/>
             <path d="M103.623 82.6472C100.055 81.3264 96.2686 80.7003 92.4665 80.8024C86.235 80.8024 78.3535 81.9931 68.3782 84.45L67.013 84.7855C62.599 85.8672 52.2719 88.408 49.9938 89.0369C27.6225 95.2673 5 96.1561 5 96.1561L5.31825 98.1938C5.91147 101.959 7.59739 105.467 10.1663 108.28C12.7351 111.093 16.0735 113.089 19.7662 114.017L20.0091 114.076C22.1949 114.649 24.4509 114.908 26.7096 114.847V114.847C32.6395 114.847 41.0989 113.615 51.8364 111.2C54.2988 110.646 67.9762 107.359 70.7401 106.663C95.7748 100.374 114.134 99.8122 114.293 99.8038L115.625 99.6361L115.298 97.5146C114.802 94.2372 113.466 91.1447 111.419 88.5389C109.373 85.9332 106.687 83.9032 103.623 82.6472V82.6472Z"/>
           </svg>
         </div>
       </div>
-      <!-- Orbiting particles -->
-      <div class="particle particle-1"></div>
-      <div class="particle particle-2"></div>
-      <div class="particle particle-3"></div>
+    </div>
+
+    <!-- Loading bar -->
+    <div class="loading-bar-container">
+      <div class="loading-bar"></div>
     </div>
 
     <!-- Text -->
     <div class="loading-text">Загрузка</div>
+
+    <!-- Status dots -->
+    <div class="status-dots">
+      <div class="status-dot"></div>
+      <div class="status-dot"></div>
+      <div class="status-dot"></div>
+    </div>
   </div>
 
   <script>

@@ -8,7 +8,7 @@
 - **Платформа**: Flutter Web (только веб)
 - **Язык интерфейса**: Русский (основной), Английский
 - **Цветовая схема**: BREEZ Blue (#2563EB) - корпоративный синий
-- **UI Framework**: shadcn_ui + Material Design 3
+- **UI Framework**: Material Design 3 + Custom BREEZ widgets
 - **Архитектура**: Clean Architecture + BLoC
 
 ---
