@@ -24,11 +24,7 @@ dependencies:
   # Dependency Injection
   get_it: ^7.6.4
 
-  # Retrofit & JSON Serialization
-  retrofit: ^4.5.0
-  json_annotation: ^4.9.0
-
-  # gRPC (для будущего API)
+  # gRPC (основной протокол связи с бэкендом)
   grpc: ^5.0.0
   protobuf: ^5.0.0
 
@@ -75,12 +71,8 @@ dependencies:
   # Form Validation
   form_builder_validators: ^11.2.0
 
-  # Network Security (Note: Certificate pinning implementation available in SecureApiService)
-  dio: ^5.3.4
-
   # Logging
   talker: ^4.4.1
-  talker_dio_logger: ^4.4.1
   talker_bloc_logger: ^4.4.1
   talker_flutter: ^4.4.1
 
@@ -92,10 +84,6 @@ dev_dependencies:
 
   # Code Generation
   build_runner: ^2.4.0
-
-  # Retrofit & JSON Code Generation
-  retrofit_generator: ^10.2.0
-  json_serializable: ^6.8.0
 
   # Testing
   bloc_test: ^9.1.5
