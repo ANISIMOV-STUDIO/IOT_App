@@ -2,12 +2,13 @@
 library;
 
 import 'package:flutter/material.dart';
+import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/spacing.dart';
 import '../../../../domain/entities/unit_state.dart';
 import '../../../widgets/breez/breez.dart';
 import '../widgets/desktop_header.dart';
 
-/// Desktop layout (grid with sidebar)
+/// Desktop layout (grid with sidebar, drawer on tablet)
 class DesktopLayout extends StatefulWidget {
   final UnitState unit;
   final List<UnitState> allUnits;
@@ -65,40 +66,61 @@ class DesktopLayout extends StatefulWidget {
 class _DesktopLayoutState extends State<DesktopLayout> {
   int _sidebarIndex = 0;
   String? _activePresetId;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        // Sidebar
-        Sidebar(
-          selectedIndex: _sidebarIndex,
-          onItemSelected: (index) => setState(() => _sidebarIndex = index),
-        ),
+    final width = MediaQuery.sizeOf(context).width;
+    final showPermanentSidebar = width > 1100;
 
-        // Main content
-        Expanded(
-          child: Padding(
-            padding: EdgeInsets.all(AppSpacing.lg),
-            child: Column(
-              children: [
-                // Main content row
-                Expanded(
-                  child: Row(
-                    children: [
-                      // Left column: MainTempCard + Presets
-                      Expanded(child: _buildLeftColumn()),
-                      SizedBox(width: AppSpacing.md),
-                      // Right column: Header + Schedule/Notifications + OperationGraph
-                      Expanded(flex: 2, child: _buildRightColumn()),
-                    ],
+    return Scaffold(
+      key: _scaffoldKey,
+      backgroundColor: Colors.transparent,
+      drawer: showPermanentSidebar
+          ? null
+          : Drawer(
+              backgroundColor: AppColors.darkCard,
+              child: Sidebar(
+                selectedIndex: _sidebarIndex,
+                onItemSelected: (index) {
+                  setState(() => _sidebarIndex = index);
+                  Navigator.of(context).pop(); // Close drawer
+                },
+              ),
+            ),
+      body: Row(
+        children: [
+          // Permanent sidebar (desktop only)
+          if (showPermanentSidebar)
+            Sidebar(
+              selectedIndex: _sidebarIndex,
+              onItemSelected: (index) => setState(() => _sidebarIndex = index),
+            ),
+
+          // Main content
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.all(AppSpacing.lg),
+              child: Column(
+                children: [
+                  // Main content row
+                  Expanded(
+                    child: Row(
+                      children: [
+                        // Left column: MainTempCard + Presets
+                        Expanded(child: _buildLeftColumn()),
+                        SizedBox(width: AppSpacing.md),
+                        // Right column: Header + Schedule/Notifications + OperationGraph
+                        Expanded(flex: 2, child: _buildRightColumn(showPermanentSidebar)),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -139,7 +161,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
     );
   }
 
-  Widget _buildRightColumn() {
+  Widget _buildRightColumn(bool showPermanentSidebar) {
     return Column(
       children: [
         // Header row
@@ -152,6 +174,8 @@ class _DesktopLayoutState extends State<DesktopLayout> {
           onThemeToggle: widget.onThemeToggle,
           userName: widget.userName,
           userRole: widget.userRole,
+          showMenuButton: !showPermanentSidebar,
+          onMenuTap: () => _scaffoldKey.currentState?.openDrawer(),
         ),
 
         SizedBox(height: AppSpacing.md),

@@ -18,6 +18,8 @@ class DesktopHeader extends StatelessWidget {
   final VoidCallback? onThemeToggle;
   final String userName;
   final String userRole;
+  final bool showMenuButton;
+  final VoidCallback? onMenuTap;
 
   const DesktopHeader({
     super.key,
@@ -29,12 +31,22 @@ class DesktopHeader extends StatelessWidget {
     this.onThemeToggle,
     required this.userName,
     required this.userRole,
+    this.showMenuButton = false,
+    this.onMenuTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
+        // Menu button (tablet only)
+        if (showMenuButton) ...[
+          HeaderIconButton(
+            icon: Icons.menu,
+            onTap: onMenuTap,
+          ),
+          const SizedBox(width: 12),
+        ],
         // Unit tabs
         Expanded(child: _buildUnitTabs()),
         const SizedBox(width: 16),

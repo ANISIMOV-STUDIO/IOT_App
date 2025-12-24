@@ -65,32 +65,31 @@ class ScheduleWidget extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
 
-          // Schedule entries (no scroll, max 3 visible)
+          // Schedule entries (flexible, max 3 visible)
           Expanded(
             child: Column(
               children: entries.take(3).toList().asMap().entries.map((entry) {
                 final index = entry.key;
                 final scheduleEntry = entry.value;
-                return Padding(
-                  padding: EdgeInsets.only(bottom: index < 2 ? 8 : 0),
-                  child: _ScheduleRow(
-                    entry: scheduleEntry,
-                    onTap: () => onEntryTap?.call(index),
+                return Flexible(
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: index < 2 ? 4 : 0),
+                    child: _ScheduleRow(
+                      entry: scheduleEntry,
+                      onTap: () => onEntryTap?.call(index),
+                    ),
                   ),
                 );
               }).toList(),
             ),
           ),
 
-          // Active schedule highlight
+          // Active schedule highlight (compact)
           if (entries.any((e) => e.isActive))
-            Padding(
-              padding: const EdgeInsets.only(top: 12),
-              child: _ActiveScheduleCard(
-                entry: entries.firstWhere((e) => e.isActive),
-              ),
+            _ActiveScheduleCard(
+              entry: entries.firstWhere((e) => e.isActive),
             ),
         ],
       ),
