@@ -72,13 +72,12 @@ class AppShell extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: isMobile
-          ? _BottomNav(
-              items: navItems,
-              selectedIndex: selectedIndex,
-              onIndexChanged: onIndexChanged,
-            )
-          : null,
+      // Bottom nav always visible (like macOS dock)
+      bottomNavigationBar: _BottomNav(
+        items: navItems,
+        selectedIndex: selectedIndex,
+        onIndexChanged: onIndexChanged,
+      ),
     );
   }
 }
@@ -202,7 +201,7 @@ class _UserAvatar extends StatelessWidget {
   }
 }
 
-/// Bottom navigation bar (mobile)
+/// Bottom navigation bar (macOS dock style)
 class _BottomNav extends StatelessWidget {
   final List<NavItem> items;
   final int selectedIndex;
@@ -217,35 +216,33 @@ class _BottomNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 72,
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, -4),
-          ),
-        ],
+        gradient: LinearGradient(
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+          colors: [
+            AppColors.primaryDark,
+            AppColors.primary,
+          ],
+        ),
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: SafeArea(
         top: false,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: items.asMap().entries.map((entry) {
-              final index = entry.key;
-              final item = entry.value;
-              final isSelected = index == selectedIndex;
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: items.asMap().entries.map((entry) {
+            final index = entry.key;
+            final item = entry.value;
+            final isSelected = index == selectedIndex;
 
-              return _NavItem(
-                item: item,
-                isSelected: isSelected,
-                onTap: () => onIndexChanged(index),
-              );
-            }).toList(),
-          ),
+            return _NavItem(
+              item: item,
+              isSelected: isSelected,
+              onTap: () => onIndexChanged(index),
+            );
+          }).toList(),
         ),
       ),
     );
@@ -270,55 +267,45 @@ class _NavItem extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        width: 56,
+        height: 56,
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary : Colors.transparent,
+          color: isSelected
+              ? Colors.white.withValues(alpha: 0.2)
+              : Colors.transparent,
           borderRadius: BorderRadius.circular(16),
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
+        child: Stack(
+          alignment: Alignment.center,
           children: [
-            Stack(
-              clipBehavior: Clip.none,
-              children: [
-                Icon(
-                  isSelected ? (item.activeIcon ?? item.icon) : item.icon,
-                  size: 24,
-                  color: isSelected ? Colors.white : AppColors.textMuted,
-                ),
-                if (item.badgeCount != null && item.badgeCount! > 0)
-                  Positioned(
-                    right: -6,
-                    top: -4,
-                    child: Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: const BoxDecoration(
-                        color: AppColors.error,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Text(
-                        item.badgeCount.toString(),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                        ),
+            Icon(
+              isSelected ? (item.activeIcon ?? item.icon) : item.icon,
+              size: 28,
+              color: Colors.white,
+            ),
+            if (item.badgeCount != null && item.badgeCount! > 0)
+              Positioned(
+                right: 8,
+                top: 8,
+                child: Container(
+                  width: 18,
+                  height: 18,
+                  decoration: const BoxDecoration(
+                    color: AppColors.error,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Text(
+                      item.badgeCount.toString(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-              ],
-            ),
-            if (isSelected) ...[
-              const SizedBox(width: 8),
-              Text(
-                item.label,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
                 ),
               ),
-            ],
           ],
         ),
       ),
