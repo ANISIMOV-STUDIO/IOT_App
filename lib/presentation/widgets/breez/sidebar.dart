@@ -1,0 +1,211 @@
+/// Sidebar Navigation Component
+library;
+
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import '../../../core/theme/app_theme.dart';
+
+/// Navigation item data
+class SidebarItem {
+  final IconData icon;
+  final String label;
+  final String? badge;
+
+  const SidebarItem({
+    required this.icon,
+    required this.label,
+    this.badge,
+  });
+}
+
+/// Sidebar navigation panel
+class Sidebar extends StatelessWidget {
+  final int selectedIndex;
+  final ValueChanged<int>? onItemSelected;
+  final VoidCallback? onSettingsTap;
+  final VoidCallback? onLogoutTap;
+
+  const Sidebar({
+    super.key,
+    this.selectedIndex = 0,
+    this.onItemSelected,
+    this.onSettingsTap,
+    this.onLogoutTap,
+  });
+
+  static const List<SidebarItem> items = [
+    SidebarItem(icon: Icons.play_arrow_rounded, label: 'Главная'),
+    SidebarItem(icon: Icons.grid_view_rounded, label: 'Виджеты'),
+    SidebarItem(icon: Icons.location_on_outlined, label: 'Локации'),
+    SidebarItem(icon: Icons.calendar_today_outlined, label: 'Расписание'),
+    SidebarItem(icon: Icons.shield_outlined, label: 'Защита'),
+    SidebarItem(icon: Icons.star_outline_rounded, label: 'Избранное'),
+    SidebarItem(icon: Icons.settings_outlined, label: 'Настройки'),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 80,
+      margin: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: AppColors.darkCard,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: AppColors.darkBorder),
+      ),
+      child: Column(
+        children: [
+          const SizedBox(height: 20),
+
+          // Logo
+          _LogoButton(),
+
+          const SizedBox(height: 32),
+
+          // Navigation items
+          Expanded(
+            child: ListView.separated(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              itemCount: items.length,
+              separatorBuilder: (_, __) => const SizedBox(height: 6),
+              itemBuilder: (context, index) {
+                final item = items[index];
+                final isSelected = index == selectedIndex;
+
+                return _SidebarButton(
+                  icon: item.icon,
+                  isSelected: isSelected,
+                  badge: item.badge,
+                  onTap: () => onItemSelected?.call(index),
+                );
+              },
+            ),
+          ),
+
+          // Bottom action - logout
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: _SidebarButton(
+              icon: Icons.logout_rounded,
+              onTap: onLogoutTap,
+            ),
+          ),
+
+          const SizedBox(height: 20),
+        ],
+      ),
+    );
+  }
+}
+
+/// Logo button at top of sidebar
+class _LogoButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 48,
+      height: 48,
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: SvgPicture.asset(
+        'assets/images/breez-logo.svg',
+        colorFilter: const ColorFilter.mode(
+          Colors.white,
+          BlendMode.srcIn,
+        ),
+      ),
+    );
+  }
+}
+
+/// Sidebar navigation button
+class _SidebarButton extends StatefulWidget {
+  final IconData icon;
+  final bool isSelected;
+  final String? badge;
+  final VoidCallback? onTap;
+
+  const _SidebarButton({
+    required this.icon,
+    this.isSelected = false,
+    this.badge,
+    this.onTap,
+  });
+
+  @override
+  State<_SidebarButton> createState() => _SidebarButtonState();
+}
+
+class _SidebarButtonState extends State<_SidebarButton> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          width: 48,
+          height: 48,
+          decoration: BoxDecoration(
+            color: widget.isSelected
+                ? AppColors.accent
+                : _isHovered
+                    ? Colors.white.withValues(alpha: 0.05)
+                    : Colors.transparent,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: widget.isSelected
+                  ? AppColors.accent
+                  : _isHovered
+                      ? AppColors.darkBorder
+                      : Colors.transparent,
+            ),
+          ),
+          child: Stack(
+            children: [
+              Center(
+                child: Icon(
+                  widget.icon,
+                  size: 22,
+                  color: widget.isSelected
+                      ? Colors.white
+                      : _isHovered
+                          ? Colors.white
+                          : AppColors.darkTextMuted,
+                ),
+              ),
+              if (widget.badge != null)
+                Positioned(
+                  top: 6,
+                  right: 6,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: AppColors.accentRed,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(
+                      widget.badge!,
+                      style: const TextStyle(
+                        fontSize: 8,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
