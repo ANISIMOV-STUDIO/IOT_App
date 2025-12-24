@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import '../../../../core/theme/spacing.dart';
 import '../../../../domain/entities/unit_state.dart';
 import '../../../widgets/breez/breez.dart';
 import '../widgets/desktop_header.dart';
@@ -144,7 +145,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
         // Main content
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(AppSpacing.lg),
             child: Column(
               children: [
                 // Main content row
@@ -153,7 +154,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                     children: [
                       // Left column: MainTempCard + Presets
                       Expanded(child: _buildLeftColumn()),
-                      const SizedBox(width: 16),
+                      SizedBox(width: AppSpacing.md),
                       // Right column: Header + Schedule/Notifications + OperationGraph
                       Expanded(flex: 2, child: _buildRightColumn()),
                     ],
@@ -189,7 +190,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
           ),
         ),
 
-        const SizedBox(height: 16),
+        SizedBox(height: AppSpacing.md),
 
         // Presets (small, icon-only)
         Expanded(
@@ -219,7 +220,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
           userRole: widget.userRole,
         ),
 
-        const SizedBox(height: 16),
+        SizedBox(height: AppSpacing.md),
 
         // Schedule + Notifications row
         Expanded(
@@ -233,7 +234,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                 ),
               ),
 
-              const SizedBox(width: 16),
+              SizedBox(width: AppSpacing.md),
 
               // Unit notifications widget
               Expanded(
@@ -247,7 +248,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
           ),
         ),
 
-        const SizedBox(height: 16),
+        SizedBox(height: AppSpacing.md),
 
         // OperationGraph row (same height as Schedule/Notifications)
         Expanded(

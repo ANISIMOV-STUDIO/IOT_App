@@ -4,6 +4,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/spacing.dart';
 
 /// Navigation item data
 class SidebarItem {
@@ -47,7 +48,11 @@ class Sidebar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 80,
-      margin: const EdgeInsets.only(left: 20, top: 20, bottom: 20),
+      margin: EdgeInsets.only(
+        left: AppSpacing.lg,
+        top: AppSpacing.lg,
+        bottom: AppSpacing.lg,
+      ),
       decoration: BoxDecoration(
         color: AppColors.darkCard,
         borderRadius: BorderRadius.circular(24),
