@@ -131,13 +131,14 @@ class _DesktopLayoutState extends State<DesktopLayout> {
   }
 
   Widget _buildBottomBar() {
+    final colors = BreezColors.of(context);
     return Container(
       height: 80,
       margin: EdgeInsets.fromLTRB(AppSpacing.lg, 0, AppSpacing.lg, AppSpacing.lg),
       decoration: BoxDecoration(
-        color: AppColors.darkCard,
+        color: colors.card,
         borderRadius: BorderRadius.circular(AppColors.cardRadius),
-        border: Border.all(color: AppColors.darkBorder),
+        border: Border.all(color: colors.border),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -161,7 +162,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                 child: Icon(
                   item.$1,
                   size: 24,
-                  color: isSelected ? AppColors.accent : AppColors.darkTextMuted,
+                  color: isSelected ? AppColors.accent : colors.textMuted,
                 ),
               ),
             ),

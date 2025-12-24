@@ -23,6 +23,7 @@ class ScheduleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
     return BreezCard(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -32,12 +33,12 @@ class ScheduleWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Расписание',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
-                  color: Colors.white,
+                  color: colors.text,
                 ),
               ),
               if (entries.length > 3)
@@ -138,6 +139,7 @@ class _ScheduleRowState extends State<_ScheduleRow> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       onEnter: (_) => setState(() => _isHovered = true),
@@ -148,9 +150,7 @@ class _ScheduleRowState extends State<_ScheduleRow> {
           duration: const Duration(milliseconds: 150),
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           decoration: BoxDecoration(
-            color: _isHovered
-                ? Colors.white.withValues(alpha: 0.03)
-                : Colors.transparent,
+            color: _isHovered ? colors.buttonBg : Colors.transparent,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Row(
@@ -163,9 +163,7 @@ class _ScheduleRowState extends State<_ScheduleRow> {
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
-                    color: widget.entry.isActive
-                        ? Colors.white
-                        : AppColors.darkTextMuted,
+                    color: widget.entry.isActive ? colors.text : colors.textMuted,
                   ),
                 ),
               ),
@@ -193,7 +191,7 @@ class _ScheduleRowState extends State<_ScheduleRow> {
                   widget.entry.mode,
                   style: TextStyle(
                     fontSize: 12,
-                    color: AppColors.darkTextMuted,
+                    color: colors.textMuted,
                   ),
                 ),
               ),
@@ -204,7 +202,7 @@ class _ScheduleRowState extends State<_ScheduleRow> {
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
-                  color: Colors.white.withValues(alpha: 0.8),
+                  color: colors.text,
                 ),
               ),
             ],

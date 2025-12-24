@@ -60,20 +60,21 @@ class MobileHeader extends StatelessWidget {
           SizedBox(height: AppSpacing.sm),
 
           // Unit tabs row
-          _buildUnitTabs(),
+          _buildUnitTabs(context),
         ],
       ),
     );
   }
 
-  Widget _buildUnitTabs() {
+  Widget _buildUnitTabs(BuildContext context) {
+    final colors = BreezColors.of(context);
     return Container(
       height: 48,
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: AppColors.darkCard,
+        color: colors.card,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.darkBorder),
+        border: Border.all(color: colors.border),
       ),
       child: Row(
         children: [
@@ -108,16 +109,17 @@ class _Logo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'BREEZ',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w900,
             letterSpacing: -1,
-            color: Colors.white,
+            color: colors.text,
           ),
         ),
         Text(
@@ -126,7 +128,7 @@ class _Logo extends StatelessWidget {
             fontSize: 7,
             fontWeight: FontWeight.w700,
             letterSpacing: 2,
-            color: AppColors.darkTextMuted,
+            color: colors.textMuted,
           ),
         ),
       ],
@@ -148,6 +150,7 @@ class _UnitTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
     return HoverBuilder(
       onTap: onTap,
       builder: (context, isHovered) {
@@ -169,7 +172,7 @@ class _UnitTab extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: unit.power
                       ? (isSelected ? Colors.white : AppColors.accentGreen)
-                      : AppColors.darkTextMuted,
+                      : colors.textMuted,
                   shape: BoxShape.circle,
                 ),
               ),
@@ -180,7 +183,7 @@ class _UnitTab extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                  color: isSelected ? Colors.white : AppColors.darkTextMuted,
+                  color: isSelected ? Colors.white : colors.textMuted,
                 ),
               ),
             ],

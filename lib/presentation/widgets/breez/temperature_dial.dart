@@ -64,9 +64,9 @@ class TemperatureDial extends StatelessWidget {
                       width: dialSize,
                       height: dialSize,
                       decoration: BoxDecoration(
-                        color: AppColors.darkCardLight,
+                        color: BreezColors.of(context).cardLight,
                         shape: BoxShape.circle,
-                        border: Border.all(color: AppColors.darkBorder),
+                        border: Border.all(color: BreezColors.of(context).border),
                         boxShadow: AppColors.cardShadow,
                       ),
                       child: Column(

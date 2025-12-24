@@ -43,6 +43,7 @@ class ModeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
     return BreezButton(
       onTap: onTap,
       // Minimum 48px touch target height
@@ -50,12 +51,8 @@ class ModeButton extends StatelessWidget {
         horizontal: compact ? 8 : 16,
         vertical: compact ? 14 : 12, // 14*2 + icon = 48px min
       ),
-      backgroundColor: isSelected
-          ? AppColors.accent
-          : Colors.white.withValues(alpha: 0.05),
-      hoverColor: isSelected
-          ? AppColors.accentLight
-          : Colors.white.withValues(alpha: 0.1),
+      backgroundColor: isSelected ? AppColors.accent : colors.buttonBg,
+      hoverColor: isSelected ? AppColors.accentLight : colors.cardLight,
       border: Border.all(
         color: isSelected ? AppColors.accent : Colors.transparent,
       ),
@@ -72,7 +69,7 @@ class ModeButton extends StatelessWidget {
               child: Icon(
                 mode.icon,
                 size: 18,
-                color: isSelected ? Colors.white : AppColors.darkTextMuted,
+                color: isSelected ? Colors.white : colors.textMuted,
               ),
             )
           : Row(
@@ -81,7 +78,7 @@ class ModeButton extends StatelessWidget {
                 Icon(
                   mode.icon,
                   size: 16,
-                  color: isSelected ? Colors.white : AppColors.darkTextMuted,
+                  color: isSelected ? Colors.white : colors.textMuted,
                 ),
                 const SizedBox(width: 8),
                 Text(
@@ -90,7 +87,7 @@ class ModeButton extends StatelessWidget {
                     fontSize: 9,
                     fontWeight: FontWeight.w900,
                     letterSpacing: 2,
-                    color: isSelected ? Colors.white : AppColors.darkTextMuted,
+                    color: isSelected ? Colors.white : colors.textMuted,
                   ),
                 ),
               ],

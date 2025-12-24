@@ -23,14 +23,15 @@ class BreezCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
     return AnimatedOpacity(
       duration: const Duration(milliseconds: 300),
       opacity: disabled ? 0.3 : 1.0,
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.darkCard,
+          color: colors.card,
           borderRadius: BorderRadius.circular(AppColors.cardRadius),
-          border: Border.all(color: AppColors.darkBorder),
+          border: Border.all(color: colors.border),
         ),
         padding: padding ?? const EdgeInsets.all(24),
         child: IgnorePointer(
@@ -44,11 +45,11 @@ class BreezCard extends StatelessWidget {
                         padding: const EdgeInsets.only(bottom: 4),
                         child: Text(
                           title!.toUpperCase(),
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w900,
                             letterSpacing: 2,
-                            color: Colors.white,
+                            color: colors.text,
                           ),
                         ),
                       ),
@@ -59,7 +60,7 @@ class BreezCard extends StatelessWidget {
                           description!,
                           style: TextStyle(
                             fontSize: 12,
-                            color: AppColors.darkTextMuted,
+                            color: colors.textMuted,
                           ),
                         ),
                       ),
@@ -109,8 +110,9 @@ class _BreezButtonState extends State<BreezButton> {
 
   @override
   Widget build(BuildContext context) {
-    final bg = widget.backgroundColor ?? Colors.white.withValues(alpha: 0.05);
-    final hover = widget.hoverColor ?? Colors.white.withValues(alpha: 0.1);
+    final colors = BreezColors.of(context);
+    final bg = widget.backgroundColor ?? colors.buttonBg;
+    final hover = widget.hoverColor ?? colors.cardLight;
 
     return MouseRegion(
       cursor: SystemMouseCursors.click,
@@ -126,7 +128,7 @@ class _BreezButtonState extends State<BreezButton> {
           decoration: BoxDecoration(
             color: _isHovered ? hover : bg,
             borderRadius: BorderRadius.circular(widget.borderRadius),
-            border: widget.border ?? Border.all(color: AppColors.darkBorder),
+            border: widget.border ?? Border.all(color: colors.border),
             boxShadow: widget.shadows,
           ),
           child: widget.child,
@@ -155,19 +157,16 @@ class BreezIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
     return BreezButton(
       onTap: onTap,
       padding: const EdgeInsets.all(10),
-      backgroundColor: isActive
-          ? AppColors.accent
-          : Colors.white.withValues(alpha: 0.05),
-      hoverColor: isActive
-          ? AppColors.accentLight
-          : Colors.white.withValues(alpha: 0.1),
+      backgroundColor: isActive ? AppColors.accent : colors.buttonBg,
+      hoverColor: isActive ? AppColors.accentLight : colors.cardLight,
       child: Icon(
         icon,
         size: size,
-        color: iconColor ?? (isActive ? Colors.white : AppColors.darkTextMuted),
+        color: iconColor ?? (isActive ? Colors.white : colors.textMuted),
       ),
     );
   }
@@ -264,13 +263,14 @@ class BreezLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
     return Text(
       text.toUpperCase(),
       style: TextStyle(
         fontSize: fontSize,
         fontWeight: fontWeight,
         letterSpacing: 2,
-        color: color ?? AppColors.darkTextMuted,
+        color: color ?? colors.textMuted,
       ),
     );
   }
@@ -291,6 +291,7 @@ class BreezPowerButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
     return BreezButton(
       onTap: onTap,
       width: size,
@@ -299,20 +300,20 @@ class BreezPowerButton extends StatelessWidget {
       borderRadius: size / 2,
       backgroundColor: isPowered
           ? AppColors.accentGreen.withValues(alpha: 0.15)
-          : Colors.white.withValues(alpha: 0.05),
+          : colors.buttonBg,
       hoverColor: isPowered
           ? AppColors.accentGreen.withValues(alpha: 0.25)
-          : Colors.white.withValues(alpha: 0.1),
+          : colors.cardLight,
       border: Border.all(
         color: isPowered
             ? AppColors.accentGreen.withValues(alpha: 0.3)
-            : AppColors.darkBorder,
+            : colors.border,
       ),
       child: Center(
         child: Icon(
           Icons.power_settings_new,
           size: size * 0.45,
-          color: isPowered ? AppColors.accentGreen : AppColors.darkTextMuted,
+          color: isPowered ? AppColors.accentGreen : colors.textMuted,
         ),
       ),
     );

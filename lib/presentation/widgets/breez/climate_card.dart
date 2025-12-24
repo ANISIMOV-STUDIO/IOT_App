@@ -42,6 +42,8 @@ class ClimateCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final width = MediaQuery.sizeOf(context).width;
     final isWide = width > 600;
     final isCompact = width < 400;
@@ -49,13 +51,17 @@ class ClimateCard extends StatelessWidget {
     // Adaptive padding based on screen size
     final padding = isCompact ? 16.0 : (isWide ? 24.0 : 20.0);
 
+    // Theme-aware gradients
+    final poweredGradient = isDark
+        ? [const Color(0xFF1E3A5F), const Color(0xFF0F2847)]
+        : [const Color(0xFFE3F2FD), const Color(0xFFBBDEFB)];
+    final offGradient = [colors.card, colors.card];
+
     // Gradient background like MainTempCard
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: isPowered
-              ? [const Color(0xFF1E3A5F), const Color(0xFF0F2847)]
-              : [AppColors.darkCard, AppColors.darkCard],
+          colors: isPowered ? poweredGradient : offGradient,
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -63,7 +69,7 @@ class ClimateCard extends StatelessWidget {
         border: Border.all(
           color: isPowered
               ? AppColors.accent.withValues(alpha: 0.3)
-              : AppColors.darkBorder,
+              : colors.border,
         ),
         boxShadow: isPowered
             ? [
@@ -107,6 +113,7 @@ class ClimateCard extends StatelessWidget {
   }
 
   Widget _buildHeader(BuildContext context, bool isWide) {
+    final colors = BreezColors.of(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -122,11 +129,11 @@ class ClimateCard extends StatelessWidget {
                 const SizedBox(width: 6),
                 Text(
                   isPowered ? 'В РАБОТЕ' : 'ОСТАНОВЛЕНО',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w900,
                     letterSpacing: 0.5,
-                    color: Colors.white,
+                    color: colors.text,
                   ),
                 ),
               ],
@@ -246,6 +253,7 @@ class _StatItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
     return Column(
       children: [
         Icon(
@@ -256,10 +264,10 @@ class _StatItem extends StatelessWidget {
         const SizedBox(height: 6),
         Text(
           value,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w700,
-            color: Colors.white,
+            color: colors.text,
           ),
         ),
         const SizedBox(height: 2),
@@ -267,7 +275,7 @@ class _StatItem extends StatelessWidget {
           label,
           style: TextStyle(
             fontSize: 10,
-            color: Colors.white.withValues(alpha: 0.5),
+            color: colors.textMuted,
           ),
         ),
       ],
@@ -293,6 +301,8 @@ class _FanSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -309,7 +319,7 @@ class _FanSlider extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w500,
-                    color: Colors.white.withValues(alpha: 0.7),
+                    color: colors.textMuted,
                   ),
                 ),
               ],
@@ -330,7 +340,9 @@ class _FanSlider extends StatelessWidget {
           child: SliderTheme(
             data: SliderThemeData(
               activeTrackColor: color,
-              inactiveTrackColor: Colors.white.withValues(alpha: 0.1),
+              inactiveTrackColor: isDark
+                  ? Colors.white.withValues(alpha: 0.1)
+                  : Colors.black.withValues(alpha: 0.1),
               thumbColor: color,
               overlayColor: color.withValues(alpha: 0.2),
               trackHeight: 4,
@@ -358,6 +370,7 @@ class _StatColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
@@ -365,10 +378,10 @@ class _StatColumn extends StatelessWidget {
         const SizedBox(height: 2),
         Text(
           value,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 10,
             fontWeight: FontWeight.w700,
-            color: Colors.white,
+            color: colors.text,
           ),
         ),
       ],

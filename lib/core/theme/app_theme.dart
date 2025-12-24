@@ -1,5 +1,88 @@
 import 'package:flutter/material.dart';
 
+/// Theme-aware colors accessible via BreezColors.of(context)
+class BreezColors extends ThemeExtension<BreezColors> {
+  final Color bg;
+  final Color card;
+  final Color cardLight;
+  final Color border;
+  final Color text;
+  final Color textMuted;
+  final Color buttonBg;
+
+  const BreezColors({
+    required this.bg,
+    required this.card,
+    required this.cardLight,
+    required this.border,
+    required this.text,
+    required this.textMuted,
+    required this.buttonBg,
+  });
+
+  /// Get colors from context
+  static BreezColors of(BuildContext context) {
+    return Theme.of(context).extension<BreezColors>()!;
+  }
+
+  /// Dark theme colors
+  static const dark = BreezColors(
+    bg: AppColors.darkBg,
+    card: AppColors.darkCard,
+    cardLight: AppColors.darkCardLight,
+    border: AppColors.darkBorder,
+    text: AppColors.darkText,
+    textMuted: AppColors.darkTextMuted,
+    buttonBg: Color(0x0DFFFFFF), // white 5%
+  );
+
+  /// Light theme colors
+  static const light = BreezColors(
+    bg: AppColors.lightBg,
+    card: AppColors.lightCard,
+    cardLight: Color(0xFFF8FAFC), // slate-50
+    border: AppColors.lightBorder,
+    text: AppColors.lightText,
+    textMuted: AppColors.lightTextMuted,
+    buttonBg: Color(0xFFF1F5F9), // slate-100
+  );
+
+  @override
+  BreezColors copyWith({
+    Color? bg,
+    Color? card,
+    Color? cardLight,
+    Color? border,
+    Color? text,
+    Color? textMuted,
+    Color? buttonBg,
+  }) {
+    return BreezColors(
+      bg: bg ?? this.bg,
+      card: card ?? this.card,
+      cardLight: cardLight ?? this.cardLight,
+      border: border ?? this.border,
+      text: text ?? this.text,
+      textMuted: textMuted ?? this.textMuted,
+      buttonBg: buttonBg ?? this.buttonBg,
+    );
+  }
+
+  @override
+  BreezColors lerp(ThemeExtension<BreezColors>? other, double t) {
+    if (other is! BreezColors) return this;
+    return BreezColors(
+      bg: Color.lerp(bg, other.bg, t)!,
+      card: Color.lerp(card, other.card, t)!,
+      cardLight: Color.lerp(cardLight, other.cardLight, t)!,
+      border: Color.lerp(border, other.border, t)!,
+      text: Color.lerp(text, other.text, t)!,
+      textMuted: Color.lerp(textMuted, other.textMuted, t)!,
+      buttonBg: Color.lerp(buttonBg, other.buttonBg, t)!,
+    );
+  }
+}
+
 /// BREEZ Design System Colors
 /// Dark industrial theme for HVAC control
 abstract class AppColors {
@@ -84,6 +167,7 @@ class AppTheme {
     useMaterial3: true,
     brightness: isDark ? Brightness.dark : Brightness.light,
     scaffoldBackgroundColor: bg,
+    extensions: [isDark ? BreezColors.dark : BreezColors.light],
     colorScheme: ColorScheme.fromSeed(
       seedColor: AppColors.accent,
       brightness: isDark ? Brightness.dark : Brightness.light,

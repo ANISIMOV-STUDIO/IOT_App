@@ -35,6 +35,7 @@ class _OperationGraphState extends State<OperationGraph> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
     return BreezCard(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -44,19 +45,19 @@ class _OperationGraphState extends State<OperationGraph> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Обзор',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
-                  color: Colors.white,
+                  color: colors.text,
                 ),
               ),
               // Metric tabs
               Container(
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.05),
+                  color: colors.buttonBg,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
@@ -148,6 +149,7 @@ class _OperationGraphState extends State<OperationGraph> {
   }
 
   Widget _buildYAxis() {
+    final colors = BreezColors.of(context);
     final maxValue = widget.data.isEmpty
         ? 30
         : widget.data.map((e) => e.value).reduce(math.max).ceil();
@@ -161,21 +163,22 @@ class _OperationGraphState extends State<OperationGraph> {
       children: [
         Text(
           '${maxValue + 2}',
-          style: TextStyle(fontSize: 9, color: AppColors.darkTextMuted),
+          style: TextStyle(fontSize: 9, color: colors.textMuted),
         ),
         Text(
           '${((maxValue + minValue) / 2).round()}',
-          style: TextStyle(fontSize: 9, color: AppColors.darkTextMuted),
+          style: TextStyle(fontSize: 9, color: colors.textMuted),
         ),
         Text(
           '${minValue - 2 < 0 ? 0 : minValue - 2}',
-          style: TextStyle(fontSize: 9, color: AppColors.darkTextMuted),
+          style: TextStyle(fontSize: 9, color: colors.textMuted),
         ),
       ],
     );
   }
 
   Widget _buildXAxis() {
+    final colors = BreezColors.of(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: widget.data.map((point) {
@@ -183,7 +186,7 @@ class _OperationGraphState extends State<OperationGraph> {
           point.label,
           style: TextStyle(
             fontSize: 10,
-            color: AppColors.darkTextMuted,
+            color: colors.textMuted,
           ),
         );
       }).toList(),
@@ -205,6 +208,7 @@ class _MetricTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
@@ -213,7 +217,7 @@ class _MetricTab extends StatelessWidget {
           duration: const Duration(milliseconds: 150),
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: isSelected ? AppColors.darkCard : Colors.transparent,
+            color: isSelected ? colors.card : Colors.transparent,
             borderRadius: BorderRadius.circular(8),
           ),
           child: Text(
@@ -221,7 +225,7 @@ class _MetricTab extends StatelessWidget {
             style: TextStyle(
               fontSize: 11,
               fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-              color: isSelected ? Colors.white : AppColors.darkTextMuted,
+              color: isSelected ? colors.text : colors.textMuted,
             ),
           ),
         ),

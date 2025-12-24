@@ -46,6 +46,7 @@ class Sidebar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
     return Container(
       width: 80,
       margin: EdgeInsets.only(
@@ -54,9 +55,9 @@ class Sidebar extends StatelessWidget {
         bottom: AppSpacing.lg,
       ),
       decoration: BoxDecoration(
-        color: AppColors.darkCard,
+        color: colors.card,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.darkBorder),
+        border: Border.all(color: colors.border),
       ),
       child: Column(
         children: [
@@ -109,18 +110,19 @@ class Sidebar extends StatelessWidget {
 class _LogoButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
     return Container(
       width: 48,
       height: 48,
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.05),
+        color: colors.buttonBg,
         borderRadius: BorderRadius.circular(14),
       ),
       child: SvgPicture.asset(
         'assets/images/breez-logo.svg',
-        colorFilter: const ColorFilter.mode(
-          Colors.white,
+        colorFilter: ColorFilter.mode(
+          colors.text,
           BlendMode.srcIn,
         ),
       ),
@@ -151,6 +153,7 @@ class _SidebarButtonState extends State<_SidebarButton> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       onEnter: (_) => setState(() => _isHovered = true),
@@ -165,14 +168,14 @@ class _SidebarButtonState extends State<_SidebarButton> {
             color: widget.isSelected
                 ? AppColors.accent
                 : _isHovered
-                    ? Colors.white.withValues(alpha: 0.05)
+                    ? colors.buttonBg
                     : Colors.transparent,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: widget.isSelected
                   ? AppColors.accent
                   : _isHovered
-                      ? AppColors.darkBorder
+                      ? colors.border
                       : Colors.transparent,
             ),
           ),
@@ -185,8 +188,8 @@ class _SidebarButtonState extends State<_SidebarButton> {
                   color: widget.isSelected
                       ? Colors.white
                       : _isHovered
-                          ? Colors.white
-                          : AppColors.darkTextMuted,
+                          ? colors.text
+                          : colors.textMuted,
                 ),
               ),
               if (widget.badge != null)
@@ -195,7 +198,7 @@ class _SidebarButtonState extends State<_SidebarButton> {
                   right: 6,
                   child: Container(
                     padding: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: AppColors.accentRed,
                       shape: BoxShape.circle,
                     ),

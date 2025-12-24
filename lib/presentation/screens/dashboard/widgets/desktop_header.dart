@@ -48,7 +48,7 @@ class DesktopHeader extends StatelessWidget {
           const SizedBox(width: 12),
         ],
         // Unit tabs
-        Expanded(child: _buildUnitTabs()),
+        Expanded(child: _buildUnitTabs(context)),
         const SizedBox(width: 16),
         // Theme toggle
         HeaderIconButton(
@@ -69,14 +69,15 @@ class DesktopHeader extends StatelessWidget {
     );
   }
 
-  Widget _buildUnitTabs() {
+  Widget _buildUnitTabs(BuildContext context) {
+    final colors = BreezColors.of(context);
     return Container(
       height: 48,
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: AppColors.darkCard,
+        color: colors.card,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.darkBorder),
+        border: Border.all(color: colors.border),
       ),
       child: Row(
         children: [
@@ -154,6 +155,7 @@ class _UnitTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
     return HoverBuilder(
       onTap: onTap,
       builder: (context, isHovered) {
@@ -175,7 +177,7 @@ class _UnitTab extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: unit.power
                       ? (isSelected ? Colors.white : AppColors.accentGreen)
-                      : AppColors.darkTextMuted,
+                      : colors.textMuted,
                   shape: BoxShape.circle,
                 ),
               ),
@@ -186,7 +188,7 @@ class _UnitTab extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                  color: isSelected ? Colors.white : AppColors.darkTextMuted,
+                  color: isSelected ? Colors.white : colors.textMuted,
                 ),
               ),
             ],

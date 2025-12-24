@@ -364,13 +364,14 @@ class _CompactSidePanelState extends State<_CompactSidePanel>
     required bool isVertical,
     required BorderRadius borderRadius,
   }) {
+    final colors = BreezColors.of(context);
     return Container(
       width: width,
       height: height,
       decoration: BoxDecoration(
-        color: AppColors.darkCard,
+        color: colors.card,
         borderRadius: borderRadius,
-        border: Border.all(color: AppColors.darkBorder),
+        border: Border.all(color: colors.border),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.3),
@@ -396,6 +397,7 @@ class _CompactSidePanelState extends State<_CompactSidePanel>
   }
 
   List<Widget> _buildMenuItems() {
+    final colors = BreezColors.of(context);
     return _menuItems.asMap().entries.map((entry) {
       final index = entry.key;
       final item = entry.value;
@@ -420,7 +422,7 @@ class _CompactSidePanelState extends State<_CompactSidePanel>
             child: Icon(
               item.$1,
               size: 20,
-              color: isSelected ? AppColors.accent : AppColors.darkTextMuted,
+              color: isSelected ? AppColors.accent : colors.textMuted,
             ),
           ),
         ),

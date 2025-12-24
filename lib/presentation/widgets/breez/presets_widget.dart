@@ -23,6 +23,7 @@ class PresetsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
     return BreezCard(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -32,12 +33,12 @@ class PresetsWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Пресеты',
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
-                  color: Colors.white,
+                  color: colors.text,
                 ),
               ),
               if (activePresetId != null)
@@ -99,6 +100,7 @@ class _IconPresetState extends State<_IconPreset> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       onEnter: (_) => setState(() => _isHovered = true),
@@ -115,14 +117,14 @@ class _IconPresetState extends State<_IconPreset> {
               color: widget.isActive
                   ? _color.withValues(alpha: 0.2)
                   : _isHovered
-                      ? Colors.white.withValues(alpha: 0.05)
-                      : Colors.white.withValues(alpha: 0.02),
+                      ? colors.buttonBg
+                      : colors.buttonBg.withValues(alpha: 0.5),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
                 color: widget.isActive
                     ? _color.withValues(alpha: 0.6)
                     : _isHovered
-                        ? AppColors.darkBorder
+                        ? colors.border
                         : Colors.transparent,
                 width: widget.isActive ? 2 : 1,
               ),
@@ -142,8 +144,8 @@ class _IconPresetState extends State<_IconPreset> {
               color: widget.isActive
                   ? _color
                   : _isHovered
-                      ? Colors.white
-                      : AppColors.darkTextMuted,
+                      ? colors.text
+                      : colors.textMuted,
             ),
           ),
         ),

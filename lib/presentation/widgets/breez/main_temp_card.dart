@@ -37,6 +37,15 @@ class MainTempCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    // Theme-aware gradients
+    final poweredGradient = isDark
+        ? [const Color(0xFF1E3A5F), const Color(0xFF0F2847)]
+        : [const Color(0xFFE3F2FD), const Color(0xFFBBDEFB)];
+    final offGradient = [colors.card, colors.card];
+
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
@@ -44,9 +53,7 @@ class MainTempCard extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: isPowered
-                  ? [const Color(0xFF1E3A5F), const Color(0xFF0F2847)]
-                  : [AppColors.darkCard, AppColors.darkCard],
+              colors: isPowered ? poweredGradient : offGradient,
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -54,7 +61,7 @@ class MainTempCard extends StatelessWidget {
             border: Border.all(
               color: isPowered
                   ? AppColors.accent.withValues(alpha: 0.3)
-                  : AppColors.darkBorder,
+                  : colors.border,
             ),
             boxShadow: isPowered
                 ? [
@@ -81,7 +88,7 @@ class MainTempCard extends StatelessWidget {
                         _formatDate(),
                         style: TextStyle(
                           fontSize: 11,
-                          color: Colors.white.withValues(alpha: 0.6),
+                          color: colors.textMuted,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -95,17 +102,17 @@ class MainTempCard extends StatelessWidget {
                           const SizedBox(width: 4),
                           Text(
                             unitName,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
-                              color: Colors.white,
+                              color: colors.text,
                             ),
                           ),
                           const SizedBox(width: 4),
                           Icon(
                             Icons.keyboard_arrow_down,
                             size: 16,
-                            color: Colors.white.withValues(alpha: 0.6),
+                            color: colors.textMuted,
                           ),
                         ],
                       ),
@@ -161,7 +168,7 @@ class MainTempCard extends StatelessWidget {
                       Icon(
                         isPowered ? Icons.ac_unit : Icons.cloud_off,
                         size: 48,
-                        color: Colors.white.withValues(alpha: 0.3),
+                        color: colors.textMuted,
                       ),
                       const SizedBox(height: 8),
                       // Temperature
@@ -171,10 +178,10 @@ class MainTempCard extends StatelessWidget {
                         children: [
                           Text(
                             '$temperature',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 72,
                               fontWeight: FontWeight.w300,
-                              color: Colors.white,
+                              color: colors.text,
                               height: 1,
                             ),
                           ),
@@ -185,7 +192,7 @@ class MainTempCard extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.w400,
-                                color: Colors.white.withValues(alpha: 0.7),
+                                color: colors.textMuted,
                               ),
                             ),
                           ),
@@ -196,7 +203,7 @@ class MainTempCard extends StatelessWidget {
                         'Целевая температура',
                         style: TextStyle(
                           fontSize: 12,
-                          color: Colors.white.withValues(alpha: 0.5),
+                          color: colors.textMuted,
                         ),
                       ),
                     ],
@@ -209,7 +216,7 @@ class MainTempCard extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 16),
                 decoration: BoxDecoration(
                   border: Border(
-                    top: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+                    top: BorderSide(color: colors.border),
                   ),
                 ),
                 child: Row(
@@ -241,7 +248,7 @@ class MainTempCard extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 16),
                   decoration: BoxDecoration(
                     border: Border(
-                      top: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+                      top: BorderSide(color: colors.border),
                     ),
                   ),
                   child: Row(
@@ -296,6 +303,7 @@ class _StatItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
     return Column(
       children: [
         Icon(
@@ -306,10 +314,10 @@ class _StatItem extends StatelessWidget {
         const SizedBox(height: 6),
         Text(
           value,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w700,
-            color: Colors.white,
+            color: colors.text,
           ),
         ),
         const SizedBox(height: 2),
@@ -317,7 +325,7 @@ class _StatItem extends StatelessWidget {
           label,
           style: TextStyle(
             fontSize: 10,
-            color: Colors.white.withValues(alpha: 0.5),
+            color: colors.textMuted,
           ),
         ),
       ],
@@ -343,6 +351,8 @@ class _FanSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -359,7 +369,7 @@ class _FanSlider extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w500,
-                    color: Colors.white.withValues(alpha: 0.7),
+                    color: colors.textMuted,
                   ),
                 ),
               ],
@@ -380,7 +390,9 @@ class _FanSlider extends StatelessWidget {
           child: SliderTheme(
             data: SliderThemeData(
               activeTrackColor: color,
-              inactiveTrackColor: Colors.white.withValues(alpha: 0.1),
+              inactiveTrackColor: isDark
+                  ? Colors.white.withValues(alpha: 0.1)
+                  : Colors.black.withValues(alpha: 0.1),
               thumbColor: color,
               overlayColor: color.withValues(alpha: 0.2),
               trackHeight: 4,

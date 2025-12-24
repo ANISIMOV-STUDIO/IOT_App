@@ -25,6 +25,7 @@ class UnitNotificationsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
     return BreezCard(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -42,12 +43,12 @@ class UnitNotificationsWidget extends StatelessWidget {
                     color: AppColors.accent,
                   ),
                   const SizedBox(width: 8),
-                  const Text(
+                  Text(
                     'Уведомления',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
-                      color: Colors.white,
+                      color: colors.text,
                     ),
                   ),
                 ],
@@ -103,9 +104,9 @@ class UnitNotificationsWidget extends StatelessWidget {
                   width: double.infinity,
                   height: 48, // Minimum touch target
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.03),
+                    color: colors.buttonBg,
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: AppColors.darkBorder),
+                    border: Border.all(color: colors.border),
                   ),
                   child: Center(
                     child: Text(
@@ -131,6 +132,7 @@ class UnitNotificationsWidget extends StatelessWidget {
 class _EmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -146,7 +148,7 @@ class _EmptyState extends StatelessWidget {
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w600,
-              color: AppColors.darkTextMuted,
+              color: colors.textMuted,
             ),
           ),
           const SizedBox(height: 4),
@@ -154,7 +156,7 @@ class _EmptyState extends StatelessWidget {
             'Система работает штатно',
             style: TextStyle(
               fontSize: 11,
-              color: AppColors.darkTextMuted.withValues(alpha: 0.7),
+              color: colors.textMuted.withValues(alpha: 0.7),
             ),
           ),
         ],
@@ -218,6 +220,7 @@ class _NotificationCardState extends State<_NotificationCard> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       onEnter: (_) => setState(() => _isHovered = true),
@@ -273,8 +276,8 @@ class _NotificationCardState extends State<_NotificationCard> {
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
                               color: widget.notification.isRead
-                                  ? AppColors.darkTextMuted
-                                  : Colors.white,
+                                  ? colors.textMuted
+                                  : colors.text,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -284,7 +287,7 @@ class _NotificationCardState extends State<_NotificationCard> {
                           _timeAgo,
                           style: TextStyle(
                             fontSize: 10,
-                            color: AppColors.darkTextMuted,
+                            color: colors.textMuted,
                           ),
                         ),
                       ],
@@ -294,7 +297,7 @@ class _NotificationCardState extends State<_NotificationCard> {
                       widget.notification.message,
                       style: TextStyle(
                         fontSize: 11,
-                        color: AppColors.darkTextMuted,
+                        color: colors.textMuted,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
