@@ -23,17 +23,16 @@ class EnStrings implements AppStrings {
   @override String get user => 'User';
 
   // ============================================
-  // DEVICES
+  // DEVICES (HVAC)
   // ============================================
   @override String get myDevices => 'My Devices';
-  @override String get smartTv => 'Smart TV';
-  @override String get speaker => 'Speaker';
-  @override String get router => 'Router';
-  @override String get wifi => 'Wi-Fi';
-  @override String get heater => 'Heater';
-  @override String get socket => 'Socket';
-  @override String get airCondition => 'Air Condition';
-  @override String get smartLamp => 'Smart Lamp';
+  @override String get ventilationUnit => 'Air Handling Unit';
+  @override String get airCondition => 'Air Conditioner';
+  @override String get recuperator => 'Heat Recuperator';
+  @override String get humidifier => 'Humidifier';
+  @override String get dehumidifier => 'Dehumidifier';
+  @override String get heater => 'Air Heater';
+  @override String get cooler => 'Air Cooler';
   @override String get activeFor => 'Active for';
   @override String hours(int count) => '$count ${count == 1 ? 'hour' : 'hours'}';
   @override String get active => 'Active';

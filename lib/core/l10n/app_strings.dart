@@ -22,17 +22,16 @@ abstract class AppStrings {
   String get user;
 
   // ============================================
-  // УСТРОЙСТВА
+  // УСТРОЙСТВА (HVAC)
   // ============================================
   String get myDevices;
-  String get smartTv;
-  String get speaker;
-  String get router;
-  String get wifi;
-  String get heater;
-  String get socket;
+  String get ventilationUnit;
   String get airCondition;
-  String get smartLamp;
+  String get recuperator;
+  String get humidifier;
+  String get dehumidifier;
+  String get heater;
+  String get cooler;
   String get activeFor;
   String hours(int count);
   String get active;

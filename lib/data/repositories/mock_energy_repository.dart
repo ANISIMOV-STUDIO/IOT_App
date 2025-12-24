@@ -27,32 +27,25 @@ class MockEnergyRepository implements EnergyRepository {
     await Future.delayed(const Duration(milliseconds: 300));
     return const [
       DeviceEnergyUsage(
-        deviceId: 'ac_1',
-        deviceName: 'Кондиционер',
-        deviceType: 'airCondition',
-        unitCount: 2,
-        totalKwh: 52,
-      ),
-      DeviceEnergyUsage(
-        deviceId: 'lamp_group',
-        deviceName: 'Умные лампы',
-        deviceType: 'lamp',
-        unitCount: 8,
-        totalKwh: 12,
-      ),
-      DeviceEnergyUsage(
-        deviceId: 'tv_group',
-        deviceName: 'Телевизоры',
-        deviceType: 'tv',
-        unitCount: 5,
-        totalKwh: 21,
-      ),
-      DeviceEnergyUsage(
-        deviceId: 'speaker_group',
-        deviceName: 'Колонки',
-        deviceType: 'speaker',
+        deviceId: 'pv_1',
+        deviceName: 'ПВ-1',
+        deviceType: 'ventilation',
         unitCount: 1,
-        totalKwh: 42,
+        totalKwh: 18,
+      ),
+      DeviceEnergyUsage(
+        deviceId: 'pv_2',
+        deviceName: 'ПВ-2',
+        deviceType: 'ventilation',
+        unitCount: 1,
+        totalKwh: 14,
+      ),
+      DeviceEnergyUsage(
+        deviceId: 'pv_3',
+        deviceName: 'ПВ-3',
+        deviceType: 'ventilation',
+        unitCount: 1,
+        totalKwh: 16,
       ),
     ];
   }

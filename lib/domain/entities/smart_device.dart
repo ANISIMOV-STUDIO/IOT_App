@@ -1,19 +1,24 @@
-/// Умное устройство (ТВ, розетка, колонка и т.д.)
+/// HVAC устройство (вентиляционные установки BREEZ)
 library;
 
 import 'package:equatable/equatable.dart';
 
+/// Типы HVAC устройств
 enum SmartDeviceType {
-  tv,
-  speaker,
-  router,
-  wifi,
-  heater,
-  socket,
-  lamp,
+  /// Приточно-вытяжная установка (ПВУ)
+  ventilation,
+  /// Кондиционер
   airCondition,
-  camera,
-  doorLock,
+  /// Рекуператор
+  recuperator,
+  /// Увлажнитель
+  humidifier,
+  /// Осушитель
+  dehumidifier,
+  /// Нагреватель воздуха
+  heater,
+  /// Охладитель воздуха
+  cooler,
 }
 
 class SmartDevice extends Equatable {

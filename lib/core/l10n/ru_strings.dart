@@ -23,17 +23,16 @@ class RuStrings implements AppStrings {
   @override String get user => 'Пользователь';
 
   // ============================================
-  // УСТРОЙСТВА
+  // УСТРОЙСТВА (HVAC)
   // ============================================
   @override String get myDevices => 'Мои устройства';
-  @override String get smartTv => 'Телевизор';
-  @override String get speaker => 'Колонка';
-  @override String get router => 'Роутер';
-  @override String get wifi => 'Wi-Fi';
-  @override String get heater => 'Обогреватель';
-  @override String get socket => 'Розетка';
+  @override String get ventilationUnit => 'Приточно-вытяжная установка';
   @override String get airCondition => 'Кондиционер';
-  @override String get smartLamp => 'Умная лампа';
+  @override String get recuperator => 'Рекуператор';
+  @override String get humidifier => 'Увлажнитель';
+  @override String get dehumidifier => 'Осушитель';
+  @override String get heater => 'Нагреватель';
+  @override String get cooler => 'Охладитель';
   @override String get activeFor => 'Активно';
   @override String hours(int count) {
     if (count == 1) return '$count час';
