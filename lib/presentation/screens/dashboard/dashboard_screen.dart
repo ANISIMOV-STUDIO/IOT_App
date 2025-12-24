@@ -262,95 +262,52 @@ class _CompactSidePanelState extends State<_CompactSidePanel>
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.sizeOf(context).height;
-    final panelHeight = screenHeight * 0.5;
+    final size = MediaQuery.sizeOf(context);
+    final isPortrait = size.height > size.width;
+
+    // Portrait tablet: bottom panel, Landscape/phone: side panel
+    if (isPortrait && size.width > 600) {
+      return _buildBottomPanel(size);
+    }
+    return _buildSidePanel(size);
+  }
+
+  Widget _buildSidePanel(Size screenSize) {
+    final panelHeight = screenSize.height * 0.5;
     const panelWidth = 56.0;
     const handleWidth = 6.0;
 
     return Positioned(
       left: 0,
-      top: (screenHeight - panelHeight) / 2,
+      top: (screenSize.height - panelHeight) / 2,
       child: GestureDetector(
         onTap: () => setState(() => _isOpen = !_isOpen),
         onHorizontalDragEnd: (details) {
           if (details.primaryVelocity != null) {
-            setState(() {
-              _isOpen = details.primaryVelocity! > 0;
-            });
+            setState(() => _isOpen = details.primaryVelocity! > 0);
           }
         },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 250),
           curve: Curves.easeOutCubic,
           transform: Matrix4.translationValues(
-            _isOpen ? 0 : -(panelWidth),
+            _isOpen ? 0 : -panelWidth,
             0,
             0,
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Panel with icons
-              Container(
+              _buildPanelContainer(
                 width: panelWidth,
                 height: panelHeight,
-                decoration: BoxDecoration(
-                  color: AppColors.darkCard,
-                  borderRadius: const BorderRadius.only(
-                    topRight: Radius.circular(16),
-                    bottomRight: Radius.circular(16),
-                  ),
-                  border: Border.all(
-                    color: AppColors.darkBorder,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.3),
-                      blurRadius: 12,
-                      offset: const Offset(2, 0),
-                    ),
-                  ],
-                ),
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: _menuItems.asMap().entries.map((entry) {
-                    final index = entry.key;
-                    final item = entry.value;
-                    final isSelected = index == widget.selectedIndex;
-                    return Tooltip(
-                      message: item.$2,
-                      preferBelow: false,
-                      child: GestureDetector(
-                        onTap: () {
-                          widget.onItemSelected?.call(index);
-                          setState(() => _isOpen = false);
-                        },
-                        child: Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: isSelected
-                                ? AppColors.accent.withValues(alpha: 0.2)
-                                : Colors.transparent,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Icon(
-                            item.$1,
-                            size: 20,
-                            color: isSelected
-                                ? AppColors.accent
-                                : AppColors.darkTextMuted,
-                          ),
-                        ),
-                      ),
-                    );
-                  }).toList(),
+                isVertical: true,
+                borderRadius: const BorderRadius.only(
+                  topRight: Radius.circular(16),
+                  bottomRight: Radius.circular(16),
                 ),
               ),
-
-              // Handle (curly brace shape)
-              _buildHandle(handleWidth, panelHeight * 0.4),
+              _buildHandle(handleWidth, panelHeight * 0.4, isVertical: true),
             ],
           ),
         ),
@@ -358,7 +315,120 @@ class _CompactSidePanelState extends State<_CompactSidePanel>
     );
   }
 
-  Widget _buildHandle(double width, double height) {
+  Widget _buildBottomPanel(Size screenSize) {
+    final panelWidth = screenSize.width * 0.6;
+    const panelHeight = 56.0;
+    const handleHeight = 6.0;
+
+    return Positioned(
+      bottom: 0,
+      left: (screenSize.width - panelWidth) / 2,
+      child: GestureDetector(
+        onTap: () => setState(() => _isOpen = !_isOpen),
+        onVerticalDragEnd: (details) {
+          if (details.primaryVelocity != null) {
+            setState(() => _isOpen = details.primaryVelocity! < 0);
+          }
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.easeOutCubic,
+          transform: Matrix4.translationValues(
+            0,
+            _isOpen ? 0 : panelHeight,
+            0,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildHandle(panelWidth * 0.3, handleHeight, isVertical: false),
+              _buildPanelContainer(
+                width: panelWidth,
+                height: panelHeight,
+                isVertical: false,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(16),
+                  topRight: Radius.circular(16),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPanelContainer({
+    required double width,
+    required double height,
+    required bool isVertical,
+    required BorderRadius borderRadius,
+  }) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        color: AppColors.darkCard,
+        borderRadius: borderRadius,
+        border: Border.all(color: AppColors.darkBorder),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.3),
+            blurRadius: 12,
+            offset: isVertical ? const Offset(2, 0) : const Offset(0, -2),
+          ),
+        ],
+      ),
+      padding: EdgeInsets.symmetric(
+        vertical: isVertical ? 12 : 8,
+        horizontal: isVertical ? 8 : 12,
+      ),
+      child: isVertical
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: _buildMenuItems(),
+            )
+          : Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: _buildMenuItems(),
+            ),
+    );
+  }
+
+  List<Widget> _buildMenuItems() {
+    return _menuItems.asMap().entries.map((entry) {
+      final index = entry.key;
+      final item = entry.value;
+      final isSelected = index == widget.selectedIndex;
+      return Tooltip(
+        message: item.$2,
+        preferBelow: false,
+        child: GestureDetector(
+          onTap: () {
+            widget.onItemSelected?.call(index);
+            setState(() => _isOpen = false);
+          },
+          child: Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: isSelected
+                  ? AppColors.accent.withValues(alpha: 0.2)
+                  : Colors.transparent,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(
+              item.$1,
+              size: 20,
+              color: isSelected ? AppColors.accent : AppColors.darkTextMuted,
+            ),
+          ),
+        ),
+      );
+    }).toList();
+  }
+
+  Widget _buildHandle(double width, double height, {required bool isVertical}) {
     return AnimatedBuilder(
       animation: _blinkController,
       builder: (context, child) {
@@ -367,7 +437,7 @@ class _CompactSidePanelState extends State<_CompactSidePanel>
           size: Size(width, height),
           painter: _BracketPainter(
             color: AppColors.accent.withValues(alpha: opacity),
-            isOpen: _isOpen,
+            isVertical: isVertical,
           ),
         );
       },
@@ -378,9 +448,9 @@ class _CompactSidePanelState extends State<_CompactSidePanel>
 /// Paints a curly bracket shape
 class _BracketPainter extends CustomPainter {
   final Color color;
-  final bool isOpen;
+  final bool isVertical;
 
-  _BracketPainter({required this.color, required this.isOpen});
+  _BracketPainter({required this.color, required this.isVertical});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -391,16 +461,28 @@ class _BracketPainter extends CustomPainter {
     final path = Path();
     final w = size.width;
     final h = size.height;
-    final midY = h / 2;
 
-    // Curly bracket shape pointing right
-    path.moveTo(0, 0);
-    path.quadraticBezierTo(w * 0.8, 0, w * 0.8, h * 0.15);
-    path.quadraticBezierTo(w * 0.8, h * 0.35, w * 0.3, h * 0.4);
-    path.quadraticBezierTo(0, midY * 0.95, 0, midY);
-    path.quadraticBezierTo(0, midY * 1.05, w * 0.3, h * 0.6);
-    path.quadraticBezierTo(w * 0.8, h * 0.65, w * 0.8, h * 0.85);
-    path.quadraticBezierTo(w * 0.8, h, 0, h);
+    if (isVertical) {
+      // Vertical bracket pointing right }
+      final midY = h / 2;
+      path.moveTo(0, 0);
+      path.quadraticBezierTo(w * 0.8, 0, w * 0.8, h * 0.15);
+      path.quadraticBezierTo(w * 0.8, h * 0.35, w * 0.3, h * 0.4);
+      path.quadraticBezierTo(0, midY * 0.95, 0, midY);
+      path.quadraticBezierTo(0, midY * 1.05, w * 0.3, h * 0.6);
+      path.quadraticBezierTo(w * 0.8, h * 0.65, w * 0.8, h * 0.85);
+      path.quadraticBezierTo(w * 0.8, h, 0, h);
+    } else {
+      // Horizontal bracket pointing up ⌢
+      final midX = w / 2;
+      path.moveTo(0, h);
+      path.quadraticBezierTo(0, h * 0.2, w * 0.15, h * 0.2);
+      path.quadraticBezierTo(w * 0.35, h * 0.2, w * 0.4, h * 0.7);
+      path.quadraticBezierTo(midX * 0.95, h, midX, h);
+      path.quadraticBezierTo(midX * 1.05, h, w * 0.6, h * 0.7);
+      path.quadraticBezierTo(w * 0.65, h * 0.2, w * 0.85, h * 0.2);
+      path.quadraticBezierTo(w, h * 0.2, w, h);
+    }
     path.close();
 
     canvas.drawPath(path, paint);
@@ -408,5 +490,5 @@ class _BracketPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_BracketPainter oldDelegate) =>
-      color != oldDelegate.color || isOpen != oldDelegate.isOpen;
+      color != oldDelegate.color || isVertical != oldDelegate.isVertical;
 }
