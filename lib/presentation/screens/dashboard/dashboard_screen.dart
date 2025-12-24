@@ -148,7 +148,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ),
       body: SafeArea(
-        child: isDesktop ? _buildDesktopLayout(isDark) : _buildMobileLayout(isDark, width),
+        child: Stack(
+          children: [
+            // Main content
+            isDesktop ? _buildDesktopLayout(isDark) : _buildMobileLayout(isDark, width),
+
+            // Side drawer handle (mobile/tablet only)
+            if (!isDesktop)
+              Positioned(
+                left: 0,
+                top: 0,
+                bottom: 0,
+                child: _DrawerHandle(
+                  onTap: () => _scaffoldKey.currentState?.openDrawer(),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -170,11 +186,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
       onMasterOff: _masterPowerOff,
       onUnitSelected: (index) {
         setState(() => _activeUnitIndex = index);
-        _loadData(); // Reload data for new device
+        _loadData();
       },
       onThemeToggle: _toggleTheme,
       onAddUnit: _showAddUnitDialog,
-      // Data from repositories
       schedule: _schedule,
       notifications: _notifications,
       graphData: _graphData,
@@ -186,7 +201,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget _buildMobileLayout(bool isDark, double width) {
     return Column(
       children: [
-        // Header with unit tabs (like desktop)
+        // Header with unit tabs
         MobileHeader(
           units: _units,
           selectedUnitIndex: _activeUnitIndex,
@@ -197,10 +212,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           onAddUnit: _showAddUnitDialog,
           isDark: isDark,
           onThemeToggle: _toggleTheme,
-          onMenuTap: () => _scaffoldKey.currentState?.openDrawer(),
         ),
 
-        // Content (no footer)
+        // Content
         Expanded(
           child: MobileLayout(
             unit: _currentUnit,
@@ -214,6 +228,67 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// Side drawer handle ("tongue") for opening drawer
+class _DrawerHandle extends StatefulWidget {
+  final VoidCallback? onTap;
+
+  const _DrawerHandle({this.onTap});
+
+  @override
+  State<_DrawerHandle> createState() => _DrawerHandleState();
+}
+
+class _DrawerHandleState extends State<_DrawerHandle> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: widget.onTap,
+      onHorizontalDragEnd: (details) {
+        // Swipe right to open
+        if (details.primaryVelocity != null && details.primaryVelocity! > 0) {
+          widget.onTap?.call();
+        }
+      },
+      child: MouseRegion(
+        onEnter: (_) => setState(() => _isHovered = true),
+        onExit: (_) => setState(() => _isHovered = false),
+        child: Center(
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            width: _isHovered ? 20 : 12,
+            height: 80,
+            decoration: BoxDecoration(
+              color: _isHovered
+                  ? AppColors.accent.withValues(alpha: 0.8)
+                  : AppColors.accent.withValues(alpha: 0.4),
+              borderRadius: const BorderRadius.only(
+                topRight: Radius.circular(8),
+                bottomRight: Radius.circular(8),
+              ),
+              boxShadow: _isHovered
+                  ? [
+                      BoxShadow(
+                        color: AppColors.accent.withValues(alpha: 0.3),
+                        blurRadius: 8,
+                        offset: const Offset(2, 0),
+                      ),
+                    ]
+                  : null,
+            ),
+            child: Icon(
+              Icons.chevron_right,
+              size: 16,
+              color: Colors.white.withValues(alpha: _isHovered ? 1.0 : 0.6),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

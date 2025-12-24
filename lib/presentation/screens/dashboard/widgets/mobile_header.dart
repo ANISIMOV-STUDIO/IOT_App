@@ -36,15 +36,9 @@ class MobileHeader extends StatelessWidget {
       padding: EdgeInsets.all(AppSpacing.sm),
       child: Column(
         children: [
-          // Top row: Menu + Logo + controls
+          // Top row: Logo + controls
           Row(
             children: [
-              // Menu button
-              HeaderIconButton(
-                icon: Icons.menu,
-                onTap: onMenuTap,
-              ),
-              const SizedBox(width: 12),
               // Logo
               const _Logo(),
               const Spacer(),
