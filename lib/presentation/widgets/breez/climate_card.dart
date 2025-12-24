@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import 'breez_card.dart';
 import 'temperature_dial.dart';
-import 'airflow_slider.dart';
 
-/// Main climate control card
+/// Main climate control card (unified style for mobile & desktop)
 class ClimateCard extends StatelessWidget {
   final String unitName;
   final bool isPowered;
@@ -31,7 +30,7 @@ class ClimateCard extends StatelessWidget {
     required this.exhaustFan,
     this.filterPercent = 88,
     this.airflowRate = 420,
-    this.humidity,
+    this.humidity = 45,
     this.outsideTemp,
     this.onTemperatureIncrease,
     this.onTemperatureDecrease,
@@ -48,10 +47,34 @@ class ClimateCard extends StatelessWidget {
     final isCompact = width < 400;
 
     // Adaptive padding based on screen size
-    final padding = isCompact ? 12.0 : (isWide ? 32.0 : 20.0);
-    final sliderSpacing = isCompact ? 8.0 : 12.0;
+    final padding = isCompact ? 16.0 : (isWide ? 24.0 : 20.0);
 
-    return BreezCard(
+    // Gradient background like MainTempCard
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: isPowered
+              ? [const Color(0xFF1E3A5F), const Color(0xFF0F2847)]
+              : [AppColors.darkCard, AppColors.darkCard],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(AppColors.cardRadius),
+        border: Border.all(
+          color: isPowered
+              ? AppColors.accent.withValues(alpha: 0.3)
+              : AppColors.darkBorder,
+        ),
+        boxShadow: isPowered
+            ? [
+                BoxShadow(
+                  color: AppColors.accent.withValues(alpha: 0.15),
+                  blurRadius: 24,
+                  offset: const Offset(0, 8),
+                ),
+              ]
+            : null,
+      ),
       padding: EdgeInsets.all(padding),
       child: Column(
         children: [
@@ -70,32 +93,14 @@ class ClimateCard extends StatelessWidget {
             ),
           ),
 
-          // Sliders
-          AnimatedOpacity(
-            duration: const Duration(milliseconds: 300),
-            opacity: isPowered ? 1.0 : 0.2,
-            child: IgnorePointer(
-              ignoring: !isPowered,
-              child: Column(
-                children: [
-                  SupplyAirflowSlider(
-                    value: supplyFan,
-                    onChanged: onSupplyFanChanged,
-                  ),
-                  SizedBox(height: sliderSpacing),
-                  ExhaustAirflowSlider(
-                    value: exhaustFan,
-                    onChanged: onExhaustFanChanged,
-                  ),
-                ],
-              ),
-            ),
-          ),
+          // Stats row (like MainTempCard)
+          _buildStatsRow(),
 
-          SizedBox(height: isCompact ? 12 : 16),
-
-          // Footer stats
-          _buildFooter(),
+          // Sliders (side by side like MainTempCard)
+          if (isPowered) ...[
+            const SizedBox(height: 12),
+            _buildSlidersRow(),
+          ],
         ],
       ),
     );
@@ -159,57 +164,188 @@ class ClimateCard extends StatelessWidget {
     );
   }
 
-  Widget _buildFooter() {
+  /// Stats row (like MainTempCard)
+  Widget _buildStatsRow() {
+    return Container(
+      padding: const EdgeInsets.only(top: 16),
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _StatItem(
+            icon: Icons.air,
+            value: '$airflowRate м³/ч',
+            label: 'Поток',
+          ),
+          _StatItem(
+            icon: Icons.water_drop_outlined,
+            value: '${humidity ?? 45}%',
+            label: 'Влажность',
+          ),
+          _StatItem(
+            icon: Icons.filter_alt_outlined,
+            value: '$filterPercent%',
+            label: 'Фильтр',
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Sliders row (side by side like MainTempCard)
+  Widget _buildSlidersRow() {
     return Container(
       padding: const EdgeInsets.only(top: 12),
       decoration: BoxDecoration(
         border: Border(
-          top: BorderSide(color: AppColors.darkBorder),
+          top: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
         ),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              Icon(
-                Icons.refresh,
-                size: 12,
-                color: AppColors.accentGreen,
-              ),
-              const SizedBox(width: 6),
-              Text(
-                'ФИЛЬТР: $filterPercent%',
-                style: const TextStyle(
-                  fontSize: 9,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.5,
-                  color: Colors.white,
-                ),
-              ),
-            ],
+          Expanded(
+            child: _FanSlider(
+              label: 'Приток',
+              value: supplyFan,
+              color: AppColors.accent,
+              icon: Icons.arrow_downward_rounded,
+              onChanged: onSupplyFanChanged,
+            ),
           ),
-          Row(
-            children: [
-              Icon(
-                Icons.swap_horiz,
-                size: 12,
-                color: AppColors.accent,
-              ),
-              const SizedBox(width: 6),
-              Text(
-                '$airflowRate М³/Ч',
-                style: const TextStyle(
-                  fontSize: 9,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.5,
-                  color: Colors.white,
-                ),
-              ),
-            ],
+          const SizedBox(width: 16),
+          Expanded(
+            child: _FanSlider(
+              label: 'Вытяжка',
+              value: exhaustFan,
+              color: AppColors.accentOrange,
+              icon: Icons.arrow_upward_rounded,
+              onChanged: onExhaustFanChanged,
+            ),
           ),
         ],
       ),
+    );
+  }
+}
+
+/// Stat item for stats row
+class _StatItem extends StatelessWidget {
+  final IconData icon;
+  final String value;
+  final String label;
+
+  const _StatItem({
+    required this.icon,
+    required this.value,
+    required this.label,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Icon(
+          icon,
+          size: 18,
+          color: AppColors.accent,
+        ),
+        const SizedBox(height: 6),
+        Text(
+          value,
+          style: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w700,
+            color: Colors.white,
+          ),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 10,
+            color: Colors.white.withValues(alpha: 0.5),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Fan slider (like MainTempCard)
+class _FanSlider extends StatelessWidget {
+  final String label;
+  final int value;
+  final Color color;
+  final IconData icon;
+  final ValueChanged<int>? onChanged;
+
+  const _FanSlider({
+    required this.label,
+    required this.value,
+    required this.color,
+    required this.icon,
+    this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Icon(icon, size: 12, color: color),
+                const SizedBox(width: 4),
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white.withValues(alpha: 0.7),
+                  ),
+                ),
+              ],
+            ),
+            Text(
+              '$value%',
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+                color: color,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 6),
+        SizedBox(
+          height: 24, // Slightly taller for touch
+          child: SliderTheme(
+            data: SliderThemeData(
+              activeTrackColor: color,
+              inactiveTrackColor: Colors.white.withValues(alpha: 0.1),
+              thumbColor: color,
+              overlayColor: color.withValues(alpha: 0.2),
+              trackHeight: 4,
+              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
+              overlayShape: const RoundSliderOverlayShape(overlayRadius: 16),
+            ),
+            child: Slider(
+              value: value.toDouble(),
+              min: 0,
+              max: 100,
+              onChanged: (v) => onChanged?.call(v.round()),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

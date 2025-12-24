@@ -54,15 +54,17 @@ class PresetsWidget extends StatelessWidget {
 
           const Spacer(),
 
-          // Presets as icon row
+          // Presets as icon row (flexible to fit any width)
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: presets.map((preset) {
               final isActive = preset.id == activePresetId;
-              return _IconPreset(
-                preset: preset,
-                isActive: isActive,
-                onTap: () => onPresetSelected?.call(preset.id),
+              return Flexible(
+                child: _IconPreset(
+                  preset: preset,
+                  isActive: isActive,
+                  onTap: () => onPresetSelected?.call(preset.id),
+                ),
               );
             }).toList(),
           ),
