@@ -14,6 +14,7 @@ import '../../widgets/breez/breez.dart';
 import 'dialogs/add_unit_dialog.dart';
 import 'layouts/desktop_layout.dart';
 import 'layouts/mobile_layout.dart';
+import 'widgets/mobile_header.dart';
 
 /// Main dashboard screen
 class DashboardScreen extends StatefulWidget {
@@ -170,29 +171,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget _buildMobileLayout(bool isDark, double width) {
     return Column(
       children: [
-        // Header
-        AppHeader(
+        // Header with unit tabs (like desktop)
+        MobileHeader(
+          units: _units,
+          selectedUnitIndex: _activeUnitIndex,
+          onUnitSelected: (index) {
+            setState(() => _activeUnitIndex = index);
+            _loadData();
+          },
+          onAddUnit: _showAddUnitDialog,
           isDark: isDark,
           onThemeToggle: _toggleTheme,
-          hasNotifications: true,
-          userName: 'Алексей Б.',
-          userRole: 'Админ',
         ),
 
-        // Unit tabs
-        UnitTabs(
-          units: _units
-              .map((u) => UnitTabData(
-                    id: u.id,
-                    name: u.name,
-                    isActive: u.power,
-                  ))
-              .toList(),
-          selectedIndex: _activeUnitIndex,
-          onUnitSelected: (index) => setState(() => _activeUnitIndex = index),
-        ),
-
-        // Content
+        // Content (no footer)
         Expanded(
           child: MobileLayout(
             unit: _currentUnit,
@@ -205,9 +197,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
             compact: width <= 600,
           ),
         ),
-
-        // Footer
-        const AppFooter(outsideTemp: 18),
       ],
     );
   }
