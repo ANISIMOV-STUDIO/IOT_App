@@ -66,60 +66,107 @@ class DesktopLayout extends StatefulWidget {
 class _DesktopLayoutState extends State<DesktopLayout> {
   int _sidebarIndex = 0;
   String? _activePresetId;
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  // Menu items for bottom bar
+  static const _menuItems = [
+    (Icons.dashboard_outlined, 'Панель'),
+    (Icons.devices_outlined, 'Устройства'),
+    (Icons.schedule_outlined, 'Расписание'),
+    (Icons.analytics_outlined, 'Аналитика'),
+    (Icons.notifications_outlined, 'Уведомления'),
+    (Icons.settings_outlined, 'Настройки'),
+  ];
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.sizeOf(context).width;
-    final showPermanentSidebar = width > 1100;
+    final size = MediaQuery.sizeOf(context);
+    final isPortrait = size.height > size.width;
+    // Portrait: bottom bar, Landscape: sidebar
+    final showBottomBar = isPortrait;
+    final showSidebar = !isPortrait;
 
     return Scaffold(
-      key: _scaffoldKey,
       backgroundColor: Colors.transparent,
-      drawer: showPermanentSidebar
-          ? null
-          : Drawer(
-              backgroundColor: AppColors.darkCard,
-              child: Sidebar(
-                selectedIndex: _sidebarIndex,
-                onItemSelected: (index) {
-                  setState(() => _sidebarIndex = index);
-                  Navigator.of(context).pop(); // Close drawer
-                },
-              ),
-            ),
-      body: Row(
+      body: Column(
         children: [
-          // Permanent sidebar (desktop only)
-          if (showPermanentSidebar)
-            Sidebar(
-              selectedIndex: _sidebarIndex,
-              onItemSelected: (index) => setState(() => _sidebarIndex = index),
-            ),
-
           // Main content
           Expanded(
-            child: Padding(
-              padding: EdgeInsets.all(AppSpacing.lg),
-              child: Column(
-                children: [
-                  // Main content row
-                  Expanded(
-                    child: Row(
+            child: Row(
+              children: [
+                // Sidebar (landscape only)
+                if (showSidebar)
+                  Sidebar(
+                    selectedIndex: _sidebarIndex,
+                    onItemSelected: (index) => setState(() => _sidebarIndex = index),
+                  ),
+
+                // Main content
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.all(AppSpacing.lg),
+                    child: Column(
                       children: [
-                        // Left column: MainTempCard + Presets
-                        Expanded(child: _buildLeftColumn()),
-                        SizedBox(width: AppSpacing.md),
-                        // Right column: Header + Schedule/Notifications + OperationGraph
-                        Expanded(flex: 2, child: _buildRightColumn(showPermanentSidebar)),
+                        Expanded(
+                          child: Row(
+                            children: [
+                              Expanded(child: _buildLeftColumn()),
+                              SizedBox(width: AppSpacing.lg),
+                              Expanded(flex: 2, child: _buildRightColumn()),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
+
+          // Bottom navigation bar (portrait only)
+          if (showBottomBar) _buildBottomBar(),
         ],
+      ),
+    );
+  }
+
+  Widget _buildBottomBar() {
+    return Container(
+      height: 80,
+      margin: EdgeInsets.fromLTRB(AppSpacing.lg, 0, AppSpacing.lg, AppSpacing.lg),
+      decoration: BoxDecoration(
+        color: AppColors.darkCard,
+        borderRadius: BorderRadius.circular(AppColors.cardRadius),
+        border: Border.all(color: AppColors.darkBorder),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: _menuItems.asMap().entries.map((entry) {
+          final index = entry.key;
+          final item = entry.value;
+          final isSelected = index == _sidebarIndex;
+          return Tooltip(
+            message: item.$2,
+            child: GestureDetector(
+              onTap: () => setState(() => _sidebarIndex = index),
+              child: Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? AppColors.accent.withValues(alpha: 0.2)
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(AppSpacing.radiusXl),
+                ),
+                child: Icon(
+                  item.$1,
+                  size: 24,
+                  color: isSelected ? AppColors.accent : AppColors.darkTextMuted,
+                ),
+              ),
+            ),
+          );
+        }).toList(),
       ),
     );
   }
@@ -146,7 +193,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
           ),
         ),
 
-        SizedBox(height: AppSpacing.md),
+        SizedBox(height: AppSpacing.lg),
 
         // Presets (small, icon-only)
         Expanded(
@@ -161,7 +208,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
     );
   }
 
-  Widget _buildRightColumn(bool showPermanentSidebar) {
+  Widget _buildRightColumn() {
     return Column(
       children: [
         // Header row
@@ -174,11 +221,9 @@ class _DesktopLayoutState extends State<DesktopLayout> {
           onThemeToggle: widget.onThemeToggle,
           userName: widget.userName,
           userRole: widget.userRole,
-          showMenuButton: !showPermanentSidebar,
-          onMenuTap: () => _scaffoldKey.currentState?.openDrawer(),
         ),
 
-        SizedBox(height: AppSpacing.md),
+        SizedBox(height: AppSpacing.lg),
 
         // Schedule + Notifications row
         Expanded(
@@ -192,7 +237,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                 ),
               ),
 
-              SizedBox(width: AppSpacing.md),
+              SizedBox(width: AppSpacing.lg),
 
               // Unit notifications widget
               Expanded(
@@ -206,7 +251,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
           ),
         ),
 
-        SizedBox(height: AppSpacing.md),
+        SizedBox(height: AppSpacing.lg),
 
         // OperationGraph row (same height as Schedule/Notifications)
         Expanded(
