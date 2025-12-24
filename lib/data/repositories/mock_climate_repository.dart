@@ -1,4 +1,4 @@
-/// Мок-репозиторий климат-контроля с поддержкой нескольких устройств
+/// Мок-репозиторий климат-контроля
 library;
 
 import 'dart:async';
@@ -6,96 +6,78 @@ import 'package:flutter/material.dart';
 import '../../domain/entities/climate.dart';
 import '../../domain/entities/hvac_device.dart';
 import '../../domain/repositories/climate_repository.dart';
+import '../mock/mock_data.dart';
 
 class MockClimateRepository implements ClimateRepository {
   final _climateController = StreamController<ClimateState>.broadcast();
   final _devicesController = StreamController<List<HvacDevice>>.broadcast();
 
-  // Хранение состояний всех устройств
   final Map<String, ClimateState> _deviceStates = {};
-
-  // Метаданные устройств (бренд, тип, иконка)
   final Map<String, _DeviceMeta> _deviceMeta = {};
-
-  // Выбранное устройство
-  String _selectedDeviceId = 'zilon-1';
+  String _selectedDeviceId = '';
 
   MockClimateRepository() {
-    _initializeMockDevices();
+    _initializeFromMockData();
   }
 
-  void _initializeMockDevices() {
-    // ZILON - Приточная установка
-    _deviceStates['zilon-1'] = const ClimateState(
-      roomId: 'main',
-      deviceName: 'ZILON ZPE-6000',
-      currentTemperature: 21.5,
-      targetTemperature: 22.0,
-      humidity: 58.0,
-      targetHumidity: 50.0,
-      supplyAirflow: 65.0,
-      exhaustAirflow: 50.0,
-      mode: ClimateMode.auto,
-      preset: 'auto',
-      airQuality: AirQualityLevel.good,
-      co2Ppm: 720,
-      pollutantsAqi: 45,
-      isOn: true,
-    );
-    _deviceMeta['zilon-1'] = const _DeviceMeta(
-      brand: 'ZILON',
-      type: 'Приточная установка',
-      icon: Icons.air,
-      isOnline: true,
-    );
+  void _initializeFromMockData() {
+    for (final device in MockData.hvacDevices) {
+      final id = device['id'] as String;
+      final climate = device['climate'] as Map<String, dynamic>;
 
-    // LG - Сплит-система
-    _deviceStates['lg-1'] = const ClimateState(
-      roomId: 'bedroom',
-      deviceName: 'LG Dual Inverter',
-      currentTemperature: 24.0,
-      targetTemperature: 23.0,
-      humidity: 45.0,
-      targetHumidity: 45.0,
-      supplyAirflow: 40.0,
-      exhaustAirflow: 0.0,
-      mode: ClimateMode.cooling,
-      preset: 'auto',
-      airQuality: AirQualityLevel.excellent,
-      co2Ppm: 520,
-      pollutantsAqi: 25,
-      isOn: false,
-    );
-    _deviceMeta['lg-1'] = const _DeviceMeta(
-      brand: 'LG',
-      type: 'Сплит-система',
-      icon: Icons.ac_unit,
-      isOnline: true,
-    );
+      _deviceStates[id] = ClimateState(
+        roomId: climate['roomId'] as String,
+        deviceName: climate['deviceName'] as String,
+        currentTemperature: (climate['currentTemperature'] as num).toDouble(),
+        targetTemperature: (climate['targetTemperature'] as num).toDouble(),
+        humidity: (climate['humidity'] as num).toDouble(),
+        targetHumidity: (climate['targetHumidity'] as num).toDouble(),
+        supplyAirflow: (climate['supplyAirflow'] as num).toDouble(),
+        exhaustAirflow: (climate['exhaustAirflow'] as num).toDouble(),
+        mode: _parseClimateMode(climate['mode'] as String),
+        preset: climate['preset'] as String,
+        airQuality: _parseAirQuality(climate['airQuality'] as String),
+        co2Ppm: climate['co2Ppm'] as int,
+        pollutantsAqi: climate['pollutantsAqi'] as int,
+        isOn: climate['isOn'] as bool,
+      );
 
-    // Xiaomi - Увлажнитель
-    _deviceStates['xiaomi-1'] = const ClimateState(
-      roomId: 'living',
-      deviceName: 'Xiaomi Mi Humidifier',
-      currentTemperature: 22.0,
-      targetTemperature: 22.0,
-      humidity: 52.0,
-      targetHumidity: 55.0,
-      supplyAirflow: 30.0,
-      exhaustAirflow: 0.0,
-      mode: ClimateMode.ventilation,
-      preset: 'auto',
-      airQuality: AirQualityLevel.good,
-      co2Ppm: 650,
-      pollutantsAqi: 38,
-      isOn: false,
+      _deviceMeta[id] = _DeviceMeta(
+        brand: device['brand'] as String,
+        type: device['type'] as String,
+        icon: _parseIcon(device['icon'] as String),
+        isOnline: device['isOnline'] as bool,
+      );
+    }
+
+    _selectedDeviceId = MockData.hvacDevices.first['id'] as String;
+  }
+
+  ClimateMode _parseClimateMode(String mode) {
+    return ClimateMode.values.firstWhere(
+      (e) => e.name == mode,
+      orElse: () => ClimateMode.auto,
     );
-    _deviceMeta['xiaomi-1'] = const _DeviceMeta(
-      brand: 'Xiaomi',
-      type: 'Увлажнитель',
-      icon: Icons.water_drop,
-      isOnline: false,
+  }
+
+  AirQualityLevel _parseAirQuality(String quality) {
+    return AirQualityLevel.values.firstWhere(
+      (e) => e.name == quality,
+      orElse: () => AirQualityLevel.good,
     );
+  }
+
+  IconData _parseIcon(String icon) {
+    switch (icon) {
+      case 'air':
+        return Icons.air;
+      case 'ac_unit':
+        return Icons.ac_unit;
+      case 'water_drop':
+        return Icons.water_drop;
+      default:
+        return Icons.device_hub;
+    }
   }
 
   // ============================================
@@ -104,13 +86,13 @@ class MockClimateRepository implements ClimateRepository {
 
   @override
   Future<List<HvacDevice>> getAllHvacDevices() async {
-    await Future.delayed(const Duration(milliseconds: 100));
+    await Future.delayed(Duration(milliseconds: MockData.networkDelays['fast']!));
     return _buildDeviceList();
   }
 
   @override
   Future<ClimateState> getDeviceState(String deviceId) async {
-    await Future.delayed(const Duration(milliseconds: 100));
+    await Future.delayed(Duration(milliseconds: MockData.networkDelays['fast']!));
     return _deviceStates[deviceId] ?? _deviceStates.values.first;
   }
 
@@ -122,8 +104,6 @@ class MockClimateRepository implements ClimateRepository {
 
   @override
   Stream<ClimateState> watchDeviceClimate(String deviceId) {
-    // Возвращаем общий стрим, фильтруя по deviceId не нужно -
-    // используем _selectedDeviceId для определения какое устройство отслеживать
     return _climateController.stream;
   }
 
@@ -152,10 +132,7 @@ class MockClimateRepository implements ClimateRepository {
   }
 
   void _notifyDeviceChange(String deviceId) {
-    // Обновляем список устройств
     _devicesController.add(_buildDeviceList());
-
-    // Если это выбранное устройство - обновляем климат стрим
     if (deviceId == _selectedDeviceId) {
       _climateController.add(_deviceStates[deviceId]!);
     }
@@ -167,7 +144,7 @@ class MockClimateRepository implements ClimateRepository {
 
   @override
   Future<ClimateState> getCurrentState() async {
-    await Future.delayed(const Duration(milliseconds: 200));
+    await Future.delayed(Duration(milliseconds: MockData.networkDelays['normal']!));
     return _deviceStates[_selectedDeviceId]!;
   }
 
@@ -185,7 +162,7 @@ class MockClimateRepository implements ClimateRepository {
 
   @override
   Future<ClimateState> setPower(bool isOn, {String? deviceId}) async {
-    await Future.delayed(const Duration(milliseconds: 300));
+    await Future.delayed(Duration(milliseconds: MockData.networkDelays['slow']!));
     final id = _resolveDeviceId(deviceId);
     _deviceStates[id] = _deviceStates[id]!.copyWith(isOn: isOn);
     _notifyDeviceChange(id);
@@ -194,7 +171,7 @@ class MockClimateRepository implements ClimateRepository {
 
   @override
   Future<ClimateState> setTargetTemperature(double temperature, {String? deviceId}) async {
-    await Future.delayed(const Duration(milliseconds: 100));
+    await Future.delayed(Duration(milliseconds: MockData.networkDelays['fast']!));
     final id = _resolveDeviceId(deviceId);
     _deviceStates[id] = _deviceStates[id]!.copyWith(targetTemperature: temperature);
     _notifyDeviceChange(id);
@@ -203,7 +180,7 @@ class MockClimateRepository implements ClimateRepository {
 
   @override
   Future<ClimateState> setHumidity(double humidity, {String? deviceId}) async {
-    await Future.delayed(const Duration(milliseconds: 100));
+    await Future.delayed(Duration(milliseconds: MockData.networkDelays['fast']!));
     final id = _resolveDeviceId(deviceId);
     _deviceStates[id] = _deviceStates[id]!.copyWith(targetHumidity: humidity);
     _notifyDeviceChange(id);
@@ -212,7 +189,7 @@ class MockClimateRepository implements ClimateRepository {
 
   @override
   Future<ClimateState> setMode(ClimateMode mode, {String? deviceId}) async {
-    await Future.delayed(const Duration(milliseconds: 200));
+    await Future.delayed(Duration(milliseconds: MockData.networkDelays['normal']!));
     final id = _resolveDeviceId(deviceId);
     _deviceStates[id] = _deviceStates[id]!.copyWith(
       mode: mode,
@@ -224,7 +201,7 @@ class MockClimateRepository implements ClimateRepository {
 
   @override
   Future<ClimateState> setSupplyAirflow(double value, {String? deviceId}) async {
-    await Future.delayed(const Duration(milliseconds: 100));
+    await Future.delayed(Duration(milliseconds: MockData.networkDelays['fast']!));
     final id = _resolveDeviceId(deviceId);
     _deviceStates[id] = _deviceStates[id]!.copyWith(supplyAirflow: value);
     _notifyDeviceChange(id);
@@ -233,7 +210,7 @@ class MockClimateRepository implements ClimateRepository {
 
   @override
   Future<ClimateState> setExhaustAirflow(double value, {String? deviceId}) async {
-    await Future.delayed(const Duration(milliseconds: 100));
+    await Future.delayed(Duration(milliseconds: MockData.networkDelays['fast']!));
     final id = _resolveDeviceId(deviceId);
     _deviceStates[id] = _deviceStates[id]!.copyWith(exhaustAirflow: value);
     _notifyDeviceChange(id);
@@ -242,41 +219,25 @@ class MockClimateRepository implements ClimateRepository {
 
   @override
   Future<ClimateState> setPreset(String preset, {String? deviceId}) async {
-    await Future.delayed(const Duration(milliseconds: 200));
+    await Future.delayed(Duration(milliseconds: MockData.networkDelays['normal']!));
     final id = _resolveDeviceId(deviceId);
 
     ClimateState newState = _deviceStates[id]!.copyWith(preset: preset);
-    switch (preset) {
-      case 'auto':
-        newState = newState.copyWith(mode: ClimateMode.auto);
-        break;
-      case 'night':
-        newState = newState.copyWith(
-          targetTemperature: 19.0,
-          supplyAirflow: 30.0,
-          exhaustAirflow: 25.0,
-        );
-        break;
-      case 'turbo':
-        newState = newState.copyWith(
-          supplyAirflow: 100.0,
-          exhaustAirflow: 90.0,
-        );
-        break;
-      case 'eco':
-        newState = newState.copyWith(
-          targetTemperature: 20.0,
-          supplyAirflow: 40.0,
-          exhaustAirflow: 35.0,
-        );
-        break;
-      case 'away':
-        newState = newState.copyWith(
-          targetTemperature: 16.0,
-          supplyAirflow: 20.0,
-          exhaustAirflow: 15.0,
-        );
-        break;
+
+    final presetConfig = MockData.climatePresets[preset];
+    if (presetConfig != null) {
+      if (presetConfig.containsKey('mode')) {
+        newState = newState.copyWith(mode: _parseClimateMode(presetConfig['mode'] as String));
+      }
+      if (presetConfig.containsKey('targetTemperature')) {
+        newState = newState.copyWith(targetTemperature: (presetConfig['targetTemperature'] as num).toDouble());
+      }
+      if (presetConfig.containsKey('supplyAirflow')) {
+        newState = newState.copyWith(supplyAirflow: (presetConfig['supplyAirflow'] as num).toDouble());
+      }
+      if (presetConfig.containsKey('exhaustAirflow')) {
+        newState = newState.copyWith(exhaustAirflow: (presetConfig['exhaustAirflow'] as num).toDouble());
+      }
     }
 
     _deviceStates[id] = newState;

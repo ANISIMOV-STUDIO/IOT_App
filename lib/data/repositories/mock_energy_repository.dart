@@ -5,6 +5,7 @@ import 'dart:async';
 import 'dart:math';
 import '../../domain/entities/energy_stats.dart';
 import '../../domain/repositories/energy_repository.dart';
+import '../mock/mock_data.dart';
 
 class MockEnergyRepository implements EnergyRepository {
   final _controller = StreamController<EnergyStats>.broadcast();
@@ -12,42 +13,26 @@ class MockEnergyRepository implements EnergyRepository {
 
   @override
   Future<EnergyStats> getTodayStats() async {
-    await Future.delayed(const Duration(milliseconds: 300));
+    await Future.delayed(Duration(milliseconds: MockData.networkDelays['slow']!));
     return _generateStats(DateTime.now());
   }
 
   @override
   Future<EnergyStats> getStats(DateTime from, DateTime to) async {
-    await Future.delayed(const Duration(milliseconds: 400));
+    await Future.delayed(Duration(milliseconds: MockData.networkDelays['load']!));
     return _generateStats(from);
   }
 
   @override
   Future<List<DeviceEnergyUsage>> getDevicePowerUsage() async {
-    await Future.delayed(const Duration(milliseconds: 300));
-    return const [
-      DeviceEnergyUsage(
-        deviceId: 'pv_1',
-        deviceName: 'ПВ-1',
-        deviceType: 'ventilation',
-        unitCount: 1,
-        totalKwh: 18,
-      ),
-      DeviceEnergyUsage(
-        deviceId: 'pv_2',
-        deviceName: 'ПВ-2',
-        deviceType: 'ventilation',
-        unitCount: 1,
-        totalKwh: 14,
-      ),
-      DeviceEnergyUsage(
-        deviceId: 'pv_3',
-        deviceName: 'ПВ-3',
-        deviceType: 'ventilation',
-        unitCount: 1,
-        totalKwh: 16,
-      ),
-    ];
+    await Future.delayed(Duration(milliseconds: MockData.networkDelays['slow']!));
+    return MockData.energyUsage.map((d) => DeviceEnergyUsage(
+      deviceId: d['deviceId'] as String,
+      deviceName: d['deviceName'] as String,
+      deviceType: d['deviceType'] as String,
+      unitCount: d['unitCount'] as int,
+      totalKwh: (d['totalKwh'] as num).toDouble(),
+    )).toList();
   }
 
   @override
@@ -61,7 +46,7 @@ class MockEnergyRepository implements EnergyRepository {
   EnergyStats _generateStats(DateTime date) {
     final hourlyData = <HourlyUsage>[];
     final currentHour = DateTime.now().hour;
-    
+
     for (var h = 0; h <= currentHour; h++) {
       hourlyData.add(HourlyUsage(
         hour: h,

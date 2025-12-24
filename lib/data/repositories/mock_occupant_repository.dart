@@ -4,27 +4,34 @@ library;
 import 'dart:async';
 import '../../domain/entities/occupant.dart';
 import '../../domain/repositories/occupant_repository.dart';
+import '../mock/mock_data.dart';
 
 class MockOccupantRepository implements OccupantRepository {
   final _controller = StreamController<List<Occupant>>.broadcast();
+  late List<Occupant> _occupants;
 
-  List<Occupant> _occupants = [
-    const Occupant(id: 'occ_1', name: 'Иван', isHome: true),
-    const Occupant(id: 'occ_2', name: 'Мария', isHome: true),
-    const Occupant(id: 'occ_3', name: 'Алексей', isHome: false),
-    const Occupant(id: 'occ_4', name: 'Ольга', isHome: true),
-    const Occupant(id: 'occ_5', name: 'Дмитрий', isHome: false),
-  ];
+  MockOccupantRepository() {
+    _occupants = _parseOccupants(MockData.occupants);
+  }
+
+  List<Occupant> _parseOccupants(List<Map<String, dynamic>> json) {
+    return json.map((o) => Occupant(
+      id: o['id'] as String,
+      name: o['name'] as String,
+      avatarUrl: o['avatarUrl'] as String?,
+      isHome: o['isHome'] as bool,
+    )).toList();
+  }
 
   @override
   Future<List<Occupant>> getAllOccupants() async {
-    await Future.delayed(const Duration(milliseconds: 200));
+    await Future.delayed(Duration(milliseconds: MockData.networkDelays['normal']!));
     return List.unmodifiable(_occupants);
   }
 
   @override
   Future<Occupant> addOccupant(String name, {String? avatarUrl}) async {
-    await Future.delayed(const Duration(milliseconds: 300));
+    await Future.delayed(Duration(milliseconds: MockData.networkDelays['slow']!));
     final newOccupant = Occupant(
       id: 'occ_${DateTime.now().millisecondsSinceEpoch}',
       name: name,
@@ -38,14 +45,14 @@ class MockOccupantRepository implements OccupantRepository {
 
   @override
   Future<void> removeOccupant(String id) async {
-    await Future.delayed(const Duration(milliseconds: 200));
+    await Future.delayed(Duration(milliseconds: MockData.networkDelays['normal']!));
     _occupants = _occupants.where((o) => o.id != id).toList();
     _controller.add(_occupants);
   }
 
   @override
   Future<Occupant> updatePresence(String id, bool isHome) async {
-    await Future.delayed(const Duration(milliseconds: 200));
+    await Future.delayed(Duration(milliseconds: MockData.networkDelays['normal']!));
     final index = _occupants.indexWhere((o) => o.id == id);
     if (index == -1) throw Exception('Житель не найден: $id');
     final updated = _occupants[index].copyWith(isHome: isHome);

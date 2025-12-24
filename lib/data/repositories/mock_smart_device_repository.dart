@@ -1,61 +1,54 @@
-/// Мок-репозиторий умных устройств
+/// Мок-репозиторий HVAC устройств
 library;
 
 import 'dart:async';
 import '../../domain/entities/smart_device.dart';
 import '../../domain/repositories/smart_device_repository.dart';
+import '../mock/mock_data.dart';
 
 class MockSmartDeviceRepository implements SmartDeviceRepository {
   final _controller = StreamController<List<SmartDevice>>.broadcast();
-  
-  List<SmartDevice> _devices = [
-    SmartDevice(
-      id: 'pv_1',
-      name: 'ПВ-1',
-      type: SmartDeviceType.ventilation,
-      isOn: true,
-      roomId: 'living_room',
-      powerConsumption: 0.8,
-      activeTime: const Duration(hours: 12),
+  late List<SmartDevice> _devices;
+
+  MockSmartDeviceRepository() {
+    _devices = _parseDevices(MockData.devices);
+  }
+
+  List<SmartDevice> _parseDevices(List<Map<String, dynamic>> json) {
+    return json.map((d) => SmartDevice(
+      id: d['id'] as String,
+      name: d['name'] as String,
+      type: _parseDeviceType(d['type'] as String),
+      isOn: d['isOn'] as bool,
+      roomId: d['roomId'] as String?,
+      powerConsumption: (d['powerConsumption'] as num).toDouble(),
+      activeTime: Duration(hours: d['activeHours'] as int),
       lastUpdated: DateTime.now(),
-    ),
-    SmartDevice(
-      id: 'pv_2',
-      name: 'ПВ-2',
-      type: SmartDeviceType.ventilation,
-      isOn: false,
-      roomId: 'bedroom',
-      powerConsumption: 0.6,
-      activeTime: const Duration(hours: 8),
-      lastUpdated: DateTime.now(),
-    ),
-    SmartDevice(
-      id: 'pv_3',
-      name: 'ПВ-3',
-      type: SmartDeviceType.ventilation,
-      isOn: true,
-      roomId: 'office',
-      powerConsumption: 0.7,
-      activeTime: const Duration(hours: 6),
-      lastUpdated: DateTime.now(),
-    ),
-  ];
+    )).toList();
+  }
+
+  SmartDeviceType _parseDeviceType(String type) {
+    return SmartDeviceType.values.firstWhere(
+      (e) => e.name == type,
+      orElse: () => SmartDeviceType.ventilation,
+    );
+  }
 
   @override
   Future<List<SmartDevice>> getAllDevices() async {
-    await Future.delayed(const Duration(milliseconds: 300)); // Имитация задержки сети
+    await Future.delayed(Duration(milliseconds: MockData.networkDelays['slow']!));
     return List.unmodifiable(_devices);
   }
 
   @override
   Future<List<SmartDevice>> getDevicesByRoom(String roomId) async {
-    await Future.delayed(const Duration(milliseconds: 200));
+    await Future.delayed(Duration(milliseconds: MockData.networkDelays['normal']!));
     return _devices.where((d) => d.roomId == roomId).toList();
   }
 
   @override
   Future<SmartDevice?> getDeviceById(String id) async {
-    await Future.delayed(const Duration(milliseconds: 100));
+    await Future.delayed(Duration(milliseconds: MockData.networkDelays['fast']!));
     try {
       return _devices.firstWhere((d) => d.id == id);
     } catch (_) {
@@ -65,38 +58,37 @@ class MockSmartDeviceRepository implements SmartDeviceRepository {
 
   @override
   Future<SmartDevice> toggleDevice(String id, bool isOn) async {
-    await Future.delayed(const Duration(milliseconds: 200));
-    
+    await Future.delayed(Duration(milliseconds: MockData.networkDelays['normal']!));
+
     final index = _devices.indexWhere((d) => d.id == id);
     if (index == -1) throw Exception('Устройство не найдено: $id');
-    
+
     final updated = _devices[index].copyWith(
       isOn: isOn,
       lastUpdated: DateTime.now(),
     );
-    
+
     _devices = List.from(_devices)..[index] = updated;
     _controller.add(_devices);
-    
+
     return updated;
   }
 
   @override
   Future<SmartDevice> updateDevice(SmartDevice device) async {
-    await Future.delayed(const Duration(milliseconds: 200));
-    
+    await Future.delayed(Duration(milliseconds: MockData.networkDelays['normal']!));
+
     final index = _devices.indexWhere((d) => d.id == device.id);
     if (index == -1) throw Exception('Устройство не найдено: ${device.id}');
-    
+
     _devices = List.from(_devices)..[index] = device;
     _controller.add(_devices);
-    
+
     return device;
   }
 
   @override
   Stream<List<SmartDevice>> watchDevices() {
-    // Сразу отдаём текущее состояние
     Future.microtask(() => _controller.add(_devices));
     return _controller.stream;
   }
