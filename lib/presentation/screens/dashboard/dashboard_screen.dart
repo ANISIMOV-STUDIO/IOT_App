@@ -135,33 +135,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: isDark ? AppColors.darkBg : AppColors.lightBg,
-      drawer: isDesktop
-          ? null
-          : Drawer(
-              backgroundColor: AppColors.darkCard,
-              child: Sidebar(
-                selectedIndex: _sidebarIndex,
-                onItemSelected: (index) {
-                  setState(() => _sidebarIndex = index);
-                  Navigator.of(context).pop();
-                },
-              ),
-            ),
       body: SafeArea(
         child: Stack(
           children: [
             // Main content
             isDesktop ? _buildDesktopLayout(isDark) : _buildMobileLayout(isDark, width),
 
-            // Side drawer handle (mobile/tablet only)
+            // Compact side panel (mobile/tablet only)
             if (!isDesktop)
-              Positioned(
-                left: 0,
-                top: 0,
-                bottom: 0,
-                child: _DrawerHandle(
-                  onTap: () => _scaffoldKey.currentState?.openDrawer(),
-                ),
+              _CompactSidePanel(
+                selectedIndex: _sidebarIndex,
+                onItemSelected: (index) => setState(() => _sidebarIndex = index),
               ),
           ],
         ),
@@ -232,63 +216,197 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 }
 
-/// Side drawer handle ("tongue") for opening drawer
-class _DrawerHandle extends StatefulWidget {
-  final VoidCallback? onTap;
+/// Compact side panel with blinking handle
+class _CompactSidePanel extends StatefulWidget {
+  final int selectedIndex;
+  final ValueChanged<int>? onItemSelected;
 
-  const _DrawerHandle({this.onTap});
+  const _CompactSidePanel({
+    required this.selectedIndex,
+    this.onItemSelected,
+  });
 
   @override
-  State<_DrawerHandle> createState() => _DrawerHandleState();
+  State<_CompactSidePanel> createState() => _CompactSidePanelState();
 }
 
-class _DrawerHandleState extends State<_DrawerHandle> {
-  bool _isHovered = false;
+class _CompactSidePanelState extends State<_CompactSidePanel>
+    with SingleTickerProviderStateMixin {
+  bool _isOpen = false;
+  late AnimationController _blinkController;
+
+  // Menu items (icons only)
+  static const _menuItems = [
+    (Icons.dashboard_outlined, 'Панель'),
+    (Icons.devices_outlined, 'Устройства'),
+    (Icons.schedule_outlined, 'Расписание'),
+    (Icons.analytics_outlined, 'Аналитика'),
+    (Icons.notifications_outlined, 'Уведомления'),
+    (Icons.settings_outlined, 'Настройки'),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _blinkController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 3),
+    )..repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _blinkController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: widget.onTap,
-      onHorizontalDragEnd: (details) {
-        // Swipe right to open
-        if (details.primaryVelocity != null && details.primaryVelocity! > 0) {
-          widget.onTap?.call();
-        }
-      },
-      child: MouseRegion(
-        onEnter: (_) => setState(() => _isHovered = true),
-        onExit: (_) => setState(() => _isHovered = false),
-        child: Center(
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            width: _isHovered ? 20 : 12,
-            height: 80,
-            decoration: BoxDecoration(
-              color: _isHovered
-                  ? AppColors.accent.withValues(alpha: 0.8)
-                  : AppColors.accent.withValues(alpha: 0.4),
-              borderRadius: const BorderRadius.only(
-                topRight: Radius.circular(8),
-                bottomRight: Radius.circular(8),
-              ),
-              boxShadow: _isHovered
-                  ? [
-                      BoxShadow(
-                        color: AppColors.accent.withValues(alpha: 0.3),
-                        blurRadius: 8,
-                        offset: const Offset(2, 0),
+    final screenHeight = MediaQuery.sizeOf(context).height;
+    final panelHeight = screenHeight * 0.5;
+    const panelWidth = 56.0;
+    const handleWidth = 6.0;
+
+    return Positioned(
+      left: 0,
+      top: (screenHeight - panelHeight) / 2,
+      child: GestureDetector(
+        onTap: () => setState(() => _isOpen = !_isOpen),
+        onHorizontalDragEnd: (details) {
+          if (details.primaryVelocity != null) {
+            setState(() {
+              _isOpen = details.primaryVelocity! > 0;
+            });
+          }
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.easeOutCubic,
+          transform: Matrix4.translationValues(
+            _isOpen ? 0 : -(panelWidth),
+            0,
+            0,
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Panel with icons
+              Container(
+                width: panelWidth,
+                height: panelHeight,
+                decoration: BoxDecoration(
+                  color: AppColors.darkCard,
+                  borderRadius: const BorderRadius.only(
+                    topRight: Radius.circular(16),
+                    bottomRight: Radius.circular(16),
+                  ),
+                  border: Border.all(
+                    color: AppColors.darkBorder,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.3),
+                      blurRadius: 12,
+                      offset: const Offset(2, 0),
+                    ),
+                  ],
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: _menuItems.asMap().entries.map((entry) {
+                    final index = entry.key;
+                    final item = entry.value;
+                    final isSelected = index == widget.selectedIndex;
+                    return Tooltip(
+                      message: item.$2,
+                      preferBelow: false,
+                      child: GestureDetector(
+                        onTap: () {
+                          widget.onItemSelected?.call(index);
+                          setState(() => _isOpen = false);
+                        },
+                        child: Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? AppColors.accent.withValues(alpha: 0.2)
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Icon(
+                            item.$1,
+                            size: 20,
+                            color: isSelected
+                                ? AppColors.accent
+                                : AppColors.darkTextMuted,
+                          ),
+                        ),
                       ),
-                    ]
-                  : null,
-            ),
-            child: Icon(
-              Icons.chevron_right,
-              size: 16,
-              color: Colors.white.withValues(alpha: _isHovered ? 1.0 : 0.6),
-            ),
+                    );
+                  }).toList(),
+                ),
+              ),
+
+              // Handle (curly brace shape)
+              _buildHandle(handleWidth, panelHeight * 0.4),
+            ],
           ),
         ),
       ),
     );
   }
+
+  Widget _buildHandle(double width, double height) {
+    return AnimatedBuilder(
+      animation: _blinkController,
+      builder: (context, child) {
+        final opacity = _isOpen ? 0.6 : (0.15 + _blinkController.value * 0.25);
+        return CustomPaint(
+          size: Size(width, height),
+          painter: _BracketPainter(
+            color: AppColors.accent.withValues(alpha: opacity),
+            isOpen: _isOpen,
+          ),
+        );
+      },
+    );
+  }
+}
+
+/// Paints a curly bracket shape
+class _BracketPainter extends CustomPainter {
+  final Color color;
+  final bool isOpen;
+
+  _BracketPainter({required this.color, required this.isOpen});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.fill;
+
+    final path = Path();
+    final w = size.width;
+    final h = size.height;
+    final midY = h / 2;
+
+    // Curly bracket shape pointing right
+    path.moveTo(0, 0);
+    path.quadraticBezierTo(w * 0.8, 0, w * 0.8, h * 0.15);
+    path.quadraticBezierTo(w * 0.8, h * 0.35, w * 0.3, h * 0.4);
+    path.quadraticBezierTo(0, midY * 0.95, 0, midY);
+    path.quadraticBezierTo(0, midY * 1.05, w * 0.3, h * 0.6);
+    path.quadraticBezierTo(w * 0.8, h * 0.65, w * 0.8, h * 0.85);
+    path.quadraticBezierTo(w * 0.8, h, 0, h);
+    path.close();
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(_BracketPainter oldDelegate) =>
+      color != oldDelegate.color || isOpen != oldDelegate.isOpen;
 }
