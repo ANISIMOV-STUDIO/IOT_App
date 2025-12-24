@@ -1,61 +1,92 @@
-/// Репозиторий климат-контроля
+/// Climate Repository - Unified interface for climate operations
+///
+/// This repository combines three separate concerns following ISP:
+/// - HvacDeviceProvider: Device management
+/// - ClimateStateProvider: State access
+/// - ClimateController: Control operations
 library;
 
 import '../entities/climate.dart';
 import '../entities/hvac_device.dart';
+import 'climate_controller.dart';
+import 'climate_state_provider.dart';
+import 'hvac_device_provider.dart';
 
-abstract class ClimateRepository {
+export 'climate_controller.dart';
+export 'climate_state_provider.dart';
+export 'hvac_device_provider.dart';
+
+/// Unified climate repository interface
+///
+/// Combines [HvacDeviceProvider], [ClimateStateProvider], and [ClimateController]
+/// for backward compatibility while allowing clients to depend on smaller interfaces.
+abstract class ClimateRepository
+    implements HvacDeviceProvider, ClimateStateProvider, ClimateController {
   // ============================================
-  // MULTI-DEVICE SUPPORT
+  // MULTI-DEVICE SUPPORT (from HvacDeviceProvider)
   // ============================================
 
-  /// Получить все HVAC устройства
+  /// Get all HVAC devices
+  @override
   Future<List<HvacDevice>> getAllHvacDevices();
 
-  /// Получить состояние конкретного устройства
-  Future<ClimateState> getDeviceState(String deviceId);
-
-  /// Стрим обновлений списка устройств
+  /// Watch for device list updates
+  @override
   Stream<List<HvacDevice>> watchHvacDevices();
 
-  /// Стрим обновлений конкретного устройства
+  /// Set the currently selected device
+  @override
+  void setSelectedDevice(String deviceId);
+
+  // ============================================
+  // STATE ACCESS (from ClimateStateProvider)
+  // ============================================
+
+  /// Get state of a specific device
+  @override
+  Future<ClimateState> getDeviceState(String deviceId);
+
+  /// Watch for climate updates of a specific device
+  @override
   Stream<ClimateState> watchDeviceClimate(String deviceId);
 
-  // ============================================
-  // LEGACY (single device) - для обратной совместимости
-  // ============================================
-
-  /// Получить текущее состояние климата (выбранного устройства)
+  /// Get current state (selected device) - legacy support
+  @override
   Future<ClimateState> getCurrentState();
 
-  /// Стрим обновлений климата (выбранного устройства)
+  /// Watch current climate (selected device) - legacy support
+  @override
   Stream<ClimateState> watchClimate();
 
   // ============================================
-  // DEVICE CONTROL (с опциональным deviceId)
+  // CONTROL OPERATIONS (from ClimateController)
   // ============================================
 
-  /// Включить/выключить устройство
+  /// Turn device on/off
+  @override
   Future<ClimateState> setPower(bool isOn, {String? deviceId});
 
-  /// Установить целевую температуру
+  /// Set target temperature
+  @override
   Future<ClimateState> setTargetTemperature(double temperature, {String? deviceId});
 
-  /// Установить целевую влажность
+  /// Set target humidity
+  @override
   Future<ClimateState> setHumidity(double humidity, {String? deviceId});
 
-  /// Установить режим климата
+  /// Set climate mode
+  @override
   Future<ClimateState> setMode(ClimateMode mode, {String? deviceId});
 
-  /// Установить приточную вентиляцию (0-100%)
+  /// Set supply airflow (0-100%)
+  @override
   Future<ClimateState> setSupplyAirflow(double value, {String? deviceId});
 
-  /// Установить вытяжную вентиляцию (0-100%)
+  /// Set exhaust airflow (0-100%)
+  @override
   Future<ClimateState> setExhaustAirflow(double value, {String? deviceId});
 
-  /// Установить пресет (auto, night, turbo, eco, away)
+  /// Set preset (auto, night, turbo, eco, away)
+  @override
   Future<ClimateState> setPreset(String preset, {String? deviceId});
-
-  /// Установить выбранное устройство
-  void setSelectedDevice(String deviceId);
 }
