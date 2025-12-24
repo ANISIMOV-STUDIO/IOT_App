@@ -151,6 +151,236 @@ abstract class MockData {
   };
 
   // ============================================
+  // SCHEDULE DATA (расписание по устройствам)
+  // ============================================
+
+  /// Расписание для всех устройств
+  static const Map<String, List<Map<String, dynamic>>> schedules = {
+    'pv_1': [
+      {
+        'id': 'sch_1_1',
+        'day': 'Понедельник',
+        'mode': 'Охлаждение',
+        'timeRange': '08:00 - 22:00',
+        'tempDay': 22,
+        'tempNight': 19,
+        'isActive': true,
+      },
+      {
+        'id': 'sch_1_2',
+        'day': 'Вторник',
+        'mode': 'Авто',
+        'timeRange': '08:00 - 22:00',
+        'tempDay': 22,
+        'tempNight': 19,
+        'isActive': false,
+      },
+      {
+        'id': 'sch_1_3',
+        'day': 'Среда',
+        'mode': 'Охлаждение',
+        'timeRange': '08:00 - 22:00',
+        'tempDay': 21,
+        'tempNight': 18,
+        'isActive': false,
+      },
+      {
+        'id': 'sch_1_4',
+        'day': 'Четверг',
+        'mode': 'Эко',
+        'timeRange': '09:00 - 21:00',
+        'tempDay': 23,
+        'tempNight': 20,
+        'isActive': false,
+      },
+      {
+        'id': 'sch_1_5',
+        'day': 'Пятница',
+        'mode': 'Авто',
+        'timeRange': '08:00 - 23:00',
+        'tempDay': 22,
+        'tempNight': 19,
+        'isActive': false,
+      },
+    ],
+    'pv_2': [
+      {
+        'id': 'sch_2_1',
+        'day': 'Понедельник',
+        'mode': 'Эко',
+        'timeRange': '09:00 - 18:00',
+        'tempDay': 20,
+        'tempNight': 18,
+        'isActive': true,
+      },
+    ],
+    'pv_3': [
+      {
+        'id': 'sch_3_1',
+        'day': 'Понедельник',
+        'mode': 'Турбо',
+        'timeRange': '06:00 - 22:00',
+        'tempDay': 24,
+        'tempNight': 20,
+        'isActive': true,
+      },
+    ],
+    'pv_4': [
+      {
+        'id': 'sch_4_1',
+        'day': 'Понедельник',
+        'mode': 'Ночь',
+        'timeRange': '22:00 - 08:00',
+        'tempDay': 21,
+        'tempNight': 19,
+        'isActive': true,
+      },
+    ],
+  };
+
+  // ============================================
+  // UNIT NOTIFICATIONS (уведомления с привязкой к устройству)
+  // ============================================
+
+  /// Уведомления для устройств (с deviceId и временными метками)
+  static const List<Map<String, dynamic>> unitNotifications = [
+    {
+      'id': 'notif_1',
+      'deviceId': 'pv_1',
+      'title': 'Замена фильтра',
+      'message': 'Рекомендуется заменить фильтр в течение 7 дней',
+      'type': 'warning',
+      'hoursAgo': 2,
+      'isRead': false,
+    },
+    {
+      'id': 'notif_2',
+      'deviceId': 'pv_1',
+      'title': 'Температура достигнута',
+      'message': 'Целевая температура 22°C достигнута',
+      'type': 'success',
+      'hoursAgo': 5,
+      'isRead': true,
+    },
+    {
+      'id': 'notif_3',
+      'deviceId': null,
+      'title': 'Обновление системы',
+      'message': 'Доступна новая версия прошивки v2.1.4',
+      'type': 'info',
+      'hoursAgo': 24,
+      'isRead': false,
+    },
+    {
+      'id': 'notif_4',
+      'deviceId': 'pv_2',
+      'title': 'Устройство выключено',
+      'message': 'ПВ-2 выключено по расписанию',
+      'type': 'info',
+      'hoursAgo': 1,
+      'isRead': true,
+    },
+    {
+      'id': 'notif_5',
+      'deviceId': 'pv_3',
+      'title': 'Высокая нагрузка',
+      'message': 'Вентилятор работает на максимальной мощности',
+      'type': 'warning',
+      'hoursAgo': 3,
+      'isRead': false,
+    },
+  ];
+
+  // ============================================
+  // GRAPH DATA TEMPLATES (шаблоны данных графиков)
+  // ============================================
+
+  /// Базовые данные для графиков (по дням недели)
+  static const List<Map<String, dynamic>> graphDataTemplate = [
+    {'label': 'Пн', 'baseTemp': 21, 'baseHumidity': 45, 'baseAirflow': 400},
+    {'label': 'Вт', 'baseTemp': 22, 'baseHumidity': 48, 'baseAirflow': 420},
+    {'label': 'Ср', 'baseTemp': 20, 'baseHumidity': 42, 'baseAirflow': 380},
+    {'label': 'Чт', 'baseTemp': 23, 'baseHumidity': 50, 'baseAirflow': 450},
+    {'label': 'Пт', 'baseTemp': 22, 'baseHumidity': 47, 'baseAirflow': 410},
+    {'label': 'Сб', 'baseTemp': 19, 'baseHumidity': 44, 'baseAirflow': 360},
+    {'label': 'Вс', 'baseTemp': 21, 'baseHumidity': 46, 'baseAirflow': 400},
+  ];
+
+  // ============================================
+  // HVAC MODES (режимы работы)
+  // ============================================
+
+  /// Режимы работы HVAC
+  static const List<Map<String, dynamic>> hvacModes = [
+    {'id': 'auto', 'label': 'АВТО', 'icon': 'bolt'},
+    {'id': 'eco', 'label': 'ЭКО', 'icon': 'wb_sunny_outlined'},
+    {'id': 'night', 'label': 'НОЧЬ', 'icon': 'nightlight_outlined'},
+    {'id': 'boost', 'label': 'ТУРБО', 'icon': 'air'},
+  ];
+
+  // ============================================
+  // USER PRESETS (пользовательские пресеты)
+  // ============================================
+
+  /// Пресеты пользователя
+  static const List<Map<String, dynamic>> userPresets = [
+    {
+      'id': 'comfort',
+      'name': 'Комфорт',
+      'description': 'Оптимальный режим',
+      'icon': 'spa_outlined',
+      'temperature': 22,
+      'airflow': 60,
+      'color': 0xFF2D7DFF,
+    },
+    {
+      'id': 'eco',
+      'name': 'Эко',
+      'description': 'Энергосбережение',
+      'icon': 'eco_outlined',
+      'temperature': 20,
+      'airflow': 40,
+      'color': 0xFF22C55E,
+    },
+    {
+      'id': 'night',
+      'name': 'Ночь',
+      'description': 'Тихий режим',
+      'icon': 'nightlight_outlined',
+      'temperature': 19,
+      'airflow': 30,
+      'color': 0xFF8B5CF6,
+    },
+    {
+      'id': 'turbo',
+      'name': 'Турбо',
+      'description': 'Максимальная мощность',
+      'icon': 'bolt_outlined',
+      'temperature': 18,
+      'airflow': 100,
+      'color': 0xFFF97316,
+    },
+    {
+      'id': 'away',
+      'name': 'Нет дома',
+      'description': 'Минимальный режим',
+      'icon': 'home_outlined',
+      'temperature': 16,
+      'airflow': 20,
+      'color': 0xFF64748B,
+    },
+    {
+      'id': 'sleep',
+      'name': 'Сон',
+      'description': 'Комфортный сон',
+      'icon': 'bedtime_outlined',
+      'temperature': 20,
+      'airflow': 25,
+      'color': 0xFF6366F1,
+    },
+  ];
+
+  // ============================================
   // LEGACY DATA (для обратной совместимости с репозиториями)
   // ============================================
 

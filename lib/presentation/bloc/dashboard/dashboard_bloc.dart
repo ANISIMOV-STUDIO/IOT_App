@@ -10,10 +10,16 @@ import '../../../domain/entities/climate.dart';
 import '../../../domain/entities/hvac_device.dart';
 import '../../../domain/entities/energy_stats.dart';
 import '../../../domain/entities/occupant.dart';
+import '../../../domain/entities/schedule_entry.dart';
+import '../../../domain/entities/unit_notification.dart';
+import '../../../domain/entities/graph_data.dart';
 import '../../../domain/repositories/smart_device_repository.dart';
 import '../../../domain/repositories/climate_repository.dart';
 import '../../../domain/repositories/energy_repository.dart';
 import '../../../domain/repositories/occupant_repository.dart';
+import '../../../domain/repositories/schedule_repository.dart';
+import '../../../domain/repositories/notification_repository.dart';
+import '../../../domain/repositories/graph_data_repository.dart';
 
 part 'dashboard_event.dart';
 part 'dashboard_state.dart';
@@ -23,22 +29,34 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   final ClimateRepository _climateRepository;
   final EnergyRepository _energyRepository;
   final OccupantRepository _occupantRepository;
+  final ScheduleRepository _scheduleRepository;
+  final NotificationRepository _notificationRepository;
+  final GraphDataRepository _graphDataRepository;
 
   StreamSubscription<List<SmartDevice>>? _devicesSubscription;
   StreamSubscription<ClimateState>? _climateSubscription;
   StreamSubscription<EnergyStats>? _energySubscription;
   StreamSubscription<List<Occupant>>? _occupantsSubscription;
   StreamSubscription<List<HvacDevice>>? _hvacDevicesSubscription;
+  StreamSubscription<List<ScheduleEntry>>? _scheduleSubscription;
+  StreamSubscription<List<UnitNotification>>? _notificationsSubscription;
+  StreamSubscription<List<GraphDataPoint>>? _graphDataSubscription;
 
   DashboardBloc({
     required SmartDeviceRepository deviceRepository,
     required ClimateRepository climateRepository,
     required EnergyRepository energyRepository,
     required OccupantRepository occupantRepository,
+    required ScheduleRepository scheduleRepository,
+    required NotificationRepository notificationRepository,
+    required GraphDataRepository graphDataRepository,
   })  : _deviceRepository = deviceRepository,
         _climateRepository = climateRepository,
         _energyRepository = energyRepository,
         _occupantRepository = occupantRepository,
+        _scheduleRepository = scheduleRepository,
+        _notificationRepository = notificationRepository,
+        _graphDataRepository = graphDataRepository,
         super(const DashboardState()) {
     on<DashboardStarted>(_onStarted);
     on<DashboardRefreshed>(_onRefreshed);
@@ -57,6 +75,14 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     on<OccupantsUpdated>(_onOccupantsUpdated);
     on<HvacDeviceSelected>(_onHvacDeviceSelected);
     on<HvacDevicesUpdated>(_onHvacDevicesUpdated);
+    // New event handlers
+    on<ScheduleLoaded>(_onScheduleLoaded);
+    on<ScheduleEntryToggled>(_onScheduleEntryToggled);
+    on<NotificationsLoaded>(_onNotificationsLoaded);
+    on<NotificationRead>(_onNotificationRead);
+    on<NotificationDismissed>(_onNotificationDismissed);
+    on<GraphDataLoaded>(_onGraphDataLoaded);
+    on<GraphMetricChanged>(_onGraphMetricChanged);
   }
 
   Future<void> _onStarted(DashboardStarted event, Emitter<DashboardState> emit) async {
@@ -80,6 +106,22 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         _occupantRepository.getAllOccupants(),
       ]);
 
+      // Load additional data for selected device
+      final weeklySchedule = selectedId != null
+          ? await _scheduleRepository.getSchedule(selectedId)
+          : <ScheduleEntry>[];
+      final notifications = await _notificationRepository.getNotifications(
+        deviceId: selectedId,
+      );
+      final graphData = selectedId != null
+          ? await _graphDataRepository.getGraphData(
+              deviceId: selectedId,
+              metric: GraphMetric.temperature,
+              from: DateTime.now().subtract(const Duration(days: 7)),
+              to: DateTime.now(),
+            )
+          : <GraphDataPoint>[];
+
       emit(state.copyWith(
         status: DashboardStatus.success,
         devices: results[0] as List<SmartDevice>,
@@ -90,9 +132,12 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         schedule: DashboardState.defaultSchedule,
         hvacDevices: hvacDevices,
         selectedHvacDeviceId: selectedId,
+        weeklySchedule: weeklySchedule,
+        unitNotifications: notifications,
+        graphData: graphData,
       ));
 
-      _subscribeToUpdates();
+      _subscribeToUpdates(selectedId);
     } catch (e) {
       emit(state.copyWith(
         status: DashboardStatus.failure,
@@ -101,7 +146,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     }
   }
 
-  void _subscribeToUpdates() {
+  void _subscribeToUpdates(String? selectedDeviceId) {
     _devicesSubscription = _deviceRepository.watchDevices().listen(
       (devices) => add(DevicesUpdated(devices)),
     );
@@ -117,6 +162,23 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     _hvacDevicesSubscription = _climateRepository.watchHvacDevices().listen(
       (devices) => add(HvacDevicesUpdated(devices)),
     );
+    // Subscribe to new streams
+    if (selectedDeviceId != null) {
+      _scheduleSubscription = _scheduleRepository.watchSchedule(selectedDeviceId).listen(
+        (schedule) => add(ScheduleLoaded(schedule)),
+      );
+      _graphDataSubscription = _graphDataRepository.watchGraphData(
+        deviceId: selectedDeviceId,
+        metric: state.selectedGraphMetric,
+      ).listen(
+        (data) => add(GraphDataLoaded(data)),
+      );
+    }
+    _notificationsSubscription = _notificationRepository
+        .watchNotifications(deviceId: selectedDeviceId)
+        .listen(
+          (notifications) => add(NotificationsLoaded(notifications)),
+        );
   }
 
   Future<void> _onRefreshed(DashboardRefreshed event, Emitter<DashboardState> emit) async {
@@ -237,6 +299,77 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     emit(state.copyWith(hvacDevices: event.devices));
   }
 
+  // Schedule handlers
+  void _onScheduleLoaded(ScheduleLoaded event, Emitter<DashboardState> emit) {
+    emit(state.copyWith(weeklySchedule: event.schedule));
+  }
+
+  Future<void> _onScheduleEntryToggled(
+    ScheduleEntryToggled event,
+    Emitter<DashboardState> emit,
+  ) async {
+    try {
+      await _scheduleRepository.toggleEntry(event.entryId, event.isActive);
+    } catch (e) {
+      emit(state.copyWith(errorMessage: 'Ошибка изменения расписания: $e'));
+    }
+  }
+
+  // Notification handlers
+  void _onNotificationsLoaded(NotificationsLoaded event, Emitter<DashboardState> emit) {
+    emit(state.copyWith(unitNotifications: event.notifications));
+  }
+
+  Future<void> _onNotificationRead(
+    NotificationRead event,
+    Emitter<DashboardState> emit,
+  ) async {
+    try {
+      await _notificationRepository.markAsRead(event.notificationId);
+    } catch (e) {
+      emit(state.copyWith(errorMessage: 'Ошибка отметки уведомления: $e'));
+    }
+  }
+
+  Future<void> _onNotificationDismissed(
+    NotificationDismissed event,
+    Emitter<DashboardState> emit,
+  ) async {
+    try {
+      await _notificationRepository.dismiss(event.notificationId);
+    } catch (e) {
+      emit(state.copyWith(errorMessage: 'Ошибка удаления уведомления: $e'));
+    }
+  }
+
+  // Graph handlers
+  void _onGraphDataLoaded(GraphDataLoaded event, Emitter<DashboardState> emit) {
+    emit(state.copyWith(graphData: event.data));
+  }
+
+  Future<void> _onGraphMetricChanged(
+    GraphMetricChanged event,
+    Emitter<DashboardState> emit,
+  ) async {
+    emit(state.copyWith(selectedGraphMetric: event.metric));
+
+    // Reload graph data for new metric
+    final deviceId = state.selectedHvacDeviceId;
+    if (deviceId != null) {
+      try {
+        final data = await _graphDataRepository.getGraphData(
+          deviceId: deviceId,
+          metric: event.metric,
+          from: DateTime.now().subtract(const Duration(days: 7)),
+          to: DateTime.now(),
+        );
+        emit(state.copyWith(graphData: data));
+      } catch (e) {
+        emit(state.copyWith(errorMessage: 'Ошибка загрузки графика: $e'));
+      }
+    }
+  }
+
   @override
   Future<void> close() {
     _devicesSubscription?.cancel();
@@ -244,6 +377,9 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     _energySubscription?.cancel();
     _occupantsSubscription?.cancel();
     _hvacDevicesSubscription?.cancel();
+    _scheduleSubscription?.cancel();
+    _notificationsSubscription?.cancel();
+    _graphDataSubscription?.cancel();
     return super.close();
   }
 }

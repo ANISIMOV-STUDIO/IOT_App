@@ -119,3 +119,56 @@ class HvacDevicesUpdated extends DashboardEvent {
   @override
   List<Object?> get props => [devices];
 }
+
+// Schedule events
+class ScheduleLoaded extends DashboardEvent {
+  final List<ScheduleEntry> schedule;
+  const ScheduleLoaded(this.schedule);
+  @override
+  List<Object?> get props => [schedule];
+}
+
+class ScheduleEntryToggled extends DashboardEvent {
+  final String entryId;
+  final bool isActive;
+  const ScheduleEntryToggled(this.entryId, this.isActive);
+  @override
+  List<Object?> get props => [entryId, isActive];
+}
+
+// Notification events
+class NotificationsLoaded extends DashboardEvent {
+  final List<UnitNotification> notifications;
+  const NotificationsLoaded(this.notifications);
+  @override
+  List<Object?> get props => [notifications];
+}
+
+class NotificationRead extends DashboardEvent {
+  final String notificationId;
+  const NotificationRead(this.notificationId);
+  @override
+  List<Object?> get props => [notificationId];
+}
+
+class NotificationDismissed extends DashboardEvent {
+  final String notificationId;
+  const NotificationDismissed(this.notificationId);
+  @override
+  List<Object?> get props => [notificationId];
+}
+
+// Graph events
+class GraphDataLoaded extends DashboardEvent {
+  final List<GraphDataPoint> data;
+  const GraphDataLoaded(this.data);
+  @override
+  List<Object?> get props => [data];
+}
+
+class GraphMetricChanged extends DashboardEvent {
+  final GraphMetric metric;
+  const GraphMetricChanged(this.metric);
+  @override
+  List<Object?> get props => [metric];
+}

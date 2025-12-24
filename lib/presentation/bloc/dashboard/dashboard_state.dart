@@ -34,6 +34,16 @@ class DashboardState extends Equatable {
   final List<HvacDevice> hvacDevices;
   final String? selectedHvacDeviceId;
 
+  // Schedule (weekly)
+  final List<ScheduleEntry> weeklySchedule;
+
+  // Notifications
+  final List<UnitNotification> unitNotifications;
+
+  // Graph data
+  final List<GraphDataPoint> graphData;
+  final GraphMetric selectedGraphMetric;
+
   const DashboardState({
     this.status = DashboardStatus.initial,
     this.devices = const [],
@@ -45,6 +55,10 @@ class DashboardState extends Equatable {
     this.errorMessage,
     this.hvacDevices = const [],
     this.selectedHvacDeviceId,
+    this.weeklySchedule = const [],
+    this.unitNotifications = const [],
+    this.graphData = const [],
+    this.selectedGraphMetric = GraphMetric.temperature,
   });
 
   /// Получить выбранное HVAC устройство
@@ -80,6 +94,10 @@ class DashboardState extends Equatable {
     String? errorMessage,
     List<HvacDevice>? hvacDevices,
     String? selectedHvacDeviceId,
+    List<ScheduleEntry>? weeklySchedule,
+    List<UnitNotification>? unitNotifications,
+    List<GraphDataPoint>? graphData,
+    GraphMetric? selectedGraphMetric,
   }) {
     return DashboardState(
       status: status ?? this.status,
@@ -92,12 +110,21 @@ class DashboardState extends Equatable {
       errorMessage: errorMessage,
       hvacDevices: hvacDevices ?? this.hvacDevices,
       selectedHvacDeviceId: selectedHvacDeviceId ?? this.selectedHvacDeviceId,
+      weeklySchedule: weeklySchedule ?? this.weeklySchedule,
+      unitNotifications: unitNotifications ?? this.unitNotifications,
+      graphData: graphData ?? this.graphData,
+      selectedGraphMetric: selectedGraphMetric ?? this.selectedGraphMetric,
     );
   }
+
+  /// Get unread notification count
+  int get unreadNotificationCount =>
+      unitNotifications.where((n) => !n.isRead).length;
 
   @override
   List<Object?> get props => [
     status, devices, climate, energyStats, powerUsage,
     occupants, schedule, errorMessage, hvacDevices, selectedHvacDeviceId,
+    weeklySchedule, unitNotifications, graphData, selectedGraphMetric,
   ];
 }

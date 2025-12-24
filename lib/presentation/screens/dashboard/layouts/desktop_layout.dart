@@ -26,6 +26,13 @@ class DesktopLayout extends StatefulWidget {
   final VoidCallback? onThemeToggle;
   final VoidCallback? onAddUnit;
 
+  // Data from repositories
+  final List<ScheduleEntry> schedule;
+  final List<UnitNotification> notifications;
+  final List<GraphDataPoint> graphData;
+  final GraphMetric selectedGraphMetric;
+  final ValueChanged<GraphMetric>? onGraphMetricChanged;
+
   const DesktopLayout({
     super.key,
     required this.unit,
@@ -44,6 +51,11 @@ class DesktopLayout extends StatefulWidget {
     this.onUnitSelected,
     this.onThemeToggle,
     this.onAddUnit,
+    this.schedule = const [],
+    this.notifications = const [],
+    this.graphData = const [],
+    this.selectedGraphMetric = GraphMetric.temperature,
+    this.onGraphMetricChanged,
   });
 
   @override
@@ -52,85 +64,7 @@ class DesktopLayout extends StatefulWidget {
 
 class _DesktopLayoutState extends State<DesktopLayout> {
   int _sidebarIndex = 0;
-  GraphMetric _selectedMetric = GraphMetric.temperature;
   String? _activePresetId;
-
-  // Sample graph data
-  List<GraphDataPoint> get _graphData => const [
-        GraphDataPoint(label: 'Пн', value: 21),
-        GraphDataPoint(label: 'Вт', value: 22),
-        GraphDataPoint(label: 'Ср', value: 20),
-        GraphDataPoint(label: 'Чт', value: 23),
-        GraphDataPoint(label: 'Пт', value: 22),
-        GraphDataPoint(label: 'Сб', value: 19),
-        GraphDataPoint(label: 'Вс', value: 21),
-      ];
-
-  // Sample notifications data
-  List<UnitNotification> get _unitNotifications => [
-        UnitNotification(
-          id: '1',
-          title: 'Замена фильтра',
-          message: 'Рекомендуется заменить фильтр в течение 7 дней',
-          type: NotificationType.warning,
-          timestamp: DateTime.now().subtract(const Duration(hours: 2)),
-        ),
-        UnitNotification(
-          id: '2',
-          title: 'Температура достигнута',
-          message: 'Целевая температура 22°C достигнута',
-          type: NotificationType.success,
-          timestamp: DateTime.now().subtract(const Duration(hours: 5)),
-          isRead: true,
-        ),
-        UnitNotification(
-          id: '3',
-          title: 'Обновление системы',
-          message: 'Доступна новая версия прошивки v2.1.4',
-          type: NotificationType.info,
-          timestamp: DateTime.now().subtract(const Duration(days: 1)),
-        ),
-      ];
-
-  // Sample schedule data
-  List<ScheduleEntry> get _scheduleData => const [
-        ScheduleEntry(
-          day: 'Понедельник',
-          mode: 'Охлаждение',
-          timeRange: '08:00 - 22:00',
-          tempDay: 22,
-          tempNight: 19,
-          isActive: true,
-        ),
-        ScheduleEntry(
-          day: 'Вторник',
-          mode: 'Авто',
-          timeRange: '08:00 - 22:00',
-          tempDay: 22,
-          tempNight: 19,
-        ),
-        ScheduleEntry(
-          day: 'Среда',
-          mode: 'Охлаждение',
-          timeRange: '08:00 - 22:00',
-          tempDay: 21,
-          tempNight: 18,
-        ),
-        ScheduleEntry(
-          day: 'Четверг',
-          mode: 'Эко',
-          timeRange: '09:00 - 21:00',
-          tempDay: 23,
-          tempNight: 20,
-        ),
-        ScheduleEntry(
-          day: 'Пятница',
-          mode: 'Авто',
-          timeRange: '08:00 - 23:00',
-          tempDay: 22,
-          tempNight: 19,
-        ),
-      ];
 
   @override
   Widget build(BuildContext context) {
@@ -229,7 +163,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
               // Schedule widget
               Expanded(
                 child: ScheduleWidget(
-                  entries: _scheduleData,
+                  entries: widget.schedule,
                   onSeeAll: () {},
                 ),
               ),
@@ -240,7 +174,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
               Expanded(
                 child: UnitNotificationsWidget(
                   unitName: widget.unit.name,
-                  notifications: _unitNotifications,
+                  notifications: widget.notifications,
                   onSeeAll: () {},
                 ),
               ),
@@ -253,10 +187,9 @@ class _DesktopLayoutState extends State<DesktopLayout> {
         // OperationGraph row (same height as Schedule/Notifications)
         Expanded(
           child: OperationGraph(
-            data: _graphData,
-            selectedMetric: _selectedMetric,
-            onMetricChanged: (metric) =>
-                setState(() => _selectedMetric = metric),
+            data: widget.graphData,
+            selectedMetric: widget.selectedGraphMetric,
+            onMetricChanged: widget.onGraphMetricChanged,
           ),
         ),
       ],

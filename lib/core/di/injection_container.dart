@@ -15,6 +15,9 @@ import '../../domain/repositories/climate_repository.dart';
 import '../../domain/repositories/energy_repository.dart';
 import '../../domain/repositories/smart_device_repository.dart';
 import '../../domain/repositories/occupant_repository.dart';
+import '../../domain/repositories/schedule_repository.dart';
+import '../../domain/repositories/notification_repository.dart';
+import '../../domain/repositories/graph_data_repository.dart';
 
 // Presentation - BLoCs
 import '../../presentation/bloc/dashboard/dashboard_bloc.dart';
@@ -24,6 +27,9 @@ import '../../data/repositories/mock_climate_repository.dart';
 import '../../data/repositories/mock_energy_repository.dart';
 import '../../data/repositories/mock_smart_device_repository.dart';
 import '../../data/repositories/mock_occupant_repository.dart';
+import '../../data/repositories/mock_schedule_repository.dart';
+import '../../data/repositories/mock_notification_repository.dart';
+import '../../data/repositories/mock_graph_data_repository.dart';
 
 final sl = GetIt.instance;
 
@@ -53,6 +59,15 @@ Future<void> init() async {
   sl.registerLazySingleton<OccupantRepository>(
     () => MockOccupantRepository(),
   );
+  sl.registerLazySingleton<ScheduleRepository>(
+    () => MockScheduleRepository(),
+  );
+  sl.registerLazySingleton<NotificationRepository>(
+    () => MockNotificationRepository(),
+  );
+  sl.registerLazySingleton<GraphDataRepository>(
+    () => MockGraphDataRepository(),
+  );
 
   // Dashboard BLoC
   sl.registerFactory(
@@ -61,6 +76,9 @@ Future<void> init() async {
       climateRepository: sl(),
       energyRepository: sl(),
       occupantRepository: sl(),
+      scheduleRepository: sl(),
+      notificationRepository: sl(),
+      graphDataRepository: sl(),
     ),
   );
 }

@@ -7,6 +7,9 @@ import '../../../core/services/theme_service.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../data/mock/mock_data.dart';
 import '../../../domain/entities/unit_state.dart';
+import '../../../domain/repositories/graph_data_repository.dart';
+import '../../../domain/repositories/notification_repository.dart';
+import '../../../domain/repositories/schedule_repository.dart';
 import '../../widgets/breez/breez.dart';
 import 'dialogs/add_unit_dialog.dart';
 import 'layouts/desktop_layout.dart';
@@ -25,11 +28,68 @@ class _DashboardScreenState extends State<DashboardScreen> {
   late List<UnitState> _units;
   late ThemeService _themeService;
 
+  // Repositories
+  late ScheduleRepository _scheduleRepository;
+  late NotificationRepository _notificationRepository;
+  late GraphDataRepository _graphDataRepository;
+
+  // Data from repositories
+  List<ScheduleEntry> _schedule = [];
+  List<UnitNotification> _notifications = [];
+  List<GraphDataPoint> _graphData = [];
+  GraphMetric _selectedGraphMetric = GraphMetric.temperature;
+
   @override
   void initState() {
     super.initState();
     _units = MockData.units.map((u) => UnitState.fromJson(u)).toList();
     _themeService = di.sl<ThemeService>();
+    _scheduleRepository = di.sl<ScheduleRepository>();
+    _notificationRepository = di.sl<NotificationRepository>();
+    _graphDataRepository = di.sl<GraphDataRepository>();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    final deviceId = _units[_activeUnitIndex].id;
+    try {
+      final results = await Future.wait([
+        _scheduleRepository.getSchedule(deviceId),
+        _notificationRepository.getNotifications(deviceId: deviceId),
+        _graphDataRepository.getGraphData(
+          deviceId: deviceId,
+          metric: _selectedGraphMetric,
+          from: DateTime.now().subtract(const Duration(days: 7)),
+          to: DateTime.now(),
+        ),
+      ]);
+      setState(() {
+        _schedule = results[0] as List<ScheduleEntry>;
+        _notifications = results[1] as List<UnitNotification>;
+        _graphData = results[2] as List<GraphDataPoint>;
+      });
+    } catch (_) {
+      // Silently handle errors - data will remain empty
+    }
+  }
+
+  void _onGraphMetricChanged(GraphMetric? metric) {
+    if (metric == null) return;
+    setState(() => _selectedGraphMetric = metric);
+    _loadGraphData();
+  }
+
+  Future<void> _loadGraphData() async {
+    final deviceId = _units[_activeUnitIndex].id;
+    try {
+      final data = await _graphDataRepository.getGraphData(
+        deviceId: deviceId,
+        metric: _selectedGraphMetric,
+        from: DateTime.now().subtract(const Duration(days: 7)),
+        to: DateTime.now(),
+      );
+      setState(() => _graphData = data);
+    } catch (_) {}
   }
 
   UnitState get _currentUnit => _units[_activeUnitIndex];
@@ -92,9 +152,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
       onModeChanged: (m) => _updateUnit((u) => u.copyWith(mode: m)),
       onPowerToggle: () => _updateUnit((u) => u.copyWith(power: !u.power)),
       onMasterOff: _masterPowerOff,
-      onUnitSelected: (index) => setState(() => _activeUnitIndex = index),
+      onUnitSelected: (index) {
+        setState(() => _activeUnitIndex = index);
+        _loadData(); // Reload data for new device
+      },
       onThemeToggle: _toggleTheme,
       onAddUnit: _showAddUnitDialog,
+      // Data from repositories
+      schedule: _schedule,
+      notifications: _notifications,
+      graphData: _graphData,
+      selectedGraphMetric: _selectedGraphMetric,
+      onGraphMetricChanged: _onGraphMetricChanged,
     );
   }
 
