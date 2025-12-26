@@ -50,3 +50,14 @@ app.*.map.json
 .env.production
 .env.local
 *.env
+
+# Deployment - local only
+logs/
+ssl/
+certbot/
+*.crt
+*.key
+*.pem
+
+# Claude Code local settings
+.claude/

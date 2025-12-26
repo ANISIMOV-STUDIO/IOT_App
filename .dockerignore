@@ -1,0 +1,44 @@
+# Git
+.git
+.gitignore
+
+# IDE
+.idea
+.vscode
+*.iml
+
+# Build outputs
+build/
+.dart_tool/
+.packages
+
+# Test
+test/
+coverage/
+
+# Documentation
+*.md
+docs/
+
+# CI/CD
+.github/
+
+# Deployment configs (not needed in image)
+deploy/
+docker-compose*.yml
+ssl/
+logs/
+
+# Environment files
+.env
+.env.*
+*.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Misc
+*.log
+*.lock
+!pubspec.lock
