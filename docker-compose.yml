@@ -1,5 +1,8 @@
 version: '3.8'
 
+# BREEZ HVAC - Локальная разработка
+# Запуск: docker-compose up --build
+
 services:
   breez-app:
     build:
@@ -10,6 +13,7 @@ services:
     ports:
       - "80:80"
     volumes:
+      # Логи nginx
       - ./logs/nginx:/var/log/nginx
     networks:
       - breez-network

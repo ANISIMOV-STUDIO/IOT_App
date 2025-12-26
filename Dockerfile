@@ -1,37 +1,37 @@
-# Stage 1: Build Flutter web app
+# Этап 1: Сборка Flutter web приложения
 FROM ghcr.io/cirruslabs/flutter:stable AS builder
 
 WORKDIR /app
 
-# Copy pubspec files first for better caching
+# Копируем pubspec файлы для кэширования зависимостей
 COPY pubspec.yaml pubspec.lock ./
 COPY packages/ packages/
 
-# Get dependencies
+# Устанавливаем зависимости
 RUN flutter pub get
 
-# Copy the rest of the app
+# Копируем остальные файлы приложения
 COPY . .
 
-# Build for web with release optimizations
+# Собираем релизную версию для web
 RUN flutter build web --release
 
-# Stage 2: Serve with Nginx
+# Этап 2: Запуск через Nginx
 FROM nginx:alpine
 
-# Remove default nginx config
+# Удаляем стандартный конфиг nginx
 RUN rm /etc/nginx/conf.d/default.conf
 
-# Copy custom nginx config
+# Копируем наш конфиг nginx
 COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
-# Copy built Flutter web app
+# Копируем собранное Flutter приложение
 COPY --from=builder /app/build/web /usr/share/nginx/html
 
-# Expose port 80
+# Открываем порт 80
 EXPOSE 80
 
-# Health check
+# Проверка здоровья контейнера
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD wget --quiet --tries=1 --spider http://localhost/ || exit 1
 

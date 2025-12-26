@@ -1,10 +1,10 @@
 #!/bin/bash
 #
-# Let's Encrypt SSL Certificate Setup for BREEZ HVAC App
-# Domain: anisimovstudio.ru
+# BREEZ HVAC - Настройка SSL сертификата Let's Encrypt
+# Домен: anisimovstudio.ru
 #
-# Usage: sudo bash init-letsencrypt.sh [email]
-# Example: sudo bash init-letsencrypt.sh admin@anisimovstudio.ru
+# Использование: sudo bash init-letsencrypt.sh [email]
+# Пример: sudo bash init-letsencrypt.sh admin@anisimovstudio.ru
 #
 
 set -e
@@ -16,24 +16,24 @@ DATA_PATH="/opt/breez-hvac/certbot"
 RSA_KEY_SIZE=4096
 
 echo "=========================================="
-echo "  Let's Encrypt Setup for $DOMAIN"
+echo "  Настройка Let's Encrypt для $DOMAIN"
 echo "=========================================="
 
-# Check if running as root
+# Проверка запуска от root
 if [ "$EUID" -ne 0 ]; then
-    echo "Please run as root: sudo bash init-letsencrypt.sh your@email.com"
+    echo "Запустите от root: sudo bash init-letsencrypt.sh ваш@email.com"
     exit 1
 fi
 
-# Create directories
+# Создание директорий
 echo ""
-echo "[1/5] Creating directories..."
+echo "[1/5] Создание директорий..."
 mkdir -p "$DATA_PATH/conf"
 mkdir -p "$DATA_PATH/www"
 
-# Download recommended TLS parameters
+# Загрузка рекомендованных параметров TLS
 echo ""
-echo "[2/5] Downloading TLS parameters..."
+echo "[2/5] Загрузка параметров TLS..."
 if [ ! -e "$DATA_PATH/conf/options-ssl-nginx.conf" ]; then
     curl -s https://raw.githubusercontent.com/certbot/certbot/master/certbot-nginx/certbot_nginx/_internal/tls_configs/options-ssl-nginx.conf > "$DATA_PATH/conf/options-ssl-nginx.conf"
 fi
@@ -42,9 +42,9 @@ if [ ! -e "$DATA_PATH/conf/ssl-dhparams.pem" ]; then
     curl -s https://raw.githubusercontent.com/certbot/certbot/master/certbot/certbot/ssl-dhparams.pem > "$DATA_PATH/conf/ssl-dhparams.pem"
 fi
 
-# Create dummy certificate for initial nginx start
+# Создание временного самоподписанного сертификата
 echo ""
-echo "[3/5] Creating temporary self-signed certificate..."
+echo "[3/5] Создание временного сертификата..."
 CERT_PATH="$DATA_PATH/conf/live/$DOMAIN"
 mkdir -p "$CERT_PATH"
 
@@ -53,16 +53,16 @@ if [ ! -e "$CERT_PATH/fullchain.pem" ]; then
         -keyout "$CERT_PATH/privkey.pem" \
         -out "$CERT_PATH/fullchain.pem" \
         -subj "/CN=localhost"
-    echo "Temporary certificate created"
+    echo "Временный сертификат создан"
 fi
 
-# Start nginx with dummy certificate
+# Запуск nginx с временным сертификатом
 echo ""
-echo "[4/5] Starting nginx..."
+echo "[4/5] Запуск nginx..."
 cd /opt/breez-hvac
 
-# Pull and start just the app container first
-docker pull ghcr.io/$GITHUB_REPOSITORY:latest || echo "Using local image"
+# Скачивание и запуск контейнера
+docker pull ghcr.io/$GITHUB_REPOSITORY:latest || echo "Используется локальный образ"
 docker stop breez-hvac-app 2>/dev/null || true
 docker rm breez-hvac-app 2>/dev/null || true
 
@@ -76,15 +76,15 @@ docker run -d \
     -v "/opt/breez-hvac/logs:/var/log/nginx" \
     ghcr.io/$GITHUB_REPOSITORY:latest || docker start breez-hvac-app
 
-echo "Nginx started, waiting 5 seconds..."
+echo "Nginx запущен, ожидание 5 секунд..."
 sleep 5
 
-# Delete dummy certificate
+# Удаление временного сертификата
 rm -rf "$CERT_PATH"
 
-# Request real certificate
+# Запрос настоящего сертификата
 echo ""
-echo "[5/5] Requesting Let's Encrypt certificate..."
+echo "[5/5] Запрос сертификата Let's Encrypt..."
 docker run --rm \
     -v "$DATA_PATH/conf:/etc/letsencrypt" \
     -v "$DATA_PATH/www:/var/www/certbot" \
@@ -98,21 +98,21 @@ docker run --rm \
     -d "$DOMAIN" \
     -d "$WWW_DOMAIN"
 
-# Restart nginx to load real certificate
+# Перезапуск nginx с настоящим сертификатом
 echo ""
-echo "Restarting nginx with real certificate..."
+echo "Перезапуск nginx с настоящим сертификатом..."
 docker restart breez-hvac-app
 
 echo ""
 echo "=========================================="
-echo "  SSL Setup Complete!"
+echo "  Настройка SSL завершена!"
 echo "=========================================="
 echo ""
-echo "Certificate obtained for: $DOMAIN, $WWW_DOMAIN"
-echo "Certificate location: $DATA_PATH/conf/live/$DOMAIN/"
+echo "Сертификат получен для: $DOMAIN, $WWW_DOMAIN"
+echo "Расположение сертификата: $DATA_PATH/conf/live/$DOMAIN/"
 echo ""
-echo "Auto-renewal cron job (add with 'crontab -e'):"
+echo "Для автообновления добавьте в cron (crontab -e):"
 echo "0 0 * * * docker run --rm -v $DATA_PATH/conf:/etc/letsencrypt -v $DATA_PATH/www:/var/www/certbot certbot/certbot renew && docker restart breez-hvac-app"
 echo ""
-echo "Your app is now available at: https://$DOMAIN"
+echo "Приложение доступно по адресу: https://$DOMAIN"
 echo ""

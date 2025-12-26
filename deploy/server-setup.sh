@@ -1,9 +1,9 @@
 #!/bin/bash
 #
-# BREEZ HVAC App - Server Setup Script
-# Domain: anisimovstudio.ru
+# BREEZ HVAC - Скрипт настройки сервера
+# Домен: anisimovstudio.ru
 #
-# Usage: sudo bash server-setup.sh
+# Использование: sudo bash server-setup.sh
 #
 
 set -e
@@ -11,25 +11,25 @@ set -e
 DOMAIN="anisimovstudio.ru"
 
 echo "=========================================="
-echo "  BREEZ HVAC App - Server Setup"
-echo "  Domain: $DOMAIN"
+echo "  BREEZ HVAC - Настройка сервера"
+echo "  Домен: $DOMAIN"
 echo "=========================================="
 
-# Check if running as root
+# Проверка запуска от root
 if [ "$EUID" -ne 0 ]; then
-    echo "Please run as root: sudo bash server-setup.sh"
+    echo "Запустите от root: sudo bash server-setup.sh"
     exit 1
 fi
 
-# Update system
+# Обновление системы
 echo ""
-echo "[1/7] Updating system packages..."
+echo "[1/7] Обновление системных пакетов..."
 apt-get update
 apt-get upgrade -y
 
-# Install required packages
+# Установка необходимых пакетов
 echo ""
-echo "[2/7] Installing required packages..."
+echo "[2/7] Установка необходимых пакетов..."
 apt-get install -y \
     apt-transport-https \
     ca-certificates \
@@ -39,101 +39,98 @@ apt-get install -y \
     ufw \
     openssl
 
-# Install Docker
+# Установка Docker
 echo ""
-echo "[3/7] Installing Docker..."
+echo "[3/7] Установка Docker..."
 if ! command -v docker &> /dev/null; then
-    # Add Docker's official GPG key
+    # Добавление GPG ключа Docker
     install -m 0755 -d /etc/apt/keyrings
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
     chmod a+r /etc/apt/keyrings/docker.asc
 
-    # Add Docker repository
+    # Добавление репозитория Docker
     echo \
       "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
       $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
       tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-    # Install Docker
+    # Установка Docker
     apt-get update
     apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
-    # Start and enable Docker
+    # Запуск и автозагрузка Docker
     systemctl start docker
     systemctl enable docker
 
-    echo "Docker installed successfully!"
+    echo "Docker установлен успешно!"
 else
-    echo "Docker is already installed"
+    echo "Docker уже установлен"
 fi
 
-# Create app directory structure
+# Создание директорий приложения
 echo ""
-echo "[4/7] Creating application directories..."
+echo "[4/7] Создание директорий приложения..."
 mkdir -p /opt/breez-hvac/certbot/conf
 mkdir -p /opt/breez-hvac/certbot/www
 mkdir -p /opt/breez-hvac/logs
 chmod 755 /opt/breez-hvac
 
-# Create deploy user
+# Создание пользователя deploy
 echo ""
-echo "[5/7] Setting up deploy user..."
+echo "[5/7] Настройка пользователя deploy..."
 if ! id "deploy" &>/dev/null; then
     useradd -m -s /bin/bash deploy
     usermod -aG docker deploy
     mkdir -p /home/deploy/.ssh
     chmod 700 /home/deploy/.ssh
     chown -R deploy:deploy /home/deploy/.ssh
-    echo "User 'deploy' created and added to docker group"
+    echo "Пользователь 'deploy' создан и добавлен в группу docker"
 else
     usermod -aG docker deploy
-    echo "User 'deploy' already exists, added to docker group"
+    echo "Пользователь 'deploy' уже существует, добавлен в группу docker"
 fi
 
-# Give deploy user access to app directory
+# Права доступа к директории приложения
 chown -R deploy:deploy /opt/breez-hvac
 
-# Configure firewall
+# Настройка файрвола
 echo ""
-echo "[6/7] Configuring firewall..."
+echo "[6/7] Настройка файрвола..."
 ufw allow 22/tcp    # SSH
-ufw allow 80/tcp    # HTTP (for Let's Encrypt verification)
+ufw allow 80/tcp    # HTTP
 ufw allow 443/tcp   # HTTPS
 ufw --force enable
-echo "Firewall configured: SSH(22), HTTP(80), HTTPS(443) allowed"
+echo "Файрвол настроен: SSH(22), HTTP(80), HTTPS(443) разрешены"
 
-# Generate SSH key for GitHub Actions
+# Генерация SSH ключа для GitHub Actions
 echo ""
-echo "[7/7] Generating SSH key for GitHub Actions..."
+echo "[7/7] Генерация SSH ключа для GitHub Actions..."
 if [ ! -f /home/deploy/.ssh/github_actions ]; then
     sudo -u deploy ssh-keygen -t ed25519 -C "github-actions-$DOMAIN" -f /home/deploy/.ssh/github_actions -N ""
     cat /home/deploy/.ssh/github_actions.pub >> /home/deploy/.ssh/authorized_keys
     chmod 600 /home/deploy/.ssh/authorized_keys
     chown deploy:deploy /home/deploy/.ssh/authorized_keys
-    echo "SSH key generated"
+    echo "SSH ключ сгенерирован"
 else
-    echo "SSH key already exists"
+    echo "SSH ключ уже существует"
 fi
 
 echo ""
 echo "=========================================="
-echo "  Server Setup Complete!"
+echo "  Настройка сервера завершена!"
 echo "=========================================="
 echo ""
-echo "PRIVATE KEY for GitHub Secrets (SERVER_SSH_KEY):"
+echo "ПРИВАТНЫЙ КЛЮЧ для GitHub Secrets (SERVER_SSH_KEY):"
 echo "================================================="
 cat /home/deploy/.ssh/github_actions
 echo ""
 echo "================================================="
 echo ""
-echo "Add these secrets to GitHub (Settings → Secrets → Actions):"
+echo "Добавьте эти секреты в GitHub (Settings → Secrets → Actions):"
 echo ""
-echo "  SERVER_HOST:    $(curl -s ifconfig.me 2>/dev/null || echo 'YOUR_PUBLIC_IP')"
+echo "  SERVER_HOST:    $(curl -s ifconfig.me 2>/dev/null || echo 'ВАШ_ПУБЛИЧНЫЙ_IP')"
 echo "  SERVER_USER:    deploy"
 echo "  SERVER_PORT:    22"
-echo "  SERVER_SSH_KEY: (private key above)"
-echo "  CR_PAT:         (GitHub Personal Access Token with packages:read)"
-echo ""
-echo "Next step - get SSL certificate:"
-echo "  sudo bash /opt/breez-hvac/init-letsencrypt.sh your@email.com"
+echo "  SERVER_SSH_KEY: (приватный ключ выше)"
+echo "  CR_PAT:         (GitHub Personal Access Token с правами packages:read)"
 echo ""
