@@ -50,7 +50,7 @@ class ScheduleWidget extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
                         color: AppColors.accent.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(16),
                       ),
                       child: Text(
                         'Все (+${entries.length - 3})',
@@ -174,7 +174,7 @@ class _ScheduleRowState extends State<_ScheduleRow> {
                 height: 28,
                 decoration: BoxDecoration(
                   color: AppColors.accent.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(16),
                 ),
                 child: Icon(
                   _getModeIcon(),

@@ -58,7 +58,7 @@ class UnitNotificationsWidget extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
                     color: AppColors.accentRed.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(16),
                   ),
                   child: Text(
                     '${notifications.length}',
@@ -234,7 +234,7 @@ class _NotificationCardState extends State<_NotificationCard> {
             color: _isHovered
                 ? _typeColor.withValues(alpha: 0.08)
                 : _typeColor.withValues(alpha: 0.05),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(16),
             border: Border.all(
               color: _isHovered
                   ? _typeColor.withValues(alpha: 0.3)
@@ -250,7 +250,7 @@ class _NotificationCardState extends State<_NotificationCard> {
                 height: 32,
                 decoration: BoxDecoration(
                   color: _typeColor.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(16),
                 ),
                 child: Icon(
                   _typeIcon,

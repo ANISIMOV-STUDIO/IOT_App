@@ -93,7 +93,7 @@ class AppFooter extends StatelessWidget {
                   color: isOnline
                       ? AppColors.accentGreen.withValues(alpha: 0.1)
                       : AppColors.accentRed.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(16),
                   border: Border.all(
                     color: isOnline
                         ? AppColors.accentGreen.withValues(alpha: 0.2)

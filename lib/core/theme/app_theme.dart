@@ -122,7 +122,7 @@ abstract class AppColors {
   );
 
   // === STYLING ===
-  static const double cardRadius = 32.0;
+  static const double cardRadius = 16.0;
   static const double cardRadiusSmall = 16.0;
   static const double buttonRadius = 16.0;
 
