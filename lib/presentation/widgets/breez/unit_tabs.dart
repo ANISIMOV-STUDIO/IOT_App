@@ -38,7 +38,7 @@ class UnitTab extends StatelessWidget {
     return BreezButton(
       onTap: onTap,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      borderRadius: 20,
+      borderRadius: AppColors.cardRadius,
       backgroundColor: isSelected
           ? AppColors.accent
           : Colors.white.withValues(alpha: 0.05),
@@ -133,7 +133,7 @@ class UnitTabs extends StatelessWidget {
               width: 32,
               height: 32,
               padding: const EdgeInsets.all(8), // Expands touch area
-              borderRadius: 16,
+              borderRadius: AppColors.buttonRadius,
               child: Icon(
                 Icons.add,
                 size: 16,

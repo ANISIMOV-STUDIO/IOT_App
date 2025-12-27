@@ -397,7 +397,7 @@ class _GraphPainter extends CustomPainter {
           width: textPainter.width + 16,
           height: 24,
         ),
-        const Radius.circular(8),
+        Radius.circular(AppColors.buttonRadius),
       );
 
       final tooltipPaint = Paint()..color = color;
