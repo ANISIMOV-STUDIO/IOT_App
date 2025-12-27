@@ -50,7 +50,7 @@ class ScheduleWidget extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
                         color: AppColors.accent.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(AppColors.buttonRadius),
                       ),
                       child: Text(
                         'Все (+${entries.length - 3})',
@@ -174,7 +174,7 @@ class _ScheduleRowState extends State<_ScheduleRow> {
                 height: 28,
                 decoration: BoxDecoration(
                   color: AppColors.accent.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(AppColors.cardRadius),
                 ),
                 child: Icon(
                   _getModeIcon(),
@@ -232,7 +232,7 @@ class _ActiveScheduleCard extends StatelessWidget {
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
         ),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppColors.cardRadius),
         boxShadow: [
           BoxShadow(
             color: AppColors.accent.withValues(alpha: 0.3),
@@ -257,7 +257,7 @@ class _ActiveScheduleCard extends StatelessWidget {
             height: 28,
             decoration: BoxDecoration(
               color: Colors.white.withValues(alpha: 0.2),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(AppColors.buttonRadius),
             ),
             child: const Icon(
               Icons.wb_cloudy_outlined,

@@ -184,7 +184,7 @@ class ClimateCard extends StatelessWidget {
                     height: 8,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(AppColors.indicatorRadius),
                     ),
                   ),
                   const SizedBox(height: 6),
@@ -193,7 +193,7 @@ class ClimateCard extends StatelessWidget {
                     height: 10,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(AppColors.indicatorRadius),
                     ),
                   ),
                 ],
@@ -257,7 +257,7 @@ class ClimateCard extends StatelessWidget {
                     height: 12,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(AppColors.indicatorRadius),
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -266,7 +266,7 @@ class ClimateCard extends StatelessWidget {
                     height: 10,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(AppColors.indicatorRadius),
                     ),
                   ),
                 ],

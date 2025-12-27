@@ -262,7 +262,7 @@ class _AddUnitButtonState extends State<_AddUnitButton> {
                     height: 32,
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.05),
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(AppColors.buttonRadius),
                     ),
                     child: Icon(
                       Icons.add,

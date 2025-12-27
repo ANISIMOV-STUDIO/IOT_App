@@ -164,7 +164,7 @@ class _UnitTab extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           decoration: BoxDecoration(
             color: isSelected ? AppColors.accent : Colors.transparent,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(AppColors.buttonRadius),
           ),
           alignment: Alignment.center,
           child: Row(

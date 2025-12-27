@@ -96,7 +96,7 @@ class BreezCard extends StatelessWidget {
               height: 10,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(AppColors.indicatorRadius),
               ),
             ),
           if (title != null) const SizedBox(height: 4),
@@ -106,7 +106,7 @@ class BreezCard extends StatelessWidget {
               height: 12,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(AppColors.indicatorRadius),
               ),
             ),
           if (description != null) const SizedBox(height: 16),
@@ -115,7 +115,7 @@ class BreezCard extends StatelessWidget {
             height: 100,
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(AppColors.cardRadius),
             ),
           ),
         ],

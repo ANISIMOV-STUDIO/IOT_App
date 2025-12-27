@@ -125,6 +125,7 @@ abstract class AppColors {
   static const double cardRadius = 16.0;
   static const double cardRadiusSmall = 16.0;
   static const double buttonRadius = 16.0;
+  static const double indicatorRadius = 4.0;
 
   static List<BoxShadow> get cardShadow => [
     BoxShadow(
