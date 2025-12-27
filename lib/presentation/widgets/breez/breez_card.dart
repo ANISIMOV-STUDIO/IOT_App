@@ -177,9 +177,11 @@ class _BreezButtonState extends State<BreezButton> {
         : kMinTouchTarget;
 
     return MouseRegion(
-      cursor: widget.isLoading ? SystemMouseCursors.basic : SystemMouseCursors.click,
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
+      cursor: widget.isLoading || widget.onTap == null
+          ? SystemMouseCursors.basic
+          : SystemMouseCursors.click,
+      onEnter: widget.onTap == null ? null : (_) => setState(() => _isHovered = true),
+      onExit: widget.onTap == null ? null : (_) => setState(() => _isHovered = false),
       child: GestureDetector(
         onTap: widget.isLoading ? null : widget.onTap,
         onTapDown: widget.isLoading ? null : (_) => setState(() => _isPressed = true),

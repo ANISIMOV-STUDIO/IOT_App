@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import '../../../core/di/injection_container.dart' as di;
 import '../../../core/services/theme_service.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/spacing.dart';
 import '../../../data/mock/mock_data.dart';
 import '../../../domain/entities/unit_state.dart';
@@ -247,66 +246,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   // Menu items for bottom bar
   static const _menuItems = [
-    (Icons.dashboard_outlined, 'Панель'),
-    (Icons.devices_outlined, 'Устройства'),
-    (Icons.schedule_outlined, 'Расписание'),
-    (Icons.analytics_outlined, 'Аналитика'),
-    (Icons.notifications_outlined, 'Уведомления'),
-    (Icons.settings_outlined, 'Настройки'),
+    NavigationItem(icon: Icons.dashboard_outlined, label: 'Панель'),
+    NavigationItem(icon: Icons.devices_outlined, label: 'Устройства'),
+    NavigationItem(icon: Icons.schedule_outlined, label: 'Расписание'),
+    NavigationItem(icon: Icons.analytics_outlined, label: 'Аналитика'),
+    NavigationItem(icon: Icons.notifications_outlined, label: 'Уведомления'),
+    NavigationItem(icon: Icons.settings_outlined, label: 'Настройки'),
   ];
 
   Widget _buildBottomBar() {
-    final colors = BreezColors.of(context);
-
-    return Container(
-      height: 72,
-      margin: const EdgeInsets.fromLTRB(
-        AppSpacing.sm,
-        0, // Нет отступа сверху
-        AppSpacing.sm,
-        AppSpacing.sm,
-      ),
-      decoration: BoxDecoration(
-        color: colors.card,
-        borderRadius: BorderRadius.circular(AppRadius.card),
-        border: Border.all(color: colors.border),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
-            blurRadius: 16,
-            offset: const Offset(0, -4),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: _menuItems.asMap().entries.map((entry) {
-          final index = entry.key;
-          final item = entry.value;
-          final isSelected = index == _sidebarIndex;
-          return Tooltip(
-            message: item.$2,
-            child: GestureDetector(
-              onTap: () => setState(() => _sidebarIndex = index),
-              child: Container(
-                width: 56,
-                height: 56,
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? AppColors.accent.withValues(alpha: 0.15)
-                      : Colors.transparent,
-                  borderRadius: BorderRadius.circular(AppRadius.button),
-                ),
-                child: Icon(
-                  item.$1,
-                  size: 24,
-                  color: isSelected ? AppColors.accent : colors.textMuted,
-                ),
-              ),
-            ),
-          );
-        }).toList(),
-      ),
+    return BreezNavigationBar(
+      items: _menuItems,
+      selectedIndex: _sidebarIndex,
+      onItemSelected: (index) => setState(() => _sidebarIndex = index),
     );
   }
 }

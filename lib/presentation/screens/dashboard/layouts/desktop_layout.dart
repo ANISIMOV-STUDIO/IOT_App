@@ -2,8 +2,6 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_theme.dart';
-import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/spacing.dart';
 import '../../../../domain/entities/unit_state.dart';
 import '../../../widgets/breez/breez.dart';
@@ -70,12 +68,12 @@ class _DesktopLayoutState extends State<DesktopLayout> {
 
   // Menu items for bottom bar
   static const _menuItems = [
-    (Icons.dashboard_outlined, 'Панель'),
-    (Icons.devices_outlined, 'Устройства'),
-    (Icons.schedule_outlined, 'Расписание'),
-    (Icons.analytics_outlined, 'Аналитика'),
-    (Icons.notifications_outlined, 'Уведомления'),
-    (Icons.settings_outlined, 'Настройки'),
+    NavigationItem(icon: Icons.dashboard_outlined, label: 'Панель'),
+    NavigationItem(icon: Icons.devices_outlined, label: 'Устройства'),
+    NavigationItem(icon: Icons.schedule_outlined, label: 'Расписание'),
+    NavigationItem(icon: Icons.analytics_outlined, label: 'Аналитика'),
+    NavigationItem(icon: Icons.notifications_outlined, label: 'Уведомления'),
+    NavigationItem(icon: Icons.settings_outlined, label: 'Настройки'),
   ];
 
   @override
@@ -99,6 +97,9 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                   Sidebar(
                     selectedIndex: _sidebarIndex,
                     onItemSelected: (index) => setState(() => _sidebarIndex = index),
+                    onLogoutTap: () {
+                      // TODO: Implement logout
+                    },
                   ),
 
                 // Main content
@@ -132,44 +133,11 @@ class _DesktopLayoutState extends State<DesktopLayout> {
   }
 
   Widget _buildBottomBar() {
-    final colors = BreezColors.of(context);
-    return Container(
+    return BreezNavigationBar(
+      items: _menuItems,
+      selectedIndex: _sidebarIndex,
+      onItemSelected: (index) => setState(() => _sidebarIndex = index),
       height: 80,
-      margin: const EdgeInsets.fromLTRB(AppSpacing.sm, 0, AppSpacing.sm, AppSpacing.sm),
-      decoration: BoxDecoration(
-        color: colors.card,
-        borderRadius: BorderRadius.circular(AppRadius.card),
-        border: Border.all(color: colors.border),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: _menuItems.asMap().entries.map((entry) {
-          final index = entry.key;
-          final item = entry.value;
-          final isSelected = index == _sidebarIndex;
-          return Tooltip(
-            message: item.$2,
-            child: GestureDetector(
-              onTap: () => setState(() => _sidebarIndex = index),
-              child: Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? AppColors.accent.withValues(alpha: 0.2)
-                      : Colors.transparent,
-                  borderRadius: BorderRadius.circular(AppRadius.button),
-                ),
-                child: Icon(
-                  item.$1,
-                  size: 24,
-                  color: isSelected ? AppColors.accent : colors.textMuted,
-                ),
-              ),
-            ),
-          );
-        }).toList(),
-      ),
     );
   }
 

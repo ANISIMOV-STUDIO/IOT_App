@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/spacing.dart';
+import 'breez_card.dart';
 
 /// Navigation item data
 class SidebarItem {
@@ -132,7 +133,7 @@ class _LogoButton extends StatelessWidget {
 }
 
 /// Sidebar navigation button
-class _SidebarButton extends StatefulWidget {
+class _SidebarButton extends StatelessWidget {
   final IconData icon;
   final bool isSelected;
   final String? badge;
@@ -146,76 +147,48 @@ class _SidebarButton extends StatefulWidget {
   });
 
   @override
-  State<_SidebarButton> createState() => _SidebarButtonState();
-}
-
-class _SidebarButtonState extends State<_SidebarButton> {
-  bool _isHovered = false;
-
-  @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: GestureDetector(
-        onTap: widget.onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          width: 48,
-          height: 48,
-          decoration: BoxDecoration(
-            color: widget.isSelected
-                ? AppColors.accent
-                : _isHovered
-                    ? colors.buttonBg
-                    : Colors.transparent,
-            borderRadius: BorderRadius.circular(AppRadius.button),
-            border: Border.all(
-              color: widget.isSelected
-                  ? AppColors.accent
-                  : _isHovered
-                      ? colors.border
-                      : Colors.transparent,
+    return BreezButton(
+      onTap: onTap,
+      width: 48,
+      height: 48,
+      padding: EdgeInsets.zero,
+      backgroundColor: isSelected ? AppColors.accent : Colors.transparent,
+      hoverColor: isSelected ? AppColors.accent : colors.buttonBg,
+      border: Border.all(
+        color: isSelected ? AppColors.accent : Colors.transparent,
+      ),
+      child: Stack(
+        children: [
+          Center(
+            child: Icon(
+              icon,
+              size: 22,
+              color: isSelected ? Colors.white : colors.textMuted,
             ),
           ),
-          child: Stack(
-            children: [
-              Center(
-                child: Icon(
-                  widget.icon,
-                  size: 22,
-                  color: widget.isSelected
-                      ? Colors.white
-                      : _isHovered
-                          ? colors.text
-                          : colors.textMuted,
+          if (badge != null)
+            Positioned(
+              top: 6,
+              right: 6,
+              child: Container(
+                padding: const EdgeInsets.all(4),
+                decoration: const BoxDecoration(
+                  color: AppColors.accentRed,
+                  shape: BoxShape.circle,
                 ),
-              ),
-              if (widget.badge != null)
-                Positioned(
-                  top: 6,
-                  right: 6,
-                  child: Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: const BoxDecoration(
-                      color: AppColors.accentRed,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Text(
-                      widget.badge!,
-                      style: const TextStyle(
-                        fontSize: 8,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white,
-                      ),
-                    ),
+                child: Text(
+                  badge!,
+                  style: const TextStyle(
+                    fontSize: 8,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
                   ),
                 ),
-            ],
-          ),
-        ),
+              ),
+            ),
+        ],
       ),
     );
   }

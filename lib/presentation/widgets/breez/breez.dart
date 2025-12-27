@@ -10,6 +10,7 @@ export 'app_header.dart';
 export 'app_footer.dart';
 export 'global_controls.dart';
 export 'sidebar.dart';
+export 'navigation_bar.dart';
 export 'main_temp_card.dart';
 export 'units_list.dart';
 export 'schedule_widget.dart';
