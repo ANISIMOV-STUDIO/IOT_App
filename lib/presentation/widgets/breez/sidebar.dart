@@ -49,19 +49,29 @@ class Sidebar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
-    return Container(
-      width: 80,
-      margin: const EdgeInsets.only(
-        left: AppSpacing.sm,
-        top: AppSpacing.sm,
-        bottom: AppSpacing.sm,
-      ),
-      decoration: BoxDecoration(
-        color: colors.card,
-        borderRadius: BorderRadius.circular(AppRadius.card),
-        border: Border.all(color: colors.border),
-      ),
-      child: Column(
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Адаптивная ширина на основе доступного пространства
+        // Если места мало - компактный режим (только иконки)
+        // Если места много - расширенный режим (иконки + текст)
+        final availableWidth = MediaQuery.sizeOf(context).width;
+        final isExpanded = availableWidth > 1200; // breakpoint для расширенного режима
+        final sidebarWidth = isExpanded ? 200.0 : 80.0;
+
+        return Container(
+          width: sidebarWidth,
+          margin: const EdgeInsets.only(
+            left: AppSpacing.sm,
+            top: AppSpacing.sm,
+            bottom: AppSpacing.sm,
+          ),
+          decoration: BoxDecoration(
+            color: colors.card,
+            borderRadius: BorderRadius.circular(AppRadius.card),
+            border: Border.all(color: colors.border),
+          ),
+          child: Column(
         children: [
           const SizedBox(height: 20),
 
@@ -83,7 +93,9 @@ class Sidebar extends StatelessWidget {
 
                   return _SidebarButton(
                     icon: item.icon,
+                    label: item.label,
                     isSelected: isSelected,
+                    isExpanded: isExpanded,
                     badge: item.badge,
                     onTap: () => onItemSelected?.call(index),
                   );
@@ -97,6 +109,8 @@ class Sidebar extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: _SidebarButton(
               icon: Icons.logout_rounded,
+              label: 'Выход',
+              isExpanded: isExpanded,
               onTap: onLogoutTap,
             ),
           ),
@@ -104,6 +118,8 @@ class Sidebar extends StatelessWidget {
           const SizedBox(height: 20),
         ],
       ),
+        );
+      },
     );
   }
 }
@@ -135,13 +151,17 @@ class _LogoButton extends StatelessWidget {
 /// Sidebar navigation button
 class _SidebarButton extends StatelessWidget {
   final IconData icon;
+  final String? label;
   final bool isSelected;
+  final bool isExpanded;
   final String? badge;
   final VoidCallback? onTap;
 
   const _SidebarButton({
     required this.icon,
+    this.label,
     this.isSelected = false,
+    this.isExpanded = false,
     this.badge,
     this.onTap,
   });
@@ -151,45 +171,83 @@ class _SidebarButton extends StatelessWidget {
     final colors = BreezColors.of(context);
     return BreezButton(
       onTap: onTap,
-      width: 48,
       height: 48,
-      padding: EdgeInsets.zero,
+      padding: isExpanded
+          ? const EdgeInsets.symmetric(horizontal: 16, vertical: 12)
+          : EdgeInsets.zero,
       backgroundColor: isSelected ? AppColors.accent : Colors.transparent,
       hoverColor: isSelected ? AppColors.accent : colors.buttonBg,
       border: Border.all(
         color: isSelected ? AppColors.accent : Colors.transparent,
       ),
-      child: Stack(
-        children: [
-          Center(
-            child: Icon(
-              icon,
-              size: 22,
-              color: isSelected ? Colors.white : colors.textMuted,
-            ),
-          ),
-          if (badge != null)
-            Positioned(
-              top: 6,
-              right: 6,
-              child: Container(
-                padding: const EdgeInsets.all(4),
-                decoration: const BoxDecoration(
-                  color: AppColors.accentRed,
-                  shape: BoxShape.circle,
+      child: isExpanded && label != null
+          ? Row(
+              children: [
+                Icon(
+                  icon,
+                  size: 22,
+                  color: isSelected ? Colors.white : colors.textMuted,
                 ),
-                child: Text(
-                  badge!,
-                  style: const TextStyle(
-                    fontSize: 8,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    label!,
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: isSelected ? Colors.white : colors.text,
+                    ),
                   ),
                 ),
-              ),
+                if (badge != null)
+                  Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: const BoxDecoration(
+                      color: AppColors.accentRed,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(
+                      badge!,
+                      style: const TextStyle(
+                        fontSize: 8,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+              ],
+            )
+          : Stack(
+              children: [
+                Center(
+                  child: Icon(
+                    icon,
+                    size: 22,
+                    color: isSelected ? Colors.white : colors.textMuted,
+                  ),
+                ),
+                if (badge != null)
+                  Positioned(
+                    top: 6,
+                    right: 6,
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: const BoxDecoration(
+                        color: AppColors.accentRed,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Text(
+                        badge!,
+                        style: const TextStyle(
+                          fontSize: 8,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
             ),
-        ],
-      ),
     );
   }
 }

@@ -139,7 +139,6 @@ class _DesktopLayoutState extends State<DesktopLayout> {
       items: _menuItems,
       selectedIndex: _sidebarIndex,
       onItemSelected: (index) => setState(() => _sidebarIndex = index),
-      height: 80,
     );
   }
 
