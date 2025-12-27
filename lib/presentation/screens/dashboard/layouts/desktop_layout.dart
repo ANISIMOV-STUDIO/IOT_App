@@ -156,8 +156,6 @@ class _DesktopLayoutState extends State<DesktopLayout> {
             onModeChanged: widget.onModeChanged,
             onPowerToggle: widget.onPowerToggle,
             onSettingsTap: widget.onSettingsTap,
-            showControls: true,
-            showModeSelector: true,
           ),
         ),
 

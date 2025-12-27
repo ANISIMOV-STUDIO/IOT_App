@@ -42,8 +42,6 @@ class MobileLayout extends StatelessWidget {
         onModeChanged: onModeChanged,
         onPowerToggle: onPowerToggle,
         onSettingsTap: onSettingsTap,
-        showControls: true,
-        showModeSelector: true,
       ),
     );
   }
