@@ -119,7 +119,7 @@ class _IconPresetState extends State<_IconPreset> {
                   : _isHovered
                       ? colors.buttonBg
                       : colors.buttonBg.withValues(alpha: 0.5),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppColors.buttonRadius),
               border: Border.all(
                 color: widget.isActive
                     ? _color.withValues(alpha: 0.6)

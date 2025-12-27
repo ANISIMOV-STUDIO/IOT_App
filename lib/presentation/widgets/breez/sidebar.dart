@@ -56,7 +56,7 @@ class Sidebar extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: colors.card,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(AppColors.cardRadius),
         border: Border.all(color: colors.border),
       ),
       child: Column(
@@ -117,7 +117,7 @@ class _LogoButton extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: colors.buttonBg,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(AppColors.buttonRadius),
       ),
       child: SvgPicture.asset(
         'assets/images/breez-logo.svg',
@@ -170,7 +170,7 @@ class _SidebarButtonState extends State<_SidebarButton> {
                 : _isHovered
                     ? colors.buttonBg
                     : Colors.transparent,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppColors.buttonRadius),
             border: Border.all(
               color: widget.isSelected
                   ? AppColors.accent

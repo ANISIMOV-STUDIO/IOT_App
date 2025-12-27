@@ -31,7 +31,7 @@ class HeaderIconButton extends StatelessWidget {
             color: isHovered
                 ? Colors.white.withValues(alpha: 0.05)
                 : AppColors.darkCard,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppColors.buttonRadius),
             border: Border.all(color: AppColors.darkBorder),
           ),
           child: Stack(

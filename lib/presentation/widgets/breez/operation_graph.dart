@@ -58,7 +58,7 @@ class _OperationGraphState extends State<OperationGraph> {
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
                   color: colors.buttonBg,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(AppColors.buttonRadius),
                 ),
                 child: Row(
                   children: [

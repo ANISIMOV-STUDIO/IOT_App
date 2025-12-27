@@ -58,7 +58,7 @@ class UnitNotificationsWidget extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
                     color: AppColors.accentRed.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
                     '${notifications.length}',
@@ -105,7 +105,7 @@ class UnitNotificationsWidget extends StatelessWidget {
                   height: 48, // Minimum touch target
                   decoration: BoxDecoration(
                     color: colors.buttonBg,
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(AppColors.buttonRadius),
                     border: Border.all(color: colors.border),
                   ),
                   child: Center(

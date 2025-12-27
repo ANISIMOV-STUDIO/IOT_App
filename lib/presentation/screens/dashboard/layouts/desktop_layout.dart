@@ -157,7 +157,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                   color: isSelected
                       ? AppColors.accent.withValues(alpha: 0.2)
                       : Colors.transparent,
-                  borderRadius: BorderRadius.circular(AppSpacing.radiusXl),
+                  borderRadius: BorderRadius.circular(AppColors.buttonRadius),
                 ),
                 child: Icon(
                   item.$1,

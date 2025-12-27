@@ -76,7 +76,7 @@ class DesktopHeader extends StatelessWidget {
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         color: colors.card,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(AppColors.cardRadiusSmall),
         border: Border.all(color: colors.border),
       ),
       child: Row(
@@ -126,7 +126,7 @@ class DesktopHeader extends StatelessWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppColors.buttonRadius),
           ),
           child: const Center(
             child: Icon(
@@ -164,7 +164,7 @@ class _UnitTab extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           decoration: BoxDecoration(
             color: isSelected ? AppColors.accent : Colors.transparent,
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(12),
           ),
           alignment: Alignment.center,
           child: Row(

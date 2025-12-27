@@ -42,7 +42,7 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
     return Dialog(
       backgroundColor: AppColors.darkCard,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppColors.cardRadiusSmall),
         side: BorderSide(color: AppColors.darkBorder),
       ),
       child: Container(
@@ -115,15 +115,15 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
             filled: true,
             fillColor: AppColors.darkBg,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppColors.buttonRadius),
               borderSide: BorderSide(color: AppColors.darkBorder),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppColors.buttonRadius),
               borderSide: BorderSide(color: AppColors.darkBorder),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(AppColors.buttonRadius),
               borderSide: BorderSide(color: AppColors.accent),
             ),
             contentPadding: const EdgeInsets.symmetric(
@@ -188,7 +188,7 @@ class _DialogButton extends StatelessWidget {
             color: isPrimary
                 ? (isHovered ? AppColors.accentLight : AppColors.accent)
                 : (isHovered ? Colors.white.withValues(alpha: 0.05) : Colors.transparent),
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(AppColors.buttonRadius),
             border: isPrimary ? null : Border.all(color: AppColors.darkBorder),
           ),
           child: Text(

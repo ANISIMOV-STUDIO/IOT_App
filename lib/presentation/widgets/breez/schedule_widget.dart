@@ -151,7 +151,7 @@ class _ScheduleRowState extends State<_ScheduleRow> {
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           decoration: BoxDecoration(
             color: _isHovered ? colors.buttonBg : Colors.transparent,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppColors.buttonRadius),
           ),
           child: Row(
             children: [

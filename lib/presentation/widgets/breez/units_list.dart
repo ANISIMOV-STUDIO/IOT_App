@@ -119,7 +119,7 @@ class _UnitCardState extends State<_UnitCard> {
                 : _isHovered
                     ? Colors.white.withValues(alpha: 0.03)
                     : AppColors.darkCard,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(AppColors.cardRadiusSmall),
             border: Border.all(
               color: widget.isSelected
                   ? AppColors.accent.withValues(alpha: 0.5)
@@ -137,7 +137,7 @@ class _UnitCardState extends State<_UnitCard> {
                   color: widget.unit.isPowered
                       ? AppColors.accent.withValues(alpha: 0.15)
                       : Colors.white.withValues(alpha: 0.05),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(AppColors.buttonRadius),
                 ),
                 child: Icon(
                   _getModeIcon(),
@@ -236,7 +236,7 @@ class _AddUnitButtonState extends State<_AddUnitButton> {
             color: _isHovered
                 ? Colors.white.withValues(alpha: 0.02)
                 : Colors.transparent,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(AppColors.cardRadiusSmall),
             border: Border.all(
               color: _isHovered
                   ? AppColors.accent.withValues(alpha: 0.5)

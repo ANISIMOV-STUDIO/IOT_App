@@ -270,7 +270,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   color: isSelected
                       ? AppColors.accent.withValues(alpha: 0.15)
                       : Colors.transparent,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(AppColors.buttonRadius),
                 ),
                 child: Icon(
                   item.$1,
