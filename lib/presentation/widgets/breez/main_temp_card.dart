@@ -4,6 +4,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/app_radius.dart';
 
 /// Main temperature display card with gradient background
 class MainTempCard extends StatelessWidget {
@@ -60,7 +61,7 @@ class MainTempCard extends StatelessWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
-            borderRadius: BorderRadius.circular(AppColors.cardRadius),
+            borderRadius: BorderRadius.circular(AppRadius.card),
             border: Border.all(
               color: isPowered
                   ? AppColors.accent.withValues(alpha: 0.3)
@@ -99,7 +100,7 @@ class MainTempCard extends StatelessWidget {
                       const SizedBox(height: 4),
                       Row(
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.location_on,
                             size: 14,
                             color: AppColors.accent,
@@ -130,7 +131,7 @@ class MainTempCard extends StatelessWidget {
                       color: isPowered
                           ? AppColors.accentGreen.withValues(alpha: 0.15)
                           : AppColors.accentRed.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(AppColors.buttonRadius),
+                      borderRadius: BorderRadius.circular(AppRadius.button),
                       border: Border.all(
                         color: isPowered
                             ? AppColors.accentGreen.withValues(alpha: 0.3)
@@ -307,7 +308,7 @@ class MainTempCard extends StatelessWidget {
                     height: 11,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(AppColors.indicatorRadius),
+                      borderRadius: BorderRadius.circular(AppRadius.indicator),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -316,7 +317,7 @@ class MainTempCard extends StatelessWidget {
                     height: 13,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(AppColors.indicatorRadius),
+                      borderRadius: BorderRadius.circular(AppRadius.indicator),
                     ),
                   ),
                 ],
@@ -326,7 +327,7 @@ class MainTempCard extends StatelessWidget {
                 height: 24,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(AppColors.buttonRadius),
+                  borderRadius: BorderRadius.circular(AppRadius.button),
                 ),
               ),
             ],
@@ -339,7 +340,7 @@ class MainTempCard extends StatelessWidget {
                 Container(
                   width: 48,
                   height: 48,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.white,
                     shape: BoxShape.circle,
                   ),
@@ -350,7 +351,7 @@ class MainTempCard extends StatelessWidget {
                   height: 72,
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(AppColors.buttonRadius),
+                    borderRadius: BorderRadius.circular(AppRadius.button),
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -359,7 +360,7 @@ class MainTempCard extends StatelessWidget {
                   height: 12,
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(AppColors.indicatorRadius),
+                    borderRadius: BorderRadius.circular(AppRadius.indicator),
                   ),
                 ),
               ],
@@ -376,7 +377,7 @@ class MainTempCard extends StatelessWidget {
                   Container(
                     width: 18,
                     height: 18,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Colors.white,
                       shape: BoxShape.circle,
                     ),
@@ -387,7 +388,7 @@ class MainTempCard extends StatelessWidget {
                     height: 12,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(AppColors.indicatorRadius),
+                      borderRadius: BorderRadius.circular(AppRadius.indicator),
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -396,7 +397,7 @@ class MainTempCard extends StatelessWidget {
                     height: 10,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(AppColors.indicatorRadius),
+                      borderRadius: BorderRadius.circular(AppRadius.indicator),
                     ),
                   ),
                 ],

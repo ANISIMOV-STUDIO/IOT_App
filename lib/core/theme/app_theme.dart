@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'app_radius.dart';
 
 /// Theme-aware colors accessible via BreezColors.of(context)
 class BreezColors extends ThemeExtension<BreezColors> {
@@ -121,28 +122,6 @@ abstract class AppColors {
     end: Alignment.bottomCenter,
   );
 
-  // === STYLING ===
-  static const double cardRadius = 16.0;
-  static const double cardRadiusSmall = 16.0;
-  static const double buttonRadius = 16.0;
-  static const double nestedButtonRadius = 16.0; // Для кнопок внутри контейнеров с padding
-  static const double indicatorRadius = 4.0;
-
-  static List<BoxShadow> get cardShadow => [
-    BoxShadow(
-      color: Colors.black.withValues(alpha: 0.3),
-      blurRadius: 20,
-      offset: const Offset(0, 8),
-    ),
-  ];
-
-  static List<BoxShadow> get glowShadow => [
-    BoxShadow(
-      color: accent.withValues(alpha: 0.3),
-      blurRadius: 40,
-      spreadRadius: 0,
-    ),
-  ];
 }
 
 /// Theme configuration
@@ -181,7 +160,7 @@ class AppTheme {
       color: card,
       elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppColors.cardRadius),
+        borderRadius: BorderRadius.circular(AppRadius.card),
         side: BorderSide(color: border),
       ),
     ),
@@ -190,7 +169,7 @@ class AppTheme {
         backgroundColor: AppColors.accent,
         foregroundColor: Colors.white,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppColors.buttonRadius),
+          borderRadius: BorderRadius.circular(AppRadius.button),
         ),
       ),
     ),
@@ -199,7 +178,7 @@ class AppTheme {
         foregroundColor: text,
         side: BorderSide(color: border),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppColors.buttonRadius),
+          borderRadius: BorderRadius.circular(AppRadius.button),
         ),
       ),
     ),

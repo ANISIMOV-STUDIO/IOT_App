@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/app_radius.dart';
 import '../../../widgets/common/hover_builder.dart';
 
 /// Icon button with badge for header
@@ -31,7 +32,7 @@ class HeaderIconButton extends StatelessWidget {
             color: isHovered
                 ? Colors.white.withValues(alpha: 0.05)
                 : AppColors.darkCard,
-            borderRadius: BorderRadius.circular(AppColors.buttonRadius),
+            borderRadius: BorderRadius.circular(AppRadius.button),
             border: Border.all(color: AppColors.darkBorder),
           ),
           child: Stack(
@@ -50,7 +51,7 @@ class HeaderIconButton extends StatelessWidget {
                   child: Container(
                     width: 16,
                     height: 16,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: AppColors.accentRed,
                       shape: BoxShape.circle,
                     ),

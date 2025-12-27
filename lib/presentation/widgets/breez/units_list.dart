@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/app_radius.dart';
 
 /// Unit item data for the list
 class UnitListItem {
@@ -119,7 +120,7 @@ class _UnitCardState extends State<_UnitCard> {
                 : _isHovered
                     ? Colors.white.withValues(alpha: 0.03)
                     : AppColors.darkCard,
-            borderRadius: BorderRadius.circular(AppColors.cardRadiusSmall),
+            borderRadius: BorderRadius.circular(AppRadius.cardSmall),
             border: Border.all(
               color: widget.isSelected
                   ? AppColors.accent.withValues(alpha: 0.5)
@@ -137,7 +138,7 @@ class _UnitCardState extends State<_UnitCard> {
                   color: widget.unit.isPowered
                       ? AppColors.accent.withValues(alpha: 0.15)
                       : Colors.white.withValues(alpha: 0.05),
-                  borderRadius: BorderRadius.circular(AppColors.buttonRadius),
+                  borderRadius: BorderRadius.circular(AppRadius.button),
                 ),
                 child: Icon(
                   _getModeIcon(),
@@ -166,7 +167,7 @@ class _UnitCardState extends State<_UnitCard> {
                     const SizedBox(height: 2),
                     Text(
                       widget.unit.location,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 11,
                         color: AppColors.darkTextMuted,
                       ),
@@ -236,7 +237,7 @@ class _AddUnitButtonState extends State<_AddUnitButton> {
             color: _isHovered
                 ? Colors.white.withValues(alpha: 0.02)
                 : Colors.transparent,
-            borderRadius: BorderRadius.circular(AppColors.cardRadiusSmall),
+            borderRadius: BorderRadius.circular(AppRadius.cardSmall),
             border: Border.all(
               color: _isHovered
                   ? AppColors.accent.withValues(alpha: 0.5)
@@ -262,16 +263,16 @@ class _AddUnitButtonState extends State<_AddUnitButton> {
                     height: 32,
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.05),
-                      borderRadius: BorderRadius.circular(AppColors.buttonRadius),
+                      borderRadius: BorderRadius.circular(AppRadius.button),
                     ),
-                    child: Icon(
+                    child: const Icon(
                       Icons.add,
                       size: 18,
                       color: AppColors.darkTextMuted,
                     ),
                   ),
                   const SizedBox(width: 12),
-                  Text(
+                  const Text(
                     'Добавить установку',
                     style: TextStyle(
                       fontSize: 12,

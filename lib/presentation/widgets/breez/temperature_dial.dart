@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/app_shadows.dart';
 import 'breez_card.dart';
 
 /// Circular temperature dial with glow effect
@@ -67,7 +68,7 @@ class TemperatureDial extends StatelessWidget {
                         color: BreezColors.of(context).cardLight,
                         shape: BoxShape.circle,
                         border: Border.all(color: BreezColors.of(context).border),
-                        boxShadow: AppColors.cardShadow,
+                        boxShadow: AppShadows.card,
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,

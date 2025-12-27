@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/app_radius.dart';
 import '../../../domain/entities/unit_notification.dart';
 import 'breez_card.dart';
 
@@ -37,7 +38,7 @@ class UnitNotificationsWidget extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.notifications_outlined,
                     size: 18,
                     color: AppColors.accent,
@@ -58,11 +59,11 @@ class UnitNotificationsWidget extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
                     color: AppColors.accentRed.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(AppColors.buttonRadius),
+                    borderRadius: BorderRadius.circular(AppRadius.button),
                   ),
                   child: Text(
                     '${notifications.length}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
                       color: AppColors.accentRed,
@@ -105,13 +106,13 @@ class UnitNotificationsWidget extends StatelessWidget {
                   height: 48, // Minimum touch target
                   decoration: BoxDecoration(
                     color: colors.buttonBg,
-                    borderRadius: BorderRadius.circular(AppColors.buttonRadius),
+                    borderRadius: BorderRadius.circular(AppRadius.button),
                     border: Border.all(color: colors.border),
                   ),
                   child: Center(
                     child: Text(
                       'Все уведомления (+${notifications.length - 3})',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                         color: AppColors.accent,
@@ -234,7 +235,7 @@ class _NotificationCardState extends State<_NotificationCard> {
             color: _isHovered
                 ? _typeColor.withValues(alpha: 0.08)
                 : _typeColor.withValues(alpha: 0.05),
-            borderRadius: BorderRadius.circular(AppColors.cardRadius),
+            borderRadius: BorderRadius.circular(AppRadius.card),
             border: Border.all(
               color: _isHovered
                   ? _typeColor.withValues(alpha: 0.3)
@@ -250,7 +251,7 @@ class _NotificationCardState extends State<_NotificationCard> {
                 height: 32,
                 decoration: BoxDecoration(
                   color: _typeColor.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(AppColors.cardRadius),
+                  borderRadius: BorderRadius.circular(AppRadius.card),
                 ),
                 child: Icon(
                   _typeIcon,

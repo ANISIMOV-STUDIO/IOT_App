@@ -29,15 +29,15 @@ class FanControlsWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           // Header
-          Row(
+          const Row(
             children: [
               Icon(
                 Icons.air,
                 size: 16,
                 color: AppColors.accent,
               ),
-              const SizedBox(width: 6),
-              const Text(
+              SizedBox(width: 6),
+              Text(
                 'Вентиляция',
                 style: TextStyle(
                   fontSize: 13,
@@ -107,7 +107,7 @@ class _CompactSlider extends StatelessWidget {
                 const SizedBox(width: 4),
                 Text(
                   label,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w500,
                     color: AppColors.darkTextMuted,

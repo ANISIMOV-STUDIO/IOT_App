@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/app_radius.dart';
 import '../../../domain/entities/preset_data.dart';
 import 'breez_card.dart';
 
@@ -44,7 +45,7 @@ class PresetsWidget extends StatelessWidget {
               if (activePresetId != null)
                 Text(
                   presets.firstWhere((p) => p.id == activePresetId, orElse: () => presets.first).name,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w600,
                     color: AppColors.accentGreen,
@@ -119,7 +120,7 @@ class _IconPresetState extends State<_IconPreset> {
                   : _isHovered
                       ? colors.buttonBg
                       : colors.buttonBg.withValues(alpha: 0.5),
-              borderRadius: BorderRadius.circular(AppColors.buttonRadius),
+              borderRadius: BorderRadius.circular(AppRadius.button),
               border: Border.all(
                 color: widget.isActive
                     ? _color.withValues(alpha: 0.6)

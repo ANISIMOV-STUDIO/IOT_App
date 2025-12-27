@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/app_radius.dart';
 import '../../../domain/entities/schedule_entry.dart';
 import 'breez_card.dart';
 
@@ -50,11 +51,11 @@ class ScheduleWidget extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
                         color: AppColors.accent.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(AppColors.buttonRadius),
+                        borderRadius: BorderRadius.circular(AppRadius.button),
                       ),
                       child: Text(
                         'Все (+${entries.length - 3})',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
                           color: AppColors.accent,
@@ -151,7 +152,7 @@ class _ScheduleRowState extends State<_ScheduleRow> {
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           decoration: BoxDecoration(
             color: _isHovered ? colors.buttonBg : Colors.transparent,
-            borderRadius: BorderRadius.circular(AppColors.buttonRadius),
+            borderRadius: BorderRadius.circular(AppRadius.button),
           ),
           child: Row(
             children: [
@@ -174,7 +175,7 @@ class _ScheduleRowState extends State<_ScheduleRow> {
                 height: 28,
                 decoration: BoxDecoration(
                   color: AppColors.accent.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(AppColors.cardRadius),
+                  borderRadius: BorderRadius.circular(AppRadius.card),
                 ),
                 child: Icon(
                   _getModeIcon(),
@@ -224,7 +225,7 @@ class _ActiveScheduleCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
+        gradient: const LinearGradient(
           colors: [
             AppColors.accent,
             AppColors.accentLight,
@@ -232,7 +233,7 @@ class _ActiveScheduleCard extends StatelessWidget {
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
         ),
-        borderRadius: BorderRadius.circular(AppColors.cardRadius),
+        borderRadius: BorderRadius.circular(AppRadius.card),
         boxShadow: [
           BoxShadow(
             color: AppColors.accent.withValues(alpha: 0.3),
@@ -257,7 +258,7 @@ class _ActiveScheduleCard extends StatelessWidget {
             height: 28,
             decoration: BoxDecoration(
               color: Colors.white.withValues(alpha: 0.2),
-              borderRadius: BorderRadius.circular(AppColors.buttonRadius),
+              borderRadius: BorderRadius.circular(AppRadius.button),
             ),
             child: const Icon(
               Icons.wb_cloudy_outlined,

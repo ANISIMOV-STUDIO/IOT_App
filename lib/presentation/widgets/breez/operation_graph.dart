@@ -4,6 +4,7 @@ library;
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/app_radius.dart';
 import '../../../domain/entities/graph_data.dart';
 import 'breez_card.dart';
 
@@ -58,7 +59,7 @@ class _OperationGraphState extends State<OperationGraph> {
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
                   color: colors.buttonBg,
-                  borderRadius: BorderRadius.circular(AppColors.buttonRadius),
+                  borderRadius: BorderRadius.circular(AppRadius.button),
                 ),
                 child: Row(
                   children: [
@@ -218,7 +219,7 @@ class _MetricTab extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
             color: isSelected ? colors.card : Colors.transparent,
-            borderRadius: BorderRadius.circular(AppColors.buttonRadius),
+            borderRadius: BorderRadius.circular(AppRadius.button),
           ),
           child: Text(
             label,
@@ -397,7 +398,7 @@ class _GraphPainter extends CustomPainter {
           width: textPainter.width + 16,
           height: 24,
         ),
-        Radius.circular(AppColors.buttonRadius),
+        const Radius.circular(AppRadius.button),
       );
 
       final tooltipPaint = Paint()..color = color;

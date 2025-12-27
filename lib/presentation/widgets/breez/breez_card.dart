@@ -4,6 +4,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/app_radius.dart';
 
 /// Минимальный размер touch target по Material Design
 const double kMinTouchTarget = 48.0;
@@ -38,7 +39,7 @@ class BreezCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: colors.card,
-          borderRadius: BorderRadius.circular(AppColors.cardRadius),
+          borderRadius: BorderRadius.circular(AppRadius.card),
           border: Border.all(color: colors.border),
         ),
         padding: padding ?? const EdgeInsets.all(24),
@@ -96,7 +97,7 @@ class BreezCard extends StatelessWidget {
               height: 10,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(AppColors.indicatorRadius),
+                borderRadius: BorderRadius.circular(AppRadius.indicator),
               ),
             ),
           if (title != null) const SizedBox(height: 4),
@@ -106,7 +107,7 @@ class BreezCard extends StatelessWidget {
               height: 12,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(AppColors.indicatorRadius),
+                borderRadius: BorderRadius.circular(AppRadius.indicator),
               ),
             ),
           if (description != null) const SizedBox(height: 16),
@@ -115,7 +116,7 @@ class BreezCard extends StatelessWidget {
             height: 100,
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(AppColors.cardRadius),
+              borderRadius: BorderRadius.circular(AppRadius.card),
             ),
           ),
         ],
@@ -147,7 +148,7 @@ class BreezButton extends StatefulWidget {
     this.width,
     this.height,
     this.padding,
-    this.borderRadius = AppColors.buttonRadius,
+    this.borderRadius = AppRadius.button,
     this.shadows,
     this.border,
     this.isLoading = false,

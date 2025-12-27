@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/app_radius.dart';
 
 /// App footer with status info
 class AppFooter extends StatelessWidget {
@@ -26,7 +27,7 @@ class AppFooter extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 24),
       decoration: BoxDecoration(
         color: Colors.black.withValues(alpha: 0.2),
-        border: Border(
+        border: const Border(
           top: BorderSide(color: AppColors.darkBorder),
         ),
       ),
@@ -35,7 +36,7 @@ class AppFooter extends StatelessWidget {
           // Left side - time & weather
           Row(
             children: [
-              Icon(
+              const Icon(
                 Icons.refresh,
                 size: 12,
                 color: AppColors.accentGreen,
@@ -43,7 +44,7 @@ class AppFooter extends StatelessWidget {
               const SizedBox(width: 6),
               Text(
                 time ?? _getCurrentTime(),
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 8,
                   fontWeight: FontWeight.w700,
                   color: AppColors.darkTextMuted,
@@ -53,14 +54,14 @@ class AppFooter extends StatelessWidget {
                 const SizedBox(width: 16),
                 Container(
                   padding: const EdgeInsets.only(left: 16),
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     border: Border(
                       left: BorderSide(color: AppColors.darkBorder),
                     ),
                   ),
                   child: Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.cloud_outlined,
                         size: 12,
                         color: AppColors.accent,
@@ -68,7 +69,7 @@ class AppFooter extends StatelessWidget {
                       const SizedBox(width: 6),
                       Text(
                         '+$outsideTemp°C',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 8,
                           fontWeight: FontWeight.w700,
                           color: AppColors.darkTextMuted,
@@ -93,7 +94,7 @@ class AppFooter extends StatelessWidget {
                   color: isOnline
                       ? AppColors.accentGreen.withValues(alpha: 0.1)
                       : AppColors.accentRed.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(AppColors.buttonRadius),
+                  borderRadius: BorderRadius.circular(AppRadius.button),
                   border: Border.all(
                     color: isOnline
                         ? AppColors.accentGreen.withValues(alpha: 0.2)
@@ -124,7 +125,7 @@ class AppFooter extends StatelessWidget {
               const SizedBox(width: 12),
               Text(
                 version,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 8,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 1,

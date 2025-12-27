@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/spacing.dart';
 import '../../../../domain/entities/unit_state.dart';
 import '../../../widgets/common/hover_builder.dart';
@@ -62,7 +63,7 @@ class MobileHeader extends StatelessWidget {
             ],
           ),
 
-          SizedBox(height: AppSpacing.sm),
+          const SizedBox(height: AppSpacing.sm),
 
           // Unit tabs row
           _buildUnitTabs(context),
@@ -78,7 +79,7 @@ class MobileHeader extends StatelessWidget {
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         color: colors.card,
-        borderRadius: BorderRadius.circular(AppColors.cardRadiusSmall),
+        borderRadius: BorderRadius.circular(AppRadius.cardSmall),
         border: Border.all(color: colors.border),
       ),
       child: Row(
@@ -164,7 +165,7 @@ class _UnitTab extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           decoration: BoxDecoration(
             color: isSelected ? AppColors.accent : Colors.transparent,
-            borderRadius: BorderRadius.circular(AppColors.nestedButtonRadius),
+            borderRadius: BorderRadius.circular(AppRadius.nested),
           ),
           alignment: Alignment.center,
           child: Row(

@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/spacing.dart';
 import '../../../../domain/entities/unit_state.dart';
 import '../../../widgets/breez/breez.dart';
@@ -137,7 +138,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
       margin: const EdgeInsets.fromLTRB(AppSpacing.sm, 0, AppSpacing.sm, AppSpacing.sm),
       decoration: BoxDecoration(
         color: colors.card,
-        borderRadius: BorderRadius.circular(AppColors.cardRadius),
+        borderRadius: BorderRadius.circular(AppRadius.card),
         border: Border.all(color: colors.border),
       ),
       child: Row(
@@ -157,7 +158,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                   color: isSelected
                       ? AppColors.accent.withValues(alpha: 0.2)
                       : Colors.transparent,
-                  borderRadius: BorderRadius.circular(AppColors.buttonRadius),
+                  borderRadius: BorderRadius.circular(AppRadius.button),
                 ),
                 child: Icon(
                   item.$1,
@@ -194,7 +195,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
           ),
         ),
 
-        SizedBox(height: AppSpacing.sm),
+        const SizedBox(height: AppSpacing.sm),
 
         // Presets (small, icon-only)
         Expanded(
@@ -224,7 +225,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
           userRole: widget.userRole,
         ),
 
-        SizedBox(height: AppSpacing.sm),
+        const SizedBox(height: AppSpacing.sm),
 
         // Schedule + Notifications row
         Expanded(
@@ -238,7 +239,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                 ),
               ),
 
-              SizedBox(width: AppSpacing.sm),
+              const SizedBox(width: AppSpacing.sm),
 
               // Unit notifications widget
               Expanded(
@@ -252,7 +253,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
           ),
         ),
 
-        SizedBox(height: AppSpacing.sm),
+        const SizedBox(height: AppSpacing.sm),
 
         // OperationGraph row (same height as Schedule/Notifications)
         Expanded(

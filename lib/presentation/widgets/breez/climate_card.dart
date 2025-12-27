@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/app_radius.dart';
 import 'breez_card.dart';
 import 'temperature_dial.dart';
 import 'mode_selector.dart';
@@ -76,7 +77,7 @@ class ClimateCard extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(AppColors.cardRadius),
+        borderRadius: BorderRadius.circular(AppRadius.card),
         border: Border.all(
           color: isPowered
               ? AppColors.accent.withValues(alpha: 0.3)
@@ -184,7 +185,7 @@ class ClimateCard extends StatelessWidget {
                     height: 8,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(AppColors.indicatorRadius),
+                      borderRadius: BorderRadius.circular(AppRadius.indicator),
                     ),
                   ),
                   const SizedBox(height: 6),
@@ -193,7 +194,7 @@ class ClimateCard extends StatelessWidget {
                     height: 10,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(AppColors.indicatorRadius),
+                      borderRadius: BorderRadius.circular(AppRadius.indicator),
                     ),
                   ),
                 ],
@@ -203,7 +204,7 @@ class ClimateCard extends StatelessWidget {
                   Container(
                     width: 48,
                     height: 48,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Colors.white,
                       shape: BoxShape.circle,
                     ),
@@ -212,7 +213,7 @@ class ClimateCard extends StatelessWidget {
                   Container(
                     width: 48,
                     height: 48,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Colors.white,
                       shape: BoxShape.circle,
                     ),
@@ -228,7 +229,7 @@ class ClimateCard extends StatelessWidget {
               child: Container(
                 width: 200,
                 height: 200,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.white,
                   shape: BoxShape.circle,
                 ),
@@ -246,7 +247,7 @@ class ClimateCard extends StatelessWidget {
                   Container(
                     width: 18,
                     height: 18,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Colors.white,
                       shape: BoxShape.circle,
                     ),
@@ -257,7 +258,7 @@ class ClimateCard extends StatelessWidget {
                     height: 12,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(AppColors.indicatorRadius),
+                      borderRadius: BorderRadius.circular(AppRadius.indicator),
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -266,7 +267,7 @@ class ClimateCard extends StatelessWidget {
                     height: 10,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(AppColors.indicatorRadius),
+                      borderRadius: BorderRadius.circular(AppRadius.indicator),
                     ),
                   ),
                 ],

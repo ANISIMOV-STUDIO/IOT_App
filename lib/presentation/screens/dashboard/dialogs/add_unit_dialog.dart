@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/app_radius.dart';
 import '../../../widgets/common/hover_builder.dart';
 
 /// Dialog for adding a new HVAC unit
@@ -42,8 +43,8 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
     return Dialog(
       backgroundColor: AppColors.darkCard,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppColors.cardRadiusSmall),
-        side: BorderSide(color: AppColors.darkBorder),
+        borderRadius: BorderRadius.circular(AppRadius.cardSmall),
+        side: const BorderSide(color: AppColors.darkBorder),
       ),
       child: Container(
         width: 400,
@@ -96,7 +97,7 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           'Название',
           style: TextStyle(
             fontSize: 13,
@@ -111,20 +112,20 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
           style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(
             hintText: 'Например: ПВ-3',
-            hintStyle: TextStyle(color: AppColors.darkTextMuted),
+            hintStyle: const TextStyle(color: AppColors.darkTextMuted),
             filled: true,
             fillColor: AppColors.darkBg,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(AppColors.buttonRadius),
-              borderSide: BorderSide(color: AppColors.darkBorder),
+              borderRadius: BorderRadius.circular(AppRadius.button),
+              borderSide: const BorderSide(color: AppColors.darkBorder),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(AppColors.buttonRadius),
-              borderSide: BorderSide(color: AppColors.darkBorder),
+              borderRadius: BorderRadius.circular(AppRadius.button),
+              borderSide: const BorderSide(color: AppColors.darkBorder),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(AppColors.buttonRadius),
-              borderSide: BorderSide(color: AppColors.accent),
+              borderRadius: BorderRadius.circular(AppRadius.button),
+              borderSide: const BorderSide(color: AppColors.accent),
             ),
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 16,
@@ -188,7 +189,7 @@ class _DialogButton extends StatelessWidget {
             color: isPrimary
                 ? (isHovered ? AppColors.accentLight : AppColors.accent)
                 : (isHovered ? Colors.white.withValues(alpha: 0.05) : Colors.transparent),
-            borderRadius: BorderRadius.circular(AppColors.buttonRadius),
+            borderRadius: BorderRadius.circular(AppRadius.button),
             border: isPrimary ? null : Border.all(color: AppColors.darkBorder),
           ),
           child: Text(

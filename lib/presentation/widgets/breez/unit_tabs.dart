@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/app_radius.dart';
 import 'breez_card.dart';
 
 /// Unit tab data
@@ -38,7 +39,7 @@ class UnitTab extends StatelessWidget {
     return BreezButton(
       onTap: onTap,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      borderRadius: AppColors.cardRadius,
+      borderRadius: AppRadius.card,
       backgroundColor: isSelected
           ? AppColors.accent
           : Colors.white.withValues(alpha: 0.05),
@@ -107,7 +108,7 @@ class UnitTabs extends StatelessWidget {
       height: 48,
       decoration: BoxDecoration(
         color: Colors.black.withValues(alpha: 0.2),
-        border: Border(
+        border: const Border(
           bottom: BorderSide(color: AppColors.darkBorder),
         ),
       ),
@@ -133,8 +134,8 @@ class UnitTabs extends StatelessWidget {
               width: 32,
               height: 32,
               padding: const EdgeInsets.all(8), // Expands touch area
-              borderRadius: AppColors.buttonRadius,
-              child: Icon(
+              borderRadius: AppRadius.button,
+              child: const Icon(
                 Icons.add,
                 size: 16,
                 color: AppColors.darkTextMuted,

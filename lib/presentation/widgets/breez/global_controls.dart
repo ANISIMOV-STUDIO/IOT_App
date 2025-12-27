@@ -27,14 +27,14 @@ class GlobalControls extends StatelessWidget {
             onTap: onMasterOff,
             padding: const EdgeInsets.all(16),
             hoverColor: AppColors.accentRed.withValues(alpha: 0.2),
-            child: Row(
+            child: const Row(
               children: [
                 Icon(Icons.shield_outlined, size: 24, color: AppColors.accentRed),
-                const SizedBox(width: 16),
+                SizedBox(width: 16),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'ОСТАНОВИТЬ ВСЁ',
                       style: TextStyle(
                         fontSize: 11,
@@ -42,7 +42,7 @@ class GlobalControls extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2),
                     Text(
                       'МАСТЕР-ВЫКЛЮЧАТЕЛЬ СИСТЕМ',
                       style: TextStyle(

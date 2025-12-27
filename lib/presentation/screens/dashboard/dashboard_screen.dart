@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../core/di/injection_container.dart' as di;
 import '../../../core/services/theme_service.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/spacing.dart';
 import '../../../data/mock/mock_data.dart';
 import '../../../domain/entities/unit_state.dart';
@@ -243,7 +244,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       decoration: BoxDecoration(
         color: colors.card,
-        borderRadius: BorderRadius.circular(AppColors.cardRadius),
+        borderRadius: BorderRadius.circular(AppRadius.card),
         border: Border.all(color: colors.border),
         boxShadow: [
           BoxShadow(
@@ -270,7 +271,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   color: isSelected
                       ? AppColors.accent.withValues(alpha: 0.15)
                       : Colors.transparent,
-                  borderRadius: BorderRadius.circular(AppColors.buttonRadius),
+                  borderRadius: BorderRadius.circular(AppRadius.button),
                 ),
                 child: Icon(
                   item.$1,

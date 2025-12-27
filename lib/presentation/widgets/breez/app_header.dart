@@ -28,7 +28,7 @@ class AppHeader extends StatelessWidget {
     return Container(
       height: 56,
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         border: Border(
           bottom: BorderSide(color: AppColors.darkBorder),
         ),
@@ -38,11 +38,11 @@ class AppHeader extends StatelessWidget {
           // Logo
           GestureDetector(
             onTap: () {},
-            child: Column(
+            child: const Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'BREEZ',
                   style: TextStyle(
                     fontSize: 18,
@@ -105,7 +105,7 @@ class AppHeader extends StatelessWidget {
             const SizedBox(width: 16),
             Container(
               padding: const EdgeInsets.only(left: 16),
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 border: Border(
                   left: BorderSide(color: AppColors.darkBorder),
                 ),
@@ -128,7 +128,7 @@ class AppHeader extends StatelessWidget {
                       if (userRole != null)
                         Text(
                           userRole!.toUpperCase(),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 8,
                             fontWeight: FontWeight.w500,
                             color: AppColors.darkTextMuted,

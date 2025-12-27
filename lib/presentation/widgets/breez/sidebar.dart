@@ -4,6 +4,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/spacing.dart';
 
 /// Navigation item data
@@ -56,7 +57,7 @@ class Sidebar extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: colors.card,
-        borderRadius: BorderRadius.circular(AppColors.cardRadius),
+        borderRadius: BorderRadius.circular(AppRadius.card),
         border: Border.all(color: colors.border),
       ),
       child: Column(
@@ -117,7 +118,7 @@ class _LogoButton extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: colors.buttonBg,
-        borderRadius: BorderRadius.circular(AppColors.buttonRadius),
+        borderRadius: BorderRadius.circular(AppRadius.button),
       ),
       child: SvgPicture.asset(
         'assets/images/breez-logo.svg',
@@ -170,7 +171,7 @@ class _SidebarButtonState extends State<_SidebarButton> {
                 : _isHovered
                     ? colors.buttonBg
                     : Colors.transparent,
-            borderRadius: BorderRadius.circular(AppColors.buttonRadius),
+            borderRadius: BorderRadius.circular(AppRadius.button),
             border: Border.all(
               color: widget.isSelected
                   ? AppColors.accent

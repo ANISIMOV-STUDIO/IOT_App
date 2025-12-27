@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/app_radius.dart';
 import '../../../../domain/entities/unit_state.dart';
 import '../../../widgets/common/hover_builder.dart';
 import 'header_icon_button.dart';
@@ -76,7 +77,7 @@ class DesktopHeader extends StatelessWidget {
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         color: colors.card,
-        borderRadius: BorderRadius.circular(AppColors.cardRadiusSmall),
+        borderRadius: BorderRadius.circular(AppRadius.cardSmall),
         border: Border.all(color: colors.border),
       ),
       child: Row(
@@ -121,12 +122,12 @@ class DesktopHeader extends StatelessWidget {
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            gradient: LinearGradient(
+            gradient: const LinearGradient(
               colors: [AppColors.accent, AppColors.accentLight],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
-            borderRadius: BorderRadius.circular(AppColors.buttonRadius),
+            borderRadius: BorderRadius.circular(AppRadius.button),
           ),
           child: const Center(
             child: Icon(
@@ -164,7 +165,7 @@ class _UnitTab extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           decoration: BoxDecoration(
             color: isSelected ? AppColors.accent : Colors.transparent,
-            borderRadius: BorderRadius.circular(AppColors.nestedButtonRadius),
+            borderRadius: BorderRadius.circular(AppRadius.nested),
           ),
           alignment: Alignment.center,
           child: Row(

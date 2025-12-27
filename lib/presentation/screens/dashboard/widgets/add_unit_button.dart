@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/app_radius.dart';
 import '../../../widgets/common/hover_builder.dart';
 
 /// Compact add button for unit tabs
@@ -24,7 +25,7 @@ class AddUnitButton extends StatelessWidget {
             color: isHovered
                 ? AppColors.accent.withValues(alpha: 0.2)
                 : Colors.transparent,
-            borderRadius: BorderRadius.circular(AppColors.nestedButtonRadius),
+            borderRadius: BorderRadius.circular(AppRadius.nested),
             border: Border.all(
               color: isHovered ? AppColors.accent : Colors.transparent,
             ),

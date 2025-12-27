@@ -224,7 +224,7 @@ class _FanOverlayPainter extends CustomPainter {
 
       final path = Path();
       final bladeLength = radius - 2;
-      final bladeWidth = 5.0;
+      const bladeWidth = 5.0;
 
       path.moveTo(0, -3);
       path.cubicTo(
