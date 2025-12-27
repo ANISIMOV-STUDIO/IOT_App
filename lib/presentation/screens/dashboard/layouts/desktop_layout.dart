@@ -160,10 +160,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
       items: _menuItems,
       selectedIndex: _sidebarIndex,
       onItemSelected: (index) => setState(() => _sidebarIndex = index),
-      isDark: widget.isDark,
-      onThemeToggle: widget.onThemeToggle,
-      onNotificationsTap: () {},
-      notificationsBadge: '3',
+      // Кнопки темы и уведомлений не нужны - они уже в DesktopHeader сверху
     );
   }
 
