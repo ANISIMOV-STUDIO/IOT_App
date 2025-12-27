@@ -125,7 +125,7 @@ abstract class AppColors {
   static const double cardRadius = 16.0;
   static const double cardRadiusSmall = 16.0;
   static const double buttonRadius = 16.0;
-  static const double nestedButtonRadius = 12.0; // For buttons inside containers with padding
+  static const double nestedButtonRadius = 16.0; // Для кнопок внутри контейнеров с padding
   static const double indicatorRadius = 4.0;
 
   static List<BoxShadow> get cardShadow => [
