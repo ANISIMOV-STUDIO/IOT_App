@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../core/theme/app_theme.dart';
 import 'breez_card.dart';
 import 'temperature_dial.dart';
+import 'mode_selector.dart';
 
 /// Main climate control card (unified style for mobile & desktop)
 class ClimateCard extends StatelessWidget {
   final String unitName;
   final bool isPowered;
+  final bool isLoading;
   final int temperature;
   final int supplyFan;
   final int exhaustFan;
@@ -20,11 +23,16 @@ class ClimateCard extends StatelessWidget {
   final ValueChanged<int>? onExhaustFanChanged;
   final VoidCallback? onPowerTap;
   final VoidCallback? onSettingsTap;
+  // Mode selector parameters
+  final String? selectedMode;
+  final ValueChanged<String>? onModeChanged;
+  final bool showModeSelector;
 
   const ClimateCard({
     super.key,
     required this.unitName,
     required this.isPowered,
+    this.isLoading = false,
     required this.temperature,
     required this.supplyFan,
     required this.exhaustFan,
@@ -38,6 +46,9 @@ class ClimateCard extends StatelessWidget {
     this.onExhaustFanChanged,
     this.onPowerTap,
     this.onSettingsTap,
+    this.selectedMode,
+    this.onModeChanged,
+    this.showModeSelector = false,
   });
 
   @override
@@ -82,31 +93,186 @@ class ClimateCard extends StatelessWidget {
             : null,
       ),
       padding: EdgeInsets.all(padding),
+      child: isLoading
+          ? _buildShimmer(context, colors, isDark)
+          : Column(
+              children: [
+                // Header row
+                _buildHeader(context, isWide),
+
+                // Temperature dial - takes available space
+                Expanded(
+                  child: Center(
+                    child: TemperatureDial(
+                      temperature: temperature,
+                      isActive: isPowered,
+                      onIncrease: onTemperatureIncrease,
+                      onDecrease: onTemperatureDecrease,
+                    ),
+                  ),
+                ),
+
+                // Stats row (like MainTempCard)
+                _buildStatsRow(),
+
+                // Sliders (side by side like MainTempCard)
+                if (isPowered) ...[
+                  const SizedBox(height: 12),
+                  _buildSlidersRow(),
+                ],
+
+                // Mode selector (integrated at bottom)
+                if (showModeSelector && selectedMode != null) ...[
+                  const SizedBox(height: 12),
+                  _buildModeSelectorRow(),
+                ],
+              ],
+            ),
+    );
+  }
+
+  Widget _buildModeSelectorRow() {
+    return Container(
+      padding: const EdgeInsets.only(top: 12),
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: BreezLabel('Режим $unitName'),
+          ),
+          Row(
+            children: defaultModes.map((mode) {
+              return Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: ModeButton(
+                    mode: mode,
+                    isSelected: selectedMode == mode.id,
+                    onTap: isPowered ? () => onModeChanged?.call(mode.id) : null,
+                    compact: true,
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildShimmer(BuildContext context, BreezColors colors, bool isDark) {
+    return Shimmer.fromColors(
+      baseColor: isDark ? colors.cardLight : Colors.grey[300]!,
+      highlightColor: isDark ? colors.border : Colors.grey[100]!,
       child: Column(
         children: [
-          // Header row
-          _buildHeader(context, isWide),
-
-          // Temperature dial - takes available space
+          // Header shimmer
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 60,
+                    height: 8,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Container(
+                    width: 100,
+                    height: 10,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 40),
+          // Temperature dial shimmer
           Expanded(
             child: Center(
-              child: TemperatureDial(
-                temperature: temperature,
-                isActive: isPowered,
-                onIncrease: onTemperatureIncrease,
-                onDecrease: onTemperatureDecrease,
+              child: Container(
+                width: 200,
+                height: 200,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                ),
               ),
             ),
           ),
-
-          // Stats row (like MainTempCard)
-          _buildStatsRow(),
-
-          // Sliders (side by side like MainTempCard)
-          if (isPowered) ...[
-            const SizedBox(height: 12),
-            _buildSlidersRow(),
-          ],
+          const SizedBox(height: 40),
+          // Stats shimmer
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: List.generate(
+              3,
+              (index) => Column(
+                children: [
+                  Container(
+                    width: 18,
+                    height: 18,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Container(
+                    width: 60,
+                    height: 12,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Container(
+                    width: 50,
+                    height: 10,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );

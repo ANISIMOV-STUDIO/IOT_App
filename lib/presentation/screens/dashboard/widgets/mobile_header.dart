@@ -33,7 +33,12 @@ class MobileHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(AppSpacing.sm),
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.sm,
+        AppSpacing.sm,
+        AppSpacing.sm,
+        0, // Нет отступа снизу - будет SizedBox
+      ),
       child: Column(
         children: [
           // Top row: Logo + controls

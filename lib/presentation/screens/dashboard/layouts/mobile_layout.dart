@@ -32,45 +32,24 @@ class MobileLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(AppSpacing.sm),
-      child: Column(
-        children: [
-          // Climate card - takes most of the space
-          Expanded(
-            flex: 5,
-            child: ClimateCard(
-              unitName: unit.name,
-              isPowered: unit.power,
-              temperature: unit.temp,
-              supplyFan: unit.supplyFan,
-              exhaustFan: unit.exhaustFan,
-              filterPercent: unit.filterPercent,
-              airflowRate: unit.airflowRate,
-              onTemperatureIncrease: onTemperatureIncrease,
-              onTemperatureDecrease: onTemperatureDecrease,
-              onSupplyFanChanged: onSupplyFanChanged,
-              onExhaustFanChanged: onExhaustFanChanged,
-              onPowerTap: onPowerToggle,
-            ),
-          ),
-
-          SizedBox(height: AppSpacing.sm),
-
-          // Mode selector - compact row at bottom
-          AnimatedOpacity(
-            duration: const Duration(milliseconds: 300),
-            opacity: unit.power ? 1.0 : 0.3,
-            child: IgnorePointer(
-              ignoring: !unit.power,
-              child: ModeSelector(
-                unitName: unit.name,
-                selectedMode: unit.mode,
-                onModeChanged: onModeChanged,
-                compact: true, // Always compact on mobile
-              ),
-            ),
-          ),
-        ],
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+      child: ClimateCard(
+        unitName: unit.name,
+        isPowered: unit.power,
+        temperature: unit.temp,
+        supplyFan: unit.supplyFan,
+        exhaustFan: unit.exhaustFan,
+        filterPercent: unit.filterPercent,
+        airflowRate: unit.airflowRate,
+        onTemperatureIncrease: onTemperatureIncrease,
+        onTemperatureDecrease: onTemperatureDecrease,
+        onSupplyFanChanged: onSupplyFanChanged,
+        onExhaustFanChanged: onExhaustFanChanged,
+        onPowerTap: onPowerToggle,
+        // Mode selector integrated
+        selectedMode: unit.mode,
+        onModeChanged: onModeChanged,
+        showModeSelector: true,
       ),
     );
   }

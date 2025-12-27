@@ -103,14 +103,14 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                 // Main content
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.all(AppSpacing.lg),
+                    padding: const EdgeInsets.all(AppSpacing.sm),
                     child: Column(
                       children: [
                         Expanded(
                           child: Row(
                             children: [
                               Expanded(child: _buildLeftColumn()),
-                              SizedBox(width: AppSpacing.lg),
+                              const SizedBox(width: AppSpacing.sm),
                               Expanded(flex: 2, child: _buildRightColumn()),
                             ],
                           ),
@@ -134,7 +134,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
     final colors = BreezColors.of(context);
     return Container(
       height: 80,
-      margin: EdgeInsets.fromLTRB(AppSpacing.lg, 0, AppSpacing.lg, AppSpacing.lg),
+      margin: const EdgeInsets.fromLTRB(AppSpacing.sm, 0, AppSpacing.sm, AppSpacing.sm),
       decoration: BoxDecoration(
         color: colors.card,
         borderRadius: BorderRadius.circular(AppColors.cardRadius),
@@ -194,7 +194,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
           ),
         ),
 
-        SizedBox(height: AppSpacing.lg),
+        SizedBox(height: AppSpacing.sm),
 
         // Presets (small, icon-only)
         Expanded(
@@ -224,7 +224,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
           userRole: widget.userRole,
         ),
 
-        SizedBox(height: AppSpacing.lg),
+        SizedBox(height: AppSpacing.sm),
 
         // Schedule + Notifications row
         Expanded(
@@ -238,7 +238,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                 ),
               ),
 
-              SizedBox(width: AppSpacing.lg),
+              SizedBox(width: AppSpacing.sm),
 
               // Unit notifications widget
               Expanded(
@@ -252,7 +252,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
           ),
         ),
 
-        SizedBox(height: AppSpacing.lg),
+        SizedBox(height: AppSpacing.sm),
 
         // OperationGraph row (same height as Schedule/Notifications)
         Expanded(

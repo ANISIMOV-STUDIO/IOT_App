@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../core/theme/app_theme.dart';
 
 /// Main temperature display card with gradient background
@@ -13,6 +14,7 @@ class MainTempCard extends StatelessWidget {
   final int airflow;
   final int filterPercent;
   final bool isPowered;
+  final bool isLoading;
   final int supplyFan;
   final int exhaustFan;
   final VoidCallback? onTap;
@@ -28,6 +30,7 @@ class MainTempCard extends StatelessWidget {
     this.airflow = 420,
     this.filterPercent = 88,
     this.isPowered = true,
+    this.isLoading = false,
     this.supplyFan = 50,
     this.exhaustFan = 50,
     this.onTap,
@@ -74,9 +77,11 @@ class MainTempCard extends StatelessWidget {
                 : null,
           ),
           padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+          child: isLoading
+              ? _buildShimmer(context, colors, isDark)
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
               // Header
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -277,8 +282,128 @@ class MainTempCard extends StatelessWidget {
                 ),
               ],
             ],
-          ),
+                ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildShimmer(BuildContext context, BreezColors colors, bool isDark) {
+    return Shimmer.fromColors(
+      baseColor: isDark ? colors.cardLight : Colors.grey[300]!,
+      highlightColor: isDark ? colors.border : Colors.grey[100]!,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header shimmer
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 100,
+                    height: 11,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Container(
+                    width: 120,
+                    height: 13,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                width: 80,
+                height: 24,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 40),
+          // Temperature shimmer
+          Center(
+            child: Column(
+              children: [
+                Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Container(
+                  width: 120,
+                  height: 72,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Container(
+                  width: 140,
+                  height: 12,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 40),
+          // Stats shimmer
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: List.generate(
+              3,
+              (index) => Column(
+                children: [
+                  Container(
+                    width: 18,
+                    height: 18,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Container(
+                    width: 60,
+                    height: 12,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Container(
+                    width: 50,
+                    height: 10,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

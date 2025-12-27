@@ -49,10 +49,10 @@ class Sidebar extends StatelessWidget {
     final colors = BreezColors.of(context);
     return Container(
       width: 80,
-      margin: EdgeInsets.only(
-        left: AppSpacing.lg,
-        top: AppSpacing.lg,
-        bottom: AppSpacing.lg,
+      margin: const EdgeInsets.only(
+        left: AppSpacing.sm,
+        top: AppSpacing.sm,
+        bottom: AppSpacing.sm,
       ),
       decoration: BoxDecoration(
         color: colors.card,

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../core/di/injection_container.dart' as di;
 import '../../../core/services/theme_service.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/spacing.dart';
 import '../../../data/mock/mock_data.dart';
 import '../../../domain/entities/unit_state.dart';
 import '../../../domain/repositories/graph_data_repository.dart';
@@ -136,17 +137,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
       key: _scaffoldKey,
       backgroundColor: isDark ? AppColors.darkBg : AppColors.lightBg,
       body: SafeArea(
-        child: Stack(
+        child: Column(
           children: [
             // Main content
-            isDesktop ? _buildDesktopLayout(isDark) : _buildMobileLayout(isDark, width),
+            Expanded(
+              child: isDesktop ? _buildDesktopLayout(isDark) : _buildMobileLayout(isDark, width),
+            ),
 
-            // Compact side panel (mobile/tablet only)
-            if (!isDesktop)
-              _CompactSidePanel(
-                selectedIndex: _sidebarIndex,
-                onItemSelected: (index) => setState(() => _sidebarIndex = index),
-              ),
+            // Space between content and bottom bar
+            if (!isDesktop) const SizedBox(height: AppSpacing.sm),
+
+            // Bottom navigation bar (mobile/tablet only)
+            if (!isDesktop) _buildBottomBar(),
           ],
         ),
       ),
@@ -198,6 +200,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           onThemeToggle: _toggleTheme,
         ),
 
+        // Space between header and content
+        const SizedBox(height: AppSpacing.sm),
+
         // Content
         Expanded(
           child: MobileLayout(
@@ -214,28 +219,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ],
     );
   }
-}
 
-/// Compact side panel with blinking handle
-class _CompactSidePanel extends StatefulWidget {
-  final int selectedIndex;
-  final ValueChanged<int>? onItemSelected;
-
-  const _CompactSidePanel({
-    required this.selectedIndex,
-    this.onItemSelected,
-  });
-
-  @override
-  State<_CompactSidePanel> createState() => _CompactSidePanelState();
-}
-
-class _CompactSidePanelState extends State<_CompactSidePanel>
-    with SingleTickerProviderStateMixin {
-  bool _isOpen = false;
-  late AnimationController _blinkController;
-
-  // Menu items (icons only)
+  // Menu items for bottom bar
   static const _menuItems = [
     (Icons.dashboard_outlined, 'Панель'),
     (Icons.devices_outlined, 'Устройства'),
@@ -245,252 +230,58 @@ class _CompactSidePanelState extends State<_CompactSidePanel>
     (Icons.settings_outlined, 'Настройки'),
   ];
 
-  @override
-  void initState() {
-    super.initState();
-    _blinkController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 3),
-    )..repeat(reverse: true);
-  }
-
-  @override
-  void dispose() {
-    _blinkController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final size = MediaQuery.sizeOf(context);
-    final isPortrait = size.height > size.width;
-
-    // Portrait tablet: bottom panel, Landscape/phone: side panel
-    if (isPortrait && size.width > 600) {
-      return _buildBottomPanel(size);
-    }
-    return _buildSidePanel(size);
-  }
-
-  Widget _buildSidePanel(Size screenSize) {
-    final panelHeight = screenSize.height * 0.5;
-    const panelWidth = 56.0;
-    const handleWidth = 6.0;
-
-    return Positioned(
-      left: 0,
-      top: (screenSize.height - panelHeight) / 2,
-      child: GestureDetector(
-        onTap: () => setState(() => _isOpen = !_isOpen),
-        onHorizontalDragEnd: (details) {
-          if (details.primaryVelocity != null) {
-            setState(() => _isOpen = details.primaryVelocity! > 0);
-          }
-        },
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 250),
-          curve: Curves.easeOutCubic,
-          transform: Matrix4.translationValues(
-            _isOpen ? 0 : -panelWidth,
-            0,
-            0,
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _buildPanelContainer(
-                width: panelWidth,
-                height: panelHeight,
-                isVertical: true,
-                borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(16),
-                  bottomRight: Radius.circular(16),
-                ),
-              ),
-              _buildHandle(handleWidth, panelHeight * 0.4, isVertical: true),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildBottomPanel(Size screenSize) {
-    final panelWidth = screenSize.width * 0.6;
-    const panelHeight = 56.0;
-    const handleHeight = 6.0;
-
-    return Positioned(
-      bottom: 0,
-      left: (screenSize.width - panelWidth) / 2,
-      child: GestureDetector(
-        onTap: () => setState(() => _isOpen = !_isOpen),
-        onVerticalDragEnd: (details) {
-          if (details.primaryVelocity != null) {
-            setState(() => _isOpen = details.primaryVelocity! < 0);
-          }
-        },
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 250),
-          curve: Curves.easeOutCubic,
-          transform: Matrix4.translationValues(
-            0,
-            _isOpen ? 0 : panelHeight,
-            0,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _buildHandle(panelWidth * 0.3, handleHeight, isVertical: false),
-              _buildPanelContainer(
-                width: panelWidth,
-                height: panelHeight,
-                isVertical: false,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(16),
-                  topRight: Radius.circular(16),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPanelContainer({
-    required double width,
-    required double height,
-    required bool isVertical,
-    required BorderRadius borderRadius,
-  }) {
+  Widget _buildBottomBar() {
     final colors = BreezColors.of(context);
+
     return Container(
-      width: width,
-      height: height,
+      height: 72,
+      margin: const EdgeInsets.fromLTRB(
+        AppSpacing.sm,
+        0, // Нет отступа сверху
+        AppSpacing.sm,
+        AppSpacing.sm,
+      ),
       decoration: BoxDecoration(
         color: colors.card,
-        borderRadius: borderRadius,
+        borderRadius: BorderRadius.circular(AppColors.cardRadius),
         border: Border.all(color: colors.border),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.3),
-            blurRadius: 12,
-            offset: isVertical ? const Offset(2, 0) : const Offset(0, -2),
+            color: Colors.black.withValues(alpha: 0.1),
+            blurRadius: 16,
+            offset: const Offset(0, -4),
           ),
         ],
       ),
-      padding: EdgeInsets.symmetric(
-        vertical: isVertical ? 12 : 8,
-        horizontal: isVertical ? 8 : 12,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: _menuItems.asMap().entries.map((entry) {
+          final index = entry.key;
+          final item = entry.value;
+          final isSelected = index == _sidebarIndex;
+          return Tooltip(
+            message: item.$2,
+            child: GestureDetector(
+              onTap: () => setState(() => _sidebarIndex = index),
+              child: Container(
+                width: 56,
+                height: 56,
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? AppColors.accent.withValues(alpha: 0.15)
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  item.$1,
+                  size: 24,
+                  color: isSelected ? AppColors.accent : colors.textMuted,
+                ),
+              ),
+            ),
+          );
+        }).toList(),
       ),
-      child: isVertical
-          ? Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: _buildMenuItems(),
-            )
-          : Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: _buildMenuItems(),
-            ),
     );
   }
-
-  List<Widget> _buildMenuItems() {
-    final colors = BreezColors.of(context);
-    return _menuItems.asMap().entries.map((entry) {
-      final index = entry.key;
-      final item = entry.value;
-      final isSelected = index == widget.selectedIndex;
-      return Tooltip(
-        message: item.$2,
-        preferBelow: false,
-        child: GestureDetector(
-          onTap: () {
-            widget.onItemSelected?.call(index);
-            setState(() => _isOpen = false);
-          },
-          child: Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: isSelected
-                  ? AppColors.accent.withValues(alpha: 0.2)
-                  : Colors.transparent,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Icon(
-              item.$1,
-              size: 20,
-              color: isSelected ? AppColors.accent : colors.textMuted,
-            ),
-          ),
-        ),
-      );
-    }).toList();
-  }
-
-  Widget _buildHandle(double width, double height, {required bool isVertical}) {
-    return AnimatedBuilder(
-      animation: _blinkController,
-      builder: (context, child) {
-        final opacity = _isOpen ? 0.6 : (0.15 + _blinkController.value * 0.25);
-        return CustomPaint(
-          size: Size(width, height),
-          painter: _BracketPainter(
-            color: AppColors.accent.withValues(alpha: opacity),
-            isVertical: isVertical,
-          ),
-        );
-      },
-    );
-  }
-}
-
-/// Paints a curly bracket shape
-class _BracketPainter extends CustomPainter {
-  final Color color;
-  final bool isVertical;
-
-  _BracketPainter({required this.color, required this.isVertical});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = color
-      ..style = PaintingStyle.fill;
-
-    final path = Path();
-    final w = size.width;
-    final h = size.height;
-
-    if (isVertical) {
-      // Vertical bracket pointing right }
-      final midY = h / 2;
-      path.moveTo(0, 0);
-      path.quadraticBezierTo(w * 0.8, 0, w * 0.8, h * 0.15);
-      path.quadraticBezierTo(w * 0.8, h * 0.35, w * 0.3, h * 0.4);
-      path.quadraticBezierTo(0, midY * 0.95, 0, midY);
-      path.quadraticBezierTo(0, midY * 1.05, w * 0.3, h * 0.6);
-      path.quadraticBezierTo(w * 0.8, h * 0.65, w * 0.8, h * 0.85);
-      path.quadraticBezierTo(w * 0.8, h, 0, h);
-    } else {
-      // Horizontal bracket pointing up ⌢
-      final midX = w / 2;
-      path.moveTo(0, h);
-      path.quadraticBezierTo(0, h * 0.2, w * 0.15, h * 0.2);
-      path.quadraticBezierTo(w * 0.35, h * 0.2, w * 0.4, h * 0.7);
-      path.quadraticBezierTo(midX * 0.95, h, midX, h);
-      path.quadraticBezierTo(midX * 1.05, h, w * 0.6, h * 0.7);
-      path.quadraticBezierTo(w * 0.65, h * 0.2, w * 0.85, h * 0.2);
-      path.quadraticBezierTo(w, h * 0.2, w, h);
-    }
-    path.close();
-
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(_BracketPainter oldDelegate) =>
-      color != oldDelegate.color || isVertical != oldDelegate.isVertical;
 }
