@@ -62,12 +62,8 @@ class MainTempCard extends StatelessWidget {
         : [const Color(0xFFE3F2FD), const Color(0xFFBBDEFB)];
     final offGradient = [colors.card, colors.card];
 
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          decoration: BoxDecoration(
+    final cardWidget = Container(
+      decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: isPowered ? poweredGradient : offGradient,
               begin: Alignment.topLeft,
@@ -345,10 +341,21 @@ class MainTempCard extends StatelessWidget {
                 ),
               ],
             ],
-                ),
         ),
-      ),
     );
+
+    // Оборачиваем в MouseRegion и GestureDetector только если onTap не null
+    if (onTap != null) {
+      return MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          onTap: onTap,
+          child: cardWidget,
+        ),
+      );
+    }
+
+    return cardWidget;
   }
 
   Widget _buildShimmer(BuildContext context, BreezColors colors, bool isDark) {
