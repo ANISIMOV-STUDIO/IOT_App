@@ -24,7 +24,7 @@ class AddUnitButton extends StatelessWidget {
             color: isHovered
                 ? AppColors.accent.withValues(alpha: 0.2)
                 : Colors.transparent,
-            borderRadius: BorderRadius.circular(AppColors.buttonRadius),
+            borderRadius: BorderRadius.circular(AppColors.nestedButtonRadius),
             border: Border.all(
               color: isHovered ? AppColors.accent : Colors.transparent,
             ),
