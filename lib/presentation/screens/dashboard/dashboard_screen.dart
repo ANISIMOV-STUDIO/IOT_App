@@ -123,6 +123,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
   }
 
+  void _showUnitSettings() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: BreezColors.of(context).card,
+        title: Text(
+          'Настройки ${_currentUnit.name}',
+          style: TextStyle(color: BreezColors.of(context).text),
+        ),
+        content: Text(
+          'Настройки установки в разработке',
+          style: TextStyle(color: BreezColors.of(context).textMuted),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Закрыть'),
+          ),
+        ],
+      ),
+    );
+  }
+
   void _toggleTheme() {
     _themeService.toggleTheme();
     setState(() {});
@@ -214,6 +237,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             onExhaustFanChanged: (v) => _updateUnit((u) => u.copyWith(exhaustFan: v)),
             onModeChanged: (m) => _updateUnit((u) => u.copyWith(mode: m)),
             onPowerToggle: () => _updateUnit((u) => u.copyWith(power: !u.power)),
+            onSettingsTap: _showUnitSettings,
             compact: width <= 600,
           ),
         ),
