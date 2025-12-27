@@ -1,9 +1,11 @@
 /// Dashboard Screen - Main BREEZ HVAC control interface
 library;
 
+import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../../core/di/injection_container.dart' as di;
 import '../../../core/services/theme_service.dart';
+import '../../../core/services/version_check_service.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/spacing.dart';
 import '../../../data/mock/mock_data.dart';
@@ -13,6 +15,7 @@ import '../../../domain/repositories/notification_repository.dart';
 import '../../../domain/repositories/schedule_repository.dart';
 import '../../widgets/breez/breez.dart';
 import 'dialogs/add_unit_dialog.dart';
+import 'dialogs/update_available_dialog.dart';
 import 'layouts/desktop_layout.dart';
 import 'layouts/mobile_layout.dart';
 import 'widgets/mobile_header.dart';
@@ -30,7 +33,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   int _sidebarIndex = 0;
   late List<UnitState> _units;
   late ThemeService _themeService;
+  late VersionCheckService _versionCheckService;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  StreamSubscription? _versionSubscription;
 
   // Repositories
   late ScheduleRepository _scheduleRepository;
@@ -48,10 +53,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
     super.initState();
     _units = MockData.units.map((u) => UnitState.fromJson(u)).toList();
     _themeService = di.sl<ThemeService>();
+    _versionCheckService = di.sl<VersionCheckService>();
     _scheduleRepository = di.sl<ScheduleRepository>();
     _notificationRepository = di.sl<NotificationRepository>();
     _graphDataRepository = di.sl<GraphDataRepository>();
     _loadData();
+    _initializeVersionCheck();
+  }
+
+  void _initializeVersionCheck() async {
+    // Initialize version checking
+    await _versionCheckService.initialize(
+      checkInterval: const Duration(minutes: 2),
+    );
+
+    // Listen for version changes
+    _versionSubscription = _versionCheckService.onVersionChanged.listen((_) {
+      if (mounted) {
+        UpdateAvailableDialog.show(context);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _versionSubscription?.cancel();
+    super.dispose();
   }
 
   Future<void> _loadData() async {
