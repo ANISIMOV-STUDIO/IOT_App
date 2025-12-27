@@ -251,7 +251,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     NavigationItem(icon: Icons.devices_outlined, label: 'Устройства'),
     NavigationItem(icon: Icons.schedule_outlined, label: 'Расписание'),
     NavigationItem(icon: Icons.analytics_outlined, label: 'Аналитика'),
-    NavigationItem(icon: Icons.notifications_outlined, label: 'Уведомления'),
     NavigationItem(icon: Icons.settings_outlined, label: 'Настройки'),
   ];
 
@@ -260,6 +259,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
       items: _menuItems,
       selectedIndex: _sidebarIndex,
       onItemSelected: (index) => setState(() => _sidebarIndex = index),
+      isDark: _themeService.isDark,
+      onThemeToggle: _toggleTheme,
+      onNotificationsTap: () {},
+      notificationsBadge: '3',
     );
   }
 }

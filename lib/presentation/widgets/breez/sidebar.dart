@@ -7,6 +7,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/spacing.dart';
 import 'breez_card.dart';
+import 'breez_logo.dart';
 
 /// Navigation item data
 class SidebarItem {
@@ -76,7 +77,7 @@ class Sidebar extends StatelessWidget {
           const SizedBox(height: 20),
 
           // Logo
-          _LogoButton(),
+          _LogoButton(isExpanded: isExpanded),
 
           const SizedBox(height: 32),
 
@@ -126,9 +127,23 @@ class Sidebar extends StatelessWidget {
 
 /// Logo button at top of sidebar
 class _LogoButton extends StatelessWidget {
+  final bool isExpanded;
+
+  const _LogoButton({this.isExpanded = false});
+
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
+
+    // Expanded mode: logo + text
+    if (isExpanded) {
+      return const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16),
+        child: BreezLogo.medium(),
+      );
+    }
+
+    // Compact mode: icon only
     return Container(
       width: 48,
       height: 48,

@@ -74,7 +74,6 @@ class _DesktopLayoutState extends State<DesktopLayout> {
     NavigationItem(icon: Icons.devices_outlined, label: 'Устройства'),
     NavigationItem(icon: Icons.schedule_outlined, label: 'Расписание'),
     NavigationItem(icon: Icons.analytics_outlined, label: 'Аналитика'),
-    NavigationItem(icon: Icons.notifications_outlined, label: 'Уведомления'),
     NavigationItem(icon: Icons.settings_outlined, label: 'Настройки'),
   ];
 
@@ -110,12 +109,34 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                     padding: const EdgeInsets.all(AppSpacing.sm),
                     child: Column(
                       children: [
+                        // Top row: Header with logo
+                        if (showBottomBar) ...[
+                          DesktopHeader(
+                            units: widget.allUnits,
+                            selectedUnitIndex: widget.selectedUnitIndex,
+                            onUnitSelected: widget.onUnitSelected,
+                            onAddUnit: widget.onAddUnit,
+                            isDark: widget.isDark,
+                            onThemeToggle: widget.onThemeToggle,
+                            userName: widget.userName,
+                            userRole: widget.userRole,
+                            showLogo: true,
+                          ),
+                          const SizedBox(height: AppSpacing.sm),
+                        ],
+
+                        // Content row
                         Expanded(
                           child: Row(
                             children: [
                               Expanded(child: _buildLeftColumn()),
                               const SizedBox(width: AppSpacing.sm),
-                              Expanded(flex: 2, child: _buildRightColumn()),
+                              Expanded(
+                                flex: 2,
+                                child: showBottomBar
+                                    ? _buildRightColumnContent()
+                                    : _buildRightColumn(),
+                              ),
                             ],
                           ),
                         ),
@@ -139,6 +160,10 @@ class _DesktopLayoutState extends State<DesktopLayout> {
       items: _menuItems,
       selectedIndex: _sidebarIndex,
       onItemSelected: (index) => setState(() => _sidebarIndex = index),
+      isDark: widget.isDark,
+      onThemeToggle: widget.onThemeToggle,
+      onNotificationsTap: () {},
+      notificationsBadge: '3',
     );
   }
 
@@ -190,6 +215,14 @@ class _DesktopLayoutState extends State<DesktopLayout> {
 
         const SizedBox(height: AppSpacing.sm),
 
+        Expanded(child: _buildRightColumnContent()),
+      ],
+    );
+  }
+
+  Widget _buildRightColumnContent() {
+    return Column(
+      children: [
         // Schedule + Notifications row
         Expanded(
           child: Row(

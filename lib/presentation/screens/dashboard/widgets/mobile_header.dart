@@ -6,6 +6,7 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/spacing.dart';
 import '../../../../domain/entities/unit_state.dart';
+import '../../../widgets/breez/breez_logo.dart';
 import '../../../widgets/common/hover_builder.dart';
 import 'header_icon_button.dart';
 import 'add_unit_button.dart';
@@ -40,35 +41,7 @@ class MobileHeader extends StatelessWidget {
         AppSpacing.sm,
         0, // Нет отступа снизу - будет SizedBox
       ),
-      child: Column(
-        children: [
-          // Top row: Logo + controls
-          Row(
-            children: [
-              // Logo
-              const _Logo(),
-              const Spacer(),
-              // Theme toggle
-              HeaderIconButton(
-                icon: isDark ? Icons.light_mode_outlined : Icons.dark_mode_outlined,
-                onTap: onThemeToggle,
-              ),
-              const SizedBox(width: 8),
-              // Notifications
-              HeaderIconButton(
-                icon: Icons.notifications_outlined,
-                badge: '3',
-                onTap: () {},
-              ),
-            ],
-          ),
-
-          const SizedBox(height: AppSpacing.sm),
-
-          // Unit tabs row
-          _buildUnitTabs(context),
-        ],
-      ),
+      child: _buildUnitTabs(context),
     );
   }
 
@@ -84,6 +57,12 @@ class MobileHeader extends StatelessWidget {
       ),
       child: Row(
         children: [
+          // Logo
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8),
+            child: BreezLogo.small(),
+          ),
+          const SizedBox(width: 8),
           // Unit tabs list
           Expanded(
             child: ListView.separated(
@@ -105,39 +84,6 @@ class MobileHeader extends StatelessWidget {
           AddUnitButton(onTap: onAddUnit),
         ],
       ),
-    );
-  }
-}
-
-/// BREEZ logo
-class _Logo extends StatelessWidget {
-  const _Logo();
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'BREEZ',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w900,
-            letterSpacing: -1,
-            color: colors.text,
-          ),
-        ),
-        Text(
-          'SMART SYSTEMS',
-          style: TextStyle(
-            fontSize: 7,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 2,
-            color: colors.textMuted,
-          ),
-        ),
-      ],
     );
   }
 }

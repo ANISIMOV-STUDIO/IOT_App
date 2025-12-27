@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../domain/entities/unit_state.dart';
+import '../../../widgets/breez/breez_logo.dart';
 import '../../../widgets/common/hover_builder.dart';
 import 'header_icon_button.dart';
 import 'add_unit_button.dart';
@@ -21,6 +22,7 @@ class DesktopHeader extends StatelessWidget {
   final String userRole;
   final bool showMenuButton;
   final VoidCallback? onMenuTap;
+  final bool showLogo;
 
   const DesktopHeader({
     super.key,
@@ -34,6 +36,7 @@ class DesktopHeader extends StatelessWidget {
     required this.userRole,
     this.showMenuButton = false,
     this.onMenuTap,
+    this.showLogo = false,
   });
 
   @override
@@ -48,7 +51,7 @@ class DesktopHeader extends StatelessWidget {
           ),
           const SizedBox(width: 12),
         ],
-        // Unit tabs
+        // Unit tabs (with logo inside if requested)
         Expanded(child: _buildUnitTabs(context)),
         const SizedBox(width: 16),
         // Theme toggle
@@ -82,6 +85,14 @@ class DesktopHeader extends StatelessWidget {
       ),
       child: Row(
         children: [
+          // Logo (when requested)
+          if (showLogo) ...[
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              child: BreezLogo.small(),
+            ),
+            const SizedBox(width: 8),
+          ],
           // Unit tabs list
           Expanded(
             child: ListView.separated(
