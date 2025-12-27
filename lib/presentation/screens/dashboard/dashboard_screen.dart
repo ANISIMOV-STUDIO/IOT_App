@@ -192,6 +192,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       onExhaustFanChanged: (v) => _updateUnit((u) => u.copyWith(exhaustFan: v)),
       onModeChanged: (m) => _updateUnit((u) => u.copyWith(mode: m)),
       onPowerToggle: () => _updateUnit((u) => u.copyWith(power: !u.power)),
+      onSettingsTap: _showUnitSettings,
       onMasterOff: _masterPowerOff,
       onUnitSelected: (index) {
         setState(() => _activeUnitIndex = index);

@@ -12,6 +12,7 @@ export 'global_controls.dart';
 export 'sidebar.dart';
 export 'navigation_bar.dart';
 export 'main_temp_card.dart';
+export 'unit_control_card.dart';
 export 'units_list.dart';
 export 'schedule_widget.dart';
 export 'operation_graph.dart';

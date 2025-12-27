@@ -35,23 +35,14 @@ class MobileLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
-      child: MainTempCard(
-        unitName: unit.name,
-        temperature: unit.temp,
-        status: unit.power ? 'В работе' : 'Выключен',
-        humidity: unit.humidity,
-        airflow: unit.airflowRate,
-        filterPercent: unit.filterPercent,
-        isPowered: unit.power,
-        supplyFan: unit.supplyFan,
-        exhaustFan: unit.exhaustFan,
-        onPowerToggle: onPowerToggle,
+      child: UnitControlCard(
+        unit: unit,
         onSupplyFanChanged: onSupplyFanChanged,
         onExhaustFanChanged: onExhaustFanChanged,
+        onModeChanged: onModeChanged,
+        onPowerToggle: onPowerToggle,
         onSettingsTap: onSettingsTap,
         showControls: true,
-        selectedMode: unit.mode,
-        onModeChanged: onModeChanged,
         showModeSelector: true,
       ),
     );

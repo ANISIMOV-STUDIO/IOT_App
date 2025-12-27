@@ -21,6 +21,7 @@ class DesktopLayout extends StatefulWidget {
   final ValueChanged<int>? onExhaustFanChanged;
   final ValueChanged<String>? onModeChanged;
   final VoidCallback? onPowerToggle;
+  final VoidCallback? onSettingsTap;
   final VoidCallback? onMasterOff;
   final ValueChanged<int>? onUnitSelected;
   final VoidCallback? onThemeToggle;
@@ -47,6 +48,7 @@ class DesktopLayout extends StatefulWidget {
     this.onExhaustFanChanged,
     this.onModeChanged,
     this.onPowerToggle,
+    this.onSettingsTap,
     this.onMasterOff,
     this.onUnitSelected,
     this.onThemeToggle,
@@ -147,18 +149,15 @@ class _DesktopLayoutState extends State<DesktopLayout> {
         // Main temperature card with fan sliders
         Expanded(
           flex: 4,
-          child: MainTempCard(
-            unitName: widget.unit.name,
-            temperature: widget.unit.temp,
-            status: widget.unit.power ? 'В работе' : 'Выключен',
-            humidity: widget.unit.humidity,
-            airflow: widget.unit.airflowRate,
-            filterPercent: widget.unit.filterPercent,
-            isPowered: widget.unit.power,
-            supplyFan: widget.unit.supplyFan,
-            exhaustFan: widget.unit.exhaustFan,
+          child: UnitControlCard(
+            unit: widget.unit,
             onSupplyFanChanged: widget.onSupplyFanChanged,
             onExhaustFanChanged: widget.onExhaustFanChanged,
+            onModeChanged: widget.onModeChanged,
+            onPowerToggle: widget.onPowerToggle,
+            onSettingsTap: widget.onSettingsTap,
+            showControls: true,
+            showModeSelector: true,
           ),
         ),
 
