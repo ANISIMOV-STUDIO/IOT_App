@@ -15,6 +15,7 @@ class MobileLayout extends StatelessWidget {
   final ValueChanged<int>? onExhaustFanChanged;
   final ValueChanged<String>? onModeChanged;
   final VoidCallback? onPowerToggle;
+  final VoidCallback? onSettingsTap;
   final bool compact;
 
   const MobileLayout({
@@ -26,6 +27,7 @@ class MobileLayout extends StatelessWidget {
     this.onExhaustFanChanged,
     this.onModeChanged,
     this.onPowerToggle,
+    this.onSettingsTap,
     this.compact = true,
   });
 
@@ -33,20 +35,20 @@ class MobileLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
-      child: ClimateCard(
+      child: MainTempCard(
         unitName: unit.name,
-        isPowered: unit.power,
         temperature: unit.temp,
+        status: unit.power ? 'В работе' : 'Выключен',
+        humidity: unit.humidity,
+        airflow: unit.airflowRate,
+        filterPercent: unit.filterPercent,
+        isPowered: unit.power,
         supplyFan: unit.supplyFan,
         exhaustFan: unit.exhaustFan,
-        filterPercent: unit.filterPercent,
-        airflowRate: unit.airflowRate,
-        onTemperatureIncrease: onTemperatureIncrease,
-        onTemperatureDecrease: onTemperatureDecrease,
         onSupplyFanChanged: onSupplyFanChanged,
         onExhaustFanChanged: onExhaustFanChanged,
-        onPowerTap: onPowerToggle,
-        // Mode selector integrated
+        onSettingsTap: onSettingsTap,
+        showControls: true,
         selectedMode: unit.mode,
         onModeChanged: onModeChanged,
         showModeSelector: true,

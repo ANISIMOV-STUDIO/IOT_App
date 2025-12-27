@@ -189,7 +189,6 @@ class _DesktopLayoutState extends State<DesktopLayout> {
             isPowered: widget.unit.power,
             supplyFan: widget.unit.supplyFan,
             exhaustFan: widget.unit.exhaustFan,
-            onTap: widget.onPowerToggle,
             onSupplyFanChanged: widget.onSupplyFanChanged,
             onExhaustFanChanged: widget.onExhaustFanChanged,
           ),

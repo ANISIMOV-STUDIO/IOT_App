@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
+import 'breez_card.dart';
+import 'mode_selector.dart';
 
 /// Main temperature display card with gradient background
 class MainTempCard extends StatelessWidget {
@@ -21,6 +23,11 @@ class MainTempCard extends StatelessWidget {
   final VoidCallback? onTap;
   final ValueChanged<int>? onSupplyFanChanged;
   final ValueChanged<int>? onExhaustFanChanged;
+  final VoidCallback? onSettingsTap;
+  final bool showControls;
+  final String? selectedMode;
+  final ValueChanged<String>? onModeChanged;
+  final bool showModeSelector;
 
   const MainTempCard({
     super.key,
@@ -37,6 +44,11 @@ class MainTempCard extends StatelessWidget {
     this.onTap,
     this.onSupplyFanChanged,
     this.onExhaustFanChanged,
+    this.onSettingsTap,
+    this.showControls = false,
+    this.selectedMode,
+    this.onModeChanged,
+    this.showModeSelector = false,
   });
 
   @override
@@ -124,39 +136,55 @@ class MainTempCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  // Status badge
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: isPowered
-                          ? AppColors.accentGreen.withValues(alpha: 0.15)
-                          : AppColors.accentRed.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(AppRadius.button),
-                      border: Border.all(
-                        color: isPowered
-                            ? AppColors.accentGreen.withValues(alpha: 0.3)
-                            : AppColors.accentRed.withValues(alpha: 0.3),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
+                  // Controls or Status badge
+                  if (showControls)
+                    Row(
                       children: [
-                        Container(
-                          width: 6,
-                          height: 6,
-                          decoration: BoxDecoration(
-                            color: isPowered ? AppColors.accentGreen : AppColors.accentRed,
-                            shape: BoxShape.circle,
-                          ),
+                        BreezIconButton(
+                          icon: Icons.settings_outlined,
+                          onTap: onSettingsTap,
                         ),
-                        const SizedBox(width: 6),
-                        Text(
-                          status,
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w600,
-                            color: isPowered ? AppColors.accentGreen : AppColors.accentRed,
+                        const SizedBox(width: 8),
+                        BreezIconButton(
+                          icon: Icons.power_settings_new,
+                          iconColor: isPowered ? AppColors.accentRed : AppColors.accentGreen,
+                          onTap: onTap,
+                        ),
+                      ],
+                    )
+                  else
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: isPowered
+                            ? AppColors.accentGreen.withValues(alpha: 0.15)
+                            : AppColors.accentRed.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(AppRadius.button),
+                        border: Border.all(
+                          color: isPowered
+                              ? AppColors.accentGreen.withValues(alpha: 0.3)
+                              : AppColors.accentRed.withValues(alpha: 0.3),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 6,
+                            height: 6,
+                            decoration: BoxDecoration(
+                              color: isPowered ? AppColors.accentGreen : AppColors.accentRed,
+                              shape: BoxShape.circle,
+                            ),
                           ),
+                          const SizedBox(width: 6),
+                          Text(
+                            status,
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w600,
+                              color: isPowered ? AppColors.accentGreen : AppColors.accentRed,
+                            ),
                         ),
                       ],
                     ),
@@ -277,6 +305,40 @@ class MainTempCard extends StatelessWidget {
                           icon: Icons.arrow_upward_rounded,
                           onChanged: onExhaustFanChanged,
                         ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+
+              // Mode selector (integrated at bottom)
+              if (showModeSelector && selectedMode != null) ...[
+                const SizedBox(height: 16),
+                Container(
+                  padding: const EdgeInsets.only(top: 16),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      top: BorderSide(color: colors.border),
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Режим работы',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          color: colors.textMuted,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      ModeSelector(
+                        unitName: unitName,
+                        selectedMode: selectedMode!,
+                        onModeChanged: onModeChanged,
+                        compact: true,
                       ),
                     ],
                   ),

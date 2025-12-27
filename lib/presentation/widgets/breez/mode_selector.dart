@@ -115,6 +115,26 @@ class ModeSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // В компактном режиме убираем подложку и заголовок
+    if (compact) {
+      return Row(
+        children: modes.map((mode) {
+          return Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: ModeButton(
+                mode: mode,
+                isSelected: selectedMode == mode.id,
+                onTap: () => onModeChanged?.call(mode.id),
+                compact: true,
+              ),
+            ),
+          );
+        }).toList(),
+      );
+    }
+
+    // В обычном режиме оставляем с подложкой
     return BreezCard(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -122,37 +142,21 @@ class ModeSelector extends StatelessWidget {
         children: [
           BreezLabel('Режим $unitName'),
           const SizedBox(height: 16),
-          compact
-              ? Row(
-                  children: modes.map((mode) {
-                    return Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
-                        child: ModeButton(
-                          mode: mode,
-                          isSelected: selectedMode == mode.id,
-                          onTap: () => onModeChanged?.call(mode.id),
-                          compact: true,
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                )
-              : GridView.count(
-                  shrinkWrap: true,
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
-                  childAspectRatio: 2.8,
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: modes.map((mode) {
-                    return ModeButton(
-                      mode: mode,
-                      isSelected: selectedMode == mode.id,
-                      onTap: () => onModeChanged?.call(mode.id),
-                    );
-                  }).toList(),
-                ),
+          GridView.count(
+            shrinkWrap: true,
+            crossAxisCount: 2,
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
+            childAspectRatio: 2.8,
+            physics: const NeverScrollableScrollPhysics(),
+            children: modes.map((mode) {
+              return ModeButton(
+                mode: mode,
+                isSelected: selectedMode == mode.id,
+                onTap: () => onModeChanged?.call(mode.id),
+              );
+            }).toList(),
+          ),
         ],
       ),
     );
