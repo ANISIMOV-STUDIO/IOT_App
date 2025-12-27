@@ -58,11 +58,5 @@ class AppSpacing {
   static double get snackbarMarginTablet => lg;
   static double get snackbarMarginDesktop => xl;
 
-  // Border radius scale
-  static const double radiusXs = 4.0; // Tiny elements
-  static const double radiusSm = 6.0; // Small pills, tabs
-  static const double radiusMd = 8.0; // Buttons, inputs
-  static const double radiusLg = 10.0; // Medium containers
-  static const double radiusXl = 12.0; // Cards, dialogs
-  static const double radiusFull = 9999.0; // Circular
+  // Border radius - используйте AppColors.buttonRadius, cardRadius и т.д.
 }
