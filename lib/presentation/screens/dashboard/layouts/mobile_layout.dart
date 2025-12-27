@@ -45,7 +45,7 @@ class MobileLayout extends StatelessWidget {
         isPowered: unit.power,
         supplyFan: unit.supplyFan,
         exhaustFan: unit.exhaustFan,
-        onTap: onPowerToggle,
+        onPowerToggle: onPowerToggle,
         onSupplyFanChanged: onSupplyFanChanged,
         onExhaustFanChanged: onExhaustFanChanged,
         onSettingsTap: onSettingsTap,

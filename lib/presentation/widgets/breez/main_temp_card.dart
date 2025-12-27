@@ -20,7 +20,7 @@ class MainTempCard extends StatelessWidget {
   final bool isLoading;
   final int supplyFan;
   final int exhaustFan;
-  final VoidCallback? onTap;
+  final VoidCallback? onPowerToggle;
   final ValueChanged<int>? onSupplyFanChanged;
   final ValueChanged<int>? onExhaustFanChanged;
   final VoidCallback? onSettingsTap;
@@ -41,7 +41,7 @@ class MainTempCard extends StatelessWidget {
     this.isLoading = false,
     this.supplyFan = 50,
     this.exhaustFan = 50,
-    this.onTap,
+    this.onPowerToggle,
     this.onSupplyFanChanged,
     this.onExhaustFanChanged,
     this.onSettingsTap,
@@ -144,7 +144,7 @@ class MainTempCard extends StatelessWidget {
                         BreezIconButton(
                           icon: Icons.power_settings_new,
                           iconColor: isPowered ? AppColors.accentRed : AppColors.accentGreen,
-                          onTap: onTap,
+                          onTap: onPowerToggle,
                         ),
                       ],
                     )
@@ -343,17 +343,6 @@ class MainTempCard extends StatelessWidget {
             ],
         ),
     );
-
-    // Оборачиваем в MouseRegion и GestureDetector только если onTap не null
-    if (onTap != null) {
-      return MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: GestureDetector(
-          onTap: onTap,
-          child: cardWidget,
-        ),
-      );
-    }
 
     return cardWidget;
   }
