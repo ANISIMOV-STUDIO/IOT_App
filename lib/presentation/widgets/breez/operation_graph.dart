@@ -5,6 +5,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
+import '../../../core/theme/spacing.dart';
 import '../../../domain/entities/graph_data.dart';
 import 'breez_card.dart';
 
@@ -34,69 +35,156 @@ class OperationGraph extends StatefulWidget {
 class _OperationGraphState extends State<OperationGraph> {
   int? _hoveredIndex;
 
+  String get _metricLabel {
+    switch (widget.selectedMetric) {
+      case GraphMetric.temperature:
+        return 'ТЕМПЕРАТУРА';
+      case GraphMetric.humidity:
+        return 'ВЛАЖНОСТЬ';
+      case GraphMetric.airflow:
+        return 'ПОТОК ВОЗДУХА';
+    }
+  }
+
+  String get _metricUnit {
+    switch (widget.selectedMetric) {
+      case GraphMetric.temperature:
+        return '°C';
+      case GraphMetric.humidity:
+        return '%';
+      case GraphMetric.airflow:
+        return 'м³/ч';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
+
+    // Calculate statistics
+    final values = widget.data.map((e) => e.value).toList();
+    final currentValue = values.isNotEmpty ? values.last : 0.0;
+    final minValue = values.isNotEmpty ? values.reduce(math.min) : 0.0;
+    final maxValue = values.isNotEmpty ? values.reduce(math.max) : 0.0;
+    final avgValue = values.isNotEmpty
+        ? values.reduce((a, b) => a + b) / values.length
+        : 0.0;
+
     return BreezCard(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(AppSpacing.sm),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header with metric switcher
+          // Header with title and current value
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Обзор',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: colors.text,
-                ),
-              ),
-              // Metric tabs
-              Container(
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: colors.buttonBg,
-                  borderRadius: BorderRadius.circular(AppRadius.button),
-                ),
-                child: Row(
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _MetricTab(
-                      label: 'Температура',
-                      isSelected: widget.selectedMetric == GraphMetric.temperature,
-                      onTap: () => widget.onMetricChanged?.call(GraphMetric.temperature),
+                    Text(
+                      _metricLabel,
+                      style: TextStyle(
+                        fontSize: 9,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1.5,
+                        color: colors.textMuted,
+                      ),
                     ),
-                    _MetricTab(
-                      label: 'Влажность',
-                      isSelected: widget.selectedMetric == GraphMetric.humidity,
-                      onTap: () => widget.onMetricChanged?.call(GraphMetric.humidity),
-                    ),
-                    _MetricTab(
-                      label: 'Поток',
-                      isSelected: widget.selectedMetric == GraphMetric.airflow,
-                      onTap: () => widget.onMetricChanged?.call(GraphMetric.airflow),
+                    const SizedBox(height: 4),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.alphabetic,
+                      children: [
+                        Text(
+                          currentValue.toStringAsFixed(1),
+                          style: TextStyle(
+                            fontSize: 32,
+                            fontWeight: FontWeight.w900,
+                            height: 1,
+                            color: colors.text,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          _metricUnit,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: colors.textMuted,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
+              // Metric tabs
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _MetricTab(
+                    icon: Icons.thermostat_outlined,
+                    label: 'Темп',
+                    isSelected: widget.selectedMetric == GraphMetric.temperature,
+                    onTap: () => widget.onMetricChanged?.call(GraphMetric.temperature),
+                  ),
+                  const SizedBox(width: 8),
+                  _MetricTab(
+                    icon: Icons.water_drop_outlined,
+                    label: 'Влаж',
+                    isSelected: widget.selectedMetric == GraphMetric.humidity,
+                    onTap: () => widget.onMetricChanged?.call(GraphMetric.humidity),
+                  ),
+                  const SizedBox(width: 8),
+                  _MetricTab(
+                    icon: Icons.air,
+                    label: 'Поток',
+                    isSelected: widget.selectedMetric == GraphMetric.airflow,
+                    onTap: () => widget.onMetricChanged?.call(GraphMetric.airflow),
+                  ),
+                ],
+              ),
             ],
           ),
 
-          const SizedBox(height: 20),
+          const SizedBox(height: AppSpacing.sm),
+
+          // Statistics row
+          Row(
+            children: [
+              _StatBadge(
+                label: 'Мин',
+                value: '${minValue.toStringAsFixed(1)}$_metricUnit',
+                color: AppColors.accent,
+              ),
+              const SizedBox(width: 8),
+              _StatBadge(
+                label: 'Макс',
+                value: '${maxValue.toStringAsFixed(1)}$_metricUnit',
+                color: AppColors.accentRed,
+              ),
+              const SizedBox(width: 8),
+              _StatBadge(
+                label: 'Сред',
+                value: '${avgValue.toStringAsFixed(1)}$_metricUnit',
+                color: AppColors.accentGreen,
+              ),
+            ],
+          ),
+
+          const SizedBox(height: AppSpacing.sm),
 
           // Graph area
           Expanded(
             child: LayoutBuilder(
               builder: (context, constraints) {
+                const yAxisWidth = 28.0;
                 return Row(
                   children: [
                     // Y-axis labels
-                    SizedBox(
-                      width: 40,
-                      child: _buildYAxis(),
-                    ),
+                    _buildYAxis(),
 
                     // Graph
                     Expanded(
@@ -107,13 +195,16 @@ class _OperationGraphState extends State<OperationGraph> {
                               onHover: (event) {
                                 final index = _getIndexFromPosition(
                                   event.localPosition.dx,
-                                  constraints.maxWidth - 40,
+                                  constraints.maxWidth - yAxisWidth,
                                 );
                                 setState(() => _hoveredIndex = index);
                               },
                               onExit: (_) => setState(() => _hoveredIndex = null),
                               child: CustomPaint(
-                                size: Size(constraints.maxWidth - 40, constraints.maxHeight - 30),
+                                size: Size(
+                                  constraints.maxWidth - yAxisWidth,
+                                  constraints.maxHeight - 30,
+                                ),
                                 painter: _GraphPainter(
                                   data: widget.data,
                                   color: AppColors.accent,
@@ -158,23 +249,38 @@ class _OperationGraphState extends State<OperationGraph> {
         ? 0
         : widget.data.map((e) => e.value).reduce(math.min).floor();
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Text(
-          '${maxValue + 2}',
-          style: TextStyle(fontSize: 9, color: colors.textMuted),
-        ),
-        Text(
-          '${((maxValue + minValue) / 2).round()}',
-          style: TextStyle(fontSize: 9, color: colors.textMuted),
-        ),
-        Text(
-          '${minValue - 2 < 0 ? 0 : minValue - 2}',
-          style: TextStyle(fontSize: 9, color: colors.textMuted),
-        ),
-      ],
+    return SizedBox(
+      width: 28,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Text(
+            '${maxValue + 2}',
+            style: TextStyle(
+              fontSize: 9,
+              fontWeight: FontWeight.w500,
+              color: colors.textMuted.withValues(alpha: 0.6),
+            ),
+          ),
+          Text(
+            '${((maxValue + minValue) / 2).round()}',
+            style: TextStyle(
+              fontSize: 9,
+              fontWeight: FontWeight.w500,
+              color: colors.textMuted.withValues(alpha: 0.6),
+            ),
+          ),
+          Text(
+            '${minValue - 2 < 0 ? 0 : minValue - 2}',
+            style: TextStyle(
+              fontSize: 9,
+              fontWeight: FontWeight.w500,
+              color: colors.textMuted.withValues(alpha: 0.6),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -195,13 +301,66 @@ class _OperationGraphState extends State<OperationGraph> {
   }
 }
 
+/// Statistic badge
+class _StatBadge extends StatelessWidget {
+  final String label;
+  final String value;
+  final Color color;
+
+  const _StatBadge({
+    required this.label,
+    required this.value,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(AppRadius.indicator),
+        border: Border.all(
+          color: color.withValues(alpha: 0.3),
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 9,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.5,
+              color: colors.textMuted,
+            ),
+          ),
+          const SizedBox(width: 4),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w900,
+              color: color,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 /// Metric selection tab
 class _MetricTab extends StatelessWidget {
+  final IconData icon;
   final String label;
   final bool isSelected;
   final VoidCallback? onTap;
 
   const _MetricTab({
+    required this.icon,
     required this.label,
     this.isSelected = false,
     this.onTap,
@@ -210,26 +369,51 @@ class _MetricTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          decoration: BoxDecoration(
-            color: isSelected ? colors.card : Colors.transparent,
-            borderRadius: BorderRadius.circular(AppRadius.button),
+    return BreezButton(
+      onTap: onTap,
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+      backgroundColor: isSelected
+          ? AppColors.accent.withValues(alpha: 0.15)
+          : Colors.transparent,
+      hoverColor: isSelected
+          ? AppColors.accent.withValues(alpha: 0.25)
+          : colors.buttonBg,
+      border: Border.all(
+        color: isSelected ? AppColors.accent.withValues(alpha: 0.4) : colors.border,
+        width: 1,
+      ),
+      shadows: isSelected
+          ? [
+              BoxShadow(
+                color: AppColors.accent.withValues(alpha: 0.3),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ]
+          : null,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            size: 20,
+            color: isSelected ? AppColors.accent : colors.textMuted,
           ),
-          child: Text(
-            label,
+          const SizedBox(height: 3),
+          Text(
+            label.toUpperCase(),
             style: TextStyle(
-              fontSize: 11,
-              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-              color: isSelected ? colors.text : colors.textMuted,
+              fontSize: 8,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 0.5,
+              color: isSelected ? AppColors.accent : colors.textMuted,
             ),
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
-        ),
+        ],
       ),
     );
   }
@@ -267,13 +451,14 @@ class _GraphPainter extends CustomPainter {
       points.add(Offset(x, y));
     }
 
-    // Draw grid lines
+    // Draw grid lines (horizontal)
     final gridPaint = Paint()
-      ..color = Colors.white.withValues(alpha: 0.05)
-      ..strokeWidth = 1;
+      ..color = Colors.white.withValues(alpha: 0.08)
+      ..strokeWidth = 1
+      ..style = PaintingStyle.stroke;
 
-    for (int i = 0; i < 4; i++) {
-      final y = size.height * i / 3;
+    for (int i = 0; i <= 4; i++) {
+      final y = size.height * i / 4;
       canvas.drawLine(Offset(0, y), Offset(size.width, y), gridPaint);
     }
 
