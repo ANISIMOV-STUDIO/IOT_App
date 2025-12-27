@@ -32,6 +32,7 @@ class ModeButton extends StatelessWidget {
   final bool isSelected;
   final VoidCallback? onTap;
   final bool compact;
+  final bool enabled;
 
   const ModeButton({
     super.key,
@@ -39,24 +40,36 @@ class ModeButton extends StatelessWidget {
     this.isSelected = false,
     this.onTap,
     this.compact = false,
+    this.enabled = true,
   });
 
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
+    final effectiveOnTap = enabled ? onTap : null;
+    final iconColor = !enabled
+        ? colors.textMuted.withValues(alpha: 0.3)
+        : (isSelected ? Colors.white : colors.textMuted);
+
     return BreezButton(
-      onTap: onTap,
+      onTap: effectiveOnTap,
       // Minimum 48px touch target height
       padding: EdgeInsets.symmetric(
         horizontal: compact ? 8 : 16,
         vertical: compact ? 14 : 12, // 14*2 + icon = 48px min
       ),
-      backgroundColor: isSelected ? AppColors.accent : colors.buttonBg,
-      hoverColor: isSelected ? AppColors.accentLight : colors.cardLight,
+      backgroundColor: !enabled
+          ? colors.buttonBg.withValues(alpha: 0.5)
+          : (isSelected ? AppColors.accent : colors.buttonBg),
+      hoverColor: !enabled
+          ? colors.buttonBg.withValues(alpha: 0.5)
+          : (isSelected ? AppColors.accentLight : colors.cardLight),
       border: Border.all(
-        color: isSelected ? AppColors.accent : Colors.transparent,
+        color: !enabled
+            ? Colors.transparent
+            : (isSelected ? AppColors.accent : Colors.transparent),
       ),
-      shadows: isSelected
+      shadows: isSelected && enabled
           ? [
               BoxShadow(
                 color: AppColors.accent.withValues(alpha: 0.3),
@@ -69,7 +82,7 @@ class ModeButton extends StatelessWidget {
               child: Icon(
                 mode.icon,
                 size: 18,
-                color: isSelected ? Colors.white : colors.textMuted,
+                color: iconColor,
               ),
             )
           : Row(
@@ -78,7 +91,7 @@ class ModeButton extends StatelessWidget {
                 Icon(
                   mode.icon,
                   size: 16,
-                  color: isSelected ? Colors.white : colors.textMuted,
+                  color: iconColor,
                 ),
                 const SizedBox(width: 8),
                 Text(
@@ -87,7 +100,7 @@ class ModeButton extends StatelessWidget {
                     fontSize: 9,
                     fontWeight: FontWeight.w900,
                     letterSpacing: 2,
-                    color: isSelected ? Colors.white : colors.textMuted,
+                    color: iconColor,
                   ),
                 ),
               ],
@@ -103,6 +116,7 @@ class ModeSelector extends StatelessWidget {
   final ValueChanged<String>? onModeChanged;
   final List<ModeData> modes;
   final bool compact;
+  final bool enabled;
 
   const ModeSelector({
     super.key,
@@ -111,6 +125,7 @@ class ModeSelector extends StatelessWidget {
     this.onModeChanged,
     this.modes = defaultModes,
     this.compact = false,
+    this.enabled = true,
   });
 
   @override
@@ -127,6 +142,7 @@ class ModeSelector extends StatelessWidget {
                 isSelected: selectedMode == mode.id,
                 onTap: () => onModeChanged?.call(mode.id),
                 compact: true,
+                enabled: enabled,
               ),
             ),
           );
@@ -154,6 +170,7 @@ class ModeSelector extends StatelessWidget {
                 mode: mode,
                 isSelected: selectedMode == mode.id,
                 onTap: () => onModeChanged?.call(mode.id),
+                enabled: enabled,
               );
             }).toList(),
           ),

@@ -335,6 +335,7 @@ class MainTempCard extends StatelessWidget {
                         selectedMode: selectedMode!,
                         onModeChanged: onModeChanged,
                         compact: true,
+                        enabled: isPowered,
                       ),
                     ],
                   ),
