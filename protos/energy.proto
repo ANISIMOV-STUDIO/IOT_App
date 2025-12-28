@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package breez;
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Breez.Contracts";
+
+// Статистика энергопотребления
+message EnergyStats {
+  string device_id = 1;                       // Идентификатор устройства
+  double current_consumption = 2;             // Текущее потребление (кВт)
+  double daily_consumption = 3;               // Дневное потребление (кВтч)
+  double weekly_consumption = 4;              // Недельное потребление (кВтч)
+  double monthly_consumption = 5;             // Месячное потребление (кВтч)
+  double cost_per_hour = 6;                   // Стоимость в час (руб/ч)
+  double daily_cost = 7;                      // Дневная стоимость (руб)
+  double monthly_cost = 8;                    // Месячная стоимость (руб)
+  google.protobuf.Timestamp last_update = 9;  // Время последнего обновления
+}
+
+// Запрос на получение статистики энергопотребления
+message GetEnergyStatsRequest {
+  string device_id = 1;                       // Идентификатор устройства
+}
+
+// Запрос истории энергопотребления
+message EnergyHistoryRequest {
+  string device_id = 1;                       // Идентификатор устройства
+  google.protobuf.Timestamp from = 2;         // Начало периода
+  google.protobuf.Timestamp to = 3;           // Конец периода
+  EnergyPeriod period = 4;                    // Период агрегации
+}
+
+// Период агрегации данных
+enum EnergyPeriod {
+  ENERGY_PERIOD_UNSPECIFIED = 0;              // Не указан
+  ENERGY_PERIOD_HOURLY = 1;                   // Почасово
+  ENERGY_PERIOD_DAILY = 2;                    // Ежедневно
+  ENERGY_PERIOD_WEEKLY = 3;                   // Еженедельно
+  ENERGY_PERIOD_MONTHLY = 4;                  // Ежемесячно
+}
+
+// Ответ с историей энергопотребления
+message EnergyHistoryResponse {
+  repeated EnergyDataPoint data_points = 1;   // Точки данных
+  double total_consumption = 2;               // Общее потребление за период (кВтч)
+  double total_cost = 3;                      // Общая стоимость за период (руб)
+}
+
+// Точка данных энергопотребления
+message EnergyDataPoint {
+  google.protobuf.Timestamp timestamp = 1;    // Время
+  double consumption = 2;                     // Потребление (кВтч)
+  double cost = 3;                            // Стоимость (руб)
+}

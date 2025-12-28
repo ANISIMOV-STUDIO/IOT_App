@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package breez;
+
+import "occupant.proto";
+import "common.proto";
+
+option csharp_namespace = "Breez.Contracts";
+
+// Сервис управления жильцами
+service OccupantService {
+  rpc GetOccupants(GetOccupantsRequest) returns (ListOccupantsResponse);      // Получить список жильцов
+  rpc CreateOccupant(CreateOccupantRequest) returns (Occupant);               // Создать жильца
+  rpc UpdateOccupant(UpdateOccupantRequest) returns (Occupant);               // Обновить жильца
+  rpc DeleteOccupant(DeleteOccupantRequest) returns (Empty);                  // Удалить жильца
+  rpc UpdatePresence(UpdatePresenceRequest) returns (Occupant);               // Обновить присутствие
+}

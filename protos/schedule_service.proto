@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package breez;
+
+import "schedule.proto";
+import "common.proto";
+
+option csharp_namespace = "Breez.Contracts";
+
+// Сервис управления расписаниями
+service ScheduleService {
+  rpc GetSchedule(GetScheduleRequest) returns (ListScheduleResponse);         // Получить расписание
+  rpc CreateScheduleEntry(CreateScheduleRequest) returns (ScheduleEntry);     // Создать запись
+  rpc UpdateScheduleEntry(UpdateScheduleRequest) returns (ScheduleEntry);     // Обновить запись
+  rpc DeleteScheduleEntry(DeleteScheduleRequest) returns (Empty);             // Удалить запись
+}

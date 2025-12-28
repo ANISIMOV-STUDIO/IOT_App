@@ -1,0 +1,114 @@
+syntax = "proto3";
+
+package breez;
+
+import "google/protobuf/timestamp.proto";
+import "common.proto";
+
+option csharp_namespace = "Breez.Contracts";
+
+// HVAC устройство
+message HvacDevice {
+  string id = 1;                              // Идентификатор устройства
+  string name = 2;                            // Название устройства
+  bool power = 3;                             // Состояние питания (вкл/выкл)
+  int32 temp = 4;                             // Целевая температура (16-32°C)
+  OperationMode mode = 5;                     // Режим работы
+  FanSpeed supply_fan = 6;                    // Скорость приточного вентилятора
+  FanSpeed exhaust_fan = 7;                   // Скорость вытяжного вентилятора
+
+  // Текущие показания
+  int32 current_temp = 8;                     // Текущая температура
+  int32 humidity = 9;                         // Текущая влажность %
+  int32 co2 = 10;                             // Уровень CO2 ppm
+  int32 airflow = 11;                         // Поток воздуха м³/ч
+
+  repeated Alert alerts = 12;                 // Список оповещений
+  DeviceStatus status = 13;                   // Статус устройства
+  google.protobuf.Timestamp last_update = 14; // Время последнего обновления
+
+  string mqtt_topic = 15;                     // MQTT топик для этого устройства
+
+  repeated Preset presets = 16;               // Пользовательские пресеты
+}
+
+// Пресет (пользовательская конфигурация)
+message Preset {
+  string id = 1;                              // Идентификатор пресета
+  string name = 2;                            // Название пресета
+  int32 temp = 3;                             // Температура
+  OperationMode mode = 4;                     // Режим работы
+  FanSpeed supply_fan = 5;                    // Скорость приточного вентилятора
+  FanSpeed exhaust_fan = 6;                   // Скорость вытяжного вентилятора
+  string icon = 7;                            // Название иконки (home, night, away и т.д.)
+}
+
+// Запрос на создание устройства
+message CreateDeviceRequest {
+  string name = 1;                            // Название устройства
+  string mqtt_topic = 2;                      // MQTT топик
+}
+
+// Запрос на получение устройства
+message GetDeviceRequest {
+  string id = 1;                              // Идентификатор устройства
+}
+
+// Ответ со списком устройств
+message ListDevicesResponse {
+  repeated HvacDevice devices = 1;            // Список устройств
+}
+
+// Запрос на обновление устройства
+message UpdateDeviceRequest {
+  string id = 1;                              // Идентификатор устройства
+  optional string name = 2;                   // Новое название (опционально)
+  optional bool power = 3;                    // Состояние питания (опционально)
+  optional int32 temp = 4;                    // Целевая температура (опционально)
+  optional OperationMode mode = 5;            // Режим работы (опционально)
+  optional FanSpeed supply_fan = 6;           // Скорость приточного вентилятора (опционально)
+  optional FanSpeed exhaust_fan = 7;          // Скорость вытяжного вентилятора (опционально)
+}
+
+// Запросы управления
+
+// Установить состояние питания
+message SetPowerRequest {
+  string device_id = 1;                       // Идентификатор устройства
+  bool power = 2;                             // Состояние питания
+}
+
+// Установить температуру
+message SetTemperatureRequest {
+  string device_id = 1;                       // Идентификатор устройства
+  int32 temperature = 2;                      // Температура
+}
+
+// Установить режим работы
+message SetModeRequest {
+  string device_id = 1;                       // Идентификатор устройства
+  OperationMode mode = 2;                     // Режим работы
+}
+
+// Установить скорость вентиляторов
+message SetFanSpeedRequest {
+  string device_id = 1;                       // Идентификатор устройства
+  FanSpeed supply_fan = 2;                    // Скорость приточного вентилятора
+  FanSpeed exhaust_fan = 3;                   // Скорость вытяжного вентилятора
+}
+
+// Применить пресет
+message ApplyPresetRequest {
+  string device_id = 1;                       // Идентификатор устройства
+  string preset_id = 2;                       // Идентификатор пресета
+}
+
+// Удалить устройство
+message DeleteDeviceRequest {
+  string id = 1;                              // Идентификатор устройства
+}
+
+// Запрос на стриминг обновлений устройств
+message StreamDeviceUpdatesRequest {
+  optional string device_id = 1;              // ID устройства (если пусто - стрим всех устройств)
+}

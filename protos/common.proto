@@ -1,0 +1,85 @@
+syntax = "proto3";
+
+package breez;
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Breez.Contracts";
+
+// Пустое сообщение
+message Empty {}
+
+// Общие перечисления
+
+// Режим работы HVAC системы
+enum OperationMode {
+  OPERATION_MODE_UNSPECIFIED = 0;  // Не указан
+  OPERATION_MODE_AUTO = 1;         // Автоматический режим
+  OPERATION_MODE_HEAT = 2;         // Обогрев
+  OPERATION_MODE_COOL = 3;         // Охлаждение
+  OPERATION_MODE_FAN_ONLY = 4;     // Только вентиляция
+}
+
+// Скорость вентилятора
+enum FanSpeed {
+  FAN_SPEED_UNSPECIFIED = 0;       // Не указана
+  FAN_SPEED_LOW = 1;               // Низкая
+  FAN_SPEED_MEDIUM = 2;            // Средняя
+  FAN_SPEED_HIGH = 3;              // Высокая
+  FAN_SPEED_AUTO = 4;              // Автоматическая
+}
+
+// Статус устройства
+enum DeviceStatus {
+  DEVICE_STATUS_UNSPECIFIED = 0;   // Не указан
+  DEVICE_STATUS_ONLINE = 1;        // В сети
+  DEVICE_STATUS_OFFLINE = 2;       // Не в сети
+  DEVICE_STATUS_ERROR = 3;         // Ошибка
+  DEVICE_STATUS_MAINTENANCE = 4;   // Обслуживание
+}
+
+// Тип оповещения
+enum AlertType {
+  ALERT_TYPE_UNSPECIFIED = 0;              // Не указан
+  ALERT_TYPE_FILTER_REPLACEMENT = 1;       // Замена фильтра
+  ALERT_TYPE_MAINTENANCE_REQUIRED = 2;     // Требуется обслуживание
+  ALERT_TYPE_HIGH_TEMPERATURE = 3;         // Высокая температура
+  ALERT_TYPE_LOW_TEMPERATURE = 4;          // Низкая температура
+  ALERT_TYPE_HIGH_HUMIDITY = 5;            // Высокая влажность
+  ALERT_TYPE_HIGH_CO2 = 6;                 // Высокий уровень CO2
+  ALERT_TYPE_SYSTEM_ERROR = 7;             // Системная ошибка
+}
+
+// Тип уведомления
+enum NotificationType {
+  NOTIFICATION_TYPE_UNSPECIFIED = 0;       // Не указан
+  NOTIFICATION_TYPE_INFO = 1;              // Информация
+  NOTIFICATION_TYPE_WARNING = 2;           // Предупреждение
+  NOTIFICATION_TYPE_ERROR = 3;             // Ошибка
+}
+
+// Метрика для графика
+enum GraphMetric {
+  GRAPH_METRIC_UNSPECIFIED = 0;            // Не указана
+  GRAPH_METRIC_TEMPERATURE = 1;            // Температура
+  GRAPH_METRIC_HUMIDITY = 2;               // Влажность
+  GRAPH_METRIC_AIRFLOW = 3;                // Поток воздуха
+  GRAPH_METRIC_ENERGY = 4;                 // Энергопотребление
+  GRAPH_METRIC_CO2 = 5;                    // Уровень CO2
+}
+
+// Качество воздуха
+enum AirQuality {
+  AIR_QUALITY_UNSPECIFIED = 0;             // Не указано
+  AIR_QUALITY_EXCELLENT = 1;               // Отличное
+  AIR_QUALITY_GOOD = 2;                    // Хорошее
+  AIR_QUALITY_FAIR = 3;                    // Удовлетворительное
+  AIR_QUALITY_POOR = 4;                    // Плохое
+}
+
+// Оповещение
+message Alert {
+  AlertType type = 1;                       // Тип оповещения
+  string message = 2;                       // Текст сообщения
+  google.protobuf.Timestamp timestamp = 3;  // Время создания
+}

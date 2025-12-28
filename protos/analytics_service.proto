@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package breez;
+
+import "graph_data.proto";
+import "energy.proto";
+import "climate.proto";
+
+option csharp_namespace = "Breez.Contracts";
+
+// Сервис аналитики
+service AnalyticsService {
+  // Данные графиков
+  rpc GetGraphData(GraphDataRequest) returns (GraphDataResponse);            // Получить данные для графика
+
+  // Статистика энергопотребления
+  rpc GetEnergyStats(GetEnergyStatsRequest) returns (EnergyStats);           // Получить статистику энергопотребления
+  rpc GetEnergyHistory(EnergyHistoryRequest) returns (EnergyHistoryResponse);// Получить историю энергопотребления
+
+  // Климатические данные
+  rpc GetClimateState(GetClimateStateRequest) returns (ClimateState);        // Получить текущее состояние климата
+  rpc GetClimateHistory(ClimateHistoryRequest) returns (ClimateHistoryResponse);// Получить историю климата
+}

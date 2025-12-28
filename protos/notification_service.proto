@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package breez;
+
+import "notification.proto";
+import "common.proto";
+
+option csharp_namespace = "Breez.Contracts";
+
+// Сервис уведомлений
+service NotificationService {
+  rpc GetNotifications(GetNotificationsRequest) returns (ListNotificationsResponse);  // Получить уведомления
+  rpc MarkAsRead(MarkAsReadRequest) returns (Empty);                                  // Отметить как прочитанное
+  rpc DeleteNotification(DeleteNotificationRequest) returns (Empty);                  // Удалить уведомление
+
+  // Стриминг уведомлений в реальном времени
+  rpc StreamNotifications(StreamNotificationsRequest) returns (stream Notification);  // Стрим уведомлений
+}

@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package breez;
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Breez.Contracts";
+
+// Жилец/пользователь
+message Occupant {
+  string id = 1;                              // Идентификатор
+  string name = 2;                            // Имя
+  string avatar_url = 3;                      // URL аватара
+  bool is_home = 4;                           // Дома ли сейчас
+  google.protobuf.Timestamp last_seen = 5;    // Последний раз замечен
+  repeated string device_ids = 6;             // Устройства, к которым есть доступ
+}
+
+// Запрос на получение списка жильцов
+message GetOccupantsRequest {
+  optional string device_id = 1;              // Фильтр по доступу к устройству
+}
+
+// Ответ со списком жильцов
+message ListOccupantsResponse {
+  repeated Occupant occupants = 1;            // Список жильцов
+  int32 home_count = 2;                       // Количество людей дома сейчас
+}
+
+// Запрос на создание жильца
+message CreateOccupantRequest {
+  string name = 1;                            // Имя
+  optional string avatar_url = 2;             // URL аватара
+  repeated string device_ids = 3;             // Устройства
+}
+
+// Запрос на обновление жильца
+message UpdateOccupantRequest {
+  string id = 1;                              // Идентификатор
+  optional string name = 2;                   // Имя (опционально)
+  optional string avatar_url = 3;             // URL аватара (опционально)
+  optional bool is_home = 4;                  // Дома ли (опционально)
+  repeated string device_ids = 5;             // Устройства
+}
+
+// Запрос на удаление жильца
+message DeleteOccupantRequest {
+  string id = 1;                              // Идентификатор
+}
+
+// Запрос на обновление присутствия
+message UpdatePresenceRequest {
+  string occupant_id = 1;                     // Идентификатор жильца
+  bool is_home = 2;                           // Дома ли
+}

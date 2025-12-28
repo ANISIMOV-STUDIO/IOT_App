@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package breez;
+
+import "google/protobuf/timestamp.proto";
+import "common.proto";
+
+option csharp_namespace = "Breez.Contracts";
+
+// Запись расписания
+message ScheduleEntry {
+  string id = 1;                              // Идентификатор записи
+  string device_id = 2;                       // Идентификатор устройства
+  string time = 3;                            // Время в формате HH:mm (например, "08:00")
+  repeated int32 days = 4;                    // Дни недели: 0=Понедельник, 6=Воскресенье
+  ScheduleAction action = 5;                  // Действие для выполнения
+  bool enabled = 6;                           // Включено ли расписание
+  google.protobuf.Timestamp created_at = 7;   // Время создания
+}
+
+// Действие расписания
+message ScheduleAction {
+  optional bool power = 1;                    // Состояние питания (опционально)
+  optional int32 temp = 2;                    // Температура (опционально)
+  optional OperationMode mode = 3;            // Режим работы (опционально)
+  optional FanSpeed supply_fan = 4;           // Скорость приточного вентилятора (опционально)
+  optional FanSpeed exhaust_fan = 5;          // Скорость вытяжного вентилятора (опционально)
+  optional string preset_id = 6;              // ID пресета (вместо индивидуальных настроек)
+}
+
+// Запрос на получение расписания
+message GetScheduleRequest {
+  string device_id = 1;                       // Идентификатор устройства
+}
+
+// Ответ со списком расписаний
+message ListScheduleResponse {
+  repeated ScheduleEntry entries = 1;         // Список записей расписания
+}
+
+// Запрос на создание записи расписания
+message CreateScheduleRequest {
+  string device_id = 1;                       // Идентификатор устройства
+  string time = 2;                            // Время
+  repeated int32 days = 3;                    // Дни недели
+  ScheduleAction action = 4;                  // Действие
+  bool enabled = 5;                           // Включено
+}
+
+// Запрос на обновление записи расписания
+message UpdateScheduleRequest {
+  string id = 1;                              // Идентификатор записи
+  optional string time = 2;                   // Время (опционально)
+  repeated int32 days = 3;                    // Дни недели
+  optional ScheduleAction action = 4;         // Действие (опционально)
+  optional bool enabled = 5;                  // Включено (опционально)
+}
+
+// Запрос на удаление записи расписания
+message DeleteScheduleRequest {
+  string id = 1;                              // Идентификатор записи
+}

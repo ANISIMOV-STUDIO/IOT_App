@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package breez;
+
+import "google/protobuf/timestamp.proto";
+import "common.proto";
+
+option csharp_namespace = "Breez.Contracts";
+
+// Точка данных для графика
+message GraphDataPoint {
+  google.protobuf.Timestamp timestamp = 1;    // Время
+  double value = 2;                           // Значение
+}
+
+// Запрос данных для графика
+message GraphDataRequest {
+  string device_id = 1;                       // Идентификатор устройства
+  GraphMetric metric = 2;                     // Метрика
+  google.protobuf.Timestamp from = 3;         // Начало периода
+  google.protobuf.Timestamp to = 4;           // Конец периода
+  optional int32 resolution = 5;              // Количество точек (для даунсэмплинга)
+}
+
+// Ответ с данными для графика
+message GraphDataResponse {
+  repeated GraphDataPoint data_points = 1;    // Точки данных
+  GraphMetric metric = 2;                     // Метрика
+  GraphStats stats = 3;                       // Статистика
+}
+
+// Статистика по данным графика
+message GraphStats {
+  double min = 1;                             // Минимальное значение
+  double max = 2;                             // Максимальное значение
+  double avg = 3;                             // Среднее значение
+  double current = 4;                         // Текущее значение
+}

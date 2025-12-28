@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package breez;
+
+import "hvac_device.proto";
+import "common.proto";
+
+option csharp_namespace = "Breez.Contracts";
+
+// Сервис управления HVAC устройствами
+service HvacService {
+  // Управление устройствами
+  rpc GetDevice(GetDeviceRequest) returns (HvacDevice);              // Получить устройство
+  rpc ListDevices(Empty) returns (ListDevicesResponse);              // Получить список устройств
+  rpc CreateDevice(CreateDeviceRequest) returns (HvacDevice);        // Создать устройство
+  rpc UpdateDevice(UpdateDeviceRequest) returns (HvacDevice);        // Обновить устройство
+  rpc DeleteDevice(DeleteDeviceRequest) returns (Empty);             // Удалить устройство
+
+  // Стриминг обновлений в реальном времени
+  rpc StreamDeviceUpdates(StreamDeviceUpdatesRequest) returns (stream HvacDevice);  // Стрим обновлений
+
+  // Управляющие операции
+  rpc SetPower(SetPowerRequest) returns (HvacDevice);                // Установить питание
+  rpc SetTemperature(SetTemperatureRequest) returns (HvacDevice);    // Установить температуру
+  rpc SetMode(SetModeRequest) returns (HvacDevice);                  // Установить режим
+  rpc SetFanSpeed(SetFanSpeedRequest) returns (HvacDevice);          // Установить скорость вентиляторов
+  rpc ApplyPreset(ApplyPresetRequest) returns (HvacDevice);          // Применить пресет
+}

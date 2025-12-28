@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package breez;
+
+import "google/protobuf/timestamp.proto";
+import "common.proto";
+
+option csharp_namespace = "Breez.Contracts";
+
+// Климатическое состояние
+message ClimateState {
+  string device_id = 1;                       // Идентификатор устройства
+  int32 indoor_temp = 2;                      // Температура в помещении (°C)
+  int32 outdoor_temp = 3;                     // Температура снаружи (°C)
+  int32 humidity = 4;                         // Влажность в помещении (%)
+  int32 co2 = 5;                              // Уровень CO2 (ppm)
+  AirQuality air_quality = 6;                 // Качество воздуха
+  google.protobuf.Timestamp timestamp = 7;    // Время измерения
+
+  // Дополнительные климатические данные
+  optional int32 outdoor_humidity = 8;        // Влажность снаружи (%)
+  optional double pressure = 9;               // Атмосферное давление (мм рт.ст.)
+  optional int32 pm25 = 10;                   // Частицы PM2.5 (мкг/м³)
+  optional int32 pm10 = 11;                   // Частицы PM10 (мкг/м³)
+}
+
+// Запрос на получение климатического состояния
+message GetClimateStateRequest {
+  string device_id = 1;                       // Идентификатор устройства
+}
+
+// Запрос истории климата
+message ClimateHistoryRequest {
+  string device_id = 1;                       // Идентификатор устройства
+  google.protobuf.Timestamp from = 2;         // Начало периода
+  google.protobuf.Timestamp to = 3;           // Конец периода
+}
+
+// Ответ с историей климата
+message ClimateHistoryResponse {
+  repeated ClimateState history = 1;          // История состояний
+}

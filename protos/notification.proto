@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package breez;
+
+import "google/protobuf/timestamp.proto";
+import "common.proto";
+
+option csharp_namespace = "Breez.Contracts";
+
+// Уведомление
+message Notification {
+  string id = 1;                              // Идентификатор уведомления
+  string device_id = 2;                       // Идентификатор устройства
+  NotificationType type = 3;                  // Тип уведомления
+  string title = 4;                           // Заголовок
+  string message = 5;                         // Текст сообщения
+  google.protobuf.Timestamp timestamp = 6;    // Время создания
+  bool is_read = 7;                           // Прочитано ли
+  optional string action_url = 8;             // Ссылка на действие (опционально)
+}
+
+// Запрос на получение уведомлений
+message GetNotificationsRequest {
+  optional string device_id = 1;              // Фильтр по устройству (если пусто - все)
+  optional bool unread_only = 2;              // Только непрочитанные
+  optional int32 limit = 3;                   // Лимит количества
+}
+
+// Ответ со списком уведомлений
+message ListNotificationsResponse {
+  repeated Notification notifications = 1;    // Список уведомлений
+  int32 unread_count = 2;                     // Количество непрочитанных
+}
+
+// Запрос на отметку как прочитанное
+message MarkAsReadRequest {
+  repeated string notification_ids = 1;       // ID уведомлений (можно несколько)
+}
+
+// Запрос на стриминг уведомлений
+message StreamNotificationsRequest {
+  optional string device_id = 1;              // Фильтр по устройству (если пусто - все)
+}
+
+// Запрос на удаление уведомления
+message DeleteNotificationRequest {
+  string id = 1;                              // Идентификатор уведомления
+}
