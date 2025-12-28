@@ -3,6 +3,8 @@ library;
 
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/di/injection_container.dart' as di;
 import '../../../core/services/theme_service.dart';
 import '../../../core/services/version_check_service.dart';
@@ -14,6 +16,9 @@ import '../../../domain/repositories/graph_data_repository.dart';
 import '../../../domain/repositories/notification_repository.dart';
 import '../../../domain/repositories/schedule_repository.dart';
 import '../../widgets/breez/breez.dart';
+import '../../bloc/auth/auth_bloc.dart';
+import '../../bloc/auth/auth_event.dart';
+import '../../bloc/auth/auth_state.dart';
 import 'dialogs/add_unit_dialog.dart';
 import 'dialogs/update_available_dialog.dart';
 import 'layouts/desktop_layout.dart';
@@ -177,29 +182,40 @@ class _DashboardScreenState extends State<DashboardScreen> {
     setState(() {});
   }
 
+  void _handleLogout() {
+    context.read<AuthBloc>().add(const AuthLogoutRequested());
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDark = _themeService.isDark;
     final width = MediaQuery.sizeOf(context).width;
     final isDesktop = width > 900;
 
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: isDark ? AppColors.darkBg : AppColors.lightBg,
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Main content
-            Expanded(
-              child: isDesktop ? _buildDesktopLayout(isDark) : _buildMobileLayout(isDark, width),
-            ),
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is AuthUnauthenticated) {
+          context.go('/login');
+        }
+      },
+      child: Scaffold(
+        key: _scaffoldKey,
+        backgroundColor: isDark ? AppColors.darkBg : AppColors.lightBg,
+        body: SafeArea(
+          child: Column(
+            children: [
+              // Main content
+              Expanded(
+                child: isDesktop ? _buildDesktopLayout(isDark) : _buildMobileLayout(isDark, width),
+              ),
 
-            // Space between content and bottom bar
-            if (!isDesktop) const SizedBox(height: AppSpacing.sm),
+              // Space between content and bottom bar
+              if (!isDesktop) const SizedBox(height: AppSpacing.sm),
 
-            // Bottom navigation bar (mobile/tablet only)
-            if (!isDesktop) _buildBottomBar(),
-          ],
+              // Bottom navigation bar (mobile/tablet only)
+              if (!isDesktop) _buildBottomBar(),
+            ],
+          ),
         ),
       ),
     );
@@ -227,6 +243,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       },
       onThemeToggle: _toggleTheme,
       onAddUnit: _showAddUnitDialog,
+      onLogoutTap: _handleLogout,
       schedule: _schedule,
       notifications: _notifications,
       graphData: _graphData,

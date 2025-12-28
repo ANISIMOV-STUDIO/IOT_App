@@ -8,7 +8,6 @@ import '../../../../core/theme/spacing.dart';
 import '../../../../domain/entities/unit_state.dart';
 import '../../../widgets/breez/breez_logo.dart';
 import '../../../widgets/common/hover_builder.dart';
-import 'header_icon_button.dart';
 import 'add_unit_button.dart';
 
 /// Mobile header with unit tabs and controls

@@ -26,6 +26,7 @@ class DesktopLayout extends StatefulWidget {
   final ValueChanged<int>? onUnitSelected;
   final VoidCallback? onThemeToggle;
   final VoidCallback? onAddUnit;
+  final VoidCallback? onLogoutTap;
 
   // Data from repositories
   final List<ScheduleEntry> schedule;
@@ -53,6 +54,7 @@ class DesktopLayout extends StatefulWidget {
     this.onUnitSelected,
     this.onThemeToggle,
     this.onAddUnit,
+    this.onLogoutTap,
     this.schedule = const [],
     this.notifications = const [],
     this.graphData = const [],
@@ -98,9 +100,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                   Sidebar(
                     selectedIndex: _sidebarIndex,
                     onItemSelected: (index) => setState(() => _sidebarIndex = index),
-                    onLogoutTap: () {
-                      // TODO: Implement logout
-                    },
+                    onLogoutTap: widget.onLogoutTap,
                   ),
 
                 // Main content

@@ -28,6 +28,9 @@ dependencies:
   grpc: ^5.0.0
   protobuf: ^5.0.0
 
+  # HTTP клиент для REST API (auth endpoints)
+  http: ^1.2.2
+
   # QR Code Scanner
   mobile_scanner: ^3.5.2
 
@@ -102,6 +105,7 @@ flutter:
   assets:
     - assets/
     - assets/images/
+    - .env
 
 # App Icons Configuration (Web Only)
 flutter_launcher_icons:

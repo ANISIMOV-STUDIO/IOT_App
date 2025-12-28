@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'core/theme/app_theme.dart';
 import 'generated/l10n/app_localizations.dart';
@@ -15,9 +16,14 @@ import 'core/services/language_service.dart';
 import 'core/services/theme_service.dart';
 import 'core/navigation/app_router.dart';
 import 'presentation/bloc/dashboard/dashboard_bloc.dart';
+import 'presentation/bloc/auth/auth_bloc.dart';
+import 'presentation/bloc/auth/auth_event.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Load environment variables
+  await dotenv.load(fileName: ".env");
 
   // Initialize dependencies
   await di.init();
@@ -45,6 +51,10 @@ class _HvacControlAppState extends State<HvacControlApp> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider(
+          create: (context) =>
+              di.sl<AuthBloc>()..add(const AuthCheckRequested()),
+        ),
         BlocProvider(
           create: (context) =>
               di.sl<DashboardBloc>()..add(const DashboardStarted()),
