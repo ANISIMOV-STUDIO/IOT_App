@@ -71,7 +71,13 @@ class _RegisterFormState extends State<RegisterForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is AuthError) {
+          SnackBarUtils.showError(context, state.message);
+        }
+      },
+      child: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         // Логотип
@@ -200,6 +206,7 @@ class _RegisterFormState extends State<RegisterForm> {
           ),
         ),
       ],
+      ),
     );
   }
 }

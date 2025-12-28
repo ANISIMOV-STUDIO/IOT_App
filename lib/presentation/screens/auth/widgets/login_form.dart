@@ -59,9 +59,15 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is AuthError) {
+          SnackBarUtils.showError(context, state.message);
+        }
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
         // Логотип
         const BreezLogo(
           iconSize: 56,
@@ -194,6 +200,7 @@ class _LoginFormState extends State<LoginForm> {
           ),
         ),
       ],
+      ),
     );
   }
 }
