@@ -48,11 +48,23 @@ class _BreezTextFieldState extends State<BreezTextField> {
   bool _hasError = false;
   String? _errorText;
   bool _obscureTextInternal = false;
+  final GlobalKey<FormFieldState> _fieldKey = GlobalKey<FormFieldState>();
 
   @override
   void initState() {
     super.initState();
     _obscureTextInternal = widget.obscureText;
+  }
+
+  void _validateField() {
+    // Запускаем валидацию через FormField
+    _fieldKey.currentState?.validate();
+    // Получаем текущую ошибку из FormField
+    final error = _fieldKey.currentState?.errorText;
+    setState(() {
+      _hasError = error != null;
+      _errorText = error;
+    });
   }
 
   @override
@@ -109,6 +121,7 @@ class _BreezTextFieldState extends State<BreezTextField> {
             ),
           ),
           child: TextFormField(
+            key: _fieldKey,
             controller: widget.controller,
             obscureText: widget.showPasswordToggle ? _obscureTextInternal : widget.obscureText,
             keyboardType: widget.keyboardType,
@@ -142,11 +155,7 @@ class _BreezTextFieldState extends State<BreezTextField> {
             onChanged: (value) {
               widget.onChanged?.call(value);
               if (widget.validateOnChange && widget.validator != null) {
-                final error = widget.validator!(value);
-                setState(() {
-                  _hasError = error != null;
-                  _errorText = error;
-                });
+                _validateField();
               }
             },
             onTap: () => setState(() => _isFocused = true),
@@ -154,11 +163,7 @@ class _BreezTextFieldState extends State<BreezTextField> {
               setState(() => _isFocused = false);
               // Валидация при потере фокуса (если не включена валидация на изменение)
               if (!widget.validateOnChange && widget.validator != null) {
-                final error = widget.validator!(widget.controller?.text);
-                setState(() {
-                  _hasError = error != null;
-                  _errorText = error;
-                });
+                _validateField();
               }
             },
             validator: widget.validator,
