@@ -77,11 +77,15 @@ GoRouter createRouter() {
       // Auth routes
       GoRoute(
         path: AppRoutes.login,
-        builder: (context, state) => const LoginScreen(),
+        builder: (context, state) => LoginScreen(
+          key: UniqueKey(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.register,
-        builder: (context, state) => const RegisterScreen(),
+        builder: (context, state) => RegisterScreen(
+          key: UniqueKey(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.verifyEmail,

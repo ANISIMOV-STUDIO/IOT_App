@@ -39,21 +39,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _consentAccepted = false;
 
   @override
-  void initState() {
-    super.initState();
-    // Сбрасываем форму и очищаем поля при каждой инициализации
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _formKey.currentState?.reset();
-      _firstNameController.clear();
-      _lastNameController.clear();
-      _emailController.clear();
-      _passwordController.clear();
-      _confirmPasswordController.clear();
-      setState(() => _consentAccepted = false);
-    });
-  }
-
-  @override
   void dispose() {
     _firstNameController.dispose();
     _lastNameController.dispose();
