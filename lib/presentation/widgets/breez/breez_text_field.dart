@@ -47,13 +47,31 @@ class _BreezTextFieldState extends State<BreezTextField> {
   bool _isFocused = false;
   bool _hasError = false;
   String? _errorText;
-  bool _obscureTextInternal = false;
+  late bool _obscureTextInternal;
   final GlobalKey<FormFieldState> _fieldKey = GlobalKey<FormFieldState>();
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
     _obscureTextInternal = widget.obscureText;
+    _focusNode.addListener(_onFocusChange);
+  }
+
+  void _onFocusChange() {
+    setState(() {
+      _isFocused = _focusNode.hasFocus;
+    });
+    if (!_focusNode.hasFocus && !widget.validateOnChange && widget.validator != null) {
+      _validateField();
+    }
+  }
+
+  @override
+  void dispose() {
+    _focusNode.removeListener(_onFocusChange);
+    _focusNode.dispose();
+    super.dispose();
   }
 
   void _validateField() {
@@ -106,91 +124,95 @@ class _BreezTextFieldState extends State<BreezTextField> {
           ),
           const SizedBox(height: AppSpacing.xs),
         ],
-        AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          decoration: BoxDecoration(
-            color: colors.card,
-            borderRadius: BorderRadius.circular(AppRadius.button),
-            border: Border.all(
-              color: _hasError
-                  ? AppColors.accentRed
-                  : _isFocused
-                      ? AppColors.accent
-                      : colors.border,
-              width: _isFocused ? 2 : 1,
-            ),
-          ),
-          child: TextFormField(
-            key: _fieldKey,
-            controller: widget.controller,
-            obscureText: widget.showPasswordToggle ? _obscureTextInternal : widget.obscureText,
-            keyboardType: widget.keyboardType,
-            maxLines: widget.maxLines,
-            enabled: widget.enabled,
-            style: TextStyle(
-              color: colors.text,
-              fontSize: 14,
-            ),
-            decoration: InputDecoration(
-              hintText: widget.hint,
-              hintStyle: TextStyle(
-                color: colors.textMuted,
-                fontSize: 14,
+        Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: colors.card,
+                borderRadius: BorderRadius.circular(AppRadius.button),
+                border: Border.all(
+                  color: _hasError
+                      ? AppColors.accentRed
+                      : _isFocused
+                          ? AppColors.accent
+                          : colors.border,
+                  width: 1,
+                ),
               ),
-              prefixIcon: widget.prefixIcon != null
-                  ? Icon(
-                      widget.prefixIcon,
-                      color: colors.textMuted,
-                      size: 20,
-                    )
-                  : null,
-              suffixIcon: effectiveSuffixIcon,
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: widget.prefixIcon != null ? 0 : AppSpacing.md,
-                vertical: AppSpacing.sm,
+              child: TextFormField(
+                key: _fieldKey,
+                controller: widget.controller,
+                focusNode: _focusNode,
+                obscureText: widget.showPasswordToggle ? _obscureTextInternal : widget.obscureText,
+                keyboardType: widget.keyboardType,
+                maxLines: widget.maxLines,
+                enabled: widget.enabled,
+                style: TextStyle(
+                  color: colors.text,
+                  fontSize: 14,
+                ),
+                decoration: InputDecoration(
+                  hintText: widget.hint,
+                  hintStyle: TextStyle(
+                    color: colors.textMuted,
+                    fontSize: 14,
+                  ),
+                  prefixIcon: widget.prefixIcon != null
+                      ? Icon(
+                          widget.prefixIcon,
+                          color: colors.textMuted,
+                          size: 20,
+                        )
+                      : null,
+                  suffixIcon: effectiveSuffixIcon,
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: widget.prefixIcon != null ? 0 : AppSpacing.md,
+                    vertical: AppSpacing.sm,
+                  ),
+                  helperText: ' ', // Резервирует место для ошибки
+                  helperStyle: const TextStyle(height: 0, fontSize: 0),
+                  errorStyle: const TextStyle(height: 0, fontSize: 0),
+                ),
+                onChanged: (value) {
+                  widget.onChanged?.call(value);
+                  if (widget.validateOnChange && widget.validator != null) {
+                    _validateField();
+                  }
+                },
+                validator: widget.validator,
               ),
-              errorStyle: const TextStyle(height: 0, fontSize: 0),
             ),
-            onChanged: (value) {
-              widget.onChanged?.call(value);
-              if (widget.validateOnChange && widget.validator != null) {
-                _validateField();
-              }
-            },
-            onTap: () => setState(() => _isFocused = true),
-            onTapOutside: (_) {
-              setState(() => _isFocused = false);
-              // Валидация при потере фокуса (если не включена валидация на изменение)
-              if (!widget.validateOnChange && widget.validator != null) {
-                _validateField();
-              }
-            },
-            validator: widget.validator,
-          ),
-        ),
-        if (_hasError && _errorText != null) ...[
-          const SizedBox(height: AppSpacing.xxs),
-          Row(
-            children: [
-              const Icon(
-                Icons.error_outline,
-                size: 12,
-                color: AppColors.accentRed,
-              ),
-              const SizedBox(width: AppSpacing.xxs),
-              Expanded(
-                child: Text(
-                  _errorText!,
-                  style: const TextStyle(
-                    fontSize: 11,
-                    color: AppColors.accentRed,
+            if (_hasError && _errorText != null)
+              Positioned(
+                left: 12,
+                bottom: -7,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  color: colors.card,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(
+                        Icons.error_outline,
+                        size: 12,
+                        color: AppColors.accentRed,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        _errorText!,
+                        style: const TextStyle(
+                          fontSize: 11,
+                          color: AppColors.accentRed,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ],
-          ),
-        ],
+          ],
+        ),
       ],
     );
   }
