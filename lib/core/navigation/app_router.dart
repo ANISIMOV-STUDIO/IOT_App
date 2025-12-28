@@ -9,6 +9,7 @@ import 'package:go_router/go_router.dart';
 import '../../presentation/screens/dashboard/dashboard_screen.dart';
 import '../../presentation/screens/auth/login_screen.dart';
 import '../../presentation/screens/auth/register_screen.dart';
+import '../../presentation/screens/auth/verify_email_screen.dart';
 import '../../core/services/auth_storage_service.dart';
 import '../../core/di/injection_container.dart' as di;
 
@@ -17,6 +18,7 @@ class AppRoutes {
   static const String home = '/';
   static const String login = '/login';
   static const String register = '/register';
+  static const String verifyEmail = '/verify-email';
 }
 
 /// Global router configuration
@@ -37,7 +39,8 @@ GoRouter createRouter() {
       final isSkipped = await authStorage.hasSkipped();
 
       final isGoingToAuth = state.matchedLocation == AppRoutes.login ||
-          state.matchedLocation == AppRoutes.register;
+          state.matchedLocation == AppRoutes.register ||
+          state.matchedLocation == AppRoutes.verifyEmail;
 
       // Если не авторизован и не пропущено и пытается зайти на защищенную страницу
       if (!isAuthenticated && !isSkipped && !isGoingToAuth) {
@@ -80,6 +83,13 @@ GoRouter createRouter() {
         path: AppRoutes.register,
         builder: (context, state) => const RegisterScreen(),
       ),
+      GoRoute(
+        path: AppRoutes.verifyEmail,
+        builder: (context, state) {
+          final email = state.uri.queryParameters['email'] ?? '';
+          return VerifyEmailScreen(email: email);
+        },
+      ),
 
       // Protected routes
       GoRoute(
@@ -95,4 +105,6 @@ extension GoRouterExtensions on BuildContext {
   void goToHome() => go(AppRoutes.home);
   void goToLogin() => go(AppRoutes.login);
   void goToRegister() => go(AppRoutes.register);
+  void goToVerifyEmail(String email) =>
+      go('${AppRoutes.verifyEmail}?email=$email');
 }

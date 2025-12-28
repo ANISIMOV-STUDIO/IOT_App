@@ -104,4 +104,54 @@ class AuthService {
       throw AuthException('Ошибка подключения к серверу: $e');
     }
   }
+
+  /// Подтверждение email по коду
+  Future<void> verifyEmail(VerifyEmailRequest request) async {
+    try {
+      final response = await _client.post(
+        Uri.parse('$_baseUrl/auth/verify-email'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode(request.toJson()),
+      );
+
+      if (response.statusCode == 200) {
+        return;
+      } else {
+        final error = json.decode(response.body);
+        throw AuthException(
+          error['message'] as String? ?? 'Ошибка подтверждения email',
+        );
+      }
+    } catch (e) {
+      if (e is AuthException) rethrow;
+      throw AuthException('Ошибка подключения к серверу: $e');
+    }
+  }
+
+  /// Повторная отправка кода подтверждения
+  Future<void> resendCode(ResendCodeRequest request) async {
+    try {
+      final response = await _client.post(
+        Uri.parse('$_baseUrl/auth/resend-code'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode(request.toJson()),
+      );
+
+      if (response.statusCode == 200) {
+        return;
+      } else {
+        final error = json.decode(response.body);
+        throw AuthException(
+          error['message'] as String? ?? 'Ошибка отправки кода',
+        );
+      }
+    } catch (e) {
+      if (e is AuthException) rethrow;
+      throw AuthException('Ошибка подключения к серверу: $e');
+    }
+  }
 }

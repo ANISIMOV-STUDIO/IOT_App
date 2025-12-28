@@ -65,3 +65,29 @@ class AuthLogoutRequested extends AuthEvent {
 class AuthSkipRequested extends AuthEvent {
   const AuthSkipRequested();
 }
+
+/// Подтверждение email по коду
+class AuthVerifyEmailRequested extends AuthEvent {
+  final String email;
+  final String code;
+
+  const AuthVerifyEmailRequested({
+    required this.email,
+    required this.code,
+  });
+
+  @override
+  List<Object?> get props => [email, code];
+}
+
+/// Повторная отправка кода подтверждения
+class AuthResendCodeRequested extends AuthEvent {
+  final String email;
+
+  const AuthResendCodeRequested({
+    required this.email,
+  });
+
+  @override
+  List<Object?> get props => [email];
+}

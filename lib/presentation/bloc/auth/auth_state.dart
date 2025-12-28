@@ -55,3 +55,13 @@ class AuthError extends AuthState {
 class AuthSkipped extends AuthState {
   const AuthSkipped();
 }
+
+/// Email подтвержден успешно
+class AuthEmailVerified extends AuthState {
+  const AuthEmailVerified();
+}
+
+/// Код подтверждения отправлен повторно
+class AuthCodeResent extends AuthState {
+  const AuthCodeResent();
+}

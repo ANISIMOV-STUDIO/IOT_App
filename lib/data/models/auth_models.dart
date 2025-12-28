@@ -72,3 +72,36 @@ class AuthResponse {
     };
   }
 }
+
+/// Запрос на подтверждение email
+class VerifyEmailRequest {
+  final String email;
+  final String code;
+
+  const VerifyEmailRequest({
+    required this.email,
+    required this.code,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'email': email,
+      'code': code,
+    };
+  }
+}
+
+/// Запрос на повторную отправку кода
+class ResendCodeRequest {
+  final String email;
+
+  const ResendCodeRequest({
+    required this.email,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'email': email,
+    };
+  }
+}

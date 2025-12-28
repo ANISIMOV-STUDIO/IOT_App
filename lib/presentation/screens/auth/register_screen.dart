@@ -14,6 +14,7 @@ import '../../widgets/breez/breez_card.dart';
 import '../../widgets/breez/breez_text_field.dart';
 import '../../widgets/breez/breez_checkbox.dart';
 import '../../../core/constants/auth_constants.dart';
+import '../../../core/navigation/app_router.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_font_sizes.dart';
 import '../../../core/theme/spacing.dart';
@@ -78,7 +79,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthAuthenticated) {
-            context.go('/');
+            // После регистрации проверяем подтверждение email
+            if (!state.user.emailConfirmed) {
+              context.goToVerifyEmail(state.user.email);
+            } else {
+              context.go('/');
+            }
           } else if (state is AuthError) {
             SnackBarUtils.showError(context, state.message);
           }

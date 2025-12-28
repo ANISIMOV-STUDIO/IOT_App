@@ -25,6 +25,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthRegisterRequested>(_onRegisterRequested);
     on<AuthLogoutRequested>(_onLogoutRequested);
     on<AuthSkipRequested>(_onSkipRequested);
+    on<AuthVerifyEmailRequested>(_onVerifyEmailRequested);
+    on<AuthResendCodeRequested>(_onResendCodeRequested);
   }
 
   /// Проверка сохраненной сессии
@@ -122,5 +124,46 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     await _storageService.saveSkipped();
     emit(const AuthSkipped());
+  }
+
+  /// Подтверждение email
+  Future<void> _onVerifyEmailRequested(
+    AuthVerifyEmailRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(const AuthLoading());
+
+    try {
+      final request = VerifyEmailRequest(
+        email: event.email,
+        code: event.code,
+      );
+
+      await _authService.verifyEmail(request);
+
+      emit(const AuthEmailVerified());
+    } catch (e) {
+      emit(AuthError(e.toString()));
+    }
+  }
+
+  /// Повторная отправка кода
+  Future<void> _onResendCodeRequested(
+    AuthResendCodeRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(const AuthLoading());
+
+    try {
+      final request = ResendCodeRequest(
+        email: event.email,
+      );
+
+      await _authService.resendCode(request);
+
+      emit(const AuthCodeResent());
+    } catch (e) {
+      emit(AuthError(e.toString()));
+    }
   }
 }
