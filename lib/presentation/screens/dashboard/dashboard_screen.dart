@@ -68,10 +68,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void _initializeVersionCheck() async {
-    // Initialize version checking
-    await _versionCheckService.initialize(
-      checkInterval: const Duration(minutes: 2),
-    );
+    // Initialize version checking (SignalR + fallback раз в час)
+    await _versionCheckService.initialize();
 
     // Listen for version changes
     _versionSubscription = _versionCheckService.onVersionChanged.listen((versionInfo) {
