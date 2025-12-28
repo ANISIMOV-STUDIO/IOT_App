@@ -33,6 +33,17 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    // Сбрасываем форму и очищаем поля при каждой инициализации
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _formKey.currentState?.reset();
+      _emailController.clear();
+      _passwordController.clear();
+    });
+  }
+
+  @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
