@@ -7,8 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../presentation/screens/dashboard/dashboard_screen.dart';
-import '../../presentation/screens/auth/login_screen.dart';
-import '../../presentation/screens/auth/register_screen.dart';
+import '../../presentation/screens/auth/auth_screen.dart';
 import '../../presentation/screens/auth/verify_email_screen.dart';
 import '../../core/services/auth_storage_service.dart';
 import '../../core/di/injection_container.dart' as di;
@@ -77,14 +76,16 @@ GoRouter createRouter() {
       // Auth routes
       GoRoute(
         path: AppRoutes.login,
-        builder: (context, state) => LoginScreen(
-          key: UniqueKey(),
+        builder: (context, state) => const AuthScreen(
+          key: ValueKey('login'),
+          isRegister: false,
         ),
       ),
       GoRoute(
         path: AppRoutes.register,
-        builder: (context, state) => RegisterScreen(
-          key: UniqueKey(),
+        builder: (context, state) => const AuthScreen(
+          key: ValueKey('register'),
+          isRegister: true,
         ),
       ),
       GoRoute(

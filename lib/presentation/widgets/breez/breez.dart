@@ -4,6 +4,8 @@ library;
 
 export 'breez_card.dart';
 export 'breez_logo.dart';
+export 'breez_text_field.dart';
+export 'breez_checkbox.dart';
 export 'airflow_slider.dart';
 export 'mode_selector.dart';
 export 'unit_tabs.dart';
