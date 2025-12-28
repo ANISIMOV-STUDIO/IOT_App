@@ -6,14 +6,14 @@ import 'package:flutter/foundation.dart';
 class ApiConfig {
   // Backend configuration
   static const String backendHost = '89.207.223.45';
-  static const int grpcPort = 443; // gRPC over TLS
-  static const int httpPort = 443; // HTTPS
+  static const int grpcPort = 8080; // gRPC (backend слушает 8080)
+  static const int httpPort = 8080; // HTTP (backend слушает 8080)
 
   // URLs
-  static String get grpcUrl => 'https://$backendHost:$grpcPort';
-  static String get httpUrl => 'https://$backendHost:$httpPort';
+  static String get grpcUrl => 'http://$backendHost:$grpcPort'; // HTTP (не HTTPS)
+  static String get httpUrl => 'http://$backendHost:$httpPort'; // HTTP (не HTTPS)
   static String get websocketUrl =>
-      'wss://$backendHost:$httpPort/hubs/devices';
+      'ws://$backendHost:$httpPort/hubs/devices'; // WS (не WSS)
 
   // REST API endpoints (for web)
   static String get apiBaseUrl => '$httpUrl/api';
