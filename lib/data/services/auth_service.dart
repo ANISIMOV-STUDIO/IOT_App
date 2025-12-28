@@ -3,7 +3,6 @@ library;
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../models/auth_models.dart';
 import '../../domain/entities/user.dart';
@@ -23,7 +22,10 @@ class AuthService {
   late final String _baseUrl;
 
   AuthService(this._client) {
-    _baseUrl = dotenv.env['API_BASE_URL'] ?? 'http://localhost:8080/api';
+    _baseUrl = const String.fromEnvironment(
+      'API_BASE_URL',
+      defaultValue: 'http://localhost:8080/api',
+    );
   }
 
   /// Регистрация нового пользователя
