@@ -44,6 +44,16 @@ jobs:
             type=sha,prefix=
             type=raw,value=latest,enable={{is_default_branch}}
 
+      - name: Создание .env для продакшена
+        run: |
+          cat > .env << EOF
+          ENVIRONMENT=production
+          API_BASE_URL=${{ secrets.PROD_API_URL }}
+          APP_VERSION=${{ github.sha }}
+          ENABLE_ANALYTICS=true
+          ENABLE_CRASH_REPORTING=true
+          EOF
+
       - name: Сборка и публикация Docker образа
         uses: docker/build-push-action@v5
         with:
