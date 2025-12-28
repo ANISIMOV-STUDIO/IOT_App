@@ -30,15 +30,20 @@ class AuthUnauthenticated extends AuthState {
 /// Пользователь авторизован
 class AuthAuthenticated extends AuthState {
   final User user;
-  final String token;
+  final String accessToken;
+  final String refreshToken;
 
   const AuthAuthenticated({
     required this.user,
-    required this.token,
+    required this.accessToken,
+    required this.refreshToken,
   });
 
+  /// Для обратной совместимости
+  String get token => accessToken;
+
   @override
-  List<Object?> get props => [user, token];
+  List<Object?> get props => [user, accessToken, refreshToken];
 }
 
 /// Ошибка аутентификации

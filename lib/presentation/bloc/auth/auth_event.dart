@@ -61,6 +61,11 @@ class AuthLogoutRequested extends AuthEvent {
   const AuthLogoutRequested();
 }
 
+/// Выход со всех устройств
+class AuthLogoutAllRequested extends AuthEvent {
+  const AuthLogoutAllRequested();
+}
+
 /// Пропуск авторизации (только для разработки)
 class AuthSkipRequested extends AuthEvent {
   const AuthSkipRequested();

@@ -84,19 +84,22 @@ Future<void> init() async {
   sl.registerLazySingleton(() => AuthStorageService(sl()));
   await sl<LanguageService>().initializeDefaults();
 
-  //! API Client (Platform-specific: gRPC для mobile/desktop, HTTP для web)
-  if (USE_REAL_API) {
-    sl.registerLazySingleton<ApiClient>(
-      () => ApiClientFactory.create(sl<AuthStorageService>()),
-    );
-  }
-
-  //! Auth Feature - Аутентификация
+  //! Auth Feature - Аутентификация (должен быть ПЕРЕД ApiClient)
   sl.registerLazySingleton(() => AuthService(sl()));
   sl.registerFactory(() => AuthBloc(
         authService: sl(),
         storageService: sl(),
       ));
+
+  //! API Client (Platform-specific: gRPC для mobile/desktop, HTTP для web)
+  if (USE_REAL_API) {
+    sl.registerLazySingleton<ApiClient>(
+      () => ApiClientFactory.create(
+        sl<AuthStorageService>(),
+        sl<AuthService>(),
+      ),
+    );
+  }
 
   //! Dashboard Feature - Главный экран
 

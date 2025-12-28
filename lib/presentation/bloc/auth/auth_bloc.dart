@@ -24,6 +24,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthLoginRequested>(_onLoginRequested);
     on<AuthRegisterRequested>(_onRegisterRequested);
     on<AuthLogoutRequested>(_onLogoutRequested);
+    on<AuthLogoutAllRequested>(_onLogoutAllRequested);
     on<AuthSkipRequested>(_onSkipRequested);
     on<AuthVerifyEmailRequested>(_onVerifyEmailRequested);
     on<AuthResendCodeRequested>(_onResendCodeRequested);
@@ -37,11 +38,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(const AuthLoading());
 
     try {
-      final token = await _storageService.getToken();
+      final accessToken = await _storageService.getToken();
+      final refreshToken = await _storageService.getRefreshToken();
 
-      if (token != null && token.isNotEmpty) {
-        final user = await _authService.getCurrentUser(token);
-        emit(AuthAuthenticated(user: user, token: token));
+      if (accessToken != null && accessToken.isNotEmpty &&
+          refreshToken != null && refreshToken.isNotEmpty) {
+        final user = await _authService.getCurrentUser(accessToken);
+        emit(AuthAuthenticated(
+          user: user,
+          accessToken: accessToken,
+          refreshToken: refreshToken,
+        ));
       } else {
         emit(const AuthUnauthenticated());
       }
@@ -66,12 +73,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       final response = await _authService.login(request);
 
-      await _storageService.saveToken(response.token);
+      // Сохранить оба токена
+      await _storageService.saveTokens(
+        response.accessToken,
+        response.refreshToken,
+      );
       await _storageService.saveUserId(response.user.id);
 
       emit(AuthAuthenticated(
         user: response.user,
-        token: response.token,
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
       ));
     } catch (e) {
       emit(AuthError(e.toString()));
@@ -111,6 +123,33 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthLogoutRequested event,
     Emitter<AuthState> emit,
   ) async {
+    try {
+      final refreshToken = await _storageService.getRefreshToken();
+      if (refreshToken != null && refreshToken.isNotEmpty) {
+        await _authService.logout(refreshToken);
+      }
+    } catch (e) {
+      // Логировать, но продолжить logout
+    }
+
+    await _storageService.deleteToken();
+    emit(const AuthUnauthenticated());
+  }
+
+  /// Выход со всех устройств
+  Future<void> _onLogoutAllRequested(
+    AuthLogoutAllRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    try {
+      final accessToken = await _storageService.getToken();
+      if (accessToken != null && accessToken.isNotEmpty) {
+        await _authService.logoutAll(accessToken);
+      }
+    } catch (e) {
+      // Логировать, но продолжить logout
+    }
+
     await _storageService.deleteToken();
     emit(const AuthUnauthenticated());
   }
