@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/di/injection_container.dart' as di;
+import '../../../core/navigation/app_router.dart';
 import '../../../core/services/theme_service.dart';
 import '../../../core/services/version_check_service.dart';
 import '../../../core/theme/app_theme.dart';
@@ -195,7 +196,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthUnauthenticated) {
-          context.go('/login');
+          // Небольшая задержка для гарантии очистки storage
+          Future.delayed(const Duration(milliseconds: 100), () {
+            if (context.mounted) {
+              context.go(AppRoutes.login);
+            }
+          });
         }
       },
       child: Scaffold(
