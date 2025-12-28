@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 
 import '../models/auth_models.dart';
 import '../../domain/entities/user.dart';
+import '../../core/config/api_config.dart';
 
 /// Исключение авторизации
 class AuthException implements Exception {
@@ -22,10 +23,7 @@ class AuthService {
   late final String _baseUrl;
 
   AuthService(this._client) {
-    _baseUrl = const String.fromEnvironment(
-      'API_BASE_URL',
-      defaultValue: 'http://localhost:8080/api',
-    );
+    _baseUrl = ApiConfig.apiBaseUrl;
   }
 
   /// Регистрация нового пользователя
@@ -154,6 +152,66 @@ class AuthService {
     } catch (e) {
       if (e is AuthException) rethrow;
       throw AuthException('Ошибка подключения к серверу: $e');
+    }
+  }
+
+  /// Обновление токенов через refresh token
+  Future<AuthResponse> refreshToken(String refreshToken) async {
+    try {
+      final response = await _client.post(
+        Uri.parse('$_baseUrl/auth/refresh'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode(RefreshTokenRequest(refreshToken: refreshToken).toJson()),
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body) as Map<String, dynamic>;
+        return AuthResponse.fromJson(data);
+      } else if (response.statusCode == 401) {
+        throw const AuthException('Refresh token истек или недействителен');
+      } else {
+        final error = json.decode(response.body);
+        throw AuthException(
+          error['message'] as String? ?? 'Ошибка обновления токена',
+        );
+      }
+    } catch (e) {
+      if (e is AuthException) rethrow;
+      throw AuthException('Ошибка подключения к серверу: $e');
+    }
+  }
+
+  /// Выход из системы (отзыв refresh token)
+  Future<void> logout(String refreshToken) async {
+    try {
+      await _client.post(
+        Uri.parse('$_baseUrl/auth/logout'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode(LogoutRequest(refreshToken: refreshToken).toJson()),
+      );
+      // Игнорируем ответ - logout всегда должен быть успешным на клиенте
+    } catch (e) {
+      // Логировать, но не выбрасывать - logout должен быть успешным
+    }
+  }
+
+  /// Выход со всех устройств
+  Future<void> logoutAll(String accessToken) async {
+    try {
+      await _client.post(
+        Uri.parse('$_baseUrl/auth/logout-all'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $accessToken',
+        },
+      );
+      // Игнорируем ответ - logout всегда должен быть успешным на клиенте
+    } catch (e) {
+      // Логировать, но не выбрасывать - logout должен быть успешным
     }
   }
 }

@@ -50,24 +50,29 @@ class LoginRequest {
 
 /// Ответ при успешной аутентификации
 class AuthResponse {
-  final String token;
+  final String accessToken;
+  final String refreshToken;
   final User user;
 
   const AuthResponse({
-    required this.token,
+    required this.accessToken,
+    required this.refreshToken,
     required this.user,
   });
 
   factory AuthResponse.fromJson(Map<String, dynamic> json) {
     return AuthResponse(
-      token: json['token'] as String,
+      // Поддержка старого формата (token) и нового (accessToken)
+      accessToken: (json['accessToken'] ?? json['token']) as String,
+      refreshToken: json['refreshToken'] as String,
       user: User.fromJson(json['user'] as Map<String, dynamic>),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'token': token,
+      'accessToken': accessToken,
+      'refreshToken': refreshToken,
       'user': user.toJson(),
     };
   }
@@ -123,6 +128,36 @@ class ResendCodeRequest {
   Map<String, dynamic> toJson() {
     return {
       'email': email,
+    };
+  }
+}
+
+/// Запрос на обновление токенов через refresh token
+class RefreshTokenRequest {
+  final String refreshToken;
+
+  const RefreshTokenRequest({
+    required this.refreshToken,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'refreshToken': refreshToken,
+    };
+  }
+}
+
+/// Запрос на выход из системы
+class LogoutRequest {
+  final String refreshToken;
+
+  const LogoutRequest({
+    required this.refreshToken,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'refreshToken': refreshToken,
     };
   }
 }
