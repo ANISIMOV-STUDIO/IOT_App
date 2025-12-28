@@ -20,6 +20,9 @@ import '../../widgets/breez/breez.dart';
 import '../../bloc/auth/auth_bloc.dart';
 import '../../bloc/auth/auth_event.dart';
 import '../../bloc/auth/auth_state.dart';
+import '../../bloc/dashboard/dashboard_bloc.dart';
+import '../../../domain/entities/hvac_device.dart';
+import '../../../domain/entities/climate.dart';
 import 'dialogs/add_unit_dialog.dart';
 import 'dialogs/update_available_dialog.dart';
 import 'layouts/desktop_layout.dart';
@@ -57,6 +60,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     super.initState();
+    // Units будут загружены из DashboardBloc, fallback на MockData
     _units = MockData.units.map((u) => UnitState.fromJson(u)).toList();
     _themeService = di.sl<ThemeService>();
     _versionCheckService = di.sl<VersionCheckService>();
@@ -65,6 +69,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
     _graphDataRepository = di.sl<GraphDataRepository>();
     _loadData();
     _initializeVersionCheck();
+  }
+
+  /// Создать UnitState из HvacDevice и ClimateState
+  UnitState _createUnitStateFromHvacDevice(HvacDevice device, ClimateState? climate) {
+    return UnitState(
+      id: device.id,
+      name: device.name,
+      power: climate?.isOn ?? false,
+      temp: climate?.currentTemperature.toInt() ?? 20,
+      supplyFan: climate?.supplyAirflow.toInt() ?? 50,
+      exhaustFan: climate?.exhaustAirflow.toInt() ?? 50,
+      mode: climate?.mode.toString().split('.').last ?? 'auto',
+      humidity: climate?.humidity.toInt() ?? 45,
+      outsideTemp: 15, // TODO: Получать из API
+      filterPercent: 85, // TODO: Получать из API
+      airflowRate: 250, // TODO: Получать из API
+    );
   }
 
   void _initializeVersionCheck() async {
@@ -195,37 +216,59 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final width = MediaQuery.sizeOf(context).width;
     final isDesktop = width > 900;
 
-    return BlocListener<AuthBloc, AuthState>(
-      listener: (context, state) {
-        if (state is AuthUnauthenticated) {
-          // Небольшая задержка для гарантии очистки storage
-          Future.delayed(const Duration(milliseconds: 100), () {
-            if (context.mounted) {
-              context.go(AppRoutes.login);
-            }
-          });
+    return BlocBuilder<DashboardBloc, DashboardState>(
+      builder: (context, dashboardState) {
+        // Используем данные из DashboardBloc если есть, иначе fallback на MockData
+        final units = dashboardState.hvacDevices.isNotEmpty
+            ? dashboardState.hvacDevices
+                .map((device) {
+                  // Использовать climate только для выбранного устройства
+                  final climate = device.id == dashboardState.selectedHvacDeviceId
+                      ? dashboardState.climate
+                      : null;
+                  return _createUnitStateFromHvacDevice(device, climate);
+                })
+                .toList()
+            : _units;
+
+        // Обновляем _units если пришли новые данные
+        if (units != _units && units.isNotEmpty) {
+          Future.microtask(() => setState(() => _units = units));
         }
-      },
-      child: Scaffold(
-        key: _scaffoldKey,
-        backgroundColor: isDark ? AppColors.darkBg : AppColors.lightBg,
-        body: SafeArea(
-          child: Column(
-            children: [
-              // Main content
-              Expanded(
-                child: isDesktop ? _buildDesktopLayout(isDark) : _buildMobileLayout(isDark, width),
+
+        return BlocListener<AuthBloc, AuthState>(
+          listener: (context, state) {
+            if (state is AuthUnauthenticated) {
+              // Небольшая задержка для гарантии очистки storage
+              Future.delayed(const Duration(milliseconds: 100), () {
+                if (context.mounted) {
+                  context.go(AppRoutes.login);
+                }
+              });
+            }
+          },
+          child: Scaffold(
+            key: _scaffoldKey,
+            backgroundColor: isDark ? AppColors.darkBg : AppColors.lightBg,
+            body: SafeArea(
+              child: Column(
+                children: [
+                  // Main content
+                  Expanded(
+                    child: isDesktop ? _buildDesktopLayout(isDark) : _buildMobileLayout(isDark, width),
+                  ),
+
+                  // Space between content and bottom bar
+                  if (!isDesktop) const SizedBox(height: AppSpacing.sm),
+
+                  // Bottom navigation bar (mobile/tablet only)
+                  if (!isDesktop) _buildBottomBar(),
+                ],
               ),
-
-              // Space between content and bottom bar
-              if (!isDesktop) const SizedBox(height: AppSpacing.sm),
-
-              // Bottom navigation bar (mobile/tablet only)
-              if (!isDesktop) _buildBottomBar(),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 

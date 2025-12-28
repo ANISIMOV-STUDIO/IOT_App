@@ -4,11 +4,13 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../presentation/screens/dashboard/dashboard_screen.dart';
 import '../../presentation/screens/auth/auth_screen.dart';
 import '../../presentation/screens/auth/verify_email_screen.dart';
+import '../../presentation/bloc/dashboard/dashboard_bloc.dart';
 import '../../core/services/auth_storage_service.dart';
 import '../../core/di/injection_container.dart' as di;
 
@@ -103,7 +105,10 @@ GoRouter createRouter() {
       // Protected routes
       GoRoute(
         path: AppRoutes.home,
-        builder: (context, state) => const DashboardScreen(),
+        builder: (context, state) => BlocProvider(
+          create: (context) => di.sl<DashboardBloc>()..add(const DashboardStarted()),
+          child: const DashboardScreen(),
+        ),
       ),
     ],
   );
