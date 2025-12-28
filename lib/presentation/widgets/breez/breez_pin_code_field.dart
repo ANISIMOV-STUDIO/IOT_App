@@ -114,7 +114,7 @@ class _BreezPinCodeFieldState extends State<BreezPinCodeField> {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
-    final hasError = widget.errorText != null && widget.errorText!.isNotEmpty;
+    final hasError = widget.errorText?.isNotEmpty ?? false;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -182,7 +182,7 @@ class _BreezPinCodeFieldState extends State<BreezPinCodeField> {
           Padding(
             padding: const EdgeInsets.only(left: AppSpacing.xs),
             child: Text(
-              widget.errorText!,
+              widget.errorText ?? '',
               style: const TextStyle(
                 fontSize: 12,
                 color: AppColors.critical,
