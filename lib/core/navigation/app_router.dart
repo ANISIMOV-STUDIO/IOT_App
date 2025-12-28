@@ -91,7 +91,11 @@ GoRouter createRouter() {
         path: AppRoutes.verifyEmail,
         builder: (context, state) {
           final email = state.uri.queryParameters['email'] ?? '';
-          return VerifyEmailScreen(email: email);
+          final password = state.extra as String? ?? '';
+          return VerifyEmailScreen(
+            email: email,
+            password: password,
+          );
         },
       ),
 
@@ -109,6 +113,6 @@ extension GoRouterExtensions on BuildContext {
   void goToHome() => go(AppRoutes.home);
   void goToLogin() => go(AppRoutes.login);
   void goToRegister() => go(AppRoutes.register);
-  void goToVerifyEmail(String email) =>
-      go('${AppRoutes.verifyEmail}?email=$email');
+  void goToVerifyEmail(String email, {String? password}) =>
+      go('${AppRoutes.verifyEmail}?email=$email', extra: password);
 }

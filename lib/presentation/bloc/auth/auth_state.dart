@@ -56,6 +56,20 @@ class AuthSkipped extends AuthState {
   const AuthSkipped();
 }
 
+/// Регистрация успешна, требуется подтверждение email
+class AuthRegistered extends AuthState {
+  final String email;
+  final String password;
+
+  const AuthRegistered({
+    required this.email,
+    required this.password,
+  });
+
+  @override
+  List<Object?> get props => [email, password];
+}
+
 /// Email подтвержден успешно
 class AuthEmailVerified extends AuthState {
   const AuthEmailVerified();

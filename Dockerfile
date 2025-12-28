@@ -13,6 +13,12 @@ RUN flutter pub get
 # Копируем остальные файлы приложения
 COPY . .
 
+# Создаём .env файл из build args
+ARG API_BASE_URL=http://localhost:8080/api
+ARG ENVIRONMENT=production
+RUN echo "API_BASE_URL=${API_BASE_URL}" > .env && \
+    echo "ENVIRONMENT=${ENVIRONMENT}" >> .env
+
 # Собираем релизную версию для web
 RUN flutter build web --release
 

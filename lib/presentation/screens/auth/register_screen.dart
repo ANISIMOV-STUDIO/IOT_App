@@ -78,13 +78,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
       backgroundColor: colors.bg,
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
-          if (state is AuthAuthenticated) {
-            // После регистрации проверяем подтверждение email
-            if (!state.user.emailConfirmed) {
-              context.goToVerifyEmail(state.user.email);
-            } else {
-              context.go('/');
-            }
+          if (state is AuthRegistered) {
+            // После регистрации требуется подтверждение email
+            context.goToVerifyEmail(state.email, password: state.password);
           } else if (state is AuthError) {
             SnackBarUtils.showError(context, state.message);
           }

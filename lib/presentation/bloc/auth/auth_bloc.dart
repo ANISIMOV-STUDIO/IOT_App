@@ -96,12 +96,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       final response = await _authService.register(request);
 
-      await _storageService.saveToken(response.token);
-      await _storageService.saveUserId(response.user.id);
-
-      emit(AuthAuthenticated(
-        user: response.user,
-        token: response.token,
+      // Регистрация успешна, требуется подтверждение email
+      emit(AuthRegistered(
+        email: response.email,
+        password: event.password,
       ));
     } catch (e) {
       emit(AuthError(e.toString()));

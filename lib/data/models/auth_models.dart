@@ -73,6 +73,27 @@ class AuthResponse {
   }
 }
 
+/// Ответ при успешной регистрации
+class RegisterResponse {
+  final String message;
+  final String email;
+  final bool requiresEmailVerification;
+
+  const RegisterResponse({
+    required this.message,
+    required this.email,
+    required this.requiresEmailVerification,
+  });
+
+  factory RegisterResponse.fromJson(Map<String, dynamic> json) {
+    return RegisterResponse(
+      message: json['message'] as String,
+      email: json['email'] as String,
+      requiresEmailVerification: json['requiresEmailVerification'] as bool,
+    );
+  }
+}
+
 /// Запрос на подтверждение email
 class VerifyEmailRequest {
   final String email;

@@ -27,7 +27,7 @@ class AuthService {
   }
 
   /// Регистрация нового пользователя
-  Future<AuthResponse> register(RegisterRequest request) async {
+  Future<RegisterResponse> register(RegisterRequest request) async {
     try {
       final response = await _client.post(
         Uri.parse('$_baseUrl/auth/register'),
@@ -39,7 +39,7 @@ class AuthService {
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body) as Map<String, dynamic>;
-        return AuthResponse.fromJson(data);
+        return RegisterResponse.fromJson(data);
       } else {
         final error = json.decode(response.body);
         throw AuthException(

@@ -20,10 +20,12 @@ import '../../widgets/breez/breez_card.dart';
 /// Экран подтверждения email с вводом 6-значного кода
 class VerifyEmailScreen extends StatefulWidget {
   final String email;
+  final String password;
 
   const VerifyEmailScreen({
     super.key,
     required this.email,
+    required this.password,
   });
 
   @override
@@ -67,6 +69,15 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
       listener: (context, state) {
         if (state is AuthEmailVerified) {
           SnackBarUtils.showSuccess(context, 'Email успешно подтверждён');
+          // Автоматический вход после подтверждения email
+          context.read<AuthBloc>().add(
+                AuthLoginRequested(
+                  email: widget.email,
+                  password: widget.password,
+                ),
+              );
+        } else if (state is AuthAuthenticated) {
+          // Успешный вход после верификации
           context.go(AppRoutes.home);
         } else if (state is AuthCodeResent) {
           SnackBarUtils.showSuccess(context, 'Код отправлен на email');
@@ -182,24 +193,6 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                             ),
                           );
                         },
-                      ),
-                      const SizedBox(height: AppSpacing.md),
-
-                      // Кнопка "Позже"
-                      GestureDetector(
-                        onTap: () => context.go('/'),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: Text(
-                            'Подтвердить позже',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: colors.textMuted,
-                              fontSize: 14,
-                              decoration: TextDecoration.underline,
-                            ),
-                          ),
-                        ),
                       ),
                     ],
                   ),
