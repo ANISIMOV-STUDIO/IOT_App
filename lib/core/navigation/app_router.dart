@@ -26,6 +26,9 @@ class AppRoutes {
 final GlobalKey<NavigatorState> _rootNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'root');
 
+/// Экспортируем для использования в navigation без context
+GlobalKey<NavigatorState> get rootNavigatorKey => _rootNavigatorKey;
+
 /// Creates the GoRouter instance
 GoRouter createRouter() {
   return GoRouter(

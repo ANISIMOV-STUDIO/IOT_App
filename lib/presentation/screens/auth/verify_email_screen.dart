@@ -61,25 +61,21 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthEmailVerified) {
-          if (mounted) {
-            SnackBarUtils.showSuccess(context, 'Email успешно подтверждён');
-            // Автоматический вход после подтверждения email
-            context.read<AuthBloc>().add(
-                  AuthLoginRequested(
-                    email: widget.email,
-                    password: widget.password,
-                  ),
-                );
-          }
+          SnackBarUtils.showSuccess(context, 'Email успешно подтверждён');
+          // Автоматический вход после подтверждения email
+          context.read<AuthBloc>().add(
+                AuthLoginRequested(
+                  email: widget.email,
+                  password: widget.password,
+                ),
+              );
         } else if (state is AuthAuthenticated) {
           // Успешный вход после верификации
-          if (mounted) {
-            context.go(AppRoutes.home);
-          }
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            rootNavigatorKey.currentContext?.go(AppRoutes.home);
+          });
         } else if (state is AuthCodeResent) {
-          if (mounted) {
-            SnackBarUtils.showSuccess(context, 'Код отправлен на email');
-          }
+          SnackBarUtils.showSuccess(context, 'Код отправлен на email');
         } else if (state is AuthError) {
           if (mounted) {
             setState(() => _errorText = state.message);

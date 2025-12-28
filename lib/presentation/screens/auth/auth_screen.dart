@@ -51,21 +51,17 @@ class _AuthScreenState extends State<AuthScreen> {
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthAuthenticated || state is AuthSkipped) {
-            if (mounted) {
-              // Небольшая задержка чтобы токен успел сохраниться
-              Future.delayed(const Duration(milliseconds: 100), () {
-                if (mounted) {
-                  context.go('/');
-                }
-              });
-            }
+            // Используем global navigator key для надежной навигации
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              rootNavigatorKey.currentContext?.go(AppRoutes.home);
+            });
           } else if (state is AuthRegistered) {
-            if (mounted) {
-              context.go(
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              rootNavigatorKey.currentContext?.go(
                 '${AppRoutes.verifyEmail}?email=${Uri.encodeComponent(state.email)}',
                 extra: state.password,
               );
-            }
+            });
           }
         },
         child: Center(

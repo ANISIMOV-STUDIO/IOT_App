@@ -13,6 +13,7 @@ import '../../widgets/breez/breez_card.dart';
 import '../../widgets/breez/breez_text_field.dart';
 import '../../widgets/breez/breez_logo.dart';
 import '../../../core/constants/auth_constants.dart';
+import '../../../core/navigation/app_router.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_font_sizes.dart';
 import '../../../core/theme/spacing.dart';
@@ -63,14 +64,10 @@ class _LoginScreenState extends State<LoginScreen> {
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthAuthenticated || state is AuthSkipped) {
-            if (mounted) {
-              // Небольшая задержка чтобы токен успел сохраниться
-              Future.delayed(const Duration(milliseconds: 100), () {
-                if (mounted) {
-                  context.go('/');
-                }
-              });
-            }
+            // Используем global navigator key для надежной навигации
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              rootNavigatorKey.currentContext?.go(AppRoutes.home);
+            });
           } else if (state is AuthError) {
             SnackBarUtils.showError(context, state.message);
           }
