@@ -57,7 +57,7 @@ Future<void> init() async {
   //! Core - Services
   sl.registerLazySingleton(() => LanguageService(sl()));
   sl.registerLazySingleton(() => ThemeService());
-  sl.registerLazySingleton(() => VersionCheckService());
+  sl.registerLazySingleton(() => VersionCheckService(sl()));
   sl.registerLazySingleton(() => AuthStorageService(sl()));
   await sl<LanguageService>().initializeDefaults();
 

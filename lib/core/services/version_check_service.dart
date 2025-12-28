@@ -5,9 +5,18 @@ import '../../domain/entities/version_info.dart';
 
 /// Service for checking app version updates
 class VersionCheckService {
+  final http.Client _client;
+  final String _baseUrl;
+
   VersionInfo? _currentVersion;
   Timer? _checkTimer;
   final _versionChangedController = StreamController<VersionInfo>.broadcast();
+
+  VersionCheckService(this._client)
+      : _baseUrl = const String.fromEnvironment(
+          'API_BASE_URL',
+          defaultValue: 'http://localhost:8080/api',
+        );
 
   /// Stream that emits when a new version is detected
   Stream<VersionInfo> get onVersionChanged => _versionChangedController.stream;
@@ -42,13 +51,18 @@ class VersionCheckService {
   /// Fetch version from server
   Future<VersionInfo?> _fetchVersion() async {
     try {
-      // Add cache-busting parameter
-      final uri = Uri.parse('/version.json?t=${DateTime.now().millisecondsSinceEpoch}');
-      final response = await http.get(uri);
+      final uri = Uri.parse('$_baseUrl/releases/latest');
+      final response = await _client.get(uri);
 
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body) as Map<String, dynamic>;
-        return VersionInfo.fromJson(json);
+
+        // API возвращает: { version, title, changelog, releaseDate, buildTime }
+        return VersionInfo(
+          version: json['version'] as String,
+          buildTime: DateTime.parse(json['buildTime'] as String),
+          changelog: json['changelog'] as String?,
+        );
       }
     } catch (e) {
       // Return null on error
