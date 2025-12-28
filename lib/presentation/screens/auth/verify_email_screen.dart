@@ -15,6 +15,7 @@ import '../../bloc/auth/auth_event.dart';
 import '../../bloc/auth/auth_state.dart';
 import '../../widgets/auth/auth_header.dart';
 import '../../widgets/breez/breez_pin_code_field.dart';
+import '../../widgets/breez/breez_text_button.dart';
 
 /// Экран подтверждения email с вводом 6-значного кода
 class VerifyEmailScreen extends StatefulWidget {
@@ -135,21 +136,11 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                       builder: (context, state) {
                         final isLoading = state is AuthLoading;
 
-                        return GestureDetector(
-                          onTap: isLoading ? null : _handleResendCode,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: Text(
-                              'Отправить код повторно',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: isLoading
-                                    ? colors.textMuted
-                                    : AppColors.accent,
-                                fontSize: 14,
-                                decoration: TextDecoration.underline,
-                              ),
-                            ),
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: BreezTextButton(
+                            text: 'Отправить код повторно',
+                            onPressed: isLoading ? null : _handleResendCode,
                           ),
                         );
                       },
