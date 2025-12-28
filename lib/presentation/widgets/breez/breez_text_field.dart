@@ -148,6 +148,7 @@ class _BreezTextFieldState extends State<BreezTextField> {
                 keyboardType: widget.keyboardType,
                 maxLines: widget.maxLines,
                 enabled: widget.enabled,
+                textAlignVertical: TextAlignVertical.center,
                 style: TextStyle(
                   color: colors.text,
                   fontSize: 14,
@@ -159,17 +160,27 @@ class _BreezTextFieldState extends State<BreezTextField> {
                     fontSize: 14,
                   ),
                   prefixIcon: widget.prefixIcon != null
-                      ? Icon(
-                          widget.prefixIcon,
-                          color: colors.textMuted,
-                          size: 20,
+                      ? Align(
+                          widthFactor: 1.0,
+                          heightFactor: 1.0,
+                          child: Icon(
+                            widget.prefixIcon,
+                            color: colors.textMuted,
+                            size: 20,
+                          ),
                         )
                       : null,
-                  suffixIcon: effectiveSuffixIcon,
+                  suffixIcon: effectiveSuffixIcon != null
+                      ? Align(
+                          widthFactor: 1.0,
+                          heightFactor: 1.0,
+                          child: effectiveSuffixIcon,
+                        )
+                      : null,
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.symmetric(
                     horizontal: widget.prefixIcon != null ? 0 : AppSpacing.md,
-                    vertical: AppSpacing.sm,
+                    vertical: AppSpacing.md,
                   ),
                   helperText: ' ', // Резервирует место для ошибки
                   helperStyle: const TextStyle(height: 0, fontSize: 0),
