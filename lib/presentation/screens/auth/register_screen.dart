@@ -119,6 +119,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             hint: 'Иван',
                             prefixIcon: Icons.person_outline,
                             validator: (v) => Validators.name(v, fieldName: 'имя'),
+                            validateOnChange: true,
                           ),
                           const SizedBox(height: AppSpacing.md),
 
@@ -130,6 +131,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             prefixIcon: Icons.person_outline,
                             validator: (v) =>
                                 Validators.name(v, fieldName: 'фамилию'),
+                            validateOnChange: true,
                           ),
                           const SizedBox(height: AppSpacing.md),
 
@@ -141,6 +143,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             prefixIcon: Icons.email_outlined,
                             keyboardType: TextInputType.emailAddress,
                             validator: Validators.email,
+                            validateOnChange: true,
                           ),
                           const SizedBox(height: AppSpacing.md),
 
@@ -152,6 +155,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             prefixIcon: Icons.lock_outlined,
                             validator: Validators.password,
                             showPasswordToggle: true,
+                            validateOnChange: true,
                           ),
                           const SizedBox(height: AppSpacing.md),
 
@@ -165,6 +169,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               _passwordController.text,
                             ),
                             showPasswordToggle: true,
+                            validateOnChange: true,
                           ),
                           const SizedBox(height: AppSpacing.lg),
 

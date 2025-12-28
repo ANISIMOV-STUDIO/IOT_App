@@ -99,6 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             prefixIcon: Icons.email_outlined,
                             keyboardType: TextInputType.emailAddress,
                             validator: Validators.email,
+                            validateOnChange: true,
                           ),
                           const SizedBox(height: AppSpacing.md),
 
@@ -109,6 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             prefixIcon: Icons.lock_outlined,
                             validator: Validators.password,
                             showPasswordToggle: true,
+                            validateOnChange: true,
                           ),
                           const SizedBox(height: AppSpacing.xs),
 
