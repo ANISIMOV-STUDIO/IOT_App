@@ -2,10 +2,14 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'dart:html' as html;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import '../../../widgets/breez/breez_card.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/spacing.dart';
+
+// Conditional import для web-специфичных функций
+import 'update_available_dialog_stub.dart'
+    if (dart.library.html) 'update_available_dialog_web.dart';
 
 class UpdateAvailableDialog extends StatelessWidget {
   const UpdateAvailableDialog({super.key});
@@ -19,7 +23,9 @@ class UpdateAvailableDialog extends StatelessWidget {
   }
 
   void _reloadPage() {
-    html.window.location.reload();
+    if (kIsWeb) {
+      reloadWebPage();
+    }
   }
 
   @override

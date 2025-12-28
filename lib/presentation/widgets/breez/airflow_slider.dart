@@ -173,16 +173,16 @@ class _FanOverlayPainter extends CustomPainter {
   final double rotation;
   final Color color;
   final bool isActive;
-  final double radius;
-  final int bladeCount;
+
+  // Константы для внешнего вида вентилятора
+  static const double radius = 12;
+  static const int bladeCount = 3;
 
   const _FanOverlayPainter({
     required this.thumbX,
     required this.rotation,
     required this.color,
     this.isActive = true,
-    this.radius = 12,
-    this.bladeCount = 3,
   });
 
   @override
@@ -223,7 +223,7 @@ class _FanOverlayPainter extends CustomPainter {
       canvas.rotate(i * (2 * math.pi / bladeCount));
 
       final path = Path();
-      final bladeLength = radius - 2;
+      const bladeLength = radius - 2;
       const bladeWidth = 5.0;
 
       path.moveTo(0, -3);
