@@ -11,16 +11,37 @@ import '../../../../core/theme/spacing.dart';
 import 'update_available_dialog_stub.dart'
     if (dart.library.html) 'update_available_dialog_web.dart';
 
-class UpdateAvailableDialog extends StatelessWidget {
-  const UpdateAvailableDialog({super.key});
+class UpdateAvailableDialog extends StatefulWidget {
+  final String? version;
+  final String? changelog;
 
-  static Future<void> show(BuildContext context) async {
+  const UpdateAvailableDialog({
+    super.key,
+    this.version,
+    this.changelog,
+  });
+
+  static Future<void> show(
+    BuildContext context, {
+    String? version,
+    String? changelog,
+  }) async {
     return showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => const UpdateAvailableDialog(),
+      builder: (context) => UpdateAvailableDialog(
+        version: version,
+        changelog: changelog,
+      ),
     );
   }
+
+  @override
+  State<UpdateAvailableDialog> createState() => _UpdateAvailableDialogState();
+}
+
+class _UpdateAvailableDialogState extends State<UpdateAvailableDialog> {
+  bool _showChangelog = false;
 
   void _reloadPage() {
     if (kIsWeb) {
@@ -60,7 +81,9 @@ class UpdateAvailableDialog extends StatelessWidget {
 
               // Title
               Text(
-                'Доступна новая версия',
+                widget.version != null
+                    ? 'Доступна версия ${widget.version}'
+                    : 'Доступна новая версия',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
@@ -81,39 +104,130 @@ class UpdateAvailableDialog extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
 
+              // Changelog section
+              if (widget.changelog != null && widget.changelog!.isNotEmpty) ...[
+                const SizedBox(height: AppSpacing.md),
+
+                // Toggle changelog button
+                if (!_showChangelog)
+                  GestureDetector(
+                    onTap: () => setState(() => _showChangelog = true),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: AppSpacing.xs,
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: const [
+                          Text(
+                            'Что нового?',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: AppColors.accent,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          SizedBox(width: 4),
+                          Icon(
+                            Icons.arrow_drop_down,
+                            size: 20,
+                            color: AppColors.accent,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                // Changelog content
+                if (_showChangelog) ...[
+                  const SizedBox(height: AppSpacing.xs),
+                  BreezCard(
+                    padding: const EdgeInsets.all(AppSpacing.md),
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxHeight: 150),
+                      child: SingleChildScrollView(
+                        child: Text(
+                          widget.changelog!,
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: colors.text,
+                            height: 1.5,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => setState(() => _showChangelog = false),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: AppSpacing.xs,
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'Скрыть',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: colors.textMuted,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          Icon(
+                            Icons.arrow_drop_up,
+                            size: 20,
+                            color: colors.textMuted,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ],
+
               const SizedBox(height: AppSpacing.lg),
 
-              // Buttons
+              // Buttons - ИСПРАВЛЕНО
               Row(
                 children: [
+                  // Кнопка "Позже"
                   Expanded(
                     child: BreezButton(
                       onTap: () => Navigator.of(context).pop(),
                       backgroundColor: colors.buttonBg,
                       hoverColor: colors.card,
-                      child: Text(
-                        'Позже',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: colors.textMuted,
+                      height: 48,
+                      child: Center(
+                        child: Text(
+                          'Позже',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: colors.textMuted,
+                          ),
                         ),
                       ),
                     ),
                   ),
                   const SizedBox(width: AppSpacing.sm),
+
+                  // Кнопка "Обновить сейчас"
                   Expanded(
-                    flex: 2,
                     child: BreezButton(
                       onTap: _reloadPage,
                       backgroundColor: AppColors.accent,
                       hoverColor: AppColors.accentLight,
-                      child: const Text(
-                        'Обновить сейчас',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
+                      height: 48,
+                      child: const Center(
+                        child: Text(
+                          'Обновить сейчас',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
