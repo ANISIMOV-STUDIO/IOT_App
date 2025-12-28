@@ -7,63 +7,87 @@ import '../theme/spacing.dart';
 
 /// Вспомогательные функции для показа SnackBar с единым стилем
 class SnackBarUtils {
-  /// Показать SnackBar с ошибкой
-  static void showError(BuildContext context, String message) {
+  /// Базовая функция для показа красивого SnackBar
+  static void _showSnackBar(
+    BuildContext context, {
+    required String message,
+    required Color backgroundColor,
+    required IconData icon,
+  }) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(message),
-        backgroundColor: AppColors.accentRed,
-        behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.all(AppSpacing.md),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+        content: Row(
+          children: [
+            Icon(icon, color: Colors.white, size: 24),
+            const SizedBox(width: AppSpacing.sm),
+            Expanded(
+              child: Text(
+                message,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ],
         ),
+        backgroundColor: backgroundColor,
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.xl,
+          vertical: AppSpacing.lg,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        elevation: 8,
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.md,
+          vertical: AppSpacing.sm,
+        ),
+        duration: const Duration(seconds: 3),
       ),
+    );
+  }
+
+  /// Показать SnackBar с ошибкой
+  static void showError(BuildContext context, String message) {
+    _showSnackBar(
+      context,
+      message: message,
+      backgroundColor: AppColors.accentRed,
+      icon: Icons.error_outline,
     );
   }
 
   /// Показать SnackBar с предупреждением
   static void showWarning(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: AppColors.warning,
-        behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.all(AppSpacing.md),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
+    _showSnackBar(
+      context,
+      message: message,
+      backgroundColor: AppColors.warning,
+      icon: Icons.warning_amber_outlined,
     );
   }
 
   /// Показать SnackBar с информацией
   static void showInfo(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: AppColors.info,
-        behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.all(AppSpacing.md),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
+    _showSnackBar(
+      context,
+      message: message,
+      backgroundColor: AppColors.info,
+      icon: Icons.info_outline,
     );
   }
 
   /// Показать SnackBar с успехом
   static void showSuccess(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: AppColors.accentGreen,
-        behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.all(AppSpacing.md),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
+    _showSnackBar(
+      context,
+      message: message,
+      backgroundColor: AppColors.accentGreen,
+      icon: Icons.check_circle_outline,
     );
   }
 }

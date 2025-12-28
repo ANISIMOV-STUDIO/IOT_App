@@ -120,16 +120,15 @@ class _BreezPinCodeFieldState extends State<BreezPinCodeField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(widget.length, (index) {
-            return Expanded(
-              child: Container(
-                margin: EdgeInsets.symmetric(
-                  horizontal: index == 0 || index == widget.length - 1
-                      ? 0
-                      : AppSpacing.xs,
-                ),
-                child: KeyboardListener(
+            return Container(
+              width: 56,
+              margin: EdgeInsets.only(
+                left: index == 0 ? 0 : AppSpacing.xs / 2,
+                right: index == widget.length - 1 ? 0 : AppSpacing.xs / 2,
+              ),
+              child: KeyboardListener(
                   focusNode: FocusNode(),
                   onKeyEvent: (event) => _onKeyEvent(event, index),
                   child: TextField(
@@ -175,8 +174,7 @@ class _BreezPinCodeFieldState extends State<BreezPinCodeField> {
                     onChanged: (value) => _onChanged(value, index),
                   ),
                 ),
-              ),
-            );
+              );
           }),
         ),
         if (hasError) ...[

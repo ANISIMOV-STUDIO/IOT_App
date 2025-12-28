@@ -63,7 +63,14 @@ class _LoginScreenState extends State<LoginScreen> {
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthAuthenticated || state is AuthSkipped) {
-            context.go('/');
+            if (mounted) {
+              // Небольшая задержка чтобы токен успел сохраниться
+              Future.delayed(const Duration(milliseconds: 100), () {
+                if (mounted) {
+                  context.go('/');
+                }
+              });
+            }
           } else if (state is AuthError) {
             SnackBarUtils.showError(context, state.message);
           }

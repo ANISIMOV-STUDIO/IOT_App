@@ -40,15 +40,14 @@ GoRouter createRouter() {
       final isSkipped = await authStorage.hasSkipped();
 
       final isGoingToAuth = state.matchedLocation == AppRoutes.login ||
-          state.matchedLocation == AppRoutes.register ||
-          state.matchedLocation == AppRoutes.verifyEmail;
+          state.matchedLocation == AppRoutes.register;
 
       // Если не авторизован и не пропущено и пытается зайти на защищенную страницу
-      if (!isAuthenticated && !isSkipped && !isGoingToAuth) {
+      if (!isAuthenticated && !isSkipped && !isGoingToAuth && state.matchedLocation != AppRoutes.verifyEmail) {
         return AppRoutes.login;
       }
 
-      // Если авторизован или пропущено и пытается зайти на страницы auth
+      // Если авторизован или пропущено и пытается зайти на страницы auth (но не verifyEmail)
       if ((isAuthenticated || isSkipped) && isGoingToAuth) {
         return AppRoutes.home;
       }
