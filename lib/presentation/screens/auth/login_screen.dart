@@ -174,42 +174,39 @@ class _LoginScreenState extends State<LoginScreen> {
                             onTap: () => context.push('/register'),
                           ),
 
-                          // Dev: Пропустить
-                          if (const bool.fromEnvironment('dart.vm.product') ==
-                              false) ...[
-                            const SizedBox(height: AppSpacing.sm),
-                            Divider(color: colors.border),
-                            const SizedBox(height: AppSpacing.sm),
-                            BreezButton(
-                              onTap: _handleSkip,
-                              backgroundColor:
-                                  AppColors.warning.withValues(alpha: 0.1),
-                              hoverColor:
-                                  AppColors.warning.withValues(alpha: 0.2),
-                              border: Border.all(
-                                color: AppColors.warning.withValues(alpha: 0.3),
-                              ),
-                              child: const Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.developer_mode,
-                                    size: 16,
+                          // Пропустить авторизацию
+                          const SizedBox(height: AppSpacing.sm),
+                          Divider(color: colors.border),
+                          const SizedBox(height: AppSpacing.sm),
+                          BreezButton(
+                            onTap: _handleSkip,
+                            backgroundColor:
+                                AppColors.warning.withValues(alpha: 0.1),
+                            hoverColor:
+                                AppColors.warning.withValues(alpha: 0.2),
+                            border: Border.all(
+                              color: AppColors.warning.withValues(alpha: 0.3),
+                            ),
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.developer_mode,
+                                  size: 16,
+                                  color: AppColors.warning,
+                                ),
+                                SizedBox(width: AppSpacing.xs),
+                                Text(
+                                  'Пропустить',
+                                  style: TextStyle(
+                                    fontSize: AppFontSizes.bodySmall,
+                                    fontWeight: FontWeight.w600,
                                     color: AppColors.warning,
                                   ),
-                                  SizedBox(width: AppSpacing.xs),
-                                  Text(
-                                    'Пропустить (dev)',
-                                    style: TextStyle(
-                                      fontSize: AppFontSizes.bodySmall,
-                                      fontWeight: FontWeight.w600,
-                                      color: AppColors.warning,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         ],
                       ),
                     ),
