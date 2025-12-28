@@ -24,7 +24,8 @@ RUN flutter build web --release
 
 # Создаём файл version.json с информацией о версии
 ARG GIT_COMMIT=unknown
-RUN echo "{\"version\":\"${GIT_COMMIT}\",\"buildTime\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}" > /app/build/web/version.json
+ARG CHANGELOG=""
+RUN echo "{\"version\":\"${GIT_COMMIT}\",\"buildTime\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"${CHANGELOG:+,\"changelog\":\"${CHANGELOG}\"}}" > /app/build/web/version.json
 
 # Этап 2: Запуск через Nginx
 FROM nginx:alpine

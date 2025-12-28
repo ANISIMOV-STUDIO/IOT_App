@@ -74,9 +74,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
 
     // Listen for version changes
-    _versionSubscription = _versionCheckService.onVersionChanged.listen((_) {
+    _versionSubscription = _versionCheckService.onVersionChanged.listen((versionInfo) {
       if (mounted) {
-        UpdateAvailableDialog.show(context);
+        UpdateAvailableDialog.show(
+          context,
+          version: versionInfo.version,
+          changelog: versionInfo.changelog,
+        );
       }
     });
   }

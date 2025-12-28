@@ -2,16 +2,19 @@
 class VersionInfo {
   final String version;
   final DateTime buildTime;
+  final String? changelog;
 
   const VersionInfo({
     required this.version,
     required this.buildTime,
+    this.changelog,
   });
 
   factory VersionInfo.fromJson(Map<String, dynamic> json) {
     return VersionInfo(
       version: json['version'] as String,
       buildTime: DateTime.parse(json['buildTime'] as String),
+      changelog: json['changelog'] as String?,
     );
   }
 
@@ -19,6 +22,7 @@ class VersionInfo {
     return {
       'version': version,
       'buildTime': buildTime.toIso8601String(),
+      if (changelog != null) 'changelog': changelog,
     };
   }
 
