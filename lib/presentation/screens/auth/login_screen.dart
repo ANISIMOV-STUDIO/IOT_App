@@ -8,10 +8,10 @@ import 'package:go_router/go_router.dart';
 import '../../bloc/auth/auth_bloc.dart';
 import '../../bloc/auth/auth_event.dart';
 import '../../bloc/auth/auth_state.dart';
-import '../../widgets/auth/auth_header.dart';
 import '../../widgets/auth/auth_action_link.dart';
 import '../../widgets/breez/breez_card.dart';
 import '../../widgets/breez/breez_text_field.dart';
+import '../../widgets/breez/breez_logo.dart';
 import '../../../core/constants/auth_constants.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_font_sizes.dart';
@@ -78,8 +78,13 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Логотип и заголовок
-                  const AuthHeader(title: 'Вход'),
+                  // Логотип
+                  const BreezLogo(
+                    iconSize: 56,
+                    titleSize: 28,
+                    subtitleSize: 10,
+                    spacing: 12,
+                  ),
                   const SizedBox(height: AppSpacing.xl),
 
                   // Карточка с формой
