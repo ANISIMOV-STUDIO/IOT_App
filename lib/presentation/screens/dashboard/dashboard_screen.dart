@@ -250,7 +250,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
             key: _scaffoldKey,
             backgroundColor: isDark ? AppColors.darkBg : AppColors.lightBg,
             body: SafeArea(
-              child: isDesktop ? _buildDesktopLayout(isDark) : _buildMobileLayout(isDark, width),
+              child: Column(
+                children: [
+                  // Main content
+                  Expanded(
+                    child: isDesktop ? _buildDesktopLayout(isDark) : _buildMobileLayout(isDark, width),
+                  ),
+                  // Space between content and bottom bar
+                  const SizedBox(height: AppSpacing.sm),
+                ],
+              ),
             ),
           ),
         );
