@@ -14,6 +14,7 @@ import 'core/di/injection_container.dart' as di;
 import 'core/services/language_service.dart';
 import 'core/services/theme_service.dart';
 import 'core/navigation/app_router.dart';
+import 'core/logging/talker_config.dart';
 import 'presentation/bloc/dashboard/dashboard_bloc.dart';
 import 'presentation/bloc/auth/auth_bloc.dart';
 import 'presentation/bloc/auth/auth_event.dart';
@@ -21,19 +22,14 @@ import 'presentation/bloc/auth/auth_event.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Global error handler
+  // Global error handler with Talker
   FlutterError.onError = (FlutterErrorDetails details) {
     FlutterError.presentError(details);
-    // ignore: avoid_print
-    print('╔═══════════════════════════════════════════════════════════');
-    // ignore: avoid_print
-    print('║ FLUTTER ERROR:');
-    // ignore: avoid_print
-    print('║ ${details.exception}');
-    // ignore: avoid_print
-    print('║ ${details.stack}');
-    // ignore: avoid_print
-    print('╚═══════════════════════════════════════════════════════════');
+    TalkerConfig.talker.handle(
+      details.exception,
+      details.stack,
+      'Flutter Error',
+    );
   };
 
   // Initialize dependencies
