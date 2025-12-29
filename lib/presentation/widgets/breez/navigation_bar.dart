@@ -132,7 +132,9 @@ class BreezNavigationBar extends StatelessWidget {
                     child: Icon(
                       isDark ? Icons.light_mode_outlined : Icons.dark_mode_outlined,
                       size: iconSize,
-                      color: colors.textMuted,
+                      color: isDark
+                          ? colors.textMuted
+                          : AppColors.warning, // Желто-оранжевая иконка солнца в светлой теме
                     ),
                   ),
                 ),
@@ -154,7 +156,9 @@ class BreezNavigationBar extends StatelessWidget {
                         child: Icon(
                           Icons.notifications_outlined,
                           size: iconSize,
-                          color: colors.textMuted,
+                          color: notificationsBadge != null
+                              ? AppColors.accent // Синяя иконка если есть уведомления
+                              : colors.textMuted,
                         ),
                       ),
                       if (notificationsBadge != null)

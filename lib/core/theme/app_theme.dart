@@ -41,11 +41,11 @@ class BreezColors extends ThemeExtension<BreezColors> {
   static const light = BreezColors(
     bg: AppColors.lightBg,
     card: AppColors.lightCard,
-    cardLight: Color(0xFFF8FAFC), // slate-50
+    cardLight: AppColors.lightCardLight,
     border: AppColors.lightBorder,
     text: AppColors.lightText,
     textMuted: AppColors.lightTextMuted,
-    buttonBg: Color(0xFFF1F5F9), // slate-100
+    buttonBg: Color(0xFFE8EEF4), // Голубовато-серый для кнопок
   );
 
   @override
@@ -96,11 +96,13 @@ abstract class AppColors {
   static const Color darkTextMuted = Color(0x66FFFFFF); // white/40%
 
   // === LIGHT THEME ===
-  static const Color lightBg = Color(0xFFEDF1F5);
-  static const Color lightCard = Color(0xFFFFFFFF);
-  static const Color lightBorder = Color(0xFFCBD5E1); // slate-300
-  static const Color lightText = Color(0xFF001B3D);
-  static const Color lightTextMuted = Color(0x80001B3D); // 50%
+  // Modern clean theme с голубым оттенком (в стиле темной темы)
+  static const Color lightBg = Color(0xFFF0F4F8); // Голубовато-серый фон
+  static const Color lightCard = Color(0xFFFFFFFF); // Чистый белый
+  static const Color lightCardLight = Color(0xFFF8FAFC); // Очень светлый
+  static const Color lightBorder = Color(0xFFCFD8E3); // Мягкая голубая граница
+  static const Color lightText = Color(0xFF1E293B); // Темно-серый (slate-800)
+  static const Color lightTextMuted = Color(0xFF64748B); // Средний серый (slate-500)
 
   // === ACCENT COLORS ===
   static const Color accent = Color(0xFF2D7DFF); // Primary blue
@@ -141,7 +143,7 @@ class AppTheme {
   // Button background
   Color get buttonBg => isDark
       ? Colors.white.withValues(alpha: 0.05)
-      : const Color(0xFFF8FAFC);
+      : const Color(0xFFE8EEF4); // Голубовато-серый для светлой темы
 
   /// Material theme
   ThemeData get materialTheme => ThemeData(

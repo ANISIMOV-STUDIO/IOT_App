@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../presentation/screens/dashboard/dashboard_screen.dart';
+import '../../presentation/screens/main_screen.dart';
 import '../../presentation/screens/auth/auth_screen.dart';
 import '../../presentation/screens/auth/verify_email_screen.dart';
 import '../../presentation/bloc/dashboard/dashboard_bloc.dart';
@@ -108,7 +108,7 @@ GoRouter createRouter() {
         path: AppRoutes.home,
         builder: (context, state) => BlocProvider(
           create: (context) => di.sl<DashboardBloc>()..add(const DashboardStarted()),
-          child: const DashboardScreen(),
+          child: const MainScreen(),
         ),
       ),
     ],
