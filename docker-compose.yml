@@ -11,7 +11,7 @@ services:
     container_name: breez-hvac-app
     restart: unless-stopped
     ports:
-      - "80:80"
+      - "127.0.0.1:3000:80"
     volumes:
       # Логи nginx
       - ./logs/nginx:/var/log/nginx
