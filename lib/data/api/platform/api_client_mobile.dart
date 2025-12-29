@@ -21,7 +21,7 @@ class ApiClientMobile implements ApiClient {
   ClientChannel getGrpcChannel() {
     return _channel ??= ClientChannel(
       ApiConfig.backendHost,
-      port: ApiConfig.grpcPort,
+      port: 443, // Standard HTTPS port through nginx
       options: ChannelOptions(
         credentials: const ChannelCredentials.secure(),
         codecRegistry: CodecRegistry(codecs: const [GzipCodec()]),
