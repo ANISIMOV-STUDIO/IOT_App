@@ -33,17 +33,17 @@ class UnitState extends Equatable {
 
   factory UnitState.fromJson(Map<String, dynamic> json) {
     return UnitState(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      power: json['power'] as bool,
-      temp: json['temp'] as int,
-      supplyFan: json['supplyFan'] as int,
-      exhaustFan: json['exhaustFan'] as int,
-      mode: json['mode'] as String,
-      humidity: json['humidity'] as int,
-      outsideTemp: json['outsideTemp'] as int,
-      filterPercent: json['filterPercent'] as int,
-      airflowRate: json['airflowRate'] as int,
+      id: json['id'] as String? ?? 'unknown',
+      name: json['name'] as String? ?? 'Unit',
+      power: json['power'] as bool? ?? false,
+      temp: json['temp'] as int? ?? 22,
+      supplyFan: json['supplyFan'] as int? ?? 50,
+      exhaustFan: json['exhaustFan'] as int? ?? 50,
+      mode: json['mode'] as String? ?? 'auto',
+      humidity: json['humidity'] as int? ?? 45,
+      outsideTemp: json['outsideTemp'] as int? ?? 18,
+      filterPercent: json['filterPercent'] as int? ?? 85,
+      airflowRate: json['airflowRate'] as int? ?? 250,
     );
   }
 
