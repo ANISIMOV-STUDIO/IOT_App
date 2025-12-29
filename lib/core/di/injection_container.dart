@@ -72,6 +72,10 @@ Future<void> init() async {
 
   const secureStorage = FlutterSecureStorage(
     aOptions: AndroidOptions(encryptedSharedPreferences: true),
+    webOptions: WebOptions(
+      dbName: 'BreezApp',
+      publicKey: 'BreezApp',
+    ),
   );
   sl.registerLazySingleton(() => secureStorage);
 
