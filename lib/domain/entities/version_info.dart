@@ -12,8 +12,8 @@ class VersionInfo {
 
   factory VersionInfo.fromJson(Map<String, dynamic> json) {
     return VersionInfo(
-      version: json['version'] as String,
-      buildTime: DateTime.parse(json['buildTime'] as String),
+      version: json['version'] as String? ?? '0.0.0',
+      buildTime: DateTime.tryParse(json['buildTime'] as String? ?? '') ?? DateTime.now(),
       changelog: json['changelog'] as String?,
     );
   }
