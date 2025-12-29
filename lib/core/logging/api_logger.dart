@@ -32,18 +32,20 @@ class ApiLogger {
 
   // HTTP logging
   static void logHttpRequest(String method, String url, dynamic body) {
+    final bodyStr = body?.toString() ?? 'null';
     _talker.info(
       '🌐 [HTTP Request] $method $url\n'
-      'Body: ${_truncate(body?.toString() ?? 'null')}',
+      'Body: ${_maskSensitiveData(_truncate(bodyStr))}',
     );
   }
 
   static void logHttpResponse(
       String method, String url, int statusCode, dynamic body) {
+    final bodyStr = body?.toString() ?? 'null';
     _talker.info(
       '✅ [HTTP Response] $method $url\n'
       'Status: $statusCode\n'
-      'Body: ${_truncate(body?.toString() ?? 'null')}',
+      'Body: ${_maskSensitiveData(_truncate(bodyStr))}',
     );
   }
 
@@ -91,5 +93,36 @@ class ApiLogger {
   static String _truncate(String text, [int maxLength = 500]) {
     if (text.length <= maxLength) return text;
     return '${text.substring(0, maxLength)}... (truncated)';
+  }
+
+  /// Маскирует чувствительные данные (токены, пароли, email)
+  static String _maskSensitiveData(String text) {
+    var masked = text;
+
+    // Маскировка JWT токенов (Bearer eyJhbGc...)
+    masked = masked.replaceAllMapped(
+      RegExp(r'(Bearer\s+|token["\s:]+)([A-Za-z0-9\-_]+\.[A-Za-z0-9\-_]+\.[A-Za-z0-9\-_]+)'),
+      (match) => '${match.group(1)}***MASKED_JWT***',
+    );
+
+    // Маскировка паролей в JSON
+    masked = masked.replaceAllMapped(
+      RegExp(r'"password"\s*:\s*"([^"]+)"', caseSensitive: false),
+      (match) => '"password": "***MASKED***"',
+    );
+
+    // Маскировка refresh tokens
+    masked = masked.replaceAllMapped(
+      RegExp(r'"refreshToken"\s*:\s*"([^"]+)"', caseSensitive: false),
+      (match) => '"refreshToken": "***MASKED***"',
+    );
+
+    // Частичная маскировка email (оставить первые 3 символа)
+    masked = masked.replaceAllMapped(
+      RegExp(r'"email"\s*:\s*"([a-zA-Z0-9._%+-]{3})[a-zA-Z0-9._%+-]*@([^"]+)"'),
+      (match) => '"email": "${match.group(1)}***@${match.group(2)}"',
+    );
+
+    return masked;
   }
 }
