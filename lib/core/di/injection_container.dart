@@ -62,7 +62,7 @@ final sl = GetIt.instance;
 ///
 /// Установите в false для разработки UI без backend или для тестирования
 /// Установите в true для работы с реальным backend (https://89.207.223.45)
-const bool USE_REAL_API = false;
+const bool USE_REAL_API = true;
 
 /// Инициализация всех зависимостей
 Future<void> init() async {
