@@ -21,6 +21,21 @@ import 'presentation/bloc/auth/auth_event.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Global error handler
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.presentError(details);
+    // ignore: avoid_print
+    print('╔═══════════════════════════════════════════════════════════');
+    // ignore: avoid_print
+    print('║ FLUTTER ERROR:');
+    // ignore: avoid_print
+    print('║ ${details.exception}');
+    // ignore: avoid_print
+    print('║ ${details.stack}');
+    // ignore: avoid_print
+    print('╚═══════════════════════════════════════════════════════════');
+  };
+
   // Initialize dependencies
   await di.init();
 
