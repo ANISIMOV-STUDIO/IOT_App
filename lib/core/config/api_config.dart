@@ -5,15 +5,13 @@ import 'package:flutter/foundation.dart';
 
 class ApiConfig {
   // Backend configuration
-  static const String backendHost = '89.207.223.45';
-  static const int grpcPort = 8080; // gRPC (backend слушает 8080)
-  static const int httpPort = 8080; // HTTP (backend слушает 8080)
+  static const String backendHost = 'hvac.anisimovstudio.ru';
 
   // URLs
-  static String get grpcUrl => 'http://$backendHost:$grpcPort'; // HTTP (не HTTPS)
-  static String get httpUrl => 'http://$backendHost:$httpPort'; // HTTP (не HTTPS)
+  static String get grpcUrl => 'https://$backendHost'; // HTTPS через nginx
+  static String get httpUrl => 'https://$backendHost'; // HTTPS через nginx
   static String get websocketUrl =>
-      'ws://$backendHost:$httpPort/hubs/devices'; // WS (не WSS)
+      'wss://$backendHost/hubs/devices'; // WSS через nginx
 
   // REST API endpoints (for web)
   static String get apiBaseUrl => '$httpUrl/api';
