@@ -67,100 +67,55 @@ class DesktopLayout extends StatefulWidget {
 }
 
 class _DesktopLayoutState extends State<DesktopLayout> {
-  int _sidebarIndex = 0;
   String? _activePresetId;
-
-  // Menu items for bottom bar
-  static const _menuItems = [
-    NavigationItem(icon: Icons.dashboard_outlined, label: 'Панель'),
-    NavigationItem(icon: Icons.devices_outlined, label: 'Устройства'),
-    NavigationItem(icon: Icons.schedule_outlined, label: 'Расписание'),
-    NavigationItem(icon: Icons.analytics_outlined, label: 'Аналитика'),
-    NavigationItem(icon: Icons.settings_outlined, label: 'Настройки'),
-  ];
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     final isPortrait = size.height > size.width;
-    // Portrait: bottom bar, Landscape: sidebar
-    final showBottomBar = isPortrait;
-    final showSidebar = !isPortrait;
+    // Portrait: show header with logo, Landscape: show header without logo
+    final showLogoInHeader = isPortrait;
 
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: Column(
-        children: [
-          // Main content
-          Expanded(
-            child: Row(
-              children: [
-                // Sidebar (landscape only)
-                if (showSidebar)
-                  Sidebar(
-                    selectedIndex: _sidebarIndex,
-                    onItemSelected: (index) => setState(() => _sidebarIndex = index),
-                    onLogoutTap: widget.onLogoutTap,
-                  ),
+      body: Padding(
+        padding: const EdgeInsets.all(AppSpacing.sm),
+        child: Column(
+          children: [
+            // Top row: Header with logo (portrait) or without logo (landscape)
+            if (showLogoInHeader) ...[
+              DesktopHeader(
+                units: widget.allUnits,
+                selectedUnitIndex: widget.selectedUnitIndex,
+                onUnitSelected: widget.onUnitSelected,
+                onAddUnit: widget.onAddUnit,
+                isDark: widget.isDark,
+                onThemeToggle: widget.onThemeToggle,
+                userName: widget.userName,
+                userRole: widget.userRole,
+                showLogo: true,
+              ),
+              const SizedBox(height: AppSpacing.sm),
+            ],
 
-                // Main content
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(AppSpacing.sm),
-                    child: Column(
-                      children: [
-                        // Top row: Header with logo
-                        if (showBottomBar) ...[
-                          DesktopHeader(
-                            units: widget.allUnits,
-                            selectedUnitIndex: widget.selectedUnitIndex,
-                            onUnitSelected: widget.onUnitSelected,
-                            onAddUnit: widget.onAddUnit,
-                            isDark: widget.isDark,
-                            onThemeToggle: widget.onThemeToggle,
-                            userName: widget.userName,
-                            userRole: widget.userRole,
-                            showLogo: true,
-                          ),
-                          const SizedBox(height: AppSpacing.sm),
-                        ],
-
-                        // Content row
-                        Expanded(
-                          child: Row(
-                            children: [
-                              Expanded(child: _buildLeftColumn()),
-                              const SizedBox(width: AppSpacing.sm),
-                              Expanded(
-                                flex: 2,
-                                child: showBottomBar
-                                    ? _buildRightColumnContent()
-                                    : _buildRightColumn(),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+            // Content row
+            Expanded(
+              child: Row(
+                children: [
+                  Expanded(child: _buildLeftColumn()),
+                  const SizedBox(width: AppSpacing.sm),
+                  Expanded(
+                    flex: 2,
+                    child: showLogoInHeader
+                        ? _buildRightColumnContent()
+                        : _buildRightColumn(),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-
-          // Bottom navigation bar (portrait only)
-          if (showBottomBar) _buildBottomBar(),
-        ],
+          ],
+        ),
       ),
-    );
-  }
-
-  Widget _buildBottomBar() {
-    return BreezNavigationBar(
-      items: _menuItems,
-      selectedIndex: _sidebarIndex,
-      onItemSelected: (index) => setState(() => _sidebarIndex = index),
-      // Кнопки темы и уведомлений не нужны - они уже в DesktopHeader сверху
     );
   }
 

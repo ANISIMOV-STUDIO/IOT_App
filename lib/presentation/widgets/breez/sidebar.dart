@@ -38,13 +38,10 @@ class Sidebar extends StatelessWidget {
   });
 
   static const List<SidebarItem> items = [
-    SidebarItem(icon: Icons.play_arrow_rounded, label: 'Главная'),
-    SidebarItem(icon: Icons.grid_view_rounded, label: 'Виджеты'),
-    SidebarItem(icon: Icons.location_on_outlined, label: 'Локации'),
-    SidebarItem(icon: Icons.calendar_today_outlined, label: 'Расписание'),
-    SidebarItem(icon: Icons.shield_outlined, label: 'Защита'),
-    SidebarItem(icon: Icons.star_outline_rounded, label: 'Избранное'),
-    SidebarItem(icon: Icons.settings_outlined, label: 'Настройки'),
+    SidebarItem(icon: Icons.home_outlined, label: 'Главная'),
+    SidebarItem(icon: Icons.bar_chart, label: 'Аналитика'),
+    SidebarItem(icon: Icons.devices, label: 'Устройства'),
+    SidebarItem(icon: Icons.person_outline, label: 'Профиль'),
   ];
 
   @override
@@ -58,7 +55,7 @@ class Sidebar extends StatelessWidget {
         // Если места много - расширенный режим (иконки + текст)
         final availableWidth = MediaQuery.sizeOf(context).width;
         final isExpanded = availableWidth > 1200; // breakpoint для расширенного режима
-        final sidebarWidth = isExpanded ? 200.0 : 80.0;
+        final sidebarWidth = isExpanded ? 133.0 : 53.0;
 
         return Container(
           width: sidebarWidth,
