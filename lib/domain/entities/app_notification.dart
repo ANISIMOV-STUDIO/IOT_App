@@ -82,7 +82,7 @@ class DeviceAlert extends AppNotification {
   /// Days until due date
   int? get daysUntilDue {
     if (dueDate == null) return null;
-    return dueDate!.difference(DateTime.now()).inDays;
+    return dueDate?.difference(DateTime.now()).inDays;
   }
 
   /// Is urgent (due soon or critical)

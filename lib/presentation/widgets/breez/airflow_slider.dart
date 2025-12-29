@@ -135,7 +135,7 @@ class _AirflowSliderState extends State<AirflowSlider>
                         ? (_) => setState(() => _isDragging = false)
                         : null,
                     onChanged: widget.onChanged != null
-                        ? (v) => widget.onChanged!(v.round())
+                        ? (v) => widget.onChanged?.call(v.round())
                         : null,
                   ),
                 ),
