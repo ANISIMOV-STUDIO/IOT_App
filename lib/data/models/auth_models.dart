@@ -63,9 +63,9 @@ class AuthResponse {
   factory AuthResponse.fromJson(Map<String, dynamic> json) {
     return AuthResponse(
       // Поддержка старого формата (token) и нового (accessToken)
-      accessToken: (json['accessToken'] ?? json['token']) as String,
-      refreshToken: json['refreshToken'] as String,
-      user: User.fromJson(json['user'] as Map<String, dynamic>),
+      accessToken: (json['accessToken'] ?? json['token']) as String? ?? '',
+      refreshToken: json['refreshToken'] as String? ?? '',
+      user: User.fromJson((json['user'] as Map<String, dynamic>?) ?? {}),
     );
   }
 
@@ -92,9 +92,9 @@ class RegisterResponse {
 
   factory RegisterResponse.fromJson(Map<String, dynamic> json) {
     return RegisterResponse(
-      message: json['message'] as String,
-      email: json['email'] as String,
-      requiresEmailVerification: json['requiresEmailVerification'] as bool,
+      message: json['message'] as String? ?? 'Регистрация выполнена',
+      email: json['email'] as String? ?? '',
+      requiresEmailVerification: json['requiresEmailVerification'] as bool? ?? false,
     );
   }
 }
