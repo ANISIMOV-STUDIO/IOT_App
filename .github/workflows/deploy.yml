@@ -82,7 +82,7 @@ jobs:
             docker run -d \
               --name breez-hvac-app \
               --restart unless-stopped \
-              -p 80:80 \
+              -p 127.0.0.1:3000:80 \
               -v /opt/breez-hvac/logs:/var/log/nginx \
               ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
 
