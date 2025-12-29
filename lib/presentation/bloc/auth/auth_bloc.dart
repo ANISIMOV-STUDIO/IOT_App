@@ -66,26 +66,39 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(const AuthLoading());
 
     try {
+      print('🔵 BLOC: Creating login request');
       final request = LoginRequest(
         email: event.email,
         password: event.password,
       );
 
+      print('🔵 BLOC: Calling auth service login');
       final response = await _authService.login(request);
+      print('🔵 BLOC: Got response from auth service');
+      print('🔵 BLOC: Response user: ${response.user}');
+      print('🔵 BLOC: Response user.id: ${response.user.id}');
+      print('🔵 BLOC: Response accessToken: ${response.accessToken.substring(0, 20)}...');
 
-      // Сохранить оба токена
+      // Сохранить оба токены
+      print('🔵 BLOC: Saving tokens to storage');
       await _storageService.saveTokens(
         response.accessToken,
         response.refreshToken,
       );
+
+      print('🔵 BLOC: Saving user ID to storage');
       await _storageService.saveUserId(response.user.id);
 
+      print('🔵 BLOC: Emitting AuthAuthenticated state');
       emit(AuthAuthenticated(
         user: response.user,
         accessToken: response.accessToken,
         refreshToken: response.refreshToken,
       ));
-    } catch (e) {
+      print('🔵 BLOC: AuthAuthenticated emitted successfully');
+    } catch (e, stackTrace) {
+      print('🔴 BLOC ERROR: $e');
+      print('🔴 BLOC STACK: $stackTrace');
       emit(AuthError(e.toString()));
     }
   }
