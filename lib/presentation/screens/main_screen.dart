@@ -48,6 +48,15 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.sizeOf(context).width;
+    final isDesktop = width > 900;
+
+    // На десктопе показываем только DashboardScreen (у него свой sidebar)
+    // На mobile/tablet используем bottom navigation
+    if (isDesktop) {
+      return const DashboardScreen();
+    }
+
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,
