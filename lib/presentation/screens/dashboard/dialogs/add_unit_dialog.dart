@@ -33,7 +33,7 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
   }
 
   void _submit() {
-    if (_formKey.currentState!.validate()) {
+    if (_formKey.currentState?.validate() ?? false) {
       Navigator.of(context).pop(_nameController.text.trim());
     }
   }

@@ -117,7 +117,7 @@ class AppHeader extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        userName!.toUpperCase(),
+                        (userName ?? '').toUpperCase(),
                         style: const TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.w700,
@@ -127,7 +127,7 @@ class AppHeader extends StatelessWidget {
                       ),
                       if (userRole != null)
                         Text(
-                          userRole!.toUpperCase(),
+                          (userRole ?? '').toUpperCase(),
                           style: const TextStyle(
                             fontSize: 8,
                             fontWeight: FontWeight.w500,
@@ -146,7 +146,7 @@ class AppHeader extends StatelessWidget {
                     ),
                     child: Center(
                       child: Text(
-                        userName!.isNotEmpty ? userName![0].toUpperCase() : '?',
+                        (userName?.isNotEmpty ?? false) ? (userName?[0] ?? '?').toUpperCase() : '?',
                         style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w700,

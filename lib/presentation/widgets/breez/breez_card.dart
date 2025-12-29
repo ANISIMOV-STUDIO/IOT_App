@@ -55,7 +55,7 @@ class BreezCard extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(bottom: 4),
                             child: Text(
-                              title!.toUpperCase(),
+                              (title ?? '').toUpperCase(),
                               style: TextStyle(
                                 fontSize: 10,
                                 fontWeight: FontWeight.w900,
@@ -68,7 +68,7 @@ class BreezCard extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(bottom: 16),
                             child: Text(
-                              description!,
+                              description ?? '',
                               style: TextStyle(
                                 fontSize: 12,
                                 color: colors.textMuted,
@@ -86,8 +86,8 @@ class BreezCard extends StatelessWidget {
 
   Widget _buildShimmer(BuildContext context, BreezColors colors, bool isDark) {
     return Shimmer.fromColors(
-      baseColor: isDark ? colors.cardLight : Colors.grey[300]!,
-      highlightColor: isDark ? colors.border : Colors.grey[100]!,
+      baseColor: isDark ? colors.cardLight : (Colors.grey[300] ?? Colors.grey),
+      highlightColor: isDark ? colors.border : (Colors.grey[100] ?? Colors.grey.shade100),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -170,10 +170,10 @@ class _BreezButtonState extends State<BreezButton> {
 
     // Обеспечиваем минимальный touch target
     final buttonWidth = widget.width != null
-        ? (widget.width! < kMinTouchTarget ? kMinTouchTarget : widget.width)
+        ? ((widget.width ?? 0) < kMinTouchTarget ? kMinTouchTarget : widget.width)
         : null;
     final buttonHeight = widget.height != null
-        ? (widget.height! < kMinTouchTarget ? kMinTouchTarget : widget.height)
+        ? ((widget.height ?? 0) < kMinTouchTarget ? kMinTouchTarget : widget.height)
         : kMinTouchTarget;
 
     return MouseRegion(

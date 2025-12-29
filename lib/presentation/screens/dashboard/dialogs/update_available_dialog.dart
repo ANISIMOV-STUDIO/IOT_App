@@ -105,7 +105,7 @@ class _UpdateAvailableDialogState extends State<UpdateAvailableDialog> {
               ),
 
               // Changelog section
-              if (widget.changelog != null && widget.changelog!.isNotEmpty) ...[
+              if (widget.changelog?.isNotEmpty ?? false) ...[
                 const SizedBox(height: AppSpacing.md),
 
                 // Toggle changelog button
@@ -147,7 +147,7 @@ class _UpdateAvailableDialogState extends State<UpdateAvailableDialog> {
                       constraints: const BoxConstraints(maxHeight: 150),
                       child: SingleChildScrollView(
                         child: Text(
-                          widget.changelog!,
+                          widget.changelog ?? '',
                           style: TextStyle(
                             fontSize: 13,
                             color: colors.text,

@@ -114,7 +114,7 @@ class _BreezTextFieldState extends State<BreezTextField> {
       children: [
         if (widget.label != null) ...[
           Text(
-            widget.label!.toUpperCase(),
+            (widget.label ?? '').toUpperCase(),
             style: TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.w900,
@@ -212,7 +212,7 @@ class _BreezTextFieldState extends State<BreezTextField> {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        _errorText!,
+                        _errorText ?? '',
                         style: const TextStyle(
                           fontSize: 11,
                           color: AppColors.accentRed,

@@ -57,7 +57,7 @@ class HeaderIconButton extends StatelessWidget {
                     ),
                     child: Center(
                       child: Text(
-                        badge!,
+                        badge ?? '',
                         style: const TextStyle(
                           fontSize: 9,
                           fontWeight: FontWeight.w700,
