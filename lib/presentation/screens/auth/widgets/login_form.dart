@@ -87,8 +87,9 @@ class _LoginFormState extends State<LoginForm> {
                   hint: 'example@mail.com',
                   prefixIcon: Icons.email_outlined,
                   keyboardType: TextInputType.emailAddress,
-                  validator: Validators.email,
+                  validator: Validators.loginEmail,
                   validateOnChange: true,
+                  autofillHints: const [AutofillHints.email],
                 ),
                 const SizedBox(height: AppSpacing.md),
 
@@ -97,9 +98,11 @@ class _LoginFormState extends State<LoginForm> {
                   controller: _passwordController,
                   label: 'Пароль',
                   prefixIcon: Icons.lock_outlined,
-                  validator: Validators.password,
+                  obscureText: true,
+                  validator: Validators.loginPassword,
                   showPasswordToggle: true,
                   validateOnChange: true,
+                  autofillHints: const [AutofillHints.password],
                 ),
                 const SizedBox(height: AppSpacing.xs),
 

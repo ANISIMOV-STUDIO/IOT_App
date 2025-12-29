@@ -106,6 +106,7 @@ class _RegisterFormState extends State<RegisterForm> {
                   prefixIcon: Icons.person_outline,
                   validator: (v) => Validators.name(v, fieldName: 'имя'),
                   validateOnChange: true,
+                  autofillHints: const [AutofillHints.givenName],
                 ),
                 const SizedBox(height: AppSpacing.md),
 
@@ -117,6 +118,7 @@ class _RegisterFormState extends State<RegisterForm> {
                   prefixIcon: Icons.person_outline,
                   validator: (v) => Validators.name(v, fieldName: 'фамилию'),
                   validateOnChange: true,
+                  autofillHints: const [AutofillHints.familyName],
                 ),
                 const SizedBox(height: AppSpacing.md),
 
@@ -129,6 +131,7 @@ class _RegisterFormState extends State<RegisterForm> {
                   keyboardType: TextInputType.emailAddress,
                   validator: Validators.email,
                   validateOnChange: true,
+                  autofillHints: const [AutofillHints.email],
                 ),
                 const SizedBox(height: AppSpacing.md),
 
@@ -138,9 +141,11 @@ class _RegisterFormState extends State<RegisterForm> {
                   label: 'Пароль',
                   hint: 'Минимум 8 символов, буквы и цифры',
                   prefixIcon: Icons.lock_outlined,
+                  obscureText: true,
                   validator: Validators.password,
                   showPasswordToggle: true,
                   validateOnChange: true,
+                  autofillHints: const [AutofillHints.newPassword],
                 ),
                 const SizedBox(height: AppSpacing.md),
 
@@ -149,12 +154,14 @@ class _RegisterFormState extends State<RegisterForm> {
                   controller: _confirmPasswordController,
                   label: 'Подтвердите пароль',
                   prefixIcon: Icons.lock_outlined,
+                  obscureText: true,
                   validator: (v) => Validators.confirmPassword(
                     v,
                     _passwordController.text,
                   ),
                   showPasswordToggle: true,
                   validateOnChange: true,
+                  autofillHints: const [AutofillHints.newPassword],
                 ),
                 const SizedBox(height: AppSpacing.lg),
 

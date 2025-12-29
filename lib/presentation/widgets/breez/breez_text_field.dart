@@ -21,6 +21,7 @@ class BreezTextField extends StatefulWidget {
   final bool enabled;
   final bool validateOnChange;
   final bool showPasswordToggle;
+  final Iterable<String>? autofillHints;
 
   const BreezTextField({
     super.key,
@@ -37,6 +38,7 @@ class BreezTextField extends StatefulWidget {
     this.enabled = true,
     this.validateOnChange = false,
     this.showPasswordToggle = false,
+    this.autofillHints,
   });
 
   @override
@@ -148,6 +150,7 @@ class _BreezTextFieldState extends State<BreezTextField> {
                 keyboardType: widget.keyboardType,
                 maxLines: widget.maxLines,
                 enabled: widget.enabled,
+                autofillHints: widget.autofillHints,
                 textAlignVertical: TextAlignVertical.center,
                 style: TextStyle(
                   color: colors.text,

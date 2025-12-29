@@ -4,7 +4,25 @@ library;
 import 'package:form_builder_validators/form_builder_validators.dart';
 
 class Validators {
-  /// Валидация email с использованием надёжной библиотеки
+  /// Упрощенная валидация email для логина (только проверка на пустоту)
+  /// Если пользователь введет неправильный email - просто не зайдет
+  static String? loginEmail(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Введите email';
+    }
+    return null;
+  }
+
+  /// Упрощенная валидация пароля для логина (только проверка на пустоту)
+  /// Полная валидация не нужна - если пароль неправильный, то не зайдет
+  static String? loginPassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Введите пароль';
+    }
+    return null;
+  }
+
+  /// Валидация email для регистрации с проверкой формата
   static String? email(String? value) {
     return FormBuilderValidators.compose([
       FormBuilderValidators.required(errorText: 'Введите email'),
