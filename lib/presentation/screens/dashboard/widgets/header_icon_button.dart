@@ -21,6 +21,8 @@ class HeaderIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+
     return HoverBuilder(
       onTap: onTap,
       builder: (context, isHovered) {
@@ -30,10 +32,10 @@ class HeaderIconButton extends StatelessWidget {
           height: 44,
           decoration: BoxDecoration(
             color: isHovered
-                ? Colors.white.withValues(alpha: 0.05)
-                : AppColors.darkCard,
+                ? colors.buttonBg
+                : colors.card,
             borderRadius: BorderRadius.circular(AppRadius.button),
-            border: Border.all(color: AppColors.darkBorder),
+            border: Border.all(color: colors.border),
           ),
           child: Stack(
             children: [
@@ -41,7 +43,7 @@ class HeaderIconButton extends StatelessWidget {
                 child: Icon(
                   icon,
                   size: 20,
-                  color: isHovered ? Colors.white : AppColors.darkTextMuted,
+                  color: isHovered ? colors.text : colors.textMuted,
                 ),
               ),
               if (badge != null)

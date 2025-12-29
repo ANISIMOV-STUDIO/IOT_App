@@ -23,6 +23,8 @@ class DesktopHeader extends StatelessWidget {
   final bool showMenuButton;
   final VoidCallback? onMenuTap;
   final bool showLogo;
+  final VoidCallback? onProfileTap;
+  final VoidCallback? onNotificationsTap;
 
   const DesktopHeader({
     super.key,
@@ -37,6 +39,8 @@ class DesktopHeader extends StatelessWidget {
     this.showMenuButton = false,
     this.onMenuTap,
     this.showLogo = false,
+    this.onProfileTap,
+    this.onNotificationsTap,
   });
 
   @override
@@ -64,7 +68,7 @@ class DesktopHeader extends StatelessWidget {
         HeaderIconButton(
           icon: Icons.notifications_outlined,
           badge: '3',
-          onTap: () {},
+          onTap: onNotificationsTap,
         ),
         const SizedBox(width: 16),
         // User info
@@ -118,37 +122,52 @@ class DesktopHeader extends StatelessWidget {
   }
 
   Widget _buildUserInfo() {
-    return Row(
-      children: [
-        Text(
-          userName,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
-          ),
-        ),
-        const SizedBox(width: 12),
-        Container(
-          width: 40,
-          height: 40,
+    return HoverBuilder(
+      onTap: onProfileTap,
+      builder: (context, isHovered) {
+        final colors = BreezColors.of(context);
+
+        return AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [AppColors.accent, AppColors.accentLight],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
+            color: isHovered ? colors.buttonBg : Colors.transparent,
             borderRadius: BorderRadius.circular(AppRadius.button),
           ),
-          child: const Center(
-            child: Icon(
-              Icons.person,
-              size: 20,
-              color: Colors.white,
-            ),
+          child: Row(
+            children: [
+              Text(
+                userName,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: colors.text,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [AppColors.accent, AppColors.accentLight],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(AppRadius.button),
+                ),
+                child: const Center(
+                  child: Icon(
+                    Icons.person,
+                    size: 20,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
           ),
-        ),
-      ],
+        );
+      },
     );
   }
 }
