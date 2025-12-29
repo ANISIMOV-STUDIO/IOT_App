@@ -256,8 +256,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   Expanded(
                     child: isDesktop ? _buildDesktopLayout(isDark) : _buildMobileLayout(isDark, width),
                   ),
-                  // Space between content and bottom bar
-                  const SizedBox(height: AppSpacing.sm),
+                  // Space between content and bottom bar (mobile/tablet only)
+                  if (!isDesktop) const SizedBox(height: AppSpacing.sm),
                 ],
               ),
             ),
