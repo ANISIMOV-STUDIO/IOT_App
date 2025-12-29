@@ -39,7 +39,6 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   int _activeUnitIndex = 0;
-  int _sidebarIndex = 0;
   late List<UnitState> _units;
   late ThemeService _themeService;
   late VersionCheckService _versionCheckService;
@@ -251,20 +250,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             key: _scaffoldKey,
             backgroundColor: isDark ? AppColors.darkBg : AppColors.lightBg,
             body: SafeArea(
-              child: Column(
-                children: [
-                  // Main content
-                  Expanded(
-                    child: isDesktop ? _buildDesktopLayout(isDark) : _buildMobileLayout(isDark, width),
-                  ),
-
-                  // Space between content and bottom bar
-                  if (!isDesktop) const SizedBox(height: AppSpacing.sm),
-
-                  // Bottom navigation bar (mobile/tablet only)
-                  if (!isDesktop) _buildBottomBar(),
-                ],
-              ),
+              child: isDesktop ? _buildDesktopLayout(isDark) : _buildMobileLayout(isDark, width),
             ),
           ),
         );
@@ -337,27 +323,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ),
       ],
-    );
-  }
-
-  // Menu items for bottom bar
-  static const _menuItems = [
-    NavigationItem(icon: Icons.dashboard_outlined, label: 'Панель'),
-    NavigationItem(icon: Icons.devices_outlined, label: 'Устройства'),
-    NavigationItem(icon: Icons.schedule_outlined, label: 'Расписание'),
-    NavigationItem(icon: Icons.analytics_outlined, label: 'Аналитика'),
-    NavigationItem(icon: Icons.settings_outlined, label: 'Настройки'),
-  ];
-
-  Widget _buildBottomBar() {
-    return BreezNavigationBar(
-      items: _menuItems,
-      selectedIndex: _sidebarIndex,
-      onItemSelected: (index) => setState(() => _sidebarIndex = index),
-      isDark: _themeService.isDark,
-      onThemeToggle: _toggleTheme,
-      onNotificationsTap: () {},
-      notificationsBadge: '3',
     );
   }
 }
