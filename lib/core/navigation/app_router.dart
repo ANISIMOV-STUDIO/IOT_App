@@ -40,18 +40,17 @@ GoRouter createRouter() {
     redirect: (context, state) async {
       final authStorage = di.sl<AuthStorageService>();
       final isAuthenticated = await authStorage.hasToken();
-      final isSkipped = await authStorage.hasSkipped();
 
       final isGoingToAuth = state.matchedLocation == AppRoutes.login ||
           state.matchedLocation == AppRoutes.register;
 
-      // Если не авторизован и не пропущено и пытается зайти на защищенную страницу
-      if (!isAuthenticated && !isSkipped && !isGoingToAuth && state.matchedLocation != AppRoutes.verifyEmail) {
+      // Если не авторизован и пытается зайти на защищенную страницу
+      if (!isAuthenticated && !isGoingToAuth && state.matchedLocation != AppRoutes.verifyEmail) {
         return AppRoutes.login;
       }
 
-      // Если авторизован или пропущено и пытается зайти на страницы auth (но не verifyEmail)
-      if ((isAuthenticated || isSkipped) && isGoingToAuth) {
+      // Если авторизован и пытается зайти на страницы auth (но не verifyEmail)
+      if (isAuthenticated && isGoingToAuth) {
         return AppRoutes.home;
       }
 

@@ -3,7 +3,6 @@ library;
 
 export 'app_notification.dart';
 export 'climate.dart';
-export 'device_schedule.dart';
 export 'energy_stats.dart';
 export 'graph_data.dart';
 export 'hvac_device.dart';

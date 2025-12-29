@@ -56,11 +56,6 @@ class AuthError extends AuthState {
   List<Object?> get props => [message];
 }
 
-/// Пропущена авторизация (dev mode)
-class AuthSkipped extends AuthState {
-  const AuthSkipped();
-}
-
 /// Регистрация успешна, требуется подтверждение email
 class AuthRegistered extends AuthState {
   final String email;

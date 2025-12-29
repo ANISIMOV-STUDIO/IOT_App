@@ -10,7 +10,6 @@ class AuthStorageService {
   static const String _refreshTokenKey = 'auth_refresh_token';
   static const String _tokenExpiryKey = 'auth_token_expiry';
   static const String _userIdKey = 'user_id';
-  static const String _skippedKey = 'auth_skipped';
 
   final FlutterSecureStorage _secureStorage;
 
@@ -97,24 +96,12 @@ class AuthStorageService {
     await _secureStorage.delete(key: _refreshTokenKey);
     await _secureStorage.delete(key: _tokenExpiryKey);
     await _secureStorage.delete(key: _userIdKey);
-    await _secureStorage.delete(key: _skippedKey);
   }
 
   /// Проверить наличие токена
   Future<bool> hasToken() async {
     final token = await getToken();
     return token != null && token.isNotEmpty;
-  }
-
-  /// Сохранить флаг "пропущено" (dev mode)
-  Future<void> saveSkipped() async {
-    await _secureStorage.write(key: _skippedKey, value: 'true');
-  }
-
-  /// Проверить, пропущена ли авторизация (dev mode)
-  Future<bool> hasSkipped() async {
-    final skipped = await _secureStorage.read(key: _skippedKey);
-    return skipped == 'true';
   }
 
   /// Очистить все данные

@@ -25,7 +25,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthRegisterRequested>(_onRegisterRequested);
     on<AuthLogoutRequested>(_onLogoutRequested);
     on<AuthLogoutAllRequested>(_onLogoutAllRequested);
-    on<AuthSkipRequested>(_onSkipRequested);
     on<AuthVerifyEmailRequested>(_onVerifyEmailRequested);
     on<AuthResendCodeRequested>(_onResendCodeRequested);
   }
@@ -152,15 +151,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     await _storageService.deleteToken();
     emit(const AuthUnauthenticated());
-  }
-
-  /// Пропуск (dev mode)
-  Future<void> _onSkipRequested(
-    AuthSkipRequested event,
-    Emitter<AuthState> emit,
-  ) async {
-    await _storageService.saveSkipped();
-    emit(const AuthSkipped());
   }
 
   /// Подтверждение email

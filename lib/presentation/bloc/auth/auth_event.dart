@@ -66,11 +66,6 @@ class AuthLogoutAllRequested extends AuthEvent {
   const AuthLogoutAllRequested();
 }
 
-/// Пропуск авторизации (только для разработки)
-class AuthSkipRequested extends AuthEvent {
-  const AuthSkipRequested();
-}
-
 /// Подтверждение email по коду
 class AuthVerifyEmailRequested extends AuthEvent {
   final String email;

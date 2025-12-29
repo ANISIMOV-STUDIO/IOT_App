@@ -51,14 +51,8 @@ class _LoginFormState extends State<LoginForm> {
     }
   }
 
-  void _handleSkip() {
-    context.read<AuthBloc>().add(const AuthSkipRequested());
-  }
-
   @override
   Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
-
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthError) {
@@ -162,38 +156,6 @@ class _LoginFormState extends State<LoginForm> {
                   text: 'Нет аккаунта?',
                   actionText: 'Зарегистрироваться',
                   onTap: widget.onSwitchToRegister,
-                ),
-
-                // Пропустить авторизацию
-                const SizedBox(height: AppSpacing.sm),
-                Divider(color: colors.border),
-                const SizedBox(height: AppSpacing.sm),
-                BreezButton(
-                  onTap: _handleSkip,
-                  backgroundColor: AppColors.warning.withValues(alpha: 0.1),
-                  hoverColor: AppColors.warning.withValues(alpha: 0.2),
-                  border: Border.all(
-                    color: AppColors.warning.withValues(alpha: 0.3),
-                  ),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.developer_mode,
-                        size: 16,
-                        color: AppColors.warning,
-                      ),
-                      SizedBox(width: AppSpacing.xs),
-                      Text(
-                        'Пропустить',
-                        style: TextStyle(
-                          fontSize: AppFontSizes.bodySmall,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.warning,
-                        ),
-                      ),
-                    ],
-                  ),
                 ),
               ],
             ),

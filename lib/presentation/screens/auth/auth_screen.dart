@@ -50,7 +50,7 @@ class _AuthScreenState extends State<AuthScreen> {
       backgroundColor: colors.bg,
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
-          if (state is AuthAuthenticated || state is AuthSkipped) {
+          if (state is AuthAuthenticated) {
             // Используем global navigator key для надежной навигации
             WidgetsBinding.instance.addPostFrameCallback((_) {
               rootNavigatorKey.currentContext?.go(AppRoutes.home);
