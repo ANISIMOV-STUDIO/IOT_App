@@ -55,6 +55,7 @@ class AuthService {
   /// Вход пользователя
   Future<AuthResponse> login(LoginRequest request) async {
     try {
+      print('🔐 AUTH: Sending login request to $_baseUrl/auth/login');
       final response = await _client.post(
         Uri.parse('$_baseUrl/auth/login'),
         headers: {
@@ -63,9 +64,15 @@ class AuthService {
         body: json.encode(request.toJson()),
       );
 
+      print('🔐 AUTH: Login response status: ${response.statusCode}');
+
       if (response.statusCode == 200) {
+        print('🔐 AUTH: Response body: ${response.body}');
         final data = json.decode(response.body) as Map<String, dynamic>;
-        return AuthResponse.fromJson(data);
+        print('🔐 AUTH: Parsed JSON: $data');
+        final authResponse = AuthResponse.fromJson(data);
+        print('🔐 AUTH: Successfully created AuthResponse');
+        return authResponse;
       } else if (response.statusCode == 401) {
         throw const AuthException('Неверный email или пароль');
       } else {
@@ -75,6 +82,8 @@ class AuthService {
         );
       }
     } catch (e) {
+      print('🔐 AUTH ERROR: $e');
+      print('🔐 AUTH ERROR STACK: ${StackTrace.current}');
       if (e is AuthException) rethrow;
       throw AuthException('Ошибка подключения к серверу: $e');
     }
