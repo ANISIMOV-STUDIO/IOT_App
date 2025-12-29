@@ -112,13 +112,13 @@ class _UpdateAvailableDialogState extends State<UpdateAvailableDialog> {
                 if (!_showChangelog)
                   GestureDetector(
                     onTap: () => setState(() => _showChangelog = true),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(
                         vertical: AppSpacing.xs,
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
-                        children: const [
+                        children: [
                           Text(
                             'Что нового?',
                             style: TextStyle(

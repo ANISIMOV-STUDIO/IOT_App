@@ -41,9 +41,7 @@ class AuthHttpInterceptor extends http.BaseClient {
       if (refreshToken != null && refreshToken.isNotEmpty) {
         try {
           // Синхронизация одновременных refresh запросов
-          if (_refreshingTokens == null) {
-            _refreshingTokens = _doRefreshTokens(refreshToken);
-          }
+          _refreshingTokens ??= _doRefreshTokens(refreshToken);
 
           await _refreshingTokens;
           _refreshingTokens = null;

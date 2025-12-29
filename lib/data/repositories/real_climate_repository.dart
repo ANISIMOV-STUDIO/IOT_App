@@ -9,9 +9,9 @@ import '../api/platform/api_client.dart';
 import '../api/http/clients/hvac_http_client.dart';
 import '../api/websocket/signalr_hub_connection.dart';
 import '../api/mappers/device_json_mapper.dart';
-import '../../core/config/api_config.dart';
 
 class RealClimateRepository implements ClimateRepository {
+  // ignore: unused_field
   final ApiClient _apiClient;
   final HvacHttpClient _httpClient;
   final SignalRHubConnection? _signalR;

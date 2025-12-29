@@ -62,7 +62,7 @@ final sl = GetIt.instance;
 ///
 /// Установите в false для разработки UI без backend или для тестирования
 /// Установите в true для работы с реальным backend (https://89.207.223.45)
-const bool USE_REAL_API = true;
+const bool useRealApi = true;
 
 /// Инициализация всех зависимостей
 Future<void> init() async {
@@ -92,7 +92,7 @@ Future<void> init() async {
       ));
 
   //! API Client (Platform-specific: gRPC для mobile/desktop, HTTP для web)
-  if (USE_REAL_API) {
+  if (useRealApi) {
     sl.registerLazySingleton<ApiClient>(
       () => ApiClientFactory.create(
         sl<AuthStorageService>(),
@@ -105,7 +105,7 @@ Future<void> init() async {
 
   // Repositories - Условная регистрация Real или Mock
   // SmartDevice Repository (Управление умными устройствами)
-  if (USE_REAL_API) {
+  if (useRealApi) {
     sl.registerLazySingleton<SmartDeviceRepository>(
       () => RealSmartDeviceRepository(sl<ApiClient>()),
     );
@@ -116,7 +116,7 @@ Future<void> init() async {
   }
 
   // Climate Repository (Управление климатом HVAC)
-  if (USE_REAL_API) {
+  if (useRealApi) {
     sl.registerLazySingleton<ClimateRepository>(
       () {
         final apiClient = sl<ApiClient>();
@@ -137,7 +137,7 @@ Future<void> init() async {
   }
 
   // Energy Repository (Статистика энергопотребления)
-  if (USE_REAL_API) {
+  if (useRealApi) {
     sl.registerLazySingleton<EnergyRepository>(
       () => RealEnergyRepository(sl<ApiClient>()),
     );
@@ -148,7 +148,7 @@ Future<void> init() async {
   }
 
   // Occupant Repository (Управление жильцами)
-  if (USE_REAL_API) {
+  if (useRealApi) {
     sl.registerLazySingleton<OccupantRepository>(
       () => RealOccupantRepository(sl<ApiClient>()),
     );
@@ -159,7 +159,7 @@ Future<void> init() async {
   }
 
   // Schedule Repository (Расписания устройств)
-  if (USE_REAL_API) {
+  if (useRealApi) {
     sl.registerLazySingleton<ScheduleRepository>(
       () => RealScheduleRepository(sl<ApiClient>()),
     );
@@ -170,7 +170,7 @@ Future<void> init() async {
   }
 
   // Notification Repository (Уведомления)
-  if (USE_REAL_API) {
+  if (useRealApi) {
     sl.registerLazySingleton<NotificationRepository>(
       () => RealNotificationRepository(sl<ApiClient>()),
     );
@@ -181,7 +181,7 @@ Future<void> init() async {
   }
 
   // GraphData Repository (Данные для графиков аналитики)
-  if (USE_REAL_API) {
+  if (useRealApi) {
     sl.registerLazySingleton<GraphDataRepository>(
       () => RealGraphDataRepository(sl<ApiClient>()),
     );

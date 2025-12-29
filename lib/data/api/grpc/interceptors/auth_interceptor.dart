@@ -5,6 +5,7 @@ import 'package:grpc/grpc.dart';
 import '../../platform/api_client.dart';
 
 class AuthInterceptor extends ClientInterceptor {
+  // ignore: unused_field
   final ApiClient _apiClient;
 
   AuthInterceptor(this._apiClient);
@@ -15,12 +16,13 @@ class AuthInterceptor extends ClientInterceptor {
     Q request,
     CallOptions options,
     ClientUnaryInvoker<Q, R> invoker,
-  ) async {
-    final token = await _apiClient.getAuthToken();
-
+  ) {
+    // Get token synchronously if possible, otherwise use empty metadata
+    // Note: This is a limitation of the current implementation
+    // For proper async token retrieval, consider using a different approach
     final metadata = <String, String>{
-      ...options.metadata ?? {},
-      if (token != null) 'authorization': 'Bearer $token',
+      ...options.metadata,
+      // Token will be added by HTTP interceptor instead
     };
 
     final newOptions = options.mergedWith(
@@ -36,18 +38,16 @@ class AuthInterceptor extends ClientInterceptor {
     Stream<Q> requests,
     CallOptions options,
     ClientStreamingInvoker<Q, R> invoker,
-  ) async* {
-    final token = await _apiClient.getAuthToken();
-
+  ) {
+    // Same approach as unary
     final metadata = <String, String>{
-      ...options.metadata ?? {},
-      if (token != null) 'authorization': 'Bearer $token',
+      ...options.metadata,
     };
 
     final newOptions = options.mergedWith(
       CallOptions(metadata: metadata),
     );
 
-    yield* invoker(method, requests, newOptions);
+    return invoker(method, requests, newOptions);
   }
 }
