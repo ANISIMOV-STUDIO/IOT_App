@@ -350,8 +350,8 @@ class MainTempCard extends StatelessWidget {
 
   Widget _buildShimmer(BuildContext context, BreezColors colors, bool isDark) {
     return Shimmer.fromColors(
-      baseColor: isDark ? colors.cardLight : Colors.grey[300]!,
-      highlightColor: isDark ? colors.border : Colors.grey[100]!,
+      baseColor: isDark ? colors.cardLight : (Colors.grey[300] ?? Colors.grey),
+      highlightColor: isDark ? colors.border : (Colors.grey[100] ?? Colors.grey.shade100),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

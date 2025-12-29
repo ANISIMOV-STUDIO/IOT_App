@@ -57,7 +57,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       return;
     }
 
-    if (_formKey.currentState!.validate()) {
+    if (_formKey.currentState?.validate() ?? false) {
       context.read<AuthBloc>().add(
             AuthRegisterRequested(
               email: _emailController.text.trim(),
