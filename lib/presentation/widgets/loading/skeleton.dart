@@ -91,7 +91,7 @@ class SkeletonDeviceCard extends StatelessWidget {
           const SizedBox(width: AppSpacing.md),
 
           // Текстовая информация
-          Expanded(
+          const Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -101,7 +101,7 @@ class SkeletonDeviceCard extends StatelessWidget {
                   height: 16,
                   borderRadius: 8,
                 ),
-                const SizedBox(height: AppSpacing.xs),
+                SizedBox(height: AppSpacing.xs),
                 // Дополнительная информация
                 SkeletonBox(
                   width: 120,
@@ -114,7 +114,7 @@ class SkeletonDeviceCard extends StatelessWidget {
           const SizedBox(width: AppSpacing.md),
 
           // Статус badge
-          SkeletonBox(
+          const SkeletonBox(
             width: 60,
             height: 24,
             borderRadius: 8,
@@ -140,7 +140,7 @@ class SkeletonStatCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadius.card),
         border: Border.all(color: BreezColors.of(context).border),
       ),
-      child: Row(
+      child: const Row(
         children: [
           // Иконка
           SkeletonBox(
@@ -148,7 +148,7 @@ class SkeletonStatCard extends StatelessWidget {
             height: 48,
             borderRadius: AppRadius.button,
           ),
-          const SizedBox(width: AppSpacing.md),
+          SizedBox(width: AppSpacing.md),
 
           // Текст
           Expanded(
@@ -161,7 +161,7 @@ class SkeletonStatCard extends StatelessWidget {
                   height: 12,
                   borderRadius: 6,
                 ),
-                const SizedBox(height: AppSpacing.xs),
+                SizedBox(height: AppSpacing.xs),
                 // Значение
                 SkeletonBox(
                   width: double.infinity,
@@ -199,7 +199,7 @@ class SkeletonGraph extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadius.card),
         border: Border.all(color: BreezColors.of(context).border),
       ),
-      child: Column(
+      child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Заголовок графика
@@ -208,7 +208,7 @@ class SkeletonGraph extends StatelessWidget {
             height: 16,
             borderRadius: 8,
           ),
-          const SizedBox(height: AppSpacing.lg),
+          SizedBox(height: AppSpacing.lg),
 
           // Область графика
           Expanded(

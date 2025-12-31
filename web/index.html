@@ -67,6 +67,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="dns-prefetch" href="https://fonts.googleapis.com">
 
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-messaging-compat.js"></script>
+
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter_bootstrap.js" async></script>
 
@@ -367,7 +371,7 @@
   </div>
 
   <script>
-    // Remove loading screen when Flutter app loads
+    // Скрыть экран загрузки когда Flutter приложение загружено
     window.addEventListener('flutter-first-frame', function() {
       const loading = document.getElementById('loading');
       if (loading) {
@@ -376,6 +380,19 @@
         setTimeout(() => loading.remove(), 300);
       }
     });
+
+    // Регистрация Service Worker для Firebase Messaging (push уведомления)
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/firebase-messaging-sw.js')
+          .then(function(registration) {
+            console.log('Firebase Messaging SW зарегистрирован:', registration.scope);
+          })
+          .catch(function(error) {
+            console.log('Ошибка регистрации Firebase Messaging SW:', error);
+          });
+      });
+    }
   </script>
 </body>
 </html>

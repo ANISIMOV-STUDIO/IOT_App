@@ -172,3 +172,11 @@ class GraphMetricChanged extends DashboardEvent {
   @override
   List<Object?> get props => [metric];
 }
+
+// Connectivity events
+class ConnectivityChanged extends DashboardEvent {
+  final bool isOffline;
+  const ConnectivityChanged(this.isOffline);
+  @override
+  List<Object?> get props => [isOffline];
+}

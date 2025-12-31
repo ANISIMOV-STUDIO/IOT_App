@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../../core/services/connectivity_service.dart';
 import '../../../domain/entities/smart_device.dart';
 import '../../../domain/entities/climate.dart';
 import '../../../domain/entities/hvac_device.dart';
@@ -32,6 +33,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   final ScheduleRepository _scheduleRepository;
   final NotificationRepository _notificationRepository;
   final GraphDataRepository _graphDataRepository;
+  final ConnectivityService? _connectivityService;
 
   StreamSubscription<List<SmartDevice>>? _devicesSubscription;
   StreamSubscription<ClimateState>? _climateSubscription;
@@ -41,6 +43,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   StreamSubscription<List<ScheduleEntry>>? _scheduleSubscription;
   StreamSubscription<List<UnitNotification>>? _notificationsSubscription;
   StreamSubscription<List<GraphDataPoint>>? _graphDataSubscription;
+  StreamSubscription<NetworkStatus>? _connectivitySubscription;
 
   DashboardBloc({
     required SmartDeviceRepository deviceRepository,
@@ -50,6 +53,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     required ScheduleRepository scheduleRepository,
     required NotificationRepository notificationRepository,
     required GraphDataRepository graphDataRepository,
+    ConnectivityService? connectivityService,
   })  : _deviceRepository = deviceRepository,
         _climateRepository = climateRepository,
         _energyRepository = energyRepository,
@@ -57,6 +61,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         _scheduleRepository = scheduleRepository,
         _notificationRepository = notificationRepository,
         _graphDataRepository = graphDataRepository,
+        _connectivityService = connectivityService,
         super(const DashboardState()) {
     on<DashboardStarted>(_onStarted);
     on<DashboardRefreshed>(_onRefreshed);
@@ -83,6 +88,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     on<NotificationDismissed>(_onNotificationDismissed);
     on<GraphDataLoaded>(_onGraphDataLoaded);
     on<GraphMetricChanged>(_onGraphMetricChanged);
+    on<ConnectivityChanged>(_onConnectivityChanged);
   }
 
   Future<void> _onStarted(DashboardStarted event, Emitter<DashboardState> emit) async {
@@ -179,6 +185,10 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         .listen(
           (notifications) => add(NotificationsLoaded(notifications)),
         );
+    // Подписка на изменения сети
+    _connectivitySubscription = _connectivityService?.onStatusChange.listen(
+      (status) => add(ConnectivityChanged(status == NetworkStatus.offline)),
+    );
   }
 
   Future<void> _onRefreshed(DashboardRefreshed event, Emitter<DashboardState> emit) async {
@@ -370,6 +380,13 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     }
   }
 
+  void _onConnectivityChanged(
+    ConnectivityChanged event,
+    Emitter<DashboardState> emit,
+  ) {
+    emit(state.copyWith(isOffline: event.isOffline));
+  }
+
   @override
   Future<void> close() {
     _devicesSubscription?.cancel();
@@ -380,6 +397,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     _scheduleSubscription?.cancel();
     _notificationsSubscription?.cancel();
     _graphDataSubscription?.cancel();
+    _connectivitySubscription?.cancel();
     return super.close();
   }
 }

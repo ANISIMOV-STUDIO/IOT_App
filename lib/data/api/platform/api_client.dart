@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 
 /// Platform-agnostic API client
 abstract class ApiClient {
+  /// Base URL для HTTP запросов
+  String get baseUrl;
   /// Get gRPC channel (mobile/desktop only)
   ClientChannel? getGrpcChannel();
 

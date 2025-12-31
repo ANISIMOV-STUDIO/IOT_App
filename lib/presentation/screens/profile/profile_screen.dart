@@ -62,7 +62,7 @@ class ProfileScreen extends StatelessWidget {
                               Container(
                                 width: 100,
                                 height: 100,
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
                                   gradient: LinearGradient(
                                     begin: Alignment.topLeft,
@@ -178,15 +178,15 @@ class ProfileScreen extends StatelessWidget {
                     border: Border.all(
                       color: AppColors.critical.withValues(alpha: 0.3),
                     ),
-                    child: Row(
+                    child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.logout,
                           size: 20,
                           color: AppColors.critical,
                         ),
-                        const SizedBox(width: AppSpacing.xs),
+                        SizedBox(width: AppSpacing.xs),
                         Text(
                           'Выйти',
                           style: TextStyle(

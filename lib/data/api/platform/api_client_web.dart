@@ -4,6 +4,7 @@ library;
 import 'package:grpc/grpc.dart';
 import 'package:http/http.dart' as http;
 import '../../../core/services/auth_storage_service.dart';
+import '../../../core/config/api_config.dart';
 import '../../services/auth_service.dart';
 import '../http/interceptors/auth_http_interceptor.dart';
 import 'api_client.dart';
@@ -14,6 +15,7 @@ class ApiClientWeb implements ApiClient {
   http.Client? _httpClient;
 
   ApiClientWeb(this._authStorage, this._authService);
+@override  String get baseUrl => ApiConfig.httpUrl;
 
   @override
   ClientChannel? getGrpcChannel() {

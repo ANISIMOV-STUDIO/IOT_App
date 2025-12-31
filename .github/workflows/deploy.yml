@@ -10,8 +10,31 @@ env:
   REGISTRY: ghcr.io
 
 jobs:
+  test:
+    name: Тестирование
+    runs-on: ubuntu-latest
+    steps:
+      - name: Клонирование репозитория
+        uses: actions/checkout@v4
+
+      - name: Установка Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          cache: true
+
+      - name: Установка зависимостей
+        run: flutter pub get
+
+      - name: Анализ кода
+        run: flutter analyze
+
+      - name: Запуск тестов
+        run: flutter test
+
   build-and-deploy:
     name: Сборка и развёртывание
+    needs: test
     runs-on: ubuntu-latest
     permissions:
       contents: read

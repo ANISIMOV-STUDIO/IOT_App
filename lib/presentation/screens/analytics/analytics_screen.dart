@@ -56,22 +56,22 @@ class AnalyticsScreen extends StatelessWidget {
                           final isDesktop = width > 900;
 
                           return isDesktop
-                              ? Row(
+                              ? const Row(
                                   children: [
-                                    Expanded(child: const SkeletonStatCard()),
-                                    const SizedBox(width: AppSpacing.lg),
-                                    Expanded(child: const SkeletonStatCard()),
-                                    const SizedBox(width: AppSpacing.lg),
-                                    Expanded(child: const SkeletonStatCard()),
+                                    Expanded(child: SkeletonStatCard()),
+                                    SizedBox(width: AppSpacing.lg),
+                                    Expanded(child: SkeletonStatCard()),
+                                    SizedBox(width: AppSpacing.lg),
+                                    Expanded(child: SkeletonStatCard()),
                                   ],
                                 )
-                              : Column(
+                              : const Column(
                                   children: [
-                                    const SkeletonStatCard(),
-                                    const SizedBox(height: AppSpacing.md),
-                                    const SkeletonStatCard(),
-                                    const SizedBox(height: AppSpacing.md),
-                                    const SkeletonStatCard(),
+                                    SkeletonStatCard(),
+                                    SizedBox(height: AppSpacing.md),
+                                    SkeletonStatCard(),
+                                    SizedBox(height: AppSpacing.md),
+                                    SkeletonStatCard(),
                                   ],
                                 );
                         },
@@ -105,7 +105,7 @@ class AnalyticsScreen extends StatelessWidget {
                                     child: _buildStatCard(
                                       context,
                                       'Этот месяц',
-                                      '${totalHours} часов',
+                                      '$totalHours часов',
                                       Icons.calendar_month,
                                       AppColors.success,
                                     ),
@@ -135,7 +135,7 @@ class AnalyticsScreen extends StatelessWidget {
                                   _buildStatCard(
                                     context,
                                     'Этот месяц',
-                                    '${totalHours} часов',
+                                    '$totalHours часов',
                                     Icons.calendar_month,
                                     AppColors.success,
                                   ),

@@ -44,6 +44,9 @@ class DashboardState extends Equatable {
   final List<GraphDataPoint> graphData;
   final GraphMetric selectedGraphMetric;
 
+  // Connectivity
+  final bool isOffline;
+
   const DashboardState({
     this.status = DashboardStatus.initial,
     this.devices = const [],
@@ -59,6 +62,7 @@ class DashboardState extends Equatable {
     this.unitNotifications = const [],
     this.graphData = const [],
     this.selectedGraphMetric = GraphMetric.temperature,
+    this.isOffline = false,
   });
 
   /// Получить выбранное HVAC устройство
@@ -98,6 +102,7 @@ class DashboardState extends Equatable {
     List<UnitNotification>? unitNotifications,
     List<GraphDataPoint>? graphData,
     GraphMetric? selectedGraphMetric,
+    bool? isOffline,
   }) {
     return DashboardState(
       status: status ?? this.status,
@@ -114,6 +119,7 @@ class DashboardState extends Equatable {
       unitNotifications: unitNotifications ?? this.unitNotifications,
       graphData: graphData ?? this.graphData,
       selectedGraphMetric: selectedGraphMetric ?? this.selectedGraphMetric,
+      isOffline: isOffline ?? this.isOffline,
     );
   }
 
@@ -126,5 +132,6 @@ class DashboardState extends Equatable {
     status, devices, climate, energyStats, powerUsage,
     occupants, schedule, errorMessage, hvacDevices, selectedHvacDeviceId,
     weeklySchedule, unitNotifications, graphData, selectedGraphMetric,
+    isOffline,
   ];
 }

@@ -13,6 +13,10 @@ import '../services/language_service.dart';
 import '../services/theme_service.dart';
 import '../services/version_check_service.dart';
 import '../services/auth_storage_service.dart';
+import '../services/connectivity_service.dart';
+import '../services/cache_service.dart';
+import '../services/push_notification_service.dart';
+import '../services/fcm_token_service.dart';
 
 // Data - Сервисы данных
 import '../../data/services/auth_service.dart';
@@ -51,6 +55,15 @@ import '../../data/repositories/real_occupant_repository.dart';
 import '../../data/repositories/real_schedule_repository.dart';
 import '../../data/repositories/real_notification_repository.dart';
 import '../../data/repositories/real_graph_data_repository.dart';
+
+// Data - Cached репозитории (offline поддержка)
+import '../../data/repositories/cached_climate_repository.dart';
+import '../../data/repositories/cached_energy_repository.dart';
+import '../../data/repositories/cached_smart_device_repository.dart';
+import '../../data/repositories/cached_schedule_repository.dart';
+import '../../data/repositories/cached_notification_repository.dart';
+import '../../data/repositories/cached_graph_data_repository.dart';
+import '../../data/repositories/cached_occupant_repository.dart';
 
 // Data - HTTP Clients (для DI в repositories)
 import '../../data/api/http/clients/hvac_http_client.dart';
@@ -95,6 +108,14 @@ Future<void> init() async {
         storageService: sl(),
       ));
 
+  //! Offline Support - Сервисы кеширования и мониторинга сети
+  sl.registerLazySingleton(() => ConnectivityService());
+  sl.registerLazySingleton(() => CacheService());
+
+  // Инициализация сервисов
+  await sl<ConnectivityService>().initialize();
+  await sl<CacheService>().initialize();
+
   //! API Client (Platform-specific: gRPC для mobile/desktop, HTTP для web)
   if (useRealApi) {
     sl.registerLazySingleton<ApiClient>(
@@ -103,15 +124,26 @@ Future<void> init() async {
         sl<AuthService>(),
       ),
     );
+
+    //! Push Notifications - FCM сервисы
+    sl.registerLazySingleton(() => PushNotificationService());
+    sl.registerLazySingleton(() => FcmTokenService(
+          apiClient: sl<ApiClient>(),
+          pushService: sl<PushNotificationService>(),
+        ));
   }
 
   //! Dashboard Feature - Главный экран
 
-  // Repositories - Условная регистрация Real или Mock
+  // Repositories - Условная регистрация Real или Mock (с кешированием)
   // SmartDevice Repository (Управление умными устройствами)
   if (useRealApi) {
     sl.registerLazySingleton<SmartDeviceRepository>(
-      () => RealSmartDeviceRepository(sl<ApiClient>()),
+      () => CachedSmartDeviceRepository(
+        inner: RealSmartDeviceRepository(sl<ApiClient>()),
+        cacheService: sl<CacheService>(),
+        connectivity: sl<ConnectivityService>(),
+      ),
     );
   } else {
     sl.registerLazySingleton<SmartDeviceRepository>(
@@ -124,14 +156,19 @@ Future<void> init() async {
     sl.registerLazySingleton<ClimateRepository>(
       () {
         final apiClient = sl<ApiClient>();
-        final repository = RealClimateRepository(
+        final realRepository = RealClimateRepository(
           apiClient,
           HvacHttpClient(apiClient),
           SignalRHubConnection(apiClient),
         );
         // Инициализировать SignalR connection асинхронно
-        repository.initialize();
-        return repository;
+        realRepository.initialize();
+        // Обернуть в кеширующий декоратор
+        return CachedClimateRepository(
+          inner: realRepository,
+          cacheService: sl<CacheService>(),
+          connectivity: sl<ConnectivityService>(),
+        );
       },
     );
   } else {
@@ -143,7 +180,11 @@ Future<void> init() async {
   // Energy Repository (Статистика энергопотребления)
   if (useRealApi) {
     sl.registerLazySingleton<EnergyRepository>(
-      () => RealEnergyRepository(sl<ApiClient>()),
+      () => CachedEnergyRepository(
+        inner: RealEnergyRepository(sl<ApiClient>()),
+        cacheService: sl<CacheService>(),
+        connectivity: sl<ConnectivityService>(),
+      ),
     );
   } else {
     sl.registerLazySingleton<EnergyRepository>(
@@ -154,7 +195,11 @@ Future<void> init() async {
   // Occupant Repository (Управление жильцами)
   if (useRealApi) {
     sl.registerLazySingleton<OccupantRepository>(
-      () => RealOccupantRepository(sl<ApiClient>()),
+      () => CachedOccupantRepository(
+        inner: RealOccupantRepository(sl<ApiClient>()),
+        cacheService: sl<CacheService>(),
+        connectivity: sl<ConnectivityService>(),
+      ),
     );
   } else {
     sl.registerLazySingleton<OccupantRepository>(
@@ -165,7 +210,11 @@ Future<void> init() async {
   // Schedule Repository (Расписания устройств)
   if (useRealApi) {
     sl.registerLazySingleton<ScheduleRepository>(
-      () => RealScheduleRepository(sl<ApiClient>()),
+      () => CachedScheduleRepository(
+        inner: RealScheduleRepository(sl<ApiClient>()),
+        cacheService: sl<CacheService>(),
+        connectivity: sl<ConnectivityService>(),
+      ),
     );
   } else {
     sl.registerLazySingleton<ScheduleRepository>(
@@ -176,7 +225,11 @@ Future<void> init() async {
   // Notification Repository (Уведомления)
   if (useRealApi) {
     sl.registerLazySingleton<NotificationRepository>(
-      () => RealNotificationRepository(sl<ApiClient>()),
+      () => CachedNotificationRepository(
+        inner: RealNotificationRepository(sl<ApiClient>()),
+        cacheService: sl<CacheService>(),
+        connectivity: sl<ConnectivityService>(),
+      ),
     );
   } else {
     sl.registerLazySingleton<NotificationRepository>(
@@ -187,7 +240,11 @@ Future<void> init() async {
   // GraphData Repository (Данные для графиков аналитики)
   if (useRealApi) {
     sl.registerLazySingleton<GraphDataRepository>(
-      () => RealGraphDataRepository(sl<ApiClient>()),
+      () => CachedGraphDataRepository(
+        inner: RealGraphDataRepository(sl<ApiClient>()),
+        cacheService: sl<CacheService>(),
+        connectivity: sl<ConnectivityService>(),
+      ),
     );
   } else {
     sl.registerLazySingleton<GraphDataRepository>(
@@ -205,6 +262,7 @@ Future<void> init() async {
       scheduleRepository: sl(),
       notificationRepository: sl(),
       graphDataRepository: sl(),
+      connectivityService: sl(),
     ),
   );
 }

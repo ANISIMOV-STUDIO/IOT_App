@@ -500,16 +500,16 @@ class OfflineBanner extends StatelessWidget {
       height: height,
       width: double.infinity,
       color: AppColors.warning,
-      child: Row(
+      child: const Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(
+          Icon(
             Icons.wifi_off,
             size: 16,
             color: Colors.white,
           ),
-          const SizedBox(width: AppSpacing.xs),
-          const Text(
+          SizedBox(width: AppSpacing.xs),
+          Text(
             'Нет соединения с интернетом',
             style: TextStyle(
               fontSize: AppFontSizes.caption,

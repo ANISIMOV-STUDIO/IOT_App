@@ -16,6 +16,7 @@ class ApiClientMobile implements ApiClient {
   http.Client? _httpClient;
 
   ApiClientMobile(this._authStorage, this._authService);
+@override  String get baseUrl => ApiConfig.httpUrl;
 
   @override
   ClientChannel getGrpcChannel() {
