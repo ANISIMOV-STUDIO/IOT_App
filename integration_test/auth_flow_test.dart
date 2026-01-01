@@ -4,6 +4,8 @@
 /// - Отображение формы входа
 /// - Валидацию полей
 /// - Переход между экранами регистрации и входа
+library;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -70,23 +72,14 @@ void main() {
       await tester.pumpWidget(const HvacControlApp());
       await tester.pumpAndSettle(const Duration(seconds: 3));
 
-      // Ищем поле пароля по obscureText
+      // Ищем поле пароля по obscureText (только TextField имеет это свойство)
       final passwordFields = find.byWidgetPredicate(
         (widget) => widget is TextField && widget.obscureText == true,
       );
 
-      final passwordFormFields = find.byWidgetPredicate(
-        (widget) => widget is TextFormField && (widget.obscureText ?? false),
-      );
-
       // Если есть поле пароля - оно должно скрывать ввод
-      if (passwordFields.evaluate().isNotEmpty ||
-          passwordFormFields.evaluate().isNotEmpty) {
-        expect(
-          passwordFields.evaluate().isNotEmpty ||
-              passwordFormFields.evaluate().isNotEmpty,
-          isTrue,
-        );
+      if (passwordFields.evaluate().isNotEmpty) {
+        expect(passwordFields, findsWidgets);
       }
     });
   });
