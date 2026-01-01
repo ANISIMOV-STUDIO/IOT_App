@@ -7,7 +7,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/di/injection_container.dart' as di;
 import '../../../core/navigation/app_router.dart';
+import '../../../core/services/dialog_service.dart';
 import '../../../core/services/theme_service.dart';
+import '../../../core/services/toast_service.dart';
 import '../../../core/services/version_check_service.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/spacing.dart';
@@ -159,12 +161,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
     });
   }
 
-  void _masterPowerOff() {
+  Future<void> _masterPowerOff() async {
+    final confirmed = await DialogService.confirmMasterOff(context);
+    if (!confirmed) return;
+
     setState(() {
       for (var i = 0; i < _units.length; i++) {
         _units[i] = _units[i].copyWith(power: false);
       }
     });
+    ToastService.success('Все устройства выключены');
   }
 
   Future<void> _showAddUnitDialog() async {
@@ -205,7 +211,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
     setState(() {});
   }
 
-  void _handleLogout() {
+  Future<void> _handleLogout() async {
+    final confirmed = await DialogService.confirmLogout(context);
+    if (!confirmed) return;
+
+    if (!mounted) return;
     context.read<AuthBloc>().add(const AuthLogoutRequested());
   }
 

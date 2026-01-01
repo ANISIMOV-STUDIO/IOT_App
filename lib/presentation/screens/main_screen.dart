@@ -2,6 +2,11 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../core/navigation/app_router.dart';
+import '../bloc/dashboard/dashboard_bloc.dart';
 
 import '../widgets/breez/navigation_bar.dart';
 import 'dashboard/dashboard_screen.dart';
@@ -53,13 +58,20 @@ class _MainScreenState extends State<MainScreen> {
         index: _currentIndex,
         children: _screens,
       ),
-      bottomNavigationBar: BreezNavigationBar(
-        items: _navigationItems,
-        selectedIndex: _currentIndex,
-        onItemSelected: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
+      bottomNavigationBar: BlocBuilder<DashboardBloc, DashboardState>(
+        builder: (context, state) {
+          final unreadCount = state.unreadNotificationCount;
+          return BreezNavigationBar(
+            items: _navigationItems,
+            selectedIndex: _currentIndex,
+            onItemSelected: (index) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+            onNotificationsTap: () => context.push(AppRoutes.notifications),
+            notificationsBadge: unreadCount > 0 ? '$unreadCount' : null,
+          );
         },
       ),
     );

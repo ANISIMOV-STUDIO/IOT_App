@@ -13,6 +13,7 @@ import 'generated/l10n/app_localizations.dart';
 import 'core/di/injection_container.dart' as di;
 import 'core/services/language_service.dart';
 import 'core/services/theme_service.dart';
+import 'core/services/toast_service.dart';
 import 'core/navigation/app_router.dart';
 import 'core/logging/talker_config.dart';
 import 'presentation/bloc/dashboard/dashboard_bloc.dart';
@@ -77,6 +78,7 @@ class _HvacControlAppState extends State<HvacControlApp> {
           final themeService = di.sl<ThemeService>();
 
           return MaterialApp.router(
+            scaffoldMessengerKey: scaffoldMessengerKey,
             routerConfig: _router,
             title: 'BREEZ Home',
             debugShowCheckedModeBanner: false,

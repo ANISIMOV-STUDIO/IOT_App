@@ -10,6 +10,7 @@ import 'package:go_router/go_router.dart';
 import '../../presentation/screens/main_screen.dart';
 import '../../presentation/screens/auth/auth_screen.dart';
 import '../../presentation/screens/auth/verify_email_screen.dart';
+import '../../presentation/screens/notifications/notifications_screen.dart';
 import '../../presentation/bloc/dashboard/dashboard_bloc.dart';
 import '../../core/services/auth_storage_service.dart';
 import '../../core/di/injection_container.dart' as di;
@@ -20,6 +21,7 @@ class AppRoutes {
   static const String login = '/login';
   static const String register = '/register';
   static const String verifyEmail = '/verify-email';
+  static const String notifications = '/notifications';
 }
 
 /// Global router configuration
@@ -110,6 +112,12 @@ GoRouter createRouter() {
           create: (context) => di.sl<DashboardBloc>()..add(const DashboardStarted()),
           child: const MainScreen(),
         ),
+      ),
+
+      // Notifications screen
+      GoRoute(
+        path: AppRoutes.notifications,
+        builder: (context, state) => const NotificationsScreen(),
       ),
     ],
   );

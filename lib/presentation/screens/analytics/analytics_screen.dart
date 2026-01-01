@@ -24,7 +24,13 @@ class AnalyticsScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: colors.bg,
       body: SafeArea(
-        child: CustomScrollView(
+        child: RefreshIndicator(
+          color: AppColors.accent,
+          onRefresh: () async {
+            context.read<DashboardBloc>().add(const DashboardRefreshed());
+            await Future.delayed(const Duration(milliseconds: 500));
+          },
+          child: CustomScrollView(
           slivers: [
             // Header
             SliverToBoxAdapter(
@@ -229,7 +235,8 @@ class AnalyticsScreen extends StatelessWidget {
                 ),
               ),
             ),
-          ],
+            ],
+          ),
         ),
       ),
     );

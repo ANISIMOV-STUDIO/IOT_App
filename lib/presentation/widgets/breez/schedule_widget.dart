@@ -71,7 +71,9 @@ class ScheduleWidget extends StatelessWidget {
 
           // Schedule entries (flexible, max 3 visible)
           Expanded(
-            child: Column(
+            child: entries.isEmpty
+                ? _EmptyState()
+                : Column(
               children: entries.take(3).toList().asMap().entries.map((entry) {
                 final index = entry.key;
                 final scheduleEntry = entry.value;
@@ -89,7 +91,7 @@ class ScheduleWidget extends StatelessWidget {
           ),
 
           // Active schedule highlight (compact)
-          if (entries.any((e) => e.isActive))
+          if (entries.isNotEmpty && entries.any((e) => e.isActive))
             _ActiveScheduleCard(
               entry: entries.firstWhere((e) => e.isActive),
             ),
@@ -283,6 +285,43 @@ class _ActiveScheduleCard extends StatelessWidget {
               fontSize: 13,
               fontWeight: FontWeight.w700,
               color: Colors.white,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Empty state for schedule
+class _EmptyState extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.calendar_today_outlined,
+            size: 40,
+            color: AppColors.accent.withValues(alpha: 0.5),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'Нет расписания',
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: colors.textMuted,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'Добавьте расписание для устройства',
+            style: TextStyle(
+              fontSize: 11,
+              color: colors.textMuted.withValues(alpha: 0.7),
             ),
           ),
         ],
