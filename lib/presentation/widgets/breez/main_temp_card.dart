@@ -161,7 +161,7 @@ class MainTempCard extends StatelessWidget {
                               ),
                               const SizedBox(width: 4),
                               Text(
-                                '',
+                                '$alarmCount',
                                 style: const TextStyle(
                                   fontSize: 10,
                                   fontWeight: FontWeight.w700,
