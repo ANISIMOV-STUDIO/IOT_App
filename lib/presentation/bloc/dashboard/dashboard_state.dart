@@ -46,6 +46,8 @@ class DashboardState extends Equatable {
 
   // Connectivity
   final bool isOffline;
+  final bool isServerUnavailable;
+  final String? connectionMessage;
 
   // Полное состояние устройства (аварии, настройки режимов, таймер)
   final DeviceFullState? deviceFullState;
@@ -73,6 +75,8 @@ class DashboardState extends Equatable {
     this.graphData = const [],
     this.selectedGraphMetric = GraphMetric.temperature,
     this.isOffline = false,
+    this.isServerUnavailable = false,
+    this.connectionMessage,
     this.deviceFullState,
     this.alarmHistory = const [],
     this.isRegistering = false,
@@ -123,6 +127,8 @@ class DashboardState extends Equatable {
     List<GraphDataPoint>? graphData,
     GraphMetric? selectedGraphMetric,
     bool? isOffline,
+    bool? isServerUnavailable,
+    String? connectionMessage,
     DeviceFullState? deviceFullState,
     List<AlarmHistory>? alarmHistory,
     bool? isRegistering,
@@ -144,6 +150,8 @@ class DashboardState extends Equatable {
       graphData: graphData ?? this.graphData,
       selectedGraphMetric: selectedGraphMetric ?? this.selectedGraphMetric,
       isOffline: isOffline ?? this.isOffline,
+      isServerUnavailable: isServerUnavailable ?? this.isServerUnavailable,
+      connectionMessage: connectionMessage,
       deviceFullState: deviceFullState ?? this.deviceFullState,
       alarmHistory: alarmHistory ?? this.alarmHistory,
       isRegistering: isRegistering ?? this.isRegistering,
@@ -160,6 +168,10 @@ class DashboardState extends Equatable {
     status, devices, climate, energyStats, powerUsage,
     occupants, schedule, errorMessage, hvacDevices, selectedHvacDeviceId,
     weeklySchedule, unitNotifications, graphData, selectedGraphMetric,
-    isOffline, deviceFullState, alarmHistory, isRegistering, registrationError,
+    isOffline, isServerUnavailable, connectionMessage,
+    deviceFullState, alarmHistory, isRegistering, registrationError,
   ];
+
+  /// Показывать ли баннер о проблемах с соединением
+  bool get showConnectionBanner => isOffline || isServerUnavailable;
 }

@@ -31,6 +31,7 @@ import 'dialogs/update_available_dialog.dart';
 import 'layouts/desktop_layout.dart';
 import 'layouts/mobile_layout.dart';
 import 'widgets/mobile_header.dart';
+import '../../widgets/common/offline_banner.dart';
 
 /// Main dashboard screen
 class DashboardScreen extends StatefulWidget {
@@ -324,6 +325,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
             body: SafeArea(
               child: Column(
                 children: [
+                  // Баннер о проблемах с соединением
+                  AnimatedOfflineBanner(
+                    isVisible: dashboardState.showConnectionBanner,
+                    message: dashboardState.connectionMessage,
+                  ),
                   // Main content
                   Expanded(
                     child: currentUnit == null

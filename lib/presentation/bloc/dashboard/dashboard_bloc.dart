@@ -217,7 +217,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         );
     // Подписка на изменения сети
     _connectivitySubscription = _connectivityService?.onStatusChange.listen(
-      (status) => add(ConnectivityChanged(status == NetworkStatus.offline)),
+      (status) => add(ConnectivityChanged(status)),
     );
   }
 
@@ -436,7 +436,25 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     ConnectivityChanged event,
     Emitter<DashboardState> emit,
   ) {
-    emit(state.copyWith(isOffline: event.isOffline));
+    String? message;
+    switch (event.status) {
+      case NetworkStatus.offline:
+        message = 'Нет подключения к интернету';
+        break;
+      case NetworkStatus.serverUnavailable:
+        message = 'Сервер недоступен';
+        break;
+      case NetworkStatus.online:
+      case NetworkStatus.unknown:
+        message = null;
+        break;
+    }
+
+    emit(state.copyWith(
+      isOffline: event.status == NetworkStatus.offline,
+      isServerUnavailable: event.status == NetworkStatus.serverUnavailable,
+      connectionMessage: message,
+    ));
   }
 
   Future<void> _onRegisterDeviceRequested(

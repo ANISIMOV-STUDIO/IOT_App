@@ -175,10 +175,10 @@ class GraphMetricChanged extends DashboardEvent {
 
 // Connectivity events
 class ConnectivityChanged extends DashboardEvent {
-  final bool isOffline;
-  const ConnectivityChanged(this.isOffline);
+  final NetworkStatus status;
+  const ConnectivityChanged(this.status);
   @override
-  List<Object?> get props => [isOffline];
+  List<Object?> get props => [status];
 }
 
 // Device full state events (аварии, настройки режимов, таймер)
