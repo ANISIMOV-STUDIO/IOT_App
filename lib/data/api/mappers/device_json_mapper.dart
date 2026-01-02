@@ -6,6 +6,7 @@ import '../../../domain/entities/climate.dart';
 import '../../../domain/entities/alarm_info.dart';
 import '../../../domain/entities/mode_settings.dart';
 import '../../../domain/entities/device_full_state.dart';
+import '../../../domain/entities/sensor_history.dart';
 import 'package:flutter/material.dart';
 
 class DeviceJsonMapper {
@@ -201,5 +202,31 @@ class DeviceJsonMapper {
           ? activeAlarmsFromJson(json['activeAlarms'] as Map<String, dynamic>)
           : null,
     );
+  }
+
+  // ============================================
+  // ИСТОРИЯ ДАТЧИКОВ
+  // ============================================
+
+  /// JSON → SensorHistory entity
+  static SensorHistory sensorHistoryFromJson(Map<String, dynamic> json) {
+    return SensorHistory(
+      id: json['id'] as String? ?? '',
+      timestamp: DateTime.parse(json['timestamp'] as String),
+      supplyTemperature: (json['supplyTemperature'] as num?)?.toDouble(),
+      roomTemperature: (json['roomTemperature'] as num?)?.toDouble(),
+      outdoorTemperature: (json['outdoorTemperature'] as num?)?.toDouble(),
+      humidity: json['humidity'] as int?,
+      supplyFan: json['supplyFan'] as int?,
+      exhaustFan: json['exhaustFan'] as int?,
+      power: json['power'] as int?,
+    );
+  }
+
+  /// JSON List → List<SensorHistory>
+  static List<SensorHistory> sensorHistoryListFromJson(List<dynamic> json) {
+    return json
+        .map((item) => sensorHistoryFromJson(item as Map<String, dynamic>))
+        .toList();
   }
 }
