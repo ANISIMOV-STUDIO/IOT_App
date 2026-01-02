@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../../core/error/api_exception.dart';
 import '../../../core/services/connectivity_service.dart';
 import '../../../domain/entities/smart_device.dart';
 import '../../../domain/entities/climate.dart';
@@ -95,6 +96,14 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     on<AlarmHistoryLoaded>(_onAlarmHistoryLoaded);
     on<LoadAlarmHistory>(_onLoadAlarmHistory);
     on<RegisterDeviceRequested>(_onRegisterDeviceRequested);
+    on<ClearRegistrationError>(_onClearRegistrationError);
+  }
+
+  void _onClearRegistrationError(
+    ClearRegistrationError event,
+    Emitter<DashboardState> emit,
+  ) {
+    emit(state.copyWith(registrationError: null));
   }
 
   Future<void> _onStarted(DashboardStarted event, Emitter<DashboardState> emit) async {
@@ -433,9 +442,16 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         selectedHvacDeviceId: device.id,
       ));
     } catch (e) {
+      // Извлекаем только сообщение для пользователя
+      String errorMessage;
+      if (e is ApiException) {
+        errorMessage = e.message;
+      } else {
+        errorMessage = 'Не удалось зарегистрировать устройство';
+      }
       emit(state.copyWith(
         isRegistering: false,
-        registrationError: e.toString(),
+        registrationError: errorMessage,
       ));
     }
   }

@@ -246,7 +246,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
               previous.registrationError != current.registrationError &&
               current.registrationError != null,
           listener: (context, state) {
-            ToastService.error('Ошибка: ${state.registrationError}');
+            ToastService.error(state.registrationError!);
+            // Очищаем ошибку после показа
+            context.read<DashboardBloc>().add(const ClearRegistrationError());
           },
         ),
         // Слушатель для logout

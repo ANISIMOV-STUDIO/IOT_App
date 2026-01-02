@@ -225,3 +225,10 @@ class DeviceRegistrationFailed extends DashboardEvent {
   @override
   List<Object?> get props => [error];
 }
+
+/// Очистить ошибку регистрации после показа
+class ClearRegistrationError extends DashboardEvent {
+  const ClearRegistrationError();
+  @override
+  List<Object?> get props => [];
+}
