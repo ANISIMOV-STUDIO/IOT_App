@@ -47,24 +47,25 @@ class HvacControlApp extends StatefulWidget {
 }
 
 class _HvacControlAppState extends State<HvacControlApp> {
+  late final AuthBloc _authBloc;
   late final GoRouter _router;
 
   @override
   void initState() {
     super.initState();
-    _router = createRouter();
+    // Создаём AuthBloc и сразу запускаем проверку сессии
+    _authBloc = di.sl<AuthBloc>()..add(const AuthCheckRequested());
+    // Router получает AuthBloc для refreshListenable и redirect
+    _router = createRouter(_authBloc);
   }
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) =>
-              di.sl<AuthBloc>()..add(const AuthCheckRequested()),
-        ),
-        // DashboardBloc предоставляется глобально, но НЕ запускается здесь.
-        // DashboardStarted диспатчится в app_router.dart только после авторизации
+        // AuthBloc уже создан в initState - используем .value
+        BlocProvider.value(value: _authBloc),
+        // DashboardBloc предоставляется глобально
         BlocProvider(
           create: (context) => di.sl<DashboardBloc>(),
         ),

@@ -24,6 +24,18 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
+  bool _dashboardStarted = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Загружаем данные dashboard при первом входе на экран
+    // didChangeDependencies вызывается после initState и имеет доступ к context
+    if (!_dashboardStarted) {
+      _dashboardStarted = true;
+      context.read<DashboardBloc>().add(const DashboardStarted());
+    }
+  }
 
   static const _screens = [
     DashboardScreen(),

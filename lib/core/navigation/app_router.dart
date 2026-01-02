@@ -1,22 +1,26 @@
 /// App Router Configuration
 ///
-/// GoRouter-based navigation for the dashboard
+/// GoRouter с правильным auth flow:
+/// - refreshListenable слушает AuthBloc.stream
+/// - redirect проверяет AuthBloc.state (не storage напрямую)
+/// - Никаких side effects в builder
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../presentation/screens/main_screen.dart';
 import '../../presentation/screens/auth/auth_screen.dart';
 import '../../presentation/screens/auth/verify_email_screen.dart';
 import '../../presentation/screens/notifications/notifications_screen.dart';
-import '../../presentation/bloc/dashboard/dashboard_bloc.dart';
-import '../../core/services/auth_storage_service.dart';
-import '../../core/di/injection_container.dart' as di;
+import '../../presentation/screens/splash/splash_screen.dart';
+import '../../presentation/bloc/auth/auth_bloc.dart';
+import '../../presentation/bloc/auth/auth_state.dart';
+import 'router_refresh_stream.dart';
 
-/// App route names
+/// Названия маршрутов
 class AppRoutes {
+  static const String splash = '/splash';
   static const String home = '/';
   static const String login = '/login';
   static const String register = '/register';
@@ -24,39 +28,86 @@ class AppRoutes {
   static const String notifications = '/notifications';
 }
 
-/// Global router configuration
+/// Global navigator key
 final GlobalKey<NavigatorState> _rootNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'root');
 
 /// Экспортируем для использования в navigation без context
 GlobalKey<NavigatorState> get rootNavigatorKey => _rootNavigatorKey;
 
-/// Creates the GoRouter instance
-GoRouter createRouter() {
+/// Создаёт GoRouter с правильным auth flow
+///
+/// Требует AuthBloc для:
+/// - refreshListenable: перепроверяет routes при изменении auth state
+/// - redirect: решает куда направить пользователя
+GoRouter createRouter(AuthBloc authBloc) {
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
     debugLogDiagnostics: true,
-    initialLocation: AppRoutes.login,
 
-    // Route guard - проверка авторизации
-    redirect: (context, state) async {
-      final authStorage = di.sl<AuthStorageService>();
-      final isAuthenticated = await authStorage.hasToken();
+    // Начинаем со splash - пока AuthBloc не определит состояние
+    initialLocation: AppRoutes.splash,
 
-      final isGoingToAuth = state.matchedLocation == AppRoutes.login ||
-          state.matchedLocation == AppRoutes.register;
+    // Автоматически перепроверяем routes при изменении auth state
+    refreshListenable: RouterRefreshStream(authBloc.stream),
 
-      // Если не авторизован и пытается зайти на защищенную страницу
-      if (!isAuthenticated && !isGoingToAuth && state.matchedLocation != AppRoutes.verifyEmail) {
+    // Централизованная логика навигации
+    redirect: (context, state) {
+      final authState = authBloc.state;
+      final currentPath = state.matchedLocation;
+
+      // 1. Если AuthBloc ещё загружается - показываем splash
+      if (authState is AuthInitial || authState is AuthLoading) {
+        // Разрешаем оставаться на splash или переходить на verify-email
+        if (currentPath == AppRoutes.splash ||
+            currentPath == AppRoutes.verifyEmail) {
+          return null;
+        }
+        return AppRoutes.splash;
+      }
+
+      // 2. Если пользователь НЕ авторизован
+      if (authState is AuthUnauthenticated || authState is AuthError) {
+        // Разрешаем: login, register, verify-email
+        final allowedPaths = [
+          AppRoutes.login,
+          AppRoutes.register,
+          AppRoutes.verifyEmail,
+        ];
+        if (allowedPaths.contains(currentPath)) {
+          return null;
+        }
         return AppRoutes.login;
       }
 
-      // Если авторизован и пытается зайти на страницы auth (но не verifyEmail)
-      if (isAuthenticated && isGoingToAuth) {
-        return AppRoutes.home;
+      // 3. Если пользователь зарегистрировался - нужно подтвердить email
+      if (authState is AuthRegistered) {
+        if (currentPath == AppRoutes.verifyEmail) {
+          return null;
+        }
+        return '${AppRoutes.verifyEmail}?email=${authState.email}';
       }
 
-      return null; // Продолжить навигацию
+      // 4. Если пользователь авторизован
+      if (authState is AuthAuthenticated) {
+        // Не пускаем на auth страницы
+        final authPaths = [
+          AppRoutes.splash,
+          AppRoutes.login,
+          AppRoutes.register,
+        ];
+        if (authPaths.contains(currentPath)) {
+          return AppRoutes.home;
+        }
+        return null;
+      }
+
+      // 5. Email подтверждён - редирект на login
+      if (authState is AuthEmailVerified) {
+        return AppRoutes.login;
+      }
+
+      return null;
     },
 
     errorBuilder: (context, state) => Scaffold(
@@ -66,11 +117,11 @@ GoRouter createRouter() {
           children: [
             const Icon(Icons.error_outline, size: 48, color: Colors.red),
             const SizedBox(height: 16),
-            Text('Page not found: ${state.matchedLocation}'),
+            Text('Страница не найдена: ${state.matchedLocation}'),
             const SizedBox(height: 24),
             ElevatedButton(
-              onPressed: () => context.go(AppRoutes.login),
-              child: const Text('Go to Login'),
+              onPressed: () => context.go(AppRoutes.home),
+              child: const Text('На главную'),
             ),
           ],
         ),
@@ -78,6 +129,12 @@ GoRouter createRouter() {
     ),
 
     routes: [
+      // Splash - показывается пока проверяется auth
+      GoRoute(
+        path: AppRoutes.splash,
+        builder: (context, state) => const SplashScreen(),
+      ),
+
       // Auth routes
       GoRoute(
         path: AppRoutes.login,
@@ -105,18 +162,13 @@ GoRouter createRouter() {
         },
       ),
 
-      // Protected routes
+      // Protected routes - пользователь уже авторизован (проверено в redirect)
       GoRoute(
         path: AppRoutes.home,
-        builder: (context, state) {
-          // DashboardBloc предоставляется глобально в main.dart
-          // Здесь только запускаем загрузку данных при входе на dashboard
-          context.read<DashboardBloc>().add(const DashboardStarted());
-          return const MainScreen();
-        },
+        builder: (context, state) => const MainScreen(),
       ),
 
-      // Notifications screen
+      // Notifications
       GoRoute(
         path: AppRoutes.notifications,
         builder: (context, state) => const NotificationsScreen(),
@@ -125,11 +177,12 @@ GoRouter createRouter() {
   );
 }
 
-/// GoRouter extensions for easier navigation
+/// Расширения для удобной навигации
 extension GoRouterExtensions on BuildContext {
   void goToHome() => go(AppRoutes.home);
   void goToLogin() => go(AppRoutes.login);
   void goToRegister() => go(AppRoutes.register);
+  void goToNotifications() => go(AppRoutes.notifications);
   void goToVerifyEmail(String email, {String? password}) =>
-      go('${AppRoutes.verifyEmail}?email=$email', extra: password);
+      go('${AppRoutes.verifyEmail}?email=\$email', extra: password);
 }
