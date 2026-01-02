@@ -1,7 +1,11 @@
-/// Auth Models for API requests and responses
+/// Auth Models (DTO) для API запросов и ответов
+///
+/// Все модели отвечают только за сериализацию/десериализацию.
+/// Преобразование в Domain Entities выполняется через методы toEntity().
 library;
 
 import '../../domain/entities/user.dart';
+import 'user_model.dart';
 
 /// Запрос на регистрацию
 class RegisterRequest {
@@ -52,28 +56,31 @@ class LoginRequest {
 class AuthResponse {
   final String accessToken;
   final String refreshToken;
-  final User user;
+  final UserModel _userModel;
 
-  const AuthResponse({
+  const AuthResponse._({
     required this.accessToken,
     required this.refreshToken,
-    required this.user,
-  });
+    required UserModel userModel,
+  }) : _userModel = userModel;
 
   factory AuthResponse.fromJson(Map<String, dynamic> json) {
-    return AuthResponse(
+    return AuthResponse._(
       // Поддержка старого формата (token) и нового (accessToken)
       accessToken: (json['accessToken'] ?? json['token']) as String? ?? '',
       refreshToken: json['refreshToken'] as String? ?? '',
-      user: User.fromJson((json['user'] as Map<String, dynamic>?) ?? {}),
+      userModel: UserModel.fromJson((json['user'] as Map<String, dynamic>?) ?? {}),
     );
   }
+
+  /// Получить Domain Entity пользователя
+  User get user => _userModel.toEntity();
 
   Map<String, dynamic> toJson() {
     return {
       'accessToken': accessToken,
       'refreshToken': refreshToken,
-      'user': user.toJson(),
+      'user': _userModel.toJson(),
     };
   }
 }

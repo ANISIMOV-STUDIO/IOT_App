@@ -361,7 +361,7 @@ class CacheService {
         'id': d.id,
         'name': d.name,
         'brand': d.brand,
-        'type': d.type,
+        'deviceType': d.deviceType.index,
         'isOnline': d.isOnline,
         'isActive': d.isActive,
       };
@@ -370,7 +370,7 @@ class CacheService {
         id: m['id'] as String,
         name: m['name'] as String,
         brand: m['brand'] as String,
-        type: m['type'] as String,
+        deviceType: HvacDeviceType.values[m['deviceType'] as int? ?? 0],
         isOnline: m['isOnline'] as bool? ?? true,
         isActive: m['isActive'] as bool? ?? false,
       );

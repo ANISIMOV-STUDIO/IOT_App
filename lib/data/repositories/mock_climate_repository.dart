@@ -1,8 +1,9 @@
 /// Мок-репозиторий климат-контроля
+///
+/// Используется для разработки UI без backend.
 library;
 
 import 'dart:async';
-import 'package:flutter/material.dart';
 import '../../domain/entities/climate.dart';
 import '../../domain/entities/hvac_device.dart';
 import '../../domain/entities/device_full_state.dart';
@@ -46,8 +47,7 @@ class MockClimateRepository implements ClimateRepository {
 
       _deviceMeta[id] = _DeviceMeta(
         brand: device['brand'] as String,
-        type: device['type'] as String,
-        icon: _parseIcon(device['icon'] as String),
+        deviceType: _parseDeviceType(device['type'] as String?),
         isOnline: device['isOnline'] as bool,
       );
     }
@@ -71,16 +71,18 @@ class MockClimateRepository implements ClimateRepository {
     );
   }
 
-  IconData _parseIcon(String icon) {
-    switch (icon) {
-      case 'air':
-        return Icons.air;
-      case 'ac_unit':
-        return Icons.ac_unit;
-      case 'water_drop':
-        return Icons.water_drop;
+  HvacDeviceType _parseDeviceType(String? type) {
+    if (type == null) return HvacDeviceType.ventilation;
+    switch (type.toLowerCase()) {
+      case 'ventilation':
+        return HvacDeviceType.ventilation;
+      case 'airconditioner':
+      case 'ac':
+        return HvacDeviceType.airConditioner;
+      case 'heatpump':
+        return HvacDeviceType.heatPump;
       default:
-        return Icons.device_hub;
+        return HvacDeviceType.generic;
     }
   }
 
@@ -130,10 +132,9 @@ class MockClimateRepository implements ClimateRepository {
         id: entry.key,
         name: state.deviceName,
         brand: meta.brand,
-        type: meta.type,
+        deviceType: meta.deviceType,
         isOnline: meta.isOnline,
         isActive: state.isOn,
-        icon: meta.icon,
       );
     }).toList();
   }
@@ -313,8 +314,7 @@ class MockClimateRepository implements ClimateRepository {
     _deviceStates[newId] = newState;
     _deviceMeta[newId] = _DeviceMeta(
       brand: 'Breez',
-      type: 'HVAC',
-      icon: Icons.ac_unit,
+      deviceType: HvacDeviceType.ventilation,
       isOnline: true,
     );
     _devicesController.add(_buildDeviceList());
@@ -322,10 +322,9 @@ class MockClimateRepository implements ClimateRepository {
       id: newId,
       name: name,
       brand: 'Breez',
-      type: 'HVAC',
+      deviceType: HvacDeviceType.ventilation,
       isOnline: true,
       isActive: false,
-      icon: Icons.ac_unit,
     );
   }
 
@@ -381,14 +380,12 @@ class MockClimateRepository implements ClimateRepository {
 
 class _DeviceMeta {
   final String brand;
-  final String type;
-  final IconData icon;
+  final HvacDeviceType deviceType;
   final bool isOnline;
 
   const _DeviceMeta({
     required this.brand,
-    required this.type,
-    required this.icon,
+    required this.deviceType,
     required this.isOnline,
   });
 }

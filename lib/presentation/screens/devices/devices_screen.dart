@@ -1,4 +1,4 @@
-/// Devices Screen - List of all HVAC devices
+/// Devices Screen - Список всех HVAC устройств
 library;
 
 import 'package:flutter/material.dart';
@@ -7,8 +7,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_font_sizes.dart';
 import '../../../core/theme/spacing.dart';
+import '../../../domain/entities/hvac_device.dart';
 import '../../bloc/dashboard/dashboard_bloc.dart';
 import '../../widgets/breez/breez_card.dart';
+import '../../widgets/common/device_icon_helper.dart';
 import '../../widgets/loading/loading_indicator.dart';
 import '../../widgets/loading/skeleton.dart';
 import '../../widgets/error/error_widgets.dart';
@@ -77,7 +79,7 @@ class DevicesScreen extends StatelessWidget {
                       break;
                   }
 
-                  return LoadingState<List<dynamic>>(
+                  return LoadingState<List<HvacDevice>>(
                     status: loadingStatus,
                     data: state.hvacDevices.isEmpty ? null : state.hvacDevices,
                     errorMessage: 'Не удалось загрузить устройства',
@@ -113,7 +115,7 @@ class DevicesScreen extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Icon(
-                                    device.icon,
+                                    device.icon, // Использует extension из device_icon_helper
                                     color: device.isOnline ? AppColors.accent : colors.textMuted,
                                     size: 24,
                                   ),
@@ -133,7 +135,7 @@ class DevicesScreen extends StatelessWidget {
                                       ),
                                       const SizedBox(height: AppSpacing.xxs),
                                       Text(
-                                        '${device.brand} • ${device.type}',
+                                        device.brand,
                                         style: TextStyle(
                                           fontSize: AppFontSizes.caption,
                                           color: colors.textMuted,

@@ -1,4 +1,7 @@
 /// JSON Mapper: HTTP JSON ↔ Domain entities
+///
+/// Маппер для преобразования JSON данных в доменные сущности.
+/// Не содержит Flutter зависимостей - только Dart.
 library;
 
 import '../../../domain/entities/hvac_device.dart';
@@ -7,7 +10,6 @@ import '../../../domain/entities/alarm_info.dart';
 import '../../../domain/entities/mode_settings.dart';
 import '../../../domain/entities/device_full_state.dart';
 import '../../../domain/entities/sensor_history.dart';
-import 'package:flutter/material.dart';
 
 class DeviceJsonMapper {
   /// JSON → Domain HvacDevice
@@ -16,11 +18,30 @@ class DeviceJsonMapper {
       id: json['id'] as String,
       name: json['name'] as String? ?? 'Unknown Device',
       brand: json['brand'] as String? ?? 'ZILON',
-      type: json['type'] as String? ?? 'Ventilation',
+      deviceType: _stringToDeviceType(json['type'] as String?),
       isOnline: json['isOnline'] as bool? ?? true,
       isActive: json['power'] as bool? ?? false,
-      icon: Icons.air,
     );
+  }
+
+  /// Преобразование строки типа в enum
+  static HvacDeviceType _stringToDeviceType(String? type) {
+    if (type == null) return HvacDeviceType.ventilation;
+
+    switch (type.toLowerCase()) {
+      case 'ventilation':
+      case 'vent':
+        return HvacDeviceType.ventilation;
+      case 'airconditioner':
+      case 'ac':
+      case 'air_conditioner':
+        return HvacDeviceType.airConditioner;
+      case 'heatpump':
+      case 'heat_pump':
+        return HvacDeviceType.heatPump;
+      default:
+        return HvacDeviceType.generic;
+    }
   }
 
   /// JSON → Domain ClimateState

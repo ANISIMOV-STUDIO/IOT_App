@@ -90,11 +90,11 @@ class TestData {
   // ==================== Ответы авторизации ====================
 
   /// Успешный ответ на вход
-  static AuthResponse get authResponse => AuthResponse(
-        accessToken: testAccessToken,
-        refreshToken: testRefreshToken,
-        user: testUser,
-      );
+  static AuthResponse get authResponse => AuthResponse.fromJson({
+        'accessToken': testAccessToken,
+        'refreshToken': testRefreshToken,
+        'user': userJson,
+      });
 
   /// Успешный ответ на регистрацию
   static const RegisterResponse registerResponse = RegisterResponse(
@@ -105,11 +105,21 @@ class TestData {
 
   // ==================== JSON ответы ====================
 
+  /// JSON для пользователя
+  static Map<String, dynamic> get userJson => {
+        'id': 'test-user-id-123',
+        'email': 'test@example.com',
+        'firstName': 'Иван',
+        'lastName': 'Петров',
+        'role': 'User',
+        'emailConfirmed': true,
+      };
+
   /// JSON для успешного входа
   static Map<String, dynamic> get loginSuccessJson => {
         'accessToken': testAccessToken,
         'refreshToken': testRefreshToken,
-        'user': testUser.toJson(),
+        'user': userJson,
       };
 
   /// JSON для успешной регистрации
@@ -118,9 +128,6 @@ class TestData {
         'email': 'newuser@example.com',
         'requiresEmailVerification': true,
       };
-
-  /// JSON для пользователя
-  static Map<String, dynamic> get userJson => testUser.toJson();
 
   /// JSON для ошибки
   static Map<String, dynamic> errorJson(String message) => {
@@ -175,7 +182,7 @@ class TestData {
         id: 'hvac-device-1',
         name: 'Бризер Гостиная',
         brand: 'Breez',
-        type: 'Pro 200',
+        deviceType: HvacDeviceType.ventilation,
         isOnline: true,
         isActive: true,
       );
@@ -185,7 +192,7 @@ class TestData {
         id: 'hvac-device-2',
         name: 'Бризер Спальня',
         brand: 'Breez',
-        type: 'Pro 150',
+        deviceType: HvacDeviceType.ventilation,
         isOnline: true,
         isActive: false,
       );

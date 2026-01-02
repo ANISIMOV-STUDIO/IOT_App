@@ -1,10 +1,11 @@
-/// Auth Service for API calls
+/// Auth Service - API вызовы для аутентификации
 library;
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import '../models/auth_models.dart';
+import '../models/user_model.dart';
 import '../../domain/entities/user.dart';
 import '../../core/config/api_config.dart';
 
@@ -93,7 +94,8 @@ class AuthService {
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body) as Map<String, dynamic>;
-        return User.fromJson(data);
+        // Используем UserModel для десериализации, затем преобразуем в Entity
+        return UserModel.fromJson(data).toEntity();
       } else if (response.statusCode == 401) {
         throw const AuthException('Токен недействителен');
       } else {

@@ -1,4 +1,7 @@
 /// User Entity
+///
+/// Чистая доменная сущность без зависимостей от сериализации.
+/// Сериализация выполняется в Data Layer через UserModel.
 library;
 
 import 'package:equatable/equatable.dart';
@@ -52,30 +55,6 @@ class User extends Equatable {
       role: role ?? this.role,
       emailConfirmed: emailConfirmed ?? this.emailConfirmed,
     );
-  }
-
-  /// Из JSON
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      id: json['id'] as String? ?? '',
-      email: json['email'] as String? ?? '',
-      firstName: json['firstName'] as String? ?? '',
-      lastName: json['lastName'] as String? ?? '',
-      role: json['role'] as String? ?? 'user',
-      emailConfirmed: json['emailConfirmed'] as bool? ?? false,
-    );
-  }
-
-  /// В JSON
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'email': email,
-      'firstName': firstName,
-      'lastName': lastName,
-      'role': role,
-      'emailConfirmed': emailConfirmed,
-    };
   }
 
   @override
