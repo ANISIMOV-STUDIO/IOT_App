@@ -131,6 +131,11 @@ Future<void> init() async {
           apiClient: sl<ApiClient>(),
           pushService: sl<PushNotificationService>(),
         ));
+
+    //! SignalR - Real-time соединение (общий для всех репозиториев)
+    sl.registerLazySingleton<SignalRHubConnection>(
+      () => SignalRHubConnection(sl<ApiClient>()),
+    );
   }
 
   //! Dashboard Feature - Главный экран
@@ -140,7 +145,10 @@ Future<void> init() async {
   if (useRealApi) {
     sl.registerLazySingleton<SmartDeviceRepository>(
       () => CachedSmartDeviceRepository(
-        inner: RealSmartDeviceRepository(sl<ApiClient>()),
+        inner: RealSmartDeviceRepository(
+          sl<ApiClient>(),
+          sl<SignalRHubConnection>(), // Для fallback polling
+        ),
         cacheService: sl<CacheService>(),
         connectivity: sl<ConnectivityService>(),
       ),
@@ -156,10 +164,11 @@ Future<void> init() async {
     sl.registerLazySingleton<ClimateRepository>(
       () {
         final apiClient = sl<ApiClient>();
+        final signalR = sl<SignalRHubConnection>();
         final realRepository = RealClimateRepository(
           apiClient,
           HvacHttpClient(apiClient),
-          SignalRHubConnection(apiClient),
+          signalR,
         );
         // Инициализировать SignalR connection асинхронно
         realRepository.initialize();

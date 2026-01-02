@@ -2,21 +2,29 @@
 library;
 
 import 'dart:async';
+import 'package:signalr_netcore/signalr_client.dart';
 import '../../domain/entities/smart_device.dart';
 import '../../domain/repositories/smart_device_repository.dart';
 import '../api/platform/api_client.dart';
 import '../api/http/clients/hvac_http_client.dart';
+import '../api/websocket/signalr_hub_connection.dart';
 import '../../core/error/api_exception.dart';
 import '../../core/logging/api_logger.dart';
 
 class RealSmartDeviceRepository implements SmartDeviceRepository {
   final ApiClient _apiClient;
+  final SignalRHubConnection? _signalR;
   late final HvacHttpClient _httpClient;
 
   final _devicesController = StreamController<List<SmartDevice>>.broadcast();
-  Timer? _pollTimer; // Для отслеживания и отмены polling
+  Timer? _pollTimer;
+  StreamSubscription<HubConnectionState>? _signalRSubscription;
+  bool _isSignalRConnected = false;
 
-  RealSmartDeviceRepository(this._apiClient) {
+  /// Интервал polling когда SignalR не работает
+  static const _pollInterval = Duration(seconds: 30);
+
+  RealSmartDeviceRepository(this._apiClient, [this._signalR]) {
     _httpClient = HvacHttpClient(_apiClient);
   }
 
@@ -138,21 +146,51 @@ class RealSmartDeviceRepository implements SmartDeviceRepository {
 
   @override
   Stream<List<SmartDevice>> watchDevices() {
-    // Отменить предыдущий таймер, если существует
-    _pollTimer?.cancel();
-
-    // Создать новый таймер для polling каждые 30 секунд
-    _pollTimer = Timer.periodic(const Duration(seconds: 30), (_) {
-      getAllDevices();
-    });
-
     // Начальная загрузка данных
     getAllDevices();
+
+    // Подписаться на состояние SignalR для управления polling
+    _signalRSubscription?.cancel();
+    if (_signalR != null) {
+      _signalRSubscription = _signalR.connectionState.listen(_onSignalRStateChanged);
+      // Проверить текущее состояние
+      _isSignalRConnected = _signalR.state == HubConnectionState.Connected;
+    }
+
+    // Запустить polling только если SignalR не подключён
+    _updatePolling();
+
     return _devicesController.stream;
   }
 
+  /// Обработчик изменения состояния SignalR
+  void _onSignalRStateChanged(HubConnectionState state) {
+    final wasConnected = _isSignalRConnected;
+    _isSignalRConnected = state == HubConnectionState.Connected;
+
+    // Обновить polling только если состояние изменилось
+    if (wasConnected != _isSignalRConnected) {
+      _updatePolling();
+    }
+  }
+
+  /// Включить/выключить polling в зависимости от состояния SignalR
+  void _updatePolling() {
+    _pollTimer?.cancel();
+    _pollTimer = null;
+
+    if (!_isSignalRConnected) {
+      // SignalR не работает — включаем fallback polling
+      _pollTimer = Timer.periodic(_pollInterval, (_) {
+        getAllDevices();
+      });
+    }
+    // Если SignalR подключён — polling не нужен, данные приходят через WebSocket
+  }
+
   void dispose() {
-    _pollTimer?.cancel(); // Отменить таймер для предотвращения утечки памяти
+    _pollTimer?.cancel();
+    _signalRSubscription?.cancel();
     _devicesController.close();
   }
 }
