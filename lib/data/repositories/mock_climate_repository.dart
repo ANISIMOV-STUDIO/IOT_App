@@ -5,6 +5,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../domain/entities/climate.dart';
 import '../../domain/entities/hvac_device.dart';
+import '../../domain/entities/device_full_state.dart';
+import '../../domain/entities/alarm_info.dart';
 import '../../domain/repositories/climate_repository.dart';
 import '../mock/mock_data.dart';
 
@@ -343,6 +345,32 @@ class MockClimateRepository implements ClimateRepository {
       _deviceStates[deviceId] = state.copyWith(deviceName: newName);
       _devicesController.add(_buildDeviceList());
     }
+  }
+
+  @override
+  Future<DeviceFullState> getDeviceFullState(String deviceId) async {
+    await Future.delayed(Duration(milliseconds: MockData.networkDelays['fast'] ?? 100));
+    final state = _deviceStates[deviceId];
+    if (state == null) {
+      throw Exception('Device not found: $deviceId');
+    }
+
+    // Моковые данные для тестирования - одна авария
+    return DeviceFullState(
+      id: deviceId,
+      name: state.deviceName,
+      power: state.isOn,
+      mode: state.mode,
+      currentTemperature: state.currentTemperature,
+      targetTemperature: state.targetTemperature,
+      humidity: state.humidity,
+      activeAlarms: {
+        'alarm1': const AlarmInfo(
+          code: 1,
+          description: 'Тестовая авария: перегрев системы',
+        ),
+      },
+    );
   }
 
   void dispose() {

@@ -8,6 +8,7 @@ library;
 
 import '../entities/climate.dart';
 import '../entities/hvac_device.dart';
+import '../entities/device_full_state.dart';
 import 'climate_controller.dart';
 import 'climate_state_provider.dart';
 import 'hvac_device_provider.dart';
@@ -102,4 +103,11 @@ abstract class ClimateRepository
 
   /// Rename device
   Future<void> renameDevice(String deviceId, String newName);
+
+  // ============================================
+  // FULL STATE (with alarms, mode settings, etc.)
+  // ============================================
+
+  /// Get full device state including alarms and mode settings
+  Future<DeviceFullState> getDeviceFullState(String deviceId);
 }

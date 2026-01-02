@@ -4,6 +4,7 @@ library;
 import 'dart:async';
 import '../../domain/entities/climate.dart';
 import '../../domain/entities/hvac_device.dart';
+import '../../domain/entities/device_full_state.dart';
 import '../../domain/repositories/climate_repository.dart';
 import '../api/platform/api_client.dart';
 import '../api/http/clients/hvac_http_client.dart';
@@ -77,6 +78,7 @@ class RealClimateRepository implements ClimateRepository {
         .map((json) => DeviceJsonMapper.hvacDeviceFromJson(json))
         .toList();
 
+    _cachedDevices = devices; // Сохраняем для последующих операций
     _devicesController.add(devices);
     return devices;
   }
@@ -262,6 +264,19 @@ class RealClimateRepository implements ClimateRepository {
       return d;
     }).toList();
     _devicesController.add(_cachedDevices);
+  }
+
+  // ============================================
+  // FULL STATE (with alarms, mode settings, etc.)
+  // ============================================
+
+  @override
+  Future<DeviceFullState> getDeviceFullState(String deviceId) async {
+    if (deviceId.isEmpty) {
+      throw StateError('No device selected');
+    }
+    final jsonDevice = await _httpClient.getDevice(deviceId);
+    return DeviceJsonMapper.deviceFullStateFromJson(jsonDevice);
   }
 
   void dispose() {

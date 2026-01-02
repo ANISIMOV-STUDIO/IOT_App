@@ -133,6 +133,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
       List<ScheduleEntry> weeklySchedule = [];
       List<UnitNotification> notifications = [];
       List<GraphDataPoint> graphData = [];
+      DeviceFullState? deviceFullState;
 
       if (selectedId != null) {
         try {
@@ -157,6 +158,13 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         } catch (_) {
           // График не критичен для отображения устройства
         }
+
+        // Загружаем полное состояние (с авариями)
+        try {
+          deviceFullState = await _climateRepository.getDeviceFullState(selectedId);
+        } catch (_) {
+          // Аварии не критичны для отображения устройства
+        }
       }
       emit(state.copyWith(
         status: DashboardStatus.success,
@@ -171,6 +179,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         weeklySchedule: weeklySchedule,
         unitNotifications: notifications,
         graphData: graphData,
+        deviceFullState: deviceFullState,
       ));
 
       _subscribeToUpdates(selectedId);
@@ -326,9 +335,18 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
       // Загружаем состояние выбранного устройства
       final climate = await _climateRepository.getDeviceState(event.deviceId);
 
+      // Загружаем полное состояние (с авариями)
+      DeviceFullState? deviceFullState;
+      try {
+        deviceFullState = await _climateRepository.getDeviceFullState(event.deviceId);
+      } catch (_) {
+        // Аварии не критичны
+      }
+
       emit(state.copyWith(
         selectedHvacDeviceId: event.deviceId,
         climate: climate,
+        deviceFullState: deviceFullState,
       ));
     } catch (e) {
       emit(state.copyWith(errorMessage: 'Ошибка выбора устройства: $e'));

@@ -335,7 +335,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     child: currentUnit == null
                         ? _buildEmptyState(isDark)
                         : isDesktop
-                            ? _buildDesktopLayout(isDark, user, currentUnit, units)
+                            ? _buildDesktopLayout(isDark, user, currentUnit, units, dashboardState)
                             : _buildMobileLayout(isDark, width, currentUnit, units),
                   ),
                   // Space between content and bottom bar (mobile/tablet only)
@@ -396,7 +396,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildDesktopLayout(bool isDark, User? user, UnitState currentUnit, List<UnitState> units) {
+  Widget _buildDesktopLayout(bool isDark, User? user, UnitState currentUnit, List<UnitState> units, DashboardState dashboardState) {
     return DesktopLayout(
       unit: currentUnit,
       allUnits: units,
@@ -424,7 +424,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       graphData: _graphData,
       selectedGraphMetric: _selectedGraphMetric,
       onGraphMetricChanged: _onGraphMetricChanged,
-      activeAlarms: const {},
+      activeAlarms: dashboardState.deviceFullState?.activeAlarms ?? const {},
     );
   }
 

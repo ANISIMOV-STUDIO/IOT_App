@@ -11,6 +11,7 @@ import '../../core/services/cache_service.dart';
 import '../../core/services/connectivity_service.dart';
 import '../../domain/entities/climate.dart';
 import '../../domain/entities/hvac_device.dart';
+import '../../domain/entities/device_full_state.dart';
 import '../../domain/repositories/climate_repository.dart';
 
 /// Кеширующий декоратор для ClimateRepository
@@ -203,6 +204,17 @@ class CachedClimateRepository implements ClimateRepository {
   Future<void> renameDevice(String deviceId, String newName) async {
     _ensureOnline('renameDevice');
     await _inner.renameDevice(deviceId, newName);
+  }
+
+  // ============================================
+  // FULL STATE
+  // ============================================
+
+  @override
+  Future<DeviceFullState> getDeviceFullState(String deviceId) async {
+    // Полное состояние пока не кешируем — делегируем во inner
+    // TODO: Добавить кеширование при необходимости
+    return await _inner.getDeviceFullState(deviceId);
   }
 
   // ============================================
