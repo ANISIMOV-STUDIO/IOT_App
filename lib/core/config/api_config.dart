@@ -15,7 +15,8 @@ class ApiConfig {
 
   // REST API endpoints (for web)
   static String get apiBaseUrl => '$httpUrl/api';
-  static String get hvacApiUrl => '$apiBaseUrl/hvac';
+  static String get deviceApiUrl => '$apiBaseUrl/device'; // Новый DeviceController
+  static String get hvacApiUrl => deviceApiUrl; // Алиас для совместимости
   static String get analyticsApiUrl => '$apiBaseUrl/analytics';
   static String get scheduleApiUrl => '$apiBaseUrl/schedule';
   static String get notificationApiUrl => '$apiBaseUrl/notifications';

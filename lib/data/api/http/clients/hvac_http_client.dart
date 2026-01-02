@@ -13,9 +13,10 @@ class HvacHttpClient {
 
   HvacHttpClient(this._apiClient);
 
-  /// List all devices
+  /// Получить все устройства
+  /// GET /api/device
   Future<List<Map<String, dynamic>>> listDevices() async {
-    final url = '${ApiConfig.hvacApiUrl}/devices';
+    final url = ApiConfig.hvacApiUrl;
 
     try {
       ApiLogger.logHttpRequest('GET', url, null);
@@ -54,7 +55,7 @@ class HvacHttpClient {
 
   /// Get device by ID
   Future<Map<String, dynamic>> getDevice(String deviceId) async {
-    final url = '${ApiConfig.hvacApiUrl}/devices/$deviceId';
+    final url = '${ApiConfig.hvacApiUrl}/$deviceId';
 
     try {
       ApiLogger.logHttpRequest('GET', url, null);
@@ -86,14 +87,14 @@ class HvacHttpClient {
 
   /// Set power
   Future<Map<String, dynamic>> setPower(String deviceId, bool power) async {
-    final url = '${ApiConfig.hvacApiUrl}/devices/$deviceId/power';
+    final url = '${ApiConfig.hvacApiUrl}/$deviceId/power';
     final body = json.encode({'power': power});
 
     try {
-      ApiLogger.logHttpRequest('PUT', url, body);
+      ApiLogger.logHttpRequest('POST', url, body);
 
       final token = await _apiClient.getAuthToken();
-      final response = await _apiClient.getHttpClient().put(
+      final response = await _apiClient.getHttpClient().post(
             Uri.parse(url),
             headers: {
               'Content-Type': 'application/json',
@@ -102,7 +103,7 @@ class HvacHttpClient {
             body: body,
           );
 
-      ApiLogger.logHttpResponse('PUT', url, response.statusCode, response.body);
+      ApiLogger.logHttpResponse('POST', url, response.statusCode, response.body);
 
       if (response.statusCode == 200) {
         return json.decode(response.body) as Map<String, dynamic>;
@@ -110,7 +111,7 @@ class HvacHttpClient {
         throw HttpErrorHandler.handle(response);
       }
     } catch (e) {
-      ApiLogger.logHttpError('PUT', url, e);
+      ApiLogger.logHttpError('POST', url, e);
       if (e is http.ClientException) {
         throw HttpErrorHandler.handleException(e);
       }
@@ -121,14 +122,14 @@ class HvacHttpClient {
   /// Set temperature
   Future<Map<String, dynamic>> setTemperature(
       String deviceId, int temperature) async {
-    final url = '${ApiConfig.hvacApiUrl}/devices/$deviceId/temperature';
+    final url = '${ApiConfig.hvacApiUrl}/$deviceId/temperature';
     final body = json.encode({'temperature': temperature});
 
     try {
-      ApiLogger.logHttpRequest('PUT', url, body);
+      ApiLogger.logHttpRequest('POST', url, body);
 
       final token = await _apiClient.getAuthToken();
-      final response = await _apiClient.getHttpClient().put(
+      final response = await _apiClient.getHttpClient().post(
             Uri.parse(url),
             headers: {
               'Content-Type': 'application/json',
@@ -137,7 +138,7 @@ class HvacHttpClient {
             body: body,
           );
 
-      ApiLogger.logHttpResponse('PUT', url, response.statusCode, response.body);
+      ApiLogger.logHttpResponse('POST', url, response.statusCode, response.body);
 
       if (response.statusCode == 200) {
         return json.decode(response.body) as Map<String, dynamic>;
@@ -145,7 +146,7 @@ class HvacHttpClient {
         throw HttpErrorHandler.handle(response);
       }
     } catch (e) {
-      ApiLogger.logHttpError('PUT', url, e);
+      ApiLogger.logHttpError('POST', url, e);
       if (e is http.ClientException) {
         throw HttpErrorHandler.handleException(e);
       }
@@ -155,14 +156,14 @@ class HvacHttpClient {
 
   /// Set mode
   Future<Map<String, dynamic>> setMode(String deviceId, String mode) async {
-    final url = '${ApiConfig.hvacApiUrl}/devices/$deviceId/mode';
+    final url = '${ApiConfig.hvacApiUrl}/$deviceId/mode';
     final body = json.encode({'mode': mode});
 
     try {
-      ApiLogger.logHttpRequest('PUT', url, body);
+      ApiLogger.logHttpRequest('POST', url, body);
 
       final token = await _apiClient.getAuthToken();
-      final response = await _apiClient.getHttpClient().put(
+      final response = await _apiClient.getHttpClient().post(
             Uri.parse(url),
             headers: {
               'Content-Type': 'application/json',
@@ -171,7 +172,7 @@ class HvacHttpClient {
             body: body,
           );
 
-      ApiLogger.logHttpResponse('PUT', url, response.statusCode, response.body);
+      ApiLogger.logHttpResponse('POST', url, response.statusCode, response.body);
 
       if (response.statusCode == 200) {
         return json.decode(response.body) as Map<String, dynamic>;
@@ -179,7 +180,7 @@ class HvacHttpClient {
         throw HttpErrorHandler.handle(response);
       }
     } catch (e) {
-      ApiLogger.logHttpError('PUT', url, e);
+      ApiLogger.logHttpError('POST', url, e);
       if (e is http.ClientException) {
         throw HttpErrorHandler.handleException(e);
       }
@@ -193,17 +194,17 @@ class HvacHttpClient {
     String supplyFan,
     String exhaustFan,
   ) async {
-    final url = '${ApiConfig.hvacApiUrl}/devices/$deviceId/fan';
+    final url = '${ApiConfig.hvacApiUrl}/$deviceId/fan';
     final body = json.encode({
       'supplyFan': supplyFan,
       'exhaustFan': exhaustFan,
     });
 
     try {
-      ApiLogger.logHttpRequest('PUT', url, body);
+      ApiLogger.logHttpRequest('POST', url, body);
 
       final token = await _apiClient.getAuthToken();
-      final response = await _apiClient.getHttpClient().put(
+      final response = await _apiClient.getHttpClient().post(
             Uri.parse(url),
             headers: {
               'Content-Type': 'application/json',
@@ -212,7 +213,7 @@ class HvacHttpClient {
             body: body,
           );
 
-      ApiLogger.logHttpResponse('PUT', url, response.statusCode, response.body);
+      ApiLogger.logHttpResponse('POST', url, response.statusCode, response.body);
 
       if (response.statusCode == 200) {
         return json.decode(response.body) as Map<String, dynamic>;
@@ -220,7 +221,7 @@ class HvacHttpClient {
         throw HttpErrorHandler.handle(response);
       }
     } catch (e) {
-      ApiLogger.logHttpError('PUT', url, e);
+      ApiLogger.logHttpError('POST', url, e);
       if (e is http.ClientException) {
         throw HttpErrorHandler.handleException(e);
       }
