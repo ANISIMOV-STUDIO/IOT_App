@@ -22,6 +22,8 @@ import '../../bloc/auth/auth_bloc.dart';
 import '../../bloc/auth/auth_event.dart';
 import '../../bloc/auth/auth_state.dart';
 import '../../bloc/dashboard/dashboard_bloc.dart';
+import '../../bloc/devices/devices_bloc.dart';
+import '../../bloc/climate/climate_bloc.dart';
 import '../../../domain/entities/hvac_device.dart';
 import '../../../domain/entities/climate.dart';
 import '../../../domain/entities/user.dart';
@@ -195,9 +197,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
     if (current == null) return;
 
     final newPower = !current.power;
-    // Отправляем команду на сервер через BLoC
+    // Отправляем команду на сервер через ClimateBloc
     // UI обновится когда устройство реально ответит через SignalR
-    context.read<DashboardBloc>().add(DevicePowerToggled(newPower));
+    context.read<ClimateBloc>().add(ClimatePowerToggled(newPower));
   }
 
   Future<void> _masterPowerOff() async {
@@ -215,10 +217,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Future<void> _showAddUnitDialog() async {
     final result = await AddUnitDialog.show(context);
     if (result != null) {
-      // Отправляем событие регистрации устройства в BLoC
+      // Отправляем событие регистрации устройства в DevicesBloc
       if (!mounted) return;
-      context.read<DashboardBloc>().add(
-        RegisterDeviceRequested(result.macAddress, result.name),
+      context.read<DevicesBloc>().add(
+        DevicesRegistrationRequested(
+          macAddress: result.macAddress,
+          name: result.name,
+        ),
       );
     }
   }
@@ -232,13 +237,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     switch (result.action) {
       case UnitSettingsAction.delete:
-        context.read<DashboardBloc>().add(DeleteDeviceRequested(unit.id));
+        context.read<DevicesBloc>().add(DevicesDeletionRequested(unit.id));
         ToastService.success('Установка удалена');
         break;
       case UnitSettingsAction.rename:
         if (result.newName != null) {
-          context.read<DashboardBloc>().add(
-                RenameDeviceRequested(unit.id, result.newName!),
+          context.read<DevicesBloc>().add(
+                DevicesRenameRequested(
+                  deviceId: unit.id,
+                  newName: result.newName!,
+                ),
               );
           ToastService.success('Название изменено');
         }
@@ -271,15 +279,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     return MultiBlocListener(
       listeners: [
-        // Слушатель для ошибок регистрации устройства
-        BlocListener<DashboardBloc, DashboardState>(
+        // Слушатель для ошибок регистрации устройства (DevicesBloc)
+        BlocListener<DevicesBloc, DevicesState>(
           listenWhen: (previous, current) =>
               previous.registrationError != current.registrationError &&
               current.registrationError != null,
           listener: (context, state) {
             ToastService.error(state.registrationError!);
             // Очищаем ошибку после показа
-            context.read<DashboardBloc>().add(const ClearRegistrationError());
+            context.read<DevicesBloc>().add(const DevicesRegistrationErrorCleared());
           },
         ),
         // Слушатель для logout
@@ -295,54 +303,68 @@ class _DashboardScreenState extends State<DashboardScreen> {
           },
         ),
       ],
-      child: BlocBuilder<DashboardBloc, DashboardState>(
-        builder: (context, dashboardState) {
-          // Преобразуем HvacDevice в UnitState для UI
-          final units = dashboardState.hvacDevices
-              .map((device) {
-                // Использовать climate только для выбранного устройства
-                final climate = device.id == dashboardState.selectedHvacDeviceId
-                    ? dashboardState.climate
-                    : null;
-                return _createUnitStateFromHvacDevice(device, climate);
-              })
-              .toList();
+      // Используем DevicesBloc для списка устройств
+      child: BlocBuilder<DevicesBloc, DevicesState>(
+        builder: (context, devicesState) {
+          // Используем ClimateBloc для климата текущего устройства
+          return BlocBuilder<ClimateBloc, ClimateControlState>(
+            builder: (context, climateState) {
+              // Используем DashboardBloc только для connectivity
+              return BlocBuilder<DashboardBloc, DashboardState>(
+                buildWhen: (previous, current) =>
+                    previous.showConnectionBanner != current.showConnectionBanner ||
+                    previous.connectionMessage != current.connectionMessage,
+                builder: (context, dashboardState) {
+                  // Преобразуем HvacDevice в UnitState для UI
+                  final units = devicesState.devices
+                      .map((device) {
+                        // Использовать climate только для выбранного устройства
+                        final climate = device.id == devicesState.selectedDeviceId
+                            ? climateState.climate
+                            : null;
+                        return _createUnitStateFromHvacDevice(device, climate);
+                      })
+                      .toList();
 
-          // Синхронно обновляем _units для использования в callback-ах
-          // (не вызываем setState чтобы избежать бесконечного цикла)
-          if (units.length != _units.length || !_unitsEqual(units, _units)) {
-            _units = units;
-          }
+                  // Синхронно обновляем _units для использования в callback-ах
+                  // (не вызываем setState чтобы избежать бесконечного цикла)
+                  if (units.length != _units.length || !_unitsEqual(units, _units)) {
+                    _units = units;
+                  }
 
-          // Определяем текущий unit для layouts
-          final currentUnit = units.isNotEmpty && _activeUnitIndex < units.length
-              ? units[_activeUnitIndex]
-              : null;
+                  // Определяем текущий unit для layouts
+                  final currentUnit = units.isNotEmpty && _activeUnitIndex < units.length
+                      ? units[_activeUnitIndex]
+                      : null;
 
-          return Scaffold(
-            key: _scaffoldKey,
-            backgroundColor: isDark ? AppColors.darkBg : AppColors.lightBg,
-            body: SafeArea(
-              child: Column(
-                children: [
-                  // Баннер о проблемах с соединением
-                  AnimatedOfflineBanner(
-                    isVisible: dashboardState.showConnectionBanner,
-                    message: dashboardState.connectionMessage,
-                  ),
-                  // Main content
-                  Expanded(
-                    child: currentUnit == null
-                        ? _buildEmptyState(isDark)
-                        : isDesktop
-                            ? _buildDesktopLayout(isDark, user, currentUnit, units, dashboardState)
-                            : _buildMobileLayout(isDark, width, currentUnit, units),
-                  ),
-                  // Space between content and bottom bar (mobile/tablet only)
-                  if (!isDesktop) const SizedBox(height: AppSpacing.sm),
-                ],
-              ),
-            ),
+                  return Scaffold(
+                    key: _scaffoldKey,
+                    backgroundColor: isDark ? AppColors.darkBg : AppColors.lightBg,
+                    body: SafeArea(
+                      child: Column(
+                        children: [
+                          // Баннер о проблемах с соединением
+                          AnimatedOfflineBanner(
+                            isVisible: dashboardState.showConnectionBanner,
+                            message: dashboardState.connectionMessage,
+                          ),
+                          // Main content
+                          Expanded(
+                            child: currentUnit == null
+                                ? _buildEmptyState(isDark)
+                                : isDesktop
+                                    ? _buildDesktopLayout(isDark, user, currentUnit, units, climateState)
+                                    : _buildMobileLayout(isDark, width, currentUnit, units),
+                          ),
+                          // Space between content and bottom bar (mobile/tablet only)
+                          if (!isDesktop) const SizedBox(height: AppSpacing.sm),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
           );
         },
       ),
@@ -396,7 +418,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildDesktopLayout(bool isDark, User? user, UnitState currentUnit, List<UnitState> units, DashboardState dashboardState) {
+  Widget _buildDesktopLayout(bool isDark, User? user, UnitState currentUnit, List<UnitState> units, ClimateControlState climateState) {
     return DesktopLayout(
       unit: currentUnit,
       allUnits: units,
@@ -414,6 +436,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
       onMasterOff: _masterPowerOff,
       onUnitSelected: (index) {
         setState(() => _activeUnitIndex = index);
+        // Уведомляем DevicesBloc о смене устройства
+        if (index < _units.length) {
+          context.read<DevicesBloc>().add(DevicesDeviceSelected(_units[index].id));
+        }
         _loadData();
       },
       onThemeToggle: _toggleTheme,
@@ -424,7 +450,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       graphData: _graphData,
       selectedGraphMetric: _selectedGraphMetric,
       onGraphMetricChanged: _onGraphMetricChanged,
-      activeAlarms: dashboardState.deviceFullState?.activeAlarms ?? const {},
+      activeAlarms: climateState.activeAlarms,
     );
   }
 
@@ -437,6 +463,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
           selectedUnitIndex: _activeUnitIndex,
           onUnitSelected: (index) {
             setState(() => _activeUnitIndex = index);
+            // Уведомляем DevicesBloc о смене устройства
+            if (index < _units.length) {
+              context.read<DevicesBloc>().add(DevicesDeviceSelected(_units[index].id));
+            }
             _loadData();
           },
           onAddUnit: _showAddUnitDialog,

@@ -39,6 +39,7 @@ import '../../presentation/bloc/dashboard/dashboard_bloc.dart';
 import '../../presentation/bloc/auth/auth_bloc.dart';
 import '../../presentation/bloc/devices/devices_bloc.dart';
 import '../../presentation/bloc/climate/climate_bloc.dart';
+import '../../presentation/bloc/notifications/notifications_bloc.dart';
 
 // Data - Mock репозитории (для разработки/тестирования)
 import '../../data/repositories/mock_climate_repository.dart';
@@ -285,5 +286,10 @@ Future<void> init() async {
   // ClimateBloc (Управление климатом текущего устройства)
   sl.registerLazySingleton(
     () => ClimateBloc(climateRepository: sl()),
+  );
+
+  // NotificationsBloc (Уведомления устройств)
+  sl.registerLazySingleton(
+    () => NotificationsBloc(notificationRepository: sl()),
   );
 }

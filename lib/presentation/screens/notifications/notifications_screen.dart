@@ -10,7 +10,7 @@ import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/spacing.dart';
 import '../../../core/services/toast_service.dart';
 import '../../../domain/entities/unit_notification.dart';
-import '../../bloc/dashboard/dashboard_bloc.dart';
+import '../../bloc/notifications/notifications_bloc.dart';
 import '../../widgets/error/error_widgets.dart';
 
 /// Полноэкранный список уведомлений с действиями
@@ -39,18 +39,15 @@ class NotificationsScreen extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
         ),
         actions: [
-          BlocBuilder<DashboardBloc, DashboardState>(
+          BlocBuilder<NotificationsBloc, NotificationsState>(
             builder: (context, state) {
-              final hasUnread = state.unitNotifications.any((n) => !n.isRead);
-              if (!hasUnread) return const SizedBox.shrink();
+              if (!state.hasUnread) return const SizedBox.shrink();
 
               return TextButton(
                 onPressed: () {
-                  for (final n in state.unitNotifications) {
-                    if (!n.isRead) {
-                      context.read<DashboardBloc>().add(NotificationRead(n.id));
-                    }
-                  }
+                  context.read<NotificationsBloc>().add(
+                    const NotificationsMarkAllAsReadRequested(),
+                  );
                   ToastService.success('Все уведомления прочитаны');
                 },
                 child: const Text(
@@ -65,38 +62,38 @@ class NotificationsScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: BlocBuilder<DashboardBloc, DashboardState>(
+      body: BlocBuilder<NotificationsBloc, NotificationsState>(
         builder: (context, state) {
-          final notifications = state.unitNotifications;
-
-          if (notifications.isEmpty) {
+          if (state.isEmpty) {
             return EmptyState.noNotifications();
           }
 
           return RefreshIndicator(
             color: AppColors.accent,
             onRefresh: () async {
-              context.read<DashboardBloc>().add(const DashboardRefreshed());
+              context.read<NotificationsBloc>().add(
+                const NotificationsSubscriptionRequested(),
+              );
               await Future.delayed(const Duration(milliseconds: 500));
             },
             child: ListView.separated(
               padding: const EdgeInsets.all(AppSpacing.lg),
-              itemCount: notifications.length,
+              itemCount: state.notifications.length,
               separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.sm),
               itemBuilder: (context, index) {
-                final notification = notifications[index];
+                final notification = state.notifications[index];
                 return _NotificationTile(
                   notification: notification,
                   onTap: () {
                     if (!notification.isRead) {
-                      context.read<DashboardBloc>().add(
-                        NotificationRead(notification.id),
+                      context.read<NotificationsBloc>().add(
+                        NotificationsMarkAsReadRequested(notification.id),
                       );
                     }
                   },
                   onDismiss: () {
-                    context.read<DashboardBloc>().add(
-                      NotificationDismissed(notification.id),
+                    context.read<NotificationsBloc>().add(
+                      NotificationsDismissRequested(notification.id),
                     );
                     ToastService.info('Уведомление удалено');
                   },

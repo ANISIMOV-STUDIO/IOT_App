@@ -9,6 +9,7 @@ import '../../core/navigation/app_router.dart';
 import '../bloc/dashboard/dashboard_bloc.dart';
 import '../bloc/devices/devices_bloc.dart';
 import '../bloc/climate/climate_bloc.dart';
+import '../bloc/notifications/notifications_bloc.dart';
 
 import '../widgets/breez/navigation_bar.dart';
 import 'dashboard/dashboard_screen.dart';
@@ -41,6 +42,8 @@ class _MainScreenState extends State<MainScreen> {
       context.read<DevicesBloc>().add(const DevicesSubscriptionRequested());
       // ClimateBloc — загрузка состояния климата
       context.read<ClimateBloc>().add(const ClimateSubscriptionRequested());
+      // NotificationsBloc — загрузка уведомлений
+      context.read<NotificationsBloc>().add(const NotificationsSubscriptionRequested());
     }
   }
 
@@ -89,9 +92,8 @@ class _MainScreenState extends State<MainScreen> {
           index: _currentIndex,
           children: _screens,
         ),
-        bottomNavigationBar: BlocBuilder<DashboardBloc, DashboardState>(
+        bottomNavigationBar: BlocBuilder<NotificationsBloc, NotificationsState>(
           builder: (context, state) {
-            final unreadCount = state.unreadNotificationCount;
             return BreezNavigationBar(
               items: _navigationItems,
               selectedIndex: _currentIndex,
@@ -101,7 +103,7 @@ class _MainScreenState extends State<MainScreen> {
                 });
               },
               onNotificationsTap: () => context.push(AppRoutes.notifications),
-              notificationsBadge: unreadCount > 0 ? '$unreadCount' : null,
+              notificationsBadge: state.unreadCount > 0 ? '${state.unreadCount}' : null,
             );
           },
         ),
