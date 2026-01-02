@@ -25,6 +25,7 @@ import '../../bloc/auth/auth_state.dart';
 import '../../bloc/dashboard/dashboard_bloc.dart';
 import '../../../domain/entities/hvac_device.dart';
 import '../../../domain/entities/climate.dart';
+import '../../../domain/entities/user.dart';
 import 'dialogs/add_unit_dialog.dart';
 import 'dialogs/update_available_dialog.dart';
 import 'layouts/desktop_layout.dart';
@@ -225,6 +226,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final width = MediaQuery.sizeOf(context).width;
     final isDesktop = width > 900;
 
+    // Получаем данные пользователя из AuthBloc
+    final authState = context.watch<AuthBloc>().state;
+    final user = authState is AuthAuthenticated ? authState.user : null;
+
     return BlocBuilder<DashboardBloc, DashboardState>(
       builder: (context, dashboardState) {
         // Используем данные из DashboardBloc если есть, иначе fallback на MockData
@@ -264,7 +269,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 children: [
                   // Main content
                   Expanded(
-                    child: isDesktop ? _buildDesktopLayout(isDark) : _buildMobileLayout(isDark, width),
+                    child: isDesktop ? _buildDesktopLayout(isDark, user) : _buildMobileLayout(isDark, width),
                   ),
                   // Space between content and bottom bar (mobile/tablet only)
                   if (!isDesktop) const SizedBox(height: AppSpacing.sm),
@@ -277,14 +282,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildDesktopLayout(bool isDark) {
+  Widget _buildDesktopLayout(bool isDark, User? user) {
     return DesktopLayout(
       unit: _currentUnit,
       allUnits: _units,
       selectedUnitIndex: _activeUnitIndex,
       isDark: isDark,
-      userName: 'Алексей Б.',
-      userRole: 'Админ',
+      userName: user?.fullName ?? 'Пользователь',
+      userRole: user?.role ?? 'User',
       onTemperatureIncrease: (v) => _updateUnit((u) => u.copyWith(temp: v.clamp(16, 32))),
       onTemperatureDecrease: (v) => _updateUnit((u) => u.copyWith(temp: v.clamp(16, 32))),
       onSupplyFanChanged: (v) => _updateUnit((u) => u.copyWith(supplyFan: v)),
