@@ -178,7 +178,7 @@ void main() {
         'id': 'device-1',
         'isOn': true,
       };
-      when(() => mockHttpClient.put(
+      when(() => mockHttpClient.post(
             any(),
             headers: any(named: 'headers'),
             body: any(named: 'body'),
@@ -191,7 +191,7 @@ void main() {
       expect(result['isOn'], isTrue);
 
       // Verify request body
-      verify(() => mockHttpClient.put(
+      verify(() => mockHttpClient.post(
             any(),
             headers: any(named: 'headers'),
             body: json.encode({'power': true}),
@@ -204,7 +204,7 @@ void main() {
         'id': 'device-1',
         'isOn': false,
       };
-      when(() => mockHttpClient.put(
+      when(() => mockHttpClient.post(
             any(),
             headers: any(named: 'headers'),
             body: any(named: 'body'),
@@ -225,7 +225,7 @@ void main() {
         'id': 'device-1',
         'targetTemperature': 24,
       };
-      when(() => mockHttpClient.put(
+      when(() => mockHttpClient.post(
             any(),
             headers: any(named: 'headers'),
             body: any(named: 'body'),
@@ -238,7 +238,7 @@ void main() {
       expect(result['targetTemperature'], equals(24));
 
       // Verify request body
-      verify(() => mockHttpClient.put(
+      verify(() => mockHttpClient.post(
             any(),
             headers: any(named: 'headers'),
             body: json.encode({'temperature': 24}),
@@ -247,7 +247,7 @@ void main() {
 
     test('выбрасывает исключение при ошибке сервера', () async {
       // Arrange
-      when(() => mockHttpClient.put(
+      when(() => mockHttpClient.post(
             any(),
             headers: any(named: 'headers'),
             body: any(named: 'body'),
@@ -268,7 +268,7 @@ void main() {
         'id': 'device-1',
         'mode': 'heating',
       };
-      when(() => mockHttpClient.put(
+      when(() => mockHttpClient.post(
             any(),
             headers: any(named: 'headers'),
             body: any(named: 'body'),
@@ -281,7 +281,7 @@ void main() {
       expect(result['mode'], equals('heating'));
 
       // Verify request body
-      verify(() => mockHttpClient.put(
+      verify(() => mockHttpClient.post(
             any(),
             headers: any(named: 'headers'),
             body: json.encode({'mode': 'heating'}),
@@ -294,7 +294,7 @@ void main() {
         'id': 'device-1',
         'mode': 'cooling',
       };
-      when(() => mockHttpClient.put(
+      when(() => mockHttpClient.post(
             any(),
             headers: any(named: 'headers'),
             body: any(named: 'body'),
@@ -316,7 +316,7 @@ void main() {
         'supplyFan': 'high',
         'exhaustFan': 'medium',
       };
-      when(() => mockHttpClient.put(
+      when(() => mockHttpClient.post(
             any(),
             headers: any(named: 'headers'),
             body: any(named: 'body'),
@@ -330,7 +330,7 @@ void main() {
       expect(result['exhaustFan'], equals('medium'));
 
       // Verify request body
-      verify(() => mockHttpClient.put(
+      verify(() => mockHttpClient.post(
             any(),
             headers: any(named: 'headers'),
             body: json.encode({
@@ -347,7 +347,7 @@ void main() {
         'supplyFan': 'auto',
         'exhaustFan': 'auto',
       };
-      when(() => mockHttpClient.put(
+      when(() => mockHttpClient.post(
             any(),
             headers: any(named: 'headers'),
             body: any(named: 'body'),
