@@ -89,7 +89,8 @@ class AnalyticsHttpClient {
     }
   }
 
-  /// Get graph data
+  /// Get graph data from device history
+  /// Использует /api/device/{id}/history и преобразует в формат графика
   Future<Map<String, dynamic>> getGraphData(
     String deviceId,
     String metric,
@@ -97,11 +98,11 @@ class AnalyticsHttpClient {
     DateTime to,
   ) async {
     final queryParams = {
-      'metric': metric,
       'from': from.toIso8601String(),
       'to': to.toIso8601String(),
+      'limit': '1000',
     };
-    final url = Uri.parse('${ApiConfig.analyticsApiUrl}/graph/$deviceId')
+    final url = Uri.parse('${ApiConfig.deviceApiUrl}/$deviceId/history')
         .replace(queryParameters: queryParams)
         .toString();
 
@@ -120,7 +121,39 @@ class AnalyticsHttpClient {
       ApiLogger.logHttpResponse('GET', url, response.statusCode, response.body);
 
       if (response.statusCode == 200) {
-        return json.decode(response.body) as Map<String, dynamic>;
+        final data = json.decode(response.body);
+        // Преобразуем SensorHistoryDto[] в формат dataPoints
+        if (data is List) {
+          final dataPoints = <Map<String, dynamic>>[];
+          for (final item in data) {
+            if (item is Map<String, dynamic>) {
+              final timestamp = item['timestamp'] as String?;
+              double? value;
+
+              // Выбираем значение по метрике
+              switch (metric) {
+                case 'temperature':
+                  value = (item['roomTemperature'] as num?)?.toDouble();
+                  break;
+                case 'humidity':
+                  value = (item['humidity'] as num?)?.toDouble();
+                  break;
+                case 'airflow':
+                  value = (item['supplyFan'] as num?)?.toDouble();
+                  break;
+              }
+
+              if (timestamp != null && value != null) {
+                dataPoints.add({
+                  'label': timestamp,
+                  'value': value,
+                });
+              }
+            }
+          }
+          return {'dataPoints': dataPoints};
+        }
+        return {'dataPoints': []};
       } else {
         throw HttpErrorHandler.handle(response);
       }

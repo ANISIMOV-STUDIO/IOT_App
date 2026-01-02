@@ -91,7 +91,7 @@ class VersionCheckService {
   /// Fetch version from server
   Future<VersionInfo?> _fetchVersion() async {
     try {
-      final uri = Uri.parse('$_baseUrl/releases/latest');
+      final uri = Uri.parse('$_baseUrl/release/latest');
       final response = await _client.get(uri);
 
       if (response.statusCode == 200) {

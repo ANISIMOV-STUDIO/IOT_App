@@ -17,10 +17,11 @@ class ApiConfig {
   static String get apiBaseUrl => '$httpUrl/api';
   static String get deviceApiUrl => '$apiBaseUrl/device'; // Новый DeviceController
   static String get hvacApiUrl => deviceApiUrl; // Алиас для совместимости
-  static String get analyticsApiUrl => '$apiBaseUrl/analytics';
-  static String get scheduleApiUrl => '$apiBaseUrl/schedule';
-  static String get notificationApiUrl => '$apiBaseUrl/notifications';
-  static String get occupantApiUrl => '$apiBaseUrl/occupants';
+  static String get analyticsApiUrl => '$apiBaseUrl/analytics'; // Не реализован на бэке
+  static String get scheduleApiUrl => deviceApiUrl; // Расписание через /device/{id}/schedule
+  static String get notificationApiUrl => '$apiBaseUrl/notification'; // Без s!
+  static String get occupantApiUrl => '$apiBaseUrl/occupant'; // Без s!
+  static String get releaseApiUrl => '$apiBaseUrl/release'; // Версии приложения
 
   // Timeouts
   static const Duration connectTimeout = Duration(seconds: 10);
