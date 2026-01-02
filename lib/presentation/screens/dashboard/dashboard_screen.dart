@@ -153,11 +153,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
     } catch (_) {}
   }
 
-  UnitState get _currentUnit => _units[_activeUnitIndex];
+  UnitState? get _currentUnit => _units.isNotEmpty && _activeUnitIndex < _units.length
+      ? _units[_activeUnitIndex]
+      : null;
 
   void _updateUnit(UnitState Function(UnitState) update) {
+    final current = _currentUnit;
+    if (current == null) return;
     setState(() {
-      _units[_activeUnitIndex] = update(_currentUnit);
+      _units[_activeUnitIndex] = update(current);
     });
   }
 
@@ -190,7 +194,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       builder: (context) => AlertDialog(
         backgroundColor: BreezColors.of(context).card,
         title: Text(
-          'Настройки ${_currentUnit.name}',
+          'Настройки ${_currentUnit?.name ?? ''}',
           style: TextStyle(color: BreezColors.of(context).text),
         ),
         content: Text(
@@ -274,7 +278,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 children: [
                   // Main content
                   Expanded(
-                    child: isDesktop ? _buildDesktopLayout(isDark, user) : _buildMobileLayout(isDark, width),
+                    child: _units.isEmpty
+                        ? _buildEmptyState(isDark)
+                        : isDesktop
+                            ? _buildDesktopLayout(isDark, user)
+                            : _buildMobileLayout(isDark, width),
                   ),
                   // Space between content and bottom bar (mobile/tablet only)
                   if (!isDesktop) const SizedBox(height: AppSpacing.sm),
@@ -287,9 +295,56 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
+  Widget _buildEmptyState(bool isDark) {
+    final colors = BreezColors.of(context);
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.ac_unit_outlined,
+            size: 80,
+            color: colors.textMuted.withValues(alpha: 0.3),
+          ),
+          const SizedBox(height: 24),
+          Text(
+            'Нет устройств',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w700,
+              color: colors.text,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Добавьте первую установку по MAC-адресу',
+            style: TextStyle(
+              fontSize: 14,
+              color: colors.textMuted,
+            ),
+          ),
+          const SizedBox(height: 32),
+          ElevatedButton.icon(
+            onPressed: _showAddUnitDialog,
+            icon: const Icon(Icons.add),
+            label: const Text('Добавить установку'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.accent,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildDesktopLayout(bool isDark, User? user) {
     return DesktopLayout(
-      unit: _currentUnit,
+      unit: _currentUnit!,
       allUnits: _units,
       selectedUnitIndex: _activeUnitIndex,
       isDark: isDark,
@@ -341,7 +396,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         // Content
         Expanded(
           child: MobileLayout(
-            unit: _currentUnit,
+            unit: _currentUnit!,
             onTemperatureIncrease: (v) => _updateUnit((u) => u.copyWith(temp: v.clamp(16, 32))),
             onTemperatureDecrease: (v) => _updateUnit((u) => u.copyWith(temp: v.clamp(16, 32))),
             onSupplyFanChanged: (v) => _updateUnit((u) => u.copyWith(supplyFan: v)),
