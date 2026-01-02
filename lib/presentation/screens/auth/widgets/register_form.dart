@@ -37,6 +37,12 @@ class _RegisterFormState extends State<RegisterForm> {
   final _confirmPasswordController = TextEditingController();
   bool _consentAccepted = false;
 
+  // FocusNodes для навигации по Enter
+  final _lastNameFocus = FocusNode();
+  final _emailFocus = FocusNode();
+  final _passwordFocus = FocusNode();
+  final _confirmPasswordFocus = FocusNode();
+
   @override
   void dispose() {
     _firstNameController.dispose();
@@ -44,6 +50,10 @@ class _RegisterFormState extends State<RegisterForm> {
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
+    _lastNameFocus.dispose();
+    _emailFocus.dispose();
+    _passwordFocus.dispose();
+    _confirmPasswordFocus.dispose();
     super.dispose();
   }
 
@@ -92,77 +102,92 @@ class _RegisterFormState extends State<RegisterForm> {
         // Карточка с формой
         BreezCard(
           padding: const EdgeInsets.all(AppSpacing.xl),
-          child: Form(
-            key: _formKey,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Имя
-                BreezTextField(
-                  controller: _firstNameController,
-                  label: 'Имя',
-                  hint: 'Иван',
-                  prefixIcon: Icons.person_outline,
-                  validator: (v) => Validators.name(v, fieldName: 'имя'),
-                  validateOnChange: true,
-                  autofillHints: const [AutofillHints.givenName],
-                ),
-                const SizedBox(height: AppSpacing.md),
-
-                // Фамилия
-                BreezTextField(
-                  controller: _lastNameController,
-                  label: 'Фамилия',
-                  hint: 'Иванов',
-                  prefixIcon: Icons.person_outline,
-                  validator: (v) => Validators.name(v, fieldName: 'фамилию'),
-                  validateOnChange: true,
-                  autofillHints: const [AutofillHints.familyName],
-                ),
-                const SizedBox(height: AppSpacing.md),
-
-                // Email
-                BreezTextField(
-                  controller: _emailController,
-                  label: 'Email',
-                  hint: 'example@mail.com',
-                  prefixIcon: Icons.email_outlined,
-                  keyboardType: TextInputType.emailAddress,
-                  validator: Validators.email,
-                  validateOnChange: true,
-                  autofillHints: const [AutofillHints.email],
-                ),
-                const SizedBox(height: AppSpacing.md),
-
-                // Пароль
-                BreezTextField(
-                  controller: _passwordController,
-                  label: 'Пароль',
-                  hint: 'Минимум 8 символов, буквы и цифры',
-                  prefixIcon: Icons.lock_outlined,
-                  obscureText: true,
-                  validator: Validators.password,
-                  showPasswordToggle: true,
-                  validateOnChange: true,
-                  autofillHints: const [AutofillHints.newPassword],
-                ),
-                const SizedBox(height: AppSpacing.md),
-
-                // Подтверждение пароля
-                BreezTextField(
-                  controller: _confirmPasswordController,
-                  label: 'Подтвердите пароль',
-                  prefixIcon: Icons.lock_outlined,
-                  obscureText: true,
-                  validator: (v) => Validators.confirmPassword(
-                    v,
-                    _passwordController.text,
+          child: AutofillGroup(
+            child: Form(
+              key: _formKey,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Имя
+                  BreezTextField(
+                    controller: _firstNameController,
+                    label: 'Имя',
+                    hint: 'Иван',
+                    prefixIcon: Icons.person_outline,
+                    validator: (v) => Validators.name(v, fieldName: 'имя'),
+                    validateOnChange: true,
+                    autofillHints: const [AutofillHints.givenName],
+                    textInputAction: TextInputAction.next,
+                    onFieldSubmitted: (_) => _lastNameFocus.requestFocus(),
                   ),
-                  showPasswordToggle: true,
-                  validateOnChange: true,
-                  autofillHints: const [AutofillHints.newPassword],
-                ),
+                  const SizedBox(height: AppSpacing.md),
+
+                  // Фамилия
+                  BreezTextField(
+                    controller: _lastNameController,
+                    focusNode: _lastNameFocus,
+                    label: 'Фамилия',
+                    hint: 'Иванов',
+                    prefixIcon: Icons.person_outline,
+                    validator: (v) => Validators.name(v, fieldName: 'фамилию'),
+                    validateOnChange: true,
+                    autofillHints: const [AutofillHints.familyName],
+                    textInputAction: TextInputAction.next,
+                    onFieldSubmitted: (_) => _emailFocus.requestFocus(),
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+
+                  // Email
+                  BreezTextField(
+                    controller: _emailController,
+                    focusNode: _emailFocus,
+                    label: 'Email',
+                    hint: 'example@mail.com',
+                    prefixIcon: Icons.email_outlined,
+                    keyboardType: TextInputType.emailAddress,
+                    validator: Validators.email,
+                    validateOnChange: true,
+                    autofillHints: const [AutofillHints.username, AutofillHints.email],
+                    textInputAction: TextInputAction.next,
+                    onFieldSubmitted: (_) => _passwordFocus.requestFocus(),
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+
+                  // Пароль
+                  BreezTextField(
+                    controller: _passwordController,
+                    focusNode: _passwordFocus,
+                    label: 'Пароль',
+                    hint: 'Минимум 8 символов, буквы и цифры',
+                    prefixIcon: Icons.lock_outlined,
+                    obscureText: true,
+                    validator: Validators.password,
+                    showPasswordToggle: true,
+                    validateOnChange: true,
+                    autofillHints: const [AutofillHints.newPassword],
+                    textInputAction: TextInputAction.next,
+                    onFieldSubmitted: (_) => _confirmPasswordFocus.requestFocus(),
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+
+                  // Подтверждение пароля
+                  BreezTextField(
+                    controller: _confirmPasswordController,
+                    focusNode: _confirmPasswordFocus,
+                    label: 'Подтвердите пароль',
+                    prefixIcon: Icons.lock_outlined,
+                    obscureText: true,
+                    validator: (v) => Validators.confirmPassword(
+                      v,
+                      _passwordController.text,
+                    ),
+                    showPasswordToggle: true,
+                    validateOnChange: true,
+                    autofillHints: const [AutofillHints.newPassword],
+                    textInputAction: TextInputAction.done,
+                    onFieldSubmitted: (_) => _handleRegister(),
+                  ),
                 const SizedBox(height: AppSpacing.lg),
 
                 // Согласие на обработку ПД
@@ -208,7 +233,8 @@ class _RegisterFormState extends State<RegisterForm> {
                   actionText: 'Войти',
                   onTap: widget.onSwitchToLogin,
                 ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

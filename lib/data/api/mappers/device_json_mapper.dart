@@ -32,8 +32,8 @@ class DeviceJsonMapper {
       targetTemperature: (json['temp'] as num?)?.toDouble() ?? 22.0,
       humidity: (json['humidity'] as num?)?.toDouble() ?? 50.0,
       targetHumidity: (json['targetHumidity'] as num?)?.toDouble() ?? 50.0,
-      supplyAirflow: _fanSpeedToPercent(json['supplyFan'] as String?),
-      exhaustAirflow: _fanSpeedToPercent(json['exhaustFan'] as String?),
+      supplyAirflow: _parseFanValue(json['supplyFan']),
+      exhaustAirflow: _parseFanValue(json['exhaustFan']),
       mode: _stringToClimateMode(json['mode'] as String?),
       preset: json['preset'] as String? ?? 'auto',
       airQuality: _stringToAirQuality(json['airQuality'] as String?),
@@ -106,22 +106,32 @@ class DeviceJsonMapper {
     }
   }
 
-  /// FanSpeed string → Percent (0-100)
-  static double _fanSpeedToPercent(String? speed) {
-    if (speed == null) return 50.0;
+  /// Parse fan value (can be int or String) → Percent (0-100)
+  static double _parseFanValue(dynamic value) {
+    if (value == null) return 50.0;
 
-    switch (speed.toLowerCase()) {
-      case 'low':
-        return 33.0;
-      case 'medium':
-        return 66.0;
-      case 'high':
-        return 100.0;
-      case 'auto':
-        return 50.0;
-      default:
-        return 50.0;
+    // Если int - возвращаем напрямую как double
+    if (value is int) return value.toDouble();
+    if (value is num) return value.toDouble();
+
+    // Если String - конвертируем по названию
+    if (value is String) {
+      switch (value.toLowerCase()) {
+        case 'low':
+          return 33.0;
+        case 'medium':
+          return 66.0;
+        case 'high':
+          return 100.0;
+        case 'auto':
+          return 50.0;
+        default:
+          // Попробовать распарсить как число
+          return double.tryParse(value) ?? 50.0;
+      }
     }
+
+    return 50.0;
   }
 
   /// Percent → FanSpeed string

@@ -83,7 +83,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     on<OccupantsUpdated>(_onOccupantsUpdated);
     on<HvacDeviceSelected>(_onHvacDeviceSelected);
     on<HvacDevicesUpdated>(_onHvacDevicesUpdated);
-    // New event handlers
+    // Обработчики новых событий
     on<ScheduleLoaded>(_onScheduleLoaded);
     on<ScheduleEntryToggled>(_onScheduleEntryToggled);
     on<NotificationsLoaded>(_onNotificationsLoaded);
@@ -129,22 +129,35 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         _occupantRepository.getAllOccupants(),
       ]);
 
-      // Load additional data for selected device
-      final weeklySchedule = selectedId != null
-          ? await _scheduleRepository.getSchedule(selectedId)
-          : <ScheduleEntry>[];
-      final notifications = await _notificationRepository.getNotifications(
-        deviceId: selectedId,
-      );
-      final graphData = selectedId != null
-          ? await _graphDataRepository.getGraphData(
-              deviceId: selectedId,
-              metric: GraphMetric.temperature,
-              from: DateTime.now().subtract(const Duration(days: 7)),
-              to: DateTime.now(),
-            )
-          : <GraphDataPoint>[];
+      // Загружаем дополнительные данные (не критично, не ломаем загрузку если эти запросы упадут)
+      List<ScheduleEntry> weeklySchedule = [];
+      List<UnitNotification> notifications = [];
+      List<GraphDataPoint> graphData = [];
 
+      if (selectedId != null) {
+        try {
+          weeklySchedule = await _scheduleRepository.getSchedule(selectedId);
+        } catch (_) {
+          // Расписание не критично для отображения устройства
+        }
+
+        try {
+          notifications = await _notificationRepository.getNotifications(deviceId: selectedId);
+        } catch (_) {
+          // Уведомления не критичны для отображения устройства
+        }
+
+        try {
+          graphData = await _graphDataRepository.getGraphData(
+            deviceId: selectedId,
+            metric: GraphMetric.temperature,
+            from: DateTime.now().subtract(const Duration(days: 7)),
+            to: DateTime.now(),
+          );
+        } catch (_) {
+          // График не критичен для отображения устройства
+        }
+      }
       emit(state.copyWith(
         status: DashboardStatus.success,
         devices: results[0] as List<SmartDevice>,
@@ -185,7 +198,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     _hvacDevicesSubscription = _climateRepository.watchHvacDevices().listen(
       (devices) => add(HvacDevicesUpdated(devices)),
     );
-    // Subscribe to new streams
+    // Подписываемся на стримы расписания и графиков
     if (selectedDeviceId != null) {
       _scheduleSubscription = _scheduleRepository.watchSchedule(selectedDeviceId).listen(
         (schedule) => add(ScheduleLoaded(schedule)),
@@ -326,7 +339,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     emit(state.copyWith(hvacDevices: event.devices));
   }
 
-  // Schedule handlers
+  // Обработчики расписания
   void _onScheduleLoaded(ScheduleLoaded event, Emitter<DashboardState> emit) {
     emit(state.copyWith(weeklySchedule: event.schedule));
   }
@@ -342,7 +355,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     }
   }
 
-  // Notification handlers
+  // Обработчики уведомлений
   void _onNotificationsLoaded(NotificationsLoaded event, Emitter<DashboardState> emit) {
     emit(state.copyWith(unitNotifications: event.notifications));
   }
@@ -369,7 +382,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     }
   }
 
-  // Graph handlers
+  // Обработчики графиков
   void _onGraphDataLoaded(GraphDataLoaded event, Emitter<DashboardState> emit) {
     emit(state.copyWith(graphData: event.data));
   }
@@ -380,7 +393,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   ) async {
     emit(state.copyWith(selectedGraphMetric: event.metric));
 
-    // Reload graph data for new metric
+    // Перезагружаем данные графика для новой метрики
     final deviceId = state.selectedHvacDeviceId;
     if (deviceId != null) {
       try {
@@ -397,7 +410,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     }
   }
 
-  // DeviceFullState handlers
+  // Обработчики полного состояния устройства
   void _onDeviceFullStateLoaded(
     DeviceFullStateLoaded event,
     Emitter<DashboardState> emit,
@@ -416,7 +429,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     LoadAlarmHistory event,
     Emitter<DashboardState> emit,
   ) async {
-    // TODO: Implement when repository method available
+    // TODO: Реализовать когда метод репозитория будет готов
   }
 
   void _onConnectivityChanged(

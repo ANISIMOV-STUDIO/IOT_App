@@ -32,11 +32,13 @@ class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _passwordFocusNode = FocusNode();
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _passwordFocusNode.dispose();
     super.dispose();
   }
 
@@ -74,36 +76,42 @@ class _LoginFormState extends State<LoginForm> {
         // Карточка с формой
         BreezCard(
           padding: const EdgeInsets.all(AppSpacing.xl),
-          child: Form(
-            key: _formKey,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Email
-                BreezTextField(
-                  controller: _emailController,
-                  label: 'Email',
-                  hint: 'example@mail.com',
-                  prefixIcon: Icons.email_outlined,
-                  keyboardType: TextInputType.emailAddress,
-                  validator: Validators.loginEmail,
-                  validateOnChange: true,
-                  autofillHints: const [AutofillHints.email],
-                ),
-                const SizedBox(height: AppSpacing.md),
+          child: AutofillGroup(
+            child: Form(
+              key: _formKey,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Email
+                  BreezTextField(
+                    controller: _emailController,
+                    label: 'Email',
+                    hint: 'example@mail.com',
+                    prefixIcon: Icons.email_outlined,
+                    keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.next,
+                    validator: Validators.loginEmail,
+                    validateOnChange: true,
+                    autofillHints: const [AutofillHints.username, AutofillHints.email],
+                    onFieldSubmitted: (_) => _passwordFocusNode.requestFocus(),
+                  ),
+                  const SizedBox(height: AppSpacing.md),
 
-                // Пароль
-                BreezTextField(
-                  controller: _passwordController,
-                  label: 'Пароль',
-                  prefixIcon: Icons.lock_outlined,
-                  obscureText: true,
-                  validator: Validators.loginPassword,
-                  showPasswordToggle: true,
-                  validateOnChange: true,
-                  autofillHints: const [AutofillHints.password],
-                ),
+                  // Пароль
+                  BreezTextField(
+                    controller: _passwordController,
+                    focusNode: _passwordFocusNode,
+                    label: 'Пароль',
+                    prefixIcon: Icons.lock_outlined,
+                    obscureText: true,
+                    validator: Validators.loginPassword,
+                    showPasswordToggle: true,
+                    validateOnChange: true,
+                    autofillHints: const [AutofillHints.password],
+                    textInputAction: TextInputAction.done,
+                    onFieldSubmitted: (_) => _handleLogin(),
+                  ),
                 const SizedBox(height: AppSpacing.xs),
 
                 // Восстановить пароль
@@ -160,7 +168,8 @@ class _LoginFormState extends State<LoginForm> {
                   actionText: 'Зарегистрироваться',
                   onTap: widget.onSwitchToRegister,
                 ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

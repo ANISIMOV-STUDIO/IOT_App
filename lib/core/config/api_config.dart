@@ -10,8 +10,9 @@ class ApiConfig {
   // URLs
   static String get grpcUrl => 'https://$backendHost'; // HTTPS через nginx
   static String get httpUrl => 'https://$backendHost'; // HTTPS через nginx
+  // SignalR использует HTTP для negotiate, потом апгрейд до WebSocket
   static String get websocketUrl =>
-      'wss://$backendHost/hubs/devices'; // WSS через nginx
+      'https://$backendHost/hubs/devices';
 
   // REST API endpoints (for web)
   static String get apiBaseUrl => '$httpUrl/api';

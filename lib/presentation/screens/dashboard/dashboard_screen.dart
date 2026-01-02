@@ -162,12 +162,41 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ? _units[_activeUnitIndex]
       : null;
 
+  /// Глубокое сравнение двух списков UnitState
+  bool _unitsEqual(List<UnitState> a, List<UnitState> b) {
+    if (a.length != b.length) return false;
+    for (var i = 0; i < a.length; i++) {
+      final unitA = a[i];
+      final unitB = b[i];
+      if (unitA.id != unitB.id ||
+          unitA.name != unitB.name ||
+          unitA.power != unitB.power ||
+          unitA.temp != unitB.temp ||
+          unitA.mode != unitB.mode ||
+          unitA.supplyFan != unitB.supplyFan ||
+          unitA.exhaustFan != unitB.exhaustFan) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   void _updateUnit(UnitState Function(UnitState) update) {
     final current = _currentUnit;
     if (current == null) return;
     setState(() {
       _units[_activeUnitIndex] = update(current);
     });
+  }
+
+  void _handlePowerToggle() {
+    final current = _currentUnit;
+    if (current == null) return;
+
+    final newPower = !current.power;
+    // Отправляем команду на сервер через BLoC
+    // UI обновится когда устройство реально ответит через SignalR
+    context.read<DashboardBloc>().add(DevicePowerToggled(newPower));
   }
 
   Future<void> _masterPowerOff() async {
@@ -278,10 +307,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
               })
               .toList();
 
-          // Обновляем _units если пришли новые данные
-          if (units != _units) {
-            Future.microtask(() => setState(() => _units = units));
+          // Синхронно обновляем _units для использования в callback-ах
+          // (не вызываем setState чтобы избежать бесконечного цикла)
+          if (units.length != _units.length || !_unitsEqual(units, _units)) {
+            _units = units;
           }
+
+          // Определяем текущий unit для layouts
+          final currentUnit = units.isNotEmpty && _activeUnitIndex < units.length
+              ? units[_activeUnitIndex]
+              : null;
 
           return Scaffold(
             key: _scaffoldKey,
@@ -291,11 +326,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 children: [
                   // Main content
                   Expanded(
-                    child: _units.isEmpty
+                    child: currentUnit == null
                         ? _buildEmptyState(isDark)
                         : isDesktop
-                            ? _buildDesktopLayout(isDark, user)
-                            : _buildMobileLayout(isDark, width),
+                            ? _buildDesktopLayout(isDark, user, currentUnit, units)
+                            : _buildMobileLayout(isDark, width, currentUnit, units),
                   ),
                   // Space between content and bottom bar (mobile/tablet only)
                   if (!isDesktop) const SizedBox(height: AppSpacing.sm),
@@ -355,10 +390,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildDesktopLayout(bool isDark, User? user) {
+  Widget _buildDesktopLayout(bool isDark, User? user, UnitState currentUnit, List<UnitState> units) {
     return DesktopLayout(
-      unit: _currentUnit!,
-      allUnits: _units,
+      unit: currentUnit,
+      allUnits: units,
       selectedUnitIndex: _activeUnitIndex,
       isDark: isDark,
       userName: user?.fullName ?? 'Пользователь',
@@ -368,7 +403,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       onSupplyFanChanged: (v) => _updateUnit((u) => u.copyWith(supplyFan: v)),
       onExhaustFanChanged: (v) => _updateUnit((u) => u.copyWith(exhaustFan: v)),
       onModeChanged: (m) => _updateUnit((u) => u.copyWith(mode: m)),
-      onPowerToggle: () => _updateUnit((u) => u.copyWith(power: !u.power)),
+      onPowerToggle: _handlePowerToggle,
       onSettingsTap: _showUnitSettings,
       onMasterOff: _masterPowerOff,
       onUnitSelected: (index) {
@@ -387,12 +422,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildMobileLayout(bool isDark, double width) {
+  Widget _buildMobileLayout(bool isDark, double width, UnitState currentUnit, List<UnitState> units) {
     return Column(
       children: [
         // Header with unit tabs
         MobileHeader(
-          units: _units,
+          units: units,
           selectedUnitIndex: _activeUnitIndex,
           onUnitSelected: (index) {
             setState(() => _activeUnitIndex = index);
@@ -409,13 +444,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
         // Content
         Expanded(
           child: MobileLayout(
-            unit: _currentUnit!,
+            unit: currentUnit,
             onTemperatureIncrease: (v) => _updateUnit((u) => u.copyWith(temp: v.clamp(16, 32))),
             onTemperatureDecrease: (v) => _updateUnit((u) => u.copyWith(temp: v.clamp(16, 32))),
             onSupplyFanChanged: (v) => _updateUnit((u) => u.copyWith(supplyFan: v)),
             onExhaustFanChanged: (v) => _updateUnit((u) => u.copyWith(exhaustFan: v)),
             onModeChanged: (m) => _updateUnit((u) => u.copyWith(mode: m)),
-            onPowerToggle: () => _updateUnit((u) => u.copyWith(power: !u.power)),
+            onPowerToggle: _handlePowerToggle,
             onSettingsTap: _showUnitSettings,
             compact: width <= 600,
           ),

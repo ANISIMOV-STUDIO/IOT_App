@@ -22,6 +22,9 @@ class BreezTextField extends StatefulWidget {
   final bool validateOnChange;
   final bool showPasswordToggle;
   final Iterable<String>? autofillHints;
+  final TextInputAction? textInputAction;
+  final void Function(String)? onFieldSubmitted;
+  final FocusNode? focusNode;
 
   const BreezTextField({
     super.key,
@@ -39,6 +42,9 @@ class BreezTextField extends StatefulWidget {
     this.validateOnChange = false,
     this.showPasswordToggle = false,
     this.autofillHints,
+    this.textInputAction,
+    this.onFieldSubmitted,
+    this.focusNode,
   });
 
   @override
@@ -51,28 +57,31 @@ class _BreezTextFieldState extends State<BreezTextField> {
   String? _errorText;
   late bool _obscureTextInternal;
   final GlobalKey<FormFieldState> _fieldKey = GlobalKey<FormFieldState>();
-  final FocusNode _focusNode = FocusNode();
+  FocusNode? _internalFocusNode;
+
+  FocusNode get _effectiveFocusNode => widget.focusNode ?? (_internalFocusNode ??= FocusNode());
 
   @override
   void initState() {
     super.initState();
     _obscureTextInternal = widget.obscureText;
-    _focusNode.addListener(_onFocusChange);
+    _effectiveFocusNode.addListener(_onFocusChange);
   }
 
   void _onFocusChange() {
     setState(() {
-      _isFocused = _focusNode.hasFocus;
+      _isFocused = _effectiveFocusNode.hasFocus;
     });
-    if (!_focusNode.hasFocus && !widget.validateOnChange && widget.validator != null) {
+    if (!_effectiveFocusNode.hasFocus && !widget.validateOnChange && widget.validator != null) {
       _validateField();
     }
   }
 
   @override
   void dispose() {
-    _focusNode.removeListener(_onFocusChange);
-    _focusNode.dispose();
+    _effectiveFocusNode.removeListener(_onFocusChange);
+    // Только если мы создали внутренний FocusNode - удаляем его
+    _internalFocusNode?.dispose();
     super.dispose();
   }
 
@@ -145,12 +154,14 @@ class _BreezTextFieldState extends State<BreezTextField> {
               child: TextFormField(
                 key: _fieldKey,
                 controller: widget.controller,
-                focusNode: _focusNode,
+                focusNode: _effectiveFocusNode,
                 obscureText: widget.showPasswordToggle ? _obscureTextInternal : widget.obscureText,
                 keyboardType: widget.keyboardType,
                 maxLines: widget.maxLines,
                 enabled: widget.enabled,
                 autofillHints: widget.autofillHints,
+                textInputAction: widget.textInputAction,
+                onFieldSubmitted: widget.onFieldSubmitted,
                 textAlignVertical: TextAlignVertical.center,
                 style: TextStyle(
                   color: colors.text,

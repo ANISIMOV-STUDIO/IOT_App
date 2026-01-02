@@ -21,16 +21,22 @@ class RealScheduleRepository implements ScheduleRepository {
   Future<List<ScheduleEntry>> getSchedule(String deviceId) async {
     final jsonSchedules = await _httpClient.getSchedules(deviceId);
 
-    return jsonSchedules.map((json) {
+    // Если API вернул пустой массив или неправильный формат - вернуть пустой список
+    if (jsonSchedules.isEmpty) return [];
+
+    return jsonSchedules.where((json) {
+      // Фильтруем только валидные записи расписания
+      return json['day'] != null;
+    }).map((json) {
       return ScheduleEntry(
-        id: json['id'] as String,
-        deviceId: json['deviceId'] as String,
-        day: json['day'] as String,
-        mode: json['mode'] as String,
-        timeRange: json['timeRange'] as String,
+        id: json['id'] as String? ?? '',
+        deviceId: json['deviceId'] as String? ?? deviceId,
+        day: json['day'] as String? ?? 'monday',
+        mode: json['mode'] as String? ?? 'auto',
+        timeRange: json['timeRange'] as String? ?? '00:00-23:59',
         tempDay: (json['tempDay'] as num?)?.toInt() ?? 22,
         tempNight: (json['tempNight'] as num?)?.toInt() ?? 20,
-        isActive: json['isActive'] as bool? ?? true,
+        isActive: json['isActive'] as bool? ?? json['enabled'] as bool? ?? true,
       );
     }).toList();
   }
