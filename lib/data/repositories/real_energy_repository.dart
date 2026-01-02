@@ -10,7 +10,7 @@ import '../api/mappers/energy_json_mapper.dart';
 
 class RealEnergyRepository implements EnergyRepository {
   final ApiClient _apiClient;
-  final String _defaultDeviceId;
+  String? _selectedDeviceId;
 
   late final AnalyticsHttpClient _httpClient;
 
@@ -18,13 +18,29 @@ class RealEnergyRepository implements EnergyRepository {
   Timer? _pollTimer; // Для отслеживания и отмены polling
 
   RealEnergyRepository(this._apiClient, {String? deviceId})
-      : _defaultDeviceId = deviceId ?? 'default-device-id' {
+      : _selectedDeviceId = deviceId {
     _httpClient = AnalyticsHttpClient(_apiClient);
   }
 
+  /// Установить ID выбранного устройства
+  void setSelectedDeviceId(String? deviceId) {
+    _selectedDeviceId = deviceId;
+  }
+
+  /// Возвращает пустую статистику когда устройство не выбрано
+  EnergyStats get _emptyStats => EnergyStats(
+        totalKwh: 0,
+        totalHours: 0,
+        date: DateTime.now(),
+        hourlyData: const [],
+      );
+
   @override
   Future<EnergyStats> getTodayStats() async {
-    final jsonStats = await _httpClient.getEnergyStats(_defaultDeviceId);
+    if (_selectedDeviceId == null || _selectedDeviceId!.isEmpty) {
+      return _emptyStats;
+    }
+    final jsonStats = await _httpClient.getEnergyStats(_selectedDeviceId!);
     final stats = EnergyJsonMapper.energyStatsFromJson(jsonStats);
     _statsController.add(stats);
     return stats;
@@ -32,8 +48,11 @@ class RealEnergyRepository implements EnergyRepository {
 
   @override
   Future<EnergyStats> getStats(DateTime from, DateTime to) async {
+    if (_selectedDeviceId == null || _selectedDeviceId!.isEmpty) {
+      return _emptyStats;
+    }
     final jsonHistory =
-        await _httpClient.getEnergyHistory(_defaultDeviceId, from, to, 'hourly');
+        await _httpClient.getEnergyHistory(_selectedDeviceId!, from, to, 'hourly');
 
     final stats = EnergyJsonMapper.energyStatsFromJson(jsonHistory);
     return stats;

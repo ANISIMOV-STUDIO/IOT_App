@@ -112,6 +112,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Future<void> _loadData() async {
+    if (_units.isEmpty) return; // Нет устройств - нечего загружать
+
     final deviceId = _units[_activeUnitIndex].id;
     try {
       final results = await Future.wait([
@@ -141,6 +143,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Future<void> _loadGraphData() async {
+    if (_units.isEmpty) return; // Нет устройств - нечего загружать
+
     final deviceId = _units[_activeUnitIndex].id;
     try {
       final data = await _graphDataRepository.getGraphData(

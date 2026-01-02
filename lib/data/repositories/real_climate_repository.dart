@@ -90,6 +90,8 @@ class RealClimateRepository implements ClimateRepository {
 
   @override
   void setSelectedDevice(String deviceId) {
+    if (deviceId.isEmpty) return; // Пропускаем если нет устройств
+
     _selectedDeviceId = deviceId;
 
     // Subscribe to device updates via SignalR
@@ -98,11 +100,16 @@ class RealClimateRepository implements ClimateRepository {
     // Load initial state
     getDeviceState(deviceId).then((state) {
       _climateController.add(state);
+    }).catchError((_) {
+      // Ignore errors for initial load
     });
   }
 
   @override
   Future<ClimateState> getDeviceState(String deviceId) async {
+    if (deviceId.isEmpty) {
+      throw StateError('No device selected');
+    }
     final jsonDevice = await _httpClient.getDevice(deviceId);
     return DeviceJsonMapper.climateStateFromJson(jsonDevice);
   }
@@ -110,17 +117,25 @@ class RealClimateRepository implements ClimateRepository {
   @override
   Stream<ClimateState> watchDeviceClimate(String deviceId) {
     // Set selected device to start receiving updates
-    setSelectedDevice(deviceId);
+    if (deviceId.isNotEmpty) {
+      setSelectedDevice(deviceId);
+    }
     return _climateController.stream;
   }
 
   @override
   Future<ClimateState> getCurrentState() async {
+    if (_selectedDeviceId.isEmpty) {
+      throw StateError('No device selected');
+    }
     return getDeviceState(_selectedDeviceId);
   }
 
   @override
   Stream<ClimateState> watchClimate() {
+    if (_selectedDeviceId.isEmpty) {
+      return _climateController.stream; // Возвращаем пустой stream
+    }
     return watchDeviceClimate(_selectedDeviceId);
   }
 

@@ -55,6 +55,9 @@ class HvacHttpClient {
 
   /// Get device by ID
   Future<Map<String, dynamic>> getDevice(String deviceId) async {
+    if (deviceId.isEmpty) {
+      throw ArgumentError('deviceId cannot be empty');
+    }
     final url = '${ApiConfig.hvacApiUrl}/$deviceId';
 
     try {
