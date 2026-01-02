@@ -290,6 +290,51 @@ class MockClimateRepository implements ClimateRepository {
     return newState;
   }
 
+  @override
+  Future<HvacDevice> registerDevice(String macAddress, String name) async {
+    await Future.delayed(Duration(milliseconds: MockData.networkDelays['normal'] ?? 100));
+    final newId = 'pv_${_deviceStates.length + 1}';
+    final newState = ClimateState(
+      roomId: newId,
+      deviceName: name,
+      isOn: false,
+      currentTemperature: 20.0,
+      targetTemperature: 22.0,
+      humidity: 45.0,
+      targetHumidity: 50.0,
+      mode: ClimateMode.auto,
+      preset: 'auto',
+      supplyAirflow: 50.0,
+      exhaustAirflow: 50.0,
+      airQuality: AirQualityLevel.good,
+    );
+    _deviceStates[newId] = newState;
+    _deviceMeta[newId] = _DeviceMeta(
+      brand: 'Breez',
+      type: 'HVAC',
+      icon: Icons.ac_unit,
+      isOnline: true,
+    );
+    _devicesController.add(_buildDeviceList());
+    return HvacDevice(
+      id: newId,
+      name: name,
+      brand: 'Breez',
+      type: 'HVAC',
+      isOnline: true,
+      isActive: false,
+      icon: Icons.ac_unit,
+    );
+  }
+
+  @override
+  Future<void> deleteDevice(String deviceId) async {
+    await Future.delayed(Duration(milliseconds: MockData.networkDelays['normal'] ?? 100));
+    _deviceStates.remove(deviceId);
+    _deviceMeta.remove(deviceId);
+    _devicesController.add(_buildDeviceList());
+  }
+
   void dispose() {
     _climateController.close();
     _devicesController.close();

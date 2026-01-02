@@ -89,4 +89,14 @@ abstract class ClimateRepository
   /// Set preset (auto, night, turbo, eco, away)
   @override
   Future<ClimateState> setPreset(String preset, {String? deviceId});
+
+  // ============================================
+  // DEVICE REGISTRATION
+  // ============================================
+
+  /// Register new device by MAC address
+  Future<HvacDevice> registerDevice(String macAddress, String name);
+
+  /// Delete device
+  Future<void> deleteDevice(String deviceId);
 }

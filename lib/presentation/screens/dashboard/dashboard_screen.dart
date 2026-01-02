@@ -13,7 +13,6 @@ import '../../../core/services/toast_service.dart';
 import '../../../core/services/version_check_service.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/spacing.dart';
-import '../../../data/mock/mock_data.dart';
 import '../../../domain/entities/unit_state.dart';
 import '../../../domain/repositories/graph_data_repository.dart';
 import '../../../domain/repositories/notification_repository.dart';
@@ -62,8 +61,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     super.initState();
-    // Units будут загружены из DashboardBloc, fallback на MockData
-    _units = MockData.units.map((u) => UnitState.fromJson(u)).toList();
+    // Units будут загружены из DashboardBloc
+    _units = [];
     _themeService = di.sl<ThemeService>();
     _versionCheckService = di.sl<VersionCheckService>();
     _scheduleRepository = di.sl<ScheduleRepository>();
@@ -175,12 +174,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Future<void> _showAddUnitDialog() async {
-    final name = await AddUnitDialog.show(context);
-    if (name != null && name.isNotEmpty) {
-      setState(() {
-        _units.add(UnitState.create(name: name));
-        _activeUnitIndex = _units.length - 1;
-      });
+    final result = await AddUnitDialog.show(context);
+    if (result != null) {
+      // Отправляем событие регистрации устройства в BLoC
+      if (!mounted) return;
+      context.read<DashboardBloc>().add(
+        RegisterDeviceRequested(result.macAddress, result.name),
+      );
     }
   }
 
@@ -232,22 +232,27 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     return BlocBuilder<DashboardBloc, DashboardState>(
       builder: (context, dashboardState) {
-        // Используем данные из DashboardBloc если есть, иначе fallback на MockData
-        final units = dashboardState.hvacDevices.isNotEmpty
-            ? dashboardState.hvacDevices
-                .map((device) {
-                  // Использовать climate только для выбранного устройства
-                  final climate = device.id == dashboardState.selectedHvacDeviceId
-                      ? dashboardState.climate
-                      : null;
-                  return _createUnitStateFromHvacDevice(device, climate);
-                })
-                .toList()
-            : _units;
+        // Преобразуем HvacDevice в UnitState для UI
+        final units = dashboardState.hvacDevices
+            .map((device) {
+              // Использовать climate только для выбранного устройства
+              final climate = device.id == dashboardState.selectedHvacDeviceId
+                  ? dashboardState.climate
+                  : null;
+              return _createUnitStateFromHvacDevice(device, climate);
+            })
+            .toList();
 
         // Обновляем _units если пришли новые данные
-        if (units != _units && units.isNotEmpty) {
+        if (units != _units) {
           Future.microtask(() => setState(() => _units = units));
+        }
+
+        // Показываем ошибку регистрации
+        if (dashboardState.registrationError != null) {
+          Future.microtask(() {
+            ToastService.error('Ошибка: ${dashboardState.registrationError}');
+          });
         }
 
         return BlocListener<AuthBloc, AuthState>(

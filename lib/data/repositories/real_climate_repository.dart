@@ -20,6 +20,7 @@ class RealClimateRepository implements ClimateRepository {
   final _climateController = StreamController<ClimateState>.broadcast();
   final _devicesController = StreamController<List<HvacDevice>>.broadcast();
   String _selectedDeviceId = '';
+  List<HvacDevice> _cachedDevices = [];
 
   // SignalR subscription для отмены при dispose
   StreamSubscription? _deviceUpdatesSubscription;
@@ -209,6 +210,29 @@ class RealClimateRepository implements ClimateRepository {
     // Backend might not have preset endpoint via HTTP
     // Return current state for now
     return getCurrentState();
+  }
+
+  @override
+  Future<HvacDevice> registerDevice(String macAddress, String name) async {
+    final jsonDevice = await _httpClient.registerDevice(macAddress, name);
+    final device = DeviceJsonMapper.hvacDeviceFromJson(jsonDevice);
+
+    // Добавляем в локальный список и уведомляем
+    final updatedDevices = [..._cachedDevices, device];
+    _cachedDevices = updatedDevices;
+    _devicesController.add(updatedDevices);
+
+    return device;
+  }
+
+  @override
+  Future<void> deleteDevice(String deviceId) async {
+    await _httpClient.deleteDevice(deviceId);
+
+    // Удаляем из локального списка
+    final updatedDevices = _cachedDevices.where((d) => d.id != deviceId).toList();
+    _cachedDevices = updatedDevices;
+    _devicesController.add(updatedDevices);
   }
 
   void dispose() {

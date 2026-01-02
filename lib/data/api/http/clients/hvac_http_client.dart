@@ -268,4 +268,76 @@ class HvacHttpClient {
       rethrow;
     }
   }
+
+  /// Зарегистрировать новое устройство по MAC-адресу
+  /// POST /api/device/register
+  Future<Map<String, dynamic>> registerDevice(
+    String macAddress,
+    String name,
+  ) async {
+    final url = '${ApiConfig.hvacApiUrl}/register';
+    final body = json.encode({
+      'macAddress': macAddress,
+      'name': name,
+    });
+
+    try {
+      ApiLogger.logHttpRequest('POST', url, body);
+
+      final token = await _apiClient.getAuthToken();
+      final response = await _apiClient.getHttpClient().post(
+            Uri.parse(url),
+            headers: {
+              'Content-Type': 'application/json',
+              if (token != null) 'Authorization': 'Bearer $token',
+            },
+            body: body,
+          );
+
+      ApiLogger.logHttpResponse('POST', url, response.statusCode, response.body);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return json.decode(response.body) as Map<String, dynamic>;
+      } else {
+        throw HttpErrorHandler.handle(response);
+      }
+    } catch (e) {
+      ApiLogger.logHttpError('POST', url, e);
+      if (e is http.ClientException) {
+        throw HttpErrorHandler.handleException(e);
+      }
+      rethrow;
+    }
+  }
+
+  /// Удалить устройство
+  /// DELETE /api/device/{id}
+  Future<void> deleteDevice(String deviceId) async {
+    final url = '${ApiConfig.hvacApiUrl}/$deviceId';
+
+    try {
+      ApiLogger.logHttpRequest('DELETE', url, null);
+
+      final token = await _apiClient.getAuthToken();
+      final response = await _apiClient.getHttpClient().delete(
+            Uri.parse(url),
+            headers: {
+              'Content-Type': 'application/json',
+              if (token != null) 'Authorization': 'Bearer $token',
+            },
+          );
+
+      ApiLogger.logHttpResponse('DELETE', url, response.statusCode, response.body);
+
+      if (response.statusCode != 200 && response.statusCode != 204) {
+        throw HttpErrorHandler.handle(response);
+      }
+    } catch (e) {
+      ApiLogger.logHttpError('DELETE', url, e);
+      if (e is http.ClientException) {
+        throw HttpErrorHandler.handleException(e);
+      }
+      rethrow;
+    }
+  }
 }

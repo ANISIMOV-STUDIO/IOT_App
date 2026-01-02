@@ -94,6 +94,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     on<DeviceFullStateLoaded>(_onDeviceFullStateLoaded);
     on<AlarmHistoryLoaded>(_onAlarmHistoryLoaded);
     on<LoadAlarmHistory>(_onLoadAlarmHistory);
+    on<RegisterDeviceRequested>(_onRegisterDeviceRequested);
   }
 
   Future<void> _onStarted(DashboardStarted event, Emitter<DashboardState> emit) async {
@@ -412,6 +413,31 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     Emitter<DashboardState> emit,
   ) {
     emit(state.copyWith(isOffline: event.isOffline));
+  }
+
+  Future<void> _onRegisterDeviceRequested(
+    RegisterDeviceRequested event,
+    Emitter<DashboardState> emit,
+  ) async {
+    emit(state.copyWith(isRegistering: true, registrationError: null));
+    try {
+      final device = await _climateRepository.registerDevice(
+        event.macAddress,
+        event.name,
+      );
+      // Обновляем список устройств
+      final updatedDevices = [...state.hvacDevices, device];
+      emit(state.copyWith(
+        isRegistering: false,
+        hvacDevices: updatedDevices,
+        selectedHvacDeviceId: device.id,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        isRegistering: false,
+        registrationError: e.toString(),
+      ));
+    }
   }
 
   @override

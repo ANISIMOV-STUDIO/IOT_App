@@ -202,3 +202,26 @@ class LoadAlarmHistory extends DashboardEvent {
   @override
   List<Object?> get props => [deviceId];
 }
+
+// Device registration events
+class RegisterDeviceRequested extends DashboardEvent {
+  final String macAddress;
+  final String name;
+  const RegisterDeviceRequested(this.macAddress, this.name);
+  @override
+  List<Object?> get props => [macAddress, name];
+}
+
+class DeviceRegistered extends DashboardEvent {
+  final HvacDevice device;
+  const DeviceRegistered(this.device);
+  @override
+  List<Object?> get props => [device];
+}
+
+class DeviceRegistrationFailed extends DashboardEvent {
+  final String error;
+  const DeviceRegistrationFailed(this.error);
+  @override
+  List<Object?> get props => [error];
+}

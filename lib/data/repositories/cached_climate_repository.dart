@@ -187,6 +187,18 @@ class CachedClimateRepository implements ClimateRepository {
     return result;
   }
 
+  @override
+  Future<HvacDevice> registerDevice(String macAddress, String name) async {
+    _ensureOnline('registerDevice');
+    return await _inner.registerDevice(macAddress, name);
+  }
+
+  @override
+  Future<void> deleteDevice(String deviceId) async {
+    _ensureOnline('deleteDevice');
+    await _inner.deleteDevice(deviceId);
+  }
+
   // ============================================
   // HELPERS
   // ============================================

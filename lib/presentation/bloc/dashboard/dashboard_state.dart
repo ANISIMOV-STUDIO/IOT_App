@@ -53,6 +53,10 @@ class DashboardState extends Equatable {
   // История аварий
   final List<AlarmHistory> alarmHistory;
 
+  // Device registration
+  final bool isRegistering;
+  final String? registrationError;
+
   const DashboardState({
     this.status = DashboardStatus.initial,
     this.devices = const [],
@@ -71,6 +75,8 @@ class DashboardState extends Equatable {
     this.isOffline = false,
     this.deviceFullState,
     this.alarmHistory = const [],
+    this.isRegistering = false,
+    this.registrationError,
   });
 
   /// Получить выбранное HVAC устройство
@@ -119,6 +125,8 @@ class DashboardState extends Equatable {
     bool? isOffline,
     DeviceFullState? deviceFullState,
     List<AlarmHistory>? alarmHistory,
+    bool? isRegistering,
+    String? registrationError,
   }) {
     return DashboardState(
       status: status ?? this.status,
@@ -138,6 +146,8 @@ class DashboardState extends Equatable {
       isOffline: isOffline ?? this.isOffline,
       deviceFullState: deviceFullState ?? this.deviceFullState,
       alarmHistory: alarmHistory ?? this.alarmHistory,
+      isRegistering: isRegistering ?? this.isRegistering,
+      registrationError: registrationError,
     );
   }
 
@@ -150,6 +160,6 @@ class DashboardState extends Equatable {
     status, devices, climate, energyStats, powerUsage,
     occupants, schedule, errorMessage, hvacDevices, selectedHvacDeviceId,
     weeklySchedule, unitNotifications, graphData, selectedGraphMetric,
-    isOffline, deviceFullState, alarmHistory,
+    isOffline, deviceFullState, alarmHistory, isRegistering, registrationError,
   ];
 }
