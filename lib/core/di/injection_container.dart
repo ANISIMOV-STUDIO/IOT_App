@@ -103,7 +103,7 @@ Future<void> init() async {
 
   //! Auth Feature - Аутентификация (должен быть ПЕРЕД ApiClient)
   sl.registerLazySingleton(() => AuthService(sl()));
-  sl.registerFactory(() => AuthBloc(
+  sl.registerLazySingleton(() => AuthBloc(
         authService: sl(),
         storageService: sl(),
       ));
@@ -262,7 +262,7 @@ Future<void> init() async {
   }
 
   // Dashboard BLoC (Главный экран с виджетами)
-  sl.registerFactory(
+  sl.registerLazySingleton(
     () => DashboardBloc(
       deviceRepository: sl(),
       climateRepository: sl(),

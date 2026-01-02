@@ -63,9 +63,10 @@ class _HvacControlAppState extends State<HvacControlApp> {
           create: (context) =>
               di.sl<AuthBloc>()..add(const AuthCheckRequested()),
         ),
+        // DashboardBloc предоставляется глобально, но НЕ запускается здесь.
+        // DashboardStarted диспатчится в app_router.dart только после авторизации
         BlocProvider(
-          create: (context) =>
-              di.sl<DashboardBloc>()..add(const DashboardStarted()),
+          create: (context) => di.sl<DashboardBloc>(),
         ),
       ],
       child: ListenableBuilder(

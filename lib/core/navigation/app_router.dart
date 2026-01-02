@@ -108,10 +108,12 @@ GoRouter createRouter() {
       // Protected routes
       GoRoute(
         path: AppRoutes.home,
-        builder: (context, state) => BlocProvider(
-          create: (context) => di.sl<DashboardBloc>()..add(const DashboardStarted()),
-          child: const MainScreen(),
-        ),
+        builder: (context, state) {
+          // DashboardBloc предоставляется глобально в main.dart
+          // Здесь только запускаем загрузку данных при входе на dashboard
+          context.read<DashboardBloc>().add(const DashboardStarted());
+          return const MainScreen();
+        },
       ),
 
       // Notifications screen
