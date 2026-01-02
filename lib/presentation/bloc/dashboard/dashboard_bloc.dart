@@ -97,6 +97,8 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     on<LoadAlarmHistory>(_onLoadAlarmHistory);
     on<RegisterDeviceRequested>(_onRegisterDeviceRequested);
     on<ClearRegistrationError>(_onClearRegistrationError);
+    on<DeleteDeviceRequested>(_onDeleteDeviceRequested);
+    on<RenameDeviceRequested>(_onRenameDeviceRequested);
   }
 
   void _onClearRegistrationError(
@@ -453,6 +455,69 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         isRegistering: false,
         registrationError: errorMessage,
       ));
+    }
+  }
+
+  Future<void> _onDeleteDeviceRequested(
+    DeleteDeviceRequested event,
+    Emitter<DashboardState> emit,
+  ) async {
+    try {
+      await _climateRepository.deleteDevice(event.deviceId);
+
+      // Удаляем из локального списка
+      final updatedDevices = state.hvacDevices
+          .where((d) => d.id != event.deviceId)
+          .toList();
+
+      // Выбираем другое устройство если удалено текущее
+      String? newSelectedId;
+      if (state.selectedHvacDeviceId == event.deviceId) {
+        newSelectedId = updatedDevices.isNotEmpty ? updatedDevices.first.id : null;
+        if (newSelectedId != null) {
+          _climateRepository.setSelectedDevice(newSelectedId);
+        }
+      }
+
+      emit(state.copyWith(
+        hvacDevices: updatedDevices,
+        selectedHvacDeviceId: newSelectedId ?? state.selectedHvacDeviceId,
+      ));
+    } catch (e) {
+      String errorMessage;
+      if (e is ApiException) {
+        errorMessage = e.message;
+      } else {
+        errorMessage = 'Не удалось удалить устройство';
+      }
+      emit(state.copyWith(registrationError: errorMessage));
+    }
+  }
+
+  Future<void> _onRenameDeviceRequested(
+    RenameDeviceRequested event,
+    Emitter<DashboardState> emit,
+  ) async {
+    try {
+      await _climateRepository.renameDevice(event.deviceId, event.newName);
+
+      // Обновляем имя в локальном списке
+      final updatedDevices = state.hvacDevices.map((d) {
+        if (d.id == event.deviceId) {
+          return d.copyWith(name: event.newName);
+        }
+        return d;
+      }).toList();
+
+      emit(state.copyWith(hvacDevices: updatedDevices));
+    } catch (e) {
+      String errorMessage;
+      if (e is ApiException) {
+        errorMessage = e.message;
+      } else {
+        errorMessage = 'Не удалось переименовать устройство';
+      }
+      emit(state.copyWith(registrationError: errorMessage));
     }
   }
 

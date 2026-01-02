@@ -26,6 +26,7 @@ import '../../../domain/entities/hvac_device.dart';
 import '../../../domain/entities/climate.dart';
 import '../../../domain/entities/user.dart';
 import 'dialogs/add_unit_dialog.dart';
+import 'dialogs/unit_settings_dialog.dart';
 import 'dialogs/update_available_dialog.dart';
 import 'layouts/desktop_layout.dart';
 import 'layouts/mobile_layout.dart';
@@ -192,27 +193,27 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
   }
 
-  void _showUnitSettings() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: BreezColors.of(context).card,
-        title: Text(
-          'Настройки ${_currentUnit?.name ?? ''}',
-          style: TextStyle(color: BreezColors.of(context).text),
-        ),
-        content: Text(
-          'Настройки установки в разработке',
-          style: TextStyle(color: BreezColors.of(context).textMuted),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Закрыть'),
-          ),
-        ],
-      ),
-    );
+  Future<void> _showUnitSettings() async {
+    final unit = _currentUnit;
+    if (unit == null) return;
+
+    final result = await UnitSettingsDialog.show(context, unit);
+    if (result == null || !mounted) return;
+
+    switch (result.action) {
+      case UnitSettingsAction.delete:
+        context.read<DashboardBloc>().add(DeleteDeviceRequested(unit.id));
+        ToastService.success('Установка удалена');
+        break;
+      case UnitSettingsAction.rename:
+        if (result.newName != null) {
+          context.read<DashboardBloc>().add(
+                RenameDeviceRequested(unit.id, result.newName!),
+              );
+          ToastService.success('Название изменено');
+        }
+        break;
+    }
   }
 
   void _toggleTheme() {

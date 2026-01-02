@@ -335,6 +335,16 @@ class MockClimateRepository implements ClimateRepository {
     _devicesController.add(_buildDeviceList());
   }
 
+  @override
+  Future<void> renameDevice(String deviceId, String newName) async {
+    await Future.delayed(Duration(milliseconds: MockData.networkDelays['normal'] ?? 100));
+    final state = _deviceStates[deviceId];
+    if (state != null) {
+      _deviceStates[deviceId] = state.copyWith(deviceName: newName);
+      _devicesController.add(_buildDeviceList());
+    }
+  }
+
   void dispose() {
     _climateController.close();
     _devicesController.close();

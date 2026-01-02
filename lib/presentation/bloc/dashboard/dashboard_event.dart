@@ -232,3 +232,20 @@ class ClearRegistrationError extends DashboardEvent {
   @override
   List<Object?> get props => [];
 }
+
+/// Удалить устройство
+class DeleteDeviceRequested extends DashboardEvent {
+  final String deviceId;
+  const DeleteDeviceRequested(this.deviceId);
+  @override
+  List<Object?> get props => [deviceId];
+}
+
+/// Переименовать устройство
+class RenameDeviceRequested extends DashboardEvent {
+  final String deviceId;
+  final String newName;
+  const RenameDeviceRequested(this.deviceId, this.newName);
+  @override
+  List<Object?> get props => [deviceId, newName];
+}

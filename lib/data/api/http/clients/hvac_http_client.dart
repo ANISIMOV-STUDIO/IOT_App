@@ -343,4 +343,37 @@ class HvacHttpClient {
       rethrow;
     }
   }
+
+  /// Переименовать устройство
+  /// PATCH /api/device/{id}
+  Future<void> renameDevice(String deviceId, String newName) async {
+    final url = '${ApiConfig.hvacApiUrl}/$deviceId';
+    final body = json.encode({'name': newName});
+
+    try {
+      ApiLogger.logHttpRequest('PATCH', url, body);
+
+      final token = await _apiClient.getAuthToken();
+      final response = await _apiClient.getHttpClient().patch(
+            Uri.parse(url),
+            headers: {
+              'Content-Type': 'application/json',
+              if (token != null) 'Authorization': 'Bearer $token',
+            },
+            body: body,
+          );
+
+      ApiLogger.logHttpResponse('PATCH', url, response.statusCode, response.body);
+
+      if (response.statusCode != 200 && response.statusCode != 204) {
+        throw HttpErrorHandler.handle(response);
+      }
+    } catch (e) {
+      ApiLogger.logHttpError('PATCH', url, e);
+      if (e is http.ClientException) {
+        throw HttpErrorHandler.handleException(e);
+      }
+      rethrow;
+    }
+  }
 }

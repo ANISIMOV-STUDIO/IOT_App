@@ -250,6 +250,20 @@ class RealClimateRepository implements ClimateRepository {
     _devicesController.add(updatedDevices);
   }
 
+  @override
+  Future<void> renameDevice(String deviceId, String newName) async {
+    await _httpClient.renameDevice(deviceId, newName);
+
+    // Обновляем имя в локальном списке
+    _cachedDevices = _cachedDevices.map((d) {
+      if (d.id == deviceId) {
+        return d.copyWith(name: newName);
+      }
+      return d;
+    }).toList();
+    _devicesController.add(_cachedDevices);
+  }
+
   void dispose() {
     _deviceUpdatesSubscription?.cancel(); // Отменить SignalR subscription
     _climateController.close();

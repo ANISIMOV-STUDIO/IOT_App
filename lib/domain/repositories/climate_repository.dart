@@ -99,4 +99,7 @@ abstract class ClimateRepository
 
   /// Delete device
   Future<void> deleteDevice(String deviceId);
+
+  /// Rename device
+  Future<void> renameDevice(String deviceId, String newName);
 }

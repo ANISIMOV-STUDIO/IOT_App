@@ -199,6 +199,12 @@ class CachedClimateRepository implements ClimateRepository {
     await _inner.deleteDevice(deviceId);
   }
 
+  @override
+  Future<void> renameDevice(String deviceId, String newName) async {
+    _ensureOnline('renameDevice');
+    await _inner.renameDevice(deviceId, newName);
+  }
+
   // ============================================
   // HELPERS
   // ============================================
