@@ -47,6 +47,12 @@ class DashboardState extends Equatable {
   // Connectivity
   final bool isOffline;
 
+  // Полное состояние устройства (аварии, настройки режимов, таймер)
+  final DeviceFullState? deviceFullState;
+
+  // История аварий
+  final List<AlarmHistory> alarmHistory;
+
   const DashboardState({
     this.status = DashboardStatus.initial,
     this.devices = const [],
@@ -63,6 +69,8 @@ class DashboardState extends Equatable {
     this.graphData = const [],
     this.selectedGraphMetric = GraphMetric.temperature,
     this.isOffline = false,
+    this.deviceFullState,
+    this.alarmHistory = const [],
   });
 
   /// Получить выбранное HVAC устройство
@@ -87,6 +95,12 @@ class DashboardState extends Equatable {
   int? get co2Ppm => climate?.co2Ppm;
   int? get pollutantsAqi => climate?.pollutantsAqi;
 
+  /// Есть ли активные аварии
+  bool get hasAlarms => deviceFullState?.hasAlarms ?? false;
+
+  /// Количество активных аварий
+  int get alarmCount => deviceFullState?.alarmCount ?? 0;
+
   DashboardState copyWith({
     DashboardStatus? status,
     List<SmartDevice>? devices,
@@ -103,6 +117,8 @@ class DashboardState extends Equatable {
     List<GraphDataPoint>? graphData,
     GraphMetric? selectedGraphMetric,
     bool? isOffline,
+    DeviceFullState? deviceFullState,
+    List<AlarmHistory>? alarmHistory,
   }) {
     return DashboardState(
       status: status ?? this.status,
@@ -120,6 +136,8 @@ class DashboardState extends Equatable {
       graphData: graphData ?? this.graphData,
       selectedGraphMetric: selectedGraphMetric ?? this.selectedGraphMetric,
       isOffline: isOffline ?? this.isOffline,
+      deviceFullState: deviceFullState ?? this.deviceFullState,
+      alarmHistory: alarmHistory ?? this.alarmHistory,
     );
   }
 
@@ -132,6 +150,6 @@ class DashboardState extends Equatable {
     status, devices, climate, energyStats, powerUsage,
     occupants, schedule, errorMessage, hvacDevices, selectedHvacDeviceId,
     weeklySchedule, unitNotifications, graphData, selectedGraphMetric,
-    isOffline,
+    isOffline, deviceFullState, alarmHistory,
   ];
 }

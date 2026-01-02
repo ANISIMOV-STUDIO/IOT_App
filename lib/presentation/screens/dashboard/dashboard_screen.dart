@@ -305,6 +305,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       graphData: _graphData,
       selectedGraphMetric: _selectedGraphMetric,
       onGraphMetricChanged: _onGraphMetricChanged,
+      activeAlarms: const {},
     );
   }
 

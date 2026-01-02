@@ -4,6 +4,7 @@ library;
 import 'package:flutter/material.dart';
 import '../../../../core/theme/spacing.dart';
 import '../../../../domain/entities/unit_state.dart';
+import '../../../../domain/entities/alarm_info.dart';
 import '../../../widgets/breez/breez.dart';
 import '../widgets/desktop_header.dart';
 
@@ -32,6 +33,7 @@ class DesktopLayout extends StatefulWidget {
   final List<ScheduleEntry> schedule;
   final List<UnitNotification> notifications;
   final List<GraphDataPoint> graphData;
+  final Map<String, AlarmInfo> activeAlarms;
   final GraphMetric selectedGraphMetric;
   final ValueChanged<GraphMetric>? onGraphMetricChanged;
 
@@ -58,6 +60,7 @@ class DesktopLayout extends StatefulWidget {
     this.schedule = const [],
     this.notifications = const [],
     this.graphData = const [],
+    this.activeAlarms = const {},
     this.selectedGraphMetric = GraphMetric.temperature,
     this.onGraphMetricChanged,
   });
@@ -184,6 +187,16 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                 child: ScheduleWidget(
                   entries: widget.schedule,
                   onSeeAll: () {},
+                ),
+              ),
+
+              const SizedBox(width: AppSpacing.sm),
+
+              // Unit alarms widget
+              Expanded(
+                child: UnitAlarmsWidget(
+                  alarms: widget.activeAlarms,
+                  onSeeHistory: () {},
                 ),
               ),
 

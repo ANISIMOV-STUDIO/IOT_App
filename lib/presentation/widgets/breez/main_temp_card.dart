@@ -28,6 +28,8 @@ class MainTempCard extends StatelessWidget {
   final String? selectedMode;
   final ValueChanged<String>? onModeChanged;
   final bool showModeSelector;
+  final int alarmCount;
+  final VoidCallback? onAlarmsTap;
 
   const MainTempCard({
     super.key,
@@ -49,6 +51,8 @@ class MainTempCard extends StatelessWidget {
     this.selectedMode,
     this.onModeChanged,
     this.showModeSelector = false,
+    this.alarmCount = 0,
+    this.onAlarmsTap,
   });
 
   @override
@@ -132,6 +136,43 @@ class MainTempCard extends StatelessWidget {
                       ),
                     ],
                   ),
+                  // Alarm badge (if any)
+                  if (alarmCount > 0)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: GestureDetector(
+                        onTap: onAlarmsTap,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: AppColors.accentRed.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(AppRadius.button),
+                            border: Border.all(
+                              color: AppColors.accentRed.withValues(alpha: 0.3),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(
+                                Icons.warning_amber_rounded,
+                                size: 12,
+                                color: AppColors.accentRed,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                '',
+                                style: const TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.accentRed,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                   // Controls or Status badge
                   if (showControls)
                     Row(

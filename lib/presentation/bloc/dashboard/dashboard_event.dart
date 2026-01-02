@@ -180,3 +180,25 @@ class ConnectivityChanged extends DashboardEvent {
   @override
   List<Object?> get props => [isOffline];
 }
+
+// Device full state events (аварии, настройки режимов, таймер)
+class DeviceFullStateLoaded extends DashboardEvent {
+  final DeviceFullState deviceFullState;
+  const DeviceFullStateLoaded(this.deviceFullState);
+  @override
+  List<Object?> get props => [deviceFullState];
+}
+
+class AlarmHistoryLoaded extends DashboardEvent {
+  final List<AlarmHistory> alarmHistory;
+  const AlarmHistoryLoaded(this.alarmHistory);
+  @override
+  List<Object?> get props => [alarmHistory];
+}
+
+class LoadAlarmHistory extends DashboardEvent {
+  final String deviceId;
+  const LoadAlarmHistory(this.deviceId);
+  @override
+  List<Object?> get props => [deviceId];
+}

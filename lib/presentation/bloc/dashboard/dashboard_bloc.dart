@@ -14,6 +14,8 @@ import '../../../domain/entities/occupant.dart';
 import '../../../domain/entities/schedule_entry.dart';
 import '../../../domain/entities/unit_notification.dart';
 import '../../../domain/entities/graph_data.dart';
+import '../../../domain/entities/device_full_state.dart';
+import '../../../domain/entities/alarm_info.dart';
 import '../../../domain/repositories/smart_device_repository.dart';
 import '../../../domain/repositories/climate_repository.dart';
 import '../../../domain/repositories/energy_repository.dart';
@@ -89,6 +91,9 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     on<GraphDataLoaded>(_onGraphDataLoaded);
     on<GraphMetricChanged>(_onGraphMetricChanged);
     on<ConnectivityChanged>(_onConnectivityChanged);
+    on<DeviceFullStateLoaded>(_onDeviceFullStateLoaded);
+    on<AlarmHistoryLoaded>(_onAlarmHistoryLoaded);
+    on<LoadAlarmHistory>(_onLoadAlarmHistory);
   }
 
   Future<void> _onStarted(DashboardStarted event, Emitter<DashboardState> emit) async {
@@ -378,6 +383,28 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         emit(state.copyWith(errorMessage: 'Ошибка загрузки графика: $e'));
       }
     }
+  }
+
+  // DeviceFullState handlers
+  void _onDeviceFullStateLoaded(
+    DeviceFullStateLoaded event,
+    Emitter<DashboardState> emit,
+  ) {
+    emit(state.copyWith(deviceFullState: event.deviceFullState));
+  }
+
+  void _onAlarmHistoryLoaded(
+    AlarmHistoryLoaded event,
+    Emitter<DashboardState> emit,
+  ) {
+    emit(state.copyWith(alarmHistory: event.alarmHistory));
+  }
+
+  Future<void> _onLoadAlarmHistory(
+    LoadAlarmHistory event,
+    Emitter<DashboardState> emit,
+  ) async {
+    // TODO: Implement when repository method available
   }
 
   void _onConnectivityChanged(

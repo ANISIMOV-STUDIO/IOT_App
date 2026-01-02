@@ -18,3 +18,4 @@ export 'schedule_widget.dart';
 export 'operation_graph.dart';
 export 'presets_widget.dart';
 export 'unit_notifications_widget.dart';
+export 'unit_alarms_widget.dart';
