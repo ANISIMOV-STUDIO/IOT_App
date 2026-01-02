@@ -3,6 +3,9 @@ library;
 
 import '../../../domain/entities/hvac_device.dart';
 import '../../../domain/entities/climate.dart';
+import '../../../domain/entities/alarm_info.dart';
+import '../../../domain/entities/mode_settings.dart';
+import '../../../domain/entities/device_full_state.dart';
 import 'package:flutter/material.dart';
 
 class DeviceJsonMapper {
@@ -129,5 +132,64 @@ class DeviceJsonMapper {
     if (clamped < 33) return 'low';
     if (clamped < 66) return 'medium';
     return 'high'; // 66-100
+  }
+
+  /// Парсинг настроек режимов из JSON объекта
+  static Map<String, ModeSettings>? modeSettingsFromJson(
+      Map<String, dynamic>? json) {
+    if (json == null) return null;
+    return json.map((key, value) =>
+        MapEntry(key, ModeSettings.fromJson(value as Map<String, dynamic>)));
+  }
+
+  /// Парсинг настроек таймера из JSON объекта
+  static Map<String, TimerSettings>? timerSettingsFromJson(
+      Map<String, dynamic>? json) {
+    if (json == null) return null;
+    return json.map((key, value) =>
+        MapEntry(key, TimerSettings.fromJson(value as Map<String, dynamic>)));
+  }
+
+  /// Парсинг активных аварий из JSON объекта
+  static Map<String, AlarmInfo>? activeAlarmsFromJson(
+      Map<String, dynamic>? json) {
+    if (json == null) return null;
+    return json.map((key, value) =>
+        MapEntry(key, AlarmInfo.fromJson(value as Map<String, dynamic>)));
+  }
+
+  /// Парсинг истории аварий из JSON списка
+  static List<AlarmHistory> alarmHistoryListFromJson(List<dynamic> json) {
+    return json
+        .map((item) => AlarmHistory.fromJson(item as Map<String, dynamic>))
+        .toList();
+  }
+
+  /// JSON → DeviceFullState (полное состояние с настройками и авариями)
+  static DeviceFullState deviceFullStateFromJson(Map<String, dynamic> json) {
+    return DeviceFullState(
+      id: json['id'] as String,
+      name: json['name'] as String? ?? 'Unknown Device',
+      macAddress: json['macAddress'] as String? ?? '',
+      power: json['power'] as bool? ?? false,
+      mode: _stringToClimateMode(json['mode'] as String?),
+      currentTemperature: (json['currentTemp'] as num?)?.toDouble() ?? 20.0,
+      targetTemperature: (json['temp'] as num?)?.toDouble() ?? 22.0,
+      humidity: (json['humidity'] as num?)?.toDouble() ?? 50.0,
+      supplyFan: json['supplyFan'] as String?,
+      exhaustFan: json['exhaustFan'] as String?,
+      scheduleIndicator: json['scheduleIndicator'] as int?,
+      devicePower: json['devicePower'] as int?,
+      isOnline: json['isOnline'] as bool? ?? true,
+      modeSettings: json['modeSettings'] != null
+          ? modeSettingsFromJson(json['modeSettings'] as Map<String, dynamic>)
+          : null,
+      timerSettings: json['timerSettings'] != null
+          ? timerSettingsFromJson(json['timerSettings'] as Map<String, dynamic>)
+          : null,
+      activeAlarms: json['activeAlarms'] != null
+          ? activeAlarmsFromJson(json['activeAlarms'] as Map<String, dynamic>)
+          : null,
+    );
   }
 }

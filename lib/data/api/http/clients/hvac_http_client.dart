@@ -228,4 +228,44 @@ class HvacHttpClient {
       rethrow;
     }
   }
+
+  /// Получить историю аварий устройства
+  /// GET /api/device/{id}/alarms?limit=100
+  Future<List<Map<String, dynamic>>> getAlarmHistory(
+    String deviceId, {
+    int limit = 100,
+  }) async {
+    final url = '${ApiConfig.hvacApiUrl}/$deviceId/alarms?limit=$limit';
+
+    try {
+      ApiLogger.logHttpRequest('GET', url, null);
+
+      final token = await _apiClient.getAuthToken();
+      final response = await _apiClient.getHttpClient().get(
+            Uri.parse(url),
+            headers: {
+              'Content-Type': 'application/json',
+              if (token != null) 'Authorization': 'Bearer $token',
+            },
+          );
+
+      ApiLogger.logHttpResponse('GET', url, response.statusCode, response.body);
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data is List) {
+          return data.cast<Map<String, dynamic>>();
+        }
+        return [];
+      } else {
+        throw HttpErrorHandler.handle(response);
+      }
+    } catch (e) {
+      ApiLogger.logHttpError('GET', url, e);
+      if (e is http.ClientException) {
+        throw HttpErrorHandler.handleException(e);
+      }
+      rethrow;
+    }
+  }
 }
