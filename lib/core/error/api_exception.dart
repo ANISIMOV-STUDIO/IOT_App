@@ -7,6 +7,7 @@ enum ApiErrorType {
   authentication,
   authorization,
   notFound,
+  conflict,
   serverError,
   validation,
   unknown,

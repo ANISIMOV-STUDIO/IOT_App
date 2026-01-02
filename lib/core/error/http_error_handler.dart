@@ -1,58 +1,81 @@
 /// HTTP error handler
 library;
 
+import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'api_exception.dart';
 
 class HttpErrorHandler {
+  /// Извлечь сообщение об ошибке из тела ответа
+  static String? _extractMessage(http.Response response) {
+    try {
+      if (response.body.isNotEmpty) {
+        final json = jsonDecode(response.body);
+        if (json is Map) {
+          return json['message'] as String? ?? json['error'] as String?;
+        }
+      }
+    } catch (_) {}
+    return null;
+  }
+
   static ApiException handle(http.Response response) {
+    final serverMessage = _extractMessage(response);
+
     switch (response.statusCode) {
       case 401:
         return ApiException(
           type: ApiErrorType.authentication,
-          message: 'Требуется авторизация',
+          message: serverMessage ?? 'Требуется авторизация',
           statusCode: response.statusCode,
         );
 
       case 403:
         return ApiException(
           type: ApiErrorType.authorization,
-          message: 'Недостаточно прав доступа',
+          message: serverMessage ?? 'Недостаточно прав доступа',
           statusCode: response.statusCode,
         );
 
       case 404:
         return ApiException(
           type: ApiErrorType.notFound,
-          message: 'Ресурс не найден',
+          message: serverMessage ?? 'Ресурс не найден',
           statusCode: response.statusCode,
         );
 
       case 400:
         return ApiException(
           type: ApiErrorType.validation,
-          message: 'Неверные параметры запроса',
+          message: serverMessage ?? 'Неверные параметры запроса',
           statusCode: response.statusCode,
         );
 
       case 408:
         return ApiException(
           type: ApiErrorType.timeout,
-          message: 'Превышено время ожидания',
+          message: serverMessage ?? 'Превышено время ожидания',
+          statusCode: response.statusCode,
+        );
+
+      case 409:
+        return ApiException(
+          type: ApiErrorType.conflict,
+          message: serverMessage ?? 'Ресурс уже существует',
           statusCode: response.statusCode,
         );
 
       case >= 500:
         return ApiException(
           type: ApiErrorType.serverError,
-          message: 'Ошибка сервера',
+          message: serverMessage ?? 'Ошибка сервера',
           statusCode: response.statusCode,
         );
 
       default:
         return ApiException(
           type: ApiErrorType.unknown,
-          message: 'Неизвестная ошибка',
+          message: serverMessage ?? 'Неизвестная ошибка',
           statusCode: response.statusCode,
         );
     }
