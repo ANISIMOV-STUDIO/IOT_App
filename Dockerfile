@@ -14,7 +14,7 @@ RUN flutter pub get
 COPY . .
 
 # Build args для environment variables
-ARG API_BASE_URL=http://localhost:8080/api
+ARG API_BASE_URL=https://hvac.anisimovstudio.ru/api
 ARG ENVIRONMENT=production
 
 # Собираем релизную версию для web с встроенными переменными окружения

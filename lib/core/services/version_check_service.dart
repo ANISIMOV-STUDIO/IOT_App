@@ -17,7 +17,7 @@ class VersionCheckService {
   VersionCheckService(this._client)
       : _baseUrl = const String.fromEnvironment(
           'API_BASE_URL',
-          defaultValue: 'http://localhost:8080/api',
+          defaultValue: 'https://hvac.anisimovstudio.ru/api',
         );
 
   /// Stream that emits when a new version is detected
