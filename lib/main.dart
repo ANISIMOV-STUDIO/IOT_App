@@ -19,6 +19,8 @@ import 'core/logging/talker_config.dart';
 import 'presentation/bloc/dashboard/dashboard_bloc.dart';
 import 'presentation/bloc/auth/auth_bloc.dart';
 import 'presentation/bloc/auth/auth_event.dart';
+import 'presentation/bloc/devices/devices_bloc.dart';
+import 'presentation/bloc/climate/climate_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -65,9 +67,17 @@ class _HvacControlAppState extends State<HvacControlApp> {
       providers: [
         // AuthBloc уже создан в initState - используем .value
         BlocProvider.value(value: _authBloc),
-        // DashboardBloc предоставляется глобально
+        // DashboardBloc предоставляется глобально (LEGACY — будет удалён после миграции)
         BlocProvider(
           create: (context) => di.sl<DashboardBloc>(),
+        ),
+        // DevicesBloc — управление списком HVAC устройств
+        BlocProvider(
+          create: (context) => di.sl<DevicesBloc>(),
+        ),
+        // ClimateBloc — управление климатом текущего устройства
+        BlocProvider(
+          create: (context) => di.sl<ClimateBloc>(),
         ),
       ],
       child: ListenableBuilder(

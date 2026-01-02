@@ -37,6 +37,8 @@ import '../../domain/repositories/graph_data_repository.dart';
 // Presentation - BLoCs
 import '../../presentation/bloc/dashboard/dashboard_bloc.dart';
 import '../../presentation/bloc/auth/auth_bloc.dart';
+import '../../presentation/bloc/devices/devices_bloc.dart';
+import '../../presentation/bloc/climate/climate_bloc.dart';
 
 // Data - Mock репозитории (для разработки/тестирования)
 import '../../data/repositories/mock_climate_repository.dart';
@@ -261,7 +263,7 @@ Future<void> init() async {
     );
   }
 
-  // Dashboard BLoC (Главный экран с виджетами)
+  // Dashboard BLoC (Главный экран с виджетами) — LEGACY, будет удалён после миграции
   sl.registerLazySingleton(
     () => DashboardBloc(
       deviceRepository: sl(),
@@ -273,5 +275,15 @@ Future<void> init() async {
       graphDataRepository: sl(),
       connectivityService: sl(),
     ),
+  );
+
+  // DevicesBloc (Управление списком HVAC устройств)
+  sl.registerLazySingleton(
+    () => DevicesBloc(climateRepository: sl()),
+  );
+
+  // ClimateBloc (Управление климатом текущего устройства)
+  sl.registerLazySingleton(
+    () => ClimateBloc(climateRepository: sl()),
   );
 }

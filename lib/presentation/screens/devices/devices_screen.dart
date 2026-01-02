@@ -8,7 +8,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_font_sizes.dart';
 import '../../../core/theme/spacing.dart';
 import '../../../domain/entities/hvac_device.dart';
-import '../../bloc/dashboard/dashboard_bloc.dart';
+import '../../bloc/devices/devices_bloc.dart';
 import '../../widgets/breez/breez_card.dart';
 import '../../widgets/common/device_icon_helper.dart';
 import '../../widgets/loading/loading_indicator.dart';
@@ -44,11 +44,10 @@ class DevicesScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: AppSpacing.xs),
-                  BlocBuilder<DashboardBloc, DashboardState>(
+                  BlocBuilder<DevicesBloc, DevicesState>(
                     builder: (context, state) {
-                      final deviceCount = state.hvacDevices.length;
                       return Text(
-                        '$deviceCount устройств',
+                        '${state.deviceCount} устройств',
                         style: TextStyle(
                           fontSize: AppFontSizes.body,
                           color: colors.textMuted,
@@ -62,26 +61,26 @@ class DevicesScreen extends StatelessWidget {
 
             // Devices List
             Expanded(
-              child: BlocBuilder<DashboardBloc, DashboardState>(
+              child: BlocBuilder<DevicesBloc, DevicesState>(
                 builder: (context, state) {
-                  // Конвертируем DashboardStatus в LoadingStatus
+                  // Конвертируем DevicesStatus в LoadingStatus
                   LoadingStatus loadingStatus;
                   switch (state.status) {
-                    case DashboardStatus.initial:
-                    case DashboardStatus.loading:
+                    case DevicesStatus.initial:
+                    case DevicesStatus.loading:
                       loadingStatus = LoadingStatus.loading;
                       break;
-                    case DashboardStatus.failure:
+                    case DevicesStatus.failure:
                       loadingStatus = LoadingStatus.error;
                       break;
-                    case DashboardStatus.success:
+                    case DevicesStatus.success:
                       loadingStatus = LoadingStatus.success;
                       break;
                   }
 
                   return LoadingState<List<HvacDevice>>(
                     status: loadingStatus,
-                    data: state.hvacDevices.isEmpty ? null : state.hvacDevices,
+                    data: state.devices.isEmpty ? null : state.devices,
                     errorMessage: 'Не удалось загрузить устройства',
                     loadingSkeleton: Padding(
                       padding: const EdgeInsets.all(AppSpacing.lg),
@@ -89,7 +88,7 @@ class DevicesScreen extends StatelessWidget {
                     ),
                     errorBuilder: (context, error) => NetworkError(
                       onRetry: () {
-                        context.read<DashboardBloc>().add(const DashboardRefreshed());
+                        context.read<DevicesBloc>().add(const DevicesSubscriptionRequested());
                       },
                     ),
                     builder: (context, devices) {
