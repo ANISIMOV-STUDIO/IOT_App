@@ -238,35 +238,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final authState = context.watch<AuthBloc>().state;
     final user = authState is AuthAuthenticated ? authState.user : null;
 
-    return BlocBuilder<DashboardBloc, DashboardState>(
-      builder: (context, dashboardState) {
-        // Преобразуем HvacDevice в UnitState для UI
-        final units = dashboardState.hvacDevices
-            .map((device) {
-              // Использовать climate только для выбранного устройства
-              final climate = device.id == dashboardState.selectedHvacDeviceId
-                  ? dashboardState.climate
-                  : null;
-              return _createUnitStateFromHvacDevice(device, climate);
-            })
-            .toList();
-
-        // Обновляем _units если пришли новые данные
-        if (units != _units) {
-          Future.microtask(() => setState(() => _units = units));
-        }
-
-        // Показываем ошибку регистрации
-        if (dashboardState.registrationError != null) {
-          Future.microtask(() {
-            ToastService.error('Ошибка: ${dashboardState.registrationError}');
-          });
-        }
-
-        return BlocListener<AuthBloc, AuthState>(
+    return MultiBlocListener(
+      listeners: [
+        // Слушатель для ошибок регистрации устройства
+        BlocListener<DashboardBloc, DashboardState>(
+          listenWhen: (previous, current) =>
+              previous.registrationError != current.registrationError &&
+              current.registrationError != null,
+          listener: (context, state) {
+            ToastService.error('Ошибка: ${state.registrationError}');
+          },
+        ),
+        // Слушатель для logout
+        BlocListener<AuthBloc, AuthState>(
           listener: (context, state) {
             if (state is AuthUnauthenticated) {
-              // Небольшая задержка для гарантии очистки storage
               Future.delayed(const Duration(milliseconds: 100), () {
                 if (context.mounted) {
                   context.go(AppRoutes.login);
@@ -274,7 +260,27 @@ class _DashboardScreenState extends State<DashboardScreen> {
               });
             }
           },
-          child: Scaffold(
+        ),
+      ],
+      child: BlocBuilder<DashboardBloc, DashboardState>(
+        builder: (context, dashboardState) {
+          // Преобразуем HvacDevice в UnitState для UI
+          final units = dashboardState.hvacDevices
+              .map((device) {
+                // Использовать climate только для выбранного устройства
+                final climate = device.id == dashboardState.selectedHvacDeviceId
+                    ? dashboardState.climate
+                    : null;
+                return _createUnitStateFromHvacDevice(device, climate);
+              })
+              .toList();
+
+          // Обновляем _units если пришли новые данные
+          if (units != _units) {
+            Future.microtask(() => setState(() => _units = units));
+          }
+
+          return Scaffold(
             key: _scaffoldKey,
             backgroundColor: isDark ? AppColors.darkBg : AppColors.lightBg,
             body: SafeArea(
@@ -293,9 +299,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ],
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
