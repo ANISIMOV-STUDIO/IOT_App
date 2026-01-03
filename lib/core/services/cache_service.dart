@@ -15,7 +15,6 @@ import '../../domain/entities/energy_stats.dart';
 import '../../domain/entities/schedule_entry.dart';
 import '../../domain/entities/unit_notification.dart';
 import '../../domain/entities/graph_data.dart';
-import '../../domain/entities/occupant.dart';
 
 /// Ключи для Hive боксов
 class CacheKeys {
@@ -26,7 +25,6 @@ class CacheKeys {
   static const String scheduleBox = 'schedule_cache';
   static const String notificationsBox = 'notifications_cache';
   static const String graphDataBox = 'graph_data_cache';
-  static const String occupantsBox = 'occupants_cache';
   static const String metadataBox = 'cache_metadata';
 
   // Ключи внутри боксов
@@ -34,7 +32,6 @@ class CacheKeys {
   static const String allDevices = 'all_devices';
   static const String allHvacDevices = 'all_hvac_devices';
   static const String todayEnergy = 'today_energy';
-  static const String allOccupants = 'all_occupants';
 }
 
 /// Метаданные кеша (время сохранения)
@@ -70,7 +67,6 @@ class CacheService {
   late Box<dynamic> _scheduleBox;
   late Box<dynamic> _notificationsBox;
   late Box<dynamic> _graphDataBox;
-  late Box<dynamic> _occupantsBox;
   late Box<dynamic> _metadataBox;
 
   bool _initialized = false;
@@ -88,7 +84,6 @@ class CacheService {
     _scheduleBox = await Hive.openBox(CacheKeys.scheduleBox);
     _notificationsBox = await Hive.openBox(CacheKeys.notificationsBox);
     _graphDataBox = await Hive.openBox(CacheKeys.graphDataBox);
-    _occupantsBox = await Hive.openBox(CacheKeys.occupantsBox);
     _metadataBox = await Hive.openBox(CacheKeys.metadataBox);
 
     _initialized = true;
@@ -260,29 +255,6 @@ class CacheService {
   }
 
   // ============================================
-  // OCCUPANTS CACHE
-  // ============================================
-
-  /// Сохранить список жителей
-  Future<void> cacheOccupants(List<Occupant> occupants) async {
-    final data = occupants.map((o) => _occupantToMap(o)).toList();
-    await _occupantsBox.put(CacheKeys.allOccupants, data);
-    await _saveMetadata('occupants');
-  }
-
-  /// Получить жителей из кеша
-  List<Occupant>? getCachedOccupants() {
-    if (!_isValidCache('occupants')) return null;
-
-    final data = _occupantsBox.get(CacheKeys.allOccupants);
-    if (data == null) return null;
-
-    return (data as List).map((item) {
-      return _occupantFromMap(Map<String, dynamic>.from(item));
-    }).toList();
-  }
-
-  // ============================================
   // UTILITY METHODS
   // ============================================
 
@@ -295,13 +267,7 @@ class CacheService {
     await _scheduleBox.clear();
     await _notificationsBox.clear();
     await _graphDataBox.clear();
-    await _occupantsBox.clear();
     await _metadataBox.clear();
-  }
-
-  /// Очистить кеш жителей
-  Future<void> clearOccupantsCache() async {
-    await _occupantsBox.clear();
   }
 
   /// Сохранить метаданные (timestamp)
@@ -467,21 +433,5 @@ class CacheService {
   GraphDataPoint _graphDataPointFromMap(Map<String, dynamic> m) => GraphDataPoint(
         label: m['label'] as String,
         value: (m['value'] as num).toDouble(),
-      );
-
-  Map<String, dynamic> _occupantToMap(Occupant o) => {
-        'id': o.id,
-        'name': o.name,
-        'avatarUrl': o.avatarUrl,
-        'isHome': o.isHome,
-        'currentRoom': o.currentRoom,
-      };
-
-  Occupant _occupantFromMap(Map<String, dynamic> m) => Occupant(
-        id: m['id'] as String,
-        name: m['name'] as String,
-        avatarUrl: m['avatarUrl'] as String?,
-        isHome: m['isHome'] as bool? ?? false,
-        currentRoom: m['currentRoom'] as String?,
       );
 }

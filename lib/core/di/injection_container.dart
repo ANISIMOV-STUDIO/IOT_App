@@ -29,7 +29,6 @@ import '../../data/api/platform/api_client_factory.dart';
 import '../../domain/repositories/climate_repository.dart';
 import '../../domain/repositories/energy_repository.dart';
 import '../../domain/repositories/smart_device_repository.dart';
-import '../../domain/repositories/occupant_repository.dart';
 import '../../domain/repositories/schedule_repository.dart';
 import '../../domain/repositories/notification_repository.dart';
 import '../../domain/repositories/graph_data_repository.dart';
@@ -49,7 +48,6 @@ import '../../domain/usecases/usecases.dart';
 import '../../data/repositories/mock_climate_repository.dart';
 import '../../data/repositories/mock_energy_repository.dart';
 import '../../data/repositories/mock_smart_device_repository.dart';
-import '../../data/repositories/mock_occupant_repository.dart';
 import '../../data/repositories/mock_schedule_repository.dart';
 import '../../data/repositories/mock_notification_repository.dart';
 import '../../data/repositories/mock_graph_data_repository.dart';
@@ -58,7 +56,6 @@ import '../../data/repositories/mock_graph_data_repository.dart';
 import '../../data/repositories/real_climate_repository.dart';
 import '../../data/repositories/real_energy_repository.dart';
 import '../../data/repositories/real_smart_device_repository.dart';
-import '../../data/repositories/real_occupant_repository.dart';
 import '../../data/repositories/real_schedule_repository.dart';
 import '../../data/repositories/real_notification_repository.dart';
 import '../../data/repositories/real_graph_data_repository.dart';
@@ -70,7 +67,6 @@ import '../../data/repositories/cached_smart_device_repository.dart';
 import '../../data/repositories/cached_schedule_repository.dart';
 import '../../data/repositories/cached_notification_repository.dart';
 import '../../data/repositories/cached_graph_data_repository.dart';
-import '../../data/repositories/cached_occupant_repository.dart';
 
 // Data - HTTP Clients (для DI в repositories)
 import '../../data/api/http/clients/hvac_http_client.dart';
@@ -205,21 +201,6 @@ Future<void> init() async {
   } else {
     sl.registerLazySingleton<EnergyRepository>(
       () => MockEnergyRepository(),
-    );
-  }
-
-  // Occupant Repository (Управление жильцами)
-  if (useRealApi) {
-    sl.registerLazySingleton<OccupantRepository>(
-      () => CachedOccupantRepository(
-        inner: RealOccupantRepository(sl<ApiClient>()),
-        cacheService: sl<CacheService>(),
-        connectivity: sl<ConnectivityService>(),
-      ),
-    );
-  } else {
-    sl.registerLazySingleton<OccupantRepository>(
-      () => MockOccupantRepository(),
     );
   }
 

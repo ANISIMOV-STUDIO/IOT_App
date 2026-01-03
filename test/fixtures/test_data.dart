@@ -6,7 +6,6 @@ import 'package:hvac_control/domain/entities/smart_device.dart';
 import 'package:hvac_control/domain/entities/climate.dart';
 import 'package:hvac_control/domain/entities/hvac_device.dart';
 import 'package:hvac_control/domain/entities/energy_stats.dart';
-import 'package:hvac_control/domain/entities/occupant.dart';
 import 'package:hvac_control/domain/entities/schedule_entry.dart';
 import 'package:hvac_control/domain/entities/unit_notification.dart';
 import 'package:hvac_control/domain/entities/graph_data.dart';
@@ -295,32 +294,6 @@ class TestData {
           unitCount: 1,
           totalKwh: 4.0,
         ),
-      ];
-
-  // ==================== Жители ====================
-
-  /// Тестовый житель (дома)
-  static Occupant get testOccupantHome => const Occupant(
-        id: 'occupant-1',
-        name: 'Иван',
-        avatarUrl: null,
-        isHome: true,
-        currentRoom: 'Гостиная',
-      );
-
-  /// Тестовый житель (не дома)
-  static Occupant get testOccupantAway => const Occupant(
-        id: 'occupant-2',
-        name: 'Мария',
-        avatarUrl: null,
-        isHome: false,
-        currentRoom: null,
-      );
-
-  /// Список жителей
-  static List<Occupant> get testOccupants => [
-        testOccupantHome,
-        testOccupantAway,
       ];
 
   // ==================== Расписание ====================

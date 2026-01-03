@@ -8,7 +8,6 @@ import 'package:hvac_control/domain/repositories/smart_device_repository.dart';
 import 'package:hvac_control/domain/repositories/energy_repository.dart';
 import 'package:hvac_control/domain/repositories/notification_repository.dart';
 import 'package:hvac_control/domain/repositories/schedule_repository.dart';
-import 'package:hvac_control/domain/repositories/occupant_repository.dart';
 import 'package:hvac_control/domain/repositories/graph_data_repository.dart';
 
 /// Mock для ClimateRepository
@@ -25,9 +24,6 @@ class MockNotificationRepository extends Mock implements NotificationRepository 
 
 /// Mock для ScheduleRepository
 class MockScheduleRepository extends Mock implements ScheduleRepository {}
-
-/// Mock для OccupantRepository
-class MockOccupantRepository extends Mock implements OccupantRepository {}
 
 /// Mock для GraphDataRepository
 class MockGraphDataRepository extends Mock implements GraphDataRepository {}

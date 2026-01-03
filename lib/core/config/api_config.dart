@@ -20,9 +20,8 @@ class ApiConfig {
   static String get hvacApiUrl => deviceApiUrl; // Алиас для совместимости
   static String get analyticsApiUrl => '$apiBaseUrl/analytics'; // Не реализован на бэке
   static String get scheduleApiUrl => deviceApiUrl; // Расписание через /device/{id}/schedule
-  static String get notificationApiUrl => '$apiBaseUrl/notification'; // Без s!
-  static String get occupantApiUrl => '$apiBaseUrl/occupant'; // Без s!
-  static String get releaseApiUrl => '$apiBaseUrl/release'; // Версии приложения
+  static String get notificationApiUrl => '$apiBaseUrl/notification';
+  static String get releaseApiUrl => '$apiBaseUrl/release';
 
   // Timeouts
   static const Duration connectTimeout = Duration(seconds: 10);

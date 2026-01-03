@@ -104,11 +104,6 @@ abstract class MockData {
     },
   ];
 
-  /// Жители/пользователи системы
-  static const List<Map<String, dynamic>> occupants = [
-    {'id': 'occ_1', 'name': 'Алексей Б.', 'role': 'Админ', 'isHome': true},
-  ];
-
   /// Пресеты режимов
   static const Map<String, Map<String, dynamic>> modePresets = {
     'auto': {

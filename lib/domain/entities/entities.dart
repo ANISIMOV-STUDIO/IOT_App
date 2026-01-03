@@ -9,7 +9,6 @@ export 'energy_stats.dart';
 export 'graph_data.dart';
 export 'hvac_device.dart';
 export 'mode_settings.dart';
-export 'occupant.dart';
 export 'preset_data.dart';
 export 'schedule_entry.dart';
 export 'smart_device.dart';
