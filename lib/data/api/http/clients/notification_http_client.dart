@@ -53,29 +53,32 @@ class NotificationHttpClient {
     }
   }
 
-  /// Mark notification as read
-  Future<void> markAsRead(String notificationId) async {
-    final url = '${ApiConfig.notificationApiUrl}/$notificationId/read';
+  /// Mark notifications as read (one or multiple)
+  /// Backend: POST /api/notification/mark-read with body ["id1", "id2", ...]
+  Future<void> markAsRead(List<String> notificationIds) async {
+    final url = '${ApiConfig.notificationApiUrl}/mark-read';
 
     try {
-      ApiLogger.logHttpRequest('PUT', url, null);
+      final body = json.encode(notificationIds);
+      ApiLogger.logHttpRequest('POST', url, body);
 
       final token = await _apiClient.getAuthToken();
-      final response = await _apiClient.getHttpClient().put(
+      final response = await _apiClient.getHttpClient().post(
             Uri.parse(url),
             headers: {
               'Content-Type': 'application/json',
               if (token != null) 'Authorization': 'Bearer $token',
             },
+            body: body,
           );
 
-      ApiLogger.logHttpResponse('PUT', url, response.statusCode, response.body);
+      ApiLogger.logHttpResponse('POST', url, response.statusCode, response.body);
 
       if (response.statusCode != 200 && response.statusCode != 204) {
         throw HttpErrorHandler.handle(response);
       }
     } catch (e) {
-      ApiLogger.logHttpError('PUT', url, e);
+      ApiLogger.logHttpError('POST', url, e);
       if (e is http.ClientException) {
         throw HttpErrorHandler.handleException(e);
       }
@@ -83,15 +86,16 @@ class NotificationHttpClient {
     }
   }
 
-  /// Mark all notifications as read
-  Future<void> markAllAsRead() async {
-    final url = '${ApiConfig.notificationApiUrl}/read-all';
+  /// Dismiss (delete) notification
+  /// Backend: DELETE /api/notification/{id}
+  Future<void> dismiss(String notificationId) async {
+    final url = '${ApiConfig.notificationApiUrl}/$notificationId';
 
     try {
-      ApiLogger.logHttpRequest('PUT', url, null);
+      ApiLogger.logHttpRequest('DELETE', url, null);
 
       final token = await _apiClient.getAuthToken();
-      final response = await _apiClient.getHttpClient().put(
+      final response = await _apiClient.getHttpClient().delete(
             Uri.parse(url),
             headers: {
               'Content-Type': 'application/json',
@@ -99,13 +103,13 @@ class NotificationHttpClient {
             },
           );
 
-      ApiLogger.logHttpResponse('PUT', url, response.statusCode, response.body);
+      ApiLogger.logHttpResponse('DELETE', url, response.statusCode, response.body);
 
       if (response.statusCode != 200 && response.statusCode != 204) {
         throw HttpErrorHandler.handle(response);
       }
     } catch (e) {
-      ApiLogger.logHttpError('PUT', url, e);
+      ApiLogger.logHttpError('DELETE', url, e);
       if (e is http.ClientException) {
         throw HttpErrorHandler.handleException(e);
       }

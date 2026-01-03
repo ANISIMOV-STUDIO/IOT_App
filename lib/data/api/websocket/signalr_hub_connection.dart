@@ -1,4 +1,9 @@
-/// SignalR Hub connection for real-time updates (Web)
+/// SignalR Hub соединение для real-time обновлений
+///
+/// Поддерживает события:
+/// - DeviceUpdated / DeviceStateChanged - обновления устройств
+/// - NotificationReceived - новые уведомления
+/// - NewReleaseAvailable - новые версии приложения
 library;
 
 import 'dart:async';
@@ -12,15 +17,19 @@ class SignalRHubConnection {
   HubConnection? _connection;
   final _deviceUpdatesController =
       StreamController<Map<String, dynamic>>.broadcast();
+  final _notificationController =
+      StreamController<Map<String, dynamic>>.broadcast();
+  final _releaseController =
+      StreamController<Map<String, dynamic>>.broadcast();
   final _connectionStateController =
       StreamController<HubConnectionState>.broadcast();
 
   SignalRHubConnection(this._apiClient);
 
-  /// Current connection state
+  /// Текущее состояние соединения
   HubConnectionState? get state => _connection?.state;
 
-  /// Connect to SignalR hub
+  /// Подключиться к SignalR hub
   Future<void> connect() async {
     if (_connection != null &&
         _connection!.state == HubConnectionState.Connected) {
@@ -40,11 +49,17 @@ class SignalRHubConnection {
           .withAutomaticReconnect()
           .build();
 
-      // Subscribe to device updates
+      // Подписка на обновления устройств
       _connection!.on('DeviceUpdated', _handleDeviceUpdate);
       _connection!.on('DeviceStateChanged', _handleDeviceUpdate);
 
-      // Connection state changes
+      // Подписка на уведомления
+      _connection!.on('NotificationReceived', _handleNotification);
+
+      // Подписка на обновления версий
+      _connection!.on('NewReleaseAvailable', _handleRelease);
+
+      // Обработка состояния соединения
       _connection!.onclose(({error}) {
         ApiLogger.logWebSocketError('Connection closed: $error');
         _connectionStateController.add(HubConnectionState.Disconnected);
@@ -71,7 +86,7 @@ class SignalRHubConnection {
     }
   }
 
-  /// Handle device update from SignalR
+  /// Обработка обновления устройства из SignalR
   void _handleDeviceUpdate(List<Object?>? arguments) {
     try {
       final data = arguments?.first;
@@ -95,7 +110,55 @@ class SignalRHubConnection {
     }
   }
 
-  /// Subscribe to specific device updates
+  /// Обработка уведомления из SignalR
+  void _handleNotification(List<Object?>? arguments) {
+    try {
+      final data = arguments?.first;
+      if (data != null) {
+        Map<String, dynamic> notificationData;
+
+        if (data is Map<String, dynamic>) {
+          notificationData = data;
+        } else if (data is Map) {
+          notificationData = Map<String, dynamic>.from(data);
+        } else {
+          ApiLogger.logWebSocketError('Unknown notification data format: ${data.runtimeType}');
+          return;
+        }
+
+        ApiLogger.logWebSocketMessage('NotificationReceived', notificationData);
+        _notificationController.add(notificationData);
+      }
+    } catch (e) {
+      ApiLogger.logWebSocketError('Error handling notification: $e');
+    }
+  }
+
+  /// Обработка информации о новом релизе из SignalR
+  void _handleRelease(List<Object?>? arguments) {
+    try {
+      final data = arguments?.first;
+      if (data != null) {
+        Map<String, dynamic> releaseData;
+
+        if (data is Map<String, dynamic>) {
+          releaseData = data;
+        } else if (data is Map) {
+          releaseData = Map<String, dynamic>.from(data);
+        } else {
+          ApiLogger.logWebSocketError('Unknown release data format: ${data.runtimeType}');
+          return;
+        }
+
+        ApiLogger.logWebSocketMessage('NewReleaseAvailable', releaseData);
+        _releaseController.add(releaseData);
+      }
+    } catch (e) {
+      ApiLogger.logWebSocketError('Error handling release: $e');
+    }
+  }
+
+  /// Подписаться на обновления конкретного устройства
   Future<void> subscribeToDevice(String deviceId) async {
     try {
       await _connection?.invoke('SubscribeToDevice', args: [deviceId]);
@@ -105,7 +168,7 @@ class SignalRHubConnection {
     }
   }
 
-  /// Unsubscribe from device updates
+  /// Отписаться от обновлений устройства
   Future<void> unsubscribeFromDevice(String deviceId) async {
     try {
       await _connection?.invoke('UnsubscribeFromDevice', args: [deviceId]);
@@ -115,15 +178,33 @@ class SignalRHubConnection {
     }
   }
 
-  /// Stream of device updates
+  /// Подписаться на все устройства
+  Future<void> subscribeToAllDevices() async {
+    try {
+      await _connection?.invoke('SubscribeToAllDevices', args: []);
+      ApiLogger.logWebSocketMessage('SubscribeToAllDevices', null);
+    } catch (e) {
+      ApiLogger.logWebSocketError('Failed to subscribe to all devices: $e');
+    }
+  }
+
+  /// Стрим обновлений устройств
   Stream<Map<String, dynamic>> get deviceUpdates =>
       _deviceUpdatesController.stream;
 
-  /// Stream of connection state changes
+  /// Стрим уведомлений
+  Stream<Map<String, dynamic>> get notifications =>
+      _notificationController.stream;
+
+  /// Стрим обновлений версий
+  Stream<Map<String, dynamic>> get releases =>
+      _releaseController.stream;
+
+  /// Стрим состояния соединения
   Stream<HubConnectionState> get connectionState =>
       _connectionStateController.stream;
 
-  /// Disconnect
+  /// Отключиться от SignalR
   Future<void> disconnect() async {
     await _connection?.stop();
     _connectionStateController.add(HubConnectionState.Disconnected);
@@ -136,6 +217,8 @@ class SignalRHubConnection {
       ApiLogger.logWebSocketError('Error during disconnect: $e');
     }
     await _deviceUpdatesController.close();
+    await _notificationController.close();
+    await _releaseController.close();
     await _connectionStateController.close();
   }
 }

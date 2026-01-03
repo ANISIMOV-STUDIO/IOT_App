@@ -238,11 +238,14 @@ Future<void> init() async {
     );
   }
 
-  // Notification Repository (Уведомления)
+  // Notification Repository (Уведомления с SignalR real-time)
   if (useRealApi) {
     sl.registerLazySingleton<NotificationRepository>(
       () => CachedNotificationRepository(
-        inner: RealNotificationRepository(sl<ApiClient>()),
+        inner: RealNotificationRepository(
+          sl<ApiClient>(),
+          sl<SignalRHubConnection>(),
+        ),
         cacheService: sl<CacheService>(),
         connectivity: sl<ConnectivityService>(),
       ),
