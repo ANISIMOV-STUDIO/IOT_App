@@ -21,6 +21,12 @@ class DeviceFullState extends Equatable {
   final int? devicePower;
   final bool isOnline;
 
+  /// Уличная температура (с датчика устройства)
+  final double? outdoorTemperature;
+
+  /// КПД рекуператора (0-100%)
+  final int? kpdRecuperator;
+
   /// Настройки режимов (basic, intensive, economy и т.д.)
   final Map<String, ModeSettings>? modeSettings;
 
@@ -44,6 +50,8 @@ class DeviceFullState extends Equatable {
     this.scheduleIndicator,
     this.devicePower,
     this.isOnline = true,
+    this.outdoorTemperature,
+    this.kpdRecuperator,
     this.modeSettings,
     this.timerSettings,
     this.activeAlarms,
@@ -72,6 +80,8 @@ class DeviceFullState extends Equatable {
     int? scheduleIndicator,
     int? devicePower,
     bool? isOnline,
+    double? outdoorTemperature,
+    int? kpdRecuperator,
     Map<String, ModeSettings>? modeSettings,
     Map<String, TimerSettings>? timerSettings,
     Map<String, AlarmInfo>? activeAlarms,
@@ -90,6 +100,8 @@ class DeviceFullState extends Equatable {
       scheduleIndicator: scheduleIndicator ?? this.scheduleIndicator,
       devicePower: devicePower ?? this.devicePower,
       isOnline: isOnline ?? this.isOnline,
+      outdoorTemperature: outdoorTemperature ?? this.outdoorTemperature,
+      kpdRecuperator: kpdRecuperator ?? this.kpdRecuperator,
       modeSettings: modeSettings ?? this.modeSettings,
       timerSettings: timerSettings ?? this.timerSettings,
       activeAlarms: activeAlarms ?? this.activeAlarms,
@@ -111,6 +123,8 @@ class DeviceFullState extends Equatable {
         scheduleIndicator,
         devicePower,
         isOnline,
+        outdoorTemperature,
+        kpdRecuperator,
         modeSettings,
         timerSettings,
         activeAlarms,

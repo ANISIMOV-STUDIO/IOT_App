@@ -25,6 +25,7 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
   final RegisterDevice _registerDevice;
   final DeleteDevice _deleteDevice;
   final RenameDevice _renameDevice;
+  final SetDevicePower _setDevicePower;
   final void Function(String) _setSelectedDevice;
 
   StreamSubscription<List<HvacDevice>>? _devicesSubscription;
@@ -35,12 +36,14 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
     required RegisterDevice registerDevice,
     required DeleteDevice deleteDevice,
     required RenameDevice renameDevice,
+    required SetDevicePower setDevicePower,
     required void Function(String) setSelectedDevice,
   })  : _getAllHvacDevices = getAllHvacDevices,
         _watchHvacDevices = watchHvacDevices,
         _registerDevice = registerDevice,
         _deleteDevice = deleteDevice,
         _renameDevice = renameDevice,
+        _setDevicePower = setDevicePower,
         _setSelectedDevice = setSelectedDevice,
         super(const DevicesState()) {
     // События жизненного цикла
@@ -55,6 +58,7 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
     on<DevicesRegistrationErrorCleared>(_onRegistrationErrorCleared);
     on<DevicesDeletionRequested>(_onDeletionRequested);
     on<DevicesRenameRequested>(_onRenameRequested);
+    on<DevicesMasterPowerOffRequested>(_onMasterPowerOffRequested);
   }
 
   /// Запрос на подписку к списку устройств
@@ -217,6 +221,39 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
         errorMessage = 'Не удалось переименовать устройство';
       }
       emit(state.copyWith(registrationError: errorMessage));
+    }
+  }
+
+  /// Выключение всех устройств (Master Power Off)
+  Future<void> _onMasterPowerOffRequested(
+    DevicesMasterPowerOffRequested event,
+    Emitter<DevicesState> emit,
+  ) async {
+    emit(state.copyWith(isMasterPowerOffInProgress: true));
+
+    try {
+      // Выключаем все устройства параллельно
+      await Future.wait(
+        state.devices.map((device) => _setDevicePower(
+              SetDevicePowerParams(isOn: false, deviceId: device.id),
+            )),
+      );
+
+      emit(state.copyWith(
+        isMasterPowerOffInProgress: false,
+        masterPowerOffSuccess: true,
+      ));
+    } catch (e) {
+      String errorMessage;
+      if (e is ApiException) {
+        errorMessage = e.message;
+      } else {
+        errorMessage = 'Не удалось выключить все устройства';
+      }
+      emit(state.copyWith(
+        isMasterPowerOffInProgress: false,
+        masterPowerOffError: errorMessage,
+      ));
     }
   }
 

@@ -27,6 +27,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthLogoutAllRequested>(_onLogoutAllRequested);
     on<AuthVerifyEmailRequested>(_onVerifyEmailRequested);
     on<AuthResendCodeRequested>(_onResendCodeRequested);
+    on<AuthForgotPasswordRequested>(_onForgotPasswordRequested);
+    on<AuthResetPasswordRequested>(_onResetPasswordRequested);
   }
 
   /// Проверка сохраненной сессии
@@ -189,6 +191,48 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await _authService.resendCode(request);
 
       emit(const AuthCodeResent());
+    } catch (e) {
+      emit(AuthError(e.toString()));
+    }
+  }
+
+  /// Запрос сброса пароля (отправка кода на email)
+  Future<void> _onForgotPasswordRequested(
+    AuthForgotPasswordRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(const AuthLoading());
+
+    try {
+      final request = ForgotPasswordRequest(
+        email: event.email,
+      );
+
+      await _authService.forgotPassword(request);
+
+      emit(AuthPasswordResetCodeSent(email: event.email));
+    } catch (e) {
+      emit(AuthError(e.toString()));
+    }
+  }
+
+  /// Сброс пароля по коду
+  Future<void> _onResetPasswordRequested(
+    AuthResetPasswordRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(const AuthLoading());
+
+    try {
+      final request = ResetPasswordRequest(
+        email: event.email,
+        code: event.code,
+        newPassword: event.newPassword,
+      );
+
+      await _authService.resetPassword(request);
+
+      emit(const AuthPasswordReset());
     } catch (e) {
       emit(AuthError(e.toString()));
     }

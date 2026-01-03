@@ -14,7 +14,7 @@ import '../../../core/services/version_check_service.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/spacing.dart';
 import '../../../domain/entities/unit_state.dart';
-import '../../../domain/repositories/schedule_repository.dart';
+import '../../bloc/schedule/schedule_bloc.dart';
 import '../../widgets/breez/breez.dart';
 import '../../bloc/auth/auth_bloc.dart';
 import '../../bloc/auth/auth_event.dart';
@@ -26,6 +26,7 @@ import '../../bloc/analytics/analytics_bloc.dart';
 import '../../bloc/notifications/notifications_bloc.dart';
 import '../../../domain/entities/hvac_device.dart';
 import '../../../domain/entities/climate.dart';
+import '../../../domain/entities/device_full_state.dart';
 import '../../../domain/entities/user.dart';
 import 'dialogs/add_unit_dialog.dart';
 import 'dialogs/unit_settings_dialog.dart';
@@ -49,35 +50,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   StreamSubscription? _versionSubscription;
 
-  // Schedule repository (TODO: создать ScheduleBloc)
-  late ScheduleRepository _scheduleRepository;
-  List<ScheduleEntry> _schedule = [];
 
   @override
   void initState() {
     super.initState();
     _themeService = di.sl<ThemeService>();
     _versionCheckService = di.sl<VersionCheckService>();
-    _scheduleRepository = di.sl<ScheduleRepository>();
     _initializeVersionCheck();
-
-    // Инициализируем BLoC-и после первого кадра (когда context доступен)
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _initializeBlocs();
-    });
+    // Note: BLoC-и инициализируются в MainScreen.didChangeDependencies
   }
 
-  void _initializeBlocs() {
-    // Инициализируем подписки во всех BLoC-ах
-    context.read<DevicesBloc>().add(const DevicesSubscriptionRequested());
-    context.read<ClimateBloc>().add(const ClimateSubscriptionRequested());
-    context.read<NotificationsBloc>().add(const NotificationsSubscriptionRequested());
-    context.read<AnalyticsBloc>().add(const AnalyticsSubscriptionRequested());
-    context.read<ConnectivityBloc>().add(const ConnectivitySubscriptionRequested());
-  }
-
-  /// Создать UnitState из HvacDevice и ClimateState
-  UnitState _createUnitStateFromHvacDevice(HvacDevice device, ClimateState? climate) {
+  /// Создать UnitState из HvacDevice, ClimateState и DeviceFullState
+  UnitState _createUnitStateFromHvacDevice(
+    HvacDevice device,
+    ClimateState? climate,
+    DeviceFullState? fullState,
+  ) {
     return UnitState(
       id: device.id,
       name: device.name,
@@ -87,9 +75,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
       exhaustFan: climate?.exhaustAirflow.toInt() ?? 50,
       mode: climate?.mode.toString().split('.').last ?? 'auto',
       humidity: climate?.humidity.toInt() ?? 45,
-      outsideTemp: 15, // TODO: Получать из API
-      filterPercent: 85, // TODO: Получать из API
-      airflowRate: 250, // TODO: Получать из API
+      outsideTemp: fullState?.outdoorTemperature?.toInt() ?? 0,
+      filterPercent: fullState?.kpdRecuperator ?? 0,
+      airflowRate: fullState?.devicePower ?? 0,
     );
   }
 
@@ -115,18 +103,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     super.dispose();
   }
 
-  /// Загружает расписание для устройства (TODO: вынести в ScheduleBloc)
-  Future<void> _loadSchedule(String deviceId) async {
-    try {
-      final schedule = await _scheduleRepository.getSchedule(deviceId);
-      if (mounted) {
-        setState(() => _schedule = schedule);
-      }
-    } catch (_) {
-      // Silently handle errors
-    }
-  }
-
   /// Обработчик смены метрики графика - делегируем в AnalyticsBloc
   void _onGraphMetricChanged(GraphMetric? metric) {
     if (metric == null) return;
@@ -139,7 +115,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     context.read<ClimateBloc>().add(ClimateDeviceChanged(deviceId));
     context.read<AnalyticsBloc>().add(AnalyticsDeviceChanged(deviceId));
     context.read<NotificationsBloc>().add(NotificationsDeviceChanged(deviceId));
-    _loadSchedule(deviceId);
+    context.read<ScheduleBloc>().add(ScheduleDeviceChanged(deviceId));
   }
 
   void _handlePowerToggle(ClimateControlState climateState) {
@@ -150,10 +126,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Future<void> _masterPowerOff() async {
     final confirmed = await DialogService.confirmMasterOff(context);
-    if (!confirmed) return;
+    if (!confirmed || !mounted) return;
 
-    // TODO: Реализовать через DevicesBloc.masterPowerOff
-    ToastService.success('Все устройства выключены');
+    // Отправляем команду на выключение всех устройств
+    context.read<DevicesBloc>().add(const DevicesMasterPowerOffRequested());
   }
 
   Future<void> _showAddUnitDialog() async {
@@ -226,6 +202,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
             context.read<DevicesBloc>().add(const DevicesRegistrationErrorCleared());
           },
         ),
+        // Слушатель для Master Power Off - успех
+        BlocListener<DevicesBloc, DevicesState>(
+          listenWhen: (previous, current) =>
+              !previous.masterPowerOffSuccess && current.masterPowerOffSuccess,
+          listener: (context, state) {
+            ToastService.success('Все устройства выключены');
+          },
+        ),
+        // Слушатель для Master Power Off - ошибка
+        BlocListener<DevicesBloc, DevicesState>(
+          listenWhen: (previous, current) =>
+              previous.masterPowerOffError != current.masterPowerOffError &&
+              current.masterPowerOffError != null,
+          listener: (context, state) {
+            ToastService.error(state.masterPowerOffError!);
+          },
+        ),
         // Слушатель для logout
         BlocListener<AuthBloc, AuthState>(
           listener: (context, state) {
@@ -248,7 +241,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             context.read<ClimateBloc>().add(ClimateDeviceChanged(deviceId));
             context.read<AnalyticsBloc>().add(AnalyticsDeviceChanged(deviceId));
             context.read<NotificationsBloc>().add(NotificationsDeviceChanged(deviceId));
-            _loadSchedule(deviceId);
+            context.read<ScheduleBloc>().add(ScheduleDeviceChanged(deviceId));
           },
         ),
       ],
@@ -265,12 +258,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     builder: (context, analyticsState) {
                       return BlocBuilder<NotificationsBloc, NotificationsState>(
                         builder: (context, notificationsState) {
+                          return BlocBuilder<ScheduleBloc, ScheduleState>(
+                            builder: (context, scheduleState) {
                           // Преобразуем HvacDevice в UnitState для UI
                           final units = devicesState.devices.map((device) {
-                            final climate = device.id == devicesState.selectedDeviceId
-                                ? climateState.climate
-                                : null;
-                            return _createUnitStateFromHvacDevice(device, climate);
+                            final isSelected = device.id == devicesState.selectedDeviceId;
+                            final climate = isSelected ? climateState.climate : null;
+                            final fullState = isSelected ? climateState.deviceFullState : null;
+                            return _createUnitStateFromHvacDevice(device, climate, fullState);
                           }).toList();
 
                           // Находим индекс выбранного устройства
@@ -309,6 +304,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                 climateState,
                                                 analyticsState,
                                                 notificationsState,
+                                                scheduleState,
                                               )
                                             : _buildMobileLayout(
                                                 isDark,
@@ -323,6 +319,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 ],
                               ),
                             ),
+                          );
+                            },
                           );
                         },
                       );
@@ -393,6 +391,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     ClimateControlState climateState,
     AnalyticsState analyticsState,
     NotificationsState notificationsState,
+    ScheduleState scheduleState,
   ) {
     return DesktopLayout(
       unit: currentUnit,
@@ -422,7 +421,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       onThemeToggle: _toggleTheme,
       onAddUnit: _showAddUnitDialog,
       onLogoutTap: _handleLogout,
-      schedule: _schedule,
+      schedule: scheduleState.entries,
       notifications: notificationsState.notifications,
       graphData: analyticsState.graphData,
       selectedGraphMetric: analyticsState.selectedMetric,

@@ -216,4 +216,54 @@ class AuthService {
       // Логировать, но не выбрасывать - logout должен быть успешным
     }
   }
+
+  /// Запрос сброса пароля (отправка кода на email)
+  Future<void> forgotPassword(ForgotPasswordRequest request) async {
+    try {
+      final response = await _client.post(
+        Uri.parse('$_baseUrl/auth/forgot-password'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode(request.toJson()),
+      );
+
+      if (response.statusCode == 200) {
+        return;
+      } else {
+        final error = json.decode(response.body);
+        throw AuthException(
+          error['message'] as String? ?? 'Ошибка отправки кода',
+        );
+      }
+    } catch (e) {
+      if (e is AuthException) rethrow;
+      throw AuthException('Ошибка подключения к серверу: $e');
+    }
+  }
+
+  /// Сброс пароля по коду
+  Future<void> resetPassword(ResetPasswordRequest request) async {
+    try {
+      final response = await _client.post(
+        Uri.parse('$_baseUrl/auth/reset-password'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode(request.toJson()),
+      );
+
+      if (response.statusCode == 200) {
+        return;
+      } else {
+        final error = json.decode(response.body);
+        throw AuthException(
+          error['message'] as String? ?? 'Ошибка сброса пароля',
+        );
+      }
+    } catch (e) {
+      if (e is AuthException) rethrow;
+      throw AuthException('Ошибка подключения к серверу: $e');
+    }
+  }
 }

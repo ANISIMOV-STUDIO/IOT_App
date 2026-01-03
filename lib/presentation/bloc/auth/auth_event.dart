@@ -91,3 +91,31 @@ class AuthResendCodeRequested extends AuthEvent {
   @override
   List<Object?> get props => [email];
 }
+
+/// Запрос сброса пароля (forgot password)
+class AuthForgotPasswordRequested extends AuthEvent {
+  final String email;
+
+  const AuthForgotPasswordRequested({
+    required this.email,
+  });
+
+  @override
+  List<Object?> get props => [email];
+}
+
+/// Сброс пароля по коду (reset password)
+class AuthResetPasswordRequested extends AuthEvent {
+  final String email;
+  final String code;
+  final String newPassword;
+
+  const AuthResetPasswordRequested({
+    required this.email,
+    required this.code,
+    required this.newPassword,
+  });
+
+  @override
+  List<Object?> get props => [email, code, newPassword];
+}

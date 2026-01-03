@@ -168,3 +168,39 @@ class LogoutRequest {
     };
   }
 }
+
+/// Запрос на восстановление пароля (forgot password)
+class ForgotPasswordRequest {
+  final String email;
+
+  const ForgotPasswordRequest({
+    required this.email,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'email': email,
+    };
+  }
+}
+
+/// Запрос на сброс пароля (reset password)
+class ResetPasswordRequest {
+  final String email;
+  final String code;
+  final String newPassword;
+
+  const ResetPasswordRequest({
+    required this.email,
+    required this.code,
+    required this.newPassword,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'email': email,
+      'code': code,
+      'newPassword': newPassword,
+    };
+  }
+}

@@ -40,6 +40,7 @@ import '../../presentation/bloc/climate/climate_bloc.dart';
 import '../../presentation/bloc/notifications/notifications_bloc.dart';
 import '../../presentation/bloc/analytics/analytics_bloc.dart';
 import '../../presentation/bloc/connectivity/connectivity_bloc.dart';
+import '../../presentation/bloc/schedule/schedule_bloc.dart';
 
 // Domain - Use Cases
 import '../../domain/usecases/usecases.dart';
@@ -303,6 +304,7 @@ Future<void> init() async {
       registerDevice: sl(),
       deleteDevice: sl(),
       renameDevice: sl(),
+      setDevicePower: sl(),
       setSelectedDevice: sl<ClimateRepository>().setSelectedDevice,
     ),
   );
@@ -347,5 +349,10 @@ Future<void> init() async {
   // ConnectivityBloc (Мониторинг сетевого соединения)
   sl.registerLazySingleton(
     () => ConnectivityBloc(connectivityService: sl()),
+  );
+
+  // ScheduleBloc (Расписание устройств)
+  sl.registerLazySingleton(
+    () => ScheduleBloc(repository: sl()),
   );
 }

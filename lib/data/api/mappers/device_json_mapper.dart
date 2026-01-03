@@ -213,6 +213,8 @@ class DeviceJsonMapper {
       scheduleIndicator: json['scheduleIndicator'] as int?,
       devicePower: json['devicePower'] as int?,
       isOnline: json['isOnline'] as bool? ?? true,
+      outdoorTemperature: (json['outdoorTemperature'] as num?)?.toDouble(),
+      kpdRecuperator: json['kpdRecuperator'] as int?,
       modeSettings: json['modeSettings'] != null
           ? modeSettingsFromJson(json['modeSettings'] as Map<String, dynamic>)
           : null,

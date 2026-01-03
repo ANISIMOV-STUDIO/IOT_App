@@ -80,3 +80,8 @@ final class DevicesRenameRequested extends DevicesEvent {
   @override
   List<Object?> get props => [deviceId, newName];
 }
+
+/// Запрошено выключение всех устройств (Master Power Off)
+final class DevicesMasterPowerOffRequested extends DevicesEvent {
+  const DevicesMasterPowerOffRequested();
+}

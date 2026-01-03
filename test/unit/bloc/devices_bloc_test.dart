@@ -23,12 +23,15 @@ class MockDeleteDevice extends Mock implements DeleteDevice {}
 
 class MockRenameDevice extends Mock implements RenameDevice {}
 
+class MockSetDevicePower extends Mock implements SetDevicePower {}
+
 void main() {
   late MockGetAllHvacDevices mockGetAllHvacDevices;
   late MockWatchHvacDevices mockWatchHvacDevices;
   late MockRegisterDevice mockRegisterDevice;
   late MockDeleteDevice mockDeleteDevice;
   late MockRenameDevice mockRenameDevice;
+  late MockSetDevicePower mockSetDevicePower;
   late void Function(String) mockSetSelectedDevice;
   late List<String> selectedDeviceCalls;
 
@@ -61,6 +64,7 @@ void main() {
     mockRegisterDevice = MockRegisterDevice();
     mockDeleteDevice = MockDeleteDevice();
     mockRenameDevice = MockRenameDevice();
+    mockSetDevicePower = MockSetDevicePower();
     selectedDeviceCalls = [];
     mockSetSelectedDevice = (deviceId) => selectedDeviceCalls.add(deviceId);
   });
@@ -71,6 +75,7 @@ void main() {
         registerDevice: mockRegisterDevice,
         deleteDevice: mockDeleteDevice,
         renameDevice: mockRenameDevice,
+        setDevicePower: mockSetDevicePower,
         setSelectedDevice: mockSetSelectedDevice,
       );
 

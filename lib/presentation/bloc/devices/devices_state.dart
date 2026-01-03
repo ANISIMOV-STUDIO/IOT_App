@@ -38,6 +38,15 @@ final class DevicesState extends Equatable {
   /// Ошибка регистрации устройства
   final String? registrationError;
 
+  /// Идёт выключение всех устройств
+  final bool isMasterPowerOffInProgress;
+
+  /// Успешное выключение всех устройств
+  final bool masterPowerOffSuccess;
+
+  /// Ошибка выключения всех устройств
+  final String? masterPowerOffError;
+
   const DevicesState({
     this.status = DevicesStatus.initial,
     this.devices = const [],
@@ -45,6 +54,9 @@ final class DevicesState extends Equatable {
     this.errorMessage,
     this.isRegistering = false,
     this.registrationError,
+    this.isMasterPowerOffInProgress = false,
+    this.masterPowerOffSuccess = false,
+    this.masterPowerOffError,
   });
 
   /// Получить выбранное устройство
@@ -72,6 +84,9 @@ final class DevicesState extends Equatable {
     String? errorMessage,
     bool? isRegistering,
     String? registrationError,
+    bool? isMasterPowerOffInProgress,
+    bool? masterPowerOffSuccess,
+    String? masterPowerOffError,
   }) {
     return DevicesState(
       status: status ?? this.status,
@@ -82,6 +97,10 @@ final class DevicesState extends Equatable {
       errorMessage: errorMessage,
       isRegistering: isRegistering ?? this.isRegistering,
       registrationError: registrationError,
+      isMasterPowerOffInProgress:
+          isMasterPowerOffInProgress ?? this.isMasterPowerOffInProgress,
+      masterPowerOffSuccess: masterPowerOffSuccess ?? false,
+      masterPowerOffError: masterPowerOffError,
     );
   }
 
@@ -93,5 +112,8 @@ final class DevicesState extends Equatable {
         errorMessage,
         isRegistering,
         registrationError,
+        isMasterPowerOffInProgress,
+        masterPowerOffSuccess,
+        masterPowerOffError,
       ];
 }

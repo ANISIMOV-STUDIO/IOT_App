@@ -23,6 +23,7 @@ import 'presentation/bloc/climate/climate_bloc.dart';
 import 'presentation/bloc/notifications/notifications_bloc.dart';
 import 'presentation/bloc/analytics/analytics_bloc.dart';
 import 'presentation/bloc/connectivity/connectivity_bloc.dart';
+import 'presentation/bloc/schedule/schedule_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -88,6 +89,10 @@ class _HvacControlAppState extends State<HvacControlApp> {
         // ConnectivityBloc — мониторинг сетевого соединения
         BlocProvider(
           create: (context) => di.sl<ConnectivityBloc>(),
+        ),
+        // ScheduleBloc — расписание устройств
+        BlocProvider(
+          create: (context) => di.sl<ScheduleBloc>(),
         ),
       ],
       child: ListenableBuilder(

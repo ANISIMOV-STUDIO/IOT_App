@@ -79,3 +79,18 @@ class AuthEmailVerified extends AuthState {
 class AuthCodeResent extends AuthState {
   const AuthCodeResent();
 }
+
+/// Код сброса пароля отправлен на email
+class AuthPasswordResetCodeSent extends AuthState {
+  final String email;
+
+  const AuthPasswordResetCodeSent({required this.email});
+
+  @override
+  List<Object?> get props => [email];
+}
+
+/// Пароль успешно изменён
+class AuthPasswordReset extends AuthState {
+  const AuthPasswordReset();
+}

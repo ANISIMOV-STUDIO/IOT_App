@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../bloc/auth/auth_bloc.dart';
 import '../../../bloc/auth/auth_event.dart';
@@ -10,6 +11,7 @@ import '../../../bloc/auth/auth_state.dart';
 import '../../../widgets/auth/auth_action_link.dart';
 import '../../../widgets/breez/breez.dart';
 import '../../../../core/constants/auth_constants.dart';
+import '../../../../core/navigation/app_router.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/app_font_sizes.dart';
 import '../../../../core/theme/spacing.dart';
@@ -119,10 +121,12 @@ class _LoginFormState extends State<LoginForm> {
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: () {
-                      SnackBarUtils.showInfo(
-                        context,
-                        'Функция восстановления пароля в разработке',
-                      );
+                      final email = _emailController.text.trim();
+                      if (email.isNotEmpty) {
+                        context.go('${AppRoutes.forgotPassword}?email=$email');
+                      } else {
+                        context.go(AppRoutes.forgotPassword);
+                      }
                     },
                     child: const Text(
                       'Забыли пароль?',

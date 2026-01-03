@@ -12,6 +12,7 @@ import 'package:go_router/go_router.dart';
 import '../../presentation/screens/main_screen.dart';
 import '../../presentation/screens/auth/auth_screen.dart';
 import '../../presentation/screens/auth/verify_email_screen.dart';
+import '../../presentation/screens/auth/forgot_password_screen.dart';
 import '../../presentation/screens/notifications/notifications_screen.dart';
 import '../../presentation/screens/splash/splash_screen.dart';
 import '../../presentation/bloc/auth/auth_bloc.dart';
@@ -25,6 +26,7 @@ class AppRoutes {
   static const String login = '/login';
   static const String register = '/register';
   static const String verifyEmail = '/verify-email';
+  static const String forgotPassword = '/forgot-password';
   static const String notifications = '/notifications';
 }
 
@@ -68,11 +70,12 @@ GoRouter createRouter(AuthBloc authBloc) {
 
       // 2. Если пользователь НЕ авторизован
       if (authState is AuthUnauthenticated || authState is AuthError) {
-        // Разрешаем: login, register, verify-email
+        // Разрешаем: login, register, verify-email, forgot-password
         final allowedPaths = [
           AppRoutes.login,
           AppRoutes.register,
           AppRoutes.verifyEmail,
+          AppRoutes.forgotPassword,
         ];
         if (allowedPaths.contains(currentPath)) {
           return null;
@@ -159,6 +162,13 @@ GoRouter createRouter(AuthBloc authBloc) {
             email: email,
             password: password,
           );
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.forgotPassword,
+        builder: (context, state) {
+          final email = state.uri.queryParameters['email'];
+          return ForgotPasswordScreen(initialEmail: email);
         },
       ),
 
