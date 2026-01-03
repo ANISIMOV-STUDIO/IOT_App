@@ -2,6 +2,7 @@
 library;
 
 import 'dart:async';
+import 'dart:developer' as developer;
 import '../../domain/entities/climate.dart';
 import '../../domain/entities/hvac_device.dart';
 import '../../domain/entities/device_full_state.dart';
@@ -92,9 +93,14 @@ class RealClimateRepository implements ClimateRepository {
 
   @override
   void setSelectedDevice(String deviceId) {
-    if (deviceId.isEmpty) return; // Пропускаем если нет устройств
+    developer.log('setSelectedDevice called: deviceId=$deviceId', name: 'ClimateRepository');
+    if (deviceId.isEmpty) {
+      developer.log('setSelectedDevice: skipping empty deviceId', name: 'ClimateRepository');
+      return; // Пропускаем если нет устройств
+    }
 
     _selectedDeviceId = deviceId;
+    developer.log('setSelectedDevice: _selectedDeviceId set to $deviceId', name: 'ClimateRepository');
 
     // Subscribe to device updates via SignalR
     _signalR?.subscribeToDevice(deviceId);
@@ -148,6 +154,15 @@ class RealClimateRepository implements ClimateRepository {
   @override
   Future<ClimateState> setPower(bool isOn, {String? deviceId}) async {
     final id = deviceId ?? _selectedDeviceId;
+    developer.log(
+      'setPower called: isOn=$isOn, deviceId=$deviceId, selectedDeviceId=$_selectedDeviceId, resolved id=$id',
+      name: 'ClimateRepository',
+    );
+
+    if (id.isEmpty) {
+      developer.log('setPower ERROR: deviceId is empty!', name: 'ClimateRepository');
+      throw StateError('No device selected for power control');
+    }
 
     final jsonDevice = await _httpClient.setPower(id, isOn);
     final state = DeviceJsonMapper.climateStateFromJson(jsonDevice);

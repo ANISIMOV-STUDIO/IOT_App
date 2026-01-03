@@ -90,6 +90,9 @@ class HvacHttpClient {
 
   /// Set power
   Future<Map<String, dynamic>> setPower(String deviceId, bool power) async {
+    if (deviceId.isEmpty) {
+      throw ArgumentError('deviceId cannot be empty');
+    }
     final url = '${ApiConfig.hvacApiUrl}/$deviceId/power';
     final body = json.encode({'power': power});
 

@@ -9,6 +9,7 @@
 library;
 
 import 'dart:async';
+import 'dart:developer' as developer;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -161,9 +162,17 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     ClimatePowerToggled event,
     Emitter<ClimateControlState> emit,
   ) async {
+    developer.log('_onPowerToggled called: isOn=${event.isOn}', name: 'ClimateBloc');
     try {
       await _setDevicePower(SetDevicePowerParams(isOn: event.isOn));
-    } catch (e) {
+      developer.log('_onPowerToggled: command sent successfully', name: 'ClimateBloc');
+    } catch (e, stackTrace) {
+      developer.log(
+        '_onPowerToggled ERROR: $e',
+        name: 'ClimateBloc',
+        error: e,
+        stackTrace: stackTrace,
+      );
       emit(state.copyWith(errorMessage: 'Ошибка переключения питания: $e'));
     }
   }
