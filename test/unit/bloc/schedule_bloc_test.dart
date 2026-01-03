@@ -124,7 +124,7 @@ void main() {
   });
 
   group('ScheduleBloc - ScheduleEntryUpdated', () {
-    final updatedEntry = const ScheduleEntry(
+    const updatedEntry = ScheduleEntry(
       id: 'schedule-1',
       deviceId: 'hvac-device-1',
       day: 'Понедельник',

@@ -1547,5 +1547,74 @@
   "devices": "devices",
   "@devices": {
     "description": "Devices plural"
+  },
+  "@@_PROFILE": "=== Profile Section ===",
+  "profile": "Profile",
+  "@profile": {
+    "description": "Profile screen title"
+  },
+  "profileUpdated": "Profile updated",
+  "@profileUpdated": {
+    "description": "Profile updated success message"
+  },
+  "passwordChanged": "Password changed. Please sign in again.",
+  "@passwordChanged": {
+    "description": "Password changed success message"
+  },
+  "editProfile": "Edit Profile",
+  "@editProfile": {
+    "description": "Edit profile button"
+  },
+  "account": "Account",
+  "@account": {
+    "description": "Account section title"
+  },
+  "changePassword": "Change Password",
+  "@changePassword": {
+    "description": "Change password button"
+  },
+  "changeAccountPassword": "Change account password",
+  "@changeAccountPassword": {
+    "description": "Change account password subtitle"
+  },
+  "theme": "Theme",
+  "@theme": {
+    "description": "Theme setting"
+  },
+  "darkThemeLabel": "Dark",
+  "@darkThemeLabel": {
+    "description": "Dark theme label"
+  },
+  "lightThemeLabel": "Light",
+  "@lightThemeLabel": {
+    "description": "Light theme label"
+  },
+  "firstName": "First Name",
+  "@firstName": {
+    "description": "First name label"
+  },
+  "lastName": "Last Name",
+  "@lastName": {
+    "description": "Last name label"
+  },
+  "currentPassword": "Current Password",
+  "@currentPassword": {
+    "description": "Current password label"
+  },
+  "newPassword": "New Password",
+  "@newPassword": {
+    "description": "New password label"
+  },
+  "passwordConfirmation": "Confirm Password",
+  "@passwordConfirmation": {
+    "description": "Password confirmation label"
+  },
+  "passwordsDoNotMatch": "Passwords do not match",
+  "@passwordsDoNotMatch": {
+    "description": "Passwords do not match error"
+  },
+  "change": "Change",
+  "@change": {
+    "description": "Change button"
   }
 }

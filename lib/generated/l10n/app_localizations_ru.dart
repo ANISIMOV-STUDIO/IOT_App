@@ -1113,4 +1113,55 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get devices => 'устройства';
+
+  @override
+  String get profile => 'Профиль';
+
+  @override
+  String get profileUpdated => 'Профиль обновлён';
+
+  @override
+  String get passwordChanged => 'Пароль изменён. Войдите снова.';
+
+  @override
+  String get editProfile => 'Редактировать профиль';
+
+  @override
+  String get account => 'Аккаунт';
+
+  @override
+  String get changePassword => 'Сменить пароль';
+
+  @override
+  String get changeAccountPassword => 'Изменить пароль аккаунта';
+
+  @override
+  String get theme => 'Тема';
+
+  @override
+  String get darkThemeLabel => 'Темная';
+
+  @override
+  String get lightThemeLabel => 'Светлая';
+
+  @override
+  String get firstName => 'Имя';
+
+  @override
+  String get lastName => 'Фамилия';
+
+  @override
+  String get currentPassword => 'Текущий пароль';
+
+  @override
+  String get newPassword => 'Новый пароль';
+
+  @override
+  String get passwordConfirmation => 'Подтверждение пароля';
+
+  @override
+  String get passwordsDoNotMatch => 'Пароли не совпадают';
+
+  @override
+  String get change => 'Сменить';
 }

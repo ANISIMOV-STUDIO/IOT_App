@@ -1108,4 +1108,55 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get devices => 'devices';
+
+  @override
+  String get profile => 'Profile';
+
+  @override
+  String get profileUpdated => 'Profile updated';
+
+  @override
+  String get passwordChanged => 'Password changed. Please sign in again.';
+
+  @override
+  String get editProfile => 'Edit Profile';
+
+  @override
+  String get account => 'Account';
+
+  @override
+  String get changePassword => 'Change Password';
+
+  @override
+  String get changeAccountPassword => 'Change account password';
+
+  @override
+  String get theme => 'Theme';
+
+  @override
+  String get darkThemeLabel => 'Dark';
+
+  @override
+  String get lightThemeLabel => 'Light';
+
+  @override
+  String get firstName => 'First Name';
+
+  @override
+  String get lastName => 'Last Name';
+
+  @override
+  String get currentPassword => 'Current Password';
+
+  @override
+  String get newPassword => 'New Password';
+
+  @override
+  String get passwordConfirmation => 'Confirm Password';
+
+  @override
+  String get passwordsDoNotMatch => 'Passwords do not match';
+
+  @override
+  String get change => 'Change';
 }

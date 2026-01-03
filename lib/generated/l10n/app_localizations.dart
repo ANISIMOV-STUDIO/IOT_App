@@ -2173,6 +2173,108 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'устройства'**
   String get devices;
+
+  /// Profile screen title
+  ///
+  /// In ru, this message translates to:
+  /// **'Профиль'**
+  String get profile;
+
+  /// Profile updated success message
+  ///
+  /// In ru, this message translates to:
+  /// **'Профиль обновлён'**
+  String get profileUpdated;
+
+  /// Password changed success message
+  ///
+  /// In ru, this message translates to:
+  /// **'Пароль изменён. Войдите снова.'**
+  String get passwordChanged;
+
+  /// Edit profile button
+  ///
+  /// In ru, this message translates to:
+  /// **'Редактировать профиль'**
+  String get editProfile;
+
+  /// Account section title
+  ///
+  /// In ru, this message translates to:
+  /// **'Аккаунт'**
+  String get account;
+
+  /// Change password button
+  ///
+  /// In ru, this message translates to:
+  /// **'Сменить пароль'**
+  String get changePassword;
+
+  /// Change account password subtitle
+  ///
+  /// In ru, this message translates to:
+  /// **'Изменить пароль аккаунта'**
+  String get changeAccountPassword;
+
+  /// Theme setting
+  ///
+  /// In ru, this message translates to:
+  /// **'Тема'**
+  String get theme;
+
+  /// Dark theme label
+  ///
+  /// In ru, this message translates to:
+  /// **'Темная'**
+  String get darkThemeLabel;
+
+  /// Light theme label
+  ///
+  /// In ru, this message translates to:
+  /// **'Светлая'**
+  String get lightThemeLabel;
+
+  /// First name label
+  ///
+  /// In ru, this message translates to:
+  /// **'Имя'**
+  String get firstName;
+
+  /// Last name label
+  ///
+  /// In ru, this message translates to:
+  /// **'Фамилия'**
+  String get lastName;
+
+  /// Current password label
+  ///
+  /// In ru, this message translates to:
+  /// **'Текущий пароль'**
+  String get currentPassword;
+
+  /// New password label
+  ///
+  /// In ru, this message translates to:
+  /// **'Новый пароль'**
+  String get newPassword;
+
+  /// Password confirmation label
+  ///
+  /// In ru, this message translates to:
+  /// **'Подтверждение пароля'**
+  String get passwordConfirmation;
+
+  /// Passwords do not match error
+  ///
+  /// In ru, this message translates to:
+  /// **'Пароли не совпадают'**
+  String get passwordsDoNotMatch;
+
+  /// Change button
+  ///
+  /// In ru, this message translates to:
+  /// **'Сменить'**
+  String get change;
 }
 
 class _AppLocalizationsDelegate

@@ -15,6 +15,7 @@ import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/spacing.dart';
 import '../../../core/utils/snackbar_utils.dart';
 import '../../../core/utils/validators.dart';
+import '../../../generated/l10n/app_localizations.dart';
 import '../../bloc/auth/auth_bloc.dart';
 import '../../bloc/auth/auth_event.dart';
 import '../../bloc/auth/auth_state.dart';
@@ -29,15 +30,16 @@ class ProfileScreen extends StatelessWidget {
     final colors = BreezColors.of(context);
     final themeService = di.sl<ThemeService>();
     final languageService = di.sl<LanguageService>();
+    final l10n = AppLocalizations.of(context)!;
 
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthProfileUpdated) {
-          SnackBarUtils.showSuccess(context, 'Профиль обновлён');
+          SnackBarUtils.showSuccess(context, l10n.profileUpdated);
         } else if (state is AuthPasswordChanged) {
           SnackBarUtils.showSuccess(
             context,
-            'Пароль изменён. Войдите снова.',
+            l10n.passwordChanged,
           );
           context.go(AppRoutes.login);
         } else if (state is AuthError) {
@@ -57,7 +59,7 @@ class ProfileScreen extends StatelessWidget {
                   children: [
                     // Header
                     Text(
-                      'Профиль',
+                      l10n.profile,
                       style: TextStyle(
                         fontSize: AppFontSizes.h2,
                         fontWeight: FontWeight.bold,
@@ -133,18 +135,18 @@ class ProfileScreen extends StatelessWidget {
                                   backgroundColor: Colors.transparent,
                                   hoverColor: colors.buttonBg,
                                   border: Border.all(color: AppColors.accent),
-                                  child: const Row(
+                                  child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Icon(
+                                      const Icon(
                                         Icons.edit_outlined,
                                         size: 18,
                                         color: AppColors.accent,
                                       ),
-                                      SizedBox(width: AppSpacing.xs),
+                                      const SizedBox(width: AppSpacing.xs),
                                       Text(
-                                        'Редактировать профиль',
-                                        style: TextStyle(
+                                        l10n.editProfile,
+                                        style: const TextStyle(
                                           fontSize: AppFontSizes.body,
                                           fontWeight: FontWeight.w600,
                                           color: AppColors.accent,
@@ -169,7 +171,7 @@ class ProfileScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Аккаунт',
+                            l10n.account,
                             style: TextStyle(
                               fontSize: AppFontSizes.h4,
                               fontWeight: FontWeight.bold,
@@ -181,8 +183,8 @@ class ProfileScreen extends StatelessWidget {
                           // Change Password
                           _SettingsTile(
                             icon: Icons.lock_outlined,
-                            title: 'Сменить пароль',
-                            subtitle: 'Изменить пароль аккаунта',
+                            title: l10n.changePassword,
+                            subtitle: l10n.changeAccountPassword,
                             onTap: () => _showChangePasswordDialog(context),
                           ),
                         ],
@@ -197,7 +199,7 @@ class ProfileScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Настройки',
+                            l10n.settings,
                             style: TextStyle(
                               fontSize: AppFontSizes.h4,
                               fontWeight: FontWeight.bold,
@@ -213,8 +215,8 @@ class ProfileScreen extends StatelessWidget {
                               final isDark = themeService.isDark;
                               return _SettingsTile(
                                 icon: isDark ? Icons.dark_mode : Icons.light_mode,
-                                title: 'Тема',
-                                subtitle: isDark ? 'Темная' : 'Светлая',
+                                title: l10n.theme,
+                                subtitle: isDark ? l10n.darkThemeLabel : l10n.lightThemeLabel,
                                 onTap: themeService.toggleTheme,
                               );
                             },
@@ -228,8 +230,8 @@ class ProfileScreen extends StatelessWidget {
                               final isRussian = languageService.currentLocale?.languageCode == 'ru';
                               return _SettingsTile(
                                 icon: Icons.language,
-                                title: 'Язык',
-                                subtitle: isRussian ? 'Русский' : 'English',
+                                title: l10n.language,
+                                subtitle: isRussian ? l10n.russian : l10n.english,
                                 onTap: () {
                                   languageService.setLocale(
                                     isRussian ? 'en' : 'ru',
@@ -254,18 +256,18 @@ class ProfileScreen extends StatelessWidget {
                       border: Border.all(
                         color: AppColors.critical.withValues(alpha: 0.3),
                       ),
-                      child: const Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.logout,
                             size: 20,
                             color: AppColors.critical,
                           ),
-                          SizedBox(width: AppSpacing.xs),
+                          const SizedBox(width: AppSpacing.xs),
                           Text(
-                            'Выйти',
-                            style: TextStyle(
+                            l10n.logout,
+                            style: const TextStyle(
                               fontSize: AppFontSizes.body,
                               fontWeight: FontWeight.w600,
                               color: AppColors.critical,
@@ -447,6 +449,7 @@ class _EditProfileDialogState extends State<_EditProfileDialog> {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return Dialog(
       backgroundColor: colors.card,
@@ -468,7 +471,7 @@ class _EditProfileDialogState extends State<_EditProfileDialog> {
                   const Icon(Icons.edit, color: AppColors.accent),
                   const SizedBox(width: 12),
                   Text(
-                    'Редактировать профиль',
+                    l10n.editProfile,
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
@@ -482,7 +485,7 @@ class _EditProfileDialogState extends State<_EditProfileDialog> {
               // First Name
               BreezTextField(
                 controller: _firstNameController,
-                label: 'Имя',
+                label: l10n.firstName,
                 prefixIcon: Icons.person_outlined,
                 validator: Validators.name,
                 textInputAction: TextInputAction.next,
@@ -492,7 +495,7 @@ class _EditProfileDialogState extends State<_EditProfileDialog> {
               // Last Name
               BreezTextField(
                 controller: _lastNameController,
-                label: 'Фамилия',
+                label: l10n.lastName,
                 prefixIcon: Icons.person_outlined,
                 validator: Validators.name,
                 textInputAction: TextInputAction.done,
@@ -507,7 +510,7 @@ class _EditProfileDialogState extends State<_EditProfileDialog> {
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(),
                     child: Text(
-                      'Отмена',
+                      l10n.cancel,
                       style: TextStyle(color: colors.textMuted),
                     ),
                   ),
@@ -522,7 +525,7 @@ class _EditProfileDialogState extends State<_EditProfileDialog> {
                         vertical: 12,
                       ),
                     ),
-                    child: const Text('Сохранить'),
+                    child: Text(l10n.save),
                   ),
                 ],
               ),
@@ -570,6 +573,7 @@ class _ChangePasswordDialogState extends State<_ChangePasswordDialog> {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return Dialog(
       backgroundColor: colors.card,
@@ -591,7 +595,7 @@ class _ChangePasswordDialogState extends State<_ChangePasswordDialog> {
                   const Icon(Icons.lock, color: AppColors.accent),
                   const SizedBox(width: 12),
                   Text(
-                    'Сменить пароль',
+                    l10n.changePassword,
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
@@ -605,7 +609,7 @@ class _ChangePasswordDialogState extends State<_ChangePasswordDialog> {
               // Current Password
               BreezTextField(
                 controller: _currentPasswordController,
-                label: 'Текущий пароль',
+                label: l10n.currentPassword,
                 prefixIcon: Icons.lock_outlined,
                 obscureText: true,
                 showPasswordToggle: true,
@@ -617,7 +621,7 @@ class _ChangePasswordDialogState extends State<_ChangePasswordDialog> {
               // New Password
               BreezTextField(
                 controller: _newPasswordController,
-                label: 'Новый пароль',
+                label: l10n.newPassword,
                 prefixIcon: Icons.lock_outlined,
                 obscureText: true,
                 showPasswordToggle: true,
@@ -629,13 +633,13 @@ class _ChangePasswordDialogState extends State<_ChangePasswordDialog> {
               // Confirm Password
               BreezTextField(
                 controller: _confirmPasswordController,
-                label: 'Подтверждение пароля',
+                label: l10n.passwordConfirmation,
                 prefixIcon: Icons.lock_outlined,
                 obscureText: true,
                 showPasswordToggle: true,
                 validator: (value) {
                   if (value != _newPasswordController.text) {
-                    return 'Пароли не совпадают';
+                    return l10n.passwordsDoNotMatch;
                   }
                   return null;
                 },
@@ -651,7 +655,7 @@ class _ChangePasswordDialogState extends State<_ChangePasswordDialog> {
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(),
                     child: Text(
-                      'Отмена',
+                      l10n.cancel,
                       style: TextStyle(color: colors.textMuted),
                     ),
                   ),
@@ -666,7 +670,7 @@ class _ChangePasswordDialogState extends State<_ChangePasswordDialog> {
                         vertical: 12,
                       ),
                     ),
-                    child: const Text('Сменить'),
+                    child: Text(l10n.change),
                   ),
                 ],
               ),

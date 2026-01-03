@@ -1547,5 +1547,74 @@
   "devices": "устройства",
   "@devices": {
     "description": "Devices plural"
+  },
+  "@@_PROFILE": "=== Profile Section ===",
+  "profile": "Профиль",
+  "@profile": {
+    "description": "Profile screen title"
+  },
+  "profileUpdated": "Профиль обновлён",
+  "@profileUpdated": {
+    "description": "Profile updated success message"
+  },
+  "passwordChanged": "Пароль изменён. Войдите снова.",
+  "@passwordChanged": {
+    "description": "Password changed success message"
+  },
+  "editProfile": "Редактировать профиль",
+  "@editProfile": {
+    "description": "Edit profile button"
+  },
+  "account": "Аккаунт",
+  "@account": {
+    "description": "Account section title"
+  },
+  "changePassword": "Сменить пароль",
+  "@changePassword": {
+    "description": "Change password button"
+  },
+  "changeAccountPassword": "Изменить пароль аккаунта",
+  "@changeAccountPassword": {
+    "description": "Change account password subtitle"
+  },
+  "theme": "Тема",
+  "@theme": {
+    "description": "Theme setting"
+  },
+  "darkThemeLabel": "Темная",
+  "@darkThemeLabel": {
+    "description": "Dark theme label"
+  },
+  "lightThemeLabel": "Светлая",
+  "@lightThemeLabel": {
+    "description": "Light theme label"
+  },
+  "firstName": "Имя",
+  "@firstName": {
+    "description": "First name label"
+  },
+  "lastName": "Фамилия",
+  "@lastName": {
+    "description": "Last name label"
+  },
+  "currentPassword": "Текущий пароль",
+  "@currentPassword": {
+    "description": "Current password label"
+  },
+  "newPassword": "Новый пароль",
+  "@newPassword": {
+    "description": "New password label"
+  },
+  "passwordConfirmation": "Подтверждение пароля",
+  "@passwordConfirmation": {
+    "description": "Password confirmation label"
+  },
+  "passwordsDoNotMatch": "Пароли не совпадают",
+  "@passwordsDoNotMatch": {
+    "description": "Passwords do not match error"
+  },
+  "change": "Сменить",
+  "@change": {
+    "description": "Change button"
   }
 }
