@@ -1,94 +1,88 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:signalr_netcore/signalr_client.dart';
+import '../../data/api/websocket/signalr_hub_connection.dart';
 import '../../domain/entities/version_info.dart';
 
-/// Service for checking app version updates
+/// Сервис проверки обновлений приложения
+///
+/// Использует:
+/// - SignalR для real-time уведомлений о новых версиях
+/// - Периодический HTTP опрос как резервный механизм
 class VersionCheckService {
   final http.Client _client;
+  final SignalRHubConnection? _signalR;
   final String _baseUrl;
 
-  HubConnection? _hubConnection;
   VersionInfo? _currentVersion;
   Timer? _fallbackTimer;
+  StreamSubscription<Map<String, dynamic>>? _signalRSubscription;
   final _versionChangedController = StreamController<VersionInfo>.broadcast();
 
-  VersionCheckService(this._client)
+  VersionCheckService(this._client, [this._signalR])
       : _baseUrl = const String.fromEnvironment(
           'API_BASE_URL',
           defaultValue: 'https://hvac.anisimovstudio.ru/api',
         );
 
-  /// Stream that emits when a new version is detected
+  /// Стрим для получения уведомлений о новых версиях
   Stream<VersionInfo> get onVersionChanged => _versionChangedController.stream;
 
-  /// Initialize and start real-time version checking
+  /// Инициализация сервиса проверки версий
   Future<void> initialize({
     Duration fallbackInterval = const Duration(hours: 1),
   }) async {
-    // Load current version
+    // Загружаем текущую версию
     _currentVersion = await _fetchVersion();
 
-    // Connect to SignalR hub
-    await _connectToHub();
+    // Подключаемся к SignalR стриму (если доступен)
+    _setupSignalRSubscription();
 
-    // Start fallback periodic checking (1 раз в час как резервный механизм)
+    // Периодическая проверка (1 раз в час как резервный механизм)
     _fallbackTimer = Timer.periodic(fallbackInterval, (_) => _checkForUpdates());
   }
 
-  /// Connect to SignalR hub for real-time updates
-  Future<void> _connectToHub() async {
-    try {
-      // Извлекаем base URL без /api
-      final hubUrl = _baseUrl.replaceAll('/api', '');
+  /// Подписка на SignalR стрим новых релизов
+  void _setupSignalRSubscription() {
+    if (_signalR == null) return;
 
-      _hubConnection = HubConnectionBuilder()
-          .withUrl('$hubUrl/hubs/devices')
-          .withAutomaticReconnect()
-          .build();
+    _signalRSubscription = _signalR.releases.listen((releaseData) {
+      try {
+        final newVersion = VersionInfo(
+          version: releaseData['version'] as String,
+          buildTime: DateTime.parse(releaseData['buildTime'] as String),
+          changelog: releaseData['changelog'] as String?,
+        );
 
-      // Слушаем событие о новом релизе
-      _hubConnection!.on('NewReleaseAvailable', (arguments) {
-        if (arguments != null && arguments.isNotEmpty) {
-          final releaseData = arguments[0] as Map<String, dynamic>;
-          final newVersion = VersionInfo(
-            version: releaseData['version'] as String,
-            buildTime: DateTime.parse(releaseData['buildTime'] as String),
-            changelog: releaseData['changelog'] as String?,
-          );
-
-          // Проверяем что версия действительно новая
-          if (_currentVersion == null || newVersion != _currentVersion) {
-            _versionChangedController.add(newVersion);
-            _currentVersion = newVersion;
-          }
+        // Проверяем что версия действительно новая
+        if (_currentVersion == null || newVersion != _currentVersion) {
+          _versionChangedController.add(newVersion);
+          _currentVersion = newVersion;
         }
-      });
-
-      await _hubConnection!.start();
-    } catch (e) {
-      // Silently handle SignalR connection errors - fallback timer will work
-    }
+      } catch (e) {
+        // Игнорируем ошибки парсинга
+      }
+    });
   }
 
-  /// Check for version updates
+  /// Проверка обновлений по HTTP
   Future<void> _checkForUpdates() async {
     try {
       final newVersion = await _fetchVersion();
 
-      // If version changed, emit event
+      // Если версия изменилась - отправляем событие
       if (_currentVersion != null &&
           newVersion != null &&
           newVersion != _currentVersion) {
         _versionChangedController.add(newVersion);
+        _currentVersion = newVersion;
       }
     } catch (e) {
-      // Silently ignore errors
+      // Игнорируем ошибки
     }
   }
 
-  /// Fetch version from server
+  /// Получение версии с сервера
   Future<VersionInfo?> _fetchVersion() async {
     try {
       final uri = Uri.parse('$_baseUrl/release/latest');
@@ -105,15 +99,15 @@ class VersionCheckService {
         );
       }
     } catch (e) {
-      // Return null on error
+      // Возвращаем null при ошибке
     }
     return null;
   }
 
-  /// Dispose resources
+  /// Освобождение ресурсов
   void dispose() {
     _fallbackTimer?.cancel();
-    _hubConnection?.stop();
+    _signalRSubscription?.cancel();
     _versionChangedController.close();
   }
 }

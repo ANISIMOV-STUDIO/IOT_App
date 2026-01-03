@@ -100,7 +100,6 @@ Future<void> init() async {
   //! Core - Основные сервисы
   sl.registerLazySingleton(() => LanguageService(sl()));
   sl.registerLazySingleton(() => ThemeService());
-  sl.registerLazySingleton(() => VersionCheckService(sl()));
   sl.registerLazySingleton(() => AuthStorageService(sl()));
   await sl<LanguageService>().initializeDefaults();
 
@@ -139,6 +138,14 @@ Future<void> init() async {
     sl.registerLazySingleton<SignalRHubConnection>(
       () => SignalRHubConnection(sl<ApiClient>()),
     );
+
+    //! VersionCheckService - с SignalR для real-time обновлений
+    sl.registerLazySingleton(
+      () => VersionCheckService(sl<http.Client>(), sl<SignalRHubConnection>()),
+    );
+  } else {
+    //! VersionCheckService - только HTTP polling (без SignalR)
+    sl.registerLazySingleton(() => VersionCheckService(sl<http.Client>()));
   }
 
   //! Dashboard Feature - Главный экран
