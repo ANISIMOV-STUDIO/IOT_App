@@ -14,6 +14,7 @@ import '../../presentation/screens/auth/auth_screen.dart';
 import '../../presentation/screens/auth/verify_email_screen.dart';
 import '../../presentation/screens/auth/forgot_password_screen.dart';
 import '../../presentation/screens/notifications/notifications_screen.dart';
+import '../../presentation/screens/schedule/schedule_screen.dart';
 import '../../presentation/screens/splash/splash_screen.dart';
 import '../../presentation/bloc/auth/auth_bloc.dart';
 import '../../presentation/bloc/auth/auth_state.dart';
@@ -28,6 +29,7 @@ class AppRoutes {
   static const String verifyEmail = '/verify-email';
   static const String forgotPassword = '/forgot-password';
   static const String notifications = '/notifications';
+  static const String schedule = '/schedule';
 }
 
 /// Global navigator key
@@ -183,6 +185,19 @@ GoRouter createRouter(AuthBloc authBloc) {
         path: AppRoutes.notifications,
         builder: (context, state) => const NotificationsScreen(),
       ),
+
+      // Schedule
+      GoRoute(
+        path: AppRoutes.schedule,
+        builder: (context, state) {
+          final deviceId = state.uri.queryParameters['deviceId'] ?? '';
+          final deviceName = state.uri.queryParameters['deviceName'] ?? 'Устройство';
+          return ScheduleScreen(
+            deviceId: deviceId,
+            deviceName: deviceName,
+          );
+        },
+      ),
     ],
   );
 }
@@ -194,5 +209,7 @@ extension GoRouterExtensions on BuildContext {
   void goToRegister() => go(AppRoutes.register);
   void goToNotifications() => go(AppRoutes.notifications);
   void goToVerifyEmail(String email, {String? password}) =>
-      go('${AppRoutes.verifyEmail}?email=\$email', extra: password);
+      go('${AppRoutes.verifyEmail}?email=$email', extra: password);
+  void goToSchedule(String deviceId, String deviceName) =>
+      go('${AppRoutes.schedule}?deviceId=$deviceId&deviceName=${Uri.encodeComponent(deviceName)}');
 }

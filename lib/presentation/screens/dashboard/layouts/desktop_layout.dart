@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import '../../../../core/navigation/app_router.dart';
 import '../../../../core/theme/spacing.dart';
 import '../../../../domain/entities/unit_state.dart';
 import '../../../../domain/entities/alarm_info.dart';
@@ -186,7 +187,10 @@ class _DesktopLayoutState extends State<DesktopLayout> {
               Expanded(
                 child: ScheduleWidget(
                   entries: widget.schedule,
-                  onSeeAll: () {},
+                  onSeeAll: () => context.goToSchedule(
+                    widget.unit.id,
+                    widget.unit.name,
+                  ),
                 ),
               ),
 
