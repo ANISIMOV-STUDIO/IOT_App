@@ -3,6 +3,8 @@
 /// Cross-platform HVAC dashboard
 library;
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -14,8 +16,11 @@ import 'core/di/injection_container.dart' as di;
 import 'core/services/language_service.dart';
 import 'core/services/theme_service.dart';
 import 'core/services/toast_service.dart';
+import 'core/services/push_notification_service.dart';
+import 'core/services/fcm_token_service.dart';
 import 'core/navigation/app_router.dart';
 import 'core/logging/talker_config.dart';
+import 'firebase_options.dart';
 import 'presentation/bloc/auth/auth_bloc.dart';
 import 'presentation/bloc/auth/auth_event.dart';
 import 'presentation/bloc/devices/devices_bloc.dart';
@@ -38,8 +43,20 @@ void main() async {
     );
   };
 
+  // Initialize Firebase
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  // Регистрируем background handler
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
   // Initialize dependencies
   await di.init();
+
+  // Initialize push notifications
+  await di.sl<PushNotificationService>().initialize();
+  di.sl<FcmTokenService>().initialize();
 
   runApp(const HvacControlApp());
 }
