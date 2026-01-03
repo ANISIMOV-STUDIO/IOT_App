@@ -8,14 +8,24 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'package:hvac_control/domain/entities/unit_notification.dart';
-import 'package:hvac_control/domain/repositories/notification_repository.dart';
+import 'package:hvac_control/domain/usecases/usecases.dart';
 import 'package:hvac_control/presentation/bloc/notifications/notifications_bloc.dart';
 
-// Mock classes
-class MockNotificationRepository extends Mock implements NotificationRepository {}
+// Mock classes for Use Cases
+class MockGetNotifications extends Mock implements GetNotifications {}
+
+class MockWatchNotifications extends Mock implements WatchNotifications {}
+
+class MockMarkNotificationAsRead extends Mock
+    implements MarkNotificationAsRead {}
+
+class MockDismissNotification extends Mock implements DismissNotification {}
 
 void main() {
-  late MockNotificationRepository mockRepository;
+  late MockGetNotifications mockGetNotifications;
+  late MockWatchNotifications mockWatchNotifications;
+  late MockMarkNotificationAsRead mockMarkNotificationAsRead;
+  late MockDismissNotification mockDismissNotification;
 
   // Test data
   final testNotification1 = UnitNotification(
@@ -40,17 +50,35 @@ void main() {
 
   final testNotifications = [testNotification1, testNotification2];
 
-  setUp(() {
-    mockRepository = MockNotificationRepository();
+  setUpAll(() {
+    registerFallbackValue(const GetNotificationsParams());
+    registerFallbackValue(const WatchNotificationsParams());
+    registerFallbackValue(
+        const MarkNotificationAsReadParams(notificationId: ''));
+    registerFallbackValue(const DismissNotificationParams(notificationId: ''));
   });
+
+  setUp(() {
+    mockGetNotifications = MockGetNotifications();
+    mockWatchNotifications = MockWatchNotifications();
+    mockMarkNotificationAsRead = MockMarkNotificationAsRead();
+    mockDismissNotification = MockDismissNotification();
+  });
+
+  NotificationsBloc createBloc() => NotificationsBloc(
+        getNotifications: mockGetNotifications,
+        watchNotifications: mockWatchNotifications,
+        markNotificationAsRead: mockMarkNotificationAsRead,
+        dismissNotification: mockDismissNotification,
+      );
 
   group('NotificationsBloc', () {
     group('Инициализация', () {
       test('начальное состояние - NotificationsState с initial статусом', () {
-        when(() => mockRepository.watchNotifications())
+        when(() => mockWatchNotifications(any()))
             .thenAnswer((_) => const Stream.empty());
 
-        final bloc = NotificationsBloc(notificationRepository: mockRepository);
+        final bloc = createBloc();
 
         expect(bloc.state.status, NotificationsStatus.initial);
         expect(bloc.state.notifications, isEmpty);
@@ -64,11 +92,11 @@ void main() {
       blocTest<NotificationsBloc, NotificationsState>(
         'эмитит [loading, success] при успешной загрузке',
         build: () {
-          when(() => mockRepository.getNotifications())
+          when(() => mockGetNotifications(any()))
               .thenAnswer((_) async => testNotifications);
-          when(() => mockRepository.watchNotifications())
+          when(() => mockWatchNotifications(any()))
               .thenAnswer((_) => const Stream.empty());
-          return NotificationsBloc(notificationRepository: mockRepository);
+          return createBloc();
         },
         act: (bloc) => bloc.add(const NotificationsSubscriptionRequested()),
         expect: () => [
@@ -79,17 +107,17 @@ void main() {
           ),
         ],
         verify: (_) {
-          verify(() => mockRepository.getNotifications()).called(1);
-          verify(() => mockRepository.watchNotifications()).called(1);
+          verify(() => mockGetNotifications(any())).called(1);
+          verify(() => mockWatchNotifications(any())).called(1);
         },
       );
 
       blocTest<NotificationsBloc, NotificationsState>(
         'эмитит [loading, failure] при ошибке',
         build: () {
-          when(() => mockRepository.getNotifications())
+          when(() => mockGetNotifications(any()))
               .thenThrow(Exception('Network error'));
-          return NotificationsBloc(notificationRepository: mockRepository);
+          return createBloc();
         },
         act: (bloc) => bloc.add(const NotificationsSubscriptionRequested()),
         expect: () => [
@@ -105,11 +133,11 @@ void main() {
       blocTest<NotificationsBloc, NotificationsState>(
         'загружает уведомления для выбранного устройства',
         build: () {
-          when(() => mockRepository.getNotifications(deviceId: any(named: 'deviceId')))
+          when(() => mockGetNotifications(any()))
               .thenAnswer((_) async => [testNotification1]);
-          when(() => mockRepository.watchNotifications(deviceId: any(named: 'deviceId')))
+          when(() => mockWatchNotifications(any()))
               .thenAnswer((_) => const Stream.empty());
-          return NotificationsBloc(notificationRepository: mockRepository);
+          return createBloc();
         },
         act: (bloc) => bloc.add(const NotificationsDeviceChanged('device-1')),
         expect: () => [
@@ -126,7 +154,7 @@ void main() {
     group('NotificationsListUpdated', () {
       blocTest<NotificationsBloc, NotificationsState>(
         'обновляет список уведомлений из стрима',
-        build: () => NotificationsBloc(notificationRepository: mockRepository),
+        build: () => createBloc(),
         seed: () => NotificationsState(
           status: NotificationsStatus.success,
           notifications: [testNotification1],
@@ -145,36 +173,38 @@ void main() {
       blocTest<NotificationsBloc, NotificationsState>(
         'отмечает уведомление как прочитанное',
         build: () {
-          when(() => mockRepository.markAsRead(any()))
+          when(() => mockMarkNotificationAsRead(any()))
               .thenAnswer((_) async {});
-          return NotificationsBloc(notificationRepository: mockRepository);
+          return createBloc();
         },
         seed: () => NotificationsState(
           status: NotificationsStatus.success,
           notifications: [testNotification1],
         ),
-        act: (bloc) => bloc.add(const NotificationsMarkAsReadRequested('notif-1')),
+        act: (bloc) =>
+            bloc.add(const NotificationsMarkAsReadRequested('notif-1')),
         expect: () => [
           isA<NotificationsState>()
               .having((s) => s.notifications.first.isRead, 'isRead', isTrue),
         ],
         verify: (_) {
-          verify(() => mockRepository.markAsRead('notif-1')).called(1);
+          verify(() => mockMarkNotificationAsRead(any())).called(1);
         },
       );
 
       blocTest<NotificationsBloc, NotificationsState>(
         'эмитит ошибку при неудачной отметке',
         build: () {
-          when(() => mockRepository.markAsRead(any()))
+          when(() => mockMarkNotificationAsRead(any()))
               .thenThrow(Exception('Failed'));
-          return NotificationsBloc(notificationRepository: mockRepository);
+          return createBloc();
         },
         seed: () => NotificationsState(
           status: NotificationsStatus.success,
           notifications: [testNotification1],
         ),
-        act: (bloc) => bloc.add(const NotificationsMarkAsReadRequested('notif-1')),
+        act: (bloc) =>
+            bloc.add(const NotificationsMarkAsReadRequested('notif-1')),
         expect: () => [
           isA<NotificationsState>()
               .having((s) => s.errorMessage, 'errorMessage', contains('Ошибка')),
@@ -186,9 +216,9 @@ void main() {
       blocTest<NotificationsBloc, NotificationsState>(
         'отмечает все уведомления как прочитанные',
         build: () {
-          when(() => mockRepository.markAsRead(any()))
+          when(() => mockMarkNotificationAsRead(any()))
               .thenAnswer((_) async {});
-          return NotificationsBloc(notificationRepository: mockRepository);
+          return createBloc();
         },
         seed: () => NotificationsState(
           status: NotificationsStatus.success,
@@ -196,16 +226,15 @@ void main() {
         ),
         act: (bloc) => bloc.add(const NotificationsMarkAllAsReadRequested()),
         expect: () => [
-          isA<NotificationsState>()
-              .having(
-                (s) => s.notifications.every((n) => n.isRead),
-                'all isRead',
-                isTrue,
-              ),
+          isA<NotificationsState>().having(
+            (s) => s.notifications.every((n) => n.isRead),
+            'all isRead',
+            isTrue,
+          ),
         ],
         verify: (_) {
           // Только testNotification1 был непрочитан
-          verify(() => mockRepository.markAsRead('notif-1')).called(1);
+          verify(() => mockMarkNotificationAsRead(any())).called(1);
         },
       );
     });
@@ -214,15 +243,15 @@ void main() {
       blocTest<NotificationsBloc, NotificationsState>(
         'удаляет уведомление из списка',
         build: () {
-          when(() => mockRepository.dismiss(any()))
-              .thenAnswer((_) async {});
-          return NotificationsBloc(notificationRepository: mockRepository);
+          when(() => mockDismissNotification(any())).thenAnswer((_) async {});
+          return createBloc();
         },
         seed: () => NotificationsState(
           status: NotificationsStatus.success,
           notifications: testNotifications,
         ),
-        act: (bloc) => bloc.add(const NotificationsDismissRequested('notif-1')),
+        act: (bloc) =>
+            bloc.add(const NotificationsDismissRequested('notif-1')),
         expect: () => [
           NotificationsState(
             status: NotificationsStatus.success,
@@ -230,25 +259,26 @@ void main() {
           ),
         ],
         verify: (_) {
-          verify(() => mockRepository.dismiss('notif-1')).called(1);
+          verify(() => mockDismissNotification(any())).called(1);
         },
       );
 
       blocTest<NotificationsBloc, NotificationsState>(
         'эмитит ошибку при неудачном удалении',
         build: () {
-          when(() => mockRepository.dismiss(any()))
+          when(() => mockDismissNotification(any()))
               .thenThrow(Exception('Failed'));
-          return NotificationsBloc(notificationRepository: mockRepository);
+          return createBloc();
         },
         seed: () => NotificationsState(
           status: NotificationsStatus.success,
           notifications: testNotifications,
         ),
-        act: (bloc) => bloc.add(const NotificationsDismissRequested('notif-1')),
+        act: (bloc) =>
+            bloc.add(const NotificationsDismissRequested('notif-1')),
         expect: () => [
-          isA<NotificationsState>()
-              .having((s) => s.errorMessage, 'errorMessage', contains('удаления')),
+          isA<NotificationsState>().having(
+              (s) => s.errorMessage, 'errorMessage', contains('удаления')),
         ],
       );
     });

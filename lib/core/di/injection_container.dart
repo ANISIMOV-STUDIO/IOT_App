@@ -296,6 +296,12 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetGraphData(sl()));
   sl.registerLazySingleton(() => WatchGraphData(sl()));
 
+  // Notifications Use Cases
+  sl.registerLazySingleton(() => GetNotifications(sl()));
+  sl.registerLazySingleton(() => WatchNotifications(sl()));
+  sl.registerLazySingleton(() => MarkNotificationAsRead(sl()));
+  sl.registerLazySingleton(() => DismissNotification(sl()));
+
   //! Presentation - BLoCs
 
   // DevicesBloc (Управление списком HVAC устройств)
@@ -328,7 +334,12 @@ Future<void> init() async {
 
   // NotificationsBloc (Уведомления устройств)
   sl.registerLazySingleton(
-    () => NotificationsBloc(notificationRepository: sl()),
+    () => NotificationsBloc(
+      getNotifications: sl(),
+      watchNotifications: sl(),
+      markNotificationAsRead: sl(),
+      dismissNotification: sl(),
+    ),
   );
 
   // AnalyticsBloc (Статистика и графики)

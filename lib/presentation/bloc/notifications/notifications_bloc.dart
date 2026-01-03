@@ -11,20 +11,29 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../../domain/entities/unit_notification.dart';
-import '../../../domain/repositories/notification_repository.dart';
+import '../../../domain/usecases/usecases.dart';
 
 part 'notifications_event.dart';
 part 'notifications_state.dart';
 
 /// BLoC для управления уведомлениями
 class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
-  final NotificationRepository _notificationRepository;
+  final GetNotifications _getNotifications;
+  final WatchNotifications _watchNotifications;
+  final MarkNotificationAsRead _markNotificationAsRead;
+  final DismissNotification _dismissNotification;
 
   StreamSubscription<List<UnitNotification>>? _notificationsSubscription;
 
   NotificationsBloc({
-    required NotificationRepository notificationRepository,
-  })  : _notificationRepository = notificationRepository,
+    required GetNotifications getNotifications,
+    required WatchNotifications watchNotifications,
+    required MarkNotificationAsRead markNotificationAsRead,
+    required DismissNotification dismissNotification,
+  })  : _getNotifications = getNotifications,
+        _watchNotifications = watchNotifications,
+        _markNotificationAsRead = markNotificationAsRead,
+        _dismissNotification = dismissNotification,
         super(const NotificationsState()) {
     // События жизненного цикла
     on<NotificationsSubscriptionRequested>(_onSubscriptionRequested);
@@ -45,19 +54,21 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     emit(state.copyWith(status: NotificationsStatus.loading));
 
     try {
-      // Загружаем уведомления для всех устройств
-      final notifications = await _notificationRepository.getNotifications();
+      // Загружаем уведомления для всех устройств через Use Case
+      final notifications = await _getNotifications(
+        const GetNotificationsParams(),
+      );
 
       emit(state.copyWith(
         status: NotificationsStatus.success,
         notifications: notifications,
       ));
 
-      // Подписываемся на обновления
+      // Подписываемся на обновления через Use Case
       await _notificationsSubscription?.cancel();
-      _notificationsSubscription = _notificationRepository
-          .watchNotifications()
-          .listen((notifications) => add(NotificationsListUpdated(notifications)));
+      _notificationsSubscription = _watchNotifications(
+        const WatchNotificationsParams(),
+      ).listen((notifications) => add(NotificationsListUpdated(notifications)));
     } catch (e) {
       emit(state.copyWith(
         status: NotificationsStatus.failure,
@@ -74,8 +85,8 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     emit(state.copyWith(status: NotificationsStatus.loading));
 
     try {
-      final notifications = await _notificationRepository.getNotifications(
-        deviceId: event.deviceId,
+      final notifications = await _getNotifications(
+        GetNotificationsParams(deviceId: event.deviceId),
       );
 
       emit(state.copyWith(
@@ -86,9 +97,9 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
 
       // Переподписываемся для нового устройства
       await _notificationsSubscription?.cancel();
-      _notificationsSubscription = _notificationRepository
-          .watchNotifications(deviceId: event.deviceId)
-          .listen((notifications) => add(NotificationsListUpdated(notifications)));
+      _notificationsSubscription = _watchNotifications(
+        WatchNotificationsParams(deviceId: event.deviceId),
+      ).listen((notifications) => add(NotificationsListUpdated(notifications)));
     } catch (e) {
       emit(state.copyWith(
         status: NotificationsStatus.failure,
@@ -111,7 +122,9 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     Emitter<NotificationsState> emit,
   ) async {
     try {
-      await _notificationRepository.markAsRead(event.notificationId);
+      await _markNotificationAsRead(
+        MarkNotificationAsReadParams(notificationId: event.notificationId),
+      );
 
       // Обновляем локальный список
       final updatedNotifications = state.notifications.map((n) {
@@ -144,7 +157,9 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
       // Отмечаем все непрочитанные
       for (final n in state.notifications) {
         if (!n.isRead) {
-          await _notificationRepository.markAsRead(n.id);
+          await _markNotificationAsRead(
+            MarkNotificationAsReadParams(notificationId: n.id),
+          );
         }
       }
 
@@ -173,7 +188,9 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     Emitter<NotificationsState> emit,
   ) async {
     try {
-      await _notificationRepository.dismiss(event.notificationId);
+      await _dismissNotification(
+        DismissNotificationParams(notificationId: event.notificationId),
+      );
 
       // Удаляем из локального списка
       final updatedNotifications = state.notifications

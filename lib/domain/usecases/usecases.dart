@@ -40,3 +40,9 @@ export 'analytics/get_device_power_usage.dart';
 export 'analytics/watch_energy_stats.dart';
 export 'analytics/get_graph_data.dart';
 export 'analytics/watch_graph_data.dart';
+
+// Notifications Use Cases
+export 'notifications/get_notifications.dart';
+export 'notifications/watch_notifications.dart';
+export 'notifications/mark_notification_as_read.dart';
+export 'notifications/dismiss_notification.dart';
