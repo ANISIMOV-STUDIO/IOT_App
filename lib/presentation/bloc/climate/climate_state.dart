@@ -32,12 +32,16 @@ final class ClimateControlState extends Equatable {
   /// Сообщение об ошибке
   final String? errorMessage;
 
+  /// Флаг переключения питания (для блокировки кнопки)
+  final bool isTogglingPower;
+
   const ClimateControlState({
     this.status = ClimateControlStatus.initial,
     this.climate,
     this.deviceFullState,
     this.alarmHistory = const [],
     this.errorMessage,
+    this.isTogglingPower = false,
   });
 
   // ============================================
@@ -96,6 +100,7 @@ final class ClimateControlState extends Equatable {
     DeviceFullState? deviceFullState,
     List<AlarmHistory>? alarmHistory,
     String? errorMessage,
+    bool? isTogglingPower,
   }) {
     return ClimateControlState(
       status: status ?? this.status,
@@ -103,6 +108,7 @@ final class ClimateControlState extends Equatable {
       deviceFullState: deviceFullState ?? this.deviceFullState,
       alarmHistory: alarmHistory ?? this.alarmHistory,
       errorMessage: errorMessage,
+      isTogglingPower: isTogglingPower ?? this.isTogglingPower,
     );
   }
 
@@ -113,5 +119,6 @@ final class ClimateControlState extends Equatable {
         deviceFullState,
         alarmHistory,
         errorMessage,
+        isTogglingPower,
       ];
 }

@@ -30,6 +30,7 @@ class MainTempCard extends StatelessWidget {
   final bool showModeSelector;
   final int alarmCount;
   final VoidCallback? onAlarmsTap;
+  final bool isPowerLoading;
 
   const MainTempCard({
     super.key,
@@ -53,6 +54,7 @@ class MainTempCard extends StatelessWidget {
     this.showModeSelector = false,
     this.alarmCount = 0,
     this.onAlarmsTap,
+    this.isPowerLoading = false,
   });
 
   @override
@@ -182,11 +184,23 @@ class MainTempCard extends StatelessWidget {
                           onTap: onSettingsTap,
                         ),
                         const SizedBox(width: 8),
-                        BreezIconButton(
-                          icon: Icons.power_settings_new,
-                          iconColor: isPowered ? AppColors.accentRed : AppColors.accentGreen,
-                          onTap: onPowerToggle,
-                        ),
+                        isPowerLoading
+                            ? const SizedBox(
+                                width: 32,
+                                height: 32,
+                                child: Padding(
+                                  padding: EdgeInsets.all(6),
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: AppColors.accent,
+                                  ),
+                                ),
+                              )
+                            : BreezIconButton(
+                                icon: Icons.power_settings_new,
+                                iconColor: isPowered ? AppColors.accentRed : AppColors.accentGreen,
+                                onTap: onPowerToggle,
+                              ),
                       ],
                     )
                   else

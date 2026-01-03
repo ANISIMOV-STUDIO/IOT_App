@@ -13,6 +13,7 @@ class UnitControlCard extends StatelessWidget {
   final ValueChanged<String>? onModeChanged;
   final VoidCallback? onPowerToggle;
   final VoidCallback? onSettingsTap;
+  final bool isPowerLoading;
 
   const UnitControlCard({
     super.key,
@@ -22,6 +23,7 @@ class UnitControlCard extends StatelessWidget {
     this.onModeChanged,
     this.onPowerToggle,
     this.onSettingsTap,
+    this.isPowerLoading = false,
   });
 
   @override
@@ -60,6 +62,7 @@ class UnitControlCard extends StatelessWidget {
           selectedMode: unit.mode,
           onModeChanged: onModeChanged,
           showModeSelector: showModeSelector,
+          isPowerLoading: isPowerLoading,
         );
       },
     );

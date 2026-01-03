@@ -412,6 +412,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           context.read<ClimateBloc>().add(ClimateModeChanged(_parseClimateMode(m))),
       onPowerToggle: () => _handlePowerToggle(climateState),
       onSettingsTap: () => _showUnitSettings(currentUnit),
+      isPowerLoading: climateState.isTogglingPower,
       onMasterOff: _masterPowerOff,
       onUnitSelected: (index) {
         if (index < units.length) {
@@ -477,6 +478,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             onPowerToggle: () => _handlePowerToggle(climateState),
             onSettingsTap: () => _showUnitSettings(currentUnit),
             compact: width <= 600,
+            isPowerLoading: climateState.isTogglingPower,
           ),
         ),
       ],

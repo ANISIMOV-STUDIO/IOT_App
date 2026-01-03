@@ -162,10 +162,23 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     ClimatePowerToggled event,
     Emitter<ClimateControlState> emit,
   ) async {
+    // Блокируем кнопку и делаем optimistic update
+    if (state.isTogglingPower) return; // Предотвращаем двойные нажатия
+
     developer.log('_onPowerToggled called: isOn=${event.isOn}', name: 'ClimateBloc');
+
+    // Optimistic update: сразу показываем новое состояние
+    final optimisticClimate = state.climate?.copyWith(isOn: event.isOn);
+    emit(state.copyWith(
+      isTogglingPower: true,
+      climate: optimisticClimate,
+    ));
+
     try {
       await _setDevicePower(SetDevicePowerParams(isOn: event.isOn));
       developer.log('_onPowerToggled: command sent successfully', name: 'ClimateBloc');
+      // Разблокируем кнопку после успешной отправки
+      emit(state.copyWith(isTogglingPower: false));
     } catch (e, stackTrace) {
       developer.log(
         '_onPowerToggled ERROR: $e',
@@ -173,7 +186,13 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         error: e,
         stackTrace: stackTrace,
       );
-      emit(state.copyWith(errorMessage: 'Ошибка переключения питания: $e'));
+      // Откатываем optimistic update при ошибке
+      final revertedClimate = state.climate?.copyWith(isOn: !event.isOn);
+      emit(state.copyWith(
+        isTogglingPower: false,
+        climate: revertedClimate,
+        errorMessage: 'Ошибка переключения питания: $e',
+      ));
     }
   }
 

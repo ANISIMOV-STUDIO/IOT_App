@@ -17,6 +17,7 @@ class MobileLayout extends StatelessWidget {
   final VoidCallback? onPowerToggle;
   final VoidCallback? onSettingsTap;
   final bool compact;
+  final bool isPowerLoading;
 
   const MobileLayout({
     super.key,
@@ -29,6 +30,7 @@ class MobileLayout extends StatelessWidget {
     this.onPowerToggle,
     this.onSettingsTap,
     this.compact = true,
+    this.isPowerLoading = false,
   });
 
   @override
@@ -42,6 +44,7 @@ class MobileLayout extends StatelessWidget {
         onModeChanged: onModeChanged,
         onPowerToggle: onPowerToggle,
         onSettingsTap: onSettingsTap,
+        isPowerLoading: isPowerLoading,
       ),
     );
   }
