@@ -119,3 +119,31 @@ class AuthResetPasswordRequested extends AuthEvent {
   @override
   List<Object?> get props => [email, code, newPassword];
 }
+
+/// Смена пароля (авторизованный пользователь)
+class AuthChangePasswordRequested extends AuthEvent {
+  final String currentPassword;
+  final String newPassword;
+
+  const AuthChangePasswordRequested({
+    required this.currentPassword,
+    required this.newPassword,
+  });
+
+  @override
+  List<Object?> get props => [currentPassword, newPassword];
+}
+
+/// Обновление профиля
+class AuthUpdateProfileRequested extends AuthEvent {
+  final String firstName;
+  final String lastName;
+
+  const AuthUpdateProfileRequested({
+    required this.firstName,
+    required this.lastName,
+  });
+
+  @override
+  List<Object?> get props => [firstName, lastName];
+}

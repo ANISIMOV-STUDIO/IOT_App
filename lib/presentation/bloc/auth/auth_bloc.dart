@@ -29,6 +29,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthResendCodeRequested>(_onResendCodeRequested);
     on<AuthForgotPasswordRequested>(_onForgotPasswordRequested);
     on<AuthResetPasswordRequested>(_onResetPasswordRequested);
+    on<AuthChangePasswordRequested>(_onChangePasswordRequested);
+    on<AuthUpdateProfileRequested>(_onUpdateProfileRequested);
   }
 
   /// Проверка сохраненной сессии
@@ -233,6 +235,83 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await _authService.resetPassword(request);
 
       emit(const AuthPasswordReset());
+    } catch (e) {
+      emit(AuthError(e.toString()));
+    }
+  }
+
+  /// Смена пароля (авторизованный пользователь)
+  Future<void> _onChangePasswordRequested(
+    AuthChangePasswordRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(const AuthLoading());
+
+    try {
+      final accessToken = await _storageService.getToken();
+      if (accessToken == null || accessToken.isEmpty) {
+        emit(const AuthError('Не авторизован'));
+        return;
+      }
+
+      final request = ChangePasswordRequest(
+        currentPassword: event.currentPassword,
+        newPassword: event.newPassword,
+      );
+
+      await _authService.changePassword(request, accessToken);
+
+      // После смены пароля нужно перелогиниться (все токены отозваны на сервере)
+      await _storageService.deleteToken();
+      emit(const AuthPasswordChanged());
+    } catch (e) {
+      emit(AuthError(e.toString()));
+    }
+  }
+
+  /// Обновление профиля
+  Future<void> _onUpdateProfileRequested(
+    AuthUpdateProfileRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    // Сохраняем текущее состояние для восстановления токенов
+    final currentState = state;
+    emit(const AuthLoading());
+
+    try {
+      final accessToken = await _storageService.getToken();
+      final refreshToken = await _storageService.getRefreshToken();
+
+      if (accessToken == null || accessToken.isEmpty) {
+        emit(const AuthError('Не авторизован'));
+        return;
+      }
+
+      final request = UpdateProfileRequest(
+        firstName: event.firstName,
+        lastName: event.lastName,
+      );
+
+      final updatedUser = await _authService.updateProfile(request, accessToken);
+
+      // Возвращаем AuthAuthenticated с обновленным пользователем
+      emit(AuthAuthenticated(
+        user: updatedUser,
+        accessToken: accessToken,
+        refreshToken: refreshToken ?? '',
+      ));
+
+      // Также эмитим событие успеха для UI
+      emit(AuthProfileUpdated(user: updatedUser));
+
+      // И снова возвращаем AuthAuthenticated для стабильного состояния
+      if (currentState is AuthAuthenticated) {
+        emit(AuthAuthenticated(
+          user: updatedUser,
+          accessToken: accessToken,
+          refreshToken: refreshToken ?? '',
+        ));
+      }
     } catch (e) {
       emit(AuthError(e.toString()));
     }

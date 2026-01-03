@@ -90,7 +90,22 @@ class AuthPasswordResetCodeSent extends AuthState {
   List<Object?> get props => [email];
 }
 
-/// Пароль успешно изменён
+/// Пароль успешно изменён (через forgot password)
 class AuthPasswordReset extends AuthState {
   const AuthPasswordReset();
+}
+
+/// Пароль успешно изменён (авторизованным пользователем)
+class AuthPasswordChanged extends AuthState {
+  const AuthPasswordChanged();
+}
+
+/// Профиль успешно обновлён
+class AuthProfileUpdated extends AuthState {
+  final User user;
+
+  const AuthProfileUpdated({required this.user});
+
+  @override
+  List<Object?> get props => [user];
 }

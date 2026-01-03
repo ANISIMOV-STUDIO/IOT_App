@@ -204,3 +204,39 @@ class ResetPasswordRequest {
     };
   }
 }
+
+/// Запрос на смену пароля (авторизованный пользователь)
+class ChangePasswordRequest {
+  final String currentPassword;
+  final String newPassword;
+
+  const ChangePasswordRequest({
+    required this.currentPassword,
+    required this.newPassword,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'currentPassword': currentPassword,
+      'newPassword': newPassword,
+    };
+  }
+}
+
+/// Запрос на обновление профиля
+class UpdateProfileRequest {
+  final String firstName;
+  final String lastName;
+
+  const UpdateProfileRequest({
+    required this.firstName,
+    required this.lastName,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'firstName': firstName,
+      'lastName': lastName,
+    };
+  }
+}

@@ -266,4 +266,57 @@ class AuthService {
       throw AuthException('Ошибка подключения к серверу: $e');
     }
   }
+
+  /// Смена пароля авторизованным пользователем
+  Future<void> changePassword(ChangePasswordRequest request, String token) async {
+    try {
+      final response = await _client.post(
+        Uri.parse('$_baseUrl/auth/change-password'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: json.encode(request.toJson()),
+      );
+
+      if (response.statusCode == 200) {
+        return;
+      } else {
+        final error = json.decode(response.body);
+        throw AuthException(
+          error['message'] as String? ?? 'Ошибка смены пароля',
+        );
+      }
+    } catch (e) {
+      if (e is AuthException) rethrow;
+      throw AuthException('Ошибка подключения к серверу: $e');
+    }
+  }
+
+  /// Обновление профиля пользователя
+  Future<User> updateProfile(UpdateProfileRequest request, String token) async {
+    try {
+      final response = await _client.put(
+        Uri.parse('$_baseUrl/auth/profile'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: json.encode(request.toJson()),
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body) as Map<String, dynamic>;
+        return UserModel.fromJson(data).toEntity();
+      } else {
+        final error = json.decode(response.body);
+        throw AuthException(
+          error['message'] as String? ?? 'Ошибка обновления профиля',
+        );
+      }
+    } catch (e) {
+      if (e is AuthException) rethrow;
+      throw AuthException('Ошибка подключения к серверу: $e');
+    }
+  }
 }
