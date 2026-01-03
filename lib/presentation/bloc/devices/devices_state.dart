@@ -1,5 +1,8 @@
 part of 'devices_bloc.dart';
 
+/// Sentinel для различения null от "не передано"
+const _sentinel = Object();
+
 /// Статус загрузки DevicesBloc
 enum DevicesStatus {
   /// Начальное состояние
@@ -65,7 +68,7 @@ final class DevicesState extends Equatable {
   DevicesState copyWith({
     DevicesStatus? status,
     List<HvacDevice>? devices,
-    String? selectedDeviceId,
+    Object? selectedDeviceId = _sentinel,
     String? errorMessage,
     bool? isRegistering,
     String? registrationError,
@@ -73,7 +76,9 @@ final class DevicesState extends Equatable {
     return DevicesState(
       status: status ?? this.status,
       devices: devices ?? this.devices,
-      selectedDeviceId: selectedDeviceId ?? this.selectedDeviceId,
+      selectedDeviceId: selectedDeviceId == _sentinel
+          ? this.selectedDeviceId
+          : selectedDeviceId as String?,
       errorMessage: errorMessage,
       isRegistering: isRegistering ?? this.isRegistering,
       registrationError: registrationError,
