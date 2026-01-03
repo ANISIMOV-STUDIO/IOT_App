@@ -86,6 +86,44 @@ class TestData {
         email: 'test@example.com',
       );
 
+  /// Запрос на смену пароля
+  static ChangePasswordRequest get changePasswordRequest =>
+      const ChangePasswordRequest(
+        currentPassword: 'OldPassword123!',
+        newPassword: 'NewPassword456!',
+      );
+
+  /// Запрос на обновление профиля
+  static UpdateProfileRequest get updateProfileRequest =>
+      const UpdateProfileRequest(
+        firstName: 'Новое Имя',
+        lastName: 'Новая Фамилия',
+      );
+
+  /// Запрос на восстановление пароля
+  static ForgotPasswordRequest get forgotPasswordRequest =>
+      const ForgotPasswordRequest(
+        email: 'test@example.com',
+      );
+
+  /// Запрос на сброс пароля
+  static ResetPasswordRequest get resetPasswordRequest =>
+      const ResetPasswordRequest(
+        email: 'test@example.com',
+        code: '123456',
+        newPassword: 'NewPassword123!',
+      );
+
+  /// Обновлённый пользователь
+  static User get updatedUser => const User(
+        id: 'test-user-id-123',
+        email: 'test@example.com',
+        firstName: 'Новое Имя',
+        lastName: 'Новая Фамилия',
+        role: 'User',
+        emailConfirmed: true,
+      );
+
   // ==================== Ответы авторизации ====================
 
   /// Успешный ответ на вход

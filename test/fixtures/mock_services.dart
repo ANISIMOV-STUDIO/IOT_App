@@ -7,12 +7,16 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:hvac_control/data/services/auth_service.dart';
 import 'package:hvac_control/core/services/auth_storage_service.dart';
+import 'package:hvac_control/domain/repositories/schedule_repository.dart';
 
 /// Mock для AuthService
 class MockAuthService extends Mock implements AuthService {}
 
 /// Mock для AuthStorageService
 class MockAuthStorageService extends Mock implements AuthStorageService {}
+
+/// Mock для ScheduleRepository
+class MockScheduleRepository extends Mock implements ScheduleRepository {}
 
 /// Mock для HTTP клиента
 class MockHttpClient extends Mock implements http.Client {}

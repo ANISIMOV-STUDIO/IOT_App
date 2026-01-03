@@ -7,6 +7,9 @@
 /// - Выход
 /// - Подтверждение email
 /// - Повторная отправка кода
+/// - Смена пароля
+/// - Обновление профиля
+/// - Сброс пароля
 library;
 
 import 'package:flutter_test/flutter_test.dart';
@@ -31,6 +34,10 @@ void main() {
     registerFallbackValue(TestData.registerRequest);
     registerFallbackValue(TestData.verifyEmailRequest);
     registerFallbackValue(TestData.resendCodeRequest);
+    registerFallbackValue(TestData.changePasswordRequest);
+    registerFallbackValue(TestData.updateProfileRequest);
+    registerFallbackValue(TestData.forgotPasswordRequest);
+    registerFallbackValue(TestData.resetPasswordRequest);
   });
 
   setUp(() {
@@ -367,6 +374,211 @@ void main() {
         isA<AuthLoading>(),
         isA<AuthError>()
             .having((s) => s.message, 'message', 'Слишком много запросов'),
+      ],
+    );
+  });
+
+  group('AuthBloc - AuthChangePasswordRequested', () {
+    blocTest<AuthBloc, AuthState>(
+      'эмитит [AuthLoading, AuthPasswordChanged] при успешной смене пароля',
+      build: () {
+        when(() => mockStorageService.getToken())
+            .thenAnswer((_) async => TestData.testAccessToken);
+        when(() => mockAuthService.changePassword(any(), any()))
+            .thenAnswer((_) async {});
+        when(() => mockStorageService.deleteToken()).thenAnswer((_) async {});
+        return createBloc();
+      },
+      act: (bloc) => bloc.add(const AuthChangePasswordRequested(
+        currentPassword: 'OldPassword123!',
+        newPassword: 'NewPassword456!',
+      )),
+      expect: () => [
+        isA<AuthLoading>(),
+        isA<AuthPasswordChanged>(),
+      ],
+      verify: (_) {
+        verify(() => mockStorageService.deleteToken()).called(1);
+      },
+    );
+
+    blocTest<AuthBloc, AuthState>(
+      'эмитит [AuthLoading, AuthError] когда не авторизован',
+      build: () {
+        when(() => mockStorageService.getToken()).thenAnswer((_) async => null);
+        return createBloc();
+      },
+      act: (bloc) => bloc.add(const AuthChangePasswordRequested(
+        currentPassword: 'OldPassword123!',
+        newPassword: 'NewPassword456!',
+      )),
+      expect: () => [
+        isA<AuthLoading>(),
+        isA<AuthError>()
+            .having((s) => s.message, 'message', 'Не авторизован'),
+      ],
+    );
+
+    blocTest<AuthBloc, AuthState>(
+      'эмитит [AuthLoading, AuthError] при неверном текущем пароле',
+      build: () {
+        when(() => mockStorageService.getToken())
+            .thenAnswer((_) async => TestData.testAccessToken);
+        when(() => mockAuthService.changePassword(any(), any()))
+            .thenThrow(const AuthException('Неверный текущий пароль'));
+        return createBloc();
+      },
+      act: (bloc) => bloc.add(const AuthChangePasswordRequested(
+        currentPassword: 'WrongPassword!',
+        newPassword: 'NewPassword456!',
+      )),
+      expect: () => [
+        isA<AuthLoading>(),
+        isA<AuthError>()
+            .having((s) => s.message, 'message', 'Неверный текущий пароль'),
+      ],
+    );
+  });
+
+  group('AuthBloc - AuthUpdateProfileRequested', () {
+    blocTest<AuthBloc, AuthState>(
+      'эмитит [AuthLoading, AuthAuthenticated, AuthProfileUpdated] при успешном обновлении',
+      build: () {
+        when(() => mockStorageService.getToken())
+            .thenAnswer((_) async => TestData.testAccessToken);
+        when(() => mockStorageService.getRefreshToken())
+            .thenAnswer((_) async => TestData.testRefreshToken);
+        when(() => mockAuthService.updateProfile(any(), any()))
+            .thenAnswer((_) async => TestData.updatedUser);
+        return createBloc();
+      },
+      act: (bloc) => bloc.add(const AuthUpdateProfileRequested(
+        firstName: 'Новое Имя',
+        lastName: 'Новая Фамилия',
+      )),
+      expect: () => [
+        isA<AuthLoading>(),
+        isA<AuthAuthenticated>()
+            .having((s) => s.user.firstName, 'firstName', 'Новое Имя')
+            .having((s) => s.user.lastName, 'lastName', 'Новая Фамилия'),
+        isA<AuthProfileUpdated>()
+            .having((s) => s.user.firstName, 'firstName', 'Новое Имя'),
+        // Последний AuthAuthenticated не эмитится т.к. state не AuthAuthenticated
+      ],
+    );
+
+    blocTest<AuthBloc, AuthState>(
+      'эмитит [AuthLoading, AuthError] когда не авторизован',
+      build: () {
+        when(() => mockStorageService.getToken()).thenAnswer((_) async => null);
+        when(() => mockStorageService.getRefreshToken()).thenAnswer((_) async => null);
+        return createBloc();
+      },
+      act: (bloc) => bloc.add(const AuthUpdateProfileRequested(
+        firstName: 'Новое Имя',
+        lastName: 'Новая Фамилия',
+      )),
+      expect: () => [
+        isA<AuthLoading>(),
+        isA<AuthError>()
+            .having((s) => s.message, 'message', 'Не авторизован'),
+      ],
+    );
+
+    blocTest<AuthBloc, AuthState>(
+      'эмитит [AuthLoading, AuthError] при ошибке сервера',
+      build: () {
+        when(() => mockStorageService.getToken())
+            .thenAnswer((_) async => TestData.testAccessToken);
+        when(() => mockStorageService.getRefreshToken())
+            .thenAnswer((_) async => TestData.testRefreshToken);
+        when(() => mockAuthService.updateProfile(any(), any()))
+            .thenThrow(const AuthException('Ошибка обновления профиля'));
+        return createBloc();
+      },
+      act: (bloc) => bloc.add(const AuthUpdateProfileRequested(
+        firstName: 'Новое Имя',
+        lastName: 'Новая Фамилия',
+      )),
+      expect: () => [
+        isA<AuthLoading>(),
+        isA<AuthError>()
+            .having((s) => s.message, 'message', 'Ошибка обновления профиля'),
+      ],
+    );
+  });
+
+  group('AuthBloc - AuthForgotPasswordRequested', () {
+    blocTest<AuthBloc, AuthState>(
+      'эмитит [AuthLoading, AuthPasswordResetCodeSent] при успешной отправке',
+      build: () {
+        when(() => mockAuthService.forgotPassword(any()))
+            .thenAnswer((_) async {});
+        return createBloc();
+      },
+      act: (bloc) => bloc.add(const AuthForgotPasswordRequested(
+        email: 'test@example.com',
+      )),
+      expect: () => [
+        isA<AuthLoading>(),
+        isA<AuthPasswordResetCodeSent>()
+            .having((s) => s.email, 'email', 'test@example.com'),
+      ],
+    );
+
+    blocTest<AuthBloc, AuthState>(
+      'эмитит [AuthLoading, AuthError] когда email не найден',
+      build: () {
+        when(() => mockAuthService.forgotPassword(any()))
+            .thenThrow(const AuthException('Пользователь не найден'));
+        return createBloc();
+      },
+      act: (bloc) => bloc.add(const AuthForgotPasswordRequested(
+        email: 'unknown@example.com',
+      )),
+      expect: () => [
+        isA<AuthLoading>(),
+        isA<AuthError>()
+            .having((s) => s.message, 'message', 'Пользователь не найден'),
+      ],
+    );
+  });
+
+  group('AuthBloc - AuthResetPasswordRequested', () {
+    blocTest<AuthBloc, AuthState>(
+      'эмитит [AuthLoading, AuthPasswordReset] при успешном сбросе пароля',
+      build: () {
+        when(() => mockAuthService.resetPassword(any()))
+            .thenAnswer((_) async {});
+        return createBloc();
+      },
+      act: (bloc) => bloc.add(const AuthResetPasswordRequested(
+        email: 'test@example.com',
+        code: '123456',
+        newPassword: 'NewPassword123!',
+      )),
+      expect: () => [
+        isA<AuthLoading>(),
+        isA<AuthPasswordReset>(),
+      ],
+    );
+
+    blocTest<AuthBloc, AuthState>(
+      'эмитит [AuthLoading, AuthError] при неверном коде',
+      build: () {
+        when(() => mockAuthService.resetPassword(any()))
+            .thenThrow(const AuthException('Неверный код подтверждения'));
+        return createBloc();
+      },
+      act: (bloc) => bloc.add(const AuthResetPasswordRequested(
+        email: 'test@example.com',
+        code: '000000',
+        newPassword: 'NewPassword123!',
+      )),
+      expect: () => [
+        isA<AuthLoading>(),
+        isA<AuthError>()
+            .having((s) => s.message, 'message', 'Неверный код подтверждения'),
       ],
     );
   });
