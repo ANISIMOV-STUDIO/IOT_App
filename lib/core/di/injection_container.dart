@@ -289,6 +289,13 @@ Future<void> init() async {
   sl.registerLazySingleton(() => SetPreset(sl()));
   sl.registerLazySingleton(() => SetAirflow(sl()));
 
+  // Analytics Use Cases
+  sl.registerLazySingleton(() => GetTodayStats(sl()));
+  sl.registerLazySingleton(() => GetDevicePowerUsage(sl()));
+  sl.registerLazySingleton(() => WatchEnergyStats(sl()));
+  sl.registerLazySingleton(() => GetGraphData(sl()));
+  sl.registerLazySingleton(() => WatchGraphData(sl()));
+
   //! Presentation - BLoCs
 
   // DevicesBloc (Управление списком HVAC устройств)
@@ -327,8 +334,11 @@ Future<void> init() async {
   // AnalyticsBloc (Статистика и графики)
   sl.registerLazySingleton(
     () => AnalyticsBloc(
-      energyRepository: sl(),
-      graphDataRepository: sl(),
+      getTodayStats: sl(),
+      getDevicePowerUsage: sl(),
+      watchEnergyStats: sl(),
+      getGraphData: sl(),
+      watchGraphData: sl(),
     ),
   );
 

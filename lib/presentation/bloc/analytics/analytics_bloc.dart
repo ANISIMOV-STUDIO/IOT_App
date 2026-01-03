@@ -12,25 +12,33 @@ import 'package:equatable/equatable.dart';
 
 import '../../../domain/entities/energy_stats.dart';
 import '../../../domain/entities/graph_data.dart';
-import '../../../domain/repositories/energy_repository.dart';
-import '../../../domain/repositories/graph_data_repository.dart';
+import '../../../domain/usecases/usecases.dart';
 
 part 'analytics_event.dart';
 part 'analytics_state.dart';
 
 /// BLoC для аналитики и статистики
 class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
-  final EnergyRepository _energyRepository;
-  final GraphDataRepository _graphDataRepository;
+  final GetTodayStats _getTodayStats;
+  final GetDevicePowerUsage _getDevicePowerUsage;
+  final WatchEnergyStats _watchEnergyStats;
+  final GetGraphData _getGraphData;
+  final WatchGraphData _watchGraphData;
 
   StreamSubscription<EnergyStats>? _energySubscription;
   StreamSubscription<List<GraphDataPoint>>? _graphDataSubscription;
 
   AnalyticsBloc({
-    required EnergyRepository energyRepository,
-    required GraphDataRepository graphDataRepository,
-  })  : _energyRepository = energyRepository,
-        _graphDataRepository = graphDataRepository,
+    required GetTodayStats getTodayStats,
+    required GetDevicePowerUsage getDevicePowerUsage,
+    required WatchEnergyStats watchEnergyStats,
+    required GetGraphData getGraphData,
+    required WatchGraphData watchGraphData,
+  })  : _getTodayStats = getTodayStats,
+        _getDevicePowerUsage = getDevicePowerUsage,
+        _watchEnergyStats = watchEnergyStats,
+        _getGraphData = getGraphData,
+        _watchGraphData = watchGraphData,
         super(const AnalyticsState()) {
     // События жизненного цикла
     on<AnalyticsSubscriptionRequested>(_onSubscriptionRequested);
@@ -53,10 +61,10 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
     emit(state.copyWith(status: AnalyticsStatus.loading));
 
     try {
-      // Загружаем статистику энергопотребления
+      // Загружаем статистику энергопотребления через Use Cases
       final results = await Future.wait([
-        _energyRepository.getTodayStats(),
-        _energyRepository.getDevicePowerUsage(),
+        _getTodayStats(),
+        _getDevicePowerUsage(),
       ]);
 
       emit(state.copyWith(
@@ -65,9 +73,9 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
         powerUsage: results[1] as List<DeviceEnergyUsage>,
       ));
 
-      // Подписываемся на обновления
+      // Подписываемся на обновления через Use Case
       await _energySubscription?.cancel();
-      _energySubscription = _energyRepository.watchStats().listen(
+      _energySubscription = _watchEnergyStats().listen(
         (stats) => add(AnalyticsEnergyStatsUpdated(stats)),
       );
     } catch (e) {
@@ -98,9 +106,10 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
 
     // Переподписываемся на графики для нового устройства
     await _graphDataSubscription?.cancel();
-    _graphDataSubscription = _graphDataRepository
-        .watchGraphData(deviceId: event.deviceId, metric: state.selectedMetric)
-        .listen((data) => add(AnalyticsGraphDataUpdated(data)));
+    _graphDataSubscription = _watchGraphData(WatchGraphDataParams(
+      deviceId: event.deviceId,
+      metric: state.selectedMetric,
+    )).listen((data) => add(AnalyticsGraphDataUpdated(data)));
   }
 
   /// Обновление статистики энергопотребления из стрима
@@ -140,12 +149,12 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
     Emitter<AnalyticsState> emit,
   ) async {
     try {
-      final data = await _graphDataRepository.getGraphData(
+      final data = await _getGraphData(GetGraphDataParams(
         deviceId: deviceId,
         metric: metric,
         from: DateTime.now().subtract(const Duration(days: 7)),
         to: DateTime.now(),
-      );
+      ));
       emit(state.copyWith(graphData: data));
     } catch (e) {
       emit(state.copyWith(errorMessage: 'Ошибка загрузки графика: $e'));

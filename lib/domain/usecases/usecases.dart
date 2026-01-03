@@ -33,3 +33,10 @@ export 'device/delete_device.dart';
 export 'device/rename_device.dart';
 export 'device/get_device_full_state.dart';
 export 'device/watch_hvac_devices.dart';
+
+// Analytics Use Cases
+export 'analytics/get_today_stats.dart';
+export 'analytics/get_device_power_usage.dart';
+export 'analytics/watch_energy_stats.dart';
+export 'analytics/get_graph_data.dart';
+export 'analytics/watch_graph_data.dart';

@@ -9,18 +9,26 @@ import 'package:mocktail/mocktail.dart';
 
 import 'package:hvac_control/domain/entities/energy_stats.dart';
 import 'package:hvac_control/domain/entities/graph_data.dart';
-import 'package:hvac_control/domain/repositories/energy_repository.dart';
-import 'package:hvac_control/domain/repositories/graph_data_repository.dart';
+import 'package:hvac_control/domain/usecases/usecases.dart';
 import 'package:hvac_control/presentation/bloc/analytics/analytics_bloc.dart';
 
-// Mock classes
-class MockEnergyRepository extends Mock implements EnergyRepository {}
+// Mock classes for Use Cases
+class MockGetTodayStats extends Mock implements GetTodayStats {}
 
-class MockGraphDataRepository extends Mock implements GraphDataRepository {}
+class MockGetDevicePowerUsage extends Mock implements GetDevicePowerUsage {}
+
+class MockWatchEnergyStats extends Mock implements WatchEnergyStats {}
+
+class MockGetGraphData extends Mock implements GetGraphData {}
+
+class MockWatchGraphData extends Mock implements WatchGraphData {}
 
 void main() {
-  late MockEnergyRepository mockEnergyRepository;
-  late MockGraphDataRepository mockGraphDataRepository;
+  late MockGetTodayStats mockGetTodayStats;
+  late MockGetDevicePowerUsage mockGetDevicePowerUsage;
+  late MockWatchEnergyStats mockWatchEnergyStats;
+  late MockGetGraphData mockGetGraphData;
+  late MockWatchGraphData mockWatchGraphData;
 
   // Test data - using late final to avoid const issues with DateTime
   late EnergyStats testEnergyStats;
@@ -32,8 +40,11 @@ void main() {
   ];
 
   setUp(() {
-    mockEnergyRepository = MockEnergyRepository();
-    mockGraphDataRepository = MockGraphDataRepository();
+    mockGetTodayStats = MockGetTodayStats();
+    mockGetDevicePowerUsage = MockGetDevicePowerUsage();
+    mockWatchEnergyStats = MockWatchEnergyStats();
+    mockGetGraphData = MockGetGraphData();
+    mockWatchGraphData = MockWatchGraphData();
 
     testEnergyStats = EnergyStats(
       totalKwh: 15.5,
@@ -60,20 +71,33 @@ void main() {
   });
 
   setUpAll(() {
-    registerFallbackValue(GraphMetric.temperature);
-    registerFallbackValue(DateTime.now());
+    registerFallbackValue(GetGraphDataParams(
+      deviceId: '',
+      metric: GraphMetric.temperature,
+      from: DateTime(2024, 1, 1),
+      to: DateTime(2024, 1, 2),
+    ));
+    registerFallbackValue(const WatchGraphDataParams(
+      deviceId: '',
+      metric: GraphMetric.temperature,
+    ));
   });
+
+  AnalyticsBloc createBloc() => AnalyticsBloc(
+        getTodayStats: mockGetTodayStats,
+        getDevicePowerUsage: mockGetDevicePowerUsage,
+        watchEnergyStats: mockWatchEnergyStats,
+        getGraphData: mockGetGraphData,
+        watchGraphData: mockWatchGraphData,
+      );
 
   group('AnalyticsBloc', () {
     group('Инициализация', () {
       test('начальное состояние - AnalyticsState с initial статусом', () {
-        when(() => mockEnergyRepository.watchStats())
+        when(() => mockWatchEnergyStats())
             .thenAnswer((_) => const Stream.empty());
 
-        final bloc = AnalyticsBloc(
-          energyRepository: mockEnergyRepository,
-          graphDataRepository: mockGraphDataRepository,
-        );
+        final bloc = createBloc();
 
         expect(bloc.state.status, AnalyticsStatus.initial);
         expect(bloc.state.energyStats, isNull);
@@ -94,16 +118,13 @@ void main() {
           );
         },
         build: () {
-          when(() => mockEnergyRepository.getTodayStats())
+          when(() => mockGetTodayStats())
               .thenAnswer((_) async => testEnergyStats);
-          when(() => mockEnergyRepository.getDevicePowerUsage())
+          when(() => mockGetDevicePowerUsage())
               .thenAnswer((_) async => testPowerUsage);
-          when(() => mockEnergyRepository.watchStats())
+          when(() => mockWatchEnergyStats())
               .thenAnswer((_) => const Stream.empty());
-          return AnalyticsBloc(
-            energyRepository: mockEnergyRepository,
-            graphDataRepository: mockGraphDataRepository,
-          );
+          return createBloc();
         },
         act: (bloc) => bloc.add(const AnalyticsSubscriptionRequested()),
         expect: () => [
@@ -114,23 +135,20 @@ void main() {
               .having((s) => s.powerUsage.length, 'powerUsage length', 2),
         ],
         verify: (_) {
-          verify(() => mockEnergyRepository.getTodayStats()).called(1);
-          verify(() => mockEnergyRepository.getDevicePowerUsage()).called(1);
-          verify(() => mockEnergyRepository.watchStats()).called(1);
+          verify(() => mockGetTodayStats()).called(1);
+          verify(() => mockGetDevicePowerUsage()).called(1);
+          verify(() => mockWatchEnergyStats()).called(1);
         },
       );
 
       blocTest<AnalyticsBloc, AnalyticsState>(
         'эмитит [loading, failure] при ошибке',
         build: () {
-          when(() => mockEnergyRepository.getTodayStats())
+          when(() => mockGetTodayStats())
               .thenThrow(Exception('Network error'));
-          when(() => mockEnergyRepository.getDevicePowerUsage())
+          when(() => mockGetDevicePowerUsage())
               .thenAnswer((_) async => []);
-          return AnalyticsBloc(
-            energyRepository: mockEnergyRepository,
-            graphDataRepository: mockGraphDataRepository,
-          );
+          return createBloc();
         },
         act: (bloc) => bloc.add(const AnalyticsSubscriptionRequested()),
         expect: () => [
@@ -146,20 +164,11 @@ void main() {
       blocTest<AnalyticsBloc, AnalyticsState>(
         'загружает график для выбранного устройства',
         build: () {
-          when(() => mockGraphDataRepository.getGraphData(
-                deviceId: any(named: 'deviceId'),
-                metric: any(named: 'metric'),
-                from: any(named: 'from'),
-                to: any(named: 'to'),
-              )).thenAnswer((_) async => testGraphData);
-          when(() => mockGraphDataRepository.watchGraphData(
-                deviceId: any(named: 'deviceId'),
-                metric: any(named: 'metric'),
-              )).thenAnswer((_) => const Stream.empty());
-          return AnalyticsBloc(
-            energyRepository: mockEnergyRepository,
-            graphDataRepository: mockGraphDataRepository,
-          );
+          when(() => mockGetGraphData(any()))
+              .thenAnswer((_) async => testGraphData);
+          when(() => mockWatchGraphData(any()))
+              .thenAnswer((_) => const Stream.empty());
+          return createBloc();
         },
         seed: () => const AnalyticsState(status: AnalyticsStatus.success),
         act: (bloc) => bloc.add(const AnalyticsDeviceChanged('device-1')),
@@ -181,23 +190,17 @@ void main() {
       blocTest<AnalyticsBloc, AnalyticsState>(
         'обновляет метрику и перезагружает график',
         build: () {
-          when(() => mockGraphDataRepository.getGraphData(
-                deviceId: any(named: 'deviceId'),
-                metric: any(named: 'metric'),
-                from: any(named: 'from'),
-                to: any(named: 'to'),
-              )).thenAnswer((_) async => testGraphData);
-          return AnalyticsBloc(
-            energyRepository: mockEnergyRepository,
-            graphDataRepository: mockGraphDataRepository,
-          );
+          when(() => mockGetGraphData(any()))
+              .thenAnswer((_) async => testGraphData);
+          return createBloc();
         },
         seed: () => const AnalyticsState(
           status: AnalyticsStatus.success,
           currentDeviceId: 'device-1',
           selectedMetric: GraphMetric.temperature,
         ),
-        act: (bloc) => bloc.add(const AnalyticsGraphMetricChanged(GraphMetric.humidity)),
+        act: (bloc) =>
+            bloc.add(const AnalyticsGraphMetricChanged(GraphMetric.humidity)),
         expect: () => [
           const AnalyticsState(
             status: AnalyticsStatus.success,
@@ -224,10 +227,7 @@ void main() {
             date: DateTime(2024, 1, 15),
           );
         },
-        build: () => AnalyticsBloc(
-          energyRepository: mockEnergyRepository,
-          graphDataRepository: mockGraphDataRepository,
-        ),
+        build: () => createBloc(),
         seed: () => AnalyticsState(
           status: AnalyticsStatus.success,
           energyStats: EnergyStats(
@@ -248,12 +248,10 @@ void main() {
     group('AnalyticsGraphDataUpdated', () {
       blocTest<AnalyticsBloc, AnalyticsState>(
         'обновляет данные графика из стрима',
-        build: () => AnalyticsBloc(
-          energyRepository: mockEnergyRepository,
-          graphDataRepository: mockGraphDataRepository,
-        ),
+        build: () => createBloc(),
         seed: () => const AnalyticsState(status: AnalyticsStatus.success),
-        act: (bloc) => bloc.add(const AnalyticsGraphDataUpdated(testGraphData)),
+        act: (bloc) =>
+            bloc.add(const AnalyticsGraphDataUpdated(testGraphData)),
         expect: () => [
           const AnalyticsState(
             status: AnalyticsStatus.success,
