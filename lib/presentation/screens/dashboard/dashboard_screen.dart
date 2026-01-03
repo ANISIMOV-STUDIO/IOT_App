@@ -21,9 +21,9 @@ import '../../widgets/breez/breez.dart';
 import '../../bloc/auth/auth_bloc.dart';
 import '../../bloc/auth/auth_event.dart';
 import '../../bloc/auth/auth_state.dart';
-import '../../bloc/dashboard/dashboard_bloc.dart';
 import '../../bloc/devices/devices_bloc.dart';
 import '../../bloc/climate/climate_bloc.dart';
+import '../../bloc/connectivity/connectivity_bloc.dart';
 import '../../../domain/entities/hvac_device.dart';
 import '../../../domain/entities/climate.dart';
 import '../../../domain/entities/user.dart';
@@ -309,12 +309,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
           // Используем ClimateBloc для климата текущего устройства
           return BlocBuilder<ClimateBloc, ClimateControlState>(
             builder: (context, climateState) {
-              // Используем DashboardBloc только для connectivity
-              return BlocBuilder<DashboardBloc, DashboardState>(
+              // Используем ConnectivityBloc для мониторинга соединения
+              return BlocBuilder<ConnectivityBloc, ConnectivityState>(
                 buildWhen: (previous, current) =>
-                    previous.showConnectionBanner != current.showConnectionBanner ||
-                    previous.connectionMessage != current.connectionMessage,
-                builder: (context, dashboardState) {
+                    previous.showBanner != current.showBanner ||
+                    previous.message != current.message,
+                builder: (context, connectivityState) {
                   // Преобразуем HvacDevice в UnitState для UI
                   final units = devicesState.devices
                       .map((device) {
@@ -345,8 +345,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         children: [
                           // Баннер о проблемах с соединением
                           AnimatedOfflineBanner(
-                            isVisible: dashboardState.showConnectionBanner,
-                            message: dashboardState.connectionMessage,
+                            isVisible: connectivityState.showBanner,
+                            message: connectivityState.message,
                           ),
                           // Main content
                           Expanded(

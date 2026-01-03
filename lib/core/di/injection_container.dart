@@ -35,11 +35,12 @@ import '../../domain/repositories/notification_repository.dart';
 import '../../domain/repositories/graph_data_repository.dart';
 
 // Presentation - BLoCs
-import '../../presentation/bloc/dashboard/dashboard_bloc.dart';
 import '../../presentation/bloc/auth/auth_bloc.dart';
 import '../../presentation/bloc/devices/devices_bloc.dart';
 import '../../presentation/bloc/climate/climate_bloc.dart';
 import '../../presentation/bloc/notifications/notifications_bloc.dart';
+import '../../presentation/bloc/analytics/analytics_bloc.dart';
+import '../../presentation/bloc/connectivity/connectivity_bloc.dart';
 
 // Data - Mock репозитории (для разработки/тестирования)
 import '../../data/repositories/mock_climate_repository.dart';
@@ -264,19 +265,7 @@ Future<void> init() async {
     );
   }
 
-  // Dashboard BLoC (Главный экран с виджетами) — LEGACY, будет удалён после миграции
-  sl.registerLazySingleton(
-    () => DashboardBloc(
-      deviceRepository: sl(),
-      climateRepository: sl(),
-      energyRepository: sl(),
-      occupantRepository: sl(),
-      scheduleRepository: sl(),
-      notificationRepository: sl(),
-      graphDataRepository: sl(),
-      connectivityService: sl(),
-    ),
-  );
+  //! Presentation - BLoCs
 
   // DevicesBloc (Управление списком HVAC устройств)
   sl.registerLazySingleton(
@@ -291,5 +280,18 @@ Future<void> init() async {
   // NotificationsBloc (Уведомления устройств)
   sl.registerLazySingleton(
     () => NotificationsBloc(notificationRepository: sl()),
+  );
+
+  // AnalyticsBloc (Статистика и графики)
+  sl.registerLazySingleton(
+    () => AnalyticsBloc(
+      energyRepository: sl(),
+      graphDataRepository: sl(),
+    ),
+  );
+
+  // ConnectivityBloc (Мониторинг сетевого соединения)
+  sl.registerLazySingleton(
+    () => ConnectivityBloc(connectivityService: sl()),
   );
 }

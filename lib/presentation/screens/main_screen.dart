@@ -6,10 +6,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/navigation/app_router.dart';
-import '../bloc/dashboard/dashboard_bloc.dart';
 import '../bloc/devices/devices_bloc.dart';
 import '../bloc/climate/climate_bloc.dart';
 import '../bloc/notifications/notifications_bloc.dart';
+import '../bloc/analytics/analytics_bloc.dart';
+import '../bloc/connectivity/connectivity_bloc.dart';
 
 import '../widgets/breez/navigation_bar.dart';
 import 'dashboard/dashboard_screen.dart';
@@ -36,14 +37,16 @@ class _MainScreenState extends State<MainScreen> {
     // didChangeDependencies вызывается после initState и имеет доступ к context
     if (!_blocsStarted) {
       _blocsStarted = true;
-      // DashboardBloc (LEGACY — будет удалён после полной миграции)
-      context.read<DashboardBloc>().add(const DashboardStarted());
       // DevicesBloc — загрузка списка устройств
       context.read<DevicesBloc>().add(const DevicesSubscriptionRequested());
       // ClimateBloc — загрузка состояния климата
       context.read<ClimateBloc>().add(const ClimateSubscriptionRequested());
       // NotificationsBloc — загрузка уведомлений
       context.read<NotificationsBloc>().add(const NotificationsSubscriptionRequested());
+      // AnalyticsBloc — статистика и графики
+      context.read<AnalyticsBloc>().add(const AnalyticsSubscriptionRequested());
+      // ConnectivityBloc — мониторинг соединения
+      context.read<ConnectivityBloc>().add(const ConnectivitySubscriptionRequested());
     }
   }
 

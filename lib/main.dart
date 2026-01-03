@@ -16,12 +16,13 @@ import 'core/services/theme_service.dart';
 import 'core/services/toast_service.dart';
 import 'core/navigation/app_router.dart';
 import 'core/logging/talker_config.dart';
-import 'presentation/bloc/dashboard/dashboard_bloc.dart';
 import 'presentation/bloc/auth/auth_bloc.dart';
 import 'presentation/bloc/auth/auth_event.dart';
 import 'presentation/bloc/devices/devices_bloc.dart';
 import 'presentation/bloc/climate/climate_bloc.dart';
 import 'presentation/bloc/notifications/notifications_bloc.dart';
+import 'presentation/bloc/analytics/analytics_bloc.dart';
+import 'presentation/bloc/connectivity/connectivity_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -68,10 +69,6 @@ class _HvacControlAppState extends State<HvacControlApp> {
       providers: [
         // AuthBloc уже создан в initState - используем .value
         BlocProvider.value(value: _authBloc),
-        // DashboardBloc предоставляется глобально (LEGACY — будет удалён после миграции)
-        BlocProvider(
-          create: (context) => di.sl<DashboardBloc>(),
-        ),
         // DevicesBloc — управление списком HVAC устройств
         BlocProvider(
           create: (context) => di.sl<DevicesBloc>(),
@@ -83,6 +80,14 @@ class _HvacControlAppState extends State<HvacControlApp> {
         // NotificationsBloc — уведомления устройств
         BlocProvider(
           create: (context) => di.sl<NotificationsBloc>(),
+        ),
+        // AnalyticsBloc — статистика и графики
+        BlocProvider(
+          create: (context) => di.sl<AnalyticsBloc>(),
+        ),
+        // ConnectivityBloc — мониторинг сетевого соединения
+        BlocProvider(
+          create: (context) => di.sl<ConnectivityBloc>(),
         ),
       ],
       child: ListenableBuilder(

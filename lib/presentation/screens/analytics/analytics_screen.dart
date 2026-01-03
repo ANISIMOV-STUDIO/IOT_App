@@ -8,7 +8,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_font_sizes.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/spacing.dart';
-import '../../bloc/dashboard/dashboard_bloc.dart';
+import '../../bloc/analytics/analytics_bloc.dart';
 import '../../widgets/breez/breez_card.dart';
 import '../../widgets/breez/operation_graph.dart';
 import '../../widgets/loading/skeleton.dart';
@@ -27,7 +27,7 @@ class AnalyticsScreen extends StatelessWidget {
         child: RefreshIndicator(
           color: AppColors.accent,
           onRefresh: () async {
-            context.read<DashboardBloc>().add(const DashboardRefreshed());
+            context.read<AnalyticsBloc>().add(const AnalyticsRefreshRequested());
             await Future.delayed(const Duration(milliseconds: 500));
           },
           child: CustomScrollView(
@@ -51,11 +51,11 @@ class AnalyticsScreen extends StatelessWidget {
             SliverPadding(
               padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
               sliver: SliverToBoxAdapter(
-                child: BlocBuilder<DashboardBloc, DashboardState>(
+                child: BlocBuilder<AnalyticsBloc, AnalyticsState>(
                   builder: (context, state) {
                     // Показываем skeleton при загрузке
-                    if (state.status == DashboardStatus.loading ||
-                        state.status == DashboardStatus.initial) {
+                    if (state.status == AnalyticsStatus.loading ||
+                        state.status == AnalyticsStatus.initial) {
                       return LayoutBuilder(
                         builder: (context, constraints) {
                           final width = constraints.maxWidth;
@@ -170,7 +170,7 @@ class AnalyticsScreen extends StatelessWidget {
             SliverPadding(
               padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
               sliver: SliverToBoxAdapter(
-                child: BlocBuilder<DashboardBloc, DashboardState>(
+                child: BlocBuilder<AnalyticsBloc, AnalyticsState>(
                   builder: (context, state) {
                     return SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
@@ -181,7 +181,7 @@ class AnalyticsScreen extends StatelessWidget {
                             'Температура',
                             Icons.thermostat,
                             GraphMetric.temperature,
-                            state.selectedGraphMetric,
+                            state.selectedMetric,
                           ),
                           const SizedBox(width: AppSpacing.sm),
                           _buildMetricChip(
@@ -189,7 +189,7 @@ class AnalyticsScreen extends StatelessWidget {
                             'Влажность',
                             Icons.water_drop,
                             GraphMetric.humidity,
-                            state.selectedGraphMetric,
+                            state.selectedMetric,
                           ),
                           const SizedBox(width: AppSpacing.sm),
                           _buildMetricChip(
@@ -197,7 +197,7 @@ class AnalyticsScreen extends StatelessWidget {
                             'Поток воздуха',
                             Icons.bolt,
                             GraphMetric.airflow,
-                            state.selectedGraphMetric,
+                            state.selectedMetric,
                           ),
                         ],
                       ),
@@ -220,11 +220,11 @@ class AnalyticsScreen extends StatelessWidget {
                 AppSpacing.lg,
               ),
               sliver: SliverToBoxAdapter(
-                child: BlocBuilder<DashboardBloc, DashboardState>(
+                child: BlocBuilder<AnalyticsBloc, AnalyticsState>(
                   builder: (context, state) {
                     // Показываем skeleton графика при загрузке
-                    if (state.status == DashboardStatus.loading ||
-                        state.status == DashboardStatus.initial) {
+                    if (state.status == AnalyticsStatus.loading ||
+                        state.status == AnalyticsStatus.initial) {
                       return const SkeletonGraph(height: 300);
                     }
 
@@ -309,7 +309,7 @@ class AnalyticsScreen extends StatelessWidget {
 
     return BreezButton(
       onTap: () {
-        context.read<DashboardBloc>().add(GraphMetricChanged(metric));
+        context.read<AnalyticsBloc>().add(AnalyticsGraphMetricChanged(metric));
       },
       backgroundColor: isSelected
           ? AppColors.accent.withValues(alpha: 0.15)
