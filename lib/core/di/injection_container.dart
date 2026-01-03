@@ -282,7 +282,6 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetCurrentClimateState(sl()));
   sl.registerLazySingleton(() => GetDeviceState(sl()));
   sl.registerLazySingleton(() => WatchCurrentClimate(sl()));
-  sl.registerLazySingleton(() => WatchClimate(sl()));
   sl.registerLazySingleton(() => SetDevicePower(sl()));
   sl.registerLazySingleton(() => SetTemperature(sl()));
   sl.registerLazySingleton(() => SetHumidity(sl()));
