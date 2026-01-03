@@ -15,20 +15,47 @@ import 'package:equatable/equatable.dart';
 import '../../../domain/entities/climate.dart';
 import '../../../domain/entities/device_full_state.dart';
 import '../../../domain/entities/alarm_info.dart';
-import '../../../domain/repositories/climate_repository.dart';
+import '../../../domain/usecases/usecases.dart';
 
 part 'climate_event.dart';
 part 'climate_state.dart';
 
 /// BLoC для управления климатом текущего устройства
 class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
-  final ClimateRepository _climateRepository;
+  final GetCurrentClimateState _getCurrentClimateState;
+  final GetDeviceState _getDeviceState;
+  final GetDeviceFullState _getDeviceFullState;
+  final WatchCurrentClimate _watchCurrentClimate;
+  final SetDevicePower _setDevicePower;
+  final SetTemperature _setTemperature;
+  final SetHumidity _setHumidity;
+  final SetClimateMode _setClimateMode;
+  final SetPreset _setPreset;
+  final SetAirflow _setAirflow;
 
   StreamSubscription<ClimateState>? _climateSubscription;
 
   ClimateBloc({
-    required ClimateRepository climateRepository,
-  })  : _climateRepository = climateRepository,
+    required GetCurrentClimateState getCurrentClimateState,
+    required GetDeviceState getDeviceState,
+    required GetDeviceFullState getDeviceFullState,
+    required WatchCurrentClimate watchCurrentClimate,
+    required SetDevicePower setDevicePower,
+    required SetTemperature setTemperature,
+    required SetHumidity setHumidity,
+    required SetClimateMode setClimateMode,
+    required SetPreset setPreset,
+    required SetAirflow setAirflow,
+  })  : _getCurrentClimateState = getCurrentClimateState,
+        _getDeviceState = getDeviceState,
+        _getDeviceFullState = getDeviceFullState,
+        _watchCurrentClimate = watchCurrentClimate,
+        _setDevicePower = setDevicePower,
+        _setTemperature = setTemperature,
+        _setHumidity = setHumidity,
+        _setClimateMode = setClimateMode,
+        _setPreset = setPreset,
+        _setAirflow = setAirflow,
         super(const ClimateControlState()) {
     // События жизненного цикла
     on<ClimateSubscriptionRequested>(_onSubscriptionRequested);
@@ -56,17 +83,17 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     emit(state.copyWith(status: ClimateControlStatus.loading));
 
     try {
-      // Загружаем текущее состояние
-      final climate = await _climateRepository.getCurrentState();
+      // Загружаем текущее состояние через Use Case
+      final climate = await _getCurrentClimateState();
 
       emit(state.copyWith(
         status: ClimateControlStatus.success,
         climate: climate,
       ));
 
-      // Подписываемся на обновления
+      // Подписываемся на обновления через Use Case
       await _climateSubscription?.cancel();
-      _climateSubscription = _climateRepository.watchClimate().listen(
+      _climateSubscription = _watchCurrentClimate().listen(
         (climate) => add(ClimateStateUpdated(climate)),
       );
     } catch (e) {
@@ -85,13 +112,17 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     emit(state.copyWith(status: ClimateControlStatus.loading));
 
     try {
-      // Загружаем состояние выбранного устройства
-      final climate = await _climateRepository.getDeviceState(event.deviceId);
+      // Загружаем состояние выбранного устройства через Use Case
+      final climate = await _getDeviceState(
+        GetDeviceStateParams(deviceId: event.deviceId),
+      );
 
       // Загружаем полное состояние (с авариями)
       DeviceFullState? fullState;
       try {
-        fullState = await _climateRepository.getDeviceFullState(event.deviceId);
+        fullState = await _getDeviceFullState(
+          GetDeviceFullStateParams(deviceId: event.deviceId),
+        );
       } catch (_) {
         // Аварии не критичны
       }
@@ -131,7 +162,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     Emitter<ClimateControlState> emit,
   ) async {
     try {
-      await _climateRepository.setPower(event.isOn);
+      await _setDevicePower(SetDevicePowerParams(isOn: event.isOn));
     } catch (e) {
       emit(state.copyWith(errorMessage: 'Ошибка переключения питания: $e'));
     }
@@ -143,7 +174,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     Emitter<ClimateControlState> emit,
   ) async {
     try {
-      await _climateRepository.setTargetTemperature(event.temperature);
+      await _setTemperature(SetTemperatureParams(temperature: event.temperature));
     } catch (e) {
       emit(state.copyWith(errorMessage: 'Ошибка установки температуры: $e'));
     }
@@ -155,7 +186,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     Emitter<ClimateControlState> emit,
   ) async {
     try {
-      await _climateRepository.setHumidity(event.humidity);
+      await _setHumidity(SetHumidityParams(humidity: event.humidity));
     } catch (e) {
       emit(state.copyWith(errorMessage: 'Ошибка установки влажности: $e'));
     }
@@ -167,7 +198,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     Emitter<ClimateControlState> emit,
   ) async {
     try {
-      await _climateRepository.setMode(event.mode);
+      await _setClimateMode(SetClimateModeParams(mode: event.mode));
     } catch (e) {
       emit(state.copyWith(errorMessage: 'Ошибка смены режима: $e'));
     }
@@ -179,7 +210,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     Emitter<ClimateControlState> emit,
   ) async {
     try {
-      await _climateRepository.setPreset(event.preset);
+      await _setPreset(SetPresetParams(preset: event.preset));
     } catch (e) {
       emit(state.copyWith(errorMessage: 'Ошибка смены пресета: $e'));
     }
@@ -191,7 +222,10 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     Emitter<ClimateControlState> emit,
   ) async {
     try {
-      await _climateRepository.setSupplyAirflow(event.value);
+      await _setAirflow(SetAirflowParams(
+        type: AirflowType.supply,
+        value: event.value,
+      ));
     } catch (e) {
       emit(state.copyWith(errorMessage: 'Ошибка настройки притока: $e'));
     }
@@ -203,7 +237,10 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     Emitter<ClimateControlState> emit,
   ) async {
     try {
-      await _climateRepository.setExhaustAirflow(event.value);
+      await _setAirflow(SetAirflowParams(
+        type: AirflowType.exhaust,
+        value: event.value,
+      ));
     } catch (e) {
       emit(state.copyWith(errorMessage: 'Ошибка настройки вытяжки: $e'));
     }

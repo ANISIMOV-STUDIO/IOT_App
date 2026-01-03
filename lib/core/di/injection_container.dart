@@ -42,6 +42,9 @@ import '../../presentation/bloc/notifications/notifications_bloc.dart';
 import '../../presentation/bloc/analytics/analytics_bloc.dart';
 import '../../presentation/bloc/connectivity/connectivity_bloc.dart';
 
+// Domain - Use Cases
+import '../../domain/usecases/usecases.dart';
+
 // Data - Mock репозитории (для разработки/тестирования)
 import '../../data/repositories/mock_climate_repository.dart';
 import '../../data/repositories/mock_energy_repository.dart';
@@ -265,16 +268,56 @@ Future<void> init() async {
     );
   }
 
+  //! Domain - Use Cases
+
+  // Device Use Cases
+  sl.registerLazySingleton(() => GetAllHvacDevices(sl()));
+  sl.registerLazySingleton(() => WatchHvacDevices(sl()));
+  sl.registerLazySingleton(() => RegisterDevice(sl()));
+  sl.registerLazySingleton(() => DeleteDevice(sl()));
+  sl.registerLazySingleton(() => RenameDevice(sl()));
+  sl.registerLazySingleton(() => GetDeviceFullState(sl()));
+
+  // Climate Use Cases
+  sl.registerLazySingleton(() => GetCurrentClimateState(sl()));
+  sl.registerLazySingleton(() => GetDeviceState(sl()));
+  sl.registerLazySingleton(() => WatchCurrentClimate(sl()));
+  sl.registerLazySingleton(() => WatchClimate(sl()));
+  sl.registerLazySingleton(() => SetDevicePower(sl()));
+  sl.registerLazySingleton(() => SetTemperature(sl()));
+  sl.registerLazySingleton(() => SetHumidity(sl()));
+  sl.registerLazySingleton(() => SetClimateMode(sl()));
+  sl.registerLazySingleton(() => SetPreset(sl()));
+  sl.registerLazySingleton(() => SetAirflow(sl()));
+
   //! Presentation - BLoCs
 
   // DevicesBloc (Управление списком HVAC устройств)
   sl.registerLazySingleton(
-    () => DevicesBloc(climateRepository: sl()),
+    () => DevicesBloc(
+      getAllHvacDevices: sl(),
+      watchHvacDevices: sl(),
+      registerDevice: sl(),
+      deleteDevice: sl(),
+      renameDevice: sl(),
+      setSelectedDevice: sl<ClimateRepository>().setSelectedDevice,
+    ),
   );
 
   // ClimateBloc (Управление климатом текущего устройства)
   sl.registerLazySingleton(
-    () => ClimateBloc(climateRepository: sl()),
+    () => ClimateBloc(
+      getCurrentClimateState: sl(),
+      getDeviceState: sl(),
+      getDeviceFullState: sl(),
+      watchCurrentClimate: sl(),
+      setDevicePower: sl(),
+      setTemperature: sl(),
+      setHumidity: sl(),
+      setClimateMode: sl(),
+      setPreset: sl(),
+      setAirflow: sl(),
+    ),
   );
 
   // NotificationsBloc (Уведомления устройств)

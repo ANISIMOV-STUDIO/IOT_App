@@ -8,14 +8,42 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'package:hvac_control/domain/entities/climate.dart';
-import 'package:hvac_control/domain/repositories/climate_repository.dart';
+import 'package:hvac_control/domain/usecases/usecases.dart';
 import 'package:hvac_control/presentation/bloc/climate/climate_bloc.dart';
 
-// Mock classes
-class MockClimateRepository extends Mock implements ClimateRepository {}
+// Mock classes for Use Cases
+class MockGetCurrentClimateState extends Mock
+    implements GetCurrentClimateState {}
+
+class MockGetDeviceState extends Mock implements GetDeviceState {}
+
+class MockGetDeviceFullState extends Mock implements GetDeviceFullState {}
+
+class MockWatchCurrentClimate extends Mock implements WatchCurrentClimate {}
+
+class MockSetDevicePower extends Mock implements SetDevicePower {}
+
+class MockSetTemperature extends Mock implements SetTemperature {}
+
+class MockSetHumidity extends Mock implements SetHumidity {}
+
+class MockSetClimateMode extends Mock implements SetClimateMode {}
+
+class MockSetPreset extends Mock implements SetPreset {}
+
+class MockSetAirflow extends Mock implements SetAirflow {}
 
 void main() {
-  late MockClimateRepository mockRepository;
+  late MockGetCurrentClimateState mockGetCurrentClimateState;
+  late MockGetDeviceState mockGetDeviceState;
+  late MockGetDeviceFullState mockGetDeviceFullState;
+  late MockWatchCurrentClimate mockWatchCurrentClimate;
+  late MockSetDevicePower mockSetDevicePower;
+  late MockSetTemperature mockSetTemperature;
+  late MockSetHumidity mockSetHumidity;
+  late MockSetClimateMode mockSetClimateMode;
+  late MockSetPreset mockSetPreset;
+  late MockSetAirflow mockSetAirflow;
 
   // Test data
   const testClimate = ClimateState(
@@ -40,21 +68,51 @@ void main() {
     isOn: false,
   );
 
-  setUp(() {
-    mockRepository = MockClimateRepository();
+  setUpAll(() {
+    registerFallbackValue(const GetDeviceStateParams(deviceId: ''));
+    registerFallbackValue(const GetDeviceFullStateParams(deviceId: ''));
+    registerFallbackValue(const SetDevicePowerParams(isOn: false));
+    registerFallbackValue(const SetTemperatureParams(temperature: 20.0));
+    registerFallbackValue(const SetHumidityParams(humidity: 50.0));
+    registerFallbackValue(const SetClimateModeParams(mode: ClimateMode.auto));
+    registerFallbackValue(const SetPresetParams(preset: 'auto'));
+    registerFallbackValue(
+        const SetAirflowParams(type: AirflowType.supply, value: 50.0));
   });
 
-  setUpAll(() {
-    registerFallbackValue(ClimateMode.auto);
+  setUp(() {
+    mockGetCurrentClimateState = MockGetCurrentClimateState();
+    mockGetDeviceState = MockGetDeviceState();
+    mockGetDeviceFullState = MockGetDeviceFullState();
+    mockWatchCurrentClimate = MockWatchCurrentClimate();
+    mockSetDevicePower = MockSetDevicePower();
+    mockSetTemperature = MockSetTemperature();
+    mockSetHumidity = MockSetHumidity();
+    mockSetClimateMode = MockSetClimateMode();
+    mockSetPreset = MockSetPreset();
+    mockSetAirflow = MockSetAirflow();
   });
+
+  ClimateBloc createBloc() => ClimateBloc(
+        getCurrentClimateState: mockGetCurrentClimateState,
+        getDeviceState: mockGetDeviceState,
+        getDeviceFullState: mockGetDeviceFullState,
+        watchCurrentClimate: mockWatchCurrentClimate,
+        setDevicePower: mockSetDevicePower,
+        setTemperature: mockSetTemperature,
+        setHumidity: mockSetHumidity,
+        setClimateMode: mockSetClimateMode,
+        setPreset: mockSetPreset,
+        setAirflow: mockSetAirflow,
+      );
 
   group('ClimateBloc', () {
     group('Инициализация', () {
       test('начальное состояние - ClimateControlState с initial статусом', () {
-        when(() => mockRepository.watchClimate())
+        when(() => mockWatchCurrentClimate())
             .thenAnswer((_) => const Stream.empty());
 
-        final bloc = ClimateBloc(climateRepository: mockRepository);
+        final bloc = createBloc();
 
         expect(bloc.state.status, ClimateControlStatus.initial);
         expect(bloc.state.climate, isNull);
@@ -68,11 +126,11 @@ void main() {
       blocTest<ClimateBloc, ClimateControlState>(
         'эмитит [loading, success] с климатом при успешной загрузке',
         build: () {
-          when(() => mockRepository.getCurrentState())
+          when(() => mockGetCurrentClimateState())
               .thenAnswer((_) async => testClimate);
-          when(() => mockRepository.watchClimate())
+          when(() => mockWatchCurrentClimate())
               .thenAnswer((_) => const Stream.empty());
-          return ClimateBloc(climateRepository: mockRepository);
+          return createBloc();
         },
         act: (bloc) => bloc.add(const ClimateSubscriptionRequested()),
         expect: () => [
@@ -83,17 +141,17 @@ void main() {
           ),
         ],
         verify: (_) {
-          verify(() => mockRepository.getCurrentState()).called(1);
-          verify(() => mockRepository.watchClimate()).called(1);
+          verify(() => mockGetCurrentClimateState()).called(1);
+          verify(() => mockWatchCurrentClimate()).called(1);
         },
       );
 
       blocTest<ClimateBloc, ClimateControlState>(
         'эмитит [loading, failure] при ошибке загрузки',
         build: () {
-          when(() => mockRepository.getCurrentState())
+          when(() => mockGetCurrentClimateState())
               .thenThrow(Exception('Network error'));
-          return ClimateBloc(climateRepository: mockRepository);
+          return createBloc();
         },
         act: (bloc) => bloc.add(const ClimateSubscriptionRequested()),
         expect: () => [
@@ -109,11 +167,11 @@ void main() {
       blocTest<ClimateBloc, ClimateControlState>(
         'эмитит [loading, success] при смене устройства',
         build: () {
-          when(() => mockRepository.getDeviceState(any()))
+          when(() => mockGetDeviceState(any()))
               .thenAnswer((_) async => testClimate);
-          when(() => mockRepository.getDeviceFullState(any()))
+          when(() => mockGetDeviceFullState(any()))
               .thenThrow(Exception('Not implemented')); // Опционально
-          return ClimateBloc(climateRepository: mockRepository);
+          return createBloc();
         },
         act: (bloc) => bloc.add(const ClimateDeviceChanged('device-2')),
         expect: () => [
@@ -124,23 +182,24 @@ void main() {
           ),
         ],
         verify: (_) {
-          verify(() => mockRepository.getDeviceState('device-2')).called(1);
+          verify(() => mockGetDeviceState(any())).called(1);
         },
       );
 
       blocTest<ClimateBloc, ClimateControlState>(
         'эмитит [loading, failure] при ошибке загрузки устройства',
         build: () {
-          when(() => mockRepository.getDeviceState(any()))
+          when(() => mockGetDeviceState(any()))
               .thenThrow(Exception('Device not found'));
-          return ClimateBloc(climateRepository: mockRepository);
+          return createBloc();
         },
         act: (bloc) => bloc.add(const ClimateDeviceChanged('unknown')),
         expect: () => [
           const ClimateControlState(status: ClimateControlStatus.loading),
           isA<ClimateControlState>()
               .having((s) => s.status, 'status', ClimateControlStatus.failure)
-              .having((s) => s.errorMessage, 'errorMessage', contains('Ошибка загрузки')),
+              .having(
+                  (s) => s.errorMessage, 'errorMessage', contains('Ошибка загрузки')),
         ],
       );
     });
@@ -148,7 +207,7 @@ void main() {
     group('ClimateStateUpdated', () {
       blocTest<ClimateBloc, ClimateControlState>(
         'обновляет состояние климата из стрима',
-        build: () => ClimateBloc(climateRepository: mockRepository),
+        build: () => createBloc(),
         seed: () => ClimateControlState(
           status: ClimateControlStatus.success,
           climate: testClimate,
@@ -165,11 +224,11 @@ void main() {
 
     group('ClimatePowerToggled', () {
       blocTest<ClimateBloc, ClimateControlState>(
-        'вызывает setPower на репозитории',
+        'вызывает setDevicePower use case',
         build: () {
-          when(() => mockRepository.setPower(any()))
+          when(() => mockSetDevicePower(any()))
               .thenAnswer((_) async => testClimateOff);
-          return ClimateBloc(climateRepository: mockRepository);
+          return createBloc();
         },
         seed: () => ClimateControlState(
           status: ClimateControlStatus.success,
@@ -177,16 +236,16 @@ void main() {
         ),
         act: (bloc) => bloc.add(const ClimatePowerToggled(false)),
         verify: (_) {
-          verify(() => mockRepository.setPower(false)).called(1);
+          verify(() => mockSetDevicePower(any())).called(1);
         },
       );
 
       blocTest<ClimateBloc, ClimateControlState>(
         'эмитит ошибку при неудачном переключении',
         build: () {
-          when(() => mockRepository.setPower(any()))
+          when(() => mockSetDevicePower(any()))
               .thenThrow(Exception('Device offline'));
-          return ClimateBloc(climateRepository: mockRepository);
+          return createBloc();
         },
         seed: () => ClimateControlState(
           status: ClimateControlStatus.success,
@@ -195,18 +254,19 @@ void main() {
         act: (bloc) => bloc.add(const ClimatePowerToggled(false)),
         expect: () => [
           isA<ClimateControlState>()
-              .having((s) => s.errorMessage, 'errorMessage', contains('переключения питания')),
+              .having((s) => s.errorMessage, 'errorMessage',
+                  contains('переключения питания')),
         ],
       );
     });
 
     group('ClimateTemperatureChanged', () {
       blocTest<ClimateBloc, ClimateControlState>(
-        'вызывает setTargetTemperature на репозитории',
+        'вызывает setTemperature use case',
         build: () {
-          when(() => mockRepository.setTargetTemperature(any()))
+          when(() => mockSetTemperature(any()))
               .thenAnswer((_) async => testClimate.copyWith(targetTemperature: 25.0));
-          return ClimateBloc(climateRepository: mockRepository);
+          return createBloc();
         },
         seed: () => ClimateControlState(
           status: ClimateControlStatus.success,
@@ -214,16 +274,16 @@ void main() {
         ),
         act: (bloc) => bloc.add(const ClimateTemperatureChanged(25.0)),
         verify: (_) {
-          verify(() => mockRepository.setTargetTemperature(25.0)).called(1);
+          verify(() => mockSetTemperature(any())).called(1);
         },
       );
 
       blocTest<ClimateBloc, ClimateControlState>(
         'эмитит ошибку при неудачной установке температуры',
         build: () {
-          when(() => mockRepository.setTargetTemperature(any()))
+          when(() => mockSetTemperature(any()))
               .thenThrow(Exception('Invalid value'));
-          return ClimateBloc(climateRepository: mockRepository);
+          return createBloc();
         },
         seed: () => ClimateControlState(
           status: ClimateControlStatus.success,
@@ -239,11 +299,11 @@ void main() {
 
     group('ClimateHumidityChanged', () {
       blocTest<ClimateBloc, ClimateControlState>(
-        'вызывает setHumidity на репозитории',
+        'вызывает setHumidity use case',
         build: () {
-          when(() => mockRepository.setHumidity(any()))
+          when(() => mockSetHumidity(any()))
               .thenAnswer((_) async => testClimate.copyWith(targetHumidity: 60.0));
-          return ClimateBloc(climateRepository: mockRepository);
+          return createBloc();
         },
         seed: () => ClimateControlState(
           status: ClimateControlStatus.success,
@@ -251,18 +311,18 @@ void main() {
         ),
         act: (bloc) => bloc.add(const ClimateHumidityChanged(60.0)),
         verify: (_) {
-          verify(() => mockRepository.setHumidity(60.0)).called(1);
+          verify(() => mockSetHumidity(any())).called(1);
         },
       );
     });
 
     group('ClimateModeChanged', () {
       blocTest<ClimateBloc, ClimateControlState>(
-        'вызывает setMode на репозитории',
+        'вызывает setClimateMode use case',
         build: () {
-          when(() => mockRepository.setMode(any()))
+          when(() => mockSetClimateMode(any()))
               .thenAnswer((_) async => testClimate.copyWith(mode: ClimateMode.cooling));
-          return ClimateBloc(climateRepository: mockRepository);
+          return createBloc();
         },
         seed: () => ClimateControlState(
           status: ClimateControlStatus.success,
@@ -270,18 +330,18 @@ void main() {
         ),
         act: (bloc) => bloc.add(const ClimateModeChanged(ClimateMode.cooling)),
         verify: (_) {
-          verify(() => mockRepository.setMode(ClimateMode.cooling)).called(1);
+          verify(() => mockSetClimateMode(any())).called(1);
         },
       );
     });
 
     group('ClimatePresetChanged', () {
       blocTest<ClimateBloc, ClimateControlState>(
-        'вызывает setPreset на репозитории',
+        'вызывает setPreset use case',
         build: () {
-          when(() => mockRepository.setPreset(any()))
+          when(() => mockSetPreset(any()))
               .thenAnswer((_) async => testClimate.copyWith(preset: 'turbo'));
-          return ClimateBloc(climateRepository: mockRepository);
+          return createBloc();
         },
         seed: () => ClimateControlState(
           status: ClimateControlStatus.success,
@@ -289,18 +349,18 @@ void main() {
         ),
         act: (bloc) => bloc.add(const ClimatePresetChanged('turbo')),
         verify: (_) {
-          verify(() => mockRepository.setPreset('turbo')).called(1);
+          verify(() => mockSetPreset(any())).called(1);
         },
       );
     });
 
     group('ClimateSupplyAirflowChanged', () {
       blocTest<ClimateBloc, ClimateControlState>(
-        'вызывает setSupplyAirflow на репозитории',
+        'вызывает setAirflow use case с типом supply',
         build: () {
-          when(() => mockRepository.setSupplyAirflow(any()))
+          when(() => mockSetAirflow(any()))
               .thenAnswer((_) async => testClimate.copyWith(supplyAirflow: 80.0));
-          return ClimateBloc(climateRepository: mockRepository);
+          return createBloc();
         },
         seed: () => ClimateControlState(
           status: ClimateControlStatus.success,
@@ -308,18 +368,18 @@ void main() {
         ),
         act: (bloc) => bloc.add(const ClimateSupplyAirflowChanged(80.0)),
         verify: (_) {
-          verify(() => mockRepository.setSupplyAirflow(80.0)).called(1);
+          verify(() => mockSetAirflow(any())).called(1);
         },
       );
     });
 
     group('ClimateExhaustAirflowChanged', () {
       blocTest<ClimateBloc, ClimateControlState>(
-        'вызывает setExhaustAirflow на репозитории',
+        'вызывает setAirflow use case с типом exhaust',
         build: () {
-          when(() => mockRepository.setExhaustAirflow(any()))
+          when(() => mockSetAirflow(any()))
               .thenAnswer((_) async => testClimate.copyWith(exhaustAirflow: 70.0));
-          return ClimateBloc(climateRepository: mockRepository);
+          return createBloc();
         },
         seed: () => ClimateControlState(
           status: ClimateControlStatus.success,
@@ -327,7 +387,7 @@ void main() {
         ),
         act: (bloc) => bloc.add(const ClimateExhaustAirflowChanged(70.0)),
         verify: (_) {
-          verify(() => mockRepository.setExhaustAirflow(70.0)).called(1);
+          verify(() => mockSetAirflow(any())).called(1);
         },
       );
     });

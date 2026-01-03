@@ -9,14 +9,28 @@ import 'package:mocktail/mocktail.dart';
 
 import 'package:hvac_control/core/error/api_exception.dart';
 import 'package:hvac_control/domain/entities/hvac_device.dart';
-import 'package:hvac_control/domain/repositories/climate_repository.dart';
+import 'package:hvac_control/domain/usecases/usecases.dart';
 import 'package:hvac_control/presentation/bloc/devices/devices_bloc.dart';
 
-// Mock classes
-class MockClimateRepository extends Mock implements ClimateRepository {}
+// Mock classes for Use Cases
+class MockGetAllHvacDevices extends Mock implements GetAllHvacDevices {}
+
+class MockWatchHvacDevices extends Mock implements WatchHvacDevices {}
+
+class MockRegisterDevice extends Mock implements RegisterDevice {}
+
+class MockDeleteDevice extends Mock implements DeleteDevice {}
+
+class MockRenameDevice extends Mock implements RenameDevice {}
 
 void main() {
-  late MockClimateRepository mockRepository;
+  late MockGetAllHvacDevices mockGetAllHvacDevices;
+  late MockWatchHvacDevices mockWatchHvacDevices;
+  late MockRegisterDevice mockRegisterDevice;
+  late MockDeleteDevice mockDeleteDevice;
+  late MockRenameDevice mockRenameDevice;
+  late void Function(String) mockSetSelectedDevice;
+  late List<String> selectedDeviceCalls;
 
   // Test data
   const testDevice1 = HvacDevice(
@@ -35,17 +49,38 @@ void main() {
 
   final testDevices = [testDevice1, testDevice2];
 
-  setUp(() {
-    mockRepository = MockClimateRepository();
+  setUpAll(() {
+    registerFallbackValue(const RegisterDeviceParams(macAddress: '', name: ''));
+    registerFallbackValue(const DeleteDeviceParams(deviceId: ''));
+    registerFallbackValue(const RenameDeviceParams(deviceId: '', newName: ''));
   });
+
+  setUp(() {
+    mockGetAllHvacDevices = MockGetAllHvacDevices();
+    mockWatchHvacDevices = MockWatchHvacDevices();
+    mockRegisterDevice = MockRegisterDevice();
+    mockDeleteDevice = MockDeleteDevice();
+    mockRenameDevice = MockRenameDevice();
+    selectedDeviceCalls = [];
+    mockSetSelectedDevice = (deviceId) => selectedDeviceCalls.add(deviceId);
+  });
+
+  DevicesBloc createBloc() => DevicesBloc(
+        getAllHvacDevices: mockGetAllHvacDevices,
+        watchHvacDevices: mockWatchHvacDevices,
+        registerDevice: mockRegisterDevice,
+        deleteDevice: mockDeleteDevice,
+        renameDevice: mockRenameDevice,
+        setSelectedDevice: mockSetSelectedDevice,
+      );
 
   group('DevicesBloc', () {
     group('Инициализация', () {
       test('начальное состояние - DevicesState с initial статусом', () {
-        when(() => mockRepository.watchHvacDevices())
+        when(() => mockWatchHvacDevices())
             .thenAnswer((_) => const Stream.empty());
 
-        final bloc = DevicesBloc(climateRepository: mockRepository);
+        final bloc = createBloc();
 
         expect(bloc.state.status, DevicesStatus.initial);
         expect(bloc.state.devices, isEmpty);
@@ -59,12 +94,11 @@ void main() {
       blocTest<DevicesBloc, DevicesState>(
         'эмитит [loading, success] с устройствами при успешной загрузке',
         build: () {
-          when(() => mockRepository.getAllHvacDevices())
+          when(() => mockGetAllHvacDevices())
               .thenAnswer((_) async => testDevices);
-          when(() => mockRepository.setSelectedDevice(any())).thenReturn(null);
-          when(() => mockRepository.watchHvacDevices())
+          when(() => mockWatchHvacDevices())
               .thenAnswer((_) => const Stream.empty());
-          return DevicesBloc(climateRepository: mockRepository);
+          return createBloc();
         },
         act: (bloc) => bloc.add(const DevicesSubscriptionRequested()),
         expect: () => [
@@ -76,20 +110,19 @@ void main() {
           ),
         ],
         verify: (_) {
-          verify(() => mockRepository.getAllHvacDevices()).called(1);
-          verify(() => mockRepository.setSelectedDevice(testDevice1.id)).called(1);
-          verify(() => mockRepository.watchHvacDevices()).called(1);
+          verify(() => mockGetAllHvacDevices()).called(1);
+          expect(selectedDeviceCalls, [testDevice1.id]);
+          verify(() => mockWatchHvacDevices()).called(1);
         },
       );
 
       blocTest<DevicesBloc, DevicesState>(
         'эмитит [loading, success] с пустым списком когда устройств нет',
         build: () {
-          when(() => mockRepository.getAllHvacDevices())
-              .thenAnswer((_) async => []);
-          when(() => mockRepository.watchHvacDevices())
+          when(() => mockGetAllHvacDevices()).thenAnswer((_) async => []);
+          when(() => mockWatchHvacDevices())
               .thenAnswer((_) => const Stream.empty());
-          return DevicesBloc(climateRepository: mockRepository);
+          return createBloc();
         },
         act: (bloc) => bloc.add(const DevicesSubscriptionRequested()),
         expect: () => [
@@ -101,16 +134,16 @@ void main() {
           ),
         ],
         verify: (_) {
-          verifyNever(() => mockRepository.setSelectedDevice(any()));
+          expect(selectedDeviceCalls, isEmpty);
         },
       );
 
       blocTest<DevicesBloc, DevicesState>(
         'эмитит [loading, failure] при ошибке загрузки',
         build: () {
-          when(() => mockRepository.getAllHvacDevices())
+          when(() => mockGetAllHvacDevices())
               .thenThrow(Exception('Network error'));
-          return DevicesBloc(climateRepository: mockRepository);
+          return createBloc();
         },
         act: (bloc) => bloc.add(const DevicesSubscriptionRequested()),
         expect: () => [
@@ -125,10 +158,7 @@ void main() {
     group('DevicesDeviceSelected', () {
       blocTest<DevicesBloc, DevicesState>(
         'обновляет selectedDeviceId при выборе устройства',
-        build: () {
-          when(() => mockRepository.setSelectedDevice(any())).thenReturn(null);
-          return DevicesBloc(climateRepository: mockRepository);
-        },
+        build: () => createBloc(),
         seed: () => DevicesState(
           status: DevicesStatus.success,
           devices: testDevices,
@@ -143,7 +173,7 @@ void main() {
           ),
         ],
         verify: (_) {
-          verify(() => mockRepository.setSelectedDevice(testDevice2.id)).called(1);
+          expect(selectedDeviceCalls, [testDevice2.id]);
         },
       );
     });
@@ -151,7 +181,7 @@ void main() {
     group('DevicesListUpdated', () {
       blocTest<DevicesBloc, DevicesState>(
         'обновляет список устройств из стрима',
-        build: () => DevicesBloc(climateRepository: mockRepository),
+        build: () => createBloc(),
         seed: () => DevicesState(
           status: DevicesStatus.success,
           devices: [testDevice1],
@@ -172,9 +202,9 @@ void main() {
       blocTest<DevicesBloc, DevicesState>(
         'эмитит [isRegistering=true, success с новым устройством] при успешной регистрации',
         build: () {
-          when(() => mockRepository.registerDevice(any(), any()))
+          when(() => mockRegisterDevice(any()))
               .thenAnswer((_) async => testDevice2);
-          return DevicesBloc(climateRepository: mockRepository);
+          return createBloc();
         },
         seed: () => DevicesState(
           status: DevicesStatus.success,
@@ -200,22 +230,19 @@ void main() {
           ),
         ],
         verify: (_) {
-          verify(() => mockRepository.registerDevice(
-                'AA:BB:CC:DD:EE:FF',
-                'Бризер Спальня',
-              )).called(1);
+          verify(() => mockRegisterDevice(any())).called(1);
         },
       );
 
       blocTest<DevicesBloc, DevicesState>(
         'эмитит ошибку регистрации при ApiException',
         build: () {
-          when(() => mockRepository.registerDevice(any(), any()))
+          when(() => mockRegisterDevice(any()))
               .thenThrow(const ApiException(
             type: ApiErrorType.validation,
             message: 'Устройство уже зарегистрировано',
           ));
-          return DevicesBloc(climateRepository: mockRepository);
+          return createBloc();
         },
         seed: () => DevicesState(
           status: DevicesStatus.success,
@@ -247,7 +274,7 @@ void main() {
     group('DevicesRegistrationErrorCleared', () {
       blocTest<DevicesBloc, DevicesState>(
         'очищает ошибку регистрации',
-        build: () => DevicesBloc(climateRepository: mockRepository),
+        build: () => createBloc(),
         seed: () => DevicesState(
           status: DevicesStatus.success,
           devices: [testDevice1],
@@ -270,10 +297,8 @@ void main() {
       blocTest<DevicesBloc, DevicesState>(
         'удаляет устройство и выбирает следующее',
         build: () {
-          when(() => mockRepository.deleteDevice(any()))
-              .thenAnswer((_) async {});
-          when(() => mockRepository.setSelectedDevice(any())).thenReturn(null);
-          return DevicesBloc(climateRepository: mockRepository);
+          when(() => mockDeleteDevice(any())).thenAnswer((_) async {});
+          return createBloc();
         },
         seed: () => DevicesState(
           status: DevicesStatus.success,
@@ -289,17 +314,16 @@ void main() {
           ),
         ],
         verify: (_) {
-          verify(() => mockRepository.deleteDevice(testDevice1.id)).called(1);
-          verify(() => mockRepository.setSelectedDevice(testDevice2.id)).called(1);
+          verify(() => mockDeleteDevice(any())).called(1);
+          expect(selectedDeviceCalls, [testDevice2.id]);
         },
       );
 
       blocTest<DevicesBloc, DevicesState>(
         'удаляет последнее устройство и сбрасывает выбор',
         build: () {
-          when(() => mockRepository.deleteDevice(any()))
-              .thenAnswer((_) async {});
-          return DevicesBloc(climateRepository: mockRepository);
+          when(() => mockDeleteDevice(any())).thenAnswer((_) async {});
+          return createBloc();
         },
         seed: () => DevicesState(
           status: DevicesStatus.success,
@@ -319,12 +343,11 @@ void main() {
       blocTest<DevicesBloc, DevicesState>(
         'эмитит ошибку при неудачном удалении',
         build: () {
-          when(() => mockRepository.deleteDevice(any()))
-              .thenThrow(const ApiException(
+          when(() => mockDeleteDevice(any())).thenThrow(const ApiException(
             type: ApiErrorType.serverError,
             message: 'Ошибка сервера',
           ));
-          return DevicesBloc(climateRepository: mockRepository);
+          return createBloc();
         },
         seed: () => DevicesState(
           status: DevicesStatus.success,
@@ -347,9 +370,8 @@ void main() {
       blocTest<DevicesBloc, DevicesState>(
         'переименовывает устройство',
         build: () {
-          when(() => mockRepository.renameDevice(any(), any()))
-              .thenAnswer((_) async {});
-          return DevicesBloc(climateRepository: mockRepository);
+          when(() => mockRenameDevice(any())).thenAnswer((_) async {});
+          return createBloc();
         },
         seed: () => DevicesState(
           status: DevicesStatus.success,
@@ -371,20 +393,18 @@ void main() {
           ),
         ],
         verify: (_) {
-          verify(() => mockRepository.renameDevice('device-1', 'Бризер Кухня'))
-              .called(1);
+          verify(() => mockRenameDevice(any())).called(1);
         },
       );
 
       blocTest<DevicesBloc, DevicesState>(
         'эмитит ошибку при неудачном переименовании',
         build: () {
-          when(() => mockRepository.renameDevice(any(), any()))
-              .thenThrow(const ApiException(
+          when(() => mockRenameDevice(any())).thenThrow(const ApiException(
             type: ApiErrorType.validation,
             message: 'Имя слишком короткое',
           ));
-          return DevicesBloc(climateRepository: mockRepository);
+          return createBloc();
         },
         seed: () => DevicesState(
           status: DevicesStatus.success,

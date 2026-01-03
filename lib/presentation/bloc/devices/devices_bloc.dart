@@ -13,20 +13,35 @@ import 'package:equatable/equatable.dart';
 
 import '../../../core/error/api_exception.dart';
 import '../../../domain/entities/hvac_device.dart';
-import '../../../domain/repositories/climate_repository.dart';
+import '../../../domain/usecases/usecases.dart';
 
 part 'devices_event.dart';
 part 'devices_state.dart';
 
 /// BLoC для управления списком HVAC устройств
 class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
-  final ClimateRepository _climateRepository;
+  final GetAllHvacDevices _getAllHvacDevices;
+  final WatchHvacDevices _watchHvacDevices;
+  final RegisterDevice _registerDevice;
+  final DeleteDevice _deleteDevice;
+  final RenameDevice _renameDevice;
+  final void Function(String) _setSelectedDevice;
 
   StreamSubscription<List<HvacDevice>>? _devicesSubscription;
 
   DevicesBloc({
-    required ClimateRepository climateRepository,
-  })  : _climateRepository = climateRepository,
+    required GetAllHvacDevices getAllHvacDevices,
+    required WatchHvacDevices watchHvacDevices,
+    required RegisterDevice registerDevice,
+    required DeleteDevice deleteDevice,
+    required RenameDevice renameDevice,
+    required void Function(String) setSelectedDevice,
+  })  : _getAllHvacDevices = getAllHvacDevices,
+        _watchHvacDevices = watchHvacDevices,
+        _registerDevice = registerDevice,
+        _deleteDevice = deleteDevice,
+        _renameDevice = renameDevice,
+        _setSelectedDevice = setSelectedDevice,
         super(const DevicesState()) {
     // События жизненного цикла
     on<DevicesSubscriptionRequested>(_onSubscriptionRequested);
@@ -50,13 +65,13 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
     emit(state.copyWith(status: DevicesStatus.loading));
 
     try {
-      // Загружаем список устройств
-      final devices = await _climateRepository.getAllHvacDevices();
+      // Загружаем список устройств через Use Case
+      final devices = await _getAllHvacDevices();
       final selectedId = devices.isNotEmpty ? devices.first.id : null;
 
-      // Устанавливаем выбранное устройство в репозитории
+      // Устанавливаем выбранное устройство
       if (selectedId != null) {
-        _climateRepository.setSelectedDevice(selectedId);
+        _setSelectedDevice(selectedId);
       }
 
       emit(state.copyWith(
@@ -65,9 +80,9 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
         selectedDeviceId: selectedId,
       ));
 
-      // Подписываемся на обновления
+      // Подписываемся на обновления через Use Case
       await _devicesSubscription?.cancel();
-      _devicesSubscription = _climateRepository.watchHvacDevices().listen(
+      _devicesSubscription = _watchHvacDevices().listen(
         (devices) => add(DevicesListUpdated(devices)),
       );
     } catch (e) {
@@ -83,7 +98,7 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
     DevicesDeviceSelected event,
     Emitter<DevicesState> emit,
   ) {
-    _climateRepository.setSelectedDevice(event.deviceId);
+    _setSelectedDevice(event.deviceId);
     emit(state.copyWith(selectedDeviceId: event.deviceId));
   }
 
@@ -103,10 +118,10 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
     emit(state.copyWith(isRegistering: true, registrationError: null));
 
     try {
-      final device = await _climateRepository.registerDevice(
-        event.macAddress,
-        event.name,
-      );
+      final device = await _registerDevice(RegisterDeviceParams(
+        macAddress: event.macAddress,
+        name: event.name,
+      ));
 
       // Обновляем список устройств и выбираем новое
       final updatedDevices = [...state.devices, device];
@@ -143,7 +158,7 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
     Emitter<DevicesState> emit,
   ) async {
     try {
-      await _climateRepository.deleteDevice(event.deviceId);
+      await _deleteDevice(DeleteDeviceParams(deviceId: event.deviceId));
 
       // Удаляем из локального списка
       final updatedDevices = state.devices
@@ -155,7 +170,7 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
       if (state.selectedDeviceId == event.deviceId) {
         newSelectedId = updatedDevices.isNotEmpty ? updatedDevices.first.id : null;
         if (newSelectedId != null) {
-          _climateRepository.setSelectedDevice(newSelectedId);
+          _setSelectedDevice(newSelectedId);
         }
       }
 
@@ -180,7 +195,10 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
     Emitter<DevicesState> emit,
   ) async {
     try {
-      await _climateRepository.renameDevice(event.deviceId, event.newName);
+      await _renameDevice(RenameDeviceParams(
+        deviceId: event.deviceId,
+        newName: event.newName,
+      ));
 
       // Обновляем имя в локальном списке
       final updatedDevices = state.devices.map((d) {
