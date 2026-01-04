@@ -78,9 +78,6 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.sizeOf(context).width;
-    final isDesktop = width > 900; // На десктопе есть sidebar и header
-
     // BlocListener для синхронизации DevicesBloc → ClimateBloc
     // Когда выбрано устройство, обновляем ClimateBloc
     return BlocListener<DevicesBloc, DevicesState>(
@@ -98,24 +95,21 @@ class _MainScreenState extends State<MainScreen> {
           index: _currentIndex,
           children: _screens,
         ),
-        // На десктопе скрываем нижнюю панель - навигация через sidebar
-        bottomNavigationBar: isDesktop
-            ? null
-            : BlocBuilder<NotificationsBloc, NotificationsState>(
-                builder: (context, state) {
-                  return BreezNavigationBar(
-                    items: _navigationItems,
-                    selectedIndex: _currentIndex,
-                    onItemSelected: (index) {
-                      setState(() {
-                        _currentIndex = index;
-                      });
-                    },
-                    onNotificationsTap: () => context.push(AppRoutes.notifications),
-                    notificationsBadge: state.unreadCount > 0 ? '${state.unreadCount}' : null,
-                  );
-                },
-              ),
+        bottomNavigationBar: BlocBuilder<NotificationsBloc, NotificationsState>(
+          builder: (context, state) {
+            return BreezNavigationBar(
+              items: _navigationItems,
+              selectedIndex: _currentIndex,
+              onItemSelected: (index) {
+                setState(() {
+                  _currentIndex = index;
+                });
+              },
+              onNotificationsTap: () => context.push(AppRoutes.notifications),
+              notificationsBadge: state.unreadCount > 0 ? '${state.unreadCount}' : null,
+            );
+          },
+        ),
       ),
     );
   }

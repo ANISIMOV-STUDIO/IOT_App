@@ -1,4 +1,4 @@
-/// Desktop Layout - Grid layout with sidebar for desktop
+/// Desktop Layout - Grid layout for desktop
 library;
 
 import 'package:flutter/material.dart';
@@ -9,7 +9,7 @@ import '../../../../domain/entities/alarm_info.dart';
 import '../../../widgets/breez/breez.dart';
 import '../widgets/desktop_header.dart';
 
-/// Desktop layout (grid with sidebar, drawer on tablet)
+/// Desktop layout (grid with header)
 class DesktopLayout extends StatefulWidget {
   final UnitState unit;
   final List<UnitState> allUnits;

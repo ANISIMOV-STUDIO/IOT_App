@@ -12,7 +12,6 @@ export 'mode_selector.dart';
 export 'unit_tabs.dart';
 export 'unit_tab_button.dart';
 export 'breez_list_card.dart';
-export 'sidebar.dart';
 export 'navigation_bar.dart';
 export 'main_temp_card.dart';
 export 'unit_control_card.dart';
