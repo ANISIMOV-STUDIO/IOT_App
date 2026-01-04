@@ -180,6 +180,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
     context.read<AuthBloc>().add(const AuthLogoutRequested());
   }
 
+  void _showNotifications() {
+    // TODO: Открыть экран уведомлений или показать bottom sheet
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Уведомления: функция в разработке'),
+        duration: Duration(seconds: 2),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDark = _themeService.isDark;
@@ -422,6 +432,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       onThemeToggle: _toggleTheme,
       onAddUnit: _showAddUnitDialog,
       onLogoutTap: _handleLogout,
+      onNotificationsTap: _showNotifications,
       schedule: scheduleState.entries,
       notifications: notificationsState.notifications,
       graphData: analyticsState.graphData,

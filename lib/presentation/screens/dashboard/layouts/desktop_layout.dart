@@ -30,6 +30,7 @@ class DesktopLayout extends StatefulWidget {
   final VoidCallback? onThemeToggle;
   final VoidCallback? onAddUnit;
   final VoidCallback? onLogoutTap;
+  final VoidCallback? onNotificationsTap;
 
   // Data from repositories
   final List<ScheduleEntry> schedule;
@@ -60,6 +61,7 @@ class DesktopLayout extends StatefulWidget {
     this.onThemeToggle,
     this.onAddUnit,
     this.onLogoutTap,
+    this.onNotificationsTap,
     this.schedule = const [],
     this.notifications = const [],
     this.graphData = const [],
@@ -100,6 +102,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                 userName: widget.userName,
                 userRole: widget.userRole,
                 showLogo: true,
+                onNotificationsTap: widget.onNotificationsTap,
               ),
               const SizedBox(height: AppSpacing.sm),
             ],
@@ -176,6 +179,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
           onThemeToggle: widget.onThemeToggle,
           userName: widget.userName,
           userRole: widget.userRole,
+          onNotificationsTap: widget.onNotificationsTap,
         ),
 
         const SizedBox(height: AppSpacing.sm),
