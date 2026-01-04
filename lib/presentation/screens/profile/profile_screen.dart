@@ -291,18 +291,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ListenableBuilder(
             listenable: languageService,
             builder: (context, _) {
-              final isRussian = languageService.currentLocale?.languageCode == 'ru';
+              final currentLang = languageService.currentLanguage;
               return _SettingsTile(
                 icon: Icons.language,
                 title: l10n.language,
                 trailing: Text(
-                  isRussian ? 'Русский' : 'English',
+                  currentLang.nativeName,
                   style: TextStyle(
                     fontSize: 14,
                     color: colors.textMuted,
                   ),
                 ),
-                onTap: () => languageService.setLocale(isRussian ? 'en' : 'ru'),
+                onTap: () => languageService.setLocale(
+                  currentLang.code == 'ru' ? 'en' : 'ru',
+                ),
               );
             },
           ),
