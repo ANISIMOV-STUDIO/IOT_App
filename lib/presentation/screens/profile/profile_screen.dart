@@ -388,6 +388,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
+          spacing: AppSpacing.xs,
           children: [
             for (final language in languageService.availableLanguages)
               _LanguageOption(
