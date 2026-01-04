@@ -378,17 +378,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppRadius.card),
         ),
+        titlePadding: const EdgeInsets.fromLTRB(
+          AppSpacing.sm,
+          AppSpacing.sm,
+          AppSpacing.sm,
+          0,
+        ),
+        contentPadding: const EdgeInsets.all(AppSpacing.sm),
+        actionsPadding: const EdgeInsets.fromLTRB(
+          AppSpacing.sm,
+          0,
+          AppSpacing.sm,
+          AppSpacing.sm,
+        ),
         title: Text(
           l10n.language,
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 14,
             fontWeight: FontWeight.w600,
-            color: colors.text,
+            color: colors.textMuted,
           ),
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
-          spacing: AppSpacing.xs,
+          spacing: AppSpacing.sm,
           children: [
             for (final language in languageService.availableLanguages)
               _LanguageOption(
