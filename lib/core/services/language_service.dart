@@ -1,114 +1,150 @@
-/// Language Service
+/// Сервис управления языком приложения
 ///
-/// Manages application locale with persistence
-/// Following best practices from Google, Apple, and Microsoft
+/// Управляет локалью с сохранением в хранилище.
+/// Реализует паттерны Strategy и Observer.
+///
+/// Возможности:
+/// - Сохранение выбора через SharedPreferences
+/// - Определение системной локали с fallback
+/// - Реактивные обновления через ChangeNotifier
+/// - Легкое добавление новых языков
 library;
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:ui' as ui;
 
-/// Supported languages in the application
+/// Поддерживаемые языки приложения.
+///
+/// Для добавления нового языка:
+/// 1. Добавить значение enum с code, nativeName, shortCode, flag
+/// 2. Создать соответствующий .arb файл в lib/l10n/
+/// 3. Запустить `flutter gen-l10n` для генерации
 enum AppLanguage {
-  russian('ru', 'Русский', 'RU'),
-  english('en', 'English', 'EN');
+  russian('ru', 'Русский', 'RU', '🇷🇺'),
+  english('en', 'English', 'EN', '🇬🇧');
 
-  const AppLanguage(this.code, this.nativeName, this.shortCode);
+  const AppLanguage(this.code, this.nativeName, this.shortCode, this.flag);
 
+  /// Код языка ISO 639-1
   final String code;
+
+  /// Название языка на родном языке
   final String nativeName;
+
+  /// Короткий код для компактного отображения
   final String shortCode;
 
+  /// Эмодзи флага для визуальной идентификации
+  final String flag;
+
+  /// Получить Locale для MaterialApp
   Locale get locale => Locale(code);
 
+  /// Найти язык по коду, возвращает null если не найден
   static AppLanguage? fromCode(String? code) {
     if (code == null) return null;
-    return AppLanguage.values.firstWhere(
-      (lang) => lang.code == code,
-      orElse: () => AppLanguage.english, // Fallback to English if code not found
-    );
+    for (final lang in AppLanguage.values) {
+      if (lang.code == code) return lang;
+    }
+    return null;
   }
+
+  /// Получить список всех доступных языков
+  static List<AppLanguage> get all => AppLanguage.values.toList();
 }
 
-/// Service for managing application locale
+/// Сервис управления локалью приложения.
+///
+/// Observer Pattern - реактивные обновления UI через ChangeNotifier.
+/// Strategy Pattern - стратегия выбора локали (явный выбор или системный).
 class LanguageService extends ChangeNotifier {
   static const String _localeKey = 'app_locale';
 
   final SharedPreferences _prefs;
-  Locale? _currentLocale; // If null, use system
+  Locale? _currentLocale; // null = использовать системный
 
   LanguageService(this._prefs) {
     _loadSavedLocale();
   }
 
-  /// Initialize default - do nothing, let system default take over
+  /// Инициализация по умолчанию - ничего не делаем, используем системный
   Future<void> initializeDefaults() async {
-    // No-op: Do not force any language.
-    // If prefs are empty, _currentLocale is null, which means use system.
+    // Если в настройках пусто, _currentLocale = null, т.е. системный язык
   }
 
-  /// Currently selected locale to be used by MaterialApp
-  /// Returns null if system default should be used (MaterialApp handles null by using device locale)
+  // ============== Геттеры ==============
+
+  /// Текущая локаль для MaterialApp.
+  /// null = использовать системную локаль.
   Locale? get currentLocale => _currentLocale;
 
-  /// Currently active language (resolved)
+  /// Выбран ли язык явно (или используется системный)
+  bool get isExplicitlySet => _currentLocale != null;
+
+  /// Текущий активный язык (с учетом явного выбора или системного)
   AppLanguage get currentLanguage {
     if (_currentLocale != null) {
-      return AppLanguage.fromCode(_currentLocale!.languageCode) ?? AppLanguage.english;
+      return AppLanguage.fromCode(_currentLocale!.languageCode) ??
+          AppLanguage.russian;
     }
-    
-    // Resolve system locale
-    final systemLocale = ui.PlatformDispatcher.instance.locale;
-    // Check if system locale is supported
-    try {
-      return AppLanguage.values.firstWhere(
-        (lang) => lang.code == systemLocale.languageCode,
-      );
-    } catch (_) {
-      // If system locale is not Russian or English, default to English (standard practice)
-      return AppLanguage.english;
-    }
+    return _resolveSystemLanguage();
   }
 
-  /// List of supported locales for MaterialApp
+  /// Системный язык устройства
+  AppLanguage get systemLanguage => _resolveSystemLanguage();
+
+  /// Список всех доступных языков
+  List<AppLanguage> get availableLanguages => AppLanguage.all;
+
+  /// Список поддерживаемых локалей для MaterialApp
   static List<Locale> get supportedLocales =>
       AppLanguage.values.map((lang) => lang.locale).toList();
 
-  /// Load saved locale from persistent storage
-  void _loadSavedLocale() {
-    final savedCode = _prefs.getString(_localeKey);
-    if (savedCode != null) {
-      _currentLocale = Locale(savedCode);
-    } else {
-      _currentLocale = null; // Use system
-    }
-    notifyListeners();
-  }
+  // ============== Сеттеры ==============
 
-  /// Set locale and persist to storage
-  ///
-  /// If [language] is null, will use system default
+  /// Установить язык явно.
+  /// Передать null для использования системного.
   Future<void> setLanguage(AppLanguage? language) async {
     if (language == null) {
-      // Use system default
       await _prefs.remove(_localeKey);
       _currentLocale = null;
     } else {
-      // Set specific language
       await _prefs.setString(_localeKey, language.code);
       _currentLocale = language.locale;
     }
     notifyListeners();
   }
 
-  /// Set locale by code (for backward compatibility)
+  /// Установить локаль по коду языка (для обратной совместимости)
   Future<void> setLocale(String languageCode) async {
     final language = AppLanguage.fromCode(languageCode);
     await setLanguage(language);
   }
 
-  /// Reset to system default
+  /// Сбросить на системный язык
   Future<void> useSystemDefault() async {
     await setLanguage(null);
+  }
+
+  // ============== Приватные методы ==============
+
+  /// Загрузить сохраненную локаль из хранилища
+  void _loadSavedLocale() {
+    final savedCode = _prefs.getString(_localeKey);
+    if (savedCode != null) {
+      _currentLocale = Locale(savedCode);
+    } else {
+      _currentLocale = null;
+    }
+    notifyListeners();
+  }
+
+  /// Определить системный язык с fallback
+  AppLanguage _resolveSystemLanguage() {
+    final systemLocale = ui.PlatformDispatcher.instance.locale;
+    final matched = AppLanguage.fromCode(systemLocale.languageCode);
+    // Fallback на русский если системный язык не поддерживается
+    return matched ?? AppLanguage.russian;
   }
 }

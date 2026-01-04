@@ -287,7 +287,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             },
           ),
           const SizedBox(height: AppSpacing.xs),
-          // Language Toggle
+          // Выбор языка
           ListenableBuilder(
             listenable: languageService,
             builder: (context, _) {
@@ -295,16 +295,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
               return _SettingsTile(
                 icon: Icons.language,
                 title: l10n.language,
-                trailing: Text(
-                  currentLang.nativeName,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: colors.textMuted,
-                  ),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      currentLang.flag,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      currentLang.nativeName,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: colors.textMuted,
+                      ),
+                    ),
+                  ],
                 ),
-                onTap: () => languageService.setLocale(
-                  currentLang.code == 'ru' ? 'en' : 'ru',
-                ),
+                onTap: () => _showLanguagePickerDialog(context, languageService),
               );
             },
           ),
@@ -353,6 +361,56 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final first = firstName.isNotEmpty ? firstName[0].toUpperCase() : '';
     final last = lastName.isNotEmpty ? lastName[0].toUpperCase() : '';
     return '$first$last';
+  }
+
+  /// Диалог выбора языка приложения
+  void _showLanguagePickerDialog(
+    BuildContext context,
+    LanguageService languageService,
+  ) {
+    final colors = BreezColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
+
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: colors.card,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.card),
+        ),
+        title: Text(
+          l10n.language,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            color: colors.text,
+          ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (final language in languageService.availableLanguages)
+              _LanguageOption(
+                language: language,
+                isSelected: languageService.currentLanguage == language,
+                onTap: () {
+                  languageService.setLanguage(language);
+                  Navigator.of(dialogContext).pop();
+                },
+              ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(
+              l10n.cancel,
+              style: TextStyle(color: colors.textMuted),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   void _showEditProfileDialog(
@@ -564,7 +622,70 @@ class _SwitchTile extends StatelessWidget {
   }
 }
 
-/// Edit Profile Dialog
+/// Опция выбора языка в диалоге
+class _LanguageOption extends StatelessWidget {
+  final AppLanguage language;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _LanguageOption({
+    required this.language,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppRadius.button),
+        child: Ink(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          decoration: BoxDecoration(
+            color: isSelected
+                ? AppColors.accent.withValues(alpha: 0.1)
+                : colors.cardLight,
+            borderRadius: BorderRadius.circular(AppRadius.button),
+            border: isSelected
+                ? Border.all(color: AppColors.accent.withValues(alpha: 0.3))
+                : null,
+          ),
+          child: Row(
+            children: [
+              Text(
+                language.flag,
+                style: const TextStyle(fontSize: 24),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  language.nativeName,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                    color: isSelected ? AppColors.accent : colors.text,
+                  ),
+                ),
+              ),
+              if (isSelected)
+                const Icon(
+                  Icons.check_circle,
+                  color: AppColors.accent,
+                  size: 20,
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Диалог редактирования профиля
 class _EditProfileDialog extends StatefulWidget {
   final String firstName;
   final String lastName;

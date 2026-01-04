@@ -132,7 +132,7 @@ class _HvacControlAppState extends State<HvacControlApp> {
             darkTheme: AppTheme.materialDark,
             themeMode: themeService.themeMode,
 
-            // Localization
+            // Локализация
             locale: languageService.currentLocale,
             localizationsDelegates: const [
               AppLocalizations.delegate,
@@ -141,6 +141,23 @@ class _HvacControlAppState extends State<HvacControlApp> {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: LanguageService.supportedLocales,
+            // Корректное разрешение локали с fallback
+            localeResolutionCallback: (locale, supportedLocales) {
+              // Если пользователь явно выбрал язык - используем его
+              if (languageService.currentLocale != null) {
+                return languageService.currentLocale;
+              }
+              // Пытаемся найти системную локаль
+              if (locale != null) {
+                for (final supportedLocale in supportedLocales) {
+                  if (supportedLocale.languageCode == locale.languageCode) {
+                    return supportedLocale;
+                  }
+                }
+              }
+              // Fallback на первую поддерживаемую локаль (русский)
+              return supportedLocales.first;
+            },
           );
         },
       ),
