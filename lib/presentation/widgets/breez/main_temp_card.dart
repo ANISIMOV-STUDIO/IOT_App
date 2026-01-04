@@ -2,9 +2,11 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
+import '../../../generated/l10n/app_localizations.dart';
 import 'breez_card.dart';
 import 'mode_selector.dart';
 
@@ -65,6 +67,7 @@ class MainTempCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
 
     // Theme-aware gradients
     final poweredGradient = isDark
@@ -109,7 +112,7 @@ class MainTempCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        _formatDate(),
+                        _formatDate(l10n),
                         style: TextStyle(
                           fontSize: 11,
                           color: colors.textMuted,
@@ -314,7 +317,7 @@ class MainTempCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Целевая температура',
+                        l10n.targetTemperature,
                         style: TextStyle(
                           fontSize: 12,
                           color: colors.textMuted,
@@ -339,17 +342,17 @@ class MainTempCard extends StatelessWidget {
                     _StatItem(
                       icon: Icons.air,
                       value: '$airflow м³/ч',
-                      label: 'Поток',
+                      label: l10n.airflowRate,
                     ),
                     _StatItem(
                       icon: Icons.water_drop_outlined,
                       value: '$humidity%',
-                      label: 'Влажность',
+                      label: l10n.humidity,
                     ),
                     _StatItem(
                       icon: Icons.filter_alt_outlined,
                       value: '$filterPercent%',
-                      label: 'Фильтр',
+                      label: l10n.filter,
                     ),
                   ],
                 ),
@@ -369,7 +372,7 @@ class MainTempCard extends StatelessWidget {
                     children: [
                       Expanded(
                         child: _FanSlider(
-                          label: 'Приток',
+                          label: l10n.intake,
                           value: supplyFan,
                           color: AppColors.accent,
                           icon: Icons.arrow_downward_rounded,
@@ -379,7 +382,7 @@ class MainTempCard extends StatelessWidget {
                       const SizedBox(width: 16),
                       Expanded(
                         child: _FanSlider(
-                          label: 'Вытяжка',
+                          label: l10n.exhaust,
                           value: exhaustFan,
                           color: AppColors.accentOrange,
                           icon: Icons.arrow_upward_rounded,
@@ -405,7 +408,7 @@ class MainTempCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Режим работы',
+                        l10n.operatingMode,
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
@@ -552,10 +555,13 @@ class MainTempCard extends StatelessWidget {
     );
   }
 
-  String _formatDate() {
+  String _formatDate(AppLocalizations l10n) {
     final now = DateTime.now();
-    final months = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
-    return 'Сегодня, ${now.day} ${months[now.month - 1]}';
+    final locale = Localizations.localeOf(
+      WidgetsBinding.instance.rootElement!,
+    ).languageCode;
+    final dateFormat = DateFormat('d MMM', locale);
+    return l10n.todayDate(dateFormat.format(now));
   }
 }
 

@@ -288,6 +288,10 @@
   "@emailNotifications": {
     "description": "Email notifications option (Russian: Email-уведомления)"
   },
+  "alarmNotifications": "Уведомления об авариях",
+  "@alarmNotifications": {
+    "description": "Alarm notifications option"
+  },
   "receiveEmailReports": "Получать отчеты на email",
   "@receiveEmailReports": {
     "description": "Email notifications description (Russian: Получать отчеты на email)"
@@ -528,6 +532,43 @@
   "target": "Целевая",
   "@target": {
     "description": "Target label"
+  },
+  "targetTemperature": "Целевая температура",
+  "@targetTemperature": {
+    "description": "Target temperature label"
+  },
+  "intake": "Приток",
+  "@intake": {
+    "description": "Intake airflow label"
+  },
+  "exhaust": "Вытяжка",
+  "@exhaust": {
+    "description": "Exhaust airflow label"
+  },
+  "airflowRate": "Поток",
+  "@airflowRate": {
+    "description": "Airflow rate label"
+  },
+  "filter": "Фильтр",
+  "@filter": {
+    "description": "Filter label"
+  },
+  "statusWorking": "В работе",
+  "@statusWorking": {
+    "description": "Status working"
+  },
+  "statusOff": "Выключено",
+  "@statusOff": {
+    "description": "Status off"
+  },
+  "todayDate": "Сегодня, {date}",
+  "@todayDate": {
+    "description": "Today with date",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
   },
   "cooling": "Охлаждение",
   "@cooling": {

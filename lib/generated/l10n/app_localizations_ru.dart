@@ -225,6 +225,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get emailNotifications => 'Email-уведомления';
 
   @override
+  String get alarmNotifications => 'Уведомления об авариях';
+
+  @override
   String get receiveEmailReports => 'Получать отчеты на email';
 
   @override
@@ -395,6 +398,32 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get target => 'Целевая';
+
+  @override
+  String get targetTemperature => 'Целевая температура';
+
+  @override
+  String get intake => 'Приток';
+
+  @override
+  String get exhaust => 'Вытяжка';
+
+  @override
+  String get airflowRate => 'Поток';
+
+  @override
+  String get filter => 'Фильтр';
+
+  @override
+  String get statusWorking => 'В работе';
+
+  @override
+  String get statusOff => 'Выключено';
+
+  @override
+  String todayDate(String date) {
+    return 'Сегодня, $date';
+  }
 
   @override
   String get cooling => 'Охлаждение';
@@ -944,9 +973,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get remove => 'Удалить';
-
-  @override
-  String get filter => 'Фильтр';
 
   @override
   String get sort => 'Сортировать';

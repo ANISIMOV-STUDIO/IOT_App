@@ -223,6 +223,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get emailNotifications => 'Email Notifications';
 
   @override
+  String get alarmNotifications => 'Alarm Notifications';
+
+  @override
   String get receiveEmailReports => 'Receive reports via email';
 
   @override
@@ -392,6 +395,32 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get target => 'Target';
+
+  @override
+  String get targetTemperature => 'Target temperature';
+
+  @override
+  String get intake => 'Intake';
+
+  @override
+  String get exhaust => 'Exhaust';
+
+  @override
+  String get airflowRate => 'Airflow';
+
+  @override
+  String get filter => 'Filter';
+
+  @override
+  String get statusWorking => 'Working';
+
+  @override
+  String get statusOff => 'Off';
+
+  @override
+  String todayDate(String date) {
+    return 'Today, $date';
+  }
 
   @override
   String get cooling => 'Cooling';
@@ -938,9 +967,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get remove => 'Remove';
-
-  @override
-  String get filter => 'Filter';
 
   @override
   String get sort => 'Sort';

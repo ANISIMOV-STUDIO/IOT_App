@@ -506,6 +506,12 @@ abstract class AppLocalizations {
   /// **'Email-уведомления'**
   String get emailNotifications;
 
+  /// Alarm notifications option
+  ///
+  /// In ru, this message translates to:
+  /// **'Уведомления об авариях'**
+  String get alarmNotifications;
+
   /// Email notifications description (Russian: Получать отчеты на email)
   ///
   /// In ru, this message translates to:
@@ -829,6 +835,54 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Целевая'**
   String get target;
+
+  /// Target temperature label
+  ///
+  /// In ru, this message translates to:
+  /// **'Целевая температура'**
+  String get targetTemperature;
+
+  /// Intake airflow label
+  ///
+  /// In ru, this message translates to:
+  /// **'Приток'**
+  String get intake;
+
+  /// Exhaust airflow label
+  ///
+  /// In ru, this message translates to:
+  /// **'Вытяжка'**
+  String get exhaust;
+
+  /// Airflow rate label
+  ///
+  /// In ru, this message translates to:
+  /// **'Поток'**
+  String get airflowRate;
+
+  /// Filter button
+  ///
+  /// In ru, this message translates to:
+  /// **'Фильтр'**
+  String get filter;
+
+  /// Status working
+  ///
+  /// In ru, this message translates to:
+  /// **'В работе'**
+  String get statusWorking;
+
+  /// Status off
+  ///
+  /// In ru, this message translates to:
+  /// **'Выключено'**
+  String get statusOff;
+
+  /// Today with date
+  ///
+  /// In ru, this message translates to:
+  /// **'Сегодня, {date}'**
+  String todayDate(String date);
 
   /// Cooling mode
   ///
@@ -1855,12 +1909,6 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Удалить'**
   String get remove;
-
-  /// Filter button
-  ///
-  /// In ru, this message translates to:
-  /// **'Фильтр'**
-  String get filter;
 
   /// Sort button
   ///

@@ -288,6 +288,10 @@
   "@emailNotifications": {
     "description": "Email notifications option (Russian: Email-уведомления)"
   },
+  "alarmNotifications": "Alarm Notifications",
+  "@alarmNotifications": {
+    "description": "Alarm notifications option"
+  },
   "receiveEmailReports": "Receive reports via email",
   "@receiveEmailReports": {
     "description": "Email notifications description (Russian: Получать отчеты на email)"
@@ -528,6 +532,43 @@
   "target": "Target",
   "@target": {
     "description": "Target label"
+  },
+  "targetTemperature": "Target temperature",
+  "@targetTemperature": {
+    "description": "Target temperature label"
+  },
+  "intake": "Intake",
+  "@intake": {
+    "description": "Intake airflow label"
+  },
+  "exhaust": "Exhaust",
+  "@exhaust": {
+    "description": "Exhaust airflow label"
+  },
+  "airflowRate": "Airflow",
+  "@airflowRate": {
+    "description": "Airflow rate label"
+  },
+  "filter": "Filter",
+  "@filter": {
+    "description": "Filter label"
+  },
+  "statusWorking": "Working",
+  "@statusWorking": {
+    "description": "Status working"
+  },
+  "statusOff": "Off",
+  "@statusOff": {
+    "description": "Status off"
+  },
+  "todayDate": "Today, {date}",
+  "@todayDate": {
+    "description": "Today with date",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
   },
   "cooling": "Cooling",
   "@cooling": {

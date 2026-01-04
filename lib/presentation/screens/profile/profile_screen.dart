@@ -215,7 +215,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Padding(
             padding: const EdgeInsets.only(left: 4, bottom: AppSpacing.sm),
             child: Text(
-              'Уведомления',
+              l10n.notifications,
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -225,21 +225,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           _SwitchTile(
             icon: Icons.notifications_outlined,
-            title: 'Push-уведомления',
+            title: l10n.pushNotifications,
             value: _pushNotifications,
             onChanged: (v) => setState(() => _pushNotifications = v),
           ),
           const SizedBox(height: AppSpacing.sm),
           _SwitchTile(
             icon: Icons.email_outlined,
-            title: 'Email-уведомления',
+            title: l10n.emailNotifications,
             value: _emailNotifications,
             onChanged: (v) => setState(() => _emailNotifications = v),
           ),
           const SizedBox(height: AppSpacing.sm),
           _SwitchTile(
             icon: Icons.warning_amber_outlined,
-            title: 'Уведомления об авариях',
+            title: l10n.alarmNotifications,
             value: _alarmNotifications,
             onChanged: (v) => setState(() => _alarmNotifications = v),
           ),
