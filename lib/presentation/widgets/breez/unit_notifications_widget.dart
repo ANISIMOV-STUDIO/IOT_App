@@ -6,6 +6,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../domain/entities/unit_notification.dart';
 import 'breez_card.dart';
+import 'breez_list_card.dart';
 
 export '../../../domain/entities/unit_notification.dart';
 
@@ -78,15 +79,19 @@ class UnitNotificationsWidget extends StatelessWidget {
           // Notifications list (no scroll, max 3 visible)
           Expanded(
             child: notifications.isEmpty
-                ? _EmptyState()
+                ? BreezEmptyState.noNotifications()
                 : Column(
                     children: notifications.take(3).toList().asMap().entries.map((entry) {
                       final index = entry.key;
                       final notification = entry.value;
                       return Padding(
                         padding: EdgeInsets.only(bottom: index < 2 ? 8 : 0),
-                        child: _NotificationCard(
-                          notification: notification,
+                        child: BreezListCard.notification(
+                          title: notification.title,
+                          message: notification.message,
+                          type: _mapNotificationType(notification.type),
+                          timeAgo: _formatTimeAgo(notification.timestamp),
+                          isRead: notification.isRead,
                           onTap: () => onNotificationTap?.call(notification.id),
                         ),
                       );
@@ -94,235 +99,42 @@ class UnitNotificationsWidget extends StatelessWidget {
                   ),
           ),
 
-          // See all button (48px min touch target)
+          // See all button
           if (notifications.length > 3) ...[
             const SizedBox(height: 12),
-            MouseRegion(
-              cursor: SystemMouseCursors.click,
-              child: GestureDetector(
-                onTap: onSeeAll,
-                child: Container(
-                  width: double.infinity,
-                  height: 48, // Minimum touch target
-                  decoration: BoxDecoration(
-                    color: colors.buttonBg,
-                    borderRadius: BorderRadius.circular(AppRadius.button),
-                    border: Border.all(color: colors.border),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Все уведомления (+${notifications.length - 3})',
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.accent,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+            BreezSeeMoreButton(
+              label: 'Все уведомления',
+              extraCount: notifications.length - 3,
+              onTap: onSeeAll,
             ),
           ],
         ],
       ),
     );
   }
-}
 
-/// Empty state widget
-class _EmptyState extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.check_circle_outline,
-            size: 40,
-            color: AppColors.accentGreen.withValues(alpha: 0.5),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            'Нет уведомлений',
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
-              color: colors.textMuted,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            'Система работает штатно',
-            style: TextStyle(
-              fontSize: 11,
-              color: colors.textMuted.withValues(alpha: 0.7),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-/// Individual notification card
-class _NotificationCard extends StatefulWidget {
-  final UnitNotification notification;
-  final VoidCallback? onTap;
-
-  const _NotificationCard({
-    required this.notification,
-    this.onTap,
-  });
-
-  @override
-  State<_NotificationCard> createState() => _NotificationCardState();
-}
-
-class _NotificationCardState extends State<_NotificationCard> {
-  bool _isHovered = false;
-
-  Color get _typeColor {
-    switch (widget.notification.type) {
+  /// Map NotificationType to ListCardType
+  ListCardType _mapNotificationType(NotificationType type) {
+    switch (type) {
       case NotificationType.info:
-        return AppColors.accent;
+        return ListCardType.info;
       case NotificationType.warning:
-        return AppColors.accentOrange;
+        return ListCardType.warning;
       case NotificationType.error:
-        return AppColors.accentRed;
+        return ListCardType.error;
       case NotificationType.success:
-        return AppColors.accentGreen;
+        return ListCardType.success;
     }
   }
 
-  IconData get _typeIcon {
-    switch (widget.notification.type) {
-      case NotificationType.info:
-        return Icons.info_outline;
-      case NotificationType.warning:
-        return Icons.warning_amber_outlined;
-      case NotificationType.error:
-        return Icons.error_outline;
-      case NotificationType.success:
-        return Icons.check_circle_outline;
-    }
-  }
-
-  String get _timeAgo {
+  /// Format timestamp to human-readable time ago
+  String _formatTimeAgo(DateTime timestamp) {
     final now = DateTime.now();
-    final diff = now.difference(widget.notification.timestamp);
+    final diff = now.difference(timestamp);
 
     if (diff.inMinutes < 1) return 'Только что';
     if (diff.inMinutes < 60) return '${diff.inMinutes} мин назад';
     if (diff.inHours < 24) return '${diff.inHours} ч назад';
     return '${diff.inDays} дн назад';
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: GestureDetector(
-        onTap: widget.onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: _isHovered
-                ? _typeColor.withValues(alpha: 0.08)
-                : _typeColor.withValues(alpha: 0.05),
-            borderRadius: BorderRadius.circular(AppRadius.card),
-            border: Border.all(
-              color: _isHovered
-                  ? _typeColor.withValues(alpha: 0.3)
-                  : _typeColor.withValues(alpha: 0.15),
-            ),
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Icon
-              Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  color: _typeColor.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(AppRadius.card),
-                ),
-                child: Icon(
-                  _typeIcon,
-                  size: 16,
-                  color: _typeColor,
-                ),
-              ),
-
-              const SizedBox(width: 10),
-
-              // Content
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            widget.notification.title,
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: widget.notification.isRead
-                                  ? colors.textMuted
-                                  : colors.text,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        Text(
-                          _timeAgo,
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: colors.textMuted,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      widget.notification.message,
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: colors.textMuted,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-
-              // Unread indicator
-              if (!widget.notification.isRead) ...[
-                const SizedBox(width: 8),
-                Container(
-                  width: 8,
-                  height: 8,
-                  decoration: BoxDecoration(
-                    color: _typeColor,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ],
-            ],
-          ),
-        ),
-      ),
-    );
   }
 }

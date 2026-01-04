@@ -6,6 +6,7 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../domain/entities/unit_state.dart';
 import '../../../widgets/breez/breez_logo.dart';
+import '../../../widgets/breez/unit_tab_button.dart';
 import 'header_icon_button.dart';
 import 'add_unit_button.dart';
 
@@ -105,7 +106,7 @@ class DesktopHeader extends StatelessWidget {
               itemBuilder: (context, index) {
                 final unit = units[index];
                 final isSelected = index == selectedUnitIndex;
-                return _UnitTab(
+                return UnitTabButton(
                   unit: unit,
                   isSelected: isSelected,
                   onTap: () => onUnitSelected?.call(index),
@@ -171,70 +172,6 @@ class DesktopHeader extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-}
-
-/// Individual unit tab
-class _UnitTab extends StatelessWidget {
-  final UnitState unit;
-  final bool isSelected;
-  final VoidCallback? onTap;
-
-  const _UnitTab({
-    required this.unit,
-    required this.isSelected,
-    this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(AppRadius.nested),
-        hoverColor: isSelected
-            ? AppColors.accentLight
-            : colors.buttonBg,
-        splashColor: AppColors.accent.withValues(alpha: 0.2),
-        highlightColor: AppColors.accent.withValues(alpha: 0.1),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          decoration: BoxDecoration(
-            color: isSelected ? AppColors.accent : Colors.transparent,
-            borderRadius: BorderRadius.circular(AppRadius.nested),
-          ),
-          alignment: Alignment.center,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Status indicator
-              Container(
-                width: 8,
-                height: 8,
-                decoration: BoxDecoration(
-                  color: unit.power
-                      ? (isSelected ? Colors.white : AppColors.accentGreen)
-                      : colors.textMuted,
-                  shape: BoxShape.circle,
-                ),
-              ),
-              const SizedBox(width: 8),
-              // Unit name
-              Text(
-                unit.name,
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                  color: isSelected ? Colors.white : colors.textMuted,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }
