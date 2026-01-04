@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/app_radius.dart';
+import '../../../widgets/breez/breez_card.dart';
 
 /// Результат диалога добавления устройства
 class AddUnitResult {
@@ -285,83 +286,19 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         // Cancel button
-        _DialogButton(
+        BreezDialogButton(
           label: 'Отмена',
-          colors: colors,
           onTap: _isLoading ? null : () => Navigator.of(context).pop(),
         ),
         const SizedBox(width: 12),
         // Create button
-        _DialogButton(
+        BreezDialogButton(
           label: 'Добавить',
           isPrimary: true,
-          colors: colors,
           isLoading: _isLoading,
           onTap: _isLoading ? null : _submit,
         ),
       ],
-    );
-  }
-}
-
-/// Dialog action button
-class _DialogButton extends StatelessWidget {
-  final String label;
-  final VoidCallback? onTap;
-  final bool isPrimary;
-  final bool isLoading;
-  final BreezColors colors;
-
-  const _DialogButton({
-    required this.label,
-    required this.colors,
-    this.onTap,
-    this.isPrimary = false,
-    this.isLoading = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(AppRadius.button),
-        hoverColor: isPrimary
-            ? AppColors.accentLight
-            : colors.text.withValues(alpha: 0.05),
-        splashColor: isPrimary
-            ? AppColors.accent.withValues(alpha: 0.3)
-            : AppColors.accent.withValues(alpha: 0.1),
-        highlightColor: isPrimary
-            ? AppColors.accent.withValues(alpha: 0.2)
-            : AppColors.accent.withValues(alpha: 0.05),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-          decoration: BoxDecoration(
-            color: isPrimary ? AppColors.accent : Colors.transparent,
-            borderRadius: BorderRadius.circular(AppRadius.button),
-            border: isPrimary ? null : Border.all(color: colors.border),
-          ),
-          child: isLoading
-              ? const SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                  ),
-                )
-              : Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: isPrimary ? FontWeight.w600 : FontWeight.w500,
-                    color: isPrimary ? Colors.white : colors.textMuted,
-                  ),
-                ),
-        ),
-      ),
     );
   }
 }

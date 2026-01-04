@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../domain/entities/unit_state.dart';
+import '../../../widgets/breez/breez_card.dart';
 
 /// Действия доступные в диалоге настроек
 enum UnitSettingsAction {
@@ -314,16 +315,14 @@ class _UnitSettingsDialogState extends State<UnitSettingsDialog> {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            _ActionButton(
+            BreezDialogButton(
               label: 'Отмена',
-              colors: colors,
               onTap: () => setState(() => _isRenaming = false),
             ),
             const SizedBox(width: 12),
-            _ActionButton(
+            BreezDialogButton(
               label: 'Сохранить',
               isPrimary: true,
-              colors: colors,
               onTap: _submitRename,
             ),
           ],
@@ -336,114 +335,22 @@ class _UnitSettingsDialogState extends State<UnitSettingsDialog> {
     return Column(
       children: [
         // Rename button
-        _SettingsButton(
+        BreezSettingsButton(
           icon: Icons.edit_outlined,
           label: 'Переименовать',
           subtitle: 'Изменить название установки',
-          colors: colors,
           onTap: () => setState(() => _isRenaming = true),
         ),
         const SizedBox(height: 12),
         // Delete button
-        _SettingsButton(
+        BreezSettingsButton(
           icon: Icons.delete_outline,
           label: 'Удалить установку',
           subtitle: 'Отвязать устройство от аккаунта',
-          colors: colors,
           isDanger: true,
           onTap: _confirmDelete,
         ),
       ],
-    );
-  }
-}
-
-/// Settings action button
-class _SettingsButton extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final String subtitle;
-  final VoidCallback? onTap;
-  final bool isDanger;
-  final BreezColors colors;
-
-  const _SettingsButton({
-    required this.icon,
-    required this.label,
-    required this.subtitle,
-    required this.colors,
-    this.onTap,
-    this.isDanger = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final color = isDanger ? AppColors.accentRed : colors.text;
-    final bgColor = isDanger
-        ? AppColors.accentRed.withValues(alpha: 0.1)
-        : colors.cardLight;
-
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(AppRadius.card),
-        hoverColor: isDanger
-            ? AppColors.accentRed.withValues(alpha: 0.15)
-            : colors.border.withValues(alpha: 0.3),
-        splashColor: isDanger
-            ? AppColors.accentRed.withValues(alpha: 0.2)
-            : AppColors.accent.withValues(alpha: 0.1),
-        highlightColor: isDanger
-            ? AppColors.accentRed.withValues(alpha: 0.1)
-            : AppColors.accent.withValues(alpha: 0.05),
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: bgColor,
-            borderRadius: BorderRadius.circular(AppRadius.card),
-            border: Border.all(
-              color: isDanger
-                  ? AppColors.accentRed.withValues(alpha: 0.3)
-                  : colors.border,
-            ),
-          ),
-          child: Row(
-            children: [
-              Icon(icon, size: 24, color: color),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      label,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: color,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      subtitle,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: colors.textMuted,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Icon(
-                Icons.chevron_right,
-                size: 20,
-                color: colors.textMuted,
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }
@@ -498,57 +405,6 @@ class _DeleteConfirmDialog extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-/// Action button for dialog
-class _ActionButton extends StatelessWidget {
-  final String label;
-  final VoidCallback? onTap;
-  final bool isPrimary;
-  final BreezColors colors;
-
-  const _ActionButton({
-    required this.label,
-    required this.colors,
-    this.onTap,
-    this.isPrimary = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(AppRadius.button),
-        hoverColor: isPrimary
-            ? AppColors.accentLight
-            : colors.text.withValues(alpha: 0.05),
-        splashColor: isPrimary
-            ? AppColors.accent.withValues(alpha: 0.3)
-            : AppColors.accent.withValues(alpha: 0.1),
-        highlightColor: isPrimary
-            ? AppColors.accent.withValues(alpha: 0.2)
-            : AppColors.accent.withValues(alpha: 0.05),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-          decoration: BoxDecoration(
-            color: isPrimary ? AppColors.accent : Colors.transparent,
-            borderRadius: BorderRadius.circular(AppRadius.button),
-            border: isPrimary ? null : Border.all(color: colors.border),
-          ),
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: isPrimary ? FontWeight.w600 : FontWeight.w500,
-              color: isPrimary ? Colors.white : colors.textMuted,
-            ),
-          ),
-        ),
-      ),
     );
   }
 }
