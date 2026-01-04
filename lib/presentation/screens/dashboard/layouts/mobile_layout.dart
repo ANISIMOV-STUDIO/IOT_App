@@ -36,7 +36,11 @@ class MobileLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+      padding: const EdgeInsets.only(
+        left: AppSpacing.sm,
+        right: AppSpacing.sm,
+        bottom: AppSpacing.sm,
+      ),
       child: UnitControlCard(
         unit: unit,
         onTemperatureIncrease: onTemperatureIncrease != null

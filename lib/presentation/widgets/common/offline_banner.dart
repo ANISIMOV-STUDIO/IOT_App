@@ -116,17 +116,12 @@ class AnimatedOfflineBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedSlide(
-      duration: duration,
-      offset: isVisible ? Offset.zero : const Offset(0, -1),
-      child: AnimatedOpacity(
-        duration: duration,
-        opacity: isVisible ? 1.0 : 0.0,
-        child: OfflineBanner(
-          isVisible: true, // Всегда true, анимация управляет видимостью
-          message: message,
-        ),
-      ),
+    // Не занимает место когда скрыт
+    if (!isVisible) return const SizedBox.shrink();
+
+    return OfflineBanner(
+      isVisible: true,
+      message: message,
     );
   }
 }

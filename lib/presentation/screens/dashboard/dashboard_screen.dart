@@ -294,40 +294,37 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           return Scaffold(
                             key: _scaffoldKey,
                             backgroundColor: isDark ? AppColors.darkBg : AppColors.lightBg,
-                            body: SafeArea(
-                              child: Column(
-                                children: [
-                                  AnimatedOfflineBanner(
-                                    isVisible: connectivityState.showBanner,
-                                    message: connectivityState.message,
-                                  ),
-                                  Expanded(
-                                    child: currentUnit == null
-                                        ? _buildEmptyState(isDark)
-                                        : isDesktop
-                                            ? _buildDesktopLayout(
-                                                isDark,
-                                                user,
-                                                currentUnit,
-                                                units,
-                                                activeIndex,
-                                                climateState,
-                                                analyticsState,
-                                                notificationsState,
-                                                scheduleState,
-                                              )
-                                            : _buildMobileLayout(
-                                                isDark,
-                                                width,
-                                                currentUnit,
-                                                units,
-                                                activeIndex,
-                                                climateState,
-                                              ),
-                                  ),
-                                  if (!isDesktop) const SizedBox(height: AppSpacing.sm),
-                                ],
-                              ),
+                            body: Column(
+                              children: [
+                                AnimatedOfflineBanner(
+                                  isVisible: connectivityState.showBanner,
+                                  message: connectivityState.message,
+                                ),
+                                Expanded(
+                                  child: currentUnit == null
+                                      ? _buildEmptyState(isDark)
+                                      : isDesktop
+                                          ? _buildDesktopLayout(
+                                              isDark,
+                                              user,
+                                              currentUnit,
+                                              units,
+                                              activeIndex,
+                                              climateState,
+                                              analyticsState,
+                                              notificationsState,
+                                              scheduleState,
+                                            )
+                                          : _buildMobileLayout(
+                                              isDark,
+                                              width,
+                                              currentUnit,
+                                              units,
+                                              activeIndex,
+                                              climateState,
+                                            ),
+                                ),
+                              ],
                             ),
                           );
                             },
