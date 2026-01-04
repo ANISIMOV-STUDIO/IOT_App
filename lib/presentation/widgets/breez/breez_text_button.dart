@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 
 /// Текстовая кнопка с акцентным цветом и hover эффектом
-class BreezTextButton extends StatefulWidget {
+class BreezTextButton extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
   final double fontSize;
@@ -22,43 +22,31 @@ class BreezTextButton extends StatefulWidget {
   });
 
   @override
-  State<BreezTextButton> createState() => _BreezTextButtonState();
-}
-
-class _BreezTextButtonState extends State<BreezTextButton> {
-  bool _isHovered = false;
-
-  @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
-    final isDisabled = widget.onPressed == null;
+    final isDisabled = onPressed == null;
 
-    return MouseRegion(
-      cursor: isDisabled ? SystemMouseCursors.basic : SystemMouseCursors.click,
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: GestureDetector(
-        onTap: widget.onPressed,
-        child: AnimatedDefaultTextStyle(
-          duration: const Duration(milliseconds: 150),
-          style: TextStyle(
-            color: isDisabled
-                ? colors.textMuted
-                : _isHovered
-                    ? AppColors.accent.withValues(alpha: 0.8)
-                    : AppColors.accent,
-            fontSize: widget.fontSize,
-            fontWeight: widget.fontWeight,
-            decoration: widget.underline ? TextDecoration.underline : TextDecoration.none,
-            decorationColor: isDisabled
-                ? colors.textMuted
-                : _isHovered
-                    ? AppColors.accent.withValues(alpha: 0.8)
-                    : AppColors.accent,
-          ),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onPressed,
+        borderRadius: BorderRadius.circular(4),
+        hoverColor: AppColors.accent.withValues(alpha: 0.1),
+        splashColor: AppColors.accent.withValues(alpha: 0.2),
+        highlightColor: AppColors.accent.withValues(alpha: 0.1),
+        mouseCursor: isDisabled ? SystemMouseCursors.basic : SystemMouseCursors.click,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
           child: Text(
-            widget.text,
+            text,
             textAlign: TextAlign.center,
+            style: TextStyle(
+              color: isDisabled ? colors.textMuted : AppColors.accent,
+              fontSize: fontSize,
+              fontWeight: fontWeight,
+              decoration: underline ? TextDecoration.underline : TextDecoration.none,
+              decorationColor: isDisabled ? colors.textMuted : AppColors.accent,
+            ),
           ),
         ),
       ),

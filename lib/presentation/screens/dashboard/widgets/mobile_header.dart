@@ -7,7 +7,6 @@ import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/spacing.dart';
 import '../../../../domain/entities/unit_state.dart';
 import '../../../widgets/breez/breez_logo.dart';
-import '../../../widgets/common/hover_builder.dart';
 import 'add_unit_button.dart';
 
 /// Mobile header with unit tabs and controls
@@ -102,11 +101,17 @@ class _UnitTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
-    return HoverBuilder(
-      onTap: onTap,
-      builder: (context, isHovered) {
-        return AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppRadius.nested),
+        hoverColor: isSelected
+            ? AppColors.accentLight
+            : colors.buttonBg,
+        splashColor: AppColors.accent.withValues(alpha: 0.2),
+        highlightColor: AppColors.accent.withValues(alpha: 0.1),
+        child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           decoration: BoxDecoration(
             color: isSelected ? AppColors.accent : Colors.transparent,
@@ -139,8 +144,8 @@ class _UnitTab extends StatelessWidget {
               ),
             ],
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

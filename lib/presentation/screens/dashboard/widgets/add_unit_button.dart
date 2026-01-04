@@ -4,7 +4,6 @@ library;
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/app_radius.dart';
-import '../../../widgets/common/hover_builder.dart';
 
 /// Compact add button for unit tabs
 class AddUnitButton extends StatelessWidget {
@@ -14,29 +13,29 @@ class AddUnitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return HoverBuilder(
-      onTap: onTap,
-      builder: (context, isHovered) {
-        return AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
+    final colors = BreezColors.of(context);
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppRadius.nested),
+        hoverColor: AppColors.accent.withValues(alpha: 0.15),
+        splashColor: AppColors.accent.withValues(alpha: 0.2),
+        highlightColor: AppColors.accent.withValues(alpha: 0.1),
+        child: Container(
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: isHovered
-                ? AppColors.accent.withValues(alpha: 0.2)
-                : Colors.transparent,
             borderRadius: BorderRadius.circular(AppRadius.nested),
-            border: Border.all(
-              color: isHovered ? AppColors.accent : Colors.transparent,
-            ),
           ),
           child: Icon(
             Icons.add_rounded,
             size: 20,
-            color: isHovered ? AppColors.accent : AppColors.darkTextMuted,
+            color: colors.textMuted,
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

@@ -4,7 +4,6 @@ library;
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/app_radius.dart';
-import '../../../widgets/common/hover_builder.dart';
 
 /// Icon button with badge for header
 class HeaderIconButton extends StatelessWidget {
@@ -23,17 +22,19 @@ class HeaderIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
 
-    return HoverBuilder(
-      onTap: onTap,
-      builder: (context, isHovered) {
-        return AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppRadius.button),
+        hoverColor: colors.buttonBg,
+        splashColor: AppColors.accent.withValues(alpha: 0.1),
+        highlightColor: AppColors.accent.withValues(alpha: 0.05),
+        child: Container(
           width: 44,
           height: 44,
           decoration: BoxDecoration(
-            color: isHovered
-                ? colors.buttonBg
-                : colors.card,
+            color: colors.card,
             borderRadius: BorderRadius.circular(AppRadius.button),
             border: Border.all(color: colors.border),
           ),
@@ -43,7 +44,7 @@ class HeaderIconButton extends StatelessWidget {
                 child: Icon(
                   icon,
                   size: 20,
-                  color: isHovered ? colors.text : colors.textMuted,
+                  color: colors.textMuted,
                 ),
               ),
               if (badge != null)
@@ -71,8 +72,8 @@ class HeaderIconButton extends StatelessWidget {
                 ),
             ],
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

@@ -6,7 +6,6 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../domain/entities/unit_state.dart';
 import '../../../widgets/breez/breez_logo.dart';
-import '../../../widgets/common/hover_builder.dart';
 import 'header_icon_button.dart';
 import 'add_unit_button.dart';
 
@@ -122,49 +121,53 @@ class DesktopHeader extends StatelessWidget {
   }
 
   Widget _buildUserInfo() {
-    return HoverBuilder(
-      onTap: onProfileTap,
-      builder: (context, isHovered) {
+    return Builder(
+      builder: (context) {
         final colors = BreezColors.of(context);
 
-        return AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          decoration: BoxDecoration(
-            color: isHovered ? colors.buttonBg : Colors.transparent,
+        return Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: onProfileTap,
             borderRadius: BorderRadius.circular(AppRadius.button),
-          ),
-          child: Row(
-            children: [
-              Text(
-                userName,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: colors.text,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [AppColors.accent, AppColors.accentLight],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
+            hoverColor: colors.buttonBg,
+            splashColor: AppColors.accent.withValues(alpha: 0.1),
+            highlightColor: AppColors.accent.withValues(alpha: 0.05),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              child: Row(
+                children: [
+                  Text(
+                    userName,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: colors.text,
+                    ),
                   ),
-                  borderRadius: BorderRadius.circular(AppRadius.button),
-                ),
-                child: const Center(
-                  child: Icon(
-                    Icons.person,
-                    size: 20,
-                    color: Colors.white,
+                  const SizedBox(width: 12),
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [AppColors.accent, AppColors.accentLight],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(AppRadius.button),
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.person,
+                        size: 20,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
         );
       },
@@ -187,11 +190,17 @@ class _UnitTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
-    return HoverBuilder(
-      onTap: onTap,
-      builder: (context, isHovered) {
-        return AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppRadius.nested),
+        hoverColor: isSelected
+            ? AppColors.accentLight
+            : colors.buttonBg,
+        splashColor: AppColors.accent.withValues(alpha: 0.2),
+        highlightColor: AppColors.accent.withValues(alpha: 0.1),
+        child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           decoration: BoxDecoration(
             color: isSelected ? AppColors.accent : Colors.transparent,
@@ -224,8 +233,8 @@ class _UnitTab extends StatelessWidget {
               ),
             ],
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

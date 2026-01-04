@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../domain/entities/unit_state.dart';
-import '../../../widgets/common/hover_builder.dart';
 
 /// Действия доступные в диалоге настроек
 enum UnitSettingsAction {
@@ -141,15 +140,23 @@ class _UnitSettingsDialogState extends State<UnitSettingsDialog> {
             ),
           ],
         ),
-        HoverBuilder(
-          onTap: () => Navigator.of(context).pop(),
-          builder: (context, isHovered) {
-            return Icon(
-              Icons.close,
-              size: 20,
-              color: isHovered ? colors.text : colors.textMuted,
-            );
-          },
+        Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () => Navigator.of(context).pop(),
+            borderRadius: BorderRadius.circular(AppRadius.button),
+            hoverColor: colors.buttonBg,
+            splashColor: AppColors.accent.withValues(alpha: 0.1),
+            highlightColor: AppColors.accent.withValues(alpha: 0.05),
+            child: Padding(
+              padding: const EdgeInsets.all(4),
+              child: Icon(
+                Icons.close,
+                size: 20,
+                color: colors.textMuted,
+              ),
+            ),
+          ),
         ),
       ],
     );
@@ -376,16 +383,24 @@ class _SettingsButton extends StatelessWidget {
         ? AppColors.accentRed.withValues(alpha: 0.1)
         : colors.cardLight;
 
-    return HoverBuilder(
-      onTap: onTap,
-      builder: (context, isHovered) {
-        return AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppRadius.card),
+        hoverColor: isDanger
+            ? AppColors.accentRed.withValues(alpha: 0.15)
+            : colors.border.withValues(alpha: 0.3),
+        splashColor: isDanger
+            ? AppColors.accentRed.withValues(alpha: 0.2)
+            : AppColors.accent.withValues(alpha: 0.1),
+        highlightColor: isDanger
+            ? AppColors.accentRed.withValues(alpha: 0.1)
+            : AppColors.accent.withValues(alpha: 0.05),
+        child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: isHovered
-                ? (isDanger ? AppColors.accentRed.withValues(alpha: 0.15) : colors.border.withValues(alpha: 0.3))
-                : bgColor,
+            color: bgColor,
             borderRadius: BorderRadius.circular(AppRadius.card),
             border: Border.all(
               color: isDanger
@@ -427,8 +442,8 @@ class _SettingsButton extends StatelessWidget {
               ),
             ],
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }
@@ -503,16 +518,24 @@ class _ActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return HoverBuilder(
-      onTap: onTap,
-      builder: (context, isHovered) {
-        return AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppRadius.button),
+        hoverColor: isPrimary
+            ? AppColors.accentLight
+            : colors.text.withValues(alpha: 0.05),
+        splashColor: isPrimary
+            ? AppColors.accent.withValues(alpha: 0.3)
+            : AppColors.accent.withValues(alpha: 0.1),
+        highlightColor: isPrimary
+            ? AppColors.accent.withValues(alpha: 0.2)
+            : AppColors.accent.withValues(alpha: 0.05),
+        child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           decoration: BoxDecoration(
-            color: isPrimary
-                ? (isHovered ? AppColors.accentLight : AppColors.accent)
-                : (isHovered ? colors.text.withValues(alpha: 0.05) : Colors.transparent),
+            color: isPrimary ? AppColors.accent : Colors.transparent,
             borderRadius: BorderRadius.circular(AppRadius.button),
             border: isPrimary ? null : Border.all(color: colors.border),
           ),
@@ -524,8 +547,8 @@ class _ActionButton extends StatelessWidget {
               color: isPrimary ? Colors.white : colors.textMuted,
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

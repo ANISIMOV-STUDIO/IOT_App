@@ -159,14 +159,10 @@ class BreezButton extends StatefulWidget {
 }
 
 class _BreezButtonState extends State<BreezButton> {
-  bool _isHovered = false;
-  bool _isPressed = false;
-
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
     final bg = widget.backgroundColor ?? colors.buttonBg;
-    final hover = widget.hoverColor ?? colors.cardLight;
 
     // Обеспечиваем минимальный touch target
     final buttonWidth = widget.width != null
@@ -176,44 +172,39 @@ class _BreezButtonState extends State<BreezButton> {
         ? ((widget.height ?? 0) < kMinTouchTarget ? kMinTouchTarget : widget.height)
         : kMinTouchTarget;
 
-    return MouseRegion(
-      cursor: widget.isLoading || widget.onTap == null
-          ? SystemMouseCursors.basic
-          : SystemMouseCursors.click,
-      onEnter: widget.onTap == null ? null : (_) => setState(() => _isHovered = true),
-      onExit: widget.onTap == null ? null : (_) => setState(() => _isHovered = false),
-      child: GestureDetector(
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
         onTap: widget.isLoading ? null : widget.onTap,
-        onTapDown: widget.isLoading ? null : (_) => setState(() => _isPressed = true),
-        onTapUp: widget.isLoading ? null : (_) => setState(() => _isPressed = false),
-        onTapCancel: widget.isLoading ? null : () => setState(() => _isPressed = false),
-        child: AnimatedScale(
-          scale: _isPressed ? 0.95 : 1.0,
-          duration: const Duration(milliseconds: 100),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 150),
-            width: buttonWidth,
-            height: buttonHeight,
-            padding: widget.padding ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: _isHovered ? hover : bg,
-              borderRadius: BorderRadius.circular(widget.borderRadius),
-              border: widget.border ?? Border.all(color: colors.border),
-              boxShadow: widget.shadows,
-            ),
-            child: widget.isLoading
-                ? Center(
-                    child: SizedBox(
-                      width: 16,
-                      height: 16,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(colors.text),
-                      ),
-                    ),
-                  )
-                : widget.child,
+        borderRadius: BorderRadius.circular(widget.borderRadius),
+        hoverColor: widget.hoverColor ?? colors.cardLight,
+        splashColor: AppColors.accent.withValues(alpha: 0.1),
+        highlightColor: AppColors.accent.withValues(alpha: 0.05),
+        mouseCursor: widget.isLoading || widget.onTap == null
+            ? SystemMouseCursors.basic
+            : SystemMouseCursors.click,
+        child: Container(
+          width: buttonWidth,
+          height: buttonHeight,
+          padding: widget.padding ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          decoration: BoxDecoration(
+            color: bg,
+            borderRadius: BorderRadius.circular(widget.borderRadius),
+            border: widget.border ?? Border.all(color: colors.border),
+            boxShadow: widget.shadows,
           ),
+          child: widget.isLoading
+              ? Center(
+                  child: SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation<Color>(colors.text),
+                    ),
+                  ),
+                )
+              : widget.child,
         ),
       ),
     );
