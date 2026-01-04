@@ -111,7 +111,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final colors = BreezColors.of(context);
 
     return BreezCard(
-      padding: const EdgeInsets.all(AppSpacing.lg),
+      padding: const EdgeInsets.all(AppSpacing.sm),
       child: Column(
         children: [
           // Avatar
@@ -179,7 +179,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final colors = BreezColors.of(context);
 
     return BreezCard(
-      padding: const EdgeInsets.all(AppSpacing.md),
+      padding: const EdgeInsets.all(AppSpacing.sm),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -208,7 +208,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final colors = BreezColors.of(context);
 
     return BreezCard(
-      padding: const EdgeInsets.all(AppSpacing.md),
+      padding: const EdgeInsets.all(AppSpacing.sm),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -257,7 +257,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final colors = BreezColors.of(context);
 
     return BreezCard(
-      padding: const EdgeInsets.all(AppSpacing.md),
+      padding: const EdgeInsets.all(AppSpacing.sm),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -645,7 +645,7 @@ class _LanguageOption extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(AppRadius.button),
         child: Ink(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: const EdgeInsets.all(AppSpacing.sm),
           decoration: BoxDecoration(
             color: isSelected
                 ? AppColors.accent.withValues(alpha: 0.1)
@@ -659,14 +659,14 @@ class _LanguageOption extends StatelessWidget {
             children: [
               Text(
                 language.flag,
-                style: const TextStyle(fontSize: 24),
+                style: const TextStyle(fontSize: 20),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: AppSpacing.sm),
               Expanded(
                 child: Text(
                   language.nativeName,
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 14,
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                     color: isSelected ? AppColors.accent : colors.text,
                   ),
@@ -676,7 +676,7 @@ class _LanguageOption extends StatelessWidget {
                 const Icon(
                   Icons.check_circle,
                   color: AppColors.accent,
-                  size: 20,
+                  size: 18,
                 ),
             ],
           ),
