@@ -133,6 +133,12 @@ class _DesktopLayoutState extends State<DesktopLayout> {
           flex: 4,
           child: UnitControlCard(
             unit: widget.unit,
+            onTemperatureIncrease: widget.onTemperatureIncrease != null
+                ? () => widget.onTemperatureIncrease!(widget.unit.temp + 1)
+                : null,
+            onTemperatureDecrease: widget.onTemperatureDecrease != null
+                ? () => widget.onTemperatureDecrease!(widget.unit.temp - 1)
+                : null,
             onSupplyFanChanged: widget.onSupplyFanChanged,
             onExhaustFanChanged: widget.onExhaustFanChanged,
             onModeChanged: widget.onModeChanged,

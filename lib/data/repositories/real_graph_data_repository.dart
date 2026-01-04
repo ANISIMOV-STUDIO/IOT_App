@@ -32,8 +32,10 @@ class RealGraphDataRepository implements GraphDataRepository {
     if (jsonData.containsKey('dataPoints') && jsonData['dataPoints'] is List) {
       for (final point in jsonData['dataPoints'] as List) {
         if (point is Map<String, dynamic>) {
+          final rawLabel = point['label'] as String? ?? '';
+          final label = _formatLabel(rawLabel);
           dataPoints.add(GraphDataPoint(
-            label: point['label'] as String? ?? '',
+            label: label,
             value: (point['value'] as num?)?.toDouble() ?? 0.0,
           ));
         }
@@ -78,6 +80,18 @@ class RealGraphDataRepository implements GraphDataRepository {
         return 'humidity';
       case GraphMetric.airflow:
         return 'airflow';
+    }
+  }
+
+  /// Format ISO timestamp to short label (HH:mm)
+  String _formatLabel(String rawLabel) {
+    if (rawLabel.isEmpty) return '';
+    try {
+      final dateTime = DateTime.parse(rawLabel);
+      return '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
+    } catch (_) {
+      // Not a timestamp, return as-is
+      return rawLabel;
     }
   }
 

@@ -253,9 +253,14 @@ void main() {
         ),
         act: (bloc) => bloc.add(const ClimatePowerToggled(false)),
         expect: () => [
+          // Первый emit: isTogglingPower = true (optimistic update)
+          isA<ClimateControlState>()
+              .having((s) => s.isTogglingPower, 'isTogglingPower', true),
+          // Второй emit: ошибка + isTogglingPower = false
           isA<ClimateControlState>()
               .having((s) => s.errorMessage, 'errorMessage',
-                  contains('переключения питания')),
+                  contains('переключения питания'))
+              .having((s) => s.isTogglingPower, 'isTogglingPower', false),
         ],
       );
     });

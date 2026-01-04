@@ -24,6 +24,8 @@ class MainTempCard extends StatelessWidget {
   final ValueChanged<int>? onSupplyFanChanged;
   final ValueChanged<int>? onExhaustFanChanged;
   final VoidCallback? onSettingsTap;
+  final VoidCallback? onTemperatureIncrease;
+  final VoidCallback? onTemperatureDecrease;
   final bool showControls;
   final String? selectedMode;
   final ValueChanged<String>? onModeChanged;
@@ -48,6 +50,8 @@ class MainTempCard extends StatelessWidget {
     this.onSupplyFanChanged,
     this.onExhaustFanChanged,
     this.onSettingsTap,
+    this.onTemperatureIncrease,
+    this.onTemperatureDecrease,
     this.showControls = false,
     this.selectedMode,
     this.onModeChanged,
@@ -243,7 +247,7 @@ class MainTempCard extends StatelessWidget {
                 ],
               ),
 
-              // Temperature display
+              // Temperature display with +/- controls
               Expanded(
                 child: Center(
                   child: Column(
@@ -256,31 +260,56 @@ class MainTempCard extends StatelessWidget {
                         color: colors.textMuted,
                       ),
                       const SizedBox(height: 8),
-                      // Temperature
+                      // Temperature with +/- buttons
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text(
-                            '$temperature',
-                            style: TextStyle(
-                              fontSize: 72,
-                              fontWeight: FontWeight.w300,
-                              color: colors.text,
-                              height: 1,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8),
-                            child: Text(
-                              '°C',
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.w400,
-                                color: colors.textMuted,
+                          // Minus button
+                          if (isPowered && onTemperatureDecrease != null)
+                            _TemperatureButton(
+                              icon: Icons.remove,
+                              onTap: onTemperatureDecrease,
+                            )
+                          else
+                            const SizedBox(width: 48),
+                          const SizedBox(width: 16),
+                          // Temperature value
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '$temperature',
+                                style: TextStyle(
+                                  fontSize: 72,
+                                  fontWeight: FontWeight.w300,
+                                  color: colors.text,
+                                  height: 1,
+                                ),
                               ),
-                            ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8),
+                                child: Text(
+                                  '°C',
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w400,
+                                    color: colors.textMuted,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
+                          const SizedBox(width: 16),
+                          // Plus button
+                          if (isPowered && onTemperatureIncrease != null)
+                            _TemperatureButton(
+                              icon: Icons.add,
+                              onTap: onTemperatureIncrease,
+                            )
+                          else
+                            const SizedBox(width: 48),
                         ],
                       ),
                       const SizedBox(height: 4),
@@ -648,6 +677,48 @@ class _FanSlider extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// Temperature +/- button
+class _TemperatureButton extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback? onTap;
+
+  const _TemperatureButton({
+    required this.icon,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(24),
+        child: Container(
+          width: 48,
+          height: 48,
+          decoration: BoxDecoration(
+            color: isDark
+                ? Colors.white.withValues(alpha: 0.1)
+                : Colors.black.withValues(alpha: 0.05),
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: AppColors.accent.withValues(alpha: 0.3),
+            ),
+          ),
+          child: Icon(
+            icon,
+            size: 24,
+            color: AppColors.accent,
+          ),
+        ),
+      ),
     );
   }
 }

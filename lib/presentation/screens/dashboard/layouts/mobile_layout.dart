@@ -39,6 +39,12 @@ class MobileLayout extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
       child: UnitControlCard(
         unit: unit,
+        onTemperatureIncrease: onTemperatureIncrease != null
+            ? () => onTemperatureIncrease!(unit.temp + 1)
+            : null,
+        onTemperatureDecrease: onTemperatureDecrease != null
+            ? () => onTemperatureDecrease!(unit.temp - 1)
+            : null,
         onSupplyFanChanged: onSupplyFanChanged,
         onExhaustFanChanged: onExhaustFanChanged,
         onModeChanged: onModeChanged,

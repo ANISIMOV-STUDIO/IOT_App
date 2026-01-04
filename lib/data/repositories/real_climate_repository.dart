@@ -202,18 +202,17 @@ class RealClimateRepository implements ClimateRepository {
   }
 
   @override
+
+  @override
   Future<ClimateState> setSupplyAirflow(
     double value, {
     String? deviceId,
   }) async {
     final id = deviceId ?? _selectedDeviceId;
-    final fanSpeed = DeviceJsonMapper.percentToFanSpeed(value);
+    final fanSpeed = DeviceJsonMapper.percentToFanSpeedInt(value);
 
-    // Get current device to maintain exhaust fan
-    final currentDevice = await _httpClient.getDevice(id);
-    final currentExhaustFan = currentDevice['exhaustFan'] as String? ?? 'auto';
-
-    final jsonDevice = await _httpClient.setFanSpeed(id, fanSpeed, currentExhaustFan);
+    // PATCH только supply fan, без получения текущего состояния
+    final jsonDevice = await _httpClient.updateDevice(id, supplyFan: fanSpeed);
     final state = DeviceJsonMapper.climateStateFromJson(jsonDevice);
     _climateController.add(state);
     return state;
@@ -225,13 +224,10 @@ class RealClimateRepository implements ClimateRepository {
     String? deviceId,
   }) async {
     final id = deviceId ?? _selectedDeviceId;
-    final fanSpeed = DeviceJsonMapper.percentToFanSpeed(value);
+    final fanSpeed = DeviceJsonMapper.percentToFanSpeedInt(value);
 
-    // Get current device to maintain supply fan
-    final currentDevice = await _httpClient.getDevice(id);
-    final currentSupplyFan = currentDevice['supplyFan'] as String? ?? 'auto';
-
-    final jsonDevice = await _httpClient.setFanSpeed(id, currentSupplyFan, fanSpeed);
+    // PATCH только exhaust fan, без получения текущего состояния
+    final jsonDevice = await _httpClient.updateDevice(id, exhaustFan: fanSpeed);
     final state = DeviceJsonMapper.climateStateFromJson(jsonDevice);
     _climateController.add(state);
     return state;

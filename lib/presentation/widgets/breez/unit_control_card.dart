@@ -8,6 +8,8 @@ import 'main_temp_card.dart';
 /// Unified unit control card for all layouts (adaptive)
 class UnitControlCard extends StatelessWidget {
   final UnitState unit;
+  final VoidCallback? onTemperatureIncrease;
+  final VoidCallback? onTemperatureDecrease;
   final ValueChanged<int>? onSupplyFanChanged;
   final ValueChanged<int>? onExhaustFanChanged;
   final ValueChanged<String>? onModeChanged;
@@ -18,6 +20,8 @@ class UnitControlCard extends StatelessWidget {
   const UnitControlCard({
     super.key,
     required this.unit,
+    this.onTemperatureIncrease,
+    this.onTemperatureDecrease,
     this.onSupplyFanChanged,
     this.onExhaustFanChanged,
     this.onModeChanged,
@@ -55,6 +59,8 @@ class UnitControlCard extends StatelessWidget {
           supplyFan: unit.supplyFan,
           exhaustFan: unit.exhaustFan,
           onPowerToggle: onPowerToggle,
+          onTemperatureIncrease: onTemperatureIncrease,
+          onTemperatureDecrease: onTemperatureDecrease,
           onSupplyFanChanged: onSupplyFanChanged,
           onExhaustFanChanged: onExhaustFanChanged,
           onSettingsTap: onSettingsTap,

@@ -156,6 +156,14 @@ class DeviceJsonMapper {
     return 50.0;
   }
 
+
+  /// Percent (0-100) → FanSpeed int (20-100)
+  /// UI использует 0-100%, API ожидает 20-100
+  static int percentToFanSpeedInt(double percent) {
+    // Ограничить значение в диапазоне 20-100
+    final clamped = percent.clamp(20.0, 100.0);
+    return clamped.round();
+  }
   /// Percent → FanSpeed string
   static String percentToFanSpeed(double percent) {
     // Ограничить значение в диапазоне 0-100

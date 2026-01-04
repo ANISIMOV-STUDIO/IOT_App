@@ -218,14 +218,15 @@ void main() {
     });
   });
 
+
   group('HvacHttpClient.setTemperature', () {
-    test('устанавливает температуру при успешном запросе', () async {
+    test('устанавливает температуру через PATCH', () async {
       // Arrange
       final responseJson = {
         'id': 'device-1',
-        'targetTemperature': 24,
+        'heatingTemperature': 24,
       };
-      when(() => mockHttpClient.post(
+      when(() => mockHttpClient.patch(
             any(),
             headers: any(named: 'headers'),
             body: any(named: 'body'),
@@ -235,19 +236,19 @@ void main() {
       final result = await hvacClient.setTemperature('device-1', 24);
 
       // Assert
-      expect(result['targetTemperature'], equals(24));
+      expect(result['heatingTemperature'], equals(24));
 
-      // Verify request body
-      verify(() => mockHttpClient.post(
+      // Verify request body uses heatingTemperature
+      verify(() => mockHttpClient.patch(
             any(),
             headers: any(named: 'headers'),
-            body: json.encode({'temperature': 24}),
+            body: json.encode({'heatingTemperature': 24}),
           )).called(1);
     });
 
     test('выбрасывает исключение при ошибке сервера', () async {
       // Arrange
-      when(() => mockHttpClient.post(
+      when(() => mockHttpClient.patch(
             any(),
             headers: any(named: 'headers'),
             body: any(named: 'body'),
@@ -260,7 +261,6 @@ void main() {
       );
     });
   });
-
   group('HvacHttpClient.setMode', () {
     test('устанавливает режим heating', () async {
       // Arrange
@@ -308,60 +308,60 @@ void main() {
     });
   });
 
+
   group('HvacHttpClient.setFanSpeed', () {
-    test('устанавливает скорость вентиляторов', () async {
+    test('устанавливает скорости вентиляторов через PATCH', () async {
       // Arrange
       final responseJson = {
         'id': 'device-1',
-        'supplyFan': 'high',
-        'exhaustFan': 'medium',
+        'supplyFan': 80,
+        'exhaustFan': 60,
       };
-      when(() => mockHttpClient.post(
+      when(() => mockHttpClient.patch(
             any(),
             headers: any(named: 'headers'),
             body: any(named: 'body'),
           )).thenAnswer((_) async => successResponse(responseJson));
 
       // Act
-      final result = await hvacClient.setFanSpeed('device-1', 'high', 'medium');
+      final result = await hvacClient.setFanSpeed('device-1', 80, 60);
 
       // Assert
-      expect(result['supplyFan'], equals('high'));
-      expect(result['exhaustFan'], equals('medium'));
+      expect(result['supplyFan'], equals(80));
+      expect(result['exhaustFan'], equals(60));
 
-      // Verify request body
-      verify(() => mockHttpClient.post(
+      // Verify request uses PATCH to device endpoint
+      verify(() => mockHttpClient.patch(
             any(),
             headers: any(named: 'headers'),
             body: json.encode({
-              'supplyFan': 'high',
-              'exhaustFan': 'medium',
+              'supplyFan': 80,
+              'exhaustFan': 60,
             }),
           )).called(1);
     });
 
-    test('устанавливает вентиляторы в auto режим', () async {
+    test('устанавливает минимальные значения вентиляторов', () async {
       // Arrange
       final responseJson = {
         'id': 'device-1',
-        'supplyFan': 'auto',
-        'exhaustFan': 'auto',
+        'supplyFan': 20,
+        'exhaustFan': 20,
       };
-      when(() => mockHttpClient.post(
+      when(() => mockHttpClient.patch(
             any(),
             headers: any(named: 'headers'),
             body: any(named: 'body'),
           )).thenAnswer((_) async => successResponse(responseJson));
 
       // Act
-      final result = await hvacClient.setFanSpeed('device-1', 'auto', 'auto');
+      final result = await hvacClient.setFanSpeed('device-1', 20, 20);
 
       // Assert
-      expect(result['supplyFan'], equals('auto'));
-      expect(result['exhaustFan'], equals('auto'));
+      expect(result['supplyFan'], equals(20));
+      expect(result['exhaustFan'], equals(20));
     });
   });
-
   group('HvacHttpClient авторизация', () {
     test('отправляет Authorization header с токеном', () async {
       // Arrange

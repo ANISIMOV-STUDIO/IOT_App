@@ -125,17 +125,34 @@ class HvacHttpClient {
     }
   }
 
-  /// Set temperature
-  Future<Map<String, dynamic>> setTemperature(
-      String deviceId, int temperature) async {
-    final url = '${ApiConfig.hvacApiUrl}/$deviceId/temperature';
-    final body = json.encode({'temperature': temperature});
+
+  /// Обновить настройки устройства (температура, вентиляторы) через PATCH
+  /// PATCH /api/device/{id}
+  Future<Map<String, dynamic>> updateDevice(
+    String deviceId, {
+    int? heatingTemperature,
+    int? coolingTemperature,
+    int? supplyFan,
+    int? exhaustFan,
+  }) async {
+    final url = '${ApiConfig.hvacApiUrl}/$deviceId';
+    final bodyMap = <String, dynamic>{};
+    if (heatingTemperature != null) {
+      bodyMap['heatingTemperature'] = heatingTemperature;
+    }
+    if (coolingTemperature != null) {
+      bodyMap['coolingTemperature'] = coolingTemperature;
+    }
+    if (supplyFan != null) bodyMap['supplyFan'] = supplyFan;
+    if (exhaustFan != null) bodyMap['exhaustFan'] = exhaustFan;
+
+    final body = json.encode(bodyMap);
 
     try {
-      ApiLogger.logHttpRequest('POST', url, body);
+      ApiLogger.logHttpRequest('PATCH', url, body);
 
       final token = await _apiClient.getAuthToken();
-      final response = await _apiClient.getHttpClient().post(
+      final response = await _apiClient.getHttpClient().patch(
             Uri.parse(url),
             headers: {
               'Content-Type': 'application/json',
@@ -144,7 +161,7 @@ class HvacHttpClient {
             body: body,
           );
 
-      ApiLogger.logHttpResponse('POST', url, response.statusCode, response.body);
+      ApiLogger.logHttpResponse('PATCH', url, response.statusCode, response.body);
 
       if (response.statusCode == 200) {
         return json.decode(response.body) as Map<String, dynamic>;
@@ -152,7 +169,7 @@ class HvacHttpClient {
         throw HttpErrorHandler.handle(response);
       }
     } catch (e) {
-      ApiLogger.logHttpError('POST', url, e);
+      ApiLogger.logHttpError('PATCH', url, e);
       if (e is http.ClientException) {
         throw HttpErrorHandler.handleException(e);
       }
@@ -160,6 +177,11 @@ class HvacHttpClient {
     }
   }
 
+  /// Set heating temperature via PATCH
+  Future<Map<String, dynamic>> setTemperature(
+      String deviceId, int temperature) async {
+    return updateDevice(deviceId, heatingTemperature: temperature);
+  }
   /// Set mode
   Future<Map<String, dynamic>> setMode(String deviceId, String mode) async {
     final url = '${ApiConfig.hvacApiUrl}/$deviceId/mode';
@@ -194,47 +216,15 @@ class HvacHttpClient {
     }
   }
 
-  /// Set fan speed
+
+  /// Set fan speed via PATCH
   Future<Map<String, dynamic>> setFanSpeed(
     String deviceId,
-    String supplyFan,
-    String exhaustFan,
+    int supplyFan,
+    int exhaustFan,
   ) async {
-    final url = '${ApiConfig.hvacApiUrl}/$deviceId/fan';
-    final body = json.encode({
-      'supplyFan': supplyFan,
-      'exhaustFan': exhaustFan,
-    });
-
-    try {
-      ApiLogger.logHttpRequest('POST', url, body);
-
-      final token = await _apiClient.getAuthToken();
-      final response = await _apiClient.getHttpClient().post(
-            Uri.parse(url),
-            headers: {
-              'Content-Type': 'application/json',
-              if (token != null) 'Authorization': 'Bearer $token',
-            },
-            body: body,
-          );
-
-      ApiLogger.logHttpResponse('POST', url, response.statusCode, response.body);
-
-      if (response.statusCode == 200) {
-        return json.decode(response.body) as Map<String, dynamic>;
-      } else {
-        throw HttpErrorHandler.handle(response);
-      }
-    } catch (e) {
-      ApiLogger.logHttpError('POST', url, e);
-      if (e is http.ClientException) {
-        throw HttpErrorHandler.handleException(e);
-      }
-      rethrow;
-    }
+    return updateDevice(deviceId, supplyFan: supplyFan, exhaustFan: exhaustFan);
   }
-
   /// Получить историю аварий устройства
   /// GET /api/device/{id}/alarms?limit=100
   Future<List<Map<String, dynamic>>> getAlarmHistory(

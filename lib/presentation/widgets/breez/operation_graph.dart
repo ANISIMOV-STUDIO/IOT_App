@@ -287,17 +287,31 @@ class _OperationGraphState extends State<OperationGraph> {
 
   Widget _buildXAxis() {
     final colors = BreezColors.of(context);
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: widget.data.map((point) {
-        return Text(
-          point.label,
-          style: TextStyle(
-            fontSize: 10,
-            color: colors.textMuted,
+    final data = widget.data;
+
+    // Show max 6 labels to prevent overflow
+    final labelCount = data.length;
+    const maxLabels = 6;
+    final step = labelCount <= maxLabels ? 1 : (labelCount / (maxLabels - 1)).ceil();
+
+    final labels = <Widget>[];
+    for (var i = 0; i < labelCount; i++) {
+      if (i == 0 || i == labelCount - 1 || (step > 1 && i % step == 0)) {
+        labels.add(
+          Text(
+            data[i].label,
+            style: TextStyle(
+              fontSize: 10,
+              color: colors.textMuted,
+            ),
           ),
         );
-      }).toList(),
+      }
+    }
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: labels,
     );
   }
 }
