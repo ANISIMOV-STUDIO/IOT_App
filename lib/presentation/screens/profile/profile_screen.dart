@@ -10,7 +10,6 @@ import '../../../core/navigation/app_router.dart';
 import '../../../core/services/language_service.dart';
 import '../../../core/services/theme_service.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_font_sizes.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/spacing.dart';
 import '../../../core/utils/snackbar_utils.dart';
@@ -22,8 +21,17 @@ import '../../bloc/auth/auth_state.dart';
 import '../../widgets/breez/breez.dart';
 
 /// Profile screen with user info and settings
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  bool _pushNotifications = true;
+  bool _emailNotifications = false;
+  bool _alarmNotifications = true;
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +45,7 @@ class ProfileScreen extends StatelessWidget {
         if (state is AuthProfileUpdated) {
           SnackBarUtils.showSuccess(context, l10n.profileUpdated);
         } else if (state is AuthPasswordChanged) {
-          SnackBarUtils.showSuccess(
-            context,
-            l10n.passwordChanged,
-          );
+          SnackBarUtils.showSuccess(context, l10n.passwordChanged);
           context.go(AppRoutes.login);
         } else if (state is AuthError) {
           SnackBarUtils.showError(context, state.message);
@@ -48,238 +53,294 @@ class ProfileScreen extends StatelessWidget {
       },
       child: Scaffold(
         backgroundColor: colors.bg,
-        body: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(AppSpacing.lg),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(AppSpacing.lg),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 500),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Header
+                  Text(
+                    l10n.profile,
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: colors.text,
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.lg),
+
+                  // User Info Card
+                  BlocBuilder<AuthBloc, AuthState>(
+                    builder: (context, state) {
+                      if (state is AuthAuthenticated) {
+                        return _buildUserCard(context, state, l10n);
+                      }
+                      return const SizedBox.shrink();
+                    },
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+
+                  // Account Card
+                  _buildAccountCard(context, l10n),
+                  const SizedBox(height: AppSpacing.md),
+
+                  // Notifications Card
+                  _buildNotificationsCard(context, l10n),
+                  const SizedBox(height: AppSpacing.md),
+
+                  // Settings Card
+                  _buildSettingsCard(context, themeService, languageService, l10n),
+                  const SizedBox(height: AppSpacing.lg),
+
+                  // Logout Button
+                  _buildLogoutButton(context, l10n),
+                  const SizedBox(height: AppSpacing.lg),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildUserCard(BuildContext context, AuthAuthenticated state, AppLocalizations l10n) {
+    final colors = BreezColors.of(context);
+
+    return BreezCard(
+      padding: const EdgeInsets.all(AppSpacing.lg),
+      child: Column(
+        children: [
+          // Avatar
+          Container(
+            width: 80,
+            height: 80,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [AppColors.accent, AppColors.accentLight],
+              ),
+            ),
             child: Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 600),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // Header
-                    Text(
-                      l10n.profile,
-                      style: TextStyle(
-                        fontSize: AppFontSizes.h2,
-                        fontWeight: FontWeight.bold,
-                        color: colors.text,
-                      ),
-                    ),
-                    const SizedBox(height: AppSpacing.xl),
-
-                    // User Info Card
-                    BlocBuilder<AuthBloc, AuthState>(
-                      builder: (context, state) {
-                        if (state is AuthAuthenticated) {
-                          return BreezCard(
-                            padding: const EdgeInsets.all(AppSpacing.xl),
-                            child: Column(
-                              children: [
-                                // Avatar
-                                Container(
-                                  width: 100,
-                                  height: 100,
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    gradient: LinearGradient(
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                      colors: [
-                                        AppColors.accent,
-                                        AppColors.accentLight,
-                                      ],
-                                    ),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      _getInitials(state.user.firstName, state.user.lastName),
-                                      style: const TextStyle(
-                                        fontSize: 36,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: AppSpacing.lg),
-
-                                // Name
-                                Text(
-                                  '${state.user.firstName} ${state.user.lastName}',
-                                  style: TextStyle(
-                                    fontSize: AppFontSizes.h3,
-                                    fontWeight: FontWeight.bold,
-                                    color: colors.text,
-                                  ),
-                                ),
-                                const SizedBox(height: AppSpacing.xs),
-
-                                // Email
-                                Text(
-                                  state.user.email,
-                                  style: TextStyle(
-                                    fontSize: AppFontSizes.body,
-                                    color: colors.textMuted,
-                                  ),
-                                ),
-                                const SizedBox(height: AppSpacing.lg),
-
-                                // Edit Profile Button
-                                BreezButton(
-                                  onTap: () => _showEditProfileDialog(
-                                    context,
-                                    state.user.firstName,
-                                    state.user.lastName,
-                                  ),
-                                  backgroundColor: Colors.transparent,
-                                  hoverColor: colors.buttonBg,
-                                  border: Border.all(color: AppColors.accent),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Icon(
-                                        Icons.edit_outlined,
-                                        size: 18,
-                                        color: AppColors.accent,
-                                      ),
-                                      const SizedBox(width: AppSpacing.xs),
-                                      Text(
-                                        l10n.editProfile,
-                                        style: const TextStyle(
-                                          fontSize: AppFontSizes.body,
-                                          fontWeight: FontWeight.w600,
-                                          color: AppColors.accent,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }
-                        return const SizedBox.shrink();
-                      },
-                    ),
-                    const SizedBox(height: AppSpacing.lg),
-
-                    // Account Card
-                    BreezCard(
-                      padding: const EdgeInsets.all(AppSpacing.lg),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            l10n.account,
-                            style: TextStyle(
-                              fontSize: AppFontSizes.h4,
-                              fontWeight: FontWeight.bold,
-                              color: colors.text,
-                            ),
-                          ),
-                          const SizedBox(height: AppSpacing.md),
-
-                          // Change Password
-                          _SettingsTile(
-                            icon: Icons.lock_outlined,
-                            title: l10n.changePassword,
-                            subtitle: l10n.changeAccountPassword,
-                            onTap: () => _showChangePasswordDialog(context),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: AppSpacing.lg),
-
-                    // Theme Settings Card
-                    BreezCard(
-                      padding: const EdgeInsets.all(AppSpacing.lg),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            l10n.settings,
-                            style: TextStyle(
-                              fontSize: AppFontSizes.h4,
-                              fontWeight: FontWeight.bold,
-                              color: colors.text,
-                            ),
-                          ),
-                          const SizedBox(height: AppSpacing.md),
-
-                          // Theme Toggle
-                          ListenableBuilder(
-                            listenable: themeService,
-                            builder: (context, _) {
-                              final isDark = themeService.isDark;
-                              return _SettingsTile(
-                                icon: isDark ? Icons.dark_mode : Icons.light_mode,
-                                title: l10n.theme,
-                                subtitle: isDark ? l10n.darkThemeLabel : l10n.lightThemeLabel,
-                                onTap: themeService.toggleTheme,
-                              );
-                            },
-                          ),
-                          const SizedBox(height: AppSpacing.sm),
-
-                          // Language Toggle
-                          ListenableBuilder(
-                            listenable: languageService,
-                            builder: (context, _) {
-                              final isRussian = languageService.currentLocale?.languageCode == 'ru';
-                              return _SettingsTile(
-                                icon: Icons.language,
-                                title: l10n.language,
-                                subtitle: isRussian ? l10n.russian : l10n.english,
-                                onTap: () {
-                                  languageService.setLocale(
-                                    isRussian ? 'en' : 'ru',
-                                  );
-                                },
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: AppSpacing.lg),
-
-                    // Logout Button
-                    BreezButton(
-                      onTap: () {
-                        context.read<AuthBloc>().add(const AuthLogoutRequested());
-                        rootNavigatorKey.currentContext?.go(AppRoutes.login);
-                      },
-                      backgroundColor: AppColors.critical.withValues(alpha: 0.1),
-                      hoverColor: AppColors.critical.withValues(alpha: 0.2),
-                      border: Border.all(
-                        color: AppColors.critical.withValues(alpha: 0.3),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            Icons.logout,
-                            size: 20,
-                            color: AppColors.critical,
-                          ),
-                          const SizedBox(width: AppSpacing.xs),
-                          Text(
-                            l10n.logout,
-                            style: const TextStyle(
-                              fontSize: AppFontSizes.body,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.critical,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+              child: Text(
+                _getInitials(state.user.firstName, state.user.lastName),
+                style: const TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
               ),
             ),
+          ),
+          const SizedBox(height: AppSpacing.md),
+
+          // Name
+          Text(
+            '${state.user.firstName} ${state.user.lastName}',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: colors.text,
+            ),
+          ),
+          const SizedBox(height: 4),
+
+          // Email
+          Text(
+            state.user.email,
+            style: TextStyle(
+              fontSize: 14,
+              color: colors.textMuted,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.md),
+
+          // Edit Profile Button
+          _ActionButton(
+            icon: Icons.edit_outlined,
+            label: l10n.editProfile,
+            onTap: () => _showEditProfileDialog(
+              context,
+              state.user.firstName,
+              state.user.lastName,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAccountCard(BuildContext context, AppLocalizations l10n) {
+    final colors = BreezColors.of(context);
+
+    return BreezCard(
+      padding: const EdgeInsets.all(AppSpacing.md),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 4, bottom: AppSpacing.sm),
+            child: Text(
+              l10n.account,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: colors.textMuted,
+              ),
+            ),
+          ),
+          _SettingsTile(
+            icon: Icons.lock_outlined,
+            title: l10n.changePassword,
+            onTap: () => _showChangePasswordDialog(context),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNotificationsCard(BuildContext context, AppLocalizations l10n) {
+    final colors = BreezColors.of(context);
+
+    return BreezCard(
+      padding: const EdgeInsets.all(AppSpacing.md),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 4, bottom: AppSpacing.sm),
+            child: Text(
+              'Уведомления',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: colors.textMuted,
+              ),
+            ),
+          ),
+          _SwitchTile(
+            icon: Icons.notifications_outlined,
+            title: 'Push-уведомления',
+            value: _pushNotifications,
+            onChanged: (v) => setState(() => _pushNotifications = v),
+          ),
+          const SizedBox(height: AppSpacing.xs),
+          _SwitchTile(
+            icon: Icons.email_outlined,
+            title: 'Email-уведомления',
+            value: _emailNotifications,
+            onChanged: (v) => setState(() => _emailNotifications = v),
+          ),
+          const SizedBox(height: AppSpacing.xs),
+          _SwitchTile(
+            icon: Icons.warning_amber_outlined,
+            title: 'Уведомления об авариях',
+            value: _alarmNotifications,
+            onChanged: (v) => setState(() => _alarmNotifications = v),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSettingsCard(
+    BuildContext context,
+    ThemeService themeService,
+    LanguageService languageService,
+    AppLocalizations l10n,
+  ) {
+    final colors = BreezColors.of(context);
+
+    return BreezCard(
+      padding: const EdgeInsets.all(AppSpacing.md),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 4, bottom: AppSpacing.sm),
+            child: Text(
+              l10n.settings,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: colors.textMuted,
+              ),
+            ),
+          ),
+          // Theme Toggle
+          ListenableBuilder(
+            listenable: themeService,
+            builder: (context, _) {
+              final isDark = themeService.isDark;
+              return _SwitchTile(
+                icon: isDark ? Icons.dark_mode : Icons.light_mode,
+                title: l10n.theme,
+                subtitle: isDark ? l10n.darkThemeLabel : l10n.lightThemeLabel,
+                value: isDark,
+                onChanged: (_) => themeService.toggleTheme(),
+              );
+            },
+          ),
+          const SizedBox(height: AppSpacing.xs),
+          // Language Toggle
+          ListenableBuilder(
+            listenable: languageService,
+            builder: (context, _) {
+              final isRussian = languageService.currentLocale?.languageCode == 'ru';
+              return _SettingsTile(
+                icon: Icons.language,
+                title: l10n.language,
+                trailing: Text(
+                  isRussian ? 'Русский' : 'English',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: colors.textMuted,
+                  ),
+                ),
+                onTap: () => languageService.setLocale(isRussian ? 'en' : 'ru'),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLogoutButton(BuildContext context, AppLocalizations l10n) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {
+          context.read<AuthBloc>().add(const AuthLogoutRequested());
+          rootNavigatorKey.currentContext?.go(AppRoutes.login);
+        },
+        borderRadius: BorderRadius.circular(AppRadius.button),
+        child: Ink(
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          decoration: BoxDecoration(
+            color: AppColors.accentRed.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(AppRadius.button),
+            border: Border.all(color: AppColors.accentRed.withValues(alpha: 0.3)),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.logout, size: 20, color: AppColors.accentRed),
+              const SizedBox(width: 8),
+              Text(
+                l10n.logout,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.accentRed,
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -329,17 +390,63 @@ class ProfileScreen extends StatelessWidget {
   }
 }
 
-/// Settings tile widget
+/// Action button (outlined)
+class _ActionButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  const _ActionButton({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppRadius.button),
+        child: Ink(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(AppRadius.button),
+            border: Border.all(color: AppColors.accent),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, size: 18, color: AppColors.accent),
+              const SizedBox(width: 8),
+              Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.accent,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Settings tile with arrow
 class _SettingsTile extends StatelessWidget {
   final IconData icon;
   final String title;
-  final String subtitle;
+  final Widget? trailing;
   final VoidCallback onTap;
 
   const _SettingsTile({
     required this.icon,
     required this.title,
-    required this.subtitle,
+    this.trailing,
     required this.onTap,
   });
 
@@ -347,56 +454,109 @@ class _SettingsTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
 
-    return BreezButton(
-      onTap: onTap,
-      backgroundColor: Colors.transparent,
-      hoverColor: colors.buttonBg,
-      border: Border.all(color: colors.border),
-      padding: const EdgeInsets.all(AppSpacing.md),
-      child: Row(
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: AppColors.accent.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(AppRadius.button),
-            ),
-            child: Icon(
-              icon,
-              color: AppColors.accent,
-              size: 20,
-            ),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppRadius.button),
+        child: Ink(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          decoration: BoxDecoration(
+            color: colors.cardLight,
+            borderRadius: BorderRadius.circular(AppRadius.button),
           ),
-          const SizedBox(width: AppSpacing.md),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
+          child: Row(
+            children: [
+              Icon(icon, size: 20, color: AppColors.accent),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
                   title,
                   style: TextStyle(
-                    fontSize: AppFontSizes.body,
-                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
                     color: colors.text,
                   ),
                 ),
-                Text(
-                  subtitle,
-                  style: TextStyle(
-                    fontSize: AppFontSizes.caption,
-                    color: colors.textMuted,
-                  ),
+              ),
+              if (trailing != null) trailing!,
+              const SizedBox(width: 4),
+              Icon(Icons.chevron_right, size: 20, color: colors.textMuted),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Switch tile for toggles
+class _SwitchTile extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String? subtitle;
+  final bool value;
+  final ValueChanged<bool> onChanged;
+
+  const _SwitchTile({
+    required this.icon,
+    required this.title,
+    this.subtitle,
+    required this.value,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () => onChanged(!value),
+        borderRadius: BorderRadius.circular(AppRadius.button),
+        child: Ink(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          decoration: BoxDecoration(
+            color: colors.cardLight,
+            borderRadius: BorderRadius.circular(AppRadius.button),
+          ),
+          child: Row(
+            children: [
+              Icon(icon, size: 20, color: AppColors.accent),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: colors.text,
+                      ),
+                    ),
+                    if (subtitle != null)
+                      Text(
+                        subtitle!,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: colors.textMuted,
+                        ),
+                      ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              Switch(
+                value: value,
+                onChanged: onChanged,
+                activeTrackColor: AppColors.accent.withValues(alpha: 0.5),
+                activeThumbColor: AppColors.accent,
+              ),
+            ],
           ),
-          Icon(
-            Icons.chevron_right,
-            color: colors.textMuted,
-            size: 20,
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -465,7 +625,6 @@ class _EditProfileDialogState extends State<_EditProfileDialog> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Header
               Row(
                 children: [
                   const Icon(Icons.edit, color: AppColors.accent),
@@ -481,8 +640,6 @@ class _EditProfileDialogState extends State<_EditProfileDialog> {
                 ],
               ),
               const SizedBox(height: AppSpacing.xl),
-
-              // First Name
               BreezTextField(
                 controller: _firstNameController,
                 label: l10n.firstName,
@@ -491,8 +648,6 @@ class _EditProfileDialogState extends State<_EditProfileDialog> {
                 textInputAction: TextInputAction.next,
               ),
               const SizedBox(height: AppSpacing.md),
-
-              // Last Name
               BreezTextField(
                 controller: _lastNameController,
                 label: l10n.lastName,
@@ -502,17 +657,12 @@ class _EditProfileDialogState extends State<_EditProfileDialog> {
                 onFieldSubmitted: (_) => _save(),
               ),
               const SizedBox(height: AppSpacing.xl),
-
-              // Buttons
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(),
-                    child: Text(
-                      l10n.cancel,
-                      style: TextStyle(color: colors.textMuted),
-                    ),
+                    child: Text(l10n.cancel, style: TextStyle(color: colors.textMuted)),
                   ),
                   const SizedBox(width: AppSpacing.md),
                   ElevatedButton(
@@ -520,10 +670,6 @@ class _EditProfileDialogState extends State<_EditProfileDialog> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.accent,
                       foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 12,
-                      ),
                     ),
                     child: Text(l10n.save),
                   ),
@@ -589,7 +735,6 @@ class _ChangePasswordDialogState extends State<_ChangePasswordDialog> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Header
               Row(
                 children: [
                   const Icon(Icons.lock, color: AppColors.accent),
@@ -605,8 +750,6 @@ class _ChangePasswordDialogState extends State<_ChangePasswordDialog> {
                 ],
               ),
               const SizedBox(height: AppSpacing.xl),
-
-              // Current Password
               BreezTextField(
                 controller: _currentPasswordController,
                 label: l10n.currentPassword,
@@ -617,8 +760,6 @@ class _ChangePasswordDialogState extends State<_ChangePasswordDialog> {
                 textInputAction: TextInputAction.next,
               ),
               const SizedBox(height: AppSpacing.md),
-
-              // New Password
               BreezTextField(
                 controller: _newPasswordController,
                 label: l10n.newPassword,
@@ -629,8 +770,6 @@ class _ChangePasswordDialogState extends State<_ChangePasswordDialog> {
                 textInputAction: TextInputAction.next,
               ),
               const SizedBox(height: AppSpacing.md),
-
-              // Confirm Password
               BreezTextField(
                 controller: _confirmPasswordController,
                 label: l10n.passwordConfirmation,
@@ -647,17 +786,12 @@ class _ChangePasswordDialogState extends State<_ChangePasswordDialog> {
                 onFieldSubmitted: (_) => _save(),
               ),
               const SizedBox(height: AppSpacing.xl),
-
-              // Buttons
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(),
-                    child: Text(
-                      l10n.cancel,
-                      style: TextStyle(color: colors.textMuted),
-                    ),
+                    child: Text(l10n.cancel, style: TextStyle(color: colors.textMuted)),
                   ),
                   const SizedBox(width: AppSpacing.md),
                   ElevatedButton(
@@ -665,10 +799,6 @@ class _ChangePasswordDialogState extends State<_ChangePasswordDialog> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.accent,
                       foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 12,
-                      ),
                     ),
                     child: Text(l10n.change),
                   ),

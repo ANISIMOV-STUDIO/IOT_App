@@ -164,13 +164,13 @@ class _BreezButtonState extends State<BreezButton> {
     final colors = BreezColors.of(context);
     final bg = widget.backgroundColor ?? colors.buttonBg;
 
-    // Обеспечиваем минимальный touch target
+    // Обеспечиваем минимальный touch target только если размер задан явно
     final buttonWidth = widget.width != null
         ? ((widget.width ?? 0) < kMinTouchTarget ? kMinTouchTarget : widget.width)
         : null;
     final buttonHeight = widget.height != null
         ? ((widget.height ?? 0) < kMinTouchTarget ? kMinTouchTarget : widget.height)
-        : kMinTouchTarget;
+        : null; // Не ограничиваем высоту если не задана - определяется контентом
 
     return Material(
       color: Colors.transparent,
@@ -183,28 +183,34 @@ class _BreezButtonState extends State<BreezButton> {
         mouseCursor: widget.isLoading || widget.onTap == null
             ? SystemMouseCursors.basic
             : SystemMouseCursors.click,
-        child: Container(
-          width: buttonWidth,
-          height: buttonHeight,
-          padding: widget.padding ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          decoration: BoxDecoration(
-            color: bg,
-            borderRadius: BorderRadius.circular(widget.borderRadius),
-            border: widget.border ?? Border.all(color: colors.border),
-            boxShadow: widget.shadows,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: kMinTouchTarget,
+            minWidth: buttonWidth ?? 0,
           ),
-          child: widget.isLoading
-              ? Center(
-                  child: SizedBox(
-                    width: 16,
-                    height: 16,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(colors.text),
+          child: Container(
+            width: buttonWidth,
+            height: buttonHeight,
+            padding: widget.padding ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              color: bg,
+              borderRadius: BorderRadius.circular(widget.borderRadius),
+              border: widget.border ?? Border.all(color: colors.border),
+              boxShadow: widget.shadows,
+            ),
+            child: widget.isLoading
+                ? Center(
+                    child: SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(colors.text),
+                      ),
                     ),
-                  ),
-                )
-              : widget.child,
+                  )
+                : widget.child,
+          ),
         ),
       ),
     );
