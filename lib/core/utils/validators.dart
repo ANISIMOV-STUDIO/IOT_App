@@ -1,32 +1,44 @@
-/// Утилиты валидации
+/// Утилиты валидации с поддержкой локализации
 library;
 
+import 'package:flutter/widgets.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
+import '../../generated/l10n/app_localizations.dart';
+
+/// Статические валидаторы с локализованными сообщениями.
+/// Требует передачи AppLocalizations для корректного отображения ошибок.
 class Validators {
+  final AppLocalizations l10n;
+
+  const Validators(this.l10n);
+
+  /// Получить валидатор из BuildContext
+  static Validators of(BuildContext context) {
+    return Validators(AppLocalizations.of(context)!);
+  }
+
   /// Упрощенная валидация email для логина (только проверка на пустоту)
-  /// Если пользователь введет неправильный email - просто не зайдет
-  static String? loginEmail(String? value) {
+  String? loginEmail(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return 'Введите email';
+      return l10n.enterEmail;
     }
     return null;
   }
 
   /// Упрощенная валидация пароля для логина (только проверка на пустоту)
-  /// Полная валидация не нужна - если пароль неправильный, то не зайдет
-  static String? loginPassword(String? value) {
+  String? loginPassword(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Введите пароль';
+      return l10n.enterPassword;
     }
     return null;
   }
 
   /// Валидация email для регистрации с проверкой формата
-  static String? email(String? value) {
+  String? email(String? value) {
     return FormBuilderValidators.compose([
-      FormBuilderValidators.required(errorText: 'Введите email'),
-      FormBuilderValidators.email(errorText: 'Неверный формат email'),
+      FormBuilderValidators.required(errorText: l10n.enterEmail),
+      FormBuilderValidators.email(errorText: l10n.invalidEmailFormat),
     ])(value);
   }
 
@@ -35,57 +47,57 @@ class Validators {
   /// - Хотя бы одна цифра
   /// - Хотя бы одна латинская буква
   /// - Только латинские буквы, цифры и спецсимволы (без кириллицы)
-  static String? password(String? value, {int minLength = 8}) {
+  String? password(String? value, {int minLength = 8}) {
     if (value == null || value.isEmpty) {
-      return 'Введите пароль';
+      return l10n.enterPassword;
     }
 
     if (value.length < minLength) {
-      return 'Минимум $minLength символов';
+      return l10n.passwordTooShort(minLength);
     }
 
     // Проверка на кириллицу
     if (RegExp(r'[а-яА-ЯёЁ]').hasMatch(value)) {
-      return 'Пароль должен содержать только латинские буквы';
+      return l10n.passwordOnlyLatin;
     }
 
     // Проверка на наличие цифры
     if (!RegExp(r'[0-9]').hasMatch(value)) {
-      return 'Должен содержать хотя бы одну цифру';
+      return l10n.passwordMustContainDigit;
     }
 
     // Проверка на наличие латинской буквы
     if (!RegExp(r'[a-zA-Z]').hasMatch(value)) {
-      return 'Должен содержать хотя бы одну латинскую букву';
+      return l10n.passwordMustContainLetter;
     }
 
     return null;
   }
 
   /// Валидация подтверждения пароля
-  static String? confirmPassword(String? value, String? password) {
+  String? confirmPassword(String? value, String? password) {
     return FormBuilderValidators.compose([
-      FormBuilderValidators.required(errorText: 'Подтвердите пароль'),
+      FormBuilderValidators.required(errorText: l10n.confirmPasswordRequired),
       FormBuilderValidators.equal(
         password ?? '',
-        errorText: 'Пароли не совпадают',
+        errorText: l10n.passwordsDoNotMatch,
       ),
     ])(value);
   }
 
   /// Валидация имени (без цифр и спецсимволов)
-  static String? name(String? value, {String? fieldName}) {
+  String? name(String? value, {String? fieldName}) {
     return FormBuilderValidators.compose([
       FormBuilderValidators.required(
-        errorText: fieldName != null ? 'Введите $fieldName' : 'Введите имя',
+        errorText: fieldName != null ? l10n.enterField(fieldName) : l10n.enterName,
       ),
       FormBuilderValidators.minLength(
         2,
-        errorText: 'Минимум 2 символа',
+        errorText: l10n.nameTooShort(fieldName ?? l10n.firstName),
       ),
       FormBuilderValidators.match(
         RegExp(r'^[а-яА-ЯёЁa-zA-Z\s-]+$'),
-        errorText: 'Только буквы (допускаются пробелы и дефис)',
+        errorText: l10n.nameOnlyLetters,
       ),
     ])(value);
   }

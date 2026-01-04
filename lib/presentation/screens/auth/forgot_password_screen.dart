@@ -12,6 +12,7 @@ import '../../../core/theme/app_font_sizes.dart';
 import '../../../core/theme/spacing.dart';
 import '../../../core/utils/snackbar_utils.dart';
 import '../../../core/utils/validators.dart';
+import '../../../generated/l10n/app_localizations.dart';
 import '../../bloc/auth/auth_bloc.dart';
 import '../../bloc/auth/auth_event.dart';
 import '../../bloc/auth/auth_state.dart';
@@ -72,9 +73,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     }
   }
 
-  void _handleResetPassword() {
+  void _handleResetPassword(AppLocalizations l10n) {
     if (_code.length != 6) {
-      setState(() => _errorText = 'Введите 6-значный код');
+      setState(() => _errorText = l10n.enterSixDigitCode);
       return;
     }
     if (_passwordFormKey.currentState?.validate() ?? false) {
@@ -106,6 +107,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
@@ -117,12 +119,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           });
           SnackBarUtils.showSuccess(
             context,
-            'Код отправлен на $_email',
+            l10n.codeSentTo(_email),
           );
         } else if (state is AuthPasswordReset) {
           SnackBarUtils.showSuccess(
             context,
-            'Пароль успешно изменён',
+            l10n.passwordChangedSuccess,
           );
           // Возвращаемся на логин
           context.go(AppRoutes.login);
@@ -155,8 +157,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   maxWidth: AuthConstants.formMaxWidth,
                 ),
                 child: _step == 0
-                    ? _buildEmailStep(colors)
-                    : _buildResetStep(colors),
+                    ? _buildEmailStep(colors, l10n)
+                    : _buildResetStep(colors, l10n),
               ),
             ),
           ),
@@ -166,17 +168,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   }
 
   /// Шаг 1: Ввод email
-  Widget _buildEmailStep(BreezColors colors) {
+  Widget _buildEmailStep(BreezColors colors, AppLocalizations l10n) {
+    final validators = Validators.of(context);
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const AuthHeader(title: 'ВОССТАНОВЛЕНИЕ ПАРОЛЯ'),
+        AuthHeader(title: l10n.passwordRecovery),
         const SizedBox(height: AppSpacing.xl),
 
         // Описание
         Text(
-          'Введите email, указанный при регистрации.\nМы отправим код для сброса пароля.',
+          l10n.enterEmailForReset,
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: AppFontSizes.body,
@@ -196,12 +200,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               children: [
                 BreezTextField(
                   controller: _emailController,
-                  label: 'Email',
+                  label: l10n.email,
                   hint: 'example@mail.com',
                   prefixIcon: Icons.email_outlined,
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.done,
-                  validator: Validators.loginEmail,
+                  validator: validators.loginEmail,
                   validateOnChange: true,
                   autofillHints: const [AutofillHints.email],
                   onFieldSubmitted: (_) => _handleRequestCode(),
@@ -229,10 +233,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       hoverColor: AppColors.accentLight,
                       height: AuthConstants.buttonHeight,
                       border: Border.all(color: Colors.transparent),
-                      child: const Center(
+                      child: Center(
                         child: Text(
-                          'Отправить код',
-                          style: TextStyle(
+                          l10n.sendCode,
+                          style: const TextStyle(
                             fontSize: AppFontSizes.body,
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
@@ -251,17 +255,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   }
 
   /// Шаг 2: Ввод кода и нового пароля
-  Widget _buildResetStep(BreezColors colors) {
+  Widget _buildResetStep(BreezColors colors, AppLocalizations l10n) {
+    final validators = Validators.of(context);
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const AuthHeader(title: 'НОВЫЙ ПАРОЛЬ'),
+        AuthHeader(title: l10n.newPassword),
         const SizedBox(height: AppSpacing.xl),
 
         // Описание
         Text(
-          'Введите код, отправленный на',
+          l10n.enterCodeSentTo,
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: AppFontSizes.body,
@@ -301,11 +307,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               children: [
                 BreezTextField(
                   controller: _passwordController,
-                  label: 'Новый пароль',
+                  label: l10n.newPassword,
                   prefixIcon: Icons.lock_outlined,
                   obscureText: true,
                   showPasswordToggle: true,
-                  validator: Validators.password,
+                  validator: validators.password,
                   validateOnChange: true,
                   textInputAction: TextInputAction.next,
                 ),
@@ -313,19 +319,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
                 BreezTextField(
                   controller: _confirmPasswordController,
-                  label: 'Подтверждение пароля',
+                  label: l10n.passwordConfirmation,
                   prefixIcon: Icons.lock_outlined,
                   obscureText: true,
                   showPasswordToggle: true,
-                  validator: (value) {
-                    if (value != _passwordController.text) {
-                      return 'Пароли не совпадают';
-                    }
-                    return null;
-                  },
+                  validator: (value) => validators.confirmPassword(
+                    value,
+                    _passwordController.text,
+                  ),
                   validateOnChange: true,
                   textInputAction: TextInputAction.done,
-                  onFieldSubmitted: (_) => _handleResetPassword(),
+                  onFieldSubmitted: (_) => _handleResetPassword(l10n),
                 ),
                 const SizedBox(height: AppSpacing.lg),
 
@@ -333,16 +337,16 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   builder: (context, state) {
                     final isLoading = state is AuthLoading;
                     return BreezButton(
-                      onTap: isLoading ? null : _handleResetPassword,
+                      onTap: isLoading ? null : () => _handleResetPassword(l10n),
                       isLoading: isLoading,
                       backgroundColor: AppColors.accent,
                       hoverColor: AppColors.accentLight,
                       height: AuthConstants.buttonHeight,
                       border: Border.all(color: Colors.transparent),
-                      child: const Center(
+                      child: Center(
                         child: Text(
-                          'Сменить пароль',
-                          style: TextStyle(
+                          l10n.changePassword,
+                          style: const TextStyle(
                             fontSize: AppFontSizes.body,
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
@@ -363,7 +367,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           builder: (context, state) {
             final isLoading = state is AuthLoading;
             return BreezTextButton(
-              text: 'Отправить код повторно',
+              text: l10n.resendCode,
               onPressed: isLoading ? null : _handleResendCode,
             );
           },

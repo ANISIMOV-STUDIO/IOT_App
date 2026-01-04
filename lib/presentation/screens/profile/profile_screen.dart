@@ -781,7 +781,7 @@ class _EditProfileDialogState extends State<_EditProfileDialog> {
                 controller: _firstNameController,
                 label: l10n.firstName,
                 prefixIcon: Icons.person_outlined,
-                validator: Validators.name,
+                validator: (v) => Validators.of(context).name(v, fieldName: l10n.firstName),
                 textInputAction: TextInputAction.next,
               ),
               const SizedBox(height: AppSpacing.md),
@@ -789,7 +789,7 @@ class _EditProfileDialogState extends State<_EditProfileDialog> {
                 controller: _lastNameController,
                 label: l10n.lastName,
                 prefixIcon: Icons.person_outlined,
-                validator: Validators.name,
+                validator: (v) => Validators.of(context).name(v, fieldName: l10n.lastName),
                 textInputAction: TextInputAction.done,
                 onFieldSubmitted: (_) => _save(),
               ),
@@ -893,7 +893,7 @@ class _ChangePasswordDialogState extends State<_ChangePasswordDialog> {
                 prefixIcon: Icons.lock_outlined,
                 obscureText: true,
                 showPasswordToggle: true,
-                validator: Validators.loginPassword,
+                validator: Validators.of(context).loginPassword,
                 textInputAction: TextInputAction.next,
               ),
               const SizedBox(height: AppSpacing.md),
@@ -903,7 +903,7 @@ class _ChangePasswordDialogState extends State<_ChangePasswordDialog> {
                 prefixIcon: Icons.lock_outlined,
                 obscureText: true,
                 showPasswordToggle: true,
-                validator: Validators.password,
+                validator: Validators.of(context).password,
                 textInputAction: TextInputAction.next,
               ),
               const SizedBox(height: AppSpacing.md),
@@ -913,12 +913,10 @@ class _ChangePasswordDialogState extends State<_ChangePasswordDialog> {
                 prefixIcon: Icons.lock_outlined,
                 obscureText: true,
                 showPasswordToggle: true,
-                validator: (value) {
-                  if (value != _newPasswordController.text) {
-                    return l10n.passwordsDoNotMatch;
-                  }
-                  return null;
-                },
+                validator: (value) => Validators.of(context).confirmPassword(
+                  value,
+                  _newPasswordController.text,
+                ),
                 textInputAction: TextInputAction.done,
                 onFieldSubmitted: (_) => _save(),
               ),

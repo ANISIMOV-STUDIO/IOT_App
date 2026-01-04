@@ -17,6 +17,7 @@ import '../../../../core/theme/app_font_sizes.dart';
 import '../../../../core/theme/spacing.dart';
 import '../../../../core/utils/validators.dart';
 import '../../../../core/utils/snackbar_utils.dart';
+import '../../../../generated/l10n/app_localizations.dart';
 
 class LoginForm extends StatefulWidget {
   final VoidCallback onSwitchToRegister;
@@ -57,6 +58,9 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final validators = Validators.of(context);
+
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthError) {
@@ -88,12 +92,12 @@ class _LoginFormState extends State<LoginForm> {
                   // Email
                   BreezTextField(
                     controller: _emailController,
-                    label: 'Email',
+                    label: l10n.email,
                     hint: 'example@mail.com',
                     prefixIcon: Icons.email_outlined,
                     keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,
-                    validator: Validators.loginEmail,
+                    validator: validators.loginEmail,
                     validateOnChange: true,
                     autofillHints: const [AutofillHints.username, AutofillHints.email],
                     onFieldSubmitted: (_) => _passwordFocusNode.requestFocus(),
@@ -104,10 +108,10 @@ class _LoginFormState extends State<LoginForm> {
                   BreezTextField(
                     controller: _passwordController,
                     focusNode: _passwordFocusNode,
-                    label: 'Пароль',
+                    label: l10n.password,
                     prefixIcon: Icons.lock_outlined,
                     obscureText: true,
-                    validator: Validators.loginPassword,
+                    validator: validators.loginPassword,
                     showPasswordToggle: true,
                     validateOnChange: true,
                     autofillHints: const [AutofillHints.password],
@@ -128,9 +132,9 @@ class _LoginFormState extends State<LoginForm> {
                         context.go(AppRoutes.forgotPassword);
                       }
                     },
-                    child: const Text(
-                      'Забыли пароль?',
-                      style: TextStyle(
+                    child: Text(
+                      l10n.forgotPassword,
+                      style: const TextStyle(
                         color: AppColors.accent,
                         fontSize: AppFontSizes.caption,
                       ),
@@ -151,10 +155,10 @@ class _LoginFormState extends State<LoginForm> {
                       hoverColor: AppColors.accentLight,
                       height: AuthConstants.buttonHeight,
                       border: Border.all(color: Colors.transparent),
-                      child: const Center(
+                      child: Center(
                         child: Text(
-                          'Войти',
-                          style: TextStyle(
+                          l10n.login,
+                          style: const TextStyle(
                             fontSize: AppFontSizes.body,
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
@@ -168,8 +172,8 @@ class _LoginFormState extends State<LoginForm> {
 
                 // Регистрация
                 AuthActionLink(
-                  text: 'Нет аккаунта?',
-                  actionText: 'Зарегистрироваться',
+                  text: l10n.noAccount,
+                  actionText: l10n.register,
                   onTap: widget.onSwitchToRegister,
                 ),
                 ],

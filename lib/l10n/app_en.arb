@@ -91,6 +91,67 @@
   "@hidePassword": {
     "description": "Hide password tooltip"
   },
+  "forgotPassword": "Forgot password?",
+  "@forgotPassword": {
+    "description": "Forgot password link"
+  },
+  "noAccount": "Don't have an account?",
+  "@noAccount": {
+    "description": "No account prompt"
+  },
+  "haveAccount": "Already have an account?",
+  "@haveAccount": {
+    "description": "Have account prompt"
+  },
+  "consentRequired": "Data processing consent is required",
+  "@consentRequired": {
+    "description": "Consent required error"
+  },
+  "consentLabel": "I agree to the processing of personal data",
+  "@consentLabel": {
+    "description": "Consent checkbox label"
+  },
+  "passwordHint": "At least 8 chars, letters and digits",
+  "@passwordHint": {
+    "description": "Password field hint"
+  },
+  "passwordRecovery": "PASSWORD RECOVERY",
+  "@passwordRecovery": {
+    "description": "Password recovery title"
+  },
+  "enterEmailForReset": "Enter the email used during registration.\nWe'll send you a code to reset your password.",
+  "@enterEmailForReset": {
+    "description": "Password recovery description"
+  },
+  "sendCode": "Send Code",
+  "@sendCode": {
+    "description": "Send code button"
+  },
+  "codeSentTo": "Code sent to {email}",
+  "@codeSentTo": {
+    "description": "Code sent confirmation",
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "enterSixDigitCode": "Enter 6-digit code",
+  "@enterSixDigitCode": {
+    "description": "Enter code prompt"
+  },
+  "enterCodeSentTo": "Enter the code sent to",
+  "@enterCodeSentTo": {
+    "description": "Enter code description"
+  },
+  "resendCode": "Resend code",
+  "@resendCode": {
+    "description": "Resend code button"
+  },
+  "passwordChangedSuccess": "Password changed successfully",
+  "@passwordChangedSuccess": {
+    "description": "Password changed success message"
+  },
   "@@_ONBOARDING": "=== Onboarding ===",
   "skip": "Skip",
   "@skip": {
@@ -896,6 +957,51 @@
         "type": "int"
       }
     }
+  },
+  "enterEmail": "Enter email",
+  "@enterEmail": {
+    "description": "Enter email prompt"
+  },
+  "enterPassword": "Enter password",
+  "@enterPassword": {
+    "description": "Enter password prompt"
+  },
+  "confirmPasswordRequired": "Confirm password",
+  "@confirmPasswordRequired": {
+    "description": "Confirm password required"
+  },
+  "passwordOnlyLatin": "Password must contain only Latin letters",
+  "@passwordOnlyLatin": {
+    "description": "Password Latin only validation"
+  },
+  "passwordMustContainDigit": "Must contain at least one digit",
+  "@passwordMustContainDigit": {
+    "description": "Password digit requirement"
+  },
+  "passwordMustContainLetter": "Must contain at least one Latin letter",
+  "@passwordMustContainLetter": {
+    "description": "Password letter requirement"
+  },
+  "enterName": "Enter name",
+  "@enterName": {
+    "description": "Enter name prompt"
+  },
+  "enterField": "Enter {fieldName}",
+  "@enterField": {
+    "description": "Enter field prompt",
+    "placeholders": {
+      "fieldName": {
+        "type": "String"
+      }
+    }
+  },
+  "nameOnlyLetters": "Only letters (spaces and hyphens allowed)",
+  "@nameOnlyLetters": {
+    "description": "Name letters only validation"
+  },
+  "invalidEmailFormat": "Invalid email format",
+  "@invalidEmailFormat": {
+    "description": "Invalid email format validation"
   },
   "@@_PASSWORD_STRENGTH": "=== Password Strength ===",
   "atLeast8Characters": "At least 8 characters",

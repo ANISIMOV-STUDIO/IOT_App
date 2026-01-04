@@ -75,6 +75,51 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hidePassword => 'Hide password';
 
   @override
+  String get forgotPassword => 'Forgot password?';
+
+  @override
+  String get noAccount => 'Don\'t have an account?';
+
+  @override
+  String get haveAccount => 'Already have an account?';
+
+  @override
+  String get consentRequired => 'Data processing consent is required';
+
+  @override
+  String get consentLabel => 'I agree to the processing of personal data';
+
+  @override
+  String get passwordHint => 'At least 8 chars, letters and digits';
+
+  @override
+  String get passwordRecovery => 'PASSWORD RECOVERY';
+
+  @override
+  String get enterEmailForReset =>
+      'Enter the email used during registration.\nWe\'ll send you a code to reset your password.';
+
+  @override
+  String get sendCode => 'Send Code';
+
+  @override
+  String codeSentTo(String email) {
+    return 'Code sent to $email';
+  }
+
+  @override
+  String get enterSixDigitCode => 'Enter 6-digit code';
+
+  @override
+  String get enterCodeSentTo => 'Enter the code sent to';
+
+  @override
+  String get resendCode => 'Resend code';
+
+  @override
+  String get passwordChangedSuccess => 'Password changed successfully';
+
+  @override
   String get skip => 'Skip';
 
   @override
@@ -655,6 +700,39 @@ class AppLocalizationsEn extends AppLocalizations {
   String minCharacters(int count) {
     return 'Min $count characters';
   }
+
+  @override
+  String get enterEmail => 'Enter email';
+
+  @override
+  String get enterPassword => 'Enter password';
+
+  @override
+  String get confirmPasswordRequired => 'Confirm password';
+
+  @override
+  String get passwordOnlyLatin => 'Password must contain only Latin letters';
+
+  @override
+  String get passwordMustContainDigit => 'Must contain at least one digit';
+
+  @override
+  String get passwordMustContainLetter =>
+      'Must contain at least one Latin letter';
+
+  @override
+  String get enterName => 'Enter name';
+
+  @override
+  String enterField(String fieldName) {
+    return 'Enter $fieldName';
+  }
+
+  @override
+  String get nameOnlyLetters => 'Only letters (spaces and hyphens allowed)';
+
+  @override
+  String get invalidEmailFormat => 'Invalid email format';
 
   @override
   String get atLeast8Characters => 'At least 8 characters';

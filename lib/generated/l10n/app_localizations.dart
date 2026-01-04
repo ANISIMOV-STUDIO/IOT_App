@@ -230,6 +230,90 @@ abstract class AppLocalizations {
   /// **'Скрыть пароль'**
   String get hidePassword;
 
+  /// Forgot password link
+  ///
+  /// In ru, this message translates to:
+  /// **'Забыли пароль?'**
+  String get forgotPassword;
+
+  /// No account prompt
+  ///
+  /// In ru, this message translates to:
+  /// **'Нет аккаунта?'**
+  String get noAccount;
+
+  /// Have account prompt
+  ///
+  /// In ru, this message translates to:
+  /// **'Уже есть аккаунт?'**
+  String get haveAccount;
+
+  /// Consent required error
+  ///
+  /// In ru, this message translates to:
+  /// **'Необходимо согласие на обработку персональных данных'**
+  String get consentRequired;
+
+  /// Consent checkbox label
+  ///
+  /// In ru, this message translates to:
+  /// **'Я согласен на обработку персональных данных'**
+  String get consentLabel;
+
+  /// Password field hint
+  ///
+  /// In ru, this message translates to:
+  /// **'Минимум 8 символов, буквы и цифры'**
+  String get passwordHint;
+
+  /// Password recovery title
+  ///
+  /// In ru, this message translates to:
+  /// **'ВОССТАНОВЛЕНИЕ ПАРОЛЯ'**
+  String get passwordRecovery;
+
+  /// Password recovery description
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите email, указанный при регистрации.\nМы отправим код для сброса пароля.'**
+  String get enterEmailForReset;
+
+  /// Send code button
+  ///
+  /// In ru, this message translates to:
+  /// **'Отправить код'**
+  String get sendCode;
+
+  /// Code sent confirmation
+  ///
+  /// In ru, this message translates to:
+  /// **'Код отправлен на {email}'**
+  String codeSentTo(String email);
+
+  /// Enter code prompt
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите 6-значный код'**
+  String get enterSixDigitCode;
+
+  /// Enter code description
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите код, отправленный на'**
+  String get enterCodeSentTo;
+
+  /// Resend code button
+  ///
+  /// In ru, this message translates to:
+  /// **'Отправить код повторно'**
+  String get resendCode;
+
+  /// Password changed success message
+  ///
+  /// In ru, this message translates to:
+  /// **'Пароль успешно изменён'**
+  String get passwordChangedSuccess;
+
   /// Skip button
   ///
   /// In ru, this message translates to:
@@ -1309,6 +1393,66 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Мин. {count} символов'**
   String minCharacters(int count);
+
+  /// Enter email prompt
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите email'**
+  String get enterEmail;
+
+  /// Enter password prompt
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите пароль'**
+  String get enterPassword;
+
+  /// Confirm password required
+  ///
+  /// In ru, this message translates to:
+  /// **'Подтвердите пароль'**
+  String get confirmPasswordRequired;
+
+  /// Password Latin only validation
+  ///
+  /// In ru, this message translates to:
+  /// **'Пароль должен содержать только латинские буквы'**
+  String get passwordOnlyLatin;
+
+  /// Password digit requirement
+  ///
+  /// In ru, this message translates to:
+  /// **'Должен содержать хотя бы одну цифру'**
+  String get passwordMustContainDigit;
+
+  /// Password letter requirement
+  ///
+  /// In ru, this message translates to:
+  /// **'Должен содержать хотя бы одну латинскую букву'**
+  String get passwordMustContainLetter;
+
+  /// Enter name prompt
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите имя'**
+  String get enterName;
+
+  /// Enter field prompt
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите {fieldName}'**
+  String enterField(String fieldName);
+
+  /// Name letters only validation
+  ///
+  /// In ru, this message translates to:
+  /// **'Только буквы (допускаются пробелы и дефис)'**
+  String get nameOnlyLetters;
+
+  /// Invalid email format validation
+  ///
+  /// In ru, this message translates to:
+  /// **'Неверный формат email'**
+  String get invalidEmailFormat;
 
   /// Password requirement
   ///

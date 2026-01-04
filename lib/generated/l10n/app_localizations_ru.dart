@@ -76,6 +76,52 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hidePassword => 'Скрыть пароль';
 
   @override
+  String get forgotPassword => 'Забыли пароль?';
+
+  @override
+  String get noAccount => 'Нет аккаунта?';
+
+  @override
+  String get haveAccount => 'Уже есть аккаунт?';
+
+  @override
+  String get consentRequired =>
+      'Необходимо согласие на обработку персональных данных';
+
+  @override
+  String get consentLabel => 'Я согласен на обработку персональных данных';
+
+  @override
+  String get passwordHint => 'Минимум 8 символов, буквы и цифры';
+
+  @override
+  String get passwordRecovery => 'ВОССТАНОВЛЕНИЕ ПАРОЛЯ';
+
+  @override
+  String get enterEmailForReset =>
+      'Введите email, указанный при регистрации.\nМы отправим код для сброса пароля.';
+
+  @override
+  String get sendCode => 'Отправить код';
+
+  @override
+  String codeSentTo(String email) {
+    return 'Код отправлен на $email';
+  }
+
+  @override
+  String get enterSixDigitCode => 'Введите 6-значный код';
+
+  @override
+  String get enterCodeSentTo => 'Введите код, отправленный на';
+
+  @override
+  String get resendCode => 'Отправить код повторно';
+
+  @override
+  String get passwordChangedSuccess => 'Пароль успешно изменён';
+
+  @override
   String get skip => 'Пропустить';
 
   @override
@@ -658,6 +704,40 @@ class AppLocalizationsRu extends AppLocalizations {
   String minCharacters(int count) {
     return 'Мин. $count символов';
   }
+
+  @override
+  String get enterEmail => 'Введите email';
+
+  @override
+  String get enterPassword => 'Введите пароль';
+
+  @override
+  String get confirmPasswordRequired => 'Подтвердите пароль';
+
+  @override
+  String get passwordOnlyLatin =>
+      'Пароль должен содержать только латинские буквы';
+
+  @override
+  String get passwordMustContainDigit => 'Должен содержать хотя бы одну цифру';
+
+  @override
+  String get passwordMustContainLetter =>
+      'Должен содержать хотя бы одну латинскую букву';
+
+  @override
+  String get enterName => 'Введите имя';
+
+  @override
+  String enterField(String fieldName) {
+    return 'Введите $fieldName';
+  }
+
+  @override
+  String get nameOnlyLetters => 'Только буквы (допускаются пробелы и дефис)';
+
+  @override
+  String get invalidEmailFormat => 'Неверный формат email';
 
   @override
   String get atLeast8Characters => 'Минимум 8 символов';

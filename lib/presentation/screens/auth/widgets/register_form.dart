@@ -15,6 +15,7 @@ import '../../../../core/theme/app_font_sizes.dart';
 import '../../../../core/theme/spacing.dart';
 import '../../../../core/utils/validators.dart';
 import '../../../../core/utils/snackbar_utils.dart';
+import '../../../../generated/l10n/app_localizations.dart';
 
 class RegisterForm extends StatefulWidget {
   final VoidCallback onSwitchToLogin;
@@ -57,11 +58,11 @@ class _RegisterFormState extends State<RegisterForm> {
     super.dispose();
   }
 
-  void _handleRegister() {
+  void _handleRegister(AppLocalizations l10n) {
     if (!_consentAccepted) {
       SnackBarUtils.showWarning(
         context,
-        'Необходимо согласие на обработку персональных данных',
+        l10n.consentRequired,
       );
       return;
     }
@@ -81,6 +82,9 @@ class _RegisterFormState extends State<RegisterForm> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final validators = Validators.of(context);
+
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthError) {
@@ -112,10 +116,10 @@ class _RegisterFormState extends State<RegisterForm> {
                   // Имя
                   BreezTextField(
                     controller: _firstNameController,
-                    label: 'Имя',
-                    hint: 'Иван',
+                    label: l10n.firstName,
+                    hint: 'Ivan',
                     prefixIcon: Icons.person_outline,
-                    validator: (v) => Validators.name(v, fieldName: 'имя'),
+                    validator: (v) => validators.name(v, fieldName: l10n.firstName),
                     validateOnChange: true,
                     autofillHints: const [AutofillHints.givenName],
                     textInputAction: TextInputAction.next,
@@ -127,10 +131,10 @@ class _RegisterFormState extends State<RegisterForm> {
                   BreezTextField(
                     controller: _lastNameController,
                     focusNode: _lastNameFocus,
-                    label: 'Фамилия',
-                    hint: 'Иванов',
+                    label: l10n.lastName,
+                    hint: 'Ivanov',
                     prefixIcon: Icons.person_outline,
-                    validator: (v) => Validators.name(v, fieldName: 'фамилию'),
+                    validator: (v) => validators.name(v, fieldName: l10n.lastName),
                     validateOnChange: true,
                     autofillHints: const [AutofillHints.familyName],
                     textInputAction: TextInputAction.next,
@@ -142,11 +146,11 @@ class _RegisterFormState extends State<RegisterForm> {
                   BreezTextField(
                     controller: _emailController,
                     focusNode: _emailFocus,
-                    label: 'Email',
+                    label: l10n.email,
                     hint: 'example@mail.com',
                     prefixIcon: Icons.email_outlined,
                     keyboardType: TextInputType.emailAddress,
-                    validator: Validators.email,
+                    validator: validators.email,
                     validateOnChange: true,
                     autofillHints: const [AutofillHints.username, AutofillHints.email],
                     textInputAction: TextInputAction.next,
@@ -158,11 +162,11 @@ class _RegisterFormState extends State<RegisterForm> {
                   BreezTextField(
                     controller: _passwordController,
                     focusNode: _passwordFocus,
-                    label: 'Пароль',
-                    hint: 'Минимум 8 символов, буквы и цифры',
+                    label: l10n.password,
+                    hint: l10n.passwordHint,
                     prefixIcon: Icons.lock_outlined,
                     obscureText: true,
-                    validator: Validators.password,
+                    validator: validators.password,
                     showPasswordToggle: true,
                     validateOnChange: true,
                     autofillHints: const [AutofillHints.newPassword],
@@ -175,10 +179,10 @@ class _RegisterFormState extends State<RegisterForm> {
                   BreezTextField(
                     controller: _confirmPasswordController,
                     focusNode: _confirmPasswordFocus,
-                    label: 'Подтвердите пароль',
+                    label: l10n.confirmPassword,
                     prefixIcon: Icons.lock_outlined,
                     obscureText: true,
-                    validator: (v) => Validators.confirmPassword(
+                    validator: (v) => validators.confirmPassword(
                       v,
                       _passwordController.text,
                     ),
@@ -186,7 +190,7 @@ class _RegisterFormState extends State<RegisterForm> {
                     validateOnChange: true,
                     autofillHints: const [AutofillHints.newPassword],
                     textInputAction: TextInputAction.done,
-                    onFieldSubmitted: (_) => _handleRegister(),
+                    onFieldSubmitted: (_) => _handleRegister(l10n),
                   ),
                 const SizedBox(height: AppSpacing.lg),
 
@@ -196,7 +200,7 @@ class _RegisterFormState extends State<RegisterForm> {
                   onChanged: (value) {
                     setState(() => _consentAccepted = value);
                   },
-                  label: 'Я согласен на обработку персональных данных',
+                  label: l10n.consentLabel,
                 ),
                 const SizedBox(height: AppSpacing.xl),
 
@@ -206,16 +210,16 @@ class _RegisterFormState extends State<RegisterForm> {
                     final isLoading = state is AuthLoading;
 
                     return BreezButton(
-                      onTap: isLoading ? null : _handleRegister,
+                      onTap: isLoading ? null : () => _handleRegister(l10n),
                       isLoading: isLoading,
                       backgroundColor: AppColors.accent,
                       hoverColor: AppColors.accentLight,
                       height: AuthConstants.buttonHeight,
                       border: Border.all(color: Colors.transparent),
-                      child: const Center(
+                      child: Center(
                         child: Text(
-                          'Зарегистрироваться',
-                          style: TextStyle(
+                          l10n.register,
+                          style: const TextStyle(
                             fontSize: AppFontSizes.body,
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
@@ -229,8 +233,8 @@ class _RegisterFormState extends State<RegisterForm> {
 
                 // Уже есть аккаунт
                 AuthActionLink(
-                  text: 'Уже есть аккаунт?',
-                  actionText: 'Войти',
+                  text: l10n.haveAccount,
+                  actionText: l10n.login,
                   onTap: widget.onSwitchToLogin,
                 ),
                 ],
