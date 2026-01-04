@@ -81,19 +81,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       return const SizedBox.shrink();
                     },
                   ),
-                  const SizedBox(height: AppSpacing.md),
+                  const SizedBox(height: AppSpacing.sm),
 
                   // Account Card
                   _buildAccountCard(context, l10n),
-                  const SizedBox(height: AppSpacing.md),
+                  const SizedBox(height: AppSpacing.sm),
 
                   // Notifications Card
                   _buildNotificationsCard(context, l10n),
-                  const SizedBox(height: AppSpacing.md),
+                  const SizedBox(height: AppSpacing.sm),
 
                   // Settings Card
                   _buildSettingsCard(context, themeService, languageService, l10n),
-                  const SizedBox(height: AppSpacing.lg),
+                  const SizedBox(height: AppSpacing.sm),
 
                   // Logout Button
                   _buildLogoutButton(context, l10n),
@@ -229,14 +229,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
             value: _pushNotifications,
             onChanged: (v) => setState(() => _pushNotifications = v),
           ),
-          const SizedBox(height: AppSpacing.xs),
+          const SizedBox(height: AppSpacing.sm),
           _SwitchTile(
             icon: Icons.email_outlined,
             title: 'Email-уведомления',
             value: _emailNotifications,
             onChanged: (v) => setState(() => _emailNotifications = v),
           ),
-          const SizedBox(height: AppSpacing.xs),
+          const SizedBox(height: AppSpacing.sm),
           _SwitchTile(
             icon: Icons.warning_amber_outlined,
             title: 'Уведомления об авариях',
@@ -286,7 +286,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               );
             },
           ),
-          const SizedBox(height: AppSpacing.xs),
+          const SizedBox(height: AppSpacing.sm),
           // Выбор языка
           ListenableBuilder(
             listenable: languageService,
