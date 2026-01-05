@@ -293,6 +293,7 @@ class _MainControlCard extends StatelessWidget {
       showModeSelector: true,
       isPowerLoading: isPowerLoading,
       sensorUnit: null, // Hide sensors grid - moved to tab
+      showStats: false, // Hide stats row - moved to sensors tab
     );
   }
 }
