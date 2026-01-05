@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_font_sizes.dart';
 import '../../../core/theme/spacing.dart';
+import '../../../generated/l10n/app_localizations.dart';
 import '../breez/breez_card.dart';
 
 /// Базовый виджет ошибки
@@ -187,13 +188,13 @@ class NetworkError extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return ErrorWidget(
       icon: Icons.wifi_off_rounded,
       iconColor: AppColors.warning,
-      title: 'Нет соединения',
-      message: customMessage ??
-          'Проверьте подключение к интернету\nи попробуйте снова',
-      actionLabel: onRetry != null ? 'Повторить' : null,
+      title: l10n.errorNoConnection,
+      message: customMessage ?? l10n.errorCheckInternet,
+      actionLabel: onRetry != null ? l10n.retry : null,
       onAction: onRetry,
       showCard: showCard,
     );
@@ -224,15 +225,17 @@ class ServerError extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final statusText = statusCode != null ? ' ($statusCode)' : '';
+    final l10n = AppLocalizations.of(context)!;
+    final title = statusCode != null
+        ? l10n.errorServerWithCode(statusCode!)
+        : l10n.errorServer;
 
     return ErrorWidget(
       icon: Icons.cloud_off_rounded,
       iconColor: AppColors.critical,
-      title: 'Ошибка сервера$statusText',
-      message: 'Проблемы на стороне сервера.\n'
-          'Мы уже работаем над исправлением.',
-      actionLabel: onRetry != null ? 'Повторить' : null,
+      title: title,
+      message: l10n.errorServerProblems,
+      actionLabel: onRetry != null ? l10n.retry : null,
       onAction: onRetry,
       showCard: showCard,
     );
@@ -245,35 +248,38 @@ class ServerError extends StatelessWidget {
 /// Отличается от EmptyState тем, что указывает на ошибку
 /// (ресурс должен был быть, но его нет).
 class NotFoundError extends StatelessWidget {
-  /// Название ресурса, который не найден
-  final String resourceName;
+  /// Название ресурса, который не найден (null = использовать l10n.dataResource)
+  final String? resourceName;
 
   /// Callback для возврата назад или другого действия
   final VoidCallback? onAction;
 
-  /// Текст на кнопке действия
-  final String actionLabel;
+  /// Текст на кнопке действия (null = использовать l10n.back)
+  final String? actionLabel;
 
   /// Показать ли карточку-обертку
   final bool showCard;
 
   const NotFoundError({
     super.key,
-    this.resourceName = 'данные',
+    this.resourceName,
     this.onAction,
-    this.actionLabel = 'Назад',
+    this.actionLabel,
     this.showCard = true,
   });
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final resource = resourceName ?? l10n.dataResource;
+    final label = actionLabel ?? l10n.back;
+
     return ErrorWidget(
       icon: Icons.search_off_rounded,
       iconColor: AppColors.warning,
-      title: 'Не найдено',
-      message: 'Запрошенные $resourceName не найдены.\n'
-          'Возможно, они были удалены.',
-      actionLabel: onAction != null ? actionLabel : null,
+      title: l10n.errorNotFound,
+      message: l10n.errorResourceNotFound(resource),
+      actionLabel: onAction != null ? label : null,
       onAction: onAction,
       showCard: showCard,
     );
@@ -299,13 +305,13 @@ class AuthError extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return ErrorWidget(
       icon: Icons.lock_outline_rounded,
       iconColor: AppColors.critical,
-      title: 'Требуется авторизация',
-      message: 'Ваша сессия истекла.\n'
-          'Пожалуйста, войдите заново.',
-      actionLabel: 'Войти',
+      title: l10n.errorAuthRequired,
+      message: l10n.errorSessionExpired,
+      actionLabel: l10n.login,
       onAction: onLogin,
       showCard: showCard,
     );
@@ -362,13 +368,13 @@ class GenericError extends StatelessWidget {
       );
     }
 
+    final l10n = AppLocalizations.of(context)!;
     return ErrorWidget(
       icon: Icons.error_outline_rounded,
       iconColor: AppColors.critical,
-      title: 'Что-то пошло не так',
-      message: 'Произошла непредвиденная ошибка.\n'
-          'Попробуйте повторить попытку.',
-      actionLabel: onRetry != null ? 'Повторить' : null,
+      title: l10n.errorSomethingWrong,
+      message: l10n.errorUnexpected,
+      actionLabel: onRetry != null ? l10n.retry : null,
       onAction: onRetry,
       additionalContent: additionalContent,
       showCard: showCard,
@@ -419,43 +425,57 @@ class EmptyState extends StatelessWidget {
     this.showCard = true,
   });
 
-  /// Фабричный метод для пустого списка устройств
-  factory EmptyState.noDevices({VoidCallback? onAddDevice}) {
+  /// Статический метод для пустого списка устройств
+  static EmptyState noDevices(BuildContext context, {VoidCallback? onAddDevice}) {
+    final l10n = AppLocalizations.of(context)!;
     return EmptyState(
       icon: Icons.devices_outlined,
-      title: 'Нет устройств',
-      message: 'Устройства появятся здесь\nпосле подключения',
-      actionLabel: onAddDevice != null ? 'Добавить устройство' : null,
+      title: l10n.emptyNoDevicesTitle,
+      message: l10n.emptyNoDevicesMessage,
+      actionLabel: onAddDevice != null ? l10n.addDevice : null,
       onAction: onAddDevice,
     );
   }
 
-  /// Фабричный метод для пустых результатов поиска
-  factory EmptyState.noSearchResults({required String query}) {
+  /// Статический метод для пустых результатов поиска
+  static EmptyState noSearchResults(BuildContext context, {required String query}) {
+    final l10n = AppLocalizations.of(context)!;
     return EmptyState(
       icon: Icons.search_off_rounded,
-      title: 'Ничего не найдено',
-      message: 'По запросу "$query"\nничего не найдено.\n'
-          'Попробуйте изменить параметры поиска.',
+      title: l10n.emptyNothingFound,
+      message: l10n.emptyNoSearchResults(query),
     );
   }
 
-  /// Фабричный метод для отсутствия уведомлений
-  factory EmptyState.noNotifications() {
-    return const EmptyState(
+  /// Статический метод для отсутствия уведомлений
+  static EmptyState noNotifications(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return EmptyState(
       icon: Icons.notifications_none_rounded,
-      title: 'Нет уведомлений',
-      message: 'У вас пока нет уведомлений.\n'
-          'Новые уведомления появятся здесь.',
+      title: l10n.emptyNoNotificationsTitle,
+      message: l10n.emptyNoNotificationsMessage,
     );
   }
 
-  /// Фабричный метод для пустой истории
-  factory EmptyState.noHistory() {
-    return const EmptyState(
+  /// Статический метод для пустой истории
+  static EmptyState noHistory(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return EmptyState(
       icon: Icons.history_rounded,
-      title: 'История пуста',
-      message: 'История операций появится\nпосле первых действий.',
+      title: l10n.emptyHistoryTitle,
+      message: l10n.emptyHistoryMessage,
+    );
+  }
+
+  /// Статический метод для пустого расписания
+  static EmptyState noSchedule(BuildContext context, {VoidCallback? onAdd}) {
+    final l10n = AppLocalizations.of(context)!;
+    return EmptyState(
+      icon: Icons.schedule_outlined,
+      title: l10n.emptyNoScheduleTitle,
+      message: l10n.emptyNoScheduleMessage,
+      actionLabel: onAdd != null ? l10n.scheduleAdd : null,
+      onAction: onAdd,
     );
   }
 
@@ -496,22 +516,23 @@ class OfflineBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     if (!isOffline) return const SizedBox.shrink();
 
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       height: height,
       width: double.infinity,
       color: AppColors.warning,
-      child: const Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
+          const Icon(
             Icons.wifi_off,
             size: 16,
             color: Colors.white,
           ),
-          SizedBox(width: AppSpacing.xs),
+          const SizedBox(width: AppSpacing.xs),
           Text(
-            'Нет соединения с интернетом',
-            style: TextStyle(
+            l10n.errorNoInternet,
+            style: const TextStyle(
               fontSize: AppFontSizes.caption,
               fontWeight: FontWeight.w600,
               color: Colors.white,
@@ -531,8 +552,8 @@ class RetryButton extends StatelessWidget {
   /// Callback для повтора
   final VoidCallback onRetry;
 
-  /// Текст на кнопке
-  final String label;
+  /// Текст на кнопке (null = использовать l10n.retry)
+  final String? label;
 
   /// Полная ширина кнопки
   final bool fullWidth;
@@ -540,12 +561,14 @@ class RetryButton extends StatelessWidget {
   const RetryButton({
     super.key,
     required this.onRetry,
-    this.label = 'Повторить',
+    this.label,
     this.fullWidth = true,
   });
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final buttonLabel = label ?? l10n.retry;
     final button = BreezButton(
       onTap: onRetry,
       padding: const EdgeInsets.symmetric(
@@ -563,7 +586,7 @@ class RetryButton extends StatelessWidget {
           ),
           const SizedBox(width: AppSpacing.xs),
           Text(
-            label,
+            buttonLabel,
             style: const TextStyle(
               fontSize: AppFontSizes.body,
               fontWeight: FontWeight.w600,

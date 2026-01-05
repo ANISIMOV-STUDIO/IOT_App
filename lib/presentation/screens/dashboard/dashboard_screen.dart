@@ -28,6 +28,7 @@ import '../../../domain/entities/hvac_device.dart';
 import '../../../domain/entities/climate.dart';
 import '../../../domain/entities/device_full_state.dart';
 import '../../../domain/entities/user.dart';
+import '../../../generated/l10n/app_localizations.dart';
 import 'dialogs/add_unit_dialog.dart';
 import 'dialogs/unit_settings_dialog.dart';
 import 'dialogs/update_available_dialog.dart';
@@ -148,10 +149,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final result = await UnitSettingsDialog.show(context, unit);
     if (result == null || !mounted) return;
 
+    final l10n = AppLocalizations.of(context)!;
     switch (result.action) {
       case UnitSettingsAction.delete:
         context.read<DevicesBloc>().add(DevicesDeletionRequested(unit.id));
-        ToastService.success('Установка удалена');
+        ToastService.success(l10n.deviceDeleted);
         break;
       case UnitSettingsAction.rename:
         if (result.newName != null) {
@@ -161,7 +163,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   newName: result.newName!,
                 ),
               );
-          ToastService.success('Название изменено');
+          ToastService.success(l10n.nameChanged);
         }
         break;
     }
@@ -182,10 +184,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   void _showNotifications() {
     // TODO: Открыть экран уведомлений или показать bottom sheet
+    final l10n = AppLocalizations.of(context)!;
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Уведомления: функция в разработке'),
-        duration: Duration(seconds: 2),
+      SnackBar(
+        content: Text(l10n.notificationsInDevelopment),
+        duration: const Duration(seconds: 2),
       ),
     );
   }
@@ -217,7 +220,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           listenWhen: (previous, current) =>
               !previous.masterPowerOffSuccess && current.masterPowerOffSuccess,
           listener: (context, state) {
-            ToastService.success('Все устройства выключены');
+            final l10n = AppLocalizations.of(context)!;
+            ToastService.success(l10n.allDevicesTurnedOff);
           },
         ),
         // Слушатель для Master Power Off - ошибка
@@ -262,7 +266,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               return BlocBuilder<ConnectivityBloc, ConnectivityState>(
                 buildWhen: (previous, current) =>
                     previous.showBanner != current.showBanner ||
-                    previous.message != current.message,
+                    previous.status != current.status,
                 builder: (context, connectivityState) {
                   return BlocBuilder<AnalyticsBloc, AnalyticsState>(
                     builder: (context, analyticsState) {
@@ -298,7 +302,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               children: [
                                 AnimatedOfflineBanner(
                                   isVisible: connectivityState.showBanner,
-                                  message: connectivityState.message,
+                                  status: connectivityState.status,
                                 ),
                                 Expanded(
                                   child: currentUnit == null
@@ -344,6 +348,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Widget _buildEmptyState(bool isDark) {
     final colors = BreezColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -355,7 +360,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
           const SizedBox(height: 24),
           Text(
-            'Нет устройств',
+            l10n.noDevices,
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.w700,
@@ -364,7 +369,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
           const SizedBox(height: 8),
           Text(
-            'Добавьте первую установку по MAC-адресу',
+            l10n.addFirstDeviceByMac,
             style: TextStyle(
               fontSize: 14,
               color: colors.textMuted,
@@ -374,7 +379,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ElevatedButton.icon(
             onPressed: _showAddUnitDialog,
             icon: const Icon(Icons.add),
-            label: const Text('Добавить установку'),
+            label: Text(l10n.addUnit),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.accent,
               foregroundColor: Colors.white,
@@ -405,7 +410,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       allUnits: units,
       selectedUnitIndex: activeIndex,
       isDark: isDark,
-      userName: user?.fullName ?? 'Пользователь',
+      userName: user?.fullName ?? AppLocalizations.of(context)!.defaultUserName,
       userRole: user?.role ?? 'User',
       onTemperatureIncrease: (v) =>
           context.read<ClimateBloc>().add(ClimateTemperatureChanged(v.toDouble())),

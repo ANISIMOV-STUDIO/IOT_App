@@ -8,6 +8,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_font_sizes.dart';
 import '../../../core/theme/spacing.dart';
 import '../../../domain/entities/hvac_device.dart';
+import '../../../generated/l10n/app_localizations.dart';
 import '../../bloc/devices/devices_bloc.dart';
 import '../../widgets/breez/breez_card.dart';
 import '../../widgets/common/device_icon_helper.dart';
@@ -22,6 +23,7 @@ class DevicesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: colors.bg,
@@ -36,7 +38,7 @@ class DevicesScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Устройства',
+                    l10n.devices,
                     style: TextStyle(
                       fontSize: AppFontSizes.h2,
                       fontWeight: FontWeight.bold,
@@ -47,7 +49,7 @@ class DevicesScreen extends StatelessWidget {
                   BlocBuilder<DevicesBloc, DevicesState>(
                     builder: (context, state) {
                       return Text(
-                        '${state.deviceCount} устройств',
+                        l10n.devicesCount(state.deviceCount),
                         style: TextStyle(
                           fontSize: AppFontSizes.body,
                           color: colors.textMuted,
@@ -81,7 +83,7 @@ class DevicesScreen extends StatelessWidget {
                   return LoadingState<List<HvacDevice>>(
                     status: loadingStatus,
                     data: state.devices.isEmpty ? null : state.devices,
-                    errorMessage: 'Не удалось загрузить устройства',
+                    errorMessage: l10n.errorLoadingFailed,
                     loadingSkeleton: Padding(
                       padding: const EdgeInsets.all(AppSpacing.lg),
                       child: SkeletonList.devices(count: 5),
@@ -155,7 +157,7 @@ class DevicesScreen extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Text(
-                                    device.isOnline ? 'Онлайн' : 'Оффлайн',
+                                    device.isOnline ? l10n.statusOnline : l10n.statusOffline,
                                     style: TextStyle(
                                       fontSize: AppFontSizes.caption,
                                       fontWeight: FontWeight.w600,
@@ -181,6 +183,7 @@ class DevicesScreen extends StatelessWidget {
 
   Widget _buildEmptyState(BuildContext context) {
     final colors = BreezColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return Center(
       child: ConstrainedBox(
@@ -205,7 +208,7 @@ class DevicesScreen extends StatelessWidget {
               ),
               const SizedBox(height: AppSpacing.lg),
               Text(
-                'Нет устройств',
+                l10n.noDevices,
                 style: TextStyle(
                   fontSize: AppFontSizes.h3,
                   fontWeight: FontWeight.bold,
@@ -214,7 +217,7 @@ class DevicesScreen extends StatelessWidget {
               ),
               const SizedBox(height: AppSpacing.xs),
               Text(
-                'Устройства появятся здесь после подключения',
+                l10n.devicesWillAppear,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: AppFontSizes.body,

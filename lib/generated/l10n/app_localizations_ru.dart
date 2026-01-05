@@ -9,22 +9,10 @@ class AppLocalizationsRu extends AppLocalizations {
   AppLocalizationsRu([String locale = 'ru']) : super(locale);
 
   @override
-  String get appTitle => 'BREEZ Home';
-
-  @override
-  String get smartClimateManagement => 'Умное управление климатом';
-
-  @override
   String get login => 'Войти';
 
   @override
   String get register => 'Регистрация';
-
-  @override
-  String get loginSubtitle => 'С возвращением! Войдите, чтобы продолжить';
-
-  @override
-  String get registerSubtitle => 'Создайте аккаунт, чтобы начать';
 
   @override
   String get email => 'Email';
@@ -34,46 +22,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get confirmPassword => 'Подтвердите пароль';
-
-  @override
-  String get fullName => 'Полное имя';
-
-  @override
-  String get welcomeBack => 'С возвращением';
-
-  @override
-  String get createAccount => 'Создать аккаунт';
-
-  @override
-  String get signInToAccount => 'Войдите в свой аккаунт';
-
-  @override
-  String get signUpForAccount => 'Зарегистрируйтесь для нового аккаунта';
-
-  @override
-  String get skipForNow => 'Пропустить';
-
-  @override
-  String get skipAuth => 'Продолжить без регистрации';
-
-  @override
-  String get rememberMe => 'Запомнить меня';
-
-  @override
-  String get termsAndConditions => 'Условия и положения';
-
-  @override
-  String get guestUser => 'Гость';
-
-  @override
-  String get registrationComingSoon =>
-      'Функция регистрации скоро будет доступна';
-
-  @override
-  String get showPassword => 'Показать пароль';
-
-  @override
-  String get hidePassword => 'Скрыть пароль';
 
   @override
   String get forgotPassword => 'Забыли пароль?';
@@ -122,46 +70,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get passwordChangedSuccess => 'Пароль успешно изменён';
 
   @override
-  String get skip => 'Пропустить';
-
-  @override
-  String get welcomeToBreezHome => 'Добро пожаловать в\nBREEZ Home';
-
-  @override
-  String get smartHomeClimateControl =>
-      'Умное управление климатом\nвашего дома под рукой';
-
-  @override
-  String get swipeToContinue => 'Свайпните для продолжения';
-
-  @override
-  String get controlYourDevices => 'Управляйте\nустройствами';
-
-  @override
-  String get manageHvacSystems =>
-      'Управляйте всеми системами HVAC\nиз любого места в любое время';
-
-  @override
-  String get turnOnOffRemotely => 'Включение/выключение удаленно';
-
-  @override
-  String get readyToGetStarted => 'Готовы\nначать?';
-
-  @override
-  String get startControllingClimate =>
-      'Начните управлять климатом вашего дома\nлегко и эффективно';
-
-  @override
-  String get getStarted => 'Начать';
-
-  @override
-  String get termsPrivacyAgreement =>
-      'Продолжая, вы соглашаетесь с нашими\nУсловиями обслуживания и Политикой конфиденциальности';
-
-  @override
-  String get loadingBreezHome => 'Загрузка BREEZ Home';
-
-  @override
   String get home => 'Главная';
 
   @override
@@ -171,55 +79,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get back => 'Назад';
 
   @override
-  String get next => 'Далее';
-
-  @override
-  String get previous => 'Предыдущий';
-
-  @override
-  String get navigateBack => 'Вернуться назад';
-
-  @override
-  String get settingsTitle => 'Настройки';
-
-  @override
-  String get appearance => 'Внешний вид';
-
-  @override
-  String get darkTheme => 'Темная тема';
-
-  @override
-  String get useDarkColorScheme => 'Использовать темную цветовую схему';
-
-  @override
-  String get themeChangeNextVersion =>
-      'Смена темы будет доступна в следующей версии';
-
-  @override
-  String get units => 'Единицы измерения';
-
-  @override
-  String get temperatureUnits => 'Температура';
-
-  @override
-  String get celsius => 'Цельсий (°C)';
-
-  @override
-  String get fahrenheit => 'Фаренгейт (°F)';
-
-  @override
-  String unitsChangedTo(String unit) {
-    return 'Единицы изменены на $unit';
-  }
-
-  @override
   String get notifications => 'Уведомления';
 
   @override
   String get pushNotifications => 'Push-уведомления';
-
-  @override
-  String get receiveInstantNotifications => 'Получать мгновенные уведомления';
 
   @override
   String get emailNotifications => 'Email-уведомления';
@@ -228,140 +91,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get alarmNotifications => 'Уведомления об авариях';
 
   @override
-  String get receiveEmailReports => 'Получать отчеты на email';
-
-  @override
-  String notificationsState(String type, String state) {
-    return '$type-уведомления $state';
-  }
-
-  @override
   String get language => 'Язык';
-
-  @override
-  String get russian => 'Русский';
-
-  @override
-  String get english => 'English';
-
-  @override
-  String languageChangedTo(String language) {
-    return 'Язык изменен на $language';
-  }
-
-  @override
-  String get about => 'О приложении';
-
-  @override
-  String get version => 'Версия';
-
-  @override
-  String get developer => 'Разработчик';
-
-  @override
-  String get license => 'Лицензия';
-
-  @override
-  String get checkUpdates => 'Проверить обновления';
-
-  @override
-  String get checkingUpdates => 'Проверка обновлений...';
-
-  @override
-  String get deviceManagement => 'Управление устройствами';
-
-  @override
-  String get search => 'Поиск';
-
-  @override
-  String get scanForDevices => 'Сканировать устройства';
 
   @override
   String get addDevice => 'Добавить устройство';
 
   @override
-  String get editDevice => 'Редактировать устройство';
-
-  @override
-  String get removeDevice => 'Удалить устройство';
-
-  @override
-  String get deviceName => 'Название устройства';
-
-  @override
-  String get macAddress => 'MAC-адрес';
-
-  @override
-  String get location => 'Расположение';
-
-  @override
-  String get notFoundDevice => 'Не нашли\nустройство?';
-
-  @override
-  String get selectManually => 'Выбрать вручную';
-
-  @override
-  String get deviceUpdated => 'Устройство обновлено';
-
-  @override
-  String get deviceAdded => 'Устройство успешно добавлено';
-
-  @override
-  String get deviceRemoved => 'Устройство успешно удалено';
-
-  @override
-  String get scanQrCode => 'Сканировать QR-код';
-
-  @override
-  String get processingQrCode => 'Обработка QR-кода...';
-
-  @override
-  String get invalidQrCode => 'Неверный QR-код';
-
-  @override
-  String get deviceDetectedFromQr => 'Устройство обнаружено из QR-кода';
-
-  @override
-  String get enterMacManually => 'Или введите MAC-адрес вручную';
-
-  @override
-  String get invalidMacFormat =>
-      'Неверный формат MAC-адреса (например, AA:BB:CC:DD:EE:FF)';
-
-  @override
-  String get deviceNameMinLength =>
-      'Название устройства должно содержать минимум 3 символа';
-
-  @override
-  String get adding => 'Добавление...';
-
-  @override
-  String get pullToRefresh => 'Потяните для обновления';
-
-  @override
-  String get online => 'В сети';
-
-  @override
-  String get offline => 'Не в сети';
-
-  @override
-  String get edit => 'Редактировать';
+  String get deviceName => 'Название';
 
   @override
   String get delete => 'Удалить';
-
-  @override
-  String confirmRemoveDevice(String name) {
-    return 'Вы уверены, что хотите удалить $name?';
-  }
-
-  @override
-  String wifiNetwork(String network) {
-    return 'WiFi: $network';
-  }
-
-  @override
-  String get hvacControl => 'BREEZ Home';
 
   @override
   String get temperature => 'Температура';
@@ -370,34 +109,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get humidity => 'Влажность';
 
   @override
-  String get airQuality => 'Качество воздуха';
-
-  @override
-  String get fanSpeed => 'Скорость вентилятора';
-
-  @override
-  String get fan => 'Вентилятор';
-
-  @override
-  String get mode => 'Режим';
-
-  @override
   String get operatingMode => 'Режим работы';
-
-  @override
-  String get power => 'Питание';
-
-  @override
-  String get on => 'Вкл';
-
-  @override
-  String get off => 'Выкл';
-
-  @override
-  String get current => 'Текущая';
-
-  @override
-  String get target => 'Целевая';
 
   @override
   String get targetTemperature => 'Целевая температура';
@@ -415,298 +127,21 @@ class AppLocalizationsRu extends AppLocalizations {
   String get filter => 'Фильтр';
 
   @override
-  String get statusWorking => 'В работе';
-
-  @override
-  String get statusOff => 'Выключено';
-
-  @override
   String todayDate(String date) {
     return 'Сегодня, $date';
   }
 
   @override
-  String get cooling => 'Охлаждение';
-
-  @override
-  String get heating => 'Обогрев';
-
-  @override
-  String get auto => 'Авто';
-
-  @override
-  String get low => 'Низкая';
-
-  @override
-  String get medium => 'Средний';
-
-  @override
-  String get high => 'Высокая';
-
-  @override
-  String get mode2 => 'Режим 2';
-
-  @override
-  String get ventilationMode => 'Режим вентиляции';
-
-  @override
-  String get notSelected => 'Не выбран';
-
-  @override
-  String get modeBasic => 'Базовый';
-
-  @override
-  String get modeIntensive => 'Интенсивный';
-
-  @override
-  String get modeEconomic => 'Экономичный';
-
-  @override
-  String get modeMaximum => 'Максимальный';
-
-  @override
-  String get modeKitchen => 'Кухня';
-
-  @override
-  String get modeFireplace => 'Камин';
-
-  @override
-  String get modeVacation => 'Отпуск';
-
-  @override
-  String get modeCustom => 'Пользовательский';
-
-  @override
-  String get supplyAir => 'Приток';
-
-  @override
-  String get exhaustAir => 'Вытяжка';
-
-  @override
-  String get temperatures => 'Температуры';
-
-  @override
-  String get monitoringAndSettings => 'Мониторинг и уставки';
-
-  @override
-  String get outdoor => 'Наружный';
-
-  @override
-  String get indoor => 'Внутренний';
-
-  @override
-  String get humidifierAir => 'Увлажнитель\nвоздуха';
-
-  @override
-  String get purifierAir => 'Очиститель\nвоздуха';
-
-  @override
-  String get lighting => 'Освещение';
-
-  @override
-  String get mainLight => 'Основной свет';
-
-  @override
-  String get floorLamp => 'Торшер';
-
-  @override
-  String get unit => 'Блок';
-
-  @override
-  String get notificationsComingSoon =>
-      'Функция уведомлений скоро будет доступна';
-
-  @override
-  String get favorite => 'Избранное';
-
-  @override
-  String get activity => 'Активность';
-
-  @override
-  String get seeAll => 'Смотреть все';
-
-  @override
-  String get excellent => 'Отлично';
-
-  @override
-  String get good => 'Хорошо';
-
-  @override
-  String get moderate => 'Умеренно';
-
-  @override
-  String get poor => 'Плохо';
-
-  @override
-  String get veryPoor => 'Очень плохо';
-
-  @override
-  String get quickActions => 'Быстрые действия';
-
-  @override
-  String get allOn => 'Все вкл';
-
-  @override
-  String get allOff => 'Все выкл';
-
-  @override
-  String get sync => 'Синхр.';
-
-  @override
   String get presets => 'Пресеты';
-
-  @override
-  String get error => 'Ошибка';
-
-  @override
-  String get connectionError => 'Ошибка подключения';
-
-  @override
-  String get serverError => 'Ошибка сервера';
-
-  @override
-  String get permissionRequired => 'Требуется разрешение';
-
-  @override
-  String get somethingWentWrong => 'Упс! Что-то пошло не так';
-
-  @override
-  String get unableToConnect =>
-      'Не удается подключиться к серверу. Проверьте интернет-соединение.';
-
-  @override
-  String get serverErrorMessage =>
-      'На нашей стороне произошла ошибка. Попробуйте позже.';
-
-  @override
-  String get permissionRequiredMessage =>
-      'Эта функция требует дополнительных разрешений для работы.';
-
-  @override
-  String get networkConnectionFailed =>
-      'Сбой сетевого подключения. Проверьте интернет-соединение.';
-
-  @override
-  String get requestTimedOut =>
-      'Время ожидания запроса истекло. Попробуйте еще раз.';
-
-  @override
-  String get failedToConnect => 'Не удалось подключиться к серверу устройств';
-
-  @override
-  String connectionFailed(String error) {
-    return 'Подключение не удалось: $error';
-  }
-
-  @override
-  String failedToAddDevice(String error) {
-    return 'Не удалось добавить устройство: $error';
-  }
-
-  @override
-  String failedToRemoveDevice(String error) {
-    return 'Не удалось удалить устройство: $error';
-  }
-
-  @override
-  String failedToLoadMore(String error) {
-    return 'Не удалось загрузить больше элементов: $error';
-  }
-
-  @override
-  String get tryAgain => 'Попробовать снова';
 
   @override
   String get retry => 'Повторить';
 
   @override
-  String get retryConnection => 'Повторить подключение';
-
-  @override
-  String get refreshing => 'Обновление...';
-
-  @override
-  String get refreshDevices => 'Обновить устройства';
-
-  @override
-  String get retryingConnection => 'Повторная попытка подключения';
-
-  @override
-  String errorCode(String code) {
-    return 'Код ошибки: $code';
-  }
-
-  @override
-  String get errorCodeCopied => 'Код ошибки скопирован в буфер обмена';
-
-  @override
-  String get technicalDetails => 'Технические детали';
-
-  @override
-  String get doubleTapToRetry => 'Дважды нажмите для повтора';
-
-  @override
   String get loading => 'Загрузка...';
 
   @override
-  String get loadingDevices => 'Загрузка устройств...';
-
-  @override
-  String get allUnitsLoaded => 'Все блоки загружены';
-
-  @override
-  String get connecting => 'Подключение...';
-
-  @override
-  String get reconnecting => 'Переподключение...';
-
-  @override
   String get noDevices => 'Нет устройств';
-
-  @override
-  String get noDevicesFound => 'Устройства не найдены';
-
-  @override
-  String get addFirstDevice => 'Добавьте первое устройство, чтобы начать';
-
-  @override
-  String get checkMqttSettings =>
-      'Проверьте настройки MQTT-подключения\nи убедитесь, что устройства в сети';
-
-  @override
-  String get deviceNotSelected => 'Устройство не выбрано';
-
-  @override
-  String get openDeviceAddition => 'Открытие экрана добавления устройства';
-
-  @override
-  String get initializingCamera => 'Инициализация камеры...';
-
-  @override
-  String get cameraAccessRequired =>
-      'Для сканирования QR-кодов требуется доступ к камере.\nРазрешите доступ к камере в настройках браузера.';
-
-  @override
-  String get cameraError => 'Ошибка камеры';
-
-  @override
-  String get cameraErrorMessage => 'Произошла ошибка при доступе к камере.';
-
-  @override
-  String get webCameraSetupRequired =>
-      'Сканирование веб-камерой требует дополнительной настройки. Используйте ручной ввод или сканируйте с мобильного устройства.';
-
-  @override
-  String get cameraView => 'Вид с камеры';
-
-  @override
-  String get emailRequired => 'Email обязателен';
-
-  @override
-  String get invalidEmail => 'Введите корректный email';
-
-  @override
-  String get passwordRequired => 'Пароль обязателен';
 
   @override
   String passwordTooShort(int length) {
@@ -714,24 +149,8 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String nameRequired(String fieldName) {
-    return '$fieldName обязательно';
-  }
-
-  @override
   String nameTooShort(String fieldName) {
     return '$fieldName должно содержать минимум 2 символа';
-  }
-
-  @override
-  String get fillRequiredFields => 'Заполните все обязательные поля';
-
-  @override
-  String get pleaseAcceptTerms => 'Примите условия и положения';
-
-  @override
-  String minCharacters(int count) {
-    return 'Мин. $count символов';
   }
 
   @override
@@ -769,52 +188,36 @@ class AppLocalizationsRu extends AppLocalizations {
   String get invalidEmailFormat => 'Неверный формат email';
 
   @override
-  String get atLeast8Characters => 'Минимум 8 символов';
-
-  @override
-  String get uppercaseLetter => 'Заглавная буква';
-
-  @override
-  String get lowercaseLetter => 'Строчная буква';
-
-  @override
-  String get number => 'Цифра';
-
-  @override
-  String get specialCharacter => 'Специальный символ';
-
-  @override
-  String get weak => 'Слабый';
-
-  @override
-  String get strong => 'Сильный';
-
-  @override
-  String get veryStrong => 'Очень сильный';
-
-  @override
   String get schedule => 'Расписание';
 
   @override
-  String get automaticControl => 'Автоматическое управление';
+  String allCount(int count) {
+    return 'Все (+$count)';
+  }
 
   @override
-  String get configureSchedule => 'Настроить расписание';
+  String get noSchedule => 'Нет расписания';
 
   @override
-  String get operatingTime => 'Время работы';
+  String get addScheduleForDevice => 'Добавьте расписание для устройства';
 
   @override
-  String get running => 'Работает';
+  String get nowLabel => 'Сейчас';
 
   @override
-  String get stopped => 'Выключено';
+  String get alarms => 'Аварии';
 
   @override
-  String get turnOn => 'Включение';
+  String get noAlarms => 'Нет аварий';
 
   @override
-  String get turnOff => 'Отключение';
+  String get systemWorkingNormally => 'Система работает штатно';
+
+  @override
+  String get alarmHistory => 'История аварий';
+
+  @override
+  String get noNotifications => 'Нет уведомлений';
 
   @override
   String get monday => 'Понедельник';
@@ -838,387 +241,19 @@ class AppLocalizationsRu extends AppLocalizations {
   String get sunday => 'Воскресенье';
 
   @override
-  String editSchedule(String name) {
-    return 'Редактировать $name';
-  }
-
-  @override
-  String deleteSchedule(String name) {
-    return 'Удалить $name';
-  }
-
-  @override
-  String get editScheduleTooltip => 'Редактировать расписание';
-
-  @override
-  String get deleteScheduleTooltip => 'Удалить расписание';
-
-  @override
-  String get success => 'Успешно';
-
-  @override
-  String get settingsSaved =>
-      'Настройки сохранены. Перезапустите приложение для применения изменений.';
-
-  @override
-  String get presetApplied => 'Пресет применен';
-
-  @override
-  String get allUnitsOn => 'Все блоки включены';
-
-  @override
-  String get allUnitsOff => 'Все блоки выключены';
-
-  @override
-  String get settingsSynced => 'Настройки синхронизированы со всеми блоками';
-
-  @override
-  String get scheduleAppliedToAll => 'Расписание применено ко всем блокам';
-
-  @override
-  String get errorChangingPower => 'Ошибка изменения питания';
-
-  @override
-  String get errorUpdatingMode => 'Ошибка обновления режима';
-
-  @override
-  String get errorUpdatingFanSpeed => 'Ошибка обновления скорости вентилятора';
-
-  @override
-  String get errorApplyingPreset => 'Ошибка применения пресета';
-
-  @override
-  String get errorTurningOnUnits => 'Ошибка включения блоков';
-
-  @override
-  String get errorTurningOffUnits => 'Ошибка выключения блоков';
-
-  @override
-  String get errorSyncingSettings => 'Ошибка синхронизации настроек';
-
-  @override
-  String get errorApplyingSchedule => 'Ошибка применения расписания';
-
-  @override
-  String get connected => 'Подключено';
-
-  @override
-  String get disconnected => 'Отключено';
-
-  @override
-  String get idle => 'Ожидание';
-
-  @override
-  String get active => 'Активно';
-
-  @override
-  String get inactive => 'Неактивно';
-
-  @override
-  String get enabled => 'Включено';
-
-  @override
-  String get disabled => 'Выключено';
-
-  @override
-  String get available => 'Доступно';
-
-  @override
-  String get unavailable => 'Недоступно';
-
-  @override
-  String get maintenance => 'Обслуживание';
-
-  @override
-  String get activated => 'активировано';
-
-  @override
-  String get deactivated => 'деактивировано';
-
-  @override
   String get save => 'Сохранить';
 
   @override
   String get cancel => 'Отмена';
 
   @override
-  String get close => 'Закрыть';
-
-  @override
-  String get confirm => 'Подтвердить';
-
-  @override
-  String get yes => 'Да';
-
-  @override
-  String get no => 'Нет';
-
-  @override
-  String get ok => 'ОК';
-
-  @override
-  String get apply => 'Применить';
-
-  @override
-  String get reset => 'Сбросить';
-
-  @override
-  String get clear => 'Очистить';
-
-  @override
-  String get done => 'Готово';
-
-  @override
-  String get add => 'Добавить';
-
-  @override
-  String get remove => 'Удалить';
-
-  @override
-  String get sort => 'Сортировать';
-
-  @override
-  String get refresh => 'Обновить';
-
-  @override
   String get logout => 'Выйти';
-
-  @override
-  String get status => 'Статус';
-
-  @override
-  String get details => 'Детали';
-
-  @override
-  String get more => 'Больше';
-
-  @override
-  String get less => 'Меньше';
-
-  @override
-  String get all => 'Все';
-
-  @override
-  String get none => 'Ничего';
-
-  @override
-  String get optional => 'Опционально';
-
-  @override
-  String get required => 'Обязательно';
-
-  @override
-  String get info => 'Информация';
-
-  @override
-  String get warning => 'Предупреждение';
-
-  @override
-  String get notification => 'Уведомление';
 
   @override
   String get today => 'Сегодня';
 
   @override
-  String get yesterday => 'Вчера';
-
-  @override
-  String get week => 'Неделя';
-
-  @override
-  String get month => 'Месяц';
-
-  @override
-  String get year => 'Год';
-
-  @override
-  String date(String date) {
-    return '$date';
-  }
-
-  @override
-  String get automation => 'Автоматизация';
-
-  @override
-  String get manageRules => 'Управление правилами';
-
-  @override
-  String activeRulesFormat(int active, int total) {
-    return 'Активно: $active из $total';
-  }
-
-  @override
-  String get critical => 'Критические';
-
-  @override
-  String get errors => 'Ошибки';
-
-  @override
-  String get warnings => 'Предупреждения';
-
-  @override
-  String get infoLabel => 'Инфо';
-
-  @override
-  String showAll(int count) {
-    return 'Показать все ($count)';
-  }
-
-  @override
-  String get collapse => 'Свернуть';
-
-  @override
-  String get manageRulesComingSoon => 'Управление правилами (Скоро)';
-
-  @override
-  String get addUnitComingSoon =>
-      'Функция добавления блока скоро будет доступна';
-
-  @override
-  String get livingRoom => 'Гостиная';
-
-  @override
-  String get bedroom => 'Спальня';
-
-  @override
-  String get kitchen => 'Кухня';
-
-  @override
-  String get vacuumCleaner => 'Пылесос';
-
-  @override
-  String get smartBulb => 'Умная лампа';
-
-  @override
-  String get humidifier => 'Увлажнитель';
-
-  @override
-  String get average => 'Среднее';
-
-  @override
-  String get min => 'Мин';
-
-  @override
-  String get max => 'Макс';
-
-  @override
-  String get temperatureHistory => 'История температуры';
-
-  @override
-  String get last24Hours => 'Последние 24 часа';
-
-  @override
-  String activeDevices(int count, int total) {
-    return '$count из $total активно';
-  }
-
-  @override
-  String get runDiagnostics => 'Запустить диагностику';
-
-  @override
-  String get systemHealth => 'Состояние системы';
-
-  @override
-  String get supplyFan => 'Приточный вентилятор';
-
-  @override
-  String get exhaustFan => 'Вытяжной вентилятор';
-
-  @override
-  String get heater => 'Нагреватель';
-
-  @override
-  String get recuperator => 'Рекуператор';
-
-  @override
-  String get sensors => 'Датчики';
-
-  @override
-  String get normal => 'Норма';
-
-  @override
-  String get sensorReadings => 'Показания датчиков';
-
-  @override
-  String get supplyAirTemp => 'Температура притока';
-
-  @override
-  String get outdoorTemp => 'Температура улицы';
-
-  @override
-  String get pressure => 'Давление';
-
-  @override
-  String get networkConnection => 'Сетевое подключение';
-
-  @override
-  String get network => 'Сеть';
-
-  @override
-  String get signal => 'Сигнал';
-
-  @override
-  String get ipAddress => 'IP адрес';
-
-  @override
-  String get notConnected => 'Не подключено';
-
-  @override
-  String get notAssigned => 'Не назначен';
-
-  @override
-  String get diagnosticsTitle => 'Диагностика';
-
-  @override
-  String get diagnosticsRunning => 'Выполняется диагностика системы...';
-
-  @override
-  String get diagnosticsComplete => 'Диагностика завершена. Система в норме.';
-
-  @override
-  String get scheduleSaved => 'Расписание успешно сохранено';
-
-  @override
-  String saveError(String error) {
-    return 'Ошибка сохранения: $error';
-  }
-
-  @override
-  String get unsavedChanges => 'Несохранённые изменения';
-
-  @override
-  String get unsavedChangesMessage =>
-      'У вас есть несохранённые изменения. Выйти без сохранения?';
-
-  @override
-  String get exit => 'Выйти';
-
-  @override
-  String devicesFound(int count) {
-    return '$count новых устройств';
-  }
-
-  @override
-  String deviceFound(int count) {
-    return '$count новое устройство';
-  }
-
-  @override
-  String get notFoundDeviceTitle => 'Не нашли\nустройство?';
-
-  @override
-  String get selectManuallyButton => 'Выбрать вручную';
-
-  @override
-  String devicesAdded(int count, String plural) {
-    return '$count $plural добавлено';
-  }
-
-  @override
-  String get device => 'устройство';
-
-  @override
-  String get devices => 'устройства';
+  String get devices => 'Устройства';
 
   @override
   String get profile => 'Профиль';
@@ -1237,9 +272,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get changePassword => 'Сменить пароль';
-
-  @override
-  String get changeAccountPassword => 'Изменить пароль аккаунта';
 
   @override
   String get theme => 'Тема';
@@ -1270,4 +302,519 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get change => 'Сменить';
+
+  @override
+  String get allNotifications => 'Все уведомления';
+
+  @override
+  String get allAlarms => 'Все аварии';
+
+  @override
+  String get justNow => 'Только что';
+
+  @override
+  String minutesAgo(int count) {
+    return '$count мин назад';
+  }
+
+  @override
+  String hoursAgo(int count) {
+    return '$count ч назад';
+  }
+
+  @override
+  String daysAgo(int count) {
+    return '$count дн назад';
+  }
+
+  @override
+  String get addFirstEntry => 'Добавьте первую запись';
+
+  @override
+  String alarmCode(String code) {
+    return 'Код $code';
+  }
+
+  @override
+  String get activeAlarm => 'АКТИВНА';
+
+  @override
+  String get modeAuto => 'Авто';
+
+  @override
+  String get modeEco => 'Эко';
+
+  @override
+  String get modeNight => 'Ночь';
+
+  @override
+  String get modeBoost => 'ТУРБО';
+
+  @override
+  String modeFor(String name) {
+    return 'Режим $name';
+  }
+
+  @override
+  String get deviceDeleted => 'Установка удалена';
+
+  @override
+  String get nameChanged => 'Название изменено';
+
+  @override
+  String get notificationsInDevelopment => 'Уведомления: функция в разработке';
+
+  @override
+  String get allDevicesTurnedOff => 'Все устройства выключены';
+
+  @override
+  String get addFirstDeviceByMac => 'Добавьте первую установку по MAC-адресу';
+
+  @override
+  String get addUnit => 'Добавить установку';
+
+  @override
+  String get enterMacAddress => 'Введите MAC-адрес';
+
+  @override
+  String get macAddressMustContain12Chars =>
+      'MAC-адрес должен содержать 12 символов';
+
+  @override
+  String get macAddressOnlyHex => 'MAC-адрес может содержать только 0-9 и A-F';
+
+  @override
+  String get deviceMacAddress => 'MAC-адрес устройства';
+
+  @override
+  String get cancelButton => 'Отмена';
+
+  @override
+  String get addButton => 'Добавить';
+
+  @override
+  String get deviceNameExample => 'Например: Гостиная';
+
+  @override
+  String get enterDeviceName => 'Введите название установки';
+
+  @override
+  String get macAddressDisplayedOnRemote =>
+      'MAC-адрес отображается на экране пульта устройства';
+
+  @override
+  String get analytics => 'Аналитика';
+
+  @override
+  String get devicesWillAppear =>
+      'Устройства появятся здесь\nпосле подключения';
+
+  @override
+  String get presetComfort => 'Комфорт';
+
+  @override
+  String get presetComfortDesc => 'Оптимальный режим';
+
+  @override
+  String get presetEco => 'Эко';
+
+  @override
+  String get presetEcoDesc => 'Энергосбережение';
+
+  @override
+  String get presetNight => 'Ночь';
+
+  @override
+  String get presetNightDesc => 'Тихий режим';
+
+  @override
+  String get presetTurbo => 'Турбо';
+
+  @override
+  String get presetTurboDesc => 'Максимальная мощность';
+
+  @override
+  String get presetAway => 'Нет дома';
+
+  @override
+  String get presetAwayDesc => 'Минимальный режим';
+
+  @override
+  String get presetSleep => 'Сон';
+
+  @override
+  String get presetSleepDesc => 'Комфортный сон';
+
+  @override
+  String devicesCount(int count) {
+    return '$count устройств';
+  }
+
+  @override
+  String get thisMonth => 'Этот месяц';
+
+  @override
+  String get totalTime => 'Общее время';
+
+  @override
+  String energyKwh(String value) {
+    return '$value кВт⋅ч';
+  }
+
+  @override
+  String hoursCount(int count) {
+    return '$count часов';
+  }
+
+  @override
+  String get airflow => 'Поток воздуха';
+
+  @override
+  String get graphTemperatureLabel => 'ТЕМПЕРАТУРА';
+
+  @override
+  String get graphHumidityLabel => 'ВЛАЖНОСТЬ';
+
+  @override
+  String get graphAirflowLabel => 'ПОТОК ВОЗДУХА';
+
+  @override
+  String get tempShort => 'Темп';
+
+  @override
+  String get humidShort => 'Влаж';
+
+  @override
+  String get airflowShort => 'Поток';
+
+  @override
+  String get minShort => 'Мин';
+
+  @override
+  String get maxShort => 'Макс';
+
+  @override
+  String get avgShort => 'Сред';
+
+  @override
+  String get cubicMetersPerHour => 'м³/ч';
+
+  @override
+  String get readAll => 'Прочитать все';
+
+  @override
+  String get later => 'Позже';
+
+  @override
+  String get updateNow => 'Обновить сейчас';
+
+  @override
+  String get whatsNew => 'Что нового?';
+
+  @override
+  String get hide => 'Скрыть';
+
+  @override
+  String get errorNoConnection => 'Нет соединения';
+
+  @override
+  String get errorServer => 'Ошибка сервера';
+
+  @override
+  String errorServerWithCode(int code) {
+    return 'Ошибка сервера ($code)';
+  }
+
+  @override
+  String get errorNotFound => 'Не найдено';
+
+  @override
+  String get errorAuthRequired => 'Требуется авторизация';
+
+  @override
+  String get errorSomethingWrong => 'Что-то пошло не так';
+
+  @override
+  String get errorCheckInternet =>
+      'Проверьте подключение к интернету\nи попробуйте снова';
+
+  @override
+  String get errorServerProblems =>
+      'Проблемы на стороне сервера.\nМы уже работаем над исправлением.';
+
+  @override
+  String errorResourceNotFound(String resource) {
+    return 'Запрошенные $resource не найдены.\nВозможно, они были удалены.';
+  }
+
+  @override
+  String get errorSessionExpired =>
+      'Ваша сессия истекла.\nПожалуйста, войдите заново.';
+
+  @override
+  String get errorUnexpected =>
+      'Произошла непредвиденная ошибка.\nПопробуйте повторить попытку.';
+
+  @override
+  String get errorNoInternet => 'Нет соединения с интернетом';
+
+  @override
+  String get errorServerUnavailable => 'Сервер недоступен';
+
+  @override
+  String get errorLoadingFailed => 'Не удалось загрузить устройства';
+
+  @override
+  String get emptyNoDevicesTitle => 'Нет устройств';
+
+  @override
+  String get emptyNoDevicesMessage =>
+      'Устройства появятся здесь\nпосле подключения';
+
+  @override
+  String get emptyNothingFound => 'Ничего не найдено';
+
+  @override
+  String emptyNoSearchResults(String query) {
+    return 'По запросу «$query»\nничего не найдено.\nПопробуйте изменить параметры поиска.';
+  }
+
+  @override
+  String get emptyNoNotificationsTitle => 'Нет уведомлений';
+
+  @override
+  String get emptyNoNotificationsMessage =>
+      'У вас пока нет уведомлений.\nНовые уведомления появятся здесь.';
+
+  @override
+  String get emptyHistoryTitle => 'История пуста';
+
+  @override
+  String get emptyHistoryMessage =>
+      'История операций появится\nпосле первых действий.';
+
+  @override
+  String get emptyNoScheduleTitle => 'Нет расписания';
+
+  @override
+  String get emptyNoScheduleMessage =>
+      'Добавьте записи расписания\nдля автоматического управления';
+
+  @override
+  String get errorOccurred => 'Произошла ошибка';
+
+  @override
+  String get scheduleAdd => 'Добавить';
+
+  @override
+  String get scheduleNewEntry => 'Новая запись';
+
+  @override
+  String get scheduleEditEntry => 'Редактировать запись';
+
+  @override
+  String get scheduleDeleteConfirm => 'Удалить запись?';
+
+  @override
+  String scheduleDeleteMessage(String entry) {
+    return 'Запись «$entry» будет удалена.';
+  }
+
+  @override
+  String get scheduleDayLabel => 'День недели';
+
+  @override
+  String get scheduleStartLabel => 'Начало';
+
+  @override
+  String get scheduleEndLabel => 'Конец';
+
+  @override
+  String get scheduleModeLabel => 'Режим';
+
+  @override
+  String get scheduleDayTemp => 'Дневная температура';
+
+  @override
+  String get scheduleNightTemp => 'Ночная температура';
+
+  @override
+  String get scheduleActive => 'Активно';
+
+  @override
+  String scheduleDayNightTemp(int day, int night) {
+    return 'День: $day° / Ночь: $night°';
+  }
+
+  @override
+  String get modeCooling => 'Охлаждение';
+
+  @override
+  String get modeHeating => 'Нагрев';
+
+  @override
+  String get modeVentilation => 'Вентиляция';
+
+  @override
+  String get statusOnline => 'Онлайн';
+
+  @override
+  String get statusOffline => 'Оффлайн';
+
+  @override
+  String get statusRunning => 'В работе';
+
+  @override
+  String get statusStopped => 'Выключен';
+
+  @override
+  String get statusEnabled => 'Включено';
+
+  @override
+  String get statusDisabled => 'Выключено';
+
+  @override
+  String get statusResolved => 'РЕШЕНА';
+
+  @override
+  String get statusActive => 'АКТИВНА';
+
+  @override
+  String get alarmHistoryTitle => 'История аварий';
+
+  @override
+  String get alarmHistoryEmpty => 'История аварий пуста';
+
+  @override
+  String get alarmNoAlarms => 'Аварий не зафиксировано';
+
+  @override
+  String alarmCodeLabel(int code) {
+    return 'Код $code';
+  }
+
+  @override
+  String get alarmOccurredAt => 'Возникла';
+
+  @override
+  String get alarmClearedAt => 'Устранена';
+
+  @override
+  String get janShort => 'янв';
+
+  @override
+  String get febShort => 'фев';
+
+  @override
+  String get marShort => 'мар';
+
+  @override
+  String get aprShort => 'апр';
+
+  @override
+  String get mayShort => 'май';
+
+  @override
+  String get junShort => 'июн';
+
+  @override
+  String get julShort => 'июл';
+
+  @override
+  String get augShort => 'авг';
+
+  @override
+  String get sepShort => 'сен';
+
+  @override
+  String get octShort => 'окт';
+
+  @override
+  String get novShort => 'ноя';
+
+  @override
+  String get decShort => 'дек';
+
+  @override
+  String get notificationsTitle => 'Уведомления';
+
+  @override
+  String get notificationsReadAll => 'Все уведомления прочитаны';
+
+  @override
+  String get notificationDeleted => 'Уведомление удалено';
+
+  @override
+  String get unitSettingsTitle => 'Настройки установки';
+
+  @override
+  String get unitSettingsName => 'Название:';
+
+  @override
+  String get unitSettingsStatus => 'Статус:';
+
+  @override
+  String get unitSettingsNewName => 'Новое название';
+
+  @override
+  String get unitSettingsEnterName => 'Введите название';
+
+  @override
+  String get unitSettingsRename => 'Переименовать';
+
+  @override
+  String get unitSettingsRenameSubtitle => 'Изменить название установки';
+
+  @override
+  String get unitSettingsDelete => 'Удалить установку';
+
+  @override
+  String get unitSettingsDeleteSubtitle => 'Отвязать устройство от аккаунта';
+
+  @override
+  String get unitSettingsDeleteConfirm => 'Удалить установку?';
+
+  @override
+  String unitSettingsDeleteMessage(String name) {
+    return 'Установка «$name» будет отвязана от вашего аккаунта. Вы сможете снова добавить её по MAC-адресу.';
+  }
+
+  @override
+  String get updateAvailable => 'Доступна новая версия';
+
+  @override
+  String updateVersionAvailable(String version) {
+    return 'Доступна версия $version';
+  }
+
+  @override
+  String get updateMessage =>
+      'Вышло обновление приложения. Перезагрузите страницу, чтобы получить новые функции и исправления.';
+
+  @override
+  String get verifyEmailTitle => 'ПОДТВЕРЖДЕНИЕ EMAIL';
+
+  @override
+  String get verifyEmailSent => 'Мы отправили 6-значный код подтверждения на';
+
+  @override
+  String get verifyEmailResend => 'Отправить код повторно';
+
+  @override
+  String get verifyEmailCodeSent => 'Код отправлен на email';
+
+  @override
+  String get tooltipEdit => 'Редактировать';
+
+  @override
+  String get tooltipDelete => 'Удалить';
+
+  @override
+  String get tooltipAdd => 'Добавить';
+
+  @override
+  String get dataResource => 'данные';
+
+  @override
+  String get defaultUserName => 'Пользователь';
 }

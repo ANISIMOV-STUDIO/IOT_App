@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../generated/l10n/app_localizations.dart';
 import 'breez_card.dart';
 
 /// Mode button data
@@ -18,12 +19,12 @@ class ModeData {
   });
 }
 
-/// Available modes
-const List<ModeData> defaultModes = [
-  ModeData(id: 'auto', label: 'АВТО', icon: Icons.bolt),
-  ModeData(id: 'eco', label: 'ЭКО', icon: Icons.wb_sunny_outlined),
-  ModeData(id: 'night', label: 'НОЧЬ', icon: Icons.nightlight_outlined),
-  ModeData(id: 'boost', label: 'ТУРБО', icon: Icons.air),
+/// Get localized modes
+List<ModeData> getDefaultModes(AppLocalizations l10n) => [
+  ModeData(id: 'auto', label: l10n.modeAuto, icon: Icons.bolt),
+  ModeData(id: 'eco', label: l10n.modeEco, icon: Icons.wb_sunny_outlined),
+  ModeData(id: 'night', label: l10n.modeNight, icon: Icons.nightlight_outlined),
+  ModeData(id: 'boost', label: l10n.modeBoost, icon: Icons.air),
 ];
 
 /// Single mode button
@@ -114,7 +115,7 @@ class ModeSelector extends StatelessWidget {
   final String unitName;
   final String selectedMode;
   final ValueChanged<String>? onModeChanged;
-  final List<ModeData> modes;
+  final List<ModeData>? modes;
   final bool compact;
   final bool enabled;
 
@@ -123,17 +124,20 @@ class ModeSelector extends StatelessWidget {
     required this.unitName,
     required this.selectedMode,
     this.onModeChanged,
-    this.modes = defaultModes,
+    this.modes,
     this.compact = false,
     this.enabled = true,
   });
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final effectiveModes = modes ?? getDefaultModes(l10n);
+
     // В компактном режиме убираем подложку и заголовок
     if (compact) {
       return Row(
-        children: modes.map((mode) {
+        children: effectiveModes.map((mode) {
           return Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -156,7 +160,7 @@ class ModeSelector extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          BreezLabel('Режим $unitName'),
+          BreezLabel(l10n.modeFor(unitName)),
           const SizedBox(height: 16),
           GridView.count(
             shrinkWrap: true,
@@ -165,7 +169,7 @@ class ModeSelector extends StatelessWidget {
             crossAxisSpacing: 10,
             childAspectRatio: 2.8,
             physics: const NeverScrollableScrollPhysics(),
-            children: modes.map((mode) {
+            children: effectiveModes.map((mode) {
               return ModeButton(
                 mode: mode,
                 isSelected: selectedMode == mode.id,

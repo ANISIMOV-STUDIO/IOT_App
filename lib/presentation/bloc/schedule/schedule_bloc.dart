@@ -182,7 +182,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     if (error is ApiException) {
       return error.message;
     }
-    return 'Произошла ошибка при работе с расписанием';
+    return 'Schedule operation error';
   }
 
   @override

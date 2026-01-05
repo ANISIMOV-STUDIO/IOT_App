@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/theme/app_theme.dart';
+import '../../../generated/l10n/app_localizations.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/spacing.dart';
 import '../../../core/utils/snackbar_utils.dart';
@@ -27,6 +28,7 @@ class ScheduleScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: colors.bg,
@@ -37,7 +39,7 @@ class ScheduleScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Расписание',
+              l10n.schedule,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
@@ -61,7 +63,7 @@ class ScheduleScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.add, color: AppColors.accent),
             onPressed: () => _showAddDialog(context),
-            tooltip: 'Добавить',
+            tooltip: l10n.tooltipAdd,
           ),
         ],
       ),
@@ -132,24 +134,25 @@ class ScheduleScreen extends StatelessWidget {
 
   void _confirmDelete(BuildContext context, ScheduleEntry entry) {
     final colors = BreezColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
         backgroundColor: colors.card,
         title: Text(
-          'Удалить запись?',
+          l10n.scheduleDeleteConfirm,
           style: TextStyle(color: colors.text),
         ),
         content: Text(
-          'Запись "${entry.day} - ${entry.mode}" будет удалена.',
+          l10n.scheduleDeleteMessage('${entry.day} - ${entry.mode}'),
           style: TextStyle(color: colors.textMuted),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
             child: Text(
-              'Отмена',
+              l10n.cancel,
               style: TextStyle(color: colors.textMuted),
             ),
           ),
@@ -158,9 +161,9 @@ class ScheduleScreen extends StatelessWidget {
               context.read<ScheduleBloc>().add(ScheduleEntryDeleted(entry.id));
               Navigator.of(dialogContext).pop();
             },
-            child: const Text(
-              'Удалить',
-              style: TextStyle(color: Colors.red),
+            child: Text(
+              l10n.delete,
+              style: const TextStyle(color: Colors.red),
             ),
           ),
         ],
@@ -219,30 +222,26 @@ class _ScheduleEntryCard extends StatelessWidget {
   });
 
   IconData _getModeIcon() {
-    switch (entry.mode.toLowerCase()) {
-      case 'охлаждение':
-      case 'cooling':
-        return Icons.ac_unit;
-      case 'нагрев':
-      case 'heating':
-        return Icons.whatshot;
-      case 'вентиляция':
-      case 'ventilation':
-        return Icons.air;
-      case 'авто':
-      case 'auto':
-        return Icons.autorenew;
-      case 'эко':
-      case 'eco':
-        return Icons.eco;
-      default:
-        return Icons.thermostat;
+    final mode = entry.mode.toLowerCase();
+    if (mode == 'cooling') {
+      return Icons.ac_unit;
+    } else if (mode == 'heating') {
+      return Icons.whatshot;
+    } else if (mode == 'ventilation') {
+      return Icons.air;
+    } else if (mode == 'auto') {
+      return Icons.autorenew;
+    } else if (mode == 'eco') {
+      return Icons.eco;
+    } else {
+      return Icons.thermostat;
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return BreezCard(
       padding: const EdgeInsets.all(AppSpacing.md),
@@ -342,7 +341,7 @@ class _ScheduleEntryCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      'День: ${entry.tempDay}° / Ночь: ${entry.tempNight}°',
+                      l10n.scheduleDayNightTemp(entry.tempDay, entry.tempNight),
                       style: TextStyle(
                         fontSize: 12,
                         color: colors.textMuted,
@@ -356,12 +355,12 @@ class _ScheduleEntryCard extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.edit_outlined, color: colors.textMuted),
                 onPressed: onEdit,
-                tooltip: 'Редактировать',
+                tooltip: l10n.tooltipEdit,
               ),
               IconButton(
                 icon: const Icon(Icons.delete_outline, color: Colors.red),
                 onPressed: onDelete,
-                tooltip: 'Удалить',
+                tooltip: l10n.tooltipDelete,
               ),
             ],
           ),
@@ -380,6 +379,7 @@ class _EmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return Center(
       child: Column(
@@ -392,7 +392,7 @@ class _EmptyState extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            'Нет расписания',
+            l10n.emptyNoScheduleTitle,
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
@@ -401,7 +401,7 @@ class _EmptyState extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'Добавьте записи расписания\nдля автоматического управления',
+            l10n.emptyNoScheduleMessage,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 14,
@@ -412,7 +412,7 @@ class _EmptyState extends StatelessWidget {
           ElevatedButton.icon(
             onPressed: onAdd,
             icon: const Icon(Icons.add),
-            label: const Text('Добавить'),
+            label: Text(l10n.scheduleAdd),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.accent,
               foregroundColor: Colors.white,

@@ -250,7 +250,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       final accessToken = await _storageService.getToken();
       if (accessToken == null || accessToken.isEmpty) {
-        emit(const AuthError('Не авторизован'));
+        emit(const AuthError('Not authenticated'));
         return;
       }
 
@@ -283,7 +283,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final refreshToken = await _storageService.getRefreshToken();
 
       if (accessToken == null || accessToken.isEmpty) {
-        emit(const AuthError('Не авторизован'));
+        emit(const AuthError('Not authenticated'));
         return;
       }
 

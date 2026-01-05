@@ -199,7 +199,7 @@ void main() {
           isA<ClimateControlState>()
               .having((s) => s.status, 'status', ClimateControlStatus.failure)
               .having(
-                  (s) => s.errorMessage, 'errorMessage', contains('Ошибка загрузки')),
+                  (s) => s.errorMessage, 'errorMessage', contains('State loading error')),
         ],
       );
     });
@@ -259,7 +259,7 @@ void main() {
           // Второй emit: ошибка + isTogglingPower = false
           isA<ClimateControlState>()
               .having((s) => s.errorMessage, 'errorMessage',
-                  contains('переключения питания'))
+                  contains('Power toggle error'))
               .having((s) => s.isTogglingPower, 'isTogglingPower', false),
         ],
       );
@@ -297,7 +297,7 @@ void main() {
         act: (bloc) => bloc.add(const ClimateTemperatureChanged(100.0)),
         expect: () => [
           isA<ClimateControlState>()
-              .having((s) => s.errorMessage, 'errorMessage', contains('температуры')),
+              .having((s) => s.errorMessage, 'errorMessage', contains('Temperature setting error')),
         ],
       );
     });

@@ -11,14 +11,10 @@ final class ConnectivityState extends Equatable {
   /// Сервер недоступен
   final bool isServerUnavailable;
 
-  /// Сообщение для пользователя
-  final String? message;
-
   const ConnectivityState({
     this.status = NetworkStatus.unknown,
     this.isOffline = false,
     this.isServerUnavailable = false,
-    this.message,
   });
 
   /// Показывать ли баннер о проблемах с соединением
@@ -28,5 +24,5 @@ final class ConnectivityState extends Equatable {
   bool get isOnline => status == NetworkStatus.online;
 
   @override
-  List<Object?> get props => [status, isOffline, isServerUnavailable, message];
+  List<Object?> get props => [status, isOffline, isServerUnavailable];
 }

@@ -1,31 +1,12 @@
 {
   "@@locale": "en",
-  "@@_README": "Complete localization file with all hardcoded strings found in the application",
-  "@@_APPLICATION": "=== Application Metadata ===",
-  "appTitle": "BREEZ Home",
-  "@appTitle": {
-    "description": "Application title"
-  },
-  "smartClimateManagement": "Smart Climate Management",
-  "@smartClimateManagement": {
-    "description": "Application tagline"
-  },
-  "@@_AUTHENTICATION": "=== Authentication ===",
-  "login": "Sign In",
+  "login": "Log in",
   "@login": {
     "description": "Login button text"
   },
   "register": "Sign Up",
   "@register": {
     "description": "Register button text"
-  },
-  "loginSubtitle": "Welcome back! Sign in to continue",
-  "@loginSubtitle": {
-    "description": "Login screen subtitle"
-  },
-  "registerSubtitle": "Create an account to get started",
-  "@registerSubtitle": {
-    "description": "Register screen subtitle"
   },
   "email": "Email",
   "@email": {
@@ -38,58 +19,6 @@
   "confirmPassword": "Confirm Password",
   "@confirmPassword": {
     "description": "Confirm password field label"
-  },
-  "fullName": "Full Name",
-  "@fullName": {
-    "description": "Name field label"
-  },
-  "welcomeBack": "Welcome Back",
-  "@welcomeBack": {
-    "description": "Welcome back message"
-  },
-  "createAccount": "Create Account",
-  "@createAccount": {
-    "description": "Create account title"
-  },
-  "signInToAccount": "Sign in to your account",
-  "@signInToAccount": {
-    "description": "Sign in subtitle"
-  },
-  "signUpForAccount": "Sign up for a new account",
-  "@signUpForAccount": {
-    "description": "Sign up subtitle"
-  },
-  "skipForNow": "Skip for now",
-  "@skipForNow": {
-    "description": "Skip authentication button"
-  },
-  "skipAuth": "Continue without registration",
-  "@skipAuth": {
-    "description": "Skip authentication button alternative"
-  },
-  "rememberMe": "Remember me",
-  "@rememberMe": {
-    "description": "Remember me checkbox"
-  },
-  "termsAndConditions": "Terms and Conditions",
-  "@termsAndConditions": {
-    "description": "Terms and conditions link"
-  },
-  "guestUser": "Guest User",
-  "@guestUser": {
-    "description": "Guest user name"
-  },
-  "registrationComingSoon": "Registration feature coming soon",
-  "@registrationComingSoon": {
-    "description": "Registration coming soon message"
-  },
-  "showPassword": "Show password",
-  "@showPassword": {
-    "description": "Show password tooltip"
-  },
-  "hidePassword": "Hide password",
-  "@hidePassword": {
-    "description": "Hide password tooltip"
   },
   "forgotPassword": "Forgot password?",
   "@forgotPassword": {
@@ -152,56 +81,6 @@
   "@passwordChangedSuccess": {
     "description": "Password changed success message"
   },
-  "@@_ONBOARDING": "=== Onboarding ===",
-  "skip": "Skip",
-  "@skip": {
-    "description": "Skip button"
-  },
-  "welcomeToBreezHome": "Welcome to\nBREEZ Home",
-  "@welcomeToBreezHome": {
-    "description": "Onboarding welcome title"
-  },
-  "smartHomeClimateControl": "Your smart home climate control\nat your fingertips",
-  "@smartHomeClimateControl": {
-    "description": "Onboarding welcome subtitle"
-  },
-  "swipeToContinue": "Swipe to continue",
-  "@swipeToContinue": {
-    "description": "Swipe instruction"
-  },
-  "controlYourDevices": "Control Your\nDevices",
-  "@controlYourDevices": {
-    "description": "Onboarding control title"
-  },
-  "manageHvacSystems": "Manage all your HVAC systems\nfrom anywhere, anytime",
-  "@manageHvacSystems": {
-    "description": "Onboarding control subtitle"
-  },
-  "turnOnOffRemotely": "Turn on/off remotely",
-  "@turnOnOffRemotely": {
-    "description": "Remote control feature"
-  },
-  "readyToGetStarted": "Ready to\nGet Started?",
-  "@readyToGetStarted": {
-    "description": "Onboarding final title"
-  },
-  "startControllingClimate": "Start controlling your home climate\nwith ease and efficiency",
-  "@startControllingClimate": {
-    "description": "Onboarding final subtitle"
-  },
-  "getStarted": "Get Started",
-  "@getStarted": {
-    "description": "Get started button"
-  },
-  "termsPrivacyAgreement": "By continuing, you agree to our\nTerms of Service and Privacy Policy",
-  "@termsPrivacyAgreement": {
-    "description": "Terms and privacy agreement text"
-  },
-  "loadingBreezHome": "Loading BREEZ Home",
-  "@loadingBreezHome": {
-    "description": "Loading screen text"
-  },
-  "@@_NAVIGATION": "=== Navigation ===",
   "home": "Home",
   "@home": {
     "description": "Home tab label"
@@ -214,64 +93,6 @@
   "@back": {
     "description": "Back button"
   },
-  "next": "Next",
-  "@next": {
-    "description": "Next button"
-  },
-  "previous": "Previous",
-  "@previous": {
-    "description": "Previous button"
-  },
-  "navigateBack": "Navigate back",
-  "@navigateBack": {
-    "description": "Navigate back label"
-  },
-  "@@_SETTINGS": "=== Settings Screen ===",
-  "settingsTitle": "Settings",
-  "@settingsTitle": {
-    "description": "Settings screen title (Russian: Настройки)"
-  },
-  "appearance": "Appearance",
-  "@appearance": {
-    "description": "Appearance section title (Russian: Внешний вид)"
-  },
-  "darkTheme": "Dark Theme",
-  "@darkTheme": {
-    "description": "Dark theme option (Russian: Темная тема)"
-  },
-  "useDarkColorScheme": "Use dark color scheme",
-  "@useDarkColorScheme": {
-    "description": "Dark theme description (Russian: Использовать темную цветовую схему)"
-  },
-  "themeChangeNextVersion": "Theme change will be available in the next version",
-  "@themeChangeNextVersion": {
-    "description": "Theme change message (Russian: Смена темы будет доступна в следующей версии)"
-  },
-  "units": "Units",
-  "@units": {
-    "description": "Units section title (Russian: Единицы измерения)"
-  },
-  "temperatureUnits": "Temperature",
-  "@temperatureUnits": {
-    "description": "Temperature units label (Russian: Температура)"
-  },
-  "celsius": "Celsius (°C)",
-  "@celsius": {
-    "description": "Celsius option (Russian: Цельсий (°C))"
-  },
-  "fahrenheit": "Fahrenheit (°F)",
-  "@fahrenheit": {
-    "description": "Fahrenheit option (Russian: Фаренгейт (°F))"
-  },
-  "unitsChangedTo": "Units changed to {unit}",
-  "@unitsChangedTo": {
-    "description": "Units changed message",
-    "placeholders": {
-      "unit": {
-        "type": "String"
-      }
-    }
-  },
   "notifications": "Notifications",
   "@notifications": {
     "description": "Notifications section (Russian: Уведомления)"
@@ -279,10 +100,6 @@
   "pushNotifications": "Push Notifications",
   "@pushNotifications": {
     "description": "Push notifications option (Russian: Push-уведомления)"
-  },
-  "receiveInstantNotifications": "Receive instant notifications",
-  "@receiveInstantNotifications": {
-    "description": "Push notifications description (Russian: Получать мгновенные уведомления)"
   },
   "emailNotifications": "Email Notifications",
   "@emailNotifications": {
@@ -292,198 +109,21 @@
   "@alarmNotifications": {
     "description": "Alarm notifications option"
   },
-  "receiveEmailReports": "Receive reports via email",
-  "@receiveEmailReports": {
-    "description": "Email notifications description (Russian: Получать отчеты на email)"
-  },
-  "notificationsState": "{type} notifications {state}",
-  "@notificationsState": {
-    "description": "Notifications state message",
-    "placeholders": {
-      "type": {
-        "type": "String"
-      },
-      "state": {
-        "type": "String"
-      }
-    }
-  },
   "language": "Language",
   "@language": {
     "description": "Language section (Russian: Язык)"
   },
-  "russian": "Русский",
-  "@russian": {
-    "description": "Russian language option"
-  },
-  "english": "English",
-  "@english": {
-    "description": "English language option"
-  },
-  "languageChangedTo": "Language changed to {language}",
-  "@languageChangedTo": {
-    "description": "Language changed message",
-    "placeholders": {
-      "language": {
-        "type": "String"
-      }
-    }
-  },
-  "about": "About",
-  "@about": {
-    "description": "About section (Russian: О приложении)"
-  },
-  "version": "Version",
-  "@version": {
-    "description": "Version label (Russian: Версия)"
-  },
-  "developer": "Developer",
-  "@developer": {
-    "description": "Developer label (Russian: Разработчик)"
-  },
-  "license": "License",
-  "@license": {
-    "description": "License label (Russian: Лицензия)"
-  },
-  "checkUpdates": "Check for Updates",
-  "@checkUpdates": {
-    "description": "Check updates button (Russian: Проверить обновления)"
-  },
-  "checkingUpdates": "Checking for updates...",
-  "@checkingUpdates": {
-    "description": "Checking updates message (Russian: Проверка обновлений...)"
-  },
-  "@@_DEVICE_MANAGEMENT": "=== Device Management ===",
-  "deviceManagement": "Device Management",
-  "@deviceManagement": {
-    "description": "Device management screen title"
-  },
-  "search": "Search",
-  "@search": {
-    "description": "Search title"
-  },
-  "scanForDevices": "Scan for Devices",
-  "@scanForDevices": {
-    "description": "Scan for devices button"
-  },
-  "addDevice": "Add Device",
+  "addDevice": "Add device",
   "@addDevice": {
     "description": "Add device button"
   },
-  "editDevice": "Edit Device",
-  "@editDevice": {
-    "description": "Edit device dialog title"
-  },
-  "removeDevice": "Remove Device",
-  "@removeDevice": {
-    "description": "Remove device button"
-  },
-  "deviceName": "Device Name",
+  "deviceName": "Name",
   "@deviceName": {
-    "description": "Device name label"
-  },
-  "macAddress": "MAC Address",
-  "@macAddress": {
-    "description": "MAC address label"
-  },
-  "location": "Location",
-  "@location": {
-    "description": "Location label"
-  },
-  "notFoundDevice": "Not found\ndevice?",
-  "@notFoundDevice": {
-    "description": "Device not found message"
-  },
-  "selectManually": "Select manually",
-  "@selectManually": {
-    "description": "Select device manually button"
-  },
-  "deviceUpdated": "Device updated",
-  "@deviceUpdated": {
-    "description": "Device updated message"
-  },
-  "deviceAdded": "Device added successfully",
-  "@deviceAdded": {
-    "description": "Device added success message"
-  },
-  "deviceRemoved": "Device removed successfully",
-  "@deviceRemoved": {
-    "description": "Device removed success message"
-  },
-  "scanQrCode": "Scan QR Code",
-  "@scanQrCode": {
-    "description": "Scan QR code button"
-  },
-  "processingQrCode": "Processing QR Code...",
-  "@processingQrCode": {
-    "description": "Processing QR code message"
-  },
-  "invalidQrCode": "Invalid QR code",
-  "@invalidQrCode": {
-    "description": "Invalid QR code error"
-  },
-  "deviceDetectedFromQr": "Device detected from QR code",
-  "@deviceDetectedFromQr": {
-    "description": "Device detected from QR message"
-  },
-  "enterMacManually": "Or enter MAC address manually",
-  "@enterMacManually": {
-    "description": "Manual MAC entry option"
-  },
-  "invalidMacFormat": "Invalid MAC address format (e.g., AA:BB:CC:DD:EE:FF)",
-  "@invalidMacFormat": {
-    "description": "Invalid MAC format error"
-  },
-  "deviceNameMinLength": "Device name must be at least 3 characters",
-  "@deviceNameMinLength": {
-    "description": "Device name validation error"
-  },
-  "adding": "Adding...",
-  "@adding": {
-    "description": "Adding in progress"
-  },
-  "pullToRefresh": "Pull to refresh",
-  "@pullToRefresh": {
-    "description": "Pull to refresh hint"
-  },
-  "online": "Online",
-  "@online": {
-    "description": "Online status"
-  },
-  "offline": "Offline",
-  "@offline": {
-    "description": "Offline status"
-  },
-  "edit": "Edit",
-  "@edit": {
-    "description": "Edit action"
+    "description": "Device name field label"
   },
   "delete": "Delete",
   "@delete": {
     "description": "Delete action"
-  },
-  "confirmRemoveDevice": "Are you sure you want to remove {name}?",
-  "@confirmRemoveDevice": {
-    "description": "Confirm device removal",
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "wifiNetwork": "WiFi: {network}",
-  "@wifiNetwork": {
-    "description": "WiFi network display",
-    "placeholders": {
-      "network": {
-        "type": "String"
-      }
-    }
-  },
-  "@@_HVAC_CONTROL": "=== HVAC Control ===",
-  "hvacControl": "BREEZ Home",
-  "@hvacControl": {
-    "description": "Main screen title"
   },
   "temperature": "Temperature",
   "@temperature": {
@@ -493,45 +133,9 @@
   "@humidity": {
     "description": "Humidity label"
   },
-  "airQuality": "Air Quality",
-  "@airQuality": {
-    "description": "Air quality label"
-  },
-  "fanSpeed": "Fan Speed",
-  "@fanSpeed": {
-    "description": "Fan speed label"
-  },
-  "fan": "Fan",
-  "@fan": {
-    "description": "Fan label short"
-  },
-  "mode": "Mode",
-  "@mode": {
-    "description": "Mode label"
-  },
   "operatingMode": "Operating Mode",
   "@operatingMode": {
     "description": "Operating mode title"
-  },
-  "power": "Power",
-  "@power": {
-    "description": "Power label"
-  },
-  "on": "On",
-  "@on": {
-    "description": "On state"
-  },
-  "off": "Off",
-  "@off": {
-    "description": "Off state"
-  },
-  "current": "Current",
-  "@current": {
-    "description": "Current label"
-  },
-  "target": "Target",
-  "@target": {
-    "description": "Target label"
   },
   "targetTemperature": "Target temperature",
   "@targetTemperature": {
@@ -551,15 +155,7 @@
   },
   "filter": "Filter",
   "@filter": {
-    "description": "Filter label"
-  },
-  "statusWorking": "Working",
-  "@statusWorking": {
-    "description": "Status working"
-  },
-  "statusOff": "Off",
-  "@statusOff": {
-    "description": "Status off"
+    "description": "Filter button"
   },
   "todayDate": "Today, {date}",
   "@todayDate": {
@@ -570,390 +166,21 @@
       }
     }
   },
-  "cooling": "Cooling",
-  "@cooling": {
-    "description": "Cooling mode"
-  },
-  "heating": "Heating",
-  "@heating": {
-    "description": "Heating mode"
-  },
-  "auto": "Auto",
-  "@auto": {
-    "description": "Auto mode"
-  },
-  "low": "Low",
-  "@low": {
-    "description": "Low speed"
-  },
-  "medium": "Medium",
-  "@medium": {
-    "description": "Password strength"
-  },
-  "high": "High",
-  "@high": {
-    "description": "High speed"
-  },
-  "mode2": "Mode 2",
-  "@mode2": {
-    "description": "Mode 2 label"
-  },
-  "ventilationMode": "Ventilation Mode",
-  "@ventilationMode": {
-    "description": "Ventilation mode label"
-  },
-  "notSelected": "Not selected",
-  "@notSelected": {
-    "description": "Not selected state"
-  },
-  "modeBasic": "Basic",
-  "@modeBasic": {
-    "description": "Basic ventilation mode"
-  },
-  "modeIntensive": "Intensive",
-  "@modeIntensive": {
-    "description": "Intensive ventilation mode"
-  },
-  "modeEconomic": "Economic",
-  "@modeEconomic": {
-    "description": "Economic ventilation mode"
-  },
-  "modeMaximum": "Maximum",
-  "@modeMaximum": {
-    "description": "Maximum ventilation mode"
-  },
-  "modeKitchen": "Kitchen",
-  "@modeKitchen": {
-    "description": "Kitchen ventilation mode"
-  },
-  "modeFireplace": "Fireplace",
-  "@modeFireplace": {
-    "description": "Fireplace ventilation mode"
-  },
-  "modeVacation": "Vacation",
-  "@modeVacation": {
-    "description": "Vacation ventilation mode"
-  },
-  "modeCustom": "Custom",
-  "@modeCustom": {
-    "description": "Custom ventilation mode"
-  },
-  "supplyAir": "Supply",
-  "@supplyAir": {
-    "description": "Supply air label"
-  },
-  "exhaustAir": "Exhaust",
-  "@exhaustAir": {
-    "description": "Exhaust air label"
-  },
-  "temperatures": "Temperatures",
-  "@temperatures": {
-    "description": "Temperatures label"
-  },
-  "monitoringAndSettings": "Monitoring and settings",
-  "@monitoringAndSettings": {
-    "description": "Monitoring and settings label"
-  },
-  "outdoor": "Outdoor",
-  "@outdoor": {
-    "description": "Outdoor label"
-  },
-  "indoor": "Indoor",
-  "@indoor": {
-    "description": "Indoor label"
-  },
-  "@@_ROOM_CONTROL": "=== Room Control ===",
-  "humidifierAir": "Humidifier\nAir",
-  "@humidifierAir": {
-    "description": "Humidifier air label"
-  },
-  "purifierAir": "Purifier\nAir",
-  "@purifierAir": {
-    "description": "Purifier air label"
-  },
-  "lighting": "Lighting",
-  "@lighting": {
-    "description": "Lighting section"
-  },
-  "mainLight": "Main light",
-  "@mainLight": {
-    "description": "Main light label"
-  },
-  "floorLamp": "Floor lamp",
-  "@floorLamp": {
-    "description": "Floor lamp label"
-  },
-  "unit": "Unit",
-  "@unit": {
-    "description": "Unit label"
-  },
-  "notificationsComingSoon": "Notifications feature coming soon",
-  "@notificationsComingSoon": {
-    "description": "Notifications coming soon message"
-  },
-  "favorite": "Favorite",
-  "@favorite": {
-    "description": "Favorite action"
-  },
-  "@@_ANALYTICS": "=== Analytics ===",
-  "activity": "Activity",
-  "@activity": {
-    "description": "Activity label"
-  },
-  "seeAll": "See All",
-  "@seeAll": {
-    "description": "See all button"
-  },
-  "excellent": "Excellent",
-  "@excellent": {
-    "description": "Excellent air quality"
-  },
-  "good": "Good",
-  "@good": {
-    "description": "Good air quality"
-  },
-  "moderate": "Moderate",
-  "@moderate": {
-    "description": "Moderate air quality"
-  },
-  "poor": "Poor",
-  "@poor": {
-    "description": "Poor air quality"
-  },
-  "veryPoor": "Very Poor",
-  "@veryPoor": {
-    "description": "Very poor air quality"
-  },
-  "@@_QUICK_ACTIONS": "=== Quick Actions ===",
-  "quickActions": "Quick Actions",
-  "@quickActions": {
-    "description": "Quick actions title"
-  },
-  "allOn": "All On",
-  "@allOn": {
-    "description": "Turn all devices on"
-  },
-  "allOff": "All Off",
-  "@allOff": {
-    "description": "Turn all devices off"
-  },
-  "sync": "Sync",
-  "@sync": {
-    "description": "Sync devices"
-  },
   "presets": "Presets",
   "@presets": {
     "description": "Presets title"
-  },
-  "@@_ERRORS": "=== Error Messages ===",
-  "error": "Error",
-  "@error": {
-    "description": "Error title"
-  },
-  "connectionError": "Connection Error",
-  "@connectionError": {
-    "description": "Connection error title"
-  },
-  "serverError": "Server Error",
-  "@serverError": {
-    "description": "Server error title"
-  },
-  "permissionRequired": "Permission Required",
-  "@permissionRequired": {
-    "description": "Permission required title"
-  },
-  "somethingWentWrong": "Oops! Something went wrong",
-  "@somethingWentWrong": {
-    "description": "Generic error title"
-  },
-  "unableToConnect": "Unable to connect to the server. Please check your internet connection.",
-  "@unableToConnect": {
-    "description": "Network error message"
-  },
-  "serverErrorMessage": "Something went wrong on our end. Please try again later.",
-  "@serverErrorMessage": {
-    "description": "Server error message"
-  },
-  "permissionRequiredMessage": "This feature requires additional permissions to work properly.",
-  "@permissionRequiredMessage": {
-    "description": "Permission required message"
-  },
-  "networkConnectionFailed": "Network connection failed. Please check your internet connection.",
-  "@networkConnectionFailed": {
-    "description": "Network connection failed"
-  },
-  "requestTimedOut": "Request timed out. Please try again.",
-  "@requestTimedOut": {
-    "description": "Request timeout error"
-  },
-  "failedToConnect": "Failed to connect to device server",
-  "@failedToConnect": {
-    "description": "Device server connection error"
-  },
-  "connectionFailed": "Connection failed: {error}",
-  "@connectionFailed": {
-    "description": "Connection failed with error",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "failedToAddDevice": "Failed to add device: {error}",
-  "@failedToAddDevice": {
-    "description": "Failed to add device",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "failedToRemoveDevice": "Failed to remove device: {error}",
-  "@failedToRemoveDevice": {
-    "description": "Failed to remove device",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "failedToLoadMore": "Failed to load more items: {error}",
-  "@failedToLoadMore": {
-    "description": "Failed to load more items",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "tryAgain": "Try Again",
-  "@tryAgain": {
-    "description": "Try again button"
   },
   "retry": "Retry",
   "@retry": {
     "description": "Retry button"
   },
-  "retryConnection": "Retry Connection",
-  "@retryConnection": {
-    "description": "Retry connection button"
-  },
-  "refreshing": "Refreshing...",
-  "@refreshing": {
-    "description": "Refreshing message"
-  },
-  "refreshDevices": "Refresh Devices",
-  "@refreshDevices": {
-    "description": "Refresh devices tooltip"
-  },
-  "retryingConnection": "Retrying connection",
-  "@retryingConnection": {
-    "description": "Retrying connection announcement"
-  },
-  "errorCode": "Error Code: {code}",
-  "@errorCode": {
-    "description": "Error code display",
-    "placeholders": {
-      "code": {
-        "type": "String"
-      }
-    }
-  },
-  "errorCodeCopied": "Error code copied to clipboard",
-  "@errorCodeCopied": {
-    "description": "Error code copied message"
-  },
-  "technicalDetails": "Technical Details",
-  "@technicalDetails": {
-    "description": "Technical details label"
-  },
-  "doubleTapToRetry": "Double tap to retry",
-  "@doubleTapToRetry": {
-    "description": "Double tap to retry hint"
-  },
-  "@@_LOADING_STATES": "=== Loading States ===",
   "loading": "Loading...",
   "@loading": {
     "description": "Loading message"
   },
-  "loadingDevices": "Loading devices...",
-  "@loadingDevices": {
-    "description": "Loading devices message"
-  },
-  "allUnitsLoaded": "All units loaded",
-  "@allUnitsLoaded": {
-    "description": "All units loaded message"
-  },
-  "connecting": "Connecting...",
-  "@connecting": {
-    "description": "Connecting message"
-  },
-  "reconnecting": "Reconnecting...",
-  "@reconnecting": {
-    "description": "Reconnecting message"
-  },
-  "@@_EMPTY_STATES": "=== Empty States ===",
   "noDevices": "No Devices",
   "@noDevices": {
     "description": "No devices title"
-  },
-  "noDevicesFound": "No Devices Found",
-  "@noDevicesFound": {
-    "description": "No devices found message"
-  },
-  "addFirstDevice": "Add your first device to get started",
-  "@addFirstDevice": {
-    "description": "Add first device prompt"
-  },
-  "checkMqttSettings": "Check your MQTT connection settings\nand make sure devices are online",
-  "@checkMqttSettings": {
-    "description": "MQTT settings help text"
-  },
-  "deviceNotSelected": "No device selected",
-  "@deviceNotSelected": {
-    "description": "No device selected message"
-  },
-  "openDeviceAddition": "Opening device addition screen",
-  "@openDeviceAddition": {
-    "description": "Opening device addition announcement"
-  },
-  "@@_CAMERA": "=== Camera ===",
-  "initializingCamera": "Initializing camera...",
-  "@initializingCamera": {
-    "description": "Camera initialization message"
-  },
-  "cameraAccessRequired": "Camera access is required to scan QR codes.\nPlease enable camera permissions in your browser settings.",
-  "@cameraAccessRequired": {
-    "description": "Camera permission message"
-  },
-  "cameraError": "Camera Error",
-  "@cameraError": {
-    "description": "Camera error title"
-  },
-  "cameraErrorMessage": "An error occurred while accessing the camera.",
-  "@cameraErrorMessage": {
-    "description": "Camera error message"
-  },
-  "webCameraSetupRequired": "Web camera scanning requires additional setup. Please use manual entry or scan from mobile device.",
-  "@webCameraSetupRequired": {
-    "description": "Web camera setup message"
-  },
-  "cameraView": "Camera View",
-  "@cameraView": {
-    "description": "Camera view label"
-  },
-  "@@_VALIDATION": "=== Validation Messages ===",
-  "emailRequired": "Email is required",
-  "@emailRequired": {
-    "description": "Email required validation"
-  },
-  "invalidEmail": "Please enter a valid email",
-  "@invalidEmail": {
-    "description": "Invalid email validation"
-  },
-  "passwordRequired": "Password is required",
-  "@passwordRequired": {
-    "description": "Password required validation"
   },
   "passwordTooShort": "Password must be at least {length} characters",
   "@passwordTooShort": {
@@ -964,38 +191,12 @@
       }
     }
   },
-  "nameRequired": "{fieldName} is required",
-  "@nameRequired": {
-    "description": "Name required validation",
-    "placeholders": {
-      "fieldName": {
-        "type": "String"
-      }
-    }
-  },
   "nameTooShort": "{fieldName} must be at least 2 characters",
   "@nameTooShort": {
     "description": "Name too short validation",
     "placeholders": {
       "fieldName": {
         "type": "String"
-      }
-    }
-  },
-  "fillRequiredFields": "Please fill in all required fields",
-  "@fillRequiredFields": {
-    "description": "Fill required fields message"
-  },
-  "pleaseAcceptTerms": "Please accept the terms and conditions",
-  "@pleaseAcceptTerms": {
-    "description": "Accept terms validation"
-  },
-  "minCharacters": "Min {count} characters",
-  "@minCharacters": {
-    "description": "Minimum characters hint",
-    "placeholders": {
-      "count": {
-        "type": "int"
       }
     }
   },
@@ -1044,71 +245,50 @@
   "@invalidEmailFormat": {
     "description": "Invalid email format validation"
   },
-  "@@_PASSWORD_STRENGTH": "=== Password Strength ===",
-  "atLeast8Characters": "At least 8 characters",
-  "@atLeast8Characters": {
-    "description": "Password requirement"
-  },
-  "uppercaseLetter": "Uppercase letter",
-  "@uppercaseLetter": {
-    "description": "Password requirement"
-  },
-  "lowercaseLetter": "Lowercase letter",
-  "@lowercaseLetter": {
-    "description": "Password requirement"
-  },
-  "number": "Number",
-  "@number": {
-    "description": "Password requirement"
-  },
-  "specialCharacter": "Special character",
-  "@specialCharacter": {
-    "description": "Password requirement"
-  },
-  "weak": "Weak",
-  "@weak": {
-    "description": "Password strength"
-  },
-  "strong": "Strong",
-  "@strong": {
-    "description": "Password strength"
-  },
-  "veryStrong": "Very Strong",
-  "@veryStrong": {
-    "description": "Password strength"
-  },
-  "@@_SCHEDULE": "=== Schedule ===",
   "schedule": "Schedule",
   "@schedule": {
     "description": "Schedule label"
   },
-  "automaticControl": "Automatic control",
-  "@automaticControl": {
-    "description": "Automatic control label"
+  "allCount": "All (+{count})",
+  "@allCount": {
+    "description": "All with count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
-  "configureSchedule": "Configure schedule",
-  "@configureSchedule": {
-    "description": "Configure schedule button"
+  "noSchedule": "No schedule",
+  "@noSchedule": {
+    "description": "No schedule message"
   },
-  "operatingTime": "Operating time",
-  "@operatingTime": {
-    "description": "Operating time label"
+  "addScheduleForDevice": "Add schedule for the device",
+  "@addScheduleForDevice": {
+    "description": "Add schedule hint"
   },
-  "running": "Running",
-  "@running": {
-    "description": "Running status"
+  "nowLabel": "Now",
+  "@nowLabel": {
+    "description": "Now label"
   },
-  "stopped": "Stopped",
-  "@stopped": {
-    "description": "Stopped status"
+  "alarms": "Alarms",
+  "@alarms": {
+    "description": "Alarms section title"
   },
-  "turnOn": "Turn on",
-  "@turnOn": {
-    "description": "Turn on action"
+  "noAlarms": "No alarms",
+  "@noAlarms": {
+    "description": "No alarms message"
   },
-  "turnOff": "Turn off",
-  "@turnOff": {
-    "description": "Turn off action"
+  "systemWorkingNormally": "System working normally",
+  "@systemWorkingNormally": {
+    "description": "System normal status"
+  },
+  "alarmHistory": "Alarm History",
+  "@alarmHistory": {
+    "description": "Alarm history button"
+  },
+  "noNotifications": "No notifications",
+  "@noNotifications": {
+    "description": "No notifications message"
   },
   "monday": "Monday",
   "@monday": {
@@ -1138,144 +318,6 @@
   "@sunday": {
     "description": "Sunday"
   },
-  "editSchedule": "Edit {name}",
-  "@editSchedule": {
-    "description": "Edit schedule semantic label",
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "deleteSchedule": "Delete {name}",
-  "@deleteSchedule": {
-    "description": "Delete schedule semantic label",
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "editScheduleTooltip": "Edit schedule",
-  "@editScheduleTooltip": {
-    "description": "Edit schedule tooltip"
-  },
-  "deleteScheduleTooltip": "Delete schedule",
-  "@deleteScheduleTooltip": {
-    "description": "Delete schedule tooltip"
-  },
-  "@@_SUCCESS_MESSAGES": "=== Success Messages ===",
-  "success": "Success",
-  "@success": {
-    "description": "Success title"
-  },
-  "settingsSaved": "Settings saved. Restart app to apply changes.",
-  "@settingsSaved": {
-    "description": "Settings saved message"
-  },
-  "presetApplied": "Preset applied",
-  "@presetApplied": {
-    "description": "Preset applied message"
-  },
-  "allUnitsOn": "All units turned on",
-  "@allUnitsOn": {
-    "description": "All units on message"
-  },
-  "allUnitsOff": "All units turned off",
-  "@allUnitsOff": {
-    "description": "All units off message"
-  },
-  "settingsSynced": "Settings synced to all units",
-  "@settingsSynced": {
-    "description": "Settings synced message"
-  },
-  "scheduleAppliedToAll": "Schedule applied to all units",
-  "@scheduleAppliedToAll": {
-    "description": "Schedule applied message"
-  },
-  "@@_ERROR_ACTIONS": "=== Error Action Messages ===",
-  "errorChangingPower": "Error changing power",
-  "@errorChangingPower": {
-    "description": "Power change error"
-  },
-  "errorUpdatingMode": "Error updating mode",
-  "@errorUpdatingMode": {
-    "description": "Mode update error"
-  },
-  "errorUpdatingFanSpeed": "Error updating fan speed",
-  "@errorUpdatingFanSpeed": {
-    "description": "Fan speed update error"
-  },
-  "errorApplyingPreset": "Error applying preset",
-  "@errorApplyingPreset": {
-    "description": "Preset apply error"
-  },
-  "errorTurningOnUnits": "Error turning on units",
-  "@errorTurningOnUnits": {
-    "description": "Turn on units error"
-  },
-  "errorTurningOffUnits": "Error turning off units",
-  "@errorTurningOffUnits": {
-    "description": "Turn off units error"
-  },
-  "errorSyncingSettings": "Error syncing settings",
-  "@errorSyncingSettings": {
-    "description": "Settings sync error"
-  },
-  "errorApplyingSchedule": "Error applying schedule",
-  "@errorApplyingSchedule": {
-    "description": "Schedule apply error"
-  },
-  "@@_DEVICE_STATUS": "=== Device Status ===",
-  "connected": "Connected",
-  "@connected": {
-    "description": "Connected status"
-  },
-  "disconnected": "Disconnected",
-  "@disconnected": {
-    "description": "Disconnected status"
-  },
-  "idle": "Idle",
-  "@idle": {
-    "description": "Idle status"
-  },
-  "active": "Active",
-  "@active": {
-    "description": "Active status"
-  },
-  "inactive": "Inactive",
-  "@inactive": {
-    "description": "Inactive status"
-  },
-  "enabled": "Enabled",
-  "@enabled": {
-    "description": "Enabled status"
-  },
-  "disabled": "Disabled",
-  "@disabled": {
-    "description": "Disabled status"
-  },
-  "available": "Available",
-  "@available": {
-    "description": "Available status"
-  },
-  "unavailable": "Unavailable",
-  "@unavailable": {
-    "description": "Unavailable status"
-  },
-  "maintenance": "Maintenance",
-  "@maintenance": {
-    "description": "Maintenance status"
-  },
-  "activated": "activated",
-  "@activated": {
-    "description": "Activated state"
-  },
-  "deactivated": "deactivated",
-  "@deactivated": {
-    "description": "Deactivated state"
-  },
-  "@@_COMMON_ACTIONS": "=== Common Actions ===",
   "save": "Save",
   "@save": {
     "description": "Save button"
@@ -1284,418 +326,18 @@
   "@cancel": {
     "description": "Cancel button"
   },
-  "close": "Close",
-  "@close": {
-    "description": "Close button"
-  },
-  "confirm": "Confirm",
-  "@confirm": {
-    "description": "Confirm button"
-  },
-  "yes": "Yes",
-  "@yes": {
-    "description": "Yes button"
-  },
-  "no": "No",
-  "@no": {
-    "description": "No button"
-  },
-  "ok": "OK",
-  "@ok": {
-    "description": "OK button"
-  },
-  "apply": "Apply",
-  "@apply": {
-    "description": "Apply button"
-  },
-  "reset": "Reset",
-  "@reset": {
-    "description": "Reset button"
-  },
-  "clear": "Clear",
-  "@clear": {
-    "description": "Clear button"
-  },
-  "done": "Done",
-  "@done": {
-    "description": "Done button"
-  },
-  "add": "Add",
-  "@add": {
-    "description": "Add button"
-  },
-  "remove": "Remove",
-  "@remove": {
-    "description": "Remove button"
-  },
-  "filter": "Filter",
-  "@filter": {
-    "description": "Filter button"
-  },
-  "sort": "Sort",
-  "@sort": {
-    "description": "Sort button"
-  },
-  "refresh": "Refresh",
-  "@refresh": {
-    "description": "Refresh button"
-  },
   "logout": "Logout",
   "@logout": {
     "description": "Logout button"
   },
-  "@@_COMMON_LABELS": "=== Common Labels ===",
-  "status": "Status",
-  "@status": {
-    "description": "Status label"
-  },
-  "details": "Details",
-  "@details": {
-    "description": "Details label"
-  },
-  "more": "More",
-  "@more": {
-    "description": "More label"
-  },
-  "less": "Less",
-  "@less": {
-    "description": "Less label"
-  },
-  "all": "All",
-  "@all": {
-    "description": "All label"
-  },
-  "none": "None",
-  "@none": {
-    "description": "None label"
-  },
-  "optional": "Optional",
-  "@optional": {
-    "description": "Optional field hint"
-  },
-  "required": "Required",
-  "@required": {
-    "description": "Required field hint"
-  },
-  "info": "Information",
-  "@info": {
-    "description": "Information label"
-  },
-  "warning": "Warning",
-  "@warning": {
-    "description": "Warning label"
-  },
-  "notification": "Notification",
-  "@notification": {
-    "description": "Notification label"
-  },
-  "@@_TIME": "=== Time Labels ===",
   "today": "Today",
   "@today": {
     "description": "Today label"
   },
-  "yesterday": "Yesterday",
-  "@yesterday": {
-    "description": "Yesterday label"
-  },
-  "week": "Week",
-  "@week": {
-    "description": "Week label"
-  },
-  "month": "Month",
-  "@month": {
-    "description": "Month label"
-  },
-  "year": "Year",
-  "@year": {
-    "description": "Year label"
-  },
-  "date": "{date}",
-  "@date": {
-    "description": "Date format",
-    "placeholders": {
-      "date": {
-        "type": "String"
-      }
-    }
-  },
-  "@@_AUTOMATION": "=== Automation ===",
-  "automation": "Automation",
-  "@automation": {
-    "description": "Automation panel title"
-  },
-  "manageRules": "Manage Rules",
-  "@manageRules": {
-    "description": "Manage rules button"
-  },
-  "activeRulesFormat": "Active: {active} of {total}",
-  "@activeRulesFormat": {
-    "description": "Active rules count format",
-    "placeholders": {
-      "active": {
-        "type": "int"
-      },
-      "total": {
-        "type": "int"
-      }
-    }
-  },
-  "critical": "Critical",
-  "@critical": {
-    "description": "Critical notification label"
-  },
-  "errors": "Errors",
-  "@errors": {
-    "description": "Errors notification label"
-  },
-  "warnings": "Warnings",
-  "@warnings": {
-    "description": "Warnings notification label"
-  },
-  "infoLabel": "Info",
-  "@infoLabel": {
-    "description": "Info notification label"
-  },
-  "showAll": "Show all ({count})",
-  "@showAll": {
-    "description": "Show all notifications button",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "collapse": "Collapse",
-  "@collapse": {
-    "description": "Collapse button"
-  },
-  "@@_COMING_SOON": "=== Coming Soon Messages ===",
-  "manageRulesComingSoon": "Manage Rules (Coming Soon)",
-  "@manageRulesComingSoon": {
-    "description": "Manage rules coming soon"
-  },
-  "addUnitComingSoon": "Add unit feature coming soon",
-  "@addUnitComingSoon": {
-    "description": "Add unit coming soon"
-  },
-  "@@_ROOMS": "=== Room Names ===",
-  "livingRoom": "Living Room",
-  "@livingRoom": {
-    "description": "Living room name"
-  },
-  "bedroom": "Bedroom",
-  "@bedroom": {
-    "description": "Bedroom name"
-  },
-  "kitchen": "Kitchen",
-  "@kitchen": {
-    "description": "Kitchen name"
-  },
-  "@@_DEVICES": "=== Device Types ===",
-  "vacuumCleaner": "Vacuum cleaner",
-  "@vacuumCleaner": {
-    "description": "Vacuum cleaner device type"
-  },
-  "smartBulb": "Smart bulb",
-  "@smartBulb": {
-    "description": "Smart bulb device type"
-  },
-  "humidifier": "Humidifier",
-  "@humidifier": {
-    "description": "Humidifier device type"
-  },
-  "@@_STATISTICS": "=== Statistics ===",
-  "average": "Average",
-  "@average": {
-    "description": "Average label"
-  },
-  "min": "Min",
-  "@min": {
-    "description": "Minimum label"
-  },
-  "max": "Max",
-  "@max": {
-    "description": "Maximum label"
-  },
-  "temperatureHistory": "Temperature History",
-  "@temperatureHistory": {
-    "description": "Temperature history title"
-  },
-  "last24Hours": "Last 24 hours",
-  "@last24Hours": {
-    "description": "Last 24 hours label"
-  },
-  "activeDevices": "{count} of {total} active",
-  "@activeDevices": {
-    "description": "Active devices count",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      },
-      "total": {
-        "type": "int"
-      }
-    }
-  },
-  "@@_DIAGNOSTICS": "=== Diagnostics ===",
-  "runDiagnostics": "Run Diagnostics",
-  "@runDiagnostics": {
-    "description": "Run diagnostics button"
-  },
-  "systemHealth": "System Health",
-  "@systemHealth": {
-    "description": "System health title"
-  },
-  "supplyFan": "Supply Fan",
-  "@supplyFan": {
-    "description": "Supply fan component"
-  },
-  "exhaustFan": "Exhaust Fan",
-  "@exhaustFan": {
-    "description": "Exhaust fan component"
-  },
-  "heater": "Heater",
-  "@heater": {
-    "description": "Heater component"
-  },
-  "recuperator": "Recuperator",
-  "@recuperator": {
-    "description": "Heat recuperator"
-  },
-  "sensors": "Sensors",
-  "@sensors": {
-    "description": "Sensors component"
-  },
-  "normal": "Normal",
-  "@normal": {
-    "description": "Normal status"
-  },
-  "sensorReadings": "Sensor Readings",
-  "@sensorReadings": {
-    "description": "Sensor readings title"
-  },
-  "supplyAirTemp": "Supply Air Temperature",
-  "@supplyAirTemp": {
-    "description": "Supply air temperature"
-  },
-  "outdoorTemp": "Outdoor Temperature",
-  "@outdoorTemp": {
-    "description": "Outdoor temperature"
-  },
-  "pressure": "Pressure",
-  "@pressure": {
-    "description": "Pressure reading"
-  },
-  "networkConnection": "Network Connection",
-  "@networkConnection": {
-    "description": "Network connection title"
-  },
-  "network": "Network",
-  "@network": {
-    "description": "Network label"
-  },
-  "signal": "Signal",
-  "@signal": {
-    "description": "Signal strength"
-  },
-  "ipAddress": "IP Address",
-  "@ipAddress": {
-    "description": "IP address label"
-  },
-  "notConnected": "Not Connected",
-  "@notConnected": {
-    "description": "Not connected status"
-  },
-  "notAssigned": "Not Assigned",
-  "@notAssigned": {
-    "description": "Not assigned status"
-  },
-  "diagnosticsTitle": "Diagnostics",
-  "@diagnosticsTitle": {
-    "description": "Diagnostics title"
-  },
-  "diagnosticsRunning": "Running system diagnostics...",
-  "@diagnosticsRunning": {
-    "description": "Diagnostics running message"
-  },
-  "diagnosticsComplete": "Diagnostics complete. System is normal.",
-  "@diagnosticsComplete": {
-    "description": "Diagnostics complete message"
-  },
-  "@@_SCHEDULE_DIALOGS": "=== Schedule Dialogs ===",
-  "scheduleSaved": "Schedule saved successfully",
-  "@scheduleSaved": {
-    "description": "Schedule saved message"
-  },
-  "saveError": "Save error: {error}",
-  "@saveError": {
-    "description": "Save error message",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "unsavedChanges": "Unsaved Changes",
-  "@unsavedChanges": {
-    "description": "Unsaved changes title"
-  },
-  "unsavedChangesMessage": "You have unsaved changes. Exit without saving?",
-  "@unsavedChangesMessage": {
-    "description": "Unsaved changes confirmation"
-  },
-  "exit": "Exit",
-  "@exit": {
-    "description": "Exit button"
-  },
-  "@@_DEVICE_SEARCH": "=== Device Search ===",
-  "devicesFound": "{count} new devices",
-  "@devicesFound": {
-    "description": "New devices found",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "deviceFound": "{count} new device",
-  "@deviceFound": {
-    "description": "Single device found",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "notFoundDeviceTitle": "Not found\ndevice?",
-  "@notFoundDeviceTitle": {
-    "description": "Device not found message"
-  },
-  "selectManuallyButton": "Select manually",
-  "@selectManuallyButton": {
-    "description": "Select manually button"
-  },
-  "devicesAdded": "{count} {plural} added",
-  "@devicesAdded": {
-    "description": "Devices added confirmation",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      },
-      "plural": {
-        "type": "String"
-      }
-    }
-  },
-  "device": "device",
-  "@device": {
-    "description": "Device singular"
-  },
-  "devices": "devices",
+  "devices": "Devices",
   "@devices": {
-    "description": "Devices plural"
+    "description": "Devices tab label"
   },
-  "@@_PROFILE": "=== Profile Section ===",
   "profile": "Profile",
   "@profile": {
     "description": "Profile screen title"
@@ -1719,10 +361,6 @@
   "changePassword": "Change Password",
   "@changePassword": {
     "description": "Change password button"
-  },
-  "changeAccountPassword": "Change account password",
-  "@changeAccountPassword": {
-    "description": "Change account password subtitle"
   },
   "theme": "Theme",
   "@theme": {
@@ -1763,5 +401,438 @@
   "change": "Change",
   "@change": {
     "description": "Change button"
-  }
+  },
+  "allNotifications": "All notifications",
+  "@allNotifications": {
+    "description": "All notifications button"
+  },
+  "allAlarms": "All alarms",
+  "@allAlarms": {
+    "description": "All alarms button"
+  },
+  "justNow": "Just now",
+  "@justNow": {
+    "description": "Time ago - just now"
+  },
+  "minutesAgo": "{count} min ago",
+  "@minutesAgo": {
+    "description": "Time ago - minutes",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hoursAgo": "{count} h ago",
+  "@hoursAgo": {
+    "description": "Time ago - hours",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "daysAgo": "{count} d ago",
+  "@daysAgo": {
+    "description": "Time ago - days",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "addFirstEntry": "Add first entry",
+  "@addFirstEntry": {
+    "description": "Add first schedule entry prompt"
+  },
+  "alarmCode": "Code {code}",
+  "@alarmCode": {
+    "description": "Alarm code label",
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "activeAlarm": "ACTIVE",
+  "@activeAlarm": {
+    "description": "Active alarm badge"
+  },
+  "modeAuto": "Auto",
+  "@modeAuto": {
+    "description": "Auto mode label"
+  },
+  "modeEco": "Eco",
+  "@modeEco": {
+    "description": "Eco mode label"
+  },
+  "modeNight": "Night",
+  "@modeNight": {
+    "description": "Night mode label"
+  },
+  "modeBoost": "TURBO",
+  "@modeBoost": {
+    "description": "Boost/Turbo mode label"
+  },
+  "modeFor": "Mode {name}",
+  "@modeFor": {
+    "description": "Mode selector label",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "deviceDeleted": "Device deleted",
+  "@deviceDeleted": {
+    "description": "Device deleted toast"
+  },
+  "nameChanged": "Name changed",
+  "@nameChanged": {
+    "description": "Name changed toast"
+  },
+  "notificationsInDevelopment": "Notifications: feature in development",
+  "@notificationsInDevelopment": {
+    "description": "Notifications feature in development"
+  },
+  "allDevicesTurnedOff": "All devices turned off",
+  "@allDevicesTurnedOff": {
+    "description": "All devices turned off toast"
+  },
+  "addFirstDeviceByMac": "Add your first unit by MAC address",
+  "@addFirstDeviceByMac": {
+    "description": "Add first device prompt"
+  },
+  "addUnit": "Add Unit",
+  "@addUnit": {
+    "description": "Add unit button"
+  },
+  "enterMacAddress": "Enter MAC address",
+  "@enterMacAddress": {
+    "description": "Enter MAC address validation"
+  },
+  "macAddressMustContain12Chars": "MAC address must contain 12 characters",
+  "@macAddressMustContain12Chars": {
+    "description": "MAC address length validation"
+  },
+  "macAddressOnlyHex": "MAC address can only contain 0-9 and A-F",
+  "@macAddressOnlyHex": {
+    "description": "MAC address hex validation"
+  },
+  "deviceMacAddress": "Device MAC address",
+  "@deviceMacAddress": {
+    "description": "MAC address field label"
+  },
+  "cancelButton": "Cancel",
+  "@cancelButton": {
+    "description": "Cancel button"
+  },
+  "addButton": "Add",
+  "@addButton": {
+    "description": "Add button"
+  },
+  "deviceNameExample": "e.g. Living Room",
+  "@deviceNameExample": {
+    "description": "Device name example hint"
+  },
+  "enterDeviceName": "Enter device name",
+  "@enterDeviceName": {
+    "description": "Device name validation"
+  },
+  "macAddressDisplayedOnRemote": "MAC address is displayed on the remote screen",
+  "@macAddressDisplayedOnRemote": {
+    "description": "MAC address help text"
+  },
+  "analytics": "Analytics",
+  "@analytics": {
+    "description": "Analytics tab label"
+  },
+  "devicesWillAppear": "Devices will appear here\nafter connecting",
+  "@devicesWillAppear": {
+    "description": "Empty devices message"
+  },
+  "presetComfort": "Comfort",
+  "@presetComfort": {
+    "description": "Comfort preset name"
+  },
+  "presetComfortDesc": "Optimal mode",
+  "@presetComfortDesc": {
+    "description": "Comfort preset description"
+  },
+  "presetEco": "Eco",
+  "@presetEco": {
+    "description": "Eco preset name"
+  },
+  "presetEcoDesc": "Energy saving",
+  "@presetEcoDesc": {
+    "description": "Eco preset description"
+  },
+  "presetNight": "Night",
+  "@presetNight": {
+    "description": "Night preset name"
+  },
+  "presetNightDesc": "Quiet mode",
+  "@presetNightDesc": {
+    "description": "Night preset description"
+  },
+  "presetTurbo": "Turbo",
+  "@presetTurbo": {
+    "description": "Turbo preset name"
+  },
+  "presetTurboDesc": "Maximum power",
+  "@presetTurboDesc": {
+    "description": "Turbo preset description"
+  },
+  "presetAway": "Away",
+  "@presetAway": {
+    "description": "Away preset name"
+  },
+  "presetAwayDesc": "Minimal mode",
+  "@presetAwayDesc": {
+    "description": "Away preset description"
+  },
+  "presetSleep": "Sleep",
+  "@presetSleep": {
+    "description": "Sleep preset name"
+  },
+  "presetSleepDesc": "Comfortable sleep",
+  "@presetSleepDesc": {
+    "description": "Sleep preset description"
+  },
+  "devicesCount": "{count} devices",
+  "@devicesCount": {
+    "description": "Devices count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "thisMonth": "This month",
+  "@thisMonth": {
+    "description": "This month label"
+  },
+  "totalTime": "Total time",
+  "@totalTime": {
+    "description": "Total time label"
+  },
+  "energyKwh": "{value} kWh",
+  "@energyKwh": {
+    "description": "Energy in kilowatt-hours",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "hoursCount": "{count} hours",
+  "@hoursCount": {
+    "description": "Hours count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "airflow": "Airflow",
+  "@airflow": {
+    "description": "Airflow metric label"
+  },
+  "graphTemperatureLabel": "TEMPERATURE",
+  "@graphTemperatureLabel": {
+    "description": "Graph temperature label uppercase"
+  },
+  "graphHumidityLabel": "HUMIDITY",
+  "@graphHumidityLabel": {
+    "description": "Graph humidity label uppercase"
+  },
+  "graphAirflowLabel": "AIRFLOW",
+  "@graphAirflowLabel": {
+    "description": "Graph airflow label uppercase"
+  },
+  "tempShort": "Temp",
+  "@tempShort": {
+    "description": "Temperature short label"
+  },
+  "humidShort": "Humid",
+  "@humidShort": {
+    "description": "Humidity short label"
+  },
+  "airflowShort": "Flow",
+  "@airflowShort": {
+    "description": "Airflow short label"
+  },
+  "minShort": "Min",
+  "@minShort": {
+    "description": "Minimum short label"
+  },
+  "maxShort": "Max",
+  "@maxShort": {
+    "description": "Maximum short label"
+  },
+  "avgShort": "Avg",
+  "@avgShort": {
+    "description": "Average short label"
+  },
+  "cubicMetersPerHour": "m³/h",
+  "@cubicMetersPerHour": {
+    "description": "Cubic meters per hour unit"
+  },
+  "readAll": "Read all",
+  "later": "Later",
+  "updateNow": "Update now",
+  "whatsNew": "What's new?",
+  "hide": "Hide",
+  "errorNoConnection": "No connection",
+  "errorServer": "Server error",
+  "errorServerWithCode": "Server error ({code})",
+  "@errorServerWithCode": {
+    "placeholders": {
+      "code": {
+        "type": "int"
+      }
+    }
+  },
+  "errorNotFound": "Not found",
+  "errorAuthRequired": "Authorization required",
+  "errorSomethingWrong": "Something went wrong",
+  "errorCheckInternet": "Check your internet connection\nand try again",
+  "errorServerProblems": "Server-side problems.\nWe are already working on a fix.",
+  "errorResourceNotFound": "Requested {resource} not found.\nIt may have been deleted.",
+  "@errorResourceNotFound": {
+    "placeholders": {
+      "resource": {
+        "type": "String"
+      }
+    }
+  },
+  "errorSessionExpired": "Your session has expired.\nPlease log in again.",
+  "errorUnexpected": "An unexpected error occurred.\nPlease try again.",
+  "errorNoInternet": "No internet connection",
+  "errorServerUnavailable": "Server unavailable",
+  "errorLoadingFailed": "Failed to load devices",
+  "emptyNoDevicesTitle": "No devices",
+  "emptyNoDevicesMessage": "Devices will appear here\nafter connecting",
+  "emptyNothingFound": "Nothing found",
+  "emptyNoSearchResults": "No results for \"{query}\".\nTry changing search parameters.",
+  "@emptyNoSearchResults": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "emptyNoNotificationsTitle": "No notifications",
+  "emptyNoNotificationsMessage": "You have no notifications yet.\nNew notifications will appear here.",
+  "emptyHistoryTitle": "History is empty",
+  "emptyHistoryMessage": "Operation history will appear\nafter first actions.",
+  "emptyNoScheduleTitle": "No schedule",
+  "emptyNoScheduleMessage": "Add schedule entries\nfor automatic control",
+  "errorOccurred": "An error occurred",
+  "scheduleAdd": "Add",
+  "scheduleNewEntry": "New entry",
+  "scheduleEditEntry": "Edit entry",
+  "scheduleDeleteConfirm": "Delete entry?",
+  "scheduleDeleteMessage": "Entry \"{entry}\" will be deleted.",
+  "@scheduleDeleteMessage": {
+    "placeholders": {
+      "entry": {
+        "type": "String"
+      }
+    }
+  },
+  "scheduleDayLabel": "Day of week",
+  "scheduleStartLabel": "Start",
+  "scheduleEndLabel": "End",
+  "scheduleModeLabel": "Mode",
+  "scheduleDayTemp": "Day temperature",
+  "scheduleNightTemp": "Night temperature",
+  "scheduleActive": "Active",
+  "scheduleDayNightTemp": "Day: {day}° / Night: {night}°",
+  "@scheduleDayNightTemp": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      },
+      "night": {
+        "type": "int"
+      }
+    }
+  },
+  "modeCooling": "Cooling",
+  "modeHeating": "Heating",
+  "modeVentilation": "Ventilation",
+  "statusOnline": "Online",
+  "statusOffline": "Offline",
+  "statusRunning": "Running",
+  "statusStopped": "Stopped",
+  "statusEnabled": "Enabled",
+  "statusDisabled": "Disabled",
+  "statusResolved": "RESOLVED",
+  "statusActive": "ACTIVE",
+  "alarmHistoryTitle": "Alarm history",
+  "alarmHistoryEmpty": "Alarm history is empty",
+  "alarmNoAlarms": "No alarms recorded",
+  "alarmCodeLabel": "Code {code}",
+  "@alarmCodeLabel": {
+    "placeholders": {
+      "code": {
+        "type": "int"
+      }
+    }
+  },
+  "alarmOccurredAt": "Occurred",
+  "alarmClearedAt": "Cleared",
+  "janShort": "Jan",
+  "febShort": "Feb",
+  "marShort": "Mar",
+  "aprShort": "Apr",
+  "mayShort": "May",
+  "junShort": "Jun",
+  "julShort": "Jul",
+  "augShort": "Aug",
+  "sepShort": "Sep",
+  "octShort": "Oct",
+  "novShort": "Nov",
+  "decShort": "Dec",
+  "notificationsTitle": "Notifications",
+  "notificationsReadAll": "Read all notifications",
+  "notificationDeleted": "Notification deleted",
+  "unitSettingsTitle": "Unit settings",
+  "unitSettingsName": "Name:",
+  "unitSettingsStatus": "Status:",
+  "unitSettingsNewName": "New name",
+  "unitSettingsEnterName": "Enter name",
+  "unitSettingsRename": "Rename",
+  "unitSettingsRenameSubtitle": "Change unit name",
+  "unitSettingsDelete": "Delete unit",
+  "unitSettingsDeleteSubtitle": "Unlink device from account",
+  "unitSettingsDeleteConfirm": "Delete unit?",
+  "unitSettingsDeleteMessage": "Unit \"{name}\" will be unlinked from your account. You can add it again using MAC address.",
+  "@unitSettingsDeleteMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "updateAvailable": "Update available",
+  "updateVersionAvailable": "Version {version} available",
+  "@updateVersionAvailable": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "updateMessage": "An app update is available. Reload the page to get new features and fixes.",
+  "verifyEmailTitle": "EMAIL VERIFICATION",
+  "verifyEmailSent": "We sent a 6-digit verification code to",
+  "verifyEmailResend": "Resend code",
+  "verifyEmailCodeSent": "Code sent to email",
+  "tooltipEdit": "Edit",
+  "tooltipDelete": "Delete",
+  "tooltipAdd": "Add",
+  "dataResource": "data",
+  "defaultUserName": "User"
 }

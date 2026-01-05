@@ -11,6 +11,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/spacing.dart';
 import '../../../core/utils/snackbar_utils.dart';
 import '../../bloc/auth/auth_bloc.dart';
+import '../../../generated/l10n/app_localizations.dart';
 import '../../bloc/auth/auth_event.dart';
 import '../../bloc/auth/auth_state.dart';
 import '../../widgets/auth/auth_header.dart';
@@ -56,6 +57,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final colors = BreezColors.of(context);
 
     return BlocListener<AuthBloc, AuthState>(
@@ -75,7 +77,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
             rootNavigatorKey.currentContext?.go(AppRoutes.home);
           });
         } else if (state is AuthCodeResent) {
-          SnackBarUtils.showSuccess(context, 'Код отправлен на email');
+          SnackBarUtils.showSuccess(context, l10n.verifyEmailCodeSent);
         } else if (state is AuthError) {
           if (mounted) {
             setState(() => _errorText = state.message);
@@ -96,12 +98,12 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const AuthHeader(title: 'ПОДТВЕРЖДЕНИЕ EMAIL'),
+                    AuthHeader(title: l10n.verifyEmailTitle),
                     const SizedBox(height: AppSpacing.xl),
 
                     // Описание
                     Text(
-                      'Мы отправили 6-значный код подтверждения на',
+                      l10n.verifyEmailSent,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 14,
@@ -135,7 +137,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
                           child: BreezTextButton(
-                            text: 'Отправить код повторно',
+                            text: l10n.verifyEmailResend,
                             onPressed: isLoading ? null : _handleResendCode,
                           ),
                         );

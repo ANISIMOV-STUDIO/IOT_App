@@ -10,6 +10,7 @@ import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/spacing.dart';
 import '../../../core/services/toast_service.dart';
 import '../../../domain/entities/unit_notification.dart';
+import '../../../generated/l10n/app_localizations.dart';
 import '../../bloc/notifications/notifications_bloc.dart';
 import '../../widgets/error/error_widgets.dart';
 
@@ -20,6 +21,7 @@ class NotificationsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: colors.bg,
@@ -27,7 +29,7 @@ class NotificationsScreen extends StatelessWidget {
         backgroundColor: colors.bg,
         elevation: 0,
         title: Text(
-          'Уведомления',
+          l10n.notificationsTitle,
           style: TextStyle(
             fontSize: AppFontSizes.h3,
             fontWeight: FontWeight.bold,
@@ -48,11 +50,11 @@ class NotificationsScreen extends StatelessWidget {
                   context.read<NotificationsBloc>().add(
                     const NotificationsMarkAllAsReadRequested(),
                   );
-                  ToastService.success('Все уведомления прочитаны');
+                  ToastService.success(l10n.notificationsReadAll);
                 },
-                child: const Text(
-                  'Прочитать все',
-                  style: TextStyle(
+                child: Text(
+                  l10n.readAll,
+                  style: const TextStyle(
                     color: AppColors.accent,
                     fontWeight: FontWeight.w600,
                   ),
@@ -65,7 +67,7 @@ class NotificationsScreen extends StatelessWidget {
       body: BlocBuilder<NotificationsBloc, NotificationsState>(
         builder: (context, state) {
           if (state.isEmpty) {
-            return EmptyState.noNotifications();
+            return EmptyState.noNotifications(context);
           }
 
           return RefreshIndicator(
@@ -84,6 +86,7 @@ class NotificationsScreen extends StatelessWidget {
                 final notification = state.notifications[index];
                 return _NotificationTile(
                   notification: notification,
+                  l10n: l10n,
                   onTap: () {
                     if (!notification.isRead) {
                       context.read<NotificationsBloc>().add(
@@ -95,7 +98,7 @@ class NotificationsScreen extends StatelessWidget {
                     context.read<NotificationsBloc>().add(
                       NotificationsDismissRequested(notification.id),
                     );
-                    ToastService.info('Уведомление удалено');
+                    ToastService.info(l10n.notificationDeleted);
                   },
                 );
               },
@@ -112,9 +115,11 @@ class _NotificationTile extends StatelessWidget {
   final UnitNotification notification;
   final VoidCallback? onTap;
   final VoidCallback? onDismiss;
+  final AppLocalizations l10n;
 
   const _NotificationTile({
     required this.notification,
+    required this.l10n,
     this.onTap,
     this.onDismiss,
   });
@@ -149,7 +154,7 @@ class _NotificationTile extends StatelessWidget {
     final now = DateTime.now();
     final diff = now.difference(notification.timestamp);
 
-    if (diff.inMinutes < 1) return 'Только что';
+    if (diff.inMinutes < 1) return l10n.justNow;
     if (diff.inMinutes < 60) return '${diff.inMinutes} мин назад';
     if (diff.inHours < 24) return '${diff.inHours} ч назад';
     if (diff.inDays < 7) return '${diff.inDays} дн назад';

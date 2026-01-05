@@ -7,6 +7,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/spacing.dart';
 import '../../../domain/entities/graph_data.dart';
+import '../../../generated/l10n/app_localizations.dart';
 import 'breez_card.dart';
 
 export '../../../domain/entities/graph_data.dart';
@@ -35,31 +36,32 @@ class OperationGraph extends StatefulWidget {
 class _OperationGraphState extends State<OperationGraph> {
   int? _hoveredIndex;
 
-  String get _metricLabel {
+  String _getMetricLabel(AppLocalizations l10n) {
     switch (widget.selectedMetric) {
       case GraphMetric.temperature:
-        return 'ТЕМПЕРАТУРА';
+        return l10n.graphTemperatureLabel;
       case GraphMetric.humidity:
-        return 'ВЛАЖНОСТЬ';
+        return l10n.graphHumidityLabel;
       case GraphMetric.airflow:
-        return 'ПОТОК ВОЗДУХА';
+        return l10n.graphAirflowLabel;
     }
   }
 
-  String get _metricUnit {
+  String _getMetricUnit(AppLocalizations l10n) {
     switch (widget.selectedMetric) {
       case GraphMetric.temperature:
         return '°C';
       case GraphMetric.humidity:
         return '%';
       case GraphMetric.airflow:
-        return 'м³/ч';
+        return l10n.cubicMetersPerHour;
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     // Calculate statistics
     final values = widget.data.map((e) => e.value).toList();
@@ -84,7 +86,7 @@ class _OperationGraphState extends State<OperationGraph> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      _metricLabel,
+                      _getMetricLabel(l10n),
                       style: TextStyle(
                         fontSize: 9,
                         fontWeight: FontWeight.w900,
@@ -108,7 +110,7 @@ class _OperationGraphState extends State<OperationGraph> {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          _metricUnit,
+                          _getMetricUnit(l10n),
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -126,21 +128,21 @@ class _OperationGraphState extends State<OperationGraph> {
                 children: [
                   _MetricTab(
                     icon: Icons.thermostat_outlined,
-                    label: 'Темп',
+                    label: l10n.tempShort,
                     isSelected: widget.selectedMetric == GraphMetric.temperature,
                     onTap: () => widget.onMetricChanged?.call(GraphMetric.temperature),
                   ),
                   const SizedBox(width: 8),
                   _MetricTab(
                     icon: Icons.water_drop_outlined,
-                    label: 'Влаж',
+                    label: l10n.humidShort,
                     isSelected: widget.selectedMetric == GraphMetric.humidity,
                     onTap: () => widget.onMetricChanged?.call(GraphMetric.humidity),
                   ),
                   const SizedBox(width: 8),
                   _MetricTab(
                     icon: Icons.air,
-                    label: 'Поток',
+                    label: l10n.airflowShort,
                     isSelected: widget.selectedMetric == GraphMetric.airflow,
                     onTap: () => widget.onMetricChanged?.call(GraphMetric.airflow),
                   ),
@@ -155,20 +157,20 @@ class _OperationGraphState extends State<OperationGraph> {
           Row(
             children: [
               _StatBadge(
-                label: 'Мин',
-                value: '${minValue.toStringAsFixed(1)}$_metricUnit',
+                label: l10n.minShort,
+                value: '${minValue.toStringAsFixed(1)}${_getMetricUnit(l10n)}',
                 color: AppColors.accent,
               ),
               const SizedBox(width: 8),
               _StatBadge(
-                label: 'Макс',
-                value: '${maxValue.toStringAsFixed(1)}$_metricUnit',
+                label: l10n.maxShort,
+                value: '${maxValue.toStringAsFixed(1)}${_getMetricUnit(l10n)}',
                 color: AppColors.accentRed,
               ),
               const SizedBox(width: 8),
               _StatBadge(
-                label: 'Сред',
-                value: '${avgValue.toStringAsFixed(1)}$_metricUnit',
+                label: l10n.avgShort,
+                value: '${avgValue.toStringAsFixed(1)}${_getMetricUnit(l10n)}',
                 color: AppColors.accentGreen,
               ),
             ],

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../domain/entities/alarm_info.dart';
+import '../../../generated/l10n/app_localizations.dart';
 import 'breez_card.dart';
 import 'breez_list_card.dart';
 
@@ -24,6 +25,7 @@ class UnitAlarmsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
     final alarmsList = alarms.entries.toList();
 
     return BreezCard(
@@ -48,7 +50,7 @@ class UnitAlarmsWidget extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    'Аварии',
+                    l10n.alarms,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
@@ -81,7 +83,7 @@ class UnitAlarmsWidget extends StatelessWidget {
           // Alarms list
           Expanded(
             child: alarmsList.isEmpty
-                ? BreezEmptyState.noAlarms()
+                ? BreezEmptyState.noAlarms(l10n)
                 : Column(
                     children: alarmsList.take(3).toList().asMap().entries.map((entry) {
                       final index = entry.key;
@@ -91,6 +93,7 @@ class UnitAlarmsWidget extends StatelessWidget {
                         child: BreezListCard.alarm(
                           code: alarm.value.code.toString(),
                           description: alarm.value.description,
+                          l10n: l10n,
                           onTap: () => onAlarmTap?.call(alarm.key),
                         ),
                       );
@@ -101,7 +104,7 @@ class UnitAlarmsWidget extends StatelessWidget {
           // History button
           const SizedBox(height: 12),
           BreezSeeMoreButton(
-            label: alarmsList.isEmpty ? 'История аварий' : 'Все аварии',
+            label: alarmsList.isEmpty ? l10n.alarmHistory : l10n.allAlarms,
             extraCount: alarmsList.length > 3 ? alarmsList.length - 3 : null,
             onTap: onSeeHistory,
           ),

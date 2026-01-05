@@ -5,20 +5,36 @@
 library;
 
 import 'package:flutter/material.dart';
+import '../../../core/services/connectivity_service.dart';
+import '../../../generated/l10n/app_localizations.dart';
 
 /// Баннер "Нет подключения к интернету"
 class OfflineBanner extends StatelessWidget {
   /// Отображать ли баннер
   final bool isVisible;
 
-  /// Сообщение для отображения
-  final String? message;
+  /// Статус сети для определения сообщения
+  final NetworkStatus? status;
 
   const OfflineBanner({
     super.key,
     required this.isVisible,
-    this.message,
+    this.status,
   });
+
+  String _getMessage(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    switch (status) {
+      case NetworkStatus.offline:
+        return l10n.errorNoInternet;
+      case NetworkStatus.serverUnavailable:
+        return l10n.errorServerUnavailable;
+      case NetworkStatus.online:
+      case NetworkStatus.unknown:
+      case null:
+        return l10n.errorNoInternet;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +56,7 @@ class OfflineBanner extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             Text(
-              message ?? 'Нет подключения к интернету',
+              _getMessage(context),
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 14,
@@ -101,8 +117,8 @@ class AnimatedOfflineBanner extends StatelessWidget {
   /// Отображать ли баннер
   final bool isVisible;
 
-  /// Сообщение
-  final String? message;
+  /// Статус сети для определения сообщения
+  final NetworkStatus? status;
 
   /// Длительность анимации
   final Duration duration;
@@ -110,7 +126,7 @@ class AnimatedOfflineBanner extends StatelessWidget {
   const AnimatedOfflineBanner({
     super.key,
     required this.isVisible,
-    this.message,
+    this.status,
     this.duration = const Duration(milliseconds: 300),
   });
 
@@ -121,7 +137,7 @@ class AnimatedOfflineBanner extends StatelessWidget {
 
     return OfflineBanner(
       isVisible: true,
-      message: message,
+      status: status,
     );
   }
 }

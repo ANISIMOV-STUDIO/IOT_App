@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import '../../../generated/l10n/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../domain/entities/alarm_info.dart';
@@ -25,6 +26,7 @@ class AlarmHistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: colors.bg,
@@ -39,7 +41,7 @@ class AlarmHistoryScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'История аварий',
+              l10n.alarmHistoryTitle,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
@@ -59,12 +61,12 @@ class AlarmHistoryScreen extends StatelessWidget {
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : history.isEmpty
-              ? _buildEmptyState(colors)
-              : _buildHistoryList(colors),
+              ? _buildEmptyState(colors, l10n)
+              : _buildHistoryList(colors, l10n),
     );
   }
 
-  Widget _buildEmptyState(BreezColors colors) {
+  Widget _buildEmptyState(BreezColors colors, AppLocalizations l10n) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -76,7 +78,7 @@ class AlarmHistoryScreen extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            'История аварий пуста',
+            l10n.alarmHistoryEmpty,
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
@@ -85,7 +87,7 @@ class AlarmHistoryScreen extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'Аварий не зафиксировано',
+            l10n.alarmNoAlarms,
             style: TextStyle(
               fontSize: 13,
               color: colors.textMuted.withValues(alpha: 0.7),
@@ -96,7 +98,7 @@ class AlarmHistoryScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHistoryList(BreezColors colors) {
+  Widget _buildHistoryList(BreezColors colors, AppLocalizations l10n) {
     return ListView.builder(
       padding: const EdgeInsets.all(16),
       itemCount: history.length,
@@ -104,7 +106,7 @@ class AlarmHistoryScreen extends StatelessWidget {
         final alarm = history[index];
         return Padding(
           padding: EdgeInsets.only(bottom: index < history.length - 1 ? 12 : 0),
-          child: _AlarmHistoryCard(alarm: alarm),
+          child: _AlarmHistoryCard(alarm: alarm, l10n: l10n),
         );
       },
     );
@@ -114,8 +116,9 @@ class AlarmHistoryScreen extends StatelessWidget {
 /// Карточка истории аварии
 class _AlarmHistoryCard extends StatelessWidget {
   final AlarmHistory alarm;
+  final AppLocalizations l10n;
 
-  const _AlarmHistoryCard({required this.alarm});
+  const _AlarmHistoryCard({required this.alarm, required this.l10n});
 
   @override
   Widget build(BuildContext context) {
@@ -153,7 +156,7 @@ class _AlarmHistoryCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Код ${alarm.alarmCode}',
+                      l10n.alarmCodeLabel(alarm.alarmCode),
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -183,7 +186,7 @@ class _AlarmHistoryCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Text(
-                  isCleared ? 'РЕШЕНА' : 'АКТИВНА',
+                  isCleared ? l10n.statusResolved : l10n.statusActive,
                   style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w700,
@@ -211,7 +214,7 @@ class _AlarmHistoryCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Возникла',
+                        l10n.alarmOccurredAt,
                         style: TextStyle(
                           fontSize: 10,
                           color: colors.textMuted,
@@ -219,7 +222,7 @@ class _AlarmHistoryCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        _formatDateTime(alarm.occurredAt),
+                        _formatDateTime(alarm.occurredAt, l10n),
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
@@ -242,7 +245,7 @@ class _AlarmHistoryCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Устранена',
+                          l10n.alarmClearedAt,
                           style: TextStyle(
                             fontSize: 10,
                             color: colors.textMuted,
@@ -250,7 +253,7 @@ class _AlarmHistoryCard extends StatelessWidget {
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          _formatDateTime(alarm.clearedAt!),
+                          _formatDateTime(alarm.clearedAt!, l10n),
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
@@ -269,8 +272,21 @@ class _AlarmHistoryCard extends StatelessWidget {
     );
   }
 
-  String _formatDateTime(DateTime dt) {
-    final months = ['янв', 'фев', 'мар', 'апр', 'май', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
+  String _formatDateTime(DateTime dt, AppLocalizations l10n) {
+    final months = [
+      l10n.janShort,
+      l10n.febShort,
+      l10n.marShort,
+      l10n.aprShort,
+      l10n.mayShort,
+      l10n.junShort,
+      l10n.julShort,
+      l10n.augShort,
+      l10n.sepShort,
+      l10n.octShort,
+      l10n.novShort,
+      l10n.decShort,
+    ];
     return '${dt.day} ${months[dt.month - 1]} ${dt.year}, ${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
   }
 }

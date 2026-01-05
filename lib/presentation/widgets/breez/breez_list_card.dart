@@ -4,6 +4,7 @@ library;
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
+import '../../../generated/l10n/app_localizations.dart';
 
 /// Type of list card for color theming
 enum ListCardType {
@@ -41,14 +42,15 @@ class BreezListCard extends StatelessWidget {
     Key? key,
     required String code,
     required String description,
+    required AppLocalizations l10n,
     VoidCallback? onTap,
   }) {
     return BreezListCard(
       key: key,
       icon: Icons.error_outline,
-      title: 'Код $code',
+      title: l10n.alarmCode(code),
       subtitle: description,
-      badge: 'АКТИВНА',
+      badge: l10n.activeAlarm,
       type: ListCardType.error,
       onTap: onTap,
     );
@@ -298,31 +300,31 @@ class BreezEmptyState extends StatelessWidget {
   });
 
   /// Factory for no alarms state
-  factory BreezEmptyState.noAlarms() {
-    return const BreezEmptyState(
+  factory BreezEmptyState.noAlarms(AppLocalizations l10n) {
+    return BreezEmptyState(
       icon: Icons.check_circle_outline,
-      title: 'Нет аварий',
-      subtitle: 'Система работает штатно',
+      title: l10n.noAlarms,
+      subtitle: l10n.systemWorkingNormally,
       iconColor: AppColors.accentGreen,
     );
   }
 
   /// Factory for no notifications state
-  factory BreezEmptyState.noNotifications() {
-    return const BreezEmptyState(
+  factory BreezEmptyState.noNotifications(AppLocalizations l10n) {
+    return BreezEmptyState(
       icon: Icons.check_circle_outline,
-      title: 'Нет уведомлений',
-      subtitle: 'Система работает штатно',
+      title: l10n.noNotifications,
+      subtitle: l10n.systemWorkingNormally,
       iconColor: AppColors.accentGreen,
     );
   }
 
   /// Factory for no schedule entries
-  factory BreezEmptyState.noSchedule() {
-    return const BreezEmptyState(
+  factory BreezEmptyState.noSchedule(AppLocalizations l10n) {
+    return BreezEmptyState(
       icon: Icons.schedule_outlined,
-      title: 'Нет расписания',
-      subtitle: 'Добавьте первую запись',
+      title: l10n.noSchedule,
+      subtitle: l10n.addFirstEntry,
       iconColor: AppColors.accent,
     );
   }

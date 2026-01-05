@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../domain/entities/unit_notification.dart';
+import '../../../generated/l10n/app_localizations.dart';
 import 'breez_card.dart';
 import 'breez_list_card.dart';
 
@@ -28,6 +29,8 @@ class UnitNotificationsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
+
     return BreezCard(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -46,7 +49,7 @@ class UnitNotificationsWidget extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    'Уведомления',
+                    l10n.notifications,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
@@ -79,7 +82,7 @@ class UnitNotificationsWidget extends StatelessWidget {
           // Notifications list (no scroll, max 3 visible)
           Expanded(
             child: notifications.isEmpty
-                ? BreezEmptyState.noNotifications()
+                ? BreezEmptyState.noNotifications(l10n)
                 : Column(
                     children: notifications.take(3).toList().asMap().entries.map((entry) {
                       final index = entry.key;
@@ -90,7 +93,7 @@ class UnitNotificationsWidget extends StatelessWidget {
                           title: notification.title,
                           message: notification.message,
                           type: _mapNotificationType(notification.type),
-                          timeAgo: _formatTimeAgo(notification.timestamp),
+                          timeAgo: _formatTimeAgo(notification.timestamp, l10n),
                           isRead: notification.isRead,
                           onTap: () => onNotificationTap?.call(notification.id),
                         ),
@@ -103,7 +106,7 @@ class UnitNotificationsWidget extends StatelessWidget {
           if (notifications.length > 3) ...[
             const SizedBox(height: 12),
             BreezSeeMoreButton(
-              label: 'Все уведомления',
+              label: l10n.allNotifications,
               extraCount: notifications.length - 3,
               onTap: onSeeAll,
             ),
@@ -128,13 +131,13 @@ class UnitNotificationsWidget extends StatelessWidget {
   }
 
   /// Format timestamp to human-readable time ago
-  String _formatTimeAgo(DateTime timestamp) {
+  String _formatTimeAgo(DateTime timestamp, AppLocalizations l10n) {
     final now = DateTime.now();
     final diff = now.difference(timestamp);
 
-    if (diff.inMinutes < 1) return 'Только что';
-    if (diff.inMinutes < 60) return '${diff.inMinutes} мин назад';
-    if (diff.inHours < 24) return '${diff.inHours} ч назад';
-    return '${diff.inDays} дн назад';
+    if (diff.inMinutes < 1) return l10n.justNow;
+    if (diff.inMinutes < 60) return l10n.minutesAgo(diff.inMinutes);
+    if (diff.inHours < 24) return l10n.hoursAgo(diff.inHours);
+    return l10n.daysAgo(diff.inDays);
   }
 }

@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/navigation/app_router.dart';
+import '../../generated/l10n/app_localizations.dart';
 import '../bloc/devices/devices_bloc.dart';
 import '../bloc/climate/climate_bloc.dart';
 import '../bloc/notifications/notifications_bloc.dart';
@@ -57,22 +58,22 @@ class _MainScreenState extends State<MainScreen> {
     ProfileScreen(),
   ];
 
-  static const _navigationItems = [
+  List<NavigationItem> _getNavigationItems(AppLocalizations l10n) => [
     NavigationItem(
       icon: Icons.home_outlined,
-      label: 'Главная',
+      label: l10n.home,
     ),
     NavigationItem(
       icon: Icons.bar_chart,
-      label: 'Аналитика',
+      label: l10n.analytics,
     ),
     NavigationItem(
       icon: Icons.devices,
-      label: 'Устройства',
+      label: l10n.devices,
     ),
     NavigationItem(
       icon: Icons.person_outline,
-      label: 'Профиль',
+      label: l10n.profile,
     ),
   ];
 
@@ -97,8 +98,9 @@ class _MainScreenState extends State<MainScreen> {
         ),
         bottomNavigationBar: BlocBuilder<NotificationsBloc, NotificationsState>(
           builder: (context, state) {
+            final l10n = AppLocalizations.of(context)!;
             return BreezNavigationBar(
-              items: _navigationItems,
+              items: _getNavigationItems(l10n),
               selectedIndex: _currentIndex,
               onItemSelected: (index) {
                 setState(() {

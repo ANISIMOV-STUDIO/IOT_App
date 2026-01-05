@@ -6,6 +6,7 @@ import '../../../../core/navigation/app_router.dart';
 import '../../../../core/theme/spacing.dart';
 import '../../../../domain/entities/unit_state.dart';
 import '../../../../domain/entities/alarm_info.dart';
+import '../../../../generated/l10n/app_localizations.dart';
 import '../../../widgets/breez/breez.dart';
 import '../widgets/desktop_header.dart';
 
@@ -111,7 +112,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
             Expanded(
               child: Row(
                 children: [
-                  Expanded(child: _buildLeftColumn()),
+                  Expanded(child: _buildLeftColumn(context)),
                   const SizedBox(width: AppSpacing.sm),
                   Expanded(
                     flex: 2,
@@ -128,7 +129,8 @@ class _DesktopLayoutState extends State<DesktopLayout> {
     );
   }
 
-  Widget _buildLeftColumn() {
+  Widget _buildLeftColumn(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
         // Main temperature card with fan sliders
@@ -157,7 +159,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
         Expanded(
           flex: 1,
           child: PresetsWidget(
-            presets: DefaultPresets.all,
+            presets: DefaultPresets.getAll(l10n),
             activePresetId: _activePresetId,
             onPresetSelected: (id) => setState(() => _activePresetId = id),
           ),

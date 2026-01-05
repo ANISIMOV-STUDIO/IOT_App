@@ -415,7 +415,7 @@ void main() {
       expect: () => [
         isA<AuthLoading>(),
         isA<AuthError>()
-            .having((s) => s.message, 'message', 'Не авторизован'),
+            .having((s) => s.message, 'message', 'Not authenticated'),
       ],
     );
 
@@ -481,7 +481,7 @@ void main() {
       expect: () => [
         isA<AuthLoading>(),
         isA<AuthError>()
-            .having((s) => s.message, 'message', 'Не авторизован'),
+            .having((s) => s.message, 'message', 'Not authenticated'),
       ],
     );
 

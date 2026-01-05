@@ -6,6 +6,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/spacing.dart';
 import '../../../domain/entities/preset_data.dart';
+import '../../../generated/l10n/app_localizations.dart';
 import 'breez_card.dart';
 
 export '../../../domain/entities/preset_data.dart';
@@ -26,6 +27,7 @@ class PresetsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -57,7 +59,7 @@ class PresetsWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'ПРЕСЕТЫ',
+                    l10n.presets.toUpperCase(),
                     style: TextStyle(
                       fontSize: 9,
                       fontWeight: FontWeight.w900,

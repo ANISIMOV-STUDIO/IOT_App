@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import '../../../domain/entities/unit_state.dart';
+import '../../../generated/l10n/app_localizations.dart';
 import 'main_temp_card.dart';
 
 /// Unified unit control card for all layouts (adaptive)
@@ -32,6 +33,8 @@ class UnitControlCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return LayoutBuilder(
       builder: (context, constraints) {
         // Определяем доступное пространство
@@ -51,7 +54,7 @@ class UnitControlCard extends StatelessWidget {
         return MainTempCard(
           unitName: unit.name,
           temperature: unit.temp,
-          status: unit.power ? 'В работе' : 'Выключен',
+          status: unit.power ? l10n.statusRunning : l10n.statusStopped,
           humidity: unit.humidity,
           airflow: unit.airflowRate,
           filterPercent: unit.filterPercent,

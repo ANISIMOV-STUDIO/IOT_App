@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import '../../../widgets/breez/breez_card.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/spacing.dart';
+import '../../../../generated/l10n/app_localizations.dart';
 
 // Conditional import для web-специфичных функций
 import 'update_available_dialog_stub.dart'
@@ -51,6 +52,7 @@ class _UpdateAvailableDialogState extends State<UpdateAvailableDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final colors = BreezColors.of(context);
 
     return Dialog(
@@ -82,8 +84,8 @@ class _UpdateAvailableDialogState extends State<UpdateAvailableDialog> {
               // Title
               Text(
                 widget.version != null
-                    ? 'Доступна версия ${widget.version}'
-                    : 'Доступна новая версия',
+                    ? l10n.updateVersionAvailable(widget.version!)
+                    : l10n.updateAvailable,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
@@ -96,7 +98,7 @@ class _UpdateAvailableDialogState extends State<UpdateAvailableDialog> {
 
               // Message
               Text(
-                'Вышло обновление приложения. Перезагрузите страницу, чтобы получить новые функции и исправления.',
+                l10n.updateMessage,
                 style: TextStyle(
                   fontSize: 14,
                   color: colors.textMuted,
@@ -112,23 +114,23 @@ class _UpdateAvailableDialogState extends State<UpdateAvailableDialog> {
                 if (!_showChangelog)
                   GestureDetector(
                     onTap: () => setState(() => _showChangelog = true),
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
                         vertical: AppSpacing.xs,
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            'Что нового?',
-                            style: TextStyle(
+                            l10n.whatsNew,
+                            style: const TextStyle(
                               fontSize: 13,
                               color: AppColors.accent,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                          SizedBox(width: 4),
-                          Icon(
+                          const SizedBox(width: 4),
+                          const Icon(
                             Icons.arrow_drop_down,
                             size: 20,
                             color: AppColors.accent,
@@ -167,7 +169,7 @@ class _UpdateAvailableDialogState extends State<UpdateAvailableDialog> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            'Скрыть',
+                            l10n.hide,
                             style: TextStyle(
                               fontSize: 13,
                               color: colors.textMuted,
@@ -201,7 +203,7 @@ class _UpdateAvailableDialogState extends State<UpdateAvailableDialog> {
                       height: 48,
                       child: Center(
                         child: Text(
-                          'Позже',
+                          l10n.later,
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -220,10 +222,10 @@ class _UpdateAvailableDialogState extends State<UpdateAvailableDialog> {
                       backgroundColor: AppColors.accent,
                       hoverColor: AppColors.accentLight,
                       height: 48,
-                      child: const Center(
+                      child: Center(
                         child: Text(
-                          'Обновить сейчас',
-                          style: TextStyle(
+                          l10n.updateNow,
+                          style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
                             color: Colors.white,

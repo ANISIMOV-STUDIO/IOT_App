@@ -139,7 +139,7 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
       if (e is ApiException) {
         errorMessage = e.message;
       } else {
-        errorMessage = 'Не удалось зарегистрировать устройство';
+        errorMessage = 'Failed to register device';
       }
       emit(state.copyWith(
         isRegistering: false,
@@ -187,7 +187,7 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
       if (e is ApiException) {
         errorMessage = e.message;
       } else {
-        errorMessage = 'Не удалось удалить устройство';
+        errorMessage = 'Failed to delete device';
       }
       emit(state.copyWith(registrationError: errorMessage));
     }
@@ -218,7 +218,7 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
       if (e is ApiException) {
         errorMessage = e.message;
       } else {
-        errorMessage = 'Не удалось переименовать устройство';
+        errorMessage = 'Failed to rename device';
       }
       emit(state.copyWith(registrationError: errorMessage));
     }
@@ -248,7 +248,7 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
       if (e is ApiException) {
         errorMessage = e.message;
       } else {
-        errorMessage = 'Не удалось выключить все устройства';
+        errorMessage = 'Failed to turn off all devices';
       }
       emit(state.copyWith(
         isMasterPowerOffInProgress: false,

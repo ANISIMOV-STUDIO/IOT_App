@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_font_sizes.dart';
 import '../../../core/theme/spacing.dart';
+import '../../../generated/l10n/app_localizations.dart';
 
 /// Базовый индикатор загрузки
 ///
@@ -111,21 +112,22 @@ class LoadingOverlay {
     String? message,
     bool barrierDismissible = false,
   }) {
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       barrierDismissible: barrierDismissible,
       barrierColor: Colors.black.withValues(alpha: 0.5),
-      builder: (context) => PopScope(
+      builder: (dialogContext) => PopScope(
         canPop: barrierDismissible,
         child: Center(
           child: Container(
             padding: const EdgeInsets.all(AppSpacing.xl),
             decoration: BoxDecoration(
-              color: BreezColors.of(context).card,
+              color: BreezColors.of(dialogContext).card,
               borderRadius: BorderRadius.circular(16),
             ),
             child: LoadingIndicator.large(
-              message: message ?? 'Загрузка...',
+              message: message ?? l10n.loading,
             ),
           ),
         ),
@@ -256,11 +258,10 @@ class LoadingState<T> extends StatelessWidget {
             const Center(child: LoadingIndicator());
 
       case LoadingStatus.error:
+        final l10n = AppLocalizations.of(context)!;
+        final errorText = errorMessage ?? l10n.errorOccurred;
         if (errorBuilder != null) {
-          return errorBuilder!(
-            context,
-            errorMessage ?? 'Произошла ошибка',
-          );
+          return errorBuilder!(context, errorText);
         }
         // Default error UI
         return Center(
@@ -274,7 +275,7 @@ class LoadingState<T> extends StatelessWidget {
               ),
               const SizedBox(height: AppSpacing.md),
               Text(
-                errorMessage ?? 'Произошла ошибка',
+                errorText,
                 style: TextStyle(
                   fontSize: AppFontSizes.body,
                   color: BreezColors.of(context).text,
@@ -286,7 +287,7 @@ class LoadingState<T> extends StatelessWidget {
                 ElevatedButton.icon(
                   onPressed: onRetry,
                   icon: const Icon(Icons.refresh),
-                  label: const Text('Повторить'),
+                  label: Text(l10n.retry),
                 ),
               ],
             ],

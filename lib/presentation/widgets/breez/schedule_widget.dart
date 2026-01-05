@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../domain/entities/schedule_entry.dart';
+import '../../../generated/l10n/app_localizations.dart';
 import 'breez_card.dart';
 
 export '../../../domain/entities/schedule_entry.dart';
@@ -25,6 +26,8 @@ class ScheduleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
+
     return BreezCard(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -35,7 +38,7 @@ class ScheduleWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Расписание',
+                l10n.schedule,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
@@ -54,7 +57,7 @@ class ScheduleWidget extends StatelessWidget {
                         borderRadius: BorderRadius.circular(AppRadius.button),
                       ),
                       child: Text(
-                        'Все (+${entries.length - 3})',
+                        l10n.allCount(entries.length - 3),
                         style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
@@ -120,19 +123,14 @@ class _ScheduleRowState extends State<_ScheduleRow> {
 
   IconData _getModeIcon() {
     switch (widget.entry.mode.toLowerCase()) {
-      case 'охлаждение':
       case 'cooling':
         return Icons.ac_unit;
-      case 'нагрев':
       case 'heating':
         return Icons.whatshot;
-      case 'вентиляция':
       case 'ventilation':
         return Icons.air;
-      case 'авто':
       case 'auto':
         return Icons.autorenew;
-      case 'эко':
       case 'eco':
         return Icons.eco;
       default:
@@ -224,6 +222,8 @@ class _ActiveScheduleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
@@ -247,7 +247,7 @@ class _ActiveScheduleCard extends StatelessWidget {
       child: Row(
         children: [
           Text(
-            'Сейчас',
+            l10n.nowLabel,
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w600,
@@ -298,6 +298,8 @@ class _EmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -309,7 +311,7 @@ class _EmptyState extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            'Нет расписания',
+            l10n.noSchedule,
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w600,
@@ -318,7 +320,7 @@ class _EmptyState extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            'Добавьте расписание для устройства',
+            l10n.addScheduleForDevice,
             style: TextStyle(
               fontSize: 11,
               color: colors.textMuted.withValues(alpha: 0.7),

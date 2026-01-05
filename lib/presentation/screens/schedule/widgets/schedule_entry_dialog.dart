@@ -4,6 +4,7 @@ library;
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_theme.dart';
+import '../../../../generated/l10n/app_localizations.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/spacing.dart';
 import '../../../../domain/entities/schedule_entry.dart';
@@ -34,23 +35,25 @@ class _ScheduleEntryDialogState extends State<ScheduleEntryDialog> {
   late int _tempNight;
   late bool _isActive;
 
-  static const List<String> _days = [
-    'Понедельник',
-    'Вторник',
-    'Среда',
-    'Четверг',
-    'Пятница',
-    'Суббота',
-    'Воскресенье',
+  List<String> _getDays(AppLocalizations l10n) => [
+    l10n.monday,
+    l10n.tuesday,
+    l10n.wednesday,
+    l10n.thursday,
+    l10n.friday,
+    l10n.saturday,
+    l10n.sunday,
   ];
 
-  static const List<String> _modes = [
-    'Авто',
-    'Охлаждение',
-    'Нагрев',
-    'Вентиляция',
-    'Эко',
+  List<String> _getModes(AppLocalizations l10n) => [
+    l10n.modeAuto,
+    l10n.modeCooling,
+    l10n.modeHeating,
+    l10n.modeVentilation,
+    l10n.modeEco,
   ];
+
+  bool _initialized = false;
 
   @override
   void initState() {
@@ -62,14 +65,24 @@ class _ScheduleEntryDialogState extends State<ScheduleEntryDialog> {
       _tempDay = widget.entry!.tempDay;
       _tempNight = widget.entry!.tempNight;
       _isActive = widget.entry!.isActive;
+      _initialized = true;
     } else {
-      _selectedDay = _days[0];
-      _selectedMode = _modes[0];
       _startTime = const TimeOfDay(hour: 8, minute: 0);
       _endTime = const TimeOfDay(hour: 22, minute: 0);
       _tempDay = 22;
       _tempNight = 18;
       _isActive = true;
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_initialized && widget.entry == null) {
+      final l10n = AppLocalizations.of(context)!;
+      _selectedDay = _getDays(l10n)[0];
+      _selectedMode = _getModes(l10n)[0];
+      _initialized = true;
     }
   }
 
@@ -150,8 +163,11 @@ class _ScheduleEntryDialogState extends State<ScheduleEntryDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final colors = BreezColors.of(context);
     final isEditing = widget.entry != null;
+    final days = _getDays(l10n);
+    final modes = _getModes(l10n);
 
     return Dialog(
       backgroundColor: colors.card,
@@ -174,7 +190,7 @@ class _ScheduleEntryDialogState extends State<ScheduleEntryDialog> {
                 ),
                 const SizedBox(width: 12),
                 Text(
-                  isEditing ? 'Редактировать запись' : 'Новая запись',
+                  isEditing ? l10n.scheduleEditEntry : l10n.scheduleNewEntry,
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
@@ -187,9 +203,9 @@ class _ScheduleEntryDialogState extends State<ScheduleEntryDialog> {
 
             // Day selector
             _buildDropdown(
-              label: 'День недели',
+              label: l10n.scheduleDayLabel,
               value: _selectedDay,
-              items: _days,
+              items: days,
               onChanged: (value) => setState(() => _selectedDay = value!),
             ),
             const SizedBox(height: AppSpacing.md),
@@ -199,7 +215,7 @@ class _ScheduleEntryDialogState extends State<ScheduleEntryDialog> {
               children: [
                 Expanded(
                   child: _buildTimeButton(
-                    label: 'Начало',
+                    label: l10n.scheduleStartLabel,
                     time: _startTime,
                     onTap: () => _pickTime(true),
                   ),
@@ -207,7 +223,7 @@ class _ScheduleEntryDialogState extends State<ScheduleEntryDialog> {
                 const SizedBox(width: AppSpacing.md),
                 Expanded(
                   child: _buildTimeButton(
-                    label: 'Конец',
+                    label: l10n.scheduleEndLabel,
                     time: _endTime,
                     onTap: () => _pickTime(false),
                   ),
@@ -218,22 +234,22 @@ class _ScheduleEntryDialogState extends State<ScheduleEntryDialog> {
 
             // Mode selector
             _buildDropdown(
-              label: 'Режим',
+              label: l10n.scheduleModeLabel,
               value: _selectedMode,
-              items: _modes,
+              items: modes,
               onChanged: (value) => setState(() => _selectedMode = value!),
             ),
             const SizedBox(height: AppSpacing.md),
 
             // Temperature sliders
             _buildTemperatureSlider(
-              label: 'Дневная температура',
+              label: l10n.scheduleDayTemp,
               value: _tempDay,
               onChanged: (value) => setState(() => _tempDay = value.round()),
             ),
             const SizedBox(height: AppSpacing.sm),
             _buildTemperatureSlider(
-              label: 'Ночная температура',
+              label: l10n.scheduleNightTemp,
               value: _tempNight,
               onChanged: (value) => setState(() => _tempNight = value.round()),
             ),
@@ -253,7 +269,7 @@ class _ScheduleEntryDialogState extends State<ScheduleEntryDialog> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Активно',
+                    l10n.scheduleActive,
                     style: TextStyle(
                       fontSize: 14,
                       color: colors.text,
@@ -282,7 +298,7 @@ class _ScheduleEntryDialogState extends State<ScheduleEntryDialog> {
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(),
                   child: Text(
-                    'Отмена',
+                    l10n.cancel,
                     style: TextStyle(color: colors.textMuted),
                   ),
                 ),
@@ -297,7 +313,7 @@ class _ScheduleEntryDialogState extends State<ScheduleEntryDialog> {
                       vertical: 12,
                     ),
                   ),
-                  child: Text(isEditing ? 'Сохранить' : 'Добавить'),
+                  child: Text(isEditing ? l10n.save : l10n.scheduleAdd),
                 ),
               ],
             ),

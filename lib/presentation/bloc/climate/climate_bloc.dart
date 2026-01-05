@@ -136,7 +136,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     } catch (e) {
       emit(state.copyWith(
         status: ClimateControlStatus.failure,
-        errorMessage: 'Ошибка загрузки состояния: $e',
+        errorMessage: 'State loading error: $e',
       ));
     }
   }
@@ -191,7 +191,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       emit(state.copyWith(
         isTogglingPower: false,
         climate: revertedClimate,
-        errorMessage: 'Ошибка переключения питания: $e',
+        errorMessage: 'Power toggle error: $e',
       ));
     }
   }
@@ -204,7 +204,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     try {
       await _setTemperature(SetTemperatureParams(temperature: event.temperature));
     } catch (e) {
-      emit(state.copyWith(errorMessage: 'Ошибка установки температуры: $e'));
+      emit(state.copyWith(errorMessage: 'Temperature setting error: $e'));
     }
   }
 
@@ -216,7 +216,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     try {
       await _setHumidity(SetHumidityParams(humidity: event.humidity));
     } catch (e) {
-      emit(state.copyWith(errorMessage: 'Ошибка установки влажности: $e'));
+      emit(state.copyWith(errorMessage: 'Humidity setting error: $e'));
     }
   }
 
@@ -228,7 +228,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     try {
       await _setClimateMode(SetClimateModeParams(mode: event.mode));
     } catch (e) {
-      emit(state.copyWith(errorMessage: 'Ошибка смены режима: $e'));
+      emit(state.copyWith(errorMessage: 'Mode change error: $e'));
     }
   }
 
@@ -240,7 +240,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     try {
       await _setPreset(SetPresetParams(preset: event.preset));
     } catch (e) {
-      emit(state.copyWith(errorMessage: 'Ошибка смены пресета: $e'));
+      emit(state.copyWith(errorMessage: 'Preset change error: $e'));
     }
   }
 
@@ -255,7 +255,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         value: event.value,
       ));
     } catch (e) {
-      emit(state.copyWith(errorMessage: 'Ошибка настройки притока: $e'));
+      emit(state.copyWith(errorMessage: 'Supply airflow error: $e'));
     }
   }
 
@@ -270,7 +270,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         value: event.value,
       ));
     } catch (e) {
-      emit(state.copyWith(errorMessage: 'Ошибка настройки вытяжки: $e'));
+      emit(state.copyWith(errorMessage: 'Exhaust airflow error: $e'));
     }
   }
 

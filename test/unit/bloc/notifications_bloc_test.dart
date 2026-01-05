@@ -207,7 +207,7 @@ void main() {
             bloc.add(const NotificationsMarkAsReadRequested('notif-1')),
         expect: () => [
           isA<NotificationsState>()
-              .having((s) => s.errorMessage, 'errorMessage', contains('Ошибка')),
+              .having((s) => s.errorMessage, 'errorMessage', contains('Mark notification error')),
         ],
       );
     });
@@ -278,7 +278,7 @@ void main() {
             bloc.add(const NotificationsDismissRequested('notif-1')),
         expect: () => [
           isA<NotificationsState>().having(
-              (s) => s.errorMessage, 'errorMessage', contains('удаления')),
+              (s) => s.errorMessage, 'errorMessage', contains('Delete notification error')),
         ],
       );
     });

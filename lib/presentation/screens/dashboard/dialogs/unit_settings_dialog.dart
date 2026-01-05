@@ -4,6 +4,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../generated/l10n/app_localizations.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../domain/entities/unit_state.dart';
 import '../../../widgets/breez/breez_card.dart';
@@ -91,6 +92,7 @@ class _UnitSettingsDialogState extends State<UnitSettingsDialog> {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return Dialog(
       backgroundColor: colors.card,
@@ -105,21 +107,21 @@ class _UnitSettingsDialogState extends State<UnitSettingsDialog> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildHeader(colors),
+            _buildHeader(colors, l10n),
             const SizedBox(height: 24),
-            _buildDeviceInfo(colors),
+            _buildDeviceInfo(colors, l10n),
             const SizedBox(height: 16),
             if (_isRenaming)
-              _buildRenameField(colors)
+              _buildRenameField(colors, l10n)
             else
-              _buildActions(colors),
+              _buildActions(colors, l10n),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildHeader(BreezColors colors) {
+  Widget _buildHeader(BreezColors colors, AppLocalizations l10n) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -132,7 +134,7 @@ class _UnitSettingsDialogState extends State<UnitSettingsDialog> {
             ),
             const SizedBox(width: 8),
             Text(
-              'Настройки установки',
+              l10n.unitSettingsTitle,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
@@ -163,7 +165,7 @@ class _UnitSettingsDialogState extends State<UnitSettingsDialog> {
     );
   }
 
-  Widget _buildDeviceInfo(BreezColors colors) {
+  Widget _buildDeviceInfo(BreezColors colors, AppLocalizations l10n) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -179,7 +181,7 @@ class _UnitSettingsDialogState extends State<UnitSettingsDialog> {
               Icon(Icons.label_outline, size: 16, color: colors.textMuted),
               const SizedBox(width: 8),
               Text(
-                'Название:',
+                l10n.unitSettingsName,
                 style: TextStyle(
                   fontSize: 12,
                   color: colors.textMuted,
@@ -235,7 +237,7 @@ class _UnitSettingsDialogState extends State<UnitSettingsDialog> {
               ),
               const SizedBox(width: 8),
               Text(
-                'Статус:',
+                l10n.unitSettingsStatus,
                 style: TextStyle(
                   fontSize: 12,
                   color: colors.textMuted,
@@ -251,7 +253,7 @@ class _UnitSettingsDialogState extends State<UnitSettingsDialog> {
                   borderRadius: BorderRadius.circular(AppRadius.indicator),
                 ),
                 child: Text(
-                  widget.unit.power ? 'Включено' : 'Выключено',
+                  widget.unit.power ? l10n.statusEnabled : l10n.statusDisabled,
                   style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w600,
@@ -266,12 +268,12 @@ class _UnitSettingsDialogState extends State<UnitSettingsDialog> {
     );
   }
 
-  Widget _buildRenameField(BreezColors colors) {
+  Widget _buildRenameField(BreezColors colors, AppLocalizations l10n) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Новое название',
+          l10n.unitSettingsNewName,
           style: TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w500,
@@ -287,7 +289,7 @@ class _UnitSettingsDialogState extends State<UnitSettingsDialog> {
             LengthLimitingTextInputFormatter(50),
           ],
           decoration: InputDecoration(
-            hintText: 'Введите название',
+            hintText: l10n.unitSettingsEnterName,
             hintStyle: TextStyle(color: colors.textMuted),
             filled: true,
             fillColor: colors.bg,
@@ -316,12 +318,12 @@ class _UnitSettingsDialogState extends State<UnitSettingsDialog> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             BreezDialogButton(
-              label: 'Отмена',
+              label: l10n.cancel,
               onTap: () => setState(() => _isRenaming = false),
             ),
             const SizedBox(width: 12),
             BreezDialogButton(
-              label: 'Сохранить',
+              label: l10n.save,
               isPrimary: true,
               onTap: _submitRename,
             ),
@@ -331,22 +333,22 @@ class _UnitSettingsDialogState extends State<UnitSettingsDialog> {
     );
   }
 
-  Widget _buildActions(BreezColors colors) {
+  Widget _buildActions(BreezColors colors, AppLocalizations l10n) {
     return Column(
       children: [
         // Rename button
         BreezSettingsButton(
           icon: Icons.edit_outlined,
-          label: 'Переименовать',
-          subtitle: 'Изменить название установки',
+          label: l10n.unitSettingsRename,
+          subtitle: l10n.unitSettingsRenameSubtitle,
           onTap: () => setState(() => _isRenaming = true),
         ),
         const SizedBox(height: 12),
         // Delete button
         BreezSettingsButton(
           icon: Icons.delete_outline,
-          label: 'Удалить установку',
-          subtitle: 'Отвязать устройство от аккаунта',
+          label: l10n.unitSettingsDelete,
+          subtitle: l10n.unitSettingsDeleteSubtitle,
           isDanger: true,
           onTap: _confirmDelete,
         ),
@@ -364,6 +366,7 @@ class _DeleteConfirmDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return AlertDialog(
       backgroundColor: colors.card,
@@ -376,21 +379,20 @@ class _DeleteConfirmDialog extends StatelessWidget {
           const Icon(Icons.warning_amber_rounded, color: AppColors.accentRed),
           const SizedBox(width: 12),
           Text(
-            'Удалить установку?',
+            l10n.unitSettingsDeleteConfirm,
             style: TextStyle(color: colors.text),
           ),
         ],
       ),
       content: Text(
-        'Установка "$unitName" будет отвязана от вашего аккаунта. '
-        'Вы сможете снова добавить её по MAC-адресу.',
+        l10n.unitSettingsDeleteMessage(unitName),
         style: TextStyle(color: colors.textMuted),
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(false),
           child: Text(
-            'Отмена',
+            l10n.cancel,
             style: TextStyle(color: colors.textMuted),
           ),
         ),
@@ -399,9 +401,9 @@ class _DeleteConfirmDialog extends StatelessWidget {
           style: TextButton.styleFrom(
             backgroundColor: AppColors.accentRed.withValues(alpha: 0.1),
           ),
-          child: const Text(
-            'Удалить',
-            style: TextStyle(color: AppColors.accentRed),
+          child: Text(
+            l10n.unitSettingsDelete,
+            style: const TextStyle(color: AppColors.accentRed),
           ),
         ),
       ],

@@ -54,7 +54,6 @@ void main() {
             status: NetworkStatus.online,
             isOffline: false,
             isServerUnavailable: false,
-            message: null,
           ),
         ],
       );
@@ -73,7 +72,6 @@ void main() {
             status: NetworkStatus.offline,
             isOffline: true,
             isServerUnavailable: false,
-            message: 'Нет подключения к интернету',
           ),
         ],
       );
@@ -92,7 +90,6 @@ void main() {
             status: NetworkStatus.serverUnavailable,
             isOffline: false,
             isServerUnavailable: true,
-            message: 'Сервер недоступен',
           ),
         ],
       );
@@ -108,18 +105,16 @@ void main() {
             status: NetworkStatus.offline,
             isOffline: true,
             isServerUnavailable: false,
-            message: 'Нет подключения к интернету',
           ),
         ],
       );
 
       blocTest<ConnectivityBloc, ConnectivityState>(
-        'очищает сообщение при восстановлении сети',
+        'восстанавливает online состояние',
         build: () => ConnectivityBloc(connectivityService: mockService),
         seed: () => const ConnectivityState(
           status: NetworkStatus.offline,
           isOffline: true,
-          message: 'Нет подключения к интернету',
         ),
         act: (bloc) => bloc.add(const ConnectivityStatusChanged(NetworkStatus.online)),
         expect: () => [
@@ -127,7 +122,6 @@ void main() {
             status: NetworkStatus.online,
             isOffline: false,
             isServerUnavailable: false,
-            message: null,
           ),
         ],
       );
@@ -153,13 +147,11 @@ void main() {
             status: NetworkStatus.online,
             isOffline: false,
             isServerUnavailable: false,
-            message: null,
           ),
           const ConnectivityState(
             status: NetworkStatus.offline,
             isOffline: true,
             isServerUnavailable: false,
-            message: 'Нет подключения к интернету',
           ),
         ],
       );

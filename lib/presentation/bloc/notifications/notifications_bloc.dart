@@ -144,7 +144,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
 
       emit(state.copyWith(notifications: updatedNotifications));
     } catch (e) {
-      emit(state.copyWith(errorMessage: 'Ошибка отметки уведомления: $e'));
+      emit(state.copyWith(errorMessage: 'Mark notification error: $e'));
     }
   }
 
@@ -178,7 +178,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
 
       emit(state.copyWith(notifications: updatedNotifications));
     } catch (e) {
-      emit(state.copyWith(errorMessage: 'Ошибка отметки уведомлений: $e'));
+      emit(state.copyWith(errorMessage: 'Mark all notifications error: $e'));
     }
   }
 
@@ -199,7 +199,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
 
       emit(state.copyWith(notifications: updatedNotifications));
     } catch (e) {
-      emit(state.copyWith(errorMessage: 'Ошибка удаления уведомления: $e'));
+      emit(state.copyWith(errorMessage: 'Delete notification error: $e'));
     }
   }
 

@@ -157,7 +157,7 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
       ));
       emit(state.copyWith(graphData: data));
     } catch (e) {
-      emit(state.copyWith(errorMessage: 'Ошибка загрузки графика: $e'));
+      emit(state.copyWith(errorMessage: 'Graph loading error: $e'));
     }
   }
 

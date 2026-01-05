@@ -13,7 +13,7 @@ import 'mode_selector.dart';
 /// Main temperature display card with gradient background
 class MainTempCard extends StatelessWidget {
   final String unitName;
-  final String status;
+  final String? status;
   final int temperature;
   final int humidity;
   final int airflow;
@@ -40,7 +40,7 @@ class MainTempCard extends StatelessWidget {
     super.key,
     required this.unitName,
     required this.temperature,
-    this.status = 'В работе',
+    this.status,
     this.humidity = 45,
     this.airflow = 420,
     this.filterPercent = 88,
@@ -112,7 +112,7 @@ class MainTempCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        _formatDate(l10n),
+                        _formatDate(context, l10n),
                         style: TextStyle(
                           fontSize: 11,
                           color: colors.textMuted,
@@ -237,7 +237,7 @@ class MainTempCard extends StatelessWidget {
                           ),
                           const SizedBox(width: 6),
                           Text(
-                            status,
+                            status ?? l10n.statusRunning,
                             style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.w600,
@@ -555,11 +555,9 @@ class MainTempCard extends StatelessWidget {
     );
   }
 
-  String _formatDate(AppLocalizations l10n) {
+  String _formatDate(BuildContext context, AppLocalizations l10n) {
     final now = DateTime.now();
-    final locale = Localizations.localeOf(
-      WidgetsBinding.instance.rootElement!,
-    ).languageCode;
+    final locale = Localizations.localeOf(context).languageCode;
     final dateFormat = DateFormat('d MMM', locale);
     return l10n.todayDate(dateFormat.format(now));
   }

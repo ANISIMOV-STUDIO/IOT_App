@@ -1,16 +1,5 @@
 {
   "@@locale": "ru",
-  "@@_README": "Complete localization file with all hardcoded strings found in the application",
-  "@@_APPLICATION": "=== Application Metadata ===",
-  "appTitle": "BREEZ Home",
-  "@appTitle": {
-    "description": "Application title"
-  },
-  "smartClimateManagement": "Умное управление климатом",
-  "@smartClimateManagement": {
-    "description": "Application tagline"
-  },
-  "@@_AUTHENTICATION": "=== Authentication ===",
   "login": "Войти",
   "@login": {
     "description": "Login button text"
@@ -18,14 +7,6 @@
   "register": "Регистрация",
   "@register": {
     "description": "Register button text"
-  },
-  "loginSubtitle": "С возвращением! Войдите, чтобы продолжить",
-  "@loginSubtitle": {
-    "description": "Login screen subtitle"
-  },
-  "registerSubtitle": "Создайте аккаунт, чтобы начать",
-  "@registerSubtitle": {
-    "description": "Register screen subtitle"
   },
   "email": "Email",
   "@email": {
@@ -38,58 +19,6 @@
   "confirmPassword": "Подтвердите пароль",
   "@confirmPassword": {
     "description": "Confirm password field label"
-  },
-  "fullName": "Полное имя",
-  "@fullName": {
-    "description": "Name field label"
-  },
-  "welcomeBack": "С возвращением",
-  "@welcomeBack": {
-    "description": "Welcome back message"
-  },
-  "createAccount": "Создать аккаунт",
-  "@createAccount": {
-    "description": "Create account title"
-  },
-  "signInToAccount": "Войдите в свой аккаунт",
-  "@signInToAccount": {
-    "description": "Sign in subtitle"
-  },
-  "signUpForAccount": "Зарегистрируйтесь для нового аккаунта",
-  "@signUpForAccount": {
-    "description": "Sign up subtitle"
-  },
-  "skipForNow": "Пропустить",
-  "@skipForNow": {
-    "description": "Skip authentication button"
-  },
-  "skipAuth": "Продолжить без регистрации",
-  "@skipAuth": {
-    "description": "Skip authentication button alternative"
-  },
-  "rememberMe": "Запомнить меня",
-  "@rememberMe": {
-    "description": "Remember me checkbox"
-  },
-  "termsAndConditions": "Условия и положения",
-  "@termsAndConditions": {
-    "description": "Terms and conditions link"
-  },
-  "guestUser": "Гость",
-  "@guestUser": {
-    "description": "Guest user name"
-  },
-  "registrationComingSoon": "Функция регистрации скоро будет доступна",
-  "@registrationComingSoon": {
-    "description": "Registration coming soon message"
-  },
-  "showPassword": "Показать пароль",
-  "@showPassword": {
-    "description": "Show password tooltip"
-  },
-  "hidePassword": "Скрыть пароль",
-  "@hidePassword": {
-    "description": "Hide password tooltip"
   },
   "forgotPassword": "Забыли пароль?",
   "@forgotPassword": {
@@ -152,56 +81,6 @@
   "@passwordChangedSuccess": {
     "description": "Password changed success message"
   },
-  "@@_ONBOARDING": "=== Onboarding ===",
-  "skip": "Пропустить",
-  "@skip": {
-    "description": "Skip button"
-  },
-  "welcomeToBreezHome": "Добро пожаловать в\nBREEZ Home",
-  "@welcomeToBreezHome": {
-    "description": "Onboarding welcome title"
-  },
-  "smartHomeClimateControl": "Умное управление климатом\nвашего дома под рукой",
-  "@smartHomeClimateControl": {
-    "description": "Onboarding welcome subtitle"
-  },
-  "swipeToContinue": "Свайпните для продолжения",
-  "@swipeToContinue": {
-    "description": "Swipe instruction"
-  },
-  "controlYourDevices": "Управляйте\nустройствами",
-  "@controlYourDevices": {
-    "description": "Onboarding control title"
-  },
-  "manageHvacSystems": "Управляйте всеми системами HVAC\nиз любого места в любое время",
-  "@manageHvacSystems": {
-    "description": "Onboarding control subtitle"
-  },
-  "turnOnOffRemotely": "Включение/выключение удаленно",
-  "@turnOnOffRemotely": {
-    "description": "Remote control feature"
-  },
-  "readyToGetStarted": "Готовы\nначать?",
-  "@readyToGetStarted": {
-    "description": "Onboarding final title"
-  },
-  "startControllingClimate": "Начните управлять климатом вашего дома\nлегко и эффективно",
-  "@startControllingClimate": {
-    "description": "Onboarding final subtitle"
-  },
-  "getStarted": "Начать",
-  "@getStarted": {
-    "description": "Get started button"
-  },
-  "termsPrivacyAgreement": "Продолжая, вы соглашаетесь с нашими\nУсловиями обслуживания и Политикой конфиденциальности",
-  "@termsPrivacyAgreement": {
-    "description": "Terms and privacy agreement text"
-  },
-  "loadingBreezHome": "Загрузка BREEZ Home",
-  "@loadingBreezHome": {
-    "description": "Loading screen text"
-  },
-  "@@_NAVIGATION": "=== Navigation ===",
   "home": "Главная",
   "@home": {
     "description": "Home tab label"
@@ -214,64 +93,6 @@
   "@back": {
     "description": "Back button"
   },
-  "next": "Далее",
-  "@next": {
-    "description": "Next button"
-  },
-  "previous": "Предыдущий",
-  "@previous": {
-    "description": "Previous button"
-  },
-  "navigateBack": "Вернуться назад",
-  "@navigateBack": {
-    "description": "Navigate back label"
-  },
-  "@@_SETTINGS": "=== Settings Screen ===",
-  "settingsTitle": "Настройки",
-  "@settingsTitle": {
-    "description": "Settings screen title (Russian: Настройки)"
-  },
-  "appearance": "Внешний вид",
-  "@appearance": {
-    "description": "Appearance section title (Russian: Внешний вид)"
-  },
-  "darkTheme": "Темная тема",
-  "@darkTheme": {
-    "description": "Dark theme option (Russian: Темная тема)"
-  },
-  "useDarkColorScheme": "Использовать темную цветовую схему",
-  "@useDarkColorScheme": {
-    "description": "Dark theme description (Russian: Использовать темную цветовую схему)"
-  },
-  "themeChangeNextVersion": "Смена темы будет доступна в следующей версии",
-  "@themeChangeNextVersion": {
-    "description": "Theme change message (Russian: Смена темы будет доступна в следующей версии)"
-  },
-  "units": "Единицы измерения",
-  "@units": {
-    "description": "Units section title (Russian: Единицы измерения)"
-  },
-  "temperatureUnits": "Температура",
-  "@temperatureUnits": {
-    "description": "Temperature units label (Russian: Температура)"
-  },
-  "celsius": "Цельсий (°C)",
-  "@celsius": {
-    "description": "Celsius option (Russian: Цельсий (°C))"
-  },
-  "fahrenheit": "Фаренгейт (°F)",
-  "@fahrenheit": {
-    "description": "Fahrenheit option (Russian: Фаренгейт (°F))"
-  },
-  "unitsChangedTo": "Единицы изменены на {unit}",
-  "@unitsChangedTo": {
-    "description": "Units changed message",
-    "placeholders": {
-      "unit": {
-        "type": "String"
-      }
-    }
-  },
   "notifications": "Уведомления",
   "@notifications": {
     "description": "Notifications section (Russian: Уведомления)"
@@ -279,10 +100,6 @@
   "pushNotifications": "Push-уведомления",
   "@pushNotifications": {
     "description": "Push notifications option (Russian: Push-уведомления)"
-  },
-  "receiveInstantNotifications": "Получать мгновенные уведомления",
-  "@receiveInstantNotifications": {
-    "description": "Push notifications description (Russian: Получать мгновенные уведомления)"
   },
   "emailNotifications": "Email-уведомления",
   "@emailNotifications": {
@@ -292,198 +109,21 @@
   "@alarmNotifications": {
     "description": "Alarm notifications option"
   },
-  "receiveEmailReports": "Получать отчеты на email",
-  "@receiveEmailReports": {
-    "description": "Email notifications description (Russian: Получать отчеты на email)"
-  },
-  "notificationsState": "{type}-уведомления {state}",
-  "@notificationsState": {
-    "description": "Notifications state message",
-    "placeholders": {
-      "type": {
-        "type": "String"
-      },
-      "state": {
-        "type": "String"
-      }
-    }
-  },
   "language": "Язык",
   "@language": {
     "description": "Language section (Russian: Язык)"
-  },
-  "russian": "Русский",
-  "@russian": {
-    "description": "Russian language option"
-  },
-  "english": "English",
-  "@english": {
-    "description": "English language option"
-  },
-  "languageChangedTo": "Язык изменен на {language}",
-  "@languageChangedTo": {
-    "description": "Language changed message",
-    "placeholders": {
-      "language": {
-        "type": "String"
-      }
-    }
-  },
-  "about": "О приложении",
-  "@about": {
-    "description": "About section (Russian: О приложении)"
-  },
-  "version": "Версия",
-  "@version": {
-    "description": "Version label (Russian: Версия)"
-  },
-  "developer": "Разработчик",
-  "@developer": {
-    "description": "Developer label (Russian: Разработчик)"
-  },
-  "license": "Лицензия",
-  "@license": {
-    "description": "License label (Russian: Лицензия)"
-  },
-  "checkUpdates": "Проверить обновления",
-  "@checkUpdates": {
-    "description": "Check updates button (Russian: Проверить обновления)"
-  },
-  "checkingUpdates": "Проверка обновлений...",
-  "@checkingUpdates": {
-    "description": "Checking updates message (Russian: Проверка обновлений...)"
-  },
-  "@@_DEVICE_MANAGEMENT": "=== Device Management ===",
-  "deviceManagement": "Управление устройствами",
-  "@deviceManagement": {
-    "description": "Device management screen title"
-  },
-  "search": "Поиск",
-  "@search": {
-    "description": "Search title"
-  },
-  "scanForDevices": "Сканировать устройства",
-  "@scanForDevices": {
-    "description": "Scan for devices button"
   },
   "addDevice": "Добавить устройство",
   "@addDevice": {
     "description": "Add device button"
   },
-  "editDevice": "Редактировать устройство",
-  "@editDevice": {
-    "description": "Edit device dialog title"
-  },
-  "removeDevice": "Удалить устройство",
-  "@removeDevice": {
-    "description": "Remove device button"
-  },
-  "deviceName": "Название устройства",
+  "deviceName": "Название",
   "@deviceName": {
-    "description": "Device name label"
-  },
-  "macAddress": "MAC-адрес",
-  "@macAddress": {
-    "description": "MAC address label"
-  },
-  "location": "Расположение",
-  "@location": {
-    "description": "Location label"
-  },
-  "notFoundDevice": "Не нашли\nустройство?",
-  "@notFoundDevice": {
-    "description": "Device not found message"
-  },
-  "selectManually": "Выбрать вручную",
-  "@selectManually": {
-    "description": "Select device manually button"
-  },
-  "deviceUpdated": "Устройство обновлено",
-  "@deviceUpdated": {
-    "description": "Device updated message"
-  },
-  "deviceAdded": "Устройство успешно добавлено",
-  "@deviceAdded": {
-    "description": "Device added success message"
-  },
-  "deviceRemoved": "Устройство успешно удалено",
-  "@deviceRemoved": {
-    "description": "Device removed success message"
-  },
-  "scanQrCode": "Сканировать QR-код",
-  "@scanQrCode": {
-    "description": "Scan QR code button"
-  },
-  "processingQrCode": "Обработка QR-кода...",
-  "@processingQrCode": {
-    "description": "Processing QR code message"
-  },
-  "invalidQrCode": "Неверный QR-код",
-  "@invalidQrCode": {
-    "description": "Invalid QR code error"
-  },
-  "deviceDetectedFromQr": "Устройство обнаружено из QR-кода",
-  "@deviceDetectedFromQr": {
-    "description": "Device detected from QR message"
-  },
-  "enterMacManually": "Или введите MAC-адрес вручную",
-  "@enterMacManually": {
-    "description": "Manual MAC entry option"
-  },
-  "invalidMacFormat": "Неверный формат MAC-адреса (например, AA:BB:CC:DD:EE:FF)",
-  "@invalidMacFormat": {
-    "description": "Invalid MAC format error"
-  },
-  "deviceNameMinLength": "Название устройства должно содержать минимум 3 символа",
-  "@deviceNameMinLength": {
-    "description": "Device name validation error"
-  },
-  "adding": "Добавление...",
-  "@adding": {
-    "description": "Adding in progress"
-  },
-  "pullToRefresh": "Потяните для обновления",
-  "@pullToRefresh": {
-    "description": "Pull to refresh hint"
-  },
-  "online": "В сети",
-  "@online": {
-    "description": "Online status"
-  },
-  "offline": "Не в сети",
-  "@offline": {
-    "description": "Offline status"
-  },
-  "edit": "Редактировать",
-  "@edit": {
-    "description": "Edit action"
+    "description": "Device name field label"
   },
   "delete": "Удалить",
   "@delete": {
     "description": "Delete action"
-  },
-  "confirmRemoveDevice": "Вы уверены, что хотите удалить {name}?",
-  "@confirmRemoveDevice": {
-    "description": "Confirm device removal",
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "wifiNetwork": "WiFi: {network}",
-  "@wifiNetwork": {
-    "description": "WiFi network display",
-    "placeholders": {
-      "network": {
-        "type": "String"
-      }
-    }
-  },
-  "@@_HVAC_CONTROL": "=== HVAC Control ===",
-  "hvacControl": "BREEZ Home",
-  "@hvacControl": {
-    "description": "Main screen title"
   },
   "temperature": "Температура",
   "@temperature": {
@@ -493,45 +133,9 @@
   "@humidity": {
     "description": "Humidity label"
   },
-  "airQuality": "Качество воздуха",
-  "@airQuality": {
-    "description": "Air quality label"
-  },
-  "fanSpeed": "Скорость вентилятора",
-  "@fanSpeed": {
-    "description": "Fan speed label"
-  },
-  "fan": "Вентилятор",
-  "@fan": {
-    "description": "Fan label short"
-  },
-  "mode": "Режим",
-  "@mode": {
-    "description": "Mode label"
-  },
   "operatingMode": "Режим работы",
   "@operatingMode": {
     "description": "Operating mode title"
-  },
-  "power": "Питание",
-  "@power": {
-    "description": "Power label"
-  },
-  "on": "Вкл",
-  "@on": {
-    "description": "On state"
-  },
-  "off": "Выкл",
-  "@off": {
-    "description": "Off state"
-  },
-  "current": "Текущая",
-  "@current": {
-    "description": "Current label"
-  },
-  "target": "Целевая",
-  "@target": {
-    "description": "Target label"
   },
   "targetTemperature": "Целевая температура",
   "@targetTemperature": {
@@ -551,15 +155,7 @@
   },
   "filter": "Фильтр",
   "@filter": {
-    "description": "Filter label"
-  },
-  "statusWorking": "В работе",
-  "@statusWorking": {
-    "description": "Status working"
-  },
-  "statusOff": "Выключено",
-  "@statusOff": {
-    "description": "Status off"
+    "description": "Filter button"
   },
   "todayDate": "Сегодня, {date}",
   "@todayDate": {
@@ -570,390 +166,21 @@
       }
     }
   },
-  "cooling": "Охлаждение",
-  "@cooling": {
-    "description": "Cooling mode"
-  },
-  "heating": "Обогрев",
-  "@heating": {
-    "description": "Heating mode"
-  },
-  "auto": "Авто",
-  "@auto": {
-    "description": "Auto mode"
-  },
-  "low": "Низкая",
-  "@low": {
-    "description": "Low speed"
-  },
-  "medium": "Средний",
-  "@medium": {
-    "description": "Password strength"
-  },
-  "high": "Высокая",
-  "@high": {
-    "description": "High speed"
-  },
-  "mode2": "Режим 2",
-  "@mode2": {
-    "description": "Mode 2 label"
-  },
-  "ventilationMode": "Режим вентиляции",
-  "@ventilationMode": {
-    "description": "Ventilation mode label"
-  },
-  "notSelected": "Не выбран",
-  "@notSelected": {
-    "description": "Not selected state"
-  },
-  "modeBasic": "Базовый",
-  "@modeBasic": {
-    "description": "Basic ventilation mode"
-  },
-  "modeIntensive": "Интенсивный",
-  "@modeIntensive": {
-    "description": "Intensive ventilation mode"
-  },
-  "modeEconomic": "Экономичный",
-  "@modeEconomic": {
-    "description": "Economic ventilation mode"
-  },
-  "modeMaximum": "Максимальный",
-  "@modeMaximum": {
-    "description": "Maximum ventilation mode"
-  },
-  "modeKitchen": "Кухня",
-  "@modeKitchen": {
-    "description": "Kitchen ventilation mode"
-  },
-  "modeFireplace": "Камин",
-  "@modeFireplace": {
-    "description": "Fireplace ventilation mode"
-  },
-  "modeVacation": "Отпуск",
-  "@modeVacation": {
-    "description": "Vacation ventilation mode"
-  },
-  "modeCustom": "Пользовательский",
-  "@modeCustom": {
-    "description": "Custom ventilation mode"
-  },
-  "supplyAir": "Приток",
-  "@supplyAir": {
-    "description": "Supply air label"
-  },
-  "exhaustAir": "Вытяжка",
-  "@exhaustAir": {
-    "description": "Exhaust air label"
-  },
-  "temperatures": "Температуры",
-  "@temperatures": {
-    "description": "Temperatures label"
-  },
-  "monitoringAndSettings": "Мониторинг и уставки",
-  "@monitoringAndSettings": {
-    "description": "Monitoring and settings label"
-  },
-  "outdoor": "Наружный",
-  "@outdoor": {
-    "description": "Outdoor label"
-  },
-  "indoor": "Внутренний",
-  "@indoor": {
-    "description": "Indoor label"
-  },
-  "@@_ROOM_CONTROL": "=== Room Control ===",
-  "humidifierAir": "Увлажнитель\nвоздуха",
-  "@humidifierAir": {
-    "description": "Humidifier air label"
-  },
-  "purifierAir": "Очиститель\nвоздуха",
-  "@purifierAir": {
-    "description": "Purifier air label"
-  },
-  "lighting": "Освещение",
-  "@lighting": {
-    "description": "Lighting section"
-  },
-  "mainLight": "Основной свет",
-  "@mainLight": {
-    "description": "Main light label"
-  },
-  "floorLamp": "Торшер",
-  "@floorLamp": {
-    "description": "Floor lamp label"
-  },
-  "unit": "Блок",
-  "@unit": {
-    "description": "Unit label"
-  },
-  "notificationsComingSoon": "Функция уведомлений скоро будет доступна",
-  "@notificationsComingSoon": {
-    "description": "Notifications coming soon message"
-  },
-  "favorite": "Избранное",
-  "@favorite": {
-    "description": "Favorite action"
-  },
-  "@@_ANALYTICS": "=== Analytics ===",
-  "activity": "Активность",
-  "@activity": {
-    "description": "Activity label"
-  },
-  "seeAll": "Смотреть все",
-  "@seeAll": {
-    "description": "See all button"
-  },
-  "excellent": "Отлично",
-  "@excellent": {
-    "description": "Excellent air quality"
-  },
-  "good": "Хорошо",
-  "@good": {
-    "description": "Good air quality"
-  },
-  "moderate": "Умеренно",
-  "@moderate": {
-    "description": "Moderate air quality"
-  },
-  "poor": "Плохо",
-  "@poor": {
-    "description": "Poor air quality"
-  },
-  "veryPoor": "Очень плохо",
-  "@veryPoor": {
-    "description": "Very poor air quality"
-  },
-  "@@_QUICK_ACTIONS": "=== Quick Actions ===",
-  "quickActions": "Быстрые действия",
-  "@quickActions": {
-    "description": "Quick actions title"
-  },
-  "allOn": "Все вкл",
-  "@allOn": {
-    "description": "Turn all devices on"
-  },
-  "allOff": "Все выкл",
-  "@allOff": {
-    "description": "Turn all devices off"
-  },
-  "sync": "Синхр.",
-  "@sync": {
-    "description": "Sync devices"
-  },
   "presets": "Пресеты",
   "@presets": {
     "description": "Presets title"
-  },
-  "@@_ERRORS": "=== Error Messages ===",
-  "error": "Ошибка",
-  "@error": {
-    "description": "Error title"
-  },
-  "connectionError": "Ошибка подключения",
-  "@connectionError": {
-    "description": "Connection error title"
-  },
-  "serverError": "Ошибка сервера",
-  "@serverError": {
-    "description": "Server error title"
-  },
-  "permissionRequired": "Требуется разрешение",
-  "@permissionRequired": {
-    "description": "Permission required title"
-  },
-  "somethingWentWrong": "Упс! Что-то пошло не так",
-  "@somethingWentWrong": {
-    "description": "Generic error title"
-  },
-  "unableToConnect": "Не удается подключиться к серверу. Проверьте интернет-соединение.",
-  "@unableToConnect": {
-    "description": "Network error message"
-  },
-  "serverErrorMessage": "На нашей стороне произошла ошибка. Попробуйте позже.",
-  "@serverErrorMessage": {
-    "description": "Server error message"
-  },
-  "permissionRequiredMessage": "Эта функция требует дополнительных разрешений для работы.",
-  "@permissionRequiredMessage": {
-    "description": "Permission required message"
-  },
-  "networkConnectionFailed": "Сбой сетевого подключения. Проверьте интернет-соединение.",
-  "@networkConnectionFailed": {
-    "description": "Network connection failed"
-  },
-  "requestTimedOut": "Время ожидания запроса истекло. Попробуйте еще раз.",
-  "@requestTimedOut": {
-    "description": "Request timeout error"
-  },
-  "failedToConnect": "Не удалось подключиться к серверу устройств",
-  "@failedToConnect": {
-    "description": "Device server connection error"
-  },
-  "connectionFailed": "Подключение не удалось: {error}",
-  "@connectionFailed": {
-    "description": "Connection failed with error",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "failedToAddDevice": "Не удалось добавить устройство: {error}",
-  "@failedToAddDevice": {
-    "description": "Failed to add device",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "failedToRemoveDevice": "Не удалось удалить устройство: {error}",
-  "@failedToRemoveDevice": {
-    "description": "Failed to remove device",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "failedToLoadMore": "Не удалось загрузить больше элементов: {error}",
-  "@failedToLoadMore": {
-    "description": "Failed to load more items",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "tryAgain": "Попробовать снова",
-  "@tryAgain": {
-    "description": "Try again button"
   },
   "retry": "Повторить",
   "@retry": {
     "description": "Retry button"
   },
-  "retryConnection": "Повторить подключение",
-  "@retryConnection": {
-    "description": "Retry connection button"
-  },
-  "refreshing": "Обновление...",
-  "@refreshing": {
-    "description": "Refreshing message"
-  },
-  "refreshDevices": "Обновить устройства",
-  "@refreshDevices": {
-    "description": "Refresh devices tooltip"
-  },
-  "retryingConnection": "Повторная попытка подключения",
-  "@retryingConnection": {
-    "description": "Retrying connection announcement"
-  },
-  "errorCode": "Код ошибки: {code}",
-  "@errorCode": {
-    "description": "Error code display",
-    "placeholders": {
-      "code": {
-        "type": "String"
-      }
-    }
-  },
-  "errorCodeCopied": "Код ошибки скопирован в буфер обмена",
-  "@errorCodeCopied": {
-    "description": "Error code copied message"
-  },
-  "technicalDetails": "Технические детали",
-  "@technicalDetails": {
-    "description": "Technical details label"
-  },
-  "doubleTapToRetry": "Дважды нажмите для повтора",
-  "@doubleTapToRetry": {
-    "description": "Double tap to retry hint"
-  },
-  "@@_LOADING_STATES": "=== Loading States ===",
   "loading": "Загрузка...",
   "@loading": {
     "description": "Loading message"
   },
-  "loadingDevices": "Загрузка устройств...",
-  "@loadingDevices": {
-    "description": "Loading devices message"
-  },
-  "allUnitsLoaded": "Все блоки загружены",
-  "@allUnitsLoaded": {
-    "description": "All units loaded message"
-  },
-  "connecting": "Подключение...",
-  "@connecting": {
-    "description": "Connecting message"
-  },
-  "reconnecting": "Переподключение...",
-  "@reconnecting": {
-    "description": "Reconnecting message"
-  },
-  "@@_EMPTY_STATES": "=== Empty States ===",
   "noDevices": "Нет устройств",
   "@noDevices": {
     "description": "No devices title"
-  },
-  "noDevicesFound": "Устройства не найдены",
-  "@noDevicesFound": {
-    "description": "No devices found message"
-  },
-  "addFirstDevice": "Добавьте первое устройство, чтобы начать",
-  "@addFirstDevice": {
-    "description": "Add first device prompt"
-  },
-  "checkMqttSettings": "Проверьте настройки MQTT-подключения\nи убедитесь, что устройства в сети",
-  "@checkMqttSettings": {
-    "description": "MQTT settings help text"
-  },
-  "deviceNotSelected": "Устройство не выбрано",
-  "@deviceNotSelected": {
-    "description": "No device selected message"
-  },
-  "openDeviceAddition": "Открытие экрана добавления устройства",
-  "@openDeviceAddition": {
-    "description": "Opening device addition announcement"
-  },
-  "@@_CAMERA": "=== Camera ===",
-  "initializingCamera": "Инициализация камеры...",
-  "@initializingCamera": {
-    "description": "Camera initialization message"
-  },
-  "cameraAccessRequired": "Для сканирования QR-кодов требуется доступ к камере.\nРазрешите доступ к камере в настройках браузера.",
-  "@cameraAccessRequired": {
-    "description": "Camera permission message"
-  },
-  "cameraError": "Ошибка камеры",
-  "@cameraError": {
-    "description": "Camera error title"
-  },
-  "cameraErrorMessage": "Произошла ошибка при доступе к камере.",
-  "@cameraErrorMessage": {
-    "description": "Camera error message"
-  },
-  "webCameraSetupRequired": "Сканирование веб-камерой требует дополнительной настройки. Используйте ручной ввод или сканируйте с мобильного устройства.",
-  "@webCameraSetupRequired": {
-    "description": "Web camera setup message"
-  },
-  "cameraView": "Вид с камеры",
-  "@cameraView": {
-    "description": "Camera view label"
-  },
-  "@@_VALIDATION": "=== Validation Messages ===",
-  "emailRequired": "Email обязателен",
-  "@emailRequired": {
-    "description": "Email required validation"
-  },
-  "invalidEmail": "Введите корректный email",
-  "@invalidEmail": {
-    "description": "Invalid email validation"
-  },
-  "passwordRequired": "Пароль обязателен",
-  "@passwordRequired": {
-    "description": "Password required validation"
   },
   "passwordTooShort": "Пароль должен содержать минимум {length} символов",
   "@passwordTooShort": {
@@ -964,38 +191,12 @@
       }
     }
   },
-  "nameRequired": "{fieldName} обязательно",
-  "@nameRequired": {
-    "description": "Name required validation",
-    "placeholders": {
-      "fieldName": {
-        "type": "String"
-      }
-    }
-  },
   "nameTooShort": "{fieldName} должно содержать минимум 2 символа",
   "@nameTooShort": {
     "description": "Name too short validation",
     "placeholders": {
       "fieldName": {
         "type": "String"
-      }
-    }
-  },
-  "fillRequiredFields": "Заполните все обязательные поля",
-  "@fillRequiredFields": {
-    "description": "Fill required fields message"
-  },
-  "pleaseAcceptTerms": "Примите условия и положения",
-  "@pleaseAcceptTerms": {
-    "description": "Accept terms validation"
-  },
-  "minCharacters": "Мин. {count} символов",
-  "@minCharacters": {
-    "description": "Minimum characters hint",
-    "placeholders": {
-      "count": {
-        "type": "int"
       }
     }
   },
@@ -1044,71 +245,50 @@
   "@invalidEmailFormat": {
     "description": "Invalid email format validation"
   },
-  "@@_PASSWORD_STRENGTH": "=== Password Strength ===",
-  "atLeast8Characters": "Минимум 8 символов",
-  "@atLeast8Characters": {
-    "description": "Password requirement"
-  },
-  "uppercaseLetter": "Заглавная буква",
-  "@uppercaseLetter": {
-    "description": "Password requirement"
-  },
-  "lowercaseLetter": "Строчная буква",
-  "@lowercaseLetter": {
-    "description": "Password requirement"
-  },
-  "number": "Цифра",
-  "@number": {
-    "description": "Password requirement"
-  },
-  "specialCharacter": "Специальный символ",
-  "@specialCharacter": {
-    "description": "Password requirement"
-  },
-  "weak": "Слабый",
-  "@weak": {
-    "description": "Password strength"
-  },
-  "strong": "Сильный",
-  "@strong": {
-    "description": "Password strength"
-  },
-  "veryStrong": "Очень сильный",
-  "@veryStrong": {
-    "description": "Password strength"
-  },
-  "@@_SCHEDULE": "=== Schedule ===",
   "schedule": "Расписание",
   "@schedule": {
     "description": "Schedule label"
   },
-  "automaticControl": "Автоматическое управление",
-  "@automaticControl": {
-    "description": "Automatic control label"
+  "allCount": "Все (+{count})",
+  "@allCount": {
+    "description": "All with count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
-  "configureSchedule": "Настроить расписание",
-  "@configureSchedule": {
-    "description": "Configure schedule button"
+  "noSchedule": "Нет расписания",
+  "@noSchedule": {
+    "description": "No schedule message"
   },
-  "operatingTime": "Время работы",
-  "@operatingTime": {
-    "description": "Operating time label"
+  "addScheduleForDevice": "Добавьте расписание для устройства",
+  "@addScheduleForDevice": {
+    "description": "Add schedule hint"
   },
-  "running": "Работает",
-  "@running": {
-    "description": "Running status"
+  "nowLabel": "Сейчас",
+  "@nowLabel": {
+    "description": "Now label"
   },
-  "stopped": "Выключено",
-  "@stopped": {
-    "description": "Stopped status"
+  "alarms": "Аварии",
+  "@alarms": {
+    "description": "Alarms section title"
   },
-  "turnOn": "Включение",
-  "@turnOn": {
-    "description": "Turn on action"
+  "noAlarms": "Нет аварий",
+  "@noAlarms": {
+    "description": "No alarms message"
   },
-  "turnOff": "Отключение",
-  "@turnOff": {
-    "description": "Turn off action"
+  "systemWorkingNormally": "Система работает штатно",
+  "@systemWorkingNormally": {
+    "description": "System normal status"
+  },
+  "alarmHistory": "История аварий",
+  "@alarmHistory": {
+    "description": "Alarm history button"
+  },
+  "noNotifications": "Нет уведомлений",
+  "@noNotifications": {
+    "description": "No notifications message"
   },
   "monday": "Понедельник",
   "@monday": {
@@ -1138,144 +318,6 @@
   "@sunday": {
     "description": "Sunday"
   },
-  "editSchedule": "Редактировать {name}",
-  "@editSchedule": {
-    "description": "Edit schedule semantic label",
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "deleteSchedule": "Удалить {name}",
-  "@deleteSchedule": {
-    "description": "Delete schedule semantic label",
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "editScheduleTooltip": "Редактировать расписание",
-  "@editScheduleTooltip": {
-    "description": "Edit schedule tooltip"
-  },
-  "deleteScheduleTooltip": "Удалить расписание",
-  "@deleteScheduleTooltip": {
-    "description": "Delete schedule tooltip"
-  },
-  "@@_SUCCESS_MESSAGES": "=== Success Messages ===",
-  "success": "Успешно",
-  "@success": {
-    "description": "Success title"
-  },
-  "settingsSaved": "Настройки сохранены. Перезапустите приложение для применения изменений.",
-  "@settingsSaved": {
-    "description": "Settings saved message"
-  },
-  "presetApplied": "Пресет применен",
-  "@presetApplied": {
-    "description": "Preset applied message"
-  },
-  "allUnitsOn": "Все блоки включены",
-  "@allUnitsOn": {
-    "description": "All units on message"
-  },
-  "allUnitsOff": "Все блоки выключены",
-  "@allUnitsOff": {
-    "description": "All units off message"
-  },
-  "settingsSynced": "Настройки синхронизированы со всеми блоками",
-  "@settingsSynced": {
-    "description": "Settings synced message"
-  },
-  "scheduleAppliedToAll": "Расписание применено ко всем блокам",
-  "@scheduleAppliedToAll": {
-    "description": "Schedule applied message"
-  },
-  "@@_ERROR_ACTIONS": "=== Error Action Messages ===",
-  "errorChangingPower": "Ошибка изменения питания",
-  "@errorChangingPower": {
-    "description": "Power change error"
-  },
-  "errorUpdatingMode": "Ошибка обновления режима",
-  "@errorUpdatingMode": {
-    "description": "Mode update error"
-  },
-  "errorUpdatingFanSpeed": "Ошибка обновления скорости вентилятора",
-  "@errorUpdatingFanSpeed": {
-    "description": "Fan speed update error"
-  },
-  "errorApplyingPreset": "Ошибка применения пресета",
-  "@errorApplyingPreset": {
-    "description": "Preset apply error"
-  },
-  "errorTurningOnUnits": "Ошибка включения блоков",
-  "@errorTurningOnUnits": {
-    "description": "Turn on units error"
-  },
-  "errorTurningOffUnits": "Ошибка выключения блоков",
-  "@errorTurningOffUnits": {
-    "description": "Turn off units error"
-  },
-  "errorSyncingSettings": "Ошибка синхронизации настроек",
-  "@errorSyncingSettings": {
-    "description": "Settings sync error"
-  },
-  "errorApplyingSchedule": "Ошибка применения расписания",
-  "@errorApplyingSchedule": {
-    "description": "Schedule apply error"
-  },
-  "@@_DEVICE_STATUS": "=== Device Status ===",
-  "connected": "Подключено",
-  "@connected": {
-    "description": "Connected status"
-  },
-  "disconnected": "Отключено",
-  "@disconnected": {
-    "description": "Disconnected status"
-  },
-  "idle": "Ожидание",
-  "@idle": {
-    "description": "Idle status"
-  },
-  "active": "Активно",
-  "@active": {
-    "description": "Active status"
-  },
-  "inactive": "Неактивно",
-  "@inactive": {
-    "description": "Inactive status"
-  },
-  "enabled": "Включено",
-  "@enabled": {
-    "description": "Enabled status"
-  },
-  "disabled": "Выключено",
-  "@disabled": {
-    "description": "Disabled status"
-  },
-  "available": "Доступно",
-  "@available": {
-    "description": "Available status"
-  },
-  "unavailable": "Недоступно",
-  "@unavailable": {
-    "description": "Unavailable status"
-  },
-  "maintenance": "Обслуживание",
-  "@maintenance": {
-    "description": "Maintenance status"
-  },
-  "activated": "активировано",
-  "@activated": {
-    "description": "Activated state"
-  },
-  "deactivated": "деактивировано",
-  "@deactivated": {
-    "description": "Deactivated state"
-  },
-  "@@_COMMON_ACTIONS": "=== Common Actions ===",
   "save": "Сохранить",
   "@save": {
     "description": "Save button"
@@ -1284,418 +326,18 @@
   "@cancel": {
     "description": "Cancel button"
   },
-  "close": "Закрыть",
-  "@close": {
-    "description": "Close button"
-  },
-  "confirm": "Подтвердить",
-  "@confirm": {
-    "description": "Confirm button"
-  },
-  "yes": "Да",
-  "@yes": {
-    "description": "Yes button"
-  },
-  "no": "Нет",
-  "@no": {
-    "description": "No button"
-  },
-  "ok": "ОК",
-  "@ok": {
-    "description": "OK button"
-  },
-  "apply": "Применить",
-  "@apply": {
-    "description": "Apply button"
-  },
-  "reset": "Сбросить",
-  "@reset": {
-    "description": "Reset button"
-  },
-  "clear": "Очистить",
-  "@clear": {
-    "description": "Clear button"
-  },
-  "done": "Готово",
-  "@done": {
-    "description": "Done button"
-  },
-  "add": "Добавить",
-  "@add": {
-    "description": "Add button"
-  },
-  "remove": "Удалить",
-  "@remove": {
-    "description": "Remove button"
-  },
-  "filter": "Фильтр",
-  "@filter": {
-    "description": "Filter button"
-  },
-  "sort": "Сортировать",
-  "@sort": {
-    "description": "Sort button"
-  },
-  "refresh": "Обновить",
-  "@refresh": {
-    "description": "Refresh button"
-  },
   "logout": "Выйти",
   "@logout": {
     "description": "Logout button"
   },
-  "@@_COMMON_LABELS": "=== Common Labels ===",
-  "status": "Статус",
-  "@status": {
-    "description": "Status label"
-  },
-  "details": "Детали",
-  "@details": {
-    "description": "Details label"
-  },
-  "more": "Больше",
-  "@more": {
-    "description": "More label"
-  },
-  "less": "Меньше",
-  "@less": {
-    "description": "Less label"
-  },
-  "all": "Все",
-  "@all": {
-    "description": "All label"
-  },
-  "none": "Ничего",
-  "@none": {
-    "description": "None label"
-  },
-  "optional": "Опционально",
-  "@optional": {
-    "description": "Optional field hint"
-  },
-  "required": "Обязательно",
-  "@required": {
-    "description": "Required field hint"
-  },
-  "info": "Информация",
-  "@info": {
-    "description": "Information label"
-  },
-  "warning": "Предупреждение",
-  "@warning": {
-    "description": "Warning label"
-  },
-  "notification": "Уведомление",
-  "@notification": {
-    "description": "Notification label"
-  },
-  "@@_TIME": "=== Time Labels ===",
   "today": "Сегодня",
   "@today": {
     "description": "Today label"
   },
-  "yesterday": "Вчера",
-  "@yesterday": {
-    "description": "Yesterday label"
-  },
-  "week": "Неделя",
-  "@week": {
-    "description": "Week label"
-  },
-  "month": "Месяц",
-  "@month": {
-    "description": "Month label"
-  },
-  "year": "Год",
-  "@year": {
-    "description": "Year label"
-  },
-  "date": "{date}",
-  "@date": {
-    "description": "Date format",
-    "placeholders": {
-      "date": {
-        "type": "String"
-      }
-    }
-  },
-  "@@_AUTOMATION": "=== Automation ===",
-  "automation": "Автоматизация",
-  "@automation": {
-    "description": "Automation panel title"
-  },
-  "manageRules": "Управление правилами",
-  "@manageRules": {
-    "description": "Manage rules button"
-  },
-  "activeRulesFormat": "Активно: {active} из {total}",
-  "@activeRulesFormat": {
-    "description": "Active rules count format",
-    "placeholders": {
-      "active": {
-        "type": "int"
-      },
-      "total": {
-        "type": "int"
-      }
-    }
-  },
-  "critical": "Критические",
-  "@critical": {
-    "description": "Critical notification label"
-  },
-  "errors": "Ошибки",
-  "@errors": {
-    "description": "Errors notification label"
-  },
-  "warnings": "Предупреждения",
-  "@warnings": {
-    "description": "Warnings notification label"
-  },
-  "infoLabel": "Инфо",
-  "@infoLabel": {
-    "description": "Info notification label"
-  },
-  "showAll": "Показать все ({count})",
-  "@showAll": {
-    "description": "Show all notifications button",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "collapse": "Свернуть",
-  "@collapse": {
-    "description": "Collapse button"
-  },
-  "@@_COMING_SOON": "=== Coming Soon Messages ===",
-  "manageRulesComingSoon": "Управление правилами (Скоро)",
-  "@manageRulesComingSoon": {
-    "description": "Manage rules coming soon"
-  },
-  "addUnitComingSoon": "Функция добавления блока скоро будет доступна",
-  "@addUnitComingSoon": {
-    "description": "Add unit coming soon"
-  },
-  "@@_ROOMS": "=== Room Names ===",
-  "livingRoom": "Гостиная",
-  "@livingRoom": {
-    "description": "Living room name"
-  },
-  "bedroom": "Спальня",
-  "@bedroom": {
-    "description": "Bedroom name"
-  },
-  "kitchen": "Кухня",
-  "@kitchen": {
-    "description": "Kitchen name"
-  },
-  "@@_DEVICES": "=== Device Types ===",
-  "vacuumCleaner": "Пылесос",
-  "@vacuumCleaner": {
-    "description": "Vacuum cleaner device type"
-  },
-  "smartBulb": "Умная лампа",
-  "@smartBulb": {
-    "description": "Smart bulb device type"
-  },
-  "humidifier": "Увлажнитель",
-  "@humidifier": {
-    "description": "Humidifier device type"
-  },
-  "@@_STATISTICS": "=== Statistics ===",
-  "average": "Среднее",
-  "@average": {
-    "description": "Average label"
-  },
-  "min": "Мин",
-  "@min": {
-    "description": "Minimum label"
-  },
-  "max": "Макс",
-  "@max": {
-    "description": "Maximum label"
-  },
-  "temperatureHistory": "История температуры",
-  "@temperatureHistory": {
-    "description": "Temperature history title"
-  },
-  "last24Hours": "Последние 24 часа",
-  "@last24Hours": {
-    "description": "Last 24 hours label"
-  },
-  "activeDevices": "{count} из {total} активно",
-  "@activeDevices": {
-    "description": "Active devices count",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      },
-      "total": {
-        "type": "int"
-      }
-    }
-  },
-  "@@_DIAGNOSTICS": "=== Diagnostics ===",
-  "runDiagnostics": "Запустить диагностику",
-  "@runDiagnostics": {
-    "description": "Run diagnostics button"
-  },
-  "systemHealth": "Состояние системы",
-  "@systemHealth": {
-    "description": "System health title"
-  },
-  "supplyFan": "Приточный вентилятор",
-  "@supplyFan": {
-    "description": "Supply fan component"
-  },
-  "exhaustFan": "Вытяжной вентилятор",
-  "@exhaustFan": {
-    "description": "Exhaust fan component"
-  },
-  "heater": "Нагреватель",
-  "@heater": {
-    "description": "Heater component"
-  },
-  "recuperator": "Рекуператор",
-  "@recuperator": {
-    "description": "Heat recuperator"
-  },
-  "sensors": "Датчики",
-  "@sensors": {
-    "description": "Sensors component"
-  },
-  "normal": "Норма",
-  "@normal": {
-    "description": "Normal status"
-  },
-  "sensorReadings": "Показания датчиков",
-  "@sensorReadings": {
-    "description": "Sensor readings title"
-  },
-  "supplyAirTemp": "Температура притока",
-  "@supplyAirTemp": {
-    "description": "Supply air temperature"
-  },
-  "outdoorTemp": "Температура улицы",
-  "@outdoorTemp": {
-    "description": "Outdoor temperature"
-  },
-  "pressure": "Давление",
-  "@pressure": {
-    "description": "Pressure reading"
-  },
-  "networkConnection": "Сетевое подключение",
-  "@networkConnection": {
-    "description": "Network connection title"
-  },
-  "network": "Сеть",
-  "@network": {
-    "description": "Network label"
-  },
-  "signal": "Сигнал",
-  "@signal": {
-    "description": "Signal strength"
-  },
-  "ipAddress": "IP адрес",
-  "@ipAddress": {
-    "description": "IP address label"
-  },
-  "notConnected": "Не подключено",
-  "@notConnected": {
-    "description": "Not connected status"
-  },
-  "notAssigned": "Не назначен",
-  "@notAssigned": {
-    "description": "Not assigned status"
-  },
-  "diagnosticsTitle": "Диагностика",
-  "@diagnosticsTitle": {
-    "description": "Diagnostics title"
-  },
-  "diagnosticsRunning": "Выполняется диагностика системы...",
-  "@diagnosticsRunning": {
-    "description": "Diagnostics running message"
-  },
-  "diagnosticsComplete": "Диагностика завершена. Система в норме.",
-  "@diagnosticsComplete": {
-    "description": "Diagnostics complete message"
-  },
-  "@@_SCHEDULE_DIALOGS": "=== Schedule Dialogs ===",
-  "scheduleSaved": "Расписание успешно сохранено",
-  "@scheduleSaved": {
-    "description": "Schedule saved message"
-  },
-  "saveError": "Ошибка сохранения: {error}",
-  "@saveError": {
-    "description": "Save error message",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "unsavedChanges": "Несохранённые изменения",
-  "@unsavedChanges": {
-    "description": "Unsaved changes title"
-  },
-  "unsavedChangesMessage": "У вас есть несохранённые изменения. Выйти без сохранения?",
-  "@unsavedChangesMessage": {
-    "description": "Unsaved changes confirmation"
-  },
-  "exit": "Выйти",
-  "@exit": {
-    "description": "Exit button"
-  },
-  "@@_DEVICE_SEARCH": "=== Device Search ===",
-  "devicesFound": "{count} новых устройств",
-  "@devicesFound": {
-    "description": "New devices found",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "deviceFound": "{count} новое устройство",
-  "@deviceFound": {
-    "description": "Single device found",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "notFoundDeviceTitle": "Не нашли\nустройство?",
-  "@notFoundDeviceTitle": {
-    "description": "Device not found message"
-  },
-  "selectManuallyButton": "Выбрать вручную",
-  "@selectManuallyButton": {
-    "description": "Select manually button"
-  },
-  "devicesAdded": "{count} {plural} добавлено",
-  "@devicesAdded": {
-    "description": "Devices added confirmation",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      },
-      "plural": {
-        "type": "String"
-      }
-    }
-  },
-  "device": "устройство",
-  "@device": {
-    "description": "Device singular"
-  },
-  "devices": "устройства",
+  "devices": "Устройства",
   "@devices": {
-    "description": "Devices plural"
+    "description": "Devices tab label"
   },
-  "@@_PROFILE": "=== Profile Section ===",
   "profile": "Профиль",
   "@profile": {
     "description": "Profile screen title"
@@ -1719,10 +361,6 @@
   "changePassword": "Сменить пароль",
   "@changePassword": {
     "description": "Change password button"
-  },
-  "changeAccountPassword": "Изменить пароль аккаунта",
-  "@changeAccountPassword": {
-    "description": "Change account password subtitle"
   },
   "theme": "Тема",
   "@theme": {
@@ -1763,5 +401,438 @@
   "change": "Сменить",
   "@change": {
     "description": "Change button"
-  }
+  },
+  "allNotifications": "Все уведомления",
+  "@allNotifications": {
+    "description": "All notifications button"
+  },
+  "allAlarms": "Все аварии",
+  "@allAlarms": {
+    "description": "All alarms button"
+  },
+  "justNow": "Только что",
+  "@justNow": {
+    "description": "Time ago - just now"
+  },
+  "minutesAgo": "{count} мин назад",
+  "@minutesAgo": {
+    "description": "Time ago - minutes",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hoursAgo": "{count} ч назад",
+  "@hoursAgo": {
+    "description": "Time ago - hours",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "daysAgo": "{count} дн назад",
+  "@daysAgo": {
+    "description": "Time ago - days",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "addFirstEntry": "Добавьте первую запись",
+  "@addFirstEntry": {
+    "description": "Add first schedule entry prompt"
+  },
+  "alarmCode": "Код {code}",
+  "@alarmCode": {
+    "description": "Alarm code label",
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "activeAlarm": "АКТИВНА",
+  "@activeAlarm": {
+    "description": "Active alarm badge"
+  },
+  "modeAuto": "Авто",
+  "@modeAuto": {
+    "description": "Auto mode label"
+  },
+  "modeEco": "Эко",
+  "@modeEco": {
+    "description": "Eco mode label"
+  },
+  "modeNight": "Ночь",
+  "@modeNight": {
+    "description": "Night mode label"
+  },
+  "modeBoost": "ТУРБО",
+  "@modeBoost": {
+    "description": "Boost/Turbo mode label"
+  },
+  "modeFor": "Режим {name}",
+  "@modeFor": {
+    "description": "Mode selector label",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "deviceDeleted": "Установка удалена",
+  "@deviceDeleted": {
+    "description": "Device deleted toast"
+  },
+  "nameChanged": "Название изменено",
+  "@nameChanged": {
+    "description": "Name changed toast"
+  },
+  "notificationsInDevelopment": "Уведомления: функция в разработке",
+  "@notificationsInDevelopment": {
+    "description": "Notifications feature in development"
+  },
+  "allDevicesTurnedOff": "Все устройства выключены",
+  "@allDevicesTurnedOff": {
+    "description": "All devices turned off toast"
+  },
+  "addFirstDeviceByMac": "Добавьте первую установку по MAC-адресу",
+  "@addFirstDeviceByMac": {
+    "description": "Add first device prompt"
+  },
+  "addUnit": "Добавить установку",
+  "@addUnit": {
+    "description": "Add unit button"
+  },
+  "enterMacAddress": "Введите MAC-адрес",
+  "@enterMacAddress": {
+    "description": "Enter MAC address validation"
+  },
+  "macAddressMustContain12Chars": "MAC-адрес должен содержать 12 символов",
+  "@macAddressMustContain12Chars": {
+    "description": "MAC address length validation"
+  },
+  "macAddressOnlyHex": "MAC-адрес может содержать только 0-9 и A-F",
+  "@macAddressOnlyHex": {
+    "description": "MAC address hex validation"
+  },
+  "deviceMacAddress": "MAC-адрес устройства",
+  "@deviceMacAddress": {
+    "description": "MAC address field label"
+  },
+  "cancelButton": "Отмена",
+  "@cancelButton": {
+    "description": "Cancel button"
+  },
+  "addButton": "Добавить",
+  "@addButton": {
+    "description": "Add button"
+  },
+  "deviceNameExample": "Например: Гостиная",
+  "@deviceNameExample": {
+    "description": "Device name example hint"
+  },
+  "enterDeviceName": "Введите название установки",
+  "@enterDeviceName": {
+    "description": "Device name validation"
+  },
+  "macAddressDisplayedOnRemote": "MAC-адрес отображается на экране пульта устройства",
+  "@macAddressDisplayedOnRemote": {
+    "description": "MAC address help text"
+  },
+  "analytics": "Аналитика",
+  "@analytics": {
+    "description": "Analytics tab label"
+  },
+  "devicesWillAppear": "Устройства появятся здесь\nпосле подключения",
+  "@devicesWillAppear": {
+    "description": "Empty devices message"
+  },
+  "presetComfort": "Комфорт",
+  "@presetComfort": {
+    "description": "Comfort preset name"
+  },
+  "presetComfortDesc": "Оптимальный режим",
+  "@presetComfortDesc": {
+    "description": "Comfort preset description"
+  },
+  "presetEco": "Эко",
+  "@presetEco": {
+    "description": "Eco preset name"
+  },
+  "presetEcoDesc": "Энергосбережение",
+  "@presetEcoDesc": {
+    "description": "Eco preset description"
+  },
+  "presetNight": "Ночь",
+  "@presetNight": {
+    "description": "Night preset name"
+  },
+  "presetNightDesc": "Тихий режим",
+  "@presetNightDesc": {
+    "description": "Night preset description"
+  },
+  "presetTurbo": "Турбо",
+  "@presetTurbo": {
+    "description": "Turbo preset name"
+  },
+  "presetTurboDesc": "Максимальная мощность",
+  "@presetTurboDesc": {
+    "description": "Turbo preset description"
+  },
+  "presetAway": "Нет дома",
+  "@presetAway": {
+    "description": "Away preset name"
+  },
+  "presetAwayDesc": "Минимальный режим",
+  "@presetAwayDesc": {
+    "description": "Away preset description"
+  },
+  "presetSleep": "Сон",
+  "@presetSleep": {
+    "description": "Sleep preset name"
+  },
+  "presetSleepDesc": "Комфортный сон",
+  "@presetSleepDesc": {
+    "description": "Sleep preset description"
+  },
+  "devicesCount": "{count} устройств",
+  "@devicesCount": {
+    "description": "Devices count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "thisMonth": "Этот месяц",
+  "@thisMonth": {
+    "description": "This month label"
+  },
+  "totalTime": "Общее время",
+  "@totalTime": {
+    "description": "Total time label"
+  },
+  "energyKwh": "{value} кВт⋅ч",
+  "@energyKwh": {
+    "description": "Energy in kilowatt-hours",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "hoursCount": "{count} часов",
+  "@hoursCount": {
+    "description": "Hours count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "airflow": "Поток воздуха",
+  "@airflow": {
+    "description": "Airflow metric label"
+  },
+  "graphTemperatureLabel": "ТЕМПЕРАТУРА",
+  "@graphTemperatureLabel": {
+    "description": "Graph temperature label uppercase"
+  },
+  "graphHumidityLabel": "ВЛАЖНОСТЬ",
+  "@graphHumidityLabel": {
+    "description": "Graph humidity label uppercase"
+  },
+  "graphAirflowLabel": "ПОТОК ВОЗДУХА",
+  "@graphAirflowLabel": {
+    "description": "Graph airflow label uppercase"
+  },
+  "tempShort": "Темп",
+  "@tempShort": {
+    "description": "Temperature short label"
+  },
+  "humidShort": "Влаж",
+  "@humidShort": {
+    "description": "Humidity short label"
+  },
+  "airflowShort": "Поток",
+  "@airflowShort": {
+    "description": "Airflow short label"
+  },
+  "minShort": "Мин",
+  "@minShort": {
+    "description": "Minimum short label"
+  },
+  "maxShort": "Макс",
+  "@maxShort": {
+    "description": "Maximum short label"
+  },
+  "avgShort": "Сред",
+  "@avgShort": {
+    "description": "Average short label"
+  },
+  "cubicMetersPerHour": "м³/ч",
+  "@cubicMetersPerHour": {
+    "description": "Cubic meters per hour unit"
+  },
+  "readAll": "Прочитать все",
+  "later": "Позже",
+  "updateNow": "Обновить сейчас",
+  "whatsNew": "Что нового?",
+  "hide": "Скрыть",
+  "errorNoConnection": "Нет соединения",
+  "errorServer": "Ошибка сервера",
+  "errorServerWithCode": "Ошибка сервера ({code})",
+  "@errorServerWithCode": {
+    "placeholders": {
+      "code": {
+        "type": "int"
+      }
+    }
+  },
+  "errorNotFound": "Не найдено",
+  "errorAuthRequired": "Требуется авторизация",
+  "errorSomethingWrong": "Что-то пошло не так",
+  "errorCheckInternet": "Проверьте подключение к интернету\nи попробуйте снова",
+  "errorServerProblems": "Проблемы на стороне сервера.\nМы уже работаем над исправлением.",
+  "errorResourceNotFound": "Запрошенные {resource} не найдены.\nВозможно, они были удалены.",
+  "@errorResourceNotFound": {
+    "placeholders": {
+      "resource": {
+        "type": "String"
+      }
+    }
+  },
+  "errorSessionExpired": "Ваша сессия истекла.\nПожалуйста, войдите заново.",
+  "errorUnexpected": "Произошла непредвиденная ошибка.\nПопробуйте повторить попытку.",
+  "errorNoInternet": "Нет соединения с интернетом",
+  "errorServerUnavailable": "Сервер недоступен",
+  "errorLoadingFailed": "Не удалось загрузить устройства",
+  "emptyNoDevicesTitle": "Нет устройств",
+  "emptyNoDevicesMessage": "Устройства появятся здесь\nпосле подключения",
+  "emptyNothingFound": "Ничего не найдено",
+  "emptyNoSearchResults": "По запросу «{query}»\nничего не найдено.\nПопробуйте изменить параметры поиска.",
+  "@emptyNoSearchResults": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "emptyNoNotificationsTitle": "Нет уведомлений",
+  "emptyNoNotificationsMessage": "У вас пока нет уведомлений.\nНовые уведомления появятся здесь.",
+  "emptyHistoryTitle": "История пуста",
+  "emptyHistoryMessage": "История операций появится\nпосле первых действий.",
+  "emptyNoScheduleTitle": "Нет расписания",
+  "emptyNoScheduleMessage": "Добавьте записи расписания\nдля автоматического управления",
+  "errorOccurred": "Произошла ошибка",
+  "scheduleAdd": "Добавить",
+  "scheduleNewEntry": "Новая запись",
+  "scheduleEditEntry": "Редактировать запись",
+  "scheduleDeleteConfirm": "Удалить запись?",
+  "scheduleDeleteMessage": "Запись «{entry}» будет удалена.",
+  "@scheduleDeleteMessage": {
+    "placeholders": {
+      "entry": {
+        "type": "String"
+      }
+    }
+  },
+  "scheduleDayLabel": "День недели",
+  "scheduleStartLabel": "Начало",
+  "scheduleEndLabel": "Конец",
+  "scheduleModeLabel": "Режим",
+  "scheduleDayTemp": "Дневная температура",
+  "scheduleNightTemp": "Ночная температура",
+  "scheduleActive": "Активно",
+  "scheduleDayNightTemp": "День: {day}° / Ночь: {night}°",
+  "@scheduleDayNightTemp": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      },
+      "night": {
+        "type": "int"
+      }
+    }
+  },
+  "modeCooling": "Охлаждение",
+  "modeHeating": "Нагрев",
+  "modeVentilation": "Вентиляция",
+  "statusOnline": "Онлайн",
+  "statusOffline": "Оффлайн",
+  "statusRunning": "В работе",
+  "statusStopped": "Выключен",
+  "statusEnabled": "Включено",
+  "statusDisabled": "Выключено",
+  "statusResolved": "РЕШЕНА",
+  "statusActive": "АКТИВНА",
+  "alarmHistoryTitle": "История аварий",
+  "alarmHistoryEmpty": "История аварий пуста",
+  "alarmNoAlarms": "Аварий не зафиксировано",
+  "alarmCodeLabel": "Код {code}",
+  "@alarmCodeLabel": {
+    "placeholders": {
+      "code": {
+        "type": "int"
+      }
+    }
+  },
+  "alarmOccurredAt": "Возникла",
+  "alarmClearedAt": "Устранена",
+  "janShort": "янв",
+  "febShort": "фев",
+  "marShort": "мар",
+  "aprShort": "апр",
+  "mayShort": "май",
+  "junShort": "июн",
+  "julShort": "июл",
+  "augShort": "авг",
+  "sepShort": "сен",
+  "octShort": "окт",
+  "novShort": "ноя",
+  "decShort": "дек",
+  "notificationsTitle": "Уведомления",
+  "notificationsReadAll": "Все уведомления прочитаны",
+  "notificationDeleted": "Уведомление удалено",
+  "unitSettingsTitle": "Настройки установки",
+  "unitSettingsName": "Название:",
+  "unitSettingsStatus": "Статус:",
+  "unitSettingsNewName": "Новое название",
+  "unitSettingsEnterName": "Введите название",
+  "unitSettingsRename": "Переименовать",
+  "unitSettingsRenameSubtitle": "Изменить название установки",
+  "unitSettingsDelete": "Удалить установку",
+  "unitSettingsDeleteSubtitle": "Отвязать устройство от аккаунта",
+  "unitSettingsDeleteConfirm": "Удалить установку?",
+  "unitSettingsDeleteMessage": "Установка «{name}» будет отвязана от вашего аккаунта. Вы сможете снова добавить её по MAC-адресу.",
+  "@unitSettingsDeleteMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "updateAvailable": "Доступна новая версия",
+  "updateVersionAvailable": "Доступна версия {version}",
+  "@updateVersionAvailable": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "updateMessage": "Вышло обновление приложения. Перезагрузите страницу, чтобы получить новые функции и исправления.",
+  "verifyEmailTitle": "ПОДТВЕРЖДЕНИЕ EMAIL",
+  "verifyEmailSent": "Мы отправили 6-значный код подтверждения на",
+  "verifyEmailResend": "Отправить код повторно",
+  "verifyEmailCodeSent": "Код отправлен на email",
+  "tooltipEdit": "Редактировать",
+  "tooltipDelete": "Удалить",
+  "tooltipAdd": "Добавить",
+  "dataResource": "данные",
+  "defaultUserName": "Пользователь"
 }

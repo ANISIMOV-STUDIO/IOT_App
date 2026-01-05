@@ -8,6 +8,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_font_sizes.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/spacing.dart';
+import '../../../generated/l10n/app_localizations.dart';
 import '../../bloc/analytics/analytics_bloc.dart';
 import '../../widgets/breez/breez_card.dart';
 import '../../widgets/breez/operation_graph.dart';
@@ -20,6 +21,7 @@ class AnalyticsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: colors.bg,
@@ -37,7 +39,7 @@ class AnalyticsScreen extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(AppSpacing.lg),
                 child: Text(
-                  'Аналитика',
+                  l10n.analytics,
                   style: TextStyle(
                     fontSize: AppFontSizes.h2,
                     fontWeight: FontWeight.bold,
@@ -100,8 +102,8 @@ class AnalyticsScreen extends StatelessWidget {
                                   Expanded(
                                     child: _buildStatCard(
                                       context,
-                                      'Сегодня',
-                                      '${totalKwh.toStringAsFixed(1)} кВт⋅ч',
+                                      l10n.today,
+                                      l10n.energyKwh(totalKwh.toStringAsFixed(1)),
                                       Icons.today,
                                       AppColors.accent,
                                     ),
@@ -110,8 +112,8 @@ class AnalyticsScreen extends StatelessWidget {
                                   Expanded(
                                     child: _buildStatCard(
                                       context,
-                                      'Этот месяц',
-                                      '$totalHours часов',
+                                      l10n.thisMonth,
+                                      l10n.hoursCount(totalHours),
                                       Icons.calendar_month,
                                       AppColors.success,
                                     ),
@@ -120,7 +122,7 @@ class AnalyticsScreen extends StatelessWidget {
                                   Expanded(
                                     child: _buildStatCard(
                                       context,
-                                      'Общее время',
+                                      l10n.totalTime,
                                       '',
                                       Icons.power,
                                       AppColors.warning,
@@ -132,23 +134,23 @@ class AnalyticsScreen extends StatelessWidget {
                                 children: [
                                   _buildStatCard(
                                     context,
-                                    'Сегодня',
-                                    '${totalKwh.toStringAsFixed(1)} кВт⋅ч',
+                                    l10n.today,
+                                    l10n.energyKwh(totalKwh.toStringAsFixed(1)),
                                     Icons.today,
                                     AppColors.accent,
                                   ),
                                   const SizedBox(height: AppSpacing.md),
                                   _buildStatCard(
                                     context,
-                                    'Этот месяц',
-                                    '$totalHours часов',
+                                    l10n.thisMonth,
+                                    l10n.hoursCount(totalHours),
                                     Icons.calendar_month,
                                     AppColors.success,
                                   ),
                                   const SizedBox(height: AppSpacing.md),
                                   _buildStatCard(
                                     context,
-                                    'Общее время',
+                                    l10n.totalTime,
                                     '',
                                     Icons.power,
                                     AppColors.warning,
@@ -178,7 +180,7 @@ class AnalyticsScreen extends StatelessWidget {
                         children: [
                           _buildMetricChip(
                             context,
-                            'Температура',
+                            l10n.temperature,
                             Icons.thermostat,
                             GraphMetric.temperature,
                             state.selectedMetric,
@@ -186,7 +188,7 @@ class AnalyticsScreen extends StatelessWidget {
                           const SizedBox(width: AppSpacing.sm),
                           _buildMetricChip(
                             context,
-                            'Влажность',
+                            l10n.humidity,
                             Icons.water_drop,
                             GraphMetric.humidity,
                             state.selectedMetric,
@@ -194,7 +196,7 @@ class AnalyticsScreen extends StatelessWidget {
                           const SizedBox(width: AppSpacing.sm),
                           _buildMetricChip(
                             context,
-                            'Поток воздуха',
+                            l10n.airflow,
                             Icons.bolt,
                             GraphMetric.airflow,
                             state.selectedMetric,

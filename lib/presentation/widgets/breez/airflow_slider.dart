@@ -4,6 +4,7 @@ library;
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../generated/l10n/app_localizations.dart';
 import 'breez_card.dart';
 
 /// Airflow slider (supply/exhaust) with custom Slider theme
@@ -395,8 +396,9 @@ class SupplyAirflowSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return AirflowSlider(
-      label: 'Приток',
+      label: l10n.intake,
       value: value,
       onChanged: onChanged,
       color: AppColors.accent,
@@ -418,8 +420,9 @@ class ExhaustAirflowSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return AirflowSlider(
-      label: 'Вытяжка',
+      label: l10n.exhaust,
       value: value,
       onChanged: onChanged,
       color: AppColors.accentOrange,

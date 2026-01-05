@@ -54,25 +54,10 @@ class ConnectivityBloc extends Bloc<ConnectivityEvent, ConnectivityState> {
 
   /// Преобразование NetworkStatus в ConnectivityState
   ConnectivityState _mapStatusToState(NetworkStatus status) {
-    String? message;
-    switch (status) {
-      case NetworkStatus.offline:
-        message = 'Нет подключения к интернету';
-        break;
-      case NetworkStatus.serverUnavailable:
-        message = 'Сервер недоступен';
-        break;
-      case NetworkStatus.online:
-      case NetworkStatus.unknown:
-        message = null;
-        break;
-    }
-
     return ConnectivityState(
       status: status,
       isOffline: status == NetworkStatus.offline,
       isServerUnavailable: status == NetworkStatus.serverUnavailable,
-      message: message,
     );
   }
 

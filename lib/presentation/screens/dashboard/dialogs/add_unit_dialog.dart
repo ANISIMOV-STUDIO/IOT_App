@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/app_radius.dart';
+import '../../../../generated/l10n/app_localizations.dart';
 import '../../../widgets/breez/breez_card.dart';
 
 /// Результат диалога добавления устройства
@@ -56,9 +57,9 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
     }
   }
 
-  String? _validateMacAddress(String? value) {
+  String? _validateMacAddress(String? value, AppLocalizations l10n) {
     if (value == null || value.trim().isEmpty) {
-      return 'Введите MAC-адрес';
+      return l10n.enterMacAddress;
     }
 
     // Убираем разделители и приводим к верхнему регистру
@@ -66,11 +67,11 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
 
     // MAC-адрес должен содержать 12 hex символов
     if (cleaned.length != 12) {
-      return 'MAC-адрес должен содержать 12 символов';
+      return l10n.macAddressMustContain12Chars;
     }
 
     if (!RegExp(r'^[0-9A-F]+$').hasMatch(cleaned)) {
-      return 'MAC-адрес может содержать только 0-9 и A-F';
+      return l10n.macAddressOnlyHex;
     }
 
     return null;
@@ -79,6 +80,7 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return Dialog(
       backgroundColor: colors.card,
@@ -95,15 +97,15 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildHeader(colors),
+              _buildHeader(colors, l10n),
               const SizedBox(height: 24),
-              _buildMacField(colors),
+              _buildMacField(colors, l10n),
               const SizedBox(height: 16),
-              _buildNameField(colors),
+              _buildNameField(colors, l10n),
               const SizedBox(height: 8),
-              _buildHelpText(colors),
+              _buildHelpText(colors, l10n),
               const SizedBox(height: 24),
-              _buildActions(colors),
+              _buildActions(colors, l10n),
             ],
           ),
         ),
@@ -111,12 +113,12 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
     );
   }
 
-  Widget _buildHeader(BreezColors colors) {
+  Widget _buildHeader(BreezColors colors, AppLocalizations l10n) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          'Добавить установку',
+          l10n.addUnit,
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w700,
@@ -145,12 +147,12 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
     );
   }
 
-  Widget _buildMacField(BreezColors colors) {
+  Widget _buildMacField(BreezColors colors, AppLocalizations l10n) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'MAC-адрес устройства',
+          l10n.deviceMacAddress,
           style: TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w500,
@@ -199,18 +201,18 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
               vertical: 14,
             ),
           ),
-          validator: _validateMacAddress,
+          validator: (value) => _validateMacAddress(value, l10n),
         ),
       ],
     );
   }
 
-  Widget _buildNameField(BreezColors colors) {
+  Widget _buildNameField(BreezColors colors, AppLocalizations l10n) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Название',
+          l10n.deviceName,
           style: TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w500,
@@ -222,7 +224,7 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
           controller: _nameController,
           style: TextStyle(color: colors.text),
           decoration: InputDecoration(
-            hintText: 'Например: Гостиная',
+            hintText: l10n.deviceNameExample,
             hintStyle: TextStyle(color: colors.textMuted),
             filled: true,
             fillColor: colors.bg,
@@ -246,7 +248,7 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
           ),
           validator: (value) {
             if (value == null || value.trim().isEmpty) {
-              return 'Введите название установки';
+              return l10n.enterDeviceName;
             }
             return null;
           },
@@ -256,7 +258,7 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
     );
   }
 
-  Widget _buildHelpText(BreezColors colors) {
+  Widget _buildHelpText(BreezColors colors, AppLocalizations l10n) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -269,7 +271,7 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
           const SizedBox(width: 8),
           Expanded(
             child: Text(
-              'MAC-адрес отображается на экране пульта устройства',
+              l10n.macAddressDisplayedOnRemote,
               style: TextStyle(
                 fontSize: 12,
                 color: colors.textMuted,
@@ -281,19 +283,19 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
     );
   }
 
-  Widget _buildActions(BreezColors colors) {
+  Widget _buildActions(BreezColors colors, AppLocalizations l10n) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         // Cancel button
         BreezDialogButton(
-          label: 'Отмена',
+          label: l10n.cancelButton,
           onTap: _isLoading ? null : () => Navigator.of(context).pop(),
         ),
         const SizedBox(width: 12),
         // Create button
         BreezDialogButton(
-          label: 'Добавить',
+          label: l10n.addButton,
           isPrimary: true,
           isLoading: _isLoading,
           onTap: _isLoading ? null : _submit,

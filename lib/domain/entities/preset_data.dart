@@ -3,6 +3,7 @@ library;
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import '../../generated/l10n/app_localizations.dart';
 
 /// HVAC preset configuration
 class PresetData extends Equatable {
@@ -50,60 +51,61 @@ class PresetData extends Equatable {
 
 /// Default presets list
 class DefaultPresets {
-  static const List<PresetData> all = [
+  /// Get localized presets
+  static List<PresetData> getAll(AppLocalizations l10n) => [
     PresetData(
       id: 'comfort',
-      name: 'Комфорт',
-      description: 'Оптимальный режим',
+      name: l10n.presetComfort,
+      description: l10n.presetComfortDesc,
       icon: Icons.spa_outlined,
       temperature: 22,
       airflow: 60,
-      color: Color(0xFF2D7DFF),
+      color: const Color(0xFF2D7DFF),
     ),
     PresetData(
       id: 'eco',
-      name: 'Эко',
-      description: 'Энергосбережение',
+      name: l10n.presetEco,
+      description: l10n.presetEcoDesc,
       icon: Icons.eco_outlined,
       temperature: 20,
       airflow: 40,
-      color: Color(0xFF22C55E),
+      color: const Color(0xFF22C55E),
     ),
     PresetData(
       id: 'night',
-      name: 'Ночь',
-      description: 'Тихий режим',
+      name: l10n.presetNight,
+      description: l10n.presetNightDesc,
       icon: Icons.nightlight_outlined,
       temperature: 19,
       airflow: 30,
-      color: Color(0xFF8B5CF6),
+      color: const Color(0xFF8B5CF6),
     ),
     PresetData(
       id: 'turbo',
-      name: 'Турбо',
-      description: 'Максимальная мощность',
+      name: l10n.presetTurbo,
+      description: l10n.presetTurboDesc,
       icon: Icons.bolt_outlined,
       temperature: 18,
       airflow: 100,
-      color: Color(0xFFF97316),
+      color: const Color(0xFFF97316),
     ),
     PresetData(
       id: 'away',
-      name: 'Нет дома',
-      description: 'Минимальный режим',
+      name: l10n.presetAway,
+      description: l10n.presetAwayDesc,
       icon: Icons.home_outlined,
       temperature: 16,
       airflow: 20,
-      color: Color(0xFF64748B),
+      color: const Color(0xFF64748B),
     ),
     PresetData(
       id: 'sleep',
-      name: 'Сон',
-      description: 'Комфортный сон',
+      name: l10n.presetSleep,
+      description: l10n.presetSleepDesc,
       icon: Icons.bedtime_outlined,
       temperature: 20,
       airflow: 25,
-      color: Color(0xFF6366F1),
+      color: const Color(0xFF6366F1),
     ),
   ];
 }
