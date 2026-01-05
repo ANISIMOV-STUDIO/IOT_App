@@ -658,26 +658,23 @@ class _FanSlider extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 6),
-        SizedBox(
-          height: 20,
-          child: SliderTheme(
-            data: SliderThemeData(
-              activeTrackColor: color,
-              inactiveTrackColor: isDark
-                  ? AppColors.darkHoverOverlay
-                  : AppColors.lightHoverOverlay,
-              thumbColor: color,
-              overlayColor: color.withValues(alpha: 0.2),
-              trackHeight: 4,
-              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6),
-              overlayShape: const RoundSliderOverlayShape(overlayRadius: 12),
-            ),
-            child: Slider(
-              value: value.toDouble(),
-              min: 0,
-              max: 100,
-              onChanged: (v) => onChanged?.call(v.round()),
-            ),
+        SliderTheme(
+          data: SliderThemeData(
+            activeTrackColor: color,
+            inactiveTrackColor: isDark
+                ? AppColors.darkHoverOverlay
+                : AppColors.lightHoverOverlay,
+            thumbColor: color,
+            overlayColor: color.withValues(alpha: 0.2),
+            trackHeight: 6,
+            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
+            overlayShape: const RoundSliderOverlayShape(overlayRadius: 16),
+          ),
+          child: Slider(
+            value: value.toDouble(),
+            min: 0,
+            max: 100,
+            onChanged: onChanged != null ? (v) => onChanged!(v.round()) : null,
           ),
         ),
       ],
