@@ -8,6 +8,7 @@ library;
 
 import 'package:hive_flutter/hive_flutter.dart';
 
+import '../config/app_constants.dart';
 import '../../domain/entities/climate.dart';
 import '../../domain/entities/hvac_device.dart';
 import '../../domain/entities/smart_device.dart';
@@ -41,7 +42,7 @@ class CacheMetadata {
 
   CacheMetadata({
     required this.timestamp,
-    this.ttl = const Duration(minutes: 30),
+    this.ttl = CacheConstants.defaultTtl,
   });
 
   /// Кеш истёк?

@@ -8,6 +8,7 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:http/http.dart' as http;
 import '../config/api_config.dart';
+import '../config/app_constants.dart';
 import '../logging/api_logger.dart';
 
 /// Состояние сетевого подключения
@@ -40,10 +41,10 @@ class ConnectivityService {
   Timer? _serverCheckTimer;
 
   /// Интервал проверки сервера
-  static const _serverCheckInterval = Duration(seconds: 30);
+  static const _serverCheckInterval = NetworkConstants.serverCheckInterval;
 
   /// Таймаут для ping запроса
-  static const _pingTimeout = Duration(seconds: 5);
+  static const _pingTimeout = NetworkConstants.pingTimeout;
 
   /// Конструктор с возможностью инжекции зависимости
   ConnectivityService([Connectivity? connectivity, http.Client? httpClient])

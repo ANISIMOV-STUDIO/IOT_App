@@ -5,6 +5,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import '../config/app_constants.dart';
 import '../theme/app_theme.dart';
 import '../theme/app_font_sizes.dart';
 import '../theme/app_radius.dart';
@@ -44,7 +45,7 @@ class ToastService {
   static void show(
     String message, {
     ToastType type = ToastType.info,
-    Duration duration = const Duration(seconds: 3),
+    Duration duration = UiConstants.toastDuration,
     String? actionLabel,
     VoidCallback? onAction,
     bool showIcon = true,
