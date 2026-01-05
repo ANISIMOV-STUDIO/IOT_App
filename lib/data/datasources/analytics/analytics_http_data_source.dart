@@ -4,6 +4,7 @@
 /// Делегирует вызовы к AnalyticsHttpClient.
 library;
 
+import '../../../core/logging/api_logger.dart';
 import '../../../domain/entities/graph_data.dart';
 import '../../../domain/entities/sensor_history.dart';
 import '../../api/http/clients/analytics_http_client.dart';
@@ -98,7 +99,9 @@ class AnalyticsHttpDataSource implements AnalyticsDataSource {
     try {
       final dateTime = DateTime.parse(rawLabel);
       return '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
-    } catch (_) {
+    } catch (e) {
+      // Неизвестный формат даты — используем как есть
+      ApiLogger.debug('[AnalyticsHttpDataSource] Не удалось распарсить дату: $rawLabel', e);
       return rawLabel;
     }
   }

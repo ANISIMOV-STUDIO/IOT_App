@@ -4,6 +4,7 @@ library;
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'api_exception.dart';
+import '../logging/api_logger.dart';
 
 class HttpErrorHandler {
   /// Извлечь сообщение об ошибке из тела ответа
@@ -15,7 +16,9 @@ class HttpErrorHandler {
           return json['message'] as String? ?? json['error'] as String?;
         }
       }
-    } catch (_) {}
+    } catch (e) {
+      ApiLogger.debug('[HttpErrorHandler] Не удалось распарсить JSON ошибки', e);
+    }
     return null;
   }
 

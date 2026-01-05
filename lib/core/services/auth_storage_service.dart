@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import '../logging/api_logger.dart';
 
 /// Сервис для безопасного хранения токена аутентификации
 class AuthStorageService {
@@ -32,7 +33,7 @@ class AuthStorageService {
         );
       }
     } catch (e) {
-      // Логировать ошибку, но продолжить
+      ApiLogger.debug('[AuthStorage] Ошибка декодирования JWT', e);
     }
   }
 
@@ -52,7 +53,7 @@ class AuthStorageService {
         );
       }
     } catch (e) {
-      // Логировать ошибку, но продолжить
+      ApiLogger.debug('[AuthStorage] Ошибка обновления JWT expiry', e);
     }
   }
 
@@ -76,6 +77,7 @@ class AuthStorageService {
       // Считаем токен истекшим за 1 минуту до реального истечения
       return DateTime.now().isAfter(expiry.subtract(const Duration(minutes: 1)));
     } catch (e) {
+      ApiLogger.debug('[AuthStorage] Ошибка парсинга даты истечения токена', e);
       return false;
     }
   }

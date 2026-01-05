@@ -13,6 +13,7 @@ import 'dart:developer' as developer;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../../core/logging/api_logger.dart';
 import '../../../domain/entities/climate.dart';
 import '../../../domain/entities/device_full_state.dart';
 import '../../../domain/entities/alarm_info.dart';
@@ -126,8 +127,9 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         fullState = await _getDeviceFullState(
           GetDeviceFullStateParams(deviceId: event.deviceId),
         );
-      } catch (_) {
-        // Аварии не критичны
+      } catch (e) {
+        // Аварии не критичны для отображения основного UI
+        ApiLogger.warning('[ClimateBloc] Не удалось загрузить аварии', e);
       }
 
       emit(state.copyWith(

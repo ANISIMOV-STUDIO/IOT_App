@@ -8,6 +8,7 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:http/http.dart' as http;
 import '../config/api_config.dart';
+import '../logging/api_logger.dart';
 
 /// Состояние сетевого подключения
 enum NetworkStatus {
@@ -140,7 +141,8 @@ class ConnectivityService {
 
         // Любой ответ кроме сетевой ошибки - сервер доступен
         return response.statusCode < 500;
-      } catch (_) {
+      } catch (e) {
+        ApiLogger.debug('[Connectivity] Сервер недоступен', e);
         return false;
       }
     }
@@ -202,8 +204,9 @@ class ConnectivityService {
 
     try {
       return await onlineAction();
-    } catch (_) {
+    } catch (e) {
       // При ошибке — возвращаем из кеша и помечаем сервер недоступным
+      ApiLogger.warning('[Connectivity] Fallback на оффлайн режим', e);
       _updateStatus(NetworkStatus.serverUnavailable);
       return offlineAction();
     }

@@ -49,11 +49,10 @@ class MockSmartDeviceRepository implements SmartDeviceRepository {
   @override
   Future<SmartDevice?> getDeviceById(String id) async {
     await Future.delayed(Duration(milliseconds: MockData.networkDelays['fast']!));
-    try {
-      return _devices.firstWhere((d) => d.id == id);
-    } catch (_) {
-      return null;
-    }
+    // Используем cast и where вместо firstWhere + catch
+    // для явной обработки случая "не найдено"
+    final matches = _devices.where((d) => d.id == id);
+    return matches.isEmpty ? null : matches.first;
   }
 
   @override

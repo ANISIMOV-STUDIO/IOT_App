@@ -89,6 +89,29 @@ class ApiLogger {
     _talker.warning('🔴 [Stream] Closed: $name');
   }
 
+  // General purpose logging
+  static void debug(String message, [Object? error]) {
+    _talker.debug(message);
+    if (error != null) {
+      _talker.debug('Details: $error');
+    }
+  }
+
+  static void info(String message) {
+    _talker.info(message);
+  }
+
+  static void warning(String message, [Object? error]) {
+    _talker.warning(message);
+    if (error != null) {
+      _talker.warning('Details: $error');
+    }
+  }
+
+  static void error(String message, [Object? error, StackTrace? stackTrace]) {
+    _talker.error(message, error, stackTrace);
+  }
+
   // Utility
   static String _truncate(String text, [int maxLength = 500]) {
     if (text.length <= maxLength) return text;

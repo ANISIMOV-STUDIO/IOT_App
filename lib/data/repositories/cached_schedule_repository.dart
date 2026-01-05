@@ -4,6 +4,7 @@
 library;
 
 import '../../core/error/offline_exception.dart';
+import '../../core/logging/api_logger.dart';
 import '../../core/services/cache_service.dart';
 import '../../core/services/connectivity_service.dart';
 import '../../domain/entities/schedule_entry.dart';
@@ -109,8 +110,9 @@ class CachedScheduleRepository implements ScheduleRepository {
     try {
       final schedule = await _inner.getSchedule(deviceId);
       await _cacheService.cacheSchedule(deviceId, schedule);
-    } catch (_) {
-      // Игнорируем ошибки обновления кеша
+    } catch (e) {
+      // Ошибки фонового обновления кеша не критичны
+      ApiLogger.debug('[ScheduleCache] Ошибка обновления кеша', e);
     }
   }
 }
