@@ -201,21 +201,26 @@ class _BreezButtonState extends State<BreezButton> {
           scale: _isPressed ? 0.98 : 1.0,
           duration: AppDurations.fast,
           curve: AppCurves.standard,
-          child: AnimatedContainer(
-            duration: AppDurations.fast,
+          // TweenAnimationBuilder только для hover/press, не для темы
+          child: TweenAnimationBuilder<Color?>(
+            tween: ColorTween(end: effectiveBg),
+            duration: (_isHovered || _isPressed) ? AppDurations.fast : Duration.zero,
             curve: AppCurves.standard,
-            width: buttonWidth,
-            height: buttonHeight,
-            constraints: BoxConstraints(
-              minHeight: kMinTouchTarget,
-              minWidth: buttonWidth ?? 0,
-            ),
-            padding: widget.padding ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: effectiveBg,
-              borderRadius: BorderRadius.circular(widget.borderRadius),
-              border: widget.border ?? Border.all(color: effectiveBorder),
-              boxShadow: _isHovered ? AppColors.darkShadowSm : widget.shadows,
+            builder: (context, bgColor, child) => Container(
+              width: buttonWidth,
+              height: buttonHeight,
+              constraints: BoxConstraints(
+                minHeight: kMinTouchTarget,
+                minWidth: buttonWidth ?? 0,
+              ),
+              padding: widget.padding ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: bgColor,
+                borderRadius: BorderRadius.circular(widget.borderRadius),
+                border: widget.border ?? Border.all(color: effectiveBorder),
+                boxShadow: _isHovered ? AppColors.darkShadowSm : widget.shadows,
+              ),
+              child: child,
             ),
             child: widget.isLoading
                 ? Center(
