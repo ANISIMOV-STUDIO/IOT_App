@@ -331,6 +331,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                               units,
                                               activeIndex,
                                               climateState,
+                                              scheduleState,
                                             ),
                                 ),
                               ],
@@ -473,6 +474,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     List<UnitState> units,
     int activeIndex,
     ClimateControlState climateState,
+    ScheduleState scheduleState,
   ) {
     return Column(
       children: [
@@ -514,6 +516,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
             onSettingsTap: () => _showUnitSettings(currentUnit),
             compact: width <= 600,
             isPowerLoading: climateState.isTogglingPower,
+            // New: Data for internal tabs
+            schedule: scheduleState.entries,
+            activeAlarms: climateState.activeAlarms,
+            onScheduleSeeAll: () => context.goToSchedule(
+              currentUnit.id,
+              currentUnit.name,
+            ),
+            onAlarmsSeeHistory: () {}, // TODO: Navigate to alarm history
           ),
         ),
       ],
