@@ -127,10 +127,14 @@ class _HvacControlAppState extends State<HvacControlApp> {
             title: 'BREEZ Home',
             debugShowCheckedModeBanner: false,
 
-            // Material theme
+            // Material theme with smooth transition
             theme: AppTheme.materialLight,
             darkTheme: AppTheme.materialDark,
             themeMode: themeService.themeMode,
+            // Мгновенная смена темы - без анимации MaterialApp
+            // Плавные переходы обеспечиваются AnimatedContainer в виджетах
+            // Это предотвращает "каскадный" эффект рассинхронизации анимаций
+            themeAnimationDuration: Duration.zero,
 
             // Локализация
             locale: languageService.currentLocale,
