@@ -11,6 +11,10 @@ class MobileLayout extends StatelessWidget {
   final UnitState unit;
   final ValueChanged<int>? onTemperatureIncrease;
   final ValueChanged<int>? onTemperatureDecrease;
+  final VoidCallback? onHeatingTempIncrease;
+  final VoidCallback? onHeatingTempDecrease;
+  final VoidCallback? onCoolingTempIncrease;
+  final VoidCallback? onCoolingTempDecrease;
   final ValueChanged<int>? onSupplyFanChanged;
   final ValueChanged<int>? onExhaustFanChanged;
   final ValueChanged<String>? onModeChanged;
@@ -24,6 +28,10 @@ class MobileLayout extends StatelessWidget {
     required this.unit,
     this.onTemperatureIncrease,
     this.onTemperatureDecrease,
+    this.onHeatingTempIncrease,
+    this.onHeatingTempDecrease,
+    this.onCoolingTempIncrease,
+    this.onCoolingTempDecrease,
     this.onSupplyFanChanged,
     this.onExhaustFanChanged,
     this.onModeChanged,
@@ -49,6 +57,10 @@ class MobileLayout extends StatelessWidget {
         onTemperatureDecrease: onTemperatureDecrease != null
             ? () => onTemperatureDecrease!(unit.temp - 1)
             : null,
+        onHeatingTempIncrease: onHeatingTempIncrease,
+        onHeatingTempDecrease: onHeatingTempDecrease,
+        onCoolingTempIncrease: onCoolingTempIncrease,
+        onCoolingTempDecrease: onCoolingTempDecrease,
         onSupplyFanChanged: onSupplyFanChanged,
         onExhaustFanChanged: onExhaustFanChanged,
         onModeChanged: onModeChanged,

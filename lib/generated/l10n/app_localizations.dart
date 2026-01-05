@@ -1609,6 +1609,72 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Охлаждение'**
   String get cooling;
+
+  /// No description provided for @outdoorTemp.
+  ///
+  /// In ru, this message translates to:
+  /// **'Температура уличного воздуха'**
+  String get outdoorTemp;
+
+  /// No description provided for @indoorTemp.
+  ///
+  /// In ru, this message translates to:
+  /// **'Температура воздуха в помещении'**
+  String get indoorTemp;
+
+  /// No description provided for @supplyTempAfterRecup.
+  ///
+  /// In ru, this message translates to:
+  /// **'Температура приточного воздуха после рекуператора'**
+  String get supplyTempAfterRecup;
+
+  /// No description provided for @supplyTemp.
+  ///
+  /// In ru, this message translates to:
+  /// **'Температура приточного воздуха'**
+  String get supplyTemp;
+
+  /// No description provided for @co2Level.
+  ///
+  /// In ru, this message translates to:
+  /// **'Концентрация CO2'**
+  String get co2Level;
+
+  /// No description provided for @recuperatorEfficiency.
+  ///
+  /// In ru, this message translates to:
+  /// **'Температурная эффективность рекуператора'**
+  String get recuperatorEfficiency;
+
+  /// No description provided for @freeCooling.
+  ///
+  /// In ru, this message translates to:
+  /// **'Свободное охлаждение рекуператора'**
+  String get freeCooling;
+
+  /// No description provided for @heaterPerformance.
+  ///
+  /// In ru, this message translates to:
+  /// **'Текущая производительность электрического нагревателя'**
+  String get heaterPerformance;
+
+  /// No description provided for @coolerStatus.
+  ///
+  /// In ru, this message translates to:
+  /// **'Статус охладителя'**
+  String get coolerStatus;
+
+  /// No description provided for @ductPressure.
+  ///
+  /// In ru, this message translates to:
+  /// **'Текущее значение давления в воздуховоде'**
+  String get ductPressure;
+
+  /// No description provided for @relativeHumidity.
+  ///
+  /// In ru, this message translates to:
+  /// **'Относительная влажность'**
+  String get relativeHumidity;
 }
 
 class _AppLocalizationsDelegate

@@ -6,10 +6,12 @@ import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
+import '../../../domain/entities/unit_state.dart';
 import '../../../generated/l10n/app_localizations.dart';
 import 'breez_card.dart';
 import 'fan_slider.dart';
 import 'mode_selector.dart';
+import 'sensors_grid.dart';
 import 'stat_item.dart';
 import 'temp_column.dart';
 
@@ -42,6 +44,7 @@ class MainTempCard extends StatelessWidget {
   final int alarmCount;
   final VoidCallback? onAlarmsTap;
   final bool isPowerLoading;
+  final UnitState? sensorUnit; // For full sensors grid
 
   const MainTempCard({
     super.key,
@@ -72,6 +75,7 @@ class MainTempCard extends StatelessWidget {
     this.alarmCount = 0,
     this.onAlarmsTap,
     this.isPowerLoading = false,
+    this.sensorUnit,
   });
 
   @override
@@ -303,7 +307,7 @@ class MainTempCard extends StatelessWidget {
                 ),
               ),
 
-              // Stats row
+              // Stats/Sensors section
               Container(
                 padding: const EdgeInsets.only(top: 16),
                 decoration: BoxDecoration(
@@ -311,26 +315,28 @@ class MainTempCard extends StatelessWidget {
                     top: BorderSide(color: colors.border),
                   ),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    StatItem(
-                      icon: Icons.air,
-                      value: '$airflow м³/ч',
-                      label: l10n.airflowRate,
-                    ),
-                    StatItem(
-                      icon: Icons.water_drop_outlined,
-                      value: '$humidity%',
-                      label: l10n.humidity,
-                    ),
-                    StatItem(
-                      icon: Icons.filter_alt_outlined,
-                      value: '$filterPercent%',
-                      label: l10n.filter,
-                    ),
-                  ],
-                ),
+                child: sensorUnit != null
+                    ? SensorsGrid(unit: sensorUnit!)
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          StatItem(
+                            icon: Icons.air,
+                            value: '$airflow м³/ч',
+                            label: l10n.airflowRate,
+                          ),
+                          StatItem(
+                            icon: Icons.water_drop_outlined,
+                            value: '$humidity%',
+                            label: l10n.humidity,
+                          ),
+                          StatItem(
+                            icon: Icons.filter_alt_outlined,
+                            value: '$filterPercent%',
+                            label: l10n.filter,
+                          ),
+                        ],
+                      ),
               ),
 
               // Fan sliders

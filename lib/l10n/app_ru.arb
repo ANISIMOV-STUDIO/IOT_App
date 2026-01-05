@@ -842,5 +842,16 @@
   "cooling": "Охлаждение",
   "@cooling": {
     "description": "Cooling label for temperature control"
-  }
+  },
+  "outdoorTemp": "Температура уличного воздуха",
+  "indoorTemp": "Температура воздуха в помещении",
+  "supplyTempAfterRecup": "Температура приточного воздуха после рекуператора",
+  "supplyTemp": "Температура приточного воздуха",
+  "co2Level": "Концентрация CO2",
+  "recuperatorEfficiency": "Температурная эффективность рекуператора",
+  "freeCooling": "Свободное охлаждение рекуператора",
+  "heaterPerformance": "Текущая производительность электрического нагревателя",
+  "coolerStatus": "Статус охладителя",
+  "ductPressure": "Текущее значение давления в воздуховоде",
+  "relativeHumidity": "Относительная влажность"
 }

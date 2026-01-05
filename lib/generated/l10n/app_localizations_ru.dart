@@ -823,4 +823,40 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get cooling => 'Охлаждение';
+
+  @override
+  String get outdoorTemp => 'Температура уличного воздуха';
+
+  @override
+  String get indoorTemp => 'Температура воздуха в помещении';
+
+  @override
+  String get supplyTempAfterRecup =>
+      'Температура приточного воздуха после рекуператора';
+
+  @override
+  String get supplyTemp => 'Температура приточного воздуха';
+
+  @override
+  String get co2Level => 'Концентрация CO2';
+
+  @override
+  String get recuperatorEfficiency =>
+      'Температурная эффективность рекуператора';
+
+  @override
+  String get freeCooling => 'Свободное охлаждение рекуператора';
+
+  @override
+  String get heaterPerformance =>
+      'Текущая производительность электрического нагревателя';
+
+  @override
+  String get coolerStatus => 'Статус охладителя';
+
+  @override
+  String get ductPressure => 'Текущее значение давления в воздуховоде';
+
+  @override
+  String get relativeHumidity => 'Относительная влажность';
 }

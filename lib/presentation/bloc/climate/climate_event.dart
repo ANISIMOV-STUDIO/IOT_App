@@ -80,6 +80,26 @@ final class ClimateTemperatureChanged extends ClimateEvent {
   List<Object?> get props => [temperature];
 }
 
+/// Изменена температура нагрева
+final class ClimateHeatingTempChanged extends ClimateEvent {
+  final int temperature;
+
+  const ClimateHeatingTempChanged(this.temperature);
+
+  @override
+  List<Object?> get props => [temperature];
+}
+
+/// Изменена температура охлаждения
+final class ClimateCoolingTempChanged extends ClimateEvent {
+  final int temperature;
+
+  const ClimateCoolingTempChanged(this.temperature);
+
+  @override
+  List<Object?> get props => [temperature];
+}
+
 /// Изменена целевая влажность
 final class ClimateHumidityChanged extends ClimateEvent {
   final double humidity;

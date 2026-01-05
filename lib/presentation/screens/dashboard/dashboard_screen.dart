@@ -72,6 +72,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       name: device.name,
       power: climate?.isOn ?? false,
       temp: climate?.currentTemperature.toInt() ?? 20,
+      heatingTemp: fullState?.heatingTemperature ?? 21,
+      coolingTemp: fullState?.coolingTemperature ?? 24,
       supplyFan: climate?.supplyAirflow.toInt() ?? 50,
       exhaustFan: climate?.exhaustAirflow.toInt() ?? 50,
       mode: climate?.mode.toString().split('.').last ?? 'auto',
@@ -79,6 +81,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
       outsideTemp: fullState?.outdoorTemperature?.toInt() ?? 0,
       filterPercent: fullState?.kpdRecuperator ?? 0,
       airflowRate: fullState?.devicePower ?? 0,
+      // Новые датчики из DeviceFullState
+      indoorTemp: fullState?.indoorTemperature?.toInt() ?? climate?.currentTemperature.toInt() ?? 22,
+      supplyTemp: fullState?.supplyTemperature?.toInt() ?? 20,
+      supplyTempAfterRecup: fullState?.supplyTempAfterRecup?.toInt() ?? 18,
+      co2Level: fullState?.co2Level ?? 450,
+      recuperatorEfficiency: fullState?.kpdRecuperator ?? 85,
+      freeCooling: fullState?.freeCooling ?? 0,
+      heaterPerformance: fullState?.heaterPerformance ?? 0,
+      coolerStatus: fullState?.coolerStatus ?? 0,
+      ductPressure: fullState?.ductPressure ?? 120,
     );
   }
 
@@ -409,6 +421,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
           context.read<ClimateBloc>().add(ClimateTemperatureChanged(v.toDouble())),
       onTemperatureDecrease: (v) =>
           context.read<ClimateBloc>().add(ClimateTemperatureChanged(v.toDouble())),
+      onHeatingTempIncrease: () =>
+          context.read<ClimateBloc>().add(ClimateHeatingTempChanged(currentUnit.heatingTemp + 1)),
+      onHeatingTempDecrease: () =>
+          context.read<ClimateBloc>().add(ClimateHeatingTempChanged(currentUnit.heatingTemp - 1)),
+      onCoolingTempIncrease: () =>
+          context.read<ClimateBloc>().add(ClimateCoolingTempChanged(currentUnit.coolingTemp + 1)),
+      onCoolingTempDecrease: () =>
+          context.read<ClimateBloc>().add(ClimateCoolingTempChanged(currentUnit.coolingTemp - 1)),
       onSupplyFanChanged: (v) =>
           context.read<ClimateBloc>().add(ClimateSupplyAirflowChanged(v.toDouble())),
       onExhaustFanChanged: (v) =>
@@ -476,6 +496,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 context.read<ClimateBloc>().add(ClimateTemperatureChanged(v.toDouble())),
             onTemperatureDecrease: (v) =>
                 context.read<ClimateBloc>().add(ClimateTemperatureChanged(v.toDouble())),
+            onHeatingTempIncrease: () =>
+                context.read<ClimateBloc>().add(ClimateHeatingTempChanged(currentUnit.heatingTemp + 1)),
+            onHeatingTempDecrease: () =>
+                context.read<ClimateBloc>().add(ClimateHeatingTempChanged(currentUnit.heatingTemp - 1)),
+            onCoolingTempIncrease: () =>
+                context.read<ClimateBloc>().add(ClimateCoolingTempChanged(currentUnit.coolingTemp + 1)),
+            onCoolingTempDecrease: () =>
+                context.read<ClimateBloc>().add(ClimateCoolingTempChanged(currentUnit.coolingTemp - 1)),
             onSupplyFanChanged: (v) =>
                 context.read<ClimateBloc>().add(ClimateSupplyAirflowChanged(v.toDouble())),
             onExhaustFanChanged: (v) =>

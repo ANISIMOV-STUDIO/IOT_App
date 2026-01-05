@@ -22,6 +22,17 @@ class UnitState extends Equatable {
   final int filterPercent;
   final int airflowRate;
 
+  // Новые датчики
+  final int indoorTemp;              // Температура воздуха в помещении
+  final int supplyTemp;              // Температура приточного воздуха
+  final int supplyTempAfterRecup;    // Температура приточного воздуха после рекуператора
+  final int co2Level;                // Концентрация CO2 (ppm)
+  final int recuperatorEfficiency;   // Температурная эффективность рекуператора (%)
+  final int freeCooling;             // Свободное охлаждение рекуператора (м³/ч)
+  final int heaterPerformance;       // Производительность электрического нагревателя (%)
+  final int coolerStatus;            // Статус охладителя (%)
+  final int ductPressure;            // Давление в воздуховоде (Па)
+
   const UnitState({
     required this.id,
     required this.name,
@@ -36,6 +47,15 @@ class UnitState extends Equatable {
     required this.outsideTemp,
     required this.filterPercent,
     required this.airflowRate,
+    this.indoorTemp = 22,
+    this.supplyTemp = 20,
+    this.supplyTempAfterRecup = 18,
+    this.co2Level = 450,
+    this.recuperatorEfficiency = 85,
+    this.freeCooling = 0,
+    this.heaterPerformance = 0,
+    this.coolerStatus = 0,
+    this.ductPressure = 120,
   });
 
   UnitState copyWith({
@@ -52,6 +72,15 @@ class UnitState extends Equatable {
     int? outsideTemp,
     int? filterPercent,
     int? airflowRate,
+    int? indoorTemp,
+    int? supplyTemp,
+    int? supplyTempAfterRecup,
+    int? co2Level,
+    int? recuperatorEfficiency,
+    int? freeCooling,
+    int? heaterPerformance,
+    int? coolerStatus,
+    int? ductPressure,
   }) {
     return UnitState(
       id: id ?? this.id,
@@ -67,6 +96,15 @@ class UnitState extends Equatable {
       outsideTemp: outsideTemp ?? this.outsideTemp,
       filterPercent: filterPercent ?? this.filterPercent,
       airflowRate: airflowRate ?? this.airflowRate,
+      indoorTemp: indoorTemp ?? this.indoorTemp,
+      supplyTemp: supplyTemp ?? this.supplyTemp,
+      supplyTempAfterRecup: supplyTempAfterRecup ?? this.supplyTempAfterRecup,
+      co2Level: co2Level ?? this.co2Level,
+      recuperatorEfficiency: recuperatorEfficiency ?? this.recuperatorEfficiency,
+      freeCooling: freeCooling ?? this.freeCooling,
+      heaterPerformance: heaterPerformance ?? this.heaterPerformance,
+      coolerStatus: coolerStatus ?? this.coolerStatus,
+      ductPressure: ductPressure ?? this.ductPressure,
     );
   }
 
@@ -85,5 +123,14 @@ class UnitState extends Equatable {
         outsideTemp,
         filterPercent,
         airflowRate,
+        indoorTemp,
+        supplyTemp,
+        supplyTempAfterRecup,
+        co2Level,
+        recuperatorEfficiency,
+        freeCooling,
+        heaterPerformance,
+        coolerStatus,
+        ductPressure,
       ];
 }

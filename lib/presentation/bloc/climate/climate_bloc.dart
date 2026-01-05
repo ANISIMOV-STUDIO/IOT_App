@@ -69,6 +69,8 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     // Управление устройством
     on<ClimatePowerToggled>(_onPowerToggled);
     on<ClimateTemperatureChanged>(_onTemperatureChanged);
+    on<ClimateHeatingTempChanged>(_onHeatingTempChanged);
+    on<ClimateCoolingTempChanged>(_onCoolingTempChanged);
     on<ClimateHumidityChanged>(_onHumidityChanged);
     on<ClimateModeChanged>(_onModeChanged);
     on<ClimatePresetChanged>(_onPresetChanged);
@@ -205,6 +207,32 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       await _setTemperature(SetTemperatureParams(temperature: event.temperature));
     } catch (e) {
       emit(state.copyWith(errorMessage: 'Temperature setting error: $e'));
+    }
+  }
+
+  /// Изменение температуры нагрева
+  Future<void> _onHeatingTempChanged(
+    ClimateHeatingTempChanged event,
+    Emitter<ClimateControlState> emit,
+  ) async {
+    try {
+      await _setTemperature(SetTemperatureParams(temperature: event.temperature.toDouble()));
+      // TODO: Когда бэкенд поддержит отдельные температуры, использовать отдельный API
+    } catch (e) {
+      emit(state.copyWith(errorMessage: 'Heating temperature error: $e'));
+    }
+  }
+
+  /// Изменение температуры охлаждения
+  Future<void> _onCoolingTempChanged(
+    ClimateCoolingTempChanged event,
+    Emitter<ClimateControlState> emit,
+  ) async {
+    try {
+      await _setTemperature(SetTemperatureParams(temperature: event.temperature.toDouble()));
+      // TODO: Когда бэкенд поддержит отдельные температуры, использовать отдельный API
+    } catch (e) {
+      emit(state.copyWith(errorMessage: 'Cooling temperature error: $e'));
     }
   }
 

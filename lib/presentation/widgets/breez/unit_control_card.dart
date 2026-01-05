@@ -84,6 +84,7 @@ class UnitControlCard extends StatelessWidget {
           onModeChanged: onModeChanged,
           showModeSelector: showModeSelector,
           isPowerLoading: isPowerLoading,
+          sensorUnit: unit,
         );
       },
     );

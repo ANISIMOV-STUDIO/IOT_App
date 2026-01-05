@@ -821,4 +821,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cooling => 'Cooling';
+
+  @override
+  String get outdoorTemp => 'Outdoor air temperature';
+
+  @override
+  String get indoorTemp => 'Indoor air temperature';
+
+  @override
+  String get supplyTempAfterRecup => 'Supply air temp after recuperator';
+
+  @override
+  String get supplyTemp => 'Supply air temperature';
+
+  @override
+  String get co2Level => 'CO2 concentration';
+
+  @override
+  String get recuperatorEfficiency => 'Recuperator temp efficiency';
+
+  @override
+  String get freeCooling => 'Recuperator free cooling';
+
+  @override
+  String get heaterPerformance => 'Electric heater performance';
+
+  @override
+  String get coolerStatus => 'Cooler status';
+
+  @override
+  String get ductPressure => 'Duct pressure';
+
+  @override
+  String get relativeHumidity => 'Relative humidity';
 }

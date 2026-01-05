@@ -842,5 +842,16 @@
   "cooling": "Cooling",
   "@cooling": {
     "description": "Cooling label for temperature control"
-  }
+  },
+  "outdoorTemp": "Outdoor air temperature",
+  "indoorTemp": "Indoor air temperature",
+  "supplyTempAfterRecup": "Supply air temp after recuperator",
+  "supplyTemp": "Supply air temperature",
+  "co2Level": "CO2 concentration",
+  "recuperatorEfficiency": "Recuperator temp efficiency",
+  "freeCooling": "Recuperator free cooling",
+  "heaterPerformance": "Electric heater performance",
+  "coolerStatus": "Cooler status",
+  "ductPressure": "Duct pressure",
+  "relativeHumidity": "Relative humidity"
 }

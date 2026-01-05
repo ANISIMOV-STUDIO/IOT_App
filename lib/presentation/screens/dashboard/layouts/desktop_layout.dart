@@ -20,6 +20,10 @@ class DesktopLayout extends StatefulWidget {
   final String userRole;
   final ValueChanged<int>? onTemperatureIncrease;
   final ValueChanged<int>? onTemperatureDecrease;
+  final VoidCallback? onHeatingTempIncrease;
+  final VoidCallback? onHeatingTempDecrease;
+  final VoidCallback? onCoolingTempIncrease;
+  final VoidCallback? onCoolingTempDecrease;
   final ValueChanged<int>? onSupplyFanChanged;
   final ValueChanged<int>? onExhaustFanChanged;
   final ValueChanged<String>? onModeChanged;
@@ -52,6 +56,10 @@ class DesktopLayout extends StatefulWidget {
     required this.userRole,
     this.onTemperatureIncrease,
     this.onTemperatureDecrease,
+    this.onHeatingTempIncrease,
+    this.onHeatingTempDecrease,
+    this.onCoolingTempIncrease,
+    this.onCoolingTempDecrease,
     this.onSupplyFanChanged,
     this.onExhaustFanChanged,
     this.onModeChanged,
@@ -147,6 +155,10 @@ class _DesktopLayoutState extends State<DesktopLayout> {
             onTemperatureDecrease: widget.onTemperatureDecrease != null
                 ? () => widget.onTemperatureDecrease!(widget.unit.temp - 1)
                 : null,
+            onHeatingTempIncrease: widget.onHeatingTempIncrease,
+            onHeatingTempDecrease: widget.onHeatingTempDecrease,
+            onCoolingTempIncrease: widget.onCoolingTempIncrease,
+            onCoolingTempDecrease: widget.onCoolingTempDecrease,
             onSupplyFanChanged: widget.onSupplyFanChanged,
             onExhaustFanChanged: widget.onExhaustFanChanged,
             onModeChanged: widget.onModeChanged,
