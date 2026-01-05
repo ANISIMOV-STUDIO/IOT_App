@@ -23,7 +23,6 @@ class BreezNavigationBar extends StatelessWidget {
   final List<NavigationItem> items;
   final int selectedIndex;
   final ValueChanged<int>? onItemSelected;
-  final bool isDark;
   final VoidCallback? onThemeToggle;
 
   const BreezNavigationBar({
@@ -31,7 +30,6 @@ class BreezNavigationBar extends StatelessWidget {
     required this.items,
     required this.selectedIndex,
     this.onItemSelected,
-    this.isDark = true,
     this.onThemeToggle,
   });
 
@@ -114,20 +112,25 @@ class BreezNavigationBar extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(right: 4),
-                  child: BreezButton(
-                    onTap: onThemeToggle,
-                    width: buttonSize,
-                    height: buttonSize,
-                    padding: EdgeInsets.zero,
-                    backgroundColor: Colors.transparent,
-                    hoverColor: colors.buttonBg,
-                    child: Icon(
-                      isDark ? Icons.light_mode_outlined : Icons.dark_mode_outlined,
-                      size: iconSize,
-                      color: isDark
-                          ? colors.textMuted
-                          : AppColors.warning, // Желто-оранжевая иконка солнца в светлой теме
-                    ),
+                  child: Builder(
+                    builder: (context) {
+                      final isDark = Theme.of(context).brightness == Brightness.dark;
+                      return BreezButton(
+                        onTap: onThemeToggle,
+                        width: buttonSize,
+                        height: buttonSize,
+                        padding: EdgeInsets.zero,
+                        backgroundColor: Colors.transparent,
+                        hoverColor: colors.buttonBg,
+                        child: Icon(
+                          isDark ? Icons.light_mode_outlined : Icons.dark_mode_outlined,
+                          size: iconSize,
+                          color: isDark
+                              ? colors.textMuted
+                              : AppColors.warning, // Желто-оранжевая иконка солнца в светлой теме
+                        ),
+                      );
+                    },
                   ),
                 ),
               ],
