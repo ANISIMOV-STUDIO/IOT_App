@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../generated/l10n/app_localizations.dart';
+import 'breez_card.dart'; // BreezButton
 
 /// Type of list card for color theming
 enum ListCardType {
@@ -252,31 +253,19 @@ class BreezSeeMoreButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(AppRadius.button),
-        hoverColor: colors.buttonBg,
-        splashColor: AppColors.accent.withValues(alpha: 0.1),
-        highlightColor: AppColors.accent.withValues(alpha: 0.05),
-        child: Ink(
-          width: double.infinity,
-          height: 48,
-          decoration: BoxDecoration(
-            color: colors.buttonBg,
-            borderRadius: BorderRadius.circular(AppRadius.button),
-            border: Border.all(color: colors.border),
-          ),
-          child: Center(
-            child: Text(
-              _text,
-              style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                color: AppColors.accent,
-              ),
-            ),
+    return BreezButton(
+      onTap: onTap,
+      width: double.infinity,
+      height: 48,
+      backgroundColor: colors.buttonBg,
+      hoverColor: colors.buttonHover,
+      child: Center(
+        child: Text(
+          _text,
+          style: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            color: AppColors.accent,
           ),
         ),
       ),

@@ -3,9 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
-import '../../core/navigation/app_router.dart';
 import '../../generated/l10n/app_localizations.dart';
 import '../bloc/devices/devices_bloc.dart';
 import '../bloc/climate/climate_bloc.dart';
@@ -96,8 +94,8 @@ class _MainScreenState extends State<MainScreen> {
           index: _currentIndex,
           children: _screens,
         ),
-        bottomNavigationBar: BlocBuilder<NotificationsBloc, NotificationsState>(
-          builder: (context, state) {
+        bottomNavigationBar: Builder(
+          builder: (context) {
             final l10n = AppLocalizations.of(context)!;
             return BreezNavigationBar(
               items: _getNavigationItems(l10n),
@@ -107,8 +105,6 @@ class _MainScreenState extends State<MainScreen> {
                   _currentIndex = index;
                 });
               },
-              onNotificationsTap: () => context.push(AppRoutes.notifications),
-              notificationsBadge: state.unreadCount > 0 ? '${state.unreadCount}' : null,
             );
           },
         ),

@@ -834,5 +834,13 @@
   "tooltipDelete": "Delete",
   "tooltipAdd": "Add",
   "dataResource": "data",
-  "defaultUserName": "User"
+  "defaultUserName": "User",
+  "heating": "Heating",
+  "@heating": {
+    "description": "Heating label for temperature control"
+  },
+  "cooling": "Cooling",
+  "@cooling": {
+    "description": "Cooling label for temperature control"
+  }
 }

@@ -817,4 +817,10 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get defaultUserName => 'Пользователь';
+
+  @override
+  String get heating => 'Нагрев';
+
+  @override
+  String get cooling => 'Охлаждение';
 }

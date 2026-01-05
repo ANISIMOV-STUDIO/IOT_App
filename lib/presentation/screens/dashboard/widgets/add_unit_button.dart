@@ -2,8 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_theme.dart';
-import '../../../../core/theme/app_radius.dart';
+import '../../../widgets/breez/breez_card.dart';
 
 /// Compact add button for unit tabs
 class AddUnitButton extends StatelessWidget {
@@ -13,29 +12,11 @@ class AddUnitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
-
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(AppRadius.nested),
-        hoverColor: AppColors.accent.withValues(alpha: 0.15),
-        splashColor: AppColors.accent.withValues(alpha: 0.2),
-        highlightColor: AppColors.accent.withValues(alpha: 0.1),
-        child: Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(AppRadius.nested),
-          ),
-          child: Icon(
-            Icons.add_rounded,
-            size: 20,
-            color: colors.textMuted,
-          ),
-        ),
-      ),
+    return BreezIconButton(
+      icon: Icons.add_rounded,
+      onTap: onTap,
+      size: 40,
+      showBorder: false,
     );
   }
 }

@@ -25,8 +25,6 @@ class BreezNavigationBar extends StatelessWidget {
   final ValueChanged<int>? onItemSelected;
   final bool isDark;
   final VoidCallback? onThemeToggle;
-  final VoidCallback? onNotificationsTap;
-  final String? notificationsBadge;
 
   const BreezNavigationBar({
     super.key,
@@ -35,8 +33,6 @@ class BreezNavigationBar extends StatelessWidget {
     this.onItemSelected,
     this.isDark = true,
     this.onThemeToggle,
-    this.onNotificationsTap,
-    this.notificationsBadge,
   });
 
   @override
@@ -108,18 +104,14 @@ class BreezNavigationBar extends StatelessWidget {
                 ),
               ),
 
-              // Additional actions (theme toggle, notifications)
-              if (onThemeToggle != null || onNotificationsTap != null) ...[
+              // Additional actions (theme toggle)
+              if (onThemeToggle != null) ...[
                 Container(
                   width: 1,
                   height: buttonSize * 0.6,
                   color: colors.border,
                   margin: const EdgeInsets.symmetric(horizontal: 8),
                 ),
-              ],
-
-              // Theme toggle
-              if (onThemeToggle != null)
                 Padding(
                   padding: const EdgeInsets.only(right: 4),
                   child: BreezButton(
@@ -138,58 +130,7 @@ class BreezNavigationBar extends StatelessWidget {
                     ),
                   ),
                 ),
-
-              // Notifications
-              if (onNotificationsTap != null)
-                Padding(
-                  padding: const EdgeInsets.only(right: 4),
-                  child: Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      BreezButton(
-                        onTap: onNotificationsTap,
-                        width: buttonSize,
-                        height: buttonSize,
-                        padding: EdgeInsets.zero,
-                        backgroundColor: Colors.transparent,
-                        hoverColor: colors.buttonBg,
-                        child: Icon(
-                          Icons.notifications_outlined,
-                          size: iconSize,
-                          color: notificationsBadge != null
-                              ? AppColors.accent // Синяя иконка если есть уведомления
-                              : colors.textMuted,
-                        ),
-                      ),
-                      if (notificationsBadge != null)
-                        Positioned(
-                          right: 8,
-                          top: 8,
-                          child: Container(
-                            padding: const EdgeInsets.all(4),
-                            decoration: const BoxDecoration(
-                              color: AppColors.accentRed,
-                              shape: BoxShape.circle,
-                            ),
-                            constraints: const BoxConstraints(
-                              minWidth: 16,
-                              minHeight: 16,
-                            ),
-                            child: Center(
-                              child: Text(
-                                notificationsBadge!,
-                                style: const TextStyle(
-                                  fontSize: 9,
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
+              ],
             ],
           ),
         );

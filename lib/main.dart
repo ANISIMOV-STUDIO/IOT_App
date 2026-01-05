@@ -54,8 +54,9 @@ void main() async {
   // Initialize dependencies
   await di.init();
 
-  // Initialize push notifications
-  await di.sl<PushNotificationService>().initialize();
+  // Initialize push notifications (не блокируем UI)
+  // ignore: unawaited_futures
+  di.sl<PushNotificationService>().initialize();
   di.sl<FcmTokenService>().initialize();
 
   runApp(const HvacControlApp());

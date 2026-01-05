@@ -834,5 +834,13 @@
   "tooltipDelete": "Удалить",
   "tooltipAdd": "Добавить",
   "dataResource": "данные",
-  "defaultUserName": "Пользователь"
+  "defaultUserName": "Пользователь",
+  "heating": "Нагрев",
+  "@heating": {
+    "description": "Heating label for temperature control"
+  },
+  "cooling": "Охлаждение",
+  "@cooling": {
+    "description": "Cooling label for temperature control"
+  }
 }

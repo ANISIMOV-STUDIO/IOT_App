@@ -25,6 +25,7 @@ class DesktopHeader extends StatelessWidget {
   final bool showLogo;
   final VoidCallback? onProfileTap;
   final VoidCallback? onNotificationsTap;
+  final int unreadNotificationsCount;
 
   const DesktopHeader({
     super.key,
@@ -41,6 +42,7 @@ class DesktopHeader extends StatelessWidget {
     this.showLogo = false,
     this.onProfileTap,
     this.onNotificationsTap,
+    this.unreadNotificationsCount = 0,
   });
 
   @override
@@ -67,7 +69,7 @@ class DesktopHeader extends StatelessWidget {
         // Notifications
         BreezIconButton(
           icon: Icons.notifications_outlined,
-          badge: '3',
+          badge: unreadNotificationsCount > 0 ? '$unreadNotificationsCount' : null,
           onTap: onNotificationsTap,
         ),
         const SizedBox(width: 16),

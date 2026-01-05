@@ -46,24 +46,18 @@ class ScheduleWidget extends StatelessWidget {
                 ),
               ),
               if (entries.length > 3)
-                MouseRegion(
-                  cursor: SystemMouseCursors.click,
-                  child: GestureDetector(
-                    onTap: onSeeAll,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: AppColors.accent.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(AppRadius.button),
-                      ),
-                      child: Text(
-                        l10n.allCount(entries.length - 3),
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.accent,
-                        ),
-                      ),
+                BreezButton(
+                  onTap: onSeeAll,
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  backgroundColor: AppColors.accent.withValues(alpha: 0.1),
+                  hoverColor: AppColors.accent.withValues(alpha: 0.15),
+                  showBorder: false,
+                  child: Text(
+                    l10n.allCount(entries.length - 3),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.accent,
                     ),
                   ),
                 ),
@@ -105,7 +99,7 @@ class ScheduleWidget extends StatelessWidget {
 }
 
 /// Individual schedule row
-class _ScheduleRow extends StatefulWidget {
+class _ScheduleRow extends StatelessWidget {
   final ScheduleEntry entry;
   final VoidCallback? onTap;
 
@@ -114,15 +108,8 @@ class _ScheduleRow extends StatefulWidget {
     this.onTap,
   });
 
-  @override
-  State<_ScheduleRow> createState() => _ScheduleRowState();
-}
-
-class _ScheduleRowState extends State<_ScheduleRow> {
-  bool _isHovered = false;
-
   IconData _getModeIcon() {
-    switch (widget.entry.mode.toLowerCase()) {
+    switch (entry.mode.toLowerCase()) {
       case 'cooling':
         return Icons.ac_unit;
       case 'heating':
@@ -141,74 +128,66 @@ class _ScheduleRowState extends State<_ScheduleRow> {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: GestureDetector(
-        onTap: widget.onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-          decoration: BoxDecoration(
-            color: _isHovered ? colors.buttonBg : Colors.transparent,
-            borderRadius: BorderRadius.circular(AppRadius.button),
+    return BreezButton(
+      onTap: onTap,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      backgroundColor: Colors.transparent,
+      hoverColor: colors.buttonBg,
+      showBorder: false,
+      enableScale: false,
+      child: Row(
+        children: [
+          // Day
+          SizedBox(
+            width: 80,
+            child: Text(
+              entry.day,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+                color: entry.isActive ? colors.text : colors.textMuted,
+              ),
+            ),
           ),
-          child: Row(
-            children: [
-              // Day
-              SizedBox(
-                width: 80,
-                child: Text(
-                  widget.entry.day,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                    color: widget.entry.isActive ? colors.text : colors.textMuted,
-                  ),
-                ),
-              ),
 
-              // Mode icon
-              Container(
-                width: 28,
-                height: 28,
-                decoration: BoxDecoration(
-                  color: AppColors.accent.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(AppRadius.card),
-                ),
-                child: Icon(
-                  _getModeIcon(),
-                  size: 14,
-                  color: AppColors.accent,
-                ),
-              ),
-
-              const SizedBox(width: 10),
-
-              // Mode name
-              Expanded(
-                child: Text(
-                  widget.entry.mode,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: colors.textMuted,
-                  ),
-                ),
-              ),
-
-              // Temperature range
-              Text(
-                '${widget.entry.tempDay}° / ${widget.entry.tempNight}°',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: colors.text,
-                ),
-              ),
-            ],
+          // Mode icon
+          Container(
+            width: 28,
+            height: 28,
+            decoration: BoxDecoration(
+              color: AppColors.accent.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(AppRadius.card),
+            ),
+            child: Icon(
+              _getModeIcon(),
+              size: 14,
+              color: AppColors.accent,
+            ),
           ),
-        ),
+
+          const SizedBox(width: 10),
+
+          // Mode name
+          Expanded(
+            child: Text(
+              entry.mode,
+              style: TextStyle(
+                fontSize: 12,
+                color: colors.textMuted,
+              ),
+            ),
+          ),
+
+          // Temperature range
+          Text(
+            '${entry.tempDay}° / ${entry.tempNight}°',
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: colors.text,
+            ),
+          ),
+        ],
       ),
     );
   }

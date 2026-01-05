@@ -178,9 +178,8 @@ class _OperationGraphState extends State<OperationGraph> {
 
           const SizedBox(height: AppSpacing.sm),
 
-          // Graph area (фиксированная высота для работы в SliverToBoxAdapter)
-          SizedBox(
-            height: 200,
+          // Graph area
+          Expanded(
             child: LayoutBuilder(
               builder: (context, constraints) {
                 const yAxisWidth = 28.0;

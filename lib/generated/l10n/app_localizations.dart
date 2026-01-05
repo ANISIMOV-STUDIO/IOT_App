@@ -1597,6 +1597,18 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Пользователь'**
   String get defaultUserName;
+
+  /// Heating label for temperature control
+  ///
+  /// In ru, this message translates to:
+  /// **'Нагрев'**
+  String get heating;
+
+  /// Cooling label for temperature control
+  ///
+  /// In ru, this message translates to:
+  /// **'Охлаждение'**
+  String get cooling;
 }
 
 class _AppLocalizationsDelegate

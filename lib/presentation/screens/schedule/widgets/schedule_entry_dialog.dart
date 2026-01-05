@@ -8,6 +8,7 @@ import '../../../../generated/l10n/app_localizations.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/spacing.dart';
 import '../../../../domain/entities/schedule_entry.dart';
+import '../../../widgets/breez/breez_card.dart'; // BreezButton
 
 /// Диалог добавления/редактирования записи расписания
 class ScheduleEntryDialog extends StatefulWidget {
@@ -388,35 +389,30 @@ class _ScheduleEntryDialogState extends State<ScheduleEntryDialog> {
           ),
         ),
         const SizedBox(height: 4),
-        InkWell(
+        BreezButton(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(AppRadius.button),
-          child: Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 12,
-              vertical: 14,
-            ),
-            decoration: BoxDecoration(
-              color: colors.buttonBg,
-              borderRadius: BorderRadius.circular(AppRadius.button),
-            ),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.access_time,
-                  size: 18,
-                  color: colors.textMuted,
+          padding: const EdgeInsets.symmetric(
+            horizontal: 12,
+            vertical: 14,
+          ),
+          backgroundColor: colors.buttonBg,
+          hoverColor: colors.buttonHover,
+          child: Row(
+            children: [
+              Icon(
+                Icons.access_time,
+                size: 18,
+                color: colors.textMuted,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                _formatTime(time),
+                style: TextStyle(
+                  fontSize: 14,
+                  color: colors.text,
                 ),
-                const SizedBox(width: 8),
-                Text(
-                  _formatTime(time),
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: colors.text,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ],

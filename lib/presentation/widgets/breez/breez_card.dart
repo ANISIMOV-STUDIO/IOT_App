@@ -144,6 +144,7 @@ class BreezButton extends StatefulWidget {
   final bool showBorder;
   final bool enableScale;
   final bool enableGlow;
+  final bool enforceMinTouchTarget;
 
   const BreezButton({
     super.key,
@@ -161,6 +162,7 @@ class BreezButton extends StatefulWidget {
     this.showBorder = true,
     this.enableScale = true,
     this.enableGlow = false,
+    this.enforceMinTouchTarget = true,
   });
 
   @override
@@ -216,12 +218,13 @@ class _BreezButtonState extends State<BreezButton>
     final bg = widget.backgroundColor ?? colors.buttonBg;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    // Touch target constraints
+    // Touch target constraints (only enforce if enforceMinTouchTarget is true)
+    final minTarget = widget.enforceMinTouchTarget ? kMinTouchTarget : 0.0;
     final buttonWidth = widget.width != null
-        ? ((widget.width ?? 0) < kMinTouchTarget ? kMinTouchTarget : widget.width)
+        ? ((widget.width ?? 0) < minTarget ? minTarget : widget.width)
         : null;
     final buttonHeight = widget.height != null
-        ? ((widget.height ?? 0) < kMinTouchTarget ? kMinTouchTarget : widget.height)
+        ? ((widget.height ?? 0) < minTarget ? minTarget : widget.height)
         : null;
 
     // State-based colors
@@ -265,7 +268,7 @@ class _BreezButtonState extends State<BreezButton>
                 width: buttonWidth,
                 height: buttonHeight,
                 constraints: BoxConstraints(
-                  minHeight: kMinTouchTarget,
+                  minHeight: minTarget,
                   minWidth: buttonWidth ?? 0,
                 ),
                 padding: widget.padding ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 12),

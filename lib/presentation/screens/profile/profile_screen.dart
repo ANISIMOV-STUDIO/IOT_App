@@ -322,37 +322,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildLogoutButton(BuildContext context, AppLocalizations l10n) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: () {
-          context.read<AuthBloc>().add(const AuthLogoutRequested());
-          rootNavigatorKey.currentContext?.go(AppRoutes.login);
-        },
-        borderRadius: BorderRadius.circular(AppRadius.button),
-        child: Ink(
-          padding: const EdgeInsets.symmetric(vertical: 14),
-          decoration: BoxDecoration(
-            color: AppColors.accentRed.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(AppRadius.button),
-            border: Border.all(color: AppColors.accentRed.withValues(alpha: 0.3)),
+    return BreezButton(
+      onTap: () {
+        context.read<AuthBloc>().add(const AuthLogoutRequested());
+        rootNavigatorKey.currentContext?.go(AppRoutes.login);
+      },
+      backgroundColor: AppColors.critical.withValues(alpha: 0.1),
+      hoverColor: AppColors.critical.withValues(alpha: 0.15),
+      padding: const EdgeInsets.symmetric(vertical: 14),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.logout, size: 20, color: AppColors.critical),
+          const SizedBox(width: 8),
+          Text(
+            l10n.logout,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: AppColors.critical,
+            ),
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.logout, size: 20, color: AppColors.accentRed),
-              const SizedBox(width: 8),
-              Text(
-                l10n.logout,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.accentRed,
-                ),
-              ),
-            ],
-          ),
-        ),
+        ],
       ),
     );
   }
@@ -478,33 +469,26 @@ class _ActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(AppRadius.button),
-        child: Ink(
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(AppRadius.button),
-            border: Border.all(color: AppColors.accent),
+    return BreezButton(
+      onTap: onTap,
+      backgroundColor: Colors.transparent,
+      hoverColor: AppColors.accent.withValues(alpha: 0.1),
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      border: Border.all(color: AppColors.accent),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, size: 18, color: AppColors.accent),
+          const SizedBox(width: 8),
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: AppColors.accent,
+            ),
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, size: 18, color: AppColors.accent),
-              const SizedBox(width: 8),
-              Text(
-                label,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.accent,
-                ),
-              ),
-            ],
-          ),
-        ),
+        ],
       ),
     );
   }

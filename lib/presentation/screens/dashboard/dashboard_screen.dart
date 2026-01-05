@@ -183,14 +183,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void _showNotifications() {
-    // TODO: Открыть экран уведомлений или показать bottom sheet
-    final l10n = AppLocalizations.of(context)!;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(l10n.notificationsInDevelopment),
-        duration: const Duration(seconds: 2),
-      ),
-    );
+    context.push(AppRoutes.notifications);
   }
 
   @override
@@ -435,6 +428,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       onAddUnit: _showAddUnitDialog,
       onLogoutTap: _handleLogout,
       onNotificationsTap: _showNotifications,
+      unreadNotificationsCount: notificationsState.unreadCount,
       schedule: scheduleState.entries,
       notifications: notificationsState.notifications,
       graphData: analyticsState.graphData,

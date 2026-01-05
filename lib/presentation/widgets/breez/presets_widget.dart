@@ -167,28 +167,38 @@ class _PresetButton extends StatelessWidget {
               ),
             ]
           : null,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            preset.icon,
-            size: isCompact ? 16 : 18,
-            color: isActive ? _color : colors.textMuted,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            preset.name.toUpperCase(),
-            style: TextStyle(
-              fontSize: 8,
-              fontWeight: FontWeight.w900,
-              letterSpacing: 0.5,
-              color: isActive ? _color : colors.textMuted,
-            ),
-            textAlign: TextAlign.center,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          // Если высота слишком мала, показываем только иконку
+          final showLabel = constraints.maxHeight > 32;
+
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                preset.icon,
+                size: isCompact ? 14 : 16,
+                color: isActive ? _color : colors.textMuted,
+              ),
+              if (showLabel) ...[
+                const SizedBox(height: 2),
+                Text(
+                  preset.name.toUpperCase(),
+                  style: TextStyle(
+                    fontSize: 7,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 0.3,
+                    color: isActive ? _color : colors.textMuted,
+                  ),
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ],
+          );
+        },
       ),
     );
   }

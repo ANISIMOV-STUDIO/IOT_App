@@ -12,6 +12,8 @@ class UnitStateModel {
   final String name;
   final bool power;
   final int temp;
+  final int heatingTemp;
+  final int coolingTemp;
   final int supplyFan;
   final int exhaustFan;
   final String mode;
@@ -25,6 +27,8 @@ class UnitStateModel {
     required this.name,
     required this.power,
     required this.temp,
+    required this.heatingTemp,
+    required this.coolingTemp,
     required this.supplyFan,
     required this.exhaustFan,
     required this.mode,
@@ -41,6 +45,8 @@ class UnitStateModel {
       name: json['name'] as String? ?? 'Unit',
       power: json['power'] as bool? ?? false,
       temp: json['temp'] as int? ?? 22,
+      heatingTemp: json['heatingTemperature'] as int? ?? 21,
+      coolingTemp: json['coolingTemperature'] as int? ?? 24,
       supplyFan: json['supplyFan'] as int? ?? 50,
       exhaustFan: json['exhaustFan'] as int? ?? 50,
       mode: json['mode'] as String? ?? 'auto',
@@ -58,6 +64,8 @@ class UnitStateModel {
       'name': name,
       'power': power,
       'temp': temp,
+      'heatingTemperature': heatingTemp,
+      'coolingTemperature': coolingTemp,
       'supplyFan': supplyFan,
       'exhaustFan': exhaustFan,
       'mode': mode,
@@ -75,6 +83,8 @@ class UnitStateModel {
       name: name,
       power: power,
       temp: temp,
+      heatingTemp: heatingTemp,
+      coolingTemp: coolingTemp,
       supplyFan: supplyFan,
       exhaustFan: exhaustFan,
       mode: mode,
@@ -92,6 +102,8 @@ class UnitStateModel {
       name: state.name,
       power: state.power,
       temp: state.temp,
+      heatingTemp: state.heatingTemp,
+      coolingTemp: state.coolingTemp,
       supplyFan: state.supplyFan,
       exhaustFan: state.exhaustFan,
       mode: state.mode,

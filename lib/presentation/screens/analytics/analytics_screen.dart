@@ -230,8 +230,11 @@ class AnalyticsScreen extends StatelessWidget {
                       return const SkeletonGraph(height: 300);
                     }
 
-                    return OperationGraph(
-                      data: state.graphData,
+                    return SizedBox(
+                      height: 280,
+                      child: OperationGraph(
+                        data: state.graphData,
+                      ),
                     );
                   },
                 ),

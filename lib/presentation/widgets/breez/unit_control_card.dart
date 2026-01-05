@@ -11,6 +11,10 @@ class UnitControlCard extends StatelessWidget {
   final UnitState unit;
   final VoidCallback? onTemperatureIncrease;
   final VoidCallback? onTemperatureDecrease;
+  final VoidCallback? onHeatingTempIncrease;
+  final VoidCallback? onHeatingTempDecrease;
+  final VoidCallback? onCoolingTempIncrease;
+  final VoidCallback? onCoolingTempDecrease;
   final ValueChanged<int>? onSupplyFanChanged;
   final ValueChanged<int>? onExhaustFanChanged;
   final ValueChanged<String>? onModeChanged;
@@ -23,6 +27,10 @@ class UnitControlCard extends StatelessWidget {
     required this.unit,
     this.onTemperatureIncrease,
     this.onTemperatureDecrease,
+    this.onHeatingTempIncrease,
+    this.onHeatingTempDecrease,
+    this.onCoolingTempIncrease,
+    this.onCoolingTempDecrease,
     this.onSupplyFanChanged,
     this.onExhaustFanChanged,
     this.onModeChanged,
@@ -54,6 +62,8 @@ class UnitControlCard extends StatelessWidget {
         return MainTempCard(
           unitName: unit.name,
           temperature: unit.temp,
+          heatingTemp: unit.heatingTemp,
+          coolingTemp: unit.coolingTemp,
           status: unit.power ? l10n.statusRunning : l10n.statusStopped,
           humidity: unit.humidity,
           airflow: unit.airflowRate,
@@ -62,8 +72,10 @@ class UnitControlCard extends StatelessWidget {
           supplyFan: unit.supplyFan,
           exhaustFan: unit.exhaustFan,
           onPowerToggle: onPowerToggle,
-          onTemperatureIncrease: onTemperatureIncrease,
-          onTemperatureDecrease: onTemperatureDecrease,
+          onHeatingTempIncrease: onHeatingTempIncrease,
+          onHeatingTempDecrease: onHeatingTempDecrease,
+          onCoolingTempIncrease: onCoolingTempIncrease,
+          onCoolingTempDecrease: onCoolingTempDecrease,
           onSupplyFanChanged: onSupplyFanChanged,
           onExhaustFanChanged: onExhaustFanChanged,
           onSettingsTap: onSettingsTap,

@@ -12,6 +12,8 @@ class UnitState extends Equatable {
   final String name;
   final bool power;
   final int temp;
+  final int heatingTemp;
+  final int coolingTemp;
   final int supplyFan;
   final int exhaustFan;
   final String mode;
@@ -25,6 +27,8 @@ class UnitState extends Equatable {
     required this.name,
     required this.power,
     required this.temp,
+    this.heatingTemp = 21,
+    this.coolingTemp = 24,
     required this.supplyFan,
     required this.exhaustFan,
     required this.mode,
@@ -39,6 +43,8 @@ class UnitState extends Equatable {
     String? name,
     bool? power,
     int? temp,
+    int? heatingTemp,
+    int? coolingTemp,
     int? supplyFan,
     int? exhaustFan,
     String? mode,
@@ -52,6 +58,8 @@ class UnitState extends Equatable {
       name: name ?? this.name,
       power: power ?? this.power,
       temp: temp ?? this.temp,
+      heatingTemp: heatingTemp ?? this.heatingTemp,
+      coolingTemp: coolingTemp ?? this.coolingTemp,
       supplyFan: supplyFan ?? this.supplyFan,
       exhaustFan: exhaustFan ?? this.exhaustFan,
       mode: mode ?? this.mode,
@@ -68,6 +76,8 @@ class UnitState extends Equatable {
         name,
         power,
         temp,
+        heatingTemp,
+        coolingTemp,
         supplyFan,
         exhaustFan,
         mode,

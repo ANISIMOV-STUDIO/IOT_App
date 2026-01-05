@@ -8,13 +8,18 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../generated/l10n/app_localizations.dart';
 import 'breez_card.dart';
+import 'fan_slider.dart';
 import 'mode_selector.dart';
+import 'stat_item.dart';
+import 'temp_column.dart';
 
 /// Main temperature display card with gradient background
 class MainTempCard extends StatelessWidget {
   final String unitName;
   final String? status;
   final int temperature;
+  final int heatingTemp;
+  final int coolingTemp;
   final int humidity;
   final int airflow;
   final int filterPercent;
@@ -26,8 +31,10 @@ class MainTempCard extends StatelessWidget {
   final ValueChanged<int>? onSupplyFanChanged;
   final ValueChanged<int>? onExhaustFanChanged;
   final VoidCallback? onSettingsTap;
-  final VoidCallback? onTemperatureIncrease;
-  final VoidCallback? onTemperatureDecrease;
+  final VoidCallback? onHeatingTempIncrease;
+  final VoidCallback? onHeatingTempDecrease;
+  final VoidCallback? onCoolingTempIncrease;
+  final VoidCallback? onCoolingTempDecrease;
   final bool showControls;
   final String? selectedMode;
   final ValueChanged<String>? onModeChanged;
@@ -40,6 +47,8 @@ class MainTempCard extends StatelessWidget {
     super.key,
     required this.unitName,
     required this.temperature,
+    this.heatingTemp = 21,
+    this.coolingTemp = 24,
     this.status,
     this.humidity = 45,
     this.airflow = 420,
@@ -52,8 +61,10 @@ class MainTempCard extends StatelessWidget {
     this.onSupplyFanChanged,
     this.onExhaustFanChanged,
     this.onSettingsTap,
-    this.onTemperatureIncrease,
-    this.onTemperatureDecrease,
+    this.onHeatingTempIncrease,
+    this.onHeatingTempDecrease,
+    this.onCoolingTempIncrease,
+    this.onCoolingTempDecrease,
     this.showControls = false,
     this.selectedMode,
     this.onModeChanged,
@@ -250,77 +261,41 @@ class MainTempCard extends StatelessWidget {
                 ],
               ),
 
-              // Temperature display with +/- controls
+              // Temperature display with +/- controls - Two columns: Heating & Cooling
               Expanded(
                 child: Center(
-                  child: Column(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Cloud/Fan icon
-                      Icon(
-                        isPowered ? Icons.ac_unit : Icons.cloud_off,
-                        size: 48,
-                        color: colors.textMuted,
+                      // Heating temperature
+                      Expanded(
+                        child: TemperatureColumn(
+                          label: l10n.heating,
+                          temperature: heatingTemp,
+                          icon: Icons.whatshot,
+                          color: AppColors.accentOrange,
+                          isPowered: isPowered,
+                          onIncrease: onHeatingTempIncrease,
+                          onDecrease: onHeatingTempDecrease,
+                        ),
                       ),
-                      const SizedBox(height: 8),
-                      // Temperature with +/- buttons
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          // Minus button
-                          if (isPowered && onTemperatureDecrease != null)
-                            _TemperatureButton(
-                              icon: Icons.remove,
-                              onTap: onTemperatureDecrease,
-                            )
-                          else
-                            const SizedBox(width: 48),
-                          const SizedBox(width: 16),
-                          // Temperature value
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '$temperature',
-                                style: TextStyle(
-                                  fontSize: 72,
-                                  fontWeight: FontWeight.w300,
-                                  color: colors.text,
-                                  height: 1,
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 8),
-                                child: Text(
-                                  '°C',
-                                  style: TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w400,
-                                    color: colors.textMuted,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(width: 16),
-                          // Plus button
-                          if (isPowered && onTemperatureIncrease != null)
-                            _TemperatureButton(
-                              icon: Icons.add,
-                              onTap: onTemperatureIncrease,
-                            )
-                          else
-                            const SizedBox(width: 48),
-                        ],
+                      // Divider
+                      Container(
+                        width: 1,
+                        height: 80,
+                        color: colors.border,
+                        margin: const EdgeInsets.symmetric(horizontal: 16),
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        l10n.targetTemperature,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: colors.textMuted,
+                      // Cooling temperature
+                      Expanded(
+                        child: TemperatureColumn(
+                          label: l10n.cooling,
+                          temperature: coolingTemp,
+                          icon: Icons.ac_unit,
+                          color: AppColors.accent,
+                          isPowered: isPowered,
+                          onIncrease: onCoolingTempIncrease,
+                          onDecrease: onCoolingTempDecrease,
                         ),
                       ),
                     ],
@@ -339,17 +314,17 @@ class MainTempCard extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    _StatItem(
+                    StatItem(
                       icon: Icons.air,
                       value: '$airflow м³/ч',
                       label: l10n.airflowRate,
                     ),
-                    _StatItem(
+                    StatItem(
                       icon: Icons.water_drop_outlined,
                       value: '$humidity%',
                       label: l10n.humidity,
                     ),
-                    _StatItem(
+                    StatItem(
                       icon: Icons.filter_alt_outlined,
                       value: '$filterPercent%',
                       label: l10n.filter,
@@ -371,7 +346,7 @@ class MainTempCard extends StatelessWidget {
                   child: Row(
                     children: [
                       Expanded(
-                        child: _FanSlider(
+                        child: FanSlider(
                           label: l10n.intake,
                           value: supplyFan,
                           color: AppColors.accent,
@@ -381,7 +356,7 @@ class MainTempCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 16),
                       Expanded(
-                        child: _FanSlider(
+                        child: FanSlider(
                           label: l10n.exhaust,
                           value: exhaustFan,
                           color: AppColors.accentOrange,
@@ -560,155 +535,5 @@ class MainTempCard extends StatelessWidget {
     final locale = Localizations.localeOf(context).languageCode;
     final dateFormat = DateFormat('d MMM', locale);
     return l10n.todayDate(dateFormat.format(now));
-  }
-}
-
-class _StatItem extends StatelessWidget {
-  final IconData icon;
-  final String value;
-  final String label;
-
-  const _StatItem({
-    required this.icon,
-    required this.value,
-    required this.label,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
-    return Column(
-      children: [
-        Icon(
-          icon,
-          size: 18,
-          color: AppColors.accent,
-        ),
-        const SizedBox(height: 6),
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w700,
-            color: colors.text,
-          ),
-        ),
-        const SizedBox(height: 2),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 10,
-            color: colors.textMuted,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-/// Compact fan slider
-class _FanSlider extends StatelessWidget {
-  final String label;
-  final int value;
-  final Color color;
-  final IconData icon;
-  final ValueChanged<int>? onChanged;
-
-  const _FanSlider({
-    required this.label,
-    required this.value,
-    required this.color,
-    required this.icon,
-    this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Icon(icon, size: 12, color: color),
-                const SizedBox(width: 4),
-                Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w500,
-                    color: colors.textMuted,
-                  ),
-                ),
-              ],
-            ),
-            Text(
-              '$value%',
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-                color: color,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 6),
-        SliderTheme(
-          data: SliderThemeData(
-            activeTrackColor: color,
-            inactiveTrackColor: isDark
-                ? AppColors.darkHoverOverlay
-                : AppColors.lightHoverOverlay,
-            thumbColor: color,
-            overlayColor: color.withValues(alpha: 0.2),
-            trackHeight: 6,
-            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
-            overlayShape: const RoundSliderOverlayShape(overlayRadius: 16),
-          ),
-          child: Slider(
-            value: value.toDouble(),
-            min: 0,
-            max: 100,
-            onChanged: onChanged != null ? (v) => onChanged!(v.round()) : null,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-/// Temperature +/- button - uses BreezButton for consistent animations
-class _TemperatureButton extends StatelessWidget {
-  final IconData icon;
-  final VoidCallback? onTap;
-
-  const _TemperatureButton({
-    required this.icon,
-    this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
-
-    return BreezButton(
-      onTap: onTap,
-      width: 48,
-      height: 48,
-      padding: EdgeInsets.zero,
-      borderRadius: 24,
-      backgroundColor: colors.card,
-      showBorder: true,
-      child: Icon(
-        icon,
-        size: 24,
-        color: AppColors.accent,
-      ),
-    );
   }
 }

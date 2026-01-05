@@ -143,23 +143,11 @@ class _UnitSettingsDialogState extends State<UnitSettingsDialog> {
             ),
           ],
         ),
-        Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: () => Navigator.of(context).pop(),
-            borderRadius: BorderRadius.circular(AppRadius.button),
-            hoverColor: colors.buttonBg,
-            splashColor: AppColors.accent.withValues(alpha: 0.1),
-            highlightColor: AppColors.accent.withValues(alpha: 0.05),
-            child: Padding(
-              padding: const EdgeInsets.all(4),
-              child: Icon(
-                Icons.close,
-                size: 20,
-                color: colors.textMuted,
-              ),
-            ),
-          ),
+        BreezIconButton(
+          icon: Icons.close,
+          onTap: () => Navigator.of(context).pop(),
+          size: 32,
+          showBorder: false,
         ),
       ],
     );

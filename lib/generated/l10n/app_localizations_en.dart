@@ -815,4 +815,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get defaultUserName => 'User';
+
+  @override
+  String get heating => 'Heating';
+
+  @override
+  String get cooling => 'Cooling';
 }

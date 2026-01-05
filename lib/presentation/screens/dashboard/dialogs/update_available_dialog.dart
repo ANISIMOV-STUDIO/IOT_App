@@ -112,31 +112,33 @@ class _UpdateAvailableDialogState extends State<UpdateAvailableDialog> {
 
                 // Toggle changelog button
                 if (!_showChangelog)
-                  GestureDetector(
+                  BreezButton(
                     onTap: () => setState(() => _showChangelog = true),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: AppSpacing.xs,
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            l10n.whatsNew,
-                            style: const TextStyle(
-                              fontSize: 13,
-                              color: AppColors.accent,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const SizedBox(width: 4),
-                          const Icon(
-                            Icons.arrow_drop_down,
-                            size: 20,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.sm,
+                      vertical: AppSpacing.xs,
+                    ),
+                    backgroundColor: Colors.transparent,
+                    hoverColor: AppColors.accent.withValues(alpha: 0.1),
+                    showBorder: false,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          l10n.whatsNew,
+                          style: const TextStyle(
+                            fontSize: 13,
                             color: AppColors.accent,
+                            fontWeight: FontWeight.w600,
                           ),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(width: 4),
+                        const Icon(
+                          Icons.arrow_drop_down,
+                          size: 20,
+                          color: AppColors.accent,
+                        ),
+                      ],
                     ),
                   ),
 
@@ -159,31 +161,33 @@ class _UpdateAvailableDialogState extends State<UpdateAvailableDialog> {
                       ),
                     ),
                   ),
-                  GestureDetector(
+                  BreezButton(
                     onTap: () => setState(() => _showChangelog = false),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: AppSpacing.xs,
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            l10n.hide,
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: colors.textMuted,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const SizedBox(width: 4),
-                          Icon(
-                            Icons.arrow_drop_up,
-                            size: 20,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.sm,
+                      vertical: AppSpacing.xs,
+                    ),
+                    backgroundColor: Colors.transparent,
+                    hoverColor: colors.buttonBg,
+                    showBorder: false,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          l10n.hide,
+                          style: TextStyle(
+                            fontSize: 13,
                             color: colors.textMuted,
+                            fontWeight: FontWeight.w600,
                           ),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(width: 4),
+                        Icon(
+                          Icons.arrow_drop_up,
+                          size: 20,
+                          color: colors.textMuted,
+                        ),
+                      ],
                     ),
                   ),
                 ],
