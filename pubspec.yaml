@@ -27,6 +27,7 @@ dependencies:
   # gRPC (основной протокол связи с бэкендом)
   grpc: ^5.0.0
   protobuf: ^5.0.0
+  fixnum: ^1.1.0
 
   # HTTP клиент для REST API (auth endpoints)
   http: ^1.2.2
