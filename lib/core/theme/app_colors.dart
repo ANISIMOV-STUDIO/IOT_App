@@ -205,6 +205,31 @@ abstract class AppColors {
       ];
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // SKELETON / SHIMMER
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  static const Color darkShimmerBase = Color(0xFF1A232D);
+  static const Color darkShimmerHighlight = Color(0xFF232F3E);
+  static const Color lightShimmerBase = Color(0xFFE2E8F0);
+  static const Color lightShimmerHighlight = Color(0xFFF1F5F9);
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // CARD GRADIENTS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// Тёмный градиент для главной карточки
+  static const List<Color> darkCardGradientColors = [
+    Color(0xFF1A2E42),
+    Color(0xFF0F1D2A),
+  ];
+
+  /// Светлый градиент для главной карточки
+  static const List<Color> lightCardGradientColors = [
+    Color(0xFFE8F4F8),
+    Color(0xFFD0E8F0),
+  ];
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // LEGACY ALIASES (для совместимости)
   // ═══════════════════════════════════════════════════════════════════════════
 

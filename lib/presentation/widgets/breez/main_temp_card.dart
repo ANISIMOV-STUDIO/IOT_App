@@ -69,10 +69,10 @@ class MainTempCard extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final l10n = AppLocalizations.of(context)!;
 
-    // Theme-aware gradients
+    // Theme-aware gradients (using centralized tokens)
     final poweredGradient = isDark
-        ? [const Color(0xFF1E3A5F), const Color(0xFF0F2847)]
-        : [const Color(0xFFE3F2FD), const Color(0xFFBBDEFB)];
+        ? AppColors.darkCardGradientColors
+        : AppColors.lightCardGradientColors;
     final offGradient = [colors.card, colors.card];
 
     final cardWidget = Container(
@@ -437,8 +437,8 @@ class MainTempCard extends StatelessWidget {
 
   Widget _buildShimmer(BuildContext context, BreezColors colors, bool isDark) {
     return Shimmer.fromColors(
-      baseColor: isDark ? colors.cardLight : (Colors.grey[300] ?? Colors.grey),
-      highlightColor: isDark ? colors.border : (Colors.grey[100] ?? Colors.grey.shade100),
+      baseColor: isDark ? AppColors.darkShimmerBase : AppColors.lightShimmerBase,
+      highlightColor: isDark ? AppColors.darkShimmerHighlight : AppColors.lightShimmerHighlight,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -664,8 +664,8 @@ class _FanSlider extends StatelessWidget {
             data: SliderThemeData(
               activeTrackColor: color,
               inactiveTrackColor: isDark
-                  ? Colors.white.withValues(alpha: 0.1)
-                  : Colors.black.withValues(alpha: 0.1),
+                  ? AppColors.darkHoverOverlay
+                  : AppColors.lightHoverOverlay,
               thumbColor: color,
               overlayColor: color.withValues(alpha: 0.2),
               trackHeight: 4,
@@ -709,8 +709,8 @@ class _TemperatureButton extends StatelessWidget {
           height: 48,
           decoration: BoxDecoration(
             color: isDark
-                ? Colors.white.withValues(alpha: 0.1)
-                : Colors.black.withValues(alpha: 0.05),
+                ? AppColors.darkHoverOverlay
+                : AppColors.lightHoverOverlay,
             shape: BoxShape.circle,
             border: Border.all(
               color: AppColors.accent.withValues(alpha: 0.3),

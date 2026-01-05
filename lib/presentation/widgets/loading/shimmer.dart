@@ -5,6 +5,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import '../../../core/theme/app_theme.dart';
 
 /// Shimmer эффект для skeleton loaders
 ///
@@ -26,11 +27,11 @@ class Shimmer extends StatefulWidget {
   /// Дочерний виджет, к которому применяется shimmer эффект
   final Widget child;
 
-  /// Базовый цвет (обычно цвет фона)
-  final Color baseColor;
+  /// Базовый цвет (обычно цвет фона). Если null, использует цвет темы.
+  final Color? baseColor;
 
-  /// Цвет подсветки (цвет "блика")
-  final Color highlightColor;
+  /// Цвет подсветки (цвет "блика"). Если null, использует цвет темы.
+  final Color? highlightColor;
 
   /// Длительность одного цикла анимации
   final Duration period;
@@ -41,12 +42,11 @@ class Shimmer extends StatefulWidget {
   const Shimmer({
     super.key,
     required this.child,
-    Color? baseColor,
-    Color? highlightColor,
+    this.baseColor,
+    this.highlightColor,
     this.period = const Duration(milliseconds: 1500),
     this.direction = ShimmerDirection.leftToRight,
-  })  : baseColor = baseColor ?? const Color(0xFFE0E0E0),
-        highlightColor = highlightColor ?? const Color(0xFFF5F5F5);
+  });
 
   /// Фабричный метод для создания shimmer с темной темой
   factory Shimmer.dark({
@@ -55,8 +55,23 @@ class Shimmer extends StatefulWidget {
     ShimmerDirection direction = ShimmerDirection.leftToRight,
   }) {
     return Shimmer(
-      baseColor: const Color(0xFF1A1A1A),
-      highlightColor: const Color(0xFF2A2A2A),
+      baseColor: AppColors.darkShimmerBase,
+      highlightColor: AppColors.darkShimmerHighlight,
+      period: period,
+      direction: direction,
+      child: child,
+    );
+  }
+
+  /// Фабричный метод для создания shimmer со светлой темой
+  factory Shimmer.light({
+    required Widget child,
+    Duration period = const Duration(milliseconds: 1500),
+    ShimmerDirection direction = ShimmerDirection.leftToRight,
+  }) {
+    return Shimmer(
+      baseColor: AppColors.lightShimmerBase,
+      highlightColor: AppColors.lightShimmerHighlight,
       period: period,
       direction: direction,
       child: child,
@@ -102,6 +117,12 @@ class _ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final baseColor = widget.baseColor ??
+        (isDark ? AppColors.darkShimmerBase : AppColors.lightShimmerBase);
+    final highlightColor = widget.highlightColor ??
+        (isDark ? AppColors.darkShimmerHighlight : AppColors.lightShimmerHighlight);
+
     return AnimatedBuilder(
       animation: _animation,
       builder: (context, child) {
@@ -110,9 +131,9 @@ class _ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
           shaderCallback: (Rect bounds) {
             return LinearGradient(
               colors: [
-                widget.baseColor,
-                widget.highlightColor,
-                widget.baseColor,
+                baseColor,
+                highlightColor,
+                baseColor,
               ],
               stops: const [
                 0.0,
@@ -237,8 +258,8 @@ class ShimmerUtil {
     final isDark = brightness == Brightness.dark;
 
     return Shimmer(
-      baseColor: isDark ? const Color(0xFF1A1A1A) : const Color(0xFFE0E0E0),
-      highlightColor: isDark ? const Color(0xFF2A2A2A) : const Color(0xFFF5F5F5),
+      baseColor: isDark ? AppColors.darkShimmerBase : AppColors.lightShimmerBase,
+      highlightColor: isDark ? AppColors.darkShimmerHighlight : AppColors.lightShimmerHighlight,
       period: period,
       direction: direction,
       child: child,

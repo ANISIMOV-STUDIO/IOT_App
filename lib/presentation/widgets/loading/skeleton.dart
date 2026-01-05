@@ -52,13 +52,13 @@ class SkeletonBox extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Shimmer(
-      baseColor: isDark ? colors.card : const Color(0xFFE0E0E0),
-      highlightColor: isDark ? colors.cardLight : const Color(0xFFF5F5F5),
+      baseColor: isDark ? AppColors.darkShimmerBase : AppColors.lightShimmerBase,
+      highlightColor: isDark ? AppColors.darkShimmerHighlight : AppColors.lightShimmerHighlight,
       child: Container(
         width: width,
         height: height,
         decoration: BoxDecoration(
-          color: isDark ? colors.card : Colors.white,
+          color: isDark ? colors.card : AppColors.lightCard,
           shape: shape,
           borderRadius: shape == BoxShape.rectangle
               ? BorderRadius.circular(borderRadius)

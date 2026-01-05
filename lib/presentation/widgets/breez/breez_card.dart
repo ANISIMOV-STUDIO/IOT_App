@@ -86,8 +86,8 @@ class BreezCard extends StatelessWidget {
 
   Widget _buildShimmer(BuildContext context, BreezColors colors, bool isDark) {
     return Shimmer.fromColors(
-      baseColor: isDark ? colors.cardLight : (Colors.grey[300] ?? Colors.grey),
-      highlightColor: isDark ? colors.border : (Colors.grey[100] ?? Colors.grey.shade100),
+      baseColor: isDark ? AppColors.darkShimmerBase : AppColors.lightShimmerBase,
+      highlightColor: isDark ? AppColors.darkShimmerHighlight : AppColors.lightShimmerHighlight,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
