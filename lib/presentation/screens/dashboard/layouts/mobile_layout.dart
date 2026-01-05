@@ -1,6 +1,4 @@
-/// Mobile Layout - Restructured with 4 tabs
-///
-/// Compact main card + tabs for Controls, Sensors, Schedule, Alarms
+/// Mobile Layout - Main control card + tabs for sensors/schedule/alarms
 library;
 
 import 'package:flutter/material.dart';
@@ -12,7 +10,7 @@ import '../../../../domain/entities/alarm_info.dart';
 import '../../../../generated/l10n/app_localizations.dart';
 import '../../../widgets/breez/breez.dart';
 
-/// Mobile layout with compact header + 4 tabs
+/// Mobile layout with UnitControlCard + tabs (sensors moved to tab)
 class MobileLayout extends StatefulWidget {
   final UnitState unit;
   final ValueChanged<int>? onTemperatureIncrease;
@@ -68,7 +66,7 @@ class _MobileLayoutState extends State<MobileLayout>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -83,16 +81,29 @@ class _MobileLayoutState extends State<MobileLayout>
     final l10n = AppLocalizations.of(context)!;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+      padding: const EdgeInsets.only(
+        left: AppSpacing.sm,
+        right: AppSpacing.sm,
+        bottom: AppSpacing.sm,
+      ),
       child: Column(
         children: [
-          // Compact header card
-          _CompactHeaderCard(
-            unit: widget.unit,
-            onPowerToggle: widget.onPowerToggle,
-            onSettingsTap: widget.onSettingsTap,
-            isPowerLoading: widget.isPowerLoading,
-            alarmCount: widget.activeAlarms.length,
+          // Main control card (without sensors grid)
+          Expanded(
+            flex: 5,
+            child: _MainControlCard(
+              unit: widget.unit,
+              onHeatingTempIncrease: widget.onHeatingTempIncrease,
+              onHeatingTempDecrease: widget.onHeatingTempDecrease,
+              onCoolingTempIncrease: widget.onCoolingTempIncrease,
+              onCoolingTempDecrease: widget.onCoolingTempDecrease,
+              onSupplyFanChanged: widget.onSupplyFanChanged,
+              onExhaustFanChanged: widget.onExhaustFanChanged,
+              onModeChanged: widget.onModeChanged,
+              onPowerToggle: widget.onPowerToggle,
+              onSettingsTap: widget.onSettingsTap,
+              isPowerLoading: widget.isPowerLoading,
+            ),
           ),
 
           const SizedBox(height: AppSpacing.sm),
@@ -133,29 +144,9 @@ class _MobileLayoutState extends State<MobileLayout>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.tune, size: 14),
-                      const SizedBox(width: 3),
-                      Flexible(
-                        child: Text(
-                          l10n.controls.toUpperCase(),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Tab(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
                       const Icon(Icons.sensors, size: 14),
-                      const SizedBox(width: 3),
-                      Flexible(
-                        child: Text(
-                          l10n.sensors.toUpperCase(),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
+                      const SizedBox(width: 4),
+                      Text(l10n.sensors.toUpperCase()),
                     ],
                   ),
                 ),
@@ -164,13 +155,8 @@ class _MobileLayoutState extends State<MobileLayout>
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Icon(Icons.calendar_today, size: 14),
-                      const SizedBox(width: 3),
-                      Flexible(
-                        child: Text(
-                          l10n.schedule.toUpperCase(),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
+                      const SizedBox(width: 4),
+                      Text(l10n.schedule.toUpperCase()),
                     ],
                   ),
                 ),
@@ -187,8 +173,10 @@ class _MobileLayoutState extends State<MobileLayout>
                             ? null
                             : AppColors.accentRed,
                       ),
+                      const SizedBox(width: 4),
+                      Text(l10n.alarms.toUpperCase()),
                       if (widget.activeAlarms.isNotEmpty) ...[
-                        const SizedBox(width: 3),
+                        const SizedBox(width: 4),
                         Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 4,
@@ -219,21 +207,10 @@ class _MobileLayoutState extends State<MobileLayout>
 
           // Tab content
           Expanded(
+            flex: 2,
             child: TabBarView(
               controller: _tabController,
               children: [
-                // Controls tab
-                _ControlsTab(
-                  unit: widget.unit,
-                  onHeatingTempIncrease: widget.onHeatingTempIncrease,
-                  onHeatingTempDecrease: widget.onHeatingTempDecrease,
-                  onCoolingTempIncrease: widget.onCoolingTempIncrease,
-                  onCoolingTempDecrease: widget.onCoolingTempDecrease,
-                  onSupplyFanChanged: widget.onSupplyFanChanged,
-                  onExhaustFanChanged: widget.onExhaustFanChanged,
-                  onModeChanged: widget.onModeChanged,
-                ),
-
                 // Sensors tab
                 _SensorsTab(unit: widget.unit),
 
@@ -251,314 +228,14 @@ class _MobileLayoutState extends State<MobileLayout>
               ],
             ),
           ),
-
-          const SizedBox(height: AppSpacing.sm),
         ],
       ),
     );
   }
 }
 
-/// Compact header card - unit name, status, main temps, power
-class _CompactHeaderCard extends StatelessWidget {
-  final UnitState unit;
-  final VoidCallback? onPowerToggle;
-  final VoidCallback? onSettingsTap;
-  final bool isPowerLoading;
-  final int alarmCount;
-
-  const _CompactHeaderCard({
-    required this.unit,
-    this.onPowerToggle,
-    this.onSettingsTap,
-    this.isPowerLoading = false,
-    this.alarmCount = 0,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
-    final l10n = AppLocalizations.of(context)!;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    final poweredGradient = isDark
-        ? AppColors.darkCardGradientColors
-        : AppColors.lightCardGradientColors;
-    final offGradient = [colors.card, colors.card];
-
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: unit.power ? poweredGradient : offGradient,
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(AppRadius.card),
-        border: Border.all(
-          color: unit.power
-              ? AppColors.accent.withValues(alpha: 0.3)
-              : colors.border,
-        ),
-        boxShadow: unit.power
-            ? [
-                BoxShadow(
-                  color: AppColors.accent.withValues(alpha: 0.15),
-                  blurRadius: 16,
-                  offset: const Offset(0, 4),
-                ),
-              ]
-            : null,
-      ),
-      child: Column(
-        children: [
-          // Top row: Unit name + controls
-          Row(
-            children: [
-              // Unit name
-              Expanded(
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.location_on,
-                      size: 14,
-                      color: AppColors.accent,
-                    ),
-                    const SizedBox(width: 4),
-                    Flexible(
-                      child: Text(
-                        unit.name,
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: colors.text,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    Icon(
-                      Icons.keyboard_arrow_down,
-                      size: 16,
-                      color: colors.textMuted,
-                    ),
-                  ],
-                ),
-              ),
-
-              // Alarm badge
-              if (alarmCount > 0)
-                Container(
-                  margin: const EdgeInsets.only(right: 8),
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: AppColors.accentRed.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(AppRadius.button),
-                    border: Border.all(
-                      color: AppColors.accentRed.withValues(alpha: 0.3),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(
-                        Icons.warning_amber_rounded,
-                        size: 10,
-                        color: AppColors.accentRed,
-                      ),
-                      const SizedBox(width: 3),
-                      Text(
-                        '$alarmCount',
-                        style: const TextStyle(
-                          fontSize: 9,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.accentRed,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-              // Settings button
-              BreezIconButton(
-                icon: Icons.settings_outlined,
-                size: 28,
-                onTap: onSettingsTap,
-              ),
-              const SizedBox(width: 6),
-
-              // Power button
-              isPowerLoading
-                  ? const SizedBox(
-                      width: 28,
-                      height: 28,
-                      child: Padding(
-                        padding: EdgeInsets.all(4),
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: AppColors.accent,
-                        ),
-                      ),
-                    )
-                  : BreezIconButton(
-                      icon: Icons.power_settings_new,
-                      size: 28,
-                      iconColor: unit.power
-                          ? AppColors.accentRed
-                          : AppColors.accentGreen,
-                      onTap: onPowerToggle,
-                    ),
-            ],
-          ),
-
-          const SizedBox(height: 12),
-
-          // Main temperature display
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              // Indoor temp (big)
-              _TempDisplay(
-                label: l10n.indoorTemp,
-                value: unit.indoorTemp,
-                icon: Icons.home_outlined,
-                isPrimary: true,
-              ),
-
-              // Divider
-              Container(
-                width: 1,
-                height: 50,
-                color: colors.border,
-              ),
-
-              // Outdoor temp
-              _TempDisplay(
-                label: l10n.outdoorTemp,
-                value: unit.outsideTemp,
-                icon: Icons.thermostat_outlined,
-                isPrimary: false,
-              ),
-
-              // Divider
-              Container(
-                width: 1,
-                height: 50,
-                color: colors.border,
-              ),
-
-              // Status
-              Column(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: unit.power
-                          ? AppColors.accentGreen.withValues(alpha: 0.15)
-                          : AppColors.accentRed.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(AppRadius.button),
-                      border: Border.all(
-                        color: unit.power
-                            ? AppColors.accentGreen.withValues(alpha: 0.3)
-                            : AppColors.accentRed.withValues(alpha: 0.3),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          width: 6,
-                          height: 6,
-                          decoration: BoxDecoration(
-                            color: unit.power
-                                ? AppColors.accentGreen
-                                : AppColors.accentRed,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          unit.power ? l10n.statusRunning : l10n.statusStopped,
-                          style: TextStyle(
-                            fontSize: 9,
-                            fontWeight: FontWeight.w600,
-                            color: unit.power
-                                ? AppColors.accentGreen
-                                : AppColors.accentRed,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    l10n.status,
-                    style: TextStyle(
-                      fontSize: 9,
-                      color: colors.textMuted,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-/// Temperature display widget
-class _TempDisplay extends StatelessWidget {
-  final String label;
-  final int value;
-  final IconData icon;
-  final bool isPrimary;
-
-  const _TempDisplay({
-    required this.label,
-    required this.value,
-    required this.icon,
-    this.isPrimary = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
-
-    return Column(
-      children: [
-        Icon(
-          icon,
-          size: isPrimary ? 20 : 16,
-          color: AppColors.accent,
-        ),
-        const SizedBox(height: 4),
-        Text(
-          '$value°',
-          style: TextStyle(
-            fontSize: isPrimary ? 28 : 22,
-            fontWeight: FontWeight.w700,
-            color: colors.text,
-          ),
-        ),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 9,
-            color: colors.textMuted,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-/// Controls tab - temperature setpoints, mode, fans
-class _ControlsTab extends StatelessWidget {
+/// Main control card - temperature setpoints, fans, mode (no sensors)
+class _MainControlCard extends StatelessWidget {
   final UnitState unit;
   final VoidCallback? onHeatingTempIncrease;
   final VoidCallback? onHeatingTempDecrease;
@@ -567,8 +244,11 @@ class _ControlsTab extends StatelessWidget {
   final ValueChanged<int>? onSupplyFanChanged;
   final ValueChanged<int>? onExhaustFanChanged;
   final ValueChanged<String>? onModeChanged;
+  final VoidCallback? onPowerToggle;
+  final VoidCallback? onSettingsTap;
+  final bool isPowerLoading;
 
-  const _ControlsTab({
+  const _MainControlCard({
     required this.unit,
     this.onHeatingTempIncrease,
     this.onHeatingTempDecrease,
@@ -577,129 +257,42 @@ class _ControlsTab extends StatelessWidget {
     this.onSupplyFanChanged,
     this.onExhaustFanChanged,
     this.onModeChanged,
+    this.onPowerToggle,
+    this.onSettingsTap,
+    this.isPowerLoading = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
-    return BreezCard(
-      padding: const EdgeInsets.all(AppSpacing.md),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Temperature setpoints
-            Text(
-              l10n.temperatureSetpoints.toUpperCase(),
-              style: TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.w600,
-                color: colors.textMuted,
-                letterSpacing: 0.5,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                // Heating temp
-                Expanded(
-                  child: TemperatureColumn(
-                    label: l10n.heating,
-                    temperature: unit.heatingTemp,
-                    icon: Icons.whatshot,
-                    color: AppColors.accentOrange,
-                    isPowered: unit.power,
-                    onIncrease: onHeatingTempIncrease,
-                    onDecrease: onHeatingTempDecrease,
-                    compact: true,
-                  ),
-                ),
-                Container(
-                  width: 1,
-                  height: 70,
-                  color: colors.border,
-                  margin: const EdgeInsets.symmetric(horizontal: 12),
-                ),
-                // Cooling temp
-                Expanded(
-                  child: TemperatureColumn(
-                    label: l10n.cooling,
-                    temperature: unit.coolingTemp,
-                    icon: Icons.ac_unit,
-                    color: AppColors.accent,
-                    isPowered: unit.power,
-                    onIncrease: onCoolingTempIncrease,
-                    onDecrease: onCoolingTempDecrease,
-                    compact: true,
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 20),
-
-            // Fan controls
-            if (unit.power) ...[
-              Text(
-                l10n.fanSpeed.toUpperCase(),
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w600,
-                  color: colors.textMuted,
-                  letterSpacing: 0.5,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  Expanded(
-                    child: FanSlider(
-                      label: l10n.intake,
-                      value: unit.supplyFan,
-                      color: AppColors.accent,
-                      icon: Icons.arrow_downward_rounded,
-                      onChanged: onSupplyFanChanged,
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: FanSlider(
-                      label: l10n.exhaust,
-                      value: unit.exhaustFan,
-                      color: AppColors.accentOrange,
-                      icon: Icons.arrow_upward_rounded,
-                      onChanged: onExhaustFanChanged,
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 20),
-            ],
-
-            // Mode selector
-            Text(
-              l10n.operatingMode.toUpperCase(),
-              style: TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.w600,
-                color: colors.textMuted,
-                letterSpacing: 0.5,
-              ),
-            ),
-            const SizedBox(height: 12),
-            ModeSelector(
-              unitName: unit.name,
-              selectedMode: unit.mode,
-              onModeChanged: onModeChanged,
-              compact: true,
-              enabled: unit.power,
-            ),
-          ],
-        ),
-      ),
+    // Use MainTempCard but pass null for sensorUnit to hide sensors grid
+    return MainTempCard(
+      unitName: unit.name,
+      temperature: unit.temp,
+      heatingTemp: unit.heatingTemp,
+      coolingTemp: unit.coolingTemp,
+      status: unit.power ? l10n.statusRunning : l10n.statusStopped,
+      humidity: unit.humidity,
+      airflow: unit.airflowRate,
+      filterPercent: unit.filterPercent,
+      isPowered: unit.power,
+      supplyFan: unit.supplyFan,
+      exhaustFan: unit.exhaustFan,
+      onPowerToggle: onPowerToggle,
+      onHeatingTempIncrease: onHeatingTempIncrease,
+      onHeatingTempDecrease: onHeatingTempDecrease,
+      onCoolingTempIncrease: onCoolingTempIncrease,
+      onCoolingTempDecrease: onCoolingTempDecrease,
+      onSupplyFanChanged: onSupplyFanChanged,
+      onExhaustFanChanged: onExhaustFanChanged,
+      onSettingsTap: onSettingsTap,
+      showControls: true,
+      selectedMode: unit.mode,
+      onModeChanged: onModeChanged,
+      showModeSelector: true,
+      isPowerLoading: isPowerLoading,
+      sensorUnit: null, // Hide sensors grid - moved to tab
     );
   }
 }
@@ -745,7 +338,8 @@ class _MobileScheduleWidget extends StatelessWidget {
                 // Schedule rows
                 Expanded(
                   child: ListView.separated(
-                    itemCount: entries.length,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: entries.take(2).length,
                     separatorBuilder: (_, __) => const SizedBox(height: 4),
                     itemBuilder: (context, index) {
                       final entry = entries[index];
@@ -755,11 +349,11 @@ class _MobileScheduleWidget extends StatelessWidget {
                 ),
 
                 // See all button
-                if (onSeeAll != null)
+                if (entries.length > 2)
                   Padding(
-                    padding: const EdgeInsets.only(top: 8),
+                    padding: const EdgeInsets.only(top: 4),
                     child: BreezSeeMoreButton(
-                      label: l10n.seeAll,
+                      label: l10n.allCount(entries.length - 2),
                       onTap: onSeeAll,
                     ),
                   ),
@@ -775,14 +369,14 @@ class _MobileScheduleWidget extends StatelessWidget {
         children: [
           Icon(
             Icons.calendar_today_outlined,
-            size: 32,
+            size: 28,
             color: AppColors.accent.withValues(alpha: 0.5),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
           Text(
             l10n.noSchedule,
             style: TextStyle(
-              fontSize: 13,
+              fontSize: 12,
               fontWeight: FontWeight.w600,
               color: colors.textMuted,
             ),
@@ -804,7 +398,7 @@ class _ScheduleRowCompact extends StatelessWidget {
     final colors = BreezColors.of(context);
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: entry.isActive
             ? AppColors.accent.withValues(alpha: 0.1)
@@ -817,11 +411,11 @@ class _ScheduleRowCompact extends StatelessWidget {
       child: Row(
         children: [
           SizedBox(
-            width: 70,
+            width: 60,
             child: Text(
               entry.day,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 11,
                 fontWeight: entry.isActive ? FontWeight.w600 : FontWeight.w500,
                 color: entry.isActive ? AppColors.accent : colors.textMuted,
               ),
@@ -839,7 +433,7 @@ class _ScheduleRowCompact extends StatelessWidget {
           Text(
             '${entry.tempDay}° / ${entry.tempNight}°',
             style: TextStyle(
-              fontSize: 12,
+              fontSize: 11,
               fontWeight: FontWeight.w600,
               color: entry.isActive ? AppColors.accent : colors.text,
             ),
@@ -875,8 +469,9 @@ class _MobileAlarmsWidget extends StatelessWidget {
                 // Alarms list
                 Expanded(
                   child: ListView.separated(
-                    itemCount: alarmsList.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 6),
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: alarmsList.take(2).length,
+                    separatorBuilder: (_, __) => const SizedBox(height: 4),
                     itemBuilder: (context, index) {
                       final alarm = alarmsList[index];
                       return _AlarmRowCompact(
@@ -889,9 +484,13 @@ class _MobileAlarmsWidget extends StatelessWidget {
 
                 // See history button
                 Padding(
-                  padding: const EdgeInsets.only(top: 8),
+                  padding: const EdgeInsets.only(top: 4),
                   child: BreezSeeMoreButton(
-                    label: l10n.alarmHistory,
+                    label: alarmsList.isEmpty
+                        ? l10n.alarmHistory
+                        : l10n.allAlarms,
+                    extraCount:
+                        alarmsList.length > 2 ? alarmsList.length - 2 : null,
                     onTap: onSeeHistory,
                   ),
                 ),
@@ -910,14 +509,14 @@ class _MobileAlarmsWidget extends StatelessWidget {
               children: [
                 const Icon(
                   Icons.check_circle_outline,
-                  size: 40,
+                  size: 28,
                   color: AppColors.accentGreen,
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 8),
                 Text(
                   l10n.noAlarms,
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 12,
                     fontWeight: FontWeight.w600,
                     color: colors.textMuted,
                   ),
@@ -950,7 +549,7 @@ class _AlarmRowCompact extends StatelessWidget {
     final colors = BreezColors.of(context);
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: AppColors.accentRed.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(AppRadius.cardSmall),
@@ -962,10 +561,10 @@ class _AlarmRowCompact extends StatelessWidget {
         children: [
           const Icon(
             Icons.warning_amber_rounded,
-            size: 16,
+            size: 14,
             color: AppColors.accentRed,
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 8),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
             decoration: BoxDecoration(
@@ -981,15 +580,15 @@ class _AlarmRowCompact extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 8),
           Expanded(
             child: Text(
               description,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 11,
                 color: colors.text,
               ),
-              maxLines: 2,
+              maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
           ),
