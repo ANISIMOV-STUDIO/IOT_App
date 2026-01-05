@@ -1,5 +1,15 @@
+/// BREEZ Premium Theme System
+///
+/// Material 3 тема с премиум Teal/Cyan акцентом.
+/// Поддержка hover/press состояний через WidgetStateProperty.
+library;
+
 import 'package:flutter/material.dart';
 import 'app_radius.dart';
+
+// Re-export colors for backwards compatibility
+export 'app_colors.dart';
+import 'app_colors.dart';
 
 /// Theme-aware colors accessible via BreezColors.of(context)
 class BreezColors extends ThemeExtension<BreezColors> {
@@ -7,18 +17,26 @@ class BreezColors extends ThemeExtension<BreezColors> {
   final Color card;
   final Color cardLight;
   final Color border;
+  final Color borderAccent;
   final Color text;
   final Color textMuted;
   final Color buttonBg;
+  final Color buttonHover;
+  final Color hoverOverlay;
+  final Color pressedOverlay;
 
   const BreezColors({
     required this.bg,
     required this.card,
     required this.cardLight,
     required this.border,
+    required this.borderAccent,
     required this.text,
     required this.textMuted,
     required this.buttonBg,
+    required this.buttonHover,
+    required this.hoverOverlay,
+    required this.pressedOverlay,
   });
 
   /// Get colors from context
@@ -26,26 +44,34 @@ class BreezColors extends ThemeExtension<BreezColors> {
     return Theme.of(context).extension<BreezColors>()!;
   }
 
-  /// Dark theme colors
+  /// Dark theme colors - Premium Dark
   static const dark = BreezColors(
     bg: AppColors.darkBg,
     card: AppColors.darkCard,
     cardLight: AppColors.darkCardLight,
     border: AppColors.darkBorder,
+    borderAccent: AppColors.darkBorderAccent,
     text: AppColors.darkText,
     textMuted: AppColors.darkTextMuted,
-    buttonBg: Color(0x0DFFFFFF), // white 5%
+    buttonBg: AppColors.darkButtonBg,
+    buttonHover: AppColors.darkButtonHover,
+    hoverOverlay: AppColors.darkHoverOverlay,
+    pressedOverlay: AppColors.darkPressedOverlay,
   );
 
-  /// Light theme colors
+  /// Light theme colors - Clean Premium
   static const light = BreezColors(
     bg: AppColors.lightBg,
     card: AppColors.lightCard,
     cardLight: AppColors.lightCardLight,
     border: AppColors.lightBorder,
+    borderAccent: AppColors.lightBorderAccent,
     text: AppColors.lightText,
     textMuted: AppColors.lightTextMuted,
-    buttonBg: Color(0xFFE8EEF4), // Голубовато-серый для кнопок
+    buttonBg: AppColors.lightButtonBg,
+    buttonHover: AppColors.lightButtonHover,
+    hoverOverlay: AppColors.lightHoverOverlay,
+    pressedOverlay: AppColors.lightPressedOverlay,
   );
 
   @override
@@ -54,18 +80,26 @@ class BreezColors extends ThemeExtension<BreezColors> {
     Color? card,
     Color? cardLight,
     Color? border,
+    Color? borderAccent,
     Color? text,
     Color? textMuted,
     Color? buttonBg,
+    Color? buttonHover,
+    Color? hoverOverlay,
+    Color? pressedOverlay,
   }) {
     return BreezColors(
       bg: bg ?? this.bg,
       card: card ?? this.card,
       cardLight: cardLight ?? this.cardLight,
       border: border ?? this.border,
+      borderAccent: borderAccent ?? this.borderAccent,
       text: text ?? this.text,
       textMuted: textMuted ?? this.textMuted,
       buttonBg: buttonBg ?? this.buttonBg,
+      buttonHover: buttonHover ?? this.buttonHover,
+      hoverOverlay: hoverOverlay ?? this.hoverOverlay,
+      pressedOverlay: pressedOverlay ?? this.pressedOverlay,
     );
   }
 
@@ -77,123 +111,360 @@ class BreezColors extends ThemeExtension<BreezColors> {
       card: Color.lerp(card, other.card, t)!,
       cardLight: Color.lerp(cardLight, other.cardLight, t)!,
       border: Color.lerp(border, other.border, t)!,
+      borderAccent: Color.lerp(borderAccent, other.borderAccent, t)!,
       text: Color.lerp(text, other.text, t)!,
       textMuted: Color.lerp(textMuted, other.textMuted, t)!,
       buttonBg: Color.lerp(buttonBg, other.buttonBg, t)!,
+      buttonHover: Color.lerp(buttonHover, other.buttonHover, t)!,
+      hoverOverlay: Color.lerp(hoverOverlay, other.hoverOverlay, t)!,
+      pressedOverlay: Color.lerp(pressedOverlay, other.pressedOverlay, t)!,
     );
   }
 }
 
-/// BREEZ Design System Colors
-/// Dark industrial theme for HVAC control
-abstract class AppColors {
-  // === DARK THEME (Primary) ===
-  static const Color darkBg = Color(0xFF000D1A);
-  static const Color darkCard = Color(0xFF0F1D2E);
-  static const Color darkCardLight = Color(0xFF162942);
-  static const Color darkBorder = Color(0x0DFFFFFF); // white/5%
-  static const Color darkText = Color(0xFFFFFFFF);
-  static const Color darkTextMuted = Color(0x66FFFFFF); // white/40%
-
-  // === LIGHT THEME ===
-  // Modern clean theme с голубым оттенком (в стиле темной темы)
-  static const Color lightBg = Color(0xFFF0F4F8); // Голубовато-серый фон
-  static const Color lightCard = Color(0xFFFFFFFF); // Чистый белый
-  static const Color lightCardLight = Color(0xFFF8FAFC); // Очень светлый
-  static const Color lightBorder = Color(0xFFCFD8E3); // Мягкая голубая граница
-  static const Color lightText = Color(0xFF1E293B); // Темно-серый (slate-800)
-  static const Color lightTextMuted = Color(0xFF64748B); // Средний серый (slate-500)
-
-  // === ACCENT COLORS ===
-  static const Color accent = Color(0xFF2D7DFF); // Primary blue
-  static const Color accentLight = Color(0xFF5B9AFF);
-  static const Color accentRed = Color(0xFFD64545); // Power off / Critical
-  static const Color accentOrange = Color(0xFFF97316); // Exhaust / Warning
-  static const Color accentGreen = Color(0xFF22C55E); // Online / Success
-
-  // === STATUS COLORS ===
-  static const Color critical = Color(0xFFD64545);
-  static const Color warning = Color(0xFFF97316);
-  static const Color info = Color(0xFF2D7DFF);
-  static const Color success = Color(0xFF22C55E);
-
-  // === GRADIENTS ===
-  static const LinearGradient glowGradient = LinearGradient(
-    colors: [Color(0x3360A5FA), Color(0x002D7DFF)],
-    begin: Alignment.topCenter,
-    end: Alignment.bottomCenter,
-  );
-
-}
-
-/// Theme configuration
+/// Theme configuration with Material 3 support
 class AppTheme {
   final bool isDark;
 
   AppTheme({required this.isDark});
 
   // Getters for current theme colors
-  Color get bg => isDark ? AppColors.darkBg : AppColors.lightBg;
-  Color get card => isDark ? AppColors.darkCard : AppColors.lightCard;
-  Color get cardLight => isDark ? AppColors.darkCardLight : AppColors.lightCard;
-  Color get border => isDark ? AppColors.darkBorder : AppColors.lightBorder;
-  Color get text => isDark ? AppColors.darkText : AppColors.lightText;
-  Color get textMuted => isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted;
+  BreezColors get colors => isDark ? BreezColors.dark : BreezColors.light;
 
-  // Button background
-  Color get buttonBg => isDark
-      ? Colors.white.withValues(alpha: 0.05)
-      : const Color(0xFFE8EEF4); // Голубовато-серый для светлой темы
+  Color get bg => colors.bg;
+  Color get card => colors.card;
+  Color get cardLight => colors.cardLight;
+  Color get border => colors.border;
+  Color get text => colors.text;
+  Color get textMuted => colors.textMuted;
+  Color get buttonBg => colors.buttonBg;
 
-  /// Material theme
+  /// Material theme with premium styling
   ThemeData get materialTheme => ThemeData(
-    useMaterial3: true,
-    brightness: isDark ? Brightness.dark : Brightness.light,
-    scaffoldBackgroundColor: bg,
-    extensions: [isDark ? BreezColors.dark : BreezColors.light],
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: AppColors.accent,
-      brightness: isDark ? Brightness.dark : Brightness.light,
-      surface: card,
-      onSurface: text,
-    ),
-    fontFamily: 'Inter',
-    cardTheme: CardThemeData(
-      color: card,
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppRadius.card),
-        side: BorderSide(color: border),
-      ),
-    ),
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.accent,
-        foregroundColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppRadius.button),
+        useMaterial3: true,
+        brightness: isDark ? Brightness.dark : Brightness.light,
+        scaffoldBackgroundColor: bg,
+        extensions: [colors],
+
+        // Color Scheme
+        colorScheme: ColorScheme(
+          brightness: isDark ? Brightness.dark : Brightness.light,
+          primary: AppColors.accent,
+          onPrimary: isDark ? AppColors.darkBg : Colors.white,
+          secondary: AppColors.accentLight,
+          onSecondary: isDark ? AppColors.darkBg : Colors.white,
+          tertiary: AppColors.warning,
+          onTertiary: AppColors.darkBg,
+          error: AppColors.critical,
+          onError: Colors.white,
+          surface: card,
+          onSurface: text,
+          surfaceContainerHighest: cardLight,
+          outline: border,
+          outlineVariant: colors.borderAccent,
         ),
-      ),
-    ),
-    outlinedButtonTheme: OutlinedButtonThemeData(
-      style: OutlinedButton.styleFrom(
-        foregroundColor: text,
-        side: BorderSide(color: border),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppRadius.button),
+
+        // Typography
+        fontFamily: 'Inter',
+        textTheme: _buildTextTheme(isDark),
+
+        // Card Theme
+        cardTheme: CardThemeData(
+          color: card,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppRadius.card),
+            side: BorderSide(color: border),
+          ),
         ),
-      ),
-    ),
-    sliderTheme: SliderThemeData(
-      activeTrackColor: AppColors.accent,
-      inactiveTrackColor: isDark
-          ? Colors.white.withValues(alpha: 0.1)
-          : Colors.black.withValues(alpha: 0.1),
-      thumbColor: Colors.white,
-      overlayColor: AppColors.accent.withValues(alpha: 0.2),
-      trackHeight: 8,
-    ),
-  );
+
+        // Elevated Button - Primary action
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ButtonStyle(
+            backgroundColor: WidgetStateProperty.resolveWith((states) {
+              if (states.contains(WidgetState.disabled)) {
+                return AppColors.accent.withValues(alpha: 0.5);
+              }
+              if (states.contains(WidgetState.pressed)) {
+                return AppColors.accentDark;
+              }
+              if (states.contains(WidgetState.hovered)) {
+                return AppColors.accentLight;
+              }
+              return AppColors.accent;
+            }),
+            foregroundColor: WidgetStateProperty.resolveWith((states) {
+              if (states.contains(WidgetState.disabled)) {
+                return Colors.white.withValues(alpha: 0.7);
+              }
+              return Colors.white;
+            }),
+            overlayColor: WidgetStateProperty.resolveWith((states) {
+              if (states.contains(WidgetState.pressed)) {
+                return Colors.white.withValues(alpha: 0.1);
+              }
+              if (states.contains(WidgetState.hovered)) {
+                return Colors.white.withValues(alpha: 0.05);
+              }
+              return Colors.transparent;
+            }),
+            elevation: WidgetStateProperty.resolveWith((states) {
+              if (states.contains(WidgetState.hovered)) return 4;
+              if (states.contains(WidgetState.pressed)) return 2;
+              return 0;
+            }),
+            shadowColor: WidgetStateProperty.all(AppColors.accentGlow),
+            padding: WidgetStateProperty.all(
+              const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+            ),
+            shape: WidgetStateProperty.all(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppRadius.button),
+              ),
+            ),
+            animationDuration: AppDurations.fast,
+          ),
+        ),
+
+        // Outlined Button - Secondary action
+        outlinedButtonTheme: OutlinedButtonThemeData(
+          style: ButtonStyle(
+            backgroundColor: WidgetStateProperty.resolveWith((states) {
+              if (states.contains(WidgetState.pressed)) {
+                return colors.pressedOverlay;
+              }
+              if (states.contains(WidgetState.hovered)) {
+                return colors.hoverOverlay;
+              }
+              return Colors.transparent;
+            }),
+            foregroundColor: WidgetStateProperty.resolveWith((states) {
+              if (states.contains(WidgetState.disabled)) {
+                return textMuted.withValues(alpha: 0.5);
+              }
+              if (states.contains(WidgetState.hovered)) {
+                return AppColors.accent;
+              }
+              return text;
+            }),
+            side: WidgetStateProperty.resolveWith((states) {
+              if (states.contains(WidgetState.hovered)) {
+                return BorderSide(color: AppColors.accent, width: 1.5);
+              }
+              return BorderSide(color: border);
+            }),
+            padding: WidgetStateProperty.all(
+              const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+            ),
+            shape: WidgetStateProperty.all(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppRadius.button),
+              ),
+            ),
+            animationDuration: AppDurations.fast,
+          ),
+        ),
+
+        // Text Button - Tertiary action
+        textButtonTheme: TextButtonThemeData(
+          style: ButtonStyle(
+            backgroundColor: WidgetStateProperty.resolveWith((states) {
+              if (states.contains(WidgetState.pressed)) {
+                return AppColors.accent.withValues(alpha: 0.15);
+              }
+              if (states.contains(WidgetState.hovered)) {
+                return AppColors.accent.withValues(alpha: 0.08);
+              }
+              return Colors.transparent;
+            }),
+            foregroundColor: WidgetStateProperty.resolveWith((states) {
+              if (states.contains(WidgetState.disabled)) {
+                return textMuted.withValues(alpha: 0.5);
+              }
+              return AppColors.accent;
+            }),
+            overlayColor: WidgetStateProperty.all(Colors.transparent),
+            padding: WidgetStateProperty.all(
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            ),
+            shape: WidgetStateProperty.all(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppRadius.button),
+              ),
+            ),
+            animationDuration: AppDurations.fast,
+          ),
+        ),
+
+        // Icon Button
+        iconButtonTheme: IconButtonThemeData(
+          style: ButtonStyle(
+            backgroundColor: WidgetStateProperty.resolveWith((states) {
+              if (states.contains(WidgetState.pressed)) {
+                return colors.pressedOverlay;
+              }
+              if (states.contains(WidgetState.hovered)) {
+                return colors.hoverOverlay;
+              }
+              return Colors.transparent;
+            }),
+            foregroundColor: WidgetStateProperty.resolveWith((states) {
+              if (states.contains(WidgetState.hovered)) {
+                return AppColors.accent;
+              }
+              return textMuted;
+            }),
+            animationDuration: AppDurations.fast,
+          ),
+        ),
+
+        // Slider
+        sliderTheme: SliderThemeData(
+          activeTrackColor: AppColors.accent,
+          inactiveTrackColor: isDark
+              ? Colors.white.withValues(alpha: 0.1)
+              : Colors.black.withValues(alpha: 0.1),
+          thumbColor: Colors.white,
+          overlayColor: AppColors.accent.withValues(alpha: 0.2),
+          trackHeight: 8,
+          thumbShape: const RoundSliderThumbShape(
+            enabledThumbRadius: 10,
+            elevation: 4,
+          ),
+        ),
+
+        // Switch
+        switchTheme: SwitchThemeData(
+          thumbColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.selected)) {
+              return Colors.white;
+            }
+            return textMuted;
+          }),
+          trackColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.selected)) {
+              return AppColors.accent;
+            }
+            return border;
+          }),
+          trackOutlineColor: WidgetStateProperty.all(Colors.transparent),
+        ),
+
+        // Checkbox
+        checkboxTheme: CheckboxThemeData(
+          fillColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.selected)) {
+              return AppColors.accent;
+            }
+            return Colors.transparent;
+          }),
+          checkColor: WidgetStateProperty.all(Colors.white),
+          side: BorderSide(color: border, width: 1.5),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4),
+          ),
+        ),
+
+        // Dialog
+        dialogTheme: DialogThemeData(
+          backgroundColor: card,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppRadius.dialog),
+          ),
+          elevation: 24,
+        ),
+
+        // Bottom Sheet
+        bottomSheetTheme: BottomSheetThemeData(
+          backgroundColor: card,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppRadius.bottomSheet),
+          ),
+        ),
+
+        // Divider
+        dividerTheme: DividerThemeData(
+          color: border,
+          thickness: 1,
+        ),
+
+        // AppBar
+        appBarTheme: AppBarTheme(
+          backgroundColor: bg,
+          foregroundColor: text,
+          elevation: 0,
+          centerTitle: false,
+          titleTextStyle: TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color: text,
+          ),
+        ),
+
+        // Input Decoration
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: buttonBg,
+          hoverColor: colors.buttonHover,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(AppRadius.button),
+            borderSide: BorderSide(color: border),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(AppRadius.button),
+            borderSide: BorderSide(color: border),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(AppRadius.button),
+            borderSide: const BorderSide(color: AppColors.accent, width: 2),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(AppRadius.button),
+            borderSide: const BorderSide(color: AppColors.critical),
+          ),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 14,
+          ),
+        ),
+
+        // Snackbar
+        snackBarTheme: SnackBarThemeData(
+          backgroundColor: isDark ? AppColors.darkCardLight : AppColors.lightText,
+          contentTextStyle: TextStyle(
+            color: isDark ? AppColors.darkText : AppColors.lightCard,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppRadius.button),
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+
+  /// Build text theme with proper colors
+  TextTheme _buildTextTheme(bool isDark) {
+    final color = isDark ? AppColors.darkText : AppColors.lightText;
+    final mutedColor = isDark ? AppColors.darkTextMuted : AppColors.lightTextMuted;
+
+    return TextTheme(
+      displayLarge: TextStyle(color: color, fontWeight: FontWeight.w700),
+      displayMedium: TextStyle(color: color, fontWeight: FontWeight.w700),
+      displaySmall: TextStyle(color: color, fontWeight: FontWeight.w600),
+      headlineLarge: TextStyle(color: color, fontWeight: FontWeight.w600),
+      headlineMedium: TextStyle(color: color, fontWeight: FontWeight.w600),
+      headlineSmall: TextStyle(color: color, fontWeight: FontWeight.w600),
+      titleLarge: TextStyle(color: color, fontWeight: FontWeight.w600),
+      titleMedium: TextStyle(color: color, fontWeight: FontWeight.w500),
+      titleSmall: TextStyle(color: color, fontWeight: FontWeight.w500),
+      bodyLarge: TextStyle(color: color),
+      bodyMedium: TextStyle(color: color),
+      bodySmall: TextStyle(color: mutedColor),
+      labelLarge: TextStyle(color: color, fontWeight: FontWeight.w500),
+      labelMedium: TextStyle(color: mutedColor),
+      labelSmall: TextStyle(color: mutedColor),
+    );
+  }
 
   // === STATIC INSTANCES ===
   static final _light = AppTheme(isDark: false);

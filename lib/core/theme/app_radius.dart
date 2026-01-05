@@ -1,9 +1,11 @@
 /// Радиусы скругления для всех UI элементов
 abstract class AppRadius {
-  // Основные радиусы
-  static const double card = 16.0; // Основные карточки
-  static const double cardSmall = 16.0; // Маленькие карточки
-  static const double button = 16.0; // Обычные кнопки
-  static const double nested = 16.0; // Для кнопок внутри контейнеров с padding
-  static const double indicator = 4.0; // Индикаторы статуса
+  static const double card = 16.0;
+  static const double cardSmall = 12.0;
+  static const double button = 12.0;
+  static const double nested = 10.0;  // Кнопки внутри карточек
+  static const double dialog = 24.0;
+  static const double bottomSheet = 24.0;
+  static const double indicator = 4.0;
+  static const double chip = 8.0;
 }

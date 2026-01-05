@@ -159,6 +159,9 @@ class BreezButton extends StatefulWidget {
 }
 
 class _BreezButtonState extends State<BreezButton> {
+  bool _isHovered = false;
+  bool _isPressed = false;
+
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
@@ -170,33 +173,49 @@ class _BreezButtonState extends State<BreezButton> {
         : null;
     final buttonHeight = widget.height != null
         ? ((widget.height ?? 0) < kMinTouchTarget ? kMinTouchTarget : widget.height)
-        : null; // Не ограничиваем высоту если не задана - определяется контентом
+        : null;
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
+    // Анимированные цвета состояний
+    final effectiveBg = _isPressed
+        ? Color.lerp(bg, colors.pressedOverlay, 0.3)!
+        : _isHovered
+            ? (widget.hoverColor ?? colors.buttonHover)
+            : bg;
+
+    final effectiveBorder = _isHovered
+        ? colors.borderAccent
+        : colors.border;
+
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      cursor: widget.isLoading || widget.onTap == null
+          ? SystemMouseCursors.basic
+          : SystemMouseCursors.click,
+      child: GestureDetector(
+        onTapDown: (_) => setState(() => _isPressed = true),
+        onTapUp: (_) => setState(() => _isPressed = false),
+        onTapCancel: () => setState(() => _isPressed = false),
         onTap: widget.isLoading ? null : widget.onTap,
-        borderRadius: BorderRadius.circular(widget.borderRadius),
-        hoverColor: widget.hoverColor ?? colors.cardLight,
-        splashColor: AppColors.accent.withValues(alpha: 0.1),
-        highlightColor: AppColors.accent.withValues(alpha: 0.05),
-        mouseCursor: widget.isLoading || widget.onTap == null
-            ? SystemMouseCursors.basic
-            : SystemMouseCursors.click,
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: kMinTouchTarget,
-            minWidth: buttonWidth ?? 0,
-          ),
-          child: Container(
+        child: AnimatedScale(
+          scale: _isPressed ? 0.98 : 1.0,
+          duration: AppDurations.fast,
+          curve: AppCurves.standard,
+          child: AnimatedContainer(
+            duration: AppDurations.fast,
+            curve: AppCurves.standard,
             width: buttonWidth,
             height: buttonHeight,
+            constraints: BoxConstraints(
+              minHeight: kMinTouchTarget,
+              minWidth: buttonWidth ?? 0,
+            ),
             padding: widget.padding ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
-              color: bg,
+              color: effectiveBg,
               borderRadius: BorderRadius.circular(widget.borderRadius),
-              border: widget.border ?? Border.all(color: colors.border),
-              boxShadow: widget.shadows,
+              border: widget.border ?? Border.all(color: effectiveBorder),
+              boxShadow: _isHovered ? AppColors.darkShadowSm : widget.shadows,
             ),
             child: widget.isLoading
                 ? Center(
