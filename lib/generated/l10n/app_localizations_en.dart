@@ -854,4 +854,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get relativeHumidity => 'Relative humidity';
+
+  @override
+  String get controls => 'Control';
+
+  @override
+  String get sensors => 'Sensors';
+
+  @override
+  String get temperatureSetpoints => 'Temperature setpoints';
+
+  @override
+  String get fanSpeed => 'Fan speed';
+
+  @override
+  String get status => 'Status';
+
+  @override
+  String get seeAll => 'See all';
 }

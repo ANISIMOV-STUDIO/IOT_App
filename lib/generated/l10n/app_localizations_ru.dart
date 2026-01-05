@@ -859,4 +859,22 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get relativeHumidity => 'Относительная влажность';
+
+  @override
+  String get controls => 'Управление';
+
+  @override
+  String get sensors => 'Датчики';
+
+  @override
+  String get temperatureSetpoints => 'Уставки температуры';
+
+  @override
+  String get fanSpeed => 'Скорость вентиляторов';
+
+  @override
+  String get status => 'Статус';
+
+  @override
+  String get seeAll => 'Показать всё';
 }

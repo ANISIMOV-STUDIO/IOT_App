@@ -853,5 +853,11 @@
   "heaterPerformance": "Electric heater performance",
   "coolerStatus": "Cooler status",
   "ductPressure": "Duct pressure",
-  "relativeHumidity": "Relative humidity"
+  "relativeHumidity": "Relative humidity",
+  "controls": "Control",
+  "sensors": "Sensors",
+  "temperatureSetpoints": "Temperature setpoints",
+  "fanSpeed": "Fan speed",
+  "status": "Status",
+  "seeAll": "See all"
 }

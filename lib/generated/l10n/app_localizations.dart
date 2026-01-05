@@ -1675,6 +1675,42 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Относительная влажность'**
   String get relativeHumidity;
+
+  /// No description provided for @controls.
+  ///
+  /// In ru, this message translates to:
+  /// **'Управление'**
+  String get controls;
+
+  /// No description provided for @sensors.
+  ///
+  /// In ru, this message translates to:
+  /// **'Датчики'**
+  String get sensors;
+
+  /// No description provided for @temperatureSetpoints.
+  ///
+  /// In ru, this message translates to:
+  /// **'Уставки температуры'**
+  String get temperatureSetpoints;
+
+  /// No description provided for @fanSpeed.
+  ///
+  /// In ru, this message translates to:
+  /// **'Скорость вентиляторов'**
+  String get fanSpeed;
+
+  /// No description provided for @status.
+  ///
+  /// In ru, this message translates to:
+  /// **'Статус'**
+  String get status;
+
+  /// No description provided for @seeAll.
+  ///
+  /// In ru, this message translates to:
+  /// **'Показать всё'**
+  String get seeAll;
 }
 
 class _AppLocalizationsDelegate
