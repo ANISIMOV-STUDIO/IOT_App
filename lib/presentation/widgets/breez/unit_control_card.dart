@@ -17,7 +17,6 @@ class UnitControlCard extends StatelessWidget {
   final VoidCallback? onCoolingTempDecrease;
   final ValueChanged<int>? onSupplyFanChanged;
   final ValueChanged<int>? onExhaustFanChanged;
-  final ValueChanged<String>? onModeChanged;
   final VoidCallback? onPowerToggle;
   final VoidCallback? onSettingsTap;
   final bool isPowerLoading;
@@ -33,7 +32,6 @@ class UnitControlCard extends StatelessWidget {
     this.onCoolingTempDecrease,
     this.onSupplyFanChanged,
     this.onExhaustFanChanged,
-    this.onModeChanged,
     this.onPowerToggle,
     this.onSettingsTap,
     this.isPowerLoading = false,
@@ -56,9 +54,6 @@ class UnitControlCard extends StatelessWidget {
         final showControls = !isCompact &&
             (onPowerToggle != null || onSettingsTap != null);
 
-        // Показываем mode selector если есть обработчик и достаточно места
-        final showModeSelector = !isCompact && onModeChanged != null;
-
         return MainTempCard(
           unitName: unit.name,
           temperature: unit.temp,
@@ -80,9 +75,6 @@ class UnitControlCard extends StatelessWidget {
           onExhaustFanChanged: onExhaustFanChanged,
           onSettingsTap: onSettingsTap,
           showControls: showControls,
-          selectedMode: unit.mode,
-          onModeChanged: onModeChanged,
-          showModeSelector: showModeSelector,
           isPowerLoading: isPowerLoading,
           sensorUnit: unit,
         );

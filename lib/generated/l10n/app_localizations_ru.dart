@@ -861,6 +861,63 @@ class AppLocalizationsRu extends AppLocalizations {
   String get relativeHumidity => 'Относительная влажность';
 
   @override
+  String get outdoor => 'Улица';
+
+  @override
+  String get indoor => 'Помещение';
+
+  @override
+  String get afterRecup => 'После рекуп.';
+
+  @override
+  String get supply => 'Приток';
+
+  @override
+  String get efficiency => 'КПД';
+
+  @override
+  String get freeCool => 'Своб. охл.';
+
+  @override
+  String get heater => 'Нагреватель';
+
+  @override
+  String get cooler => 'Охладитель';
+
+  @override
+  String get pressure => 'Давление';
+
+  @override
+  String get noDeviceSelected => 'Устройство не выбрано';
+
+  @override
+  String get modes => 'Режимы';
+
+  @override
+  String get modeBasic => 'Базовый';
+
+  @override
+  String get modeIntensive => 'Интенсив';
+
+  @override
+  String get modeEconomy => 'Эконом';
+
+  @override
+  String get modeMaxPerformance => 'Макс.';
+
+  @override
+  String get modeKitchen => 'Кухня';
+
+  @override
+  String get modeFireplace => 'Камин';
+
+  @override
+  String get modeVacation => 'Отпуск';
+
+  @override
+  String get modeCustom => 'Свой';
+
+  @override
   String get controls => 'Управление';
 
   @override

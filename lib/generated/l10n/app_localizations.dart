@@ -1676,6 +1676,120 @@ abstract class AppLocalizations {
   /// **'Относительная влажность'**
   String get relativeHumidity;
 
+  /// No description provided for @outdoor.
+  ///
+  /// In ru, this message translates to:
+  /// **'Улица'**
+  String get outdoor;
+
+  /// No description provided for @indoor.
+  ///
+  /// In ru, this message translates to:
+  /// **'Помещение'**
+  String get indoor;
+
+  /// No description provided for @afterRecup.
+  ///
+  /// In ru, this message translates to:
+  /// **'После рекуп.'**
+  String get afterRecup;
+
+  /// No description provided for @supply.
+  ///
+  /// In ru, this message translates to:
+  /// **'Приток'**
+  String get supply;
+
+  /// No description provided for @efficiency.
+  ///
+  /// In ru, this message translates to:
+  /// **'КПД'**
+  String get efficiency;
+
+  /// No description provided for @freeCool.
+  ///
+  /// In ru, this message translates to:
+  /// **'Своб. охл.'**
+  String get freeCool;
+
+  /// No description provided for @heater.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нагреватель'**
+  String get heater;
+
+  /// No description provided for @cooler.
+  ///
+  /// In ru, this message translates to:
+  /// **'Охладитель'**
+  String get cooler;
+
+  /// No description provided for @pressure.
+  ///
+  /// In ru, this message translates to:
+  /// **'Давление'**
+  String get pressure;
+
+  /// No description provided for @noDeviceSelected.
+  ///
+  /// In ru, this message translates to:
+  /// **'Устройство не выбрано'**
+  String get noDeviceSelected;
+
+  /// No description provided for @modes.
+  ///
+  /// In ru, this message translates to:
+  /// **'Режимы'**
+  String get modes;
+
+  /// No description provided for @modeBasic.
+  ///
+  /// In ru, this message translates to:
+  /// **'Базовый'**
+  String get modeBasic;
+
+  /// No description provided for @modeIntensive.
+  ///
+  /// In ru, this message translates to:
+  /// **'Интенсив'**
+  String get modeIntensive;
+
+  /// No description provided for @modeEconomy.
+  ///
+  /// In ru, this message translates to:
+  /// **'Эконом'**
+  String get modeEconomy;
+
+  /// No description provided for @modeMaxPerformance.
+  ///
+  /// In ru, this message translates to:
+  /// **'Макс.'**
+  String get modeMaxPerformance;
+
+  /// No description provided for @modeKitchen.
+  ///
+  /// In ru, this message translates to:
+  /// **'Кухня'**
+  String get modeKitchen;
+
+  /// No description provided for @modeFireplace.
+  ///
+  /// In ru, this message translates to:
+  /// **'Камин'**
+  String get modeFireplace;
+
+  /// No description provided for @modeVacation.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отпуск'**
+  String get modeVacation;
+
+  /// No description provided for @modeCustom.
+  ///
+  /// In ru, this message translates to:
+  /// **'Свой'**
+  String get modeCustom;
+
   /// No description provided for @controls.
   ///
   /// In ru, this message translates to:

@@ -1,4 +1,6 @@
 /// Mobile Layout - Main control card + tabs for sensors/schedule/alarms
+///
+/// Big Tech pattern: минимальный код, переиспользование виджетов
 library;
 
 import 'package:flutter/material.dart';
@@ -10,11 +12,9 @@ import '../../../../domain/entities/alarm_info.dart';
 import '../../../../generated/l10n/app_localizations.dart';
 import '../../../widgets/breez/breez.dart';
 
-/// Mobile layout with UnitControlCard + tabs (sensors moved to tab)
+/// Mobile layout: MainTempCard + 3 tabs (Sensors, Schedule, Alarms)
 class MobileLayout extends StatefulWidget {
   final UnitState unit;
-  final ValueChanged<int>? onTemperatureIncrease;
-  final ValueChanged<int>? onTemperatureDecrease;
   final VoidCallback? onHeatingTempIncrease;
   final VoidCallback? onHeatingTempDecrease;
   final VoidCallback? onCoolingTempIncrease;
@@ -24,10 +24,7 @@ class MobileLayout extends StatefulWidget {
   final ValueChanged<String>? onModeChanged;
   final VoidCallback? onPowerToggle;
   final VoidCallback? onSettingsTap;
-  final bool compact;
   final bool isPowerLoading;
-
-  // Data for tabs
   final List<ScheduleEntry> schedule;
   final Map<String, AlarmInfo> activeAlarms;
   final VoidCallback? onScheduleSeeAll;
@@ -36,8 +33,6 @@ class MobileLayout extends StatefulWidget {
   const MobileLayout({
     super.key,
     required this.unit,
-    this.onTemperatureIncrease,
-    this.onTemperatureDecrease,
     this.onHeatingTempIncrease,
     this.onHeatingTempDecrease,
     this.onCoolingTempIncrease,
@@ -47,7 +42,6 @@ class MobileLayout extends StatefulWidget {
     this.onModeChanged,
     this.onPowerToggle,
     this.onSettingsTap,
-    this.compact = true,
     this.isPowerLoading = false,
     this.schedule = const [],
     this.activeAlarms = const {},
@@ -77,7 +71,6 @@ class _MobileLayoutState extends State<MobileLayout>
 
   @override
   Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
     return Padding(
@@ -88,119 +81,41 @@ class _MobileLayoutState extends State<MobileLayout>
       ),
       child: Column(
         children: [
-          // Main control card (without sensors grid)
+          // Main control card
           Expanded(
             flex: 5,
-            child: _MainControlCard(
-              unit: widget.unit,
+            child: MainTempCard(
+              unitName: widget.unit.name,
+              temperature: widget.unit.temp,
+              heatingTemp: widget.unit.heatingTemp,
+              coolingTemp: widget.unit.coolingTemp,
+              status: widget.unit.power ? l10n.statusRunning : l10n.statusStopped,
+              humidity: widget.unit.humidity,
+              airflow: widget.unit.airflowRate,
+              filterPercent: widget.unit.filterPercent,
+              isPowered: widget.unit.power,
+              supplyFan: widget.unit.supplyFan,
+              exhaustFan: widget.unit.exhaustFan,
+              onPowerToggle: widget.onPowerToggle,
               onHeatingTempIncrease: widget.onHeatingTempIncrease,
               onHeatingTempDecrease: widget.onHeatingTempDecrease,
               onCoolingTempIncrease: widget.onCoolingTempIncrease,
               onCoolingTempDecrease: widget.onCoolingTempDecrease,
               onSupplyFanChanged: widget.onSupplyFanChanged,
               onExhaustFanChanged: widget.onExhaustFanChanged,
-              onModeChanged: widget.onModeChanged,
-              onPowerToggle: widget.onPowerToggle,
               onSettingsTap: widget.onSettingsTap,
+              showControls: true,
               isPowerLoading: widget.isPowerLoading,
+              showStats: false,
             ),
           ),
 
           const SizedBox(height: AppSpacing.sm),
 
           // Tab bar
-          Container(
-            height: 40,
-            decoration: BoxDecoration(
-              color: colors.card,
-              borderRadius: BorderRadius.circular(AppRadius.cardSmall),
-              border: Border.all(color: colors.border),
-            ),
-            child: TabBar(
-              controller: _tabController,
-              indicator: BoxDecoration(
-                color: AppColors.accent.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(AppRadius.cardSmall - 2),
-                border: Border.all(
-                  color: AppColors.accent.withValues(alpha: 0.3),
-                ),
-              ),
-              indicatorSize: TabBarIndicatorSize.tab,
-              indicatorPadding: const EdgeInsets.all(4),
-              dividerColor: Colors.transparent,
-              labelColor: AppColors.accent,
-              unselectedLabelColor: colors.textMuted,
-              labelStyle: const TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 0.3,
-              ),
-              unselectedLabelStyle: const TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.w500,
-              ),
-              tabs: [
-                Tab(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.sensors, size: 14),
-                      const SizedBox(width: 4),
-                      Text(l10n.sensors.toUpperCase()),
-                    ],
-                  ),
-                ),
-                Tab(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.calendar_today, size: 14),
-                      const SizedBox(width: 4),
-                      Text(l10n.schedule.toUpperCase()),
-                    ],
-                  ),
-                ),
-                Tab(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        widget.activeAlarms.isEmpty
-                            ? Icons.check_circle_outline
-                            : Icons.warning_amber_rounded,
-                        size: 14,
-                        color: widget.activeAlarms.isEmpty
-                            ? null
-                            : AppColors.accentRed,
-                      ),
-                      const SizedBox(width: 4),
-                      Text(l10n.alarms.toUpperCase()),
-                      if (widget.activeAlarms.isNotEmpty) ...[
-                        const SizedBox(width: 4),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 4,
-                            vertical: 1,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.accentRed,
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: Text(
-                            '${widget.activeAlarms.length}',
-                            style: const TextStyle(
-                              fontSize: 9,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
-              ],
-            ),
+          _MobileTabBar(
+            controller: _tabController,
+            alarmCount: widget.activeAlarms.length,
           ),
 
           const SizedBox(height: AppSpacing.sm),
@@ -211,19 +126,23 @@ class _MobileLayoutState extends State<MobileLayout>
             child: TabBarView(
               controller: _tabController,
               children: [
-                // Sensors tab
-                _SensorsTab(unit: widget.unit),
-
-                // Schedule tab
-                _MobileScheduleWidget(
+                // Режимы работы
+                _ModesGrid(
+                  selectedMode: widget.unit.mode,
+                  onModeChanged: widget.onModeChanged,
+                  isPowered: widget.unit.power,
+                ),
+                // Schedule
+                ScheduleWidget(
                   entries: widget.schedule,
                   onSeeAll: widget.onScheduleSeeAll,
+                  compact: true,
                 ),
-
-                // Alarms tab
-                _MobileAlarmsWidget(
+                // Alarms
+                UnitAlarmsWidget(
                   alarms: widget.activeAlarms,
                   onSeeHistory: widget.onAlarmsSeeHistory,
+                  compact: true,
                 ),
               ],
             ),
@@ -234,95 +153,14 @@ class _MobileLayoutState extends State<MobileLayout>
   }
 }
 
-/// Main control card - temperature setpoints, fans, mode (no sensors)
-class _MainControlCard extends StatelessWidget {
-  final UnitState unit;
-  final VoidCallback? onHeatingTempIncrease;
-  final VoidCallback? onHeatingTempDecrease;
-  final VoidCallback? onCoolingTempIncrease;
-  final VoidCallback? onCoolingTempDecrease;
-  final ValueChanged<int>? onSupplyFanChanged;
-  final ValueChanged<int>? onExhaustFanChanged;
-  final ValueChanged<String>? onModeChanged;
-  final VoidCallback? onPowerToggle;
-  final VoidCallback? onSettingsTap;
-  final bool isPowerLoading;
+/// Compact tab bar for mobile layout
+class _MobileTabBar extends StatelessWidget {
+  final TabController controller;
+  final int alarmCount;
 
-  const _MainControlCard({
-    required this.unit,
-    this.onHeatingTempIncrease,
-    this.onHeatingTempDecrease,
-    this.onCoolingTempIncrease,
-    this.onCoolingTempDecrease,
-    this.onSupplyFanChanged,
-    this.onExhaustFanChanged,
-    this.onModeChanged,
-    this.onPowerToggle,
-    this.onSettingsTap,
-    this.isPowerLoading = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
-    // Use MainTempCard but pass null for sensorUnit to hide sensors grid
-    return MainTempCard(
-      unitName: unit.name,
-      temperature: unit.temp,
-      heatingTemp: unit.heatingTemp,
-      coolingTemp: unit.coolingTemp,
-      status: unit.power ? l10n.statusRunning : l10n.statusStopped,
-      humidity: unit.humidity,
-      airflow: unit.airflowRate,
-      filterPercent: unit.filterPercent,
-      isPowered: unit.power,
-      supplyFan: unit.supplyFan,
-      exhaustFan: unit.exhaustFan,
-      onPowerToggle: onPowerToggle,
-      onHeatingTempIncrease: onHeatingTempIncrease,
-      onHeatingTempDecrease: onHeatingTempDecrease,
-      onCoolingTempIncrease: onCoolingTempIncrease,
-      onCoolingTempDecrease: onCoolingTempDecrease,
-      onSupplyFanChanged: onSupplyFanChanged,
-      onExhaustFanChanged: onExhaustFanChanged,
-      onSettingsTap: onSettingsTap,
-      showControls: true,
-      selectedMode: unit.mode,
-      onModeChanged: onModeChanged,
-      showModeSelector: true,
-      isPowerLoading: isPowerLoading,
-      sensorUnit: null, // Hide sensors grid - moved to tab
-      showStats: false, // Hide stats row - moved to sensors tab
-    );
-  }
-}
-
-/// Sensors tab - full sensors grid
-class _SensorsTab extends StatelessWidget {
-  final UnitState unit;
-
-  const _SensorsTab({required this.unit});
-
-  @override
-  Widget build(BuildContext context) {
-    return BreezCard(
-      padding: const EdgeInsets.all(AppSpacing.md),
-      child: SingleChildScrollView(
-        child: SensorsGrid(unit: unit),
-      ),
-    );
-  }
-}
-
-/// Compact schedule widget for mobile tab
-class _MobileScheduleWidget extends StatelessWidget {
-  final List<ScheduleEntry> entries;
-  final VoidCallback? onSeeAll;
-
-  const _MobileScheduleWidget({
-    required this.entries,
-    this.onSeeAll,
+  const _MobileTabBar({
+    required this.controller,
+    required this.alarmCount,
   });
 
   @override
@@ -330,268 +168,216 @@ class _MobileScheduleWidget extends StatelessWidget {
     final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
-    return BreezCard(
-      padding: const EdgeInsets.all(AppSpacing.sm),
-      child: entries.isEmpty
-          ? _buildEmptyState(colors, l10n)
-          : Column(
-              children: [
-                // Schedule rows
-                Expanded(
-                  child: ListView.separated(
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: entries.take(2).length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 4),
-                    itemBuilder: (context, index) {
-                      final entry = entries[index];
-                      return _ScheduleRowCompact(entry: entry);
-                    },
-                  ),
-                ),
-
-                // See all button
-                if (entries.length > 2)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4),
-                    child: BreezSeeMoreButton(
-                      label: l10n.allCount(entries.length - 2),
-                      onTap: onSeeAll,
-                    ),
-                  ),
-              ],
-            ),
+    return Container(
+      height: 40,
+      decoration: BoxDecoration(
+        color: colors.card,
+        borderRadius: BorderRadius.circular(AppRadius.cardSmall),
+        border: Border.all(color: colors.border),
+      ),
+      child: TabBar(
+        controller: controller,
+        indicator: BoxDecoration(
+          color: AppColors.accent.withValues(alpha: 0.15),
+          borderRadius: BorderRadius.circular(AppRadius.cardSmall - 2),
+          border: Border.all(color: AppColors.accent.withValues(alpha: 0.3)),
+        ),
+        indicatorSize: TabBarIndicatorSize.tab,
+        indicatorPadding: const EdgeInsets.all(4),
+        dividerColor: Colors.transparent,
+        labelColor: AppColors.accent,
+        unselectedLabelColor: colors.textMuted,
+        labelStyle: const TextStyle(fontSize: 10, fontWeight: FontWeight.w700),
+        unselectedLabelStyle: const TextStyle(fontSize: 10, fontWeight: FontWeight.w500),
+        tabs: [
+          _buildTab(Icons.tune, l10n.modes),
+          _buildTab(Icons.calendar_today, l10n.schedule),
+          _buildAlarmTab(l10n.alarms, alarmCount),
+        ],
+      ),
     );
   }
 
-  Widget _buildEmptyState(BreezColors colors, AppLocalizations l10n) {
-    return Center(
-      child: Column(
+  Widget _buildTab(IconData icon, String label) {
+    return Tab(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, size: 14),
+          const SizedBox(width: 4),
+          Text(label.toUpperCase()),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAlarmTab(String label, int count) {
+    return Tab(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
-            Icons.calendar_today_outlined,
-            size: 28,
-            color: AppColors.accent.withValues(alpha: 0.5),
+            count == 0 ? Icons.check_circle_outline : Icons.warning_amber_rounded,
+            size: 14,
+            color: count == 0 ? null : AppColors.accentRed,
           ),
-          const SizedBox(height: 8),
-          Text(
-            l10n.noSchedule,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: colors.textMuted,
+          const SizedBox(width: 4),
+          Text(label.toUpperCase()),
+          if (count > 0) ...[
+            const SizedBox(width: 4),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+              decoration: BoxDecoration(
+                color: AppColors.accentRed,
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Text(
+                '$count',
+                style: const TextStyle(
+                  fontSize: 9,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                ),
+              ),
             ),
-          ),
+          ],
         ],
       ),
     );
   }
 }
 
-/// Compact schedule row
-class _ScheduleRowCompact extends StatelessWidget {
-  final ScheduleEntry entry;
+/// Сетка режимов работы (8 режимов, 4x2)
+class _ModesGrid extends StatelessWidget {
+  final String selectedMode;
+  final ValueChanged<String>? onModeChanged;
+  final bool isPowered;
 
-  const _ScheduleRowCompact({required this.entry});
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      decoration: BoxDecoration(
-        color: entry.isActive
-            ? AppColors.accent.withValues(alpha: 0.1)
-            : Colors.transparent,
-        borderRadius: BorderRadius.circular(AppRadius.cardSmall),
-        border: entry.isActive
-            ? Border.all(color: AppColors.accent.withValues(alpha: 0.3))
-            : null,
-      ),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 60,
-            child: Text(
-              entry.day,
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: entry.isActive ? FontWeight.w600 : FontWeight.w500,
-                color: entry.isActive ? AppColors.accent : colors.textMuted,
-              ),
-            ),
-          ),
-          Expanded(
-            child: Text(
-              entry.mode,
-              style: TextStyle(
-                fontSize: 11,
-                color: colors.textMuted,
-              ),
-            ),
-          ),
-          Text(
-            '${entry.tempDay}° / ${entry.tempNight}°',
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
-              color: entry.isActive ? AppColors.accent : colors.text,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-/// Compact alarms widget for mobile tab
-class _MobileAlarmsWidget extends StatelessWidget {
-  final Map<String, AlarmInfo> alarms;
-  final VoidCallback? onSeeHistory;
-
-  const _MobileAlarmsWidget({
-    required this.alarms,
-    this.onSeeHistory,
+  const _ModesGrid({
+    required this.selectedMode,
+    this.onModeChanged,
+    this.isPowered = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final alarmsList = alarms.entries.toList();
+
+    final modes = [
+      _ModeData('basic', l10n.modeBasic, Icons.air, AppColors.accent),
+      _ModeData('intensive', l10n.modeIntensive, Icons.speed, AppColors.accentOrange),
+      _ModeData('economy', l10n.modeEconomy, Icons.eco, AppColors.accentGreen),
+      _ModeData('max_performance', l10n.modeMaxPerformance, Icons.bolt, AppColors.accentOrange),
+      _ModeData('kitchen', l10n.modeKitchen, Icons.restaurant, Colors.brown),
+      _ModeData('fireplace', l10n.modeFireplace, Icons.fireplace, Colors.deepOrange),
+      _ModeData('vacation', l10n.modeVacation, Icons.flight_takeoff, Colors.teal),
+      _ModeData('custom', l10n.modeCustom, Icons.tune, Colors.purple),
+    ];
 
     return BreezCard(
       padding: const EdgeInsets.all(AppSpacing.sm),
-      child: alarmsList.isEmpty
-          ? _buildNoAlarms(colors, l10n)
-          : Column(
-              children: [
-                // Alarms list
-                Expanded(
-                  child: ListView.separated(
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: alarmsList.take(2).length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 4),
-                    itemBuilder: (context, index) {
-                      final alarm = alarmsList[index];
-                      return _AlarmRowCompact(
-                        code: alarm.value.code.toString(),
-                        description: alarm.value.description,
-                      );
-                    },
-                  ),
-                ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          // Вычисляем размеры ячеек на основе доступного пространства
+          const columns = 4;
+          const rows = 2;
+          const spacing = AppSpacing.sm;
 
-                // See history button
-                Padding(
-                  padding: const EdgeInsets.only(top: 4),
-                  child: BreezSeeMoreButton(
-                    label: alarmsList.isEmpty
-                        ? l10n.alarmHistory
-                        : l10n.allAlarms,
-                    extraCount:
-                        alarmsList.length > 2 ? alarmsList.length - 2 : null,
-                    onTap: onSeeHistory,
-                  ),
-                ),
-              ],
-            ),
-    );
-  }
+          final availableWidth = constraints.maxWidth - spacing * (columns - 1);
+          final availableHeight = constraints.maxHeight - spacing * (rows - 1);
 
-  Widget _buildNoAlarms(BreezColors colors, AppLocalizations l10n) {
-    return Column(
-      children: [
-        Expanded(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(
-                  Icons.check_circle_outline,
-                  size: 28,
-                  color: AppColors.accentGreen,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  l10n.noAlarms,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: colors.textMuted,
-                  ),
-                ),
-              ],
+          final cellWidth = availableWidth / columns;
+          final cellHeight = availableHeight / rows;
+
+          // Aspect ratio = width / height
+          final aspectRatio = cellWidth / cellHeight;
+
+          return GridView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: columns,
+              mainAxisSpacing: spacing,
+              crossAxisSpacing: spacing,
+              childAspectRatio: aspectRatio.clamp(0.8, 2.0),
             ),
-          ),
-        ),
-        BreezSeeMoreButton(
-          label: l10n.alarmHistory,
-          onTap: onSeeHistory,
-        ),
-      ],
+            itemCount: modes.length,
+            itemBuilder: (context, index) {
+              final mode = modes[index];
+              final isSelected = selectedMode.toLowerCase() == mode.id.toLowerCase();
+
+              return _ModeButton(
+                mode: mode,
+                isSelected: isSelected,
+                isEnabled: isPowered,
+                onTap: isPowered ? () => onModeChanged?.call(mode.id) : null,
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }
 
-/// Compact alarm row
-class _AlarmRowCompact extends StatelessWidget {
-  final String code;
-  final String description;
+class _ModeData {
+  final String id;
+  final String name;
+  final IconData icon;
+  final Color color;
 
-  const _AlarmRowCompact({
-    required this.code,
-    required this.description,
+  const _ModeData(this.id, this.name, this.icon, this.color);
+}
+
+class _ModeButton extends StatelessWidget {
+  final _ModeData mode;
+  final bool isSelected;
+  final bool isEnabled;
+  final VoidCallback? onTap;
+
+  const _ModeButton({
+    required this.mode,
+    this.isSelected = false,
+    this.isEnabled = true,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
+    final color = isEnabled ? mode.color : colors.textMuted;
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      decoration: BoxDecoration(
-        color: AppColors.accentRed.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(AppRadius.cardSmall),
-        border: Border.all(
-          color: AppColors.accentRed.withValues(alpha: 0.3),
-        ),
+    return BreezButton(
+      onTap: onTap,
+      padding: const EdgeInsets.all(AppSpacing.xs),
+      backgroundColor: isSelected
+          ? color.withValues(alpha: 0.15)
+          : Colors.transparent,
+      hoverColor: color.withValues(alpha: 0.1),
+      border: Border.all(
+        color: isSelected ? color.withValues(alpha: 0.4) : colors.border,
       ),
-      child: Row(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(
-            Icons.warning_amber_rounded,
-            size: 14,
-            color: AppColors.accentRed,
-          ),
-          const SizedBox(width: 8),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-            decoration: BoxDecoration(
-              color: AppColors.accentRed.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: Text(
-              code,
-              style: const TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.w700,
-                color: AppColors.accentRed,
-              ),
+          Flexible(
+            child: Icon(
+              mode.icon,
+              size: 20,
+              color: isSelected ? color : colors.textMuted,
             ),
           ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              description,
-              style: TextStyle(
-                fontSize: 11,
-                color: colors.text,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+          const SizedBox(height: 2),
+          Text(
+            mode.name.toUpperCase(),
+            style: TextStyle(
+              fontSize: 8,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.3,
+              color: isSelected ? color : colors.textMuted,
             ),
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),

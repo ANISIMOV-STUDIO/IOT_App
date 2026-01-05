@@ -494,10 +494,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
         Expanded(
           child: MobileLayout(
             unit: currentUnit,
-            onTemperatureIncrease: (v) =>
-                context.read<ClimateBloc>().add(ClimateTemperatureChanged(v.toDouble())),
-            onTemperatureDecrease: (v) =>
-                context.read<ClimateBloc>().add(ClimateTemperatureChanged(v.toDouble())),
             onHeatingTempIncrease: () =>
                 context.read<ClimateBloc>().add(ClimateHeatingTempChanged(currentUnit.heatingTemp + 1)),
             onHeatingTempDecrease: () =>
@@ -514,9 +510,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 context.read<ClimateBloc>().add(ClimateModeChanged(_parseClimateMode(m))),
             onPowerToggle: () => _handlePowerToggle(climateState),
             onSettingsTap: () => _showUnitSettings(currentUnit),
-            compact: width <= 600,
             isPowerLoading: climateState.isTogglingPower,
-            // New: Data for internal tabs
             schedule: scheduleState.entries,
             activeAlarms: climateState.activeAlarms,
             onScheduleSeeAll: () => context.goToSchedule(

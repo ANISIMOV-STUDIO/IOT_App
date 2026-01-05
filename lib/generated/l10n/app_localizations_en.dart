@@ -856,6 +856,63 @@ class AppLocalizationsEn extends AppLocalizations {
   String get relativeHumidity => 'Relative humidity';
 
   @override
+  String get outdoor => 'Outdoor';
+
+  @override
+  String get indoor => 'Indoor';
+
+  @override
+  String get afterRecup => 'After recup.';
+
+  @override
+  String get supply => 'Supply';
+
+  @override
+  String get efficiency => 'Efficiency';
+
+  @override
+  String get freeCool => 'Free cool';
+
+  @override
+  String get heater => 'Heater';
+
+  @override
+  String get cooler => 'Cooler';
+
+  @override
+  String get pressure => 'Pressure';
+
+  @override
+  String get noDeviceSelected => 'No device selected';
+
+  @override
+  String get modes => 'Modes';
+
+  @override
+  String get modeBasic => 'Basic';
+
+  @override
+  String get modeIntensive => 'Intensive';
+
+  @override
+  String get modeEconomy => 'Economy';
+
+  @override
+  String get modeMaxPerformance => 'Max';
+
+  @override
+  String get modeKitchen => 'Kitchen';
+
+  @override
+  String get modeFireplace => 'Fireplace';
+
+  @override
+  String get modeVacation => 'Vacation';
+
+  @override
+  String get modeCustom => 'Custom';
+
+  @override
   String get controls => 'Control';
 
   @override

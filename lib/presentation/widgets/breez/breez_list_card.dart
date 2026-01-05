@@ -15,7 +15,7 @@ enum ListCardType {
   success,
 }
 
-/// Unified list item card used for alarms, notifications, and similar lists
+/// Универсальная карточка для списков (аварии, уведомления и т.д.)
 class BreezListCard extends StatelessWidget {
   final IconData icon;
   final String title;
@@ -25,6 +25,7 @@ class BreezListCard extends StatelessWidget {
   final ListCardType type;
   final VoidCallback? onTap;
   final bool showUnreadIndicator;
+  final bool compact;
 
   const BreezListCard({
     super.key,
@@ -36,24 +37,27 @@ class BreezListCard extends StatelessWidget {
     this.type = ListCardType.info,
     this.onTap,
     this.showUnreadIndicator = false,
+    this.compact = false,
   });
 
-  /// Factory for alarm card
+  /// Фабрика для карточки аварии
   factory BreezListCard.alarm({
     Key? key,
     required String code,
     required String description,
     required AppLocalizations l10n,
     VoidCallback? onTap,
+    bool compact = false,
   }) {
     return BreezListCard(
       key: key,
       icon: Icons.error_outline,
       title: l10n.alarmCode(code),
       subtitle: description,
-      badge: l10n.activeAlarm,
+      badge: compact ? null : l10n.activeAlarm,
       type: ListCardType.error,
       onTap: onTap,
+      compact: compact,
     );
   }
 
@@ -110,6 +114,13 @@ class BreezListCard extends StatelessWidget {
     final colors = BreezColors.of(context);
     final typeColor = _colorForType();
 
+    // Размеры для компактного режима
+    final iconContainerSize = compact ? 24.0 : 32.0;
+    final iconSize = compact ? 12.0 : 16.0;
+    final padding = compact ? 8.0 : 12.0;
+    final titleSize = compact ? 11.0 : 12.0;
+    final subtitleSize = compact ? 10.0 : 11.0;
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -119,7 +130,7 @@ class BreezListCard extends StatelessWidget {
         splashColor: typeColor.withValues(alpha: 0.2),
         highlightColor: typeColor.withValues(alpha: 0.1),
         child: Ink(
-          padding: const EdgeInsets.all(12),
+          padding: EdgeInsets.all(padding),
           decoration: BoxDecoration(
             color: typeColor.withValues(alpha: 0.08),
             borderRadius: BorderRadius.circular(AppRadius.card),
@@ -130,24 +141,24 @@ class BreezListCard extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Icon container
+              // Иконка
               Container(
-                width: 32,
-                height: 32,
+                width: iconContainerSize,
+                height: iconContainerSize,
                 decoration: BoxDecoration(
                   color: typeColor.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(AppRadius.card),
                 ),
                 child: Icon(
                   icon,
-                  size: 16,
+                  size: iconSize,
                   color: typeColor,
                 ),
               ),
 
-              const SizedBox(width: 10),
+              SizedBox(width: compact ? 8 : 10),
 
-              // Content
+              // Контент
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -159,7 +170,7 @@ class BreezListCard extends StatelessWidget {
                           child: Text(
                             title,
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: titleSize,
                               fontWeight: FontWeight.w600,
                               color: colors.text,
                             ),
@@ -196,21 +207,21 @@ class BreezListCard extends StatelessWidget {
                           ),
                       ],
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: compact ? 2 : 4),
                     Text(
                       subtitle,
                       style: TextStyle(
-                        fontSize: 11,
+                        fontSize: subtitleSize,
                         color: colors.textMuted,
                       ),
-                      maxLines: 2,
+                      maxLines: compact ? 1 : 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),
               ),
 
-              // Unread indicator
+              // Индикатор непрочитанного
               if (showUnreadIndicator) ...[
                 const SizedBox(width: 8),
                 Container(
@@ -273,12 +284,13 @@ class BreezSeeMoreButton extends StatelessWidget {
   }
 }
 
-/// Empty state widget for lists
+/// Виджет пустого состояния для списков
 class BreezEmptyState extends StatelessWidget {
   final IconData icon;
   final String title;
   final String subtitle;
   final Color? iconColor;
+  final bool compact;
 
   const BreezEmptyState({
     super.key,
@@ -286,35 +298,39 @@ class BreezEmptyState extends StatelessWidget {
     required this.title,
     required this.subtitle,
     this.iconColor,
+    this.compact = false,
   });
 
-  /// Factory for no alarms state
-  factory BreezEmptyState.noAlarms(AppLocalizations l10n) {
+  /// Фабрика для пустого списка аварий
+  factory BreezEmptyState.noAlarms(AppLocalizations l10n, {bool compact = false}) {
     return BreezEmptyState(
       icon: Icons.check_circle_outline,
       title: l10n.noAlarms,
       subtitle: l10n.systemWorkingNormally,
       iconColor: AppColors.accentGreen,
+      compact: compact,
     );
   }
 
-  /// Factory for no notifications state
-  factory BreezEmptyState.noNotifications(AppLocalizations l10n) {
+  /// Фабрика для пустого списка уведомлений
+  factory BreezEmptyState.noNotifications(AppLocalizations l10n, {bool compact = false}) {
     return BreezEmptyState(
       icon: Icons.check_circle_outline,
       title: l10n.noNotifications,
       subtitle: l10n.systemWorkingNormally,
       iconColor: AppColors.accentGreen,
+      compact: compact,
     );
   }
 
-  /// Factory for no schedule entries
-  factory BreezEmptyState.noSchedule(AppLocalizations l10n) {
+  /// Фабрика для пустого расписания
+  factory BreezEmptyState.noSchedule(AppLocalizations l10n, {bool compact = false}) {
     return BreezEmptyState(
       icon: Icons.schedule_outlined,
       title: l10n.noSchedule,
       subtitle: l10n.addFirstEntry,
       iconColor: AppColors.accent,
+      compact: compact,
     );
   }
 
@@ -329,26 +345,28 @@ class BreezEmptyState extends StatelessWidget {
         children: [
           Icon(
             icon,
-            size: 40,
+            size: compact ? 28 : 40,
             color: color.withValues(alpha: 0.5),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: compact ? 8 : 12),
           Text(
             title,
             style: TextStyle(
-              fontSize: 13,
+              fontSize: compact ? 11 : 13,
               fontWeight: FontWeight.w600,
               color: colors.textMuted,
             ),
           ),
-          const SizedBox(height: 4),
-          Text(
-            subtitle,
-            style: TextStyle(
-              fontSize: 11,
-              color: colors.textMuted.withValues(alpha: 0.7),
+          if (!compact) ...[
+            const SizedBox(height: 4),
+            Text(
+              subtitle,
+              style: TextStyle(
+                fontSize: 11,
+                color: colors.textMuted.withValues(alpha: 0.7),
+              ),
             ),
-          ),
+          ],
         ],
       ),
     );

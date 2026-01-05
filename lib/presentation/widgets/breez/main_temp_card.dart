@@ -10,7 +10,6 @@ import '../../../domain/entities/unit_state.dart';
 import '../../../generated/l10n/app_localizations.dart';
 import 'breez_card.dart';
 import 'fan_slider.dart';
-import 'mode_selector.dart';
 import 'sensors_grid.dart';
 import 'stat_item.dart';
 import 'temp_column.dart';
@@ -38,9 +37,6 @@ class MainTempCard extends StatelessWidget {
   final VoidCallback? onCoolingTempIncrease;
   final VoidCallback? onCoolingTempDecrease;
   final bool showControls;
-  final String? selectedMode;
-  final ValueChanged<String>? onModeChanged;
-  final bool showModeSelector;
   final int alarmCount;
   final VoidCallback? onAlarmsTap;
   final bool isPowerLoading;
@@ -70,9 +66,6 @@ class MainTempCard extends StatelessWidget {
     this.onCoolingTempIncrease,
     this.onCoolingTempDecrease,
     this.showControls = false,
-    this.selectedMode,
-    this.onModeChanged,
-    this.showModeSelector = false,
     this.alarmCount = 0,
     this.onAlarmsTap,
     this.isPowerLoading = false,
@@ -378,40 +371,6 @@ class MainTempCard extends StatelessWidget {
                 ),
               ],
 
-              // Mode selector (integrated at bottom)
-              if (showModeSelector && selectedMode != null) ...[
-                const SizedBox(height: 16),
-                Container(
-                  padding: const EdgeInsets.only(top: 16),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      top: BorderSide(color: colors.border),
-                    ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        l10n.operatingMode,
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          color: colors.textMuted,
-                          letterSpacing: 0.5,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      ModeSelector(
-                        unitName: unitName,
-                        selectedMode: selectedMode!,
-                        onModeChanged: onModeChanged,
-                        compact: true,
-                        enabled: isPowered,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
             ],
         ),
     );

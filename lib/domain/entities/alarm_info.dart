@@ -41,17 +41,21 @@ class AlarmHistory extends Equatable {
 
   factory AlarmHistory.fromJson(Map<String, dynamic> json) {
     return AlarmHistory(
-      id: json['id'] as String? ?? '',
+      id: json['id']?.toString() ?? '',
       alarmCode: json['alarmCode'] as int? ?? 0,
       description: json['description'] as String? ?? '',
-      occurredAt: json['occurredAt'] != null
-          ? DateTime.parse(json['occurredAt'] as String)
-          : DateTime.now(),
+      occurredAt: _parseDateTime(json['occurredAt']) ?? DateTime.now(),
       isCleared: json['isCleared'] as bool? ?? false,
-      clearedAt: json['clearedAt'] != null
-          ? DateTime.parse(json['clearedAt'] as String)
-          : null,
+      clearedAt: _parseDateTime(json['clearedAt']),
     );
+  }
+
+  /// Парсинг даты: поддержка String (ISO) и int (Unix timestamp)
+  static DateTime? _parseDateTime(dynamic value) {
+    if (value == null) return null;
+    if (value is String) return DateTime.tryParse(value);
+    if (value is int) return DateTime.fromMillisecondsSinceEpoch(value * 1000);
+    return null;
   }
 
   @override

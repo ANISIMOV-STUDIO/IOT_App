@@ -161,7 +161,6 @@ class _DesktopLayoutState extends State<DesktopLayout> {
             onCoolingTempDecrease: widget.onCoolingTempDecrease,
             onSupplyFanChanged: widget.onSupplyFanChanged,
             onExhaustFanChanged: widget.onExhaustFanChanged,
-            onModeChanged: widget.onModeChanged,
             onPowerToggle: widget.onPowerToggle,
             onSettingsTap: widget.onSettingsTap,
             isPowerLoading: widget.isPowerLoading,
