@@ -1,49 +1,58 @@
 /// Реальная реализация NotificationRepository
 ///
-/// Использует HTTP API для CRUD операций и SignalR для real-time обновлений
+/// Использует NotificationDataSource для получения уведомлений.
+/// Real-time обновления:
+/// - Mobile/Desktop: gRPC streaming (через DataSource)
+/// - Web: SignalR (передается отдельно)
 library;
 
 import 'dart:async';
 import '../../domain/entities/unit_notification.dart';
 import '../../domain/repositories/notification_repository.dart';
-import '../api/platform/api_client.dart';
-import '../api/http/clients/notification_http_client.dart';
 import '../api/websocket/signalr_hub_connection.dart';
+import '../datasources/notification/notification_data_source.dart';
 
 class RealNotificationRepository implements NotificationRepository {
-  final ApiClient _apiClient;
+  final NotificationDataSource _dataSource;
   final SignalRHubConnection? _signalR;
-  late final NotificationHttpClient _httpClient;
 
   final _notificationsController =
       StreamController<List<UnitNotification>>.broadcast();
 
+  StreamSubscription<NotificationDto>? _dataSourceSubscription;
   StreamSubscription<Map<String, dynamic>>? _signalRSubscription;
   List<UnitNotification> _cachedNotifications = [];
 
-  RealNotificationRepository(this._apiClient, [this._signalR]) {
-    _httpClient = NotificationHttpClient(_apiClient);
-    _setupSignalRSubscription();
+  RealNotificationRepository(this._dataSource, [this._signalR]) {
+    _setupRealTimeUpdates();
   }
 
-  /// Настройка подписки на SignalR уведомления
-  void _setupSignalRSubscription() {
-    if (_signalR == null) return;
-
-    _signalRSubscription = _signalR.notifications.listen((data) {
-      try {
-        final notification = _parseNotification(data);
-        // Добавляем новое уведомление в начало списка
+  /// Настройка real-time обновлений
+  void _setupRealTimeUpdates() {
+    // Пробуем использовать gRPC streaming из DataSource
+    final dataSourceStream = _dataSource.watchNotifications();
+    if (dataSourceStream != null) {
+      _dataSourceSubscription = dataSourceStream.listen((dto) {
+        final notification = dto.toEntity();
         _cachedNotifications = [notification, ..._cachedNotifications];
         _notificationsController.add(_cachedNotifications);
-      } catch (e) {
-        // Логируем ошибку парсинга, но не прерываем стрим
-      }
-    });
+      });
+    } else if (_signalR != null) {
+      // Fallback на SignalR для web
+      _signalRSubscription = _signalR.notifications.listen((data) {
+        try {
+          final notification = _parseNotificationFromJson(data);
+          _cachedNotifications = [notification, ..._cachedNotifications];
+          _notificationsController.add(_cachedNotifications);
+        } catch (e) {
+          // Логируем ошибку парсинга, но не прерываем стрим
+        }
+      });
+    }
   }
 
-  /// Парсинг уведомления из JSON
-  UnitNotification _parseNotification(Map<String, dynamic> json) {
+  /// Парсинг уведомления из JSON (для SignalR)
+  UnitNotification _parseNotificationFromJson(Map<String, dynamic> json) {
     return UnitNotification(
       id: json['id'] as String,
       deviceId: json['deviceId'] as String? ?? '',
@@ -59,9 +68,8 @@ class RealNotificationRepository implements NotificationRepository {
 
   @override
   Future<List<UnitNotification>> getNotifications({String? deviceId}) async {
-    final jsonNotifications = await _httpClient.getNotifications(deviceId: deviceId);
-
-    _cachedNotifications = jsonNotifications.map(_parseNotification).toList();
+    final dtos = await _dataSource.getNotifications(deviceId: deviceId);
+    _cachedNotifications = dtos.map((dto) => dto.toEntity()).toList();
     return _cachedNotifications;
   }
 
@@ -77,18 +85,16 @@ class RealNotificationRepository implements NotificationRepository {
         _notificationsController.addError(error);
       },
     );
-    // SignalR будет автоматически добавлять новые уведомления в стрим
     return _notificationsController.stream;
   }
 
   @override
   Future<void> markAsRead(String notificationId) async {
-    await _httpClient.markAsRead([notificationId]);
+    await _dataSource.markAsRead([notificationId]);
   }
 
   @override
   Future<void> markAllAsRead({String? deviceId}) async {
-    // Получаем все уведомления и отмечаем непрочитанные
     final notifications = await getNotifications(deviceId: deviceId);
     final unreadIds = notifications
         .where((n) => !n.isRead)
@@ -96,13 +102,13 @@ class RealNotificationRepository implements NotificationRepository {
         .toList();
 
     if (unreadIds.isNotEmpty) {
-      await _httpClient.markAsRead(unreadIds);
+      await _dataSource.markAsRead(unreadIds);
     }
   }
 
   @override
   Future<void> dismiss(String notificationId) async {
-    await _httpClient.dismiss(notificationId);
+    await _dataSource.dismiss(notificationId);
   }
 
   @override
@@ -129,7 +135,9 @@ class RealNotificationRepository implements NotificationRepository {
   }
 
   void dispose() {
+    _dataSourceSubscription?.cancel();
     _signalRSubscription?.cancel();
     _notificationsController.close();
+    _dataSource.dispose();
   }
 }

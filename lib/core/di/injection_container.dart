@@ -73,6 +73,12 @@ import '../../data/repositories/cached_graph_data_repository.dart';
 import '../../data/api/http/clients/hvac_http_client.dart';
 import '../../data/api/websocket/signalr_hub_connection.dart';
 
+// Data - DataSources (Strategy Pattern: HTTP/gRPC в зависимости от платформы)
+import '../../data/datasources/analytics/analytics_data_source.dart';
+import '../../data/datasources/analytics/analytics_data_source_factory.dart';
+import '../../data/datasources/notification/notification_data_source.dart';
+import '../../data/datasources/notification/notification_data_source_factory.dart';
+
 final sl = GetIt.instance;
 
 /// Feature Flag: Использовать реальное API (true) или Mock данные (false)
@@ -227,13 +233,23 @@ Future<void> init() async {
     );
   }
 
-  // Notification Repository (Уведомления с SignalR real-time)
+  // DataSources - автоматический выбор HTTP/gRPC в зависимости от платформы
+  if (useRealApi) {
+    sl.registerLazySingleton<AnalyticsDataSource>(
+      () => AnalyticsDataSourceFactory.create(sl<ApiClient>()),
+    );
+    sl.registerLazySingleton<NotificationDataSource>(
+      () => NotificationDataSourceFactory.create(sl<ApiClient>()),
+    );
+  }
+
+  // Notification Repository (Уведомления с gRPC streaming / SignalR fallback)
   if (useRealApi) {
     sl.registerLazySingleton<NotificationRepository>(
       () => CachedNotificationRepository(
         inner: RealNotificationRepository(
-          sl<ApiClient>(),
-          sl<SignalRHubConnection>(),
+          sl<NotificationDataSource>(),
+          sl<SignalRHubConnection>(), // Fallback для web
         ),
         cacheService: sl<CacheService>(),
         connectivity: sl<ConnectivityService>(),
@@ -245,11 +261,11 @@ Future<void> init() async {
     );
   }
 
-  // GraphData Repository (Данные для графиков аналитики)
+  // GraphData Repository (Данные для графиков - gRPC на mobile, HTTP на web)
   if (useRealApi) {
     sl.registerLazySingleton<GraphDataRepository>(
       () => CachedGraphDataRepository(
-        inner: RealGraphDataRepository(sl<ApiClient>()),
+        inner: RealGraphDataRepository(sl<AnalyticsDataSource>()),
         cacheService: sl<CacheService>(),
         connectivity: sl<ConnectivityService>(),
       ),

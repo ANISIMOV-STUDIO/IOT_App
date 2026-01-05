@@ -1,21 +1,21 @@
-/// Real implementation of GraphDataRepository
+/// Реальная реализация GraphDataRepository
+///
+/// Использует AnalyticsDataSource для получения данных графиков.
+/// DataSource выбирается автоматически в зависимости от платформы:
+/// - Web: HTTP
+/// - Mobile/Desktop: gRPC
 library;
 
 import 'dart:async';
 import '../../domain/entities/graph_data.dart';
 import '../../domain/repositories/graph_data_repository.dart';
-import '../api/platform/api_client.dart';
-import '../api/http/clients/analytics_http_client.dart';
+import '../datasources/analytics/analytics_data_source.dart';
 
 class RealGraphDataRepository implements GraphDataRepository {
-  final ApiClient _apiClient;
-  late final AnalyticsHttpClient _httpClient;
-
+  final AnalyticsDataSource _dataSource;
   final _graphDataController = StreamController<List<GraphDataPoint>>.broadcast();
 
-  RealGraphDataRepository(this._apiClient) {
-    _httpClient = AnalyticsHttpClient(_apiClient);
-  }
+  RealGraphDataRepository(this._dataSource);
 
   @override
   Future<List<GraphDataPoint>> getGraphData({
@@ -25,22 +25,12 @@ class RealGraphDataRepository implements GraphDataRepository {
     required DateTime to,
   }) async {
     final metricString = _metricToString(metric);
-    final jsonData = await _httpClient.getGraphData(deviceId, metricString, from, to);
-
-    // Parse data points
-    final dataPoints = <GraphDataPoint>[];
-    if (jsonData.containsKey('dataPoints') && jsonData['dataPoints'] is List) {
-      for (final point in jsonData['dataPoints'] as List) {
-        if (point is Map<String, dynamic>) {
-          final rawLabel = point['label'] as String? ?? '';
-          final label = _formatLabel(rawLabel);
-          dataPoints.add(GraphDataPoint(
-            label: label,
-            value: (point['value'] as num?)?.toDouble() ?? 0.0,
-          ));
-        }
-      }
-    }
+    final dataPoints = await _dataSource.getGraphData(
+      deviceId: deviceId,
+      metric: metricString,
+      from: from,
+      to: to,
+    );
 
     _graphDataController.add(dataPoints);
     return dataPoints;
@@ -64,7 +54,6 @@ class RealGraphDataRepository implements GraphDataRepository {
 
   @override
   Future<List<GraphMetric>> getAvailableMetrics(String deviceId) async {
-    // Return all metrics for now
     return [
       GraphMetric.temperature,
       GraphMetric.humidity,
@@ -80,18 +69,6 @@ class RealGraphDataRepository implements GraphDataRepository {
         return 'humidity';
       case GraphMetric.airflow:
         return 'airflow';
-    }
-  }
-
-  /// Format ISO timestamp to short label (HH:mm)
-  String _formatLabel(String rawLabel) {
-    if (rawLabel.isEmpty) return '';
-    try {
-      final dateTime = DateTime.parse(rawLabel);
-      return '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
-    } catch (_) {
-      // Not a timestamp, return as-is
-      return rawLabel;
     }
   }
 
