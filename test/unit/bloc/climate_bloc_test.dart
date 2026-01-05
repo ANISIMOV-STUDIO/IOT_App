@@ -19,6 +19,8 @@ class MockGetDeviceState extends Mock implements GetDeviceState {}
 
 class MockGetDeviceFullState extends Mock implements GetDeviceFullState {}
 
+class MockGetAlarmHistory extends Mock implements GetAlarmHistory {}
+
 class MockWatchCurrentClimate extends Mock implements WatchCurrentClimate {}
 
 class MockSetDevicePower extends Mock implements SetDevicePower {}
@@ -37,6 +39,7 @@ void main() {
   late MockGetCurrentClimateState mockGetCurrentClimateState;
   late MockGetDeviceState mockGetDeviceState;
   late MockGetDeviceFullState mockGetDeviceFullState;
+  late MockGetAlarmHistory mockGetAlarmHistory;
   late MockWatchCurrentClimate mockWatchCurrentClimate;
   late MockSetDevicePower mockSetDevicePower;
   late MockSetTemperature mockSetTemperature;
@@ -91,12 +94,14 @@ void main() {
     mockSetClimateMode = MockSetClimateMode();
     mockSetPreset = MockSetPreset();
     mockSetAirflow = MockSetAirflow();
+    mockGetAlarmHistory = MockGetAlarmHistory();
   });
 
   ClimateBloc createBloc() => ClimateBloc(
         getCurrentClimateState: mockGetCurrentClimateState,
         getDeviceState: mockGetDeviceState,
         getDeviceFullState: mockGetDeviceFullState,
+        getAlarmHistory: mockGetAlarmHistory,
         watchCurrentClimate: mockWatchCurrentClimate,
         setDevicePower: mockSetDevicePower,
         setTemperature: mockSetTemperature,

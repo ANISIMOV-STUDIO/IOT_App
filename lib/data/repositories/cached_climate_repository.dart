@@ -9,6 +9,7 @@ library;
 import '../../core/error/offline_exception.dart';
 import '../../core/services/cache_service.dart';
 import '../../core/services/connectivity_service.dart';
+import '../../domain/entities/alarm_info.dart';
 import '../../domain/entities/climate.dart';
 import '../../domain/entities/hvac_device.dart';
 import '../../domain/entities/device_full_state.dart';
@@ -215,6 +216,19 @@ class CachedClimateRepository implements ClimateRepository {
     // Полное состояние пока не кешируем — делегируем во inner
     // TODO: Добавить кеширование при необходимости
     return await _inner.getDeviceFullState(deviceId);
+  }
+
+  // ============================================
+  // ALARM HISTORY
+  // ============================================
+
+  @override
+  Future<List<AlarmHistory>> getAlarmHistory(
+    String deviceId, {
+    int limit = 100,
+  }) async {
+    // История аварий — делегируем во inner (требует сети)
+    return await _inner.getAlarmHistory(deviceId, limit: limit);
   }
 
   // ============================================
