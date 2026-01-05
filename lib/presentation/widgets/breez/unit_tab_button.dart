@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../domain/entities/unit_state.dart';
+import 'breez_card.dart';
 
 /// Unified unit tab button used across all layouts (mobile, tablet, desktop)
 class UnitTabButton extends StatelessWidget {
@@ -50,48 +51,40 @@ class UnitTabButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(AppRadius.nested),
-        hoverColor: isSelected ? AppColors.accentLight : colors.buttonBg,
-        splashColor: AppColors.accent.withValues(alpha: 0.2),
-        highlightColor: AppColors.accent.withValues(alpha: 0.1),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          decoration: BoxDecoration(
-            color: isSelected ? AppColors.accent : Colors.transparent,
-            borderRadius: BorderRadius.circular(AppRadius.nested),
+
+    return BreezButton(
+      onTap: onTap,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      borderRadius: AppRadius.nested,
+      backgroundColor: isSelected ? AppColors.accent : Colors.transparent,
+      hoverColor: isSelected ? AppColors.accentLight : colors.buttonBg,
+      showBorder: false,
+      enableGlow: isSelected,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Status indicator
+          Container(
+            width: 8,
+            height: 8,
+            decoration: BoxDecoration(
+              color: unit.power
+                  ? (isSelected ? Colors.white : AppColors.success)
+                  : colors.textMuted,
+              shape: BoxShape.circle,
+            ),
           ),
-          alignment: Alignment.center,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Status indicator
-              Container(
-                width: 8,
-                height: 8,
-                decoration: BoxDecoration(
-                  color: unit.power
-                      ? (isSelected ? Colors.white : AppColors.accentGreen)
-                      : colors.textMuted,
-                  shape: BoxShape.circle,
-                ),
-              ),
-              const SizedBox(width: 8),
-              // Unit name
-              Text(
-                unit.name,
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                  color: isSelected ? Colors.white : colors.textMuted,
-                ),
-              ),
-            ],
+          const SizedBox(width: 8),
+          // Unit name
+          Text(
+            unit.name,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+              color: isSelected ? Colors.white : colors.textMuted,
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

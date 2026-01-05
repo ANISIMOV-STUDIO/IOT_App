@@ -6,8 +6,8 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../domain/entities/unit_state.dart';
 import '../../../widgets/breez/breez_logo.dart';
+import '../../../widgets/breez/breez_card.dart';
 import '../../../widgets/breez/unit_tab_button.dart';
-import 'header_icon_button.dart';
 import 'add_unit_button.dart';
 
 /// Desktop header with unit tabs and user info
@@ -49,7 +49,7 @@ class DesktopHeader extends StatelessWidget {
       children: [
         // Menu button (tablet only)
         if (showMenuButton) ...[
-          HeaderIconButton(
+          BreezIconButton(
             icon: Icons.menu,
             onTap: onMenuTap,
           ),
@@ -59,13 +59,13 @@ class DesktopHeader extends StatelessWidget {
         Expanded(child: _buildUnitTabs(context)),
         const SizedBox(width: 16),
         // Theme toggle
-        HeaderIconButton(
+        BreezIconButton(
           icon: isDark ? Icons.light_mode_outlined : Icons.dark_mode_outlined,
           onTap: onThemeToggle,
         ),
         const SizedBox(width: 8),
         // Notifications
-        HeaderIconButton(
+        BreezIconButton(
           icon: Icons.notifications_outlined,
           badge: '3',
           onTap: onNotificationsTap,
@@ -126,49 +126,41 @@ class DesktopHeader extends StatelessWidget {
       builder: (context) {
         final colors = BreezColors.of(context);
 
-        return Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: onProfileTap,
-            borderRadius: BorderRadius.circular(AppRadius.button),
-            hoverColor: colors.buttonBg,
-            splashColor: AppColors.accent.withValues(alpha: 0.1),
-            highlightColor: AppColors.accent.withValues(alpha: 0.05),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              child: Row(
-                children: [
-                  Text(
-                    userName,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: colors.text,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [AppColors.accent, AppColors.accentLight],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(AppRadius.button),
-                    ),
-                    child: const Center(
-                      child: Icon(
-                        Icons.person,
-                        size: 20,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
+        return BreezButton(
+          onTap: onProfileTap,
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                userName,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: colors.text,
+                ),
               ),
-            ),
+              const SizedBox(width: 12),
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [AppColors.accent, AppColors.accentLight],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(AppRadius.button),
+                ),
+                child: const Center(
+                  child: Icon(
+                    Icons.person,
+                    size: 20,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
           ),
         );
       },

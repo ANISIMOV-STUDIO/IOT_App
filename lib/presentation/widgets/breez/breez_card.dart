@@ -125,7 +125,10 @@ class BreezCard extends StatelessWidget {
   }
 }
 
-/// Base BREEZ button with consistent styling
+/// Base BREEZ button with premium animations
+///
+/// Единый базовый класс для всех кнопок приложения.
+/// Поддерживает hover, press, loading состояния с плавными анимациями.
 class BreezButton extends StatefulWidget {
   final Widget child;
   final VoidCallback? onTap;
@@ -138,6 +141,9 @@ class BreezButton extends StatefulWidget {
   final List<BoxShadow>? shadows;
   final Border? border;
   final bool isLoading;
+  final bool showBorder;
+  final bool enableScale;
+  final bool enableGlow;
 
   const BreezButton({
     super.key,
@@ -152,22 +158,65 @@ class BreezButton extends StatefulWidget {
     this.shadows,
     this.border,
     this.isLoading = false,
+    this.showBorder = true,
+    this.enableScale = true,
+    this.enableGlow = false,
   });
 
   @override
   State<BreezButton> createState() => _BreezButtonState();
 }
 
-class _BreezButtonState extends State<BreezButton> {
+class _BreezButtonState extends State<BreezButton>
+    with SingleTickerProviderStateMixin {
   bool _isHovered = false;
   bool _isPressed = false;
+
+  late final AnimationController _controller;
+  late final Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 120),
+    );
+
+    // Spring-like scale animation
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.96).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _handleTapDown(TapDownDetails _) {
+    setState(() => _isPressed = true);
+    if (widget.enableScale) _controller.forward();
+  }
+
+  void _handleTapUp(TapUpDetails _) {
+    setState(() => _isPressed = false);
+    if (widget.enableScale) _controller.reverse();
+  }
+
+  void _handleTapCancel() {
+    setState(() => _isPressed = false);
+    if (widget.enableScale) _controller.reverse();
+  }
 
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
     final bg = widget.backgroundColor ?? colors.buttonBg;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    // Обеспечиваем минимальный touch target только если размер задан явно
+    // Touch target constraints
     final buttonWidth = widget.width != null
         ? ((widget.width ?? 0) < kMinTouchTarget ? kMinTouchTarget : widget.width)
         : null;
@@ -175,16 +224,25 @@ class _BreezButtonState extends State<BreezButton> {
         ? ((widget.height ?? 0) < kMinTouchTarget ? kMinTouchTarget : widget.height)
         : null;
 
-    // Анимированные цвета состояний
+    // State-based colors
     final effectiveBg = _isPressed
-        ? Color.lerp(bg, colors.pressedOverlay, 0.3)!
+        ? Color.lerp(bg, isDark ? Colors.white : Colors.black, 0.1)!
         : _isHovered
-            ? (widget.hoverColor ?? colors.buttonHover)
+            ? (widget.hoverColor ?? Color.lerp(bg, isDark ? Colors.white : Colors.black, 0.05)!)
             : bg;
 
-    final effectiveBorder = _isHovered
-        ? colors.borderAccent
-        : colors.border;
+    final effectiveBorder = widget.showBorder
+        ? (_isHovered ? colors.borderAccent : colors.border)
+        : Colors.transparent;
+
+    // Hover glow for accent buttons
+    final glowShadows = widget.enableGlow && _isHovered
+        ? [BoxShadow(
+            color: (widget.backgroundColor ?? AppColors.accent).withValues(alpha: 0.4),
+            blurRadius: 16,
+            spreadRadius: -2,
+          )]
+        : widget.shadows;
 
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
@@ -193,93 +251,130 @@ class _BreezButtonState extends State<BreezButton> {
           ? SystemMouseCursors.basic
           : SystemMouseCursors.click,
       child: GestureDetector(
-        onTapDown: (_) => setState(() => _isPressed = true),
-        onTapUp: (_) => setState(() => _isPressed = false),
-        onTapCancel: () => setState(() => _isPressed = false),
+        onTapDown: _handleTapDown,
+        onTapUp: _handleTapUp,
+        onTapCancel: _handleTapCancel,
         onTap: widget.isLoading ? null : widget.onTap,
-        child: AnimatedScale(
-          scale: _isPressed ? 0.98 : 1.0,
-          duration: AppDurations.fast,
-          curve: AppCurves.standard,
-          // TweenAnimationBuilder только для hover/press, не для темы
-          child: TweenAnimationBuilder<Color?>(
-            tween: ColorTween(end: effectiveBg),
-            duration: (_isHovered || _isPressed) ? AppDurations.fast : Duration.zero,
-            curve: AppCurves.standard,
-            builder: (context, bgColor, child) => Container(
-              width: buttonWidth,
-              height: buttonHeight,
-              constraints: BoxConstraints(
-                minHeight: kMinTouchTarget,
-                minWidth: buttonWidth ?? 0,
+        child: AnimatedBuilder(
+          animation: _controller,
+          builder: (context, child) {
+            final scale = widget.enableScale ? _scaleAnimation.value : 1.0;
+            return Transform.scale(
+              scale: scale,
+              child: Container(
+                width: buttonWidth,
+                height: buttonHeight,
+                constraints: BoxConstraints(
+                  minHeight: kMinTouchTarget,
+                  minWidth: buttonWidth ?? 0,
+                ),
+                padding: widget.padding ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                decoration: BoxDecoration(
+                  color: effectiveBg,
+                  borderRadius: BorderRadius.circular(widget.borderRadius),
+                  border: widget.showBorder ? Border.all(color: effectiveBorder) : null,
+                  boxShadow: glowShadows,
+                ),
+                child: child,
               ),
-              padding: widget.padding ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: BoxDecoration(
-                color: bgColor,
-                borderRadius: BorderRadius.circular(widget.borderRadius),
-                border: widget.border ?? Border.all(color: effectiveBorder),
-                boxShadow: _isHovered ? AppColors.darkShadowSm : widget.shadows,
-              ),
-              child: child,
-            ),
-            child: widget.isLoading
-                ? Center(
-                    child: SizedBox(
-                      width: 16,
-                      height: 16,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(colors.text),
-                      ),
+            );
+          },
+          child: widget.isLoading
+              ? Center(
+                  child: SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation<Color>(colors.text),
                     ),
-                  )
-                : widget.child,
-          ),
+                  ),
+                )
+              : widget.child,
         ),
       ),
     );
   }
 }
 
-/// Icon button with consistent styling
+/// Icon button with consistent styling and optional badge
 class BreezIconButton extends StatelessWidget {
   final IconData icon;
   final VoidCallback? onTap;
   final Color? iconColor;
+  final Color? backgroundColor;
   final bool isActive;
   final double size;
+  final String? badge;
+  final bool showBorder;
 
   const BreezIconButton({
     super.key,
     required this.icon,
     this.onTap,
     this.iconColor,
+    this.backgroundColor,
     this.isActive = false,
-    this.size = 18,
+    this.size = 20,
+    this.badge,
+    this.showBorder = true,
   });
 
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
-    // Рассчитываем размер кнопки с учетом padding и минимального touch target
-    const padding = 10.0;
+    const padding = 12.0;
     final buttonSize = (size + padding * 2) < kMinTouchTarget
         ? kMinTouchTarget
         : (size + padding * 2);
     final iconPadding = (buttonSize - size) / 2;
 
-    return BreezButton(
-      onTap: onTap,
-      width: buttonSize,
-      height: buttonSize,
-      padding: EdgeInsets.all(iconPadding),
-      backgroundColor: isActive ? AppColors.accent : colors.buttonBg,
-      hoverColor: isActive ? AppColors.accentLight : colors.cardLight,
-      child: Icon(
-        icon,
-        size: size,
-        color: iconColor ?? (isActive ? Colors.white : colors.textMuted),
-      ),
+    final bg = backgroundColor ?? (isActive ? AppColors.accent : colors.card);
+    final effectiveIconColor = iconColor ?? (isActive ? Colors.white : colors.textMuted);
+
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        BreezButton(
+          onTap: onTap,
+          width: buttonSize,
+          height: buttonSize,
+          padding: EdgeInsets.all(iconPadding),
+          backgroundColor: bg,
+          hoverColor: isActive ? AppColors.accentLight : colors.cardLight,
+          showBorder: showBorder,
+          enableGlow: isActive,
+          child: Icon(
+            icon,
+            size: size,
+            color: effectiveIconColor,
+          ),
+        ),
+        // Badge
+        if (badge != null)
+          Positioned(
+            top: -2,
+            right: -2,
+            child: Container(
+              width: 18,
+              height: 18,
+              decoration: const BoxDecoration(
+                color: AppColors.critical,
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: Text(
+                  badge!,
+                  style: const TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
+      ],
     );
   }
 }

@@ -685,7 +685,7 @@ class _FanSlider extends StatelessWidget {
   }
 }
 
-/// Temperature +/- button
+/// Temperature +/- button - uses BreezButton for consistent animations
 class _TemperatureButton extends StatelessWidget {
   final IconData icon;
   final VoidCallback? onTap;
@@ -697,31 +697,20 @@ class _TemperatureButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final colors = BreezColors.of(context);
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(24),
-        child: Container(
-          width: 48,
-          height: 48,
-          decoration: BoxDecoration(
-            color: isDark
-                ? AppColors.darkHoverOverlay
-                : AppColors.lightHoverOverlay,
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: AppColors.accent.withValues(alpha: 0.3),
-            ),
-          ),
-          child: Icon(
-            icon,
-            size: 24,
-            color: AppColors.accent,
-          ),
-        ),
+    return BreezButton(
+      onTap: onTap,
+      width: 48,
+      height: 48,
+      padding: EdgeInsets.zero,
+      borderRadius: 24,
+      backgroundColor: colors.card,
+      showBorder: true,
+      child: Icon(
+        icon,
+        size: 24,
+        color: AppColors.accent,
       ),
     );
   }
