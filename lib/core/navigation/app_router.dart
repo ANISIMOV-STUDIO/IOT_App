@@ -15,6 +15,7 @@ import '../../presentation/screens/auth/verify_email_screen.dart';
 import '../../presentation/screens/auth/forgot_password_screen.dart';
 import '../../presentation/screens/notifications/notifications_screen.dart';
 import '../../presentation/screens/schedule/schedule_screen.dart';
+import '../../presentation/screens/alarms/alarm_history_screen.dart';
 import '../../presentation/screens/splash/splash_screen.dart';
 import '../../presentation/bloc/auth/auth_bloc.dart';
 import '../../presentation/bloc/auth/auth_state.dart';
@@ -30,6 +31,7 @@ class AppRoutes {
   static const String forgotPassword = '/forgot-password';
   static const String notifications = '/notifications';
   static const String schedule = '/schedule';
+  static const String alarmHistory = '/alarm-history';
 }
 
 /// Global navigator key
@@ -198,6 +200,19 @@ GoRouter createRouter(AuthBloc authBloc) {
           );
         },
       ),
+
+      // Alarm History
+      GoRoute(
+        path: AppRoutes.alarmHistory,
+        builder: (context, state) {
+          final deviceId = state.uri.queryParameters['deviceId'] ?? '';
+          final deviceName = state.uri.queryParameters['deviceName'] ?? 'Устройство';
+          return AlarmHistoryScreen(
+            deviceId: deviceId,
+            deviceName: deviceName,
+          );
+        },
+      ),
     ],
   );
 }
@@ -212,4 +227,6 @@ extension GoRouterExtensions on BuildContext {
       go('${AppRoutes.verifyEmail}?email=$email', extra: password);
   void goToSchedule(String deviceId, String deviceName) =>
       go('${AppRoutes.schedule}?deviceId=$deviceId&deviceName=${Uri.encodeComponent(deviceName)}');
+  void goToAlarmHistory(String deviceId, String deviceName) =>
+      go('${AppRoutes.alarmHistory}?deviceId=$deviceId&deviceName=${Uri.encodeComponent(deviceName)}');
 }

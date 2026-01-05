@@ -3,6 +3,7 @@ library;
 
 import 'dart:async';
 import 'dart:developer' as developer;
+import '../../domain/entities/alarm_info.dart';
 import '../../domain/entities/climate.dart';
 import '../../domain/entities/hvac_device.dart';
 import '../../domain/entities/device_full_state.dart';
@@ -288,6 +289,22 @@ class RealClimateRepository implements ClimateRepository {
     }
     final jsonDevice = await _httpClient.getDevice(deviceId);
     return DeviceJsonMapper.deviceFullStateFromJson(jsonDevice);
+  }
+
+  // ============================================
+  // ALARM HISTORY
+  // ============================================
+
+  @override
+  Future<List<AlarmHistory>> getAlarmHistory(
+    String deviceId, {
+    int limit = 100,
+  }) async {
+    if (deviceId.isEmpty) {
+      throw StateError('No device selected');
+    }
+    final jsonList = await _httpClient.getAlarmHistory(deviceId, limit: limit);
+    return jsonList.map((json) => AlarmHistory.fromJson(json)).toList();
   }
 
   void dispose() {

@@ -523,7 +523,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
               currentUnit.id,
               currentUnit.name,
             ),
-            onAlarmsSeeHistory: () {}, // TODO: Navigate to alarm history
+            onAlarmsSeeHistory: () => context.goToAlarmHistory(
+              currentUnit.id,
+              currentUnit.name,
+            ),
           ),
         ),
       ],

@@ -285,6 +285,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => DeleteDevice(sl()));
   sl.registerLazySingleton(() => RenameDevice(sl()));
   sl.registerLazySingleton(() => GetDeviceFullState(sl()));
+  sl.registerLazySingleton(() => GetAlarmHistory(sl()));
 
   // Climate Use Cases
   sl.registerLazySingleton(() => GetCurrentClimateState(sl()));
@@ -331,6 +332,7 @@ Future<void> init() async {
       getCurrentClimateState: sl(),
       getDeviceState: sl(),
       getDeviceFullState: sl(),
+      getAlarmHistory: sl(),
       watchCurrentClimate: sl(),
       setDevicePower: sl(),
       setTemperature: sl(),

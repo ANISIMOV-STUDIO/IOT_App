@@ -372,6 +372,41 @@ class MockClimateRepository implements ClimateRepository {
     );
   }
 
+  @override
+  Future<List<AlarmHistory>> getAlarmHistory(
+    String deviceId, {
+    int limit = 100,
+  }) async {
+    await Future.delayed(Duration(milliseconds: MockData.networkDelays['fast'] ?? 100));
+
+    // Моковые данные для тестирования истории аварий
+    return [
+      AlarmHistory(
+        id: 'ah_1',
+        alarmCode: 1,
+        description: 'Перегрев системы',
+        occurredAt: DateTime.now().subtract(const Duration(hours: 2)),
+        isCleared: false,
+      ),
+      AlarmHistory(
+        id: 'ah_2',
+        alarmCode: 5,
+        description: 'Низкое давление воздуха',
+        occurredAt: DateTime.now().subtract(const Duration(days: 1)),
+        isCleared: true,
+        clearedAt: DateTime.now().subtract(const Duration(hours: 20)),
+      ),
+      AlarmHistory(
+        id: 'ah_3',
+        alarmCode: 3,
+        description: 'Ошибка датчика температуры',
+        occurredAt: DateTime.now().subtract(const Duration(days: 3)),
+        isCleared: true,
+        clearedAt: DateTime.now().subtract(const Duration(days: 2, hours: 10)),
+      ),
+    ];
+  }
+
   void dispose() {
     _climateController.close();
     _devicesController.close();

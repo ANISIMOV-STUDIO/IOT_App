@@ -6,6 +6,7 @@
 /// - ClimateController: Control operations
 library;
 
+import '../entities/alarm_info.dart';
 import '../entities/climate.dart';
 import '../entities/hvac_device.dart';
 import '../entities/device_full_state.dart';
@@ -110,4 +111,11 @@ abstract class ClimateRepository
 
   /// Get full device state including alarms and mode settings
   Future<DeviceFullState> getDeviceFullState(String deviceId);
+
+  // ============================================
+  // ALARM HISTORY
+  // ============================================
+
+  /// Получить историю аварий устройства
+  Future<List<AlarmHistory>> getAlarmHistory(String deviceId, {int limit = 100});
 }

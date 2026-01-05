@@ -2,26 +2,40 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../generated/l10n/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../domain/entities/alarm_info.dart';
+import '../../bloc/climate/climate_bloc.dart';
 import '../../widgets/breez/breez_card.dart';
 
 /// Экран истории аварий
-class AlarmHistoryScreen extends StatelessWidget {
+///
+/// Загружает историю аварий из ClimateBloc при инициализации.
+class AlarmHistoryScreen extends StatefulWidget {
   final String deviceId;
   final String deviceName;
-  final List<AlarmHistory> history;
-  final bool isLoading;
 
   const AlarmHistoryScreen({
     super.key,
     required this.deviceId,
     required this.deviceName,
-    this.history = const [],
-    this.isLoading = false,
   });
+
+  @override
+  State<AlarmHistoryScreen> createState() => _AlarmHistoryScreenState();
+}
+
+class _AlarmHistoryScreenState extends State<AlarmHistoryScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Запрос на загрузку истории аварий
+    context.read<ClimateBloc>().add(
+          ClimateAlarmHistoryRequested(widget.deviceId),
+        );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +63,7 @@ class AlarmHistoryScreen extends StatelessWidget {
               ),
             ),
             Text(
-              deviceName,
+              widget.deviceName,
               style: TextStyle(
                 fontSize: 12,
                 color: colors.textMuted,
@@ -57,12 +71,30 @@ class AlarmHistoryScreen extends StatelessWidget {
             ),
           ],
         ),
+        actions: [
+          // Кнопка обновления
+          IconButton(
+            icon: Icon(Icons.refresh, color: colors.text),
+            onPressed: () {
+              context.read<ClimateBloc>().add(
+                    ClimateAlarmHistoryRequested(widget.deviceId),
+                  );
+            },
+          ),
+        ],
       ),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : history.isEmpty
-              ? _buildEmptyState(colors, l10n)
-              : _buildHistoryList(colors, l10n),
+      body: BlocBuilder<ClimateBloc, ClimateControlState>(
+        buildWhen: (prev, curr) => prev.alarmHistory != curr.alarmHistory,
+        builder: (context, state) {
+          final history = state.alarmHistory;
+
+          if (history.isEmpty) {
+            return _buildEmptyState(colors, l10n);
+          }
+
+          return _buildHistoryList(history, colors, l10n);
+        },
+      ),
     );
   }
 
@@ -98,7 +130,11 @@ class AlarmHistoryScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHistoryList(BreezColors colors, AppLocalizations l10n) {
+  Widget _buildHistoryList(
+    List<AlarmHistory> history,
+    BreezColors colors,
+    AppLocalizations l10n,
+  ) {
     return ListView.builder(
       padding: const EdgeInsets.all(16),
       itemCount: history.length,

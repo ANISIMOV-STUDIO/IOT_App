@@ -27,6 +27,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   final GetCurrentClimateState _getCurrentClimateState;
   final GetDeviceState _getDeviceState;
   final GetDeviceFullState _getDeviceFullState;
+  final GetAlarmHistory _getAlarmHistory;
   final WatchCurrentClimate _watchCurrentClimate;
   final SetDevicePower _setDevicePower;
   final SetTemperature _setTemperature;
@@ -41,6 +42,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     required GetCurrentClimateState getCurrentClimateState,
     required GetDeviceState getDeviceState,
     required GetDeviceFullState getDeviceFullState,
+    required GetAlarmHistory getAlarmHistory,
     required WatchCurrentClimate watchCurrentClimate,
     required SetDevicePower setDevicePower,
     required SetTemperature setTemperature,
@@ -51,6 +53,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   })  : _getCurrentClimateState = getCurrentClimateState,
         _getDeviceState = getDeviceState,
         _getDeviceFullState = getDeviceFullState,
+        _getAlarmHistory = getAlarmHistory,
         _watchCurrentClimate = watchCurrentClimate,
         _setDevicePower = setDevicePower,
         _setTemperature = setTemperature,
@@ -66,6 +69,10 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     // Обновления из стрима
     on<ClimateStateUpdated>(_onStateUpdated);
     on<ClimateFullStateLoaded>(_onFullStateLoaded);
+
+    // История аварий
+    on<ClimateAlarmHistoryRequested>(_onAlarmHistoryRequested);
+    on<ClimateAlarmHistoryLoaded>(_onAlarmHistoryLoaded);
 
     // Управление устройством
     on<ClimatePowerToggled>(_onPowerToggled);
@@ -159,6 +166,30 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     Emitter<ClimateControlState> emit,
   ) {
     emit(state.copyWith(deviceFullState: event.fullState));
+  }
+
+  /// Запрос на загрузку истории аварий
+  Future<void> _onAlarmHistoryRequested(
+    ClimateAlarmHistoryRequested event,
+    Emitter<ClimateControlState> emit,
+  ) async {
+    try {
+      final history = await _getAlarmHistory(
+        GetAlarmHistoryParams(deviceId: event.deviceId),
+      );
+      emit(state.copyWith(alarmHistory: history));
+    } catch (e) {
+      ApiLogger.warning('[ClimateBloc] Не удалось загрузить историю аварий', e);
+      // Не критично — оставляем текущее состояние
+    }
+  }
+
+  /// История аварий загружена
+  void _onAlarmHistoryLoaded(
+    ClimateAlarmHistoryLoaded event,
+    Emitter<ClimateControlState> emit,
+  ) {
+    emit(state.copyWith(alarmHistory: event.history));
   }
 
   /// Включение/выключение устройства
