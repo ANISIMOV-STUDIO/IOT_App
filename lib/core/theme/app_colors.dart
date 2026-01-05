@@ -68,11 +68,11 @@ abstract class AppColors {
   /// Карточки - hover
   static const Color lightCardLight = Color(0xFFF1F5F8);
 
-  /// Границы
-  static const Color lightBorder = Color(0xFFE2E8F0);
+  /// Границы - более заметные
+  static const Color lightBorder = Color(0xFFCBD5E1);
 
-  /// Границы акцентные
-  static const Color lightBorderAccent = Color(0xFFCBD5E1);
+  /// Границы акцентные - для hover состояний
+  static const Color lightBorderAccent = Color(0xFF94A3B8);
 
   /// Основной текст
   static const Color lightText = Color(0xFF0F172A);
