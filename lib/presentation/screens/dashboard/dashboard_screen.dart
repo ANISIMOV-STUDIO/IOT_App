@@ -265,8 +265,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
       ],
       child: BlocBuilder<DevicesBloc, DevicesState>(
+        buildWhen: (previous, current) =>
+            previous.devices != current.devices ||
+            previous.selectedDeviceId != current.selectedDeviceId,
         builder: (context, devicesState) {
           return BlocBuilder<ClimateBloc, ClimateControlState>(
+            buildWhen: (previous, current) =>
+                previous.climate != current.climate ||
+                previous.isTogglingPower != current.isTogglingPower ||
+                previous.deviceFullState != current.deviceFullState,
             builder: (context, climateState) {
               return BlocBuilder<ConnectivityBloc, ConnectivityState>(
                 buildWhen: (previous, current) =>
@@ -274,10 +281,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     previous.status != current.status,
                 builder: (context, connectivityState) {
                   return BlocBuilder<AnalyticsBloc, AnalyticsState>(
+                    buildWhen: (previous, current) =>
+                        previous.graphData != current.graphData ||
+                        previous.selectedMetric != current.selectedMetric,
                     builder: (context, analyticsState) {
                       return BlocBuilder<NotificationsBloc, NotificationsState>(
+                        buildWhen: (previous, current) =>
+                            previous.notifications != current.notifications ||
+                            previous.unreadCount != current.unreadCount,
                         builder: (context, notificationsState) {
                           return BlocBuilder<ScheduleBloc, ScheduleState>(
+                            buildWhen: (previous, current) =>
+                                previous.entries != current.entries,
                             builder: (context, scheduleState) {
                           // Преобразуем HvacDevice в UnitState для UI
                           final units = devicesState.devices.map((device) {
@@ -435,7 +450,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       onExhaustFanChanged: (v) =>
           context.read<ClimateBloc>().add(ClimateExhaustAirflowChanged(v.toDouble())),
       onModeChanged: (m) =>
-          context.read<ClimateBloc>().add(ClimateModeChanged(_parseClimateMode(m))),
+          context.read<ClimateBloc>().add(ClimateOperatingModeChanged(m)),
       onPowerToggle: () => _handlePowerToggle(climateState),
       onSettingsTap: () => _showUnitSettings(currentUnit),
       isPowerLoading: climateState.isTogglingPower,
@@ -456,14 +471,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       selectedGraphMetric: analyticsState.selectedMetric,
       onGraphMetricChanged: _onGraphMetricChanged,
       activeAlarms: climateState.activeAlarms,
-    );
-  }
-
-  /// Преобразует строковый mode в ClimateMode
-  ClimateMode _parseClimateMode(String mode) {
-    return ClimateMode.values.firstWhere(
-      (m) => m.name == mode,
-      orElse: () => ClimateMode.auto,
     );
   }
 
@@ -507,7 +514,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             onExhaustFanChanged: (v) =>
                 context.read<ClimateBloc>().add(ClimateExhaustAirflowChanged(v.toDouble())),
             onModeChanged: (m) =>
-                context.read<ClimateBloc>().add(ClimateModeChanged(_parseClimateMode(m))),
+                context.read<ClimateBloc>().add(ClimateOperatingModeChanged(m)),
             onPowerToggle: () => _handlePowerToggle(climateState),
             onSettingsTap: () => _showUnitSettings(currentUnit),
             isPowerLoading: climateState.isTogglingPower,

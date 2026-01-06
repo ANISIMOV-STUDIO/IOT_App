@@ -31,6 +31,8 @@ class MockSetHumidity extends Mock implements SetHumidity {}
 
 class MockSetClimateMode extends Mock implements SetClimateMode {}
 
+class MockSetOperatingMode extends Mock implements SetOperatingMode {}
+
 class MockSetPreset extends Mock implements SetPreset {}
 
 class MockSetAirflow extends Mock implements SetAirflow {}
@@ -45,6 +47,7 @@ void main() {
   late MockSetTemperature mockSetTemperature;
   late MockSetHumidity mockSetHumidity;
   late MockSetClimateMode mockSetClimateMode;
+  late MockSetOperatingMode mockSetOperatingMode;
   late MockSetPreset mockSetPreset;
   late MockSetAirflow mockSetAirflow;
 
@@ -78,6 +81,7 @@ void main() {
     registerFallbackValue(const SetTemperatureParams(temperature: 20.0));
     registerFallbackValue(const SetHumidityParams(humidity: 50.0));
     registerFallbackValue(const SetClimateModeParams(mode: ClimateMode.auto));
+    registerFallbackValue(const SetOperatingModeParams(mode: 'basic'));
     registerFallbackValue(const SetPresetParams(preset: 'auto'));
     registerFallbackValue(
         const SetAirflowParams(type: AirflowType.supply, value: 50.0));
@@ -92,6 +96,7 @@ void main() {
     mockSetTemperature = MockSetTemperature();
     mockSetHumidity = MockSetHumidity();
     mockSetClimateMode = MockSetClimateMode();
+    mockSetOperatingMode = MockSetOperatingMode();
     mockSetPreset = MockSetPreset();
     mockSetAirflow = MockSetAirflow();
     mockGetAlarmHistory = MockGetAlarmHistory();
@@ -107,6 +112,7 @@ void main() {
         setTemperature: mockSetTemperature,
         setHumidity: mockSetHumidity,
         setClimateMode: mockSetClimateMode,
+        setOperatingMode: mockSetOperatingMode,
         setPreset: mockSetPreset,
         setAirflow: mockSetAirflow,
       );

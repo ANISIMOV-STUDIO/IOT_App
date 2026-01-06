@@ -130,11 +130,21 @@ final class ClimateHumidityChanged extends ClimateEvent {
   List<Object?> get props => [humidity];
 }
 
-/// Изменён режим климата
+/// Изменён режим климата (enum: heating, cooling, auto, etc.)
 final class ClimateModeChanged extends ClimateEvent {
   final ClimateMode mode;
 
   const ClimateModeChanged(this.mode);
+
+  @override
+  List<Object?> get props => [mode];
+}
+
+/// Изменён режим работы установки (String: basic, intensive, economy, etc.)
+final class ClimateOperatingModeChanged extends ClimateEvent {
+  final String mode;
+
+  const ClimateOperatingModeChanged(this.mode);
 
   @override
   List<Object?> get props => [mode];

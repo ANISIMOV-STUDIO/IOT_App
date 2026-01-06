@@ -7,6 +7,7 @@ import '../../../core/theme/app_radius.dart';
 import '../../../domain/entities/schedule_entry.dart';
 import '../../../generated/l10n/app_localizations.dart';
 import 'breez_card.dart';
+import 'breez_list_card.dart';
 
 export '../../../domain/entities/schedule_entry.dart';
 
@@ -72,7 +73,7 @@ class ScheduleWidget extends StatelessWidget {
           // Schedule entries (flexible, max 3 visible)
           Expanded(
             child: entries.isEmpty
-                ? _EmptyState(compact: compact)
+                ? BreezEmptyState.noSchedule(l10n, compact: compact)
                 : Column(
               children: entries.take(3).toList().asMap().entries.map((entry) {
                 final index = entry.key;
@@ -285,47 +286,3 @@ class _ActiveScheduleCard extends StatelessWidget {
   }
 }
 
-/// Empty state for schedule
-class _EmptyState extends StatelessWidget {
-  final bool compact;
-
-  const _EmptyState({this.compact = false});
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
-    final l10n = AppLocalizations.of(context)!;
-
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.calendar_today_outlined,
-            size: compact ? 28 : 40,
-            color: AppColors.accent.withValues(alpha: 0.5),
-          ),
-          SizedBox(height: compact ? 8 : 12),
-          Text(
-            l10n.noSchedule,
-            style: TextStyle(
-              fontSize: compact ? 11 : 13,
-              fontWeight: FontWeight.w600,
-              color: colors.textMuted,
-            ),
-          ),
-          if (!compact) ...[
-            const SizedBox(height: 4),
-            Text(
-              l10n.addScheduleForDevice,
-              style: TextStyle(
-                fontSize: 11,
-                color: colors.textMuted.withValues(alpha: 0.7),
-              ),
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-}

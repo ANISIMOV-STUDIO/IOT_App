@@ -161,7 +161,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           const SizedBox(height: AppSpacing.md),
 
           // Edit Profile Button
-          _ActionButton(
+          BreezActionButton(
             icon: Icons.edit_outlined,
             label: l10n.editProfile,
             onTap: () => _showEditProfileDialog(
@@ -194,7 +194,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
           ),
-          _SettingsTile(
+          BreezSettingsTile(
             icon: Icons.lock_outlined,
             title: l10n.changePassword,
             onTap: () => _showChangePasswordDialog(context),
@@ -223,21 +223,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
           ),
-          _SwitchTile(
+          BreezSwitchTile(
             icon: Icons.notifications_outlined,
             title: l10n.pushNotifications,
             value: _pushNotifications,
             onChanged: (v) => setState(() => _pushNotifications = v),
           ),
           const SizedBox(height: AppSpacing.sm),
-          _SwitchTile(
+          BreezSwitchTile(
             icon: Icons.email_outlined,
             title: l10n.emailNotifications,
             value: _emailNotifications,
             onChanged: (v) => setState(() => _emailNotifications = v),
           ),
           const SizedBox(height: AppSpacing.sm),
-          _SwitchTile(
+          BreezSwitchTile(
             icon: Icons.warning_amber_outlined,
             title: l10n.alarmNotifications,
             value: _alarmNotifications,
@@ -277,7 +277,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             listenable: themeService,
             builder: (context, _) {
               final isDark = themeService.isDark;
-              return _SwitchTile(
+              return BreezSwitchTile(
                 icon: isDark ? Icons.dark_mode : Icons.light_mode,
                 title: l10n.theme,
                 subtitle: isDark ? l10n.darkThemeLabel : l10n.lightThemeLabel,
@@ -292,7 +292,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             listenable: languageService,
             builder: (context, _) {
               final currentLang = languageService.currentLanguage;
-              return _SettingsTile(
+              return BreezSettingsTile(
                 icon: Icons.language,
                 title: l10n.language,
                 trailing: Row(
@@ -450,171 +450,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ));
           Navigator.of(dialogContext).pop();
         },
-      ),
-    );
-  }
-}
-
-/// Action button (outlined)
-class _ActionButton extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-
-  const _ActionButton({
-    required this.icon,
-    required this.label,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return BreezButton(
-      onTap: onTap,
-      backgroundColor: Colors.transparent,
-      hoverColor: AppColors.accent.withValues(alpha: 0.1),
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      border: Border.all(color: AppColors.accent),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, size: 18, color: AppColors.accent),
-          const SizedBox(width: 8),
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: AppColors.accent,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-/// Settings tile with arrow
-class _SettingsTile extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final Widget? trailing;
-  final VoidCallback onTap;
-
-  const _SettingsTile({
-    required this.icon,
-    required this.title,
-    this.trailing,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
-
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(AppRadius.button),
-        child: Ink(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-          decoration: BoxDecoration(
-            color: colors.cardLight,
-            borderRadius: BorderRadius.circular(AppRadius.button),
-          ),
-          child: Row(
-            children: [
-              Icon(icon, size: 20, color: AppColors.accent),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: colors.text,
-                  ),
-                ),
-              ),
-              if (trailing != null) trailing!,
-              const SizedBox(width: 4),
-              Icon(Icons.chevron_right, size: 20, color: colors.textMuted),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// Switch tile for toggles
-class _SwitchTile extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String? subtitle;
-  final bool value;
-  final ValueChanged<bool> onChanged;
-
-  const _SwitchTile({
-    required this.icon,
-    required this.title,
-    this.subtitle,
-    required this.value,
-    required this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
-
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: () => onChanged(!value),
-        borderRadius: BorderRadius.circular(AppRadius.button),
-        child: Ink(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-          decoration: BoxDecoration(
-            color: colors.cardLight,
-            borderRadius: BorderRadius.circular(AppRadius.button),
-          ),
-          child: Row(
-            children: [
-              Icon(icon, size: 20, color: AppColors.accent),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: colors.text,
-                      ),
-                    ),
-                    if (subtitle != null)
-                      Text(
-                        subtitle!,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: colors.textMuted,
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-              Switch(
-                value: value,
-                onChanged: onChanged,
-                activeTrackColor: AppColors.accent.withValues(alpha: 0.5),
-                activeThumbColor: AppColors.accent,
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

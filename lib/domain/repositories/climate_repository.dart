@@ -92,6 +92,9 @@ abstract class ClimateRepository
   @override
   Future<ClimateState> setPreset(String preset, {String? deviceId});
 
+  /// Set operating mode (basic, intensive, economy, max_performance, kitchen, fireplace, vacation, custom)
+  Future<ClimateState> setOperatingMode(String mode, {String? deviceId});
+
   // ============================================
   // DEVICE REGISTRATION
   // ============================================

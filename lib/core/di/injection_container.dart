@@ -295,6 +295,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => SetTemperature(sl()));
   sl.registerLazySingleton(() => SetHumidity(sl()));
   sl.registerLazySingleton(() => SetClimateMode(sl()));
+  sl.registerLazySingleton(() => SetOperatingMode(sl()));
   sl.registerLazySingleton(() => SetPreset(sl()));
   sl.registerLazySingleton(() => SetAirflow(sl()));
 
@@ -338,6 +339,7 @@ Future<void> init() async {
       setTemperature: sl(),
       setHumidity: sl(),
       setClimateMode: sl(),
+      setOperatingMode: sl(),
       setPreset: sl(),
       setAirflow: sl(),
     ),

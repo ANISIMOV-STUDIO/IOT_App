@@ -33,6 +33,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   final SetTemperature _setTemperature;
   final SetHumidity _setHumidity;
   final SetClimateMode _setClimateMode;
+  final SetOperatingMode _setOperatingMode;
   final SetPreset _setPreset;
   final SetAirflow _setAirflow;
 
@@ -48,6 +49,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     required SetTemperature setTemperature,
     required SetHumidity setHumidity,
     required SetClimateMode setClimateMode,
+    required SetOperatingMode setOperatingMode,
     required SetPreset setPreset,
     required SetAirflow setAirflow,
   })  : _getCurrentClimateState = getCurrentClimateState,
@@ -59,6 +61,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         _setTemperature = setTemperature,
         _setHumidity = setHumidity,
         _setClimateMode = setClimateMode,
+        _setOperatingMode = setOperatingMode,
         _setPreset = setPreset,
         _setAirflow = setAirflow,
         super(const ClimateControlState()) {
@@ -81,6 +84,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     on<ClimateCoolingTempChanged>(_onCoolingTempChanged);
     on<ClimateHumidityChanged>(_onHumidityChanged);
     on<ClimateModeChanged>(_onModeChanged);
+    on<ClimateOperatingModeChanged>(_onOperatingModeChanged);
     on<ClimatePresetChanged>(_onPresetChanged);
     on<ClimateSupplyAirflowChanged>(_onSupplyAirflowChanged);
     on<ClimateExhaustAirflowChanged>(_onExhaustAirflowChanged);
@@ -281,7 +285,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     }
   }
 
-  /// Смена режима климата
+  /// Смена режима климата (enum: heating, cooling, auto, etc.)
   Future<void> _onModeChanged(
     ClimateModeChanged event,
     Emitter<ClimateControlState> emit,
@@ -290,6 +294,18 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       await _setClimateMode(SetClimateModeParams(mode: event.mode));
     } catch (e) {
       emit(state.copyWith(errorMessage: 'Mode change error: $e'));
+    }
+  }
+
+  /// Смена режима работы установки (String: basic, intensive, economy, etc.)
+  Future<void> _onOperatingModeChanged(
+    ClimateOperatingModeChanged event,
+    Emitter<ClimateControlState> emit,
+  ) async {
+    try {
+      await _setOperatingMode(SetOperatingModeParams(mode: event.mode));
+    } catch (e) {
+      emit(state.copyWith(errorMessage: 'Operating mode error: $e'));
     }
   }
 

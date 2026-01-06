@@ -190,6 +190,14 @@ class CachedClimateRepository implements ClimateRepository {
   }
 
   @override
+  Future<ClimateState> setOperatingMode(String mode, {String? deviceId}) async {
+    _ensureOnline('setOperatingMode');
+    final result = await _inner.setOperatingMode(mode, deviceId: deviceId);
+    await _cacheService.cacheClimateState(result, deviceId: deviceId);
+    return result;
+  }
+
+  @override
   Future<HvacDevice> registerDevice(String macAddress, String name) async {
     _ensureOnline('registerDevice');
     return await _inner.registerDevice(macAddress, name);

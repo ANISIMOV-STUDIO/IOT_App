@@ -294,6 +294,21 @@ class MockClimateRepository implements ClimateRepository {
   }
 
   @override
+  Future<ClimateState> setOperatingMode(String mode, {String? deviceId}) async {
+    await Future.delayed(Duration(milliseconds: MockData.networkDelays['normal'] ?? 100));
+    final id = _resolveDeviceId(deviceId);
+    final currentState = _deviceStates[id];
+    if (currentState == null) {
+      throw Exception('Device not found: $id');
+    }
+    // В мок репозитории просто сохраняем как preset
+    final newState = currentState.copyWith(preset: mode);
+    _deviceStates[id] = newState;
+    _notifyDeviceChange(id);
+    return newState;
+  }
+
+  @override
   Future<HvacDevice> registerDevice(String macAddress, String name) async {
     await Future.delayed(Duration(milliseconds: MockData.networkDelays['normal'] ?? 100));
     final newId = 'pv_${_deviceStates.length + 1}';

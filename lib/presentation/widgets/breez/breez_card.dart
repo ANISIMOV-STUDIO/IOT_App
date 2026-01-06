@@ -706,3 +706,181 @@ class BreezSettingsButton extends StatelessWidget {
     );
   }
 }
+
+// ============================================
+// SETTINGS COMPONENTS (Extracted from profile_screen.dart)
+// ============================================
+
+/// Action button with icon and accent border
+///
+/// Use for secondary actions like "Edit Profile", "Change Password"
+class BreezActionButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  const BreezActionButton({
+    super.key,
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BreezButton(
+      onTap: onTap,
+      backgroundColor: Colors.transparent,
+      hoverColor: AppColors.accent.withValues(alpha: 0.1),
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      border: Border.all(color: AppColors.accent),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, size: 18, color: AppColors.accent),
+          const SizedBox(width: 8),
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: AppColors.accent,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Settings tile with icon, title, optional trailing widget and chevron
+///
+/// Use for navigation items in settings screens
+class BreezSettingsTile extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final Widget? trailing;
+  final VoidCallback onTap;
+
+  const BreezSettingsTile({
+    super.key,
+    required this.icon,
+    required this.title,
+    this.trailing,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppRadius.button),
+        child: Ink(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          decoration: BoxDecoration(
+            color: colors.cardLight,
+            borderRadius: BorderRadius.circular(AppRadius.button),
+          ),
+          child: Row(
+            children: [
+              Icon(icon, size: 20, color: AppColors.accent),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: colors.text,
+                  ),
+                ),
+              ),
+              if (trailing != null) trailing!,
+              const SizedBox(width: 4),
+              Icon(Icons.chevron_right, size: 20, color: colors.textMuted),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Switch tile for boolean settings
+///
+/// Use for toggle settings like "Push Notifications", "Dark Mode"
+class BreezSwitchTile extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String? subtitle;
+  final bool value;
+  final ValueChanged<bool> onChanged;
+
+  const BreezSwitchTile({
+    super.key,
+    required this.icon,
+    required this.title,
+    this.subtitle,
+    required this.value,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () => onChanged(!value),
+        borderRadius: BorderRadius.circular(AppRadius.button),
+        child: Ink(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          decoration: BoxDecoration(
+            color: colors.cardLight,
+            borderRadius: BorderRadius.circular(AppRadius.button),
+          ),
+          child: Row(
+            children: [
+              Icon(icon, size: 20, color: AppColors.accent),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: colors.text,
+                      ),
+                    ),
+                    if (subtitle != null)
+                      Text(
+                        subtitle!,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: colors.textMuted,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              Switch(
+                value: value,
+                onChanged: onChanged,
+                activeTrackColor: AppColors.accent.withValues(alpha: 0.5),
+                activeThumbColor: AppColors.accent,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
