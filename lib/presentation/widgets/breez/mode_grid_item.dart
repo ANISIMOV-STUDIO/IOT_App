@@ -4,7 +4,6 @@ library;
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/spacing.dart';
-import 'breez_card.dart';
 
 /// Данные режима для отображения в сетке
 class OperatingModeData {
@@ -47,40 +46,49 @@ class ModeGridItem extends StatelessWidget {
     final colors = BreezColors.of(context);
     final color = isEnabled ? mode.color : colors.textMuted;
 
-    return BreezButton(
-      onTap: isEnabled ? onTap : null,
-      padding: const EdgeInsets.all(AppSpacing.xs),
-      backgroundColor: isSelected
-          ? color.withValues(alpha: 0.15)
-          : Colors.transparent,
-      hoverColor: color.withValues(alpha: 0.1),
-      border: Border.all(
-        color: isSelected ? color.withValues(alpha: 0.4) : colors.border,
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Flexible(
-            child: Icon(
-              mode.icon,
-              size: 20,
-              color: isSelected ? color : colors.textMuted,
+    // Используем Material InkWell для видимого эффекта нажатия
+    return Material(
+      color: isSelected ? color.withValues(alpha: 0.15) : Colors.transparent,
+      borderRadius: BorderRadius.circular(AppSpacing.xs),
+      child: InkWell(
+        onTap: isEnabled ? onTap : null,
+        borderRadius: BorderRadius.circular(AppSpacing.xs),
+        splashColor: color.withValues(alpha: 0.3),
+        highlightColor: color.withValues(alpha: 0.15),
+        child: Container(
+          padding: const EdgeInsets.all(AppSpacing.xs),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(AppSpacing.xs),
+            border: Border.all(
+              color: isSelected ? color.withValues(alpha: 0.4) : colors.border,
             ),
           ),
-          const SizedBox(height: 2),
-          Text(
-            mode.name.toUpperCase(),
-            style: TextStyle(
-              fontSize: 8,
-              fontWeight: FontWeight.w700,
-              letterSpacing: 0.3,
-              color: isSelected ? color : colors.textMuted,
-            ),
-            textAlign: TextAlign.center,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Flexible(
+                child: Icon(
+                  mode.icon,
+                  size: 20,
+                  color: isSelected ? color : colors.textMuted,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                mode.name.toUpperCase(),
+                style: TextStyle(
+                  fontSize: 8,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.3,
+                  color: isSelected ? color : colors.textMuted,
+                ),
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
