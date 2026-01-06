@@ -100,8 +100,13 @@ class _BreezButtonState extends State<BreezButton>
   }
 
   void _handleTapUp(TapUpDetails _) {
-    setState(() => _isPressed = false);
-    if (widget.enableScale) _controller.reverse();
+    // Задержка перед сбросом для видимого эффекта нажатия
+    Future.delayed(const Duration(milliseconds: 100), () {
+      if (mounted) {
+        setState(() => _isPressed = false);
+        if (widget.enableScale) _controller.reverse();
+      }
+    });
   }
 
   void _handleTapCancel() {
@@ -167,7 +172,10 @@ class _BreezButtonState extends State<BreezButton>
             final scale = widget.enableScale ? _scaleAnimation.value : 1.0;
             return Transform.scale(
               scale: scale,
-              child: Container(
+              // AnimatedContainer для плавного перехода цвета
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 150),
+                curve: Curves.easeOut,
                 width: buttonWidth,
                 height: buttonHeight,
                 constraints: BoxConstraints(
