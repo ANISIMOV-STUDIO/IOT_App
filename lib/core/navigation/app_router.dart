@@ -3,7 +3,7 @@
 /// GoRouter с правильным auth flow:
 /// - refreshListenable слушает AuthBloc.stream
 /// - redirect проверяет AuthBloc.state (не storage напрямую)
-/// - Никаких side effects в builder
+/// - Поддержка deep links через кастомную схему и Universal Links
 library;
 
 import 'package:flutter/material.dart';
@@ -17,22 +17,14 @@ import '../../presentation/screens/notifications/notifications_screen.dart';
 import '../../presentation/screens/schedule/schedule_screen.dart';
 import '../../presentation/screens/alarms/alarm_history_screen.dart';
 import '../../presentation/screens/splash/splash_screen.dart';
+import '../../presentation/screens/profile/profile_screen.dart';
 import '../../presentation/bloc/auth/auth_bloc.dart';
 import '../../presentation/bloc/auth/auth_state.dart';
+import 'app_routes.dart';
 import 'router_refresh_stream.dart';
 
-/// Названия маршрутов
-class AppRoutes {
-  static const String splash = '/splash';
-  static const String home = '/';
-  static const String login = '/login';
-  static const String register = '/register';
-  static const String verifyEmail = '/verify-email';
-  static const String forgotPassword = '/forgot-password';
-  static const String notifications = '/notifications';
-  static const String schedule = '/schedule';
-  static const String alarmHistory = '/alarm-history';
-}
+// Реэкспорт для обратной совместимости
+export 'app_routes.dart';
 
 /// Global navigator key
 final GlobalKey<NavigatorState> _rootNavigatorKey =
@@ -92,7 +84,7 @@ GoRouter createRouter(AuthBloc authBloc) {
         if (currentPath == AppRoutes.verifyEmail) {
           return null;
         }
-        return '${AppRoutes.verifyEmail}?email=${authState.email}';
+        return AppPaths.verifyEmail(authState.email);
       }
 
       // 4. Если пользователь авторизован
@@ -136,13 +128,13 @@ GoRouter createRouter(AuthBloc authBloc) {
     ),
 
     routes: [
-      // Splash - показывается пока проверяется auth
+      // ============ Splash ============
       GoRoute(
         path: AppRoutes.splash,
         builder: (context, state) => const SplashScreen(),
       ),
 
-      // Auth routes
+      // ============ Auth Routes ============
       GoRoute(
         path: AppRoutes.login,
         builder: (context, state) => const AuthScreen(
@@ -160,7 +152,7 @@ GoRouter createRouter(AuthBloc authBloc) {
       GoRoute(
         path: AppRoutes.verifyEmail,
         builder: (context, state) {
-          final email = state.uri.queryParameters['email'] ?? '';
+          final email = state.uri.queryParameters[RouteParams.email] ?? '';
           final password = state.extra as String? ?? '';
           return VerifyEmailScreen(
             email: email,
@@ -171,42 +163,84 @@ GoRouter createRouter(AuthBloc authBloc) {
       GoRoute(
         path: AppRoutes.forgotPassword,
         builder: (context, state) {
-          final email = state.uri.queryParameters['email'];
+          final email = state.uri.queryParameters[RouteParams.email];
           return ForgotPasswordScreen(initialEmail: email);
         },
       ),
 
-      // Protected routes - пользователь уже авторизован (проверено в redirect)
+      // ============ Main App ============
       GoRoute(
         path: AppRoutes.home,
         builder: (context, state) => const MainScreen(),
       ),
 
-      // Notifications
+      // ============ Notifications ============
       GoRoute(
         path: AppRoutes.notifications,
         builder: (context, state) => const NotificationsScreen(),
       ),
 
-      // Schedule
+      // ============ Profile ============
+      GoRoute(
+        path: AppRoutes.profile,
+        builder: (context, state) => const ProfileScreen(),
+      ),
+
+      // ============ Device Routes ============
+      // /device/:deviceId - редирект на главную (TODO: выбрать устройство)
+      GoRoute(
+        path: '/device/:${RouteParams.deviceId}',
+        redirect: (context, state) => AppRoutes.home,
+        routes: [
+          // /device/:deviceId/schedule
+          GoRoute(
+            path: 'schedule',
+            builder: (context, state) {
+              final deviceId = state.pathParameters[RouteParams.deviceId] ?? '';
+              final deviceName = state.uri.queryParameters[RouteParams.deviceName] ?? 'Устройство';
+              return ScheduleScreen(
+                deviceId: deviceId,
+                deviceName: deviceName,
+              );
+            },
+          ),
+          // /device/:deviceId/analytics - редирект на главную аналитику
+          GoRoute(
+            path: 'analytics',
+            redirect: (context, state) => AppRoutes.home,
+          ),
+          // /device/:deviceId/alarms
+          GoRoute(
+            path: 'alarms',
+            builder: (context, state) {
+              final deviceId = state.pathParameters[RouteParams.deviceId] ?? '';
+              final deviceName = state.uri.queryParameters[RouteParams.deviceName] ?? 'Устройство';
+              return AlarmHistoryScreen(
+                deviceId: deviceId,
+                deviceName: deviceName,
+              );
+            },
+          ),
+        ],
+      ),
+
+      // ============ Legacy Routes (обратная совместимость) ============
       GoRoute(
         path: AppRoutes.schedule,
         builder: (context, state) {
-          final deviceId = state.uri.queryParameters['deviceId'] ?? '';
-          final deviceName = state.uri.queryParameters['deviceName'] ?? 'Устройство';
+          final deviceId = state.uri.queryParameters[RouteParams.deviceId] ?? '';
+          final deviceName = state.uri.queryParameters[RouteParams.deviceName] ?? 'Устройство';
           return ScheduleScreen(
             deviceId: deviceId,
             deviceName: deviceName,
           );
         },
       ),
-
-      // Alarm History
       GoRoute(
         path: AppRoutes.alarmHistory,
         builder: (context, state) {
-          final deviceId = state.uri.queryParameters['deviceId'] ?? '';
-          final deviceName = state.uri.queryParameters['deviceName'] ?? 'Устройство';
+          final deviceId = state.uri.queryParameters[RouteParams.deviceId] ?? '';
+          final deviceName = state.uri.queryParameters[RouteParams.deviceName] ?? 'Устройство';
           return AlarmHistoryScreen(
             deviceId: deviceId,
             deviceName: deviceName,
@@ -218,15 +252,57 @@ GoRouter createRouter(AuthBloc authBloc) {
 }
 
 /// Расширения для удобной навигации
-extension GoRouterExtensions on BuildContext {
+extension GoRouterNavigation on BuildContext {
+  // ============ Auth Navigation ============
   void goToHome() => go(AppRoutes.home);
   void goToLogin() => go(AppRoutes.login);
   void goToRegister() => go(AppRoutes.register);
-  void goToNotifications() => go(AppRoutes.notifications);
   void goToVerifyEmail(String email, {String? password}) =>
-      go('${AppRoutes.verifyEmail}?email=$email', extra: password);
+      go(AppPaths.verifyEmail(email), extra: password);
+  void goToForgotPassword({String? email}) =>
+      go(AppPaths.forgotPassword(email: email));
+
+  // ============ Main Navigation ============
+  void goToNotifications() => go(AppRoutes.notifications);
+  void goToProfile() => go(AppRoutes.profile);
+  void goToHomeTab(MainTab tab) => go('${AppRoutes.home}?tab=${tab.name}');
+
+  // ============ Device Navigation ============
+  void goToDevice(String deviceId, {String? deviceName}) {
+    final path = AppPaths.device(deviceId);
+    final query = deviceName != null
+        ? '?${RouteParams.deviceName}=${Uri.encodeComponent(deviceName)}'
+        : '';
+    go('$path$query');
+  }
+
+  void goToDeviceSchedule(String deviceId, {String? deviceName}) {
+    final path = AppPaths.deviceSchedule(deviceId);
+    final query = deviceName != null
+        ? '?${RouteParams.deviceName}=${Uri.encodeComponent(deviceName)}'
+        : '';
+    go('$path$query');
+  }
+
+  void goToDeviceAnalytics(String deviceId, {String? deviceName}) {
+    final path = AppPaths.deviceAnalytics(deviceId);
+    final query = deviceName != null
+        ? '?${RouteParams.deviceName}=${Uri.encodeComponent(deviceName)}'
+        : '';
+    go('$path$query');
+  }
+
+  void goToDeviceAlarms(String deviceId, {String? deviceName}) {
+    final path = AppPaths.deviceAlarms(deviceId);
+    final query = deviceName != null
+        ? '?${RouteParams.deviceName}=${Uri.encodeComponent(deviceName)}'
+        : '';
+    go('$path$query');
+  }
+
+  // ============ Legacy (для обратной совместимости) ============
   void goToSchedule(String deviceId, String deviceName) =>
-      go('${AppRoutes.schedule}?deviceId=$deviceId&deviceName=${Uri.encodeComponent(deviceName)}');
+      goToDeviceSchedule(deviceId, deviceName: deviceName);
   void goToAlarmHistory(String deviceId, String deviceName) =>
-      go('${AppRoutes.alarmHistory}?deviceId=$deviceId&deviceName=${Uri.encodeComponent(deviceName)}');
+      goToDeviceAlarms(deviceId, deviceName: deviceName);
 }
