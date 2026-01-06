@@ -466,7 +466,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       onNotificationsTap: _showNotifications,
       unreadNotificationsCount: notificationsState.unreadCount,
       schedule: scheduleState.entries,
-      notifications: notificationsState.notifications,
       graphData: analyticsState.graphData,
       selectedGraphMetric: analyticsState.selectedMetric,
       onGraphMetricChanged: _onGraphMetricChanged,

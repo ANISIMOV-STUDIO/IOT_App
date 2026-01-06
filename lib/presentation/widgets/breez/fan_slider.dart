@@ -1,8 +1,18 @@
 /// Fan Slider Widget - compact slider for fan speed control
 library;
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
+
+/// ScrollBehavior для слайдера - разрешает touch для drag (не scroll)
+class _SliderScrollBehavior extends MaterialScrollBehavior {
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+    PointerDeviceKind.mouse,
+    // НЕ включаем touch - чтобы слайдер мог его использовать
+  };
+}
 
 /// Compact fan slider with label, icon, and percentage display
 /// Uses local state for immediate visual feedback during drag
@@ -83,40 +93,44 @@ class _FanSliderState extends State<FanSlider> {
           ],
         ),
         const SizedBox(height: 6),
-        SliderTheme(
-          data: SliderThemeData(
-            activeTrackColor: widget.color,
-            inactiveTrackColor: isDark
-                ? AppColors.darkHoverOverlay
-                : AppColors.lightHoverOverlay,
-            thumbColor: widget.color,
-            overlayColor: widget.color.withValues(alpha: 0.2),
-            trackHeight: 6,
-            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
-            overlayShape: const RoundSliderOverlayShape(overlayRadius: 16),
-          ),
-          child: Slider(
-            value: _localValue,
-            min: 0,
-            max: 100,
-            onChangeStart: widget.onChanged != null
-                ? (_) => setState(() => _isDragging = true)
-                : null,
-            onChanged: widget.onChanged != null
-                ? (v) {
-                    setState(() => _localValue = v);
-                    // Вызываем callback на каждое изменение,
-                    // restartable() в BLoC отменит предыдущие запросы
-                    widget.onChanged!(v.round());
-                  }
-                : null,
-            onChangeEnd: widget.onChanged != null
-                ? (v) {
-                    setState(() => _isDragging = false);
-                    // Финальный вызов для гарантии отправки последнего значения
-                    widget.onChanged!(v.round());
-                  }
-                : null,
+        // ScrollConfiguration предотвращает перехват touch родительским scroll
+        ScrollConfiguration(
+          behavior: _SliderScrollBehavior(),
+          child: SliderTheme(
+            data: SliderThemeData(
+              activeTrackColor: widget.color,
+              inactiveTrackColor: isDark
+                  ? AppColors.darkHoverOverlay
+                  : AppColors.lightHoverOverlay,
+              thumbColor: widget.color,
+              overlayColor: widget.color.withValues(alpha: 0.2),
+              trackHeight: 6,
+              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
+              overlayShape: const RoundSliderOverlayShape(overlayRadius: 16),
+            ),
+            child: Slider(
+              value: _localValue,
+              min: 0,
+              max: 100,
+              onChangeStart: widget.onChanged != null
+                  ? (_) => setState(() => _isDragging = true)
+                  : null,
+              onChanged: widget.onChanged != null
+                  ? (v) {
+                      setState(() => _localValue = v);
+                      // Вызываем callback на каждое изменение,
+                      // restartable() в BLoC отменит предыдущие запросы
+                      widget.onChanged!(v.round());
+                    }
+                  : null,
+              onChangeEnd: widget.onChanged != null
+                  ? (v) {
+                      setState(() => _isDragging = false);
+                      // Финальный вызов для гарантии отправки последнего значения
+                      widget.onChanged!(v.round());
+                    }
+                  : null,
+            ),
           ),
         ),
       ],

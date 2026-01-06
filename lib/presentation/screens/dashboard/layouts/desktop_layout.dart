@@ -39,7 +39,6 @@ class DesktopLayout extends StatefulWidget {
 
   // Data from repositories
   final List<ScheduleEntry> schedule;
-  final List<UnitNotification> notifications;
   final List<GraphDataPoint> graphData;
   final Map<String, AlarmInfo> activeAlarms;
   final GraphMetric selectedGraphMetric;
@@ -73,7 +72,6 @@ class DesktopLayout extends StatefulWidget {
     this.onNotificationsTap,
     this.unreadNotificationsCount = 0,
     this.schedule = const [],
-    this.notifications = const [],
     this.graphData = const [],
     this.activeAlarms = const {},
     this.selectedGraphMetric = GraphMetric.temperature,
@@ -205,7 +203,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
   Widget _buildRightColumnContent() {
     return Column(
       children: [
-        // Schedule + Notifications row
+        // Schedule + Alarms row
         Expanded(
           child: Row(
             children: [
@@ -227,17 +225,6 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                 child: UnitAlarmsWidget(
                   alarms: widget.activeAlarms,
                   onSeeHistory: () {},
-                ),
-              ),
-
-              const SizedBox(width: AppSpacing.sm),
-
-              // Unit notifications widget
-              Expanded(
-                child: UnitNotificationsWidget(
-                  unitName: widget.unit.name,
-                  notifications: widget.notifications,
-                  onSeeAll: () {},
                 ),
               ),
             ],
