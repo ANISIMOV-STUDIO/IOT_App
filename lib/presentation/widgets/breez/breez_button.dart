@@ -18,6 +18,7 @@ class BreezButton extends StatefulWidget {
   final VoidCallback? onTap;
   final Color? backgroundColor;
   final Color? hoverColor;
+  final Color? pressedColor; // Явный цвет при нажатии (для прозрачных кнопок)
   final double? width;
   final double? height;
   final EdgeInsets? padding;
@@ -45,6 +46,7 @@ class BreezButton extends StatefulWidget {
     this.onTap,
     this.backgroundColor,
     this.hoverColor,
+    this.pressedColor,
     this.width,
     this.height,
     this.padding,
@@ -123,8 +125,10 @@ class _BreezButtonState extends State<BreezButton>
         : null;
 
     // State-based colors
+    // pressedColor используется для прозрачных кнопок где lerp не работает
     final effectiveBg = _isPressed
-        ? Color.lerp(bg, isDark ? Colors.white : Colors.black, 0.1)!
+        ? (widget.pressedColor ??
+            Color.lerp(bg, isDark ? Colors.white : Colors.black, 0.1)!)
         : _isHovered
             ? (widget.hoverColor ??
                 Color.lerp(bg, isDark ? Colors.white : Colors.black, 0.05)!)
