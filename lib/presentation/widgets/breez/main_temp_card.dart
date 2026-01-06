@@ -93,15 +93,23 @@ class MainTempCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadius.card),
         border: Border.all(
           color: isPowered
-              ? AppColors.accent.withValues(alpha: 0.3)
+              ? AppColors.accent.withValues(alpha: 0.5) // Более яркая граница
               : colors.border,
+          width: isPowered ? 1.5 : 1.0, // Толще граница когда включено
         ),
         boxShadow: isPowered
             ? [
+                // Основная тень
                 BoxShadow(
-                  color: AppColors.accent.withValues(alpha: 0.15),
+                  color: AppColors.accent.withValues(alpha: 0.2),
                   blurRadius: 24,
                   offset: const Offset(0, 8),
+                ),
+                // Glow эффект
+                BoxShadow(
+                  color: AppColors.accent.withValues(alpha: 0.1),
+                  blurRadius: 40,
+                  spreadRadius: 4,
                 ),
               ]
             : null,
@@ -126,16 +134,21 @@ class MainTempCard extends StatelessWidget {
                 ),
 
                 // Temperature display - Two columns: Heating & Cooling
-                _TemperatureSection(
-                  heatingTemp: heatingTemp,
-                  coolingTemp: coolingTemp,
-                  isPowered: isPowered,
-                  colors: colors,
-                  l10n: l10n,
-                  onHeatingTempIncrease: onHeatingTempIncrease,
-                  onHeatingTempDecrease: onHeatingTempDecrease,
-                  onCoolingTempIncrease: onCoolingTempIncrease,
-                  onCoolingTempDecrease: onCoolingTempDecrease,
+                // Expanded чтобы занять центр карточки
+                Expanded(
+                  child: Center(
+                    child: _TemperatureSection(
+                      heatingTemp: heatingTemp,
+                      coolingTemp: coolingTemp,
+                      isPowered: isPowered,
+                      colors: colors,
+                      l10n: l10n,
+                      onHeatingTempIncrease: onHeatingTempIncrease,
+                      onHeatingTempDecrease: onHeatingTempDecrease,
+                      onCoolingTempIncrease: onCoolingTempIncrease,
+                      onCoolingTempDecrease: onCoolingTempDecrease,
+                    ),
+                  ),
                 ),
 
                 // Stats/Sensors section
@@ -149,16 +162,15 @@ class MainTempCard extends StatelessWidget {
                     l10n: l10n,
                   ),
 
-                // Fan sliders
-                if (isPowered)
-                  _FanSlidersSection(
-                    supplyFan: supplyFan,
-                    exhaustFan: exhaustFan,
-                    onSupplyFanChanged: onSupplyFanChanged,
-                    onExhaustFanChanged: onExhaustFanChanged,
-                    colors: colors,
-                    l10n: l10n,
-                  ),
+                // Fan sliders - всегда видимы, но отключены когда устройство выключено
+                _FanSlidersSection(
+                  supplyFan: supplyFan,
+                  exhaustFan: exhaustFan,
+                  onSupplyFanChanged: isPowered ? onSupplyFanChanged : null,
+                  onExhaustFanChanged: isPowered ? onExhaustFanChanged : null,
+                  colors: colors,
+                  l10n: l10n,
+                ),
               ],
             ),
     );
@@ -191,45 +203,41 @@ class _TemperatureSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Heating temperature
-            Expanded(
-              child: TemperatureColumn(
-                label: l10n.heating,
-                temperature: heatingTemp,
-                icon: Icons.whatshot,
-                color: AppColors.accentOrange,
-                isPowered: isPowered,
-                onIncrease: onHeatingTempIncrease,
-                onDecrease: onHeatingTempDecrease,
-              ),
-            ),
-            // Divider
-            Container(
-              width: 1,
-              height: 80,
-              color: colors.border,
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-            ),
-            // Cooling temperature
-            Expanded(
-              child: TemperatureColumn(
-                label: l10n.cooling,
-                temperature: coolingTemp,
-                icon: Icons.ac_unit,
-                color: AppColors.accent,
-                isPowered: isPowered,
-                onIncrease: onCoolingTempIncrease,
-                onDecrease: onCoolingTempDecrease,
-              ),
-            ),
-          ],
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        // Heating temperature
+        Expanded(
+          child: TemperatureColumn(
+            label: l10n.heating,
+            temperature: heatingTemp,
+            icon: Icons.whatshot,
+            color: AppColors.accentOrange,
+            isPowered: isPowered,
+            onIncrease: onHeatingTempIncrease,
+            onDecrease: onHeatingTempDecrease,
+          ),
         ),
-      ),
+        // Divider
+        Container(
+          width: 1,
+          height: 80,
+          color: colors.border,
+          margin: const EdgeInsets.symmetric(horizontal: 16),
+        ),
+        // Cooling temperature
+        Expanded(
+          child: TemperatureColumn(
+            label: l10n.cooling,
+            temperature: coolingTemp,
+            icon: Icons.ac_unit,
+            color: AppColors.accent,
+            isPowered: isPowered,
+            onIncrease: onCoolingTempIncrease,
+            onDecrease: onCoolingTempDecrease,
+          ),
+        ),
+      ],
     );
   }
 }
