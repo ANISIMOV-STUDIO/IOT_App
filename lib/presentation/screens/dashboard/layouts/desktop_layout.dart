@@ -164,12 +164,12 @@ class _DesktopLayoutState extends State<DesktopLayout> {
         const SizedBox(height: AppSpacing.sm),
 
         // Режимы работы (единый виджет с мобильной версией)
+        // Режимы всегда кликабельны - можно выбрать режим до включения
         Expanded(
           flex: 2,
           child: ModeGrid(
             selectedMode: widget.unit.mode,
             onModeChanged: widget.onModeChanged,
-            isEnabled: widget.unit.power,
           ),
         ),
       ],

@@ -124,10 +124,10 @@ class _MobileLayoutState extends State<MobileLayout>
               controller: _tabController,
               children: [
                 // Режимы работы (using reusable ModeGrid)
+                // Режимы всегда кликабельны - можно выбрать режим до включения
                 ModeGrid(
                   selectedMode: widget.unit.mode,
                   onModeChanged: widget.onModeChanged,
-                  isEnabled: widget.unit.power,
                 ),
                 // Schedule
                 ScheduleWidget(
