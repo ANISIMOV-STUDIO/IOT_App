@@ -11,6 +11,7 @@ library;
 import 'dart:async';
 import 'dart:developer' as developer;
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../../core/logging/api_logger.dart';
@@ -86,8 +87,16 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     on<ClimateModeChanged>(_onModeChanged);
     on<ClimateOperatingModeChanged>(_onOperatingModeChanged);
     on<ClimatePresetChanged>(_onPresetChanged);
-    on<ClimateSupplyAirflowChanged>(_onSupplyAirflowChanged);
-    on<ClimateExhaustAirflowChanged>(_onExhaustAirflowChanged);
+
+    // Airflow events с restartable() - отменяет предыдущие запросы при новых событиях
+    on<ClimateSupplyAirflowChanged>(
+      _onSupplyAirflowChanged,
+      transformer: restartable(),
+    );
+    on<ClimateExhaustAirflowChanged>(
+      _onExhaustAirflowChanged,
+      transformer: restartable(),
+    );
   }
 
   /// Запрос на подписку к состоянию климата
@@ -326,13 +335,30 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     ClimateSupplyAirflowChanged event,
     Emitter<ClimateControlState> emit,
   ) async {
+    final previousValue = state.climate?.supplyAirflow;
+
+    // Optimistic update - сразу обновляем UI
+    if (state.climate != null) {
+      emit(state.copyWith(
+        climate: state.climate!.copyWith(supplyAirflow: event.value.toDouble()),
+      ));
+    }
+
     try {
       await _setAirflow(SetAirflowParams(
         type: AirflowType.supply,
         value: event.value,
       ));
     } catch (e) {
-      emit(state.copyWith(errorMessage: 'Supply airflow error: $e'));
+      // Откатываем optimistic update при ошибке
+      if (state.climate != null && previousValue != null) {
+        emit(state.copyWith(
+          climate: state.climate!.copyWith(supplyAirflow: previousValue),
+          errorMessage: 'Supply airflow error: $e',
+        ));
+      } else {
+        emit(state.copyWith(errorMessage: 'Supply airflow error: $e'));
+      }
     }
   }
 
@@ -341,13 +367,30 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     ClimateExhaustAirflowChanged event,
     Emitter<ClimateControlState> emit,
   ) async {
+    final previousValue = state.climate?.exhaustAirflow;
+
+    // Optimistic update - сразу обновляем UI
+    if (state.climate != null) {
+      emit(state.copyWith(
+        climate: state.climate!.copyWith(exhaustAirflow: event.value.toDouble()),
+      ));
+    }
+
     try {
       await _setAirflow(SetAirflowParams(
         type: AirflowType.exhaust,
         value: event.value,
       ));
     } catch (e) {
-      emit(state.copyWith(errorMessage: 'Exhaust airflow error: $e'));
+      // Откатываем optimistic update при ошибке
+      if (state.climate != null && previousValue != null) {
+        emit(state.copyWith(
+          climate: state.climate!.copyWith(exhaustAirflow: previousValue),
+          errorMessage: 'Exhaust airflow error: $e',
+        ));
+      } else {
+        emit(state.copyWith(errorMessage: 'Exhaust airflow error: $e'));
+      }
     }
   }
 

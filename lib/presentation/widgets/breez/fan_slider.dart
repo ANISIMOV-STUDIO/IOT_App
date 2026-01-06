@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 
 /// Compact fan slider with label, icon, and percentage display
-class FanSlider extends StatelessWidget {
+/// Uses local state for immediate visual feedback during drag
+class FanSlider extends StatefulWidget {
   final String label;
   final int value;
   final Color color;
@@ -22,9 +23,33 @@ class FanSlider extends StatelessWidget {
   });
 
   @override
+  State<FanSlider> createState() => _FanSliderState();
+}
+
+class _FanSliderState extends State<FanSlider> {
+  late double _localValue;
+  bool _isDragging = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _localValue = widget.value.toDouble();
+  }
+
+  @override
+  void didUpdateWidget(FanSlider oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Синхронизируем с внешним значением, только если не идёт перетаскивание
+    if (!_isDragging && widget.value != oldWidget.value) {
+      _localValue = widget.value.toDouble();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final displayValue = _localValue.round();
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -35,10 +60,10 @@ class FanSlider extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(icon, size: 12, color: color),
+                Icon(widget.icon, size: 12, color: widget.color),
                 const SizedBox(width: 4),
                 Text(
-                  label,
+                  widget.label,
                   style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w500,
@@ -48,11 +73,11 @@ class FanSlider extends StatelessWidget {
               ],
             ),
             Text(
-              '$value%',
+              '$displayValue%',
               style: TextStyle(
                 fontSize: 11,
                 fontWeight: FontWeight.w700,
-                color: color,
+                color: widget.color,
               ),
             ),
           ],
@@ -60,21 +85,38 @@ class FanSlider extends StatelessWidget {
         const SizedBox(height: 6),
         SliderTheme(
           data: SliderThemeData(
-            activeTrackColor: color,
+            activeTrackColor: widget.color,
             inactiveTrackColor: isDark
                 ? AppColors.darkHoverOverlay
                 : AppColors.lightHoverOverlay,
-            thumbColor: color,
-            overlayColor: color.withValues(alpha: 0.2),
+            thumbColor: widget.color,
+            overlayColor: widget.color.withValues(alpha: 0.2),
             trackHeight: 6,
             thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
             overlayShape: const RoundSliderOverlayShape(overlayRadius: 16),
           ),
           child: Slider(
-            value: value.toDouble(),
+            value: _localValue,
             min: 0,
             max: 100,
-            onChanged: onChanged != null ? (v) => onChanged!(v.round()) : null,
+            onChangeStart: widget.onChanged != null
+                ? (_) => setState(() => _isDragging = true)
+                : null,
+            onChanged: widget.onChanged != null
+                ? (v) {
+                    setState(() => _localValue = v);
+                    // Вызываем callback на каждое изменение,
+                    // restartable() в BLoC отменит предыдущие запросы
+                    widget.onChanged!(v.round());
+                  }
+                : null,
+            onChangeEnd: widget.onChanged != null
+                ? (v) {
+                    setState(() => _isDragging = false);
+                    // Финальный вызов для гарантии отправки последнего значения
+                    widget.onChanged!(v.round());
+                  }
+                : null,
           ),
         ),
       ],
