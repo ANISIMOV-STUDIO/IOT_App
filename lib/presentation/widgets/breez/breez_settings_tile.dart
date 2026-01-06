@@ -1,99 +1,12 @@
-/// BREEZ Settings Tiles - Settings UI components
+/// BREEZ Settings Tiles - Settings UI components based on BreezButton
 library;
 
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
+import 'breez_button.dart';
 
-/// Settings row button with icon, label, subtitle
-class BreezSettingsButton extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final String subtitle;
-  final VoidCallback? onTap;
-  final bool isDanger;
-
-  const BreezSettingsButton({
-    super.key,
-    required this.icon,
-    required this.label,
-    required this.subtitle,
-    this.onTap,
-    this.isDanger = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
-    final color = isDanger ? AppColors.accentRed : colors.text;
-    final bgColor = isDanger
-        ? AppColors.accentRed.withValues(alpha: 0.1)
-        : colors.cardLight;
-
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(AppRadius.card),
-        hoverColor: isDanger
-            ? AppColors.accentRed.withValues(alpha: 0.15)
-            : colors.border.withValues(alpha: 0.3),
-        splashColor: isDanger
-            ? AppColors.accentRed.withValues(alpha: 0.2)
-            : AppColors.accent.withValues(alpha: 0.1),
-        highlightColor: isDanger
-            ? AppColors.accentRed.withValues(alpha: 0.1)
-            : AppColors.accent.withValues(alpha: 0.05),
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: bgColor,
-            borderRadius: BorderRadius.circular(AppRadius.card),
-            border: Border.all(
-              color: isDanger
-                  ? AppColors.accentRed.withValues(alpha: 0.3)
-                  : colors.border,
-            ),
-          ),
-          child: Row(
-            children: [
-              Icon(icon, size: 24, color: color),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      label,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: color,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      subtitle,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: colors.textMuted,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Icon(
-                Icons.chevron_right,
-                size: 20,
-                color: colors.textMuted,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
+// Note: BreezSettingsButton moved to breez_dialog_button.dart
 
 /// Settings tile with icon, title, optional trailing widget and chevron
 ///
@@ -104,49 +17,54 @@ class BreezSettingsTile extends StatelessWidget {
   final Widget? trailing;
   final VoidCallback onTap;
 
+  /// Semantic label for screen readers
+  final String? semanticLabel;
+
+  /// Tooltip shown on hover
+  final String? tooltip;
+
   const BreezSettingsTile({
     super.key,
     required this.icon,
     required this.title,
     this.trailing,
     required this.onTap,
+    this.semanticLabel,
+    this.tooltip,
   });
 
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(AppRadius.button),
-        child: Ink(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-          decoration: BoxDecoration(
-            color: colors.cardLight,
-            borderRadius: BorderRadius.circular(AppRadius.button),
-          ),
-          child: Row(
-            children: [
-              Icon(icon, size: 20, color: AppColors.accent),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: colors.text,
-                  ),
-                ),
+    return BreezButton(
+      onTap: onTap,
+      backgroundColor: colors.cardLight,
+      hoverColor: colors.buttonHover,
+      showBorder: false,
+      enableScale: false,
+      borderRadius: AppRadius.button,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+      semanticLabel: semanticLabel ?? title,
+      tooltip: tooltip,
+      child: Row(
+        children: [
+          Icon(icon, size: 20, color: AppColors.accent),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              title,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: colors.text,
               ),
-              if (trailing != null) trailing!,
-              const SizedBox(width: 4),
-              Icon(Icons.chevron_right, size: 20, color: colors.textMuted),
-            ],
+            ),
           ),
-        ),
+          if (trailing != null) trailing!,
+          const SizedBox(width: 4),
+          Icon(Icons.chevron_right, size: 20, color: colors.textMuted),
+        ],
       ),
     );
   }
@@ -162,6 +80,9 @@ class BreezSwitchTile extends StatelessWidget {
   final bool value;
   final ValueChanged<bool> onChanged;
 
+  /// Semantic label for screen readers
+  final String? semanticLabel;
+
   const BreezSwitchTile({
     super.key,
     required this.icon,
@@ -169,59 +90,60 @@ class BreezSwitchTile extends StatelessWidget {
     this.subtitle,
     required this.value,
     required this.onChanged,
+    this.semanticLabel,
   });
 
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: () => onChanged(!value),
-        borderRadius: BorderRadius.circular(AppRadius.button),
-        child: Ink(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-          decoration: BoxDecoration(
-            color: colors.cardLight,
-            borderRadius: BorderRadius.circular(AppRadius.button),
-          ),
-          child: Row(
-            children: [
-              Icon(icon, size: 20, color: AppColors.accent),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: colors.text,
-                      ),
-                    ),
-                    if (subtitle != null)
-                      Text(
-                        subtitle!,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: colors.textMuted,
-                        ),
-                      ),
-                  ],
+    return BreezButton(
+      onTap: () => onChanged(!value),
+      backgroundColor: colors.cardLight,
+      hoverColor: colors.buttonHover,
+      showBorder: false,
+      enableScale: false,
+      borderRadius: AppRadius.button,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      semanticLabel: semanticLabel ?? '$title, ${value ? 'enabled' : 'disabled'}',
+      isButton: false, // This is a toggle, not a button
+      child: Row(
+        children: [
+          Icon(icon, size: 20, color: AppColors.accent),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: colors.text,
+                  ),
                 ),
-              ),
-              Switch(
-                value: value,
-                onChanged: onChanged,
-                activeTrackColor: AppColors.accent.withValues(alpha: 0.5),
-                activeThumbColor: AppColors.accent,
-              ),
-            ],
+                if (subtitle != null)
+                  Text(
+                    subtitle!,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: colors.textMuted,
+                    ),
+                  ),
+              ],
+            ),
           ),
-        ),
+          Semantics(
+            toggled: value,
+            child: Switch(
+              value: value,
+              onChanged: onChanged,
+              activeTrackColor: AppColors.accent.withValues(alpha: 0.5),
+              activeThumbColor: AppColors.accent,
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -1,4 +1,4 @@
-/// BREEZ Dialog Buttons - Buttons for dialogs and actions
+/// BREEZ Dialog Buttons - Dialog action buttons based on BreezButton
 library;
 
 import 'package:flutter/material.dart';
@@ -6,13 +6,21 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
 import 'breez_button.dart';
 
-/// Dialog action button (primary/secondary with optional loading)
+/// Dialog action button (primary/secondary/danger)
+///
+/// Использует базовый BreezButton для единообразия анимаций и accessibility.
 class BreezDialogButton extends StatelessWidget {
   final String label;
   final VoidCallback? onTap;
   final bool isPrimary;
   final bool isLoading;
   final bool isDanger;
+
+  /// Semantic label for screen readers (defaults to label)
+  final String? semanticLabel;
+
+  /// Tooltip shown on hover
+  final String? tooltip;
 
   const BreezDialogButton({
     super.key,
@@ -21,6 +29,8 @@ class BreezDialogButton extends StatelessWidget {
     this.isPrimary = false,
     this.isLoading = false,
     this.isDanger = false,
+    this.semanticLabel,
+    this.tooltip,
   });
 
   @override
@@ -30,57 +40,39 @@ class BreezDialogButton extends StatelessWidget {
     final Color bgColor;
     final Color textColor;
     final Color hoverColor;
-    final Color splashColor;
 
     if (isDanger) {
       bgColor = AppColors.accentRed;
       textColor = Colors.white;
       hoverColor = AppColors.accentRed.withValues(alpha: 0.8);
-      splashColor = Colors.white.withValues(alpha: 0.2);
     } else if (isPrimary) {
       bgColor = AppColors.accent;
       textColor = Colors.white;
       hoverColor = AppColors.accentLight;
-      splashColor = AppColors.accent.withValues(alpha: 0.3);
     } else {
       bgColor = Colors.transparent;
       textColor = colors.textMuted;
       hoverColor = colors.text.withValues(alpha: 0.05);
-      splashColor = AppColors.accent.withValues(alpha: 0.1);
     }
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: isLoading ? null : onTap,
-        borderRadius: BorderRadius.circular(AppRadius.button),
-        hoverColor: hoverColor,
-        splashColor: splashColor,
-        highlightColor: splashColor.withValues(alpha: 0.1),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-          decoration: BoxDecoration(
-            color: bgColor,
-            borderRadius: BorderRadius.circular(AppRadius.button),
-            border: (isPrimary || isDanger) ? null : Border.all(color: colors.border),
-          ),
-          child: isLoading
-              ? const SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                  ),
-                )
-              : Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: (isPrimary || isDanger) ? FontWeight.w600 : FontWeight.w500,
-                    color: textColor,
-                  ),
-                ),
+    return BreezButton(
+      onTap: onTap,
+      isLoading: isLoading,
+      backgroundColor: bgColor,
+      hoverColor: hoverColor,
+      borderRadius: AppRadius.button,
+      showBorder: !isPrimary && !isDanger,
+      enableScale: true,
+      enableGlow: isPrimary || isDanger,
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      semanticLabel: semanticLabel ?? label,
+      tooltip: tooltip,
+      child: Text(
+        label,
+        style: TextStyle(
+          fontSize: 14,
+          fontWeight: (isPrimary || isDanger) ? FontWeight.w600 : FontWeight.w500,
+          color: textColor,
         ),
       ),
     );
@@ -95,11 +87,19 @@ class BreezActionButton extends StatelessWidget {
   final String label;
   final VoidCallback onTap;
 
+  /// Semantic label for screen readers (defaults to label)
+  final String? semanticLabel;
+
+  /// Tooltip shown on hover
+  final String? tooltip;
+
   const BreezActionButton({
     super.key,
     required this.icon,
     required this.label,
     required this.onTap,
+    this.semanticLabel,
+    this.tooltip,
   });
 
   @override
@@ -110,6 +110,8 @@ class BreezActionButton extends StatelessWidget {
       hoverColor: AppColors.accent.withValues(alpha: 0.1),
       padding: const EdgeInsets.symmetric(vertical: 12),
       border: Border.all(color: AppColors.accent),
+      semanticLabel: semanticLabel ?? label,
+      tooltip: tooltip,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -122,6 +124,88 @@ class BreezActionButton extends StatelessWidget {
               fontWeight: FontWeight.w600,
               color: AppColors.accent,
             ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Settings list button with icon, label and optional subtitle
+class BreezSettingsButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final String? subtitle;
+  final VoidCallback onTap;
+  final bool isDanger;
+
+  /// Semantic label for screen readers
+  final String? semanticLabel;
+
+  /// Tooltip shown on hover
+  final String? tooltip;
+
+  const BreezSettingsButton({
+    super.key,
+    required this.icon,
+    required this.label,
+    this.subtitle,
+    required this.onTap,
+    this.isDanger = false,
+    this.semanticLabel,
+    this.tooltip,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+    final iconColor = isDanger ? AppColors.accentRed : colors.textMuted;
+    final labelColor = isDanger ? AppColors.accentRed : colors.text;
+
+    return BreezButton(
+      onTap: onTap,
+      backgroundColor: colors.buttonBg,
+      hoverColor: isDanger
+          ? AppColors.accentRed.withValues(alpha: 0.1)
+          : colors.buttonHover,
+      showBorder: false,
+      enableScale: false,
+      padding: const EdgeInsets.all(16),
+      semanticLabel: semanticLabel ?? label,
+      tooltip: tooltip,
+      child: Row(
+        children: [
+          Icon(icon, size: 20, color: iconColor),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: labelColor,
+                  ),
+                ),
+                if (subtitle != null) ...[
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle!,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: colors.textMuted,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+          Icon(
+            Icons.chevron_right,
+            size: 20,
+            color: colors.textMuted,
           ),
         ],
       ),

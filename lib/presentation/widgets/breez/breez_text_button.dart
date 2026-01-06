@@ -1,16 +1,25 @@
-/// BREEZ Text Button - текстовая кнопка с hover эффектом
+/// BREEZ Text Button - Text link button based on BreezButton
 library;
 
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
+import 'breez_button.dart';
 
-/// Текстовая кнопка с акцентным цветом и hover эффектом
+/// Текстовая кнопка-ссылка с акцентным цветом
+///
+/// Использует базовый BreezButton для единообразия анимаций и accessibility.
 class BreezTextButton extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
   final double fontSize;
   final FontWeight fontWeight;
   final bool underline;
+
+  /// Semantic label for screen readers (defaults to text)
+  final String? semanticLabel;
+
+  /// Tooltip shown on hover
+  final String? tooltip;
 
   const BreezTextButton({
     super.key,
@@ -19,6 +28,8 @@ class BreezTextButton extends StatelessWidget {
     this.fontSize = 14,
     this.fontWeight = FontWeight.normal,
     this.underline = true,
+    this.semanticLabel,
+    this.tooltip,
   });
 
   @override
@@ -26,28 +37,25 @@ class BreezTextButton extends StatelessWidget {
     final colors = BreezColors.of(context);
     final isDisabled = onPressed == null;
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onPressed,
-        borderRadius: BorderRadius.circular(4),
-        hoverColor: AppColors.accent.withValues(alpha: 0.1),
-        splashColor: AppColors.accent.withValues(alpha: 0.2),
-        highlightColor: AppColors.accent.withValues(alpha: 0.1),
-        mouseCursor: isDisabled ? SystemMouseCursors.basic : SystemMouseCursors.click,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-          child: Text(
-            text,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: isDisabled ? colors.textMuted : AppColors.accent,
-              fontSize: fontSize,
-              fontWeight: fontWeight,
-              decoration: underline ? TextDecoration.underline : TextDecoration.none,
-              decorationColor: isDisabled ? colors.textMuted : AppColors.accent,
-            ),
-          ),
+    return BreezButton(
+      onTap: onPressed,
+      backgroundColor: Colors.transparent,
+      hoverColor: AppColors.accent.withValues(alpha: 0.1),
+      showBorder: false,
+      enableScale: false,
+      enforceMinTouchTarget: false,
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      semanticLabel: semanticLabel ?? text,
+      tooltip: tooltip,
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: isDisabled ? colors.textMuted : AppColors.accent,
+          fontSize: fontSize,
+          fontWeight: fontWeight,
+          decoration: underline ? TextDecoration.underline : TextDecoration.none,
+          decorationColor: isDisabled ? colors.textMuted : AppColors.accent,
         ),
       ),
     );

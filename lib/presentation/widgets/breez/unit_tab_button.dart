@@ -1,11 +1,11 @@
-/// Unit Tab Button - Unified tab button for unit selection
+/// Unit Tab Button - Unified tab button for unit selection with accessibility
 library;
 
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../domain/entities/unit_state.dart';
-import 'breez_card.dart';
+import 'breez_button.dart';
 
 /// Unified unit tab button used across all layouts (mobile, tablet, desktop)
 class UnitTabButton extends StatelessWidget {
@@ -13,11 +13,15 @@ class UnitTabButton extends StatelessWidget {
   final bool isSelected;
   final VoidCallback? onTap;
 
+  /// Semantic label for screen readers (defaults to unit name + status)
+  final String? semanticLabel;
+
   const UnitTabButton({
     super.key,
     required this.unit,
     required this.isSelected,
     this.onTap,
+    this.semanticLabel,
   });
 
   /// Create from unit data with name and power status
@@ -27,6 +31,7 @@ class UnitTabButton extends StatelessWidget {
     required bool power,
     required bool isSelected,
     VoidCallback? onTap,
+    String? semanticLabel,
   }) {
     return UnitTabButton(
       key: key,
@@ -45,7 +50,14 @@ class UnitTabButton extends StatelessWidget {
       ),
       isSelected: isSelected,
       onTap: onTap,
+      semanticLabel: semanticLabel,
     );
+  }
+
+  String _buildSemanticLabel() {
+    final status = unit.power ? 'включен' : 'выключен';
+    final selected = isSelected ? ', выбран' : '';
+    return '${unit.name}, $status$selected';
   }
 
   @override
@@ -60,18 +72,22 @@ class UnitTabButton extends StatelessWidget {
       hoverColor: isSelected ? AppColors.accentLight : colors.buttonBg,
       showBorder: false,
       enableGlow: isSelected,
+      semanticLabel: semanticLabel ?? _buildSemanticLabel(),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Status indicator
-          Container(
-            width: 8,
-            height: 8,
-            decoration: BoxDecoration(
-              color: unit.power
-                  ? (isSelected ? Colors.white : AppColors.success)
-                  : colors.textMuted,
-              shape: BoxShape.circle,
+          // Status indicator with semantic meaning
+          Semantics(
+            label: unit.power ? 'Работает' : 'Выключен',
+            child: Container(
+              width: 8,
+              height: 8,
+              decoration: BoxDecoration(
+                color: unit.power
+                    ? (isSelected ? Colors.white : AppColors.success)
+                    : colors.textMuted,
+                shape: BoxShape.circle,
+              ),
             ),
           ),
           const SizedBox(width: 8),
@@ -110,41 +126,41 @@ class UnitTabsContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
-    return Container(
-      height: 48,
-      padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        color: colors.card,
-        borderRadius: BorderRadius.circular(AppRadius.cardSmall),
-        border: Border.all(color: colors.border),
-      ),
-      child: Row(
-        children: [
-          // Leading widget (e.g., logo)
-          if (leading != null) ...[
-            leading!,
-            const SizedBox(width: 8),
-          ],
-          // Unit tabs list
-          Expanded(
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: units.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 4),
-              itemBuilder: (context, index) {
-                final unit = units[index];
-                final isSelected = index == selectedIndex;
-                return UnitTabButton(
-                  unit: unit,
-                  isSelected: isSelected,
-                  onTap: () => onUnitSelected?.call(index),
-                );
-              },
+    return Semantics(
+      label: 'Список устройств',
+      child: Container(
+        height: 48,
+        padding: const EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          color: colors.card,
+          borderRadius: BorderRadius.circular(AppRadius.cardSmall),
+          border: Border.all(color: colors.border),
+        ),
+        child: Row(
+          children: [
+            if (leading != null) ...[
+              leading!,
+              const SizedBox(width: 8),
+            ],
+            Expanded(
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: units.length,
+                separatorBuilder: (_, __) => const SizedBox(width: 4),
+                itemBuilder: (context, index) {
+                  final unit = units[index];
+                  final isSelected = index == selectedIndex;
+                  return UnitTabButton(
+                    unit: unit,
+                    isSelected: isSelected,
+                    onTap: () => onUnitSelected?.call(index),
+                  );
+                },
+              ),
             ),
-          ),
-          // Trailing widget (e.g., add button)
-          if (trailing != null) trailing!,
-        ],
+            if (trailing != null) trailing!,
+          ],
+        ),
       ),
     );
   }

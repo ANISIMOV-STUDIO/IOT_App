@@ -1,4 +1,4 @@
-/// BREEZ Icon Buttons - Icon-based button variants
+/// BREEZ Icon Buttons - Icon-based button variants with accessibility
 library;
 
 import 'package:flutter/material.dart';
@@ -16,6 +16,12 @@ class BreezIconButton extends StatelessWidget {
   final String? badge;
   final bool showBorder;
 
+  /// Semantic label for screen readers (required for accessibility)
+  final String? semanticLabel;
+
+  /// Tooltip text shown on hover/long-press
+  final String? tooltip;
+
   const BreezIconButton({
     super.key,
     required this.icon,
@@ -26,6 +32,8 @@ class BreezIconButton extends StatelessWidget {
     this.size = 20,
     this.badge,
     this.showBorder = true,
+    this.semanticLabel,
+    this.tooltip,
   });
 
   @override
@@ -38,7 +46,8 @@ class BreezIconButton extends StatelessWidget {
     final iconPadding = (buttonSize - size) / 2;
 
     final bg = backgroundColor ?? (isActive ? AppColors.accent : colors.card);
-    final effectiveIconColor = iconColor ?? (isActive ? Colors.white : colors.textMuted);
+    final effectiveIconColor =
+        iconColor ?? (isActive ? Colors.white : colors.textMuted);
 
     return Stack(
       clipBehavior: Clip.none,
@@ -52,6 +61,8 @@ class BreezIconButton extends StatelessWidget {
           hoverColor: isActive ? AppColors.accentLight : colors.cardLight,
           showBorder: showBorder,
           enableGlow: isActive,
+          semanticLabel: semanticLabel,
+          tooltip: tooltip,
           child: Icon(
             icon,
             size: size,
@@ -87,22 +98,29 @@ class BreezIconButton extends StatelessWidget {
   }
 }
 
-/// Circular action button (for +/- temperature)
+/// Circular action button (for +/- temperature controls)
 class BreezCircleButton extends StatelessWidget {
   final IconData icon;
   final VoidCallback? onTap;
   final double size;
+
+  /// Semantic label for screen readers
+  final String? semanticLabel;
+
+  /// Tooltip text shown on hover
+  final String? tooltip;
 
   const BreezCircleButton({
     super.key,
     required this.icon,
     this.onTap,
     this.size = 56,
+    this.semanticLabel,
+    this.tooltip,
   });
 
   @override
   Widget build(BuildContext context) {
-    // Обеспечиваем минимальный touch target
     final buttonSize = size < kMinTouchTarget ? kMinTouchTarget : size;
 
     return BreezButton(
@@ -121,6 +139,8 @@ class BreezCircleButton extends StatelessWidget {
           offset: const Offset(0, 4),
         ),
       ],
+      semanticLabel: semanticLabel,
+      tooltip: tooltip,
       child: Center(
         child: Icon(
           icon,
@@ -132,23 +152,30 @@ class BreezCircleButton extends StatelessWidget {
   }
 }
 
-/// Power button
+/// Power toggle button
 class BreezPowerButton extends StatelessWidget {
   final bool isPowered;
   final VoidCallback? onTap;
   final double size;
+
+  /// Semantic label for screen readers
+  final String? semanticLabel;
+
+  /// Tooltip text shown on hover
+  final String? tooltip;
 
   const BreezPowerButton({
     super.key,
     required this.isPowered,
     this.onTap,
     this.size = 56,
+    this.semanticLabel,
+    this.tooltip,
   });
 
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
-    // Обеспечиваем минимальный touch target
     final buttonSize = size < kMinTouchTarget ? kMinTouchTarget : size;
 
     return BreezButton(
@@ -168,6 +195,8 @@ class BreezPowerButton extends StatelessWidget {
             ? AppColors.accentGreen.withValues(alpha: 0.3)
             : colors.border,
       ),
+      semanticLabel: semanticLabel,
+      tooltip: tooltip,
       child: Center(
         child: Icon(
           Icons.power_settings_new,

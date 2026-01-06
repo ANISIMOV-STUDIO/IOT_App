@@ -1,4 +1,4 @@
-/// BREEZ Button - Base button with premium animations
+/// BREEZ Button - Base button with premium animations and accessibility
 library;
 
 import 'package:flutter/material.dart';
@@ -12,6 +12,7 @@ const double kMinTouchTarget = 48.0;
 ///
 /// Единый базовый класс для всех кнопок приложения.
 /// Поддерживает hover, press, loading состояния с плавными анимациями.
+/// Включает accessibility (Semantics, Tooltip).
 class BreezButton extends StatefulWidget {
   final Widget child;
   final VoidCallback? onTap;
@@ -28,6 +29,15 @@ class BreezButton extends StatefulWidget {
   final bool enableScale;
   final bool enableGlow;
   final bool enforceMinTouchTarget;
+
+  /// Semantic label for screen readers (accessibility)
+  final String? semanticLabel;
+
+  /// Tooltip text shown on hover/long-press
+  final String? tooltip;
+
+  /// Whether this is a button (for Semantics)
+  final bool isButton;
 
   const BreezButton({
     super.key,
@@ -46,6 +56,9 @@ class BreezButton extends StatefulWidget {
     this.enableScale = true,
     this.enableGlow = false,
     this.enforceMinTouchTarget = true,
+    this.semanticLabel,
+    this.tooltip,
+    this.isButton = true,
   });
 
   @override
@@ -68,7 +81,6 @@ class _BreezButtonState extends State<BreezButton>
       duration: const Duration(milliseconds: 120),
     );
 
-    // Spring-like scale animation
     _scaleAnimation = Tween<double>(begin: 1.0, end: 0.96).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
     );
@@ -101,7 +113,7 @@ class _BreezButtonState extends State<BreezButton>
     final bg = widget.backgroundColor ?? colors.buttonBg;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    // Touch target constraints (only enforce if enforceMinTouchTarget is true)
+    // Touch target constraints
     final minTarget = widget.enforceMinTouchTarget ? kMinTouchTarget : 0.0;
     final buttonWidth = widget.width != null
         ? ((widget.width ?? 0) < minTarget ? minTarget : widget.width)
@@ -114,7 +126,8 @@ class _BreezButtonState extends State<BreezButton>
     final effectiveBg = _isPressed
         ? Color.lerp(bg, isDark ? Colors.white : Colors.black, 0.1)!
         : _isHovered
-            ? (widget.hoverColor ?? Color.lerp(bg, isDark ? Colors.white : Colors.black, 0.05)!)
+            ? (widget.hoverColor ??
+                Color.lerp(bg, isDark ? Colors.white : Colors.black, 0.05)!)
             : bg;
 
     final effectiveBorder = widget.showBorder
@@ -123,19 +136,22 @@ class _BreezButtonState extends State<BreezButton>
 
     // Hover glow for accent buttons
     final glowShadows = widget.enableGlow && _isHovered
-        ? [BoxShadow(
-            color: (widget.backgroundColor ?? AppColors.accent).withValues(alpha: 0.4),
-            blurRadius: 16,
-            spreadRadius: -2,
-          )]
+        ? [
+            BoxShadow(
+              color: (widget.backgroundColor ?? AppColors.accent)
+                  .withValues(alpha: 0.4),
+              blurRadius: 16,
+              spreadRadius: -2,
+            )
+          ]
         : widget.shadows;
 
-    return MouseRegion(
+    final isEnabled = !widget.isLoading && widget.onTap != null;
+
+    Widget button = MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
-      cursor: widget.isLoading || widget.onTap == null
-          ? SystemMouseCursors.basic
-          : SystemMouseCursors.click,
+      cursor: isEnabled ? SystemMouseCursors.click : SystemMouseCursors.basic,
       child: GestureDetector(
         onTapDown: _handleTapDown,
         onTapUp: _handleTapUp,
@@ -154,11 +170,13 @@ class _BreezButtonState extends State<BreezButton>
                   minHeight: minTarget,
                   minWidth: buttonWidth ?? 0,
                 ),
-                padding: widget.padding ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: widget.padding ??
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
                   color: effectiveBg,
                   borderRadius: BorderRadius.circular(widget.borderRadius),
-                  border: widget.showBorder ? Border.all(color: effectiveBorder) : null,
+                  border:
+                      widget.showBorder ? Border.all(color: effectiveBorder) : null,
                   boxShadow: glowShadows,
                 ),
                 child: child,
@@ -180,5 +198,26 @@ class _BreezButtonState extends State<BreezButton>
         ),
       ),
     );
+
+    // Wrap with Semantics for accessibility
+    if (widget.semanticLabel != null || widget.isButton) {
+      button = Semantics(
+        label: widget.semanticLabel,
+        button: widget.isButton,
+        enabled: isEnabled,
+        child: button,
+      );
+    }
+
+    // Wrap with Tooltip if provided
+    if (widget.tooltip != null) {
+      button = Tooltip(
+        message: widget.tooltip!,
+        waitDuration: const Duration(milliseconds: 500),
+        child: button,
+      );
+    }
+
+    return button;
   }
 }
