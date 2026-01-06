@@ -1,0 +1,281 @@
+/// BREEZ Slider - Стилизованный слайдер с поддержкой accessibility
+library;
+
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import '../../../core/theme/app_theme.dart';
+
+/// ScrollBehavior для слайдера - разрешает touch для drag (не scroll)
+class _SliderScrollBehavior extends MaterialScrollBehavior {
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+    PointerDeviceKind.mouse,
+    // НЕ включаем touch - чтобы слайдер мог его использовать
+  };
+}
+
+/// Стилизованный слайдер в дизайн-системе BREEZ
+///
+/// Особенности:
+/// - Полная поддержка accessibility (Semantics)
+/// - Настраиваемые цвета и стилизация
+/// - Опциональные label и отображение значения
+/// - Локальное состояние для мгновенной визуальной обратной связи
+class BreezSlider extends StatefulWidget {
+  /// Текущее значение (0-100 или кастомный диапазон)
+  final double value;
+
+  /// Минимальное значение
+  final double min;
+
+  /// Максимальное значение
+  final double max;
+
+  /// Вызывается при изменении значения
+  final ValueChanged<double>? onChanged;
+
+  /// Вызывается при начале перетаскивания
+  final ValueChanged<double>? onChangeStart;
+
+  /// Вызывается при окончании перетаскивания
+  final ValueChanged<double>? onChangeEnd;
+
+  /// Цвет активного трека
+  final Color? activeColor;
+
+  /// Цвет неактивного трека
+  final Color? inactiveColor;
+
+  /// Высота трека
+  final double trackHeight;
+
+  /// Радиус ползунка
+  final double thumbRadius;
+
+  /// Включен ли слайдер
+  final bool enabled;
+
+  /// Семантическая метка для screen readers
+  final String? semanticLabel;
+
+  /// Функция форматирования значения для объявлений accessibility
+  final String Function(double)? valueFormat;
+
+  const BreezSlider({
+    super.key,
+    required this.value,
+    this.min = 0,
+    this.max = 100,
+    this.onChanged,
+    this.onChangeStart,
+    this.onChangeEnd,
+    this.activeColor,
+    this.inactiveColor,
+    this.trackHeight = 6,
+    this.thumbRadius = 8,
+    this.enabled = true,
+    this.semanticLabel,
+    this.valueFormat,
+  });
+
+  @override
+  State<BreezSlider> createState() => _BreezSliderState();
+}
+
+class _BreezSliderState extends State<BreezSlider> {
+  late double _localValue;
+  bool _isDragging = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _localValue = widget.value;
+  }
+
+  @override
+  void didUpdateWidget(BreezSlider oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Синхронизируем с внешним значением только когда не перетаскиваем
+    if (!_isDragging && widget.value != oldWidget.value) {
+      _localValue = widget.value;
+    }
+  }
+
+  String _formatValue(double value) {
+    if (widget.valueFormat != null) {
+      return widget.valueFormat!(value);
+    }
+    return '${value.round()}';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final activeColor = widget.activeColor ?? AppColors.accent;
+    final inactiveColor = widget.inactiveColor ??
+        (isDark ? AppColors.darkHoverOverlay : AppColors.lightHoverOverlay);
+
+    return Semantics(
+      label: widget.semanticLabel,
+      value: _formatValue(_localValue),
+      slider: true,
+      enabled: widget.enabled,
+      onIncrease: widget.enabled && widget.onChanged != null
+          ? () {
+              final newValue = (_localValue + 1).clamp(widget.min, widget.max);
+              widget.onChanged!(newValue);
+            }
+          : null,
+      onDecrease: widget.enabled && widget.onChanged != null
+          ? () {
+              final newValue = (_localValue - 1).clamp(widget.min, widget.max);
+              widget.onChanged!(newValue);
+            }
+          : null,
+      child: ScrollConfiguration(
+        behavior: _SliderScrollBehavior(),
+        child: SliderTheme(
+          data: SliderThemeData(
+            activeTrackColor: activeColor,
+            inactiveTrackColor: inactiveColor,
+            thumbColor: activeColor,
+            overlayColor: activeColor.withValues(alpha: 0.2),
+            disabledActiveTrackColor: colors.textMuted.withValues(alpha: 0.5),
+            disabledInactiveTrackColor: colors.textMuted.withValues(alpha: 0.2),
+            disabledThumbColor: colors.textMuted,
+            trackHeight: widget.trackHeight,
+            thumbShape: RoundSliderThumbShape(
+              enabledThumbRadius: widget.thumbRadius,
+            ),
+            overlayShape: RoundSliderOverlayShape(
+              overlayRadius: widget.thumbRadius * 2,
+            ),
+          ),
+          child: Slider(
+            value: _localValue,
+            min: widget.min,
+            max: widget.max,
+            onChangeStart: widget.enabled && widget.onChanged != null
+                ? (v) {
+                    setState(() => _isDragging = true);
+                    widget.onChangeStart?.call(v);
+                  }
+                : null,
+            onChanged: widget.enabled && widget.onChanged != null
+                ? (v) {
+                    setState(() => _localValue = v);
+                    widget.onChanged!(v);
+                  }
+                : null,
+            onChangeEnd: widget.enabled && widget.onChanged != null
+                ? (v) {
+                    setState(() => _isDragging = false);
+                    widget.onChangeEnd?.call(v);
+                  }
+                : null,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Слайдер с меткой, иконкой и отображением значения
+///
+/// Типичный случай для скорости вентилятора, громкости, яркости и т.д.
+class BreezLabeledSlider extends StatelessWidget {
+  final String label;
+  final double value;
+  final double min;
+  final double max;
+  final Color? color;
+  final IconData? icon;
+  final ValueChanged<double>? onChanged;
+  final ValueChanged<double>? onChangeEnd;
+  final bool enabled;
+  final String? semanticLabel;
+  final String? suffix;
+  final String Function(double)? valueFormat;
+
+  const BreezLabeledSlider({
+    super.key,
+    required this.label,
+    required this.value,
+    this.min = 0,
+    this.max = 100,
+    this.color,
+    this.icon,
+    this.onChanged,
+    this.onChangeEnd,
+    this.enabled = true,
+    this.semanticLabel,
+    this.suffix,
+    this.valueFormat,
+  });
+
+  String _formatDisplay() {
+    if (valueFormat != null) {
+      return valueFormat!(value);
+    }
+    final displaySuffix = suffix ?? '%';
+    return '${value.round()}$displaySuffix';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+    final effectiveColor = color ?? AppColors.accent;
+
+    return Semantics(
+      label: semanticLabel ?? '$label: ${_formatDisplay()}',
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  if (icon != null) ...[
+                    Icon(icon, size: 12, color: effectiveColor),
+                    const SizedBox(width: 4),
+                  ],
+                  Text(
+                    label,
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w500,
+                      color: colors.textMuted,
+                    ),
+                  ),
+                ],
+              ),
+              Text(
+                _formatDisplay(),
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                  color: effectiveColor,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          BreezSlider(
+            value: value,
+            min: min,
+            max: max,
+            activeColor: effectiveColor,
+            onChanged: onChanged,
+            onChangeEnd: onChangeEnd,
+            enabled: enabled,
+            semanticLabel: semanticLabel ?? label,
+            valueFormat: (v) => '${v.round()}${suffix ?? '%'}',
+          ),
+        ],
+      ),
+    );
+  }
+}
