@@ -11,7 +11,7 @@ import '../../../../domain/entities/alarm_info.dart';
 import '../../../../generated/l10n/app_localizations.dart';
 import '../../../widgets/breez/breez.dart';
 
-/// Mobile layout: MainTempCard + 3 tabs (Modes, Schedule, Alarms)
+/// Mobile layout: UnitControlCard + 3 tabs (Modes, Schedule, Alarms)
 class MobileLayout extends StatefulWidget {
   final UnitState unit;
   final VoidCallback? onHeatingTempIncrease;
@@ -81,32 +81,20 @@ class _MobileLayoutState extends State<MobileLayout>
       ),
       child: Column(
         children: [
-          // Main control card
+          // Main control card (единый виджет для всех платформ)
           Expanded(
             flex: 5,
-            child: MainTempCard(
-              unitName: widget.unit.name,
-              temperature: widget.unit.temp,
-              heatingTemp: widget.unit.heatingTemp,
-              coolingTemp: widget.unit.coolingTemp,
-              status: widget.unit.power ? l10n.statusRunning : l10n.statusStopped,
-              humidity: widget.unit.humidity,
-              airflow: widget.unit.airflowRate,
-              filterPercent: widget.unit.filterPercent,
-              isPowered: widget.unit.power,
-              supplyFan: widget.unit.supplyFan,
-              exhaustFan: widget.unit.exhaustFan,
-              onPowerToggle: widget.onPowerToggle,
+            child: UnitControlCard(
+              unit: widget.unit,
               onHeatingTempIncrease: widget.onHeatingTempIncrease,
               onHeatingTempDecrease: widget.onHeatingTempDecrease,
               onCoolingTempIncrease: widget.onCoolingTempIncrease,
               onCoolingTempDecrease: widget.onCoolingTempDecrease,
               onSupplyFanChanged: widget.onSupplyFanChanged,
               onExhaustFanChanged: widget.onExhaustFanChanged,
+              onPowerToggle: widget.onPowerToggle,
               onSettingsTap: widget.onSettingsTap,
-              showControls: true,
               isPowerLoading: widget.isPowerLoading,
-              showStats: false,
             ),
           ),
 

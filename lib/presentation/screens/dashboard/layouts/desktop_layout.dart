@@ -6,7 +6,6 @@ import '../../../../core/navigation/app_router.dart';
 import '../../../../core/theme/spacing.dart';
 import '../../../../domain/entities/unit_state.dart';
 import '../../../../domain/entities/alarm_info.dart';
-import '../../../../generated/l10n/app_localizations.dart';
 import '../../../widgets/breez/breez.dart';
 import '../widgets/desktop_header.dart';
 
@@ -86,8 +85,6 @@ class DesktopLayout extends StatefulWidget {
 }
 
 class _DesktopLayoutState extends State<DesktopLayout> {
-  String? _activePresetId;
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -141,12 +138,11 @@ class _DesktopLayoutState extends State<DesktopLayout> {
   }
 
   Widget _buildLeftColumn(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
         // Main temperature card with fan sliders
         Expanded(
-          flex: 4,
+          flex: 5,
           child: UnitControlCard(
             unit: widget.unit,
             onTemperatureIncrease: widget.onTemperatureIncrease != null
@@ -169,13 +165,13 @@ class _DesktopLayoutState extends State<DesktopLayout> {
 
         const SizedBox(height: AppSpacing.sm),
 
-        // Presets (small, icon-only)
+        // Режимы работы (единый виджет с мобильной версией)
         Expanded(
-          flex: 1,
-          child: PresetsWidget(
-            presets: DefaultPresets.getAll(l10n),
-            activePresetId: _activePresetId,
-            onPresetSelected: (id) => setState(() => _activePresetId = id),
+          flex: 2,
+          child: ModeGrid(
+            selectedMode: widget.unit.mode,
+            onModeChanged: widget.onModeChanged,
+            isEnabled: widget.unit.power,
           ),
         ),
       ],

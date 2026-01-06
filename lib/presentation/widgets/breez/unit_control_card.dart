@@ -41,44 +41,30 @@ class UnitControlCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        // Определяем доступное пространство
-        final height = constraints.maxHeight;
-
-        // Компактный режим: нет места для controls и mode selector
-        // Обычно когда карточка в списке или маленький экран
-        final isCompact = height < 400;
-
-        // Показываем controls если есть обработчики и достаточно места
-        final showControls = !isCompact &&
-            (onPowerToggle != null || onSettingsTap != null);
-
-        return MainTempCard(
-          unitName: unit.name,
-          temperature: unit.temp,
-          heatingTemp: unit.heatingTemp,
-          coolingTemp: unit.coolingTemp,
-          status: unit.power ? l10n.statusRunning : l10n.statusStopped,
-          humidity: unit.humidity,
-          airflow: unit.airflowRate,
-          filterPercent: unit.filterPercent,
-          isPowered: unit.power,
-          supplyFan: unit.supplyFan,
-          exhaustFan: unit.exhaustFan,
-          onPowerToggle: onPowerToggle,
-          onHeatingTempIncrease: onHeatingTempIncrease,
-          onHeatingTempDecrease: onHeatingTempDecrease,
-          onCoolingTempIncrease: onCoolingTempIncrease,
-          onCoolingTempDecrease: onCoolingTempDecrease,
-          onSupplyFanChanged: onSupplyFanChanged,
-          onExhaustFanChanged: onExhaustFanChanged,
-          onSettingsTap: onSettingsTap,
-          showControls: showControls,
-          isPowerLoading: isPowerLoading,
-          sensorUnit: unit,
-        );
-      },
+    // Единый виджет управления - всегда показывает controls, без показателей
+    return MainTempCard(
+      unitName: unit.name,
+      temperature: unit.temp,
+      heatingTemp: unit.heatingTemp,
+      coolingTemp: unit.coolingTemp,
+      status: unit.power ? l10n.statusRunning : l10n.statusStopped,
+      humidity: unit.humidity,
+      airflow: unit.airflowRate,
+      filterPercent: unit.filterPercent,
+      isPowered: unit.power,
+      supplyFan: unit.supplyFan,
+      exhaustFan: unit.exhaustFan,
+      onPowerToggle: onPowerToggle,
+      onHeatingTempIncrease: onHeatingTempIncrease,
+      onHeatingTempDecrease: onHeatingTempDecrease,
+      onCoolingTempIncrease: onCoolingTempIncrease,
+      onCoolingTempDecrease: onCoolingTempDecrease,
+      onSupplyFanChanged: onSupplyFanChanged,
+      onExhaustFanChanged: onExhaustFanChanged,
+      onSettingsTap: onSettingsTap,
+      showControls: true,
+      isPowerLoading: isPowerLoading,
+      showStats: false, // Без показателей - единообразно на всех платформах
     );
   }
 }

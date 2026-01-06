@@ -63,48 +63,51 @@ class TemperatureColumn extends StatelessWidget {
         ),
         SizedBox(height: spacing),
         // Temperature value with +/- buttons in one row
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            BreezButton(
-              onTap: isPowered ? onDecrease : null,
-              enforceMinTouchTarget: false,
-              showBorder: false,
-              backgroundColor: colors.buttonBg.withValues(alpha: 0.5),
-              hoverColor: color.withValues(alpha: 0.15),
-              padding: EdgeInsets.all(buttonPadding),
-              child: Icon(
-                Icons.remove,
-                size: buttonIconSize,
-                color: isPowered ? color : colors.textMuted,
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: spacing),
-              child: Text(
-                '$temperature°',
-                style: TextStyle(
-                  fontSize: fontSize,
-                  fontWeight: FontWeight.w700,
-                  color: isPowered ? colors.text : colors.textMuted,
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              BreezButton(
+                onTap: isPowered ? onDecrease : null,
+                enforceMinTouchTarget: false,
+                showBorder: false,
+                backgroundColor: colors.buttonBg.withValues(alpha: 0.5),
+                hoverColor: color.withValues(alpha: 0.15),
+                padding: EdgeInsets.all(buttonPadding),
+                child: Icon(
+                  Icons.remove,
+                  size: buttonIconSize,
+                  color: isPowered ? color : colors.textMuted,
                 ),
               ),
-            ),
-            BreezButton(
-              onTap: isPowered ? onIncrease : null,
-              enforceMinTouchTarget: false,
-              showBorder: false,
-              backgroundColor: colors.buttonBg.withValues(alpha: 0.5),
-              hoverColor: color.withValues(alpha: 0.15),
-              padding: EdgeInsets.all(buttonPadding),
-              child: Icon(
-                Icons.add,
-                size: buttonIconSize,
-                color: isPowered ? color : colors.textMuted,
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: spacing),
+                child: Text(
+                  '$temperature°',
+                  style: TextStyle(
+                    fontSize: fontSize,
+                    fontWeight: FontWeight.w700,
+                    color: isPowered ? colors.text : colors.textMuted,
+                  ),
+                ),
               ),
-            ),
-          ],
+              BreezButton(
+                onTap: isPowered ? onIncrease : null,
+                enforceMinTouchTarget: false,
+                showBorder: false,
+                backgroundColor: colors.buttonBg.withValues(alpha: 0.5),
+                hoverColor: color.withValues(alpha: 0.15),
+                padding: EdgeInsets.all(buttonPadding),
+                child: Icon(
+                  Icons.add,
+                  size: buttonIconSize,
+                  color: isPowered ? color : colors.textMuted,
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );

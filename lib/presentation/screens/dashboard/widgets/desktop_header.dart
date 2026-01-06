@@ -82,7 +82,7 @@ class DesktopHeader extends StatelessWidget {
   Widget _buildUnitTabs(BuildContext context) {
     final colors = BreezColors.of(context);
     return Container(
-      height: 48,
+      height: 56,
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         color: colors.card,
@@ -90,6 +90,7 @@ class DesktopHeader extends StatelessWidget {
         border: Border.all(color: colors.border),
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // Logo (when requested)
           if (showLogo) ...[
@@ -117,7 +118,7 @@ class DesktopHeader extends StatelessWidget {
             ),
           ),
           // Add unit button
-          AddUnitButton(onTap: onAddUnit),
+          Center(child: AddUnitButton(onTap: onAddUnit)),
         ],
       ),
     );

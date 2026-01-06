@@ -15,7 +15,7 @@ class AddUnitButton extends StatelessWidget {
     return BreezIconButton(
       icon: Icons.add_rounded,
       onTap: onTap,
-      size: 40,
+      size: 22,
       showBorder: false,
     );
   }
