@@ -283,13 +283,21 @@ class RealClimateRepository implements ClimateRepository {
     String? deviceId,
   }) async {
     final id = deviceId ?? _selectedDeviceId;
+    if (id.isEmpty) {
+      throw StateError('No device selected for supply airflow control');
+    }
+
+    // Получаем текущее состояние устройства для определения режима
+    final currentState = await getDeviceState(id);
+    final modeName = _normalizeModeName(currentState.preset);
     final fanSpeed = DeviceJsonMapper.percentToFanSpeedInt(value);
 
-    // PATCH только supply fan, без получения текущего состояния
-    final jsonDevice = await _httpClient.updateDevice(id, supplyFan: fanSpeed);
-    final state = DeviceJsonMapper.climateStateFromJson(jsonDevice);
-    _climateController.add(state);
-    return state;
+    await _httpClient.setSupplyFan(id, fanSpeed, modeName: modeName);
+    
+    // Получаем обновлённое состояние
+    final newState = await getDeviceState(id);
+    _climateController.add(newState);
+    return newState;
   }
 
   @override
@@ -298,14 +306,23 @@ class RealClimateRepository implements ClimateRepository {
     String? deviceId,
   }) async {
     final id = deviceId ?? _selectedDeviceId;
+    if (id.isEmpty) {
+      throw StateError('No device selected for exhaust airflow control');
+    }
+
+    // Получаем текущее состояние устройства для определения режима
+    final currentState = await getDeviceState(id);
+    final modeName = _normalizeModeName(currentState.preset);
     final fanSpeed = DeviceJsonMapper.percentToFanSpeedInt(value);
 
-    // PATCH только exhaust fan, без получения текущего состояния
-    final jsonDevice = await _httpClient.updateDevice(id, exhaustFan: fanSpeed);
-    final state = DeviceJsonMapper.climateStateFromJson(jsonDevice);
-    _climateController.add(state);
-    return state;
+    await _httpClient.setExhaustFan(id, fanSpeed, modeName: modeName);
+    
+    // Получаем обновлённое состояние
+    final newState = await getDeviceState(id);
+    _climateController.add(newState);
+    return newState;
   }
+
 
   @override
   Future<ClimateState> setPreset(String preset, {String? deviceId}) async {

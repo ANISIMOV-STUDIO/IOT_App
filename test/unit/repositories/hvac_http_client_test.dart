@@ -337,56 +337,48 @@ void main() {
 
 
   group('HvacHttpClient.setFanSpeed', () {
-    test('устанавливает скорости вентиляторов через PATCH', () async {
+    test('устанавливает скорость приточного вентилятора через mode-settings PATCH', () async {
       // Arrange
-      final responseJson = {
-        'id': 'device-1',
-        'supplyFan': 80,
-        'exhaustFan': 60,
-      };
       when(() => mockHttpClient.patch(
             any(),
             headers: any(named: 'headers'),
             body: any(named: 'body'),
-          )).thenAnswer((_) async => successResponse(responseJson));
+          )).thenAnswer((_) async => http.Response('', 200));
 
       // Act
-      final result = await hvacClient.setFanSpeed('device-1', 80, 60);
+      await hvacClient.setSupplyFan('device-1', 80, modeName: 'basic');
 
-      // Assert
-      expect(result['supplyFan'], equals(80));
-      expect(result['exhaustFan'], equals(60));
-
-      // Verify request uses PATCH to device endpoint
+      // Verify request uses mode-settings format
       verify(() => mockHttpClient.patch(
             any(),
             headers: any(named: 'headers'),
             body: json.encode({
+              'modeName': 'basic',
               'supplyFan': 80,
-              'exhaustFan': 60,
             }),
           )).called(1);
     });
 
-    test('устанавливает минимальные значения вентиляторов', () async {
+    test('устанавливает скорость вытяжного вентилятора через mode-settings PATCH', () async {
       // Arrange
-      final responseJson = {
-        'id': 'device-1',
-        'supplyFan': 20,
-        'exhaustFan': 20,
-      };
       when(() => mockHttpClient.patch(
             any(),
             headers: any(named: 'headers'),
             body: any(named: 'body'),
-          )).thenAnswer((_) async => successResponse(responseJson));
+          )).thenAnswer((_) async => http.Response('', 200));
 
       // Act
-      final result = await hvacClient.setFanSpeed('device-1', 20, 20);
+      await hvacClient.setExhaustFan('device-1', 60, modeName: 'intensive');
 
-      // Assert
-      expect(result['supplyFan'], equals(20));
-      expect(result['exhaustFan'], equals(20));
+      // Verify request body
+      verify(() => mockHttpClient.patch(
+            any(),
+            headers: any(named: 'headers'),
+            body: json.encode({
+              'modeName': 'intensive',
+              'exhaustFan': 60,
+            }),
+          )).called(1);
     });
   });
   group('HvacHttpClient авторизация', () {

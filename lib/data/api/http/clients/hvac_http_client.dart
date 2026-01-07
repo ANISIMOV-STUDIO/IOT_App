@@ -295,15 +295,86 @@ class HvacHttpClient {
     }
   }
 
+  /// Set supply fan speed via mode-settings PATCH
+  /// Requires modeName to specify which mode's settings to update
+  Future<void> setSupplyFan(
+    String deviceId, 
+    int fanSpeed, {
+    required String modeName,
+  }) async {
+    final url = '${ApiConfig.hvacApiUrl}/$deviceId/mode-settings';
+    final body = json.encode({
+      'modeName': modeName,
+      'supplyFan': fanSpeed,
+    });
 
-  /// Set fan speed via PATCH
-  Future<Map<String, dynamic>> setFanSpeed(
-    String deviceId,
-    int supplyFan,
-    int exhaustFan,
-  ) async {
-    return updateDevice(deviceId, supplyFan: supplyFan, exhaustFan: exhaustFan);
+    try {
+      ApiLogger.logHttpRequest('PATCH', url, body);
+
+      final token = await _apiClient.getAuthToken();
+      final response = await _apiClient.getHttpClient().patch(
+            Uri.parse(url),
+            headers: {
+              'Content-Type': 'application/json',
+              if (token != null) 'Authorization': 'Bearer $token',
+            },
+            body: body,
+          );
+
+      ApiLogger.logHttpResponse('PATCH', url, response.statusCode, response.body);
+
+      if (response.statusCode != 200 && response.statusCode != 204) {
+        throw HttpErrorHandler.handle(response);
+      }
+    } catch (e) {
+      ApiLogger.logHttpError('PATCH', url, e);
+      if (e is http.ClientException) {
+        throw HttpErrorHandler.handleException(e);
+      }
+      rethrow;
+    }
   }
+
+  /// Set exhaust fan speed via mode-settings PATCH
+  /// Requires modeName to specify which mode's settings to update
+  Future<void> setExhaustFan(
+    String deviceId, 
+    int fanSpeed, {
+    required String modeName,
+  }) async {
+    final url = '${ApiConfig.hvacApiUrl}/$deviceId/mode-settings';
+    final body = json.encode({
+      'modeName': modeName,
+      'exhaustFan': fanSpeed,
+    });
+
+    try {
+      ApiLogger.logHttpRequest('PATCH', url, body);
+
+      final token = await _apiClient.getAuthToken();
+      final response = await _apiClient.getHttpClient().patch(
+            Uri.parse(url),
+            headers: {
+              'Content-Type': 'application/json',
+              if (token != null) 'Authorization': 'Bearer $token',
+            },
+            body: body,
+          );
+
+      ApiLogger.logHttpResponse('PATCH', url, response.statusCode, response.body);
+
+      if (response.statusCode != 200 && response.statusCode != 204) {
+        throw HttpErrorHandler.handle(response);
+      }
+    } catch (e) {
+      ApiLogger.logHttpError('PATCH', url, e);
+      if (e is http.ClientException) {
+        throw HttpErrorHandler.handleException(e);
+      }
+      rethrow;
+    }
+  }
+
   /// Получить историю аварий устройства
   /// GET /api/device/{id}/alarms?limit=100
   Future<List<Map<String, dynamic>>> getAlarmHistory(
