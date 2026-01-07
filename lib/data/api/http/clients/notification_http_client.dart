@@ -37,8 +37,11 @@ class NotificationHttpClient {
         final data = json.decode(response.body);
         if (data is List) {
           return data.cast<Map<String, dynamic>>();
-        } else if (data is Map && data.containsKey('notifications')) {
-          return (data['notifications'] as List).cast<Map<String, dynamic>>();
+        } else if (data is Map) {
+          final notifications = data['notifications'];
+          if (notifications is List) {
+            return notifications.cast<Map<String, dynamic>>();
+          }
         }
         return [];
       } else {

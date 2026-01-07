@@ -37,8 +37,11 @@ class HvacHttpClient {
         // Backend может вернуть массив или объект с массивом devices
         if (data is List) {
           return data.cast<Map<String, dynamic>>();
-        } else if (data is Map && data.containsKey('devices')) {
-          return (data['devices'] as List).cast<Map<String, dynamic>>();
+        } else if (data is Map) {
+          final devices = data['devices'];
+          if (devices is List) {
+            return devices.cast<Map<String, dynamic>>();
+          }
         }
         return [];
       } else {

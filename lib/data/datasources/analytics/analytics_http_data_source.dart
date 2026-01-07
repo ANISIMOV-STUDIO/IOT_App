@@ -68,8 +68,14 @@ class AnalyticsHttpDataSource implements AnalyticsDataSource {
     if (json.containsKey('entries') && json['entries'] is List) {
       for (final entry in json['entries'] as List) {
         if (entry is Map<String, dynamic>) {
+          // Безопасный парсинг timestamp
+          final timestampStr = entry['timestamp'];
+          if (timestampStr is! String) continue;
+          final timestamp = DateTime.tryParse(timestampStr);
+          if (timestamp == null) continue;
+
           entries.add(EnergyHistoryEntryDto(
-            timestamp: DateTime.parse(entry['timestamp'] as String),
+            timestamp: timestamp,
             kwh: (entry['kwh'] as num?)?.toDouble() ?? 0.0,
           ));
         }

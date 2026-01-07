@@ -28,6 +28,8 @@ class BreezPinCodeField extends StatefulWidget {
 class _BreezPinCodeFieldState extends State<BreezPinCodeField> {
   final List<TextEditingController> _controllers = [];
   final List<FocusNode> _focusNodes = [];
+  // FocusNodes для KeyboardListener - отдельные от текстовых полей
+  final List<FocusNode> _keyboardListenerFocusNodes = [];
   String _currentCode = '';
 
   @override
@@ -36,6 +38,7 @@ class _BreezPinCodeFieldState extends State<BreezPinCodeField> {
     for (int i = 0; i < widget.length; i++) {
       _controllers.add(TextEditingController());
       _focusNodes.add(FocusNode());
+      _keyboardListenerFocusNodes.add(FocusNode());
     }
     // Автофокус на первое поле
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -51,6 +54,9 @@ class _BreezPinCodeFieldState extends State<BreezPinCodeField> {
       controller.dispose();
     }
     for (var node in _focusNodes) {
+      node.dispose();
+    }
+    for (var node in _keyboardListenerFocusNodes) {
       node.dispose();
     }
     super.dispose();
@@ -129,7 +135,7 @@ class _BreezPinCodeFieldState extends State<BreezPinCodeField> {
                 right: index == widget.length - 1 ? 0 : AppSpacing.xs / 2,
               ),
               child: KeyboardListener(
-                  focusNode: FocusNode(),
+                  focusNode: _keyboardListenerFocusNodes[index],
                   onKeyEvent: (event) => _onKeyEvent(event, index),
                   child: TextField(
                     controller: _controllers[index],
