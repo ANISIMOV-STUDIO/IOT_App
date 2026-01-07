@@ -369,4 +369,88 @@ class HvacHttpClient {
       rethrow;
     }
   }
+
+  /// Сбросить аварию устройства
+  /// POST /api/device/{id}/alarm-reset
+  Future<void> resetAlarm(String deviceId) async {
+    final url = '${ApiConfig.hvacApiUrl}/$deviceId/alarm-reset';
+
+    try {
+      ApiLogger.logHttpRequest('POST', url, null);
+
+      final token = await _apiClient.getAuthToken();
+      final response = await _apiClient.getHttpClient().post(
+            Uri.parse(url),
+            headers: {
+              'Content-Type': 'application/json',
+              if (token != null) 'Authorization': 'Bearer $token',
+            },
+          );
+
+      ApiLogger.logHttpResponse('POST', url, response.statusCode, response.body);
+
+      if (response.statusCode != 200 && response.statusCode != 204) {
+        throw HttpErrorHandler.handle(response);
+      }
+    } catch (e) {
+      ApiLogger.logHttpError('POST', url, e);
+      if (e is http.ClientException) {
+        throw HttpErrorHandler.handleException(e);
+      }
+      rethrow;
+    }
+  }
+
+  /// Установить настройки режима
+  /// POST /api/device/{id}/mode-settings
+  ///
+  /// Backend SetModeSettingsRequest:
+  /// - modeName: string (basic, intensive, economy, max_performance, etc.)
+  /// - supplyFan: int (20-100%)
+  /// - exhaustFan: int (20-100%)
+  /// - heatingTemperature: int (15-35°C)
+  /// - coolingTemperature: int (15-35°C)
+  Future<void> setModeSettings(
+    String deviceId, {
+    required String modeName,
+    required int supplyFan,
+    required int exhaustFan,
+    required int heatingTemperature,
+    required int coolingTemperature,
+  }) async {
+    final url = '${ApiConfig.hvacApiUrl}/$deviceId/mode-settings';
+    final body = json.encode({
+      'modeName': modeName,
+      'supplyFan': supplyFan,
+      'exhaustFan': exhaustFan,
+      'heatingTemperature': heatingTemperature,
+      'coolingTemperature': coolingTemperature,
+    });
+
+    try {
+      ApiLogger.logHttpRequest('POST', url, body);
+
+      final token = await _apiClient.getAuthToken();
+      final response = await _apiClient.getHttpClient().post(
+            Uri.parse(url),
+            headers: {
+              'Content-Type': 'application/json',
+              if (token != null) 'Authorization': 'Bearer $token',
+            },
+            body: body,
+          );
+
+      ApiLogger.logHttpResponse('POST', url, response.statusCode, response.body);
+
+      if (response.statusCode != 200 && response.statusCode != 204) {
+        throw HttpErrorHandler.handle(response);
+      }
+    } catch (e) {
+      ApiLogger.logHttpError('POST', url, e);
+      if (e is http.ClientException) {
+        throw HttpErrorHandler.handleException(e);
+      }
+      rethrow;
+    }
+  }
 }

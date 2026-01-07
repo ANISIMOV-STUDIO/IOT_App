@@ -1,4 +1,8 @@
 /// HTTP client for Analytics service (Web platform)
+///
+/// ВНИМАНИЕ: Backend НЕ имеет /api/analytics/* endpoints.
+/// Energy stats/history возвращают заглушки до реализации на backend.
+/// Реальные данные доступны только через /api/device/{id}/history.
 library;
 
 import 'dart:convert';
@@ -16,79 +20,49 @@ class AnalyticsHttpClient {
   AnalyticsHttpClient(this._apiClient);
 
   /// Get energy stats for device
+  ///
+  /// STUB: Backend не имеет /api/analytics/energy/* endpoints.
+  /// Возвращает пустую статистику. Для реальных данных используйте getSensorHistory().
   Future<Map<String, dynamic>> getEnergyStats(String deviceId) async {
-    final url = '${ApiConfig.analyticsApiUrl}/energy/$deviceId/stats';
+    // TODO: Реализовать когда backend добавит AnalyticsController
+    ApiLogger.warning(
+      'getEnergyStats: Backend не имеет /api/analytics/* - возвращаем заглушку',
+      null,
+    );
 
-    try {
-      ApiLogger.logHttpRequest('GET', url, null);
-
-      final token = await _apiClient.getAuthToken();
-      final response = await _apiClient.getHttpClient().get(
-            Uri.parse(url),
-            headers: {
-              'Content-Type': 'application/json',
-              if (token != null) 'Authorization': 'Bearer $token',
-            },
-          );
-
-      ApiLogger.logHttpResponse('GET', url, response.statusCode, response.body);
-
-      if (response.statusCode == 200) {
-        return json.decode(response.body) as Map<String, dynamic>;
-      } else {
-        throw HttpErrorHandler.handle(response);
-      }
-    } catch (e) {
-      ApiLogger.logHttpError('GET', url, e);
-      if (e is http.ClientException) {
-        throw HttpErrorHandler.handleException(e);
-      }
-      rethrow;
-    }
+    // Возвращаем пустую статистику вместо 404 ошибки
+    return {
+      'todayKwh': 0.0,
+      'weekKwh': 0.0,
+      'monthKwh': 0.0,
+      'currentPowerW': 0.0,
+      'totalHours': 0,
+      'hourlyData': <Map<String, dynamic>>[],
+    };
   }
 
   /// Get energy history
+  ///
+  /// STUB: Backend не имеет /api/analytics/energy/* endpoints.
+  /// Возвращает пустую историю. Для реальных данных используйте getSensorHistory().
   Future<Map<String, dynamic>> getEnergyHistory(
     String deviceId,
     DateTime from,
     DateTime to,
     String period,
   ) async {
-    final queryParams = {
-      'from': from.toIso8601String(),
-      'to': to.toIso8601String(),
-      'period': period,
+    // TODO: Реализовать когда backend добавит AnalyticsController
+    ApiLogger.warning(
+      'getEnergyHistory: Backend не имеет /api/analytics/* - возвращаем заглушку',
+      null,
+    );
+
+    // Возвращаем пустую историю вместо 404 ошибки
+    return {
+      'entries': <Map<String, dynamic>>[],
+      'totalKwh': 0.0,
+      'totalHours': 0,
     };
-    final url = Uri.parse('${ApiConfig.analyticsApiUrl}/energy/$deviceId/history')
-        .replace(queryParameters: queryParams)
-        .toString();
-
-    try {
-      ApiLogger.logHttpRequest('GET', url, null);
-
-      final token = await _apiClient.getAuthToken();
-      final response = await _apiClient.getHttpClient().get(
-            Uri.parse(url),
-            headers: {
-              'Content-Type': 'application/json',
-              if (token != null) 'Authorization': 'Bearer $token',
-            },
-          );
-
-      ApiLogger.logHttpResponse('GET', url, response.statusCode, response.body);
-
-      if (response.statusCode == 200) {
-        return json.decode(response.body) as Map<String, dynamic>;
-      } else {
-        throw HttpErrorHandler.handle(response);
-      }
-    } catch (e) {
-      ApiLogger.logHttpError('GET', url, e);
-      if (e is http.ClientException) {
-        throw HttpErrorHandler.handleException(e);
-      }
-      rethrow;
-    }
   }
 
   /// Получить историю датчиков устройства

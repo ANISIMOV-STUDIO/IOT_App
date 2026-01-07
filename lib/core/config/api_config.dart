@@ -18,7 +18,10 @@ class ApiConfig {
   static String get apiBaseUrl => '$httpUrl/api';
   static String get deviceApiUrl => '$apiBaseUrl/device'; // Новый DeviceController
   static String get hvacApiUrl => deviceApiUrl; // Алиас для совместимости
-  static String get analyticsApiUrl => '$apiBaseUrl/analytics'; // Не реализован на бэке
+  // ВНИМАНИЕ: Analytics endpoint НЕ существует на backend!
+  // Методы getEnergyStats/getEnergyHistory возвращают заглушки.
+  // Реальные данные: /api/device/{id}/history
+  static String get analyticsApiUrl => '$apiBaseUrl/analytics';
   static String get scheduleApiUrl => deviceApiUrl; // Расписание через /device/{id}/schedule
   static String get notificationApiUrl => '$apiBaseUrl/notification';
   static String get releaseApiUrl => '$apiBaseUrl/release';

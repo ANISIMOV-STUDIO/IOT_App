@@ -89,6 +89,7 @@ class FcmTokenService {
   }
 
   /// Отменить регистрацию токена
+  /// Backend: POST /api/push/unregister (НЕ DELETE!)
   Future<bool> unregisterToken(String token) async {
     try {
       final httpClient = _apiClient.getHttpClient();
@@ -99,7 +100,8 @@ class FcmTokenService {
         return false;
       }
 
-      final response = await httpClient.delete(
+      // ВАЖНО: Backend использует POST, не DELETE
+      final response = await httpClient.post(
         Uri.parse('${_apiClient.baseUrl}/api/push/unregister'),
         headers: {
           'Content-Type': 'application/json',
