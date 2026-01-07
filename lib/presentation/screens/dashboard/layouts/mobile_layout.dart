@@ -8,6 +8,7 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/spacing.dart';
 import '../../../../domain/entities/unit_state.dart';
 import '../../../../domain/entities/alarm_info.dart';
+import '../../../../domain/entities/mode_settings.dart';
 import '../../../../generated/l10n/app_localizations.dart';
 import '../../../widgets/breez/breez.dart';
 
@@ -24,9 +25,10 @@ class MobileLayout extends StatefulWidget {
   final VoidCallback? onPowerToggle;
   final VoidCallback? onSettingsTap;
   final bool isPowerLoading;
-  final List<ScheduleEntry> schedule;
+
+  final Map<String, TimerSettings>? timerSettings;
+  final DaySettingsCallback? onTimerSettingsChanged;
   final Map<String, AlarmInfo> activeAlarms;
-  final VoidCallback? onScheduleSeeAll;
   final VoidCallback? onAlarmsSeeHistory;
 
   const MobileLayout({
@@ -42,9 +44,9 @@ class MobileLayout extends StatefulWidget {
     this.onPowerToggle,
     this.onSettingsTap,
     this.isPowerLoading = false,
-    this.schedule = const [],
+    this.timerSettings,
+    this.onTimerSettingsChanged,
     this.activeAlarms = const {},
-    this.onScheduleSeeAll,
     this.onAlarmsSeeHistory,
   });
 
@@ -130,11 +132,9 @@ class _MobileLayoutState extends State<MobileLayout>
                   onModeChanged: widget.onModeChanged,
                 ),
                 // Schedule
-                ScheduleWidget(
-                  entries: widget.schedule,
-                  onSeeAll: widget.onScheduleSeeAll,
-                  onAddEntry: widget.onScheduleSeeAll,
-                  onEntryTap: (_) => widget.onScheduleSeeAll?.call(),
+                DailyScheduleWidget(
+                  timerSettings: widget.timerSettings,
+                  onDaySettingsChanged: widget.onTimerSettingsChanged,
                   compact: true,
                 ),
                 // Alarms

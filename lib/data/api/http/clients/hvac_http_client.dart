@@ -415,6 +415,54 @@ class HvacHttpClient {
     }
   }
 
+  /// Установить настройки таймера для дня недели
+  /// POST /api/device/{id}/timer
+  Future<void> setTimerSettings(
+    String deviceId, {
+    required String day,
+    required int onHour,
+    required int onMinute,
+    required int offHour,
+    required int offMinute,
+    required bool enabled,
+  }) async {
+    final url = '${ApiConfig.hvacApiUrl}/$deviceId/timer';
+    final body = json.encode({
+      'day': day,
+      'onHour': onHour,
+      'onMinute': onMinute,
+      'offHour': offHour,
+      'offMinute': offMinute,
+      'enabled': enabled,
+    });
+
+    try {
+      ApiLogger.logHttpRequest('POST', url, body);
+
+      final token = await _apiClient.getAuthToken();
+      final response = await _apiClient.getHttpClient().post(
+            Uri.parse(url),
+            headers: {
+              'Content-Type': 'application/json',
+              if (token != null) 'Authorization': 'Bearer $token',
+            },
+            body: body,
+          );
+
+      ApiLogger.logHttpResponse('POST', url, response.statusCode, response.body);
+
+      if (response.statusCode != 200) {
+        throw HttpErrorHandler.handle(response);
+      }
+    } catch (e) {
+      ApiLogger.logHttpError('POST', url, e);
+      if (e is http.ClientException) {
+        throw HttpErrorHandler.handleException(e);
+      }
+      rethrow;
+    }
+  }
+
   /// Зарегистрировать новое устройство по MAC-адресу
   /// POST /api/device/register
   Future<Map<String, dynamic>> registerDevice(

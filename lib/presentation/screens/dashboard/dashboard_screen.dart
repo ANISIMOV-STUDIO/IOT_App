@@ -25,6 +25,7 @@ import '../../bloc/notifications/notifications_bloc.dart';
 import '../../bloc/schedule/schedule_bloc.dart';
 import '../../widgets/breez/breez.dart';
 import '../../widgets/common/offline_banner.dart';
+import '../../../data/api/http/clients/hvac_http_client.dart';
 import 'dashboard_bloc_wrapper.dart';
 import 'dashboard_empty_state.dart';
 import 'dialogs/add_unit_dialog.dart';
@@ -145,7 +146,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       onLogoutTap: _handleLogout,
       onNotificationsTap: _showNotifications,
       unreadNotificationsCount: data.notificationsState.unreadCount,
-      schedule: data.scheduleState.entries,
+      timerSettings: data.climateState.deviceFullState?.timerSettings,
+      onTimerSettingsChanged: _handleTimerSettingsChanged,
       graphData: data.analyticsState.graphData,
       selectedGraphMetric: data.analyticsState.selectedMetric,
       onGraphMetricChanged: _onGraphMetricChanged,
@@ -185,9 +187,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
             onPowerToggle: () => _handlePowerToggle(data.climateState),
             onSettingsTap: () => _showUnitSettings(unit),
             isPowerLoading: data.climateState.isTogglingPower,
-            schedule: data.scheduleState.entries,
+            timerSettings: data.climateState.deviceFullState?.timerSettings,
+            onTimerSettingsChanged: _handleTimerSettingsChanged,
             activeAlarms: data.climateState.activeAlarms,
-            onScheduleSeeAll: () => context.goToSchedule(unit.id, unit.name),
             onAlarmsSeeHistory: () => context.goToAlarmHistory(unit.id, unit.name),
           ),
         ),
@@ -272,5 +274,40 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   void _showNotifications() {
     context.push(AppRoutes.notifications);
+  }
+
+  void _handleTimerSettingsChanged(
+    String day,
+    int onHour,
+    int onMinute,
+    int offHour,
+    int offMinute,
+    bool enabled,
+  ) {
+    // Get current device ID and call HTTP client
+    final climateState = context.read<ClimateBloc>().state;
+    final deviceId = climateState.deviceFullState?.id;
+    if (deviceId == null) return;
+
+    // Use HTTP client directly for timer settings
+    final httpClient = di.sl<HvacHttpClient>();
+    httpClient.setTimerSettings(
+      deviceId,
+      day: day,
+      onHour: onHour,
+      onMinute: onMinute,
+      offHour: offHour,
+      offMinute: offMinute,
+      enabled: enabled,
+    ).then((_) {
+      // Refresh device state after update
+      if (mounted) {
+        context.read<ClimateBloc>().add(ClimateDeviceChanged(deviceId));
+      }
+    }).catchError((e) {
+      if (mounted) {
+        ToastService.error('Ошибка сохранения расписания: $e');
+      }
+    });
   }
 }

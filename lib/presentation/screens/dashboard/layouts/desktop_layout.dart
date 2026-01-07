@@ -2,10 +2,10 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../../core/navigation/app_router.dart';
 import '../../../../core/theme/spacing.dart';
 import '../../../../domain/entities/unit_state.dart';
 import '../../../../domain/entities/alarm_info.dart';
+import '../../../../domain/entities/mode_settings.dart';
 import '../../../widgets/breez/breez.dart';
 import '../widgets/desktop_header.dart';
 
@@ -38,7 +38,8 @@ class DesktopLayout extends StatefulWidget {
   final int unreadNotificationsCount;
 
   // Data from repositories
-  final List<ScheduleEntry> schedule;
+  final Map<String, TimerSettings>? timerSettings;
+  final DaySettingsCallback? onTimerSettingsChanged;
   final List<GraphDataPoint> graphData;
   final Map<String, AlarmInfo> activeAlarms;
   final GraphMetric selectedGraphMetric;
@@ -71,7 +72,8 @@ class DesktopLayout extends StatefulWidget {
     this.onLogoutTap,
     this.onNotificationsTap,
     this.unreadNotificationsCount = 0,
-    this.schedule = const [],
+    this.timerSettings,
+    this.onTimerSettingsChanged,
     this.graphData = const [],
     this.activeAlarms = const {},
     this.selectedGraphMetric = GraphMetric.temperature,
@@ -207,22 +209,11 @@ class _DesktopLayoutState extends State<DesktopLayout> {
         Expanded(
           child: Row(
             children: [
-              // Schedule widget
+              // Daily schedule widget
               Expanded(
-                child: ScheduleWidget(
-                  entries: widget.schedule,
-                  onSeeAll: () => context.goToSchedule(
-                    widget.unit.id,
-                    widget.unit.name,
-                  ),
-                  onAddEntry: () => context.goToSchedule(
-                    widget.unit.id,
-                    widget.unit.name,
-                  ),
-                  onEntryTap: (entry) => context.goToSchedule(
-                    widget.unit.id,
-                    widget.unit.name,
-                  ),
+                child: DailyScheduleWidget(
+                  timerSettings: widget.timerSettings,
+                  onDaySettingsChanged: widget.onTimerSettingsChanged,
                 ),
               ),
 
