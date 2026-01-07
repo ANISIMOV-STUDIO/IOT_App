@@ -107,9 +107,12 @@ class RealScheduleRepository implements ScheduleRepository {
 
   @override
   Future<ScheduleEntry> toggleEntry(String entryId, bool isActive) async {
-    // Get current entry
+    // Get current entry from all schedules
     final schedule = await getSchedule('');
-    final entry = schedule.firstWhere((e) => e.id == entryId);
+    final entry = schedule.firstWhere(
+      (e) => e.id == entryId,
+      orElse: () => throw StateError('Schedule entry not found: $entryId'),
+    );
 
     return updateEntry(entry.copyWith(isActive: isActive));
   }

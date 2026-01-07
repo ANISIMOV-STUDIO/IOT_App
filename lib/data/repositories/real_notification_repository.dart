@@ -16,6 +16,9 @@ class RealNotificationRepository implements NotificationRepository {
   final NotificationDataSource _dataSource;
   final SignalRHubConnection? _signalR;
 
+  /// Максимальное количество уведомлений в кеше (защита от утечки памяти)
+  static const int _maxCachedNotifications = 500;
+
   final _notificationsController =
       StreamController<List<UnitNotification>>.broadcast();
 
@@ -34,21 +37,29 @@ class RealNotificationRepository implements NotificationRepository {
     if (dataSourceStream != null) {
       _dataSourceSubscription = dataSourceStream.listen((dto) {
         final notification = dto.toEntity();
-        _cachedNotifications = [notification, ..._cachedNotifications];
-        _notificationsController.add(_cachedNotifications);
+        _addNotificationToCache(notification);
       });
     } else if (_signalR != null) {
       // Fallback на SignalR для web
       _signalRSubscription = _signalR.notifications.listen((data) {
         try {
           final notification = _parseNotificationFromJson(data);
-          _cachedNotifications = [notification, ..._cachedNotifications];
-          _notificationsController.add(_cachedNotifications);
+          _addNotificationToCache(notification);
         } catch (e) {
           // Логируем ошибку парсинга, но не прерываем стрим
         }
       });
     }
+  }
+
+  /// Добавляет уведомление в кеш с ограничением размера
+  void _addNotificationToCache(UnitNotification notification) {
+    _cachedNotifications = [notification, ..._cachedNotifications];
+    // Ограничиваем размер списка для предотвращения утечки памяти
+    if (_cachedNotifications.length > _maxCachedNotifications) {
+      _cachedNotifications = _cachedNotifications.sublist(0, _maxCachedNotifications);
+    }
+    _notificationsController.add(_cachedNotifications);
   }
 
   /// Парсинг уведомления из JSON (для SignalR)

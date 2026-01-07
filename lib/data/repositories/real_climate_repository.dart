@@ -143,7 +143,8 @@ class RealClimateRepository implements ClimateRepository {
   @override
   Stream<ClimateState> watchClimate() {
     if (_selectedDeviceId.isEmpty) {
-      return _climateController.stream; // Возвращаем пустой stream
+      // Возвращаем stream с ошибкой вместо пустого stream
+      return Stream.error(StateError('No device selected for climate monitoring'));
     }
     return watchDeviceClimate(_selectedDeviceId);
   }
