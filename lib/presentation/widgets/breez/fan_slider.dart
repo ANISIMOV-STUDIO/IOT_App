@@ -32,12 +32,13 @@ class FanSlider extends StatelessWidget {
       enabled: onChanged != null,
       semanticLabel: '$label: $value%',
       suffix: '%',
-      onChanged: onChanged != null
-          ? (v) => onChanged!(v.round())
-          : null,
+      // Не вызываем callback во время перетаскивания - только UI обновление
+      onChanged: null,
+      // Отправляем изменения только когда пользователь отпустил слайдер
       onChangeEnd: onChanged != null
           ? (v) => onChanged!(v.round())
           : null,
     );
   }
+
 }
