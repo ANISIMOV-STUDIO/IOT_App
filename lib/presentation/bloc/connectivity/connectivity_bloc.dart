@@ -41,6 +41,10 @@ class ConnectivityBloc extends Bloc<ConnectivityEvent, ConnectivityState> {
     await _statusSubscription?.cancel();
     _statusSubscription = _connectivityService.onStatusChange.listen(
       (status) => add(ConnectivityStatusChanged(status)),
+      onError: (error) {
+        // При ошибке стрима считаем что сеть недоступна
+        add(const ConnectivityStatusChanged(NetworkStatus.offline));
+      },
     );
   }
 

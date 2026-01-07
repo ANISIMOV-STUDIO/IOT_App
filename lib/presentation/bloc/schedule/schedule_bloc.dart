@@ -58,8 +58,11 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
       // Подписываемся на обновления
       await _scheduleSubscription?.cancel();
       _scheduleSubscription = _repository.watchSchedule(event.deviceId).listen(
-            (entries) => add(ScheduleEntriesUpdated(entries)),
-          );
+        (entries) => add(ScheduleEntriesUpdated(entries)),
+        onError: (error) {
+          // Игнорируем ошибки стрима - данные уже загружены
+        },
+      );
     } catch (e) {
       emit(state.copyWith(
         status: ScheduleStatus.failure,

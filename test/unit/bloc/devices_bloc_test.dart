@@ -365,7 +365,7 @@ void main() {
             status: DevicesStatus.success,
             devices: testDevices,
             selectedDeviceId: testDevice1.id,
-            registrationError: 'Ошибка сервера',
+            operationError: 'Ошибка сервера',
           ),
         ],
       );
@@ -425,7 +425,7 @@ void main() {
             status: DevicesStatus.success,
             devices: testDevices,
             selectedDeviceId: testDevice1.id,
-            registrationError: 'Имя слишком короткое',
+            operationError: 'Имя слишком короткое',
           ),
         ],
       );

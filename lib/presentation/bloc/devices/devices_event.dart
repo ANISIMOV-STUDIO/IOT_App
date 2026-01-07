@@ -57,6 +57,11 @@ final class DevicesRegistrationErrorCleared extends DevicesEvent {
   const DevicesRegistrationErrorCleared();
 }
 
+/// Ошибка операции очищена (удаление, переименование)
+final class DevicesOperationErrorCleared extends DevicesEvent {
+  const DevicesOperationErrorCleared();
+}
+
 /// Запрошено удаление устройства
 final class DevicesDeletionRequested extends DevicesEvent {
   final String deviceId;

@@ -68,7 +68,12 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
       await _notificationsSubscription?.cancel();
       _notificationsSubscription = _watchNotifications(
         const WatchNotificationsParams(),
-      ).listen((notifications) => add(NotificationsListUpdated(notifications)));
+      ).listen(
+        (notifications) => add(NotificationsListUpdated(notifications)),
+        onError: (error) {
+          // Игнорируем ошибки стрима - данные уже загружены
+        },
+      );
     } catch (e) {
       emit(state.copyWith(
         status: NotificationsStatus.failure,
@@ -99,7 +104,12 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
       await _notificationsSubscription?.cancel();
       _notificationsSubscription = _watchNotifications(
         WatchNotificationsParams(deviceId: event.deviceId),
-      ).listen((notifications) => add(NotificationsListUpdated(notifications)));
+      ).listen(
+        (notifications) => add(NotificationsListUpdated(notifications)),
+        onError: (error) {
+          // Игнорируем ошибки стрима - данные уже загружены
+        },
+      );
     } catch (e) {
       emit(state.copyWith(
         status: NotificationsStatus.failure,
@@ -177,14 +187,13 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     emit(state.copyWith(notifications: optimisticNotifications));
 
     try {
-      // Отмечаем все непрочитанные на сервере
-      for (final n in previousNotifications) {
-        if (!n.isRead) {
-          await _markNotificationAsRead(
-            MarkNotificationAsReadParams(notificationId: n.id),
-          );
-        }
-      }
+      // Отмечаем все непрочитанные на сервере параллельно
+      final unreadNotifications = previousNotifications.where((n) => !n.isRead);
+      await Future.wait(
+        unreadNotifications.map((n) => _markNotificationAsRead(
+          MarkNotificationAsReadParams(notificationId: n.id),
+        )),
+      );
     } catch (e) {
       // Откат при ошибке
       emit(state.copyWith(

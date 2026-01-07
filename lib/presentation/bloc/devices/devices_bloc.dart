@@ -56,6 +56,7 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
     // События управления устройствами
     on<DevicesRegistrationRequested>(_onRegistrationRequested);
     on<DevicesRegistrationErrorCleared>(_onRegistrationErrorCleared);
+    on<DevicesOperationErrorCleared>(_onOperationErrorCleared);
     on<DevicesDeletionRequested>(_onDeletionRequested);
     on<DevicesRenameRequested>(_onRenameRequested);
     on<DevicesMasterPowerOffRequested>(_onMasterPowerOffRequested);
@@ -88,6 +89,9 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
       await _devicesSubscription?.cancel();
       _devicesSubscription = _watchHvacDevices().listen(
         (devices) => add(DevicesListUpdated(devices)),
+        onError: (error) {
+          // Игнорируем ошибки стрима - данные уже загружены
+        },
       );
     } catch (e) {
       emit(state.copyWith(
@@ -156,6 +160,14 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
     emit(state.copyWith(registrationError: null));
   }
 
+  /// Очистка ошибки операции
+  void _onOperationErrorCleared(
+    DevicesOperationErrorCleared event,
+    Emitter<DevicesState> emit,
+  ) {
+    emit(state.copyWith(operationError: null));
+  }
+
   /// Удаление устройства
   Future<void> _onDeletionRequested(
     DevicesDeletionRequested event,
@@ -189,7 +201,7 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
       } else {
         errorMessage = 'Failed to delete device';
       }
-      emit(state.copyWith(registrationError: errorMessage));
+      emit(state.copyWith(operationError: errorMessage));
     }
   }
 
@@ -220,7 +232,7 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
       } else {
         errorMessage = 'Failed to rename device';
       }
-      emit(state.copyWith(registrationError: errorMessage));
+      emit(state.copyWith(operationError: errorMessage));
     }
   }
 

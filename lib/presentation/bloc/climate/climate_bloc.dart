@@ -122,6 +122,9 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       await _climateSubscription?.cancel();
       _climateSubscription = _watchCurrentClimate().listen(
         (climate) => add(ClimateStateUpdated(climate)),
+        onError: (error) {
+          // Игнорируем ошибки стрима - данные уже загружены
+        },
       );
     } catch (e) {
       emit(state.copyWith(

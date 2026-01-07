@@ -77,6 +77,9 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
       await _energySubscription?.cancel();
       _energySubscription = _watchEnergyStats().listen(
         (stats) => add(AnalyticsEnergyStatsUpdated(stats)),
+        onError: (error) {
+          // Игнорируем ошибки стрима - данные уже загружены
+        },
       );
     } catch (e) {
       emit(state.copyWith(
@@ -109,7 +112,12 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
     _graphDataSubscription = _watchGraphData(WatchGraphDataParams(
       deviceId: event.deviceId,
       metric: state.selectedMetric,
-    )).listen((data) => add(AnalyticsGraphDataUpdated(data)));
+    )).listen(
+      (data) => add(AnalyticsGraphDataUpdated(data)),
+      onError: (error) {
+        // Игнорируем ошибки стрима - данные уже загружены
+      },
+    );
   }
 
   /// Обновление статистики энергопотребления из стрима
