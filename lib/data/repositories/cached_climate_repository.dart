@@ -150,6 +150,22 @@ class CachedClimateRepository implements ClimateRepository {
   }
 
   @override
+  Future<ClimateState> setHeatingTemperature(int temperature, {String? deviceId}) async {
+    _ensureOnline('setHeatingTemperature');
+    final result = await _inner.setHeatingTemperature(temperature, deviceId: deviceId);
+    await _cacheService.cacheClimateState(result, deviceId: deviceId);
+    return result;
+  }
+
+  @override
+  Future<ClimateState> setCoolingTemperature(int temperature, {String? deviceId}) async {
+    _ensureOnline('setCoolingTemperature');
+    final result = await _inner.setCoolingTemperature(temperature, deviceId: deviceId);
+    await _cacheService.cacheClimateState(result, deviceId: deviceId);
+    return result;
+  }
+
+  @override
   Future<ClimateState> setHumidity(double humidity, {String? deviceId}) async {
     _ensureOnline('setHumidity');
     final result = await _inner.setHumidity(humidity, deviceId: deviceId);

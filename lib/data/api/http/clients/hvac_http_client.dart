@@ -178,10 +178,17 @@ class HvacHttpClient {
   }
 
   /// Set heating temperature via PATCH
-  Future<Map<String, dynamic>> setTemperature(
+  Future<Map<String, dynamic>> setHeatingTemperature(
       String deviceId, int temperature) async {
     return updateDevice(deviceId, heatingTemperature: temperature);
   }
+
+  /// Set cooling temperature via PATCH
+  Future<Map<String, dynamic>> setCoolingTemperature(
+      String deviceId, int temperature) async {
+    return updateDevice(deviceId, coolingTemperature: temperature);
+  }
+
   /// Set mode
   Future<Map<String, dynamic>> setMode(String deviceId, String mode) async {
     final url = '${ApiConfig.hvacApiUrl}/$deviceId/mode';

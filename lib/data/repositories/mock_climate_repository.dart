@@ -195,11 +195,29 @@ class MockClimateRepository implements ClimateRepository {
 
   @override
   Future<ClimateState> setTargetTemperature(double temperature, {String? deviceId}) async {
+    return setHeatingTemperature(temperature.toInt(), deviceId: deviceId);
+  }
+
+  @override
+  Future<ClimateState> setHeatingTemperature(int temperature, {String? deviceId}) async {
     await Future.delayed(Duration(milliseconds: MockData.networkDelays['fast'] ?? 100));
     final id = _resolveDeviceId(deviceId);
     final currentState = _deviceStates[id];
     if (currentState != null) {
-      _deviceStates[id] = currentState.copyWith(targetTemperature: temperature);
+      _deviceStates[id] = currentState.copyWith(targetTemperature: temperature.toDouble());
+      _notifyDeviceChange(id);
+      return _deviceStates[id]!;
+    }
+    throw Exception('Device not found: $id');
+  }
+
+  @override
+  Future<ClimateState> setCoolingTemperature(int temperature, {String? deviceId}) async {
+    await Future.delayed(Duration(milliseconds: MockData.networkDelays['fast'] ?? 100));
+    final id = _resolveDeviceId(deviceId);
+    final currentState = _deviceStates[id];
+    if (currentState != null) {
+      _deviceStates[id] = currentState.copyWith(targetTemperature: temperature.toDouble());
       _notifyDeviceChange(id);
       return _deviceStates[id]!;
     }

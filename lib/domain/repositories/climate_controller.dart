@@ -8,8 +8,14 @@ abstract class ClimateController {
   /// Turn device on/off
   Future<ClimateState> setPower(bool isOn, {String? deviceId});
 
-  /// Set target temperature
+  /// Set target temperature (defaults to heating)
   Future<ClimateState> setTargetTemperature(double temperature, {String? deviceId});
+
+  /// Set heating temperature
+  Future<ClimateState> setHeatingTemperature(int temperature, {String? deviceId});
+
+  /// Set cooling temperature
+  Future<ClimateState> setCoolingTemperature(int temperature, {String? deviceId});
 
   /// Set target humidity
   Future<ClimateState> setHumidity(double humidity, {String? deviceId});

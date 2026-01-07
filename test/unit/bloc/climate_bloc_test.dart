@@ -27,6 +27,8 @@ class MockSetDevicePower extends Mock implements SetDevicePower {}
 
 class MockSetTemperature extends Mock implements SetTemperature {}
 
+class MockSetCoolingTemperature extends Mock implements SetCoolingTemperature {}
+
 class MockSetHumidity extends Mock implements SetHumidity {}
 
 class MockSetClimateMode extends Mock implements SetClimateMode {}
@@ -45,6 +47,7 @@ void main() {
   late MockWatchCurrentClimate mockWatchCurrentClimate;
   late MockSetDevicePower mockSetDevicePower;
   late MockSetTemperature mockSetTemperature;
+  late MockSetCoolingTemperature mockSetCoolingTemperature;
   late MockSetHumidity mockSetHumidity;
   late MockSetClimateMode mockSetClimateMode;
   late MockSetOperatingMode mockSetOperatingMode;
@@ -79,6 +82,7 @@ void main() {
     registerFallbackValue(const GetDeviceFullStateParams(deviceId: ''));
     registerFallbackValue(const SetDevicePowerParams(isOn: false));
     registerFallbackValue(const SetTemperatureParams(temperature: 20.0));
+    registerFallbackValue(const SetCoolingTemperatureParams(temperature: 24));
     registerFallbackValue(const SetHumidityParams(humidity: 50.0));
     registerFallbackValue(const SetClimateModeParams(mode: ClimateMode.auto));
     registerFallbackValue(const SetOperatingModeParams(mode: 'basic'));
@@ -94,6 +98,7 @@ void main() {
     mockWatchCurrentClimate = MockWatchCurrentClimate();
     mockSetDevicePower = MockSetDevicePower();
     mockSetTemperature = MockSetTemperature();
+    mockSetCoolingTemperature = MockSetCoolingTemperature();
     mockSetHumidity = MockSetHumidity();
     mockSetClimateMode = MockSetClimateMode();
     mockSetOperatingMode = MockSetOperatingMode();
@@ -110,6 +115,7 @@ void main() {
         watchCurrentClimate: mockWatchCurrentClimate,
         setDevicePower: mockSetDevicePower,
         setTemperature: mockSetTemperature,
+        setCoolingTemperature: mockSetCoolingTemperature,
         setHumidity: mockSetHumidity,
         setClimateMode: mockSetClimateMode,
         setOperatingMode: mockSetOperatingMode,

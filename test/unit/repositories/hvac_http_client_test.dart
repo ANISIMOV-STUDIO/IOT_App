@@ -233,7 +233,7 @@ void main() {
           )).thenAnswer((_) async => successResponse(responseJson));
 
       // Act
-      final result = await hvacClient.setTemperature('device-1', 24);
+      final result = await hvacClient.setHeatingTemperature('device-1', 24);
 
       // Assert
       expect(result['heatingTemperature'], equals(24));
@@ -256,7 +256,7 @@ void main() {
 
       // Act & Assert
       expect(
-        () => hvacClient.setTemperature('device-1', 100),
+        () => hvacClient.setHeatingTemperature('device-1', 100),
         throwsException,
       );
     });

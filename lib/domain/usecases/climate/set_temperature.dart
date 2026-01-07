@@ -1,4 +1,4 @@
-/// Use Case: Установить целевую температуру
+/// Use Case: Установить целевую температуру нагрева
 library;
 
 import '../../entities/climate.dart';
@@ -16,7 +16,7 @@ class SetTemperatureParams {
   });
 }
 
-/// Установить целевую температуру для устройства
+/// Установить температуру нагрева для устройства
 class SetTemperature extends UseCaseWithParams<ClimateState, SetTemperatureParams> {
   final ClimateRepository _repository;
 
@@ -24,8 +24,8 @@ class SetTemperature extends UseCaseWithParams<ClimateState, SetTemperatureParam
 
   @override
   Future<ClimateState> call(SetTemperatureParams params) async {
-    return _repository.setTargetTemperature(
-      params.temperature,
+    return _repository.setHeatingTemperature(
+      params.temperature.toInt(),
       deviceId: params.deviceId,
     );
   }

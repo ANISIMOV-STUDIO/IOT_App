@@ -176,9 +176,31 @@ class RealClimateRepository implements ClimateRepository {
     double temperature, {
     String? deviceId,
   }) async {
+    // Default to heating temperature for backward compatibility
+    return setHeatingTemperature(temperature.toInt(), deviceId: deviceId);
+  }
+
+  @override
+  Future<ClimateState> setHeatingTemperature(
+    int temperature, {
+    String? deviceId,
+  }) async {
     final id = deviceId ?? _selectedDeviceId;
 
-    final jsonDevice = await _httpClient.setTemperature(id, temperature.toInt());
+    final jsonDevice = await _httpClient.setHeatingTemperature(id, temperature);
+    final state = DeviceJsonMapper.climateStateFromJson(jsonDevice);
+    _climateController.add(state);
+    return state;
+  }
+
+  @override
+  Future<ClimateState> setCoolingTemperature(
+    int temperature, {
+    String? deviceId,
+  }) async {
+    final id = deviceId ?? _selectedDeviceId;
+
+    final jsonDevice = await _httpClient.setCoolingTemperature(id, temperature);
     final state = DeviceJsonMapper.climateStateFromJson(jsonDevice);
     _climateController.add(state);
     return state;

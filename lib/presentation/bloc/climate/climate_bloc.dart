@@ -32,6 +32,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   final WatchCurrentClimate _watchCurrentClimate;
   final SetDevicePower _setDevicePower;
   final SetTemperature _setTemperature;
+  final SetCoolingTemperature _setCoolingTemperature;
   final SetHumidity _setHumidity;
   final SetClimateMode _setClimateMode;
   final SetOperatingMode _setOperatingMode;
@@ -48,6 +49,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     required WatchCurrentClimate watchCurrentClimate,
     required SetDevicePower setDevicePower,
     required SetTemperature setTemperature,
+    required SetCoolingTemperature setCoolingTemperature,
     required SetHumidity setHumidity,
     required SetClimateMode setClimateMode,
     required SetOperatingMode setOperatingMode,
@@ -60,6 +62,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         _watchCurrentClimate = watchCurrentClimate,
         _setDevicePower = setDevicePower,
         _setTemperature = setTemperature,
+        _setCoolingTemperature = setCoolingTemperature,
         _setHumidity = setHumidity,
         _setClimateMode = setClimateMode,
         _setOperatingMode = setOperatingMode,
@@ -261,11 +264,31 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     ClimateHeatingTempChanged event,
     Emitter<ClimateControlState> emit,
   ) async {
+    final previousTemp = state.deviceFullState?.heatingTemperature;
+
+    // Optimistic update - сразу обновляем UI
+    if (state.deviceFullState != null) {
+      emit(state.copyWith(
+        deviceFullState: state.deviceFullState!.copyWith(
+          heatingTemperature: event.temperature,
+        ),
+      ));
+    }
+
     try {
       await _setTemperature(SetTemperatureParams(temperature: event.temperature.toDouble()));
-      // TODO: Когда бэкенд поддержит отдельные температуры, использовать отдельный API
     } catch (e) {
-      emit(state.copyWith(errorMessage: 'Heating temperature error: $e'));
+      // Откат при ошибке
+      if (state.deviceFullState != null && previousTemp != null) {
+        emit(state.copyWith(
+          deviceFullState: state.deviceFullState!.copyWith(
+            heatingTemperature: previousTemp,
+          ),
+          errorMessage: 'Heating temperature error: $e',
+        ));
+      } else {
+        emit(state.copyWith(errorMessage: 'Heating temperature error: $e'));
+      }
     }
   }
 
@@ -274,11 +297,31 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     ClimateCoolingTempChanged event,
     Emitter<ClimateControlState> emit,
   ) async {
+    final previousTemp = state.deviceFullState?.coolingTemperature;
+
+    // Optimistic update - сразу обновляем UI
+    if (state.deviceFullState != null) {
+      emit(state.copyWith(
+        deviceFullState: state.deviceFullState!.copyWith(
+          coolingTemperature: event.temperature,
+        ),
+      ));
+    }
+
     try {
-      await _setTemperature(SetTemperatureParams(temperature: event.temperature.toDouble()));
-      // TODO: Когда бэкенд поддержит отдельные температуры, использовать отдельный API
+      await _setCoolingTemperature(SetCoolingTemperatureParams(temperature: event.temperature));
     } catch (e) {
-      emit(state.copyWith(errorMessage: 'Cooling temperature error: $e'));
+      // Откат при ошибке
+      if (state.deviceFullState != null && previousTemp != null) {
+        emit(state.copyWith(
+          deviceFullState: state.deviceFullState!.copyWith(
+            coolingTemperature: previousTemp,
+          ),
+          errorMessage: 'Cooling temperature error: $e',
+        ));
+      } else {
+        emit(state.copyWith(errorMessage: 'Cooling temperature error: $e'));
+      }
     }
   }
 
