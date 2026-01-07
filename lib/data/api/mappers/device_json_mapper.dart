@@ -252,9 +252,15 @@ class DeviceJsonMapper {
 
   /// JSON → SensorHistory entity
   static SensorHistory sensorHistoryFromJson(Map<String, dynamic> json) {
+    // Безопасный парсинг timestamp с fallback на текущее время
+    final timestampStr = json['timestamp'] as String?;
+    final timestamp = timestampStr != null
+        ? DateTime.tryParse(timestampStr) ?? DateTime.now()
+        : DateTime.now();
+
     return SensorHistory(
       id: json['id'] as String? ?? '',
-      timestamp: DateTime.parse(json['timestamp'] as String),
+      timestamp: timestamp,
       supplyTemperature: (json['supplyTemperature'] as num?)?.toDouble(),
       roomTemperature: (json['roomTemperature'] as num?)?.toDouble(),
       outdoorTemperature: (json['outdoorTemperature'] as num?)?.toDouble(),

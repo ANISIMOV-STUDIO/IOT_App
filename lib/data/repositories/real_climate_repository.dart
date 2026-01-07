@@ -51,18 +51,28 @@ class RealClimateRepository implements ClimateRepository {
       await _signalR?.connect();
 
       // Сохранить subscription для отмены при dispose
-      _deviceUpdatesSubscription = _signalR?.deviceUpdates.listen((deviceData) {
-        // Snapshot переменной для избежания race condition
-        final selectedId = _selectedDeviceId;
+      _deviceUpdatesSubscription = _signalR?.deviceUpdates.listen(
+        (deviceData) {
+          // Snapshot переменной для избежания race condition
+          final selectedId = _selectedDeviceId;
 
-        // Парсинг данных устройства
-        final state = DeviceJsonMapper.climateStateFromJson(deviceData);
+          // Парсинг данных устройства
+          final state = DeviceJsonMapper.climateStateFromJson(deviceData);
 
-        // Обновить stream только для выбранного устройства
-        if (deviceData['id'] == selectedId) {
-          _climateController.add(state);
-        }
-      });
+          // Обновить stream только для выбранного устройства
+          if (deviceData['id'] == selectedId) {
+            _climateController.add(state);
+          }
+        },
+        onError: (error) {
+          // Логируем ошибку, но не прерываем стрим
+          developer.log(
+            'SignalR device updates error: $error',
+            name: 'ClimateRepository',
+            error: error,
+          );
+        },
+      );
     } catch (e) {
       // Продолжить без real-time обновлений
       // Будет использоваться polling или ручное обновление
