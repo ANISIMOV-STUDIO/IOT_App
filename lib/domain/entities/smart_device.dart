@@ -69,5 +69,5 @@ class SmartDevice extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, name, type, isOn, roomId, powerConsumption, activeTime, lastUpdated];
+  List<Object?> get props => [id, name, type, isOn, roomId, powerConsumption, activeTime, lastUpdated, metadata];
 }
