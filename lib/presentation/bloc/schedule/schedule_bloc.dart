@@ -81,20 +81,32 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     ScheduleEntryAdded event,
     Emitter<ScheduleState> emit,
   ) async {
-    emit(state.copyWith(isSubmitting: true));
+    final previousEntries = List<ScheduleEntry>.from(state.entries);
+
+    // Optimistic update - сразу добавляем в UI
+    emit(state.copyWith(
+      isSubmitting: true,
+      entries: [...state.entries, event.entry],
+    ));
 
     try {
       final newEntry = await _repository.addEntry(event.entry);
 
-      // Добавляем в локальный список
-      final updatedEntries = [...state.entries, newEntry];
+      // Заменяем временную запись на реальную с сервера
+      final updatedEntries = state.entries.map((e) {
+        if (e.id == event.entry.id) return newEntry;
+        return e;
+      }).toList();
+
       emit(state.copyWith(
         isSubmitting: false,
         entries: updatedEntries,
       ));
     } catch (e) {
+      // Откат при ошибке
       emit(state.copyWith(
         isSubmitting: false,
+        entries: previousEntries,
         errorMessage: _getErrorMessage(e),
       ));
     }
@@ -105,12 +117,23 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     ScheduleEntryUpdated event,
     Emitter<ScheduleState> emit,
   ) async {
-    emit(state.copyWith(isSubmitting: true));
+    final previousEntries = List<ScheduleEntry>.from(state.entries);
+
+    // Optimistic update - сразу обновляем в UI
+    final optimisticEntries = state.entries.map((e) {
+      if (e.id == event.entry.id) return event.entry;
+      return e;
+    }).toList();
+
+    emit(state.copyWith(
+      isSubmitting: true,
+      entries: optimisticEntries,
+    ));
 
     try {
       final updatedEntry = await _repository.updateEntry(event.entry);
 
-      // Обновляем в локальном списке
+      // Обновляем с данными с сервера
       final updatedEntries = state.entries.map((e) {
         if (e.id == updatedEntry.id) return updatedEntry;
         return e;
@@ -121,8 +144,10 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
         entries: updatedEntries,
       ));
     } catch (e) {
+      // Откат при ошибке
       emit(state.copyWith(
         isSubmitting: false,
+        entries: previousEntries,
         errorMessage: _getErrorMessage(e),
       ));
     }
@@ -133,23 +158,27 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     ScheduleEntryDeleted event,
     Emitter<ScheduleState> emit,
   ) async {
-    emit(state.copyWith(isSubmitting: true));
+    final previousEntries = List<ScheduleEntry>.from(state.entries);
+
+    // Optimistic update - сразу удаляем из UI
+    final optimisticEntries = state.entries
+        .where((e) => e.id != event.entryId)
+        .toList();
+
+    emit(state.copyWith(
+      isSubmitting: true,
+      entries: optimisticEntries,
+    ));
 
     try {
       await _repository.deleteEntry(event.entryId);
 
-      // Удаляем из локального списка
-      final updatedEntries = state.entries
-          .where((e) => e.id != event.entryId)
-          .toList();
-
-      emit(state.copyWith(
-        isSubmitting: false,
-        entries: updatedEntries,
-      ));
+      emit(state.copyWith(isSubmitting: false));
     } catch (e) {
+      // Откат при ошибке
       emit(state.copyWith(
         isSubmitting: false,
+        entries: previousEntries,
         errorMessage: _getErrorMessage(e),
       ));
     }
@@ -160,13 +189,34 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     ScheduleEntryToggled event,
     Emitter<ScheduleState> emit,
   ) async {
+    final previousEntries = List<ScheduleEntry>.from(state.entries);
+
+    // Optimistic update - сразу переключаем в UI
+    final optimisticEntries = state.entries.map((e) {
+      if (e.id == event.entryId) {
+        return ScheduleEntry(
+          id: e.id,
+          deviceId: e.deviceId,
+          day: e.day,
+          mode: e.mode,
+          timeRange: e.timeRange,
+          tempDay: e.tempDay,
+          tempNight: e.tempNight,
+          isActive: event.isActive,
+        );
+      }
+      return e;
+    }).toList();
+
+    emit(state.copyWith(entries: optimisticEntries));
+
     try {
       final toggledEntry = await _repository.toggleEntry(
         event.entryId,
         event.isActive,
       );
 
-      // Обновляем в локальном списке
+      // Обновляем с данными с сервера
       final updatedEntries = state.entries.map((e) {
         if (e.id == toggledEntry.id) return toggledEntry;
         return e;
@@ -174,7 +224,11 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
       emit(state.copyWith(entries: updatedEntries));
     } catch (e) {
-      emit(state.copyWith(errorMessage: _getErrorMessage(e)));
+      // Откат при ошибке
+      emit(state.copyWith(
+        entries: previousEntries,
+        errorMessage: _getErrorMessage(e),
+      ));
     }
   }
 

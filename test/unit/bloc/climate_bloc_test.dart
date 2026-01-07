@@ -301,7 +301,7 @@ void main() {
       );
 
       blocTest<ClimateBloc, ClimateControlState>(
-        'эмитит ошибку при неудачной установке температуры',
+        'эмитит ошибку и откатывает изменения при неудачной установке температуры',
         build: () {
           when(() => mockSetTemperature(any()))
               .thenThrow(Exception('Invalid value'));
@@ -313,7 +313,12 @@ void main() {
         ),
         act: (bloc) => bloc.add(const ClimateTemperatureChanged(100.0)),
         expect: () => [
+          // Optimistic update - сразу обновляем температуру
           isA<ClimateControlState>()
+              .having((s) => s.climate?.targetTemperature, 'targetTemperature', 100.0),
+          // Откат при ошибке - возвращаем исходное значение
+          isA<ClimateControlState>()
+              .having((s) => s.climate?.targetTemperature, 'targetTemperature', 23.0)
               .having((s) => s.errorMessage, 'errorMessage', contains('Temperature setting error')),
         ],
       );

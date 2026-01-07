@@ -121,50 +121,11 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     NotificationsMarkAsReadRequested event,
     Emitter<NotificationsState> emit,
   ) async {
-    try {
-      await _markNotificationAsRead(
-        MarkNotificationAsReadParams(notificationId: event.notificationId),
-      );
+    final previousNotifications = List<UnitNotification>.from(state.notifications);
 
-      // Обновляем локальный список
-      final updatedNotifications = state.notifications.map((n) {
-        if (n.id == event.notificationId) {
-          return UnitNotification(
-            id: n.id,
-            deviceId: n.deviceId,
-            title: n.title,
-            message: n.message,
-            type: n.type,
-            timestamp: n.timestamp,
-            isRead: true,
-          );
-        }
-        return n;
-      }).toList();
-
-      emit(state.copyWith(notifications: updatedNotifications));
-    } catch (e) {
-      emit(state.copyWith(errorMessage: 'Mark notification error: $e'));
-    }
-  }
-
-  /// Отметить все уведомления как прочитанные
-  Future<void> _onMarkAllAsReadRequested(
-    NotificationsMarkAllAsReadRequested event,
-    Emitter<NotificationsState> emit,
-  ) async {
-    try {
-      // Отмечаем все непрочитанные
-      for (final n in state.notifications) {
-        if (!n.isRead) {
-          await _markNotificationAsRead(
-            MarkNotificationAsReadParams(notificationId: n.id),
-          );
-        }
-      }
-
-      // Обновляем локальный список
-      final updatedNotifications = state.notifications.map((n) {
+    // Optimistic update - сразу обновляем UI
+    final optimisticNotifications = state.notifications.map((n) {
+      if (n.id == event.notificationId) {
         return UnitNotification(
           id: n.id,
           deviceId: n.deviceId,
@@ -174,11 +135,62 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
           timestamp: n.timestamp,
           isRead: true,
         );
-      }).toList();
+      }
+      return n;
+    }).toList();
 
-      emit(state.copyWith(notifications: updatedNotifications));
+    emit(state.copyWith(notifications: optimisticNotifications));
+
+    try {
+      await _markNotificationAsRead(
+        MarkNotificationAsReadParams(notificationId: event.notificationId),
+      );
     } catch (e) {
-      emit(state.copyWith(errorMessage: 'Mark all notifications error: $e'));
+      // Откат при ошибке
+      emit(state.copyWith(
+        notifications: previousNotifications,
+        errorMessage: 'Mark notification error: $e',
+      ));
+    }
+  }
+
+  /// Отметить все уведомления как прочитанные
+  Future<void> _onMarkAllAsReadRequested(
+    NotificationsMarkAllAsReadRequested event,
+    Emitter<NotificationsState> emit,
+  ) async {
+    final previousNotifications = List<UnitNotification>.from(state.notifications);
+
+    // Optimistic update - сразу обновляем UI
+    final optimisticNotifications = state.notifications.map((n) {
+      return UnitNotification(
+        id: n.id,
+        deviceId: n.deviceId,
+        title: n.title,
+        message: n.message,
+        type: n.type,
+        timestamp: n.timestamp,
+        isRead: true,
+      );
+    }).toList();
+
+    emit(state.copyWith(notifications: optimisticNotifications));
+
+    try {
+      // Отмечаем все непрочитанные на сервере
+      for (final n in previousNotifications) {
+        if (!n.isRead) {
+          await _markNotificationAsRead(
+            MarkNotificationAsReadParams(notificationId: n.id),
+          );
+        }
+      }
+    } catch (e) {
+      // Откат при ошибке
+      emit(state.copyWith(
+        notifications: previousNotifications,
+        errorMessage: 'Mark all notifications error: $e',
+      ));
     }
   }
 
@@ -187,19 +199,25 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     NotificationsDismissRequested event,
     Emitter<NotificationsState> emit,
   ) async {
+    final previousNotifications = List<UnitNotification>.from(state.notifications);
+
+    // Optimistic update - сразу удаляем из UI
+    final optimisticNotifications = state.notifications
+        .where((n) => n.id != event.notificationId)
+        .toList();
+
+    emit(state.copyWith(notifications: optimisticNotifications));
+
     try {
       await _dismissNotification(
         DismissNotificationParams(notificationId: event.notificationId),
       );
-
-      // Удаляем из локального списка
-      final updatedNotifications = state.notifications
-          .where((n) => n.id != event.notificationId)
-          .toList();
-
-      emit(state.copyWith(notifications: updatedNotifications));
     } catch (e) {
-      emit(state.copyWith(errorMessage: 'Delete notification error: $e'));
+      // Откат при ошибке
+      emit(state.copyWith(
+        notifications: previousNotifications,
+        errorMessage: 'Delete notification error: $e',
+      ));
     }
   }
 

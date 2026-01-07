@@ -261,7 +261,7 @@ void main() {
     );
 
     blocTest<ScheduleBloc, ScheduleState>(
-      'эмитит ошибку при неуспешном переключении',
+      'эмитит ошибку и откатывает изменения при неуспешном переключении',
       seed: () => ScheduleState(
         status: ScheduleStatus.success,
         entries: [TestData.testScheduleEntryActive],
@@ -279,7 +279,15 @@ void main() {
         isActive: false,
       )),
       expect: () => [
+        // Optimistic update - сразу переключаем
+        isA<ScheduleState>().having(
+          (s) => s.entries.first.isActive,
+          'isActive',
+          false,
+        ),
+        // Откат при ошибке - возвращаем исходное состояние
         isA<ScheduleState>()
+            .having((s) => s.entries.first.isActive, 'isActive', true)
             .having((s) => s.errorMessage, 'errorMessage', 'Ошибка переключения'),
       ],
     );

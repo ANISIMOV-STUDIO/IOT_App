@@ -252,10 +252,27 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     ClimateTemperatureChanged event,
     Emitter<ClimateControlState> emit,
   ) async {
+    final previousTemp = state.climate?.targetTemperature;
+
+    // Optimistic update - сразу обновляем UI
+    if (state.climate != null) {
+      emit(state.copyWith(
+        climate: state.climate!.copyWith(targetTemperature: event.temperature),
+      ));
+    }
+
     try {
       await _setTemperature(SetTemperatureParams(temperature: event.temperature));
     } catch (e) {
-      emit(state.copyWith(errorMessage: 'Temperature setting error: $e'));
+      // Откат при ошибке
+      if (state.climate != null && previousTemp != null) {
+        emit(state.copyWith(
+          climate: state.climate!.copyWith(targetTemperature: previousTemp),
+          errorMessage: 'Temperature setting error: $e',
+        ));
+      } else {
+        emit(state.copyWith(errorMessage: 'Temperature setting error: $e'));
+      }
     }
   }
 
@@ -330,10 +347,27 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     ClimateHumidityChanged event,
     Emitter<ClimateControlState> emit,
   ) async {
+    final previousHumidity = state.climate?.targetHumidity;
+
+    // Optimistic update - сразу обновляем UI
+    if (state.climate != null) {
+      emit(state.copyWith(
+        climate: state.climate!.copyWith(targetHumidity: event.humidity),
+      ));
+    }
+
     try {
       await _setHumidity(SetHumidityParams(humidity: event.humidity));
     } catch (e) {
-      emit(state.copyWith(errorMessage: 'Humidity setting error: $e'));
+      // Откат при ошибке
+      if (state.climate != null && previousHumidity != null) {
+        emit(state.copyWith(
+          climate: state.climate!.copyWith(targetHumidity: previousHumidity),
+          errorMessage: 'Humidity setting error: $e',
+        ));
+      } else {
+        emit(state.copyWith(errorMessage: 'Humidity setting error: $e'));
+      }
     }
   }
 
@@ -342,10 +376,27 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     ClimateModeChanged event,
     Emitter<ClimateControlState> emit,
   ) async {
+    final previousMode = state.climate?.mode;
+
+    // Optimistic update - сразу обновляем UI
+    if (state.climate != null) {
+      emit(state.copyWith(
+        climate: state.climate!.copyWith(mode: event.mode),
+      ));
+    }
+
     try {
       await _setClimateMode(SetClimateModeParams(mode: event.mode));
     } catch (e) {
-      emit(state.copyWith(errorMessage: 'Mode change error: $e'));
+      // Откат при ошибке
+      if (state.climate != null && previousMode != null) {
+        emit(state.copyWith(
+          climate: state.climate!.copyWith(mode: previousMode),
+          errorMessage: 'Mode change error: $e',
+        ));
+      } else {
+        emit(state.copyWith(errorMessage: 'Mode change error: $e'));
+      }
     }
   }
 
@@ -383,10 +434,27 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     ClimatePresetChanged event,
     Emitter<ClimateControlState> emit,
   ) async {
+    final previousPreset = state.climate?.preset;
+
+    // Optimistic update - сразу обновляем UI
+    if (state.climate != null) {
+      emit(state.copyWith(
+        climate: state.climate!.copyWith(preset: event.preset),
+      ));
+    }
+
     try {
       await _setPreset(SetPresetParams(preset: event.preset));
     } catch (e) {
-      emit(state.copyWith(errorMessage: 'Preset change error: $e'));
+      // Откат при ошибке
+      if (state.climate != null && previousPreset != null) {
+        emit(state.copyWith(
+          climate: state.climate!.copyWith(preset: previousPreset),
+          errorMessage: 'Preset change error: $e',
+        ));
+      } else {
+        emit(state.copyWith(errorMessage: 'Preset change error: $e'));
+      }
     }
   }
 

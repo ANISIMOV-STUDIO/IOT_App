@@ -193,7 +193,7 @@ void main() {
       );
 
       blocTest<NotificationsBloc, NotificationsState>(
-        'эмитит ошибку при неудачной отметке',
+        'эмитит ошибку и откатывает изменения при неудачной отметке',
         build: () {
           when(() => mockMarkNotificationAsRead(any()))
               .thenThrow(Exception('Failed'));
@@ -206,7 +206,12 @@ void main() {
         act: (bloc) =>
             bloc.add(const NotificationsMarkAsReadRequested('notif-1')),
         expect: () => [
+          // Optimistic update - сразу помечаем как прочитанное
           isA<NotificationsState>()
+              .having((s) => s.notifications.first.isRead, 'isRead', isTrue),
+          // Откат при ошибке - возвращаем исходное состояние
+          isA<NotificationsState>()
+              .having((s) => s.notifications.first.isRead, 'isRead', isFalse)
               .having((s) => s.errorMessage, 'errorMessage', contains('Mark notification error')),
         ],
       );
@@ -264,7 +269,7 @@ void main() {
       );
 
       blocTest<NotificationsBloc, NotificationsState>(
-        'эмитит ошибку при неудачном удалении',
+        'эмитит ошибку и откатывает изменения при неудачном удалении',
         build: () {
           when(() => mockDismissNotification(any()))
               .thenThrow(Exception('Failed'));
@@ -277,8 +282,15 @@ void main() {
         act: (bloc) =>
             bloc.add(const NotificationsDismissRequested('notif-1')),
         expect: () => [
-          isA<NotificationsState>().having(
-              (s) => s.errorMessage, 'errorMessage', contains('Delete notification error')),
+          // Optimistic update - сразу удаляем
+          NotificationsState(
+            status: NotificationsStatus.success,
+            notifications: [testNotification2],
+          ),
+          // Откат при ошибке - возвращаем удалённое уведомление
+          isA<NotificationsState>()
+              .having((s) => s.notifications.length, 'notifications count', 2)
+              .having((s) => s.errorMessage, 'errorMessage', contains('Delete notification error')),
         ],
       );
     });
