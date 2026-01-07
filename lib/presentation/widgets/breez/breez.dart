@@ -63,6 +63,7 @@ export 'stat_item.dart';
 // РАСПИСАНИЕ И УВЕДОМЛЕНИЯ
 // ═══════════════════════════════════════════════════════════════════════════
 export 'schedule_widget.dart';
+export 'daily_schedule_widget.dart';
 export 'unit_notifications_widget.dart';
 export 'unit_alarms_widget.dart';
 
