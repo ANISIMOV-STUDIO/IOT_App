@@ -23,6 +23,14 @@ class RenameDevice extends UseCaseWithParams<void, RenameDeviceParams> {
 
   @override
   Future<void> call(RenameDeviceParams params) async {
-    await _repository.renameDevice(params.deviceId, params.newName);
+    // Валидация параметров
+    if (params.deviceId.trim().isEmpty) {
+      throw ArgumentError('ID устройства не может быть пустым');
+    }
+    if (params.newName.trim().isEmpty) {
+      throw ArgumentError('Новое имя не может быть пустым');
+    }
+
+    await _repository.renameDevice(params.deviceId, params.newName.trim());
   }
 }

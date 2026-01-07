@@ -20,6 +20,6 @@ class MarkNotificationAsRead
 
   @override
   Future<void> call(MarkNotificationAsReadParams params) async {
-    return _repository.markAsRead(params.notificationId);
+    await _repository.markAsRead(params.notificationId);
   }
 }
