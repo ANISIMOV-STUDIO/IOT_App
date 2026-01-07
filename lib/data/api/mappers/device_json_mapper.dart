@@ -57,13 +57,36 @@ class DeviceJsonMapper {
       supplyAirflow: _parseFanValue(json['supplyFan']),
       exhaustAirflow: _parseFanValue(json['exhaustFan']),
       mode: _stringToClimateMode(json['mode'] as String?),
-      preset: json['preset'] as String? ?? 'auto',
+      // Используем mode как operating mode (basic, intensive, etc.)
+      // Backend возвращает Mode как "Basic", "Intensive" и т.д.
+      preset: _modeToOperatingMode(json['mode'] as String?),
       airQuality: _stringToAirQuality(json['airQuality'] as String?),
       co2Ppm: json['co2'] as int? ?? 400,
       pollutantsAqi: json['pollutantsAqi'] as int? ?? 50,
       isOn: json['power'] as bool? ?? false,
     );
   }
+
+  /// Конвертирует имя режима от бэкенда в snake_case для API
+  /// Backend: "Basic", "Intensive", "MaxPerformance"
+  /// API: "basic", "intensive", "max_performance"
+  static String _modeToOperatingMode(String? mode) {
+    if (mode == null || mode.isEmpty) return 'basic';
+    
+    final lower = mode.toLowerCase();
+    return switch (lower) {
+      'maxperformance' => 'max_performance',
+      'basic' => 'basic',
+      'intensive' => 'intensive',
+      'economy' => 'economy',
+      'kitchen' => 'kitchen',
+      'fireplace' => 'fireplace',
+      'vacation' => 'vacation',
+      'custom' => 'custom',
+      _ => 'basic', // Default to basic for unknown modes
+    };
+  }
+
 
   /// String mode → ClimateMode enum
   static ClimateMode _stringToClimateMode(String? mode) {
