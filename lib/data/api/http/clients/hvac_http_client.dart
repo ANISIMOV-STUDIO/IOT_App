@@ -177,17 +177,86 @@ class HvacHttpClient {
     }
   }
 
-  /// Set heating temperature via PATCH
-  Future<Map<String, dynamic>> setHeatingTemperature(
-      String deviceId, int temperature) async {
-    return updateDevice(deviceId, heatingTemperature: temperature);
+  /// Set heating temperature via mode-settings PATCH
+  /// Requires modeName to specify which mode's settings to update
+  Future<void> setHeatingTemperature(
+    String deviceId, 
+    int temperature, {
+    required String modeName,
+  }) async {
+    final url = '${ApiConfig.hvacApiUrl}/$deviceId/mode-settings';
+    final body = json.encode({
+      'modeName': modeName,
+      'heatingTemperature': temperature,
+    });
+
+    try {
+      ApiLogger.logHttpRequest('PATCH', url, body);
+
+      final token = await _apiClient.getAuthToken();
+      final response = await _apiClient.getHttpClient().patch(
+            Uri.parse(url),
+            headers: {
+              'Content-Type': 'application/json',
+              if (token != null) 'Authorization': 'Bearer $token',
+            },
+            body: body,
+          );
+
+      ApiLogger.logHttpResponse('PATCH', url, response.statusCode, response.body);
+
+      if (response.statusCode != 200 && response.statusCode != 204) {
+        throw HttpErrorHandler.handle(response);
+      }
+    } catch (e) {
+      ApiLogger.logHttpError('PATCH', url, e);
+      if (e is http.ClientException) {
+        throw HttpErrorHandler.handleException(e);
+      }
+      rethrow;
+    }
   }
 
-  /// Set cooling temperature via PATCH
-  Future<Map<String, dynamic>> setCoolingTemperature(
-      String deviceId, int temperature) async {
-    return updateDevice(deviceId, coolingTemperature: temperature);
+  /// Set cooling temperature via mode-settings PATCH
+  /// Requires modeName to specify which mode's settings to update
+  Future<void> setCoolingTemperature(
+    String deviceId, 
+    int temperature, {
+    required String modeName,
+  }) async {
+    final url = '${ApiConfig.hvacApiUrl}/$deviceId/mode-settings';
+    final body = json.encode({
+      'modeName': modeName,
+      'coolingTemperature': temperature,
+    });
+
+    try {
+      ApiLogger.logHttpRequest('PATCH', url, body);
+
+      final token = await _apiClient.getAuthToken();
+      final response = await _apiClient.getHttpClient().patch(
+            Uri.parse(url),
+            headers: {
+              'Content-Type': 'application/json',
+              if (token != null) 'Authorization': 'Bearer $token',
+            },
+            body: body,
+          );
+
+      ApiLogger.logHttpResponse('PATCH', url, response.statusCode, response.body);
+
+      if (response.statusCode != 200 && response.statusCode != 204) {
+        throw HttpErrorHandler.handle(response);
+      }
+    } catch (e) {
+      ApiLogger.logHttpError('PATCH', url, e);
+      if (e is http.ClientException) {
+        throw HttpErrorHandler.handleException(e);
+      }
+      rethrow;
+    }
   }
+
 
   /// Set mode
   Future<Map<String, dynamic>> setMode(String deviceId, String mode) async {

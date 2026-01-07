@@ -197,11 +197,20 @@ class RealClimateRepository implements ClimateRepository {
     String? deviceId,
   }) async {
     final id = deviceId ?? _selectedDeviceId;
+    if (id.isEmpty) {
+      throw StateError('No device selected for heating temperature control');
+    }
 
-    final jsonDevice = await _httpClient.setHeatingTemperature(id, temperature);
-    final state = DeviceJsonMapper.climateStateFromJson(jsonDevice);
-    _climateController.add(state);
-    return state;
+    // Получаем текущее состояние устройства для определения режима
+    final currentState = await getDeviceState(id);
+    final modeName = _normalizeModeName(currentState.preset);
+
+    await _httpClient.setHeatingTemperature(id, temperature, modeName: modeName);
+    
+    // Получаем обновлённое состояние
+    final newState = await getDeviceState(id);
+    _climateController.add(newState);
+    return newState;
   }
 
   @override
@@ -210,12 +219,35 @@ class RealClimateRepository implements ClimateRepository {
     String? deviceId,
   }) async {
     final id = deviceId ?? _selectedDeviceId;
+    if (id.isEmpty) {
+      throw StateError('No device selected for cooling temperature control');
+    }
 
-    final jsonDevice = await _httpClient.setCoolingTemperature(id, temperature);
-    final state = DeviceJsonMapper.climateStateFromJson(jsonDevice);
-    _climateController.add(state);
-    return state;
+    // Получаем текущее состояние устройства для определения режима
+    final currentState = await getDeviceState(id);
+    final modeName = _normalizeModeName(currentState.preset);
+
+    await _httpClient.setCoolingTemperature(id, temperature, modeName: modeName);
+    
+    // Получаем обновлённое состояние
+    final newState = await getDeviceState(id);
+    _climateController.add(newState);
+    return newState;
   }
+
+  /// Нормализует имя режима для backend API
+  /// Backend ожидает snake_case: basic, intensive, economy, max_performance, etc.
+  String _normalizeModeName(String preset) {
+    // Конвертируем PascalCase/camelCase в snake_case если нужно
+    final normalized = preset.toLowerCase();
+    
+    // Специальные случаи
+    return switch (normalized) {
+      'maxperformance' => 'max_performance',
+      _ => normalized,
+    };
+  }
+
 
   @override
   Future<ClimateState> setHumidity(double humidity, {String? deviceId}) async {

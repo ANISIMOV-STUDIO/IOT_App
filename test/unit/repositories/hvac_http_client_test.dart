@@ -220,29 +220,55 @@ void main() {
 
 
   group('HvacHttpClient.setTemperature', () {
-    test('устанавливает температуру через PATCH', () async {
+    test('устанавливает температуру нагрева через mode-settings PATCH', () async {
       // Arrange
-      final responseJson = {
-        'id': 'device-1',
-        'heatingTemperature': 24,
-      };
       when(() => mockHttpClient.patch(
             any(),
             headers: any(named: 'headers'),
             body: any(named: 'body'),
-          )).thenAnswer((_) async => successResponse(responseJson));
+          )).thenAnswer((_) async => http.Response('', 200));
 
       // Act
-      final result = await hvacClient.setHeatingTemperature('device-1', 24);
+      await hvacClient.setHeatingTemperature(
+        'device-1', 
+        24,
+        modeName: 'basic',
+      );
 
-      // Assert
-      expect(result['heatingTemperature'], equals(24));
-
-      // Verify request body uses heatingTemperature
+      // Verify request body uses mode-settings format
       verify(() => mockHttpClient.patch(
             any(),
             headers: any(named: 'headers'),
-            body: json.encode({'heatingTemperature': 24}),
+            body: json.encode({
+              'modeName': 'basic',
+              'heatingTemperature': 24,
+            }),
+          )).called(1);
+    });
+
+    test('устанавливает температуру охлаждения через mode-settings PATCH', () async {
+      // Arrange
+      when(() => mockHttpClient.patch(
+            any(),
+            headers: any(named: 'headers'),
+            body: any(named: 'body'),
+          )).thenAnswer((_) async => http.Response('', 200));
+
+      // Act
+      await hvacClient.setCoolingTemperature(
+        'device-1', 
+        18,
+        modeName: 'economy',
+      );
+
+      // Verify request body
+      verify(() => mockHttpClient.patch(
+            any(),
+            headers: any(named: 'headers'),
+            body: json.encode({
+              'modeName': 'economy',
+              'coolingTemperature': 18,
+            }),
           )).called(1);
     });
 
@@ -256,11 +282,12 @@ void main() {
 
       // Act & Assert
       expect(
-        () => hvacClient.setHeatingTemperature('device-1', 100),
+        () => hvacClient.setHeatingTemperature('device-1', 100, modeName: 'basic'),
         throwsException,
       );
     });
   });
+
   group('HvacHttpClient.setMode', () {
     test('устанавливает режим heating', () async {
       // Arrange
