@@ -241,6 +241,27 @@ class AppLocalizationsRu extends AppLocalizations {
   String get sunday => 'Воскресенье';
 
   @override
+  String get mondayShort => 'Пн';
+
+  @override
+  String get tuesdayShort => 'Вт';
+
+  @override
+  String get wednesdayShort => 'Ср';
+
+  @override
+  String get thursdayShort => 'Чт';
+
+  @override
+  String get fridayShort => 'Пт';
+
+  @override
+  String get saturdayShort => 'Сб';
+
+  @override
+  String get sundayShort => 'Вс';
+
+  @override
   String get save => 'Сохранить';
 
   @override

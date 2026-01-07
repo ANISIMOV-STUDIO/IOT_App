@@ -7,7 +7,7 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../generated/l10n/app_localizations.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/spacing.dart';
-import '../../../../domain/entities/schedule_entry.dart';
+import '../../../widgets/breez/schedule_widget.dart';
 import 'schedule_form_widgets.dart';
 
 /// Диалог добавления/редактирования записи расписания
@@ -60,13 +60,12 @@ class _ScheduleEntryDialogState extends State<ScheduleEntryDialog> {
   void initState() {
     super.initState();
     if (widget.entry != null) {
-      _selectedDay = widget.entry!.day;
-      _selectedMode = widget.entry!.mode;
+      // _selectedDay и _selectedMode инициализируются в didChangeDependencies
+      // когда доступна локализация
       _parseTimeRange(widget.entry!.timeRange);
       _tempDay = widget.entry!.tempDay;
       _tempNight = widget.entry!.tempNight;
       _isActive = widget.entry!.isActive;
-      _initialized = true;
     } else {
       _startTime = const TimeOfDay(hour: 8, minute: 0);
       _endTime = const TimeOfDay(hour: 22, minute: 0);
@@ -79,10 +78,16 @@ class _ScheduleEntryDialogState extends State<ScheduleEntryDialog> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (!_initialized && widget.entry == null) {
+    if (!_initialized) {
       final l10n = AppLocalizations.of(context)!;
-      _selectedDay = _getDays(l10n)[0];
-      _selectedMode = _getModes(l10n)[0];
+      if (widget.entry != null) {
+        // Конвертируем английские названия с бэкенда в локализованные
+        _selectedDay = ScheduleWidget.translateDayName(widget.entry!.day, l10n);
+        _selectedMode = widget.entry!.mode;
+      } else {
+        _selectedDay = _getDays(l10n)[0];
+        _selectedMode = _getModes(l10n)[0];
+      }
       _initialized = true;
     }
   }
@@ -121,10 +126,12 @@ class _ScheduleEntryDialogState extends State<ScheduleEntryDialog> {
   String _getTimeRange() => '${_formatTime(_startTime)} - ${_formatTime(_endTime)}';
 
   void _save() {
+    final l10n = AppLocalizations.of(context)!;
     final entry = ScheduleEntry(
       id: widget.entry?.id ?? DateTime.now().millisecondsSinceEpoch.toString(),
       deviceId: widget.deviceId,
-      day: _selectedDay,
+      // Конвертируем локализованное название дня обратно в английское для API
+      day: ScheduleWidget.dayNameToEnglish(_selectedDay, l10n),
       mode: _selectedMode,
       timeRange: _getTimeRange(),
       tempDay: _tempDay,

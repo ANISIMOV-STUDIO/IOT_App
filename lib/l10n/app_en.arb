@@ -318,6 +318,34 @@
   "@sunday": {
     "description": "Sunday"
   },
+  "mondayShort": "Mon",
+  "@mondayShort": {
+    "description": "Monday short"
+  },
+  "tuesdayShort": "Tue",
+  "@tuesdayShort": {
+    "description": "Tuesday short"
+  },
+  "wednesdayShort": "Wed",
+  "@wednesdayShort": {
+    "description": "Wednesday short"
+  },
+  "thursdayShort": "Thu",
+  "@thursdayShort": {
+    "description": "Thursday short"
+  },
+  "fridayShort": "Fri",
+  "@fridayShort": {
+    "description": "Friday short"
+  },
+  "saturdayShort": "Sat",
+  "@saturdayShort": {
+    "description": "Saturday short"
+  },
+  "sundayShort": "Sun",
+  "@sundayShort": {
+    "description": "Sunday short"
+  },
   "save": "Save",
   "@save": {
     "description": "Save button"

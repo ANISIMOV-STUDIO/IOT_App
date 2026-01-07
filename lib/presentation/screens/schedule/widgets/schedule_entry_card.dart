@@ -7,8 +7,8 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../generated/l10n/app_localizations.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/spacing.dart';
-import '../../../../domain/entities/schedule_entry.dart';
 import '../../../widgets/breez/breez_card.dart';
+import '../../../widgets/breez/schedule_widget.dart';
 
 /// Карточка записи расписания
 class ScheduleEntryCard extends StatelessWidget {
@@ -124,6 +124,7 @@ class _DayBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -134,7 +135,7 @@ class _DayBadge extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadius.button),
       ),
       child: Text(
-        day,
+        ScheduleWidget.translateDayName(day, l10n),
         style: TextStyle(
           fontSize: 13,
           fontWeight: FontWeight.w600,

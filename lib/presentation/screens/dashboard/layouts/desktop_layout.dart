@@ -215,6 +215,14 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                     widget.unit.id,
                     widget.unit.name,
                   ),
+                  onAddEntry: () => context.goToSchedule(
+                    widget.unit.id,
+                    widget.unit.name,
+                  ),
+                  onEntryTap: (entry) => context.goToSchedule(
+                    widget.unit.id,
+                    widget.unit.name,
+                  ),
                 ),
               ),
 

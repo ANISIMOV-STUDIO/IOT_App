@@ -133,6 +133,8 @@ class _MobileLayoutState extends State<MobileLayout>
                 ScheduleWidget(
                   entries: widget.schedule,
                   onSeeAll: widget.onScheduleSeeAll,
+                  onAddEntry: widget.onScheduleSeeAll,
+                  onEntryTap: (_) => widget.onScheduleSeeAll?.call(),
                   compact: true,
                 ),
                 // Alarms

@@ -7,8 +7,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../generated/l10n/app_localizations.dart';
 import '../../../core/utils/snackbar_utils.dart';
-import '../../../domain/entities/schedule_entry.dart';
 import '../../bloc/schedule/schedule_bloc.dart';
+import '../../widgets/breez/schedule_widget.dart';
 import 'widgets/schedule_entry_dialog.dart';
 import 'widgets/schedule_empty_state.dart';
 import 'widgets/schedule_list.dart';
@@ -148,7 +148,7 @@ class ScheduleScreen extends StatelessWidget {
           style: TextStyle(color: colors.text),
         ),
         content: Text(
-          l10n.scheduleDeleteMessage('${entry.day} - ${entry.mode}'),
+          l10n.scheduleDeleteMessage('${ScheduleWidget.translateDayName(entry.day, l10n)} - ${entry.mode}'),
           style: TextStyle(color: colors.textMuted),
         ),
         actions: [

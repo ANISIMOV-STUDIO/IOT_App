@@ -530,6 +530,48 @@ abstract class AppLocalizations {
   /// **'Воскресенье'**
   String get sunday;
 
+  /// Monday short
+  ///
+  /// In ru, this message translates to:
+  /// **'Пн'**
+  String get mondayShort;
+
+  /// Tuesday short
+  ///
+  /// In ru, this message translates to:
+  /// **'Вт'**
+  String get tuesdayShort;
+
+  /// Wednesday short
+  ///
+  /// In ru, this message translates to:
+  /// **'Ср'**
+  String get wednesdayShort;
+
+  /// Thursday short
+  ///
+  /// In ru, this message translates to:
+  /// **'Чт'**
+  String get thursdayShort;
+
+  /// Friday short
+  ///
+  /// In ru, this message translates to:
+  /// **'Пт'**
+  String get fridayShort;
+
+  /// Saturday short
+  ///
+  /// In ru, this message translates to:
+  /// **'Сб'**
+  String get saturdayShort;
+
+  /// Sunday short
+  ///
+  /// In ru, this message translates to:
+  /// **'Вс'**
+  String get sundayShort;
+
   /// Save button
   ///
   /// In ru, this message translates to:

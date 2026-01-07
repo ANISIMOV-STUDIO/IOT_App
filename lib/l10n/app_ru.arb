@@ -318,6 +318,34 @@
   "@sunday": {
     "description": "Sunday"
   },
+  "mondayShort": "Пн",
+  "@mondayShort": {
+    "description": "Monday short"
+  },
+  "tuesdayShort": "Вт",
+  "@tuesdayShort": {
+    "description": "Tuesday short"
+  },
+  "wednesdayShort": "Ср",
+  "@wednesdayShort": {
+    "description": "Wednesday short"
+  },
+  "thursdayShort": "Чт",
+  "@thursdayShort": {
+    "description": "Thursday short"
+  },
+  "fridayShort": "Пт",
+  "@fridayShort": {
+    "description": "Friday short"
+  },
+  "saturdayShort": "Сб",
+  "@saturdayShort": {
+    "description": "Saturday short"
+  },
+  "sundayShort": "Вс",
+  "@sundayShort": {
+    "description": "Sunday short"
+  },
   "save": "Сохранить",
   "@save": {
     "description": "Save button"
