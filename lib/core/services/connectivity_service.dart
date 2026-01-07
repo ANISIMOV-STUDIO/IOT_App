@@ -116,35 +116,33 @@ class ConnectivityService {
 
   /// Проверить доступность сервера
   Future<bool> _checkServerAvailability() async {
+    final client = _httpClient ?? http.Client();
+    final shouldCloseClient = _httpClient == null;
+
     try {
-      final client = _httpClient ?? http.Client();
+      // Пробуем /health endpoint
       final response = await client
           .get(Uri.parse('${ApiConfig.httpUrl}/health'))
           .timeout(_pingTimeout);
-
-      // Если http клиент был создан здесь - закрываем
-      if (_httpClient == null) {
-        client.close();
-      }
 
       return response.statusCode == 200;
     } catch (e) {
       // Попробуем другой endpoint если /health не существует
       try {
-        final client = _httpClient ?? http.Client();
         final response = await client
             .get(Uri.parse(ApiConfig.deviceApiUrl))
             .timeout(_pingTimeout);
-
-        if (_httpClient == null) {
-          client.close();
-        }
 
         // Любой ответ кроме сетевой ошибки - сервер доступен
         return response.statusCode < 500;
       } catch (e) {
         ApiLogger.debug('[Connectivity] Сервер недоступен', e);
         return false;
+      }
+    } finally {
+      // Гарантированно закрываем клиент если создали его здесь
+      if (shouldCloseClient) {
+        client.close();
       }
     }
   }

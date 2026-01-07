@@ -24,6 +24,14 @@ class RegisterDevice extends UseCaseWithParams<HvacDevice, RegisterDeviceParams>
 
   @override
   Future<HvacDevice> call(RegisterDeviceParams params) async {
-    return _repository.registerDevice(params.macAddress, params.name);
+    // Валидация параметров
+    if (params.macAddress.trim().isEmpty) {
+      throw ArgumentError('MAC-адрес не может быть пустым');
+    }
+    if (params.name.trim().isEmpty) {
+      throw ArgumentError('Имя устройства не может быть пустым');
+    }
+
+    return _repository.registerDevice(params.macAddress.trim(), params.name.trim());
   }
 }

@@ -24,6 +24,11 @@ class SetHumidity extends UseCaseWithParams<ClimateState, SetHumidityParams> {
 
   @override
   Future<ClimateState> call(SetHumidityParams params) async {
+    // Валидация диапазона влажности
+    if (params.humidity < 0 || params.humidity > 100) {
+      throw ArgumentError('Влажность должна быть от 0 до 100%');
+    }
+
     return _repository.setHumidity(params.humidity, deviceId: params.deviceId);
   }
 }

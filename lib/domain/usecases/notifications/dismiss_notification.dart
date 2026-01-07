@@ -20,6 +20,6 @@ class DismissNotification
 
   @override
   Future<void> call(DismissNotificationParams params) async {
-    return _repository.dismiss(params.notificationId);
+    await _repository.dismiss(params.notificationId);
   }
 }
