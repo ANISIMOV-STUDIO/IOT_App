@@ -30,13 +30,15 @@ class ScheduleEntryDialog extends StatefulWidget {
 }
 
 class _ScheduleEntryDialogState extends State<ScheduleEntryDialog> {
-  late String _selectedDay;
-  late String _selectedMode;
-  late TimeOfDay _startTime;
-  late TimeOfDay _endTime;
-  late int _tempDay;
-  late int _tempNight;
-  late bool _isActive;
+  // Инициализируются в didChangeDependencies когда доступна локализация
+  String? _selectedDay;
+  String? _selectedMode;
+  // Инициализируются в initState или _parseTimeRange
+  TimeOfDay _startTime = const TimeOfDay(hour: 8, minute: 0);
+  TimeOfDay _endTime = const TimeOfDay(hour: 22, minute: 0);
+  int _tempDay = 22;
+  int _tempNight = 18;
+  bool _isActive = true;
 
   bool _initialized = false;
 
@@ -63,18 +65,12 @@ class _ScheduleEntryDialogState extends State<ScheduleEntryDialog> {
     super.initState();
     if (widget.entry != null) {
       // _selectedDay и _selectedMode инициализируются в didChangeDependencies
-      // когда доступна локализация
       _parseTimeRange(widget.entry!.timeRange);
       _tempDay = widget.entry!.tempDay;
       _tempNight = widget.entry!.tempNight;
       _isActive = widget.entry!.isActive;
-    } else {
-      _startTime = const TimeOfDay(hour: 8, minute: 0);
-      _endTime = const TimeOfDay(hour: 22, minute: 0);
-      _tempDay = 22;
-      _tempNight = 18;
-      _isActive = true;
     }
+    // Остальные значения уже имеют defaults в объявлении
   }
 
   @override
@@ -129,12 +125,16 @@ class _ScheduleEntryDialogState extends State<ScheduleEntryDialog> {
 
   void _save() {
     final l10n = AppLocalizations.of(context)!;
+    // Безопасные значения - к этому моменту didChangeDependencies уже выполнился
+    final day = _selectedDay ?? _getDays(l10n)[0];
+    final mode = _selectedMode ?? _getModes(l10n)[0];
+
     final entry = ScheduleEntry(
       id: widget.entry?.id ?? DateTime.now().millisecondsSinceEpoch.toString(),
       deviceId: widget.deviceId,
       // Конвертируем локализованное название дня обратно в английское для API
-      day: ScheduleWidget.dayNameToEnglish(_selectedDay, l10n),
-      mode: _selectedMode,
+      day: ScheduleWidget.dayNameToEnglish(day, l10n),
+      mode: mode,
       timeRange: _getTimeRange(),
       tempDay: _tempDay,
       tempNight: _tempNight,
@@ -167,6 +167,10 @@ class _ScheduleEntryDialogState extends State<ScheduleEntryDialog> {
     final modes = _getModes(l10n);
     final maxWidth = min(MediaQuery.of(context).size.width - 48, 400.0);
 
+    // Безопасные значения с fallback
+    final selectedDay = _selectedDay ?? days[0];
+    final selectedMode = _selectedMode ?? modes[0];
+
     return Dialog(
       backgroundColor: colors.card,
       shape: RoundedRectangleBorder(
@@ -187,9 +191,9 @@ class _ScheduleEntryDialogState extends State<ScheduleEntryDialog> {
 
             ScheduleDropdown(
               label: l10n.scheduleDayLabel,
-              value: _selectedDay,
+              value: selectedDay,
               items: days,
-              onChanged: (value) => setState(() => _selectedDay = value!),
+              onChanged: (value) => setState(() => _selectedDay = value),
             ),
             const SizedBox(height: AppSpacing.md),
 
@@ -216,9 +220,9 @@ class _ScheduleEntryDialogState extends State<ScheduleEntryDialog> {
 
             ScheduleDropdown(
               label: l10n.scheduleModeLabel,
-              value: _selectedMode,
+              value: selectedMode,
               items: modes,
-              onChanged: (value) => setState(() => _selectedMode = value!),
+              onChanged: (value) => setState(() => _selectedMode = value),
             ),
             const SizedBox(height: AppSpacing.md),
 

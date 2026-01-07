@@ -56,6 +56,10 @@ class AnalyticsScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
                 sliver: SliverToBoxAdapter(
                   child: BlocBuilder<ClimateBloc, ClimateControlState>(
+                    buildWhen: (prev, curr) =>
+                        prev.status != curr.status ||
+                        prev.deviceFullState != curr.deviceFullState ||
+                        prev.climate != curr.climate,
                     builder: (context, state) {
                       if (state.status == ClimateControlStatus.loading) {
                         return const _SensorsSkeletonGrid();
@@ -95,6 +99,9 @@ class AnalyticsScreen extends StatelessWidget {
                 ),
                 sliver: SliverToBoxAdapter(
                   child: BlocBuilder<AnalyticsBloc, AnalyticsState>(
+                    buildWhen: (prev, curr) =>
+                        prev.status != curr.status ||
+                        prev.graphData != curr.graphData,
                     builder: (context, state) {
                       if (state.status == AnalyticsStatus.loading ||
                           state.status == AnalyticsStatus.initial) {

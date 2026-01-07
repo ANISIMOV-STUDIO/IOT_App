@@ -67,10 +67,16 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
         _getDevicePowerUsage(),
       ]);
 
+      // Безопасное извлечение с проверкой типов
+      final energyStats = results[0] is EnergyStats ? results[0] as EnergyStats : null;
+      final powerUsage = results[1] is List<DeviceEnergyUsage>
+          ? results[1] as List<DeviceEnergyUsage>
+          : <DeviceEnergyUsage>[];
+
       emit(state.copyWith(
         status: AnalyticsStatus.success,
-        energyStats: results[0] as EnergyStats,
-        powerUsage: results[1] as List<DeviceEnergyUsage>,
+        energyStats: energyStats,
+        powerUsage: powerUsage,
       ));
 
       // Подписываемся на обновления через Use Case
