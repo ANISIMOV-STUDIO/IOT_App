@@ -27,6 +27,7 @@ class FanSlider extends StatelessWidget {
     return BreezLabeledSlider(
       label: label,
       value: value.toDouble(),
+      min: 20, // Минимальная скорость вентилятора 20%
       color: color,
       icon: icon,
       enabled: onChanged != null,
