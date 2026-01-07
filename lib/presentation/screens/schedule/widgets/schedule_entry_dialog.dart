@@ -1,6 +1,8 @@
 /// Schedule Entry Dialog - Add/Edit schedule entry
 library;
 
+import 'dart:math' show min;
+
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_theme.dart';
@@ -163,6 +165,7 @@ class _ScheduleEntryDialogState extends State<ScheduleEntryDialog> {
     final isEditing = widget.entry != null;
     final days = _getDays(l10n);
     final modes = _getModes(l10n);
+    final maxWidth = min(MediaQuery.of(context).size.width - 48, 400.0);
 
     return Dialog(
       backgroundColor: colors.card,
@@ -170,7 +173,7 @@ class _ScheduleEntryDialogState extends State<ScheduleEntryDialog> {
         borderRadius: BorderRadius.circular(AppRadius.card),
       ),
       child: Container(
-        width: 400,
+        width: maxWidth,
         padding: const EdgeInsets.all(AppSpacing.lg),
         child: Column(
           mainAxisSize: MainAxisSize.min,

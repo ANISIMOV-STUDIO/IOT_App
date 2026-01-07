@@ -1,6 +1,8 @@
 /// Unit Settings Dialog - Dialog for device settings (rename, delete, info)
 library;
 
+import 'dart:math' show min;
+
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../generated/l10n/app_localizations.dart';
@@ -81,6 +83,7 @@ class _UnitSettingsDialogState extends State<UnitSettingsDialog> {
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
+    final maxWidth = min(MediaQuery.of(context).size.width - 48, 400.0);
 
     return Dialog(
       backgroundColor: colors.card,
@@ -89,7 +92,7 @@ class _UnitSettingsDialogState extends State<UnitSettingsDialog> {
         side: BorderSide(color: colors.border),
       ),
       child: Container(
-        width: 400,
+        width: maxWidth,
         padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisSize: MainAxisSize.min,

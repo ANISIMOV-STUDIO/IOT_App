@@ -1,6 +1,8 @@
 /// Profile Dialogs - Dialogs used in profile screen
 library;
 
+import 'dart:math' show min;
+
 import 'package:flutter/material.dart';
 import '../../../core/services/language_service.dart';
 import '../../../core/theme/app_theme.dart';
@@ -123,6 +125,7 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
+    final maxWidth = min(MediaQuery.of(context).size.width - 48, 400.0);
 
     return Dialog(
       backgroundColor: colors.card,
@@ -130,7 +133,7 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
         borderRadius: BorderRadius.circular(AppRadius.card),
       ),
       child: Container(
-        width: 400,
+        width: maxWidth,
         padding: const EdgeInsets.all(AppSpacing.xl),
         child: Form(
           key: _formKey,
@@ -213,6 +216,7 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
+    final maxWidth = min(MediaQuery.of(context).size.width - 48, 400.0);
 
     return Dialog(
       backgroundColor: colors.card,
@@ -220,7 +224,7 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
         borderRadius: BorderRadius.circular(AppRadius.card),
       ),
       child: Container(
-        width: 400,
+        width: maxWidth,
         padding: const EdgeInsets.all(AppSpacing.xl),
         child: Form(
           key: _formKey,

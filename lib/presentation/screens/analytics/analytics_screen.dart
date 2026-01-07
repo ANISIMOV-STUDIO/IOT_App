@@ -61,6 +61,11 @@ class AnalyticsScreen extends StatelessWidget {
                         return const _SensorsSkeletonGrid();
                       }
 
+                      // Обработка ошибок
+                      if (state.status == ClimateControlStatus.failure) {
+                        return _buildErrorState(context, colors, l10n, state.errorMessage);
+                      }
+
                       final fullState = state.deviceFullState;
                       final climate = state.climate;
                       if (fullState == null && climate == null) {
@@ -94,6 +99,11 @@ class AnalyticsScreen extends StatelessWidget {
                       if (state.status == AnalyticsStatus.loading ||
                           state.status == AnalyticsStatus.initial) {
                         return const SkeletonGraph(height: 300);
+                      }
+
+                      // Обработка ошибок
+                      if (state.status == AnalyticsStatus.failure) {
+                        return _buildGraphErrorState(context, colors, l10n, state.errorMessage);
                       }
 
                       return SizedBox(
@@ -255,6 +265,78 @@ class AnalyticsScreen extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildErrorState(BuildContext context, BreezColors colors, AppLocalizations l10n, String? errorMessage) {
+    return BreezCard(
+      padding: const EdgeInsets.all(AppSpacing.xl),
+      child: Center(
+        child: Column(
+          children: [
+            const Icon(
+              Icons.error_outline,
+              size: 48,
+              color: AppColors.critical,
+            ),
+            const SizedBox(height: AppSpacing.md),
+            Text(
+              errorMessage ?? l10n.errorLoadingFailed,
+              style: TextStyle(
+                fontSize: 14,
+                color: colors.textMuted,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: AppSpacing.md),
+            TextButton.icon(
+              onPressed: () {
+                context.read<ClimateBloc>().add(const ClimateSubscriptionRequested());
+              },
+              icon: const Icon(Icons.refresh),
+              label: Text(l10n.retry),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildGraphErrorState(BuildContext context, BreezColors colors, AppLocalizations l10n, String? errorMessage) {
+    return SizedBox(
+      height: 280,
+      child: BreezCard(
+        padding: const EdgeInsets.all(AppSpacing.xl),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.show_chart,
+                size: 48,
+                color: AppColors.critical,
+              ),
+              const SizedBox(height: AppSpacing.md),
+              Text(
+                errorMessage ?? l10n.errorLoadingFailed,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: colors.textMuted,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: AppSpacing.md),
+              TextButton.icon(
+                onPressed: () {
+                  context.read<AnalyticsBloc>().add(const AnalyticsRefreshRequested());
+                },
+                icon: const Icon(Icons.refresh),
+                label: Text(l10n.retry),
+              ),
+            ],
+          ),
         ),
       ),
     );

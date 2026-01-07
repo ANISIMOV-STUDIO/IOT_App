@@ -1,6 +1,8 @@
 /// Add Unit Dialog - Dialog for registering HVAC device by MAC address
 library;
 
+import 'dart:math' show min;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../core/theme/app_theme.dart';
@@ -39,7 +41,6 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
   final _macController = TextEditingController();
   final _nameController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  final bool _isLoading = false;
 
   @override
   void dispose() {
@@ -82,6 +83,9 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
     final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
+    // Адаптивная ширина: максимум 420, но не больше экрана минус отступы
+    final maxWidth = min(MediaQuery.of(context).size.width - 48, 420.0);
+
     return Dialog(
       backgroundColor: colors.card,
       shape: RoundedRectangleBorder(
@@ -89,7 +93,7 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
         side: BorderSide(color: colors.border),
       ),
       child: Container(
-        width: 420,
+        width: maxWidth,
         padding: const EdgeInsets.all(24),
         child: Form(
           key: _formKey,
@@ -278,15 +282,14 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
         // Cancel button
         BreezDialogButton(
           label: l10n.cancelButton,
-          onTap: _isLoading ? null : () => Navigator.of(context).pop(),
+          onTap: () => Navigator.of(context).pop(),
         ),
         const SizedBox(width: 12),
         // Create button
         BreezDialogButton(
           label: l10n.addButton,
           isPrimary: true,
-          isLoading: _isLoading,
-          onTap: _isLoading ? null : _submit,
+          onTap: _submit,
         ),
       ],
     );
