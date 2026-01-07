@@ -156,19 +156,23 @@ class _BreezSliderState extends State<BreezSlider> {
             value: _localValue,
             min: widget.min,
             max: widget.max,
-            onChangeStart: widget.enabled && widget.onChanged != null
+            onChangeStart: widget.enabled
                 ? (v) {
                     setState(() => _isDragging = true);
                     widget.onChangeStart?.call(v);
                   }
                 : null,
-            onChanged: widget.enabled && widget.onChanged != null
+            // Только обновляем визуальное состояние при перетаскивании
+            // callback onChanged вызывается синхронно для smooth UI
+            onChanged: widget.enabled
                 ? (v) {
                     setState(() => _localValue = v);
-                    widget.onChanged!(v);
+                    // Вызываем onChanged если передан (для синхронного UI feedback)
+                    widget.onChanged?.call(v);
                   }
                 : null,
-            onChangeEnd: widget.enabled && widget.onChanged != null
+            // Вызываем onChangeEnd когда пользователь отпустил ползунок
+            onChangeEnd: widget.enabled
                 ? (v) {
                     setState(() => _isDragging = false);
                     widget.onChangeEnd?.call(v);
