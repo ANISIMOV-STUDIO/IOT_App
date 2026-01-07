@@ -84,21 +84,20 @@ class UnitNotificationsWidget extends StatelessWidget {
             child: notifications.isEmpty
                 ? BreezEmptyState.noNotifications(l10n)
                 : Column(
-                    children: notifications.take(3).toList().asMap().entries.map((entry) {
-                      final index = entry.key;
-                      final notification = entry.value;
-                      return Padding(
-                        padding: EdgeInsets.only(bottom: index < 2 ? 8 : 0),
-                        child: BreezListCard.notification(
-                          title: notification.title,
-                          message: notification.message,
-                          type: _mapNotificationType(notification.type),
-                          timeAgo: _formatTimeAgo(notification.timestamp, l10n),
-                          isRead: notification.isRead,
-                          onTap: () => onNotificationTap?.call(notification.id),
+                    children: [
+                      // Без промежуточных списков - прямой for loop
+                      for (var i = 0; i < notifications.length && i < 3; i++) ...[
+                        if (i > 0) const SizedBox(height: 8),
+                        BreezListCard.notification(
+                          title: notifications[i].title,
+                          message: notifications[i].message,
+                          type: _mapNotificationType(notifications[i].type),
+                          timeAgo: _formatTimeAgo(notifications[i].timestamp, l10n),
+                          isRead: notifications[i].isRead,
+                          onTap: () => onNotificationTap?.call(notifications[i].id),
                         ),
-                      );
-                    }).toList(),
+                      ],
+                    ],
                   ),
           ),
 

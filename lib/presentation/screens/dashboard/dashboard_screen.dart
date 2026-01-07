@@ -76,7 +76,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = _themeService.isDark;
+    // Получаем тему из контекста - автоматически обновляется при смене темы
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final width = MediaQuery.sizeOf(context).width;
     final isDesktop = width > 900;
     final authState = context.watch<AuthBloc>().state;
@@ -258,7 +259,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   void _toggleTheme() {
     _themeService.toggleTheme();
-    setState(() {});
+    // setState не нужен - MaterialApp перестроится через ListenableBuilder в main.dart
+    // и Theme.of(context) обновится автоматически
   }
 
   Future<void> _handleLogout() async {

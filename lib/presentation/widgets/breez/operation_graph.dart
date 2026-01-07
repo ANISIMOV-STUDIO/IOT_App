@@ -36,13 +36,20 @@ class OperationGraph extends StatefulWidget {
 
 class _OperationGraphState extends State<OperationGraph> {
   int? _hoveredIndex;
+  _GraphStats? _cachedStats;
+  List<GraphDataPoint>? _lastData;
 
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
-    final stats = _calculateStats();
+    // Кэширование статистики - пересчёт только при изменении данных
+    if (_lastData != widget.data) {
+      _cachedStats = _calculateStats();
+      _lastData = widget.data;
+    }
+    final stats = _cachedStats ?? _calculateStats();
 
     return BreezCard(
       padding: const EdgeInsets.all(AppSpacing.sm),
@@ -89,12 +96,28 @@ class _OperationGraphState extends State<OperationGraph> {
   }
 
   _GraphStats _calculateStats() {
-    final values = widget.data.map((e) => e.value).toList();
+    final data = widget.data;
+    if (data.isEmpty) {
+      return const _GraphStats(current: 0, min: 0, max: 0, avg: 0);
+    }
+
+    // Один проход вместо 4 отдельных reduce
+    double minVal = data.first.value;
+    double maxVal = data.first.value;
+    double sum = 0;
+
+    for (final point in data) {
+      final v = point.value;
+      if (v < minVal) minVal = v;
+      if (v > maxVal) maxVal = v;
+      sum += v;
+    }
+
     return _GraphStats(
-      current: values.isNotEmpty ? values.last : 0.0,
-      min: values.isNotEmpty ? values.reduce(math.min) : 0.0,
-      max: values.isNotEmpty ? values.reduce(math.max) : 0.0,
-      avg: values.isNotEmpty ? values.reduce((a, b) => a + b) / values.length : 0.0,
+      current: data.last.value,
+      min: minVal,
+      max: maxVal,
+      avg: sum / data.length,
     );
   }
 
