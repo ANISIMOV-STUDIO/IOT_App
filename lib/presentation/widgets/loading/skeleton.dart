@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/spacing.dart';
-import 'shimmer.dart';
 
 /// Базовый skeleton box
 ///
@@ -346,6 +345,77 @@ class SkeletonText extends StatelessWidget {
           ),
         );
       }),
+    );
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SHIMMER WIDGET - Встроенный shimmer эффект для skeleton
+// ═══════════════════════════════════════════════════════════════════════════
+
+/// Shimmer эффект для skeleton виджетов
+///
+/// Создаёт анимированный градиент, скользящий по child виджету.
+/// Используется внутри SkeletonBox для создания loading эффекта.
+class Shimmer extends StatefulWidget {
+  final Widget child;
+  final Color baseColor;
+  final Color highlightColor;
+  final Duration duration;
+
+  const Shimmer({
+    super.key,
+    required this.child,
+    required this.baseColor,
+    required this.highlightColor,
+    this.duration = const Duration(milliseconds: 1500),
+  });
+
+  @override
+  State<Shimmer> createState() => _ShimmerState();
+}
+
+class _ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: widget.duration,
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        return ShaderMask(
+          blendMode: BlendMode.srcATop,
+          shaderCallback: (bounds) {
+            return LinearGradient(
+              colors: [
+                widget.baseColor,
+                widget.highlightColor,
+                widget.baseColor,
+              ],
+              stops: const [0.0, 0.5, 1.0],
+              begin: Alignment(-1.0 + 2 * _controller.value, 0.0),
+              end: Alignment(1.0 + 2 * _controller.value, 0.0),
+            ).createShader(bounds);
+          },
+          child: child,
+        );
+      },
+      child: widget.child,
     );
   }
 }

@@ -18,7 +18,6 @@ import '../../bloc/auth/auth_event.dart';
 import '../../bloc/auth/auth_state.dart';
 import '../../widgets/auth/auth_header.dart';
 import '../../widgets/breez/breez.dart';
-import '../../widgets/breez/breez_pin_code_field.dart';
 
 /// Экран восстановления пароля (2 шага)
 class ForgotPasswordScreen extends StatefulWidget {
