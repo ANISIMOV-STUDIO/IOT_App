@@ -906,5 +906,30 @@
   "temperatureSetpoints": "Temperature setpoints",
   "fanSpeed": "Fan speed",
   "status": "Status",
-  "seeAll": "See all"
+  "seeAll": "See all",
+  "outdoorTempDesc": "Outdoor air temperature",
+  "indoorTempDesc": "Indoor air temperature",
+  "supplyTempAfterRecupDesc": "Supply air temperature after heat exchange in recuperator",
+  "supplyTempDesc": "Air temperature at ventilation unit outlet",
+  "co2LevelDesc": "CO2 level in the room. Normal: up to 1000 ppm",
+  "recuperatorEfficiencyDesc": "Heat exchange efficiency in recuperator",
+  "freeCoolingDesc": "Free cooling mode via recuperator (m³/h)",
+  "heaterPerformanceDesc": "Current electric heater power",
+  "coolerStatusDesc": "Air cooler status",
+  "ductPressureDesc": "Air pressure in duct (Pa)",
+  "humidityDesc": "Relative indoor air humidity",
+  "unitPoweredOn": "powered on",
+  "unitPoweredOff": "powered off",
+  "unitSelected": "selected",
+  "devicesList": "Devices list",
+  "segmentSelection": "Segment selection",
+  "noEntriesForDay": "No entries for {day}",
+  "@noEntriesForDay": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "tapToAdd": "Tap to add"
 }

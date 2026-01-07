@@ -4,6 +4,7 @@ library;
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
+import '../../../generated/l10n/app_localizations.dart';
 import 'breez_button.dart';
 
 /// Стилизованный сегментированный контрол в дизайн-системе BREEZ
@@ -49,9 +50,10 @@ class BreezSegmentedControl<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return Semantics(
-      label: semanticLabel ?? 'Выбор сегмента',
+      label: semanticLabel ?? l10n.segmentSelection,
       enabled: enabled,
       child: Container(
         height: height,

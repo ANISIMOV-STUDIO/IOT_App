@@ -1867,6 +1867,114 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Показать всё'**
   String get seeAll;
+
+  /// No description provided for @outdoorTempDesc.
+  ///
+  /// In ru, this message translates to:
+  /// **'Температура воздуха снаружи здания'**
+  String get outdoorTempDesc;
+
+  /// No description provided for @indoorTempDesc.
+  ///
+  /// In ru, this message translates to:
+  /// **'Температура воздуха внутри помещения'**
+  String get indoorTempDesc;
+
+  /// No description provided for @supplyTempAfterRecupDesc.
+  ///
+  /// In ru, this message translates to:
+  /// **'Температура приточного воздуха после теплообмена в рекуператоре'**
+  String get supplyTempAfterRecupDesc;
+
+  /// No description provided for @supplyTempDesc.
+  ///
+  /// In ru, this message translates to:
+  /// **'Температура воздуха на выходе из вентиляционной установки'**
+  String get supplyTempDesc;
+
+  /// No description provided for @co2LevelDesc.
+  ///
+  /// In ru, this message translates to:
+  /// **'Уровень углекислого газа в помещении. Норма: до 1000 ppm'**
+  String get co2LevelDesc;
+
+  /// No description provided for @recuperatorEfficiencyDesc.
+  ///
+  /// In ru, this message translates to:
+  /// **'Эффективность теплообмена в рекуператоре'**
+  String get recuperatorEfficiencyDesc;
+
+  /// No description provided for @freeCoolingDesc.
+  ///
+  /// In ru, this message translates to:
+  /// **'Режим бесплатного охлаждения через рекуператор (м³/ч)'**
+  String get freeCoolingDesc;
+
+  /// No description provided for @heaterPerformanceDesc.
+  ///
+  /// In ru, this message translates to:
+  /// **'Текущая мощность электрического нагревателя'**
+  String get heaterPerformanceDesc;
+
+  /// No description provided for @coolerStatusDesc.
+  ///
+  /// In ru, this message translates to:
+  /// **'Статус работы охладителя воздуха'**
+  String get coolerStatusDesc;
+
+  /// No description provided for @ductPressureDesc.
+  ///
+  /// In ru, this message translates to:
+  /// **'Давление воздуха в воздуховоде (Па)'**
+  String get ductPressureDesc;
+
+  /// No description provided for @humidityDesc.
+  ///
+  /// In ru, this message translates to:
+  /// **'Относительная влажность воздуха в помещении'**
+  String get humidityDesc;
+
+  /// No description provided for @unitPoweredOn.
+  ///
+  /// In ru, this message translates to:
+  /// **'включен'**
+  String get unitPoweredOn;
+
+  /// No description provided for @unitPoweredOff.
+  ///
+  /// In ru, this message translates to:
+  /// **'выключен'**
+  String get unitPoweredOff;
+
+  /// No description provided for @unitSelected.
+  ///
+  /// In ru, this message translates to:
+  /// **'выбран'**
+  String get unitSelected;
+
+  /// No description provided for @devicesList.
+  ///
+  /// In ru, this message translates to:
+  /// **'Список устройств'**
+  String get devicesList;
+
+  /// No description provided for @segmentSelection.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выбор сегмента'**
+  String get segmentSelection;
+
+  /// No description provided for @noEntriesForDay.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нет записей на {day}'**
+  String noEntriesForDay(String day);
+
+  /// No description provided for @tapToAdd.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нажмите, чтобы добавить'**
+  String get tapToAdd;
 }
 
 class _AppLocalizationsDelegate

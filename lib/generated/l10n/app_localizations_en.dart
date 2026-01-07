@@ -950,4 +950,62 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get seeAll => 'See all';
+
+  @override
+  String get outdoorTempDesc => 'Outdoor air temperature';
+
+  @override
+  String get indoorTempDesc => 'Indoor air temperature';
+
+  @override
+  String get supplyTempAfterRecupDesc =>
+      'Supply air temperature after heat exchange in recuperator';
+
+  @override
+  String get supplyTempDesc => 'Air temperature at ventilation unit outlet';
+
+  @override
+  String get co2LevelDesc => 'CO2 level in the room. Normal: up to 1000 ppm';
+
+  @override
+  String get recuperatorEfficiencyDesc =>
+      'Heat exchange efficiency in recuperator';
+
+  @override
+  String get freeCoolingDesc => 'Free cooling mode via recuperator (m³/h)';
+
+  @override
+  String get heaterPerformanceDesc => 'Current electric heater power';
+
+  @override
+  String get coolerStatusDesc => 'Air cooler status';
+
+  @override
+  String get ductPressureDesc => 'Air pressure in duct (Pa)';
+
+  @override
+  String get humidityDesc => 'Relative indoor air humidity';
+
+  @override
+  String get unitPoweredOn => 'powered on';
+
+  @override
+  String get unitPoweredOff => 'powered off';
+
+  @override
+  String get unitSelected => 'selected';
+
+  @override
+  String get devicesList => 'Devices list';
+
+  @override
+  String get segmentSelection => 'Segment selection';
+
+  @override
+  String noEntriesForDay(String day) {
+    return 'No entries for $day';
+  }
+
+  @override
+  String get tapToAdd => 'Tap to add';
 }

@@ -159,7 +159,7 @@ class AnalyticsScreen extends StatelessWidget {
         value: '${unit.outsideTemp}°',
         shortLabel: l10n.outdoor,
         fullLabel: l10n.outdoorTemp,
-        description: 'Температура воздуха снаружи здания',
+        description: l10n.outdoorTempDesc,
         accentColor: AppColors.accent,
       ),
       SensorData(
@@ -167,7 +167,7 @@ class AnalyticsScreen extends StatelessWidget {
         value: '${unit.indoorTemp}°',
         shortLabel: l10n.indoor,
         fullLabel: l10n.indoorTemp,
-        description: 'Температура воздуха внутри помещения',
+        description: l10n.indoorTempDesc,
         accentColor: AppColors.accentGreen,
       ),
       SensorData(
@@ -175,7 +175,7 @@ class AnalyticsScreen extends StatelessWidget {
         value: '${unit.supplyTempAfterRecup}°',
         shortLabel: l10n.afterRecup,
         fullLabel: l10n.supplyTempAfterRecup,
-        description: 'Температура приточного воздуха после теплообмена в рекуператоре',
+        description: l10n.supplyTempAfterRecupDesc,
         accentColor: AppColors.accent,
       ),
       SensorData(
@@ -183,7 +183,7 @@ class AnalyticsScreen extends StatelessWidget {
         value: '${unit.supplyTemp}°',
         shortLabel: l10n.supply,
         fullLabel: l10n.supplyTemp,
-        description: 'Температура воздуха на выходе из вентиляционной установки',
+        description: l10n.supplyTempDesc,
         accentColor: AppColors.accentOrange,
       ),
       SensorData(
@@ -191,7 +191,7 @@ class AnalyticsScreen extends StatelessWidget {
         value: '${unit.co2Level}',
         shortLabel: 'CO₂ ppm',
         fullLabel: l10n.co2Level,
-        description: 'Уровень углекислого газа в помещении. Норма: до 1000 ppm',
+        description: l10n.co2LevelDesc,
         accentColor: AppColors.accentGreen,
       ),
       SensorData(
@@ -199,7 +199,7 @@ class AnalyticsScreen extends StatelessWidget {
         value: '${unit.recuperatorEfficiency}%',
         shortLabel: l10n.efficiency,
         fullLabel: l10n.recuperatorEfficiency,
-        description: 'Эффективность теплообмена в рекуператоре',
+        description: l10n.recuperatorEfficiencyDesc,
         accentColor: AppColors.accent,
       ),
       SensorData(
@@ -207,7 +207,7 @@ class AnalyticsScreen extends StatelessWidget {
         value: '${unit.freeCooling}',
         shortLabel: l10n.freeCool,
         fullLabel: l10n.freeCooling,
-        description: 'Режим бесплатного охлаждения через рекуператор (м³/ч)',
+        description: l10n.freeCoolingDesc,
         accentColor: AppColors.accent,
       ),
       SensorData(
@@ -215,7 +215,7 @@ class AnalyticsScreen extends StatelessWidget {
         value: '${unit.heaterPerformance}%',
         shortLabel: l10n.heater,
         fullLabel: l10n.heaterPerformance,
-        description: 'Текущая мощность электрического нагревателя',
+        description: l10n.heaterPerformanceDesc,
         accentColor: AppColors.accentOrange,
       ),
       SensorData(
@@ -223,7 +223,7 @@ class AnalyticsScreen extends StatelessWidget {
         value: '${unit.coolerStatus}%',
         shortLabel: l10n.cooler,
         fullLabel: l10n.coolerStatus,
-        description: 'Статус работы охладителя воздуха',
+        description: l10n.coolerStatusDesc,
         accentColor: AppColors.accent,
       ),
       SensorData(
@@ -231,7 +231,7 @@ class AnalyticsScreen extends StatelessWidget {
         value: '${unit.ductPressure}',
         shortLabel: l10n.pressure,
         fullLabel: l10n.ductPressure,
-        description: 'Давление воздуха в воздуховоде (Па)',
+        description: l10n.ductPressureDesc,
         accentColor: Colors.grey,
       ),
       SensorData(
@@ -239,7 +239,7 @@ class AnalyticsScreen extends StatelessWidget {
         value: '${unit.humidity}%',
         shortLabel: l10n.humidity,
         fullLabel: l10n.relativeHumidity,
-        description: 'Относительная влажность воздуха в помещении',
+        description: l10n.humidityDesc,
         accentColor: AppColors.accent,
       ),
     ];

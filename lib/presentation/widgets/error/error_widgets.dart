@@ -493,56 +493,7 @@ class EmptyState extends StatelessWidget {
   }
 }
 
-/// Offline Banner
-///
-/// Легкий баннер для отображения статуса оффлайн в верхней части экрана.
-/// Не блокирует UI полностью, но информирует пользователя о проблемах с сетью.
-///
-/// Используется в комбинации с возможностью работы оффлайн (offline-first).
-class OfflineBanner extends StatelessWidget {
-  /// Показывать ли баннер
-  final bool isOffline;
-
-  /// Высота баннера
-  final double height;
-
-  const OfflineBanner({
-    super.key,
-    required this.isOffline,
-    this.height = 32,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    if (!isOffline) return const SizedBox.shrink();
-
-    final l10n = AppLocalizations.of(context)!;
-    return Container(
-      height: height,
-      width: double.infinity,
-      color: AppColors.warning,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(
-            Icons.wifi_off,
-            size: 16,
-            color: Colors.white,
-          ),
-          const SizedBox(width: AppSpacing.xs),
-          Text(
-            l10n.errorNoInternet,
-            style: const TextStyle(
-              fontSize: AppFontSizes.caption,
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+// OfflineBanner удалён - используется версия из common/offline_banner.dart
 
 /// Retry Button
 ///

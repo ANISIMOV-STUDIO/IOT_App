@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../domain/entities/unit_state.dart';
+import '../../../generated/l10n/app_localizations.dart';
 import 'breez_button.dart';
 
 /// Unified unit tab button used across all layouts (mobile, tablet, desktop)
@@ -54,15 +55,16 @@ class UnitTabButton extends StatelessWidget {
     );
   }
 
-  String _buildSemanticLabel() {
-    final status = unit.power ? 'включен' : 'выключен';
-    final selected = isSelected ? ', выбран' : '';
+  String _buildSemanticLabel(AppLocalizations l10n) {
+    final status = unit.power ? l10n.unitPoweredOn : l10n.unitPoweredOff;
+    final selected = isSelected ? ', ${l10n.unitSelected}' : '';
     return '${unit.name}, $status$selected';
   }
 
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return BreezButton(
       onTap: onTap,
@@ -72,13 +74,13 @@ class UnitTabButton extends StatelessWidget {
       hoverColor: isSelected ? AppColors.accentLight : colors.buttonBg,
       showBorder: false,
       enableGlow: isSelected,
-      semanticLabel: semanticLabel ?? _buildSemanticLabel(),
+      semanticLabel: semanticLabel ?? _buildSemanticLabel(l10n),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           // Status indicator with semantic meaning
           Semantics(
-            label: unit.power ? 'Работает' : 'Выключен',
+            label: unit.power ? l10n.statusRunning : l10n.statusStopped,
             child: Container(
               width: 8,
               height: 8,
@@ -126,8 +128,9 @@ class UnitTabsContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
     return Semantics(
-      label: 'Список устройств',
+      label: l10n.devicesList,
       child: Container(
         height: 48,
         padding: const EdgeInsets.all(4),

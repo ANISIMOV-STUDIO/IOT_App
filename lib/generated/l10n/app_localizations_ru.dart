@@ -955,4 +955,66 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get seeAll => 'Показать всё';
+
+  @override
+  String get outdoorTempDesc => 'Температура воздуха снаружи здания';
+
+  @override
+  String get indoorTempDesc => 'Температура воздуха внутри помещения';
+
+  @override
+  String get supplyTempAfterRecupDesc =>
+      'Температура приточного воздуха после теплообмена в рекуператоре';
+
+  @override
+  String get supplyTempDesc =>
+      'Температура воздуха на выходе из вентиляционной установки';
+
+  @override
+  String get co2LevelDesc =>
+      'Уровень углекислого газа в помещении. Норма: до 1000 ppm';
+
+  @override
+  String get recuperatorEfficiencyDesc =>
+      'Эффективность теплообмена в рекуператоре';
+
+  @override
+  String get freeCoolingDesc =>
+      'Режим бесплатного охлаждения через рекуператор (м³/ч)';
+
+  @override
+  String get heaterPerformanceDesc =>
+      'Текущая мощность электрического нагревателя';
+
+  @override
+  String get coolerStatusDesc => 'Статус работы охладителя воздуха';
+
+  @override
+  String get ductPressureDesc => 'Давление воздуха в воздуховоде (Па)';
+
+  @override
+  String get humidityDesc => 'Относительная влажность воздуха в помещении';
+
+  @override
+  String get unitPoweredOn => 'включен';
+
+  @override
+  String get unitPoweredOff => 'выключен';
+
+  @override
+  String get unitSelected => 'выбран';
+
+  @override
+  String get devicesList => 'Список устройств';
+
+  @override
+  String get segmentSelection => 'Выбор сегмента';
+
+  @override
+  String noEntriesForDay(String day) {
+    return 'Нет записей на $day';
+  }
+
+  @override
+  String get tapToAdd => 'Нажмите, чтобы добавить';
 }

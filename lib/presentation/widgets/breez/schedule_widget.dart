@@ -366,7 +366,7 @@ class _EmptyDayState extends StatelessWidget {
             ),
             SizedBox(height: compact ? AppSpacing.xs : AppSpacing.sm),
             Text(
-              'Нет записей на ${ScheduleWidget.translateDayName(day, l10n).toLowerCase()}',
+              l10n.noEntriesForDay(ScheduleWidget.translateDayName(day, l10n).toLowerCase()),
               style: TextStyle(
                 fontSize: compact ? 11 : 12,
                 color: colors.textMuted,
@@ -376,7 +376,7 @@ class _EmptyDayState extends StatelessWidget {
             if (!compact) ...[
               const SizedBox(height: AppSpacing.xxs),
               Text(
-                showAddHint ? 'Нажмите, чтобы добавить' : l10n.addFirstEntry,
+                showAddHint ? l10n.tapToAdd : l10n.addFirstEntry,
                 style: TextStyle(
                   fontSize: 11,
                   color: AppColors.accent.withValues(alpha: 0.8),

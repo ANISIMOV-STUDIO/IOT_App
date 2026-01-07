@@ -906,5 +906,30 @@
   "temperatureSetpoints": "Уставки температуры",
   "fanSpeed": "Скорость вентиляторов",
   "status": "Статус",
-  "seeAll": "Показать всё"
+  "seeAll": "Показать всё",
+  "outdoorTempDesc": "Температура воздуха снаружи здания",
+  "indoorTempDesc": "Температура воздуха внутри помещения",
+  "supplyTempAfterRecupDesc": "Температура приточного воздуха после теплообмена в рекуператоре",
+  "supplyTempDesc": "Температура воздуха на выходе из вентиляционной установки",
+  "co2LevelDesc": "Уровень углекислого газа в помещении. Норма: до 1000 ppm",
+  "recuperatorEfficiencyDesc": "Эффективность теплообмена в рекуператоре",
+  "freeCoolingDesc": "Режим бесплатного охлаждения через рекуператор (м³/ч)",
+  "heaterPerformanceDesc": "Текущая мощность электрического нагревателя",
+  "coolerStatusDesc": "Статус работы охладителя воздуха",
+  "ductPressureDesc": "Давление воздуха в воздуховоде (Па)",
+  "humidityDesc": "Относительная влажность воздуха в помещении",
+  "unitPoweredOn": "включен",
+  "unitPoweredOff": "выключен",
+  "unitSelected": "выбран",
+  "devicesList": "Список устройств",
+  "segmentSelection": "Выбор сегмента",
+  "noEntriesForDay": "Нет записей на {day}",
+  "@noEntriesForDay": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "tapToAdd": "Нажмите, чтобы добавить"
 }
