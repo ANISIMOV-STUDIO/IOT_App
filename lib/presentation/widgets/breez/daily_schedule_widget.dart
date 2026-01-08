@@ -52,62 +52,51 @@ class DailyScheduleWidget extends StatelessWidget {
     final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
+    // Простая структура без Expanded - заполняет доступное пространство
     return BreezCard(
       padding: EdgeInsets.all(compact ? AppSpacing.sm : AppSpacing.md),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: ListView(
+        padding: EdgeInsets.zero,
         children: [
           // Header
           Text(
             l10n.schedule,
             style: TextStyle(
-              fontSize: 16,
+              fontSize: compact ? 14 : 16,
               fontWeight: FontWeight.w700,
               color: colors.text,
             ),
           ),
-          const SizedBox(height: AppSpacing.sm),
+          SizedBox(height: compact ? AppSpacing.xs : AppSpacing.sm),
 
           // Days list
-          Expanded(
-            child: ListView.separated(
-              padding: EdgeInsets.zero,
-              itemCount: _daysOrder.length,
-              separatorBuilder: (_, __) => Divider(
-                height: 1,
-                color: colors.border,
-              ),
-              itemBuilder: (context, index) {
-                final day = _daysOrder[index];
-                final settings = timerSettings?[day] ??
-                    const TimerSettings(
-                      onHour: 8,
-                      onMinute: 0,
-                      offHour: 22,
-                      offMinute: 0,
-                      enabled: false,
-                    );
-
-                return _DayRow(
-                  day: day,
-                  settings: settings,
-                  compact: compact,
-                  onSettingsChanged: onDaySettingsChanged != null
-                      ? (onHour, onMinute, offHour, offMinute, enabled) {
-                          onDaySettingsChanged!(
-                            day,
-                            onHour,
-                            onMinute,
-                            offHour,
-                            offMinute,
-                            enabled,
-                          );
-                        }
-                      : null,
-                );
-              },
+          for (int index = 0; index < _daysOrder.length; index++) ...[
+            if (index > 0) Divider(height: 1, color: colors.border),
+            _DayRow(
+              day: _daysOrder[index],
+              settings: timerSettings?[_daysOrder[index]] ??
+                  const TimerSettings(
+                    onHour: 8,
+                    onMinute: 0,
+                    offHour: 22,
+                    offMinute: 0,
+                    enabled: false,
+                  ),
+              compact: compact,
+              onSettingsChanged: onDaySettingsChanged != null
+                  ? (onHour, onMinute, offHour, offMinute, enabled) {
+                      onDaySettingsChanged!(
+                        _daysOrder[index],
+                        onHour,
+                        onMinute,
+                        offHour,
+                        offMinute,
+                        enabled,
+                      );
+                    }
+                  : null,
             ),
-          ),
+          ],
         ],
       ),
     );
@@ -169,11 +158,11 @@ class _DayRow extends StatelessWidget {
         children: [
           // Day name
           SizedBox(
-            width: 36,
+            width: compact ? 32 : 40,
             child: Text(
               _getDayName(context),
               style: TextStyle(
-                fontSize: compact ? 12 : 14,
+                fontSize: compact ? 11 : 13,
                 fontWeight: FontWeight.w600,
                 color: isEnabled ? colors.text : colors.textMuted,
               ),
@@ -182,8 +171,8 @@ class _DayRow extends StatelessWidget {
 
           // Enable toggle
           SizedBox(
-            width: 40,
-            height: 24,
+            width: compact ? 36 : 44,
+            height: compact ? 20 : 24,
             child: FittedBox(
               fit: BoxFit.contain,
               child: Switch(
@@ -202,215 +191,149 @@ class _DayRow extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(width: AppSpacing.sm),
+          SizedBox(width: compact ? AppSpacing.xs : AppSpacing.sm),
 
-          // On time
-          if (isEnabled) ...[
-            _TimePicker(
-              hour: settings.onHour,
-              minute: settings.onMinute,
-              enabled: onSettingsChanged != null,
-              compact: compact,
-              onChanged: (hour, minute) {
-                onSettingsChanged?.call(
-                  hour,
-                  minute,
-                  settings.offHour,
-                  settings.offMinute,
-                  settings.enabled,
-                );
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs),
-              child: Text(
-                '—',
-                style: TextStyle(
-                  color: colors.textMuted,
-                  fontSize: compact ? 12 : 14,
-                ),
-              ),
-            ),
-            // Off time
-            _TimePicker(
-              hour: settings.offHour,
-              minute: settings.offMinute,
-              enabled: onSettingsChanged != null,
-              compact: compact,
-              onChanged: (hour, minute) {
-                onSettingsChanged?.call(
-                  settings.onHour,
-                  settings.onMinute,
-                  hour,
-                  minute,
-                  settings.enabled,
-                );
-              },
-            ),
-          ] else ...[
-            Text(
-              '—',
-              style: TextStyle(
-                color: colors.textMuted,
-                fontSize: compact ? 12 : 14,
-              ),
-            ),
-          ],
+          // Time range или placeholder
+          Expanded(
+            child: isEnabled
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      _TimeDisplay(
+                        hour: settings.onHour,
+                        minute: settings.onMinute,
+                        compact: compact,
+                        onTap: onSettingsChanged != null
+                            ? () => _showTimePicker(
+                                  context,
+                                  settings.onHour,
+                                  settings.onMinute,
+                                  (hour, minute) {
+                                    onSettingsChanged?.call(
+                                      hour,
+                                      minute,
+                                      settings.offHour,
+                                      settings.offMinute,
+                                      settings.enabled,
+                                    );
+                                  },
+                                )
+                            : null,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: compact ? 4 : AppSpacing.xs,
+                        ),
+                        child: Text(
+                          '—',
+                          style: TextStyle(
+                            color: colors.textMuted,
+                            fontSize: compact ? 11 : 13,
+                          ),
+                        ),
+                      ),
+                      _TimeDisplay(
+                        hour: settings.offHour,
+                        minute: settings.offMinute,
+                        compact: compact,
+                        onTap: onSettingsChanged != null
+                            ? () => _showTimePicker(
+                                  context,
+                                  settings.offHour,
+                                  settings.offMinute,
+                                  (hour, minute) {
+                                    onSettingsChanged?.call(
+                                      settings.onHour,
+                                      settings.onMinute,
+                                      hour,
+                                      minute,
+                                      settings.enabled,
+                                    );
+                                  },
+                                )
+                            : null,
+                      ),
+                    ],
+                  )
+                : Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      '—',
+                      style: TextStyle(
+                        color: colors.textMuted,
+                        fontSize: compact ? 11 : 13,
+                      ),
+                    ),
+                  ),
+          ),
         ],
+      ),
+    );
+  }
+
+  Future<void> _showTimePicker(
+    BuildContext context,
+    int currentHour,
+    int currentMinute,
+    void Function(int hour, int minute) onTimeSelected,
+  ) async {
+    final time = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay(hour: currentHour, minute: currentMinute),
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+          child: child!,
+        );
+      },
+    );
+    if (time != null) {
+      onTimeSelected(time.hour, time.minute);
+    }
+  }
+}
+
+/// Компактное отображение времени с возможностью нажатия
+class _TimeDisplay extends StatelessWidget {
+  final int hour;
+  final int minute;
+  final bool compact;
+  final VoidCallback? onTap;
+
+  const _TimeDisplay({
+    required this.hour,
+    required this.minute,
+    required this.compact,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+    final timeText =
+        '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: compact ? 6 : 8,
+          vertical: compact ? 4 : 6,
+        ),
+        decoration: BoxDecoration(
+          color: AppColors.accent.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Text(
+          timeText,
+          style: TextStyle(
+            fontSize: compact ? 12 : 14,
+            fontWeight: FontWeight.w600,
+            color: colors.text,
+          ),
+        ),
       ),
     );
   }
 }
 
-/// Пикер времени с кнопками +/-
-class _TimePicker extends StatelessWidget {
-  final int hour;
-  final int minute;
-  final bool enabled;
-  final bool compact;
-  final void Function(int hour, int minute)? onChanged;
-
-  const _TimePicker({
-    required this.hour,
-    required this.minute,
-    required this.enabled,
-    required this.compact,
-    this.onChanged,
-  });
-
-  void _incrementHour() {
-    final newHour = (hour + 1) % 24;
-    onChanged?.call(newHour, minute);
-  }
-
-  void _decrementHour() {
-    final newHour = (hour - 1 + 24) % 24;
-    onChanged?.call(newHour, minute);
-  }
-
-  void _incrementMinute() {
-    int newMinute = minute + 5;
-    int newHour = hour;
-    if (newMinute >= 60) {
-      newMinute = 0;
-      newHour = (hour + 1) % 24;
-    }
-    onChanged?.call(newHour, newMinute);
-  }
-
-  void _decrementMinute() {
-    int newMinute = minute - 5;
-    int newHour = hour;
-    if (newMinute < 0) {
-      newMinute = 55;
-      newHour = (hour - 1 + 24) % 24;
-    }
-    onChanged?.call(newHour, newMinute);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
-
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        // Hour controls
-        _TimeControl(
-          value: hour.toString().padLeft(2, '0'),
-          onIncrement: enabled ? _incrementHour : null,
-          onDecrement: enabled ? _decrementHour : null,
-          compact: compact,
-        ),
-        Text(
-          ':',
-          style: TextStyle(
-            fontSize: compact ? 14 : 16,
-            fontWeight: FontWeight.w600,
-            color: colors.text,
-          ),
-        ),
-        // Minute controls
-        _TimeControl(
-          value: minute.toString().padLeft(2, '0'),
-          onIncrement: enabled ? _incrementMinute : null,
-          onDecrement: enabled ? _decrementMinute : null,
-          compact: compact,
-        ),
-      ],
-    );
-  }
-}
-
-/// Контрол для одного значения времени (час или минута)
-class _TimeControl extends StatelessWidget {
-  final String value;
-  final VoidCallback? onIncrement;
-  final VoidCallback? onDecrement;
-  final bool compact;
-
-  const _TimeControl({
-    required this.value,
-    this.onIncrement,
-    this.onDecrement,
-    required this.compact,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
-    final buttonSize = compact ? 20.0 : 24.0;
-    final iconSize = compact ? 14.0 : 16.0;
-
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        // Increment button
-        GestureDetector(
-          onTap: onIncrement,
-          child: Container(
-            width: buttonSize,
-            height: buttonSize,
-            decoration: BoxDecoration(
-              color: AppColors.accent.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: Icon(
-              Icons.keyboard_arrow_up,
-              size: iconSize,
-              color: onIncrement != null ? AppColors.accent : colors.textMuted,
-            ),
-          ),
-        ),
-        const SizedBox(height: 2),
-        // Value
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: compact ? 14 : 16,
-            fontWeight: FontWeight.w600,
-            color: colors.text,
-          ),
-        ),
-        const SizedBox(height: 2),
-        // Decrement button
-        GestureDetector(
-          onTap: onDecrement,
-          child: Container(
-            width: buttonSize,
-            height: buttonSize,
-            decoration: BoxDecoration(
-              color: AppColors.accent.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: Icon(
-              Icons.keyboard_arrow_down,
-              size: iconSize,
-              color: onDecrement != null ? AppColors.accent : colors.textMuted,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
