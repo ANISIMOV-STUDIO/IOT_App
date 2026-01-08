@@ -293,6 +293,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => RenameDevice(sl()));
   sl.registerLazySingleton(() => GetDeviceFullState(sl()));
   sl.registerLazySingleton(() => GetAlarmHistory(sl()));
+  sl.registerLazySingleton(() => WatchDeviceFullState(sl<ClimateRepository>()));
 
   // Climate Use Cases
   sl.registerLazySingleton(() => GetCurrentClimateState(sl()));
@@ -353,6 +354,7 @@ Future<void> init() async {
       setPreset: sl(),
       setAirflow: sl(),
       setScheduleEnabled: sl(),
+      watchDeviceFullState: sl(),
     ),
   );
 

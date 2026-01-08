@@ -39,8 +39,10 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   final SetPreset _setPreset;
   final SetAirflow _setAirflow;
   final SetScheduleEnabled _setScheduleEnabled;
+  final WatchDeviceFullState _watchDeviceFullState;
 
   StreamSubscription<ClimateState>? _climateSubscription;
+  StreamSubscription<DeviceFullState>? _deviceFullStateSubscription;
 
   ClimateBloc({
     required GetCurrentClimateState getCurrentClimateState,
@@ -57,6 +59,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     required SetPreset setPreset,
     required SetAirflow setAirflow,
     required SetScheduleEnabled setScheduleEnabled,
+    required WatchDeviceFullState watchDeviceFullState,
   })  : _getCurrentClimateState = getCurrentClimateState,
         _getDeviceState = getDeviceState,
         _getDeviceFullState = getDeviceFullState,
@@ -71,6 +74,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         _setPreset = setPreset,
         _setAirflow = setAirflow,
         _setScheduleEnabled = setScheduleEnabled,
+        _watchDeviceFullState = watchDeviceFullState,
         super(const ClimateControlState()) {
     // События жизненного цикла
     on<ClimateSubscriptionRequested>(_onSubscriptionRequested);
@@ -169,6 +173,18 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         climate: climate,
         deviceFullState: fullState,
       ));
+
+      // Подписываемся на real-time обновления DeviceFullState (SignalR)
+      await _deviceFullStateSubscription?.cancel();
+      _deviceFullStateSubscription = _watchDeviceFullState(
+        WatchDeviceFullStateParams(deviceId: event.deviceId),
+      ).listen(
+        (fullState) => add(ClimateFullStateLoaded(fullState)),
+        onError: (error) {
+          // Не критично, если SignalR не работает
+          ApiLogger.warning('[ClimateBloc] DeviceFullState stream error', error);
+        },
+      );
     } catch (e) {
       emit(state.copyWith(
         status: ClimateControlStatus.failure,
@@ -575,6 +591,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   @override
   Future<void> close() {
     _climateSubscription?.cancel();
+    _deviceFullStateSubscription?.cancel();
     return super.close();
   }
 }

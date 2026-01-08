@@ -115,6 +115,10 @@ abstract class ClimateRepository
   /// Get full device state including alarms and mode settings
   Future<DeviceFullState> getDeviceFullState(String deviceId);
 
+  /// Watch for real-time updates of device full state
+  /// Returns a stream that emits when device state changes (e.g., from physical remote)
+  Stream<DeviceFullState> watchDeviceFullState(String deviceId);
+
   // ============================================
   // ALARM HISTORY
   // ============================================

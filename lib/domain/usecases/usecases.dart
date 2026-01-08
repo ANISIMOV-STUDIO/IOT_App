@@ -37,6 +37,7 @@ export 'device/rename_device.dart';
 export 'device/get_device_full_state.dart';
 export 'device/get_alarm_history.dart';
 export 'device/watch_hvac_devices.dart';
+export 'device/watch_device_full_state.dart';
 
 // Analytics Use Cases
 export 'analytics/get_today_stats.dart';

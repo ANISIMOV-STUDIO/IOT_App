@@ -406,6 +406,12 @@ class MockClimateRepository implements ClimateRepository {
   }
 
   @override
+  Stream<DeviceFullState> watchDeviceFullState(String deviceId) {
+    // Mock репозиторий не имеет real-time обновлений
+    return const Stream.empty();
+  }
+
+  @override
   Future<List<AlarmHistory>> getAlarmHistory(
     String deviceId, {
     int limit = 100,

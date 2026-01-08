@@ -252,6 +252,12 @@ class CachedClimateRepository implements ClimateRepository {
     return await _inner.getDeviceFullState(deviceId);
   }
 
+  @override
+  Stream<DeviceFullState> watchDeviceFullState(String deviceId) {
+    // Real-time stream — делегируем во inner (SignalR)
+    return _inner.watchDeviceFullState(deviceId);
+  }
+
   // ============================================
   // ALARM HISTORY
   // ============================================
