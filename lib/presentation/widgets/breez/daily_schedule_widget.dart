@@ -53,6 +53,9 @@ class DailyScheduleWidget extends StatefulWidget {
 class _DailyScheduleWidgetState extends State<DailyScheduleWidget> {
   late String _selectedDay;
 
+  // Локальный кэш для optimistic updates
+  final Map<String, TimerSettings> _localSettings = {};
+
   @override
   void initState() {
     super.initState();
@@ -61,8 +64,18 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget> {
     _selectedDay = DailyScheduleWidget.daysOrder[now.weekday - 1];
   }
 
+  @override
+  void didUpdateWidget(DailyScheduleWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // НЕ перезаписываем локальный state при каждом обновлении -
+    // это вызывает откат optimistic updates.
+    // Локальный state синхронизируется только при первичной загрузке.
+  }
+
   TimerSettings _getSettings(String day) {
-    return widget.timerSettings?[day] ??
+    // Сначала проверяем локальный кэш, потом данные от сервера
+    return _localSettings[day] ??
+        widget.timerSettings?[day] ??
         const TimerSettings(
           onHour: 8,
           onMinute: 0,
@@ -70,6 +83,23 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget> {
           offMinute: 0,
           enabled: false,
         );
+  }
+
+  void _updateSettings(String day, TimerSettings newSettings) {
+    // Optimistic update - мгновенно обновляем UI
+    setState(() {
+      _localSettings[day] = newSettings;
+    });
+
+    // Вызываем callback для отправки на сервер
+    widget.onDaySettingsChanged?.call(
+      day,
+      newSettings.onHour,
+      newSettings.onMinute,
+      newSettings.offHour,
+      newSettings.offMinute,
+      newSettings.enabled,
+    );
   }
 
   @override
@@ -97,7 +127,7 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget> {
           // Day tabs
           _DayTabs(
             selectedDay: _selectedDay,
-            timerSettings: widget.timerSettings,
+            timerSettings: _localSettings.isNotEmpty ? _localSettings : (widget.timerSettings ?? {}),
             compact: widget.compact,
             onDaySelected: (day) => setState(() => _selectedDay = day),
           ),
@@ -112,13 +142,15 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget> {
               compact: widget.compact,
               onSettingsChanged: widget.onDaySettingsChanged != null
                   ? (onHour, onMinute, offHour, offMinute, enabled) {
-                      widget.onDaySettingsChanged!(
+                      _updateSettings(
                         _selectedDay,
-                        onHour,
-                        onMinute,
-                        offHour,
-                        offMinute,
-                        enabled,
+                        TimerSettings(
+                          onHour: onHour,
+                          onMinute: onMinute,
+                          offHour: offHour,
+                          offMinute: offMinute,
+                          enabled: enabled,
+                        ),
                       );
                     }
                   : null,
@@ -133,7 +165,7 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget> {
 /// Табы дней недели
 class _DayTabs extends StatelessWidget {
   final String selectedDay;
-  final Map<String, TimerSettings>? timerSettings;
+  final Map<String, TimerSettings> timerSettings;
   final bool compact;
   final ValueChanged<String> onDaySelected;
 
@@ -173,57 +205,59 @@ class _DayTabs extends StatelessWidget {
     return Row(
       children: DailyScheduleWidget.daysOrder.map((day) {
         final isSelected = day == selectedDay;
-        final isEnabled = timerSettings?[day]?.enabled ?? false;
+        final isEnabled = timerSettings[day]?.enabled ?? false;
 
         return Expanded(
-          child: GestureDetector(
-            onTap: () => onDaySelected(day),
-            child: Container(
-              padding: EdgeInsets.symmetric(
-                vertical: compact ? 6 : 8,
-              ),
-              margin: const EdgeInsets.symmetric(horizontal: 2),
-              decoration: BoxDecoration(
-                color: isSelected
-                    ? AppColors.accent.withValues(alpha: 0.15)
-                    : Colors.transparent,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: isSelected
-                      ? AppColors.accent
-                      : isEnabled
-                          ? AppColors.accentGreen.withValues(alpha: 0.5)
-                          : colors.border,
-                  width: isSelected ? 1.5 : 1,
+          child: MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: GestureDetector(
+              onTap: () => onDaySelected(day),
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  vertical: compact ? 6 : 8,
                 ),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    _getShortDayName(day, l10n),
-                    style: TextStyle(
-                      fontSize: compact ? 10 : 11,
-                      fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                      color: isSelected
-                          ? AppColors.accent
-                          : isEnabled
-                              ? colors.text
-                              : colors.textMuted,
-                    ),
+                margin: const EdgeInsets.symmetric(horizontal: 2),
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? AppColors.accent.withValues(alpha: 0.15)
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: isSelected
+                        ? AppColors.accent
+                        : isEnabled
+                            ? AppColors.accentGreen.withValues(alpha: 0.5)
+                            : colors.border,
+                    width: isSelected ? 1.5 : 1,
                   ),
-                  if (isEnabled) ...[
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      _getShortDayName(day, l10n),
+                      style: TextStyle(
+                        fontSize: compact ? 10 : 11,
+                        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                        color: isSelected
+                            ? AppColors.accent
+                            : isEnabled
+                                ? colors.text
+                                : colors.textMuted,
+                      ),
+                    ),
                     const SizedBox(height: 2),
+                    // Всегда показываем контейнер для точки (одинаковая высота)
                     Container(
                       width: 6,
                       height: 6,
-                      decoration: const BoxDecoration(
-                        color: AppColors.accentGreen,
+                      decoration: BoxDecoration(
+                        color: isEnabled ? AppColors.accentGreen : Colors.transparent,
                         shape: BoxShape.circle,
                       ),
                     ),
                   ],
-                ],
+                ),
               ),
             ),
           ),
@@ -462,26 +496,29 @@ class _TimeRow extends StatelessWidget {
             color: colors.textMuted,
           ),
         ),
-        GestureDetector(
-          onTap: onTap,
-          child: Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: compact ? 12 : 16,
-              vertical: compact ? 8 : 10,
-            ),
-            decoration: BoxDecoration(
-              color: AppColors.accent.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(
-                color: AppColors.accent.withValues(alpha: 0.3),
+        MouseRegion(
+          cursor: onTap != null ? SystemMouseCursors.click : SystemMouseCursors.basic,
+          child: GestureDetector(
+            onTap: onTap,
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: compact ? 12 : 16,
+                vertical: compact ? 8 : 10,
               ),
-            ),
-            child: Text(
-              timeText,
-              style: TextStyle(
-                fontSize: compact ? 16 : 20,
-                fontWeight: FontWeight.w700,
-                color: colors.text,
+              decoration: BoxDecoration(
+                color: AppColors.accent.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: AppColors.accent.withValues(alpha: 0.3),
+                ),
+              ),
+              child: Text(
+                timeText,
+                style: TextStyle(
+                  fontSize: compact ? 16 : 20,
+                  fontWeight: FontWeight.w700,
+                  color: colors.text,
+                ),
               ),
             ),
           ),
