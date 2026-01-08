@@ -47,6 +47,7 @@ class DevicesScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: AppSpacing.xs),
                   BlocBuilder<DevicesBloc, DevicesState>(
+                    buildWhen: (prev, curr) => prev.deviceCount != curr.deviceCount,
                     builder: (context, state) {
                       return Text(
                         l10n.devicesCount(state.deviceCount),
@@ -64,6 +65,8 @@ class DevicesScreen extends StatelessWidget {
             // Devices List
             Expanded(
               child: BlocBuilder<DevicesBloc, DevicesState>(
+                buildWhen: (prev, curr) =>
+                    prev.status != curr.status || prev.devices != curr.devices,
                 builder: (context, state) {
                   // Конвертируем DevicesStatus в LoadingStatus
                   LoadingStatus loadingStatus;

@@ -206,6 +206,7 @@ class _RegisterFormState extends State<RegisterForm> {
 
                 // Кнопка регистрации
                 BlocBuilder<AuthBloc, AuthState>(
+                  buildWhen: (prev, curr) => (prev is AuthLoading) != (curr is AuthLoading),
                   builder: (context, state) {
                     final isLoading = state is AuthLoading;
 

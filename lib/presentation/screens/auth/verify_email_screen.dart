@@ -131,6 +131,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
 
                     // Кнопка повторной отправки
                     BlocBuilder<AuthBloc, AuthState>(
+                      buildWhen: (prev, curr) => (prev is AuthLoading) != (curr is AuthLoading),
                       builder: (context, state) {
                         final isLoading = state is AuthLoading;
 

@@ -43,12 +43,17 @@ class RealGraphDataRepository implements GraphDataRepository {
   }) {
     final now = DateTime.now();
     final from = now.subtract(const Duration(days: 7));
+    // getGraphData уже добавляет данные в контроллер (line 35)
+    // Здесь только обрабатываем ошибки
     getGraphData(
       deviceId: deviceId,
       metric: metric,
       from: from,
       to: now,
-    ).then(_graphDataController.add);
+    ).catchError((error) {
+      _graphDataController.addError(error);
+      return <GraphDataPoint>[]; // Возвращаем пустой список для типизации
+    });
     return _graphDataController.stream;
   }
 

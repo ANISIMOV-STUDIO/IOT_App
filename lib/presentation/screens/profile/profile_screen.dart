@@ -73,6 +73,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                   // User Info Card
                   BlocBuilder<AuthBloc, AuthState>(
+                    buildWhen: (prev, curr) =>
+                        prev.runtimeType != curr.runtimeType ||
+                        (prev is AuthAuthenticated &&
+                            curr is AuthAuthenticated &&
+                            (prev.user.firstName != curr.user.firstName ||
+                                prev.user.lastName != curr.user.lastName ||
+                                prev.user.email != curr.user.email)),
                     builder: (context, state) {
                       if (state is AuthAuthenticated) {
                         return _UserCard(

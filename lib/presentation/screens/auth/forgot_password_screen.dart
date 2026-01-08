@@ -223,6 +223,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 const SizedBox(height: AppSpacing.lg),
 
                 BlocBuilder<AuthBloc, AuthState>(
+                  buildWhen: (prev, curr) => (prev is AuthLoading) != (curr is AuthLoading),
                   builder: (context, state) {
                     final isLoading = state is AuthLoading;
                     return BreezButton(
@@ -333,6 +334,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 const SizedBox(height: AppSpacing.lg),
 
                 BlocBuilder<AuthBloc, AuthState>(
+                  buildWhen: (prev, curr) => (prev is AuthLoading) != (curr is AuthLoading),
                   builder: (context, state) {
                     final isLoading = state is AuthLoading;
                     return BreezButton(
@@ -363,6 +365,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
         // Кнопка повторной отправки
         BlocBuilder<AuthBloc, AuthState>(
+          buildWhen: (prev, curr) => (prev is AuthLoading) != (curr is AuthLoading),
           builder: (context, state) {
             final isLoading = state is AuthLoading;
             return BreezTextButton(

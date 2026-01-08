@@ -62,17 +62,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
     super.dispose();
   }
 
-  void _initializeVersionCheck() async {
-    await _versionCheckService.initialize();
-    _versionSubscription = _versionCheckService.onVersionChanged.listen((versionInfo) {
-      if (mounted) {
-        UpdateAvailableDialog.show(
-          context,
-          version: versionInfo.version,
-          changelog: versionInfo.changelog,
-        );
-      }
-    });
+  Future<void> _initializeVersionCheck() async {
+    try {
+      await _versionCheckService.initialize();
+      _versionSubscription = _versionCheckService.onVersionChanged.listen((versionInfo) {
+        if (mounted) {
+          UpdateAvailableDialog.show(
+            context,
+            version: versionInfo.version,
+            changelog: versionInfo.changelog,
+          );
+        }
+      });
+    } catch (e) {
+      // Ошибка инициализации проверки версий не критична
+      debugPrint('Version check initialization failed: $e');
+    }
   }
 
   @override
