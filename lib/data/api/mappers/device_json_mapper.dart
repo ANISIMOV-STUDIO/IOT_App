@@ -234,7 +234,7 @@ class DeviceJsonMapper {
       id: json['id'] as String,
       name: json['name'] as String? ?? 'Unknown Device',
       macAddress: json['macAddress'] as String? ?? '',
-      power: json['power'] as bool? ?? json['running'] as bool? ?? false,
+      power: json['running'] as bool? ?? false,
       mode: _stringToClimateMode(json['mode'] as String?),
       currentTemperature: (json['currentTemp'] as num?)?.toDouble() ?? 20.0,
       targetTemperature: (json['temp'] as num?)?.toDouble() ?? 22.0,
