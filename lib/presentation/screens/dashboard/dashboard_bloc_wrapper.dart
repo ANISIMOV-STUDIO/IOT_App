@@ -100,7 +100,7 @@ class DashboardBlocListeners extends StatelessWidget {
               current.selectedDeviceId != null,
           listener: (context, state) {
             final deviceId = state.selectedDeviceId!;
-            print('🎯 Device selected: $deviceId - dispatching to all BLoCs');
+            debugPrint('🎯 Device selected: $deviceId - dispatching to all BLoCs');
             context.read<ClimateBloc>().add(ClimateDeviceChanged(deviceId));
             context.read<AnalyticsBloc>().add(AnalyticsDeviceChanged(deviceId));
             context.read<NotificationsBloc>().add(NotificationsDeviceChanged(deviceId));
@@ -223,7 +223,7 @@ class DashboardBlocBuilder extends StatelessWidget {
       name: device.name,
       power: () {
         final power = fullState?.power ?? climate?.isOn ?? false;
-        print('🔌 UnitState power: $power (fullState=${fullState?.power}, climate=${climate?.isOn})');
+        debugPrint('🔌 UnitState power: $power (fullState=${fullState?.power}, climate=${climate?.isOn})');
         return power;
       }(),
       temp: climate?.currentTemperature.toInt() ?? 20,
