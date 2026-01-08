@@ -202,6 +202,8 @@ void main() {
               .thenAnswer((_) async => testClimate);
           when(() => mockGetDeviceFullState(any()))
               .thenThrow(Exception('Not implemented')); // Опционально
+          when(() => mockWatchDeviceFullState(any()))
+              .thenAnswer((_) => const Stream.empty()); // Mock для real-time
           return createBloc();
         },
         act: (bloc) => bloc.add(const ClimateDeviceChanged('device-2')),
