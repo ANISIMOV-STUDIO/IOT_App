@@ -225,7 +225,7 @@ class _ControlsSection extends StatelessWidget {
         else
           BreezIconButton(
             icon: Icons.power_settings_new,
-            iconColor: isPowered ? AppColors.accentRed : AppColors.accentGreen,
+            iconColor: isPowered ? AppColors.accentGreen : BreezColors.of(context).textMuted,
             onTap: onPowerToggle,
           ),
       ],
