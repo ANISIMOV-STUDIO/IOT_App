@@ -3,7 +3,7 @@
 /// Маппер для преобразования JSON данных в доменные сущности.
 /// Не содержит Flutter зависимостей - только Dart.
 library;
-import 'package:flutter/foundation.dart';
+
 import '../../../domain/entities/hvac_device.dart';
 import '../../../domain/entities/climate.dart';
 import '../../../domain/entities/alarm_info.dart';
@@ -234,11 +234,7 @@ class DeviceJsonMapper {
       id: json['id'] as String,
       name: json['name'] as String? ?? 'Unknown Device',
       macAddress: json['macAddress'] as String? ?? '',
-      power: () {
-        final running = json['running'] as bool? ?? false;
-        debugPrint('🔋 DeviceFullState power from JSON: running=$running (raw=${json['running']})');
-        return running;
-      }(),
+      power: json['running'] as bool? ?? false,
       mode: _stringToClimateMode(json['mode'] as String?),
       currentTemperature: (json['currentTemp'] as num?)?.toDouble() ?? 20.0,
       targetTemperature: (json['temp'] as num?)?.toDouble() ?? 22.0,

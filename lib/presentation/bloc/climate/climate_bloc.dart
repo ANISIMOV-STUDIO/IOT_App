@@ -9,7 +9,6 @@
 library;
 
 import 'dart:async';
-import 'package:flutter/foundation.dart';
 import 'dart:developer' as developer;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
@@ -140,7 +139,6 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     ClimateDeviceChanged event,
     Emitter<ClimateControlState> emit,
   ) async {
-    debugPrint('📡 ClimateBloc: Loading device ${event.deviceId}');
     emit(state.copyWith(status: ClimateControlStatus.loading));
 
     try {
@@ -148,7 +146,6 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       final climate = await _getDeviceState(
         GetDeviceStateParams(deviceId: event.deviceId),
       );
-      debugPrint('✅ ClimateBloc: Climate loaded for ${event.deviceId}');
 
       // Загружаем полное состояние (с авариями)
       DeviceFullState? fullState;
@@ -156,10 +153,8 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         fullState = await _getDeviceFullState(
           GetDeviceFullStateParams(deviceId: event.deviceId),
         );
-        debugPrint('✅ ClimateBloc: FullState loaded, power=${fullState.power}');
       } catch (e) {
         // Аварии не критичны для отображения основного UI
-        debugPrint('⚠️ ClimateBloc: Failed to load fullState: $e');
         ApiLogger.warning('[ClimateBloc] Не удалось загрузить аварии', e);
       }
 
@@ -168,9 +163,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         climate: climate,
         deviceFullState: fullState,
       ));
-      debugPrint('✅ ClimateBloc: State emitted successfully');
     } catch (e) {
-      debugPrint('❌ ClimateBloc: Error loading device: $e');
       emit(state.copyWith(
         status: ClimateControlStatus.failure,
         errorMessage: 'State loading error: $e',
