@@ -426,7 +426,7 @@ class HvacHttpClient {
     required int offMinute,
     required bool enabled,
   }) async {
-    final url = '${ApiConfig.hvacApiUrl}/$deviceId/timer';
+    final url = '${ApiConfig.hvacApiUrl}/$deviceId/timer-settings';
     final body = json.encode({
       'day': day,
       'onHour': onHour,
@@ -437,10 +437,10 @@ class HvacHttpClient {
     });
 
     try {
-      ApiLogger.logHttpRequest('POST', url, body);
+      ApiLogger.logHttpRequest('PATCH', url, body);
 
       final token = await _apiClient.getAuthToken();
-      final response = await _apiClient.getHttpClient().post(
+      final response = await _apiClient.getHttpClient().patch(
             Uri.parse(url),
             headers: {
               'Content-Type': 'application/json',
@@ -449,13 +449,13 @@ class HvacHttpClient {
             body: body,
           );
 
-      ApiLogger.logHttpResponse('POST', url, response.statusCode, response.body);
+      ApiLogger.logHttpResponse('PATCH', url, response.statusCode, response.body);
 
       if (response.statusCode != 200) {
         throw HttpErrorHandler.handle(response);
       }
     } catch (e) {
-      ApiLogger.logHttpError('POST', url, e);
+      ApiLogger.logHttpError('PATCH', url, e);
       if (e is http.ClientException) {
         throw HttpErrorHandler.handleException(e);
       }

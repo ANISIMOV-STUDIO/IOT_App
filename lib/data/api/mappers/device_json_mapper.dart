@@ -20,7 +20,7 @@ class DeviceJsonMapper {
       brand: json['brand'] as String? ?? 'ZILON',
       deviceType: _stringToDeviceType(json['type'] as String?),
       isOnline: json['isOnline'] as bool? ?? true,
-      isActive: json['power'] as bool? ?? false,
+      isActive: json['running'] as bool? ?? false, // running = фактически работает
     );
   }
 
@@ -234,7 +234,11 @@ class DeviceJsonMapper {
       id: json['id'] as String,
       name: json['name'] as String? ?? 'Unknown Device',
       macAddress: json['macAddress'] as String? ?? '',
-      power: json['power'] as bool? ?? json['running'] as bool? ?? false,
+      power: () {
+        final running = json['running'] as bool? ?? false;
+        print('🔋 DeviceFullState power from JSON: running=$running (raw=${json['running']})');
+        return running;
+      }(),
       mode: _stringToClimateMode(json['mode'] as String?),
       currentTemperature: (json['currentTemp'] as num?)?.toDouble() ?? 20.0,
       targetTemperature: (json['temp'] as num?)?.toDouble() ?? 22.0,
