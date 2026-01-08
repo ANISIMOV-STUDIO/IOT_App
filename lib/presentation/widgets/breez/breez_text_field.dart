@@ -6,6 +6,26 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/spacing.dart';
 
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+/// Константы для BreezTextField
+abstract class _TextFieldConstants {
+  static const double iconSize = 20.0;
+  static const double labelFontSize = 10.0;
+  static const double labelLetterSpacing = 2.0;
+  static const double inputFontSize = 14.0;
+  static const double errorIconSize = 12.0;
+  static const double errorFontSize = 11.0;
+  static const double errorPositionLeft = 12.0;
+  static const double errorPositionBottom = -7.0;
+}
+
+// =============================================================================
+// WIDGET
+// =============================================================================
+
 /// BREEZ styled text field
 class BreezTextField extends StatefulWidget {
   final TextEditingController? controller;
@@ -109,7 +129,7 @@ class _BreezTextFieldState extends State<BreezTextField> {
               ? Icons.visibility_outlined
               : Icons.visibility_off_outlined,
           color: colors.textMuted,
-          size: 20,
+          size: _TextFieldConstants.iconSize,
         ),
         onPressed: () {
           setState(() {
@@ -127,9 +147,9 @@ class _BreezTextFieldState extends State<BreezTextField> {
           Text(
             (widget.label ?? '').toUpperCase(),
             style: TextStyle(
-              fontSize: 10,
+              fontSize: _TextFieldConstants.labelFontSize,
               fontWeight: FontWeight.w900,
-              letterSpacing: 2,
+              letterSpacing: _TextFieldConstants.labelLetterSpacing,
               color: colors.textMuted,
             ),
           ),
@@ -165,13 +185,13 @@ class _BreezTextFieldState extends State<BreezTextField> {
                 textAlignVertical: TextAlignVertical.center,
                 style: TextStyle(
                   color: colors.text,
-                  fontSize: 14,
+                  fontSize: _TextFieldConstants.inputFontSize,
                 ),
                 decoration: InputDecoration(
                   hintText: widget.hint,
                   hintStyle: TextStyle(
                     color: colors.textMuted,
-                    fontSize: 14,
+                    fontSize: _TextFieldConstants.inputFontSize,
                   ),
                   prefixIcon: widget.prefixIcon != null
                       ? Align(
@@ -180,7 +200,7 @@ class _BreezTextFieldState extends State<BreezTextField> {
                           child: Icon(
                             widget.prefixIcon,
                             color: colors.textMuted,
-                            size: 20,
+                            size: _TextFieldConstants.iconSize,
                           ),
                         )
                       : null,
@@ -211,24 +231,24 @@ class _BreezTextFieldState extends State<BreezTextField> {
             ),
             if (_hasError && _errorText != null)
               Positioned(
-                left: 12,
-                bottom: -7,
+                left: _TextFieldConstants.errorPositionLeft,
+                bottom: _TextFieldConstants.errorPositionBottom,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  padding: EdgeInsets.symmetric(horizontal: AppSpacing.xxs),
                   color: colors.card,
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.error_outline,
-                        size: 12,
+                        size: _TextFieldConstants.errorIconSize,
                         color: AppColors.accentRed,
                       ),
-                      const SizedBox(width: 4),
+                      SizedBox(width: AppSpacing.xxs),
                       Text(
                         _errorText ?? '',
-                        style: const TextStyle(
-                          fontSize: 11,
+                        style: TextStyle(
+                          fontSize: _TextFieldConstants.errorFontSize,
                           color: AppColors.accentRed,
                         ),
                       ),

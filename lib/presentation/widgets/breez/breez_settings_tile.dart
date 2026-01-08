@@ -4,7 +4,26 @@ library;
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
+import '../../../core/theme/spacing.dart';
 import 'breez_button.dart';
+
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+/// Константы для BreezSettingsTile
+abstract class _SettingsTileConstants {
+  static const double iconSize = 20.0;
+  static const double titleFontSize = 14.0;
+  static const double subtitleFontSize = 12.0;
+  static const double tileVerticalPadding = 14.0;
+  static const double switchTileVerticalPadding = 10.0;
+  static const double switchActiveTrackAlpha = 0.5;
+}
+
+// =============================================================================
+// WIDGETS
+// =============================================================================
 
 // Note: BreezSettingsButton moved to breez_dialog_button.dart
 
@@ -44,26 +63,29 @@ class BreezSettingsTile extends StatelessWidget {
       showBorder: false,
       enableScale: false,
       borderRadius: AppRadius.button,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+      padding: EdgeInsets.symmetric(
+        horizontal: AppSpacing.sm,
+        vertical: _SettingsTileConstants.tileVerticalPadding,
+      ),
       semanticLabel: semanticLabel ?? title,
       tooltip: tooltip,
       child: Row(
         children: [
-          Icon(icon, size: 20, color: AppColors.accent),
-          const SizedBox(width: 12),
+          Icon(icon, size: _SettingsTileConstants.iconSize, color: AppColors.accent),
+          SizedBox(width: AppSpacing.sm),
           Expanded(
             child: Text(
               title,
               style: TextStyle(
-                fontSize: 14,
+                fontSize: _SettingsTileConstants.titleFontSize,
                 fontWeight: FontWeight.w500,
                 color: colors.text,
               ),
             ),
           ),
           if (trailing != null) trailing!,
-          const SizedBox(width: 4),
-          Icon(Icons.chevron_right, size: 20, color: colors.textMuted),
+          SizedBox(width: AppSpacing.xxs),
+          Icon(Icons.chevron_right, size: _SettingsTileConstants.iconSize, color: colors.textMuted),
         ],
       ),
     );
@@ -104,13 +126,16 @@ class BreezSwitchTile extends StatelessWidget {
       showBorder: false,
       enableScale: false,
       borderRadius: AppRadius.button,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      padding: EdgeInsets.symmetric(
+        horizontal: AppSpacing.sm,
+        vertical: _SettingsTileConstants.switchTileVerticalPadding,
+      ),
       semanticLabel: semanticLabel ?? '$title, ${value ? 'enabled' : 'disabled'}',
       isButton: false, // This is a toggle, not a button
       child: Row(
         children: [
-          Icon(icon, size: 20, color: AppColors.accent),
-          const SizedBox(width: 12),
+          Icon(icon, size: _SettingsTileConstants.iconSize, color: AppColors.accent),
+          SizedBox(width: AppSpacing.sm),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,7 +143,7 @@ class BreezSwitchTile extends StatelessWidget {
                 Text(
                   title,
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: _SettingsTileConstants.titleFontSize,
                     fontWeight: FontWeight.w500,
                     color: colors.text,
                   ),
@@ -127,7 +152,7 @@ class BreezSwitchTile extends StatelessWidget {
                   Text(
                     subtitle!,
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: _SettingsTileConstants.subtitleFontSize,
                       color: colors.textMuted,
                     ),
                   ),
@@ -139,7 +164,9 @@ class BreezSwitchTile extends StatelessWidget {
             child: Switch(
               value: value,
               onChanged: onChanged,
-              activeTrackColor: AppColors.accent.withValues(alpha: 0.5),
+              activeTrackColor: AppColors.accent.withValues(
+                alpha: _SettingsTileConstants.switchActiveTrackAlpha,
+              ),
               activeThumbColor: AppColors.accent,
             ),
           ),
