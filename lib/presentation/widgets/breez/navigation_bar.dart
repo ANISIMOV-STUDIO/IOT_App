@@ -4,6 +4,7 @@ library;
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
+import '../../../core/theme/breakpoints.dart';
 import '../../../core/theme/spacing.dart';
 import 'breez_card.dart';
 
@@ -13,9 +14,6 @@ import 'breez_card.dart';
 
 /// Константы для BreezNavigationBar
 abstract class _NavBarConstants {
-  // Breakpoint для компактного режима
-  static const double compactBreakpoint = 600.0;
-
   // Размеры - компактный режим (mobile)
   static const double barHeightCompact = 72.0;
   static const double buttonSizeCompact = 56.0;
@@ -73,7 +71,7 @@ class BreezNavigationBar extends StatelessWidget {
       builder: (context, constraints) {
         // Адаптивная высота и размер кнопок на основе ширины экрана
         final screenWidth = MediaQuery.sizeOf(context).width;
-        final isCompact = screenWidth < _NavBarConstants.compactBreakpoint;
+        final isCompact = screenWidth < AppBreakpoints.mobile;
         final barHeight = isCompact
             ? _NavBarConstants.barHeightCompact
             : _NavBarConstants.barHeightNormal;

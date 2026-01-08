@@ -3,6 +3,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'breakpoints.dart';
 
 class AppSpacing {
   // Spacing scale (based on 8px grid system) - FIXED values, no scaling
@@ -48,9 +49,9 @@ class AppSpacing {
 
   // Snackbar margins (responsive based on breakpoints)
   static double snackbarMargin(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    if (width < 600) return md; // 16 for mobile
-    if (width < 1024) return lg; // 24 for tablet
+    final width = MediaQuery.sizeOf(context).width;
+    if (width < AppBreakpoints.mobile) return md; // 16 for mobile
+    if (width < AppBreakpoints.tablet) return lg; // 24 for tablet
     return xl; // 32 for desktop
   }
 

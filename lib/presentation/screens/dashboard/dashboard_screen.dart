@@ -12,6 +12,7 @@ import '../../../core/services/theme_service.dart';
 import '../../../core/services/toast_service.dart';
 import '../../../core/services/version_check_service.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/breakpoints.dart';
 import '../../../core/theme/spacing.dart';
 import '../../../domain/entities/unit_state.dart';
 import '../../../generated/l10n/app_localizations.dart';
@@ -85,7 +86,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     // Получаем тему из контекста - автоматически обновляется при смене темы
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final width = MediaQuery.sizeOf(context).width;
-    final isDesktop = width > 900;
+    final isDesktop = context.isDesktop;
     final authState = context.watch<AuthBloc>().state;
     final user = authState is AuthAuthenticated ? authState.user : null;
 
