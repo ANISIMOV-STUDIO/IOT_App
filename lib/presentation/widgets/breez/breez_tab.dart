@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/spacing.dart';
 
 /// Базовый компонент таба
 ///
@@ -143,9 +144,15 @@ class BreezTabGroup extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: List.generate(labels.length, (index) {
+        final isFirst = index == 0;
+        final isLast = index == labels.length - 1;
         return Expanded(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 2),
+            // Отступы только между табами, не по краям
+            padding: EdgeInsets.only(
+              left: isFirst ? 0 : AppSpacing.xxs,
+              right: isLast ? 0 : AppSpacing.xxs,
+            ),
             child: BreezTab(
               label: labels[index],
               isSelected: index == selectedIndex,
