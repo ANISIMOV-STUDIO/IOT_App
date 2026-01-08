@@ -7,6 +7,8 @@ import '../../../core/theme/spacing.dart';
 import '../../../domain/entities/mode_settings.dart';
 import '../../../generated/l10n/app_localizations.dart';
 import 'breez_card.dart';
+import 'breez_tab.dart';
+import 'breez_time_input.dart';
 
 /// Callback для изменения настроек дня
 typedef DaySettingsCallback = void Function(
@@ -51,7 +53,7 @@ class DailyScheduleWidget extends StatefulWidget {
 }
 
 class _DailyScheduleWidgetState extends State<DailyScheduleWidget> {
-  late String _selectedDay;
+  late int _selectedIndex;
 
   // Локальный кэш для optimistic updates
   final Map<String, TimerSettings> _localSettings = {};
@@ -61,19 +63,12 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget> {
     super.initState();
     // По умолчанию выбираем текущий день недели
     final now = DateTime.now();
-    _selectedDay = DailyScheduleWidget.daysOrder[now.weekday - 1];
+    _selectedIndex = now.weekday - 1;
   }
 
-  @override
-  void didUpdateWidget(DailyScheduleWidget oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    // НЕ перезаписываем локальный state при каждом обновлении -
-    // это вызывает откат optimistic updates.
-    // Локальный state синхронизируется только при первичной загрузке.
-  }
+  String get _selectedDay => DailyScheduleWidget.daysOrder[_selectedIndex];
 
   TimerSettings _getSettings(String day) {
-    // Сначала проверяем локальный кэш, потом данные от сервера
     return _localSettings[day] ??
         widget.timerSettings?[day] ??
         const TimerSettings(
@@ -85,13 +80,21 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget> {
         );
   }
 
+  Set<int> get _activeIndices {
+    final settings = _localSettings.isNotEmpty ? _localSettings : (widget.timerSettings ?? {});
+    return DailyScheduleWidget.daysOrder
+        .asMap()
+        .entries
+        .where((e) => settings[e.value]?.enabled ?? false)
+        .map((e) => e.key)
+        .toSet();
+  }
+
   void _updateSettings(String day, TimerSettings newSettings) {
-    // Optimistic update - мгновенно обновляем UI
     setState(() {
       _localSettings[day] = newSettings;
     });
 
-    // Вызываем callback для отправки на сервер
     widget.onDaySettingsChanged?.call(
       day,
       newSettings.onHour,
@@ -100,6 +103,18 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget> {
       newSettings.offMinute,
       newSettings.enabled,
     );
+  }
+
+  List<String> _getDayLabels(AppLocalizations l10n) {
+    return [
+      l10n.mondayShort,
+      l10n.tuesdayShort,
+      l10n.wednesdayShort,
+      l10n.thursdayShort,
+      l10n.fridayShort,
+      l10n.saturdayShort,
+      l10n.sundayShort,
+    ];
   }
 
   @override
@@ -124,12 +139,13 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget> {
           ),
           SizedBox(height: widget.compact ? AppSpacing.xs : AppSpacing.sm),
 
-          // Day tabs
-          _DayTabs(
-            selectedDay: _selectedDay,
-            timerSettings: _localSettings.isNotEmpty ? _localSettings : (widget.timerSettings ?? {}),
+          // Day tabs - используем BreezTabGroup
+          BreezTabGroup(
+            labels: _getDayLabels(l10n),
+            selectedIndex: _selectedIndex,
+            activeIndices: _activeIndices,
             compact: widget.compact,
-            onDaySelected: (day) => setState(() => _selectedDay = day),
+            onTabSelected: (index) => setState(() => _selectedIndex = index),
           ),
 
           SizedBox(height: widget.compact ? AppSpacing.sm : AppSpacing.md),
@@ -158,111 +174,6 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget> {
           ),
         ],
       ),
-    );
-  }
-}
-
-/// Табы дней недели
-class _DayTabs extends StatelessWidget {
-  final String selectedDay;
-  final Map<String, TimerSettings> timerSettings;
-  final bool compact;
-  final ValueChanged<String> onDaySelected;
-
-  const _DayTabs({
-    required this.selectedDay,
-    required this.timerSettings,
-    required this.compact,
-    required this.onDaySelected,
-  });
-
-  String _getShortDayName(String day, AppLocalizations l10n) {
-    switch (day) {
-      case 'monday':
-        return l10n.mondayShort;
-      case 'tuesday':
-        return l10n.tuesdayShort;
-      case 'wednesday':
-        return l10n.wednesdayShort;
-      case 'thursday':
-        return l10n.thursdayShort;
-      case 'friday':
-        return l10n.fridayShort;
-      case 'saturday':
-        return l10n.saturdayShort;
-      case 'sunday':
-        return l10n.sundayShort;
-      default:
-        return day.substring(0, 2);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
-    final l10n = AppLocalizations.of(context)!;
-
-    return Row(
-      children: DailyScheduleWidget.daysOrder.map((day) {
-        final isSelected = day == selectedDay;
-        final isEnabled = timerSettings[day]?.enabled ?? false;
-
-        return Expanded(
-          child: MouseRegion(
-            cursor: SystemMouseCursors.click,
-            child: GestureDetector(
-              onTap: () => onDaySelected(day),
-              child: Container(
-                padding: EdgeInsets.symmetric(
-                  vertical: compact ? 6 : 8,
-                ),
-                margin: const EdgeInsets.symmetric(horizontal: 2),
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? AppColors.accent.withValues(alpha: 0.15)
-                      : Colors.transparent,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color: isSelected
-                        ? AppColors.accent
-                        : isEnabled
-                            ? AppColors.accentGreen.withValues(alpha: 0.5)
-                            : colors.border,
-                    width: isSelected ? 1.5 : 1,
-                  ),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      _getShortDayName(day, l10n),
-                      style: TextStyle(
-                        fontSize: compact ? 10 : 11,
-                        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                        color: isSelected
-                            ? AppColors.accent
-                            : isEnabled
-                                ? colors.text
-                                : colors.textMuted,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    // Всегда показываем контейнер для точки (одинаковая высота)
-                    Container(
-                      width: 6,
-                      height: 6,
-                      decoration: BoxDecoration(
-                        color: isEnabled ? AppColors.accentGreen : Colors.transparent,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
-      }).toList(),
     );
   }
 }
@@ -340,22 +251,25 @@ class _DaySettings extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 8),
-                SizedBox(
-                  height: compact ? 24 : 28,
-                  child: FittedBox(
-                    fit: BoxFit.contain,
-                    child: Switch(
-                      value: isEnabled,
-                      onChanged: onSettingsChanged != null
-                          ? (v) => onSettingsChanged!(
-                                settings.onHour,
-                                settings.onMinute,
-                                settings.offHour,
-                                settings.offMinute,
-                                v,
-                              )
-                          : null,
-                      activeTrackColor: AppColors.accent,
+                MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: SizedBox(
+                    height: compact ? 24 : 28,
+                    child: FittedBox(
+                      fit: BoxFit.contain,
+                      child: Switch(
+                        value: isEnabled,
+                        onChanged: onSettingsChanged != null
+                            ? (v) => onSettingsChanged!(
+                                  settings.onHour,
+                                  settings.onMinute,
+                                  settings.offHour,
+                                  settings.offMinute,
+                                  v,
+                                )
+                            : null,
+                        activeTrackColor: AppColors.accent,
+                      ),
                     ),
                   ),
                 ),
@@ -366,50 +280,36 @@ class _DaySettings extends StatelessWidget {
 
         const Spacer(),
 
-        // Время включения/выключения
+        // Время включения/выключения - используем BreezTimeInput
         if (isEnabled) ...[
-          _TimeRow(
+          BreezTimeInput(
             label: l10n.scheduleStartLabel,
             hour: settings.onHour,
             minute: settings.onMinute,
             compact: compact,
-            onTap: onSettingsChanged != null
-                ? () => _showTimePicker(
-                      context,
-                      settings.onHour,
-                      settings.onMinute,
-                      (hour, minute) {
-                        onSettingsChanged?.call(
-                          hour,
-                          minute,
-                          settings.offHour,
-                          settings.offMinute,
-                          settings.enabled,
-                        );
-                      },
+            onTimeChanged: onSettingsChanged != null
+                ? (hour, minute) => onSettingsChanged!(
+                      hour,
+                      minute,
+                      settings.offHour,
+                      settings.offMinute,
+                      settings.enabled,
                     )
                 : null,
           ),
           SizedBox(height: compact ? AppSpacing.sm : AppSpacing.md),
-          _TimeRow(
+          BreezTimeInput(
             label: l10n.scheduleEndLabel,
             hour: settings.offHour,
             minute: settings.offMinute,
             compact: compact,
-            onTap: onSettingsChanged != null
-                ? () => _showTimePicker(
-                      context,
-                      settings.offHour,
-                      settings.offMinute,
-                      (hour, minute) {
-                        onSettingsChanged?.call(
-                          settings.onHour,
-                          settings.onMinute,
-                          hour,
-                          minute,
-                          settings.enabled,
-                        );
-                      },
+            onTimeChanged: onSettingsChanged != null
+                ? (hour, minute) => onSettingsChanged!(
+                      settings.onHour,
+                      settings.onMinute,
+                      hour,
+                      minute,
+                      settings.enabled,
                     )
                 : null,
           ),
@@ -438,91 +338,6 @@ class _DaySettings extends StatelessWidget {
         ],
 
         const Spacer(),
-      ],
-    );
-  }
-
-  Future<void> _showTimePicker(
-    BuildContext context,
-    int currentHour,
-    int currentMinute,
-    void Function(int hour, int minute) onTimeSelected,
-  ) async {
-    final time = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay(hour: currentHour, minute: currentMinute),
-      builder: (context, child) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
-          child: child!,
-        );
-      },
-    );
-    if (time != null) {
-      onTimeSelected(time.hour, time.minute);
-    }
-  }
-}
-
-/// Строка с временем
-class _TimeRow extends StatelessWidget {
-  final String label;
-  final int hour;
-  final int minute;
-  final bool compact;
-  final VoidCallback? onTap;
-
-  const _TimeRow({
-    required this.label,
-    required this.hour,
-    required this.minute,
-    required this.compact,
-    this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
-    final timeText =
-        '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: compact ? 13 : 14,
-            color: colors.textMuted,
-          ),
-        ),
-        MouseRegion(
-          cursor: onTap != null ? SystemMouseCursors.click : SystemMouseCursors.basic,
-          child: GestureDetector(
-            onTap: onTap,
-            child: Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: compact ? 12 : 16,
-                vertical: compact ? 8 : 10,
-              ),
-              decoration: BoxDecoration(
-                color: AppColors.accent.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: AppColors.accent.withValues(alpha: 0.3),
-                ),
-              ),
-              child: Text(
-                timeText,
-                style: TextStyle(
-                  fontSize: compact ? 16 : 20,
-                  fontWeight: FontWeight.w700,
-                  color: colors.text,
-                ),
-              ),
-            ),
-          ),
-        ),
       ],
     );
   }

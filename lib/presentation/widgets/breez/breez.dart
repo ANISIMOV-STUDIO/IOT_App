@@ -28,13 +28,15 @@ export 'breez_settings_tile.dart';
 // ═══════════════════════════════════════════════════════════════════════════
 export 'breez_text_field.dart';
 export 'breez_pin_code_field.dart';
+export 'breez_time_input.dart';
 
 // ═══════════════════════════════════════════════════════════════════════════
-// НАВИГАЦИЯ
+// НАВИГАЦИЯ И ТАБЫ
 // ═══════════════════════════════════════════════════════════════════════════
 export 'navigation_bar.dart';
 export 'mobile_tab_bar.dart';
 export 'unit_tab_button.dart';
+export 'breez_tab.dart';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // АНИМАЦИИ И ПЕРЕХОДЫ
