@@ -101,7 +101,8 @@ class AnalyticsScreen extends StatelessWidget {
                   child: BlocBuilder<AnalyticsBloc, AnalyticsState>(
                     buildWhen: (prev, curr) =>
                         prev.status != curr.status ||
-                        prev.graphData != curr.graphData,
+                        prev.graphData != curr.graphData ||
+                        prev.selectedMetric != curr.selectedMetric,
                     builder: (context, state) {
                       if (state.status == AnalyticsStatus.loading ||
                           state.status == AnalyticsStatus.initial) {
@@ -117,6 +118,12 @@ class AnalyticsScreen extends StatelessWidget {
                         height: 280,
                         child: OperationGraph(
                           data: state.graphData,
+                          selectedMetric: state.selectedMetric,
+                          onMetricChanged: (metric) {
+                            context.read<AnalyticsBloc>().add(
+                              AnalyticsGraphMetricChanged(metric),
+                            );
+                          },
                         ),
                       );
                     },
