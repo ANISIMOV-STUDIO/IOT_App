@@ -2,10 +2,12 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/spacing.dart';
 import '../../../../domain/entities/unit_state.dart';
 import '../../../../domain/entities/alarm_info.dart';
 import '../../../../domain/entities/mode_settings.dart';
+import '../../../bloc/analytics/analytics_bloc.dart';
 import '../../../widgets/breez/breez.dart';
 import '../widgets/desktop_header.dart';
 
@@ -43,10 +45,7 @@ class DesktopLayout extends StatefulWidget {
   // Data from repositories
   final Map<String, TimerSettings>? timerSettings;
   final DaySettingsCallback? onTimerSettingsChanged;
-  final List<GraphDataPoint> graphData;
   final Map<String, AlarmInfo> activeAlarms;
-  final GraphMetric selectedGraphMetric;
-  final ValueChanged<GraphMetric>? onGraphMetricChanged;
 
   const DesktopLayout({
     super.key,
@@ -80,10 +79,7 @@ class DesktopLayout extends StatefulWidget {
     this.unreadNotificationsCount = 0,
     this.timerSettings,
     this.onTimerSettingsChanged,
-    this.graphData = const [],
     this.activeAlarms = const {},
-    this.selectedGraphMetric = GraphMetric.temperature,
-    this.onGraphMetricChanged,
   });
 
   @override
@@ -242,11 +238,23 @@ class _DesktopLayoutState extends State<DesktopLayout> {
         const SizedBox(height: AppSpacing.sm),
 
         // OperationGraph row (same height as Schedule/Notifications)
+        // Использует BlocBuilder для прямого доступа к AnalyticsBloc
         Expanded(
-          child: OperationGraph(
-            data: widget.graphData,
-            selectedMetric: widget.selectedGraphMetric,
-            onMetricChanged: widget.onGraphMetricChanged,
+          child: BlocBuilder<AnalyticsBloc, AnalyticsState>(
+            buildWhen: (prev, curr) =>
+                prev.graphData != curr.graphData ||
+                prev.selectedMetric != curr.selectedMetric,
+            builder: (context, state) {
+              return OperationGraph(
+                data: state.graphData,
+                selectedMetric: state.selectedMetric,
+                onMetricChanged: (metric) {
+                  context.read<AnalyticsBloc>().add(
+                    AnalyticsGraphMetricChanged(metric),
+                  );
+                },
+              );
+            },
           ),
         ),
       ],

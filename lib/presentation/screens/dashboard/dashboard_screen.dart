@@ -24,7 +24,6 @@ import '../../bloc/climate/climate_bloc.dart';
 import '../../bloc/analytics/analytics_bloc.dart';
 import '../../bloc/notifications/notifications_bloc.dart';
 import '../../bloc/schedule/schedule_bloc.dart';
-import '../../widgets/breez/breez.dart';
 import '../../widgets/common/offline_banner.dart';
 import '../../../data/api/http/clients/hvac_http_client.dart';
 import 'dashboard_bloc_wrapper.dart';
@@ -157,9 +156,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       unreadNotificationsCount: data.notificationsState.unreadCount,
       timerSettings: data.climateState.deviceFullState?.timerSettings,
       onTimerSettingsChanged: _handleTimerSettingsChanged,
-      graphData: data.analyticsState.graphData,
-      selectedGraphMetric: data.analyticsState.selectedMetric,
-      onGraphMetricChanged: _onGraphMetricChanged,
       activeAlarms: data.climateState.activeAlarms,
     );
   }
@@ -218,12 +214,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       context.read<AnalyticsBloc>().add(AnalyticsDeviceChanged(deviceId));
       context.read<NotificationsBloc>().add(NotificationsDeviceChanged(deviceId));
       context.read<ScheduleBloc>().add(ScheduleDeviceChanged(deviceId));
-    }
-  }
-
-  void _onGraphMetricChanged(GraphMetric? metric) {
-    if (metric != null) {
-      context.read<AnalyticsBloc>().add(AnalyticsGraphMetricChanged(metric));
     }
   }
 
