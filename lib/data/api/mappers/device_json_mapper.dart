@@ -63,7 +63,7 @@ class DeviceJsonMapper {
       airQuality: _stringToAirQuality(json['airQuality'] as String?),
       co2Ppm: json['co2'] as int? ?? 400,
       pollutantsAqi: json['pollutantsAqi'] as int? ?? 50,
-      isOn: json['power'] as bool? ?? false,
+      isOn: json['running'] as bool? ?? false, // running = device is on
     );
   }
 
