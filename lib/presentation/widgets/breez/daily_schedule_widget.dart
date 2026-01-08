@@ -9,6 +9,23 @@ import '../../../generated/l10n/app_localizations.dart';
 import 'breez_card.dart';
 import 'breez_tab.dart';
 
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+/// Константы виджета расписания
+abstract class _ScheduleConstants {
+  static const double desktopTimeBlockHeight = 80.0;
+  static const double borderRadius = 10.0;
+  static const Duration animationDuration = Duration(milliseconds: 150);
+  static const double timeFontSize = 22.0;
+  static const double labelFontSize = 11.0;
+}
+
+// =============================================================================
+// TYPES
+// =============================================================================
+
 /// Callback для изменения настроек дня
 typedef DaySettingsCallback = void Function(
   String day,
@@ -19,7 +36,18 @@ typedef DaySettingsCallback = void Function(
   bool enabled,
 );
 
+// =============================================================================
+// MAIN WIDGET
+// =============================================================================
+
 /// Виджет расписания с табами по дням недели
+///
+/// Поддерживает:
+/// - Выбор дня недели через табы
+/// - Включение/выключение расписания для каждого дня
+/// - Настройку времени начала и конца
+/// - Optimistic updates для мгновенного отклика UI
+/// - Адаптивный layout (compact для mobile, полный для desktop)
 class DailyScheduleWidget extends StatefulWidget {
   /// Настройки таймера по дням (ключ = monday, tuesday, etc.)
   final Map<String, TimerSettings>? timerSettings;
@@ -27,9 +55,10 @@ class DailyScheduleWidget extends StatefulWidget {
   /// Callback при изменении настроек дня
   final DaySettingsCallback? onDaySettingsChanged;
 
-  /// Компактный режим
+  /// Компактный режим (для mobile)
   final bool compact;
 
+  /// Порядок дней недели (ISO 8601: понедельник = 1)
   static const List<String> daysOrder = [
     'monday',
     'tuesday',
@@ -52,10 +81,10 @@ class DailyScheduleWidget extends StatefulWidget {
 }
 
 class _DailyScheduleWidgetState extends State<DailyScheduleWidget> {
-  // По умолчанию выбираем текущий день недели (инициализация без late для hot reload)
+  /// Индекс выбранного дня (инициализация без late для hot reload)
   int _selectedIndex = DateTime.now().weekday - 1;
 
-  // Локальный кэш для optimistic updates
+  /// Локальный кэш для optimistic updates
   final Map<String, TimerSettings> _localSettings = {};
 
   String get _selectedDay => DailyScheduleWidget.daysOrder[_selectedIndex];
@@ -73,7 +102,8 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget> {
   }
 
   Set<int> get _activeIndices {
-    final settings = _localSettings.isNotEmpty ? _localSettings : (widget.timerSettings ?? {});
+    final settings =
+        _localSettings.isNotEmpty ? _localSettings : (widget.timerSettings ?? {});
     return DailyScheduleWidget.daysOrder
         .asMap()
         .entries
@@ -97,16 +127,23 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget> {
     );
   }
 
-  List<String> _getDayLabels(AppLocalizations l10n) {
-    return [
-      l10n.mondayShort,
-      l10n.tuesdayShort,
-      l10n.wednesdayShort,
-      l10n.thursdayShort,
-      l10n.fridayShort,
-      l10n.saturdayShort,
-      l10n.sundayShort,
-    ];
+  void _handleSettingsChanged(
+    int onHour,
+    int onMinute,
+    int offHour,
+    int offMinute,
+    bool enabled,
+  ) {
+    _updateSettings(
+      _selectedDay,
+      TimerSettings(
+        onHour: onHour,
+        onMinute: onMinute,
+        offHour: offHour,
+        offMinute: offMinute,
+        enabled: enabled,
+      ),
+    );
   }
 
   @override
@@ -133,9 +170,9 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget> {
             SizedBox(height: AppSpacing.sm),
           ],
 
-          // Day tabs - используем BreezTabGroup
+          // Day tabs
           BreezTabGroup(
-            labels: _getDayLabels(l10n),
+            labels: _DayNameResolver.getShortNames(l10n),
             selectedIndex: _selectedIndex,
             activeIndices: _activeIndices,
             compact: widget.compact,
@@ -146,24 +183,12 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget> {
 
           // Selected day settings
           Expanded(
-            child: _DaySettings(
-              day: _selectedDay,
+            child: _DaySettingsPanel(
+              dayKey: _selectedDay,
               settings: selectedSettings,
               compact: widget.compact,
-              onSettingsChanged: widget.onDaySettingsChanged != null
-                  ? (onHour, onMinute, offHour, offMinute, enabled) {
-                      _updateSettings(
-                        _selectedDay,
-                        TimerSettings(
-                          onHour: onHour,
-                          onMinute: onMinute,
-                          offHour: offHour,
-                          offMinute: offMinute,
-                          enabled: enabled,
-                        ),
-                      );
-                    }
-                  : null,
+              onSettingsChanged:
+                  widget.onDaySettingsChanged != null ? _handleSettingsChanged : null,
             ),
           ),
         ],
@@ -172,9 +197,50 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget> {
   }
 }
 
-/// Настройки выбранного дня
-class _DaySettings extends StatelessWidget {
-  final String day;
+// =============================================================================
+// DAY NAME RESOLVER
+// =============================================================================
+
+/// Резолвер имён дней недели
+abstract class _DayNameResolver {
+  /// Маппинг ключей дней на полные имена
+  static String getFullName(String dayKey, AppLocalizations l10n) {
+    const dayKeys = DailyScheduleWidget.daysOrder;
+    final dayNames = [
+      l10n.monday,
+      l10n.tuesday,
+      l10n.wednesday,
+      l10n.thursday,
+      l10n.friday,
+      l10n.saturday,
+      l10n.sunday,
+    ];
+
+    final index = dayKeys.indexOf(dayKey);
+    return index >= 0 ? dayNames[index] : dayKey;
+  }
+
+  /// Получить список коротких имён
+  static List<String> getShortNames(AppLocalizations l10n) {
+    return [
+      l10n.mondayShort,
+      l10n.tuesdayShort,
+      l10n.wednesdayShort,
+      l10n.thursdayShort,
+      l10n.fridayShort,
+      l10n.saturdayShort,
+      l10n.sundayShort,
+    ];
+  }
+}
+
+// =============================================================================
+// DAY SETTINGS PANEL
+// =============================================================================
+
+/// Панель настроек выбранного дня
+class _DaySettingsPanel extends StatelessWidget {
+  final String dayKey;
   final TimerSettings settings;
   final bool compact;
   final void Function(
@@ -185,256 +251,202 @@ class _DaySettings extends StatelessWidget {
     bool enabled,
   )? onSettingsChanged;
 
-  const _DaySettings({
-    required this.day,
+  const _DaySettingsPanel({
+    required this.dayKey,
     required this.settings,
     required this.compact,
     this.onSettingsChanged,
   });
 
-  String _getFullDayName(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    switch (day) {
-      case 'monday':
-        return l10n.monday;
-      case 'tuesday':
-        return l10n.tuesday;
-      case 'wednesday':
-        return l10n.wednesday;
-      case 'thursday':
-        return l10n.thursday;
-      case 'friday':
-        return l10n.friday;
-      case 'saturday':
-        return l10n.saturday;
-      case 'sunday':
-        return l10n.sunday;
-      default:
-        return day;
-    }
+  void _onEnabledChanged(bool value) {
+    onSettingsChanged?.call(
+      settings.onHour,
+      settings.onMinute,
+      settings.offHour,
+      settings.offMinute,
+      value,
+    );
   }
+
+  void _onStartTimeChanged(int hour, int minute) {
+    onSettingsChanged?.call(
+      hour,
+      minute,
+      settings.offHour,
+      settings.offMinute,
+      settings.enabled,
+    );
+  }
+
+  void _onEndTimeChanged(int hour, int minute) {
+    onSettingsChanged?.call(
+      settings.onHour,
+      settings.onMinute,
+      hour,
+      minute,
+      settings.enabled,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return Column(
+      mainAxisAlignment: compact ? MainAxisAlignment.center : MainAxisAlignment.start,
+      mainAxisSize: compact ? MainAxisSize.max : MainAxisSize.min,
+      children: [
+        // Header: день и переключатель (общий для обоих layout)
+        _DayHeader(
+          dayKey: dayKey,
+          isEnabled: settings.enabled,
+          onEnabledChanged: onSettingsChanged != null ? _onEnabledChanged : null,
+        ),
+
+        SizedBox(height: compact ? AppSpacing.sm : AppSpacing.md),
+
+        // Time inputs
+        _buildTimeInputs(l10n),
+      ],
+    );
+  }
+
+  Widget _buildTimeInputs(AppLocalizations l10n) {
+    final timeRow = Row(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: _ScheduleTimeBlock(
+            label: l10n.scheduleStartLabel,
+            hour: settings.onHour,
+            minute: settings.onMinute,
+            onTimeChanged: onSettingsChanged != null && settings.enabled
+                ? _onStartTimeChanged
+                : null,
+          ),
+        ),
+        SizedBox(width: AppSpacing.sm),
+        Expanded(
+          child: _ScheduleTimeBlock(
+            label: l10n.scheduleEndLabel,
+            hour: settings.offHour,
+            minute: settings.offMinute,
+            onTimeChanged: onSettingsChanged != null && settings.enabled
+                ? _onEndTimeChanged
+                : null,
+          ),
+        ),
+      ],
+    );
+
+    // Обёртка с opacity и ignore pointer для disabled состояния
+    final wrappedRow = Opacity(
+      opacity: settings.enabled ? 1.0 : 0.4,
+      child: IgnorePointer(
+        ignoring: !settings.enabled,
+        child: timeRow,
+      ),
+    );
+
+    if (compact) {
+      // Mobile: растягиваем на всё доступное место
+      return Expanded(child: wrappedRow);
+    }
+
+    // Desktop: фиксированная высота
+    return SizedBox(
+      height: _ScheduleConstants.desktopTimeBlockHeight,
+      child: wrappedRow,
+    );
+  }
+}
+
+// =============================================================================
+// DAY HEADER
+// =============================================================================
+
+/// Заголовок дня с переключателем
+class _DayHeader extends StatelessWidget {
+  final String dayKey;
+  final bool isEnabled;
+  final ValueChanged<bool>? onEnabledChanged;
+
+  const _DayHeader({
+    required this.dayKey,
+    required this.isEnabled,
+    this.onEnabledChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final isEnabled = settings.enabled;
 
-    if (compact) {
-      // Мобильный layout - компактный и центрированный
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // День и переключатель
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                _getFullDayName(context),
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: colors.text,
-                ),
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    isEnabled ? l10n.statusEnabled : l10n.statusDisabled,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: isEnabled ? AppColors.accentGreen : colors.textMuted,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  MouseRegion(
-                    cursor: SystemMouseCursors.click,
-                    child: Switch(
-                      value: isEnabled,
-                      onChanged: onSettingsChanged != null
-                          ? (v) => onSettingsChanged!(
-                                settings.onHour,
-                                settings.onMinute,
-                                settings.offHour,
-                                settings.offMinute,
-                                v,
-                              )
-                          : null,
-                      activeTrackColor: AppColors.accent,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-
-          SizedBox(height: AppSpacing.sm),
-
-          // Время в одну строку - растягивается на оставшееся место
-          Expanded(
-            child: Opacity(
-              opacity: isEnabled ? 1.0 : 0.4,
-              child: IgnorePointer(
-                ignoring: !isEnabled,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Expanded(
-                      child: _TimeBlock(
-                        label: l10n.scheduleStartLabel,
-                        hour: settings.onHour,
-                        minute: settings.onMinute,
-                        onTimeChanged: onSettingsChanged != null && isEnabled
-                            ? (hour, minute) => onSettingsChanged!(
-                                  hour,
-                                  minute,
-                                  settings.offHour,
-                                  settings.offMinute,
-                                  settings.enabled,
-                                )
-                            : null,
-                      ),
-                    ),
-                    SizedBox(width: AppSpacing.sm),
-                    Expanded(
-                      child: _TimeBlock(
-                        label: l10n.scheduleEndLabel,
-                        hour: settings.offHour,
-                        minute: settings.offMinute,
-                        onTimeChanged: onSettingsChanged != null && isEnabled
-                            ? (hour, minute) => onSettingsChanged!(
-                                  settings.onHour,
-                                  settings.onMinute,
-                                  hour,
-                                  minute,
-                                  settings.enabled,
-                                )
-                            : null,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      );
-    }
-
-    // Desktop layout - горизонтальный с фиксированной высотой
-    return Column(
-      mainAxisSize: MainAxisSize.min,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        // День и переключатель
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              _getFullDayName(context),
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: colors.text,
-              ),
+        // Название дня
+        Semantics(
+          header: true,
+          child: Text(
+            _DayNameResolver.getFullName(dayKey, l10n),
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: colors.text,
             ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  isEnabled ? l10n.statusEnabled : l10n.statusDisabled,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: isEnabled ? AppColors.accentGreen : colors.textMuted,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                MouseRegion(
-                  cursor: SystemMouseCursors.click,
-                  child: Switch(
-                    value: isEnabled,
-                    onChanged: onSettingsChanged != null
-                        ? (v) => onSettingsChanged!(
-                              settings.onHour,
-                              settings.onMinute,
-                              settings.offHour,
-                              settings.offMinute,
-                              v,
-                            )
-                        : null,
-                    activeTrackColor: AppColors.accent,
-                  ),
-                ),
-              ],
-            ),
-          ],
+          ),
         ),
 
-        SizedBox(height: AppSpacing.md),
-
-        // Время в одну строку с фиксированной высотой
-        Opacity(
-          opacity: isEnabled ? 1.0 : 0.4,
-          child: IgnorePointer(
-            ignoring: !isEnabled,
-            child: SizedBox(
-              height: 80, // Фиксированная максимальная высота
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Expanded(
-                    child: _TimeBlock(
-                      label: l10n.scheduleStartLabel,
-                      hour: settings.onHour,
-                      minute: settings.onMinute,
-                      onTimeChanged: onSettingsChanged != null && isEnabled
-                          ? (hour, minute) => onSettingsChanged!(
-                                hour,
-                                minute,
-                                settings.offHour,
-                                settings.offMinute,
-                                settings.enabled,
-                              )
-                          : null,
-                    ),
-                  ),
-                  SizedBox(width: AppSpacing.sm),
-                  Expanded(
-                    child: _TimeBlock(
-                      label: l10n.scheduleEndLabel,
-                      hour: settings.offHour,
-                      minute: settings.offMinute,
-                      onTimeChanged: onSettingsChanged != null && isEnabled
-                          ? (hour, minute) => onSettingsChanged!(
-                                settings.onHour,
-                                settings.onMinute,
-                                hour,
-                                minute,
-                                settings.enabled,
-                              )
-                          : null,
-                    ),
-                  ),
-                ],
+        // Статус и переключатель
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              isEnabled ? l10n.statusEnabled : l10n.statusDisabled,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: isEnabled ? AppColors.accentGreen : colors.textMuted,
               ),
             ),
-          ),
+            SizedBox(width: AppSpacing.xs),
+            Semantics(
+              label: isEnabled ? l10n.statusEnabled : l10n.statusDisabled,
+              toggled: isEnabled,
+              child: MouseRegion(
+                cursor: onEnabledChanged != null
+                    ? SystemMouseCursors.click
+                    : SystemMouseCursors.basic,
+                child: Switch(
+                  value: isEnabled,
+                  onChanged: onEnabledChanged,
+                  activeTrackColor: AppColors.accent,
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );
   }
 }
 
-/// Вертикальный блок времени для мобильного layout
-class _TimeBlock extends StatefulWidget {
+// =============================================================================
+// SCHEDULE TIME BLOCK
+// =============================================================================
+
+/// Блок выбора времени для расписания
+///
+/// Отображает label и время, открывает системный TimePicker по клику.
+/// Адаптируется к доступному размеру через FittedBox.
+class _ScheduleTimeBlock extends StatefulWidget {
   final String label;
   final int hour;
   final int minute;
   final void Function(int hour, int minute)? onTimeChanged;
 
-  const _TimeBlock({
+  const _ScheduleTimeBlock({
     required this.label,
     required this.hour,
     required this.minute,
@@ -442,13 +454,13 @@ class _TimeBlock extends StatefulWidget {
   });
 
   @override
-  State<_TimeBlock> createState() => _TimeBlockState();
+  State<_ScheduleTimeBlock> createState() => _ScheduleTimeBlockState();
 }
 
-class _TimeBlockState extends State<_TimeBlock> {
+class _ScheduleTimeBlockState extends State<_ScheduleTimeBlock> {
   bool _isHovered = false;
 
-  String get _timeText =>
+  String get _formattedTime =>
       '${widget.hour.toString().padLeft(2, '0')}:${widget.minute.toString().padLeft(2, '0')}';
 
   bool get _isEnabled => widget.onTimeChanged != null;
@@ -467,7 +479,7 @@ class _TimeBlockState extends State<_TimeBlock> {
       },
     );
 
-    if (time != null) {
+    if (time != null && mounted) {
       widget.onTimeChanged?.call(time.hour, time.minute);
     }
   }
@@ -476,51 +488,55 @@ class _TimeBlockState extends State<_TimeBlock> {
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
 
-    return MouseRegion(
-      cursor: _isEnabled ? SystemMouseCursors.click : SystemMouseCursors.basic,
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: GestureDetector(
-        onTap: _showTimePicker,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
-          padding: EdgeInsets.symmetric(
-            vertical: AppSpacing.xxs,
-            horizontal: AppSpacing.sm,
-          ),
-          decoration: BoxDecoration(
-            color: _isHovered && _isEnabled
-                ? AppColors.accent.withValues(alpha: 0.15)
-                : AppColors.accent.withValues(alpha: 0.08),
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(
-              color: _isHovered && _isEnabled
-                  ? AppColors.accent.withValues(alpha: 0.5)
-                  : AppColors.accent.withValues(alpha: 0.2),
+    return Semantics(
+      button: true,
+      label: '${widget.label}: $_formattedTime',
+      child: MouseRegion(
+        cursor: _isEnabled ? SystemMouseCursors.click : SystemMouseCursors.basic,
+        onEnter: (_) => setState(() => _isHovered = true),
+        onExit: (_) => setState(() => _isHovered = false),
+        child: GestureDetector(
+          onTap: _showTimePicker,
+          child: AnimatedContainer(
+            duration: _ScheduleConstants.animationDuration,
+            padding: EdgeInsets.symmetric(
+              vertical: AppSpacing.xxs,
+              horizontal: AppSpacing.sm,
             ),
-          ),
-          child: FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  widget.label,
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: colors.textMuted,
+            decoration: BoxDecoration(
+              color: _isHovered && _isEnabled
+                  ? AppColors.accent.withValues(alpha: 0.15)
+                  : AppColors.accent.withValues(alpha: 0.08),
+              borderRadius: BorderRadius.circular(_ScheduleConstants.borderRadius),
+              border: Border.all(
+                color: _isHovered && _isEnabled
+                    ? AppColors.accent.withValues(alpha: 0.5)
+                    : AppColors.accent.withValues(alpha: 0.2),
+              ),
+            ),
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    widget.label,
+                    style: TextStyle(
+                      fontSize: _ScheduleConstants.labelFontSize,
+                      color: colors.textMuted,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  _timeText,
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w700,
-                    color: _isEnabled ? colors.text : colors.textMuted,
+                  SizedBox(height: AppSpacing.xxs),
+                  Text(
+                    _formattedTime,
+                    style: TextStyle(
+                      fontSize: _ScheduleConstants.timeFontSize,
+                      fontWeight: FontWeight.w700,
+                      color: _isEnabled ? colors.text : colors.textMuted,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
