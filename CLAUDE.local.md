@@ -209,6 +209,27 @@ if (compact) {
 Widget _buildHeader() => Row(children: [Text(...), Switch(...)]);
 ```
 
+### Map вместо switch-case
+
+```dart
+// ❌ Switch-case (verbose, error-prone)
+switch (englishDay.toLowerCase()) {
+  case 'monday': return l10n.monday;
+  case 'tuesday': return l10n.tuesday;
+  case 'wednesday': return l10n.wednesday;
+  // ...
+}
+
+// ✅ Map lookup (concise, maintainable)
+final dayMap = <String, String>{
+  'monday': l10n.monday,
+  'tuesday': l10n.tuesday,
+  'wednesday': l10n.wednesday,
+  // ...
+};
+return dayMap[englishDay.toLowerCase()] ?? englishDay;
+```
+
 ### Константы вместо Magic Numbers
 
 ```dart
@@ -495,6 +516,27 @@ setState(() => _value = result);
 final result = await showDialog();
 if (mounted) setState(() => _value = result);
 ```
+
+---
+
+## ОБРАЗЦОВЫЕ ВИДЖЕТЫ
+
+При создании новых виджетов используй эти файлы как эталон:
+
+| Виджет | Файл | Что смотреть |
+|--------|------|--------------|
+| DailyScheduleWidget | `daily_schedule_widget.dart` | Полная структура: Constants, SRP, Semantics |
+| BreezTab | `breez_tab.dart` | Accessibility, hover, extracted methods |
+| TemperatureColumn | `temp_column.dart` | Compact mode, Semantics на кнопках |
+| ClimateBloc | `climate_bloc.dart` | Optimistic updates, sealed events |
+
+---
+
+## АУДИТ ПРОЕКТА
+
+Полный отчёт по соответствию стандартам: `AUDIT_REPORT.md`
+
+Текущая оценка: **92%**
 
 ---
 
