@@ -4,6 +4,31 @@ library;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/spacing.dart';
+
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+/// Константы для BreezSlider
+abstract class _SliderConstants {
+  static const double defaultTrackHeight = 6.0;
+  static const double defaultThumbRadius = 8.0;
+  static const double overlayAlpha = 0.2;
+  static const double disabledActiveAlpha = 0.5;
+  static const double disabledInactiveAlpha = 0.2;
+}
+
+/// Константы для BreezLabeledSlider
+abstract class _LabeledSliderConstants {
+  static const double iconSize = 12.0;
+  static const double labelFontSize = 11.0;
+  static const double valueFontSize = 11.0;
+}
+
+// =============================================================================
+// SCROLL BEHAVIOR
+// =============================================================================
 
 /// ScrollBehavior для слайдера - разрешает touch для drag (не scroll)
 class _SliderScrollBehavior extends MaterialScrollBehavior {
@@ -46,10 +71,10 @@ class BreezSlider extends StatefulWidget {
   /// Цвет неактивного трека
   final Color? inactiveColor;
 
-  /// Высота трека
+  /// Высота трека (по умолчанию 6.0)
   final double trackHeight;
 
-  /// Радиус ползунка
+  /// Радиус ползунка (по умолчанию 8.0)
   final double thumbRadius;
 
   /// Включен ли слайдер
@@ -71,8 +96,8 @@ class BreezSlider extends StatefulWidget {
     this.onChangeEnd,
     this.activeColor,
     this.inactiveColor,
-    this.trackHeight = 6,
-    this.thumbRadius = 8,
+    this.trackHeight = _SliderConstants.defaultTrackHeight,
+    this.thumbRadius = _SliderConstants.defaultThumbRadius,
     this.enabled = true,
     this.semanticLabel,
     this.valueFormat,
@@ -140,9 +165,9 @@ class _BreezSliderState extends State<BreezSlider> {
             activeTrackColor: activeColor,
             inactiveTrackColor: inactiveColor,
             thumbColor: activeColor,
-            overlayColor: activeColor.withValues(alpha: 0.2),
-            disabledActiveTrackColor: colors.textMuted.withValues(alpha: 0.5),
-            disabledInactiveTrackColor: colors.textMuted.withValues(alpha: 0.2),
+            overlayColor: activeColor.withValues(alpha: _SliderConstants.overlayAlpha),
+            disabledActiveTrackColor: colors.textMuted.withValues(alpha: _SliderConstants.disabledActiveAlpha),
+            disabledInactiveTrackColor: colors.textMuted.withValues(alpha: _SliderConstants.disabledInactiveAlpha),
             disabledThumbColor: colors.textMuted,
             trackHeight: widget.trackHeight,
             thumbShape: RoundSliderThumbShape(
@@ -243,13 +268,13 @@ class BreezLabeledSlider extends StatelessWidget {
               Row(
                 children: [
                   if (icon != null) ...[
-                    Icon(icon, size: 12, color: effectiveColor),
-                    const SizedBox(width: 4),
+                    Icon(icon, size: _LabeledSliderConstants.iconSize, color: effectiveColor),
+                    SizedBox(width: AppSpacing.xxs),
                   ],
                   Text(
                     label,
                     style: TextStyle(
-                      fontSize: 11,
+                      fontSize: _LabeledSliderConstants.labelFontSize,
                       fontWeight: FontWeight.w500,
                       color: colors.textMuted,
                     ),
@@ -259,14 +284,14 @@ class BreezLabeledSlider extends StatelessWidget {
               Text(
                 _formatDisplay(),
                 style: TextStyle(
-                  fontSize: 11,
+                  fontSize: _LabeledSliderConstants.valueFontSize,
                   fontWeight: FontWeight.w700,
                   color: effectiveColor,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: AppSpacing.xxs + 2), // 6px
           BreezSlider(
             value: value,
             min: min,

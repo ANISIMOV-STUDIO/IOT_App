@@ -3,6 +3,22 @@ library;
 
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/spacing.dart';
+
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+/// Константы для StatItem
+abstract class _StatItemConstants {
+  static const double iconSize = 18.0;
+  static const double valueFontSize = 12.0;
+  static const double labelFontSize = 10.0;
+}
+
+// =============================================================================
+// WIDGET
+// =============================================================================
 
 /// Stat display item with icon, value, and label
 class StatItem extends StatelessWidget {
@@ -23,31 +39,34 @@ class StatItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
 
-    return Column(
-      children: [
-        Icon(
-          icon,
-          size: 18,
-          color: iconColor ?? AppColors.accent,
-        ),
-        const SizedBox(height: 6),
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w700,
-            color: colors.text,
+    return Semantics(
+      label: '$label: $value',
+      child: Column(
+        children: [
+          Icon(
+            icon,
+            size: _StatItemConstants.iconSize,
+            color: iconColor ?? AppColors.accent,
           ),
-        ),
-        const SizedBox(height: 2),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 10,
-            color: colors.textMuted,
+          SizedBox(height: AppSpacing.xxs + 2), // 6px
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: _StatItemConstants.valueFontSize,
+              fontWeight: FontWeight.w700,
+              color: colors.text,
+            ),
           ),
-        ),
-      ],
+          SizedBox(height: AppSpacing.xxs / 2), // 2px
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: _StatItemConstants.labelFontSize,
+              color: colors.textMuted,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

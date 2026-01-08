@@ -7,6 +7,22 @@ import '../../../core/theme/spacing.dart';
 import '../../../domain/entities/unit_state.dart';
 import '../../../generated/l10n/app_localizations.dart';
 
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+/// Константы для SensorsGrid
+abstract class _SensorGridConstants {
+  static const double iconSize = 20.0;
+  static const double valueFontSize = 13.0;
+  static const double labelFontSize = 9.0;
+  static const double labelLineHeight = 1.2;
+}
+
+// =============================================================================
+// MAIN WIDGET
+// =============================================================================
+
 /// Grid of HVAC sensors (4 rows x 3 columns)
 class SensorsGrid extends StatelessWidget {
   final UnitState unit;
@@ -73,36 +89,39 @@ class SensorsGrid extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(
-          sensor.icon,
-          size: 20,
-          color: AppColors.accent,
-        ),
-        const SizedBox(height: 4),
-        Text(
-          sensor.value,
-          style: TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w700,
-            color: colors.text,
+    return Semantics(
+      label: '${sensor.label}: ${sensor.value}',
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            sensor.icon,
+            size: _SensorGridConstants.iconSize,
+            color: AppColors.accent,
           ),
-        ),
-        const SizedBox(height: 2),
-        Text(
-          sensor.label,
-          textAlign: TextAlign.center,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            fontSize: 9,
-            color: colors.textMuted,
-            height: 1.2,
+          SizedBox(height: AppSpacing.xxs),
+          Text(
+            sensor.value,
+            style: TextStyle(
+              fontSize: _SensorGridConstants.valueFontSize,
+              fontWeight: FontWeight.w700,
+              color: colors.text,
+            ),
           ),
-        ),
-      ],
+          SizedBox(height: AppSpacing.xxs / 2),
+          Text(
+            sensor.label,
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: _SensorGridConstants.labelFontSize,
+              color: colors.textMuted,
+              height: _SensorGridConstants.labelLineHeight,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

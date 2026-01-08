@@ -4,8 +4,67 @@ library;
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
+import '../../../core/theme/spacing.dart';
 import '../../../generated/l10n/app_localizations.dart';
 import 'breez_card.dart'; // BreezButton
+
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+/// Константы для BreezListCard
+abstract class _ListCardConstants {
+  // Размеры для нормального режима
+  static const double iconContainerSizeNormal = 32.0;
+  static const double iconSizeNormal = 16.0;
+  static const double paddingNormal = 12.0;
+  static const double titleFontSizeNormal = 12.0;
+  static const double subtitleFontSizeNormal = 11.0;
+
+  // Размеры для компактного режима
+  static const double iconContainerSizeCompact = 24.0;
+  static const double iconSizeCompact = 12.0;
+  static const double paddingCompact = 8.0;
+  static const double titleFontSizeCompact = 11.0;
+  static const double subtitleFontSizeCompact = 10.0;
+
+  // Общие
+  static const double badgeFontSize = 9.0;
+  static const double badgePaddingH = 6.0;
+  static const double badgePaddingV = 2.0;
+  static const double badgeRadius = 4.0;
+  static const double trailingFontSize = 10.0;
+  static const double unreadIndicatorSize = 8.0;
+
+  // Прозрачности
+  static const double bgAlpha = 0.08;
+  static const double borderAlpha = 0.2;
+  static const double hoverAlpha = 0.12;
+  static const double splashAlpha = 0.2;
+  static const double highlightAlpha = 0.1;
+  static const double badgeAlpha = 0.2;
+}
+
+/// Константы для BreezEmptyState
+abstract class _EmptyStateConstants {
+  static const double iconSizeNormal = 40.0;
+  static const double iconSizeCompact = 28.0;
+  static const double titleFontSizeNormal = 13.0;
+  static const double titleFontSizeCompact = 11.0;
+  static const double subtitleFontSize = 11.0;
+  static const double iconAlpha = 0.5;
+  static const double subtitleAlpha = 0.7;
+}
+
+/// Константы для BreezSeeMoreButton
+abstract class _SeeMoreConstants {
+  static const double height = 48.0;
+  static const double fontSize = 12.0;
+}
+
+// =============================================================================
+// TYPES
+// =============================================================================
 
 /// Type of list card for color theming
 enum ListCardType {
@@ -84,29 +143,23 @@ class BreezListCard extends StatelessWidget {
   }
 
   static IconData _iconForType(ListCardType type) {
-    switch (type) {
-      case ListCardType.info:
-        return Icons.info_outline;
-      case ListCardType.warning:
-        return Icons.warning_amber_outlined;
-      case ListCardType.error:
-        return Icons.error_outline;
-      case ListCardType.success:
-        return Icons.check_circle_outline;
-    }
+    const iconMap = <ListCardType, IconData>{
+      ListCardType.info: Icons.info_outline,
+      ListCardType.warning: Icons.warning_amber_outlined,
+      ListCardType.error: Icons.error_outline,
+      ListCardType.success: Icons.check_circle_outline,
+    };
+    return iconMap[type] ?? Icons.info_outline;
   }
 
   Color _colorForType() {
-    switch (type) {
-      case ListCardType.info:
-        return AppColors.accent;
-      case ListCardType.warning:
-        return AppColors.accentOrange;
-      case ListCardType.error:
-        return AppColors.accentRed;
-      case ListCardType.success:
-        return AppColors.accentGreen;
-    }
+    const colorMap = <ListCardType, Color>{
+      ListCardType.info: AppColors.accent,
+      ListCardType.warning: AppColors.accentOrange,
+      ListCardType.error: AppColors.accentRed,
+      ListCardType.success: AppColors.accentGreen,
+    };
+    return colorMap[type] ?? AppColors.accent;
   }
 
   @override
@@ -115,125 +168,139 @@ class BreezListCard extends StatelessWidget {
     final typeColor = _colorForType();
 
     // Размеры для компактного режима
-    final iconContainerSize = compact ? 24.0 : 32.0;
-    final iconSize = compact ? 12.0 : 16.0;
-    final padding = compact ? 8.0 : 12.0;
-    final titleSize = compact ? 11.0 : 12.0;
-    final subtitleSize = compact ? 10.0 : 11.0;
+    final iconContainerSize = compact
+        ? _ListCardConstants.iconContainerSizeCompact
+        : _ListCardConstants.iconContainerSizeNormal;
+    final iconSize = compact
+        ? _ListCardConstants.iconSizeCompact
+        : _ListCardConstants.iconSizeNormal;
+    final padding = compact
+        ? _ListCardConstants.paddingCompact
+        : _ListCardConstants.paddingNormal;
+    final titleSize = compact
+        ? _ListCardConstants.titleFontSizeCompact
+        : _ListCardConstants.titleFontSizeNormal;
+    final subtitleSize = compact
+        ? _ListCardConstants.subtitleFontSizeCompact
+        : _ListCardConstants.subtitleFontSizeNormal;
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(AppRadius.card),
-        hoverColor: typeColor.withValues(alpha: 0.12),
-        splashColor: typeColor.withValues(alpha: 0.2),
-        highlightColor: typeColor.withValues(alpha: 0.1),
-        child: Ink(
-          padding: EdgeInsets.all(padding),
-          decoration: BoxDecoration(
-            color: typeColor.withValues(alpha: 0.08),
-            borderRadius: BorderRadius.circular(AppRadius.card),
-            border: Border.all(
-              color: typeColor.withValues(alpha: 0.2),
+    return Semantics(
+      label: '$title: $subtitle${showUnreadIndicator ? ', непрочитано' : ''}',
+      button: onTap != null,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(AppRadius.card),
+          hoverColor: typeColor.withValues(alpha: _ListCardConstants.hoverAlpha),
+          splashColor: typeColor.withValues(alpha: _ListCardConstants.splashAlpha),
+          highlightColor: typeColor.withValues(alpha: _ListCardConstants.highlightAlpha),
+          child: Ink(
+            padding: EdgeInsets.all(padding),
+            decoration: BoxDecoration(
+              color: typeColor.withValues(alpha: _ListCardConstants.bgAlpha),
+              borderRadius: BorderRadius.circular(AppRadius.card),
+              border: Border.all(
+                color: typeColor.withValues(alpha: _ListCardConstants.borderAlpha),
+              ),
             ),
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Иконка
-              Container(
-                width: iconContainerSize,
-                height: iconContainerSize,
-                decoration: BoxDecoration(
-                  color: typeColor.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(AppRadius.card),
-                ),
-                child: Icon(
-                  icon,
-                  size: iconSize,
-                  color: typeColor,
-                ),
-              ),
-
-              SizedBox(width: compact ? 8 : 10),
-
-              // Контент
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            title,
-                            style: TextStyle(
-                              fontSize: titleSize,
-                              fontWeight: FontWeight.w600,
-                              color: colors.text,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        if (badge != null)
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 6,
-                              vertical: 2,
-                            ),
-                            decoration: BoxDecoration(
-                              color: typeColor.withValues(alpha: 0.2),
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            child: Text(
-                              badge!,
-                              style: TextStyle(
-                                fontSize: 9,
-                                fontWeight: FontWeight.w700,
-                                color: typeColor,
-                              ),
-                            ),
-                          ),
-                        if (trailing != null)
-                          Text(
-                            trailing!,
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: colors.textMuted,
-                            ),
-                          ),
-                      ],
-                    ),
-                    SizedBox(height: compact ? 2 : 4),
-                    Text(
-                      subtitle,
-                      style: TextStyle(
-                        fontSize: subtitleSize,
-                        color: colors.textMuted,
-                      ),
-                      maxLines: compact ? 1 : 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-
-              // Индикатор непрочитанного
-              if (showUnreadIndicator) ...[
-                const SizedBox(width: 8),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Иконка
                 Container(
-                  width: 8,
-                  height: 8,
+                  width: iconContainerSize,
+                  height: iconContainerSize,
                   decoration: BoxDecoration(
+                    color: typeColor.withValues(alpha: _ListCardConstants.badgeAlpha),
+                    borderRadius: BorderRadius.circular(AppRadius.card),
+                  ),
+                  child: Icon(
+                    icon,
+                    size: iconSize,
                     color: typeColor,
-                    shape: BoxShape.circle,
                   ),
                 ),
+
+                SizedBox(width: compact ? AppSpacing.xs : AppSpacing.xs + 2),
+
+                // Контент
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              title,
+                              style: TextStyle(
+                                fontSize: titleSize,
+                                fontWeight: FontWeight.w600,
+                                color: colors.text,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          if (badge != null)
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: _ListCardConstants.badgePaddingH,
+                                vertical: _ListCardConstants.badgePaddingV,
+                              ),
+                              decoration: BoxDecoration(
+                                color: typeColor.withValues(alpha: _ListCardConstants.badgeAlpha),
+                                borderRadius: BorderRadius.circular(_ListCardConstants.badgeRadius),
+                              ),
+                              child: Text(
+                                badge!,
+                                style: TextStyle(
+                                  fontSize: _ListCardConstants.badgeFontSize,
+                                  fontWeight: FontWeight.w700,
+                                  color: typeColor,
+                                ),
+                              ),
+                            ),
+                          if (trailing != null)
+                            Text(
+                              trailing!,
+                              style: TextStyle(
+                                fontSize: _ListCardConstants.trailingFontSize,
+                                color: colors.textMuted,
+                              ),
+                            ),
+                        ],
+                      ),
+                      SizedBox(height: compact ? AppSpacing.xxs / 2 : AppSpacing.xxs),
+                      Text(
+                        subtitle,
+                        style: TextStyle(
+                          fontSize: subtitleSize,
+                          color: colors.textMuted,
+                        ),
+                        maxLines: compact ? 1 : 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Индикатор непрочитанного
+                if (showUnreadIndicator) ...[
+                  SizedBox(width: AppSpacing.xs),
+                  Container(
+                    width: _ListCardConstants.unreadIndicatorSize,
+                    height: _ListCardConstants.unreadIndicatorSize,
+                    decoration: BoxDecoration(
+                      color: typeColor,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),
@@ -267,14 +334,14 @@ class BreezSeeMoreButton extends StatelessWidget {
     return BreezButton(
       onTap: onTap,
       width: double.infinity,
-      height: 48,
+      height: _SeeMoreConstants.height,
       backgroundColor: colors.buttonBg,
       hoverColor: colors.buttonHover,
       child: Center(
         child: Text(
           _text,
-          style: const TextStyle(
-            fontSize: 12,
+          style: TextStyle(
+            fontSize: _SeeMoreConstants.fontSize,
             fontWeight: FontWeight.w600,
             color: AppColors.accent,
           ),
@@ -339,35 +406,42 @@ class BreezEmptyState extends StatelessWidget {
     final colors = BreezColors.of(context);
     final color = iconColor ?? AppColors.accentGreen;
 
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            icon,
-            size: compact ? 28 : 40,
-            color: color.withValues(alpha: 0.5),
-          ),
-          SizedBox(height: compact ? 8 : 12),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: compact ? 11 : 13,
-              fontWeight: FontWeight.w600,
-              color: colors.textMuted,
+    return Semantics(
+      label: '$title. $subtitle',
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              size: compact
+                  ? _EmptyStateConstants.iconSizeCompact
+                  : _EmptyStateConstants.iconSizeNormal,
+              color: color.withValues(alpha: _EmptyStateConstants.iconAlpha),
             ),
-          ),
-          if (!compact) ...[
-            const SizedBox(height: 4),
+            SizedBox(height: compact ? AppSpacing.xs : AppSpacing.sm),
             Text(
-              subtitle,
+              title,
               style: TextStyle(
-                fontSize: 11,
-                color: colors.textMuted.withValues(alpha: 0.7),
+                fontSize: compact
+                    ? _EmptyStateConstants.titleFontSizeCompact
+                    : _EmptyStateConstants.titleFontSizeNormal,
+                fontWeight: FontWeight.w600,
+                color: colors.textMuted,
               ),
             ),
+            if (!compact) ...[
+              SizedBox(height: AppSpacing.xxs),
+              Text(
+                subtitle,
+                style: TextStyle(
+                  fontSize: _EmptyStateConstants.subtitleFontSize,
+                  color: colors.textMuted.withValues(alpha: _EmptyStateConstants.subtitleAlpha),
+                ),
+              ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }

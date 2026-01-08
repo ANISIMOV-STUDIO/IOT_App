@@ -4,12 +4,29 @@ library;
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
+import '../../../core/theme/spacing.dart';
 import '../../../domain/entities/unit_notification.dart';
 import '../../../generated/l10n/app_localizations.dart';
 import 'breez_card.dart';
 import 'breez_list_card.dart';
 
 export '../../../domain/entities/unit_notification.dart';
+
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+/// Константы для UnitNotificationsWidget
+abstract class _NotificationWidgetConstants {
+  static const double iconSize = 18.0;
+  static const double titleFontSize = 16.0;
+  static const double badgeFontSize = 11.0;
+  static const int maxVisibleNotifications = 3;
+}
+
+// =============================================================================
+// MAIN WIDGET
+// =============================================================================
 
 /// Unit notifications widget
 class UnitNotificationsWidget extends StatelessWidget {
@@ -30,103 +47,106 @@ class UnitNotificationsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
+    const maxVisible = _NotificationWidgetConstants.maxVisibleNotifications;
 
-    return BreezCard(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Header
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  const Icon(
-                    Icons.notifications_outlined,
-                    size: 18,
-                    color: AppColors.accent,
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    l10n.notifications,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: colors.text,
+    return Semantics(
+      label: '${l10n.notifications}: ${notifications.length}',
+      child: BreezCard(
+        padding: EdgeInsets.all(AppSpacing.lg),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.notifications_outlined,
+                      size: _NotificationWidgetConstants.iconSize,
+                      color: AppColors.accent,
                     ),
-                  ),
-                ],
-              ),
-              if (notifications.isNotEmpty)
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: AppColors.accentRed.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(AppRadius.button),
-                  ),
-                  child: Text(
-                    '${notifications.length}',
-                    style: const TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.accentRed,
+                    SizedBox(width: AppSpacing.xs),
+                    Text(
+                      l10n.notifications,
+                      style: TextStyle(
+                        fontSize: _NotificationWidgetConstants.titleFontSize,
+                        fontWeight: FontWeight.w700,
+                        color: colors.text,
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-            ],
-          ),
-
-          const SizedBox(height: 16),
-
-          // Notifications list (no scroll, max 3 visible)
-          Expanded(
-            child: notifications.isEmpty
-                ? BreezEmptyState.noNotifications(l10n)
-                : Column(
-                    children: [
-                      // Без промежуточных списков - прямой for loop
-                      for (var i = 0; i < notifications.length && i < 3; i++) ...[
-                        if (i > 0) const SizedBox(height: 8),
-                        BreezListCard.notification(
-                          title: notifications[i].title,
-                          message: notifications[i].message,
-                          type: _mapNotificationType(notifications[i].type),
-                          timeAgo: _formatTimeAgo(notifications[i].timestamp, l10n),
-                          isRead: notifications[i].isRead,
-                          onTap: () => onNotificationTap?.call(notifications[i].id),
-                        ),
-                      ],
-                    ],
+                if (notifications.isNotEmpty)
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: AppSpacing.xs,
+                      vertical: AppSpacing.xxs / 2,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.accentRed.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(AppRadius.button),
+                    ),
+                    child: Text(
+                      '${notifications.length}',
+                      style: TextStyle(
+                        fontSize: _NotificationWidgetConstants.badgeFontSize,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.accentRed,
+                      ),
+                    ),
                   ),
-          ),
-
-          // See all button
-          if (notifications.length > 3) ...[
-            const SizedBox(height: 12),
-            BreezSeeMoreButton(
-              label: l10n.allNotifications,
-              extraCount: notifications.length - 3,
-              onTap: onSeeAll,
+              ],
             ),
+
+            SizedBox(height: AppSpacing.md),
+
+            // Notifications list (no scroll, max 3 visible)
+            Expanded(
+              child: notifications.isEmpty
+                  ? BreezEmptyState.noNotifications(l10n)
+                  : Column(
+                      children: [
+                        for (var i = 0; i < notifications.length && i < maxVisible; i++) ...[
+                          if (i > 0) SizedBox(height: AppSpacing.xs),
+                          BreezListCard.notification(
+                            title: notifications[i].title,
+                            message: notifications[i].message,
+                            type: _mapNotificationType(notifications[i].type),
+                            timeAgo: _formatTimeAgo(notifications[i].timestamp, l10n),
+                            isRead: notifications[i].isRead,
+                            onTap: () => onNotificationTap?.call(notifications[i].id),
+                          ),
+                        ],
+                      ],
+                    ),
+            ),
+
+            // See all button
+            if (notifications.length > maxVisible) ...[
+              SizedBox(height: AppSpacing.sm),
+              BreezSeeMoreButton(
+                label: l10n.allNotifications,
+                extraCount: notifications.length - maxVisible,
+                onTap: onSeeAll,
+              ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
 
   /// Map NotificationType to ListCardType
   ListCardType _mapNotificationType(NotificationType type) {
-    switch (type) {
-      case NotificationType.info:
-        return ListCardType.info;
-      case NotificationType.warning:
-        return ListCardType.warning;
-      case NotificationType.error:
-        return ListCardType.error;
-      case NotificationType.success:
-        return ListCardType.success;
-    }
+    const typeMap = <NotificationType, ListCardType>{
+      NotificationType.info: ListCardType.info,
+      NotificationType.warning: ListCardType.warning,
+      NotificationType.error: ListCardType.error,
+      NotificationType.success: ListCardType.success,
+    };
+    return typeMap[type] ?? ListCardType.info;
   }
 
   /// Format timestamp to human-readable time ago
