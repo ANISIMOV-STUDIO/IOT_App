@@ -209,8 +209,8 @@ class DeviceJsonMapper {
   static Map<String, TimerSettings>? timerSettingsFromJson(
       Map<String, dynamic>? json) {
     if (json == null) return null;
-    return json.map((key, value) =>
-        MapEntry(key, TimerSettings.fromJson(value as Map<String, dynamic>)));
+    return json.map((key, value) => MapEntry(
+        key.toLowerCase(), TimerSettings.fromJson(value as Map<String, dynamic>)));
   }
 
   /// Парсинг активных аварий из JSON объекта
