@@ -4,6 +4,25 @@ library;
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
+import '../../../core/theme/spacing.dart';
+
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+/// Константы для BreezDropdown
+abstract class _DropdownConstants {
+  static const double labelFontSize = 12.0;
+  static const double textFontSize = 14.0;
+  static const double subtitleFontSize = 12.0;
+  static const double helperFontSize = 11.0;
+  static const double iconSize = 18.0;
+  static const double disabledAlpha = 0.5;
+}
+
+// =============================================================================
+// MAIN WIDGET
+// =============================================================================
 
 /// Стилизованный выпадающий список в дизайн-системе BREEZ
 ///
@@ -74,12 +93,12 @@ class BreezDropdown<T> extends StatelessWidget {
             Text(
               label!,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: _DropdownConstants.labelFontSize,
                 fontWeight: FontWeight.w500,
                 color: hasError ? AppColors.accentRed : colors.textMuted,
               ),
             ),
-            const SizedBox(height: 6),
+            SizedBox(height: AppSpacing.xxs + 2), // 6px
           ],
 
           // Dropdown
@@ -99,26 +118,28 @@ class BreezDropdown<T> extends StatelessWidget {
                   isExpanded: true,
                   icon: Icon(
                     Icons.keyboard_arrow_down,
-                    color: enabled ? colors.textMuted : colors.textMuted.withValues(alpha: 0.5),
+                    color: enabled
+                        ? colors.textMuted
+                        : colors.textMuted.withValues(alpha: _DropdownConstants.disabledAlpha),
                   ),
                   hint: hint != null
                       ? Text(
                           hint!,
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: _DropdownConstants.textFontSize,
                             color: colors.textMuted,
                           ),
                         )
                       : null,
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: _DropdownConstants.textFontSize,
                     color: colors.text,
                   ),
                   dropdownColor: colors.card,
                   borderRadius: BorderRadius.circular(AppRadius.button),
                   padding: EdgeInsets.only(
-                    left: prefixIcon != null ? 8 : 12,
-                    right: 8,
+                    left: prefixIcon != null ? AppSpacing.xs : AppSpacing.sm,
+                    right: AppSpacing.xs,
                   ),
                   onChanged: enabled ? onChanged : null,
                   selectedItemBuilder: (context) {
@@ -126,14 +147,14 @@ class BreezDropdown<T> extends StatelessWidget {
                       return Row(
                         children: [
                           if (prefixIcon != null) ...[
-                            Icon(prefixIcon, size: 18, color: colors.textMuted),
-                            const SizedBox(width: 8),
+                            Icon(prefixIcon, size: _DropdownConstants.iconSize, color: colors.textMuted),
+                            SizedBox(width: AppSpacing.xs),
                           ],
                           Expanded(
                             child: Text(
                               item.label,
                               style: TextStyle(
-                                fontSize: 14,
+                                fontSize: _DropdownConstants.textFontSize,
                                 color: enabled ? colors.text : colors.textMuted,
                               ),
                               overflow: TextOverflow.ellipsis,
@@ -152,10 +173,10 @@ class BreezDropdown<T> extends StatelessWidget {
                           if (item.icon != null) ...[
                             Icon(
                               item.icon,
-                              size: 18,
+                              size: _DropdownConstants.iconSize,
                               color: isSelected ? AppColors.accent : colors.textMuted,
                             ),
-                            const SizedBox(width: 12),
+                            SizedBox(width: AppSpacing.sm),
                           ],
                           Expanded(
                             child: Column(
@@ -165,7 +186,7 @@ class BreezDropdown<T> extends StatelessWidget {
                                 Text(
                                   item.label,
                                   style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: _DropdownConstants.textFontSize,
                                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                                     color: isSelected ? AppColors.accent : colors.text,
                                   ),
@@ -174,7 +195,7 @@ class BreezDropdown<T> extends StatelessWidget {
                                   Text(
                                     item.subtitle!,
                                     style: TextStyle(
-                                      fontSize: 12,
+                                      fontSize: _DropdownConstants.subtitleFontSize,
                                       color: colors.textMuted,
                                     ),
                                   ),
@@ -182,9 +203,9 @@ class BreezDropdown<T> extends StatelessWidget {
                             ),
                           ),
                           if (isSelected)
-                            const Icon(
+                            Icon(
                               Icons.check,
-                              size: 18,
+                              size: _DropdownConstants.iconSize,
                               color: AppColors.accent,
                             ),
                         ],
@@ -198,11 +219,11 @@ class BreezDropdown<T> extends StatelessWidget {
 
           // Helper/Error text
           if (helperText != null || errorText != null) ...[
-            const SizedBox(height: 4),
+            SizedBox(height: AppSpacing.xxs),
             Text(
               errorText ?? helperText ?? '',
               style: TextStyle(
-                fontSize: 11,
+                fontSize: _DropdownConstants.helperFontSize,
                 color: hasError ? AppColors.accentRed : colors.textMuted,
               ),
             ),

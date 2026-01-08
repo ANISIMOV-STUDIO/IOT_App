@@ -8,6 +8,21 @@ import '../../../generated/l10n/app_localizations.dart';
 import 'breez_card.dart';
 import 'mode_grid_item.dart';
 
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+/// Константы для ModeGrid
+abstract class _ModeGridConstants {
+  static const double minAspectRatio = 0.8;
+  static const double maxAspectRatio = 2.0;
+  static const int defaultColumns = 4;
+}
+
+// =============================================================================
+// HELPERS
+// =============================================================================
+
 /// Получить локализованные режимы работы установки
 List<OperatingModeData> getOperatingModes(AppLocalizations l10n) => [
   OperatingModeData(id: 'basic', name: l10n.modeBasic, icon: Icons.air, color: AppColors.accent),
@@ -39,7 +54,7 @@ class ModeGrid extends StatelessWidget {
     this.onModeChanged,
     this.isEnabled = true,
     this.modes,
-    this.columns = 4,
+    this.columns = _ModeGridConstants.defaultColumns,
   });
 
   @override
@@ -48,44 +63,53 @@ class ModeGrid extends StatelessWidget {
     final effectiveModes = modes ?? getOperatingModes(l10n);
     final rows = (effectiveModes.length / columns).ceil();
 
-    return BreezCard(
-      padding: const EdgeInsets.all(AppSpacing.sm),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          // Вычисляем размеры ячеек на основе доступного пространства
-          const spacing = AppSpacing.sm;
+    // Найти выбранный режим для Semantics
+    final selectedModeName = effectiveModes
+        .where((m) => m.id.toLowerCase() == selectedMode.toLowerCase())
+        .map((m) => m.name)
+        .firstOrNull ?? selectedMode;
 
-          final availableWidth = constraints.maxWidth - spacing * (columns - 1);
-          final availableHeight = constraints.maxHeight - spacing * (rows - 1);
+    return Semantics(
+      label: '${l10n.operatingMode}: $selectedModeName',
+      child: BreezCard(
+        padding: const EdgeInsets.all(AppSpacing.sm),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            const spacing = AppSpacing.sm;
 
-          final cellWidth = availableWidth / columns;
-          final cellHeight = availableHeight / rows;
+            final availableWidth = constraints.maxWidth - spacing * (columns - 1);
+            final availableHeight = constraints.maxHeight - spacing * (rows - 1);
 
-          // Aspect ratio = width / height
-          final aspectRatio = cellWidth / cellHeight;
+            final cellWidth = availableWidth / columns;
+            final cellHeight = availableHeight / rows;
+            final aspectRatio = cellWidth / cellHeight;
 
-          return GridView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: columns,
-              mainAxisSpacing: spacing,
-              crossAxisSpacing: spacing,
-              childAspectRatio: aspectRatio.clamp(0.8, 2.0),
-            ),
-            itemCount: effectiveModes.length,
-            itemBuilder: (context, index) {
-              final mode = effectiveModes[index];
-              final isSelected = selectedMode.toLowerCase() == mode.id.toLowerCase();
+            return GridView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: columns,
+                mainAxisSpacing: spacing,
+                crossAxisSpacing: spacing,
+                childAspectRatio: aspectRatio.clamp(
+                  _ModeGridConstants.minAspectRatio,
+                  _ModeGridConstants.maxAspectRatio,
+                ),
+              ),
+              itemCount: effectiveModes.length,
+              itemBuilder: (context, index) {
+                final mode = effectiveModes[index];
+                final isSelected = selectedMode.toLowerCase() == mode.id.toLowerCase();
 
-              return ModeGridItem(
-                mode: mode,
-                isSelected: isSelected,
-                isEnabled: isEnabled,
-                onTap: isEnabled ? () => onModeChanged?.call(mode.id) : null,
-              );
-            },
-          );
-        },
+                return ModeGridItem(
+                  mode: mode,
+                  isSelected: isSelected,
+                  isEnabled: isEnabled,
+                  onTap: isEnabled ? () => onModeChanged?.call(mode.id) : null,
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }
