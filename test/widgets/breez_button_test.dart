@@ -90,7 +90,9 @@ void main() {
 
       // When loading, tapping should not trigger onTap
       await tester.tap(find.byType(CircularProgressIndicator));
-      await tester.pumpAndSettle();
+      // When loading, tapping should not trigger onTap
+      await tester.tap(find.byType(CircularProgressIndicator));
+      await tester.pump(const Duration(milliseconds: 200));
 
       expect(tapped, isFalse);
     });

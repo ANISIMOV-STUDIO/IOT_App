@@ -152,11 +152,17 @@ class _BreezSliderState extends State<BreezSlider> {
               widget.onChanged!(newValue);
             }
           : null,
+      increasedValue: widget.enabled && widget.onChanged != null
+          ? _formatValue((_localValue + 1).clamp(widget.min, widget.max))
+          : null,
       onDecrease: widget.enabled && widget.onChanged != null
           ? () {
               final newValue = (_localValue - 1).clamp(widget.min, widget.max);
               widget.onChanged!(newValue);
             }
+          : null,
+      decreasedValue: widget.enabled && widget.onChanged != null
+          ? _formatValue((_localValue - 1).clamp(widget.min, widget.max))
           : null,
       child: ScrollConfiguration(
         behavior: _SliderScrollBehavior(),

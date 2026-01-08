@@ -1,0 +1,57 @@
+00:00 +0: loading /Users/kirillmuhin/Documents/Project/Breez Cloud/IOT_App/test/widgets/breez_slider_test.dart                                                                                         00:01 +0: loading /Users/kirillmuhin/Documents/Project/Breez Cloud/IOT_App/test/widgets/breez_slider_test.dart                                                                                         00:01 +0: BreezSlider renders with initial value                                                                                                                                                       00:01 +0: BreezSlider renders with initial value                                                                                                                                                       
+══╡ EXCEPTION CAUGHT BY SCHEDULER LIBRARY ╞═════════════════════════════════════════════════════════
+The following assertion was thrown during a scheduler callback:
+A SemanticsNode with action "increase" needs to be annotated with either both "value" and
+"increasedValue" or neither
+'package:flutter/src/semantics/semantics.dart':
+Failed assertion: line 3437 pos 7: '!_canPerformAction(SemanticsAction.increase) || (value == '') ==
+(increasedValue == '')'
+
+Either the assertion indicates an error in the framework itself, or we should provide substantially
+more information in this error message to help you determine and fix the underlying cause.
+In either case, please report this assertion by filing a bug on GitHub:
+  https://github.com/flutter/flutter/issues/new?template=02_bug.yml
+
+When the exception was thrown, this was the stack:
+#2      SemanticsNode.updateWith (package:flutter/src/semantics/semantics.dart:3437:7)
+#3      _RenderObjectSemantics._buildSemanticsSubtree (package:flutter/src/rendering/object.dart:5947:12)
+#4      _RenderObjectSemantics._produceSemanticsNode (package:flutter/src/rendering/object.dart:5962:5)
+#5      _RenderObjectSemantics._buildSemantics (package:flutter/src/rendering/object.dart:5902:7)
+#6      _RenderObjectSemantics._buildSemanticsSubtree (package:flutter/src/rendering/object.dart:5938:13)
+#7      _RenderObjectSemantics._produceSemanticsNode (package:flutter/src/rendering/object.dart:5962:5)
+#8      _RenderObjectSemantics._buildSemantics (package:flutter/src/rendering/object.dart:5902:7)
+#9      _RenderObjectSemantics._buildSemanticsSubtree (package:flutter/src/rendering/object.dart:5938:13)
+#10     _RenderObjectSemantics._produceSemanticsNode (package:flutter/src/rendering/object.dart:5962:5)
+#11     _RenderObjectSemantics._buildSemantics (package:flutter/src/rendering/object.dart:5902:7)
+#12     _RenderObjectSemantics._buildSemanticsSubtree (package:flutter/src/rendering/object.dart:5938:13)
+#13     _RenderObjectSemantics._produceSemanticsNode (package:flutter/src/rendering/object.dart:5962:5)
+#14     _RenderObjectSemantics._buildSemantics (package:flutter/src/rendering/object.dart:5902:7)
+#15     _RenderObjectSemantics._buildSemanticsSubtree (package:flutter/src/rendering/object.dart:5938:13)
+#16     _RenderObjectSemantics.ensureSemanticsNode (package:flutter/src/rendering/object.dart:5874:7)
+#17     PipelineOwner.flushSemantics (package:flutter/src/rendering/object.dart:1506:25)
+#18     PipelineOwner.flushSemantics (package:flutter/src/rendering/object.dart:1514:15)
+#19     AutomatedTestWidgetsFlutterBinding.drawFrame (package:flutter_test/src/binding.dart:1519:35)
+#20     RendererBinding._handlePersistentFrameCallback (package:flutter/src/rendering/binding.dart:495:5)
+#21     SchedulerBinding._invokeFrameCallback (package:flutter/src/scheduler/binding.dart:1434:15)
+#22     SchedulerBinding.handleDrawFrame (package:flutter/src/scheduler/binding.dart:1347:9)
+#23     AutomatedTestWidgetsFlutterBinding.pump.<anonymous closure> (package:flutter_test/src/binding.dart:1335:9)
+#26     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#27     AutomatedTestWidgetsFlutterBinding.pump (package:flutter_test/src/binding.dart:1324:27)
+#28     WidgetTester.pumpWidget.<anonymous closure> (package:flutter_test/src/widget_tester.dart:598:22)
+#31     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#32     WidgetTester.pumpWidget (package:flutter_test/src/widget_tester.dart:595:27)
+#33     main.<anonymous closure>.<anonymous closure> (file:///Users/kirillmuhin/Documents/Project/Breez%20Cloud/IOT_App/test/widgets/breez_slider_test.dart:13:20)
+#34     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:29)
+<asynchronous suspension>
+#35     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 7 frames from class _AssertionError, dart:async, and package:stack_trace)
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:01 +0 -1: BreezSlider renders with initial value [E]                                                                                                                                                
+  Test failed. See exception logs above.
+  The test description was: renders with initial value
+  
+
+To run this test again: /opt/homebrew/share/flutter/bin/cache/dart-sdk/bin/dart test /Users/kirillmuhin/Documents/Project/Breez Cloud/IOT_App/test/widgets/breez_slider_test.dart -p vm --plain-name 'BreezSlider renders with initial value'
+00:01 +0 -1: Some tests failed.                                                                                                                                                                        
