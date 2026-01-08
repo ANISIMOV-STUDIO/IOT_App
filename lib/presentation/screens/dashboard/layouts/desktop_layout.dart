@@ -29,6 +29,9 @@ class DesktopLayout extends StatefulWidget {
   final VoidCallback? onPowerToggle;
   final VoidCallback? onSettingsTap;
   final bool isPowerLoading;
+  final bool isScheduleEnabled;
+  final bool isScheduleLoading;
+  final VoidCallback? onScheduleToggle;
   final VoidCallback? onMasterOff;
   final ValueChanged<int>? onUnitSelected;
   final VoidCallback? onThemeToggle;
@@ -65,6 +68,9 @@ class DesktopLayout extends StatefulWidget {
     this.onPowerToggle,
     this.onSettingsTap,
     this.isPowerLoading = false,
+    this.isScheduleEnabled = false,
+    this.isScheduleLoading = false,
+    this.onScheduleToggle,
     this.onMasterOff,
     this.onUnitSelected,
     this.onThemeToggle,
@@ -160,6 +166,9 @@ class _DesktopLayoutState extends State<DesktopLayout> {
             onPowerToggle: widget.onPowerToggle,
             onSettingsTap: widget.onSettingsTap,
             isPowerLoading: widget.isPowerLoading,
+            isScheduleEnabled: widget.isScheduleEnabled,
+            isScheduleLoading: widget.isScheduleLoading,
+            onScheduleToggle: widget.onScheduleToggle,
           ),
         ),
 

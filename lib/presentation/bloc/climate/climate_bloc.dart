@@ -38,6 +38,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   final SetOperatingMode _setOperatingMode;
   final SetPreset _setPreset;
   final SetAirflow _setAirflow;
+  final SetScheduleEnabled _setScheduleEnabled;
 
   StreamSubscription<ClimateState>? _climateSubscription;
 
@@ -55,6 +56,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     required SetOperatingMode setOperatingMode,
     required SetPreset setPreset,
     required SetAirflow setAirflow,
+    required SetScheduleEnabled setScheduleEnabled,
   })  : _getCurrentClimateState = getCurrentClimateState,
         _getDeviceState = getDeviceState,
         _getDeviceFullState = getDeviceFullState,
@@ -68,6 +70,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         _setOperatingMode = setOperatingMode,
         _setPreset = setPreset,
         _setAirflow = setAirflow,
+        _setScheduleEnabled = setScheduleEnabled,
         super(const ClimateControlState()) {
     // События жизненного цикла
     on<ClimateSubscriptionRequested>(_onSubscriptionRequested);
@@ -100,6 +103,9 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       _onExhaustAirflowChanged,
       transformer: restartable(),
     );
+
+    // Расписание
+    on<ClimateScheduleToggled>(_onScheduleToggled);
   }
 
   /// Запрос на подписку к состоянию климата
@@ -522,6 +528,47 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       } else {
         emit(state.copyWith(errorMessage: 'Exhaust airflow error: $e'));
       }
+    }
+  }
+
+  /// Включение/выключение расписания
+  Future<void> _onScheduleToggled(
+    ClimateScheduleToggled event,
+    Emitter<ClimateControlState> emit,
+  ) async {
+    // Блокируем кнопку на время запроса
+    if (state.isTogglingSchedule) return;
+
+    final deviceId = state.deviceFullState?.id;
+    if (deviceId == null) {
+      emit(state.copyWith(errorMessage: 'Device ID not found'));
+      return;
+    }
+
+    emit(state.copyWith(isTogglingSchedule: true));
+
+    try {
+      await _setScheduleEnabled(SetScheduleEnabledParams(
+        deviceId: deviceId,
+        enabled: event.enabled,
+      ));
+      
+      // Обновляем локальное состояние (optimistic update)
+      if (state.deviceFullState != null) {
+        emit(state.copyWith(
+          isTogglingSchedule: false,
+          deviceFullState: state.deviceFullState!.copyWith(
+            scheduleIndicator: event.enabled ? 1 : 0,
+          ),
+        ));
+      } else {
+        emit(state.copyWith(isTogglingSchedule: false));
+      }
+    } catch (e) {
+      emit(state.copyWith(
+        isTogglingSchedule: false,
+        errorMessage: 'Schedule toggle error: $e',
+      ));
     }
   }
 

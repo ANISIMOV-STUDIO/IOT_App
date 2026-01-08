@@ -106,6 +106,12 @@ class MockScheduleRepository implements ScheduleRepository {
     throw Exception('Schedule entry not found: $entryId');
   }
 
+  @override
+  Future<void> setScheduleEnabled(String deviceId, bool enabled) async {
+    await Future.delayed(Duration(milliseconds: MockData.networkDelays['fast']!));
+    // Mock implementation - just simulate API call
+  }
+
   void dispose() {
     _controller.close();
   }

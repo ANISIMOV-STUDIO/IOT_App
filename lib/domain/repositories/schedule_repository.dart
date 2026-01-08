@@ -22,4 +22,7 @@ abstract class ScheduleRepository {
 
   /// Toggle schedule entry active state
   Future<ScheduleEntry> toggleEntry(String entryId, bool isActive);
+
+  /// Enable/disable the schedule for a device
+  Future<void> setScheduleEnabled(String deviceId, bool enabled);
 }

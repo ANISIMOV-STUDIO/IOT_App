@@ -179,3 +179,13 @@ final class ClimateExhaustAirflowChanged extends ClimateEvent {
   @override
   List<Object?> get props => [value];
 }
+
+/// Расписание устройства включено/выключено
+final class ClimateScheduleToggled extends ClimateEvent {
+  final bool enabled;
+
+  const ClimateScheduleToggled(this.enabled);
+
+  @override
+  List<Object?> get props => [enabled];
+}

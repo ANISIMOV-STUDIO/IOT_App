@@ -117,6 +117,11 @@ class RealScheduleRepository implements ScheduleRepository {
     return updateEntry(entry.copyWith(isActive: isActive));
   }
 
+  @override
+  Future<void> setScheduleEnabled(String deviceId, bool enabled) async {
+    await _httpClient.setScheduleEnabled(deviceId, enabled);
+  }
+
   void dispose() {
     _scheduleController.close();
   }

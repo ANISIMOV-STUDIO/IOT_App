@@ -144,6 +144,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
       onPowerToggle: () => _handlePowerToggle(data.climateState),
       onSettingsTap: () => _showUnitSettings(unit),
       isPowerLoading: data.climateState.isTogglingPower,
+      isScheduleEnabled: data.climateState.isScheduleEnabled,
+      isScheduleLoading: data.climateState.isTogglingSchedule,
+      onScheduleToggle: () => _handleScheduleToggle(data.climateState),
       onMasterOff: _masterPowerOff,
       onUnitSelected: (index) => _onUnitSelected(data.units, index),
       onThemeToggle: _toggleTheme,
@@ -192,6 +195,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
             onPowerToggle: () => _handlePowerToggle(data.climateState),
             onSettingsTap: () => _showUnitSettings(unit),
             isPowerLoading: data.climateState.isTogglingPower,
+            isScheduleEnabled: data.climateState.isScheduleEnabled,
+            isScheduleLoading: data.climateState.isTogglingSchedule,
+            onScheduleToggle: () => _handleScheduleToggle(data.climateState),
             timerSettings: data.climateState.deviceFullState?.timerSettings,
             onTimerSettingsChanged: _handleTimerSettingsChanged,
             activeAlarms: data.climateState.activeAlarms,
@@ -222,6 +228,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   void _handlePowerToggle(ClimateControlState climateState) {
     context.read<ClimateBloc>().add(ClimatePowerToggled(!climateState.isOn));
+  }
+
+  void _handleScheduleToggle(ClimateControlState climateState) {
+    context.read<ClimateBloc>().add(ClimateScheduleToggled(!climateState.isScheduleEnabled));
   }
 
   Future<void> _masterPowerOff() async {
