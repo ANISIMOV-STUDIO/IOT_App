@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
 
@@ -31,6 +32,9 @@ class BreezButton extends StatefulWidget {
   final bool enableGlow;
   final bool enforceMinTouchTarget;
 
+  /// Включить тактильную обратную связь при нажатии
+  final bool enableHaptic;
+
   /// Semantic label for screen readers (accessibility)
   final String? semanticLabel;
 
@@ -58,6 +62,7 @@ class BreezButton extends StatefulWidget {
     this.enableScale = true,
     this.enableGlow = false,
     this.enforceMinTouchTarget = true,
+    this.enableHaptic = true,
     this.semanticLabel,
     this.tooltip,
     this.isButton = true,
@@ -97,6 +102,10 @@ class _BreezButtonState extends State<BreezButton>
   void _handleTapDown(TapDownDetails _) {
     setState(() => _isPressed = true);
     if (widget.enableScale) _controller.forward();
+    // Тактильная обратная связь при нажатии
+    if (widget.enableHaptic && widget.onTap != null) {
+      HapticFeedback.lightImpact();
+    }
   }
 
   void _handleTapUp(TapUpDetails _) {
