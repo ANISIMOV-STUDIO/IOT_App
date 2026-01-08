@@ -27,6 +27,7 @@ export 'climate/set_climate_mode.dart';
 export 'climate/set_operating_mode.dart';
 export 'climate/set_preset.dart';
 export 'climate/set_airflow.dart';
+export 'climate/set_schedule_enabled.dart';
 export 'climate/watch_current_climate.dart';
 
 // Device Management Use Cases

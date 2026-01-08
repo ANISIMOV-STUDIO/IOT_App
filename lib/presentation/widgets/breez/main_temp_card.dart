@@ -70,6 +70,9 @@ class MainTempCard extends StatelessWidget {
   final int alarmCount;
   final VoidCallback? onAlarmsTap;
   final bool isPowerLoading;
+  final bool isScheduleEnabled;
+  final bool isScheduleLoading;
+  final VoidCallback? onScheduleToggle;
   final UnitState? sensorUnit;
   final bool showStats;
 
@@ -99,6 +102,9 @@ class MainTempCard extends StatelessWidget {
     this.alarmCount = 0,
     this.onAlarmsTap,
     this.isPowerLoading = false,
+    this.isScheduleEnabled = false,
+    this.isScheduleLoading = false,
+    this.onScheduleToggle,
     this.sensorUnit,
     this.showStats = true,
   });
@@ -167,7 +173,10 @@ class MainTempCard extends StatelessWidget {
                   showControls: showControls,
                   alarmCount: alarmCount,
                   isPowerLoading: isPowerLoading,
+                  isScheduleEnabled: isScheduleEnabled,
+                  isScheduleLoading: isScheduleLoading,
                   onPowerToggle: onPowerToggle,
+                  onScheduleToggle: onScheduleToggle,
                   onSettingsTap: onSettingsTap,
                   onAlarmsTap: onAlarmsTap,
                 ),

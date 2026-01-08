@@ -25,6 +25,9 @@ class MobileLayout extends StatefulWidget {
   final VoidCallback? onPowerToggle;
   final VoidCallback? onSettingsTap;
   final bool isPowerLoading;
+  final bool isScheduleEnabled;
+  final bool isScheduleLoading;
+  final VoidCallback? onScheduleToggle;
 
   final Map<String, TimerSettings>? timerSettings;
   final DaySettingsCallback? onTimerSettingsChanged;
@@ -44,6 +47,9 @@ class MobileLayout extends StatefulWidget {
     this.onPowerToggle,
     this.onSettingsTap,
     this.isPowerLoading = false,
+    this.isScheduleEnabled = false,
+    this.isScheduleLoading = false,
+    this.onScheduleToggle,
     this.timerSettings,
     this.onTimerSettingsChanged,
     this.activeAlarms = const {},
@@ -97,6 +103,9 @@ class _MobileLayoutState extends State<MobileLayout>
               onPowerToggle: widget.onPowerToggle,
               onSettingsTap: widget.onSettingsTap,
               isPowerLoading: widget.isPowerLoading,
+              isScheduleEnabled: widget.isScheduleEnabled,
+              isScheduleLoading: widget.isScheduleLoading,
+              onScheduleToggle: widget.onScheduleToggle,
             ),
           ),
 

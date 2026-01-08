@@ -16,7 +16,10 @@ class MainTempCardHeader extends StatelessWidget {
   final bool showControls;
   final int alarmCount;
   final bool isPowerLoading;
+  final bool isScheduleEnabled;
+  final bool isScheduleLoading;
   final VoidCallback? onPowerToggle;
+  final VoidCallback? onScheduleToggle;
   final VoidCallback? onSettingsTap;
   final VoidCallback? onAlarmsTap;
 
@@ -28,7 +31,10 @@ class MainTempCardHeader extends StatelessWidget {
     this.showControls = false,
     this.alarmCount = 0,
     this.isPowerLoading = false,
+    this.isScheduleEnabled = false,
+    this.isScheduleLoading = false,
     this.onPowerToggle,
+    this.onScheduleToggle,
     this.onSettingsTap,
     this.onAlarmsTap,
   });
@@ -58,7 +64,10 @@ class MainTempCardHeader extends StatelessWidget {
           _ControlsSection(
             isPowered: isPowered,
             isPowerLoading: isPowerLoading,
+            isScheduleEnabled: isScheduleEnabled,
+            isScheduleLoading: isScheduleLoading,
             onSettingsTap: onSettingsTap,
+            onScheduleToggle: onScheduleToggle,
             onPowerToggle: onPowerToggle,
           )
         else
@@ -187,17 +196,23 @@ class _AlarmBadge extends StatelessWidget {
   }
 }
 
-/// Controls section with settings and power buttons
+/// Controls section with settings, schedule, and power buttons
 class _ControlsSection extends StatelessWidget {
   final bool isPowered;
   final bool isPowerLoading;
+  final bool isScheduleEnabled;
+  final bool isScheduleLoading;
   final VoidCallback? onSettingsTap;
+  final VoidCallback? onScheduleToggle;
   final VoidCallback? onPowerToggle;
 
   const _ControlsSection({
     required this.isPowered,
     required this.isPowerLoading,
+    this.isScheduleEnabled = false,
+    this.isScheduleLoading = false,
     this.onSettingsTap,
+    this.onScheduleToggle,
     this.onPowerToggle,
   });
 
@@ -210,6 +225,27 @@ class _ControlsSection extends StatelessWidget {
           onTap: onSettingsTap,
         ),
         const SizedBox(width: 8),
+        // Schedule toggle button
+        if (isScheduleLoading)
+          const SizedBox(
+            width: 32,
+            height: 32,
+            child: Padding(
+              padding: EdgeInsets.all(6),
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: AppColors.accent,
+              ),
+            ),
+          )
+        else
+          BreezIconButton(
+            icon: Icons.schedule,
+            iconColor: isScheduleEnabled ? AppColors.accentGreen : BreezColors.of(context).textMuted,
+            onTap: onScheduleToggle,
+          ),
+        const SizedBox(width: 8),
+        // Power toggle button
         if (isPowerLoading)
           const SizedBox(
             width: 32,

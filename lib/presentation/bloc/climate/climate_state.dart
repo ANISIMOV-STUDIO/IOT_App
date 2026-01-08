@@ -35,6 +35,9 @@ final class ClimateControlState extends Equatable {
   /// Флаг переключения питания (для блокировки кнопки)
   final bool isTogglingPower;
 
+  /// Флаг переключения расписания (для блокировки кнопки)
+  final bool isTogglingSchedule;
+
   const ClimateControlState({
     this.status = ClimateControlStatus.initial,
     this.climate,
@@ -42,6 +45,7 @@ final class ClimateControlState extends Equatable {
     this.alarmHistory = const [],
     this.errorMessage,
     this.isTogglingPower = false,
+    this.isTogglingSchedule = false,
   });
 
   // ============================================
@@ -94,6 +98,9 @@ final class ClimateControlState extends Equatable {
   Map<String, AlarmInfo> get activeAlarms =>
       deviceFullState?.activeAlarms ?? {};
 
+  /// Включено ли расписание
+  bool get isScheduleEnabled => deviceFullState?.isScheduleEnabled ?? false;
+
   ClimateControlState copyWith({
     ClimateControlStatus? status,
     ClimateState? climate,
@@ -101,6 +108,7 @@ final class ClimateControlState extends Equatable {
     List<AlarmHistory>? alarmHistory,
     String? errorMessage,
     bool? isTogglingPower,
+    bool? isTogglingSchedule,
   }) {
     return ClimateControlState(
       status: status ?? this.status,
@@ -109,6 +117,7 @@ final class ClimateControlState extends Equatable {
       alarmHistory: alarmHistory ?? this.alarmHistory,
       errorMessage: errorMessage,
       isTogglingPower: isTogglingPower ?? this.isTogglingPower,
+      isTogglingSchedule: isTogglingSchedule ?? this.isTogglingSchedule,
     );
   }
 
@@ -120,5 +129,6 @@ final class ClimateControlState extends Equatable {
         alarmHistory,
         errorMessage,
         isTogglingPower,
+        isTogglingSchedule,
       ];
 }

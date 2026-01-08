@@ -20,6 +20,9 @@ class UnitControlCard extends StatelessWidget {
   final VoidCallback? onPowerToggle;
   final VoidCallback? onSettingsTap;
   final bool isPowerLoading;
+  final bool isScheduleEnabled;
+  final bool isScheduleLoading;
+  final VoidCallback? onScheduleToggle;
 
   const UnitControlCard({
     super.key,
@@ -35,6 +38,9 @@ class UnitControlCard extends StatelessWidget {
     this.onPowerToggle,
     this.onSettingsTap,
     this.isPowerLoading = false,
+    this.isScheduleEnabled = false,
+    this.isScheduleLoading = false,
+    this.onScheduleToggle,
   });
 
   @override
@@ -64,6 +70,9 @@ class UnitControlCard extends StatelessWidget {
       onSettingsTap: onSettingsTap,
       showControls: true,
       isPowerLoading: isPowerLoading,
+      isScheduleEnabled: isScheduleEnabled,
+      isScheduleLoading: isScheduleLoading,
+      onScheduleToggle: onScheduleToggle,
       showStats: false, // Без показателей - единообразно на всех платформах
     );
   }

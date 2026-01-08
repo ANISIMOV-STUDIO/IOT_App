@@ -266,6 +266,7 @@ class DeviceJsonMapper {
       activeAlarms: json['activeAlarms'] != null
           ? activeAlarmsFromJson(json['activeAlarms'] as Map<String, dynamic>)
           : null,
+      isScheduleEnabled: json['scheduleEnabled'] as bool? ?? false,
     );
   }
 

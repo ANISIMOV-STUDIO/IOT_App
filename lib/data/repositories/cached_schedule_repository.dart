@@ -115,4 +115,10 @@ class CachedScheduleRepository implements ScheduleRepository {
       ApiLogger.debug('[ScheduleCache] Ошибка обновления кеша', e);
     }
   }
+
+  @override
+  Future<void> setScheduleEnabled(String deviceId, bool enabled) async {
+    _ensureOnline('setScheduleEnabled');
+    await _inner.setScheduleEnabled(deviceId, enabled);
+  }
 }
