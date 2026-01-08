@@ -290,7 +290,8 @@ class _DaySelector extends StatelessWidget {
                   shortName,
                   style: TextStyle(
                     fontSize: compact ? 10 : 11,
-                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                    // Фиксированный fontWeight для предотвращения layout shift
+                    fontWeight: FontWeight.w600,
                     color: isSelected
                         ? Colors.white
                         : hasEntries
@@ -298,19 +299,20 @@ class _DaySelector extends StatelessWidget {
                             : colors.textMuted,
                   ),
                 ),
-                if (hasEntries && !isSelected) ...[
-                  const SizedBox(height: 2),
-                  Container(
-                    width: 4,
-                    height: 4,
-                    decoration: const BoxDecoration(
-                      color: AppColors.accent,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ],
-                if (!hasEntries || isSelected)
-                  const SizedBox(height: 6), // Placeholder for alignment
+                // Фиксированный контейнер для индикатора - всегда 6px высотой
+                const SizedBox(height: 2),
+                SizedBox(
+                  width: 4,
+                  height: 4,
+                  child: (hasEntries && !isSelected)
+                      ? Container(
+                          decoration: const BoxDecoration(
+                            color: AppColors.accent,
+                            shape: BoxShape.circle,
+                          ),
+                        )
+                      : null, // Пустой контейнер сохраняет размер
+                ),
               ],
             ),
           ),

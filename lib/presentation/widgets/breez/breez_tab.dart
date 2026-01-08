@@ -18,8 +18,7 @@ abstract class _TabConstants {
   // Размеры
   static const double borderRadius = 8.0;
   static const double indicatorSize = 6.0;
-  static const double borderWidthSelected = 1.5;
-  static const double borderWidthNormal = 1.0;
+  static const double borderWidth = 1.0;
 
   // Анимации
   static const Duration animationDuration = Duration(milliseconds: 150);
@@ -116,27 +115,25 @@ class _BreezTabState extends State<BreezTab> {
               borderRadius: BorderRadius.circular(_TabConstants.borderRadius),
               border: Border.all(
                 color: _buildBorderColor(colors),
-                width: widget.isSelected
-                    ? _TabConstants.borderWidthSelected
-                    : _TabConstants.borderWidthNormal,
+                width: _TabConstants.borderWidth,
               ),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Label
+                // Label - фиксированный fontWeight для предотвращения layout shift
                 Text(
                   widget.label,
                   style: TextStyle(
                     fontSize: widget.compact
                         ? _TabConstants.fontSizeCompact
                         : _TabConstants.fontSizeNormal,
-                    fontWeight: widget.isSelected ? FontWeight.w700 : FontWeight.w500,
+                    fontWeight: FontWeight.w600,
                     color: _buildTextColor(colors),
                   ),
                 ),
 
-                SizedBox(height: AppSpacing.xxs),
+                const SizedBox(height: AppSpacing.xxs),
 
                 // Индикатор активности (всегда занимает место для одинаковой высоты)
                 Container(
