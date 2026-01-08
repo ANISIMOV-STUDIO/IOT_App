@@ -558,7 +558,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         emit(state.copyWith(
           isTogglingSchedule: false,
           deviceFullState: state.deviceFullState!.copyWith(
-            scheduleIndicator: event.enabled ? 1 : 0,
+            isScheduleEnabled: event.enabled,
           ),
         ));
       } else {

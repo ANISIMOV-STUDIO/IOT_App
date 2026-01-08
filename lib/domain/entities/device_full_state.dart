@@ -70,6 +70,9 @@ class DeviceFullState extends Equatable {
   /// Активные аварии
   final Map<String, AlarmInfo>? activeAlarms;
 
+  /// Включено ли расписание
+  final bool isScheduleEnabled;
+
   const DeviceFullState({
     required this.id,
     required this.name,
@@ -99,6 +102,7 @@ class DeviceFullState extends Equatable {
     this.modeSettings,
     this.timerSettings,
     this.activeAlarms,
+    this.isScheduleEnabled = false,
   });
 
   /// Есть ли активные аварии
@@ -106,9 +110,6 @@ class DeviceFullState extends Equatable {
 
   /// Количество активных аварий
   int get alarmCount => activeAlarms?.length ?? 0;
-
-  /// Включено ли расписание
-  bool get isScheduleEnabled => scheduleIndicator != null && scheduleIndicator! > 0;
 
   DeviceFullState copyWith({
     String? id,
@@ -139,6 +140,7 @@ class DeviceFullState extends Equatable {
     Map<String, ModeSettings>? modeSettings,
     Map<String, TimerSettings>? timerSettings,
     Map<String, AlarmInfo>? activeAlarms,
+    bool? isScheduleEnabled,
   }) {
     return DeviceFullState(
       id: id ?? this.id,
@@ -169,6 +171,7 @@ class DeviceFullState extends Equatable {
       modeSettings: modeSettings ?? this.modeSettings,
       timerSettings: timerSettings ?? this.timerSettings,
       activeAlarms: activeAlarms ?? this.activeAlarms,
+      isScheduleEnabled: isScheduleEnabled ?? this.isScheduleEnabled,
     );
   }
 
@@ -202,5 +205,6 @@ class DeviceFullState extends Equatable {
         modeSettings,
         timerSettings,
         activeAlarms,
+        isScheduleEnabled,
       ];
 }
