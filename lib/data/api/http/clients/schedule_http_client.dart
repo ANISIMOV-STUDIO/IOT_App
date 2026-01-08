@@ -5,7 +5,7 @@
 /// Backend endpoints:
 /// - GET /api/device/{id} → timerSettings (расписание по дням)
 /// - POST /api/device/{id}/schedule → { enabled: bool } - вкл/выкл расписания
-/// - POST /api/device/{id}/timer → установка таймера для дня недели
+/// - PATCH /api/device/{id}/timer-settings → установка таймера для дня недели
 ///
 /// Flutter модель: ScheduleEntry с id, day, timeRange, etc.
 /// Backend модель: timerSettings[day] = { onHour, onMinute, offHour, offMinute, enabled }
@@ -109,11 +109,11 @@ class ScheduleHttpClient {
 
   /// Создать/обновить запись расписания
   ///
-  /// Backend: POST /api/device/{id}/timer
+  /// Backend: PATCH /api/device/{id}/timer-settings
   Future<Map<String, dynamic>> createSchedule(
       Map<String, dynamic> schedule) async {
     final deviceId = schedule['deviceId'] as String;
-    final url = '${ApiConfig.deviceApiUrl}/$deviceId/timer';
+    final url = '${ApiConfig.deviceApiUrl}/$deviceId/timer-settings';
 
     // Парсим timeRange из формата HH:MM-HH:MM
     final timeRange = schedule['timeRange'] as String? ?? '08:00-22:00';
@@ -129,10 +129,10 @@ class ScheduleHttpClient {
     });
 
     try {
-      ApiLogger.logHttpRequest('POST', url, body);
+      ApiLogger.logHttpRequest('PATCH', url, body);
 
       final token = await _apiClient.getAuthToken();
-      final response = await _apiClient.getHttpClient().post(
+      final response = await _apiClient.getHttpClient().patch(
             Uri.parse(url),
             headers: {
               'Content-Type': 'application/json',
@@ -141,7 +141,7 @@ class ScheduleHttpClient {
             body: body,
           );
 
-      ApiLogger.logHttpResponse('POST', url, response.statusCode, response.body);
+      ApiLogger.logHttpResponse('PATCH', url, response.statusCode, response.body);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         // Возвращаем созданную запись с синтетическим ID
@@ -153,7 +153,7 @@ class ScheduleHttpClient {
         throw HttpErrorHandler.handle(response);
       }
     } catch (e) {
-      ApiLogger.logHttpError('POST', url, e);
+      ApiLogger.logHttpError('PATCH', url, e);
       if (e is http.ClientException) {
         throw HttpErrorHandler.handleException(e);
       }
@@ -163,7 +163,7 @@ class ScheduleHttpClient {
 
   /// Обновить запись расписания
   ///
-  /// Backend: POST /api/device/{id}/timer (тот же endpoint что и create)
+  /// Backend: PATCH /api/device/{id}/timer-settings (тот же endpoint что и create)
   Future<Map<String, dynamic>> updateSchedule(
       String scheduleId, Map<String, dynamic> schedule) async {
     // scheduleId имеет формат deviceId_day
@@ -174,7 +174,7 @@ class ScheduleHttpClient {
 
     final deviceId = parts[0];
     final day = parts.sublist(1).join('_'); // На случай если день содержит _
-    final url = '${ApiConfig.deviceApiUrl}/$deviceId/timer';
+    final url = '${ApiConfig.deviceApiUrl}/$deviceId/timer-settings';
 
     // Парсим timeRange
     final timeRange = schedule['timeRange'] as String? ?? '08:00-22:00';
@@ -190,10 +190,10 @@ class ScheduleHttpClient {
     });
 
     try {
-      ApiLogger.logHttpRequest('POST', url, body);
+      ApiLogger.logHttpRequest('PATCH', url, body);
 
       final token = await _apiClient.getAuthToken();
-      final response = await _apiClient.getHttpClient().post(
+      final response = await _apiClient.getHttpClient().patch(
             Uri.parse(url),
             headers: {
               'Content-Type': 'application/json',
@@ -202,7 +202,7 @@ class ScheduleHttpClient {
             body: body,
           );
 
-      ApiLogger.logHttpResponse('POST', url, response.statusCode, response.body);
+      ApiLogger.logHttpResponse('PATCH', url, response.statusCode, response.body);
 
       if (response.statusCode == 200) {
         return {
@@ -215,7 +215,7 @@ class ScheduleHttpClient {
         throw HttpErrorHandler.handle(response);
       }
     } catch (e) {
-      ApiLogger.logHttpError('POST', url, e);
+      ApiLogger.logHttpError('PATCH', url, e);
       if (e is http.ClientException) {
         throw HttpErrorHandler.handleException(e);
       }
@@ -235,7 +235,7 @@ class ScheduleHttpClient {
 
     final deviceId = parts[0];
     final day = parts.sublist(1).join('_');
-    final url = '${ApiConfig.deviceApiUrl}/$deviceId/timer';
+    final url = '${ApiConfig.deviceApiUrl}/$deviceId/timer-settings';
 
     // "Удаление" = отключение таймера для этого дня
     final body = json.encode({
@@ -248,10 +248,10 @@ class ScheduleHttpClient {
     });
 
     try {
-      ApiLogger.logHttpRequest('POST (delete)', url, body);
+      ApiLogger.logHttpRequest('PATCH (delete)', url, body);
 
       final token = await _apiClient.getAuthToken();
-      final response = await _apiClient.getHttpClient().post(
+      final response = await _apiClient.getHttpClient().patch(
             Uri.parse(url),
             headers: {
               'Content-Type': 'application/json',
@@ -260,13 +260,13 @@ class ScheduleHttpClient {
             body: body,
           );
 
-      ApiLogger.logHttpResponse('POST (delete)', url, response.statusCode, response.body);
+      ApiLogger.logHttpResponse('PATCH (delete)', url, response.statusCode, response.body);
 
       if (response.statusCode != 200 && response.statusCode != 204) {
         throw HttpErrorHandler.handle(response);
       }
     } catch (e) {
-      ApiLogger.logHttpError('POST (delete)', url, e);
+      ApiLogger.logHttpError('PATCH (delete)', url, e);
       if (e is http.ClientException) {
         throw HttpErrorHandler.handleException(e);
       }
