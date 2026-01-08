@@ -20,7 +20,7 @@ class DeviceJsonMapper {
       brand: json['brand'] as String? ?? 'ZILON',
       deviceType: _stringToDeviceType(json['type'] as String?),
       isOnline: json['isOnline'] as bool? ?? true,
-      isActive: json['power'] as bool? ?? false,
+      isActive: json['running'] as bool? ?? false, // running = фактически работает
     );
   }
 
