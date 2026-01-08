@@ -2,7 +2,6 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../generated/l10n/app_localizations.dart';
 import '../../../../core/theme/app_radius.dart';
@@ -187,15 +186,16 @@ class RenameField extends StatelessWidget {
           controller: controller,
           autofocus: true,
           style: TextStyle(color: colors.text),
-          inputFormatters: [
-            LengthLimitingTextInputFormatter(50),
-          ],
+          keyboardType: TextInputType.text,
+          textCapitalization: TextCapitalization.sentences,
+          maxLength: 50,
           decoration: InputDecoration(
             hintText: l10n.unitSettingsEnterName,
             hintStyle: TextStyle(color: colors.textMuted),
             filled: true,
             fillColor: colors.bg,
             prefixIcon: Icon(Icons.edit, color: colors.textMuted, size: 20),
+            counterText: '', // Скрываем счётчик символов
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppRadius.button),
               borderSide: BorderSide(color: colors.border),

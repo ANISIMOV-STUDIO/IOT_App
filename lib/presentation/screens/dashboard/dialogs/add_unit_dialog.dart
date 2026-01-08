@@ -215,12 +215,16 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
         TextFormField(
           controller: _nameController,
           style: TextStyle(color: colors.text),
+          keyboardType: TextInputType.text,
+          textCapitalization: TextCapitalization.sentences,
+          maxLength: 50,
           decoration: InputDecoration(
             hintText: l10n.deviceNameExample,
             hintStyle: TextStyle(color: colors.textMuted),
             filled: true,
             fillColor: colors.bg,
             prefixIcon: Icon(Icons.label_outline, color: colors.textMuted, size: 20),
+            counterText: '', // Скрываем счётчик символов
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppRadius.button),
               borderSide: BorderSide(color: colors.border),

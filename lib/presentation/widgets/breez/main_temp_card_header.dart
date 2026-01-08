@@ -109,12 +109,16 @@ class _DateUnitSection extends StatelessWidget {
               color: AppColors.accent,
             ),
             const SizedBox(width: 4),
-            Text(
-              unitName,
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-                color: colors.text,
+            Flexible(
+              child: Text(
+                unitName,
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: colors.text,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
             const SizedBox(width: 4),
