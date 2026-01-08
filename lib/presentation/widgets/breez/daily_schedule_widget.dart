@@ -102,12 +102,15 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget> {
   }
 
   Set<int> get _activeIndices {
-    final settings =
-        _localSettings.isNotEmpty ? _localSettings : (widget.timerSettings ?? {});
+    // Merge local and server settings: prioritize local, fallback to server
     return DailyScheduleWidget.daysOrder
         .asMap()
         .entries
-        .where((e) => settings[e.value]?.enabled ?? false)
+        .where((e) {
+          final day = e.value;
+          final settings = _localSettings[day] ?? widget.timerSettings?[day];
+          return settings?.enabled ?? false;
+        })
         .map((e) => e.key)
         .toSet();
   }
