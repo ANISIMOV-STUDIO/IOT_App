@@ -220,7 +220,7 @@ class DashboardBlocBuilder extends StatelessWidget {
     return UnitState(
       id: device.id,
       name: device.name,
-      power: fullState?.power ?? false, // running from backend
+      power: fullState?.power ?? climate?.isOn ?? false, // running from backend with fallback
       temp: climate?.currentTemperature.toInt() ?? 20,
       heatingTemp: fullState?.heatingTemperature ?? 21,
       coolingTemp: fullState?.coolingTemperature ?? 24,
