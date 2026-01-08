@@ -176,6 +176,13 @@ Future<void> init() async {
     );
   }
 
+  // HVAC HTTP Client (для прямых вызовов API)
+  if (useRealApi) {
+    sl.registerLazySingleton<HvacHttpClient>(
+      () => HvacHttpClient(sl<ApiClient>()),
+    );
+  }
+
   // Climate Repository (Управление климатом HVAC)
   if (useRealApi) {
     sl.registerLazySingleton<ClimateRepository>(
@@ -184,7 +191,7 @@ Future<void> init() async {
         final signalR = sl<SignalRHubConnection>();
         final realRepository = RealClimateRepository(
           apiClient,
-          HvacHttpClient(apiClient),
+          sl<HvacHttpClient>(),
           signalR,
         );
         // Инициализировать SignalR connection асинхронно
