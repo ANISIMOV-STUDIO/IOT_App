@@ -39,6 +39,8 @@ class MockSetPreset extends Mock implements SetPreset {}
 
 class MockSetAirflow extends Mock implements SetAirflow {}
 
+class MockSetScheduleEnabled extends Mock implements SetScheduleEnabled {}
+
 void main() {
   late MockGetCurrentClimateState mockGetCurrentClimateState;
   late MockGetDeviceState mockGetDeviceState;
@@ -53,6 +55,7 @@ void main() {
   late MockSetOperatingMode mockSetOperatingMode;
   late MockSetPreset mockSetPreset;
   late MockSetAirflow mockSetAirflow;
+  late MockSetScheduleEnabled mockSetScheduleEnabled;
 
   // Test data
   const testClimate = ClimateState(
@@ -89,6 +92,8 @@ void main() {
     registerFallbackValue(const SetPresetParams(preset: 'auto'));
     registerFallbackValue(
         const SetAirflowParams(type: AirflowType.supply, value: 50.0));
+    registerFallbackValue(
+        const SetScheduleEnabledParams(deviceId: '', enabled: false));
   });
 
   setUp(() {
@@ -104,6 +109,7 @@ void main() {
     mockSetOperatingMode = MockSetOperatingMode();
     mockSetPreset = MockSetPreset();
     mockSetAirflow = MockSetAirflow();
+    mockSetScheduleEnabled = MockSetScheduleEnabled();
     mockGetAlarmHistory = MockGetAlarmHistory();
   });
 
@@ -121,6 +127,7 @@ void main() {
         setOperatingMode: mockSetOperatingMode,
         setPreset: mockSetPreset,
         setAirflow: mockSetAirflow,
+        setScheduleEnabled: mockSetScheduleEnabled,
       );
 
   group('ClimateBloc', () {
