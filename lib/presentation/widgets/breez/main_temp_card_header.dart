@@ -92,6 +92,7 @@ class _DateUnitSection extends StatelessWidget {
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Text(
           dateText,
@@ -102,6 +103,7 @@ class _DateUnitSection extends StatelessWidget {
         ),
         const SizedBox(height: 4),
         Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
             const Icon(
               Icons.location_on,
@@ -109,7 +111,8 @@ class _DateUnitSection extends StatelessWidget {
               color: AppColors.accent,
             ),
             const SizedBox(width: 4),
-            Flexible(
+            ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 150),
               child: Text(
                 unitName,
                 style: TextStyle(
