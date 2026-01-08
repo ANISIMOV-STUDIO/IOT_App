@@ -13,7 +13,38 @@ import 'operation_graph_widgets.dart';
 
 export '../../../domain/entities/graph_data.dart';
 
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+/// Константы для OperationGraph
+abstract class _GraphConstants {
+  // Размеры
+  static const double yAxisWidth = 28.0;
+  static const double xAxisHeight = 30.0;
+
+  // Шрифты
+  static const double labelFontSize = 9.0;
+  static const double valueFontSize = 32.0;
+  static const double unitFontSize = 16.0;
+  static const double axisFontSize = 9.0;
+  static const double xAxisFontSize = 10.0;
+
+  // Отступы
+  static const int maxXAxisLabels = 6;
+}
+
+// =============================================================================
+// MAIN WIDGET
+// =============================================================================
+
 /// Operation graph widget with smooth curve
+///
+/// Поддерживает:
+/// - Переключение метрик (температура, влажность, поток)
+/// - Hover эффекты
+/// - Кэширование статистики
+/// - Accessibility через Semantics
 class OperationGraph extends StatefulWidget {
   final List<GraphDataPoint> data;
   final GraphMetric selectedMetric;
@@ -122,25 +153,21 @@ class _OperationGraphState extends State<OperationGraph> {
   }
 
   String _getMetricLabel(AppLocalizations l10n) {
-    switch (widget.selectedMetric) {
-      case GraphMetric.temperature:
-        return l10n.graphTemperatureLabel;
-      case GraphMetric.humidity:
-        return l10n.graphHumidityLabel;
-      case GraphMetric.airflow:
-        return l10n.graphAirflowLabel;
-    }
+    final labelMap = <GraphMetric, String>{
+      GraphMetric.temperature: l10n.graphTemperatureLabel,
+      GraphMetric.humidity: l10n.graphHumidityLabel,
+      GraphMetric.airflow: l10n.graphAirflowLabel,
+    };
+    return labelMap[widget.selectedMetric] ?? '';
   }
 
   String _getMetricUnit(AppLocalizations l10n) {
-    switch (widget.selectedMetric) {
-      case GraphMetric.temperature:
-        return '°C';
-      case GraphMetric.humidity:
-        return '%';
-      case GraphMetric.airflow:
-        return l10n.cubicMetersPerHour;
-    }
+    final unitMap = <GraphMetric, String>{
+      GraphMetric.temperature: '°C',
+      GraphMetric.humidity: '%',
+      GraphMetric.airflow: l10n.cubicMetersPerHour,
+    };
+    return unitMap[widget.selectedMetric] ?? '';
   }
 }
 
@@ -181,77 +208,80 @@ class _GraphHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                metricLabel,
-                style: TextStyle(
-                  fontSize: 9,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 1.5,
-                  color: colors.textMuted,
+    return Semantics(
+      label: '$metricLabel: ${currentValue.toStringAsFixed(1)} $metricUnit',
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  metricLabel,
+                  style: TextStyle(
+                    fontSize: _GraphConstants.labelFontSize,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 1.5,
+                    color: colors.textMuted,
+                  ),
                 ),
+                SizedBox(height: AppSpacing.xxs),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
+                  children: [
+                    Text(
+                      currentValue.toStringAsFixed(1),
+                      style: TextStyle(
+                        fontSize: _GraphConstants.valueFontSize,
+                        fontWeight: FontWeight.w900,
+                        height: 1,
+                        color: colors.text,
+                      ),
+                    ),
+                    SizedBox(width: AppSpacing.xxs),
+                    Text(
+                      metricUnit,
+                      style: TextStyle(
+                        fontSize: _GraphConstants.unitFontSize,
+                        fontWeight: FontWeight.w600,
+                        color: colors.textMuted,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          // Metric tabs
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              GraphMetricTab(
+                icon: Icons.thermostat_outlined,
+                label: l10n.tempShort,
+                isSelected: selectedMetric == GraphMetric.temperature,
+                onTap: () => onMetricChanged?.call(GraphMetric.temperature),
               ),
-              const SizedBox(height: 4),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.baseline,
-                textBaseline: TextBaseline.alphabetic,
-                children: [
-                  Text(
-                    currentValue.toStringAsFixed(1),
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.w900,
-                      height: 1,
-                      color: colors.text,
-                    ),
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    metricUnit,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: colors.textMuted,
-                    ),
-                  ),
-                ],
+              SizedBox(width: AppSpacing.xs),
+              GraphMetricTab(
+                icon: Icons.water_drop_outlined,
+                label: l10n.humidShort,
+                isSelected: selectedMetric == GraphMetric.humidity,
+                onTap: () => onMetricChanged?.call(GraphMetric.humidity),
+              ),
+              SizedBox(width: AppSpacing.xs),
+              GraphMetricTab(
+                icon: Icons.air,
+                label: l10n.airflowShort,
+                isSelected: selectedMetric == GraphMetric.airflow,
+                onTap: () => onMetricChanged?.call(GraphMetric.airflow),
               ),
             ],
           ),
-        ),
-        // Metric tabs
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            GraphMetricTab(
-              icon: Icons.thermostat_outlined,
-              label: l10n.tempShort,
-              isSelected: selectedMetric == GraphMetric.temperature,
-              onTap: () => onMetricChanged?.call(GraphMetric.temperature),
-            ),
-            const SizedBox(width: 8),
-            GraphMetricTab(
-              icon: Icons.water_drop_outlined,
-              label: l10n.humidShort,
-              isSelected: selectedMetric == GraphMetric.humidity,
-              onTap: () => onMetricChanged?.call(GraphMetric.humidity),
-            ),
-            const SizedBox(width: 8),
-            GraphMetricTab(
-              icon: Icons.air,
-              label: l10n.airflowShort,
-              isSelected: selectedMetric == GraphMetric.airflow,
-              onTap: () => onMetricChanged?.call(GraphMetric.airflow),
-            ),
-          ],
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -318,7 +348,6 @@ class _GraphArea extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        const yAxisWidth = 28.0;
         return Row(
           children: [
             // Y-axis labels
@@ -333,15 +362,15 @@ class _GraphArea extends StatelessWidget {
                       onHover: (event) {
                         final index = _getIndexFromPosition(
                           event.localPosition.dx,
-                          constraints.maxWidth - yAxisWidth,
+                          constraints.maxWidth - _GraphConstants.yAxisWidth,
                         );
                         onHoverChanged(index);
                       },
                       onExit: (_) => onHoverChanged(null),
                       child: CustomPaint(
                         size: Size(
-                          constraints.maxWidth - yAxisWidth,
-                          constraints.maxHeight - 30,
+                          constraints.maxWidth - _GraphConstants.yAxisWidth,
+                          constraints.maxHeight - _GraphConstants.xAxisHeight,
                         ),
                         painter: OperationGraphPainter(
                           data: data,
@@ -352,7 +381,7 @@ class _GraphArea extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: AppSpacing.xs),
                   // X-axis labels
                   _XAxis(data: data, colors: colors),
                 ],
@@ -395,7 +424,7 @@ class _YAxis extends StatelessWidget {
         : data.map((e) => e.value).reduce(math.min).floor();
 
     return SizedBox(
-      width: 28,
+      width: _GraphConstants.yAxisWidth,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -412,7 +441,7 @@ class _YAxis extends StatelessWidget {
     return Text(
       text,
       style: TextStyle(
-        fontSize: 9,
+        fontSize: _GraphConstants.axisFontSize,
         fontWeight: FontWeight.w500,
         color: colors.textMuted.withValues(alpha: 0.6),
       ),
@@ -433,8 +462,9 @@ class _XAxis extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final labelCount = data.length;
-    const maxLabels = 6;
-    final step = labelCount <= maxLabels ? 1 : (labelCount / (maxLabels - 1)).ceil();
+    final step = labelCount <= _GraphConstants.maxXAxisLabels
+        ? 1
+        : (labelCount / (_GraphConstants.maxXAxisLabels - 1)).ceil();
 
     final labels = <Widget>[];
     for (var i = 0; i < labelCount; i++) {
@@ -443,7 +473,7 @@ class _XAxis extends StatelessWidget {
           Text(
             data[i].label,
             style: TextStyle(
-              fontSize: 10,
+              fontSize: _GraphConstants.xAxisFontSize,
               color: colors.textMuted,
             ),
           ),

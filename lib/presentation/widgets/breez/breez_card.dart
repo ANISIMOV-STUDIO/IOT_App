@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
+import '../../../core/theme/spacing.dart';
 
 // Re-export button components for backwards compatibility
 export 'breez_button.dart';
@@ -12,7 +13,32 @@ export 'breez_icon_button.dart';
 export 'breez_dialog_button.dart';
 export 'breez_settings_tile.dart';
 
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+/// Константы для BreezCard
+abstract class _CardConstants {
+  static const double defaultPadding = 24.0; // = AppSpacing.xl - 8
+  static const Duration animationDuration = Duration(milliseconds: 300);
+  static const double disabledOpacity = 0.3;
+  static const double titleFontSize = 10.0;
+  static const double descriptionFontSize = 12.0;
+  static const double titleLetterSpacing = 2.0;
+  static const double shimmerHeight = 100.0;
+}
+
+// =============================================================================
+// MAIN WIDGET
+// =============================================================================
+
 /// BREEZ styled card using Material Card
+///
+/// Поддерживает:
+/// - Disabled state с opacity
+/// - Loading state с shimmer
+/// - Опциональные title и description
+/// - Accessibility через Semantics
 class BreezCard extends StatelessWidget {
   final Widget child;
   final EdgeInsets? padding;
@@ -36,52 +62,56 @@ class BreezCard extends StatelessWidget {
     final colors = BreezColors.of(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return AnimatedOpacity(
-      duration: const Duration(milliseconds: 300),
-      opacity: disabled ? 0.3 : 1.0,
-      child: Container(
-        decoration: BoxDecoration(
-          color: colors.card,
-          borderRadius: BorderRadius.circular(AppRadius.card),
-          border: Border.all(color: colors.border),
-        ),
-        padding: padding ?? const EdgeInsets.all(24),
-        child: IgnorePointer(
-          ignoring: disabled,
-          child: isLoading
-              ? _buildShimmer(context, colors, isDark)
-              : (title != null || description != null
-                  ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        if (title != null)
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 4),
-                            child: Text(
-                              (title ?? '').toUpperCase(),
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w900,
-                                letterSpacing: 2,
-                                color: colors.text,
+    return Semantics(
+      container: true,
+      label: title,
+      child: AnimatedOpacity(
+        duration: _CardConstants.animationDuration,
+        opacity: disabled ? _CardConstants.disabledOpacity : 1.0,
+        child: Container(
+          decoration: BoxDecoration(
+            color: colors.card,
+            borderRadius: BorderRadius.circular(AppRadius.card),
+            border: Border.all(color: colors.border),
+          ),
+          padding: padding ?? const EdgeInsets.all(_CardConstants.defaultPadding),
+          child: IgnorePointer(
+            ignoring: disabled,
+            child: isLoading
+                ? _buildShimmer(context, colors, isDark)
+                : (title != null || description != null
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (title != null)
+                            Padding(
+                              padding: EdgeInsets.only(bottom: AppSpacing.xxs),
+                              child: Text(
+                                (title ?? '').toUpperCase(),
+                                style: TextStyle(
+                                  fontSize: _CardConstants.titleFontSize,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: _CardConstants.titleLetterSpacing,
+                                  color: colors.text,
+                                ),
                               ),
                             ),
-                          ),
-                        if (description != null)
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 16),
-                            child: Text(
-                              description ?? '',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: colors.textMuted,
+                          if (description != null)
+                            Padding(
+                              padding: EdgeInsets.only(bottom: AppSpacing.md),
+                              child: Text(
+                                description ?? '',
+                                style: TextStyle(
+                                  fontSize: _CardConstants.descriptionFontSize,
+                                  color: colors.textMuted,
+                                ),
                               ),
                             ),
-                          ),
-                        child,
-                      ],
-                    )
-                  : child),
+                          child,
+                        ],
+                      )
+                    : child),
+          ),
         ),
       ),
     );
@@ -97,26 +127,26 @@ class BreezCard extends StatelessWidget {
           if (title != null)
             Container(
               width: 80,
-              height: 10,
+              height: _CardConstants.titleFontSize,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(AppRadius.indicator),
               ),
             ),
-          if (title != null) const SizedBox(height: 4),
+          if (title != null) SizedBox(height: AppSpacing.xxs),
           if (description != null)
             Container(
               width: 120,
-              height: 12,
+              height: _CardConstants.descriptionFontSize,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(AppRadius.indicator),
               ),
             ),
-          if (description != null) const SizedBox(height: 16),
+          if (description != null) SizedBox(height: AppSpacing.md),
           Container(
             width: double.infinity,
-            height: 100,
+            height: _CardConstants.shimmerHeight,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(AppRadius.card),

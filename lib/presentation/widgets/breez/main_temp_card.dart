@@ -4,6 +4,7 @@ library;
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
+import '../../../core/theme/spacing.dart';
 import '../../../domain/entities/unit_state.dart';
 import '../../../generated/l10n/app_localizations.dart';
 import 'fan_slider.dart';
@@ -13,7 +14,37 @@ import 'sensors_grid.dart';
 import 'stat_item.dart';
 import 'temp_column.dart';
 
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+/// Константы для MainTempCard
+abstract class _MainTempCardConstants {
+  static const double padding = 24.0;
+  static const double borderWidthOn = 1.5;
+  static const double borderWidthOff = 1.0;
+  static const double borderOpacity = 0.5;
+  static const double shadowBlurPrimary = 24.0;
+  static const double shadowBlurGlow = 40.0;
+  static const double shadowSpread = 4.0;
+  static const double shadowOffsetY = 8.0;
+  static const double shadowOpacityPrimary = 0.2;
+  static const double shadowOpacityGlow = 0.1;
+  static const double dividerHeight = 80.0;
+  static const double dividerWidth = 1.0;
+}
+
+// =============================================================================
+// MAIN WIDGET
+// =============================================================================
+
 /// Main temperature display card with gradient background
+///
+/// Поддерживает:
+/// - Градиентный фон когда устройство включено
+/// - Glow эффект
+/// - Shimmer loading state
+/// - Accessibility через Semantics
 class MainTempCard extends StatelessWidget {
   final String unitName;
   final String? status;
@@ -83,38 +114,46 @@ class MainTempCard extends StatelessWidget {
         : AppColors.lightCardGradientColors;
     final offGradient = [colors.card, colors.card];
 
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: isPowered ? poweredGradient : offGradient,
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+    return Semantics(
+      label: '$unitName: ${isPowered ? status ?? 'включено' : 'выключено'}',
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: isPowered ? poweredGradient : offGradient,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(AppRadius.card),
+          border: Border.all(
+            color: isPowered
+                ? AppColors.accent.withValues(alpha: _MainTempCardConstants.borderOpacity)
+                : colors.border,
+            width: isPowered
+                ? _MainTempCardConstants.borderWidthOn
+                : _MainTempCardConstants.borderWidthOff,
+          ),
+          boxShadow: isPowered
+              ? [
+                  // Основная тень
+                  BoxShadow(
+                    color: AppColors.accent.withValues(
+                      alpha: _MainTempCardConstants.shadowOpacityPrimary,
+                    ),
+                    blurRadius: _MainTempCardConstants.shadowBlurPrimary,
+                    offset: Offset(0, _MainTempCardConstants.shadowOffsetY),
+                  ),
+                  // Glow эффект
+                  BoxShadow(
+                    color: AppColors.accent.withValues(
+                      alpha: _MainTempCardConstants.shadowOpacityGlow,
+                    ),
+                    blurRadius: _MainTempCardConstants.shadowBlurGlow,
+                    spreadRadius: _MainTempCardConstants.shadowSpread,
+                  ),
+                ]
+              : null,
         ),
-        borderRadius: BorderRadius.circular(AppRadius.card),
-        border: Border.all(
-          color: isPowered
-              ? AppColors.accent.withValues(alpha: 0.5) // Более яркая граница
-              : colors.border,
-          width: isPowered ? 1.5 : 1.0, // Толще граница когда включено
-        ),
-        boxShadow: isPowered
-            ? [
-                // Основная тень
-                BoxShadow(
-                  color: AppColors.accent.withValues(alpha: 0.2),
-                  blurRadius: 24,
-                  offset: const Offset(0, 8),
-                ),
-                // Glow эффект
-                BoxShadow(
-                  color: AppColors.accent.withValues(alpha: 0.1),
-                  blurRadius: 40,
-                  spreadRadius: 4,
-                ),
-              ]
-            : null,
-      ),
-      padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(_MainTempCardConstants.padding),
       child: isLoading
           ? const MainTempCardShimmer()
           : Column(
@@ -173,6 +212,7 @@ class MainTempCard extends StatelessWidget {
                 ),
               ],
             ),
+      ),
     );
   }
 }
@@ -220,10 +260,10 @@ class _TemperatureSection extends StatelessWidget {
         ),
         // Divider
         Container(
-          width: 1,
-          height: 80,
+          width: _MainTempCardConstants.dividerWidth,
+          height: _MainTempCardConstants.dividerHeight,
           color: colors.border,
-          margin: const EdgeInsets.symmetric(horizontal: 16),
+          margin: EdgeInsets.symmetric(horizontal: AppSpacing.md),
         ),
         // Cooling temperature
         Expanded(
@@ -263,7 +303,7 @@ class _StatsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(top: 16),
+      padding: EdgeInsets.only(top: AppSpacing.md),
       decoration: BoxDecoration(
         border: Border(
           top: BorderSide(color: colors.border),
@@ -317,9 +357,9 @@ class _FanSlidersSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const SizedBox(height: 16),
+        SizedBox(height: AppSpacing.md),
         Container(
-          padding: const EdgeInsets.only(top: 16),
+          padding: EdgeInsets.only(top: AppSpacing.md),
           decoration: BoxDecoration(
             border: Border(
               top: BorderSide(color: colors.border),
@@ -336,7 +376,7 @@ class _FanSlidersSection extends StatelessWidget {
                   onChanged: onSupplyFanChanged,
                 ),
               ),
-              const SizedBox(width: 16),
+              SizedBox(width: AppSpacing.md),
               Expanded(
                 child: FanSlider(
                   label: l10n.exhaust,

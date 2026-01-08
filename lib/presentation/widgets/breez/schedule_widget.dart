@@ -29,59 +29,47 @@ class ScheduleWidget extends StatefulWidget {
   });
 
   /// Перевод английского названия дня недели в локализованное
+  ///
+  /// Использует Map вместо switch-case для лучшей читаемости и производительности
   static String translateDayName(String englishDay, AppLocalizations l10n) {
-    switch (englishDay.toLowerCase()) {
-      case 'monday':
-        return l10n.monday;
-      case 'tuesday':
-        return l10n.tuesday;
-      case 'wednesday':
-        return l10n.wednesday;
-      case 'thursday':
-        return l10n.thursday;
-      case 'friday':
-        return l10n.friday;
-      case 'saturday':
-        return l10n.saturday;
-      case 'sunday':
-        return l10n.sunday;
-      default:
-        return englishDay;
-    }
+    final dayMap = <String, String>{
+      'monday': l10n.monday,
+      'tuesday': l10n.tuesday,
+      'wednesday': l10n.wednesday,
+      'thursday': l10n.thursday,
+      'friday': l10n.friday,
+      'saturday': l10n.saturday,
+      'sunday': l10n.sunday,
+    };
+    return dayMap[englishDay.toLowerCase()] ?? englishDay;
   }
 
   /// Перевод локализованного названия дня в английское (для API)
   static String dayNameToEnglish(String localizedDay, AppLocalizations l10n) {
-    if (localizedDay == l10n.monday) return 'monday';
-    if (localizedDay == l10n.tuesday) return 'tuesday';
-    if (localizedDay == l10n.wednesday) return 'wednesday';
-    if (localizedDay == l10n.thursday) return 'thursday';
-    if (localizedDay == l10n.friday) return 'friday';
-    if (localizedDay == l10n.saturday) return 'saturday';
-    if (localizedDay == l10n.sunday) return 'sunday';
-    return localizedDay;
+    final reverseMap = <String, String>{
+      l10n.monday: 'monday',
+      l10n.tuesday: 'tuesday',
+      l10n.wednesday: 'wednesday',
+      l10n.thursday: 'thursday',
+      l10n.friday: 'friday',
+      l10n.saturday: 'saturday',
+      l10n.sunday: 'sunday',
+    };
+    return reverseMap[localizedDay] ?? localizedDay;
   }
 
   /// Короткие названия дней недели (локализованные)
   static String getShortDayName(String englishDay, AppLocalizations l10n) {
-    switch (englishDay.toLowerCase()) {
-      case 'monday':
-        return l10n.mondayShort;
-      case 'tuesday':
-        return l10n.tuesdayShort;
-      case 'wednesday':
-        return l10n.wednesdayShort;
-      case 'thursday':
-        return l10n.thursdayShort;
-      case 'friday':
-        return l10n.fridayShort;
-      case 'saturday':
-        return l10n.saturdayShort;
-      case 'sunday':
-        return l10n.sundayShort;
-      default:
-        return englishDay.substring(0, 2);
-    }
+    final shortDayMap = <String, String>{
+      'monday': l10n.mondayShort,
+      'tuesday': l10n.tuesdayShort,
+      'wednesday': l10n.wednesdayShort,
+      'thursday': l10n.thursdayShort,
+      'friday': l10n.fridayShort,
+      'saturday': l10n.saturdayShort,
+      'sunday': l10n.sundayShort,
+    };
+    return shortDayMap[englishDay.toLowerCase()] ?? englishDay.substring(0, 2);
   }
 
   @override
