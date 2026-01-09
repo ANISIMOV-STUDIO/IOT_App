@@ -30,7 +30,7 @@ class UnitState extends Equatable {
   final int recuperatorEfficiency;   // Температурная эффективность рекуператора (%)
   final int freeCooling;             // Свободное охлаждение рекуператора (м³/ч)
   final int heaterPerformance;       // Производительность электрического нагревателя (%)
-  final int coolerStatus;            // Статус охладителя (%)
+  final String coolerStatus;            // Статус охладителя
   final int ductPressure;            // Давление в воздуховоде (Па)
 
   const UnitState({
@@ -54,7 +54,7 @@ class UnitState extends Equatable {
     this.recuperatorEfficiency = 85,
     this.freeCooling = 0,
     this.heaterPerformance = 0,
-    this.coolerStatus = 0,
+    this.coolerStatus = 'Н/Д',
     this.ductPressure = 120,
   });
 
@@ -79,7 +79,7 @@ class UnitState extends Equatable {
     int? recuperatorEfficiency,
     int? freeCooling,
     int? heaterPerformance,
-    int? coolerStatus,
+    String? coolerStatus,
     int? ductPressure,
   }) {
     return UnitState(

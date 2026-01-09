@@ -54,7 +54,7 @@ class SensorsGrid extends StatelessWidget {
       // Row 3
       _SensorData(Icons.ac_unit, '${unit.freeCooling} м³/ч', l10n.freeCooling),
       _SensorData(Icons.local_fire_department_outlined, '${unit.heaterPerformance}%', l10n.heaterPerformance),
-      _SensorData(Icons.severe_cold, '${unit.coolerStatus}%', l10n.coolerStatus),
+      _SensorData(Icons.severe_cold, unit.coolerStatus, l10n.coolerStatus),
       // Row 4
       _SensorData(Icons.speed, '${unit.ductPressure} Па', l10n.ductPressure),
       _SensorData(Icons.water_drop_outlined, '${unit.humidity}%', l10n.relativeHumidity),

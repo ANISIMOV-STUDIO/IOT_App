@@ -55,8 +55,8 @@ class DeviceFullState extends Equatable {
   /// Производительность электрического нагревателя (%)
   final int? heaterPerformance;
 
-  /// Статус охладителя (%)
-  final int? coolerStatus;
+  /// Статус охладителя (Отсутствует/Выключен/Включен)
+  final String? coolerStatus;
 
   /// Давление в воздуховоде (Па)
   final int? ductPressure;
@@ -135,7 +135,7 @@ class DeviceFullState extends Equatable {
     int? co2Level,
     int? freeCooling,
     int? heaterPerformance,
-    int? coolerStatus,
+    String? coolerStatus,
     int? ductPressure,
     Map<String, ModeSettings>? modeSettings,
     Map<String, TimerSettings>? timerSettings,

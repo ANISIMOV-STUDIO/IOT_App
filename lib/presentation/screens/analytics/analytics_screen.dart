@@ -160,7 +160,7 @@ class AnalyticsScreen extends StatelessWidget {
       recuperatorEfficiency: fullState?.kpdRecuperator ?? 85,
       freeCooling: fullState?.freeCooling ?? 0,
       heaterPerformance: fullState?.heaterPerformance ?? 0,
-      coolerStatus: fullState?.coolerStatus ?? 0,
+      coolerStatus: fullState?.coolerStatus ?? 'Н/Д',
       ductPressure: fullState?.ductPressure ?? 120,
     );
   }
@@ -234,7 +234,7 @@ class AnalyticsScreen extends StatelessWidget {
       ),
       SensorData(
         icon: Icons.severe_cold,
-        value: '${unit.coolerStatus}%',
+        value: unit.coolerStatus,
         shortLabel: l10n.cooler,
         fullLabel: l10n.coolerStatus,
         description: l10n.coolerStatusDesc,
