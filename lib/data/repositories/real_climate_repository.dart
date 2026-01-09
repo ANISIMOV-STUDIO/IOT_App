@@ -22,6 +22,7 @@ class RealClimateRepository implements ClimateRepository {
   // State
   final _climateController = StreamController<ClimateState>.broadcast();
   final _devicesController = StreamController<List<HvacDevice>>.broadcast();
+  final _deviceFullStateController = StreamController<DeviceFullState>.broadcast();
   String _selectedDeviceId = '';
   List<HvacDevice> _cachedDevices = [];
 
@@ -56,12 +57,26 @@ class RealClimateRepository implements ClimateRepository {
           // Snapshot переменной для избежания race condition
           final selectedId = _selectedDeviceId;
 
-          // Парсинг данных устройства
-          final state = DeviceJsonMapper.climateStateFromJson(deviceData);
-
           // Обновить stream только для выбранного устройства
           if (deviceData['id'] == selectedId) {
-            _climateController.add(state);
+            // Парсинг ClimateState для обратной совместимости
+            final climateState = DeviceJsonMapper.climateStateFromJson(deviceData);
+            _climateController.add(climateState);
+            
+            // Парсинг DeviceFullState для полного обновления UI
+            try {
+              final fullState = DeviceJsonMapper.deviceFullStateFromJson(deviceData);
+              _deviceFullStateController.add(fullState);
+              developer.log(
+                'SignalR: received full state update for device $selectedId',
+                name: 'ClimateRepository',
+              );
+            } catch (e) {
+              developer.log(
+                'SignalR: failed to parse DeviceFullState: $e',
+                name: 'ClimateRepository',
+              );
+            }
           }
         },
         onError: (error) {
@@ -381,6 +396,15 @@ class RealClimateRepository implements ClimateRepository {
     return DeviceJsonMapper.deviceFullStateFromJson(jsonDevice);
   }
 
+  @override
+  Stream<DeviceFullState> watchDeviceFullState(String deviceId) {
+    // Ensure device is selected for SignalR subscription
+    if (deviceId.isNotEmpty && deviceId != _selectedDeviceId) {
+      setSelectedDevice(deviceId);
+    }
+    return _deviceFullStateController.stream;
+  }
+
   // ============================================
   // ALARM HISTORY
   // ============================================
@@ -401,6 +425,7 @@ class RealClimateRepository implements ClimateRepository {
     _deviceUpdatesSubscription?.cancel(); // Отменить SignalR subscription
     _climateController.close();
     _devicesController.close();
+    _deviceFullStateController.close();
     _signalR?.dispose();
   }
 }

@@ -224,8 +224,8 @@ class DashboardBlocBuilder extends StatelessWidget {
       temp: climate?.currentTemperature.toInt() ?? 20,
       heatingTemp: fullState?.heatingTemperature ?? 21,
       coolingTemp: fullState?.coolingTemperature ?? 24,
-      supplyFan: climate?.supplyAirflow.toInt() ?? 50,
-      exhaustFan: climate?.exhaustAirflow.toInt() ?? 50,
+      supplyFan: _parseFanValue(fullState?.supplyFan) ?? climate?.supplyAirflow.toInt() ?? 50,
+      exhaustFan: _parseFanValue(fullState?.exhaustFan) ?? climate?.exhaustAirflow.toInt() ?? 50,
       mode: climate?.preset ?? 'auto', // Operating mode (basic/intensive/etc.)
       humidity: climate?.humidity.toInt() ?? 45,
       outsideTemp: fullState?.outdoorTemperature?.toInt() ?? 0,
@@ -241,5 +241,11 @@ class DashboardBlocBuilder extends StatelessWidget {
       coolerStatus: fullState?.coolerStatus ?? 0,
       ductPressure: fullState?.ductPressure ?? 120,
     );
+  }
+
+  /// Parse fan value from String to int (fan speed is 20-100)
+  int? _parseFanValue(String? value) {
+    if (value == null || value.isEmpty) return null;
+    return int.tryParse(value);
   }
 }
