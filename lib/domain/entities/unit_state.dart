@@ -18,14 +18,14 @@ class UnitState extends Equatable {
   final int exhaustFan;
   final String mode;
   final int humidity;
-  final int outsideTemp;
+  final double outsideTemp;
   final int filterPercent;
   final int airflowRate;
 
   // Новые датчики
-  final int indoorTemp;              // Температура воздуха в помещении
-  final int supplyTemp;              // Температура приточного воздуха
-  final int supplyTempAfterRecup;    // Температура приточного воздуха после рекуператора
+  final double indoorTemp;              // Температура воздуха в помещении
+  final double supplyTemp;              // Температура приточного воздуха
+  final double supplyTempAfterRecup;    // Температура приточного воздуха после рекуператора
   final int co2Level;                // Концентрация CO2 (ppm)
   final int recuperatorEfficiency;   // Температурная эффективность рекуператора (%)
   final int freeCooling;             // Свободное охлаждение рекуператора (м³/ч)
@@ -47,9 +47,9 @@ class UnitState extends Equatable {
     required this.outsideTemp,
     required this.filterPercent,
     required this.airflowRate,
-    this.indoorTemp = 22,
-    this.supplyTemp = 20,
-    this.supplyTempAfterRecup = 18,
+    this.indoorTemp = 22.0,
+    this.supplyTemp = 20.0,
+    this.supplyTempAfterRecup = 18.0,
     this.co2Level = 450,
     this.recuperatorEfficiency = 85,
     this.freeCooling = 0,
@@ -69,12 +69,12 @@ class UnitState extends Equatable {
     int? exhaustFan,
     String? mode,
     int? humidity,
-    int? outsideTemp,
+    double? outsideTemp,
     int? filterPercent,
     int? airflowRate,
-    int? indoorTemp,
-    int? supplyTemp,
-    int? supplyTempAfterRecup,
+    double? indoorTemp,
+    double? supplyTemp,
+    double? supplyTempAfterRecup,
     int? co2Level,
     int? recuperatorEfficiency,
     int? freeCooling,

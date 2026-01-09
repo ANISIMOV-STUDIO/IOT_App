@@ -150,12 +150,12 @@ class AnalyticsScreen extends StatelessWidget {
       exhaustFan: climate?.exhaustAirflow.toInt() ?? 50,
       mode: climate?.mode.toString().split('.').last ?? 'auto',
       humidity: climate?.humidity.toInt() ?? 45,
-      outsideTemp: fullState?.outdoorTemperature?.toInt() ?? 0,
+      outsideTemp: fullState?.outdoorTemperature ?? 0.0,
       filterPercent: fullState?.kpdRecuperator ?? 0,
       airflowRate: fullState?.devicePower ?? 0,
-      indoorTemp: fullState?.indoorTemperature?.toInt() ?? climate?.currentTemperature.toInt() ?? 22,
-      supplyTemp: fullState?.supplyTemperature?.toInt() ?? 20,
-      supplyTempAfterRecup: fullState?.supplyTempAfterRecup?.toInt() ?? 18,
+      indoorTemp: fullState?.indoorTemperature ?? climate?.currentTemperature ?? 22.0,
+      supplyTemp: fullState?.supplyTemperature ?? 20.0,
+      supplyTempAfterRecup: fullState?.supplyTempAfterRecup ?? 18.0,
       co2Level: fullState?.co2Level ?? 450,
       recuperatorEfficiency: fullState?.kpdRecuperator ?? 85,
       freeCooling: fullState?.freeCooling ?? 0,
@@ -170,7 +170,7 @@ class AnalyticsScreen extends StatelessWidget {
     return [
       SensorData(
         icon: Icons.thermostat_outlined,
-        value: '${unit.outsideTemp}°',
+        value: '${unit.outsideTemp.toStringAsFixed(1)}°',
         shortLabel: l10n.outdoor,
         fullLabel: l10n.outdoorTemp,
         description: l10n.outdoorTempDesc,
@@ -178,7 +178,7 @@ class AnalyticsScreen extends StatelessWidget {
       ),
       SensorData(
         icon: Icons.home_outlined,
-        value: '${unit.indoorTemp}°',
+        value: '${unit.indoorTemp.toStringAsFixed(1)}°',
         shortLabel: l10n.indoor,
         fullLabel: l10n.indoorTemp,
         description: l10n.indoorTempDesc,
@@ -186,7 +186,7 @@ class AnalyticsScreen extends StatelessWidget {
       ),
       SensorData(
         icon: Icons.air,
-        value: '${unit.supplyTempAfterRecup}°',
+        value: '${unit.supplyTempAfterRecup.toStringAsFixed(1)}°',
         shortLabel: l10n.afterRecup,
         fullLabel: l10n.supplyTempAfterRecup,
         description: l10n.supplyTempAfterRecupDesc,
@@ -194,7 +194,7 @@ class AnalyticsScreen extends StatelessWidget {
       ),
       SensorData(
         icon: Icons.thermostat,
-        value: '${unit.supplyTemp}°',
+        value: '${unit.supplyTemp.toStringAsFixed(1)}°',
         shortLabel: l10n.supply,
         fullLabel: l10n.supplyTemp,
         description: l10n.supplyTempDesc,

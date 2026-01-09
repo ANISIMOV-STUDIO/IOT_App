@@ -44,11 +44,11 @@ class SensorsGrid extends StatelessWidget {
 
     final sensors = [
       // Row 1
-      _SensorData(Icons.thermostat_outlined, '${unit.outsideTemp}°', l10n.outdoorTemp),
-      _SensorData(Icons.home_outlined, '${unit.indoorTemp}°', l10n.indoorTemp),
-      _SensorData(Icons.air, '${unit.supplyTempAfterRecup}°', l10n.supplyTempAfterRecup),
+      _SensorData(Icons.thermostat_outlined, '${unit.outsideTemp.toStringAsFixed(1)}°', l10n.outdoorTemp),
+      _SensorData(Icons.home_outlined, '${unit.indoorTemp.toStringAsFixed(1)}°', l10n.indoorTemp),
+      _SensorData(Icons.air, '${unit.supplyTempAfterRecup.toStringAsFixed(1)}°', l10n.supplyTempAfterRecup),
       // Row 2
-      _SensorData(Icons.thermostat, '${unit.supplyTemp}°', l10n.supplyTemp),
+      _SensorData(Icons.thermostat, '${unit.supplyTemp.toStringAsFixed(1)}°', l10n.supplyTemp),
       _SensorData(Icons.cloud_outlined, '${unit.co2Level} ppm', l10n.co2Level),
       _SensorData(Icons.recycling, '${unit.recuperatorEfficiency}%', l10n.recuperatorEfficiency),
       // Row 3
