@@ -242,7 +242,7 @@ class AnalyticsScreen extends StatelessWidget {
       ),
       SensorData(
         icon: Icons.speed,
-        value: '${unit.ductPressure}',
+        value: '${unit.ductPressure} Па',
         shortLabel: l10n.pressure,
         fullLabel: l10n.ductPressure,
         description: l10n.ductPressureDesc,
