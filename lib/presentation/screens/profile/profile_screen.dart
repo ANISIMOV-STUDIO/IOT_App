@@ -19,6 +19,21 @@ import '../../bloc/auth/auth_state.dart';
 import '../../widgets/breez/breez.dart';
 import 'profile_dialogs.dart';
 
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+abstract class _ProfileScreenConstants {
+  static const double headerFontSize = 24.0;
+  static const double avatarSize = 80.0;
+  static const double initialsFontSize = 28.0;
+  static const double nameFontSize = 18.0;
+  static const double bodyFontSize = 14.0;
+  static const double flagFontSize = 16.0;
+  static const double iconSize = 20.0;
+  static const double buttonPaddingVertical = 14.0;
+}
+
 /// Profile screen with user info and settings
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -64,7 +79,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Text(
                     l10n.profile,
                     style: TextStyle(
-                      fontSize: 24,
+                      fontSize: _ProfileScreenConstants.headerFontSize,
                       fontWeight: FontWeight.bold,
                       color: colors.text,
                     ),
@@ -196,8 +211,8 @@ class _UserCard extends StatelessWidget {
         children: [
           // Avatar
           Container(
-            width: 80,
-            height: 80,
+            width: _ProfileScreenConstants.avatarSize,
+            height: _ProfileScreenConstants.avatarSize,
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
               gradient: LinearGradient(
@@ -210,7 +225,7 @@ class _UserCard extends StatelessWidget {
               child: Text(
                 _getInitials(firstName, lastName),
                 style: const TextStyle(
-                  fontSize: 28,
+                  fontSize: _ProfileScreenConstants.initialsFontSize,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
@@ -223,18 +238,18 @@ class _UserCard extends StatelessWidget {
           Text(
             '$firstName $lastName',
             style: TextStyle(
-              fontSize: 18,
+              fontSize: _ProfileScreenConstants.nameFontSize,
               fontWeight: FontWeight.bold,
               color: colors.text,
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: AppSpacing.xxs),
 
           // Email
           Text(
             email,
             style: TextStyle(
-              fontSize: 14,
+              fontSize: _ProfileScreenConstants.bodyFontSize,
               color: colors.textMuted,
             ),
           ),
@@ -390,13 +405,13 @@ class _SettingsCard extends StatelessWidget {
                   children: [
                     Text(
                       currentLang.flag,
-                      style: const TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: _ProfileScreenConstants.flagFontSize),
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: AppSpacing.xs),
                     Text(
                       currentLang.nativeName,
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: _ProfileScreenConstants.bodyFontSize,
                         color: colors.textMuted,
                       ),
                     ),
@@ -425,11 +440,11 @@ class _SectionTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 4, bottom: AppSpacing.sm),
+      padding: const EdgeInsets.only(left: AppSpacing.xxs, bottom: AppSpacing.sm),
       child: Text(
         title,
         style: TextStyle(
-          fontSize: 14,
+          fontSize: _ProfileScreenConstants.bodyFontSize,
           fontWeight: FontWeight.w600,
           color: colors.textMuted,
         ),
@@ -451,16 +466,22 @@ class _LogoutButton extends StatelessWidget {
       },
       backgroundColor: AppColors.critical.withValues(alpha: 0.1),
       hoverColor: AppColors.critical.withValues(alpha: 0.15),
-      padding: const EdgeInsets.symmetric(vertical: 14),
+      padding: const EdgeInsets.symmetric(
+        vertical: _ProfileScreenConstants.buttonPaddingVertical,
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.logout, size: 20, color: AppColors.critical),
-          const SizedBox(width: 8),
+          const Icon(
+            Icons.logout,
+            size: _ProfileScreenConstants.iconSize,
+            color: AppColors.critical,
+          ),
+          const SizedBox(width: AppSpacing.xs),
           Text(
             l10n.logout,
             style: const TextStyle(
-              fontSize: 14,
+              fontSize: _ProfileScreenConstants.bodyFontSize,
               fontWeight: FontWeight.w600,
               color: AppColors.critical,
             ),

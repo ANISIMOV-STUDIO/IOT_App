@@ -10,6 +10,21 @@ import '../../../../core/theme/spacing.dart';
 import '../../../widgets/breez/breez_card.dart';
 import '../../../widgets/breez/schedule_widget.dart';
 
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+abstract class _ScheduleEntryCardConstants {
+  static const double fontSize = 14.0;
+  static const double fontSizeSmall = 12.0;
+  static const double fontSizeMedium = 13.0;
+  static const double iconSizeSmall = 16.0;
+  static const double iconSizeMedium = 18.0;
+  static const double modeIconContainerSize = 36.0;
+  static const double badgePaddingHorizontal = 12.0;
+  static const double badgePaddingVertical = 6.0;
+}
+
 /// Карточка записи расписания
 class ScheduleEntryCard extends StatelessWidget {
   final ScheduleEntry entry;
@@ -53,7 +68,7 @@ class ScheduleEntryCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildHeaderRow(colors),
-          const SizedBox(height: 12),
+          const SizedBox(height: AppSpacing.sm),
           _buildModeRow(colors, l10n),
         ],
       ),
@@ -64,7 +79,7 @@ class ScheduleEntryCard extends StatelessWidget {
     return Row(
       children: [
         _DayBadge(day: entry.day, isActive: entry.isActive),
-        const SizedBox(width: 12),
+        const SizedBox(width: AppSpacing.sm),
         _TimeRange(timeRange: entry.timeRange),
         const Spacer(),
         _ActiveSwitch(isActive: entry.isActive, onToggle: onToggle),
@@ -76,7 +91,7 @@ class ScheduleEntryCard extends StatelessWidget {
     return Row(
       children: [
         _ModeIcon(icon: _getModeIcon()),
-        const SizedBox(width: 12),
+        const SizedBox(width: AppSpacing.sm),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,7 +99,7 @@ class ScheduleEntryCard extends StatelessWidget {
               Text(
                 entry.mode,
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: _ScheduleEntryCardConstants.fontSize,
                   fontWeight: FontWeight.w500,
                   color: colors.text,
                 ),
@@ -92,7 +107,7 @@ class ScheduleEntryCard extends StatelessWidget {
               Text(
                 l10n.scheduleDayNightTemp(entry.tempDay, entry.tempNight),
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: _ScheduleEntryCardConstants.fontSizeSmall,
                   color: colors.textMuted,
                 ),
               ),
@@ -127,7 +142,10 @@ class _DayBadge extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: const EdgeInsets.symmetric(
+        horizontal: _ScheduleEntryCardConstants.badgePaddingHorizontal,
+        vertical: _ScheduleEntryCardConstants.badgePaddingVertical,
+      ),
       decoration: BoxDecoration(
         color: isActive
             ? AppColors.accent.withValues(alpha: 0.15)
@@ -137,7 +155,7 @@ class _DayBadge extends StatelessWidget {
       child: Text(
         ScheduleWidget.translateDayName(day, l10n),
         style: TextStyle(
-          fontSize: 13,
+          fontSize: _ScheduleEntryCardConstants.fontSizeMedium,
           fontWeight: FontWeight.w600,
           color: isActive ? AppColors.accent : colors.text,
         ),
@@ -159,11 +177,18 @@ class _TimeRange extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(Icons.access_time, size: 16, color: colors.textMuted),
-        const SizedBox(width: 4),
+        Icon(
+          Icons.access_time,
+          size: _ScheduleEntryCardConstants.iconSizeSmall,
+          color: colors.textMuted,
+        ),
+        const SizedBox(width: AppSpacing.xxs),
         Text(
           timeRange,
-          style: TextStyle(fontSize: 13, color: colors.textMuted),
+          style: TextStyle(
+            fontSize: _ScheduleEntryCardConstants.fontSizeMedium,
+            color: colors.textMuted,
+          ),
         ),
       ],
     );
@@ -202,13 +227,17 @@ class _ModeIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 36,
-      height: 36,
+      width: _ScheduleEntryCardConstants.modeIconContainerSize,
+      height: _ScheduleEntryCardConstants.modeIconContainerSize,
       decoration: BoxDecoration(
         color: AppColors.accent.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(AppRadius.card),
       ),
-      child: Icon(icon, size: 18, color: AppColors.accent),
+      child: Icon(
+        icon,
+        size: _ScheduleEntryCardConstants.iconSizeMedium,
+        color: AppColors.accent,
+      ),
     );
   }
 }

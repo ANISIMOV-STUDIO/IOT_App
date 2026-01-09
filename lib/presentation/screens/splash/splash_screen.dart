@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import '../../../core/theme/spacing.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -19,14 +20,14 @@ class SplashScreen extends StatelessWidget {
               size: 80,
               color: Theme.of(context).colorScheme.primary,
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppSpacing.lgx),
             Text(
               'BREEZ Home',
               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
             ),
-            const SizedBox(height: 48),
+            const SizedBox(height: AppSpacing.xxl),
             const CircularProgressIndicator(),
           ],
         ),

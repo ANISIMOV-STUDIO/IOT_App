@@ -12,6 +12,7 @@ class AppSpacing {
   static const double sm = 12.0;
   static const double md = 16.0;
   static const double lg = 20.0;
+  static const double lgx = 24.0; // 24px - между lg и xl
   static const double xl = 32.0;
   static const double xxl = 48.0;
   static const double xxxl = 64.0;

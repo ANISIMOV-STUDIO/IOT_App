@@ -11,6 +11,50 @@ import 'breez_card.dart';
 
 export '../../../domain/entities/schedule_entry.dart';
 
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+abstract class _ScheduleWidgetConstants {
+  // Title font size
+  static const double titleFontSize = 16.0;
+
+  // Button icons
+  static const double addIconSize = 16.0;
+  static const double seeAllFontSize = 12.0;
+
+  // Day selector
+  static const double dayFontSizeCompact = 10.0;
+  static const double dayFontSizeNormal = 11.0;
+  static const double indicatorGap = 2.0;
+  static const double indicatorSize = 4.0;
+
+  // Empty state
+  static const double emptyIconSizeCompact = 28.0;
+  static const double emptyIconSizeNormal = 36.0;
+  static const double emptyFontSizeCompact = 11.0;
+  static const double emptyFontSizeNormal = 12.0;
+  static const double hintFontSize = 11.0;
+
+  // Schedule row
+  static const double rowIconSizeCompact = 24.0;
+  static const double rowIconSizeNormal = 32.0;
+  static const double rowFontSizeCompact = 11.0;
+  static const double rowFontSizeNormal = 13.0;
+  static const double rowSmallFontSizeCompact = 10.0;
+  static const double rowSmallFontSizeNormal = 12.0;
+  static const double timeRangeFontSizeCompact = 9.0;
+  static const double timeRangeFontSizeNormal = 10.0;
+  static const double modeIconSizeCompact = 12.0;
+  static const double modeIconSizeNormal = 16.0;
+  static const double activeIndicatorSize = 6.0;
+
+  // Padding values
+  static const double buttonPaddingVertical = 6.0; // AppSpacing.xxs + 2
+  static const double timePaddingVerticalCompact = 3.0;
+  static const double timePaddingVerticalNormal = 4.0;
+}
+
 /// Weekly schedule widget with day selector
 class ScheduleWidget extends StatefulWidget {
   final List<ScheduleEntry> entries;
@@ -123,7 +167,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
                 Text(
                   l10n.schedule,
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: _ScheduleWidgetConstants.titleFontSize,
                     fontWeight: FontWeight.w700,
                     color: colors.text,
                   ),
@@ -137,14 +181,16 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
                         padding: const EdgeInsets.only(right: AppSpacing.xs),
                         child: BreezButton(
                           onTap: widget.onAddEntry,
-                          padding: const EdgeInsets.all(AppSpacing.xxs + 2),
+                          padding: const EdgeInsets.all(
+                            _ScheduleWidgetConstants.buttonPaddingVertical,
+                          ),
                           backgroundColor: AppColors.accent,
                           hoverColor: AppColors.accentLight,
                           showBorder: false,
                           enforceMinTouchTarget: false,
                           child: const Icon(
                             Icons.add,
-                            size: 16,
+                            size: _ScheduleWidgetConstants.addIconSize,
                             color: Colors.white,
                           ),
                         ),
@@ -154,7 +200,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
                       onTap: widget.onSeeAll ?? () {},
                       padding: const EdgeInsets.symmetric(
                         horizontal: AppSpacing.xs,
-                        vertical: AppSpacing.xxs + 2,
+                        vertical: _ScheduleWidgetConstants.buttonPaddingVertical,
                       ),
                       backgroundColor: AppColors.accent.withValues(alpha: 0.1),
                       hoverColor: AppColors.accent.withValues(alpha: 0.15),
@@ -164,7 +210,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
                         child: Text(
                           l10n.seeAll,
                           style: const TextStyle(
-                            fontSize: 12,
+                            fontSize: _ScheduleWidgetConstants.seeAllFontSize,
                             fontWeight: FontWeight.w600,
                             color: AppColors.accent,
                           ),
@@ -266,7 +312,9 @@ class _DaySelector extends StatelessWidget {
           child: BreezButton(
             onTap: () => onDaySelected(day),
             padding: EdgeInsets.symmetric(
-              vertical: compact ? AppSpacing.xxs + 2 : AppSpacing.xs,
+              vertical: compact
+                  ? _ScheduleWidgetConstants.buttonPaddingVertical
+                  : AppSpacing.xs,
               horizontal: 0,
             ),
             backgroundColor: isSelected
@@ -289,7 +337,9 @@ class _DaySelector extends StatelessWidget {
                 Text(
                   shortName,
                   style: TextStyle(
-                    fontSize: compact ? 10 : 11,
+                    fontSize: compact
+                        ? _ScheduleWidgetConstants.dayFontSizeCompact
+                        : _ScheduleWidgetConstants.dayFontSizeNormal,
                     // Фиксированный fontWeight для предотвращения layout shift
                     fontWeight: FontWeight.w600,
                     color: isSelected
@@ -299,11 +349,11 @@ class _DaySelector extends StatelessWidget {
                             : colors.textMuted,
                   ),
                 ),
-                // Фиксированный контейнер для индикатора - всегда 6px высотой
-                const SizedBox(height: 2),
+                // Фиксированный контейнер для индикатора
+                const SizedBox(height: _ScheduleWidgetConstants.indicatorGap),
                 SizedBox(
-                  width: 4,
-                  height: 4,
+                  width: _ScheduleWidgetConstants.indicatorSize,
+                  height: _ScheduleWidgetConstants.indicatorSize,
                   child: (hasEntries && !isSelected)
                       ? Container(
                           decoration: const BoxDecoration(
@@ -349,7 +399,9 @@ class _EmptyDayState extends StatelessWidget {
           children: [
             Icon(
               showAddHint ? Icons.add_circle_outline : Icons.event_busy_outlined,
-              size: compact ? 28 : 36,
+              size: compact
+                  ? _ScheduleWidgetConstants.emptyIconSizeCompact
+                  : _ScheduleWidgetConstants.emptyIconSizeNormal,
               color: showAddHint
                   ? AppColors.accent.withValues(alpha: 0.6)
                   : colors.textMuted.withValues(alpha: 0.5),
@@ -358,7 +410,9 @@ class _EmptyDayState extends StatelessWidget {
             Text(
               l10n.noEntriesForDay(ScheduleWidget.translateDayName(day, l10n).toLowerCase()),
               style: TextStyle(
-                fontSize: compact ? 11 : 12,
+                fontSize: compact
+                    ? _ScheduleWidgetConstants.emptyFontSizeCompact
+                    : _ScheduleWidgetConstants.emptyFontSizeNormal,
                 color: colors.textMuted,
               ),
               textAlign: TextAlign.center,
@@ -368,7 +422,7 @@ class _EmptyDayState extends StatelessWidget {
               Text(
                 showAddHint ? l10n.tapToAdd : l10n.addFirstEntry,
                 style: TextStyle(
-                  fontSize: 11,
+                  fontSize: _ScheduleWidgetConstants.hintFontSize,
                   color: AppColors.accent.withValues(alpha: 0.8),
                 ),
               ),
@@ -412,9 +466,15 @@ class _ScheduleRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
-    final iconSize = compact ? 24.0 : 32.0;
-    final fontSize = compact ? 11.0 : 13.0;
-    final smallFontSize = compact ? 10.0 : 12.0;
+    final iconSize = compact
+        ? _ScheduleWidgetConstants.rowIconSizeCompact
+        : _ScheduleWidgetConstants.rowIconSizeNormal;
+    final fontSize = compact
+        ? _ScheduleWidgetConstants.rowFontSizeCompact
+        : _ScheduleWidgetConstants.rowFontSizeNormal;
+    final smallFontSize = compact
+        ? _ScheduleWidgetConstants.rowSmallFontSizeCompact
+        : _ScheduleWidgetConstants.rowSmallFontSizeNormal;
 
     return BreezButton(
       onTap: onTap,
@@ -436,7 +496,9 @@ class _ScheduleRow extends StatelessWidget {
           Container(
             padding: EdgeInsets.symmetric(
               horizontal: compact ? AppSpacing.xs - 2 : AppSpacing.xs,
-              vertical: compact ? 3 : 4,
+              vertical: compact
+                  ? _ScheduleWidgetConstants.timePaddingVerticalCompact
+                  : _ScheduleWidgetConstants.timePaddingVerticalNormal,
             ),
             decoration: BoxDecoration(
               color: AppColors.accent.withValues(alpha: 0.1),
@@ -445,7 +507,9 @@ class _ScheduleRow extends StatelessWidget {
             child: Text(
               entry.timeRange,
               style: TextStyle(
-                fontSize: compact ? 9 : 10,
+                fontSize: compact
+                    ? _ScheduleWidgetConstants.timeRangeFontSizeCompact
+                    : _ScheduleWidgetConstants.timeRangeFontSizeNormal,
                 fontWeight: FontWeight.w600,
                 color: AppColors.accent,
               ),
@@ -464,7 +528,9 @@ class _ScheduleRow extends StatelessWidget {
             ),
             child: Icon(
               _getModeIcon(),
-              size: compact ? 12 : 16,
+              size: compact
+                  ? _ScheduleWidgetConstants.modeIconSizeCompact
+                  : _ScheduleWidgetConstants.modeIconSizeNormal,
               color: AppColors.accent,
             ),
           ),
@@ -510,8 +576,8 @@ class _ScheduleRow extends StatelessWidget {
           if (entry.isActive) ...[
             SizedBox(width: compact ? AppSpacing.xs - 2 : AppSpacing.xs),
             Container(
-              width: 6,
-              height: 6,
+              width: _ScheduleWidgetConstants.activeIndicatorSize,
+              height: _ScheduleWidgetConstants.activeIndicatorSize,
               decoration: const BoxDecoration(
                 color: AppColors.accentGreen,
                 shape: BoxShape.circle,

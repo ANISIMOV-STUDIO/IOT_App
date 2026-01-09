@@ -311,13 +311,13 @@ class _StatisticsRow extends StatelessWidget {
           value: '${minValue.toStringAsFixed(1)}$unit',
           color: AppColors.accent,
         ),
-        const SizedBox(width: 8),
+        const SizedBox(width: AppSpacing.xs),
         GraphStatBadge(
           label: l10n.maxShort,
           value: '${maxValue.toStringAsFixed(1)}$unit',
           color: AppColors.accentRed,
         ),
-        const SizedBox(width: 8),
+        const SizedBox(width: AppSpacing.xs),
         GraphStatBadge(
           label: l10n.avgShort,
           value: '${avgValue.toStringAsFixed(1)}$unit',

@@ -6,6 +6,7 @@ library;
 
 import 'package:flutter/material.dart';
 import '../../../core/services/connectivity_service.dart';
+import '../../../core/theme/spacing.dart';
 import '../../../generated/l10n/app_localizations.dart';
 
 /// Баннер "Нет подключения к интернету"
@@ -42,7 +43,7 @@ class OfflineBanner extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs, horizontal: AppSpacing.md),
       color: Colors.orange.shade800,
       child: SafeArea(
         bottom: false,
@@ -54,7 +55,7 @@ class OfflineBanner extends StatelessWidget {
               color: Colors.white,
               size: 18,
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: AppSpacing.xs),
             Text(
               _getMessage(context),
               style: const TextStyle(

@@ -4,8 +4,21 @@ library;
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
+import '../../../core/theme/spacing.dart';
 import '../../../generated/l10n/app_localizations.dart';
 import 'breez_button.dart';
+
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+abstract class _SegmentedControlConstants {
+  static const double defaultHeight = 40.0;
+  static const double fontSize = 13.0;
+  static const double iconSize = 16.0;
+  static const double iconTextGap = 6.0;
+  static const Duration animationDuration = Duration(milliseconds: 150);
+}
 
 /// Стилизованный сегментированный контрол в дизайн-системе BREEZ
 ///
@@ -43,7 +56,7 @@ class BreezSegmentedControl<T> extends StatelessWidget {
     required this.onChanged,
     this.enabled = true,
     this.semanticLabel,
-    this.height = 40,
+    this.height = _SegmentedControlConstants.defaultHeight,
     this.expanded = true,
   });
 
@@ -57,7 +70,7 @@ class BreezSegmentedControl<T> extends StatelessWidget {
       enabled: enabled,
       child: Container(
         height: height,
-        padding: const EdgeInsets.all(4),
+        padding: const EdgeInsets.all(AppSpacing.xxs),
         decoration: BoxDecoration(
           color: colors.buttonBg,
           borderRadius: BorderRadius.circular(AppRadius.button),
@@ -148,9 +161,9 @@ class _SegmentButton<T> extends StatelessWidget {
       semanticLabel: segment.semanticLabel ?? segment.label,
       tooltip: segment.tooltip,
       child: AnimatedDefaultTextStyle(
-        duration: const Duration(milliseconds: 150),
+        duration: _SegmentedControlConstants.animationDuration,
         style: TextStyle(
-          fontSize: 13,
+          fontSize: _SegmentedControlConstants.fontSize,
           fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
           color: textColor,
         ),
@@ -161,10 +174,11 @@ class _SegmentButton<T> extends StatelessWidget {
             if (segment.icon != null) ...[
               Icon(
                 segment.icon,
-                size: 16,
+                size: _SegmentedControlConstants.iconSize,
                 color: textColor,
               ),
-              if (segment.label.isNotEmpty) const SizedBox(width: 6),
+              if (segment.label.isNotEmpty)
+                const SizedBox(width: _SegmentedControlConstants.iconTextGap),
             ],
             if (segment.label.isNotEmpty)
               Text(
@@ -244,7 +258,7 @@ class BreezStringSegmentedControl extends StatelessWidget {
     required this.onChanged,
     this.enabled = true,
     this.semanticLabel,
-    this.height = 40,
+    this.height = _SegmentedControlConstants.defaultHeight,
     this.expanded = true,
   });
 
@@ -280,7 +294,7 @@ class BreezIconSegmentedControl<T> extends StatelessWidget {
     required this.onChanged,
     this.enabled = true,
     this.semanticLabel,
-    this.height = 40,
+    this.height = _SegmentedControlConstants.defaultHeight,
   });
 
   @override

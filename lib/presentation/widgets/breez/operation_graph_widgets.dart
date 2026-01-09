@@ -4,7 +4,27 @@ library;
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
+import '../../../core/theme/spacing.dart';
 import 'breez_card.dart';
+
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+abstract class _GraphWidgetConstants {
+  // Badge
+  static const double badgeLabelFontSize = 9.0;
+  static const double badgeValueFontSize = 11.0;
+  static const double badgePaddingH = 8.0;
+  static const double badgePaddingV = 4.0;
+
+  // Metric tab
+  static const double tabIconSize = 20.0;
+  static const double tabLabelFontSize = 8.0;
+  static const double tabPaddingH = 14.0;
+  static const double tabPaddingV = 4.0;
+  static const double tabIconLabelGap = 3.0;
+}
 
 /// Statistic badge showing min/max/avg values
 class GraphStatBadge extends StatelessWidget {
@@ -23,7 +43,10 @@ class GraphStatBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(
+        horizontal: _GraphWidgetConstants.badgePaddingH,
+        vertical: _GraphWidgetConstants.badgePaddingV,
+      ),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(AppRadius.indicator),
@@ -37,17 +60,17 @@ class GraphStatBadge extends StatelessWidget {
           Text(
             label,
             style: TextStyle(
-              fontSize: 9,
+              fontSize: _GraphWidgetConstants.badgeLabelFontSize,
               fontWeight: FontWeight.w700,
               letterSpacing: 0.5,
               color: colors.textMuted,
             ),
           ),
-          const SizedBox(width: 4),
+          const SizedBox(width: AppSpacing.xxs),
           Text(
             value,
             style: TextStyle(
-              fontSize: 11,
+              fontSize: _GraphWidgetConstants.badgeValueFontSize,
               fontWeight: FontWeight.w900,
               color: color,
             ),
@@ -78,7 +101,10 @@ class GraphMetricTab extends StatelessWidget {
     final colors = BreezColors.of(context);
     return BreezButton(
       onTap: onTap,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+      padding: const EdgeInsets.symmetric(
+        horizontal: _GraphWidgetConstants.tabPaddingH,
+        vertical: _GraphWidgetConstants.tabPaddingV,
+      ),
       backgroundColor: isSelected
           ? AppColors.accent.withValues(alpha: 0.15)
           : Colors.transparent,
@@ -93,7 +119,7 @@ class GraphMetricTab extends StatelessWidget {
           ? [
               BoxShadow(
                 color: AppColors.accent.withValues(alpha: 0.3),
-                blurRadius: 8,
+                blurRadius: AppSpacing.xs,
                 offset: const Offset(0, 2),
               ),
             ]
@@ -104,14 +130,14 @@ class GraphMetricTab extends StatelessWidget {
         children: [
           Icon(
             icon,
-            size: 20,
+            size: _GraphWidgetConstants.tabIconSize,
             color: isSelected ? AppColors.accent : colors.textMuted,
           ),
-          const SizedBox(height: 3),
+          const SizedBox(height: _GraphWidgetConstants.tabIconLabelGap),
           Text(
             label.toUpperCase(),
             style: TextStyle(
-              fontSize: 8,
+              fontSize: _GraphWidgetConstants.tabLabelFontSize,
               fontWeight: FontWeight.w900,
               letterSpacing: 0.5,
               color: isSelected ? AppColors.accent : colors.textMuted,

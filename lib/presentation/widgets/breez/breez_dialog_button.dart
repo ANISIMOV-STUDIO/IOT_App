@@ -4,7 +4,22 @@ library;
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
+import '../../../core/theme/spacing.dart';
 import 'breez_button.dart';
+
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+abstract class _DialogButtonConstants {
+  static const double fontSize = 14.0;
+  static const double fontSizeSmall = 12.0;
+  static const double iconSize = 18.0;
+  static const double iconSizeMedium = 20.0;
+  static const double verticalPadding = 12.0;
+  static const double horizontalPadding = 20.0;
+  static const double subtitleGap = 2.0;
+}
 
 /// Dialog action button (primary/secondary/danger)
 ///
@@ -64,13 +79,16 @@ class BreezDialogButton extends StatelessWidget {
       showBorder: !isPrimary && !isDanger,
       enableScale: true,
       enableGlow: isPrimary || isDanger,
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      padding: const EdgeInsets.symmetric(
+        horizontal: _DialogButtonConstants.horizontalPadding,
+        vertical: _DialogButtonConstants.verticalPadding,
+      ),
       semanticLabel: semanticLabel ?? label,
       tooltip: tooltip,
       child: Text(
         label,
         style: TextStyle(
-          fontSize: 14,
+          fontSize: _DialogButtonConstants.fontSize,
           fontWeight: (isPrimary || isDanger) ? FontWeight.w600 : FontWeight.w500,
           color: textColor,
         ),
@@ -108,19 +126,21 @@ class BreezActionButton extends StatelessWidget {
       onTap: onTap,
       backgroundColor: Colors.transparent,
       hoverColor: AppColors.accent.withValues(alpha: 0.1),
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      padding: const EdgeInsets.symmetric(
+        vertical: _DialogButtonConstants.verticalPadding,
+      ),
       border: Border.all(color: AppColors.accent),
       semanticLabel: semanticLabel ?? label,
       tooltip: tooltip,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, size: 18, color: AppColors.accent),
-          const SizedBox(width: 8),
+          Icon(icon, size: _DialogButtonConstants.iconSize, color: AppColors.accent),
+          const SizedBox(width: AppSpacing.xs),
           Text(
             label,
             style: const TextStyle(
-              fontSize: 14,
+              fontSize: _DialogButtonConstants.fontSize,
               fontWeight: FontWeight.w600,
               color: AppColors.accent,
             ),
@@ -170,13 +190,13 @@ class BreezSettingsButton extends StatelessWidget {
           : colors.buttonHover,
       showBorder: false,
       enableScale: false,
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacing.md),
       semanticLabel: semanticLabel ?? label,
       tooltip: tooltip,
       child: Row(
         children: [
-          Icon(icon, size: 20, color: iconColor),
-          const SizedBox(width: 16),
+          Icon(icon, size: _DialogButtonConstants.iconSizeMedium, color: iconColor),
+          const SizedBox(width: AppSpacing.md),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -184,17 +204,17 @@ class BreezSettingsButton extends StatelessWidget {
                 Text(
                   label,
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: _DialogButtonConstants.fontSize,
                     fontWeight: FontWeight.w500,
                     color: labelColor,
                   ),
                 ),
                 if (subtitle != null) ...[
-                  const SizedBox(height: 2),
+                  const SizedBox(height: _DialogButtonConstants.subtitleGap),
                   Text(
                     subtitle!,
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: _DialogButtonConstants.fontSizeSmall,
                       color: colors.textMuted,
                     ),
                   ),
@@ -204,7 +224,7 @@ class BreezSettingsButton extends StatelessWidget {
           ),
           Icon(
             Icons.chevron_right,
-            size: 20,
+            size: _DialogButtonConstants.iconSizeMedium,
             color: colors.textMuted,
           ),
         ],

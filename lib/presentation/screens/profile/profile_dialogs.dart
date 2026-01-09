@@ -12,6 +12,17 @@ import '../../../core/utils/validators.dart';
 import '../../../generated/l10n/app_localizations.dart';
 import '../../widgets/breez/breez.dart';
 
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+abstract class _ProfileDialogsConstants {
+  static const double flagFontSize = 20.0;
+  static const double bodyFontSize = 14.0;
+  static const double headerFontSize = 18.0;
+  static const double checkIconSize = 18.0;
+}
+
 /// Language option widget for language picker dialog
 class LanguageOption extends StatelessWidget {
   final AppLanguage language;
@@ -49,14 +60,14 @@ class LanguageOption extends StatelessWidget {
             children: [
               Text(
                 language.flag,
-                style: const TextStyle(fontSize: 20),
+                style: const TextStyle(fontSize: _ProfileDialogsConstants.flagFontSize),
               ),
               const SizedBox(width: AppSpacing.sm),
               Expanded(
                 child: Text(
                   language.nativeName,
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: _ProfileDialogsConstants.bodyFontSize,
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                     color: isSelected ? AppColors.accent : colors.text,
                   ),
@@ -66,7 +77,7 @@ class LanguageOption extends StatelessWidget {
                 const Icon(
                   Icons.check_circle,
                   color: AppColors.accent,
-                  size: 18,
+                  size: _ProfileDialogsConstants.checkIconSize,
                 ),
             ],
           ),
@@ -304,11 +315,11 @@ class _DialogHeader extends StatelessWidget {
     return Row(
       children: [
         Icon(icon, color: AppColors.accent),
-        const SizedBox(width: 12),
+        const SizedBox(width: AppSpacing.sm),
         Text(
           title,
           style: TextStyle(
-            fontSize: 18,
+            fontSize: _ProfileDialogsConstants.headerFontSize,
             fontWeight: FontWeight.w600,
             color: colors.text,
           ),
@@ -388,7 +399,7 @@ void showLanguagePickerDialog(
       title: Text(
         l10n.language,
         style: TextStyle(
-          fontSize: 14,
+          fontSize: _ProfileDialogsConstants.bodyFontSize,
           fontWeight: FontWeight.w600,
           color: colors.textMuted,
         ),
