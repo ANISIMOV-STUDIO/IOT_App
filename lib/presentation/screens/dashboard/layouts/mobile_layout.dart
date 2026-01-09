@@ -19,7 +19,7 @@ import '../../../widgets/breez/breez.dart';
 /// Константы для MobileLayout
 abstract class _MobileLayoutConstants {
   /// Фиксированная высота TabBarView (режимы/расписание/аварии)
-  static const double tabContentHeight = 170.0;
+  static const double tabContentHeight = 150.0;
 }
 
 // =============================================================================
@@ -124,45 +124,57 @@ class _MobileLayoutState extends State<MobileLayout>
 
           const SizedBox(height: AppSpacing.sm),
 
-          // Tab bar (using reusable MobileTabBar)
-          MobileTabBar(
-            controller: _tabController,
-            tabs: [
-              MobileTab(icon: Icons.tune, label: l10n.modes),
-              MobileTab(icon: Icons.calendar_today, label: l10n.schedule),
-              MobileTab(
-                icon: alarmCount == 0 ? Icons.check_circle_outline : Icons.warning_amber_rounded,
-                label: l10n.alarms,
-                badgeCount: alarmCount,
-                iconColor: alarmCount > 0 ? AppColors.accentRed : null,
-              ),
-            ],
-          ),
-
-          const SizedBox(height: AppSpacing.sm),
-
-          // Tab content (фиксированная высота)
-          SizedBox(
-            height: _MobileLayoutConstants.tabContentHeight,
-            child: TabBarView(
-              controller: _tabController,
+          // Tabs + Content в одной карточке
+          BreezCard(
+            padding: EdgeInsets.all(AppSpacing.xs),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                // Режимы работы (using reusable ModeGrid)
-                ModeGrid(
-                  selectedMode: widget.unit.mode,
-                  onModeChanged: widget.onModeChanged,
+                // Tab bar (сегментированный контрол)
+                MobileTabBar(
+                  controller: _tabController,
+                  tabs: [
+                    MobileTab(icon: Icons.tune, label: l10n.modes),
+                    MobileTab(icon: Icons.calendar_today, label: l10n.schedule),
+                    MobileTab(
+                      icon: alarmCount == 0 ? Icons.check_circle_outline : Icons.warning_amber_rounded,
+                      label: l10n.alarms,
+                      badgeCount: alarmCount,
+                      iconColor: alarmCount > 0 ? AppColors.accentRed : null,
+                    ),
+                  ],
                 ),
-                // Schedule
-                DailyScheduleWidget(
-                  timerSettings: widget.timerSettings,
-                  onDaySettingsChanged: widget.onTimerSettingsChanged,
-                  compact: true,
-                ),
-                // Alarms
-                UnitAlarmsWidget(
-                  alarms: widget.activeAlarms,
-                  onSeeHistory: widget.onAlarmsSeeHistory,
-                  compact: true,
+
+                const SizedBox(height: AppSpacing.xs),
+
+                // Tab content
+                SizedBox(
+                  height: _MobileLayoutConstants.tabContentHeight,
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: [
+                      // Режимы работы
+                      ModeGrid(
+                        selectedMode: widget.unit.mode,
+                        onModeChanged: widget.onModeChanged,
+                        showCard: false,
+                      ),
+                      // Schedule
+                      DailyScheduleWidget(
+                        timerSettings: widget.timerSettings,
+                        onDaySettingsChanged: widget.onTimerSettingsChanged,
+                        compact: true,
+                        showCard: false,
+                      ),
+                      // Alarms
+                      UnitAlarmsWidget(
+                        alarms: widget.activeAlarms,
+                        onSeeHistory: widget.onAlarmsSeeHistory,
+                        compact: true,
+                        showCard: false,
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

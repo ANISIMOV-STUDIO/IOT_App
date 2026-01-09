@@ -38,6 +38,7 @@ class UnitAlarmsWidget extends StatelessWidget {
   final VoidCallback? onSeeHistory;
   final ValueChanged<String>? onAlarmTap;
   final bool compact;
+  final bool showCard;
 
   const UnitAlarmsWidget({
     super.key,
@@ -45,6 +46,7 @@ class UnitAlarmsWidget extends StatelessWidget {
     this.onSeeHistory,
     this.onAlarmTap,
     this.compact = false,
+    this.showCard = true,
   });
 
   @override
@@ -53,13 +55,7 @@ class UnitAlarmsWidget extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final alarmsList = alarms.entries.toList();
 
-    return Semantics(
-      label: alarmsList.isEmpty
-          ? '${l10n.alarms}: нет активных'
-          : '${l10n.alarms}: ${alarmsList.length} активных',
-      child: BreezCard(
-        padding: EdgeInsets.all(compact ? AppSpacing.xs : AppSpacing.lg),
-        child: Column(
+    final content = Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Заголовок (скрыт в компактном режиме)
@@ -156,8 +152,20 @@ class UnitAlarmsWidget extends StatelessWidget {
               ),
             ],
           ],
-        ),
-      ),
+    );
+
+    final wrappedContent = showCard
+        ? BreezCard(
+            padding: EdgeInsets.all(compact ? AppSpacing.xs : AppSpacing.lg),
+            child: content,
+          )
+        : content;
+
+    return Semantics(
+      label: alarmsList.isEmpty
+          ? '${l10n.alarms}: нет активных'
+          : '${l10n.alarms}: ${alarmsList.length} активных',
+      child: wrappedContent,
     );
   }
 }

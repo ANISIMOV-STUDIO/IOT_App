@@ -69,11 +69,15 @@ class DailyScheduleWidget extends StatefulWidget {
     'sunday',
   ];
 
+  /// Показывать обёртку-карточку
+  final bool showCard;
+
   const DailyScheduleWidget({
     super.key,
     this.timerSettings,
     this.onDaySettingsChanged,
     this.compact = false,
+    this.showCard = true,
   });
 
   @override
@@ -155,47 +159,51 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget> {
     final l10n = AppLocalizations.of(context)!;
     final selectedSettings = _getSettings(_selectedDay);
 
+    final content = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Header - только для desktop
+        if (!widget.compact) ...[
+          Text(
+            l10n.schedule,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              color: colors.text,
+            ),
+          ),
+          SizedBox(height: AppSpacing.xs),
+        ],
+
+        // Day tabs
+        BreezTabGroup(
+          labels: _DayNameResolver.getShortNames(l10n),
+          selectedIndex: _selectedIndex,
+          activeIndices: _activeIndices,
+          compact: widget.compact,
+          onTabSelected: (index) => setState(() => _selectedIndex = index),
+        ),
+
+        SizedBox(height: widget.compact ? AppSpacing.xs : AppSpacing.md),
+
+        // Selected day settings
+        Expanded(
+          child: _DaySettingsPanel(
+            dayKey: _selectedDay,
+            settings: selectedSettings,
+            compact: widget.compact,
+            onSettingsChanged:
+                widget.onDaySettingsChanged != null ? _handleSettingsChanged : null,
+          ),
+        ),
+      ],
+    );
+
+    if (!widget.showCard) return content;
+
     return BreezCard(
       padding: EdgeInsets.all(widget.compact ? AppSpacing.xs : AppSpacing.md),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Header - только для desktop
-          if (!widget.compact) ...[
-            Text(
-              l10n.schedule,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: colors.text,
-              ),
-            ),
-            SizedBox(height: AppSpacing.xs),
-          ],
-
-          // Day tabs
-          BreezTabGroup(
-            labels: _DayNameResolver.getShortNames(l10n),
-            selectedIndex: _selectedIndex,
-            activeIndices: _activeIndices,
-            compact: widget.compact,
-            onTabSelected: (index) => setState(() => _selectedIndex = index),
-          ),
-
-          SizedBox(height: widget.compact ? AppSpacing.xs : AppSpacing.md),
-
-          // Selected day settings
-          Expanded(
-            child: _DaySettingsPanel(
-              dayKey: _selectedDay,
-              settings: selectedSettings,
-              compact: widget.compact,
-              onSettingsChanged:
-                  widget.onDaySettingsChanged != null ? _handleSettingsChanged : null,
-            ),
-          ),
-        ],
-      ),
+      child: content,
     );
   }
 }

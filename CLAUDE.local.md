@@ -74,6 +74,55 @@ padding: EdgeInsets.all(16)
 | `xl` | 32px | Между крупными блоками |
 | `xxl` | 48px | Отступы экрана |
 
+### Padding Convention (Mobile vs Desktop)
+
+```dart
+// Внешние отступы (между виджетами) — всегда sm
+Padding(
+  padding: EdgeInsets.all(AppSpacing.sm),  // 12px
+  child: MyWidget(),
+)
+
+// Внутренние отступы — зависят от режима
+BreezCard(
+  padding: EdgeInsets.all(compact ? AppSpacing.xs : AppSpacing.md),  // 8px / 16px
+  child: content,
+)
+```
+
+| Контекст | Отступ | Значение |
+|----------|--------|----------|
+| Между виджетами (внешний) | `AppSpacing.sm` | 12px |
+| Внутри виджета (compact) | `AppSpacing.xs` | 8px |
+| Внутри виджета (desktop) | `AppSpacing.md` | 16px |
+| Между элементами внутри | `AppSpacing.xs` | 8px |
+| Микро-отступы (иконка-текст) | `AppSpacing.xxs` | 4px |
+
+### Паттерн showCard
+
+Виджеты с собственной карточкой должны иметь параметр `showCard` для вложенного использования:
+
+```dart
+class ModeGrid extends StatelessWidget {
+  final bool showCard;  // default = true
+
+  // В build():
+  final content = _buildGrid();
+
+  if (!showCard) return content;
+
+  return BreezCard(
+    padding: EdgeInsets.all(AppSpacing.xs),
+    child: content,
+  );
+}
+
+// Использование внутри другой карточки:
+BreezCard(
+  child: ModeGrid(showCard: false),  // Без двойной рамки
+)
+```
+
 ### Цвета
 
 **ВСЕГДА** используй `BreezColors.of(context)` для темозависимых цветов:
@@ -478,6 +527,76 @@ padding: context.isMobile
 
 ---
 
+## MOBILE UI ПАТТЕРНЫ
+
+### Сегментированный контрол vs Навигация
+
+**Проблема:** Двойная навигация (табы внутри + bottom nav) запутывает пользователя.
+
+**Решение:** Внутренние табы делать визуально как **сегментированный контрол**:
+
+```dart
+// ❌ Выглядит как навигация (путает)
+TabBar с underline indicator
+
+// ✅ Выглядит как переключатель контента
+Container(
+  decoration: BoxDecoration(
+    color: colors.buttonBg.withValues(alpha: 0.5),
+    borderRadius: BorderRadius.circular(AppRadius.chip),
+  ),
+  child: Row(children: segments),
+)
+```
+
+| Элемент | Навигация (bottom bar) | Контент (segmented) |
+|---------|------------------------|---------------------|
+| Фон | Сплошной | Полупрозрачный |
+| Выбранный | Акцентная иконка | Подсветка + рамка |
+| Текст | Под иконкой | Рядом с иконкой |
+| Высота | 56-64px | 36px |
+
+### Mobile Layout Structure
+
+```dart
+abstract class _MobileLayoutConstants {
+  static const double tabContentHeight = 150.0;  // Фиксированная высота
+}
+
+// Структура:
+Column(
+  children: [
+    Expanded(child: MainControlCard()),      // Занимает остаток
+    SizedBox(height: AppSpacing.sm),
+    BreezCard(                               // Табы + контент вместе
+      child: Column(
+        children: [
+          MobileTabBar(),                    // 36px
+          SizedBox(height: AppSpacing.xs),
+          SizedBox(
+            height: tabContentHeight,        // 150px фикс
+            child: TabBarView(),
+          ),
+        ],
+      ),
+    ),
+  ],
+)
+```
+
+### Touch Targets
+
+Минимальный размер кнопки: **48x48px** (Material Design)
+
+```dart
+const double kMinTouchTarget = 48.0;
+
+// В BreezIconButton автоматически:
+final buttonSize = size < kMinTouchTarget ? kMinTouchTarget : size;
+```
+
+---
+
 ## ЧАСТЫЕ ОШИБКИ
 
 ### ❌ Late initialization error
@@ -540,4 +659,4 @@ if (mounted) setState(() => _value = result);
 
 ---
 
-*Последнее обновление: 2026-01-08*
+*Последнее обновление: 2026-01-09*

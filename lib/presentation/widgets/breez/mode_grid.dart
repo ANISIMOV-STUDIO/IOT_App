@@ -47,6 +47,7 @@ class ModeGrid extends StatelessWidget {
   final bool isEnabled;
   final List<OperatingModeData>? modes;
   final int columns;
+  final bool showCard;
 
   const ModeGrid({
     super.key,
@@ -55,6 +56,7 @@ class ModeGrid extends StatelessWidget {
     this.isEnabled = true,
     this.modes,
     this.columns = _ModeGridConstants.defaultColumns,
+    this.showCard = true,
   });
 
   @override
@@ -69,48 +71,54 @@ class ModeGrid extends StatelessWidget {
         .map((m) => m.name)
         .firstOrNull ?? selectedMode;
 
-    return Semantics(
-      label: '${l10n.operatingMode}: $selectedModeName',
-      child: BreezCard(
-        padding: const EdgeInsets.all(AppSpacing.xs),
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            const spacing = AppSpacing.xs;
+    final grid = LayoutBuilder(
+      builder: (context, constraints) {
+        const spacing = AppSpacing.xs;
 
-            final availableWidth = constraints.maxWidth - spacing * (columns - 1);
-            final availableHeight = constraints.maxHeight - spacing * (rows - 1);
+        final availableWidth = constraints.maxWidth - spacing * (columns - 1);
+        final availableHeight = constraints.maxHeight - spacing * (rows - 1);
 
-            final cellWidth = availableWidth / columns;
-            final cellHeight = availableHeight / rows;
-            final aspectRatio = cellWidth / cellHeight;
+        final cellWidth = availableWidth / columns;
+        final cellHeight = availableHeight / rows;
+        final aspectRatio = cellWidth / cellHeight;
 
-            return GridView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: columns,
-                mainAxisSpacing: spacing,
-                crossAxisSpacing: spacing,
-                childAspectRatio: aspectRatio.clamp(
-                  _ModeGridConstants.minAspectRatio,
-                  _ModeGridConstants.maxAspectRatio,
-                ),
-              ),
-              itemCount: effectiveModes.length,
-              itemBuilder: (context, index) {
-                final mode = effectiveModes[index];
-                final isSelected = selectedMode.toLowerCase() == mode.id.toLowerCase();
+        return GridView.builder(
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: columns,
+            mainAxisSpacing: spacing,
+            crossAxisSpacing: spacing,
+            childAspectRatio: aspectRatio.clamp(
+              _ModeGridConstants.minAspectRatio,
+              _ModeGridConstants.maxAspectRatio,
+            ),
+          ),
+          itemCount: effectiveModes.length,
+          itemBuilder: (context, index) {
+            final mode = effectiveModes[index];
+            final isSelected = selectedMode.toLowerCase() == mode.id.toLowerCase();
 
-                return ModeGridItem(
-                  mode: mode,
-                  isSelected: isSelected,
-                  isEnabled: isEnabled,
-                  onTap: isEnabled ? () => onModeChanged?.call(mode.id) : null,
-                );
-              },
+            return ModeGridItem(
+              mode: mode,
+              isSelected: isSelected,
+              isEnabled: isEnabled,
+              onTap: isEnabled ? () => onModeChanged?.call(mode.id) : null,
             );
           },
-        ),
-      ),
+        );
+      },
+    );
+
+    final content = showCard
+        ? BreezCard(
+            padding: const EdgeInsets.all(AppSpacing.xs),
+            child: grid,
+          )
+        : grid;
+
+    return Semantics(
+      label: '${l10n.operatingMode}: $selectedModeName',
+      child: content,
     );
   }
 }

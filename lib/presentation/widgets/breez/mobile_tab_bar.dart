@@ -1,4 +1,4 @@
-/// Mobile Tab Bar - компактный tab bar для mobile layout
+/// Mobile Tab Bar - сегментированный контрол для переключения контента
 library;
 
 import 'package:flutter/material.dart';
@@ -12,14 +12,12 @@ import '../../../core/theme/spacing.dart';
 
 /// Константы для MobileTabBar
 abstract class _MobileTabConstants {
-  static const double height = 40.0;
+  static const double height = 36.0;
   static const double iconSize = 14.0;
-  static const double fontSize = 10.0;
+  static const double fontSize = 11.0;
+  static const double badgeSize = 16.0;
   static const double badgeFontSize = 9.0;
-  static const double badgePaddingH = 4.0;
-  static const double badgePaddingV = 1.0;
-  static const double badgeRadius = 6.0;
-  static const double indicatorPadding = 4.0;
+  static const double segmentPadding = 3.0;
 }
 
 // =============================================================================
@@ -43,12 +41,13 @@ class MobileTab {
   });
 }
 
-/// Компактный tab bar для мобильного layout
+/// Сегментированный контрол для мобильного layout
 ///
+/// Визуально отличается от навигации - выглядит как переключатель контента.
 /// Поддерживает:
-/// - Иконку + текст для каждой вкладки
+/// - Иконку + текст для каждого сегмента
 /// - Badge с счётчиком
-/// - Кастомные цвета иконки
+/// - Плавную анимацию переключения
 /// - Accessibility через Semantics
 class MobileTabBar extends StatelessWidget {
   final TabController controller;
@@ -65,80 +64,121 @@ class MobileTabBar extends StatelessWidget {
     final colors = BreezColors.of(context);
 
     return Semantics(
-      label: 'Панель вкладок',
+      label: 'Переключатель контента',
       child: Container(
         height: _MobileTabConstants.height,
+        padding: EdgeInsets.all(_MobileTabConstants.segmentPadding),
         decoration: BoxDecoration(
-          color: colors.card,
-          borderRadius: BorderRadius.circular(AppRadius.cardSmall),
-          border: Border.all(color: colors.border),
+          color: colors.buttonBg.withValues(alpha: 0.5),
+          borderRadius: BorderRadius.circular(AppRadius.chip),
         ),
-        child: TabBar(
-          controller: controller,
-          indicator: BoxDecoration(
-            color: AppColors.accent.withValues(alpha: 0.15),
-            borderRadius: BorderRadius.circular(AppRadius.cardSmall - 2),
-            border: Border.all(color: AppColors.accent.withValues(alpha: 0.3)),
-          ),
-          indicatorSize: TabBarIndicatorSize.tab,
-          indicatorPadding: EdgeInsets.all(_MobileTabConstants.indicatorPadding),
-          labelPadding: EdgeInsets.zero,
-          dividerColor: Colors.transparent,
-          labelColor: AppColors.accent,
-          unselectedLabelColor: colors.textMuted,
-          labelStyle: TextStyle(
-            fontSize: _MobileTabConstants.fontSize,
-            fontWeight: FontWeight.w700,
-          ),
-          unselectedLabelStyle: TextStyle(
-            fontSize: _MobileTabConstants.fontSize,
-            fontWeight: FontWeight.w500,
-          ),
-          tabs: tabs.map(_buildTab).toList(),
+        child: AnimatedBuilder(
+          animation: controller,
+          builder: (context, _) {
+            return Row(
+              children: List.generate(tabs.length, (index) {
+                final isSelected = controller.index == index;
+                return Expanded(
+                  child: _SegmentButton(
+                    tab: tabs[index],
+                    isSelected: isSelected,
+                    onTap: () => controller.animateTo(index),
+                    colors: colors,
+                  ),
+                );
+              }),
+            );
+          },
         ),
       ),
     );
   }
+}
 
-  Widget _buildTab(MobileTab tab) {
+/// Кнопка-сегмент
+class _SegmentButton extends StatelessWidget {
+  final MobileTab tab;
+  final bool isSelected;
+  final VoidCallback onTap;
+  final BreezColors colors;
+
+  const _SegmentButton({
+    required this.tab,
+    required this.isSelected,
+    required this.onTap,
+    required this.colors,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     final hasBadge = tab.badgeCount != null && tab.badgeCount! > 0;
+
+    // Цвета: выбранный — акцентный текст на прозрачном фоне с подсветкой
+    final textColor = isSelected ? AppColors.accent : colors.textMuted;
+    final iconColor = isSelected
+        ? (tab.iconColor ?? AppColors.accent)
+        : (tab.iconColor ?? colors.textMuted);
 
     return Semantics(
       label: '${tab.label}${hasBadge ? ', ${tab.badgeCount} уведомлений' : ''}',
-      child: Tab(
-        height: _MobileTabConstants.height - _MobileTabConstants.indicatorPadding * 2,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              tab.icon,
-              size: _MobileTabConstants.iconSize,
-              color: tab.iconColor,
-            ),
-            SizedBox(width: AppSpacing.xxs),
-            Text(tab.label.toUpperCase()),
-            if (hasBadge) ...[
-              SizedBox(width: AppSpacing.xxs),
-              Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: _MobileTabConstants.badgePaddingH,
-                  vertical: _MobileTabConstants.badgePaddingV,
+      selected: isSelected,
+      button: true,
+      child: GestureDetector(
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: AppDurations.normal,
+          curve: Curves.easeOutCubic,
+          decoration: BoxDecoration(
+            color: isSelected
+                ? AppColors.accent.withValues(alpha: 0.15)
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(AppRadius.chip),
+            border: isSelected
+                ? Border.all(color: AppColors.accent.withValues(alpha: 0.3))
+                : null,
+          ),
+          child: Center(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  tab.icon,
+                  size: _MobileTabConstants.iconSize,
+                  color: iconColor,
                 ),
-                decoration: BoxDecoration(
-                  color: tab.badgeColor ?? AppColors.accentRed,
-                  borderRadius: BorderRadius.circular(_MobileTabConstants.badgeRadius),
-                ),
-                child: Text(
-                  '${tab.badgeCount}',
+                SizedBox(width: AppSpacing.xxs),
+                Text(
+                  tab.label,
                   style: TextStyle(
-                    fontSize: _MobileTabConstants.badgeFontSize,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
+                    fontSize: _MobileTabConstants.fontSize,
+                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                    color: textColor,
                   ),
                 ),
-              ),
-            ],
-          ],
+                if (hasBadge) ...[
+                  SizedBox(width: AppSpacing.xxs),
+                  Container(
+                    width: _MobileTabConstants.badgeSize,
+                    height: _MobileTabConstants.badgeSize,
+                    decoration: BoxDecoration(
+                      color: tab.badgeColor ?? AppColors.accentRed,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: Text(
+                        '${tab.badgeCount}',
+                        style: const TextStyle(
+                          fontSize: _MobileTabConstants.badgeFontSize,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
         ),
       ),
     );
