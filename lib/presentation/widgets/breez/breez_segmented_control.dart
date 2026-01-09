@@ -128,12 +128,21 @@ class _SegmentButton<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textColor = _getTextColor();
+
     return BreezButton(
       onTap: onTap,
-      backgroundColor: isSelected ? AppColors.accent : Colors.transparent,
-      hoverColor: isSelected ? AppColors.accentLight : colors.buttonHover,
+      backgroundColor: isSelected
+          ? AppColors.accent.withValues(alpha: 0.15)
+          : Colors.transparent,
+      hoverColor: isSelected
+          ? AppColors.accent.withValues(alpha: 0.25)
+          : colors.buttonHover,
+      border: isSelected
+          ? Border.all(color: AppColors.accent.withValues(alpha: 0.3))
+          : null,
       showBorder: false,
-      enableGlow: isSelected,
+      enableGlow: false,
       enableScale: false,
       borderRadius: AppRadius.nested,
       semanticLabel: segment.semanticLabel ?? segment.label,
@@ -143,7 +152,7 @@ class _SegmentButton<T> extends StatelessWidget {
         style: TextStyle(
           fontSize: 13,
           fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-          color: _getTextColor(),
+          color: textColor,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -153,7 +162,7 @@ class _SegmentButton<T> extends StatelessWidget {
               Icon(
                 segment.icon,
                 size: 16,
-                color: _getTextColor(),
+                color: textColor,
               ),
               if (segment.label.isNotEmpty) const SizedBox(width: 6),
             ],
@@ -173,7 +182,7 @@ class _SegmentButton<T> extends StatelessWidget {
       return colors.textMuted.withValues(alpha: 0.5);
     }
     if (isSelected) {
-      return Colors.white;
+      return AppColors.accent;
     }
     return colors.textMuted;
   }

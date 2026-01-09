@@ -15,14 +15,14 @@ import 'breez_card.dart';
 /// Константы для BreezNavigationBar
 abstract class _NavBarConstants {
   // Размеры - компактный режим (mobile)
-  static const double barHeightCompact = 72.0;
-  static const double buttonSizeCompact = 56.0;
+  static const double barHeightCompact = 64.0;
+  static const double buttonSizeCompact = 48.0;
   static const double iconSizeCompact = 24.0;
 
   // Размеры - полный режим (tablet/desktop)
-  static const double barHeightNormal = 80.0;
-  static const double buttonSizeNormal = 64.0;
-  static const double iconSizeNormal = 28.0;
+  static const double barHeightNormal = 64.0;
+  static const double buttonSizeNormal = 48.0;
+  static const double iconSizeNormal = 24.0;
 
   // Тень
   static const double shadowBlur = 16.0;

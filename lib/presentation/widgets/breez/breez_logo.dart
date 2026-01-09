@@ -5,6 +5,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../core/theme/app_theme.dart';
 
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+/// Константы для BreezLogo
+abstract class _LogoConstants {
+  static const double textLineHeight = 1.0;
+}
+
+// =============================================================================
+// MAIN WIDGET
+// =============================================================================
+
 /// BREEZ logo with icon and text
 class BreezLogo extends StatelessWidget {
   final double? iconSize;
@@ -28,13 +41,13 @@ class BreezLogo extends StatelessWidget {
         titleSize = 20,
         subtitleSize = 8;
 
-  /// Small size logo (24px icon, 16/6 text)
+  /// Small size logo (24px icon, 14px title only)
   const BreezLogo.small({
     super.key,
     this.spacing = 6,
   })  : iconSize = 24,
-        titleSize = 16,
-        subtitleSize = 6;
+        titleSize = 14,
+        subtitleSize = null;
 
   /// Large size logo (40px icon, 24/10 text)
   const BreezLogo.large({
@@ -76,18 +89,20 @@ class BreezLogo extends StatelessWidget {
                 fontSize: effectiveTitleSize,
                 fontWeight: FontWeight.w900,
                 letterSpacing: 0,
+                height: _LogoConstants.textLineHeight,
                 color: colors.text,
               ),
             ),
-            Text(
-              'SMART SYSTEMS',
-              style: TextStyle(
-                fontSize: effectiveSubtitleSize,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 2,
-                color: colors.textMuted,
+            if (subtitleSize != null)
+              Text(
+                'SMART SYSTEMS',
+                style: TextStyle(
+                  fontSize: effectiveSubtitleSize,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 2,
+                  color: colors.textMuted,
+                ),
               ),
-            ),
           ],
         ),
       ],

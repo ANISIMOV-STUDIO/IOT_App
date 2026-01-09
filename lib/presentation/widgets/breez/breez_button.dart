@@ -193,11 +193,12 @@ class _BreezButtonState extends State<BreezButton>
                 ),
                 padding: widget.padding ??
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                alignment: Alignment.center,
                 decoration: BoxDecoration(
                   color: effectiveBg,
                   borderRadius: BorderRadius.circular(widget.borderRadius),
-                  border:
-                      widget.showBorder ? Border.all(color: effectiveBorder) : null,
+                  border: widget.border ??
+                      (widget.showBorder ? Border.all(color: effectiveBorder) : null),
                   boxShadow: glowShadows,
                 ),
                 child: child,

@@ -9,6 +9,22 @@ import '../../../domain/entities/unit_state.dart';
 import '../../../generated/l10n/app_localizations.dart';
 import 'breez_button.dart';
 
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+/// Константы для UnitTabButton и UnitTabsContainer
+abstract class _UnitTabConstants {
+  static const double containerHeight = 48.0;
+  static const double statusIndicatorSize = 8.0;
+  static const double nameFontSize = 13.0;
+  static const double textLineHeight = 1.0;
+}
+
+// =============================================================================
+// UNIT TAB BUTTON
+// =============================================================================
+
 /// Unified unit tab button used across all layouts (mobile, tablet, desktop)
 class UnitTabButton extends StatelessWidget {
   final UnitState unit;
@@ -67,14 +83,25 @@ class UnitTabButton extends StatelessWidget {
     final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
+    // Цвета: выбранный — акцентный текст на прозрачном фоне с подсветкой
+    final textColor = isSelected ? AppColors.accent : colors.textMuted;
+    final indicatorColor = unit.power ? AppColors.success : colors.textMuted;
+
     return BreezButton(
       onTap: onTap,
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs, vertical: AppSpacing.xs),
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs),
       borderRadius: AppRadius.nested,
-      backgroundColor: isSelected ? AppColors.accent : Colors.transparent,
-      hoverColor: isSelected ? AppColors.accentLight : colors.buttonBg,
+      backgroundColor: isSelected
+          ? AppColors.accent.withValues(alpha: 0.15)
+          : Colors.transparent,
+      hoverColor: isSelected
+          ? AppColors.accent.withValues(alpha: 0.25)
+          : colors.buttonBg,
+      border: isSelected
+          ? Border.all(color: AppColors.accent.withValues(alpha: 0.3))
+          : null,
       showBorder: false,
-      enableGlow: isSelected,
+      enableGlow: false,
       semanticLabel: semanticLabel ?? _buildSemanticLabel(l10n),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -83,12 +110,10 @@ class UnitTabButton extends StatelessWidget {
           Semantics(
             label: unit.power ? l10n.statusRunning : l10n.statusStopped,
             child: Container(
-              width: 8,
-              height: 8,
+              width: _UnitTabConstants.statusIndicatorSize,
+              height: _UnitTabConstants.statusIndicatorSize,
               decoration: BoxDecoration(
-                color: unit.power
-                    ? (isSelected ? Colors.white : AppColors.success)
-                    : colors.textMuted,
+                color: indicatorColor,
                 shape: BoxShape.circle,
               ),
             ),
@@ -98,9 +123,10 @@ class UnitTabButton extends StatelessWidget {
           Text(
             unit.name,
             style: TextStyle(
-              fontSize: 13,
+              fontSize: _UnitTabConstants.nameFontSize,
               fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-              color: isSelected ? Colors.white : colors.textMuted,
+              height: _UnitTabConstants.textLineHeight,
+              color: textColor,
             ),
           ),
         ],
@@ -109,6 +135,10 @@ class UnitTabButton extends StatelessWidget {
   }
 }
 
+// =============================================================================
+// UNIT TABS CONTAINER
+// =============================================================================
+
 /// Unit tabs container - wraps unit tab buttons in a styled container
 class UnitTabsContainer extends StatelessWidget {
   final List<UnitState> units;
@@ -116,6 +146,7 @@ class UnitTabsContainer extends StatelessWidget {
   final ValueChanged<int>? onUnitSelected;
   final Widget? leading;
   final Widget? trailing;
+  final double height;
 
   const UnitTabsContainer({
     super.key,
@@ -124,6 +155,7 @@ class UnitTabsContainer extends StatelessWidget {
     this.onUnitSelected,
     this.leading,
     this.trailing,
+    this.height = _UnitTabConstants.containerHeight,
   });
 
   @override
@@ -133,7 +165,7 @@ class UnitTabsContainer extends StatelessWidget {
     return Semantics(
       label: l10n.devicesList,
       child: Container(
-        height: 48,
+        height: height,
         padding: const EdgeInsets.all(AppSpacing.xs),
         decoration: BoxDecoration(
           color: colors.card,
@@ -147,22 +179,26 @@ class UnitTabsContainer extends StatelessWidget {
               const SizedBox(width: AppSpacing.xs),
             ],
             Expanded(
-              child: ListView.separated(
+              child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                itemCount: units.length,
-                separatorBuilder: (_, __) => const SizedBox(width: AppSpacing.xs),
-                itemBuilder: (context, index) {
-                  final unit = units[index];
-                  final isSelected = index == selectedIndex;
-                  return UnitTabButton(
-                    unit: unit,
-                    isSelected: isSelected,
-                    onTap: () => onUnitSelected?.call(index),
-                  );
-                },
+                child: Row(
+                  children: [
+                    for (int i = 0; i < units.length; i++) ...[
+                      if (i > 0) const SizedBox(width: AppSpacing.xs),
+                      UnitTabButton(
+                        unit: units[i],
+                        isSelected: i == selectedIndex,
+                        onTap: () => onUnitSelected?.call(i),
+                      ),
+                    ],
+                  ],
+                ),
               ),
             ),
-            if (trailing != null) trailing!,
+            if (trailing != null) ...[
+              const SizedBox(width: AppSpacing.xs),
+              trailing!,
+            ],
           ],
         ),
       ),

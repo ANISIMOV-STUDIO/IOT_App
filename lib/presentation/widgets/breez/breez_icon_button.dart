@@ -5,6 +5,21 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import 'breez_button.dart';
 
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+/// Константы для BreezIconButton
+abstract class _IconButtonConstants {
+  static const double defaultIconSize = 20.0;
+  static const double paddingNormal = 12.0;
+  static const double paddingCompact = 4.0;
+}
+
+// =============================================================================
+// MAIN WIDGET
+// =============================================================================
+
 /// Icon button with consistent styling and optional badge
 class BreezIconButton extends StatelessWidget {
   final IconData icon;
@@ -15,6 +30,9 @@ class BreezIconButton extends StatelessWidget {
   final double size;
   final String? badge;
   final bool showBorder;
+
+  /// Compact mode - smaller padding, no min touch target
+  final bool compact;
 
   /// Semantic label for screen readers (required for accessibility)
   final String? semanticLabel;
@@ -29,9 +47,10 @@ class BreezIconButton extends StatelessWidget {
     this.iconColor,
     this.backgroundColor,
     this.isActive = false,
-    this.size = 20,
+    this.size = _IconButtonConstants.defaultIconSize,
     this.badge,
     this.showBorder = true,
+    this.compact = false,
     this.semanticLabel,
     this.tooltip,
   });
@@ -39,9 +58,12 @@ class BreezIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
-    const padding = 12.0;
-    final buttonSize = (size + padding * 2) < kMinTouchTarget
-        ? kMinTouchTarget
+    final padding = compact
+        ? _IconButtonConstants.paddingCompact
+        : _IconButtonConstants.paddingNormal;
+    final minSize = compact ? 0.0 : kMinTouchTarget;
+    final buttonSize = (size + padding * 2) < minSize
+        ? minSize
         : (size + padding * 2);
     final iconPadding = (buttonSize - size) / 2;
 
@@ -50,6 +72,7 @@ class BreezIconButton extends StatelessWidget {
         iconColor ?? (isActive ? Colors.white : colors.textMuted);
 
     return Stack(
+      alignment: Alignment.center,
       clipBehavior: Clip.none,
       children: [
         BreezButton(

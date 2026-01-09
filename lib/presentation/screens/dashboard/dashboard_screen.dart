@@ -33,7 +33,9 @@ import 'dialogs/unit_settings_dialog.dart';
 import 'dialogs/update_available_dialog.dart';
 import 'layouts/desktop_layout.dart';
 import 'layouts/mobile_layout.dart';
-import 'widgets/mobile_header.dart';
+import '../../widgets/breez/breez_logo.dart';
+import '../../widgets/breez/unit_tab_button.dart';
+import 'widgets/add_unit_button.dart';
 
 /// Main dashboard screen
 class DashboardScreen extends StatefulWidget {
@@ -164,13 +166,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final unit = data.currentUnit!;
     return Column(
       children: [
-        MobileHeader(
-          units: data.units,
-          selectedUnitIndex: data.activeIndex,
-          onUnitSelected: (index) => _onUnitSelected(data.units, index),
-          onAddUnit: _showAddUnitDialog,
-          isDark: isDark,
-          onThemeToggle: _toggleTheme,
+        Padding(
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.sm,
+            AppSpacing.sm,
+            AppSpacing.sm,
+            0,
+          ),
+          child: UnitTabsContainer(
+            units: data.units,
+            selectedIndex: data.activeIndex,
+            onUnitSelected: (index) => _onUnitSelected(data.units, index),
+            leading: const BreezLogo.small(),
+            trailing: AddUnitButton(onTap: _showAddUnitDialog),
+          ),
         ),
         const SizedBox(height: AppSpacing.sm),
         Expanded(
