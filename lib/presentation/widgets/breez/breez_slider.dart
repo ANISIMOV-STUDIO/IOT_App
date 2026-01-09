@@ -114,7 +114,7 @@ class _BreezSliderState extends State<BreezSlider> {
   @override
   void initState() {
     super.initState();
-    _localValue = widget.value;
+    _localValue = widget.value.clamp(widget.min, widget.max);
   }
 
   @override
@@ -122,7 +122,7 @@ class _BreezSliderState extends State<BreezSlider> {
     super.didUpdateWidget(oldWidget);
     // Синхронизируем с внешним значением только когда не перетаскиваем
     if (!_isDragging && widget.value != oldWidget.value) {
-      _localValue = widget.value;
+      _localValue = widget.value.clamp(widget.min, widget.max);
     }
   }
 
