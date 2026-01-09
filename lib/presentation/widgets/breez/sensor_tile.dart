@@ -48,7 +48,7 @@ class SensorTile extends StatelessWidget {
       onTap: onTap ?? () => _showSensorInfo(context),
       backgroundColor: colors.card,
       hoverColor: accentColor.withValues(alpha: 0.1),
-      padding: EdgeInsets.all(compact ? AppSpacing.xs : AppSpacing.md),
+      padding: EdgeInsets.all(AppSpacing.xs),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,

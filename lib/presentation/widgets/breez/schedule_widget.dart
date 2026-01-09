@@ -110,7 +110,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
     final l10n = AppLocalizations.of(context)!;
 
     return BreezCard(
-      padding: EdgeInsets.all(widget.compact ? AppSpacing.xs : AppSpacing.md),
+      padding: EdgeInsets.all(AppSpacing.xs),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -418,10 +418,7 @@ class _ScheduleRow extends StatelessWidget {
 
     return BreezButton(
       onTap: onTap,
-      padding: EdgeInsets.symmetric(
-        horizontal: compact ? AppSpacing.xs : AppSpacing.md,
-        vertical: compact ? AppSpacing.xs : AppSpacing.sm,
-      ),
+      padding: EdgeInsets.all(AppSpacing.xs),
       backgroundColor: entry.isActive
           ? AppColors.accent.withValues(alpha: 0.08)
           : colors.buttonBg,

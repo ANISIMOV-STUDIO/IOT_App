@@ -184,7 +184,7 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget> {
           onTabSelected: (index) => setState(() => _selectedIndex = index),
         ),
 
-        SizedBox(height: widget.compact ? AppSpacing.xs : AppSpacing.md),
+        SizedBox(height: AppSpacing.xs),
 
         // Selected day settings
         Expanded(
@@ -202,7 +202,7 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget> {
     if (!widget.showCard) return content;
 
     return BreezCard(
-      padding: EdgeInsets.all(widget.compact ? AppSpacing.xs : AppSpacing.md),
+      padding: EdgeInsets.all(AppSpacing.xs),
       child: content,
     );
   }
@@ -314,7 +314,7 @@ class _DaySettingsPanel extends StatelessWidget {
           onEnabledChanged: onSettingsChanged != null ? _onEnabledChanged : null,
         ),
 
-        SizedBox(height: compact ? AppSpacing.xs : AppSpacing.md),
+        SizedBox(height: AppSpacing.xs),
 
         // Time inputs
         _buildTimeInputs(l10n),

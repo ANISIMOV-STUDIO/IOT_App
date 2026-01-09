@@ -172,7 +172,7 @@ class _DefaultErrorWidget extends StatelessWidget {
         : _ErrorBoundaryConstants.iconSize;
 
     return Container(
-      padding: EdgeInsets.all(compact ? AppSpacing.xs : AppSpacing.md),
+      padding: EdgeInsets.all(AppSpacing.xs),
       decoration: BoxDecoration(
         color: AppColors.critical.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(12),

@@ -156,7 +156,7 @@ class UnitAlarmsWidget extends StatelessWidget {
 
     final wrappedContent = showCard
         ? BreezCard(
-            padding: EdgeInsets.all(compact ? AppSpacing.xs : AppSpacing.lg),
+            padding: EdgeInsets.all(AppSpacing.xs),
             child: content,
           )
         : content;

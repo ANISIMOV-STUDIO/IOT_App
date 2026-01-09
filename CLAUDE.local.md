@@ -74,7 +74,7 @@ padding: EdgeInsets.all(16)
 | `xl` | 32px | Между крупными блоками |
 | `xxl` | 48px | Отступы экрана |
 
-### Padding Convention (Mobile vs Desktop)
+### Padding Convention
 
 ```dart
 // Внешние отступы (между виджетами) — всегда sm
@@ -83,9 +83,9 @@ Padding(
   child: MyWidget(),
 )
 
-// Внутренние отступы — зависят от режима
+// Внутренние отступы — всегда xs (единообразно)
 BreezCard(
-  padding: EdgeInsets.all(compact ? AppSpacing.xs : AppSpacing.md),  // 8px / 16px
+  padding: EdgeInsets.all(AppSpacing.xs),  // 8px
   child: content,
 )
 ```
@@ -93,8 +93,7 @@ BreezCard(
 | Контекст | Отступ | Значение |
 |----------|--------|----------|
 | Между виджетами (внешний) | `AppSpacing.sm` | 12px |
-| Внутри виджета (compact) | `AppSpacing.xs` | 8px |
-| Внутри виджета (desktop) | `AppSpacing.md` | 16px |
+| Внутри виджета (padding) | `AppSpacing.xs` | 8px |
 | Между элементами внутри | `AppSpacing.xs` | 8px |
 | Микро-отступы (иконка-текст) | `AppSpacing.xxs` | 4px |
 

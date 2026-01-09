@@ -52,7 +52,7 @@ class UnitNotificationsWidget extends StatelessWidget {
     return Semantics(
       label: '${l10n.notifications}: ${notifications.length}',
       child: BreezCard(
-        padding: EdgeInsets.all(AppSpacing.lg),
+        padding: EdgeInsets.all(AppSpacing.xs),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
