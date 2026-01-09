@@ -58,7 +58,7 @@ class UnitAlarmsWidget extends StatelessWidget {
           ? '${l10n.alarms}: нет активных'
           : '${l10n.alarms}: ${alarmsList.length} активных',
       child: BreezCard(
-        padding: EdgeInsets.all(compact ? AppSpacing.sm : AppSpacing.lg),
+        padding: EdgeInsets.all(compact ? AppSpacing.xs : AppSpacing.lg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

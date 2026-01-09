@@ -72,10 +72,10 @@ class ModeGrid extends StatelessWidget {
     return Semantics(
       label: '${l10n.operatingMode}: $selectedModeName',
       child: BreezCard(
-        padding: const EdgeInsets.all(AppSpacing.sm),
+        padding: const EdgeInsets.all(AppSpacing.xs),
         child: LayoutBuilder(
           builder: (context, constraints) {
-            const spacing = AppSpacing.sm;
+            const spacing = AppSpacing.xs;
 
             final availableWidth = constraints.maxWidth - spacing * (columns - 1);
             final availableHeight = constraints.maxHeight - spacing * (rows - 1);

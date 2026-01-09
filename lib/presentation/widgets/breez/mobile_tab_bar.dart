@@ -82,6 +82,7 @@ class MobileTabBar extends StatelessWidget {
           ),
           indicatorSize: TabBarIndicatorSize.tab,
           indicatorPadding: EdgeInsets.all(_MobileTabConstants.indicatorPadding),
+          labelPadding: EdgeInsets.zero,
           dividerColor: Colors.transparent,
           labelColor: AppColors.accent,
           unselectedLabelColor: colors.textMuted,
@@ -105,6 +106,7 @@ class MobileTabBar extends StatelessWidget {
     return Semantics(
       label: '${tab.label}${hasBadge ? ', ${tab.badgeCount} уведомлений' : ''}',
       child: Tab(
+        height: _MobileTabConstants.height - _MobileTabConstants.indicatorPadding * 2,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

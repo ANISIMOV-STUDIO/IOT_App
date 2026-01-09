@@ -4,6 +4,7 @@ library;
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
+import '../../../core/theme/spacing.dart';
 import '../../../domain/entities/unit_state.dart';
 import '../../../generated/l10n/app_localizations.dart';
 import 'breez_button.dart';
@@ -68,7 +69,7 @@ class UnitTabButton extends StatelessWidget {
 
     return BreezButton(
       onTap: onTap,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs, vertical: AppSpacing.xs),
       borderRadius: AppRadius.nested,
       backgroundColor: isSelected ? AppColors.accent : Colors.transparent,
       hoverColor: isSelected ? AppColors.accentLight : colors.buttonBg,
@@ -92,7 +93,7 @@ class UnitTabButton extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: AppSpacing.xs),
           // Unit name
           Text(
             unit.name,
@@ -133,7 +134,7 @@ class UnitTabsContainer extends StatelessWidget {
       label: l10n.devicesList,
       child: Container(
         height: 48,
-        padding: const EdgeInsets.all(4),
+        padding: const EdgeInsets.all(AppSpacing.xs),
         decoration: BoxDecoration(
           color: colors.card,
           borderRadius: BorderRadius.circular(AppRadius.cardSmall),
@@ -143,13 +144,13 @@ class UnitTabsContainer extends StatelessWidget {
           children: [
             if (leading != null) ...[
               leading!,
-              const SizedBox(width: 8),
+              const SizedBox(width: AppSpacing.xs),
             ],
             Expanded(
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemCount: units.length,
-                separatorBuilder: (_, __) => const SizedBox(width: 4),
+                separatorBuilder: (_, __) => const SizedBox(width: AppSpacing.xs),
                 itemBuilder: (context, index) {
                   final unit = units[index];
                   final isSelected = index == selectedIndex;

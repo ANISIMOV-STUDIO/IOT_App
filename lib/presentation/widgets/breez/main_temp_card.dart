@@ -20,7 +20,6 @@ import 'temp_column.dart';
 
 /// Константы для MainTempCard
 abstract class _MainTempCardConstants {
-  static const double padding = 24.0;
   static const double borderWidthOn = 1.5;
   static const double borderWidthOff = 1.0;
   static const double borderOpacity = 0.5;
@@ -159,7 +158,7 @@ class MainTempCard extends StatelessWidget {
                 ]
               : null,
         ),
-        padding: EdgeInsets.all(_MainTempCardConstants.padding),
+        padding: EdgeInsets.all(AppSpacing.xs),
       child: isLoading
           ? const MainTempCardShimmer()
           : Column(
@@ -272,7 +271,7 @@ class _TemperatureSection extends StatelessWidget {
           width: _MainTempCardConstants.dividerWidth,
           height: _MainTempCardConstants.dividerHeight,
           color: colors.border,
-          margin: EdgeInsets.symmetric(horizontal: AppSpacing.md),
+          margin: EdgeInsets.symmetric(horizontal: AppSpacing.xs),
         ),
         // Cooling temperature
         Expanded(
@@ -312,7 +311,7 @@ class _StatsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: AppSpacing.md),
+      padding: EdgeInsets.only(top: AppSpacing.xs),
       decoration: BoxDecoration(
         border: Border(
           top: BorderSide(color: colors.border),
@@ -366,9 +365,9 @@ class _FanSlidersSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(height: AppSpacing.md),
+        SizedBox(height: AppSpacing.xs),
         Container(
-          padding: EdgeInsets.only(top: AppSpacing.md),
+          padding: EdgeInsets.only(top: AppSpacing.xs),
           decoration: BoxDecoration(
             border: Border(
               top: BorderSide(color: colors.border),
@@ -385,7 +384,7 @@ class _FanSlidersSection extends StatelessWidget {
                   onChanged: onSupplyFanChanged,
                 ),
               ),
-              SizedBox(width: AppSpacing.md),
+              SizedBox(width: AppSpacing.xs),
               Expanded(
                 child: FanSlider(
                   label: l10n.exhaust,

@@ -156,7 +156,7 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget> {
     final selectedSettings = _getSettings(_selectedDay);
 
     return BreezCard(
-      padding: EdgeInsets.all(widget.compact ? AppSpacing.sm : AppSpacing.md),
+      padding: EdgeInsets.all(widget.compact ? AppSpacing.xs : AppSpacing.md),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -170,7 +170,7 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget> {
                 color: colors.text,
               ),
             ),
-            SizedBox(height: AppSpacing.sm),
+            SizedBox(height: AppSpacing.xs),
           ],
 
           // Day tabs
@@ -306,7 +306,7 @@ class _DaySettingsPanel extends StatelessWidget {
           onEnabledChanged: onSettingsChanged != null ? _onEnabledChanged : null,
         ),
 
-        SizedBox(height: compact ? AppSpacing.sm : AppSpacing.md),
+        SizedBox(height: compact ? AppSpacing.xs : AppSpacing.md),
 
         // Time inputs
         _buildTimeInputs(l10n),
@@ -328,7 +328,7 @@ class _DaySettingsPanel extends StatelessWidget {
                 : null,
           ),
         ),
-        SizedBox(width: AppSpacing.sm),
+        SizedBox(width: AppSpacing.xs),
         Expanded(
           child: _ScheduleTimeBlock(
             label: l10n.scheduleEndLabel,
@@ -504,7 +504,7 @@ class _ScheduleTimeBlockState extends State<_ScheduleTimeBlock> {
             duration: _ScheduleConstants.animationDuration,
             padding: EdgeInsets.symmetric(
               vertical: AppSpacing.xxs,
-              horizontal: AppSpacing.sm,
+              horizontal: AppSpacing.xs,
             ),
             decoration: BoxDecoration(
               color: _isHovered && _isEnabled

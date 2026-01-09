@@ -110,7 +110,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
     final l10n = AppLocalizations.of(context)!;
 
     return BreezCard(
-      padding: EdgeInsets.all(widget.compact ? AppSpacing.sm : AppSpacing.md),
+      padding: EdgeInsets.all(widget.compact ? AppSpacing.xs : AppSpacing.md),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -153,7 +153,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
                     BreezButton(
                       onTap: widget.onSeeAll ?? () {},
                       padding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.sm,
+                        horizontal: AppSpacing.xs,
                         vertical: AppSpacing.xxs + 2,
                       ),
                       backgroundColor: AppColors.accent.withValues(alpha: 0.1),
@@ -175,7 +175,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
                 ),
               ],
             ),
-            const SizedBox(height: AppSpacing.sm),
+            const SizedBox(height: AppSpacing.xs),
           ],
 
           // Day selector
@@ -419,7 +419,7 @@ class _ScheduleRow extends StatelessWidget {
     return BreezButton(
       onTap: onTap,
       padding: EdgeInsets.symmetric(
-        horizontal: compact ? AppSpacing.sm : AppSpacing.md,
+        horizontal: compact ? AppSpacing.xs : AppSpacing.md,
         vertical: compact ? AppSpacing.xs : AppSpacing.sm,
       ),
       backgroundColor: entry.isActive

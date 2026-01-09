@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
+import '../../../core/theme/spacing.dart';
 import '../../../generated/l10n/app_localizations.dart';
 import 'breez_card.dart';
 
@@ -81,7 +82,7 @@ class MainTempCardHeader extends StatelessWidget {
   }
 }
 
-/// Date and unit name section
+/// Date section (without unit name - it's in the header)
 class _DateUnitSection extends StatelessWidget {
   final String unitName;
   final BreezColors colors;
@@ -99,49 +100,13 @@ class _DateUnitSection extends StatelessWidget {
     final dateFormat = DateFormat('d MMM', locale);
     final dateText = l10n.todayDate(dateFormat.format(DateTime.now()));
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          dateText,
-          style: TextStyle(
-            fontSize: 11,
-            color: colors.textMuted,
-          ),
-        ),
-        const SizedBox(height: 4),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(
-              Icons.location_on,
-              size: 14,
-              color: AppColors.accent,
-            ),
-            const SizedBox(width: 4),
-            ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 150),
-              child: Text(
-                unitName,
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: colors.text,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            const SizedBox(width: 4),
-            Icon(
-              Icons.keyboard_arrow_down,
-              size: 16,
-              color: colors.textMuted,
-            ),
-          ],
-        ),
-      ],
+    return Text(
+      dateText,
+      style: TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.w500,
+        color: colors.textMuted,
+      ),
     );
   }
 }
@@ -159,11 +124,11 @@ class _AlarmBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(right: 8),
+      padding: EdgeInsets.only(right: AppSpacing.xs),
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          padding: EdgeInsets.symmetric(horizontal: AppSpacing.xs, vertical: AppSpacing.xxs),
           decoration: BoxDecoration(
             color: AppColors.accentRed.withValues(alpha: 0.15),
             borderRadius: BorderRadius.circular(AppRadius.button),
@@ -179,7 +144,7 @@ class _AlarmBadge extends StatelessWidget {
                 size: 12,
                 color: AppColors.accentRed,
               ),
-              const SizedBox(width: 4),
+              SizedBox(width: AppSpacing.xxs),
               Text(
                 '$alarmCount',
                 style: const TextStyle(
@@ -224,7 +189,7 @@ class _ControlsSection extends StatelessWidget {
           icon: Icons.settings_outlined,
           onTap: onSettingsTap,
         ),
-        const SizedBox(width: 8),
+        SizedBox(width: AppSpacing.xs),
         // Schedule toggle button
         if (isScheduleLoading)
           const SizedBox(
@@ -244,7 +209,7 @@ class _ControlsSection extends StatelessWidget {
             iconColor: isScheduleEnabled ? AppColors.accentGreen : BreezColors.of(context).textMuted,
             onTap: onScheduleToggle,
           ),
-        const SizedBox(width: 8),
+        SizedBox(width: AppSpacing.xs),
         // Power toggle button
         if (isPowerLoading)
           const SizedBox(
@@ -286,7 +251,7 @@ class _StatusBadge extends StatelessWidget {
     final statusColor = isPowered ? AppColors.accentGreen : AppColors.accentRed;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.xs, vertical: AppSpacing.xxs),
       decoration: BoxDecoration(
         color: statusColor.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(AppRadius.button),
@@ -305,7 +270,7 @@ class _StatusBadge extends StatelessWidget {
               shape: BoxShape.circle,
             ),
           ),
-          const SizedBox(width: 6),
+          SizedBox(width: AppSpacing.xxs),
           Text(
             status ?? l10n.statusRunning,
             style: TextStyle(

@@ -48,7 +48,7 @@ class SensorTile extends StatelessWidget {
       onTap: onTap ?? () => _showSensorInfo(context),
       backgroundColor: colors.card,
       hoverColor: accentColor.withValues(alpha: 0.1),
-      padding: EdgeInsets.all(compact ? AppSpacing.sm : AppSpacing.md),
+      padding: EdgeInsets.all(compact ? AppSpacing.xs : AppSpacing.md),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -215,8 +215,8 @@ class AnalyticsSensorsGrid extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: crossAxisCount,
-        mainAxisSpacing: AppSpacing.sm,
-        crossAxisSpacing: AppSpacing.sm,
+        mainAxisSpacing: AppSpacing.xs,
+        crossAxisSpacing: AppSpacing.xs,
         childAspectRatio: 1.0, // Все плитки одинакового размера (квадратные)
       ),
       itemCount: sensors.length,

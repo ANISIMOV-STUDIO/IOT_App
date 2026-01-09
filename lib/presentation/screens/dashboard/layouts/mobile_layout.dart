@@ -12,6 +12,20 @@ import '../../../../domain/entities/mode_settings.dart';
 import '../../../../generated/l10n/app_localizations.dart';
 import '../../../widgets/breez/breez.dart';
 
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+/// Константы для MobileLayout
+abstract class _MobileLayoutConstants {
+  /// Фиксированная высота TabBarView (режимы/расписание/аварии)
+  static const double tabContentHeight = 170.0;
+}
+
+// =============================================================================
+// MAIN WIDGET
+// =============================================================================
+
 /// Mobile layout: UnitControlCard + 3 tabs (Modes, Schedule, Alarms)
 class MobileLayout extends StatefulWidget {
   final UnitState unit;
@@ -91,7 +105,6 @@ class _MobileLayoutState extends State<MobileLayout>
         children: [
           // Main control card (единый виджет для всех платформ)
           Expanded(
-            flex: 5,
             child: UnitControlCard(
               unit: widget.unit,
               onHeatingTempIncrease: widget.onHeatingTempIncrease,
@@ -128,14 +141,13 @@ class _MobileLayoutState extends State<MobileLayout>
 
           const SizedBox(height: AppSpacing.sm),
 
-          // Tab content
-          Expanded(
-            flex: 2,
+          // Tab content (фиксированная высота)
+          SizedBox(
+            height: _MobileLayoutConstants.tabContentHeight,
             child: TabBarView(
               controller: _tabController,
               children: [
                 // Режимы работы (using reusable ModeGrid)
-                // Режимы всегда кликабельны - можно выбрать режим до включения
                 ModeGrid(
                   selectedMode: widget.unit.mode,
                   onModeChanged: widget.onModeChanged,

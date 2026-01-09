@@ -83,7 +83,7 @@ class _OperationGraphState extends State<OperationGraph> {
     final stats = _cachedStats ?? _calculateStats();
 
     return BreezCard(
-      padding: const EdgeInsets.all(AppSpacing.sm),
+      padding: const EdgeInsets.all(AppSpacing.xs),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -98,7 +98,7 @@ class _OperationGraphState extends State<OperationGraph> {
             colors: colors,
           ),
 
-          const SizedBox(height: AppSpacing.sm),
+          const SizedBox(height: AppSpacing.xs),
 
           // Statistics row
           _StatisticsRow(
@@ -109,7 +109,7 @@ class _OperationGraphState extends State<OperationGraph> {
             l10n: l10n,
           ),
 
-          const SizedBox(height: AppSpacing.sm),
+          const SizedBox(height: AppSpacing.xs),
 
           // Graph area
           Expanded(

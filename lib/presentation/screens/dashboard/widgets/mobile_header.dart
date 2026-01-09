@@ -47,8 +47,8 @@ class MobileHeader extends StatelessWidget {
   Widget _buildUnitTabs(BuildContext context) {
     final colors = BreezColors.of(context);
     return Container(
-      height: 56,
-      padding: const EdgeInsets.all(4),
+      height: 64,
+      padding: const EdgeInsets.all(AppSpacing.xs),
       decoration: BoxDecoration(
         color: colors.card,
         borderRadius: BorderRadius.circular(AppRadius.cardSmall),
@@ -59,16 +59,16 @@ class MobileHeader extends StatelessWidget {
         children: [
           // Logo
           const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
+            padding: EdgeInsets.symmetric(horizontal: AppSpacing.xs),
             child: BreezLogo.small(),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: AppSpacing.xs),
           // Unit tabs list
           Expanded(
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: units.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 4),
+              separatorBuilder: (_, __) => const SizedBox(width: AppSpacing.xs),
               itemBuilder: (context, index) {
                 final unit = units[index];
                 final isSelected = index == selectedUnitIndex;
