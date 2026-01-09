@@ -228,17 +228,17 @@ class DashboardBlocBuilder extends StatelessWidget {
       exhaustFan: _parseFanValue(fullState?.exhaustFan) ?? climate?.exhaustAirflow.toInt() ?? 50,
       mode: climate?.preset ?? 'auto', // Operating mode (basic/intensive/etc.)
       humidity: climate?.humidity.toInt() ?? 45,
-      outsideTemp: fullState?.outdoorTemperature?.toInt() ?? 0,
+      outsideTemp: fullState?.outdoorTemperature ?? 0.0,
       filterPercent: fullState?.kpdRecuperator ?? 0,
       airflowRate: fullState?.devicePower ?? 0,
-      indoorTemp: fullState?.indoorTemperature?.toInt() ?? climate?.currentTemperature.toInt() ?? 22,
-      supplyTemp: fullState?.supplyTemperature?.toInt() ?? 20,
-      supplyTempAfterRecup: fullState?.supplyTempAfterRecup?.toInt() ?? 18,
+      indoorTemp: fullState?.indoorTemperature ?? climate?.currentTemperature ?? 22.0,
+      supplyTemp: fullState?.supplyTemperature ?? 20.0,
+      supplyTempAfterRecup: fullState?.supplyTempAfterRecup ?? 18.0,
       co2Level: fullState?.co2Level ?? 450,
       recuperatorEfficiency: fullState?.kpdRecuperator ?? 85,
       freeCooling: fullState?.freeCooling ?? 0,
       heaterPerformance: fullState?.heaterPerformance ?? 0,
-      coolerStatus: fullState?.coolerStatus ?? 0,
+      coolerStatus: fullState?.coolerStatus ?? 'Н/Д',
       ductPressure: fullState?.ductPressure ?? 120,
     );
   }

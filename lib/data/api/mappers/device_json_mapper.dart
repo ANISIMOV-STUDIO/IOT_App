@@ -255,7 +255,7 @@ class DeviceJsonMapper {
       co2Level: json['coIndicator'] as int?,
       freeCooling: json['statusOhl'] as int?,
       heaterPerformance: json['devicePower'] as int?,
-      coolerStatus: (json['running'] as bool? ?? false) ? 100 : 0,
+      coolerStatus: json['coolerStatusLabel'] as String?,
       ductPressure: json['pressure'] as int?,
       modeSettings: json['modeSettings'] != null
           ? modeSettingsFromJson(json['modeSettings'] as Map<String, dynamic>)
