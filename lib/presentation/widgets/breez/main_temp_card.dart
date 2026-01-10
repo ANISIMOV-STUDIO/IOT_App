@@ -74,6 +74,7 @@ class MainTempCard extends StatelessWidget {
   final VoidCallback? onScheduleToggle;
   final UnitState? sensorUnit;
   final bool showStats;
+  final bool isOnline;
 
   const MainTempCard({
     super.key,
@@ -106,6 +107,7 @@ class MainTempCard extends StatelessWidget {
     this.onScheduleToggle,
     this.sensorUnit,
     this.showStats = true,
+    this.isOnline = true,
   });
 
   @override

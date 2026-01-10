@@ -101,6 +101,9 @@ final class ClimateControlState extends Equatable {
   /// Включено ли расписание
   bool get isScheduleEnabled => deviceFullState?.isScheduleEnabled ?? false;
 
+  /// Устройство онлайн
+  bool get isOnline => deviceFullState?.isOnline ?? false;
+
   ClimateControlState copyWith({
     ClimateControlStatus? status,
     ClimateState? climate,

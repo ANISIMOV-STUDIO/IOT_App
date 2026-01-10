@@ -85,7 +85,8 @@ class UnitTabButton extends StatelessWidget {
 
     // Цвета: выбранный — акцентный текст на прозрачном фоне с подсветкой
     final textColor = isSelected ? AppColors.accent : colors.textMuted;
-    final indicatorColor = unit.power ? AppColors.success : colors.textMuted;
+    // Зелёный если устройство онлайн, серый если офлайн
+    final indicatorColor = unit.isOnline ? AppColors.success : colors.textMuted;
 
     return BreezButton(
       onTap: onTap,

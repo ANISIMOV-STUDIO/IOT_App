@@ -47,6 +47,7 @@ class MobileLayout extends StatefulWidget {
   final DaySettingsCallback? onTimerSettingsChanged;
   final Map<String, AlarmInfo> activeAlarms;
   final VoidCallback? onAlarmsSeeHistory;
+  final bool isOnline;
 
   const MobileLayout({
     super.key,
@@ -68,6 +69,7 @@ class MobileLayout extends StatefulWidget {
     this.onTimerSettingsChanged,
     this.activeAlarms = const {},
     this.onAlarmsSeeHistory,
+    this.isOnline = true,
   });
 
   @override
@@ -107,18 +109,19 @@ class _MobileLayoutState extends State<MobileLayout>
           Expanded(
             child: UnitControlCard(
               unit: widget.unit,
-              onHeatingTempIncrease: widget.onHeatingTempIncrease,
-              onHeatingTempDecrease: widget.onHeatingTempDecrease,
-              onCoolingTempIncrease: widget.onCoolingTempIncrease,
-              onCoolingTempDecrease: widget.onCoolingTempDecrease,
-              onSupplyFanChanged: widget.onSupplyFanChanged,
-              onExhaustFanChanged: widget.onExhaustFanChanged,
-              onPowerToggle: widget.onPowerToggle,
+              onHeatingTempIncrease: widget.isOnline ? widget.onHeatingTempIncrease : null,
+              onHeatingTempDecrease: widget.isOnline ? widget.onHeatingTempDecrease : null,
+              onCoolingTempIncrease: widget.isOnline ? widget.onCoolingTempIncrease : null,
+              onCoolingTempDecrease: widget.isOnline ? widget.onCoolingTempDecrease : null,
+              onSupplyFanChanged: widget.isOnline ? widget.onSupplyFanChanged : null,
+              onExhaustFanChanged: widget.isOnline ? widget.onExhaustFanChanged : null,
+              onPowerToggle: widget.isOnline ? widget.onPowerToggle : null,
               onSettingsTap: widget.onSettingsTap,
               isPowerLoading: widget.isPowerLoading,
               isScheduleEnabled: widget.isScheduleEnabled,
               isScheduleLoading: widget.isScheduleLoading,
-              onScheduleToggle: widget.onScheduleToggle,
+              onScheduleToggle: widget.isOnline ? widget.onScheduleToggle : null,
+              isOnline: widget.isOnline,
             ),
           ),
 
@@ -156,19 +159,21 @@ class _MobileLayoutState extends State<MobileLayout>
                       // Режимы работы
                       ModeGrid(
                         selectedMode: widget.unit.mode,
-                        onModeChanged: widget.onModeChanged,
+                        onModeChanged: widget.isOnline ? widget.onModeChanged : null,
                         showCard: false,
+                        isEnabled: widget.isOnline,
                       ),
                       // Schedule
                       DailyScheduleWidget(
                         timerSettings: widget.timerSettings,
-                        onDaySettingsChanged: widget.onTimerSettingsChanged,
+                        onDaySettingsChanged: widget.isOnline ? widget.onTimerSettingsChanged : null,
                         compact: true,
                         showCard: false,
+                        isEnabled: widget.isOnline,
                       ),
                       // Alarms
                       UnitAlarmsWidget(
-                        alarms: widget.activeAlarms,
+                        alarms: widget.isOnline ? widget.activeAlarms : const {},
                         onSeeHistory: widget.onAlarmsSeeHistory,
                         compact: true,
                         showCard: false,

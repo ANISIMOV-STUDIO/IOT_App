@@ -240,6 +240,7 @@ class DashboardBlocBuilder extends StatelessWidget {
       heaterPerformance: fullState?.heaterPerformance ?? 0,
       coolerStatus: fullState?.coolerStatus ?? 'Н/Д',
       ductPressure: fullState?.ductPressure ?? 120,
+      isOnline: fullState?.isOnline ?? device.isOnline,
     );
   }
 

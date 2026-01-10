@@ -23,6 +23,7 @@ class UnitControlCard extends StatelessWidget {
   final bool isScheduleEnabled;
   final bool isScheduleLoading;
   final VoidCallback? onScheduleToggle;
+  final bool isOnline;
 
   const UnitControlCard({
     super.key,
@@ -41,6 +42,7 @@ class UnitControlCard extends StatelessWidget {
     this.isScheduleEnabled = false,
     this.isScheduleLoading = false,
     this.onScheduleToggle,
+    this.isOnline = true,
   });
 
   @override
@@ -74,6 +76,7 @@ class UnitControlCard extends StatelessWidget {
       isScheduleLoading: isScheduleLoading,
       onScheduleToggle: onScheduleToggle,
       showStats: false, // Без показателей - единообразно на всех платформах
+      isOnline: isOnline,
     );
   }
 }

@@ -32,6 +32,7 @@ class UnitState extends Equatable {
   final int heaterPerformance;       // Производительность электрического нагревателя (%)
   final String coolerStatus;            // Статус охладителя
   final int ductPressure;            // Давление в воздуховоде (Па)
+  final bool isOnline;                // Устройство онлайн
 
   const UnitState({
     required this.id,
@@ -56,6 +57,7 @@ class UnitState extends Equatable {
     this.heaterPerformance = 0,
     this.coolerStatus = 'Н/Д',
     this.ductPressure = 120,
+    this.isOnline = true,
   });
 
   UnitState copyWith({
@@ -81,6 +83,7 @@ class UnitState extends Equatable {
     int? heaterPerformance,
     String? coolerStatus,
     int? ductPressure,
+    bool? isOnline,
   }) {
     return UnitState(
       id: id ?? this.id,
@@ -105,6 +108,7 @@ class UnitState extends Equatable {
       heaterPerformance: heaterPerformance ?? this.heaterPerformance,
       coolerStatus: coolerStatus ?? this.coolerStatus,
       ductPressure: ductPressure ?? this.ductPressure,
+      isOnline: isOnline ?? this.isOnline,
     );
   }
 
@@ -132,5 +136,6 @@ class UnitState extends Equatable {
         heaterPerformance,
         coolerStatus,
         ductPressure,
+        isOnline,
       ];
 }

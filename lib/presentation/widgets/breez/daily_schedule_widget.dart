@@ -72,12 +72,16 @@ class DailyScheduleWidget extends StatefulWidget {
   /// Показывать обёртку-карточку
   final bool showCard;
 
+  /// Включен ли виджет (для offline состояния)
+  final bool isEnabled;
+
   const DailyScheduleWidget({
     super.key,
     this.timerSettings,
     this.onDaySettingsChanged,
     this.compact = false,
     this.showCard = true,
+    this.isEnabled = true,
   });
 
   @override
@@ -199,11 +203,25 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget> {
       ],
     );
 
-    if (!widget.showCard) return content;
+    if (!widget.showCard) {
+      return Opacity(
+        opacity: widget.isEnabled ? 1.0 : 0.4,
+        child: IgnorePointer(
+          ignoring: !widget.isEnabled,
+          child: content,
+        ),
+      );
+    }
 
-    return BreezCard(
-      padding: EdgeInsets.all(AppSpacing.xs),
-      child: content,
+    return Opacity(
+      opacity: widget.isEnabled ? 1.0 : 0.4,
+      child: IgnorePointer(
+        ignoring: !widget.isEnabled,
+        child: BreezCard(
+          padding: EdgeInsets.all(AppSpacing.xs),
+          child: content,
+        ),
+      ),
     );
   }
 }

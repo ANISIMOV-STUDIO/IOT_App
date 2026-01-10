@@ -208,6 +208,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             onTimerSettingsChanged: _handleTimerSettingsChanged,
             activeAlarms: data.climateState.activeAlarms,
             onAlarmsSeeHistory: () => context.goToAlarmHistory(unit.id, unit.name),
+            isOnline: data.climateState.isOnline,
           ),
         ),
       ],
