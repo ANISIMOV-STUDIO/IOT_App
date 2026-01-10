@@ -116,30 +116,33 @@ class MainTempCard extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final l10n = AppLocalizations.of(context)!;
 
+    // Устройство активно только если включено И онлайн
+    final isActive = isPowered && isOnline;
+
     final poweredGradient = isDark
         ? AppColors.darkCardGradientColors
         : AppColors.lightCardGradientColors;
     final offGradient = [colors.card, colors.card];
 
     return Semantics(
-      label: '$unitName: ${isPowered ? status ?? 'включено' : 'выключено'}',
+      label: '$unitName: ${isActive ? status ?? 'включено' : isOnline ? 'выключено' : 'не в сети'}',
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: isPowered ? poweredGradient : offGradient,
+            colors: isActive ? poweredGradient : offGradient,
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
           borderRadius: BorderRadius.circular(AppRadius.card),
           border: Border.all(
-            color: isPowered
+            color: isActive
                 ? AppColors.accent.withValues(alpha: _MainTempCardConstants.borderOpacity)
                 : colors.border,
-            width: isPowered
+            width: isActive
                 ? _MainTempCardConstants.borderWidthOn
                 : _MainTempCardConstants.borderWidthOff,
           ),
-          boxShadow: isPowered
+          boxShadow: isActive
               ? [
                   // Основная тень
                   BoxShadow(
@@ -176,8 +179,8 @@ class MainTempCard extends StatelessWidget {
                   isPowerLoading: isPowerLoading,
                   isScheduleEnabled: isScheduleEnabled,
                   isScheduleLoading: isScheduleLoading,
-                  onPowerToggle: onPowerToggle,
-                  onScheduleToggle: onScheduleToggle,
+                  onPowerToggle: isOnline ? onPowerToggle : null,
+                  onScheduleToggle: isOnline ? onScheduleToggle : null,
                   onSettingsTap: onSettingsTap,
                   onAlarmsTap: onAlarmsTap,
                 ),
@@ -185,18 +188,60 @@ class MainTempCard extends StatelessWidget {
                 // Temperature display - Two columns: Heating & Cooling
                 // Expanded чтобы занять центр карточки
                 Expanded(
-                  child: Center(
-                    child: _TemperatureSection(
-                      heatingTemp: heatingTemp,
-                      coolingTemp: coolingTemp,
-                      isPowered: isPowered,
-                      colors: colors,
-                      l10n: l10n,
-                      onHeatingTempIncrease: onHeatingTempIncrease,
-                      onHeatingTempDecrease: onHeatingTempDecrease,
-                      onCoolingTempIncrease: onCoolingTempIncrease,
-                      onCoolingTempDecrease: onCoolingTempDecrease,
-                    ),
+                  child: Stack(
+                    children: [
+                      // Температурные колонки (с opacity если offline)
+                      Opacity(
+                        opacity: isOnline ? 1.0 : 0.4,
+                        child: Center(
+                          child: _TemperatureSection(
+                            heatingTemp: heatingTemp,
+                            coolingTemp: coolingTemp,
+                            isPowered: isActive,
+                            colors: colors,
+                            l10n: l10n,
+                            onHeatingTempIncrease: isActive ? onHeatingTempIncrease : null,
+                            onHeatingTempDecrease: isActive ? onHeatingTempDecrease : null,
+                            onCoolingTempIncrease: isActive ? onCoolingTempIncrease : null,
+                            onCoolingTempDecrease: isActive ? onCoolingTempDecrease : null,
+                          ),
+                        ),
+                      ),
+                      // Надпись "Устройство не в сети" поверх
+                      if (!isOnline)
+                        Center(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: AppSpacing.md,
+                              vertical: AppSpacing.sm,
+                            ),
+                            decoration: BoxDecoration(
+                              color: colors.card.withValues(alpha: 0.95),
+                              borderRadius: BorderRadius.circular(AppRadius.nested),
+                              border: Border.all(color: colors.border),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.cloud_off_outlined,
+                                  color: colors.textMuted,
+                                  size: 20,
+                                ),
+                                const SizedBox(width: AppSpacing.xs),
+                                Text(
+                                  l10n.statusOffline,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: colors.textMuted,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
                 ),
 
@@ -211,14 +256,17 @@ class MainTempCard extends StatelessWidget {
                     l10n: l10n,
                   ),
 
-                // Fan sliders - всегда видимы, но отключены когда устройство выключено
-                _FanSlidersSection(
-                  supplyFan: supplyFan,
-                  exhaustFan: exhaustFan,
-                  onSupplyFanChanged: isPowered ? onSupplyFanChanged : null,
-                  onExhaustFanChanged: isPowered ? onExhaustFanChanged : null,
-                  colors: colors,
-                  l10n: l10n,
+                // Fan sliders - всегда видимы, но отключены когда устройство выключено или offline
+                Opacity(
+                  opacity: isOnline ? 1.0 : 0.4,
+                  child: _FanSlidersSection(
+                    supplyFan: supplyFan,
+                    exhaustFan: exhaustFan,
+                    onSupplyFanChanged: isActive ? onSupplyFanChanged : null,
+                    onExhaustFanChanged: isActive ? onExhaustFanChanged : null,
+                    colors: colors,
+                    l10n: l10n,
+                  ),
                 ),
               ],
             ),
