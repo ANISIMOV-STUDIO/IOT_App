@@ -90,9 +90,9 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
 
     // Управление устройством
     on<ClimatePowerToggled>(_onPowerToggled);
-    on<ClimateTemperatureChanged>(_onTemperatureChanged);
-    on<ClimateHeatingTempChanged>(_onHeatingTempChanged);
-    on<ClimateCoolingTempChanged>(_onCoolingTempChanged);
+    on<ClimateTemperatureChanged>(_onTemperatureChanged, transformer: restartable());
+    on<ClimateHeatingTempChanged>(_onHeatingTempChanged, transformer: restartable());
+    on<ClimateCoolingTempChanged>(_onCoolingTempChanged, transformer: restartable());
     on<ClimateHumidityChanged>(_onHumidityChanged);
     on<ClimateModeChanged>(_onModeChanged);
     on<ClimateOperatingModeChanged>(_onOperatingModeChanged);
