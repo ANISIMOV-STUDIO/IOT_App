@@ -95,7 +95,8 @@ class _MobileLayoutState extends State<MobileLayout>
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final alarmCount = widget.activeAlarms.length;
+    // Если offline — не показываем количество аварий
+    final alarmCount = widget.isOnline ? widget.activeAlarms.length : 0;
 
     return Padding(
       padding: const EdgeInsets.only(
