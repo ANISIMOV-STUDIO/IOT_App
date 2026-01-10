@@ -28,6 +28,7 @@ class RealClimateRepository implements ClimateRepository {
 
   // SignalR subscription для отмены при dispose
   StreamSubscription? _deviceUpdatesSubscription;
+  StreamSubscription? _statusChangesSubscription;
 
   /// Конструктор с инжекцией зависимостей
   ///
@@ -88,10 +89,73 @@ class RealClimateRepository implements ClimateRepository {
           );
         },
       );
+
+      // Подписка на изменения онлайн-статуса устройств
+      _statusChangesSubscription = _signalR?.statusChanges.listen(
+        (statusData) {
+          _handleStatusChange(statusData);
+        },
+        onError: (error) {
+          developer.log(
+            'SignalR status changes error: $error',
+            name: 'ClimateRepository',
+            error: error,
+          );
+        },
+      );
     } catch (e) {
       // Продолжить без real-time обновлений
       // Будет использоваться polling или ручное обновление
     }
+  }
+
+  /// Обработка изменения онлайн-статуса устройства
+  void _handleStatusChange(Map<String, dynamic> statusData) {
+    final deviceId = statusData['deviceId'] as String?;
+    final macAddress = statusData['macAddress'] as String?;
+    final isOnline = statusData['isOnline'] as bool? ?? false;
+
+    if (deviceId == null && macAddress == null) return;
+
+    developer.log(
+      'SignalR: Device status changed - deviceId: $deviceId, mac: $macAddress, isOnline: $isOnline',
+      name: 'ClimateRepository',
+    );
+
+    // Обновляем кэш устройств (используем только deviceId, т.к. HvacDevice не хранит macAddress)
+    final updatedDevices = _cachedDevices.map((device) {
+      if (device.id == deviceId) {
+        return device.copyWith(isOnline: isOnline);
+      }
+      return device;
+    }).toList();
+
+    if (!_listEquals(_cachedDevices, updatedDevices)) {
+      _cachedDevices = updatedDevices;
+      _devicesController.add(updatedDevices);
+    }
+
+    // Если это текущее выбранное устройство — обновляем DeviceFullState
+    if (_selectedDeviceId == deviceId) {
+      // Запрашиваем полное состояние устройства для обновления UI
+      getDeviceFullState(_selectedDeviceId).then((fullState) {
+        _deviceFullStateController.add(fullState);
+      }).catchError((e) {
+        developer.log(
+          'Failed to refresh device state after status change: $e',
+          name: 'ClimateRepository',
+        );
+      });
+    }
+  }
+
+  /// Сравнение списков устройств
+  bool _listEquals(List<HvacDevice> a, List<HvacDevice> b) {
+    if (a.length != b.length) return false;
+    for (int i = 0; i < a.length; i++) {
+      if (a[i].id != b[i].id || a[i].isOnline != b[i].isOnline) return false;
+    }
+    return true;
   }
 
   // ============================================
@@ -423,6 +487,7 @@ class RealClimateRepository implements ClimateRepository {
 
   void dispose() {
     _deviceUpdatesSubscription?.cancel(); // Отменить SignalR subscription
+    _statusChangesSubscription?.cancel(); // Отменить status changes subscription
     _climateController.close();
     _devicesController.close();
     _deviceFullStateController.close();

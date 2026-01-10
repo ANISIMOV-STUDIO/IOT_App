@@ -2,6 +2,7 @@
 ///
 /// Поддерживает события:
 /// - DeviceUpdated / DeviceStateChanged - обновления устройств
+/// - DeviceStatusChanged - изменение онлайн-статуса устройств
 /// - NotificationReceived - новые уведомления
 /// - NewReleaseAvailable - новые версии приложения
 library;
@@ -20,6 +21,8 @@ class SignalRHubConnection {
   final _notificationController =
       StreamController<Map<String, dynamic>>.broadcast();
   final _releaseController =
+      StreamController<Map<String, dynamic>>.broadcast();
+  final _statusChangeController =
       StreamController<Map<String, dynamic>>.broadcast();
   final _connectionStateController =
       StreamController<HubConnectionState>.broadcast();
@@ -58,6 +61,9 @@ class SignalRHubConnection {
 
       // Подписка на обновления версий
       _connection!.on('NewReleaseAvailable', _handleRelease);
+
+      // Подписка на изменения онлайн-статуса устройств
+      _connection!.on('DeviceStatusChanged', _handleStatusChange);
 
       // Обработка состояния соединения
       _connection!.onclose(({error}) {
@@ -158,6 +164,30 @@ class SignalRHubConnection {
     }
   }
 
+  /// Обработка изменения онлайн-статуса устройства из SignalR
+  void _handleStatusChange(List<Object?>? arguments) {
+    try {
+      final data = arguments?.first;
+      if (data != null) {
+        Map<String, dynamic> statusData;
+
+        if (data is Map<String, dynamic>) {
+          statusData = data;
+        } else if (data is Map) {
+          statusData = Map<String, dynamic>.from(data);
+        } else {
+          ApiLogger.logWebSocketError('Unknown status data format: ${data.runtimeType}');
+          return;
+        }
+
+        ApiLogger.logWebSocketMessage('DeviceStatusChanged', statusData);
+        _statusChangeController.add(statusData);
+      }
+    } catch (e) {
+      ApiLogger.logWebSocketError('Error handling status change: $e');
+    }
+  }
+
   /// Подписаться на обновления конкретного устройства
   Future<void> subscribeToDevice(String deviceId) async {
     try {
@@ -200,6 +230,10 @@ class SignalRHubConnection {
   Stream<Map<String, dynamic>> get releases =>
       _releaseController.stream;
 
+  /// Стрим изменений онлайн-статуса устройств
+  Stream<Map<String, dynamic>> get statusChanges =>
+      _statusChangeController.stream;
+
   /// Стрим состояния соединения
   Stream<HubConnectionState> get connectionState =>
       _connectionStateController.stream;
@@ -219,6 +253,7 @@ class SignalRHubConnection {
     await _deviceUpdatesController.close();
     await _notificationController.close();
     await _releaseController.close();
+    await _statusChangeController.close();
     await _connectionStateController.close();
   }
 }
