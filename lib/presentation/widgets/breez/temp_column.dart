@@ -137,7 +137,7 @@ class TemperatureColumn extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: spacing),
                   child: Text(
-                    '$temperature°',
+                    '$temperature°C',
                     style: TextStyle(
                       fontSize: fontSize,
                       fontWeight: FontWeight.w700,
