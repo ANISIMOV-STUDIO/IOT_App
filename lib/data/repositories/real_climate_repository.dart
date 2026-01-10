@@ -25,6 +25,7 @@ class RealClimateRepository implements ClimateRepository {
   final _deviceFullStateController = StreamController<DeviceFullState>.broadcast();
   String _selectedDeviceId = '';
   List<HvacDevice> _cachedDevices = [];
+  ClimateState? _lastClimateState;  // Кэшированное состояние для быстрого доступа к preset
 
   // SignalR subscription для отмены при dispose
   StreamSubscription? _deviceUpdatesSubscription;
@@ -62,6 +63,7 @@ class RealClimateRepository implements ClimateRepository {
           if (deviceData['id'] == selectedId) {
             // Парсинг ClimateState для обратной совместимости
             final climateState = DeviceJsonMapper.climateStateFromJson(deviceData);
+            _lastClimateState = climateState;  // Кэшируем для быстрого доступа к preset
             _climateController.add(climateState);
             
             // Парсинг DeviceFullState для полного обновления UI
@@ -197,6 +199,7 @@ class RealClimateRepository implements ClimateRepository {
 
     // Load initial state
     getDeviceState(deviceId).then((state) {
+      _lastClimateState = state;  // Кэшируем для быстрого доступа к preset
       _climateController.add(state);
     }).catchError((_) {
       // Ignore errors for initial load
@@ -280,16 +283,13 @@ class RealClimateRepository implements ClimateRepository {
       throw StateError('No device selected for heating temperature control');
     }
 
-    // Получаем текущее состояние устройства для определения режима
-    final currentState = await getDeviceState(id);
-    final modeName = _normalizeModeName(currentState.preset);
+    // Используем кэшированный режим вместо GET запроса
+    final modeName = _getCachedModeName(id);
 
     await _httpClient.setHeatingTemperature(id, temperature, modeName: modeName);
     
-    // Получаем обновлённое состояние
-    final newState = await getDeviceState(id);
-    _climateController.add(newState);
-    return newState;
+    // Состояние придёт через SignalR, возвращаем текущее
+    return getCurrentState();
   }
 
   @override
@@ -302,16 +302,13 @@ class RealClimateRepository implements ClimateRepository {
       throw StateError('No device selected for cooling temperature control');
     }
 
-    // Получаем текущее состояние устройства для определения режима
-    final currentState = await getDeviceState(id);
-    final modeName = _normalizeModeName(currentState.preset);
+    // Используем кэшированный режим вместо GET запроса
+    final modeName = _getCachedModeName(id);
 
     await _httpClient.setCoolingTemperature(id, temperature, modeName: modeName);
     
-    // Получаем обновлённое состояние
-    final newState = await getDeviceState(id);
-    _climateController.add(newState);
-    return newState;
+    // Состояние придёт через SignalR, возвращаем текущее
+    return getCurrentState();
   }
 
   /// Нормализует имя режима для backend API
@@ -325,6 +322,14 @@ class RealClimateRepository implements ClimateRepository {
       'maxperformance' => 'max_performance',
       _ => normalized,
     };
+  }
+
+  /// Получить имя режима из кэша вместо GET запроса
+  /// Это быстрая операция, не блокирует restartable() transformer
+  String _getCachedModeName(String deviceId) {
+    // Используем кэшированный preset из последнего состояния
+    final preset = _lastClimateState?.preset ?? 'basic';
+    return _normalizeModeName(preset);
   }
 
 
@@ -366,17 +371,14 @@ class RealClimateRepository implements ClimateRepository {
       throw StateError('No device selected for supply airflow control');
     }
 
-    // Получаем текущее состояние устройства для определения режима
-    final currentState = await getDeviceState(id);
-    final modeName = _normalizeModeName(currentState.preset);
+    // Используем кэшированный режим вместо GET запроса
+    final modeName = _getCachedModeName(id);
     final fanSpeed = DeviceJsonMapper.percentToFanSpeedInt(value);
 
     await _httpClient.setSupplyFan(id, fanSpeed, modeName: modeName);
     
-    // Получаем обновлённое состояние
-    final newState = await getDeviceState(id);
-    _climateController.add(newState);
-    return newState;
+    // Состояние придёт через SignalR, возвращаем текущее
+    return getCurrentState();
   }
 
   @override
@@ -389,17 +391,14 @@ class RealClimateRepository implements ClimateRepository {
       throw StateError('No device selected for exhaust airflow control');
     }
 
-    // Получаем текущее состояние устройства для определения режима
-    final currentState = await getDeviceState(id);
-    final modeName = _normalizeModeName(currentState.preset);
+    // Используем кэшированный режим вместо GET запроса
+    final modeName = _getCachedModeName(id);
     final fanSpeed = DeviceJsonMapper.percentToFanSpeedInt(value);
 
     await _httpClient.setExhaustFan(id, fanSpeed, modeName: modeName);
     
-    // Получаем обновлённое состояние
-    final newState = await getDeviceState(id);
-    _climateController.add(newState);
-    return newState;
+    // Состояние придёт через SignalR, возвращаем текущее
+    return getCurrentState();
   }
 
 
