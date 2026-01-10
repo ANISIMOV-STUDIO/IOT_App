@@ -165,7 +165,7 @@ class _OperationGraphState extends State<OperationGraph> {
     final unitMap = <GraphMetric, String>{
       GraphMetric.temperature: '°C',
       GraphMetric.humidity: '%',
-      GraphMetric.airflow: l10n.cubicMetersPerHour,
+      GraphMetric.airflow: '%',
     };
     return unitMap[widget.selectedMetric] ?? '';
   }
