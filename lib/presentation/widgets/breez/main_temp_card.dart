@@ -181,8 +181,9 @@ class MainTempCard extends StatelessWidget {
                   isScheduleLoading: isScheduleLoading,
                   onPowerToggle: isOnline ? onPowerToggle : null,
                   onScheduleToggle: isOnline ? onScheduleToggle : null,
-                  onSettingsTap: onSettingsTap,
+                  onSettingsTap: isOnline ? onSettingsTap : null,
                   onAlarmsTap: onAlarmsTap,
+                  isOnline: isOnline,
                 ),
 
                 // Temperature display - Two columns: Heating & Cooling
@@ -220,24 +221,13 @@ class MainTempCard extends StatelessWidget {
                               borderRadius: BorderRadius.circular(AppRadius.nested),
                               border: Border.all(color: colors.border),
                             ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.cloud_off_outlined,
-                                  color: colors.textMuted,
-                                  size: 20,
-                                ),
-                                const SizedBox(width: AppSpacing.xs),
-                                Text(
-                                  l10n.statusOffline,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                    color: colors.textMuted,
-                                  ),
-                                ),
-                              ],
+                            child: Text(
+                              'Устройство не в сети',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: colors.textMuted,
+                              ),
                             ),
                           ),
                         ),

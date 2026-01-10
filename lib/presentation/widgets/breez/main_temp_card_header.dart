@@ -23,6 +23,7 @@ class MainTempCardHeader extends StatelessWidget {
   final VoidCallback? onScheduleToggle;
   final VoidCallback? onSettingsTap;
   final VoidCallback? onAlarmsTap;
+  final bool isOnline;
 
   const MainTempCardHeader({
     super.key,
@@ -38,6 +39,7 @@ class MainTempCardHeader extends StatelessWidget {
     this.onScheduleToggle,
     this.onSettingsTap,
     this.onAlarmsTap,
+    this.isOnline = true,
   });
 
   @override
@@ -70,6 +72,7 @@ class MainTempCardHeader extends StatelessWidget {
             onSettingsTap: onSettingsTap,
             onScheduleToggle: onScheduleToggle,
             onPowerToggle: onPowerToggle,
+            isOnline: isOnline,
           )
         else
           _StatusBadge(
@@ -170,6 +173,7 @@ class _ControlsSection extends StatelessWidget {
   final VoidCallback? onSettingsTap;
   final VoidCallback? onScheduleToggle;
   final VoidCallback? onPowerToggle;
+  final bool isOnline;
 
   const _ControlsSection({
     required this.isPowered,
@@ -179,14 +183,20 @@ class _ControlsSection extends StatelessWidget {
     this.onSettingsTap,
     this.onScheduleToggle,
     this.onPowerToggle,
+    this.isOnline = true,
   });
 
   @override
   Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+    // Цвет кнопок серый если offline
+    final mutedColor = colors.textMuted;
+    
     return Row(
       children: [
         BreezIconButton(
           icon: Icons.settings_outlined,
+          iconColor: isOnline ? null : mutedColor,
           onTap: onSettingsTap,
         ),
         SizedBox(width: AppSpacing.xs),
@@ -206,7 +216,7 @@ class _ControlsSection extends StatelessWidget {
         else
           BreezIconButton(
             icon: Icons.schedule,
-            iconColor: isScheduleEnabled ? AppColors.accentGreen : BreezColors.of(context).textMuted,
+            iconColor: !isOnline ? mutedColor : isScheduleEnabled ? AppColors.accentGreen : mutedColor,
             onTap: onScheduleToggle,
           ),
         SizedBox(width: AppSpacing.xs),
@@ -226,7 +236,7 @@ class _ControlsSection extends StatelessWidget {
         else
           BreezIconButton(
             icon: Icons.power_settings_new,
-            iconColor: isPowered ? AppColors.accentGreen : BreezColors.of(context).textMuted,
+            iconColor: !isOnline ? mutedColor : isPowered ? AppColors.accentGreen : mutedColor,
             onTap: onPowerToggle,
           ),
       ],
