@@ -6,7 +6,7 @@ import 'breez_slider.dart';
 
 /// Compact fan slider with label, icon, and percentage display
 /// Uses BreezLabeledSlider for consistent styling and accessibility
-class FanSlider extends StatelessWidget {
+class FanSlider extends StatefulWidget {
   final String label;
   final int value;
   final Color color;
@@ -23,23 +23,49 @@ class FanSlider extends StatelessWidget {
   });
 
   @override
+  State<FanSlider> createState() => _FanSliderState();
+}
+
+class _FanSliderState extends State<FanSlider> {
+  late int _currentValue;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentValue = widget.value;
+  }
+
+  @override
+  void didUpdateWidget(FanSlider oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Update local value if external value changes (and we assume we aren't dragging,
+    // though strictly speaking we can't detect drag state here easily without more complex logic.
+    // However, since the external update usually comes from the API response which happens
+    // after we release, this simple sync is usually sufficient and correct).
+    if (widget.value != oldWidget.value) {
+      _currentValue = widget.value;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BreezLabeledSlider(
-      label: label,
-      value: value.toDouble(),
+      label: widget.label,
+      value: _currentValue.toDouble(),
       min: 20, // Минимальная скорость вентилятора 20%
-      color: color,
-      icon: icon,
-      enabled: onChanged != null,
-      semanticLabel: '$label: $value%',
+      color: widget.color,
+      icon: widget.icon,
+      enabled: widget.onChanged != null,
+      semanticLabel: '${widget.label}: $_currentValue%',
       suffix: '%',
-      // Не вызываем callback во время перетаскивания - только UI обновление
-      onChanged: null,
-      // Отправляем изменения только когда пользователь отпустил слайдер
-      onChangeEnd: onChanged != null
-          ? (v) => onChanged!(v.round())
+      // Обновляем локальное состояние при перетаскивании для визуала
+      onChanged: widget.onChanged != null
+          ? (v) => setState(() => _currentValue = v.round())
+          : null,
+      // Отправляем запрос только когда пользователь отпустил слайдер
+      onChangeEnd: widget.onChanged != null
+          ? (v) => widget.onChanged!(v.round())
           : null,
     );
   }
-
 }
