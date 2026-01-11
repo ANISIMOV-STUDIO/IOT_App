@@ -46,7 +46,10 @@ class SignalRHubConnection {
           .withUrl(
             ApiConfig.websocketUrl,
             options: HttpConnectionOptions(
-              accessTokenFactory: () async => token ?? '',
+              accessTokenFactory: () async {
+                final token = await _apiClient.getAuthToken();
+                return token ?? '';
+              },
             ),
           )
           .withAutomaticReconnect()
