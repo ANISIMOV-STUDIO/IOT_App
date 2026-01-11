@@ -121,24 +121,23 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     // Управление устройством
     on<ClimatePowerToggled>(_onPowerToggled);
     
-    // Температура с debounce 500мс - ждём пока пользователь перестанет кликать
+    // Температура (мгновенное обновление UI, отправка через Commit)
     on<ClimateTemperatureChanged>(_onTemperatureChanged, transformer: debounceRestartable());
-    on<ClimateHeatingTempChanged>(_onHeatingTempChanged, transformer: debounceRestartable());
-    on<ClimateCoolingTempChanged>(_onCoolingTempChanged, transformer: debounceRestartable());
+    on<ClimateHeatingTempChanged>(_onHeatingTempChanged);
+    on<ClimateHeatingTempCommit>(_onHeatingTempCommit, transformer: debounceRestartable());
+    on<ClimateCoolingTempChanged>(_onCoolingTempChanged);
+    on<ClimateCoolingTempCommit>(_onCoolingTempCommit, transformer: debounceRestartable());
     on<ClimateHumidityChanged>(_onHumidityChanged);
     on<ClimateModeChanged>(_onModeChanged);
     on<ClimateOperatingModeChanged>(_onOperatingModeChanged);
     on<ClimatePresetChanged>(_onPresetChanged);
 
-    // Вентиляторы с debounce 500мс - ждём пока пользователь перестанет двигать слайдер
-    on<ClimateSupplyAirflowChanged>(
-      _onSupplyAirflowChanged,
-      transformer: debounceRestartable(),
-    );
-    on<ClimateExhaustAirflowChanged>(
-      _onExhaustAirflowChanged,
-      transformer: debounceRestartable(),
-    );
+    // Вентиляторы (мгновенное обновление UI, отправка через Commit)
+    on<ClimateSupplyAirflowChanged>(_onSupplyAirflowChanged);
+    on<ClimateSupplyAirflowCommit>(_onSupplyAirflowCommit, transformer: debounceRestartable());
+    
+    on<ClimateExhaustAirflowChanged>(_onExhaustAirflowChanged);
+    on<ClimateExhaustAirflowCommit>(_onExhaustAirflowCommit, transformer: debounceRestartable());
 
     // Расписание
     on<ClimateScheduleToggled>(_onScheduleToggled);
@@ -347,13 +346,11 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     }
   }
 
-  /// Изменение температуры нагрева
-  Future<void> _onHeatingTempChanged(
+  /// UI update: Изменение температуры нагрева
+  void _onHeatingTempChanged(
     ClimateHeatingTempChanged event,
     Emitter<ClimateControlState> emit,
-  ) async {
-    final previousTemp = state.deviceFullState?.heatingTemperature;
-
+  ) {
     // Optimistic update - сразу обновляем UI + показываем pending
     if (state.deviceFullState != null) {
       emit(state.copyWith(
@@ -362,37 +359,39 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
           heatingTemperature: event.temperature,
         ),
       ));
+      
+      // Ставим в очередь реальный запрос (с debounce)
+      add(ClimateHeatingTempCommit(event.temperature));
     }
+  }
 
+  /// API call: Отправка температуры нагрева
+  Future<void> _onHeatingTempCommit(
+    ClimateHeatingTempCommit event,
+    Emitter<ClimateControlState> emit,
+  ) async {
+    // Запоминаем текущее состояние для возможного отката
+    // ВАЖНО: берем значение, которое было ДО начала всей серии изменений, если возможно
+    // Но здесь у нас нет доступа к истории, поэтому если API упадет - вернем то, что сейчас в UI (что неверно)
+    // НО, так как мы используем optimistic UI, пользователь уже видит новое значение.
+    // Если ошибка - лучше показать тоаст ошибки, чем ломать UI
+    
     try {
       await _setTemperature(SetTemperatureParams(temperature: event.temperature.toDouble()));
       // pending сбросится когда придёт SignalR update
     } catch (e) {
-      // Откат при ошибке
-      if (state.deviceFullState != null && previousTemp != null) {
-        emit(state.copyWith(
-          isPendingTemperature: false,
-          deviceFullState: state.deviceFullState!.copyWith(
-            heatingTemperature: previousTemp,
-          ),
-          errorMessage: 'Heating temperature error: $e',
-        ));
-      } else {
-        emit(state.copyWith(
-          isPendingTemperature: false,
-          errorMessage: 'Heating temperature error: $e',
-        ));
-      }
+      emit(state.copyWith(
+        isPendingTemperature: false,
+        errorMessage: 'Heating temperature error: $e',
+      ));
     }
   }
 
-  /// Изменение температуры охлаждения
-  Future<void> _onCoolingTempChanged(
+  /// UI update: Изменение температуры охлаждения
+  void _onCoolingTempChanged(
     ClimateCoolingTempChanged event,
     Emitter<ClimateControlState> emit,
-  ) async {
-    final previousTemp = state.deviceFullState?.coolingTemperature;
-
+  ) {
     // Optimistic update - сразу обновляем UI + показываем pending
     if (state.deviceFullState != null) {
       emit(state.copyWith(
@@ -401,27 +400,25 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
           coolingTemperature: event.temperature,
         ),
       ));
+      
+      // Ставим в очередь реальный запрос (с debounce)
+      add(ClimateCoolingTempCommit(event.temperature));
     }
+  }
 
+  /// API call: Отправка температуры охлаждения
+  Future<void> _onCoolingTempCommit(
+    ClimateCoolingTempCommit event,
+    Emitter<ClimateControlState> emit,
+  ) async {
     try {
       await _setCoolingTemperature(SetCoolingTemperatureParams(temperature: event.temperature));
       // pending сбросится когда придёт SignalR update
     } catch (e) {
-      // Откат при ошибке
-      if (state.deviceFullState != null && previousTemp != null) {
-        emit(state.copyWith(
-          isPendingTemperature: false,
-          deviceFullState: state.deviceFullState!.copyWith(
-            coolingTemperature: previousTemp,
-          ),
-          errorMessage: 'Cooling temperature error: $e',
-        ));
-      } else {
-        emit(state.copyWith(
-          isPendingTemperature: false,
-          errorMessage: 'Cooling temperature error: $e',
-        ));
-      }
+      emit(state.copyWith(
+        isPendingTemperature: false,
+        errorMessage: 'Cooling temperature error: $e',
+      ));
     }
   }
 
@@ -541,21 +538,27 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     }
   }
 
-  /// Изменение притока воздуха
-  Future<void> _onSupplyAirflowChanged(
+  /// UI update: Изменение притока воздуха
+  void _onSupplyAirflowChanged(
     ClimateSupplyAirflowChanged event,
     Emitter<ClimateControlState> emit,
-  ) async {
-    final previousValue = state.climate?.supplyAirflow;
-
+  ) {
     // Optimistic update - сразу обновляем UI + показываем pending
     if (state.climate != null) {
       emit(state.copyWith(
         isPendingSupplyFan: true,
         climate: state.climate!.copyWith(supplyAirflow: event.value.toDouble()),
       ));
+      
+      add(ClimateSupplyAirflowCommit(event.value));
     }
+  }
 
+  /// API call: Отправка притока воздуха
+  Future<void> _onSupplyAirflowCommit(
+    ClimateSupplyAirflowCommit event,
+    Emitter<ClimateControlState> emit,
+  ) async {
     try {
       await _setAirflow(SetAirflowParams(
         type: AirflowType.supply,
@@ -563,37 +566,34 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       ));
       // pending сбросится когда придёт SignalR update
     } catch (e) {
-      // Откатываем optimistic update при ошибке
-      if (state.climate != null && previousValue != null) {
-        emit(state.copyWith(
-          isPendingSupplyFan: false,
-          climate: state.climate!.copyWith(supplyAirflow: previousValue),
-          errorMessage: 'Supply airflow error: $e',
-        ));
-      } else {
-        emit(state.copyWith(
-          isPendingSupplyFan: false,
-          errorMessage: 'Supply airflow error: $e',
-        ));
-      }
+      emit(state.copyWith(
+        isPendingSupplyFan: false,
+        errorMessage: 'Supply airflow error: $e',
+      ));
     }
   }
 
-  /// Изменение вытяжки воздуха
-  Future<void> _onExhaustAirflowChanged(
+  /// UI update: Изменение вытяжки воздуха
+  void _onExhaustAirflowChanged(
     ClimateExhaustAirflowChanged event,
     Emitter<ClimateControlState> emit,
-  ) async {
-    final previousValue = state.climate?.exhaustAirflow;
-
+  ) {
     // Optimistic update - сразу обновляем UI + показываем pending
     if (state.climate != null) {
       emit(state.copyWith(
         isPendingExhaustFan: true,
         climate: state.climate!.copyWith(exhaustAirflow: event.value.toDouble()),
       ));
+      
+      add(ClimateExhaustAirflowCommit(event.value));
     }
+  }
 
+  /// API call: Отправка вытяжки воздуха
+  Future<void> _onExhaustAirflowCommit(
+    ClimateExhaustAirflowCommit event,
+    Emitter<ClimateControlState> emit,
+  ) async {
     try {
       await _setAirflow(SetAirflowParams(
         type: AirflowType.exhaust,
@@ -601,19 +601,10 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       ));
       // pending сбросится когда придёт SignalR update
     } catch (e) {
-      // Откатываем optimistic update при ошибке
-      if (state.climate != null && previousValue != null) {
-        emit(state.copyWith(
-          isPendingExhaustFan: false,
-          climate: state.climate!.copyWith(exhaustAirflow: previousValue),
-          errorMessage: 'Exhaust airflow error: $e',
-        ));
-      } else {
-        emit(state.copyWith(
-          isPendingExhaustFan: false,
-          errorMessage: 'Exhaust airflow error: $e',
-        ));
-      }
+      emit(state.copyWith(
+        isPendingExhaustFan: false,
+        errorMessage: 'Exhaust airflow error: $e',
+      ));
     }
   }
 

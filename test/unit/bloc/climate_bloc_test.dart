@@ -401,7 +401,7 @@ void main() {
 
     group('ClimateSupplyAirflowChanged', () {
       blocTest<ClimateBloc, ClimateControlState>(
-        'вызывает setAirflow use case с типом supply',
+        'мгновенно обновляет UI и вызывает setAirflow use case после debounce',
         build: () {
           when(() => mockSetAirflow(any()))
               .thenAnswer((_) async => testClimate.copyWith(supplyAirflow: 80.0));
@@ -411,8 +411,17 @@ void main() {
           status: ClimateControlStatus.success,
           climate: testClimate,
         ),
-        act: (bloc) => bloc.add(const ClimateSupplyAirflowChanged(80.0)),
-        wait: const Duration(milliseconds: 600), // Ждём debounce
+        act: (bloc) async {
+          bloc.add(const ClimateSupplyAirflowChanged(80.0));
+          // Ждём 600мс чтобы debounce сработал
+          await Future.delayed(const Duration(milliseconds: 600));
+        },
+        expect: () => [
+          // 1. Мгновенное обновление UI + pending
+          isA<ClimateControlState>()
+              .having((s) => s.isPendingSupplyFan, 'isPendingSupplyFan', true)
+              .having((s) => s.climate?.supplyAirflow, 'supplyAirflow', 80.0),
+        ],
         verify: (_) {
           verify(() => mockSetAirflow(any())).called(1);
         },
@@ -421,7 +430,7 @@ void main() {
 
     group('ClimateExhaustAirflowChanged', () {
       blocTest<ClimateBloc, ClimateControlState>(
-        'вызывает setAirflow use case с типом exhaust',
+        'мгновенно обновляет UI и вызывает setAirflow use case после debounce',
         build: () {
           when(() => mockSetAirflow(any()))
               .thenAnswer((_) async => testClimate.copyWith(exhaustAirflow: 70.0));
@@ -431,10 +440,85 @@ void main() {
           status: ClimateControlStatus.success,
           climate: testClimate,
         ),
-        act: (bloc) => bloc.add(const ClimateExhaustAirflowChanged(70.0)),
-        wait: const Duration(milliseconds: 600), // Ждём debounce
+        act: (bloc) async {
+          bloc.add(const ClimateExhaustAirflowChanged(70.0));
+          // Ждём 600мс чтобы debounce сработал
+          await Future.delayed(const Duration(milliseconds: 600));
+        },
+        expect: () => [
+           // 1. Мгновенное обновление UI + pending
+          isA<ClimateControlState>()
+              .having((s) => s.isPendingExhaustFan, 'isPendingExhaustFan', true)
+              .having((s) => s.climate?.exhaustAirflow, 'exhaustAirflow', 70.0),
+        ],
         verify: (_) {
           verify(() => mockSetAirflow(any())).called(1);
+        },
+      );
+    });
+
+    group('ClimateHeatingTempChanged', () {
+      blocTest<ClimateBloc, ClimateControlState>(
+        'мгновенно обновляет UI и вызывает setTemperature use case после debounce',
+        build: () {
+          when(() => mockSetTemperature(any()))
+              .thenAnswer((_) async => testClimate.copyWith(targetTemperature: 21.0));
+          return createBloc();
+        },
+        seed: () => ClimateControlState(
+          status: ClimateControlStatus.success,
+          deviceFullState: const DeviceFullState(
+            id: '1',
+            name: 'Device 1',
+            heatingTemperature: 20,
+          ),
+        ),
+        act: (bloc) async {
+          bloc.add(const ClimateHeatingTempChanged(21));
+          // Ждём 600мс чтобы debounce сработал
+          await Future.delayed(const Duration(milliseconds: 600));
+        },
+        expect: () => [
+          // 1. Мгновенное обновление UI + pending
+          isA<ClimateControlState>()
+              .having((s) => s.isPendingTemperature, 'isPendingTemperature', true)
+              .having((s) => s.deviceFullState?.heatingTemperature, 'heatingTemperature', 21),
+        ],
+        verify: (_) {
+          verify(() => mockSetTemperature(any())).called(1);
+        },
+      );
+    });
+
+    group('ClimateCoolingTempChanged', () {
+      blocTest<ClimateBloc, ClimateControlState>(
+        'мгновенно обновляет UI и вызывает setCoolingTemperature use case после debounce',
+        build: () {
+          when(() => mockSetCoolingTemperature(any()))
+              .thenAnswer((_) async => testClimate.copyWith());
+          return createBloc();
+        },
+        seed: () => ClimateControlState(
+          status: ClimateControlStatus.success,
+          deviceFullState: const DeviceFullState(
+            id: '1',
+            name: 'Device 1',
+            coolingTemperature: 24,
+          ),
+        ),
+        act: (bloc) async {
+          bloc.add(const ClimateCoolingTempChanged(25));
+          // Ждём 600мс чтобы debounce сработал
+          await Future.delayed(const Duration(milliseconds: 600));
+        },
+        expect: () => [
+          // 1. Мгновенное обновление UI + pending
+          isA<ClimateControlState>()
+              .having((s) => s.isPendingTemperature, 'isPendingTemperature', true)
+              .having((s) => s.deviceFullState?.coolingTemperature, 'coolingTemperature', 25),
+        ],
+        verify: (_) {
+          verify(() => mockSetCoolingTemperature(any())).called(1);
         },
       );
     });

@@ -189,3 +189,47 @@ final class ClimateScheduleToggled extends ClimateEvent {
   @override
   List<Object?> get props => [enabled];
 }
+
+// ============================================
+// ВНУТРЕННИЕ СОБЫТИЯ (Debounced API Calls)
+// ============================================
+
+/// Внутреннее событие для отправки температуры нагрева (после debounce)
+final class ClimateHeatingTempCommit extends ClimateEvent {
+  final int temperature;
+
+  const ClimateHeatingTempCommit(this.temperature);
+
+  @override
+  List<Object?> get props => [temperature];
+}
+
+/// Внутреннее событие для отправки температуры охлаждения (после debounce)
+final class ClimateCoolingTempCommit extends ClimateEvent {
+  final int temperature;
+
+  const ClimateCoolingTempCommit(this.temperature);
+
+  @override
+  List<Object?> get props => [temperature];
+}
+
+/// Внутреннее событие для отправки притока воздуха (после debounce)
+final class ClimateSupplyAirflowCommit extends ClimateEvent {
+  final double value;
+
+  const ClimateSupplyAirflowCommit(this.value);
+
+  @override
+  List<Object?> get props => [value];
+}
+
+/// Внутреннее событие для отправки вытяжки воздуха (после debounce)
+final class ClimateExhaustAirflowCommit extends ClimateEvent {
+  final double value;
+
+  const ClimateExhaustAirflowCommit(this.value);
+
+  @override
+  List<Object?> get props => [value];
+}
