@@ -40,7 +40,7 @@ class SignalRHubConnection {
     }
 
     try {
-      final token = await _apiClient.getAuthToken();
+
 
       _connection = HubConnectionBuilder()
           .withUrl(
