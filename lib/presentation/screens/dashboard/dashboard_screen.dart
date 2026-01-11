@@ -317,12 +317,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       offHour: offHour,
       offMinute: offMinute,
       enabled: enabled,
-    ).then((_) {
-      // Refresh device state after update
-      if (mounted) {
-        context.read<ClimateBloc>().add(ClimateDeviceChanged(deviceId));
-      }
-    }).catchError((e) {
+    ).catchError((e) {
       if (mounted) {
         ToastService.error('Ошибка сохранения расписания: $e');
       }

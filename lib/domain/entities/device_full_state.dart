@@ -15,6 +15,10 @@ class DeviceFullState extends Equatable {
   final double currentTemperature;
   final double targetTemperature;
   final double humidity;
+  final double targetHumidity;
+  
+  /// Текущий режим (Basic, Intensive и т.д.)
+  final String operatingMode;
 
   /// Целевая температура нагрева
   final int? heatingTemperature;
@@ -82,6 +86,8 @@ class DeviceFullState extends Equatable {
     this.currentTemperature = 20.0,
     this.targetTemperature = 22.0,
     this.humidity = 50.0,
+    this.targetHumidity = 50.0,
+    this.operatingMode = 'basic',
     this.heatingTemperature,
     this.coolingTemperature,
     this.supplyFan,
@@ -141,6 +147,8 @@ class DeviceFullState extends Equatable {
     Map<String, TimerSettings>? timerSettings,
     Map<String, AlarmInfo>? activeAlarms,
     bool? isScheduleEnabled,
+    double? targetHumidity,
+    String? operatingMode,
   }) {
     return DeviceFullState(
       id: id ?? this.id,
@@ -151,6 +159,8 @@ class DeviceFullState extends Equatable {
       currentTemperature: currentTemperature ?? this.currentTemperature,
       targetTemperature: targetTemperature ?? this.targetTemperature,
       humidity: humidity ?? this.humidity,
+      targetHumidity: targetHumidity ?? this.targetHumidity,
+      operatingMode: operatingMode ?? this.operatingMode,
       heatingTemperature: heatingTemperature ?? this.heatingTemperature,
       coolingTemperature: coolingTemperature ?? this.coolingTemperature,
       supplyFan: supplyFan ?? this.supplyFan,
@@ -185,6 +195,8 @@ class DeviceFullState extends Equatable {
         currentTemperature,
         targetTemperature,
         humidity,
+        targetHumidity,
+        operatingMode,
         heatingTemperature,
         coolingTemperature,
         supplyFan,

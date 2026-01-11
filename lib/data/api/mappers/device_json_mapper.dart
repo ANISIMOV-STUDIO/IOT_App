@@ -54,8 +54,8 @@ class DeviceJsonMapper {
       targetTemperature: (json['temp'] as num?)?.toDouble() ?? 22.0,
       humidity: (json['humidity'] as num?)?.toDouble() ?? 50.0,
       targetHumidity: (json['targetHumidity'] as num?)?.toDouble() ?? 50.0,
-      supplyAirflow: _parseFanValue(json['supplyFan']),
-      exhaustAirflow: _parseFanValue(json['exhaustFan']),
+      supplyAirflow: parseFanValue(json['supplyFan']),
+      exhaustAirflow: parseFanValue(json['exhaustFan']),
       mode: _stringToClimateMode(json['mode'] as String?),
       // Используем mode как operating mode (basic, intensive, etc.)
       // Backend возвращает Mode как "Basic", "Intensive" и т.д.
@@ -152,7 +152,7 @@ class DeviceJsonMapper {
   }
 
   /// Parse fan value (can be int or String) → Percent (0-100)
-  static double _parseFanValue(dynamic value) {
+  static double parseFanValue(dynamic value) {
     if (value == null) return 50.0;
 
     // Если int - возвращаем напрямую как double
@@ -239,6 +239,8 @@ class DeviceJsonMapper {
       currentTemperature: (json['currentTemp'] as num?)?.toDouble() ?? 20.0,
       targetTemperature: (json['temp'] as num?)?.toDouble() ?? 22.0,
       humidity: (json['humidity'] as num?)?.toDouble() ?? 50.0,
+      targetHumidity: (json['targetHumidity'] as num?)?.toDouble() ?? 50.0,
+      operatingMode: _modeToOperatingMode(json['mode'] as String?),
       heatingTemperature: json['heatingTemperature'] as int?,
       coolingTemperature: json['coolingTemperature'] as int?,
       supplyFan: json['supplyFan']?.toString(),

@@ -19,6 +19,7 @@ import '../../../domain/entities/climate.dart';
 import '../../../domain/entities/device_full_state.dart';
 import '../../../domain/entities/alarm_info.dart';
 import '../../../domain/usecases/usecases.dart';
+import '../../../data/api/mappers/device_json_mapper.dart';
 
 part 'climate_event.dart';
 part 'climate_state.dart';
@@ -183,21 +184,30 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     emit(state.copyWith(status: ClimateControlStatus.loading));
 
     try {
-      // Загружаем состояние выбранного устройства через Use Case
-      final climate = await _getDeviceState(
-        GetDeviceStateParams(deviceId: event.deviceId),
+      // Загружаем полное состояние устройства (сразу включает климатическое + аварии)
+      final fullState = await _getDeviceFullState(
+        GetDeviceFullStateParams(deviceId: event.deviceId),
       );
 
-      // Загружаем полное состояние (с авариями)
-      DeviceFullState? fullState;
-      try {
-        fullState = await _getDeviceFullState(
-          GetDeviceFullStateParams(deviceId: event.deviceId),
-        );
-      } catch (e) {
-        // Аварии не критичны для отображения основного UI
-        ApiLogger.warning('[ClimateBloc] Не удалось загрузить аварии', e);
-      }
+      // Формируем ClimateState на основе полного состояния для оптимизации запросов
+      final climate = ClimateState(
+        roomId: fullState.id,
+        deviceName: fullState.name,
+        currentTemperature: fullState.currentTemperature,
+        targetTemperature: fullState.targetTemperature,
+        humidity: fullState.humidity,
+        targetHumidity: fullState.targetHumidity,
+        // Используем маппер из entities package или парсим вручную если хелперы недоступны.
+        // Здесь мы знаем формат данных:
+        supplyAirflow: DeviceJsonMapper.parseFanValue(fullState.supplyFan),
+        exhaustAirflow: DeviceJsonMapper.parseFanValue(fullState.exhaustFan),
+        mode: fullState.mode,
+        preset: fullState.operatingMode, // Теперь у нас есть точное значение
+        airQuality: AirQualityLevel.good, // В DeviceFullState нет явного airQuality, используем default
+        co2Ppm: fullState.co2Level ?? 400,
+        pollutantsAqi: 50, // Нет в DeviceFullState
+        isOn: fullState.power,
+      );
 
       emit(state.copyWith(
         status: ClimateControlStatus.success,

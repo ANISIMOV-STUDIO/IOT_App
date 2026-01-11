@@ -199,31 +199,34 @@ void main() {
       blocTest<ClimateBloc, ClimateControlState>(
         'эмитит [loading, success] при смене устройства',
         build: () {
-          when(() => mockGetDeviceState(any()))
-              .thenAnswer((_) async => testClimate);
+          // when(() => mockGetDeviceState(any())) -> Removed from bloc
           when(() => mockGetDeviceFullState(any()))
-              .thenThrow(Exception('Not implemented')); // Опционально
+              .thenAnswer((_) async => const DeviceFullState(
+                    id: 'device-2',
+                    name: 'Device 2',
+                    // Add other necessary fields if needed by mapping logic
+                  ));
           when(() => mockWatchDeviceFullState(any()))
-              .thenAnswer((_) => const Stream.empty()); // Mock для real-time
+              .thenAnswer((_) => const Stream.empty());
           return createBloc();
         },
         act: (bloc) => bloc.add(const ClimateDeviceChanged('device-2')),
         expect: () => [
           const ClimateControlState(status: ClimateControlStatus.loading),
-          ClimateControlState(
-            status: ClimateControlStatus.success,
-            climate: testClimate,
-          ),
+          isA<ClimateControlState>()
+              .having((s) => s.status, 'status', ClimateControlStatus.success)
+              .having((s) => s.climate?.deviceName, 'climate.deviceName', 'Device 2'),
         ],
         verify: (_) {
-          verify(() => mockGetDeviceState(any())).called(1);
+          verify(() => mockGetDeviceFullState(any())).called(1);
+          verifyNever(() => mockGetDeviceState(any()));
         },
       );
 
       blocTest<ClimateBloc, ClimateControlState>(
         'эмитит [loading, failure] при ошибке загрузки устройства',
         build: () {
-          when(() => mockGetDeviceState(any()))
+          when(() => mockGetDeviceFullState(any()))
               .thenThrow(Exception('Device not found'));
           return createBloc();
         },
