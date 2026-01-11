@@ -231,7 +231,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     ClimateStateUpdated event,
     Emitter<ClimateControlState> emit,
   ) {
-    // Сбрасываем pending флаги - устройство подтвердило изменения
+    // Backend фильтрует старые значения — просто сбрасываем pending
     emit(state.copyWith(
       climate: event.climate,
       isPendingTemperature: false,
@@ -246,7 +246,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     ClimateFullStateLoaded event,
     Emitter<ClimateControlState> emit,
   ) {
-    // Сбрасываем pending флаги - устройство подтвердило изменения
+    // Backend фильтрует старые значения — просто сбрасываем pending
     emit(state.copyWith(
       deviceFullState: event.fullState,
       isPendingTemperature: false,
