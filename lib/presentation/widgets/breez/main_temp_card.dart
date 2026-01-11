@@ -75,8 +75,11 @@ class MainTempCard extends StatelessWidget {
   final UnitState? sensorUnit;
   final bool showStats;
   final bool isOnline;
-  /// Ожидание подтверждения изменения температуры
-  final bool isPendingTemperature;
+  /// Ожидание подтверждения изменения температуры нагрева
+  final bool isPendingHeatingTemperature;
+
+  /// Ожидание подтверждения изменения температуры охлаждения
+  final bool isPendingCoolingTemperature;
 
   const MainTempCard({
     super.key,
@@ -110,7 +113,8 @@ class MainTempCard extends StatelessWidget {
     this.sensorUnit,
     this.showStats = true,
     this.isOnline = true,
-    this.isPendingTemperature = false,
+    this.isPendingHeatingTemperature = false,
+    this.isPendingCoolingTemperature = false,
   });
 
   @override
@@ -208,7 +212,8 @@ class MainTempCard extends StatelessWidget {
                             onHeatingTempDecrease: isActive ? onHeatingTempDecrease : null,
                             onCoolingTempIncrease: isActive ? onCoolingTempIncrease : null,
                             onCoolingTempDecrease: isActive ? onCoolingTempDecrease : null,
-                            isPendingTemperature: isPendingTemperature,
+                            isPendingHeatingTemperature: isPendingHeatingTemperature,
+                            isPendingCoolingTemperature: isPendingCoolingTemperature,
                           ),
                         ),
                       ),
@@ -280,7 +285,8 @@ class _TemperatureSection extends StatelessWidget {
   final VoidCallback? onHeatingTempDecrease;
   final VoidCallback? onCoolingTempIncrease;
   final VoidCallback? onCoolingTempDecrease;
-  final bool isPendingTemperature;
+  final bool isPendingHeatingTemperature;
+  final bool isPendingCoolingTemperature;
 
   const _TemperatureSection({
     required this.heatingTemp,
@@ -292,7 +298,8 @@ class _TemperatureSection extends StatelessWidget {
     this.onHeatingTempDecrease,
     this.onCoolingTempIncrease,
     this.onCoolingTempDecrease,
-    this.isPendingTemperature = false,
+    this.isPendingHeatingTemperature = false,
+    this.isPendingCoolingTemperature = false,
   });
 
   @override
@@ -310,7 +317,7 @@ class _TemperatureSection extends StatelessWidget {
             isPowered: isPowered,
             onIncrease: onHeatingTempIncrease,
             onDecrease: onHeatingTempDecrease,
-            isPending: isPendingTemperature,
+            isPending: isPendingHeatingTemperature,
           ),
         ),
         // Divider
@@ -330,7 +337,7 @@ class _TemperatureSection extends StatelessWidget {
             isPowered: isPowered,
             onIncrease: onCoolingTempIncrease,
             onDecrease: onCoolingTempDecrease,
-            isPending: isPendingTemperature,
+            isPending: isPendingCoolingTemperature,
           ),
         ),
       ],

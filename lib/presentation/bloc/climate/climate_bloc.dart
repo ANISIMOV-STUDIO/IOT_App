@@ -240,7 +240,8 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     // Backend фильтрует старые значения — просто сбрасываем pending
     emit(state.copyWith(
       climate: event.climate,
-      isPendingTemperature: false,
+      isPendingHeatingTemperature: false,
+      isPendingCoolingTemperature: false,
       isPendingSupplyFan: false,
       isPendingExhaustFan: false,
     ));
@@ -255,7 +256,8 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     // Backend фильтрует старые значения — просто сбрасываем pending
     emit(state.copyWith(
       deviceFullState: event.fullState,
-      isPendingTemperature: false,
+      isPendingHeatingTemperature: false,
+      isPendingCoolingTemperature: false,
       isPendingSupplyFan: false,
       isPendingExhaustFan: false,
     ));
@@ -361,7 +363,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     // Optimistic update - сразу обновляем UI + показываем pending
     if (state.deviceFullState != null) {
       emit(state.copyWith(
-        isPendingTemperature: true,
+        isPendingHeatingTemperature: true,
         deviceFullState: state.deviceFullState!.copyWith(
           heatingTemperature: event.temperature,
         ),
@@ -388,7 +390,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       // pending сбросится когда придёт SignalR update
     } catch (e) {
       emit(state.copyWith(
-        isPendingTemperature: false,
+        isPendingHeatingTemperature: false,
         errorMessage: 'Heating temperature error: $e',
       ));
     }
@@ -402,7 +404,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     // Optimistic update - сразу обновляем UI + показываем pending
     if (state.deviceFullState != null) {
       emit(state.copyWith(
-        isPendingTemperature: true,
+        isPendingCoolingTemperature: true,
         deviceFullState: state.deviceFullState!.copyWith(
           coolingTemperature: event.temperature,
         ),
@@ -423,7 +425,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       // pending сбросится когда придёт SignalR update
     } catch (e) {
       emit(state.copyWith(
-        isPendingTemperature: false,
+        isPendingCoolingTemperature: false,
         errorMessage: 'Cooling temperature error: $e',
       ));
     }

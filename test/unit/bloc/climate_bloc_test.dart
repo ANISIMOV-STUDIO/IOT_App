@@ -484,7 +484,7 @@ void main() {
         expect: () => [
           // 1. Мгновенное обновление UI + pending
           isA<ClimateControlState>()
-              .having((s) => s.isPendingTemperature, 'isPendingTemperature', true)
+              .having((s) => s.isPendingHeatingTemperature, 'isPendingHeatingTemperature', true)
               .having((s) => s.deviceFullState?.heatingTemperature, 'heatingTemperature', 21),
         ],
         verify: (_) {
@@ -517,7 +517,7 @@ void main() {
         expect: () => [
           // 1. Мгновенное обновление UI + pending
           isA<ClimateControlState>()
-              .having((s) => s.isPendingTemperature, 'isPendingTemperature', true)
+              .having((s) => s.isPendingCoolingTemperature, 'isPendingCoolingTemperature', true)
               .having((s) => s.deviceFullState?.coolingTemperature, 'coolingTemperature', 25),
         ],
         verify: (_) {

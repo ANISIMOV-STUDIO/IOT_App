@@ -24,8 +24,10 @@ class UnitControlCard extends StatelessWidget {
   final bool isScheduleLoading;
   final VoidCallback? onScheduleToggle;
   final bool isOnline;
-  /// Ожидание подтверждения изменения температуры от устройства
-  final bool isPendingTemperature;
+  /// Ожидание подтверждения изменения температуры нагрева
+  final bool isPendingHeatingTemperature;
+  /// Ожидание подтверждения изменения температуры охлаждения
+  final bool isPendingCoolingTemperature;
 
   const UnitControlCard({
     super.key,
@@ -45,7 +47,8 @@ class UnitControlCard extends StatelessWidget {
     this.isScheduleLoading = false,
     this.onScheduleToggle,
     this.isOnline = true,
-    this.isPendingTemperature = false,
+    this.isPendingHeatingTemperature = false,
+    this.isPendingCoolingTemperature = false,
   });
 
   @override
@@ -80,7 +83,8 @@ class UnitControlCard extends StatelessWidget {
       onScheduleToggle: onScheduleToggle,
       showStats: false, // Без показателей - единообразно на всех платформах
       isOnline: isOnline,
-      isPendingTemperature: isPendingTemperature,
+      isPendingHeatingTemperature: isPendingHeatingTemperature,
+      isPendingCoolingTemperature: isPendingCoolingTemperature,
     );
   }
 }

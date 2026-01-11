@@ -38,8 +38,11 @@ final class ClimateControlState extends Equatable {
   /// Флаг переключения расписания (для блокировки кнопки)
   final bool isTogglingSchedule;
 
-  /// Ожидание подтверждения изменения температуры от устройства
-  final bool isPendingTemperature;
+  /// Ожидание подтверждения изменения температуры нагрева
+  final bool isPendingHeatingTemperature;
+
+  /// Ожидание подтверждения изменения температуры охлаждения
+  final bool isPendingCoolingTemperature;
 
   /// Ожидание подтверждения изменения приточного вентилятора
   final bool isPendingSupplyFan;
@@ -55,7 +58,8 @@ final class ClimateControlState extends Equatable {
     this.errorMessage,
     this.isTogglingPower = false,
     this.isTogglingSchedule = false,
-    this.isPendingTemperature = false,
+    this.isPendingHeatingTemperature = false,
+    this.isPendingCoolingTemperature = false,
     this.isPendingSupplyFan = false,
     this.isPendingExhaustFan = false,
   });
@@ -124,7 +128,8 @@ final class ClimateControlState extends Equatable {
     String? errorMessage,
     bool? isTogglingPower,
     bool? isTogglingSchedule,
-    bool? isPendingTemperature,
+    bool? isPendingHeatingTemperature,
+    bool? isPendingCoolingTemperature,
     bool? isPendingSupplyFan,
     bool? isPendingExhaustFan,
   }) {
@@ -136,7 +141,10 @@ final class ClimateControlState extends Equatable {
       errorMessage: errorMessage,
       isTogglingPower: isTogglingPower ?? this.isTogglingPower,
       isTogglingSchedule: isTogglingSchedule ?? this.isTogglingSchedule,
-      isPendingTemperature: isPendingTemperature ?? this.isPendingTemperature,
+      isPendingHeatingTemperature:
+          isPendingHeatingTemperature ?? this.isPendingHeatingTemperature,
+      isPendingCoolingTemperature:
+          isPendingCoolingTemperature ?? this.isPendingCoolingTemperature,
       isPendingSupplyFan: isPendingSupplyFan ?? this.isPendingSupplyFan,
       isPendingExhaustFan: isPendingExhaustFan ?? this.isPendingExhaustFan,
     );
@@ -151,7 +159,8 @@ final class ClimateControlState extends Equatable {
         errorMessage,
         isTogglingPower,
         isTogglingSchedule,
-        isPendingTemperature,
+        isPendingHeatingTemperature,
+        isPendingCoolingTemperature,
         isPendingSupplyFan,
         isPendingExhaustFan,
       ];

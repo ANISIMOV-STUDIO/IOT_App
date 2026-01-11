@@ -159,7 +159,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       timerSettings: data.climateState.deviceFullState?.timerSettings,
       onTimerSettingsChanged: _handleTimerSettingsChanged,
       activeAlarms: data.climateState.activeAlarms,
-      isPendingTemperature: data.climateState.isPendingTemperature,
+      isPendingHeatingTemperature: data.climateState.isPendingHeatingTemperature,
+      isPendingCoolingTemperature: data.climateState.isPendingCoolingTemperature,
     );
   }
 
@@ -210,7 +211,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
             activeAlarms: data.climateState.activeAlarms,
             onAlarmsSeeHistory: () => context.goToAlarmHistory(unit.id, unit.name),
             isOnline: unit.isOnline,
-            isPendingTemperature: data.climateState.isPendingTemperature,
+            isPendingHeatingTemperature: data.climateState.isPendingHeatingTemperature,
+            isPendingCoolingTemperature: data.climateState.isPendingCoolingTemperature,
           ),
         ),
       ],
