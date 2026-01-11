@@ -194,11 +194,25 @@ class _ControlsSection extends StatelessWidget {
     
     return Row(
       children: [
-        BreezIconButton(
-          icon: Icons.settings_outlined,
-          iconColor: isOnline ? null : mutedColor,
-          onTap: onSettingsTap,
-        ),
+        // Power toggle button
+        if (isPowerLoading)
+          const SizedBox(
+            width: 32,
+            height: 32,
+            child: Padding(
+              padding: EdgeInsets.all(6),
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: AppColors.accent,
+              ),
+            ),
+          )
+        else
+          BreezIconButton(
+            icon: Icons.power_settings_new,
+            iconColor: !isOnline ? mutedColor : isPowered ? AppColors.accentGreen : mutedColor,
+            onTap: onPowerToggle,
+          ),
         SizedBox(width: AppSpacing.xs),
         // Schedule toggle button
         if (isScheduleLoading)
@@ -220,25 +234,11 @@ class _ControlsSection extends StatelessWidget {
             onTap: onScheduleToggle,
           ),
         SizedBox(width: AppSpacing.xs),
-        // Power toggle button
-        if (isPowerLoading)
-          const SizedBox(
-            width: 32,
-            height: 32,
-            child: Padding(
-              padding: EdgeInsets.all(6),
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                color: AppColors.accent,
-              ),
-            ),
-          )
-        else
-          BreezIconButton(
-            icon: Icons.power_settings_new,
-            iconColor: !isOnline ? mutedColor : isPowered ? AppColors.accentGreen : mutedColor,
-            onTap: onPowerToggle,
-          ),
+        BreezIconButton(
+          icon: Icons.settings_outlined,
+          iconColor: isOnline ? null : mutedColor,
+          onTap: onSettingsTap,
+        ),
       ],
     );
   }
