@@ -23,6 +23,36 @@ import '../../../domain/usecases/usecases.dart';
 part 'climate_event.dart';
 part 'climate_state.dart';
 
+/// Debounce трансформер для быстрых кликов
+/// Ждёт 500мс после последнего события, затем обрабатывает только последнее
+EventTransformer<E> debounceRestartable<E>({
+  Duration duration = const Duration(milliseconds: 500),
+}) {
+  return (events, mapper) {
+    return restartable<E>().call(
+      events.debounce(duration),
+      mapper,
+    );
+  };
+}
+
+/// Extension для debounce на Stream
+extension DebounceExtension<T> on Stream<T> {
+  Stream<T> debounce(Duration duration) {
+    Timer? timer;
+    return transform(StreamTransformer<T, T>.fromHandlers(
+      handleData: (data, sink) {
+        timer?.cancel();
+        timer = Timer(duration, () => sink.add(data));
+      },
+      handleDone: (sink) {
+        timer?.cancel();
+        sink.close();
+      },
+    ));
+  }
+}
+
 /// BLoC для управления климатом текущего устройства
 class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   final GetCurrentClimateState _getCurrentClimateState;
@@ -90,22 +120,24 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
 
     // Управление устройством
     on<ClimatePowerToggled>(_onPowerToggled);
-    on<ClimateTemperatureChanged>(_onTemperatureChanged, transformer: restartable());
-    on<ClimateHeatingTempChanged>(_onHeatingTempChanged, transformer: restartable());
-    on<ClimateCoolingTempChanged>(_onCoolingTempChanged, transformer: restartable());
+    
+    // Температура с debounce 500мс - ждём пока пользователь перестанет кликать
+    on<ClimateTemperatureChanged>(_onTemperatureChanged, transformer: debounceRestartable());
+    on<ClimateHeatingTempChanged>(_onHeatingTempChanged, transformer: debounceRestartable());
+    on<ClimateCoolingTempChanged>(_onCoolingTempChanged, transformer: debounceRestartable());
     on<ClimateHumidityChanged>(_onHumidityChanged);
     on<ClimateModeChanged>(_onModeChanged);
     on<ClimateOperatingModeChanged>(_onOperatingModeChanged);
     on<ClimatePresetChanged>(_onPresetChanged);
 
-    // Airflow events с restartable() - отменяет предыдущие запросы при новых событиях
+    // Вентиляторы с debounce 500мс - ждём пока пользователь перестанет двигать слайдер
     on<ClimateSupplyAirflowChanged>(
       _onSupplyAirflowChanged,
-      transformer: restartable(),
+      transformer: debounceRestartable(),
     );
     on<ClimateExhaustAirflowChanged>(
       _onExhaustAirflowChanged,
-      transformer: restartable(),
+      transformer: debounceRestartable(),
     );
 
     // Расписание

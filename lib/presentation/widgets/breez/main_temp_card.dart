@@ -75,6 +75,8 @@ class MainTempCard extends StatelessWidget {
   final UnitState? sensorUnit;
   final bool showStats;
   final bool isOnline;
+  /// Ожидание подтверждения изменения температуры
+  final bool isPendingTemperature;
 
   const MainTempCard({
     super.key,
@@ -108,6 +110,7 @@ class MainTempCard extends StatelessWidget {
     this.sensorUnit,
     this.showStats = true,
     this.isOnline = true,
+    this.isPendingTemperature = false,
   });
 
   @override
@@ -205,6 +208,7 @@ class MainTempCard extends StatelessWidget {
                             onHeatingTempDecrease: isActive ? onHeatingTempDecrease : null,
                             onCoolingTempIncrease: isActive ? onCoolingTempIncrease : null,
                             onCoolingTempDecrease: isActive ? onCoolingTempDecrease : null,
+                            isPendingTemperature: isPendingTemperature,
                           ),
                         ),
                       ),
@@ -276,6 +280,7 @@ class _TemperatureSection extends StatelessWidget {
   final VoidCallback? onHeatingTempDecrease;
   final VoidCallback? onCoolingTempIncrease;
   final VoidCallback? onCoolingTempDecrease;
+  final bool isPendingTemperature;
 
   const _TemperatureSection({
     required this.heatingTemp,
@@ -287,6 +292,7 @@ class _TemperatureSection extends StatelessWidget {
     this.onHeatingTempDecrease,
     this.onCoolingTempIncrease,
     this.onCoolingTempDecrease,
+    this.isPendingTemperature = false,
   });
 
   @override
@@ -304,6 +310,7 @@ class _TemperatureSection extends StatelessWidget {
             isPowered: isPowered,
             onIncrease: onHeatingTempIncrease,
             onDecrease: onHeatingTempDecrease,
+            isPending: isPendingTemperature,
           ),
         ),
         // Divider
@@ -323,6 +330,7 @@ class _TemperatureSection extends StatelessWidget {
             isPowered: isPowered,
             onIncrease: onCoolingTempIncrease,
             onDecrease: onCoolingTempDecrease,
+            isPending: isPendingTemperature,
           ),
         ),
       ],

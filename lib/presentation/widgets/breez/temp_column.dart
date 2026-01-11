@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/spacing.dart';
 import 'breez_card.dart';
+import 'pending_indicator.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -50,6 +51,8 @@ class TemperatureColumn extends StatelessWidget {
   final VoidCallback? onIncrease;
   final VoidCallback? onDecrease;
   final bool compact;
+  /// Ожидание подтверждения от устройства - показывает пульсацию
+  final bool isPending;
 
   const TemperatureColumn({
     super.key,
@@ -61,6 +64,7 @@ class TemperatureColumn extends StatelessWidget {
     this.onIncrease,
     this.onDecrease,
     this.compact = false,
+    this.isPending = false,
   });
 
   @override
@@ -136,12 +140,15 @@ class TemperatureColumn extends StatelessWidget {
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: spacing),
-                  child: Text(
-                    '$temperature°C',
-                    style: TextStyle(
-                      fontSize: fontSize,
-                      fontWeight: FontWeight.w700,
-                      color: isPowered ? colors.text : colors.textMuted,
+                  child: PendingIndicator(
+                    isPending: isPending,
+                    child: Text(
+                      '$temperature°C',
+                      style: TextStyle(
+                        fontSize: fontSize,
+                        fontWeight: FontWeight.w700,
+                        color: isPowered ? colors.text : colors.textMuted,
+                      ),
                     ),
                   ),
                 ),

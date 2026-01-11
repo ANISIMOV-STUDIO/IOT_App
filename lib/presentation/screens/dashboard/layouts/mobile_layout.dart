@@ -42,6 +42,8 @@ class MobileLayout extends StatefulWidget {
   final bool isScheduleEnabled;
   final bool isScheduleLoading;
   final VoidCallback? onScheduleToggle;
+  /// Ожидание подтверждения изменения температуры
+  final bool isPendingTemperature;
 
   final Map<String, TimerSettings>? timerSettings;
   final DaySettingsCallback? onTimerSettingsChanged;
@@ -65,6 +67,7 @@ class MobileLayout extends StatefulWidget {
     this.isScheduleEnabled = false,
     this.isScheduleLoading = false,
     this.onScheduleToggle,
+    this.isPendingTemperature = false,
     this.timerSettings,
     this.onTimerSettingsChanged,
     this.activeAlarms = const {},
@@ -123,6 +126,7 @@ class _MobileLayoutState extends State<MobileLayout>
               isScheduleLoading: widget.isScheduleLoading,
               onScheduleToggle: widget.isOnline ? widget.onScheduleToggle : null,
               isOnline: widget.isOnline,
+              isPendingTemperature: widget.isPendingTemperature,
             ),
           ),
 
