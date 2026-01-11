@@ -59,11 +59,8 @@ class RealClimateRepository implements ClimateRepository {
           // Snapshot переменной для избежания race condition
           final selectedId = _selectedDeviceId;
 
-          // Обновить стрим только для выбранного устройства
+          // Обновить stream только для выбранного устройства
           if (deviceData['id'] == selectedId) {
-            // Обновляем кэш списка устройств (для DevicesBloc)
-            _updateCachedDevice(deviceData);
-
             // Парсинг ClimateState для обратной совместимости
             final climateState = DeviceJsonMapper.climateStateFromJson(deviceData);
             _lastClimateState = climateState;  // Кэшируем для быстрого доступа к preset
@@ -154,47 +151,11 @@ class RealClimateRepository implements ClimateRepository {
     }
   }
 
-  /// Helper: Обновить кэшированное состояние устройства и уведомить слушателей
-  void _updateCachedDevice(Map<String, dynamic> json) {
-    // Парсим частичное состояние для обновления списка
-    final id = json['id'] as String?;
-    final isRunning = json['running'] as bool?;
-    final isOnline = json['isOnline'] as bool?;
-
-    if (id == null) return;
-
-    // Обновляем список, если что-то изменилось
-    var changed = false;
-    final updatedDevices = _cachedDevices.map((device) {
-      if (device.id == id) {
-        // Проверяем, изменились ли данные
-        if ((isRunning != null && device.isActive != isRunning) ||
-            (isOnline != null && device.isOnline != isOnline)) {
-          changed = true;
-          return device.copyWith(
-            isActive: isRunning,
-            isOnline: isOnline,
-          );
-        }
-      }
-      return device;
-    }).toList();
-
-    if (changed) {
-      _cachedDevices = updatedDevices;
-      _devicesController.add(updatedDevices);
-      developer.log(
-        'Updated cached device $id: isActive=$isRunning, isOnline=$isOnline',
-        name: 'ClimateRepository',
-      );
-    }
-  }
-
   /// Сравнение списков устройств
   bool _listEquals(List<HvacDevice> a, List<HvacDevice> b) {
     if (a.length != b.length) return false;
     for (int i = 0; i < a.length; i++) {
-      if (a[i].id != b[i].id || a[i].isOnline != b[i].isOnline || a[i].isActive != b[i].isActive) return false;
+      if (a[i].id != b[i].id || a[i].isOnline != b[i].isOnline) return false;
     }
     return true;
   }
@@ -348,9 +309,6 @@ class RealClimateRepository implements ClimateRepository {
     }
 
     final jsonDevice = await _httpClient.setPower(id, isOn);
-    // Обновляем общий список устройств
-    _updateCachedDevice(jsonDevice);
-
     final state = DeviceJsonMapper.climateStateFromJson(jsonDevice);
     _climateController.add(state);
     return state;
