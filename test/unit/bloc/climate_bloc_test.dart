@@ -311,6 +311,7 @@ void main() {
           climate: testClimate,
         ),
         act: (bloc) => bloc.add(const ClimateTemperatureChanged(25.0)),
+        wait: const Duration(milliseconds: 600), // Ждём debounce
         verify: (_) {
           verify(() => mockSetTemperature(any())).called(1);
         },
@@ -328,6 +329,7 @@ void main() {
           climate: testClimate,
         ),
         act: (bloc) => bloc.add(const ClimateTemperatureChanged(100.0)),
+        wait: const Duration(milliseconds: 600), // Ждём debounce
         expect: () => [
           // Optimistic update - сразу обновляем температуру
           isA<ClimateControlState>()
@@ -410,6 +412,7 @@ void main() {
           climate: testClimate,
         ),
         act: (bloc) => bloc.add(const ClimateSupplyAirflowChanged(80.0)),
+        wait: const Duration(milliseconds: 600), // Ждём debounce
         verify: (_) {
           verify(() => mockSetAirflow(any())).called(1);
         },
@@ -429,6 +432,7 @@ void main() {
           climate: testClimate,
         ),
         act: (bloc) => bloc.add(const ClimateExhaustAirflowChanged(70.0)),
+        wait: const Duration(milliseconds: 600), // Ждём debounce
         verify: (_) {
           verify(() => mockSetAirflow(any())).called(1);
         },
