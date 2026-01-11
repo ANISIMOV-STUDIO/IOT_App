@@ -27,6 +27,9 @@ class SignalRHubConnection {
   final _connectionStateController =
       StreamController<HubConnectionState>.broadcast();
 
+  final Set<String> _deviceSubscriptions = {};
+  bool _subscribedToAll = false;
+
   SignalRHubConnection(this._apiClient);
 
   /// Текущее состояние соединения
@@ -40,8 +43,6 @@ class SignalRHubConnection {
     }
 
     try {
-
-
       _connection = HubConnectionBuilder()
           .withUrl(
             ApiConfig.websocketUrl,
@@ -80,18 +81,48 @@ class SignalRHubConnection {
       });
 
       _connection!.onreconnected(({connectionId}) {
-        ApiLogger.logWebSocketConnect(
-            'Reconnected with ID: $connectionId');
+        ApiLogger.logWebSocketConnect('Reconnected with ID: $connectionId');
         _connectionStateController.add(HubConnectionState.Connected);
+        _resubscribe();
       });
 
       ApiLogger.logWebSocketConnect(ApiConfig.websocketUrl);
       await _connection!.start();
       _connectionStateController.add(HubConnectionState.Connected);
+      
+      // Если это повторный вызов connect (например, после disconnect), 
+      // нужно восстановить подписки, если они остались в памяти
+      if (_deviceSubscriptions.isNotEmpty || _subscribedToAll) {
+         _resubscribe();
+      }
+
     } catch (e) {
       ApiLogger.logWebSocketError(e);
       _connectionStateController.add(HubConnectionState.Disconnected);
       rethrow;
+    }
+  }
+
+  /// Восстановление подписок после переподключения
+  Future<void> _resubscribe() async {
+    ApiLogger.logWebSocketConnect('Restoring subscriptions...');
+    
+    if (_subscribedToAll) {
+      try {
+        await _connection?.invoke('SubscribeToAllDevices', args: []);
+        ApiLogger.logWebSocketConnect('Restored subscription to ALL devices');
+      } catch (e) {
+        ApiLogger.logWebSocketError('Failed to restore subscription to ALL devices: $e');
+      }
+    }
+
+    for (final deviceId in _deviceSubscriptions) {
+      try {
+        await _connection?.invoke('SubscribeToDevice', args: [deviceId]);
+        ApiLogger.logWebSocketConnect('Restored subscription to device: $deviceId');
+      } catch (e) {
+        ApiLogger.logWebSocketError('Failed to restore subscription to device $deviceId: $e');
+      }
     }
   }
 
@@ -193,9 +224,12 @@ class SignalRHubConnection {
 
   /// Подписаться на обновления конкретного устройства
   Future<void> subscribeToDevice(String deviceId) async {
+    _deviceSubscriptions.add(deviceId);
     try {
-      await _connection?.invoke('SubscribeToDevice', args: [deviceId]);
-      ApiLogger.logWebSocketMessage('SubscribeToDevice', deviceId);
+      if (_connection?.state == HubConnectionState.Connected) {
+        await _connection?.invoke('SubscribeToDevice', args: [deviceId]);
+        ApiLogger.logWebSocketMessage('SubscribeToDevice', deviceId);
+      }
     } catch (e) {
       ApiLogger.logWebSocketError('Failed to subscribe to device: $e');
     }
@@ -203,9 +237,12 @@ class SignalRHubConnection {
 
   /// Отписаться от обновлений устройства
   Future<void> unsubscribeFromDevice(String deviceId) async {
+    _deviceSubscriptions.remove(deviceId);
     try {
-      await _connection?.invoke('UnsubscribeFromDevice', args: [deviceId]);
-      ApiLogger.logWebSocketMessage('UnsubscribeFromDevice', deviceId);
+      if (_connection?.state == HubConnectionState.Connected) {
+        await _connection?.invoke('UnsubscribeFromDevice', args: [deviceId]);
+        ApiLogger.logWebSocketMessage('UnsubscribeFromDevice', deviceId);
+      }
     } catch (e) {
       ApiLogger.logWebSocketError('Failed to unsubscribe from device: $e');
     }
@@ -213,9 +250,12 @@ class SignalRHubConnection {
 
   /// Подписаться на все устройства
   Future<void> subscribeToAllDevices() async {
+    _subscribedToAll = true;
     try {
-      await _connection?.invoke('SubscribeToAllDevices', args: []);
-      ApiLogger.logWebSocketMessage('SubscribeToAllDevices', null);
+      if (_connection?.state == HubConnectionState.Connected) {
+        await _connection?.invoke('SubscribeToAllDevices', args: []);
+        ApiLogger.logWebSocketMessage('SubscribeToAllDevices', null);
+      }
     } catch (e) {
       ApiLogger.logWebSocketError('Failed to subscribe to all devices: $e');
     }
@@ -243,6 +283,8 @@ class SignalRHubConnection {
 
   /// Отключиться от SignalR
   Future<void> disconnect() async {
+    _deviceSubscriptions.clear();
+    _subscribedToAll = false;
     await _connection?.stop();
     _connectionStateController.add(HubConnectionState.Disconnected);
   }
