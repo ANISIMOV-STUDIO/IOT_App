@@ -160,6 +160,9 @@ class RealClimateRepository implements ClimateRepository {
     return true;
   }
 
+  // In-flight requests for deduplication
+  final _inflightRequests = <String, Future<Map<String, dynamic>>>{};
+
   // ============================================
   // MULTI-DEVICE SUPPORT
   // ============================================
@@ -197,13 +200,50 @@ class RealClimateRepository implements ClimateRepository {
     // Subscribe to device updates via SignalR
     _signalR?.subscribeToDevice(deviceId);
 
-    // Load initial state
-    getDeviceState(deviceId).then((state) {
-      _lastClimateState = state;  // Кэшируем для быстрого доступа к preset
-      _climateController.add(state);
-    }).catchError((_) {
-      // Ignore errors for initial load
+    // Load initial state using deduplicated fetch
+    // We ignore the error here as it's an initial "fire and forget" load for the broadcast stream
+    _fetchAndBroadcastState(deviceId).catchError((_) {});
+  }
+
+  /// Dedplucated fetch wrapper
+  /// Returns raw JSON map to be parsed by specific methods
+  Future<Map<String, dynamic>> _fetchDevice(String deviceId) {
+    if (_inflightRequests.containsKey(deviceId)) {
+      developer.log('Joining inflight request for device $deviceId', name: 'ClimateRepository');
+      return _inflightRequests[deviceId]!;
+    }
+
+    developer.log('Starting new request for device $deviceId', name: 'ClimateRepository');
+    final future = _httpClient.getDevice(deviceId).whenComplete(() {
+      _inflightRequests.remove(deviceId);
     });
+
+    _inflightRequests[deviceId] = future;
+    return future;
+  }
+
+  /// Helper to fetch and update all streams
+  Future<void> _fetchAndBroadcastState(String deviceId) async {
+     try {
+       final jsonDevice = await _fetchDevice(deviceId);
+       
+       // Update ClimateState stream
+       final climateState = DeviceJsonMapper.climateStateFromJson(jsonDevice);
+       _lastClimateState = climateState;
+       _climateController.add(climateState);
+       
+       // Update DeviceFullState stream if applicable (it parses more fields)
+       // We can try to parse full state from the same JSON
+       try {
+         final fullState = DeviceJsonMapper.deviceFullStateFromJson(jsonDevice);
+         _deviceFullStateController.add(fullState);
+       } catch (e) {
+         // It's okay if we can't parse full state from partial data, but usually getDevice returns full data
+       }
+     } catch (e) {
+       developer.log('Error fetching device state: $e', name: 'ClimateRepository');
+       rethrow;
+     }
   }
 
   @override
@@ -211,8 +251,18 @@ class RealClimateRepository implements ClimateRepository {
     if (deviceId.isEmpty) {
       throw StateError('No device selected');
     }
-    final jsonDevice = await _httpClient.getDevice(deviceId);
-    return DeviceJsonMapper.climateStateFromJson(jsonDevice);
+    
+    // Use deduplicated fetch
+    final jsonDevice = await _fetchDevice(deviceId);
+    final state = DeviceJsonMapper.climateStateFromJson(jsonDevice);
+    
+    // Update streams cache if this is for the selected device
+    if (deviceId == _selectedDeviceId) {
+       _lastClimateState = state;
+       _climateController.add(state);
+    }
+    
+    return state;
   }
 
   @override
@@ -455,7 +505,23 @@ class RealClimateRepository implements ClimateRepository {
     if (deviceId.isEmpty) {
       throw StateError('No device selected');
     }
-    final jsonDevice = await _httpClient.getDevice(deviceId);
+    
+    // Use deduplicated fetch
+    final jsonDevice = await _fetchDevice(deviceId);
+    
+    // Update streams cache if this is for the selected device
+    // NOTE: This ensures that if we load full state, climate state stream is also valid/updated
+    // avoiding the need for a separate getDeviceState call.
+    if (deviceId == _selectedDeviceId) {
+       final climateState = DeviceJsonMapper.climateStateFromJson(jsonDevice);
+       _lastClimateState = climateState;
+       _climateController.add(climateState);
+       
+       final fullState = DeviceJsonMapper.deviceFullStateFromJson(jsonDevice);
+       _deviceFullStateController.add(fullState);
+       return fullState;
+    }
+    
     return DeviceJsonMapper.deviceFullStateFromJson(jsonDevice);
   }
 
