@@ -38,6 +38,15 @@ final class ClimateControlState extends Equatable {
   /// Флаг переключения расписания (для блокировки кнопки)
   final bool isTogglingSchedule;
 
+  /// Ожидание подтверждения изменения температуры от устройства
+  final bool isPendingTemperature;
+
+  /// Ожидание подтверждения изменения приточного вентилятора
+  final bool isPendingSupplyFan;
+
+  /// Ожидание подтверждения изменения вытяжного вентилятора
+  final bool isPendingExhaustFan;
+
   const ClimateControlState({
     this.status = ClimateControlStatus.initial,
     this.climate,
@@ -46,6 +55,9 @@ final class ClimateControlState extends Equatable {
     this.errorMessage,
     this.isTogglingPower = false,
     this.isTogglingSchedule = false,
+    this.isPendingTemperature = false,
+    this.isPendingSupplyFan = false,
+    this.isPendingExhaustFan = false,
   });
 
   // ============================================
@@ -112,6 +124,9 @@ final class ClimateControlState extends Equatable {
     String? errorMessage,
     bool? isTogglingPower,
     bool? isTogglingSchedule,
+    bool? isPendingTemperature,
+    bool? isPendingSupplyFan,
+    bool? isPendingExhaustFan,
   }) {
     return ClimateControlState(
       status: status ?? this.status,
@@ -121,6 +136,9 @@ final class ClimateControlState extends Equatable {
       errorMessage: errorMessage,
       isTogglingPower: isTogglingPower ?? this.isTogglingPower,
       isTogglingSchedule: isTogglingSchedule ?? this.isTogglingSchedule,
+      isPendingTemperature: isPendingTemperature ?? this.isPendingTemperature,
+      isPendingSupplyFan: isPendingSupplyFan ?? this.isPendingSupplyFan,
+      isPendingExhaustFan: isPendingExhaustFan ?? this.isPendingExhaustFan,
     );
   }
 
@@ -133,5 +151,8 @@ final class ClimateControlState extends Equatable {
         errorMessage,
         isTogglingPower,
         isTogglingSchedule,
+        isPendingTemperature,
+        isPendingSupplyFan,
+        isPendingExhaustFan,
       ];
 }

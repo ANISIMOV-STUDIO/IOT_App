@@ -194,19 +194,33 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   }
 
   /// Обновление состояния климата из стрима
+  /// Приходит через SignalR когда устройство подтверждает изменения
   void _onStateUpdated(
     ClimateStateUpdated event,
     Emitter<ClimateControlState> emit,
   ) {
-    emit(state.copyWith(climate: event.climate));
+    // Сбрасываем pending флаги - устройство подтвердило изменения
+    emit(state.copyWith(
+      climate: event.climate,
+      isPendingTemperature: false,
+      isPendingSupplyFan: false,
+      isPendingExhaustFan: false,
+    ));
   }
 
   /// Загружено полное состояние устройства
+  /// Приходит через SignalR когда устройство подтверждает изменения
   void _onFullStateLoaded(
     ClimateFullStateLoaded event,
     Emitter<ClimateControlState> emit,
   ) {
-    emit(state.copyWith(deviceFullState: event.fullState));
+    // Сбрасываем pending флаги - устройство подтвердило изменения
+    emit(state.copyWith(
+      deviceFullState: event.fullState,
+      isPendingTemperature: false,
+      isPendingSupplyFan: false,
+      isPendingExhaustFan: false,
+    ));
   }
 
   /// Запрос на загрузку истории аварий
@@ -308,9 +322,10 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   ) async {
     final previousTemp = state.deviceFullState?.heatingTemperature;
 
-    // Optimistic update - сразу обновляем UI
+    // Optimistic update - сразу обновляем UI + показываем pending
     if (state.deviceFullState != null) {
       emit(state.copyWith(
+        isPendingTemperature: true,
         deviceFullState: state.deviceFullState!.copyWith(
           heatingTemperature: event.temperature,
         ),
@@ -319,17 +334,22 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
 
     try {
       await _setTemperature(SetTemperatureParams(temperature: event.temperature.toDouble()));
+      // pending сбросится когда придёт SignalR update
     } catch (e) {
       // Откат при ошибке
       if (state.deviceFullState != null && previousTemp != null) {
         emit(state.copyWith(
+          isPendingTemperature: false,
           deviceFullState: state.deviceFullState!.copyWith(
             heatingTemperature: previousTemp,
           ),
           errorMessage: 'Heating temperature error: $e',
         ));
       } else {
-        emit(state.copyWith(errorMessage: 'Heating temperature error: $e'));
+        emit(state.copyWith(
+          isPendingTemperature: false,
+          errorMessage: 'Heating temperature error: $e',
+        ));
       }
     }
   }
@@ -341,9 +361,10 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   ) async {
     final previousTemp = state.deviceFullState?.coolingTemperature;
 
-    // Optimistic update - сразу обновляем UI
+    // Optimistic update - сразу обновляем UI + показываем pending
     if (state.deviceFullState != null) {
       emit(state.copyWith(
+        isPendingTemperature: true,
         deviceFullState: state.deviceFullState!.copyWith(
           coolingTemperature: event.temperature,
         ),
@@ -352,17 +373,22 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
 
     try {
       await _setCoolingTemperature(SetCoolingTemperatureParams(temperature: event.temperature));
+      // pending сбросится когда придёт SignalR update
     } catch (e) {
       // Откат при ошибке
       if (state.deviceFullState != null && previousTemp != null) {
         emit(state.copyWith(
+          isPendingTemperature: false,
           deviceFullState: state.deviceFullState!.copyWith(
             coolingTemperature: previousTemp,
           ),
           errorMessage: 'Cooling temperature error: $e',
         ));
       } else {
-        emit(state.copyWith(errorMessage: 'Cooling temperature error: $e'));
+        emit(state.copyWith(
+          isPendingTemperature: false,
+          errorMessage: 'Cooling temperature error: $e',
+        ));
       }
     }
   }
@@ -490,9 +516,10 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   ) async {
     final previousValue = state.climate?.supplyAirflow;
 
-    // Optimistic update - сразу обновляем UI
+    // Optimistic update - сразу обновляем UI + показываем pending
     if (state.climate != null) {
       emit(state.copyWith(
+        isPendingSupplyFan: true,
         climate: state.climate!.copyWith(supplyAirflow: event.value.toDouble()),
       ));
     }
@@ -502,15 +529,20 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         type: AirflowType.supply,
         value: event.value,
       ));
+      // pending сбросится когда придёт SignalR update
     } catch (e) {
       // Откатываем optimistic update при ошибке
       if (state.climate != null && previousValue != null) {
         emit(state.copyWith(
+          isPendingSupplyFan: false,
           climate: state.climate!.copyWith(supplyAirflow: previousValue),
           errorMessage: 'Supply airflow error: $e',
         ));
       } else {
-        emit(state.copyWith(errorMessage: 'Supply airflow error: $e'));
+        emit(state.copyWith(
+          isPendingSupplyFan: false,
+          errorMessage: 'Supply airflow error: $e',
+        ));
       }
     }
   }
@@ -522,9 +554,10 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   ) async {
     final previousValue = state.climate?.exhaustAirflow;
 
-    // Optimistic update - сразу обновляем UI
+    // Optimistic update - сразу обновляем UI + показываем pending
     if (state.climate != null) {
       emit(state.copyWith(
+        isPendingExhaustFan: true,
         climate: state.climate!.copyWith(exhaustAirflow: event.value.toDouble()),
       ));
     }
@@ -534,15 +567,20 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         type: AirflowType.exhaust,
         value: event.value,
       ));
+      // pending сбросится когда придёт SignalR update
     } catch (e) {
       // Откатываем optimistic update при ошибке
       if (state.climate != null && previousValue != null) {
         emit(state.copyWith(
+          isPendingExhaustFan: false,
           climate: state.climate!.copyWith(exhaustAirflow: previousValue),
           errorMessage: 'Exhaust airflow error: $e',
         ));
       } else {
-        emit(state.copyWith(errorMessage: 'Exhaust airflow error: $e'));
+        emit(state.copyWith(
+          isPendingExhaustFan: false,
+          errorMessage: 'Exhaust airflow error: $e',
+        ));
       }
     }
   }
