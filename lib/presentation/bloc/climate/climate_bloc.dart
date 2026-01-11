@@ -297,17 +297,21 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
 
     developer.log('_onPowerToggled called: isOn=${event.isOn}', name: 'ClimateBloc');
 
-    // Optimistic update: сразу показываем новое состояние
-    final optimisticClimate = state.climate?.copyWith(isOn: event.isOn);
+    // Не делаем optimistic update для статуса (по просьбе пользователя)
+    // Вместо этого показываем прелоудер на кнопке
     emit(state.copyWith(
       isTogglingPower: true,
-      climate: optimisticClimate,
+      // Не меняем climate и deviceFullState здесь, ждем ответа от сервера
     ));
 
     try {
       await _setDevicePower(SetDevicePowerParams(isOn: event.isOn));
       developer.log('_onPowerToggled: command sent successfully', name: 'ClimateBloc');
-      // Разблокируем кнопку после успешной отправки
+      
+      // Кнопка разблокируется когда придет обновление состояния через SignalR или ответ метода
+      // Мы можем снять флаг loading здесь, но если состояния еще нет, 
+      // то кнопка вернется в исходное положение (что ок, так как это правда)
+      // В идеале мы ждем стрима.
       emit(state.copyWith(isTogglingPower: false));
     } catch (e, stackTrace) {
       developer.log(
@@ -316,11 +320,8 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         error: e,
         stackTrace: stackTrace,
       );
-      // Откатываем optimistic update при ошибке
-      final revertedClimate = state.climate?.copyWith(isOn: !event.isOn);
       emit(state.copyWith(
         isTogglingPower: false,
-        climate: revertedClimate,
         errorMessage: 'Power toggle error: $e',
       ));
     }
