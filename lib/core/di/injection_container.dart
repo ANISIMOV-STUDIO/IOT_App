@@ -341,7 +341,6 @@ Future<void> init() async {
   sl.registerLazySingleton(
     () => ClimateBloc(
       getCurrentClimateState: sl(),
-      getDeviceState: sl(),
       getDeviceFullState: sl(),
       getAlarmHistory: sl(),
       watchCurrentClimate: sl(),

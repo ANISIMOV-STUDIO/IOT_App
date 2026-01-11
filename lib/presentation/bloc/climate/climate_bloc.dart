@@ -57,7 +57,6 @@ extension DebounceExtension<T> on Stream<T> {
 /// BLoC для управления климатом текущего устройства
 class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   final GetCurrentClimateState _getCurrentClimateState;
-  final GetDeviceState _getDeviceState;
   final GetDeviceFullState _getDeviceFullState;
   final GetAlarmHistory _getAlarmHistory;
   final WatchCurrentClimate _watchCurrentClimate;
@@ -77,7 +76,6 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
 
   ClimateBloc({
     required GetCurrentClimateState getCurrentClimateState,
-    required GetDeviceState getDeviceState,
     required GetDeviceFullState getDeviceFullState,
     required GetAlarmHistory getAlarmHistory,
     required WatchCurrentClimate watchCurrentClimate,
@@ -92,7 +90,6 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     required SetScheduleEnabled setScheduleEnabled,
     required WatchDeviceFullState watchDeviceFullState,
   })  : _getCurrentClimateState = getCurrentClimateState,
-        _getDeviceState = getDeviceState,
         _getDeviceFullState = getDeviceFullState,
         _getAlarmHistory = getAlarmHistory,
         _watchCurrentClimate = watchCurrentClimate,

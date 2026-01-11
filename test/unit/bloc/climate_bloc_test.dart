@@ -122,7 +122,6 @@ void main() {
 
   ClimateBloc createBloc() => ClimateBloc(
         getCurrentClimateState: mockGetCurrentClimateState,
-        getDeviceState: mockGetDeviceState,
         getDeviceFullState: mockGetDeviceFullState,
         getAlarmHistory: mockGetAlarmHistory,
         watchCurrentClimate: mockWatchCurrentClimate,
