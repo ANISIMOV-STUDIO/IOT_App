@@ -288,8 +288,8 @@ class RealClimateRepository implements ClimateRepository {
 
     await _httpClient.setHeatingTemperature(id, temperature, modeName: modeName);
     
-    // Состояние придёт через SignalR, возвращаем текущее
-    return getCurrentState();
+    // Состояние придёт через SignalR, возвращаем кэш (без GET запроса)
+    return _lastClimateState!;
   }
 
   @override
@@ -307,8 +307,8 @@ class RealClimateRepository implements ClimateRepository {
 
     await _httpClient.setCoolingTemperature(id, temperature, modeName: modeName);
     
-    // Состояние придёт через SignalR, возвращаем текущее
-    return getCurrentState();
+    // Состояние придёт через SignalR, возвращаем кэш (без GET запроса)
+    return _lastClimateState!;
   }
 
   /// Нормализует имя режима для backend API
@@ -377,8 +377,8 @@ class RealClimateRepository implements ClimateRepository {
 
     await _httpClient.setSupplyFan(id, fanSpeed, modeName: modeName);
     
-    // Состояние придёт через SignalR, возвращаем текущее
-    return getCurrentState();
+    // Состояние придёт через SignalR, возвращаем кэш (без GET запроса)
+    return _lastClimateState!;
   }
 
   @override
@@ -397,8 +397,8 @@ class RealClimateRepository implements ClimateRepository {
 
     await _httpClient.setExhaustFan(id, fanSpeed, modeName: modeName);
     
-    // Состояние придёт через SignalR, возвращаем текущее
-    return getCurrentState();
+    // Состояние придёт через SignalR, возвращаем кэш (без GET запроса)
+    return _lastClimateState!;
   }
 
 
