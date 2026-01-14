@@ -28,7 +28,7 @@ class UnitState extends Equatable {
   final double supplyTempAfterRecup;    // Температура приточного воздуха после рекуператора
   final int co2Level;                // Концентрация CO2 (ppm)
   final int recuperatorEfficiency;   // Температурная эффективность рекуператора (%)
-  final int freeCooling;             // Свободное охлаждение рекуператора (м³/ч)
+  final bool freeCooling;            // Свободное охлаждение рекуператора (активно)
   final int heaterPerformance;       // Производительность электрического нагревателя (%)
   final String coolerStatus;            // Статус охладителя
   final int ductPressure;            // Давление в воздуховоде (Па)
@@ -54,7 +54,7 @@ class UnitState extends Equatable {
     this.supplyTempAfterRecup = 18.0,
     this.co2Level = 450,
     this.recuperatorEfficiency = 85,
-    this.freeCooling = 0,
+    this.freeCooling = false,
     this.heaterPerformance = 0,
     this.coolerStatus = 'Н/Д',
     this.ductPressure = 120,
@@ -81,7 +81,7 @@ class UnitState extends Equatable {
     double? supplyTempAfterRecup,
     int? co2Level,
     int? recuperatorEfficiency,
-    int? freeCooling,
+    bool? freeCooling,
     int? heaterPerformance,
     String? coolerStatus,
     int? ductPressure,

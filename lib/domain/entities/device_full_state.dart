@@ -53,8 +53,8 @@ class DeviceFullState extends Equatable {
   /// Концентрация CO2 (ppm)
   final int? co2Level;
 
-  /// Свободное охлаждение рекуператора (м³/ч)
-  final int? freeCooling;
+  /// Свободное охлаждение рекуператора (активно: true/false)
+  final bool? freeCooling;
 
   /// Производительность электрического нагревателя (%)
   final int? heaterPerformance;
@@ -143,7 +143,7 @@ class DeviceFullState extends Equatable {
     double? supplyTemperature,
     double? supplyTempAfterRecup,
     int? co2Level,
-    int? freeCooling,
+    bool? freeCooling,
     int? heaterPerformance,
     String? coolerStatus,
     int? ductPressure,

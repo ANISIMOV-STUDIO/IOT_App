@@ -1925,7 +1925,7 @@ abstract class AppLocalizations {
   /// No description provided for @freeCoolingDesc.
   ///
   /// In ru, this message translates to:
-  /// **'Режим бесплатного охлаждения через рекуператор (м³/ч)'**
+  /// **'Активен ли режим свободного охлаждения рекуператора'**
   String get freeCoolingDesc;
 
   /// No description provided for @heaterPerformanceDesc.
@@ -2017,6 +2017,18 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Закрыть'**
   String get close;
+
+  /// Yes label
+  ///
+  /// In ru, this message translates to:
+  /// **'Да'**
+  String get yes;
+
+  /// No label
+  ///
+  /// In ru, this message translates to:
+  /// **'Нет'**
+  String get no;
 }
 
 class _AppLocalizationsDelegate

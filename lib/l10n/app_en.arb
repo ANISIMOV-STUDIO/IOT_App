@@ -916,7 +916,7 @@
   "supplyTempDesc": "Air temperature at ventilation unit outlet",
   "co2LevelDesc": "CO2 level in the room. Normal: up to 1000 ppm",
   "recuperatorEfficiencyDesc": "Heat exchange efficiency in recuperator",
-  "freeCoolingDesc": "Free cooling mode via recuperator (m³/h)",
+  "freeCoolingDesc": "Is free cooling mode active",
   "heaterPerformanceDesc": "Current electric heater power",
   "coolerStatusDesc": "Air cooler status",
   "ductPressureDesc": "Air pressure in duct (Pa)",
@@ -938,5 +938,13 @@
   "quickSensorsTitle": "Quick sensors",
   "quickSensorsHint": "Tap sensor to replace",
   "sensorInteractionHint": "Tap for details • Long press to select",
-  "close": "Close"
+  "close": "Close",
+  "yes": "Yes",
+  "@yes": {
+    "description": "Yes label"
+  },
+  "no": "No",
+  "@no": {
+    "description": "No label"
+  }
 }

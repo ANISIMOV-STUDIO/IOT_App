@@ -989,7 +989,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get freeCoolingDesc =>
-      'Режим бесплатного охлаждения через рекуператор (м³/ч)';
+      'Активен ли режим свободного охлаждения рекуператора';
 
   @override
   String get heaterPerformanceDesc =>
@@ -1039,4 +1039,10 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get close => 'Закрыть';
+
+  @override
+  String get yes => 'Да';
+
+  @override
+  String get no => 'Нет';
 }

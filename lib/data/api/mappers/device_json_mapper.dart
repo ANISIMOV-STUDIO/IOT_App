@@ -255,7 +255,7 @@ class DeviceJsonMapper {
       supplyTemperature: (json['supplyTemperature'] as num?)?.toDouble(),
       supplyTempAfterRecup: (json['temperatureSetpoint'] as num?)?.toDouble(),
       co2Level: json['coIndicator'] as int?,
-      freeCooling: json['statusOhl'] as int?,
+      freeCooling: json['freeCooling'] as bool?,
       heaterPerformance: json['devicePower'] as int?,
       coolerStatus: json['coolerStatusLabel'] as String?,
       ductPressure: json['pressure'] as int?,
