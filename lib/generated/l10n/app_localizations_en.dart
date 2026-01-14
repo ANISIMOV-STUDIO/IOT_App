@@ -981,7 +981,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Heat exchange efficiency in recuperator';
 
   @override
-  String get freeCoolingDesc => 'Is free cooling mode active';
+  String get freeCoolingDesc => 'Free cooling mode via recuperator (m³/h)';
 
   @override
   String get heaterPerformanceDesc => 'Current electric heater power';
@@ -1029,10 +1029,4 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get close => 'Close';
-
-  @override
-  String get yes => 'Yes';
-
-  @override
-  String get no => 'No';
 }

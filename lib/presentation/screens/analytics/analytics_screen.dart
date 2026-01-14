@@ -465,7 +465,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
       supplyTempAfterRecup: fullState?.supplyTempAfterRecup ?? 18.0,
       co2Level: fullState?.co2Level ?? 0,
       recuperatorEfficiency: fullState?.kpdRecuperator ?? 0,
-      freeCooling: fullState?.freeCooling ?? false,
+      freeCooling: fullState?.freeCooling ?? 0,
       heaterPerformance: fullState?.heaterPerformance ?? 0,
       coolerStatus: fullState?.coolerStatus ?? 'Н/Д',
       ductPressure: fullState?.ductPressure ?? 0,
