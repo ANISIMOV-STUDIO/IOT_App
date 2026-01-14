@@ -796,6 +796,7 @@
   "statusStopped": "Выключен",
   "statusEnabled": "Включено",
   "statusDisabled": "Выключено",
+  "holdToToggle": "Удерживайте для активации дня",
   "statusResolved": "РЕШЕНА",
   "statusActive": "АКТИВНА",
   "alarmHistoryTitle": "История аварий",

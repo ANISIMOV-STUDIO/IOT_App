@@ -6,6 +6,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/spacing.dart';
 
@@ -39,6 +40,7 @@ abstract class _TabConstants {
 /// - Активное состояние ([isActive]) - показывает индикатор (зелёную точку)
 /// - Hover эффект и курсор pointer
 /// - Компактный режим для mobile ([compact])
+/// - Long press для дополнительного действия ([onLongPress])
 /// - Accessibility через Semantics
 ///
 /// Пример использования:
@@ -48,6 +50,7 @@ abstract class _TabConstants {
 ///   isSelected: selectedDay == 0,
 ///   isActive: schedule[0].enabled,
 ///   onTap: () => selectDay(0),
+///   onLongPress: () => toggleDay(0),
 /// )
 /// ```
 class BreezTab extends StatefulWidget {
@@ -63,6 +66,9 @@ class BreezTab extends StatefulWidget {
   /// Callback при нажатии
   final VoidCallback? onTap;
 
+  /// Callback при долгом нажатии
+  final VoidCallback? onLongPress;
+
   /// Компактный режим (меньше padding и font size)
   final bool compact;
 
@@ -75,6 +81,7 @@ class BreezTab extends StatefulWidget {
     this.isSelected = false,
     this.isActive = false,
     this.onTap,
+    this.onLongPress,
     this.compact = false,
     this.activeIndicatorColor,
   });
@@ -87,8 +94,16 @@ class _BreezTabState extends State<BreezTab> {
   bool _isHovered = false;
 
   bool get _isEnabled => widget.onTap != null;
+  bool get _hasLongPress => widget.onLongPress != null;
 
   Color get _indicatorColor => widget.activeIndicatorColor ?? AppColors.accentGreen;
+
+  void _handleLongPress() {
+    if (_hasLongPress) {
+      HapticFeedback.mediumImpact();
+      widget.onLongPress!();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,6 +119,7 @@ class _BreezTabState extends State<BreezTab> {
         onExit: (_) => setState(() => _isHovered = false),
         child: GestureDetector(
           onTap: widget.onTap,
+          onLongPress: _hasLongPress ? _handleLongPress : null,
           child: AnimatedContainer(
             duration: _TabConstants.animationDuration,
             padding: EdgeInsets.symmetric(
@@ -200,6 +216,7 @@ class _BreezTabState extends State<BreezTab> {
 ///   selectedIndex: _selectedDay,
 ///   activeIndices: _enabledDays,
 ///   onTabSelected: (index) => setState(() => _selectedDay = index),
+///   onTabLongPress: (index) => toggleEnabled(index),
 /// )
 /// ```
 class BreezTabGroup extends StatelessWidget {
@@ -215,6 +232,9 @@ class BreezTabGroup extends StatelessWidget {
   /// Callback при выборе таба
   final ValueChanged<int>? onTabSelected;
 
+  /// Callback при долгом нажатии на таб
+  final ValueChanged<int>? onTabLongPress;
+
   /// Компактный режим
   final bool compact;
 
@@ -224,6 +244,7 @@ class BreezTabGroup extends StatelessWidget {
     required this.selectedIndex,
     this.activeIndices,
     this.onTabSelected,
+    this.onTabLongPress,
     this.compact = false,
   });
 
@@ -253,6 +274,7 @@ class BreezTabGroup extends StatelessWidget {
           isSelected: index == selectedIndex,
           isActive: activeIndices?.contains(index) ?? false,
           onTap: onTabSelected != null ? () => onTabSelected!(index) : null,
+          onLongPress: onTabLongPress != null ? () => onTabLongPress!(index) : null,
           compact: compact,
         ),
       ),

@@ -11,6 +11,21 @@ import '../../../../core/theme/app_radius.dart';
 import '../../../../domain/entities/unit_state.dart';
 import 'unit_settings_widgets.dart';
 
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+abstract class _DialogConstants {
+  static const double maxWidth = 360.0;
+  static const double headerIconSize = 18.0;
+  static const double closeButtonSize = 28.0;
+  static const double titleFontSize = 16.0;
+}
+
+// =============================================================================
+// TYPES
+// =============================================================================
+
 /// Действия доступные в диалоге настроек
 enum UnitSettingsAction { rename, delete }
 
@@ -24,6 +39,10 @@ class UnitSettingsResult {
     this.newName,
   });
 }
+
+// =============================================================================
+// MAIN DIALOG
+// =============================================================================
 
 /// Диалог настроек устройства
 class UnitSettingsDialog extends StatefulWidget {
@@ -86,7 +105,7 @@ class _UnitSettingsDialogState extends State<UnitSettingsDialog> {
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final maxWidth = min(MediaQuery.of(context).size.width - 48, 400.0);
+    final maxWidth = min(MediaQuery.of(context).size.width - 32, _DialogConstants.maxWidth);
 
     return Dialog(
       backgroundColor: colors.card,
@@ -96,75 +115,423 @@ class _UnitSettingsDialogState extends State<UnitSettingsDialog> {
       ),
       child: Container(
         width: maxWidth,
-        padding: EdgeInsets.all(AppSpacing.lg),
+        padding: EdgeInsets.all(AppSpacing.sm),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildHeader(colors, l10n),
-            SizedBox(height: AppSpacing.lg),
-            DeviceInfoCard(unit: widget.unit),
-            SizedBox(height: AppSpacing.md),
+            // Header
+            Row(
+              children: [
+                Icon(
+                  Icons.settings_outlined,
+                  size: _DialogConstants.headerIconSize,
+                  color: colors.textMuted,
+                ),
+                SizedBox(width: AppSpacing.xs),
+                Expanded(
+                  child: Text(
+                    l10n.unitSettingsTitle,
+                    style: TextStyle(
+                      fontSize: _DialogConstants.titleFontSize,
+                      fontWeight: FontWeight.w600,
+                      color: colors.text,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                _CloseButton(
+                  onTap: () => Navigator.of(context).pop(),
+                ),
+              ],
+            ),
+
+            SizedBox(height: AppSpacing.sm),
+
+            // Device info
+            _CompactDeviceInfo(unit: widget.unit),
+
+            SizedBox(height: AppSpacing.sm),
+
+            // Actions or rename field
             if (_isRenaming)
-              RenameField(
+              _CompactRenameField(
                 controller: _nameController,
                 onCancel: () => setState(() => _isRenaming = false),
                 onSave: _submitRename,
               )
             else
-              _buildActions(colors, l10n),
+              _CompactActions(
+                onRename: () => setState(() => _isRenaming = true),
+                onDelete: _confirmDelete,
+              ),
           ],
         ),
       ),
     );
   }
+}
 
-  Widget _buildHeader(BreezColors colors, AppLocalizations l10n) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            Icon(Icons.settings_outlined, size: 20, color: colors.textMuted),
-            const SizedBox(width: 8),
-            Text(
-              l10n.unitSettingsTitle,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                color: colors.text,
-              ),
-            ),
-          ],
+// =============================================================================
+// PRIVATE WIDGETS
+// =============================================================================
+
+/// Компактная кнопка закрытия
+class _CloseButton extends StatelessWidget {
+  final VoidCallback onTap;
+
+  const _CloseButton({required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: _DialogConstants.closeButtonSize,
+        height: _DialogConstants.closeButtonSize,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: colors.buttonBg.withValues(alpha: 0.5),
         ),
-        BreezIconButton(
-          icon: Icons.close,
-          onTap: () => Navigator.of(context).pop(),
-          size: 32,
-          showBorder: false,
+        child: Icon(
+          Icons.close,
+          size: 16,
+          color: colors.textMuted,
+        ),
+      ),
+    );
+  }
+}
+
+/// Компактная информация об устройстве
+class _CompactDeviceInfo extends StatelessWidget {
+  final UnitState unit;
+
+  const _CompactDeviceInfo({required this.unit});
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
+
+    return Container(
+      padding: EdgeInsets.all(AppSpacing.xs),
+      decoration: BoxDecoration(
+        color: colors.cardLight,
+        borderRadius: BorderRadius.circular(AppRadius.nested),
+      ),
+      child: Column(
+        children: [
+          // Name row
+          _InfoRow(
+            icon: Icons.label_outline,
+            label: l10n.unitSettingsName,
+            value: unit.name,
+            isBold: true,
+          ),
+          SizedBox(height: AppSpacing.xs),
+          // ID and Status in one row
+          Row(
+            children: [
+              Icon(Icons.tag, size: 14, color: colors.textMuted),
+              SizedBox(width: AppSpacing.xxs),
+              Expanded(
+                child: Text(
+                  unit.id,
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontFamily: 'monospace',
+                    color: colors.textMuted,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              SizedBox(width: AppSpacing.xs),
+              Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: AppSpacing.xs,
+                  vertical: 2,
+                ),
+                decoration: BoxDecoration(
+                  color: unit.power
+                      ? AppColors.accentGreen.withValues(alpha: 0.15)
+                      : colors.buttonBg.withValues(alpha: 0.5),
+                  borderRadius: BorderRadius.circular(AppRadius.indicator),
+                ),
+                child: Text(
+                  unit.power ? l10n.statusEnabled : l10n.statusDisabled,
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                    color: unit.power ? AppColors.accentGreen : colors.textMuted,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Строка информации
+class _InfoRow extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final String value;
+  final bool isBold;
+
+  const _InfoRow({
+    required this.icon,
+    required this.label,
+    required this.value,
+    this.isBold = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+
+    return Row(
+      children: [
+        Icon(icon, size: 14, color: colors.textMuted),
+        SizedBox(width: AppSpacing.xxs),
+        Text(
+          label,
+          style: TextStyle(fontSize: 11, color: colors.textMuted),
+        ),
+        SizedBox(width: AppSpacing.xxs),
+        Expanded(
+          child: Text(
+            value,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: isBold ? FontWeight.w600 : FontWeight.normal,
+              color: colors.text,
+            ),
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
       ],
     );
   }
+}
 
-  Widget _buildActions(BreezColors colors, AppLocalizations l10n) {
-    return Column(
+/// Компактные кнопки действий
+class _CompactActions extends StatelessWidget {
+  final VoidCallback onRename;
+  final VoidCallback onDelete;
+
+  const _CompactActions({
+    required this.onRename,
+    required this.onDelete,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return Row(
       children: [
-        BreezSettingsButton(
-          icon: Icons.edit_outlined,
-          label: l10n.unitSettingsRename,
-          subtitle: l10n.unitSettingsRenameSubtitle,
-          onTap: () => setState(() => _isRenaming = true),
+        Expanded(
+          child: _ActionButton(
+            icon: Icons.edit_outlined,
+            label: l10n.unitSettingsRename,
+            onTap: onRename,
+          ),
         ),
-        const SizedBox(height: 12),
-        BreezSettingsButton(
-          icon: Icons.delete_outline,
-          label: l10n.unitSettingsDelete,
-          subtitle: l10n.unitSettingsDeleteSubtitle,
-          isDanger: true,
-          onTap: _confirmDelete,
+        SizedBox(width: AppSpacing.xs),
+        Expanded(
+          child: _ActionButton(
+            icon: Icons.delete_outline,
+            label: l10n.unitSettingsDelete,
+            onTap: onDelete,
+            isDanger: true,
+          ),
         ),
       ],
+    );
+  }
+}
+
+/// Компактная кнопка действия
+class _ActionButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+  final bool isDanger;
+
+  const _ActionButton({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+    this.isDanger = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+    final color = isDanger ? AppColors.accentRed : colors.text;
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppRadius.nested),
+        child: Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: AppSpacing.xs,
+            vertical: AppSpacing.xs,
+          ),
+          decoration: BoxDecoration(
+            color: isDanger
+                ? AppColors.accentRed.withValues(alpha: 0.08)
+                : colors.cardLight,
+            borderRadius: BorderRadius.circular(AppRadius.nested),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, size: 16, color: color),
+              SizedBox(width: AppSpacing.xxs),
+              Flexible(
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: color,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Компактное поле переименования
+class _CompactRenameField extends StatelessWidget {
+  final TextEditingController controller;
+  final VoidCallback onCancel;
+  final VoidCallback onSave;
+
+  const _CompactRenameField({
+    required this.controller,
+    required this.onCancel,
+    required this.onSave,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+    final l10n = AppLocalizations.of(context)!;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Input field
+        SizedBox(
+          height: 40,
+          child: TextFormField(
+            controller: controller,
+            autofocus: true,
+            style: TextStyle(fontSize: 13, color: colors.text),
+            decoration: InputDecoration(
+              hintText: l10n.unitSettingsEnterName,
+              hintStyle: TextStyle(fontSize: 13, color: colors.textMuted),
+              filled: true,
+              fillColor: colors.cardLight,
+              contentPadding: EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(AppRadius.nested),
+                borderSide: BorderSide.none,
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(AppRadius.nested),
+                borderSide: BorderSide(color: AppColors.accent, width: 1),
+              ),
+            ),
+            onFieldSubmitted: (_) => onSave(),
+          ),
+        ),
+        SizedBox(height: AppSpacing.xs),
+        // Buttons
+        Row(
+          children: [
+            Expanded(
+              child: _ActionButton(
+                icon: Icons.close,
+                label: l10n.cancel,
+                onTap: onCancel,
+              ),
+            ),
+            SizedBox(width: AppSpacing.xs),
+            Expanded(
+              child: _PrimaryButton(
+                label: l10n.save,
+                onTap: onSave,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+/// Основная кнопка (акцентная)
+class _PrimaryButton extends StatelessWidget {
+  final String label;
+  final VoidCallback onTap;
+
+  const _PrimaryButton({
+    required this.label,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppRadius.nested),
+        child: Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: AppSpacing.xs,
+            vertical: AppSpacing.xs,
+          ),
+          decoration: BoxDecoration(
+            color: AppColors.accent,
+            borderRadius: BorderRadius.circular(AppRadius.nested),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.check, size: 16, color: Colors.black),
+              SizedBox(width: AppSpacing.xxs),
+              Flexible(
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

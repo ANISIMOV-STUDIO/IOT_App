@@ -1364,6 +1364,12 @@ abstract class AppLocalizations {
   /// **'Выключено'**
   String get statusDisabled;
 
+  /// No description provided for @holdToToggle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удерживайте для активации дня'**
+  String get holdToToggle;
+
   /// No description provided for @statusResolved.
   ///
   /// In ru, this message translates to:

@@ -49,7 +49,7 @@ class MobileTab {
 /// - Badge с счётчиком
 /// - Плавную анимацию переключения
 /// - Accessibility через Semantics
-class MobileTabBar extends StatelessWidget {
+class MobileTabBar extends StatefulWidget {
   final TabController controller;
   final List<MobileTab> tabs;
 
@@ -58,6 +58,45 @@ class MobileTabBar extends StatelessWidget {
     required this.controller,
     required this.tabs,
   });
+
+  @override
+  State<MobileTabBar> createState() => _MobileTabBarState();
+}
+
+class _MobileTabBarState extends State<MobileTabBar> {
+  int _currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.controller.index;
+    widget.controller.addListener(_handleTabChange);
+  }
+
+  @override
+  void didUpdateWidget(MobileTabBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.controller != widget.controller) {
+      oldWidget.controller.removeListener(_handleTabChange);
+      widget.controller.addListener(_handleTabChange);
+      _currentIndex = widget.controller.index;
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeListener(_handleTabChange);
+    super.dispose();
+  }
+
+  /// Обновляем только когда реально сменился индекс (не на каждый кадр анимации)
+  void _handleTabChange() {
+    if (widget.controller.index != _currentIndex) {
+      setState(() {
+        _currentIndex = widget.controller.index;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,23 +111,18 @@ class MobileTabBar extends StatelessWidget {
           color: colors.buttonBg.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(AppRadius.chip),
         ),
-        child: AnimatedBuilder(
-          animation: controller,
-          builder: (context, _) {
-            return Row(
-              children: List.generate(tabs.length, (index) {
-                final isSelected = controller.index == index;
-                return Expanded(
-                  child: _SegmentButton(
-                    tab: tabs[index],
-                    isSelected: isSelected,
-                    onTap: () => controller.animateTo(index),
-                    colors: colors,
-                  ),
-                );
-              }),
+        child: Row(
+          children: List.generate(widget.tabs.length, (index) {
+            final isSelected = _currentIndex == index;
+            return Expanded(
+              child: _SegmentButton(
+                tab: widget.tabs[index],
+                isSelected: isSelected,
+                onTap: () => widget.controller.animateTo(index),
+                colors: colors,
+              ),
             );
-          },
+          }),
         ),
       ),
     );

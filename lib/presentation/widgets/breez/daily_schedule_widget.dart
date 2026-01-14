@@ -88,12 +88,16 @@ class DailyScheduleWidget extends StatefulWidget {
   State<DailyScheduleWidget> createState() => _DailyScheduleWidgetState();
 }
 
-class _DailyScheduleWidgetState extends State<DailyScheduleWidget> {
+class _DailyScheduleWidgetState extends State<DailyScheduleWidget>
+    with AutomaticKeepAliveClientMixin {
   /// Индекс выбранного дня (инициализация без late для hot reload)
   int _selectedIndex = DateTime.now().weekday - 1;
 
   /// Локальный кэш для optimistic updates
   final Map<String, TimerSettings> _localSettings = {};
+
+  @override
+  bool get wantKeepAlive => true;
 
   String get _selectedDay => DailyScheduleWidget.daysOrder[_selectedIndex];
 
@@ -157,8 +161,26 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget> {
     );
   }
 
+  /// Toggle enabled state for a day via long-press
+  void _handleDayLongPress(int index) {
+    final day = DailyScheduleWidget.daysOrder[index];
+    final settings = _getSettings(day);
+    _updateSettings(
+      day,
+      TimerSettings(
+        onHour: settings.onHour,
+        onMinute: settings.onMinute,
+        offHour: settings.offHour,
+        offMinute: settings.offMinute,
+        enabled: !settings.enabled,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    super.build(context); // Required for AutomaticKeepAliveClientMixin
+
     final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     final selectedSettings = _getSettings(_selectedDay);
@@ -179,18 +201,35 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget> {
           SizedBox(height: AppSpacing.xs),
         ],
 
-        // Day tabs
+        // Day tabs with long-press to toggle
         BreezTabGroup(
           labels: _DayNameResolver.getShortNames(l10n),
           selectedIndex: _selectedIndex,
           activeIndices: _activeIndices,
           compact: widget.compact,
           onTabSelected: (index) => setState(() => _selectedIndex = index),
+          onTabLongPress: widget.onDaySettingsChanged != null
+              ? _handleDayLongPress
+              : null,
         ),
+
+        // Hint for long-press (only in compact mode)
+        if (widget.compact) ...[
+          SizedBox(height: AppSpacing.xxs),
+          Center(
+            child: Text(
+              l10n.holdToToggle,
+              style: TextStyle(
+                fontSize: 10,
+                color: colors.textMuted,
+              ),
+            ),
+          ),
+        ],
 
         SizedBox(height: AppSpacing.xs),
 
-        // Selected day settings
+        // Time inputs (without day header)
         Expanded(
           child: _DaySettingsPanel(
             dayKey: _selectedDay,
@@ -232,23 +271,6 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget> {
 
 /// Резолвер имён дней недели
 abstract class _DayNameResolver {
-  /// Маппинг ключей дней на полные имена
-  static String getFullName(String dayKey, AppLocalizations l10n) {
-    const dayKeys = DailyScheduleWidget.daysOrder;
-    final dayNames = [
-      l10n.monday,
-      l10n.tuesday,
-      l10n.wednesday,
-      l10n.thursday,
-      l10n.friday,
-      l10n.saturday,
-      l10n.sunday,
-    ];
-
-    final index = dayKeys.indexOf(dayKey);
-    return index >= 0 ? dayNames[index] : dayKey;
-  }
-
   /// Получить список коротких имён
   static List<String> getShortNames(AppLocalizations l10n) {
     return [
@@ -287,16 +309,6 @@ class _DaySettingsPanel extends StatelessWidget {
     this.onSettingsChanged,
   });
 
-  void _onEnabledChanged(bool value) {
-    onSettingsChanged?.call(
-      settings.onHour,
-      settings.onMinute,
-      settings.offHour,
-      settings.offMinute,
-      value,
-    );
-  }
-
   void _onStartTimeChanged(int hour, int minute) {
     onSettingsChanged?.call(
       hour,
@@ -321,23 +333,8 @@ class _DaySettingsPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Column(
-      mainAxisAlignment: compact ? MainAxisAlignment.center : MainAxisAlignment.start,
-      mainAxisSize: compact ? MainAxisSize.max : MainAxisSize.min,
-      children: [
-        // Header: день и переключатель (общий для обоих layout)
-        _DayHeader(
-          dayKey: dayKey,
-          isEnabled: settings.enabled,
-          onEnabledChanged: onSettingsChanged != null ? _onEnabledChanged : null,
-        ),
-
-        SizedBox(height: AppSpacing.xs),
-
-        // Time inputs
-        _buildTimeInputs(l10n),
-      ],
-    );
+    // Only time inputs - header moved to parent for compact mode
+    return _buildTimeInputs(l10n);
   }
 
   Widget _buildTimeInputs(AppLocalizations l10n) {
@@ -386,77 +383,6 @@ class _DaySettingsPanel extends StatelessWidget {
     return SizedBox(
       height: _ScheduleConstants.desktopTimeBlockHeight,
       child: wrappedRow,
-    );
-  }
-}
-
-// =============================================================================
-// DAY HEADER
-// =============================================================================
-
-/// Заголовок дня с переключателем
-class _DayHeader extends StatelessWidget {
-  final String dayKey;
-  final bool isEnabled;
-  final ValueChanged<bool>? onEnabledChanged;
-
-  const _DayHeader({
-    required this.dayKey,
-    required this.isEnabled,
-    this.onEnabledChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
-    final l10n = AppLocalizations.of(context)!;
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        // Название дня
-        Semantics(
-          header: true,
-          child: Text(
-            _DayNameResolver.getFullName(dayKey, l10n),
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: colors.text,
-            ),
-          ),
-        ),
-
-        // Статус и переключатель
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              isEnabled ? l10n.statusEnabled : l10n.statusDisabled,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: isEnabled ? AppColors.accentGreen : colors.textMuted,
-              ),
-            ),
-            SizedBox(width: AppSpacing.xs),
-            Semantics(
-              label: isEnabled ? l10n.statusEnabled : l10n.statusDisabled,
-              toggled: isEnabled,
-              child: MouseRegion(
-                cursor: onEnabledChanged != null
-                    ? SystemMouseCursors.click
-                    : SystemMouseCursors.basic,
-                child: Switch(
-                  value: isEnabled,
-                  onChanged: onEnabledChanged,
-                  activeTrackColor: AppColors.accent,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
     );
   }
 }

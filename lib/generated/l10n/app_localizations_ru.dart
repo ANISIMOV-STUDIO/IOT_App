@@ -695,6 +695,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get statusDisabled => 'Выключено';
 
   @override
+  String get holdToToggle => 'Удерживайте для активации дня';
+
+  @override
   String get statusResolved => 'РЕШЕНА';
 
   @override

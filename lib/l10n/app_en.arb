@@ -796,6 +796,7 @@
   "statusStopped": "Stopped",
   "statusEnabled": "Enabled",
   "statusDisabled": "Disabled",
+  "holdToToggle": "Hold to activate day",
   "statusResolved": "RESOLVED",
   "statusActive": "ACTIVE",
   "alarmHistoryTitle": "Alarm history",
