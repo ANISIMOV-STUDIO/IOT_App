@@ -19,7 +19,6 @@ abstract class _ScheduleConstants {
   static const double borderRadius = 10.0;
   static const Duration animationDuration = Duration(milliseconds: 150);
   static const double timeFontSize = 22.0;
-  static const double labelFontSize = 11.0;
 }
 
 // =============================================================================
@@ -201,6 +200,20 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget>
           SizedBox(height: AppSpacing.xs),
         ],
 
+        // Hint for long-press (only in compact mode, above tabs)
+        if (widget.compact) ...[
+          Center(
+            child: Text(
+              l10n.holdToToggle,
+              style: TextStyle(
+                fontSize: 10,
+                color: colors.textMuted,
+              ),
+            ),
+          ),
+          SizedBox(height: AppSpacing.xxs),
+        ],
+
         // Day tabs with long-press to toggle
         BreezTabGroup(
           labels: _DayNameResolver.getShortNames(l10n),
@@ -212,20 +225,6 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget>
               ? _handleDayLongPress
               : null,
         ),
-
-        // Hint for long-press (only in compact mode)
-        if (widget.compact) ...[
-          SizedBox(height: AppSpacing.xxs),
-          Center(
-            child: Text(
-              l10n.holdToToggle,
-              style: TextStyle(
-                fontSize: 10,
-                color: colors.textMuted,
-              ),
-            ),
-          ),
-        ],
 
         SizedBox(height: AppSpacing.xs),
 
@@ -338,11 +337,11 @@ class _DaySettingsPanel extends StatelessWidget {
   }
 
   Widget _buildTimeInputs(AppLocalizations l10n) {
-    final timeRow = Row(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+    final content = Row(
       children: [
+        // Start time column
         Expanded(
-          child: _ScheduleTimeBlock(
+          child: _TimeColumn(
             label: l10n.scheduleStartLabel,
             hour: settings.onHour,
             minute: settings.onMinute,
@@ -351,9 +350,10 @@ class _DaySettingsPanel extends StatelessWidget {
                 : null,
           ),
         ),
-        SizedBox(width: AppSpacing.xs),
+        SizedBox(width: AppSpacing.sm),
+        // End time column
         Expanded(
-          child: _ScheduleTimeBlock(
+          child: _TimeColumn(
             label: l10n.scheduleEndLabel,
             hour: settings.offHour,
             minute: settings.offMinute,
@@ -366,23 +366,70 @@ class _DaySettingsPanel extends StatelessWidget {
     );
 
     // Обёртка с opacity и ignore pointer для disabled состояния
-    final wrappedRow = Opacity(
+    final wrappedContent = Opacity(
       opacity: settings.enabled ? 1.0 : 0.4,
       child: IgnorePointer(
         ignoring: !settings.enabled,
-        child: timeRow,
+        child: content,
       ),
     );
 
     if (compact) {
-      // Mobile: растягиваем на всё доступное место
-      return Expanded(child: wrappedRow);
+      // Parent already wraps in Expanded, just return content
+      return wrappedContent;
     }
 
-    // Desktop: фиксированная высота
     return SizedBox(
       height: _ScheduleConstants.desktopTimeBlockHeight,
-      child: wrappedRow,
+      child: wrappedContent,
+    );
+  }
+}
+
+// =============================================================================
+// TIME COLUMN
+// =============================================================================
+
+/// Колонка времени с подписью сверху
+class _TimeColumn extends StatelessWidget {
+  final String label;
+  final int hour;
+  final int minute;
+  final void Function(int hour, int minute)? onTimeChanged;
+
+  const _TimeColumn({
+    required this.label,
+    required this.hour,
+    required this.minute,
+    this.onTimeChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        // Label above
+        Text(
+          label,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 11,
+            color: colors.textMuted,
+          ),
+        ),
+        SizedBox(height: AppSpacing.xxs),
+        // Time block - takes remaining space
+        Flexible(
+          child: _ScheduleTimeBlock(
+            hour: hour,
+            minute: minute,
+            onTimeChanged: onTimeChanged,
+          ),
+        ),
+      ],
     );
   }
 }
@@ -391,18 +438,13 @@ class _DaySettingsPanel extends StatelessWidget {
 // SCHEDULE TIME BLOCK
 // =============================================================================
 
-/// Блок выбора времени для расписания
-///
-/// Отображает label и время, открывает системный TimePicker по клику.
-/// Адаптируется к доступному размеру через FittedBox.
+/// Компактный блок времени (только цифры)
 class _ScheduleTimeBlock extends StatefulWidget {
-  final String label;
   final int hour;
   final int minute;
   final void Function(int hour, int minute)? onTimeChanged;
 
   const _ScheduleTimeBlock({
-    required this.label,
     required this.hour,
     required this.minute,
     this.onTimeChanged,
@@ -445,7 +487,7 @@ class _ScheduleTimeBlockState extends State<_ScheduleTimeBlock> {
 
     return Semantics(
       button: true,
-      label: '${widget.label}: $_formattedTime',
+      label: _formattedTime,
       child: MouseRegion(
         cursor: _isEnabled ? SystemMouseCursors.click : SystemMouseCursors.basic,
         onEnter: (_) => setState(() => _isHovered = true),
@@ -454,10 +496,6 @@ class _ScheduleTimeBlockState extends State<_ScheduleTimeBlock> {
           onTap: _showTimePicker,
           child: AnimatedContainer(
             duration: _ScheduleConstants.animationDuration,
-            padding: EdgeInsets.symmetric(
-              vertical: AppSpacing.xxs,
-              horizontal: AppSpacing.xs,
-            ),
             decoration: BoxDecoration(
               color: _isHovered && _isEnabled
                   ? AppColors.accent.withValues(alpha: 0.15)
@@ -469,28 +507,14 @@ class _ScheduleTimeBlockState extends State<_ScheduleTimeBlock> {
                     : AppColors.accent.withValues(alpha: 0.2),
               ),
             ),
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    widget.label,
-                    style: TextStyle(
-                      fontSize: _ScheduleConstants.labelFontSize,
-                      color: colors.textMuted,
-                    ),
-                  ),
-                  SizedBox(height: AppSpacing.xxs),
-                  Text(
-                    _formattedTime,
-                    style: TextStyle(
-                      fontSize: _ScheduleConstants.timeFontSize,
-                      fontWeight: FontWeight.w700,
-                      color: _isEnabled ? colors.text : colors.textMuted,
-                    ),
-                  ),
-                ],
+            child: Center(
+              child: Text(
+                _formattedTime,
+                style: TextStyle(
+                  fontSize: _ScheduleConstants.timeFontSize,
+                  fontWeight: FontWeight.w700,
+                  color: _isEnabled ? colors.text : colors.textMuted,
+                ),
               ),
             ),
           ),
