@@ -698,6 +698,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get holdToToggle => 'Удерживайте для активации дня';
 
   @override
+  String get selectTime => 'Выбор времени';
+
+  @override
+  String get confirm => 'Готово';
+
+  @override
   String get statusResolved => 'РЕШЕНА';
 
   @override

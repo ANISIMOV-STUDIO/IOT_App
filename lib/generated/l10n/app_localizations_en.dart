@@ -696,6 +696,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get holdToToggle => 'Hold to activate day';
 
   @override
+  String get selectTime => 'Select time';
+
+  @override
+  String get confirm => 'Done';
+
+  @override
   String get statusResolved => 'RESOLVED';
 
   @override

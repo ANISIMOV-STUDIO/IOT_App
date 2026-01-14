@@ -1370,6 +1370,18 @@ abstract class AppLocalizations {
   /// **'Удерживайте для активации дня'**
   String get holdToToggle;
 
+  /// No description provided for @selectTime.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выбор времени'**
+  String get selectTime;
+
+  /// No description provided for @confirm.
+  ///
+  /// In ru, this message translates to:
+  /// **'Готово'**
+  String get confirm;
+
   /// No description provided for @statusResolved.
   ///
   /// In ru, this message translates to:

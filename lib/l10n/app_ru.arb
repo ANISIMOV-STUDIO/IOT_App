@@ -797,6 +797,8 @@
   "statusEnabled": "Включено",
   "statusDisabled": "Выключено",
   "holdToToggle": "Удерживайте для активации дня",
+  "selectTime": "Выбор времени",
+  "confirm": "Готово",
   "statusResolved": "РЕШЕНА",
   "statusActive": "АКТИВНА",
   "alarmHistoryTitle": "История аварий",

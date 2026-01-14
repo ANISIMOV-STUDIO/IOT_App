@@ -8,6 +8,7 @@ import '../../../domain/entities/mode_settings.dart';
 import '../../../generated/l10n/app_localizations.dart';
 import 'breez_card.dart';
 import 'breez_tab.dart';
+import 'breez_time_picker.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -465,15 +466,9 @@ class _ScheduleTimeBlockState extends State<_ScheduleTimeBlock> {
   Future<void> _showTimePicker() async {
     if (!_isEnabled) return;
 
-    final time = await showTimePicker(
+    final time = await showBreezTimePicker(
       context: context,
       initialTime: TimeOfDay(hour: widget.hour, minute: widget.minute),
-      builder: (context, child) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
-          child: child!,
-        );
-      },
     );
 
     if (time != null && mounted) {

@@ -29,6 +29,7 @@ export 'breez_settings_tile.dart';
 export 'breez_text_field.dart';
 export 'breez_pin_code_field.dart';
 export 'breez_time_input.dart';
+export 'breez_time_picker.dart';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // НАВИГАЦИЯ И ТАБЫ
