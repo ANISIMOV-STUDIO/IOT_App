@@ -139,6 +139,9 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
 
     // Расписание
     on<ClimateScheduleToggled>(_onScheduleToggled);
+
+    // Обновление локального состояния
+    on<ClimateQuickSensorsUpdated>(_onQuickSensorsUpdated);
   }
 
   /// Запрос на подписку к состоянию климата
@@ -654,6 +657,20 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       emit(state.copyWith(
         isTogglingSchedule: false,
         errorMessage: 'Schedule toggle error: $e',
+      ));
+    }
+  }
+
+  /// Обновление quickSensors в локальном состоянии (после успешного сохранения)
+  void _onQuickSensorsUpdated(
+    ClimateQuickSensorsUpdated event,
+    Emitter<ClimateControlState> emit,
+  ) {
+    if (state.deviceFullState != null) {
+      emit(state.copyWith(
+        deviceFullState: state.deviceFullState!.copyWith(
+          quickSensors: event.quickSensors,
+        ),
       ));
     }
   }

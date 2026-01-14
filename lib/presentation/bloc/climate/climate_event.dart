@@ -233,3 +233,17 @@ final class ClimateExhaustAirflowCommit extends ClimateEvent {
   @override
   List<Object?> get props => [value];
 }
+
+// ============================================
+// ОБНОВЛЕНИЕ ЛОКАЛЬНОГО СОСТОЯНИЯ
+// ============================================
+
+/// Обновлены быстрые показатели (локально, после успешного сохранения)
+final class ClimateQuickSensorsUpdated extends ClimateEvent {
+  final List<String> quickSensors;
+
+  const ClimateQuickSensorsUpdated(this.quickSensors);
+
+  @override
+  List<Object?> get props => [quickSensors];
+}

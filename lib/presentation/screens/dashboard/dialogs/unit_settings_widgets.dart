@@ -3,10 +3,10 @@ library;
 
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/spacing.dart';
 import '../../../../generated/l10n/app_localizations.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../domain/entities/unit_state.dart';
-import '../../../widgets/breez/breez_card.dart';
 
 /// Device info card showing name, ID, and status
 class DeviceInfoCard extends StatelessWidget {
@@ -294,6 +294,169 @@ class DeleteConfirmDialog extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// Кнопка настроек в диалоге
+class BreezSettingsButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final String? subtitle;
+  final VoidCallback? onTap;
+  final bool isDanger;
+
+  const BreezSettingsButton({
+    super.key,
+    required this.icon,
+    required this.label,
+    this.subtitle,
+    this.onTap,
+    this.isDanger = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+    final color = isDanger ? AppColors.accentRed : colors.text;
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppRadius.button),
+        child: Container(
+          padding: EdgeInsets.all(AppSpacing.sm),
+          decoration: BoxDecoration(
+            color: isDanger
+                ? AppColors.accentRed.withValues(alpha: 0.08)
+                : colors.cardLight,
+            borderRadius: BorderRadius.circular(AppRadius.button),
+          ),
+          child: Row(
+            children: [
+              Icon(icon, size: 20, color: color),
+              SizedBox(width: AppSpacing.sm),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      label,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: color,
+                      ),
+                    ),
+                    if (subtitle != null)
+                      Text(
+                        subtitle!,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: colors.textMuted,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              Icon(
+                Icons.chevron_right,
+                size: 20,
+                color: colors.textMuted,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Кнопка в диалоге
+class BreezDialogButton extends StatelessWidget {
+  final String label;
+  final VoidCallback? onTap;
+  final bool isPrimary;
+
+  const BreezDialogButton({
+    super.key,
+    required this.label,
+    this.onTap,
+    this.isPrimary = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppRadius.button),
+        child: Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: AppSpacing.md,
+            vertical: AppSpacing.xs,
+          ),
+          decoration: BoxDecoration(
+            color: isPrimary ? AppColors.accent : Colors.transparent,
+            borderRadius: BorderRadius.circular(AppRadius.button),
+            border: isPrimary ? null : Border.all(color: colors.border),
+          ),
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: isPrimary ? Colors.black : colors.text,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Icon button for dialog header
+class BreezIconButton extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback? onTap;
+  final double size;
+  final bool showBorder;
+
+  const BreezIconButton({
+    super.key,
+    required this.icon,
+    this.onTap,
+    this.size = 40,
+    this.showBorder = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(size / 2),
+        child: Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: showBorder ? Border.all(color: colors.border) : null,
+          ),
+          child: Icon(
+            icon,
+            size: size * 0.5,
+            color: colors.textMuted,
+          ),
+        ),
+      ),
     );
   }
 }

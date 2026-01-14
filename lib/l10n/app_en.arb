@@ -931,5 +931,9 @@
       }
     }
   },
-  "tapToAdd": "Tap to add"
+  "tapToAdd": "Tap to add",
+  "quickSensorsTitle": "Quick sensors",
+  "quickSensorsHint": "Tap sensor to replace",
+  "sensorInteractionHint": "Tap for details • Long press to select",
+  "close": "Close"
 }

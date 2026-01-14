@@ -1,0 +1,123 @@
+/// Типы показателей для быстрого отображения на главном виджете
+///
+/// Содержит enum QuickSensorType и статические хелперы для конвертации.
+/// Хранение данных происходит на сервере per-device.
+library;
+
+import 'package:flutter/material.dart';
+import '../../generated/l10n/app_localizations.dart';
+
+// =============================================================================
+// QUICK SENSOR TYPE
+// =============================================================================
+
+/// Доступные типы показателей для быстрого отображения
+enum QuickSensorType {
+  outsideTemp('outside_temp', Icons.thermostat_outlined),
+  indoorTemp('indoor_temp', Icons.home_outlined),
+  humidity('humidity', Icons.water_drop_outlined),
+  co2Level('co2_level', Icons.cloud_outlined),
+  supplyTemp('supply_temp', Icons.air),
+  recuperatorEfficiency('recuperator_eff', Icons.recycling),
+  heaterPerformance('heater_perf', Icons.local_fire_department_outlined),
+  ductPressure('duct_pressure', Icons.speed),
+  filterPercent('filter_percent', Icons.filter_alt_outlined),
+  airflowRate('airflow_rate', Icons.air);
+
+  const QuickSensorType(this.key, this.icon);
+
+  /// Ключ для сохранения на сервере
+  final String key;
+
+  /// Иконка показателя
+  final IconData icon;
+
+  /// Локализованное название
+  String getLabel(AppLocalizations l10n) {
+    return switch (this) {
+      QuickSensorType.outsideTemp => l10n.outdoor,
+      QuickSensorType.indoorTemp => l10n.indoor,
+      QuickSensorType.humidity => l10n.humidity,
+      QuickSensorType.co2Level => l10n.co2Level,
+      QuickSensorType.supplyTemp => l10n.supplyTemp,
+      QuickSensorType.recuperatorEfficiency => l10n.efficiency,
+      QuickSensorType.heaterPerformance => l10n.heater,
+      QuickSensorType.ductPressure => l10n.pressure,
+      QuickSensorType.filterPercent => l10n.filter,
+      QuickSensorType.airflowRate => l10n.airflowRate,
+    };
+  }
+
+  /// Цвет иконки
+  Color get color {
+    return switch (this) {
+      QuickSensorType.outsideTemp => const Color(0xFF00D9C4),
+      QuickSensorType.indoorTemp => const Color(0xFF4CAF50),
+      QuickSensorType.humidity => const Color(0xFF00D9C4),
+      QuickSensorType.co2Level => const Color(0xFF4CAF50),
+      QuickSensorType.supplyTemp => const Color(0xFFFF9800),
+      QuickSensorType.recuperatorEfficiency => const Color(0xFF00D9C4),
+      QuickSensorType.heaterPerformance => const Color(0xFFFF9800),
+      QuickSensorType.ductPressure => const Color(0xFF9E9E9E),
+      QuickSensorType.filterPercent => const Color(0xFF00D9C4),
+      QuickSensorType.airflowRate => const Color(0xFF00D9C4),
+    };
+  }
+
+  /// Найти тип по ключу
+  static QuickSensorType? fromKey(String? key) {
+    if (key == null) return null;
+    for (final type in QuickSensorType.values) {
+      if (type.key == key) return type;
+    }
+    return null;
+  }
+}
+
+// =============================================================================
+// HELPER CLASS (STATELESS)
+// =============================================================================
+
+/// Статические хелперы для работы с показателями.
+///
+/// Данные хранятся на сервере в поле quickSensors устройства.
+abstract class QuickSensorsService {
+  static const int maxSensors = 3;
+
+  /// Показатели по умолчанию
+  static const List<QuickSensorType> defaultSensors = [
+    QuickSensorType.outsideTemp,
+    QuickSensorType.indoorTemp,
+    QuickSensorType.humidity,
+  ];
+
+  /// Ключи показателей по умолчанию
+  static const List<String> defaultSensorKeys = [
+    'outside_temp',
+    'indoor_temp',
+    'humidity',
+  ];
+
+  /// Конвертировать список ключей в типы
+  static List<QuickSensorType> fromKeys(List<String>? keys) {
+    if (keys == null || keys.length != maxSensors) {
+      return defaultSensors;
+    }
+
+    final sensors = keys
+        .map((key) => QuickSensorType.fromKey(key))
+        .whereType<QuickSensorType>()
+        .toList();
+
+    return sensors.length == maxSensors ? sensors : defaultSensors;
+  }
+
+  /// Конвертировать типы в список ключей
+  static List<String> toKeys(List<QuickSensorType> sensors) {
+    return sensors.map((s) => s.key).toList();
+  }
+
+  /// Все доступные типы показателей
+  static List<QuickSensorType> get availableSensors =>
+      QuickSensorType.values.toList();
+}

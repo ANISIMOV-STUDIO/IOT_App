@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/spacing.dart';
+import '../../../core/services/quick_sensors_service.dart';
 import '../../../domain/entities/unit_state.dart';
 import '../../../generated/l10n/app_localizations.dart';
 import 'fan_slider.dart';
 import 'main_temp_card_header.dart';
 import 'main_temp_card_shimmer.dart';
-import 'sensors_grid.dart';
 import 'stat_item.dart';
 import 'temp_column.dart';
 
@@ -51,6 +51,8 @@ class MainTempCard extends StatelessWidget {
   final int heatingTemp;
   final int coolingTemp;
   final int humidity;
+  final double outsideTemp;
+  final double indoorTemp;
   final int airflow;
   final int filterPercent;
   final bool isPowered;
@@ -75,6 +77,8 @@ class MainTempCard extends StatelessWidget {
   final UnitState? sensorUnit;
   final bool showStats;
   final bool isOnline;
+  /// Выбранные показатели для отображения
+  final List<QuickSensorType> selectedSensors;
   /// Ожидание подтверждения изменения температуры нагрева
   final bool isPendingHeatingTemperature;
 
@@ -89,6 +93,8 @@ class MainTempCard extends StatelessWidget {
     this.coolingTemp = 24,
     this.status,
     this.humidity = 45,
+    this.outsideTemp = 0.0,
+    this.indoorTemp = 22.0,
     this.airflow = 420,
     this.filterPercent = 88,
     this.isPowered = true,
@@ -113,6 +119,7 @@ class MainTempCard extends StatelessWidget {
     this.sensorUnit,
     this.showStats = true,
     this.isOnline = true,
+    this.selectedSensors = QuickSensorsService.defaultSensors,
     this.isPendingHeatingTemperature = false,
     this.isPendingCoolingTemperature = false,
   });
@@ -248,9 +255,12 @@ class MainTempCard extends StatelessWidget {
                 if (showStats || sensorUnit != null)
                   _StatsSection(
                     sensorUnit: sensorUnit,
-                    airflow: airflow,
+                    outsideTemp: outsideTemp,
+                    indoorTemp: indoorTemp,
                     humidity: humidity,
+                    airflow: airflow,
                     filterPercent: filterPercent,
+                    selectedSensors: selectedSensors,
                     colors: colors,
                     l10n: l10n,
                   ),
@@ -345,23 +355,56 @@ class _TemperatureSection extends StatelessWidget {
   }
 }
 
-/// Stats section with sensors grid or stat items
+/// Stats section - Динамически отображает выбранные показатели
 class _StatsSection extends StatelessWidget {
   final UnitState? sensorUnit;
-  final int airflow;
+  final double outsideTemp;
+  final double indoorTemp;
   final int humidity;
+  final int airflow;
   final int filterPercent;
+  final List<QuickSensorType> selectedSensors;
   final BreezColors colors;
   final AppLocalizations l10n;
 
   const _StatsSection({
     this.sensorUnit,
-    required this.airflow,
+    required this.outsideTemp,
+    required this.indoorTemp,
     required this.humidity,
+    required this.airflow,
     required this.filterPercent,
+    required this.selectedSensors,
     required this.colors,
     required this.l10n,
   });
+
+  /// Получить значение для типа сенсора
+  String _getSensorValue(QuickSensorType type) {
+    final unit = sensorUnit;
+    return switch (type) {
+      QuickSensorType.outsideTemp =>
+        '${(unit?.outsideTemp ?? outsideTemp).toStringAsFixed(1)}°',
+      QuickSensorType.indoorTemp =>
+        '${(unit?.indoorTemp ?? indoorTemp).toStringAsFixed(1)}°',
+      QuickSensorType.humidity =>
+        '${unit?.humidity ?? humidity}%',
+      QuickSensorType.co2Level =>
+        '${unit?.co2Level ?? 0}',
+      QuickSensorType.supplyTemp =>
+        '${(unit?.supplyTemp ?? 0).toStringAsFixed(1)}°',
+      QuickSensorType.recuperatorEfficiency =>
+        '${unit?.recuperatorEfficiency ?? 0}%',
+      QuickSensorType.heaterPerformance =>
+        '${unit?.heaterPerformance ?? 0}%',
+      QuickSensorType.ductPressure =>
+        '${unit?.ductPressure ?? 0} Па',
+      QuickSensorType.filterPercent =>
+        '${unit?.filterPercent ?? filterPercent}%',
+      QuickSensorType.airflowRate =>
+        '${unit?.airflowRate ?? airflow}',
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -372,28 +415,17 @@ class _StatsSection extends StatelessWidget {
           top: BorderSide(color: colors.border),
         ),
       ),
-      child: sensorUnit != null
-          ? SensorsGrid(unit: sensorUnit!)
-          : Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                StatItem(
-                  icon: Icons.air,
-                  value: '$airflow м³/ч',
-                  label: l10n.airflowRate,
-                ),
-                StatItem(
-                  icon: Icons.water_drop_outlined,
-                  value: '$humidity%',
-                  label: l10n.humidity,
-                ),
-                StatItem(
-                  icon: Icons.filter_alt_outlined,
-                  value: '$filterPercent%',
-                  label: l10n.filter,
-                ),
-              ],
-            ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: selectedSensors.map((sensor) {
+          return StatItem(
+            icon: sensor.icon,
+            value: _getSensorValue(sensor),
+            label: sensor.getLabel(l10n),
+            iconColor: sensor.color,
+          );
+        }).toList(),
+      ),
     );
   }
 }

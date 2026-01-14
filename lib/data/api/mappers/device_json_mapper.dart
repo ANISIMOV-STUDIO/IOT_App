@@ -269,7 +269,19 @@ class DeviceJsonMapper {
           ? activeAlarmsFromJson(json['activeAlarms'] as Map<String, dynamic>)
           : null,
       isScheduleEnabled: json['scheduleEnabled'] as bool? ?? false,
+      quickSensors: _parseQuickSensors(json['quickSensors']),
     );
+  }
+
+  /// Парсинг quickSensors из JSON
+  static List<String> _parseQuickSensors(dynamic json) {
+    const defaultSensors = ['outside_temp', 'indoor_temp', 'humidity'];
+    if (json == null) return defaultSensors;
+    if (json is List) {
+      final sensors = json.whereType<String>().toList();
+      return sensors.length == 3 ? sensors : defaultSensors;
+    }
+    return defaultSensors;
   }
 
   // ============================================

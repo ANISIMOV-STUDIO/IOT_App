@@ -1008,4 +1008,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tapToAdd => 'Tap to add';
+
+  @override
+  String get quickSensorsTitle => 'Quick sensors';
+
+  @override
+  String get quickSensorsHint => 'Tap sensor to replace';
+
+  @override
+  String get sensorInteractionHint => 'Tap for details • Long press to select';
+
+  @override
+  String get close => 'Close';
 }

@@ -424,7 +424,7 @@ class AppLocalizationsRu extends AppLocalizations {
       'MAC-адрес отображается на экране пульта устройства';
 
   @override
-  String get analytics => 'Аналитика';
+  String get analytics => 'Текущие параметры';
 
   @override
   String get devicesWillAppear =>
@@ -1017,4 +1017,17 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get tapToAdd => 'Нажмите, чтобы добавить';
+
+  @override
+  String get quickSensorsTitle => 'Показатели на главной';
+
+  @override
+  String get quickSensorsHint => 'Нажмите на показатель, чтобы заменить';
+
+  @override
+  String get sensorInteractionHint =>
+      'Нажмите для описания • Зажмите для выбора';
+
+  @override
+  String get close => 'Закрыть';
 }

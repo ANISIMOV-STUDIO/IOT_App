@@ -1,14 +1,14 @@
-/// Unit Settings Dialog - Dialog for device settings (rename, delete, info)
+/// Диалог настроек устройства (переименование, удаление)
 library;
 
 import 'dart:math' show min;
 
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/spacing.dart';
 import '../../../../generated/l10n/app_localizations.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../domain/entities/unit_state.dart';
-import '../../../widgets/breez/breez_card.dart';
 import 'unit_settings_widgets.dart';
 
 /// Действия доступные в диалоге настроек
@@ -19,16 +19,19 @@ class UnitSettingsResult {
   final UnitSettingsAction action;
   final String? newName;
 
-  const UnitSettingsResult({required this.action, this.newName});
+  const UnitSettingsResult({
+    required this.action,
+    this.newName,
+  });
 }
 
-/// Dialog for device settings
+/// Диалог настроек устройства
 class UnitSettingsDialog extends StatefulWidget {
   final UnitState unit;
 
   const UnitSettingsDialog({super.key, required this.unit});
 
-  /// Shows the dialog and returns result if action taken
+  /// Показать диалог и вернуть результат
   static Future<UnitSettingsResult?> show(BuildContext context, UnitState unit) {
     return showDialog<UnitSettingsResult>(
       context: context,
@@ -93,15 +96,15 @@ class _UnitSettingsDialogState extends State<UnitSettingsDialog> {
       ),
       child: Container(
         width: maxWidth,
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(AppSpacing.lg),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildHeader(colors, l10n),
-            const SizedBox(height: 24),
+            SizedBox(height: AppSpacing.lg),
             DeviceInfoCard(unit: widget.unit),
-            const SizedBox(height: 16),
+            SizedBox(height: AppSpacing.md),
             if (_isRenaming)
               RenameField(
                 controller: _nameController,

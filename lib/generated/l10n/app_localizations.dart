@@ -875,7 +875,7 @@ abstract class AppLocalizations {
   /// Analytics tab label
   ///
   /// In ru, this message translates to:
-  /// **'Аналитика'**
+  /// **'Текущие параметры'**
   String get analytics;
 
   /// Empty devices message
@@ -1975,6 +1975,30 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Нажмите, чтобы добавить'**
   String get tapToAdd;
+
+  /// No description provided for @quickSensorsTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Показатели на главной'**
+  String get quickSensorsTitle;
+
+  /// No description provided for @quickSensorsHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нажмите на показатель, чтобы заменить'**
+  String get quickSensorsHint;
+
+  /// No description provided for @sensorInteractionHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нажмите для описания • Зажмите для выбора'**
+  String get sensorInteractionHint;
+
+  /// No description provided for @close.
+  ///
+  /// In ru, this message translates to:
+  /// **'Закрыть'**
+  String get close;
 }
 
 class _AppLocalizationsDelegate

@@ -33,6 +33,7 @@ class UnitState extends Equatable {
   final String coolerStatus;            // Статус охладителя
   final int ductPressure;            // Давление в воздуховоде (Па)
   final bool isOnline;                // Устройство онлайн
+  final List<String> quickSensors;   // Быстрые показатели на главном экране
 
   const UnitState({
     required this.id,
@@ -58,6 +59,7 @@ class UnitState extends Equatable {
     this.coolerStatus = 'Н/Д',
     this.ductPressure = 120,
     this.isOnline = true,
+    this.quickSensors = const ['outside_temp', 'indoor_temp', 'humidity'],
   });
 
   UnitState copyWith({
@@ -84,6 +86,7 @@ class UnitState extends Equatable {
     String? coolerStatus,
     int? ductPressure,
     bool? isOnline,
+    List<String>? quickSensors,
   }) {
     return UnitState(
       id: id ?? this.id,
@@ -109,6 +112,7 @@ class UnitState extends Equatable {
       coolerStatus: coolerStatus ?? this.coolerStatus,
       ductPressure: ductPressure ?? this.ductPressure,
       isOnline: isOnline ?? this.isOnline,
+      quickSensors: quickSensors ?? this.quickSensors,
     );
   }
 
@@ -137,5 +141,6 @@ class UnitState extends Equatable {
         coolerStatus,
         ductPressure,
         isOnline,
+        quickSensors,
       ];
 }

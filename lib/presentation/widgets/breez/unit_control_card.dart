@@ -1,12 +1,13 @@
-/// Unit Control Card - Wrapper for MainTempCard with unified behavior
+/// Карточка управления устройством - обёртка для MainTempCard
 library;
 
 import 'package:flutter/material.dart';
+import '../../../core/services/quick_sensors_service.dart';
 import '../../../domain/entities/unit_state.dart';
 import '../../../generated/l10n/app_localizations.dart';
 import 'main_temp_card.dart';
 
-/// Unified unit control card for all layouts (adaptive)
+/// Унифицированная карточка управления для всех layout-ов
 class UnitControlCard extends StatelessWidget {
   final UnitState unit;
   final VoidCallback? onTemperatureIncrease;
@@ -24,8 +25,10 @@ class UnitControlCard extends StatelessWidget {
   final bool isScheduleLoading;
   final VoidCallback? onScheduleToggle;
   final bool isOnline;
+
   /// Ожидание подтверждения изменения температуры нагрева
   final bool isPendingHeatingTemperature;
+
   /// Ожидание подтверждения изменения температуры охлаждения
   final bool isPendingCoolingTemperature;
 
@@ -55,7 +58,9 @@ class UnitControlCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    // Единый виджет управления - всегда показывает controls, без показателей
+    // Конвертируем ключи сенсоров в типы
+    final selectedSensors = QuickSensorsService.fromKeys(unit.quickSensors);
+
     return MainTempCard(
       unitName: unit.name,
       temperature: unit.temp,
@@ -63,6 +68,8 @@ class UnitControlCard extends StatelessWidget {
       coolingTemp: unit.coolingTemp,
       status: unit.power ? l10n.statusRunning : l10n.statusStopped,
       humidity: unit.humidity,
+      outsideTemp: unit.outsideTemp,
+      indoorTemp: unit.indoorTemp,
       airflow: unit.airflowRate,
       filterPercent: unit.filterPercent,
       isPowered: unit.power,
@@ -81,10 +88,12 @@ class UnitControlCard extends StatelessWidget {
       isScheduleEnabled: isScheduleEnabled,
       isScheduleLoading: isScheduleLoading,
       onScheduleToggle: onScheduleToggle,
-      showStats: false, // Без показателей - единообразно на всех платформах
+      showStats: true,
       isOnline: isOnline,
       isPendingHeatingTemperature: isPendingHeatingTemperature,
       isPendingCoolingTemperature: isPendingCoolingTemperature,
+      selectedSensors: selectedSensors,
+      sensorUnit: unit,
     );
   }
 }
