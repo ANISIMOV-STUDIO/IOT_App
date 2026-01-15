@@ -32,19 +32,19 @@ enum QuickSensorType {
   /// Иконка показателя
   final IconData icon;
 
-  /// Локализованное название
+  /// Локализованное название (краткое, как на экране аналитики)
   String getLabel(AppLocalizations l10n) {
     return switch (this) {
       QuickSensorType.outsideTemp => l10n.outdoor,
       QuickSensorType.indoorTemp => l10n.indoor,
       QuickSensorType.humidity => l10n.humidity,
-      QuickSensorType.co2Level => l10n.co2Level,
-      QuickSensorType.supplyTemp => l10n.supplyTemp,
+      QuickSensorType.co2Level => 'CO₂',
+      QuickSensorType.supplyTemp => l10n.supply,
       QuickSensorType.recuperatorEfficiency => l10n.efficiency,
       QuickSensorType.heaterPerformance => l10n.heater,
       QuickSensorType.ductPressure => l10n.pressure,
       QuickSensorType.filterPercent => l10n.filter,
-      QuickSensorType.airflowRate => l10n.airflowRate,
+      QuickSensorType.airflowRate => l10n.airflow,
     };
   }
 

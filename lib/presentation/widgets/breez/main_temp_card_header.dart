@@ -24,6 +24,8 @@ class MainTempCardHeader extends StatelessWidget {
   final VoidCallback? onSettingsTap;
   final VoidCallback? onAlarmsTap;
   final bool isOnline;
+  /// Время устройства (если null, используется системное время)
+  final DateTime? deviceTime;
 
   const MainTempCardHeader({
     super.key,
@@ -40,6 +42,7 @@ class MainTempCardHeader extends StatelessWidget {
     this.onSettingsTap,
     this.onAlarmsTap,
     this.isOnline = true,
+    this.deviceTime,
   });
 
   @override
@@ -49,12 +52,12 @@ class MainTempCardHeader extends StatelessWidget {
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Date and unit name
+        // Date and time
         _DateUnitSection(
-          unitName: unitName,
           colors: colors,
-          l10n: l10n,
+          deviceTime: deviceTime,
         ),
         // Alarm badge (if any)
         if (alarmCount > 0)
@@ -85,31 +88,33 @@ class MainTempCardHeader extends StatelessWidget {
   }
 }
 
-/// Date section (without unit name - it's in the header)
+/// Date and time section
 class _DateUnitSection extends StatelessWidget {
-  final String unitName;
   final BreezColors colors;
-  final AppLocalizations l10n;
+  final DateTime? deviceTime;
 
   const _DateUnitSection({
-    required this.unitName,
     required this.colors,
-    required this.l10n,
+    this.deviceTime,
   });
 
   @override
   Widget build(BuildContext context) {
     final locale = Localizations.localeOf(context).languageCode;
+    final time = deviceTime ?? DateTime.now();
     final dateFormat = DateFormat('d MMM', locale);
-    final dateText = l10n.todayDate(dateFormat.format(DateTime.now()));
+    final timeFormat = DateFormat('HH:mm', locale);
+
+    // Единый стиль для даты и времени
+    final textStyle = TextStyle(
+      fontSize: 12,
+      fontWeight: FontWeight.w500,
+      color: colors.textMuted,
+    );
 
     return Text(
-      dateText,
-      style: TextStyle(
-        fontSize: 12,
-        fontWeight: FontWeight.w500,
-        color: colors.textMuted,
-      ),
+      '${dateFormat.format(time)}  ·  ${timeFormat.format(time)}',
+      style: textStyle,
     );
   }
 }

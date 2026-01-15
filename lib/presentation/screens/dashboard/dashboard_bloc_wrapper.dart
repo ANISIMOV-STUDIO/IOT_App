@@ -242,6 +242,7 @@ class DashboardBlocBuilder extends StatelessWidget {
       ductPressure: fullState?.ductPressure ?? 120,
       isOnline: fullState?.isOnline ?? device.isOnline,
       quickSensors: fullState?.quickSensors ?? const ['outside_temp', 'indoor_temp', 'humidity'],
+      deviceTime: fullState?.deviceTime,
     );
   }
 

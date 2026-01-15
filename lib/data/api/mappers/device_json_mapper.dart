@@ -270,7 +270,26 @@ class DeviceJsonMapper {
           : null,
       isScheduleEnabled: json['scheduleEnabled'] as bool? ?? false,
       quickSensors: _parseQuickSensors(json['quickSensors']),
+      deviceTime: _parseDeviceTime(json),
     );
+  }
+
+  /// Парсинг времени устройства из JSON
+  static DateTime? _parseDeviceTime(Map<String, dynamic> json) {
+    // Вариант 1: ISO строка deviceTime
+    final deviceTimeStr = json['deviceTime'] as String?;
+    if (deviceTimeStr != null) {
+      return DateTime.tryParse(deviceTimeStr);
+    }
+
+    // Вариант 2: отдельные поля date и time
+    final dateStr = json['date'] as String?;
+    final timeStr = json['time'] as String?;
+    if (dateStr != null && timeStr != null) {
+      return DateTime.tryParse('$dateStr $timeStr');
+    }
+
+    return null;
   }
 
   /// Парсинг quickSensors из JSON

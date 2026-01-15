@@ -86,6 +86,9 @@ class MainTempCard extends StatelessWidget {
   /// Ожидание подтверждения изменения температуры охлаждения
   final bool isPendingCoolingTemperature;
 
+  /// Время устройства (если null, используется системное время)
+  final DateTime? deviceTime;
+
   const MainTempCard({
     super.key,
     required this.unitName,
@@ -123,6 +126,7 @@ class MainTempCard extends StatelessWidget {
     this.selectedSensors = QuickSensorsService.defaultSensors,
     this.isPendingHeatingTemperature = false,
     this.isPendingCoolingTemperature = false,
+    this.deviceTime,
   });
 
   @override
@@ -199,6 +203,7 @@ class MainTempCard extends StatelessWidget {
                   onSettingsTap: isOnline ? onSettingsTap : null,
                   onAlarmsTap: onAlarmsTap,
                   isOnline: isOnline,
+                  deviceTime: deviceTime,
                 ),
 
                 // Temperature display - Two columns: Heating & Cooling

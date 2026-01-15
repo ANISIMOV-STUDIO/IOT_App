@@ -34,6 +34,7 @@ class UnitState extends Equatable {
   final int ductPressure;            // Давление в воздуховоде (Па)
   final bool isOnline;                // Устройство онлайн
   final List<String> quickSensors;   // Быстрые показатели на главном экране
+  final DateTime? deviceTime;        // Текущее время устройства
 
   const UnitState({
     required this.id,
@@ -60,6 +61,7 @@ class UnitState extends Equatable {
     this.ductPressure = 120,
     this.isOnline = true,
     this.quickSensors = const ['outside_temp', 'indoor_temp', 'humidity'],
+    this.deviceTime,
   });
 
   UnitState copyWith({
@@ -87,6 +89,7 @@ class UnitState extends Equatable {
     int? ductPressure,
     bool? isOnline,
     List<String>? quickSensors,
+    DateTime? deviceTime,
   }) {
     return UnitState(
       id: id ?? this.id,
@@ -113,6 +116,7 @@ class UnitState extends Equatable {
       ductPressure: ductPressure ?? this.ductPressure,
       isOnline: isOnline ?? this.isOnline,
       quickSensors: quickSensors ?? this.quickSensors,
+      deviceTime: deviceTime ?? this.deviceTime,
     );
   }
 
@@ -142,5 +146,6 @@ class UnitState extends Equatable {
         ductPressure,
         isOnline,
         quickSensors,
+        deviceTime,
       ];
 }

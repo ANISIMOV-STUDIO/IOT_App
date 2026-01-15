@@ -94,6 +94,7 @@ class UnitControlCard extends StatelessWidget {
       isPendingCoolingTemperature: isPendingCoolingTemperature,
       selectedSensors: selectedSensors,
       sensorUnit: unit,
+      deviceTime: unit.deviceTime,
     );
   }
 }

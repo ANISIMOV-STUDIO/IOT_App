@@ -80,6 +80,9 @@ class DeviceFullState extends Equatable {
   /// Быстрые показатели для главного экрана
   final List<String> quickSensors;
 
+  /// Текущее время устройства
+  final DateTime? deviceTime;
+
   const DeviceFullState({
     required this.id,
     required this.name,
@@ -113,6 +116,7 @@ class DeviceFullState extends Equatable {
     this.activeAlarms,
     this.isScheduleEnabled = false,
     this.quickSensors = const ['outside_temp', 'indoor_temp', 'humidity'],
+    this.deviceTime,
   });
 
   /// Есть ли активные аварии
@@ -154,6 +158,7 @@ class DeviceFullState extends Equatable {
     double? targetHumidity,
     String? operatingMode,
     List<String>? quickSensors,
+    DateTime? deviceTime,
   }) {
     return DeviceFullState(
       id: id ?? this.id,
@@ -188,6 +193,7 @@ class DeviceFullState extends Equatable {
       activeAlarms: activeAlarms ?? this.activeAlarms,
       isScheduleEnabled: isScheduleEnabled ?? this.isScheduleEnabled,
       quickSensors: quickSensors ?? this.quickSensors,
+      deviceTime: deviceTime ?? this.deviceTime,
     );
   }
 
@@ -225,5 +231,6 @@ class DeviceFullState extends Equatable {
         activeAlarms,
         isScheduleEnabled,
         quickSensors,
+        deviceTime,
       ];
 }
