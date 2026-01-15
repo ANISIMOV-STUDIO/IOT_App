@@ -236,7 +236,7 @@ class DashboardBlocBuilder extends StatelessWidget {
       supplyTempAfterRecup: fullState?.supplyTempAfterRecup ?? 18.0,
       co2Level: fullState?.co2Level ?? 450,
       recuperatorEfficiency: fullState?.kpdRecuperator ?? 85,
-      freeCooling: fullState?.freeCooling ?? 0,
+      freeCooling: fullState?.freeCooling ?? false,
       heaterPerformance: fullState?.heaterPerformance ?? 0,
       coolerStatus: fullState?.coolerStatus ?? 'Н/Д',
       ductPressure: fullState?.ductPressure ?? 120,

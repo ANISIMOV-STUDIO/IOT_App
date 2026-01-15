@@ -123,10 +123,11 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   void _showSensorInfoDialog(_SensorInfo sensor) {
     final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
+    final isSelected = _selectedSensorKeys.contains(sensor.key);
 
     showDialog(
       context: context,
-      builder: (context) => Dialog(
+      builder: (dialogContext) => Dialog(
         backgroundColor: colors.card,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppRadius.card),
@@ -137,10 +138,44 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                sensor.icon,
-                size: _AnalyticsConstants.dialogIconSize,
-                color: sensor.color,
+              // Иконка с индикатором выбора
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    width: 72,
+                    height: 72,
+                    decoration: BoxDecoration(
+                      color: sensor.color.withValues(alpha: 0.1),
+                      shape: BoxShape.circle,
+                      border: isSelected
+                          ? Border.all(color: AppColors.accent, width: 2)
+                          : null,
+                    ),
+                    child: Icon(
+                      sensor.icon,
+                      size: _AnalyticsConstants.dialogIconSize,
+                      color: sensor.color,
+                    ),
+                  ),
+                  if (isSelected)
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: Container(
+                        padding: const EdgeInsets.all(2),
+                        decoration: const BoxDecoration(
+                          color: AppColors.accent,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.check,
+                          size: 12,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                ],
               ),
               const SizedBox(height: AppSpacing.md),
               Text(
@@ -171,44 +206,73 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                 ),
               ),
               const SizedBox(height: AppSpacing.lg),
-              SizedBox(
-                width: double.infinity,
-                child: TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  style: TextButton.styleFrom(
-                    backgroundColor: colors.buttonBg,
-                    padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(AppRadius.button),
+              // Кнопки: выбор + закрыть
+              Row(
+                children: [
+                  // Кнопка выбора
+                  Expanded(
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.pop(dialogContext);
+                        _toggleSensor(sensor.key);
+                      },
+                      style: TextButton.styleFrom(
+                        backgroundColor: isSelected
+                            ? colors.buttonBg
+                            : AppColors.accent.withValues(alpha: 0.15),
+                        padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(AppRadius.button),
+                          side: isSelected
+                              ? BorderSide.none
+                              : const BorderSide(color: AppColors.accent),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            isSelected ? Icons.remove_circle_outline : Icons.add_circle_outline,
+                            size: 18,
+                            color: isSelected ? colors.textMuted : AppColors.accent,
+                          ),
+                          const SizedBox(width: AppSpacing.xs),
+                          Text(
+                            isSelected ? 'Убрать' : 'На главную',
+                            style: TextStyle(
+                              color: isSelected ? colors.textMuted : AppColors.accent,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                  child: Text(
-                    l10n.close,
-                    style: TextStyle(color: colors.text),
+                  const SizedBox(width: AppSpacing.xs),
+                  // Кнопка закрыть
+                  Expanded(
+                    child: TextButton(
+                      onPressed: () => Navigator.pop(dialogContext),
+                      style: TextButton.styleFrom(
+                        backgroundColor: colors.buttonBg,
+                        padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(AppRadius.button),
+                        ),
+                      ),
+                      child: Text(
+                        l10n.close,
+                        style: TextStyle(color: colors.text),
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
             ],
           ),
         ),
       ),
     );
-  }
-
-  Future<void> _onSensorLongPress(String sensorKey) async {
-    final isSelected = _selectedSensorKeys.contains(sensorKey);
-
-    if (isSelected) {
-      // Убираем из выбранных
-      setState(() {
-        final current = List<String>.from(_selectedSensorKeys);
-        current.remove(sensorKey);
-        _selectedSensorKeys = current;
-      });
-    } else {
-      // Добавляем/заменяем
-      await _toggleSensor(sensorKey);
-    }
   }
 
   Future<void> _saveSensors() async {
@@ -288,7 +352,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                       ),
                       const SizedBox(height: AppSpacing.xxs),
                       Text(
-                        l10n.sensorInteractionHint,
+                        'Нажмите на показатель для выбора',
                         style: TextStyle(
                           fontSize: AppFontSizes.captionSmall,
                           color: colors.textMuted,
@@ -349,7 +413,6 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                             sensor: sensor,
                             isSelected: _selectedSensorKeys.contains(sensor.key),
                             onTap: () => _onSensorTap(sensor),
-                            onLongPress: () => _onSensorLongPress(sensor.key),
                           );
                         },
                         childCount: sensors.length,
@@ -465,7 +528,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
       supplyTempAfterRecup: fullState?.supplyTempAfterRecup ?? 18.0,
       co2Level: fullState?.co2Level ?? 0,
       recuperatorEfficiency: fullState?.kpdRecuperator ?? 0,
-      freeCooling: fullState?.freeCooling ?? 0,
+      freeCooling: fullState?.freeCooling ?? false,
       heaterPerformance: fullState?.heaterPerformance ?? 0,
       coolerStatus: fullState?.coolerStatus ?? 'Н/Д',
       ductPressure: fullState?.ductPressure ?? 0,
@@ -538,6 +601,14 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
         label: l10n.pressure,
         description: l10n.ductPressureDesc,
         color: AppColors.darkTextMuted,
+      ),
+      _SensorInfo(
+        key: 'free_cooling',
+        icon: Icons.ac_unit,
+        value: unit.freeCooling ? 'ON' : 'OFF',
+        label: l10n.freeCool,
+        description: l10n.freeCoolingDesc,
+        color: unit.freeCooling ? AppColors.accentGreen : AppColors.darkTextMuted,
       ),
       _SensorInfo(
         key: 'filter_percent',
@@ -661,13 +732,11 @@ class _SensorTile extends StatelessWidget {
   final _SensorInfo sensor;
   final bool isSelected;
   final VoidCallback onTap;
-  final VoidCallback onLongPress;
 
   const _SensorTile({
     required this.sensor,
     required this.isSelected,
     required this.onTap,
-    required this.onLongPress,
   });
 
   @override
@@ -678,12 +747,11 @@ class _SensorTile extends StatelessWidget {
       button: true,
       selected: isSelected,
       label: '${sensor.label}: ${sensor.value}',
-      hint: isSelected ? 'Зажмите чтобы убрать' : 'Зажмите чтобы выбрать',
+      hint: 'Нажмите для подробностей',
       child: Material(
         color: Colors.transparent,
         child: InkWell(
           onTap: onTap,
-          onLongPress: onLongPress,
           borderRadius: BorderRadius.circular(AppRadius.cardSmall),
           child: Container(
             decoration: BoxDecoration(

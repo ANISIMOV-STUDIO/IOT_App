@@ -989,7 +989,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get freeCoolingDesc =>
-      'Режим бесплатного охлаждения через рекуператор (м³/ч)';
+      'Режим бесплатного охлаждения наружным воздухом через рекуператор';
 
   @override
   String get heaterPerformanceDesc =>

@@ -1925,7 +1925,7 @@ abstract class AppLocalizations {
   /// No description provided for @freeCoolingDesc.
   ///
   /// In ru, this message translates to:
-  /// **'Режим бесплатного охлаждения через рекуператор (м³/ч)'**
+  /// **'Режим бесплатного охлаждения наружным воздухом через рекуператор'**
   String get freeCoolingDesc;
 
   /// No description provided for @heaterPerformanceDesc.
