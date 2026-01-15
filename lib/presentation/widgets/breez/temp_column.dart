@@ -51,8 +51,15 @@ class TemperatureColumn extends StatelessWidget {
   final VoidCallback? onIncrease;
   final VoidCallback? onDecrease;
   final bool compact;
+
   /// Ожидание подтверждения от устройства - показывает пульсацию
   final bool isPending;
+
+  /// Минимальная температура (кнопка - отключается при достижении)
+  final int? minTemp;
+
+  /// Максимальная температура (кнопка + отключается при достижении)
+  final int? maxTemp;
 
   const TemperatureColumn({
     super.key,
@@ -65,6 +72,8 @@ class TemperatureColumn extends StatelessWidget {
     this.onDecrease,
     this.compact = false,
     this.isPending = false,
+    this.minTemp,
+    this.maxTemp,
   });
 
   @override
@@ -88,6 +97,10 @@ class TemperatureColumn extends StatelessWidget {
         ? _TempColumnConstants.buttonIconSizeCompact
         : _TempColumnConstants.buttonIconSizeNormal;
     final spacing = compact ? AppSpacing.xxs + 2 : AppSpacing.xs;
+
+    // Проверка достижения границ температуры
+    final canDecrease = minTemp == null || temperature > minTemp!;
+    final canIncrease = maxTemp == null || temperature < maxTemp!;
 
     return Semantics(
       label: '$label: $temperature градусов',
@@ -125,7 +138,7 @@ class TemperatureColumn extends StatelessWidget {
                   button: true,
                   label: 'Уменьшить $label',
                   child: BreezButton(
-                    onTap: isPowered ? onDecrease : null,
+                    onTap: isPowered && canDecrease ? onDecrease : null,
                     enforceMinTouchTarget: false,
                     showBorder: false,
                     backgroundColor: colors.buttonBg.withValues(alpha: 0.5),
@@ -134,7 +147,7 @@ class TemperatureColumn extends StatelessWidget {
                     child: Icon(
                       Icons.remove,
                       size: buttonIconSize,
-                      color: isPowered ? color : colors.textMuted,
+                      color: isPowered && canDecrease ? color : colors.textMuted,
                     ),
                   ),
                 ),
@@ -156,7 +169,7 @@ class TemperatureColumn extends StatelessWidget {
                   button: true,
                   label: 'Увеличить $label',
                   child: BreezButton(
-                    onTap: isPowered ? onIncrease : null,
+                    onTap: isPowered && canIncrease ? onIncrease : null,
                     enforceMinTouchTarget: false,
                     showBorder: false,
                     backgroundColor: colors.buttonBg.withValues(alpha: 0.5),
@@ -165,7 +178,7 @@ class TemperatureColumn extends StatelessWidget {
                     child: Icon(
                       Icons.add,
                       size: buttonIconSize,
-                      color: isPowered ? color : colors.textMuted,
+                      color: isPowered && canIncrease ? color : colors.textMuted,
                     ),
                   ),
                 ),

@@ -24,6 +24,19 @@ import '../../../data/api/mappers/device_json_mapper.dart';
 part 'climate_event.dart';
 part 'climate_state.dart';
 
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+/// Константы ограничений температуры
+abstract class TemperatureLimits {
+  /// Минимальная температура (нагрев и охлаждение)
+  static const int min = 15;
+
+  /// Максимальная температура (нагрев и охлаждение)
+  static const int max = 35;
+}
+
 /// Debounce трансформер для быстрых кликов
 /// Ждёт 500мс после последнего события, затем обрабатывает только последнее
 EventTransformer<E> debounceRestartable<E>({
@@ -363,17 +376,23 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     ClimateHeatingTempChanged event,
     Emitter<ClimateControlState> emit,
   ) {
+    // Ограничиваем температуру в допустимых пределах
+    final clampedTemp = event.temperature.clamp(
+      TemperatureLimits.min,
+      TemperatureLimits.max,
+    );
+
     // Optimistic update - сразу обновляем UI + показываем pending
     if (state.deviceFullState != null) {
       emit(state.copyWith(
         isPendingHeatingTemperature: true,
         deviceFullState: state.deviceFullState!.copyWith(
-          heatingTemperature: event.temperature,
+          heatingTemperature: clampedTemp,
         ),
       ));
-      
+
       // Ставим в очередь реальный запрос (с debounce)
-      add(ClimateHeatingTempCommit(event.temperature));
+      add(ClimateHeatingTempCommit(clampedTemp));
     }
   }
 
@@ -404,17 +423,23 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     ClimateCoolingTempChanged event,
     Emitter<ClimateControlState> emit,
   ) {
+    // Ограничиваем температуру в допустимых пределах
+    final clampedTemp = event.temperature.clamp(
+      TemperatureLimits.min,
+      TemperatureLimits.max,
+    );
+
     // Optimistic update - сразу обновляем UI + показываем pending
     if (state.deviceFullState != null) {
       emit(state.copyWith(
         isPendingCoolingTemperature: true,
         deviceFullState: state.deviceFullState!.copyWith(
-          coolingTemperature: event.temperature,
+          coolingTemperature: clampedTemp,
         ),
       ));
-      
+
       // Ставим в очередь реальный запрос (с debounce)
-      add(ClimateCoolingTempCommit(event.temperature));
+      add(ClimateCoolingTempCommit(clampedTemp));
     }
   }
 

@@ -8,6 +8,7 @@ import '../../../core/theme/spacing.dart';
 import '../../../core/services/quick_sensors_service.dart';
 import '../../../domain/entities/unit_state.dart';
 import '../../../generated/l10n/app_localizations.dart';
+import '../../bloc/climate/climate_bloc.dart' show TemperatureLimits;
 import 'fan_slider.dart';
 import 'main_temp_card_header.dart';
 import 'main_temp_card_shimmer.dart';
@@ -328,6 +329,8 @@ class _TemperatureSection extends StatelessWidget {
             onIncrease: onHeatingTempIncrease,
             onDecrease: onHeatingTempDecrease,
             isPending: isPendingHeatingTemperature,
+            minTemp: TemperatureLimits.min,
+            maxTemp: TemperatureLimits.max,
           ),
         ),
         // Divider
@@ -348,6 +351,8 @@ class _TemperatureSection extends StatelessWidget {
             onIncrease: onCoolingTempIncrease,
             onDecrease: onCoolingTempDecrease,
             isPending: isPendingCoolingTemperature,
+            minTemp: TemperatureLimits.min,
+            maxTemp: TemperatureLimits.max,
           ),
         ),
       ],
