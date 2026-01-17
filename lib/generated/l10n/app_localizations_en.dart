@@ -1071,6 +1071,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get logTypeAlarm => 'Alarm';
 
   @override
+  String get filterAll => 'All';
+
+  @override
   String get logCategoryMode => 'Mode';
 
   @override

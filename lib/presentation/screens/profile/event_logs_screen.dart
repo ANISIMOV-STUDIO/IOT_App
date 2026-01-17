@@ -234,7 +234,6 @@ class _EventLogsScreenState extends State<EventLogsScreen> {
           _FilterBar(
             selectedType: _filterType,
             onFilterChanged: _setFilter,
-            colors: colors,
             l10n: l10n,
           ),
 
@@ -320,101 +319,53 @@ class _EventLogsScreenState extends State<EventLogsScreen> {
 // FILTER BAR
 // =============================================================================
 
+/// Значения фильтра (null = все)
+enum _FilterValue { all, settings, alarm }
+
 class _FilterBar extends StatelessWidget {
   final DeviceEventType? selectedType;
   final ValueChanged<DeviceEventType?> onFilterChanged;
-  final BreezColors colors;
   final AppLocalizations l10n;
 
   const _FilterBar({
     required this.selectedType,
     required this.onFilterChanged,
-    required this.colors,
     required this.l10n,
   });
 
+  _FilterValue get _currentFilter {
+    if (selectedType == null) return _FilterValue.all;
+    if (selectedType == DeviceEventType.settingsChange) return _FilterValue.settings;
+    return _FilterValue.alarm;
+  }
+
+  void _onFilterChanged(_FilterValue value) {
+    switch (value) {
+      case _FilterValue.all:
+        onFilterChanged(null);
+      case _FilterValue.settings:
+        onFilterChanged(DeviceEventType.settingsChange);
+      case _FilterValue.alarm:
+        onFilterChanged(DeviceEventType.alarm);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: _LogsScreenConstants.filterChipHeight + AppSpacing.md * 2,
+    return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.md,
         vertical: AppSpacing.sm,
       ),
-      child: Row(
-        children: [
-          _FilterChip(
-            label: 'Все',
-            isSelected: selectedType == null,
-            onTap: () => onFilterChanged(null),
-            colors: colors,
-          ),
-          const SizedBox(width: AppSpacing.xs),
-          _FilterChip(
-            label: l10n.logTypeSettings,
-            isSelected: selectedType == DeviceEventType.settingsChange,
-            onTap: () => onFilterChanged(DeviceEventType.settingsChange),
-            colors: colors,
-            activeColor: AppColors.accent,
-          ),
-          const SizedBox(width: AppSpacing.xs),
-          _FilterChip(
-            label: l10n.logTypeAlarm,
-            isSelected: selectedType == DeviceEventType.alarm,
-            onTap: () => onFilterChanged(DeviceEventType.alarm),
-            colors: colors,
-            activeColor: AppColors.accentRed,
-          ),
+      child: BreezSegmentedControl<_FilterValue>(
+        value: _currentFilter,
+        onChanged: _onFilterChanged,
+        height: _LogsScreenConstants.filterChipHeight,
+        segments: [
+          BreezSegment(value: _FilterValue.all, label: l10n.filterAll),
+          BreezSegment(value: _FilterValue.settings, label: l10n.logTypeSettings),
+          BreezSegment(value: _FilterValue.alarm, label: l10n.logTypeAlarm),
         ],
-      ),
-    );
-  }
-}
-
-class _FilterChip extends StatelessWidget {
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-  final BreezColors colors;
-  final Color? activeColor;
-
-  const _FilterChip({
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-    required this.colors,
-    this.activeColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final color = activeColor ?? AppColors.accent;
-
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          height: _LogsScreenConstants.filterChipHeight,
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
-          decoration: BoxDecoration(
-            color: isSelected ? color.withValues(alpha: 0.15) : colors.buttonBg,
-            borderRadius: BorderRadius.circular(AppRadius.chip),
-            border: Border.all(
-              color: isSelected ? color : colors.border,
-            ),
-          ),
-          child: Center(
-            child: Text(
-              label,
-              style: TextStyle(
-                fontSize: AppFontSizes.caption,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                color: isSelected ? color : colors.textMuted,
-              ),
-            ),
-          ),
-        ),
       ),
     );
   }
@@ -481,77 +432,79 @@ class _LogRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final isAlarm = log.eventType == DeviceEventType.alarm;
 
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
+    return Material(
+      color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
+        hoverColor: colors.buttonHover,
+        splashColor: AppColors.accent.withValues(alpha: 0.1),
         child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.md,
-          vertical: AppSpacing.sm,
-        ),
-        decoration: BoxDecoration(
-          color: isAlarm ? AppColors.accentRed.withValues(alpha: 0.08) : null,
-          border: Border(
-            bottom: BorderSide(color: colors.border.withValues(alpha: 0.5)),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.md,
+            vertical: AppSpacing.sm,
           ),
-        ),
-        child: Row(
-          children: [
-            // Time
-            SizedBox(
-              width: _LogsScreenConstants.labelColumnWidth,
-              child: Text(
-                dateFormat.format(log.serverTimestamp),
-                style: TextStyle(
-                  fontSize: AppFontSizes.caption,
-                  color: colors.textMuted,
+          decoration: BoxDecoration(
+            color: isAlarm ? AppColors.accentRed.withValues(alpha: 0.08) : null,
+            border: Border(
+              bottom: BorderSide(color: colors.border.withValues(alpha: 0.5)),
+            ),
+          ),
+          child: Row(
+            children: [
+              // Time
+              SizedBox(
+                width: _LogsScreenConstants.labelColumnWidth,
+                child: Text(
+                  dateFormat.format(log.serverTimestamp),
+                  style: TextStyle(
+                    fontSize: AppFontSizes.caption,
+                    color: colors.textMuted,
+                  ),
                 ),
               ),
-            ),
 
-            // Type badge
-            _TypeBadge(log.eventType, l10n, colors),
-            const SizedBox(width: AppSpacing.sm),
+              // Type badge
+              _TypeBadge(log.eventType, l10n, colors),
+              const SizedBox(width: AppSpacing.sm),
 
-            // Property (main info)
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    log.property,
-                    style: TextStyle(
-                      fontSize: AppFontSizes.caption,
-                      fontWeight: FontWeight.w500,
-                      color: colors.text,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  if (log.description.isNotEmpty)
+              // Property (main info)
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
                     Text(
-                      log.description,
+                      log.property,
                       style: TextStyle(
-                        fontSize: AppFontSizes.captionSmall,
-                        color: colors.textMuted,
+                        fontSize: AppFontSizes.caption,
+                        fontWeight: FontWeight.w500,
+                        color: colors.text,
                       ),
                       overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
                     ),
-                ],
+                    if (log.description.isNotEmpty)
+                      Text(
+                        log.description,
+                        style: TextStyle(
+                          fontSize: AppFontSizes.captionSmall,
+                          color: colors.textMuted,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                  ],
+                ),
               ),
-            ),
 
-            // Arrow
-            Icon(
-              Icons.chevron_right,
-              size: _LogsScreenConstants.iconSize,
-              color: colors.textMuted,
-            ),
-          ],
+              // Arrow
+              Icon(
+                Icons.chevron_right,
+                size: _LogsScreenConstants.iconSize,
+                color: colors.textMuted,
+              ),
+            ],
+          ),
         ),
-      ),
       ),
     );
   }

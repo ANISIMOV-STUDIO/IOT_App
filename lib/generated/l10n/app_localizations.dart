@@ -2096,6 +2096,12 @@ abstract class AppLocalizations {
   /// **'Авария'**
   String get logTypeAlarm;
 
+  /// No description provided for @filterAll.
+  ///
+  /// In ru, this message translates to:
+  /// **'Все'**
+  String get filterAll;
+
   /// No description provided for @logCategoryMode.
   ///
   /// In ru, this message translates to:

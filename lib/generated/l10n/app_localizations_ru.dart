@@ -1080,6 +1080,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get logTypeAlarm => 'Авария';
 
   @override
+  String get filterAll => 'Все';
+
+  @override
   String get logCategoryMode => 'Режим';
 
   @override

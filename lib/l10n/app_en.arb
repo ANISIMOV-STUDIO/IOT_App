@@ -952,6 +952,7 @@
   "logColumnDescription": "Description",
   "logTypeSettings": "Settings",
   "logTypeAlarm": "Alarm",
+  "filterAll": "All",
   "logCategoryMode": "Mode",
   "logCategoryTimer": "Timer",
   "logCategoryAlarm": "Alarm",
