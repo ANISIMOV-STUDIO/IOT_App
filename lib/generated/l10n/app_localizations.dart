@@ -2029,6 +2029,114 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Закрыть'**
   String get close;
+
+  /// No description provided for @eventLogs.
+  ///
+  /// In ru, this message translates to:
+  /// **'Журнал событий'**
+  String get eventLogs;
+
+  /// No description provided for @eventLogsDescription.
+  ///
+  /// In ru, this message translates to:
+  /// **'История изменений настроек устройства'**
+  String get eventLogsDescription;
+
+  /// No description provided for @logColumnTime.
+  ///
+  /// In ru, this message translates to:
+  /// **'Время'**
+  String get logColumnTime;
+
+  /// No description provided for @logColumnType.
+  ///
+  /// In ru, this message translates to:
+  /// **'Тип'**
+  String get logColumnType;
+
+  /// No description provided for @logColumnCategory.
+  ///
+  /// In ru, this message translates to:
+  /// **'Категория'**
+  String get logColumnCategory;
+
+  /// No description provided for @logColumnProperty.
+  ///
+  /// In ru, this message translates to:
+  /// **'Параметр'**
+  String get logColumnProperty;
+
+  /// No description provided for @logColumnOldValue.
+  ///
+  /// In ru, this message translates to:
+  /// **'Было'**
+  String get logColumnOldValue;
+
+  /// No description provided for @logColumnNewValue.
+  ///
+  /// In ru, this message translates to:
+  /// **'Стало'**
+  String get logColumnNewValue;
+
+  /// No description provided for @logColumnDescription.
+  ///
+  /// In ru, this message translates to:
+  /// **'Описание'**
+  String get logColumnDescription;
+
+  /// No description provided for @logTypeSettings.
+  ///
+  /// In ru, this message translates to:
+  /// **'Настройка'**
+  String get logTypeSettings;
+
+  /// No description provided for @logTypeAlarm.
+  ///
+  /// In ru, this message translates to:
+  /// **'Авария'**
+  String get logTypeAlarm;
+
+  /// No description provided for @logCategoryMode.
+  ///
+  /// In ru, this message translates to:
+  /// **'Режим'**
+  String get logCategoryMode;
+
+  /// No description provided for @logCategoryTimer.
+  ///
+  /// In ru, this message translates to:
+  /// **'Таймер'**
+  String get logCategoryTimer;
+
+  /// No description provided for @logCategoryAlarm.
+  ///
+  /// In ru, this message translates to:
+  /// **'Авария'**
+  String get logCategoryAlarm;
+
+  /// No description provided for @logNoData.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нет записей'**
+  String get logNoData;
+
+  /// No description provided for @logLoadMore.
+  ///
+  /// In ru, this message translates to:
+  /// **'Загрузить ещё'**
+  String get logLoadMore;
+
+  /// No description provided for @logPage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Страница {current} из {total}'**
+  String logPage(int current, int total);
+
+  /// No description provided for @serviceEngineer.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сервис'**
+  String get serviceEngineer;
 }
 
 class _AppLocalizationsDelegate

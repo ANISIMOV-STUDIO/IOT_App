@@ -159,6 +159,7 @@ class _BreezTextFieldState extends State<BreezTextField> {
           clipBehavior: Clip.none,
           children: [
             Container(
+              clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
                 color: colors.card,
                 borderRadius: BorderRadius.circular(AppRadius.button),
@@ -171,62 +172,75 @@ class _BreezTextFieldState extends State<BreezTextField> {
                   width: 1,
                 ),
               ),
-              child: TextFormField(
-                key: _fieldKey,
-                controller: widget.controller,
-                focusNode: _effectiveFocusNode,
-                obscureText: widget.showPasswordToggle ? _obscureTextInternal : widget.obscureText,
-                keyboardType: widget.keyboardType,
-                maxLines: widget.maxLines,
-                enabled: widget.enabled,
-                autofillHints: widget.autofillHints,
-                textInputAction: widget.textInputAction,
-                onFieldSubmitted: widget.onFieldSubmitted,
-                textAlignVertical: TextAlignVertical.center,
-                style: TextStyle(
-                  color: colors.text,
-                  fontSize: _TextFieldConstants.inputFontSize,
+              // Сбрасываем глобальную InputDecorationTheme
+              child: Theme(
+                data: Theme.of(context).copyWith(
+                  inputDecorationTheme: const InputDecorationTheme(),
                 ),
-                decoration: InputDecoration(
-                  hintText: widget.hint,
-                  hintStyle: TextStyle(
-                    color: colors.textMuted,
+                child: TextFormField(
+                  key: _fieldKey,
+                  controller: widget.controller,
+                  focusNode: _effectiveFocusNode,
+                  obscureText: widget.showPasswordToggle ? _obscureTextInternal : widget.obscureText,
+                  keyboardType: widget.keyboardType,
+                  maxLines: widget.maxLines,
+                  enabled: widget.enabled,
+                  autofillHints: widget.autofillHints,
+                  textInputAction: widget.textInputAction,
+                  onFieldSubmitted: widget.onFieldSubmitted,
+                  textAlignVertical: TextAlignVertical.center,
+                  style: TextStyle(
+                    color: colors.text,
                     fontSize: _TextFieldConstants.inputFontSize,
                   ),
-                  prefixIcon: widget.prefixIcon != null
-                      ? Align(
-                          widthFactor: 1.0,
-                          heightFactor: 1.0,
-                          child: Icon(
-                            widget.prefixIcon,
-                            color: colors.textMuted,
-                            size: _TextFieldConstants.iconSize,
-                          ),
-                        )
-                      : null,
-                  suffixIcon: effectiveSuffixIcon != null
-                      ? Align(
-                          widthFactor: 1.0,
-                          heightFactor: 1.0,
-                          child: effectiveSuffixIcon,
-                        )
-                      : null,
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: widget.prefixIcon != null ? 0 : AppSpacing.md,
-                    vertical: AppSpacing.md,
+                  decoration: InputDecoration(
+                    hintText: widget.hint,
+                    hintStyle: TextStyle(
+                      color: colors.textMuted,
+                      fontSize: _TextFieldConstants.inputFontSize,
+                    ),
+                    prefixIcon: widget.prefixIcon != null
+                        ? Align(
+                            widthFactor: 1.0,
+                            heightFactor: 1.0,
+                            child: Icon(
+                              widget.prefixIcon,
+                              color: colors.textMuted,
+                              size: _TextFieldConstants.iconSize,
+                            ),
+                          )
+                        : null,
+                    suffixIcon: effectiveSuffixIcon != null
+                        ? Align(
+                            widthFactor: 1.0,
+                            heightFactor: 1.0,
+                            child: effectiveSuffixIcon,
+                          )
+                        : null,
+                    // Убираем фон и все бордеры
+                    filled: false,
+                    border: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    focusedErrorBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: widget.prefixIcon != null ? 0 : AppSpacing.md,
+                      vertical: AppSpacing.md,
+                    ),
+                    helperText: ' ', // Резервирует место для ошибки
+                    helperStyle: const TextStyle(height: 0, fontSize: 0),
+                    errorStyle: const TextStyle(height: 0, fontSize: 0),
                   ),
-                  helperText: ' ', // Резервирует место для ошибки
-                  helperStyle: const TextStyle(height: 0, fontSize: 0),
-                  errorStyle: const TextStyle(height: 0, fontSize: 0),
+                  onChanged: (value) {
+                    widget.onChanged?.call(value);
+                    if (widget.validateOnChange && widget.validator != null) {
+                      _validateField();
+                    }
+                  },
+                  validator: widget.validator,
                 ),
-                onChanged: (value) {
-                  widget.onChanged?.call(value);
-                  if (widget.validateOnChange && widget.validator != null) {
-                    _validateField();
-                  }
-                },
-                validator: widget.validator,
               ),
             ),
             if (_hasError && _errorText != null)

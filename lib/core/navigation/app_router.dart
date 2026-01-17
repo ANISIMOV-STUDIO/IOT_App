@@ -18,6 +18,7 @@ import '../../presentation/screens/schedule/schedule_screen.dart';
 import '../../presentation/screens/alarms/alarm_history_screen.dart';
 import '../../presentation/screens/splash/splash_screen.dart';
 import '../../presentation/screens/profile/profile_screen.dart';
+import '../../presentation/screens/profile/event_logs_screen.dart';
 import '../../presentation/bloc/auth/auth_bloc.dart';
 import '../../presentation/bloc/auth/auth_state.dart';
 import 'app_routes.dart';
@@ -186,6 +187,12 @@ GoRouter createRouter(AuthBloc authBloc) {
         builder: (context, state) => const ProfileScreen(),
       ),
 
+      // ============ Service Routes ============
+      GoRoute(
+        path: AppRoutes.eventLogs,
+        builder: (context, state) => const EventLogsScreen(),
+      ),
+
       // ============ Device Routes ============
       // /device/:deviceId - редирект на главную (TODO: выбрать устройство)
       GoRoute(
@@ -266,6 +273,7 @@ extension GoRouterNavigation on BuildContext {
   void goToNotifications() => go(AppRoutes.notifications);
   void goToProfile() => go(AppRoutes.profile);
   void goToHomeTab(MainTab tab) => go('${AppRoutes.home}?tab=${tab.name}');
+  void goToEventLogs() => go(AppRoutes.eventLogs);
 
   // ============ Device Navigation ============
   void goToDevice(String deviceId, {String? deviceName}) {

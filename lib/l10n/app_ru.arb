@@ -940,5 +940,29 @@
   "quickSensorsTitle": "Показатели на главной",
   "quickSensorsHint": "Нажмите на показатель, чтобы заменить",
   "sensorInteractionHint": "Нажмите для описания • Зажмите для выбора",
-  "close": "Закрыть"
+  "close": "Закрыть",
+  "eventLogs": "Журнал событий",
+  "eventLogsDescription": "История изменений настроек устройства",
+  "logColumnTime": "Время",
+  "logColumnType": "Тип",
+  "logColumnCategory": "Категория",
+  "logColumnProperty": "Параметр",
+  "logColumnOldValue": "Было",
+  "logColumnNewValue": "Стало",
+  "logColumnDescription": "Описание",
+  "logTypeSettings": "Настройка",
+  "logTypeAlarm": "Авария",
+  "logCategoryMode": "Режим",
+  "logCategoryTimer": "Таймер",
+  "logCategoryAlarm": "Авария",
+  "logNoData": "Нет записей",
+  "logLoadMore": "Загрузить ещё",
+  "logPage": "Страница {current} из {total}",
+  "@logPage": {
+    "placeholders": {
+      "current": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "serviceEngineer": "Сервис"
 }

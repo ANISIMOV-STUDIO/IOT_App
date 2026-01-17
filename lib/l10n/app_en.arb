@@ -940,5 +940,29 @@
   "quickSensorsTitle": "Quick sensors",
   "quickSensorsHint": "Tap sensor to replace",
   "sensorInteractionHint": "Tap for details • Long press to select",
-  "close": "Close"
+  "close": "Close",
+  "eventLogs": "Event Logs",
+  "eventLogsDescription": "Device settings change history",
+  "logColumnTime": "Time",
+  "logColumnType": "Type",
+  "logColumnCategory": "Category",
+  "logColumnProperty": "Property",
+  "logColumnOldValue": "Old",
+  "logColumnNewValue": "New",
+  "logColumnDescription": "Description",
+  "logTypeSettings": "Settings",
+  "logTypeAlarm": "Alarm",
+  "logCategoryMode": "Mode",
+  "logCategoryTimer": "Timer",
+  "logCategoryAlarm": "Alarm",
+  "logNoData": "No records",
+  "logLoadMore": "Load more",
+  "logPage": "Page {current} of {total}",
+  "@logPage": {
+    "placeholders": {
+      "current": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "serviceEngineer": "Service"
 }

@@ -86,7 +86,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   const SizedBox(height: AppSpacing.lg),
 
-                  // User Info Card
+                  // User Info + Account Card
                   BlocBuilder<AuthBloc, AuthState>(
                     buildWhen: (prev, curr) =>
                         prev.runtimeType != curr.runtimeType ||
@@ -106,16 +106,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             state.user.firstName,
                             state.user.lastName,
                           ),
+                          onChangePassword: () => _showChangePasswordDialog(context),
                         );
                       }
                       return const SizedBox.shrink();
                     },
-                  ),
-                  const SizedBox(height: AppSpacing.sm),
-
-                  // Account Card
-                  _AccountCard(
-                    onChangePassword: () => _showChangePasswordDialog(context),
                   ),
                   const SizedBox(height: AppSpacing.sm),
 
@@ -135,6 +130,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     themeService: themeService,
                     languageService: languageService,
                   ),
+                  const SizedBox(height: AppSpacing.sm),
+
+                  // Service Card (for engineers)
+                  const _ServiceCard(),
                   const SizedBox(height: AppSpacing.sm),
 
                   // Logout Button
@@ -186,18 +185,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 }
 
-/// User info card with avatar and edit button
+/// User info card with avatar, edit and password buttons
 class _UserCard extends StatelessWidget {
   final String firstName;
   final String lastName;
   final String email;
   final VoidCallback onEditProfile;
+  final VoidCallback onChangePassword;
 
   const _UserCard({
     required this.firstName,
     required this.lastName,
     required this.email,
     required this.onEditProfile,
+    required this.onChangePassword,
   });
 
   @override
@@ -255,11 +256,25 @@ class _UserCard extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.md),
 
-          // Edit Profile Button
-          BreezActionButton(
-            icon: Icons.edit_outlined,
-            label: l10n.editProfile,
-            onTap: onEditProfile,
+          // Buttons row
+          Row(
+            children: [
+              Expanded(
+                child: BreezActionButton(
+                  icon: Icons.edit_outlined,
+                  label: l10n.editProfile,
+                  onTap: onEditProfile,
+                ),
+              ),
+              const SizedBox(width: AppSpacing.xs),
+              Expanded(
+                child: BreezActionButton(
+                  icon: Icons.lock_outlined,
+                  label: l10n.changePassword,
+                  onTap: onChangePassword,
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -273,11 +288,9 @@ class _UserCard extends StatelessWidget {
   }
 }
 
-/// Account settings card
-class _AccountCard extends StatelessWidget {
-  final VoidCallback onChangePassword;
-
-  const _AccountCard({required this.onChangePassword});
+/// Service section card (for engineers)
+class _ServiceCard extends StatelessWidget {
+  const _ServiceCard();
 
   @override
   Widget build(BuildContext context) {
@@ -289,11 +302,11 @@ class _AccountCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _SectionTitle(title: l10n.account, colors: colors),
+          _SectionTitle(title: l10n.serviceEngineer, colors: colors),
           BreezSettingsTile(
-            icon: Icons.lock_outlined,
-            title: l10n.changePassword,
-            onTap: onChangePassword,
+            icon: Icons.history,
+            title: l10n.eventLogs,
+            onTap: () => context.goToEventLogs(),
           ),
         ],
       ),

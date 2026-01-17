@@ -131,4 +131,15 @@ abstract class IHvacDataSource {
 
   /// Установить быстрые показатели для главного экрана
   Future<void> setQuickSensors(String deviceId, List<String> sensors);
+
+  // ===========================================================================
+  // LOGS
+  // ===========================================================================
+
+  /// Получить логи событий устройства (для сервисных инженеров)
+  Future<Map<String, dynamic>> getDeviceLogs(
+    String deviceId, {
+    int limit = 100,
+    int offset = 0,
+  });
 }

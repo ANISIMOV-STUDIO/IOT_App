@@ -257,6 +257,20 @@ class HvacHttpClient extends BaseHttpClient implements IHvacDataSource {
   }
 
   // ===========================================================================
+  // LOGS
+  // ===========================================================================
+
+  @override
+  Future<Map<String, dynamic>> getDeviceLogs(
+    String deviceId, {
+    int limit = 100,
+    int offset = 0,
+  }) async {
+    _validateDeviceId(deviceId);
+    return getRaw('$_baseUrl/$deviceId/logs?limit=$limit&offset=$offset');
+  }
+
+  // ===========================================================================
   // PRIVATE HELPERS
   // ===========================================================================
 

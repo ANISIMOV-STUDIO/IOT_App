@@ -41,6 +41,10 @@ abstract final class AppRoutes {
   /// Настройки устройства: /device/:deviceId/settings
   static const String deviceSettings = '/device/:deviceId/settings';
 
+  // ============ Service Routes ============
+  /// Журнал событий (для сервисных инженеров)
+  static const String eventLogs = '/event-logs';
+
   // ============ Legacy Routes (для обратной совместимости) ============
   static const String schedule = '/schedule';
   static const String alarmHistory = '/alarm-history';

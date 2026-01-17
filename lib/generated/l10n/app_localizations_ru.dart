@@ -1045,4 +1045,60 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get close => 'Закрыть';
+
+  @override
+  String get eventLogs => 'Журнал событий';
+
+  @override
+  String get eventLogsDescription => 'История изменений настроек устройства';
+
+  @override
+  String get logColumnTime => 'Время';
+
+  @override
+  String get logColumnType => 'Тип';
+
+  @override
+  String get logColumnCategory => 'Категория';
+
+  @override
+  String get logColumnProperty => 'Параметр';
+
+  @override
+  String get logColumnOldValue => 'Было';
+
+  @override
+  String get logColumnNewValue => 'Стало';
+
+  @override
+  String get logColumnDescription => 'Описание';
+
+  @override
+  String get logTypeSettings => 'Настройка';
+
+  @override
+  String get logTypeAlarm => 'Авария';
+
+  @override
+  String get logCategoryMode => 'Режим';
+
+  @override
+  String get logCategoryTimer => 'Таймер';
+
+  @override
+  String get logCategoryAlarm => 'Авария';
+
+  @override
+  String get logNoData => 'Нет записей';
+
+  @override
+  String get logLoadMore => 'Загрузить ещё';
+
+  @override
+  String logPage(int current, int total) {
+    return 'Страница $current из $total';
+  }
+
+  @override
+  String get serviceEngineer => 'Сервис';
 }

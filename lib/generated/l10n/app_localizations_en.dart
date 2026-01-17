@@ -1036,4 +1036,60 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get close => 'Close';
+
+  @override
+  String get eventLogs => 'Event Logs';
+
+  @override
+  String get eventLogsDescription => 'Device settings change history';
+
+  @override
+  String get logColumnTime => 'Time';
+
+  @override
+  String get logColumnType => 'Type';
+
+  @override
+  String get logColumnCategory => 'Category';
+
+  @override
+  String get logColumnProperty => 'Property';
+
+  @override
+  String get logColumnOldValue => 'Old';
+
+  @override
+  String get logColumnNewValue => 'New';
+
+  @override
+  String get logColumnDescription => 'Description';
+
+  @override
+  String get logTypeSettings => 'Settings';
+
+  @override
+  String get logTypeAlarm => 'Alarm';
+
+  @override
+  String get logCategoryMode => 'Mode';
+
+  @override
+  String get logCategoryTimer => 'Timer';
+
+  @override
+  String get logCategoryAlarm => 'Alarm';
+
+  @override
+  String get logNoData => 'No records';
+
+  @override
+  String get logLoadMore => 'Load more';
+
+  @override
+  String logPage(int current, int total) {
+    return 'Page $current of $total';
+  }
+
+  @override
+  String get serviceEngineer => 'Service';
 }
