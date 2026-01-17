@@ -13,6 +13,9 @@ class FanSlider extends StatefulWidget {
   final IconData icon;
   final ValueChanged<int>? onChanged;
 
+  /// Ожидание подтверждения от сервера - блокирует слайдер
+  final bool isPending;
+
   const FanSlider({
     super.key,
     required this.label,
@@ -20,6 +23,7 @@ class FanSlider extends StatefulWidget {
     required this.color,
     required this.icon,
     this.onChanged,
+    this.isPending = false,
   });
 
   @override
@@ -49,21 +53,24 @@ class _FanSliderState extends State<FanSlider> {
 
   @override
   Widget build(BuildContext context) {
+    // Блокируем слайдер если ожидаем ответа от сервера
+    final isEnabled = widget.onChanged != null && !widget.isPending;
+
     return BreezLabeledSlider(
       label: widget.label,
       value: _currentValue.toDouble(),
       min: 20, // Минимальная скорость вентилятора 20%
       color: widget.color,
       icon: widget.icon,
-      enabled: widget.onChanged != null,
+      enabled: isEnabled,
       semanticLabel: '${widget.label}: $_currentValue%',
       suffix: '%',
       // Обновляем локальное состояние при перетаскивании для визуала
-      onChanged: widget.onChanged != null
+      onChanged: isEnabled
           ? (v) => setState(() => _currentValue = v.round())
           : null,
       // Отправляем запрос только когда пользователь отпустил слайдер
-      onChangeEnd: widget.onChanged != null
+      onChangeEnd: isEnabled
           ? (v) => widget.onChanged!(v.round())
           : null,
     );

@@ -38,6 +38,10 @@ class DesktopLayout extends StatefulWidget {
   final bool isPendingHeatingTemperature;
   /// Ожидание подтверждения изменения температуры охлаждения
   final bool isPendingCoolingTemperature;
+  /// Ожидание подтверждения изменения приточного вентилятора
+  final bool isPendingSupplyFan;
+  /// Ожидание подтверждения изменения вытяжного вентилятора
+  final bool isPendingExhaustFan;
   final VoidCallback? onMasterOff;
   final ValueChanged<int>? onUnitSelected;
   final VoidCallback? onThemeToggle;
@@ -76,6 +80,8 @@ class DesktopLayout extends StatefulWidget {
     this.onScheduleToggle,
     this.isPendingHeatingTemperature = false,
     this.isPendingCoolingTemperature = false,
+    this.isPendingSupplyFan = false,
+    this.isPendingExhaustFan = false,
     this.onMasterOff,
     this.onUnitSelected,
     this.onThemeToggle,
@@ -171,6 +177,8 @@ class _DesktopLayoutState extends State<DesktopLayout> {
             onScheduleToggle: widget.onScheduleToggle,
             isPendingHeatingTemperature: widget.isPendingHeatingTemperature,
             isPendingCoolingTemperature: widget.isPendingCoolingTemperature,
+            isPendingSupplyFan: widget.isPendingSupplyFan,
+            isPendingExhaustFan: widget.isPendingExhaustFan,
           ),
         ),
 

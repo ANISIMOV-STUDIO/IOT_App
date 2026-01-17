@@ -32,6 +32,12 @@ class UnitControlCard extends StatelessWidget {
   /// Ожидание подтверждения изменения температуры охлаждения
   final bool isPendingCoolingTemperature;
 
+  /// Ожидание подтверждения изменения приточного вентилятора
+  final bool isPendingSupplyFan;
+
+  /// Ожидание подтверждения изменения вытяжного вентилятора
+  final bool isPendingExhaustFan;
+
   const UnitControlCard({
     super.key,
     required this.unit,
@@ -52,6 +58,8 @@ class UnitControlCard extends StatelessWidget {
     this.isOnline = true,
     this.isPendingHeatingTemperature = false,
     this.isPendingCoolingTemperature = false,
+    this.isPendingSupplyFan = false,
+    this.isPendingExhaustFan = false,
   });
 
   @override
@@ -92,6 +100,8 @@ class UnitControlCard extends StatelessWidget {
       isOnline: isOnline,
       isPendingHeatingTemperature: isPendingHeatingTemperature,
       isPendingCoolingTemperature: isPendingCoolingTemperature,
+      isPendingSupplyFan: isPendingSupplyFan,
+      isPendingExhaustFan: isPendingExhaustFan,
       selectedSensors: selectedSensors,
       sensorUnit: unit,
       deviceTime: unit.deviceTime,

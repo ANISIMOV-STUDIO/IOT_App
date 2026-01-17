@@ -200,12 +200,96 @@ AppFontSizes.captionSmall// 11px
 | `BreezDropdown` | `breez_dropdown.dart` | Выпадающий список |
 | `BreezTab` | `breez_tab.dart` | Таб/вкладка |
 | `BreezCheckbox` | `breez_checkbox.dart` | Чекбокс |
+| `BreezLoader` | `breez_loader.dart` | Лоадер (вентилятор) |
 
 ### Импорт
 
 ```dart
 // Все компоненты через единый экспорт
 import 'package:hvac_control/presentation/widgets/breez/breez.dart';
+```
+
+---
+
+## ЛОАДЕРЫ И СОСТОЯНИЯ ОЖИДАНИЯ
+
+### BreezLoader
+
+Тематический лоадер — вращающийся вентилятор (`Symbols.mode_fan` из `material_symbols_icons`).
+
+```dart
+// Размеры
+BreezLoader.small()   // 16px - inline, рядом с текстом
+BreezLoader.medium()  // 24px - стандартный (default)
+BreezLoader.large()   // 32px - центрированный
+
+// Кастомный цвет
+BreezLoader.small(color: AppColors.accentOrange)
+
+// С текстом (для полноэкранных состояний)
+BreezLoaderWithText(text: 'Загрузка...')
+```
+
+### Когда использовать
+
+| Ситуация | Лоадер |
+|----------|--------|
+| Изменение температуры | `BreezLoader.small(color: color)` вместо значения |
+| Переключение питания | Overlay с `BreezLoader.large()` на весь виджет |
+| Загрузка страницы | `BreezLoaderWithText()` по центру |
+| Ожидание слайдера | Блокировка слайдера через `isPending` |
+
+### Блокировка элементов при ожидании
+
+**ClimateControlState** содержит флаги pending:
+
+```dart
+// Температура
+isPendingHeatingTemperature  // Блокирует кнопки +/- нагрева
+isPendingCoolingTemperature  // Блокирует кнопки +/- охлаждения
+
+// Вентиляторы
+isPendingSupplyFan           // Блокирует слайдер притока
+isPendingExhaustFan          // Блокирует слайдер вытяжки
+
+// Питание
+isTogglingPower              // Показывает overlay на весь виджет
+isTogglingSchedule           // Блокирует кнопку расписания
+```
+
+### Паттерн блокировки
+
+```dart
+// В TemperatureColumn - кнопки блокируются при isPending
+final canDecrease = !isPending && (minTemp == null || temperature > minTemp!);
+final canIncrease = !isPending && (maxTemp == null || temperature < maxTemp!);
+
+// Вместо значения показываем лоадер
+child: isPending
+    ? BreezLoader.small(color: color)
+    : Text('$temperature°C', ...),
+
+// В FanSlider - слайдер блокируется
+final isEnabled = widget.onChanged != null && !widget.isPending;
+
+// В MainTempCard - overlay при переключении питания
+if (isPowerLoading)
+  Positioned.fill(
+    child: Container(
+      color: colors.card.withValues(alpha: 0.7),
+      child: Center(child: BreezLoader.large()),
+    ),
+  ),
+```
+
+### Пакет material_symbols_icons
+
+Для иконки вентилятора используется пакет `material_symbols_icons`:
+
+```dart
+import 'package:material_symbols_icons/symbols.dart';
+
+Icon(Symbols.mode_fan, size: 24, color: AppColors.accent)
 ```
 
 ---
@@ -658,4 +742,4 @@ if (mounted) setState(() => _value = result);
 
 ---
 
-*Последнее обновление: 2026-01-09*
+*Последнее обновление: 2026-01-17*

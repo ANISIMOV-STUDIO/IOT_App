@@ -168,6 +168,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       activeAlarms: data.climateState.activeAlarms,
       isPendingHeatingTemperature: data.climateState.isPendingHeatingTemperature,
       isPendingCoolingTemperature: data.climateState.isPendingCoolingTemperature,
+      isPendingSupplyFan: data.climateState.isPendingSupplyFan,
+      isPendingExhaustFan: data.climateState.isPendingExhaustFan,
     );
   }
 
@@ -220,6 +222,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
             isOnline: unit.isOnline,
             isPendingHeatingTemperature: data.climateState.isPendingHeatingTemperature,
             isPendingCoolingTemperature: data.climateState.isPendingCoolingTemperature,
+            isPendingSupplyFan: data.climateState.isPendingSupplyFan,
+            isPendingExhaustFan: data.climateState.isPendingExhaustFan,
           ),
         ),
       ],

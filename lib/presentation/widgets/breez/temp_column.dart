@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/spacing.dart';
 import 'breez_card.dart';
-import 'pending_indicator.dart';
+import 'breez_loader.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -99,8 +99,9 @@ class TemperatureColumn extends StatelessWidget {
     final spacing = compact ? AppSpacing.xxs + 2 : AppSpacing.xs;
 
     // Проверка достижения границ температуры
-    final canDecrease = minTemp == null || temperature > minTemp!;
-    final canIncrease = maxTemp == null || temperature < maxTemp!;
+    // Блокируем кнопки если ожидаем ответа от сервера
+    final canDecrease = !isPending && (minTemp == null || temperature > minTemp!);
+    final canIncrease = !isPending && (maxTemp == null || temperature < maxTemp!);
 
     return Semantics(
       label: '$label: $temperature градусов',
@@ -153,17 +154,16 @@ class TemperatureColumn extends StatelessWidget {
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: spacing),
-                  child: PendingIndicator(
-                    isPending: isPending,
-                    child: Text(
-                      '$temperature°C',
-                      style: TextStyle(
-                        fontSize: fontSize,
-                        fontWeight: FontWeight.w700,
-                        color: isPowered ? colors.text : colors.textMuted,
-                      ),
-                    ),
-                  ),
+                  child: isPending
+                      ? BreezLoader.small(color: color)
+                      : Text(
+                          '$temperature°C',
+                          style: TextStyle(
+                            fontSize: fontSize,
+                            fontWeight: FontWeight.w700,
+                            color: isPowered ? colors.text : colors.textMuted,
+                          ),
+                        ),
                 ),
                 Semantics(
                   button: true,

@@ -1,12 +1,13 @@
 /// Breez Loader - Тематический лоадер для HVAC приложения
 ///
-/// Вращающаяся иконка воздушного потока для индикации загрузки.
+/// Вращающийся вентилятор для индикации загрузки.
 /// Используется везде где система ожидает ответа от сервера.
 library;
 
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import '../../../core/theme/app_font_sizes.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/spacing.dart';
@@ -31,7 +32,7 @@ abstract class _LoaderConstants {
 
 /// Тематический лоадер для HVAC приложения
 ///
-/// Вращающаяся иконка воздушного потока. Используется для:
+/// Вращающийся вентилятор. Используется для:
 /// - Ожидания ответа сервера при изменении температуры
 /// - Переключения режимов работы
 /// - Загрузки данных датчиков
@@ -119,7 +120,7 @@ class _BreezLoaderState extends State<BreezLoader>
             );
           },
           child: Icon(
-            Icons.autorenew_rounded,
+            Symbols.mode_fan,
             size: widget.size,
             color: color,
           ),

@@ -9,6 +9,7 @@ import '../../../core/services/quick_sensors_service.dart';
 import '../../../domain/entities/unit_state.dart';
 import '../../../generated/l10n/app_localizations.dart';
 import '../../bloc/climate/climate_bloc.dart' show TemperatureLimits;
+import 'breez_loader.dart';
 import 'fan_slider.dart';
 import 'main_temp_card_header.dart';
 import 'main_temp_card_shimmer.dart';
@@ -86,6 +87,12 @@ class MainTempCard extends StatelessWidget {
   /// Ожидание подтверждения изменения температуры охлаждения
   final bool isPendingCoolingTemperature;
 
+  /// Ожидание подтверждения изменения приточного вентилятора
+  final bool isPendingSupplyFan;
+
+  /// Ожидание подтверждения изменения вытяжного вентилятора
+  final bool isPendingExhaustFan;
+
   /// Время устройства (если null, используется системное время)
   final DateTime? deviceTime;
 
@@ -126,6 +133,8 @@ class MainTempCard extends StatelessWidget {
     this.selectedSensors = QuickSensorsService.defaultSensors,
     this.isPendingHeatingTemperature = false,
     this.isPendingCoolingTemperature = false,
+    this.isPendingSupplyFan = false,
+    this.isPendingExhaustFan = false,
     this.deviceTime,
   });
 
@@ -185,11 +194,14 @@ class MainTempCard extends StatelessWidget {
         padding: EdgeInsets.all(AppSpacing.xs),
       child: isLoading
           ? const MainTempCardShimmer()
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          : Stack(
               children: [
-                // Header
-                MainTempCardHeader(
+                // Основной контент
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Header
+                    MainTempCardHeader(
                   unitName: unitName,
                   status: status,
                   isPowered: isPowered,
@@ -281,8 +293,25 @@ class MainTempCard extends StatelessWidget {
                     onExhaustFanChanged: isActive ? onExhaustFanChanged : null,
                     colors: colors,
                     l10n: l10n,
+                    isPendingSupplyFan: isPendingSupplyFan,
+                    isPendingExhaustFan: isPendingExhaustFan,
                   ),
                 ),
+                  ],
+                ),
+                // Overlay блокировки при переключении питания
+                if (isPowerLoading)
+                  Positioned.fill(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: colors.card.withValues(alpha: 0.7),
+                        borderRadius: BorderRadius.circular(AppRadius.nested),
+                      ),
+                      child: const Center(
+                        child: BreezLoader.large(),
+                      ),
+                    ),
+                  ),
               ],
             ),
       ),
@@ -448,6 +477,8 @@ class _FanSlidersSection extends StatelessWidget {
   final ValueChanged<int>? onExhaustFanChanged;
   final BreezColors colors;
   final AppLocalizations l10n;
+  final bool isPendingSupplyFan;
+  final bool isPendingExhaustFan;
 
   const _FanSlidersSection({
     required this.supplyFan,
@@ -456,6 +487,8 @@ class _FanSlidersSection extends StatelessWidget {
     this.onExhaustFanChanged,
     required this.colors,
     required this.l10n,
+    this.isPendingSupplyFan = false,
+    this.isPendingExhaustFan = false,
   });
 
   @override
@@ -479,6 +512,7 @@ class _FanSlidersSection extends StatelessWidget {
                   color: AppColors.accent,
                   icon: Icons.arrow_downward_rounded,
                   onChanged: onSupplyFanChanged,
+                  isPending: isPendingSupplyFan,
                 ),
               ),
               SizedBox(width: AppSpacing.xs),
@@ -489,6 +523,7 @@ class _FanSlidersSection extends StatelessWidget {
                   color: AppColors.accentOrange,
                   icon: Icons.arrow_upward_rounded,
                   onChanged: onExhaustFanChanged,
+                  isPending: isPendingExhaustFan,
                 ),
               ),
             ],
