@@ -571,7 +571,7 @@
   "@macAddressDisplayedOnRemote": {
     "description": "MAC address help text"
   },
-  "analytics": "Текущие параметры",
+  "analytics": "Аналитика",
   "@analytics": {
     "description": "Analytics tab label"
   },

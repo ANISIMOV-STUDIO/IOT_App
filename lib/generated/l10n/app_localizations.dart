@@ -875,7 +875,7 @@ abstract class AppLocalizations {
   /// Analytics tab label
   ///
   /// In ru, this message translates to:
-  /// **'Текущие параметры'**
+  /// **'Аналитика'**
   String get analytics;
 
   /// Empty devices message

@@ -292,9 +292,11 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
       final httpClient = GetIt.instance<HvacHttpClient>();
       await httpClient.setQuickSensors(deviceId, _selectedSensorKeys);
 
-      // Перезагружаем данные устройства для обновления главного экрана
+      // Обновляем только quickSensors без перезагрузки всего состояния
       if (mounted) {
-        context.read<ClimateBloc>().add(ClimateDeviceChanged(deviceId));
+        context.read<ClimateBloc>().add(
+          ClimateQuickSensorsUpdated(_selectedSensorKeys),
+        );
       }
     } catch (e) {
       if (mounted) {

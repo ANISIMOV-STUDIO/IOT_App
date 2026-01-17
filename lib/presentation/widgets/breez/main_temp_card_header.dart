@@ -199,25 +199,12 @@ class _ControlsSection extends StatelessWidget {
     
     return Row(
       children: [
-        // Power toggle button
-        if (isPowerLoading)
-          const SizedBox(
-            width: 32,
-            height: 32,
-            child: Padding(
-              padding: EdgeInsets.all(6),
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                color: AppColors.accent,
-              ),
-            ),
-          )
-        else
-          BreezIconButton(
-            icon: Icons.power_settings_new,
-            iconColor: !isOnline ? mutedColor : isPowered ? AppColors.accentGreen : mutedColor,
-            onTap: onPowerToggle,
-          ),
+        // Power toggle button (блокируется через overlay на весь виджет)
+        BreezIconButton(
+          icon: Icons.power_settings_new,
+          iconColor: !isOnline ? mutedColor : isPowered ? AppColors.accentGreen : mutedColor,
+          onTap: isPowerLoading ? null : onPowerToggle,
+        ),
         SizedBox(width: AppSpacing.xs),
         // Schedule toggle button
         if (isScheduleLoading)
