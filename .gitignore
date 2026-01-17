@@ -64,3 +64,6 @@ certbot/
 
 # Claude Code local settings
 .claude/
+
+# Claude Code temp files
+tmpclaude-*
