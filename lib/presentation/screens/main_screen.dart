@@ -19,15 +19,23 @@ import 'profile/profile_screen.dart';
 
 /// Main screen with bottom navigation
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+  final int? initialTab;
+
+  const MainScreen({super.key, this.initialTab});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _currentIndex = 0;
+  late int _currentIndex;
   bool _blocsStarted = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.initialTab ?? 0;
+  }
 
   @override
   void didChangeDependencies() {

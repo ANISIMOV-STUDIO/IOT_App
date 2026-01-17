@@ -172,7 +172,11 @@ GoRouter createRouter(AuthBloc authBloc) {
       // ============ Main App ============
       GoRoute(
         path: AppRoutes.home,
-        builder: (context, state) => const MainScreen(),
+        builder: (context, state) {
+          final tabName = state.uri.queryParameters['tab'];
+          final tab = MainTab.fromName(tabName);
+          return MainScreen(initialTab: tab?.tabIndex);
+        },
       ),
 
       // ============ Notifications ============

@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import '../../../core/theme/app_font_sizes.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/spacing.dart';
@@ -16,8 +17,8 @@ abstract class _SettingsTileConstants {
   static const double iconSize = 20.0;
   static const double titleFontSize = 14.0;
   static const double subtitleFontSize = 12.0;
-  static const double tileVerticalPadding = 14.0;
-  static const double switchTileVerticalPadding = 10.0;
+  static const double tileVerticalPadding = 10.0;
+  static const double switchTileVerticalPadding = 6.0;
   static const double switchActiveTrackAlpha = 0.5;
 }
 
@@ -161,16 +162,49 @@ class BreezSwitchTile extends StatelessWidget {
           ),
           Semantics(
             toggled: value,
-            child: Switch(
-              value: value,
-              onChanged: onChanged,
-              activeTrackColor: AppColors.accent.withValues(
-                alpha: _SettingsTileConstants.switchActiveTrackAlpha,
+            child: Transform.scale(
+              scale: 0.85,
+              child: Switch(
+                value: value,
+                onChanged: onChanged,
+                activeTrackColor: AppColors.accent.withValues(
+                  alpha: _SettingsTileConstants.switchActiveTrackAlpha,
+                ),
+                activeThumbColor: AppColors.accent,
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
-              activeThumbColor: AppColors.accent,
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Section title for settings groups
+///
+/// Use above a group of related settings tiles
+class BreezSectionTitle extends StatelessWidget {
+  final String title;
+
+  const BreezSectionTitle({
+    super.key,
+    required this.title,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+
+    return Padding(
+      padding: const EdgeInsets.only(left: AppSpacing.xxs, bottom: AppSpacing.xs),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontSize: AppFontSizes.bodySmall,
+          fontWeight: FontWeight.w600,
+          color: colors.textMuted,
+        ),
       ),
     );
   }

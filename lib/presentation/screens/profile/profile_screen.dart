@@ -9,6 +9,7 @@ import '../../../core/di/injection_container.dart' as di;
 import '../../../core/navigation/app_router.dart';
 import '../../../core/services/language_service.dart';
 import '../../../core/services/theme_service.dart';
+import '../../../core/theme/app_font_sizes.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/spacing.dart';
 import '../../../core/utils/snackbar_utils.dart';
@@ -24,12 +25,8 @@ import 'profile_dialogs.dart';
 // =============================================================================
 
 abstract class _ProfileScreenConstants {
-  static const double headerFontSize = 24.0;
-  static const double avatarSize = 80.0;
-  static const double initialsFontSize = 28.0;
-  static const double nameFontSize = 18.0;
-  static const double bodyFontSize = 14.0;
-  static const double flagFontSize = 16.0;
+  static const double avatarSize = 56.0;
+  static const double initialsFontSize = 20.0;
   static const double iconSize = 20.0;
   static const double buttonPaddingVertical = 14.0;
 }
@@ -68,7 +65,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Scaffold(
         backgroundColor: colors.bg,
         body: SingleChildScrollView(
-          padding: const EdgeInsets.all(AppSpacing.lg),
+          padding: const EdgeInsets.all(AppSpacing.sm),
           child: Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 500),
@@ -79,7 +76,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Text(
                     l10n.profile,
                     style: TextStyle(
-                      fontSize: _ProfileScreenConstants.headerFontSize,
+                      fontSize: AppFontSizes.h2,
                       fontWeight: FontWeight.bold,
                       color: colors.text,
                     ),
@@ -185,7 +182,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 }
 
-/// User info card with avatar, edit and password buttons
+/// User info card - горизонтальный layout с аватаром и действиями
 class _UserCard extends StatelessWidget {
   final String firstName;
   final String lastName;
@@ -207,74 +204,77 @@ class _UserCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return BreezCard(
-      padding: const EdgeInsets.all(AppSpacing.sm),
+      padding: const EdgeInsets.all(AppSpacing.xs),
       child: Column(
         children: [
-          // Avatar
-          Container(
-            width: _ProfileScreenConstants.avatarSize,
-            height: _ProfileScreenConstants.avatarSize,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [AppColors.accent, AppColors.accentLight],
-              ),
-            ),
-            child: Center(
-              child: Text(
-                _getInitials(firstName, lastName),
-                style: const TextStyle(
-                  fontSize: _ProfileScreenConstants.initialsFontSize,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: AppSpacing.md),
-
-          // Name
-          Text(
-            '$firstName $lastName',
-            style: TextStyle(
-              fontSize: _ProfileScreenConstants.nameFontSize,
-              fontWeight: FontWeight.bold,
-              color: colors.text,
-            ),
-          ),
-          const SizedBox(height: AppSpacing.xxs),
-
-          // Email
-          Text(
-            email,
-            style: TextStyle(
-              fontSize: _ProfileScreenConstants.bodyFontSize,
-              color: colors.textMuted,
-            ),
-          ),
-          const SizedBox(height: AppSpacing.md),
-
-          // Buttons row
+          // User info row
           Row(
             children: [
-              Expanded(
-                child: BreezActionButton(
-                  icon: Icons.edit_outlined,
-                  label: l10n.editProfile,
-                  onTap: onEditProfile,
+              // Avatar
+              Container(
+                width: _ProfileScreenConstants.avatarSize,
+                height: _ProfileScreenConstants.avatarSize,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [AppColors.accent, AppColors.accentLight],
+                  ),
+                ),
+                child: Center(
+                  child: Text(
+                    _getInitials(firstName, lastName),
+                    style: const TextStyle(
+                      fontSize: _ProfileScreenConstants.initialsFontSize,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ),
-              const SizedBox(width: AppSpacing.xs),
+              const SizedBox(width: AppSpacing.sm),
+
+              // Name & Email
               Expanded(
-                child: BreezActionButton(
-                  icon: Icons.lock_outlined,
-                  label: l10n.changePassword,
-                  onTap: onChangePassword,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '$firstName $lastName',
+                      style: TextStyle(
+                        fontSize: AppFontSizes.h4,
+                        fontWeight: FontWeight.w600,
+                        color: colors.text,
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.xxs),
+                    Text(
+                      email,
+                      style: TextStyle(
+                        fontSize: AppFontSizes.bodySmall,
+                        color: colors.textMuted,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
+          ),
+
+          const SizedBox(height: AppSpacing.xs),
+
+          // Actions as list tiles
+          BreezSettingsTile(
+            icon: Icons.edit_outlined,
+            title: l10n.editProfile,
+            onTap: onEditProfile,
+          ),
+          const SizedBox(height: AppSpacing.xs),
+          BreezSettingsTile(
+            icon: Icons.lock_outlined,
+            title: l10n.changePassword,
+            onTap: onChangePassword,
           ),
         ],
       ),
@@ -294,15 +294,14 @@ class _ServiceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
     return BreezCard(
-      padding: const EdgeInsets.all(AppSpacing.sm),
+      padding: const EdgeInsets.all(AppSpacing.xs),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _SectionTitle(title: l10n.serviceEngineer, colors: colors),
+          BreezSectionTitle(title: l10n.serviceEngineer),
           BreezSettingsTile(
             icon: Icons.history,
             title: l10n.eventLogs,
@@ -334,29 +333,28 @@ class _NotificationsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
     return BreezCard(
-      padding: const EdgeInsets.all(AppSpacing.sm),
+      padding: const EdgeInsets.all(AppSpacing.xs),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _SectionTitle(title: l10n.notifications, colors: colors),
+          BreezSectionTitle(title: l10n.notifications),
           BreezSwitchTile(
             icon: Icons.notifications_outlined,
             title: l10n.pushNotifications,
             value: pushNotifications,
             onChanged: onPushChanged,
           ),
-          const SizedBox(height: AppSpacing.sm),
+          const SizedBox(height: AppSpacing.xs),
           BreezSwitchTile(
             icon: Icons.email_outlined,
             title: l10n.emailNotifications,
             value: emailNotifications,
             onChanged: onEmailChanged,
           ),
-          const SizedBox(height: AppSpacing.sm),
+          const SizedBox(height: AppSpacing.xs),
           BreezSwitchTile(
             icon: Icons.warning_amber_outlined,
             title: l10n.alarmNotifications,
@@ -385,11 +383,11 @@ class _SettingsCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return BreezCard(
-      padding: const EdgeInsets.all(AppSpacing.sm),
+      padding: const EdgeInsets.all(AppSpacing.xs),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _SectionTitle(title: l10n.settings, colors: colors),
+          BreezSectionTitle(title: l10n.settings),
           // Theme Toggle
           ListenableBuilder(
             listenable: themeService,
@@ -404,7 +402,7 @@ class _SettingsCard extends StatelessWidget {
               );
             },
           ),
-          const SizedBox(height: AppSpacing.sm),
+          const SizedBox(height: AppSpacing.xs),
           // Language selector
           ListenableBuilder(
             listenable: languageService,
@@ -418,13 +416,13 @@ class _SettingsCard extends StatelessWidget {
                   children: [
                     Text(
                       currentLang.flag,
-                      style: const TextStyle(fontSize: _ProfileScreenConstants.flagFontSize),
+                      style: const TextStyle(fontSize: AppFontSizes.h4),
                     ),
                     const SizedBox(width: AppSpacing.xs),
                     Text(
                       currentLang.nativeName,
                       style: TextStyle(
-                        fontSize: _ProfileScreenConstants.bodyFontSize,
+                        fontSize: AppFontSizes.bodySmall,
                         color: colors.textMuted,
                       ),
                     ),
@@ -435,32 +433,6 @@ class _SettingsCard extends StatelessWidget {
             },
           ),
         ],
-      ),
-    );
-  }
-}
-
-/// Section title widget
-class _SectionTitle extends StatelessWidget {
-  final String title;
-  final BreezColors colors;
-
-  const _SectionTitle({
-    required this.title,
-    required this.colors,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: AppSpacing.xxs, bottom: AppSpacing.sm),
-      child: Text(
-        title,
-        style: TextStyle(
-          fontSize: _ProfileScreenConstants.bodyFontSize,
-          fontWeight: FontWeight.w600,
-          color: colors.textMuted,
-        ),
       ),
     );
   }
@@ -494,7 +466,7 @@ class _LogoutButton extends StatelessWidget {
           Text(
             l10n.logout,
             style: const TextStyle(
-              fontSize: _ProfileScreenConstants.bodyFontSize,
+              fontSize: AppFontSizes.bodySmall,
               fontWeight: FontWeight.w600,
               color: AppColors.critical,
             ),

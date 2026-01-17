@@ -957,7 +957,15 @@
   "logCategoryTimer": "Timer",
   "logCategoryAlarm": "Alarm",
   "logNoData": "No records",
+  "logNoDataHint": "Try changing the filter",
   "logLoadMore": "Load more",
+  "logShowing": "Showing: {count} of {total}",
+  "@logShowing": {
+    "placeholders": {
+      "count": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
   "logPage": "Page {current} of {total}",
   "@logPage": {
     "placeholders": {

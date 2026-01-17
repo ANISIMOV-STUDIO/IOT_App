@@ -2126,11 +2126,23 @@ abstract class AppLocalizations {
   /// **'Нет записей'**
   String get logNoData;
 
+  /// No description provided for @logNoDataHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Попробуйте изменить фильтр'**
+  String get logNoDataHint;
+
   /// No description provided for @logLoadMore.
   ///
   /// In ru, this message translates to:
   /// **'Загрузить ещё'**
   String get logLoadMore;
+
+  /// No description provided for @logShowing.
+  ///
+  /// In ru, this message translates to:
+  /// **'Показано: {count} из {total}'**
+  String logShowing(int count, int total);
 
   /// No description provided for @logPage.
   ///

@@ -1,6 +1,6 @@
 /// Event Logs Screen - Журнал событий устройства для сервисных инженеров
 ///
-/// Таблица с историей изменений настроек и аварий.
+/// Использует BreezListCard.log() для отображения записей.
 /// Доступна только для пользователей с ролью ServiceEngineer или Admin.
 library;
 
@@ -9,9 +9,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 
+import '../../../core/navigation/app_router.dart';
+import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_font_sizes.dart';
-import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/spacing.dart';
 import '../../../data/api/http/clients/hvac_http_client.dart';
 import '../../../domain/entities/device_event_log.dart';
@@ -24,9 +25,7 @@ import '../../widgets/breez/breez.dart';
 // =============================================================================
 
 abstract class _LogsScreenConstants {
-  static const double filterChipHeight = 36.0;
   static const double labelColumnWidth = 100.0;
-  static const double iconSize = 20.0;
   static const double smallIconSize = 18.0;
   static const int pageSize = 50;
 }
@@ -134,11 +133,15 @@ class _EventLogsScreenState extends State<EventLogsScreen> {
     final locale = Localizations.localeOf(context).languageCode;
     final dateFormat = DateFormat('dd.MM.yyyy HH:mm:ss', locale);
 
+    final isAlarm = log.eventType == DeviceEventType.alarm;
+    final typeColor = isAlarm ? AppColors.accentRed : AppColors.accent;
+    final typeText = isAlarm ? l10n.logTypeAlarm : l10n.logTypeSettings;
+
     showModalBottomSheet(
       context: context,
       backgroundColor: colors.card,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.card)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (context) => Padding(
         padding: const EdgeInsets.all(AppSpacing.lg),
@@ -149,7 +152,25 @@ class _EventLogsScreenState extends State<EventLogsScreen> {
             // Header
             Row(
               children: [
-                _TypeBadge(log.eventType, l10n, colors),
+                // Type badge inline
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.xs,
+                    vertical: AppSpacing.xxs,
+                  ),
+                  decoration: BoxDecoration(
+                    color: typeColor.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(AppSpacing.xxs),
+                  ),
+                  child: Text(
+                    typeText,
+                    style: TextStyle(
+                      fontSize: AppFontSizes.caption,
+                      fontWeight: FontWeight.w500,
+                      color: typeColor,
+                    ),
+                  ),
+                ),
                 const SizedBox(width: AppSpacing.sm),
                 Expanded(
                   child: Text(
@@ -206,40 +227,50 @@ class _EventLogsScreenState extends State<EventLogsScreen> {
 
     return Scaffold(
       backgroundColor: colors.bg,
-      appBar: AppBar(
-        backgroundColor: colors.bg,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: colors.text),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Text(
-          l10n.eventLogs,
-          style: TextStyle(
-            fontSize: AppFontSizes.h2,
-            fontWeight: FontWeight.bold,
-            color: colors.text,
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.refresh, color: colors.text),
-            onPressed: _isLoading ? null : _loadLogs,
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          // Filter chips
-          _FilterBar(
-            selectedType: _filterType,
-            onFilterChanged: _setFilter,
-            l10n: l10n,
-          ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Header (кастомный, как в profile_screen)
+            Padding(
+              padding: const EdgeInsets.all(AppSpacing.sm),
+              child: Row(
+                children: [
+                  BreezIconButton(
+                    icon: Icons.arrow_back,
+                    onTap: () => context.goToHomeTab(MainTab.profile),
+                    size: 24,
+                  ),
+                  const SizedBox(width: AppSpacing.sm),
+                  Expanded(
+                    child: Text(
+                      l10n.eventLogs,
+                      style: TextStyle(
+                        fontSize: AppFontSizes.h2,
+                        fontWeight: FontWeight.bold,
+                        color: colors.text,
+                      ),
+                    ),
+                  ),
+                  BreezIconButton(
+                    icon: Icons.refresh,
+                    onTap: _isLoading ? null : _loadLogs,
+                    size: 24,
+                  ),
+                ],
+              ),
+            ),
 
-          // Content
-          Expanded(child: _buildBody(colors, l10n)),
-        ],
+            // Filter chips
+            _FilterBar(
+              selectedType: _filterType,
+              onFilterChanged: _setFilter,
+              l10n: l10n,
+            ),
+
+            // Content
+            Expanded(child: _buildBody(colors, l10n)),
+          ],
+        ),
       ),
     );
   }
@@ -272,36 +303,41 @@ class _EventLogsScreenState extends State<EventLogsScreen> {
     }
 
     final filteredLogs = _filteredLogs;
+    final locale = Localizations.localeOf(context).languageCode;
+    final dateFormat = DateFormat('dd.MM.yy HH:mm', locale);
 
     if (filteredLogs.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.history, size: 48, color: colors.textMuted),
-            const SizedBox(height: AppSpacing.md),
-            Text(
-              l10n.logNoData,
-              style: TextStyle(color: colors.textMuted),
-            ),
-          ],
-        ),
+      return BreezEmptyState(
+        icon: Icons.history,
+        title: l10n.logNoData,
+        subtitle: l10n.logNoDataHint,
       );
     }
 
     return Column(
       children: [
-        // Table
+        // List
         Expanded(
-          child: _LogsTable(
-            logs: filteredLogs,
-            colors: colors,
-            l10n: l10n,
-            onRowTap: _showLogDetails,
+          child: ListView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+            itemCount: filteredLogs.length,
+            cacheExtent: 500,
+            itemBuilder: (context, index) {
+              final log = filteredLogs[index];
+              return Padding(
+                padding: const EdgeInsets.only(bottom: AppSpacing.xs),
+                child: BreezListCard.log(
+                  key: ValueKey(log.id),
+                  log: log,
+                  formattedTime: dateFormat.format(log.serverTimestamp),
+                  onTap: () => _showLogDetails(log),
+                ),
+              );
+            },
           ),
         ),
 
-        // Pagination info + Load more
+        // Pagination footer
         _PaginationFooter(
           logs: _logs!,
           filteredCount: filteredLogs.length,
@@ -316,11 +352,29 @@ class _EventLogsScreenState extends State<EventLogsScreen> {
 }
 
 // =============================================================================
-// FILTER BAR
+// FILTER BAR (по паттерну MobileTabBar)
 // =============================================================================
 
-/// Значения фильтра (null = все)
-enum _FilterValue { all, settings, alarm }
+/// Константы фильтр-бара (как в MobileTabBar)
+abstract class _FilterBarConstants {
+  static const double height = 36.0;
+  static const double iconSize = 14.0;
+  static const double fontSize = 11.0;
+  static const double segmentPadding = 3.0;
+}
+
+/// Данные фильтра
+class _FilterOption {
+  final DeviceEventType? value;
+  final IconData icon;
+  final String label;
+
+  const _FilterOption({
+    required this.value,
+    required this.icon,
+    required this.label,
+  });
+}
 
 class _FilterBar extends StatelessWidget {
   final DeviceEventType? selectedType;
@@ -333,177 +387,108 @@ class _FilterBar extends StatelessWidget {
     required this.l10n,
   });
 
-  _FilterValue get _currentFilter {
-    if (selectedType == null) return _FilterValue.all;
-    if (selectedType == DeviceEventType.settingsChange) return _FilterValue.settings;
-    return _FilterValue.alarm;
-  }
-
-  void _onFilterChanged(_FilterValue value) {
-    switch (value) {
-      case _FilterValue.all:
-        onFilterChanged(null);
-      case _FilterValue.settings:
-        onFilterChanged(DeviceEventType.settingsChange);
-      case _FilterValue.alarm:
-        onFilterChanged(DeviceEventType.alarm);
-    }
-  }
+  List<_FilterOption> _buildOptions() => [
+        _FilterOption(value: null, icon: Icons.filter_list, label: l10n.filterAll),
+        _FilterOption(value: DeviceEventType.settingsChange, icon: Icons.settings_outlined, label: l10n.logTypeSettings),
+        _FilterOption(value: DeviceEventType.alarm, icon: Icons.warning_amber, label: l10n.logTypeAlarm),
+      ];
 
   @override
   Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+    final options = _buildOptions();
+
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.md,
-        vertical: AppSpacing.sm,
+      padding: const EdgeInsets.only(
+        left: AppSpacing.sm,
+        right: AppSpacing.sm,
+        bottom: AppSpacing.sm,
       ),
-      child: BreezSegmentedControl<_FilterValue>(
-        value: _currentFilter,
-        onChanged: _onFilterChanged,
-        height: _LogsScreenConstants.filterChipHeight,
-        segments: [
-          BreezSegment(value: _FilterValue.all, label: l10n.filterAll),
-          BreezSegment(value: _FilterValue.settings, label: l10n.logTypeSettings),
-          BreezSegment(value: _FilterValue.alarm, label: l10n.logTypeAlarm),
-        ],
+      child: Container(
+        height: _FilterBarConstants.height,
+        padding: const EdgeInsets.all(_FilterBarConstants.segmentPadding),
+        decoration: BoxDecoration(
+          color: colors.buttonBg.withValues(alpha: 0.5),
+          borderRadius: BorderRadius.circular(AppRadius.chip),
+        ),
+        child: Row(
+          children: options.map((option) {
+            final isSelected = selectedType == option.value;
+            return Expanded(
+              child: _FilterSegment(
+                option: option,
+                isSelected: isSelected,
+                onTap: () => onFilterChanged(option.value),
+                colors: colors,
+              ),
+            );
+          }).toList(),
+        ),
       ),
     );
   }
 }
 
-// =============================================================================
-// LOGS TABLE
-// =============================================================================
-
-class _LogsTable extends StatelessWidget {
-  final List<DeviceEventLog> logs;
-  final BreezColors colors;
-  final AppLocalizations l10n;
-  final ValueChanged<DeviceEventLog> onRowTap;
-
-  const _LogsTable({
-    required this.logs,
-    required this.colors,
-    required this.l10n,
-    required this.onRowTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final locale = Localizations.localeOf(context).languageCode;
-    final dateFormat = DateFormat('dd.MM.yy HH:mm', locale);
-
-    return ListView.builder(
-      key: PageStorageKey<int>(logs.length),
-      itemCount: logs.length,
-      cacheExtent: 500,
-      itemBuilder: (context, index) {
-        final log = logs[index];
-        return _LogRow(
-          key: ValueKey(log.id),
-          log: log,
-          dateFormat: dateFormat,
-          colors: colors,
-          l10n: l10n,
-          onTap: () => onRowTap(log),
-        );
-      },
-    );
-  }
-}
-
-class _LogRow extends StatelessWidget {
-  final DeviceEventLog log;
-  final DateFormat dateFormat;
-  final BreezColors colors;
-  final AppLocalizations l10n;
+/// Кнопка-сегмент фильтра (как _SegmentButton в MobileTabBar)
+class _FilterSegment extends StatelessWidget {
+  final _FilterOption option;
+  final bool isSelected;
   final VoidCallback onTap;
+  final BreezColors colors;
 
-  const _LogRow({
-    super.key,
-    required this.log,
-    required this.dateFormat,
-    required this.colors,
-    required this.l10n,
+  const _FilterSegment({
+    required this.option,
+    required this.isSelected,
     required this.onTap,
+    required this.colors,
   });
 
   @override
   Widget build(BuildContext context) {
-    final isAlarm = log.eventType == DeviceEventType.alarm;
+    final textColor = isSelected ? AppColors.accent : colors.textMuted;
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        hoverColor: colors.buttonHover,
-        splashColor: AppColors.accent.withValues(alpha: 0.1),
-        child: Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.md,
-            vertical: AppSpacing.sm,
-          ),
+    return Semantics(
+      label: option.label,
+      selected: isSelected,
+      button: true,
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          onTap: onTap,
+          child: AnimatedContainer(
+          duration: AppDurations.normal,
+          curve: Curves.easeOutCubic,
           decoration: BoxDecoration(
-            color: isAlarm ? AppColors.accentRed.withValues(alpha: 0.08) : null,
-            border: Border(
-              bottom: BorderSide(color: colors.border.withValues(alpha: 0.5)),
-            ),
+            color: isSelected
+                ? AppColors.accent.withValues(alpha: 0.15)
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(AppRadius.chip),
+            border: isSelected
+                ? Border.all(color: AppColors.accent.withValues(alpha: 0.3))
+                : null,
           ),
-          child: Row(
-            children: [
-              // Time
-              SizedBox(
-                width: _LogsScreenConstants.labelColumnWidth,
-                child: Text(
-                  dateFormat.format(log.serverTimestamp),
+          child: Center(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  option.icon,
+                  size: _FilterBarConstants.iconSize,
+                  color: textColor,
+                ),
+                const SizedBox(width: AppSpacing.xxs),
+                Text(
+                  option.label,
                   style: TextStyle(
-                    fontSize: AppFontSizes.caption,
-                    color: colors.textMuted,
+                    fontSize: _FilterBarConstants.fontSize,
+                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                    color: textColor,
                   ),
                 ),
-              ),
-
-              // Type badge
-              _TypeBadge(log.eventType, l10n, colors),
-              const SizedBox(width: AppSpacing.sm),
-
-              // Property (main info)
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      log.property,
-                      style: TextStyle(
-                        fontSize: AppFontSizes.caption,
-                        fontWeight: FontWeight.w500,
-                        color: colors.text,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    if (log.description.isNotEmpty)
-                      Text(
-                        log.description,
-                        style: TextStyle(
-                          fontSize: AppFontSizes.captionSmall,
-                          color: colors.textMuted,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      ),
-                  ],
-                ),
-              ),
-
-              // Arrow
-              Icon(
-                Icons.chevron_right,
-                size: _LogsScreenConstants.iconSize,
-                color: colors.textMuted,
-              ),
-            ],
+              ],
+            ),
           ),
+        ),
         ),
       ),
     );
@@ -554,44 +539,6 @@ class _DetailRow extends StatelessWidget {
 }
 
 // =============================================================================
-// TYPE BADGE
-// =============================================================================
-
-class _TypeBadge extends StatelessWidget {
-  final DeviceEventType type;
-  final AppLocalizations l10n;
-  final BreezColors colors;
-
-  const _TypeBadge(this.type, this.l10n, this.colors);
-
-  @override
-  Widget build(BuildContext context) {
-    final isAlarm = type == DeviceEventType.alarm;
-    final color = isAlarm ? AppColors.accentRed : AppColors.accent;
-    final text = isAlarm ? l10n.logTypeAlarm : l10n.logTypeSettings;
-
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.xs,
-        vertical: AppSpacing.xxs,
-      ),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(AppRadius.chip),
-      ),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: AppFontSizes.caption,
-          fontWeight: FontWeight.w500,
-          color: color,
-        ),
-      ),
-    );
-  }
-}
-
-// =============================================================================
 // PAGINATION FOOTER
 // =============================================================================
 
@@ -627,7 +574,7 @@ class _PaginationFooter extends StatelessWidget {
         children: [
           // Count info
           Text(
-            'Показано: $filteredCount из ${logs.totalCount}',
+            l10n.logShowing(filteredCount, logs.totalCount),
             style: TextStyle(
               fontSize: AppFontSizes.caption,
               color: colors.textMuted,

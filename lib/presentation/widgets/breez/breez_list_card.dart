@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/spacing.dart';
+import '../../../domain/entities/device_event_log.dart';
 import '../../../generated/l10n/app_localizations.dart';
 import 'breez_card.dart'; // BreezButton
 
@@ -139,6 +140,27 @@ class BreezListCard extends StatelessWidget {
       type: type,
       showUnreadIndicator: !isRead,
       onTap: onTap,
+    );
+  }
+
+  /// Factory для карточки лога событий
+  factory BreezListCard.log({
+    Key? key,
+    required DeviceEventLog log,
+    required String formattedTime,
+    VoidCallback? onTap,
+    bool compact = false,
+  }) {
+    final isAlarm = log.eventType == DeviceEventType.alarm;
+    return BreezListCard(
+      key: key,
+      icon: isAlarm ? Icons.warning_amber : Icons.settings_outlined,
+      title: log.property,
+      subtitle: log.description.isNotEmpty ? log.description : log.newValue,
+      trailing: formattedTime,
+      type: isAlarm ? ListCardType.error : ListCardType.info,
+      onTap: onTap,
+      compact: compact,
     );
   }
 

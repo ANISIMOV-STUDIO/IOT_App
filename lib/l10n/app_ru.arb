@@ -957,7 +957,15 @@
   "logCategoryTimer": "Таймер",
   "logCategoryAlarm": "Авария",
   "logNoData": "Нет записей",
+  "logNoDataHint": "Попробуйте изменить фильтр",
   "logLoadMore": "Загрузить ещё",
+  "logShowing": "Показано: {count} из {total}",
+  "@logShowing": {
+    "placeholders": {
+      "count": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
   "logPage": "Страница {current} из {total}",
   "@logPage": {
     "placeholders": {

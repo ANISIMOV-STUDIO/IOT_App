@@ -1086,7 +1086,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get logNoData => 'No records';
 
   @override
+  String get logNoDataHint => 'Try changing the filter';
+
+  @override
   String get logLoadMore => 'Load more';
+
+  @override
+  String logShowing(int count, int total) {
+    return 'Showing: $count of $total';
+  }
 
   @override
   String logPage(int current, int total) {

@@ -1095,7 +1095,15 @@ class AppLocalizationsRu extends AppLocalizations {
   String get logNoData => 'Нет записей';
 
   @override
+  String get logNoDataHint => 'Попробуйте изменить фильтр';
+
+  @override
   String get logLoadMore => 'Загрузить ещё';
+
+  @override
+  String logShowing(int count, int total) {
+    return 'Показано: $count из $total';
+  }
 
   @override
   String logPage(int current, int total) {
