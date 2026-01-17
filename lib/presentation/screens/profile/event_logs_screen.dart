@@ -24,9 +24,10 @@ import '../../widgets/breez/breez.dart';
 // =============================================================================
 
 abstract class _LogsScreenConstants {
-  static const double headerFontSize = 24.0;
-  static const double tableFontSize = 12.0;
   static const double filterChipHeight = 36.0;
+  static const double labelColumnWidth = 100.0;
+  static const double iconSize = 20.0;
+  static const double smallIconSize = 18.0;
   static const int pageSize = 50;
 }
 
@@ -215,7 +216,7 @@ class _EventLogsScreenState extends State<EventLogsScreen> {
         title: Text(
           l10n.eventLogs,
           style: TextStyle(
-            fontSize: _LogsScreenConstants.headerFontSize,
+            fontSize: AppFontSizes.h2,
             fontWeight: FontWeight.bold,
             color: colors.text,
           ),
@@ -494,11 +495,11 @@ class _LogRow extends StatelessWidget {
           children: [
             // Time
             SizedBox(
-              width: 100,
+              width: _LogsScreenConstants.labelColumnWidth,
               child: Text(
                 dateFormat.format(log.serverTimestamp),
                 style: TextStyle(
-                  fontSize: _LogsScreenConstants.tableFontSize,
+                  fontSize: AppFontSizes.caption,
                   color: colors.textMuted,
                 ),
               ),
@@ -517,7 +518,7 @@ class _LogRow extends StatelessWidget {
                   Text(
                     log.property,
                     style: TextStyle(
-                      fontSize: _LogsScreenConstants.tableFontSize,
+                      fontSize: AppFontSizes.caption,
                       fontWeight: FontWeight.w500,
                       color: colors.text,
                     ),
@@ -540,7 +541,7 @@ class _LogRow extends StatelessWidget {
             // Arrow
             Icon(
               Icons.chevron_right,
-              size: 20,
+              size: _LogsScreenConstants.iconSize,
               color: colors.textMuted,
             ),
           ],
@@ -569,7 +570,7 @@ class _DetailRow extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            width: 100,
+            width: _LogsScreenConstants.labelColumnWidth,
             child: Text(
               label,
               style: TextStyle(
@@ -622,7 +623,7 @@ class _TypeBadge extends StatelessWidget {
       child: Text(
         text,
         style: TextStyle(
-          fontSize: _LogsScreenConstants.tableFontSize,
+          fontSize: AppFontSizes.caption,
           fontWeight: FontWeight.w500,
           color: color,
         ),
@@ -680,7 +681,7 @@ class _PaginationFooter extends StatelessWidget {
                 ? const BreezLoader.small()
                 : TextButton.icon(
                     onPressed: onLoadMore,
-                    icon: const Icon(Icons.expand_more, size: 18),
+                    icon: const Icon(Icons.expand_more, size: _LogsScreenConstants.smallIconSize),
                     label: Text(l10n.logLoadMore),
                     style: TextButton.styleFrom(
                       foregroundColor: AppColors.accent,
