@@ -215,41 +215,58 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                 children: [
                   // Кнопка выбора
                   Expanded(
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.pop(dialogContext);
-                        _toggleSensor(sensor.key);
-                      },
-                      style: TextButton.styleFrom(
-                        backgroundColor: isSelected
-                            ? colors.buttonBg
-                            : AppColors.accent.withValues(alpha: 0.15),
-                        padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(AppRadius.button),
-                          side: isSelected
-                              ? BorderSide.none
-                              : const BorderSide(color: AppColors.accent),
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            isSelected ? Icons.remove_circle_outline : Icons.add_circle_outline,
-                            size: 18,
-                            color: isSelected ? colors.textMuted : AppColors.accent,
-                          ),
-                          const SizedBox(width: AppSpacing.xs),
-                          Text(
-                            isSelected ? 'Убрать' : 'На главную',
-                            style: TextStyle(
-                              color: isSelected ? colors.textMuted : AppColors.accent,
-                              fontWeight: FontWeight.w600,
+                    child: Builder(
+                      builder: (context) {
+                        // Можно добавить если не достигнут лимит или убрать если уже выбран
+                        final canAdd = _selectedSensorKeys.length < _AnalyticsConstants.maxSelectedSensors;
+                        final isEnabled = isSelected || canAdd;
+                        final buttonColor = isEnabled ? AppColors.accent : colors.textMuted;
+
+                        return TextButton(
+                          onPressed: isEnabled
+                              ? () {
+                                  Navigator.pop(dialogContext);
+                                  _toggleSensor(sensor.key);
+                                }
+                              : null,
+                          style: TextButton.styleFrom(
+                            backgroundColor: isSelected
+                                ? colors.buttonBg
+                                : isEnabled
+                                    ? AppColors.accent.withValues(alpha: 0.15)
+                                    : colors.buttonBg.withValues(alpha: 0.5),
+                            padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(AppRadius.button),
+                              side: isSelected || !isEnabled
+                                  ? BorderSide.none
+                                  : const BorderSide(color: AppColors.accent),
                             ),
                           ),
-                        ],
-                      ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                isSelected ? Icons.remove_circle_outline : Icons.add_circle_outline,
+                                size: 18,
+                                color: isSelected ? colors.textMuted : buttonColor,
+                              ),
+                              const SizedBox(width: AppSpacing.xs),
+                              Text(
+                                isSelected
+                                    ? 'Убрать'
+                                    : isEnabled
+                                        ? 'На главную'
+                                        : 'Максимум 3',
+                                style: TextStyle(
+                                  color: isSelected ? colors.textMuted : buttonColor,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
                     ),
                   ),
                   const SizedBox(width: AppSpacing.xs),
