@@ -265,13 +265,24 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
 
   /// Загружено полное состояние устройства
   /// Приходит через SignalR когда устройство подтверждает изменения
+  ///
+  /// ВАЖНО: quickSensors - это пользовательская настройка, не телеметрия.
+  /// SignalR обновления могут не содержать quickSensors, поэтому сохраняем
+  /// существующее значение. Обновление через ClimateQuickSensorsUpdated event.
   void _onFullStateLoaded(
     ClimateFullStateLoaded event,
     Emitter<ClimateControlState> emit,
   ) {
-    // Backend фильтрует старые значения — просто сбрасываем pending
+    final existing = state.deviceFullState;
+    final incoming = event.fullState;
+
+    // Сохраняем quickSensors - это user preference, не телеметрия
+    final mergedState = existing != null
+        ? incoming.copyWith(quickSensors: existing.quickSensors)
+        : incoming;
+
     emit(state.copyWith(
-      deviceFullState: event.fullState,
+      deviceFullState: mergedState,
       isPendingHeatingTemperature: false,
       isPendingCoolingTemperature: false,
       isPendingSupplyFan: false,

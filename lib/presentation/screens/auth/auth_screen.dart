@@ -11,6 +11,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/spacing.dart';
 import '../../../core/constants/auth_constants.dart';
 import '../../../core/navigation/app_router.dart';
+import '../../../core/services/native_loading_service.dart';
 import 'widgets/login_form.dart';
 import 'widgets/register_form.dart';
 
@@ -34,6 +35,8 @@ class _AuthScreenState extends State<AuthScreen> {
   void initState() {
     super.initState();
     _isRegister = widget.isRegister;
+    // Скрыть HTML loading экран
+    NativeLoadingService.hide();
   }
 
   void _toggleMode() {

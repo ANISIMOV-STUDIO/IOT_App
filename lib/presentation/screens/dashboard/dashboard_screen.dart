@@ -33,8 +33,8 @@ import 'dialogs/unit_settings_dialog.dart';
 import 'dialogs/update_available_dialog.dart';
 import 'layouts/desktop_layout.dart';
 import 'layouts/mobile_layout.dart';
-import '../../widgets/breez/breez_logo.dart';
-import '../../widgets/breez/unit_tab_button.dart';
+import '../../../core/services/native_loading_service.dart';
+import '../../widgets/breez/breez.dart';
 import 'widgets/add_unit_button.dart';
 
 /// Main dashboard screen
@@ -94,6 +94,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return DashboardBlocListeners(
       child: DashboardBlocBuilder(
         builder: (context, data) {
+          // Скрыть HTML loading когда данные загружены
+          if (!data.isLoadingDevices) {
+            NativeLoadingService.hide();
+          }
+
           return Scaffold(
             backgroundColor: isDark ? AppColors.darkBg : AppColors.lightBg,
             body: Column(
@@ -103,11 +108,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   status: data.connectivityState.status,
                 ),
                 Expanded(
-                  child: data.currentUnit == null
-                      ? DashboardEmptyState(onAddUnit: _showAddUnitDialog)
-                      : isDesktop
-                          ? _buildDesktopLayout(data, user, isDark)
-                          : _buildMobileLayout(data, isDark, width),
+                  child: data.isLoadingDevices
+                      ? const Center(child: BreezLoaderWithText())
+                      : data.currentUnit == null
+                          ? DashboardEmptyState(onAddUnit: _showAddUnitDialog)
+                          : isDesktop
+                              ? _buildDesktopLayout(data, user, isDark)
+                              : _buildMobileLayout(data, isDark, width),
                 ),
               ],
             ),

@@ -9,7 +9,6 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_font_sizes.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/spacing.dart';
-import '../../../core/services/quick_sensors_service.dart';
 import '../../../data/api/http/clients/hvac_http_client.dart';
 import '../../../domain/entities/unit_state.dart';
 import '../../../domain/entities/device_full_state.dart';
@@ -54,7 +53,6 @@ abstract class _AnalyticsConstants {
   static const double graphHeight = 280.0;
 
   // Indicator
-  static const double indicatorSize = 14.0;
   static const double indicatorIconSize = 16.0;
   static const double indicatorFontSize = 13.0;
 }
@@ -74,6 +72,7 @@ class AnalyticsScreen extends StatefulWidget {
 class _AnalyticsScreenState extends State<AnalyticsScreen> {
   List<String> _selectedSensorKeys = [];
   bool _isSaving = false;
+  bool _isInitializedFromServer = false;
 
   @override
   void initState() {
@@ -81,20 +80,28 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
     _loadSelectedSensors();
   }
 
+  /// Синхронизирует _selectedSensorKeys с сервером при первой загрузке
+  /// Вызывается из BlocListener когда deviceFullState становится доступным
+  void _syncFromServerIfNeeded(DeviceFullState? fullState) {
+    if (_isInitializedFromServer || fullState == null) return;
+
+    _isInitializedFromServer = true;
+    setState(() {
+      _selectedSensorKeys = List<String>.from(fullState.quickSensors);
+    });
+  }
+
   void _loadSelectedSensors() {
     final climateState = context.read<ClimateBloc>().state;
     final fullState = climateState.deviceFullState;
     if (fullState != null) {
-      // Берём что есть (включая пустой список - пользователь убрал все)
+      // Данные с сервера - помечаем как инициализированные
+      _isInitializedFromServer = true;
       setState(() {
         _selectedSensorKeys = List<String>.from(fullState.quickSensors);
       });
-    } else {
-      // Нет данных устройства - дефолтные
-      setState(() {
-        _selectedSensorKeys = List<String>.from(QuickSensorsService.defaultSensorKeys);
-      });
     }
+    // Если данных нет - оставляем пустой список, BlocListener обновит позже
   }
 
   Future<void> _toggleSensor(String sensorKey) async {
@@ -307,7 +314,13 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
     final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
-    return Scaffold(
+    return BlocListener<ClimateBloc, ClimateControlState>(
+      listenWhen: (prev, curr) =>
+          prev.deviceFullState?.quickSensors != curr.deviceFullState?.quickSensors,
+      listener: (context, state) {
+        _syncFromServerIfNeeded(state.deviceFullState);
+      },
+      child: Scaffold(
       backgroundColor: colors.bg,
       body: SafeArea(
         child: RefreshIndicator(
@@ -465,10 +478,16 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
           ),
         ),
       ),
+      ),
     );
   }
 
   Widget _buildSelectionIndicator(BreezColors colors, AppLocalizations l10n) {
+    // Показываем лоадер пока данные не загружены с сервера
+    if (!_isInitializedFromServer) {
+      return const BreezLoader.small();
+    }
+
     final count = _selectedSensorKeys.length;
     const max = _AnalyticsConstants.maxSelectedSensors;
 
@@ -476,14 +495,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
       mainAxisSize: MainAxisSize.min,
       children: [
         if (_isSaving)
-          SizedBox(
-            width: _AnalyticsConstants.indicatorSize,
-            height: _AnalyticsConstants.indicatorSize,
-            child: CircularProgressIndicator(
-              strokeWidth: _AnalyticsConstants.defaultBorderWidth,
-              color: AppColors.accent,
-            ),
-          )
+          const BreezLoader.small()
         else
           Icon(
             count == max ? Icons.check_circle : Icons.radio_button_unchecked,

@@ -31,6 +31,9 @@ class DashboardData {
   final NotificationsState notificationsState;
   final ScheduleState scheduleState;
 
+  /// Идёт загрузка списка устройств
+  final bool isLoadingDevices;
+
   const DashboardData({
     required this.units,
     required this.activeIndex,
@@ -40,6 +43,7 @@ class DashboardData {
     required this.analyticsState,
     required this.notificationsState,
     required this.scheduleState,
+    this.isLoadingDevices = false,
   });
 }
 
@@ -123,7 +127,8 @@ class DashboardBlocBuilder extends StatelessWidget {
     return BlocBuilder<DevicesBloc, DevicesState>(
       buildWhen: (previous, current) =>
           previous.devices != current.devices ||
-          previous.selectedDeviceId != current.selectedDeviceId,
+          previous.selectedDeviceId != current.selectedDeviceId ||
+          previous.status != current.status,
       builder: (context, devicesState) {
         return BlocBuilder<ClimateBloc, ClimateControlState>(
           buildWhen: (previous, current) =>
@@ -200,6 +205,9 @@ class DashboardBlocBuilder extends StatelessWidget {
         ? units[activeIndex]
         : null;
 
+    final isLoading = devicesState.status == DevicesStatus.initial ||
+        devicesState.status == DevicesStatus.loading;
+
     return DashboardData(
       units: units,
       activeIndex: activeIndex,
@@ -209,6 +217,7 @@ class DashboardBlocBuilder extends StatelessWidget {
       analyticsState: analyticsState,
       notificationsState: notificationsState,
       scheduleState: scheduleState,
+      isLoadingDevices: isLoading,
     );
   }
 
