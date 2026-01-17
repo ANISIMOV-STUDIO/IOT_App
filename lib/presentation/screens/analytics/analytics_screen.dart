@@ -102,18 +102,13 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
         current.remove(sensorKey);
       } else if (current.length < _AnalyticsConstants.maxSelectedSensors) {
         current.add(sensorKey);
-      } else {
-        // Заменяем первый выбранный
-        current.removeAt(0);
-        current.add(sensorKey);
       }
+      // Если уже 3 выбрано - не добавляем (нужно сначала убрать один)
       _selectedSensorKeys = current;
     });
 
-    // Автосохранение если выбрано 3
-    if (_selectedSensorKeys.length == _AnalyticsConstants.maxSelectedSensors) {
-      await _saveSensors();
-    }
+    // Автосохранение при любом изменении
+    await _saveSensors();
   }
 
   void _onSensorTap(_SensorInfo sensor) {
@@ -276,7 +271,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   }
 
   Future<void> _saveSensors() async {
-    if (_isSaving || _selectedSensorKeys.length != _AnalyticsConstants.maxSelectedSensors) return;
+    if (_isSaving) return;
 
     final devicesState = context.read<DevicesBloc>().state;
     final deviceId = devicesState.selectedDeviceId;

@@ -100,16 +100,21 @@ abstract class QuickSensorsService {
 
   /// Конвертировать список ключей в типы
   static List<QuickSensorType> fromKeys(List<String>? keys) {
-    if (keys == null || keys.length != maxSensors) {
+    // null = не настроено, используем дефолтные
+    if (keys == null) {
       return defaultSensors;
     }
 
-    final sensors = keys
+    // Пустой список = пользователь убрал все
+    if (keys.isEmpty) {
+      return [];
+    }
+
+    // Конвертируем что есть (0-3 сенсора)
+    return keys
         .map((key) => QuickSensorType.fromKey(key))
         .whereType<QuickSensorType>()
         .toList();
-
-    return sensors.length == maxSensors ? sensors : defaultSensors;
   }
 
   /// Конвертировать типы в список ключей
