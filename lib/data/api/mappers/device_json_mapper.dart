@@ -295,12 +295,20 @@ class DeviceJsonMapper {
   /// Парсинг quickSensors из JSON
   static List<String> _parseQuickSensors(dynamic json) {
     const defaultSensors = ['outside_temp', 'indoor_temp', 'humidity'];
+    // DEBUG: что приходит с сервера
+    print('[DEBUG] _parseQuickSensors input: $json (type: ${json.runtimeType})');
     // null = не настроено, используем дефолтные
-    if (json == null) return defaultSensors;
+    if (json == null) {
+      print('[DEBUG] quickSensors is null, using defaults');
+      return defaultSensors;
+    }
     if (json is List) {
       // Возвращаем что есть (0-3 сенсора)
-      return json.whereType<String>().toList();
+      final result = json.whereType<String>().toList();
+      print('[DEBUG] quickSensors parsed: $result');
+      return result;
     }
+    print('[DEBUG] quickSensors is not List, using defaults');
     return defaultSensors;
   }
 
