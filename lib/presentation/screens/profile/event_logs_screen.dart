@@ -390,25 +390,28 @@ class _FilterChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = activeColor ?? AppColors.accent;
 
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: _LogsScreenConstants.filterChipHeight,
-        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
-        decoration: BoxDecoration(
-          color: isSelected ? color.withValues(alpha: 0.15) : colors.buttonBg,
-          borderRadius: BorderRadius.circular(AppRadius.chip),
-          border: Border.all(
-            color: isSelected ? color : colors.border,
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          height: _LogsScreenConstants.filterChipHeight,
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+          decoration: BoxDecoration(
+            color: isSelected ? color.withValues(alpha: 0.15) : colors.buttonBg,
+            borderRadius: BorderRadius.circular(AppRadius.chip),
+            border: Border.all(
+              color: isSelected ? color : colors.border,
+            ),
           ),
-        ),
-        child: Center(
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: AppFontSizes.caption,
-              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-              color: isSelected ? color : colors.textMuted,
+          child: Center(
+            child: Text(
+              label,
+              style: TextStyle(
+                fontSize: AppFontSizes.caption,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                color: isSelected ? color : colors.textMuted,
+              ),
             ),
           ),
         ),
@@ -478,9 +481,11 @@ class _LogRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final isAlarm = log.eventType == DeviceEventType.alarm;
 
-    return InkWell(
-      onTap: onTap,
-      child: Container(
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: InkWell(
+        onTap: onTap,
+        child: Container(
         padding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.md,
           vertical: AppSpacing.sm,
@@ -546,6 +551,7 @@ class _LogRow extends StatelessWidget {
             ),
           ],
         ),
+      ),
       ),
     );
   }
@@ -679,12 +685,27 @@ class _PaginationFooter extends StatelessWidget {
           if (logs.hasMore)
             isLoading
                 ? const BreezLoader.small()
-                : TextButton.icon(
-                    onPressed: onLoadMore,
-                    icon: const Icon(Icons.expand_more, size: _LogsScreenConstants.smallIconSize),
-                    label: Text(l10n.logLoadMore),
-                    style: TextButton.styleFrom(
-                      foregroundColor: AppColors.accent,
+                : BreezButton(
+                    onTap: onLoadMore,
+                    backgroundColor: Colors.transparent,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.sm,
+                      vertical: AppSpacing.xs,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.expand_more,
+                          size: _LogsScreenConstants.smallIconSize,
+                          color: AppColors.accent,
+                        ),
+                        const SizedBox(width: AppSpacing.xxs),
+                        Text(
+                          l10n.logLoadMore,
+                          style: const TextStyle(color: AppColors.accent),
+                        ),
+                      ],
                     ),
                   ),
         ],
