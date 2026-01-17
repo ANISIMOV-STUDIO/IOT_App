@@ -84,11 +84,13 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   void _loadSelectedSensors() {
     final climateState = context.read<ClimateBloc>().state;
     final fullState = climateState.deviceFullState;
-    if (fullState != null && fullState.quickSensors.isNotEmpty) {
+    if (fullState != null) {
+      // Берём что есть (включая пустой список - пользователь убрал все)
       setState(() {
         _selectedSensorKeys = List<String>.from(fullState.quickSensors);
       });
     } else {
+      // Нет данных устройства - дефолтные
       setState(() {
         _selectedSensorKeys = List<String>.from(QuickSensorsService.defaultSensorKeys);
       });
