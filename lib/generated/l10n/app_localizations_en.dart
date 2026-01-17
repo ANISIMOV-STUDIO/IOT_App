@@ -901,7 +901,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get efficiency => 'Efficiency';
 
   @override
-  String get freeCool => 'Free cool';
+  String get freeCool => 'Free cool recup.';
+
+  @override
+  String get on => 'ON';
+
+  @override
+  String get off => 'OFF';
 
   @override
   String get heater => 'Heater';

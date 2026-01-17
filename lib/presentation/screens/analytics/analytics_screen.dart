@@ -631,7 +631,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
       _SensorInfo(
         key: 'free_cooling',
         icon: Icons.ac_unit,
-        value: unit.freeCooling ? 'ON' : 'OFF',
+        value: unit.freeCooling ? l10n.on : l10n.off,
         label: l10n.freeCool,
         description: l10n.freeCoolingDesc,
         color: unit.freeCooling ? AppColors.accentGreen : AppColors.darkTextMuted,

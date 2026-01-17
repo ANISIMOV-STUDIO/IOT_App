@@ -1769,8 +1769,20 @@ abstract class AppLocalizations {
   /// No description provided for @freeCool.
   ///
   /// In ru, this message translates to:
-  /// **'Своб. охл.'**
+  /// **'Охл. рекуп.'**
   String get freeCool;
+
+  /// No description provided for @on.
+  ///
+  /// In ru, this message translates to:
+  /// **'ВКЛ'**
+  String get on;
+
+  /// No description provided for @off.
+  ///
+  /// In ru, this message translates to:
+  /// **'ВЫКЛ'**
+  String get off;
 
   /// No description provided for @heater.
   ///

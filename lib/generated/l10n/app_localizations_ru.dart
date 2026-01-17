@@ -906,7 +906,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get efficiency => 'КПД';
 
   @override
-  String get freeCool => 'Своб. охл.';
+  String get freeCool => 'Охл. рекуп.';
+
+  @override
+  String get on => 'ВКЛ';
+
+  @override
+  String get off => 'ВЫКЛ';
 
   @override
   String get heater => 'Нагреватель';
