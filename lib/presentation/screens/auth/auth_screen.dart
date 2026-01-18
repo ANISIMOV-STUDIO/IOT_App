@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hvac_control/core/constants/auth_constants.dart';
 import 'package:hvac_control/core/navigation/app_router.dart';
 import 'package:hvac_control/core/services/native_loading_service.dart';
+import 'package:hvac_control/core/theme/app_animations.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/presentation/bloc/auth/auth_bloc.dart';
@@ -74,7 +75,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 maxWidth: AuthConstants.formMaxWidth,
               ),
               child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 300),
+                duration: AppDurations.medium,
                 switchInCurve: Curves.easeInOut,
                 switchOutCurve: Curves.easeInOut,
                 transitionBuilder: (child, animation) => FadeTransition(

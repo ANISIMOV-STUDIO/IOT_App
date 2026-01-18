@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
 
 /// Текстовая кнопка-ссылка с акцентным цветом
@@ -12,7 +13,7 @@ class BreezTextButton extends StatelessWidget {
 
   const BreezTextButton({
     required this.text, required this.onPressed, super.key,
-    this.fontSize = 14,
+    this.fontSize = AppFontSizes.body,
     this.fontWeight = FontWeight.normal,
     this.underline = true,
     this.semanticLabel,
@@ -42,7 +43,7 @@ class BreezTextButton extends StatelessWidget {
       showBorder: false,
       enableScale: false,
       enforceMinTouchTarget: false,
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs, vertical: AppSpacing.xxs),
       semanticLabel: semanticLabel ?? text,
       tooltip: tooltip,
       child: Text(

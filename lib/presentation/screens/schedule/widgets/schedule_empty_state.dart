@@ -48,7 +48,7 @@ class ScheduleEmptyState extends StatelessWidget {
             onTap: onAdd,
             backgroundColor: AppColors.accent,
             hoverColor: AppColors.accentLight,
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lgx, vertical: AppSpacing.sm),
             enableGlow: true,
             semanticLabel: l10n.scheduleAdd,
             child: Row(

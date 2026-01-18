@@ -46,7 +46,7 @@ class DashboardEmptyState extends StatelessWidget {
             onTap: onAddUnit,
             backgroundColor: AppColors.accent,
             hoverColor: AppColors.accentLight,
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lgx, vertical: AppSpacing.md),
             enableGlow: true,
             semanticLabel: l10n.addUnit,
             child: Row(

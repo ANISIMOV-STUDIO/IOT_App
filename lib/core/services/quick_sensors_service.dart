@@ -5,6 +5,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
 
 // =============================================================================
@@ -48,16 +49,16 @@ enum QuickSensorType {
 
   /// Цвет иконки
   Color get color => switch (this) {
-      QuickSensorType.outsideTemp => const Color(0xFF00D9C4),
-      QuickSensorType.indoorTemp => const Color(0xFF4CAF50),
-      QuickSensorType.humidity => const Color(0xFF00D9C4),
-      QuickSensorType.co2Level => const Color(0xFF4CAF50),
-      QuickSensorType.supplyTemp => const Color(0xFFFF9800),
-      QuickSensorType.recuperatorEfficiency => const Color(0xFF00D9C4),
-      QuickSensorType.heaterPerformance => const Color(0xFFFF9800),
-      QuickSensorType.ductPressure => const Color(0xFF9E9E9E),
-      QuickSensorType.filterPercent => const Color(0xFF00D9C4),
-      QuickSensorType.airflowRate => const Color(0xFF00D9C4),
+      QuickSensorType.outsideTemp => AppColors.accent,
+      QuickSensorType.indoorTemp => AppColors.accentGreen,
+      QuickSensorType.humidity => AppColors.accent,
+      QuickSensorType.co2Level => AppColors.accentGreen,
+      QuickSensorType.supplyTemp => AppColors.accentOrange,
+      QuickSensorType.recuperatorEfficiency => AppColors.accent,
+      QuickSensorType.heaterPerformance => AppColors.accentOrange,
+      QuickSensorType.ductPressure => AppColors.darkTextMuted,
+      QuickSensorType.filterPercent => AppColors.accent,
+      QuickSensorType.airflowRate => AppColors.accent,
     };
 
   /// Найти тип по ключу

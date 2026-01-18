@@ -135,7 +135,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                         final isLoading = state is AuthLoading;
 
                         return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
                           child: BreezTextButton(
                             text: l10n.verifyEmailResend,
                             onPressed: isLoading ? null : _handleResendCode,

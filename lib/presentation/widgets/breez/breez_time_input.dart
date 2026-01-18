@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/theme/app_animations.dart';
 import 'package:hvac_control/core/theme/app_radius.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 
@@ -88,7 +89,7 @@ class _BreezTimeInputState extends State<BreezTimeInput> {
       child: GestureDetector(
         onTap: _showTimePicker,
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
+          duration: AppDurations.fast,
           padding: EdgeInsets.symmetric(
             horizontal: widget.compact ? 12 : 16,
             vertical: widget.compact ? 8 : 10,

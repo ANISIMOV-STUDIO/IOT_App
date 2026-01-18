@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -14,10 +15,10 @@ class SplashScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Логотип приложения
-            Icon(
+            const Icon(
               Icons.air,
               size: 80,
-              color: Theme.of(context).colorScheme.primary,
+              color: AppColors.accent,
             ),
             const SizedBox(height: AppSpacing.lgx),
             Text(
