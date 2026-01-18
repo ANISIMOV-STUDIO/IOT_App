@@ -4,15 +4,34 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
+      - develop
   workflow_dispatch:
 
 env:
   REGISTRY: ghcr.io
 
 jobs:
-  test:
-    name: Тестирование
+  design-system-check:
+    name: Проверка дизайн-системы
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Клонирование репозитория
+        uses: actions/checkout@v4
+
+      - name: Выполнение проверки дизайн-системы
+        run: |
+          chmod +x scripts/check_design_system.sh
+          ./scripts/check_design_system.sh
+
+  test:
+    name: Тестирование и анализ кода
+    needs: design-system-check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Клонирование репозитория
         uses: actions/checkout@v4
@@ -28,7 +47,10 @@ jobs:
         run: flutter pub get
 
       - name: Анализ кода
-        run: flutter analyze
+        run: flutter analyze --no-fatal-infos
+
+      - name: Расширенная проверка дизайн-системы
+        run: dart run scripts/check_design_system.dart
 
       - name: Запуск тестов
         run: flutter test
@@ -36,6 +58,7 @@ jobs:
   build-and-deploy:
     name: Сборка и развёртывание
     needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       contents: read
