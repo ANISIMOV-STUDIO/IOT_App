@@ -18,6 +18,9 @@ class RealScheduleRepository implements ScheduleRepository {
 
   final _scheduleController = StreamController<List<ScheduleEntry>>.broadcast();
 
+  /// Флаг для предотвращения race condition при dispose
+  bool _isDisposed = false;
+
   @override
   Future<List<ScheduleEntry>> getSchedule(String deviceId) async {
     final jsonSchedules = await _httpClient.getSchedules(deviceId);
@@ -44,10 +47,16 @@ class RealScheduleRepository implements ScheduleRepository {
   @override
   Stream<List<ScheduleEntry>> watchSchedule(String deviceId) {
     getSchedule(deviceId).then(
-      _scheduleController.add,
+      (schedule) {
+        if (!_isDisposed && !_scheduleController.isClosed) {
+          _scheduleController.add(schedule);
+        }
+      },
       onError: (Object error) {
         // Логировать ошибку и добавить в stream
-        _scheduleController.addError(error);
+        if (!_isDisposed && !_scheduleController.isClosed) {
+          _scheduleController.addError(error);
+        }
       },
     );
     return _scheduleController.stream;
@@ -123,6 +132,7 @@ class RealScheduleRepository implements ScheduleRepository {
   }
 
   void dispose() {
+    _isDisposed = true;
     _scheduleController.close();
   }
 }

@@ -25,8 +25,15 @@ class FcmTokenService {
   StreamSubscription<String?>? _tokenSubscription;
   String? _registeredToken;
 
+  /// Флаг для предотвращения race condition при dispose
+  bool _isDisposed = false;
+
   /// Инициализация — подписка на изменения токена
   void initialize() {
+    if (_isDisposed) {
+      return;
+    }
+
     _tokenSubscription = _pushService.onTokenRefresh.listen(_onTokenChanged);
 
     // Регистрируем текущий токен если есть
@@ -38,6 +45,10 @@ class FcmTokenService {
 
   /// Обработка изменения токена
   Future<void> _onTokenChanged(String? newToken) async {
+    if (_isDisposed) {
+      return;
+    }
+
     if (newToken == null) {
       // Токен удалён — отменяем регистрацию
       if (_registeredToken != null) {
@@ -52,6 +63,10 @@ class FcmTokenService {
 
   /// Зарегистрировать токен на сервере
   Future<bool> registerToken(String token) async {
+    if (_isDisposed) {
+      return false;
+    }
+
     try {
       final httpClient = _apiClient.getHttpClient();
       final authToken = await _apiClient.getAuthToken();
@@ -152,6 +167,9 @@ class FcmTokenService {
 
   /// Освободить ресурсы
   void dispose() {
+    // Сначала помечаем как disposed чтобы остановить все операции
+    _isDisposed = true;
+
     _tokenSubscription?.cancel();
   }
 }

@@ -45,6 +45,12 @@ class ConnectivityService {
   /// Таймер для периодической проверки сервера
   Timer? _serverCheckTimer;
 
+  /// Флаг для предотвращения race condition при dispose
+  bool _isDisposed = false;
+
+  /// Completer для синхронизации конкурентных вызовов initialize
+  Completer<void>? _initCompleter;
+
   /// Интервал проверки сервера
   static const _serverCheckInterval = NetworkConstants.serverCheckInterval;
 
@@ -74,22 +80,50 @@ class ConnectivityService {
   /// Инициализация сервиса
   ///
   /// Должен быть вызван при старте приложения
+  /// Потокобезопасный метод - конкурентные вызовы будут ожидать завершения первого
   Future<void> initialize() async {
-    // Получаем текущее состояние
-    await checkConnectivity();
+    if (_isDisposed) {
+      return;
+    }
 
-    // Подписываемся на изменения сети
-    _subscription = _connectivity.onConnectivityChanged.listen(_handleConnectivityChange);
+    // Если уже идёт инициализация - ждём её завершения
+    if (_initCompleter != null) {
+      await _initCompleter!.future;
+      return;
+    }
 
-    // Запускаем периодическую проверку сервера
-    _startServerCheck();
+    _initCompleter = Completer<void>();
+
+    try {
+      // Получаем текущее состояние
+      await checkConnectivity();
+
+      // Подписываемся на изменения сети
+      _subscription = _connectivity.onConnectivityChanged.listen(_handleConnectivityChange);
+
+      // Запускаем периодическую проверку сервера
+      _startServerCheck();
+
+      _initCompleter?.complete();
+    } catch (e) {
+      _initCompleter?.completeError(e);
+      rethrow;
+    } finally {
+      _initCompleter = null;
+    }
   }
 
   /// Запустить периодическую проверку сервера
   void _startServerCheck() {
+    if (_isDisposed) {
+      return;
+    }
+
     _serverCheckTimer?.cancel();
     _serverCheckTimer = Timer.periodic(_serverCheckInterval, (_) {
-      _checkServerAvailability();
+      if (!_isDisposed) {
+        _checkServerAvailability();
+      }
     });
   }
 
@@ -175,9 +209,15 @@ class ConnectivityService {
 
   /// Обновить статус
   void _updateStatus(NetworkStatus newStatus) {
+    if (_isDisposed) {
+      return;
+    }
+
     if (newStatus != _currentStatus) {
       _currentStatus = newStatus;
-      _statusController.add(_currentStatus);
+      if (!_statusController.isClosed) {
+        _statusController.add(_currentStatus);
+      }
     }
   }
 
@@ -225,6 +265,9 @@ class ConnectivityService {
 
   /// Освободить ресурсы
   void dispose() {
+    // Сначала помечаем как disposed чтобы остановить все операции
+    _isDisposed = true;
+
     _subscription?.cancel();
     _serverCheckTimer?.cancel();
     _statusController.close();

@@ -27,6 +27,9 @@ class VersionCheckService {
   StreamSubscription<Map<String, dynamic>>? _signalRSubscription;
   final _versionChangedController = StreamController<VersionInfo>.broadcast();
 
+  /// Флаг для предотвращения race condition при dispose
+  bool _isDisposed = false;
+
   /// Стрим для получения уведомлений о новых версиях
   Stream<VersionInfo> get onVersionChanged => _versionChangedController.stream;
 
@@ -46,11 +49,15 @@ class VersionCheckService {
 
   /// Подписка на SignalR стрим новых релизов
   void _setupSignalRSubscription() {
-    if (_signalR == null) {
+    if (_signalR == null || _isDisposed) {
       return;
     }
 
     _signalRSubscription = _signalR.releases.listen((releaseData) {
+      if (_isDisposed) {
+        return;
+      }
+
       try {
         final newVersion = VersionInfo(
           version: releaseData['version'] as String,
@@ -60,7 +67,9 @@ class VersionCheckService {
 
         // Проверяем что версия действительно новая
         if (_currentVersion == null || newVersion != _currentVersion) {
-          _versionChangedController.add(newVersion);
+          if (!_versionChangedController.isClosed) {
+            _versionChangedController.add(newVersion);
+          }
           _currentVersion = newVersion;
         }
       } catch (e) {
@@ -71,14 +80,24 @@ class VersionCheckService {
 
   /// Проверка обновлений по HTTP
   Future<void> _checkForUpdates() async {
+    if (_isDisposed) {
+      return;
+    }
+
     try {
       final newVersion = await _fetchVersion();
+
+      if (_isDisposed) {
+        return;
+      }
 
       // Если версия изменилась - отправляем событие
       if (_currentVersion != null &&
           newVersion != null &&
           newVersion != _currentVersion) {
-        _versionChangedController.add(newVersion);
+        if (!_versionChangedController.isClosed) {
+          _versionChangedController.add(newVersion);
+        }
         _currentVersion = newVersion;
       }
     } catch (e) {
@@ -110,6 +129,9 @@ class VersionCheckService {
 
   /// Освобождение ресурсов
   void dispose() {
+    // Сначала помечаем как disposed чтобы остановить все операции
+    _isDisposed = true;
+
     _fallbackTimer?.cancel();
     _signalRSubscription?.cancel();
     _versionChangedController.close();

@@ -147,3 +147,8 @@ class AuthUpdateProfileRequested extends AuthEvent {
   @override
   List<Object?> get props => [firstName, lastName];
 }
+
+/// Сессия истекла (от TokenRefreshService или interceptor)
+class AuthSessionExpired extends AuthEvent {
+  const AuthSessionExpired();
+}

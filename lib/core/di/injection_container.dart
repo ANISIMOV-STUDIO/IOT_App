@@ -14,6 +14,7 @@ import 'package:hvac_control/core/services/fcm_token_service.dart';
 import 'package:hvac_control/core/services/language_service.dart';
 import 'package:hvac_control/core/services/push_notification_service.dart';
 import 'package:hvac_control/core/services/theme_service.dart';
+import 'package:hvac_control/core/services/token_refresh_service.dart';
 import 'package:hvac_control/core/services/version_check_service.dart';
 // Data - HTTP Clients (для DI в repositories)
 import 'package:hvac_control/data/api/http/clients/hvac_http_client.dart';
@@ -103,9 +104,14 @@ Future<void> init() async {
   //! Auth Feature - Аутентификация (должен быть ПЕРЕД ApiClient)
   sl
     ..registerLazySingleton(() => AuthService(sl()))
+    ..registerLazySingleton(() => TokenRefreshService(
+          authStorage: sl(),
+          authService: sl(),
+        ))
     ..registerLazySingleton(() => AuthBloc(
           authService: sl(),
           storageService: sl(),
+          tokenRefreshService: sl(),
         ))
 
     //! Offline Support - Сервисы кеширования и мониторинга сети

@@ -979,5 +979,9 @@
       "total": {"type": "int"}
     }
   },
-  "serviceEngineer": "Сервис"
+  "serviceEngineer": "Сервис",
+  "sessionExpired": "Сессия истекла. Выполняется выход...",
+  "@sessionExpired": {
+    "description": "Session expired toast message"
+  }
 }

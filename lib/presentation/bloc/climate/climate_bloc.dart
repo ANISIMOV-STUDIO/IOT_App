@@ -48,6 +48,8 @@ EventTransformer<E> debounceRestartable<E>({
         );
 
 /// Extension для debounce на Stream
+///
+/// Timer отменяется при handleDone и handleError для избежания race condition
 extension DebounceExtension<T> on Stream<T> {
   Stream<T> debounce(Duration duration) {
     Timer? timer;
@@ -56,8 +58,14 @@ extension DebounceExtension<T> on Stream<T> {
         timer?.cancel();
         timer = Timer(duration, () => sink.add(data));
       },
+      handleError: (error, stackTrace, sink) {
+        timer?.cancel();
+        timer = null;
+        sink.addError(error, stackTrace);
+      },
       handleDone: (sink) {
         timer?.cancel();
+        timer = null;
         sink.close();
       },
     ));

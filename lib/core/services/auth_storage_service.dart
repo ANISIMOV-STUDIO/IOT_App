@@ -1,6 +1,8 @@
 /// Auth Storage Service for JWT token management
 library;
 
+import 'dart:async';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hvac_control/core/logging/api_logger.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -16,44 +18,83 @@ class AuthStorageService {
 
   final FlutterSecureStorage _secureStorage;
 
-  /// Сохранить оба токена (access и refresh)
-  Future<void> saveTokens(String accessToken, String refreshToken) async {
-    await _secureStorage.write(key: _accessTokenKey, value: accessToken);
-    await _secureStorage.write(key: _refreshTokenKey, value: refreshToken);
+  /// Completer для синхронизации конкурентных операций записи
+  Completer<void>? _writeCompleter;
 
-    // Декодировать JWT и сохранить время истечения access token
+  /// Сохранить оба токена (access и refresh)
+  ///
+  /// Синхронизирует конкурентные вызовы для избежания race condition
+  Future<void> saveTokens(String accessToken, String refreshToken) async {
+    // Если уже идёт запись - ждём её завершения
+    if (_writeCompleter != null) {
+      await _writeCompleter!.future;
+    }
+
+    _writeCompleter = Completer<void>();
+
     try {
-      final decodedToken = JwtDecoder.decode(accessToken);
-      final exp = decodedToken['exp'] as int?;
-      if (exp != null) {
-        final expiryDate = DateTime.fromMillisecondsSinceEpoch(exp * 1000);
-        await _secureStorage.write(
-          key: _tokenExpiryKey,
-          value: expiryDate.toIso8601String(),
-        );
+      await _secureStorage.write(key: _accessTokenKey, value: accessToken);
+      await _secureStorage.write(key: _refreshTokenKey, value: refreshToken);
+
+      // Декодировать JWT и сохранить время истечения access token
+      try {
+        final decodedToken = JwtDecoder.decode(accessToken);
+        final exp = decodedToken['exp'] as int?;
+        if (exp != null) {
+          final expiryDate = DateTime.fromMillisecondsSinceEpoch(exp * 1000);
+          await _secureStorage.write(
+            key: _tokenExpiryKey,
+            value: expiryDate.toIso8601String(),
+          );
+        }
+      } catch (e) {
+        ApiLogger.debug('[AuthStorage] Ошибка декодирования JWT', e);
       }
+
+      _writeCompleter?.complete();
     } catch (e) {
-      ApiLogger.debug('[AuthStorage] Ошибка декодирования JWT', e);
+      _writeCompleter?.completeError(e);
+      rethrow;
+    } finally {
+      _writeCompleter = null;
     }
   }
 
   /// Сохранить только access token (после refresh)
+  ///
+  /// Синхронизирует конкурентные вызовы для избежания race condition
   Future<void> updateAccessToken(String accessToken) async {
-    await _secureStorage.write(key: _accessTokenKey, value: accessToken);
+    // Если уже идёт запись - ждём её завершения
+    if (_writeCompleter != null) {
+      await _writeCompleter!.future;
+    }
 
-    // Обновить время истечения
+    _writeCompleter = Completer<void>();
+
     try {
-      final decodedToken = JwtDecoder.decode(accessToken);
-      final exp = decodedToken['exp'] as int?;
-      if (exp != null) {
-        final expiryDate = DateTime.fromMillisecondsSinceEpoch(exp * 1000);
-        await _secureStorage.write(
-          key: _tokenExpiryKey,
-          value: expiryDate.toIso8601String(),
-        );
+      await _secureStorage.write(key: _accessTokenKey, value: accessToken);
+
+      // Обновить время истечения
+      try {
+        final decodedToken = JwtDecoder.decode(accessToken);
+        final exp = decodedToken['exp'] as int?;
+        if (exp != null) {
+          final expiryDate = DateTime.fromMillisecondsSinceEpoch(exp * 1000);
+          await _secureStorage.write(
+            key: _tokenExpiryKey,
+            value: expiryDate.toIso8601String(),
+          );
+        }
+      } catch (e) {
+        ApiLogger.debug('[AuthStorage] Ошибка обновления JWT expiry', e);
       }
+
+      _writeCompleter?.complete();
     } catch (e) {
-      ApiLogger.debug('[AuthStorage] Ошибка обновления JWT expiry', e);
+      _writeCompleter?.completeError(e);
+      rethrow;
+    } finally {
+      _writeCompleter = null;
     }
   }
 
@@ -81,19 +122,53 @@ class AuthStorageService {
   }
 
   /// Сохранить ID пользователя
+  ///
+  /// Синхронизирует конкурентные вызовы для избежания race condition
   Future<void> saveUserId(String userId) async {
-    await _secureStorage.write(key: _userIdKey, value: userId);
+    // Если уже идёт запись - ждём её завершения
+    if (_writeCompleter != null) {
+      await _writeCompleter!.future;
+    }
+
+    _writeCompleter = Completer<void>();
+
+    try {
+      await _secureStorage.write(key: _userIdKey, value: userId);
+      _writeCompleter?.complete();
+    } catch (e) {
+      _writeCompleter?.completeError(e);
+      rethrow;
+    } finally {
+      _writeCompleter = null;
+    }
   }
 
   /// Получить ID пользователя
   Future<String?> getUserId() async => _secureStorage.read(key: _userIdKey);
 
   /// Удалить все токены (logout)
+  ///
+  /// Синхронизирует конкурентные вызовы для избежания race condition
   Future<void> deleteToken() async {
-    await _secureStorage.delete(key: _accessTokenKey);
-    await _secureStorage.delete(key: _refreshTokenKey);
-    await _secureStorage.delete(key: _tokenExpiryKey);
-    await _secureStorage.delete(key: _userIdKey);
+    // Если уже идёт запись - ждём её завершения
+    if (_writeCompleter != null) {
+      await _writeCompleter!.future;
+    }
+
+    _writeCompleter = Completer<void>();
+
+    try {
+      await _secureStorage.delete(key: _accessTokenKey);
+      await _secureStorage.delete(key: _refreshTokenKey);
+      await _secureStorage.delete(key: _tokenExpiryKey);
+      await _secureStorage.delete(key: _userIdKey);
+      _writeCompleter?.complete();
+    } catch (e) {
+      _writeCompleter?.completeError(e);
+      rethrow;
+    } finally {
+      _writeCompleter = null;
+    }
   }
 
   /// Проверить наличие токена
@@ -103,7 +178,24 @@ class AuthStorageService {
   }
 
   /// Очистить все данные
+  ///
+  /// Синхронизирует конкурентные вызовы для избежания race condition
   Future<void> clearAll() async {
-    await _secureStorage.deleteAll();
+    // Если уже идёт запись - ждём её завершения
+    if (_writeCompleter != null) {
+      await _writeCompleter!.future;
+    }
+
+    _writeCompleter = Completer<void>();
+
+    try {
+      await _secureStorage.deleteAll();
+      _writeCompleter?.complete();
+    } catch (e) {
+      _writeCompleter?.completeError(e);
+      rethrow;
+    } finally {
+      _writeCompleter = null;
+    }
   }
 }

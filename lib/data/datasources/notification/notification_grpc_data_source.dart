@@ -29,8 +29,15 @@ class NotificationGrpcDataSource implements NotificationDataSource {
   StreamSubscription<proto.Notification>? _streamSubscription;
   final _notificationController = StreamController<NotificationDto>.broadcast();
 
+  /// Флаг для предотвращения race condition при dispose
+  bool _isDisposed = false;
+
   @override
   Future<List<NotificationDto>> getNotifications({String? deviceId}) async {
+    if (_isDisposed) {
+      return [];
+    }
+
     final request = proto.GetNotificationsRequest()..limit = 50;
     if (deviceId != null) {
       request.deviceId = deviceId;
@@ -43,18 +50,30 @@ class NotificationGrpcDataSource implements NotificationDataSource {
 
   @override
   Future<void> markAsRead(List<String> notificationIds) async {
+    if (_isDisposed) {
+      return;
+    }
+
     final request = proto.MarkAsReadRequest()..notificationIds.addAll(notificationIds);
     await _client.markAsRead(request);
   }
 
   @override
   Future<void> dismiss(String notificationId) async {
+    if (_isDisposed) {
+      return;
+    }
+
     final request = proto.DeleteNotificationRequest()..id = notificationId;
     await _client.deleteNotification(request);
   }
 
   @override
   Stream<NotificationDto> watchNotifications({String? deviceId}) {
+    if (_isDisposed) {
+      return const Stream.empty();
+    }
+
     // Отменяем предыдущую подписку
     _streamSubscription?.cancel();
 
@@ -66,10 +85,20 @@ class NotificationGrpcDataSource implements NotificationDataSource {
     // Подключаемся к gRPC стриму
     _streamSubscription = _client.streamNotifications(request).listen(
       (notification) {
-        _notificationController.add(_protoToDto(notification));
+        if (_isDisposed) {
+          return;
+        }
+        if (!_notificationController.isClosed) {
+          _notificationController.add(_protoToDto(notification));
+        }
       },
       onError: (Object error) {
-        _notificationController.addError(error);
+        if (_isDisposed) {
+          return;
+        }
+        if (!_notificationController.isClosed) {
+          _notificationController.addError(error);
+        }
       },
     );
 
@@ -78,6 +107,9 @@ class NotificationGrpcDataSource implements NotificationDataSource {
 
   @override
   void dispose() {
+    // Сначала помечаем как disposed чтобы остановить все операции
+    _isDisposed = true;
+
     _streamSubscription?.cancel();
     _notificationController.close();
   }

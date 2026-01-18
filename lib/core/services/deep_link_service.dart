@@ -35,11 +35,14 @@ class DeepLinkService {
   Uri? _pendingDeepLink;
   bool _isInitialized = false;
 
+  /// Флаг для предотвращения race condition при dispose
+  bool _isDisposed = false;
+
   /// Инициализация сервиса
   ///
   /// Вызывать после создания GoRouter
   Future<void> initialize() async {
-    if (_isInitialized) {
+    if (_isInitialized || _isDisposed) {
       return;
     }
     _isInitialized = true;
@@ -173,6 +176,9 @@ class DeepLinkService {
 
   /// Освобождение ресурсов
   void dispose() {
+    // Сначала помечаем как disposed чтобы остановить все операции
+    _isDisposed = true;
+
     // _linkSubscription?.cancel();
     // _linkSubscription = null;
   }

@@ -43,6 +43,16 @@ class RealClimateRepository implements ClimateRepository {
   StreamSubscription<Map<String, dynamic>>? _deviceUpdatesSubscription;
   StreamSubscription<Map<String, dynamic>>? _statusChangesSubscription;
 
+  /// Флаг для предотвращения race condition при dispose
+  bool _isDisposed = false;
+
+  /// Безопасно добавить событие в StreamController (проверка на closed/disposed)
+  void _safeAddToController<T>(StreamController<T> controller, T event) {
+    if (!_isDisposed && !controller.isClosed) {
+      controller.add(event);
+    }
+  }
+
   /// Инициализировать SignalR подключение
   /// Должен быть вызван после создания repository
   Future<void> initialize() async {
@@ -51,12 +61,20 @@ class RealClimateRepository implements ClimateRepository {
 
   /// Запустить SignalR подключение для real-time обновлений
   Future<void> _startSignalRConnection() async {
+    if (_isDisposed) {
+      return;
+    }
+
     try {
       await _signalR?.connect();
 
       // Сохранить subscription для отмены при dispose
       _deviceUpdatesSubscription = _signalR?.deviceUpdates.listen(
         (deviceData) {
+          if (_isDisposed) {
+      return;
+    }
+
           // Snapshot переменной для избежания race condition
           final selectedId = _selectedDeviceId;
 
@@ -65,12 +83,12 @@ class RealClimateRepository implements ClimateRepository {
             // Парсинг ClimateState для обратной совместимости
             final climateState = DeviceJsonMapper.climateStateFromJson(deviceData);
             _lastClimateState = climateState;  // Кэшируем для быстрого доступа к preset
-            _climateController.add(climateState);
-            
+            _safeAddToController(_climateController, climateState);
+
             // Парсинг DeviceFullState для полного обновления UI
             try {
               final fullState = DeviceJsonMapper.deviceFullStateFromJson(deviceData);
-              _deviceFullStateController.add(fullState);
+              _safeAddToController(_deviceFullStateController, fullState);
               developer.log(
                 'SignalR: received full state update for device $selectedId',
                 name: 'ClimateRepository',
@@ -112,6 +130,10 @@ class RealClimateRepository implements ClimateRepository {
 
   /// Обработка изменения онлайн-статуса устройства
   void _handleStatusChange(Map<String, dynamic> statusData) {
+    if (_isDisposed) {
+      return;
+    }
+
     final deviceId = statusData['deviceId'] as String?;
     final macAddress = statusData['macAddress'] as String?;
     final isOnline = statusData['isOnline'] as bool? ?? false;
@@ -125,23 +147,31 @@ class RealClimateRepository implements ClimateRepository {
       name: 'ClimateRepository',
     );
 
+    // Snapshot для избежания race condition при чтении и записи
+    final currentDevices = List<HvacDevice>.from(_cachedDevices);
+
     // Обновляем кэш устройств (используем только deviceId, т.к. HvacDevice не хранит macAddress)
-    final updatedDevices = _cachedDevices.map((device) {
+    final updatedDevices = currentDevices.map((device) {
       if (device.id == deviceId) {
         return device.copyWith(isOnline: isOnline);
       }
       return device;
     }).toList();
 
-    if (!_listEquals(_cachedDevices, updatedDevices)) {
+    if (!_listEquals(currentDevices, updatedDevices)) {
       _cachedDevices = updatedDevices;
-      _devicesController.add(updatedDevices);
+      _safeAddToController(_devicesController, updatedDevices);
     }
 
+    // Snapshot selectedDeviceId для избежания race condition
+    final selectedId = _selectedDeviceId;
+
     // Если это текущее выбранное устройство — обновляем DeviceFullState
-    if (_selectedDeviceId == deviceId) {
+    if (selectedId == deviceId && selectedId.isNotEmpty) {
       // Запрашиваем полное состояние устройства для обновления UI
-      getDeviceFullState(_selectedDeviceId).then(_deviceFullStateController.add).catchError((Object e) {
+      getDeviceFullState(selectedId).then((fullState) {
+        _safeAddToController(_deviceFullStateController, fullState);
+      }).catchError((Object e) {
         developer.log(
           'Failed to refresh device state after status change: $e',
           name: 'ClimateRepository',
@@ -178,7 +208,7 @@ class RealClimateRepository implements ClimateRepository {
         .toList();
 
     _cachedDevices = devices; // Сохраняем для последующих операций
-    _devicesController.add(devices);
+    _safeAddToController(_devicesController, devices);
     return devices;
   }
 
@@ -227,19 +257,23 @@ class RealClimateRepository implements ClimateRepository {
 
   /// Helper to fetch and update all streams
   Future<void> _fetchAndBroadcastState(String deviceId) async {
+     if (_isDisposed) {
+      return;
+    }
+
      try {
        final jsonDevice = await _fetchDevice(deviceId);
-       
+
        // Update ClimateState stream
        final climateState = DeviceJsonMapper.climateStateFromJson(jsonDevice);
        _lastClimateState = climateState;
-       _climateController.add(climateState);
-       
+       _safeAddToController(_climateController, climateState);
+
        // Update DeviceFullState stream if applicable (it parses more fields)
        // We can try to parse full state from the same JSON
        try {
          final fullState = DeviceJsonMapper.deviceFullStateFromJson(jsonDevice);
-         _deviceFullStateController.add(fullState);
+         _safeAddToController(_deviceFullStateController, fullState);
        } catch (e) {
          // It's okay if we can't parse full state from partial data, but usually getDevice returns full data
        }
@@ -254,17 +288,20 @@ class RealClimateRepository implements ClimateRepository {
     if (deviceId.isEmpty) {
       throw StateError('No device selected');
     }
-    
+
     // Use deduplicated fetch
     final jsonDevice = await _fetchDevice(deviceId);
     final state = DeviceJsonMapper.climateStateFromJson(jsonDevice);
-    
+
+    // Snapshot selectedDeviceId для избежания race condition
+    final selectedId = _selectedDeviceId;
+
     // Update streams cache if this is for the selected device
-    if (deviceId == _selectedDeviceId) {
+    if (deviceId == selectedId) {
        _lastClimateState = state;
-       _climateController.add(state);
+       _safeAddToController(_climateController, state);
     }
-    
+
     return state;
   }
 
@@ -300,9 +337,11 @@ class RealClimateRepository implements ClimateRepository {
 
   @override
   Future<ClimateState> setPower({required bool isOn, String? deviceId}) async {
-    final id = deviceId ?? _selectedDeviceId;
+    // Snapshot selectedDeviceId для избежания race condition
+    final selectedId = _selectedDeviceId;
+    final id = deviceId ?? selectedId;
     developer.log(
-      'setPower called: isOn=$isOn, deviceId=$deviceId, selectedDeviceId=$_selectedDeviceId, resolved id=$id',
+      'setPower called: isOn=$isOn, deviceId=$deviceId, selectedDeviceId=$selectedId, resolved id=$id',
       name: 'ClimateRepository',
     );
 
@@ -313,7 +352,7 @@ class RealClimateRepository implements ClimateRepository {
 
     final jsonDevice = await _httpClient.setPower(id, power: isOn);
     final state = DeviceJsonMapper.climateStateFromJson(jsonDevice);
-    _climateController.add(state);
+    _safeAddToController(_climateController, state);
     return state;
   }
 
@@ -398,7 +437,7 @@ class RealClimateRepository implements ClimateRepository {
 
     final jsonDevice = await _httpClient.setMode(id, modeString);
     final state = DeviceJsonMapper.climateStateFromJson(jsonDevice);
-    _climateController.add(state);
+    _safeAddToController(_climateController, state);
     return state;
   }
 
@@ -408,7 +447,7 @@ class RealClimateRepository implements ClimateRepository {
     // String mode передаётся напрямую без конвертации
     final jsonDevice = await _httpClient.setMode(id, mode);
     final state = DeviceJsonMapper.climateStateFromJson(jsonDevice);
-    _climateController.add(state);
+    _safeAddToController(_climateController, state);
     return state;
   }
 
@@ -464,10 +503,11 @@ class RealClimateRepository implements ClimateRepository {
     final jsonDevice = await _httpClient.registerDevice(macAddress, name);
     final device = DeviceJsonMapper.hvacDeviceFromJson(jsonDevice);
 
-    // Добавляем в локальный список и уведомляем
-    final updatedDevices = [..._cachedDevices, device];
+    // Snapshot + update для избежания race condition
+    final currentDevices = List<HvacDevice>.from(_cachedDevices);
+    final updatedDevices = [...currentDevices, device];
     _cachedDevices = updatedDevices;
-    _devicesController.add(updatedDevices);
+    _safeAddToController(_devicesController, updatedDevices);
 
     return device;
   }
@@ -476,24 +516,27 @@ class RealClimateRepository implements ClimateRepository {
   Future<void> deleteDevice(String deviceId) async {
     await _httpClient.deleteDevice(deviceId);
 
-    // Удаляем из локального списка
-    final updatedDevices = _cachedDevices.where((d) => d.id != deviceId).toList();
+    // Snapshot + update для избежания race condition
+    final currentDevices = List<HvacDevice>.from(_cachedDevices);
+    final updatedDevices = currentDevices.where((d) => d.id != deviceId).toList();
     _cachedDevices = updatedDevices;
-    _devicesController.add(updatedDevices);
+    _safeAddToController(_devicesController, updatedDevices);
   }
 
   @override
   Future<void> renameDevice(String deviceId, String newName) async {
     await _httpClient.renameDevice(deviceId, newName);
 
-    // Обновляем имя в локальном списке
-    _cachedDevices = _cachedDevices.map((d) {
+    // Snapshot + update для избежания race condition
+    final currentDevices = List<HvacDevice>.from(_cachedDevices);
+    final updatedDevices = currentDevices.map((d) {
       if (d.id == deviceId) {
         return d.copyWith(name: newName);
       }
       return d;
     }).toList();
-    _devicesController.add(_cachedDevices);
+    _cachedDevices = updatedDevices;
+    _safeAddToController(_devicesController, updatedDevices);
   }
 
   // ============================================
@@ -505,23 +548,26 @@ class RealClimateRepository implements ClimateRepository {
     if (deviceId.isEmpty) {
       throw StateError('No device selected');
     }
-    
+
     // Use deduplicated fetch
     final jsonDevice = await _fetchDevice(deviceId);
-    
+
+    // Snapshot selectedDeviceId для избежания race condition
+    final selectedId = _selectedDeviceId;
+
     // Update streams cache if this is for the selected device
     // NOTE: This ensures that if we load full state, climate state stream is also valid/updated
     // avoiding the need for a separate getDeviceState call.
-    if (deviceId == _selectedDeviceId) {
+    if (deviceId == selectedId) {
        final climateState = DeviceJsonMapper.climateStateFromJson(jsonDevice);
        _lastClimateState = climateState;
-       _climateController.add(climateState);
-       
+       _safeAddToController(_climateController, climateState);
+
        final fullState = DeviceJsonMapper.deviceFullStateFromJson(jsonDevice);
-       _deviceFullStateController.add(fullState);
+       _safeAddToController(_deviceFullStateController, fullState);
        return fullState;
     }
-    
+
     return DeviceJsonMapper.deviceFullStateFromJson(jsonDevice);
   }
 
@@ -571,11 +617,22 @@ class RealClimateRepository implements ClimateRepository {
   }
 
   void dispose() {
-    _deviceUpdatesSubscription?.cancel(); // Отменить SignalR subscription
-    _statusChangesSubscription?.cancel(); // Отменить status changes subscription
+    // Сначала помечаем как disposed чтобы остановить все операции
+    _isDisposed = true;
+
+    // Отменяем подписки
+    _deviceUpdatesSubscription?.cancel();
+    _statusChangesSubscription?.cancel();
+
+    // Очищаем inflight requests
+    _inflightRequests.clear();
+
+    // Закрываем контроллеры
     _climateController.close();
     _devicesController.close();
     _deviceFullStateController.close();
+
+    // Dispose SignalR
     _signalR?.dispose();
   }
 }

@@ -109,3 +109,8 @@ class AuthProfileUpdated extends AuthState {
   @override
   List<Object?> get props => [user];
 }
+
+/// Сессия истекла - перед logout с показом предупреждения
+class AuthSessionExpiredState extends AuthState {
+  const AuthSessionExpiredState();
+}

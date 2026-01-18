@@ -88,7 +88,11 @@ class DashboardBlocListeners extends StatelessWidget {
         // Auth logout
         BlocListener<AuthBloc, AuthState>(
           listener: (context, state) {
-            if (state is AuthUnauthenticated) {
+            if (state is AuthSessionExpiredState) {
+              // Показать предупреждение о истечении сессии
+              final l10n = AppLocalizations.of(context)!;
+              ToastService.warning(l10n.sessionExpired);
+            } else if (state is AuthUnauthenticated) {
               Future.delayed(AppStagger.card, () {
                 if (context.mounted) {
                   context.go(AppRoutes.login);

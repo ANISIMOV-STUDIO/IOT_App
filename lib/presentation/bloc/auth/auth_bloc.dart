@@ -1,9 +1,12 @@
 /// Auth BLoC
 library;
 
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'dart:async';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hvac_control/core/services/auth_storage_service.dart';
+import 'package:hvac_control/core/services/token_refresh_service.dart';
+import 'package:hvac_control/data/api/http/interceptors/auth_http_interceptor.dart';
 import 'package:hvac_control/data/models/auth_models.dart';
 import 'package:hvac_control/data/services/auth_service.dart';
 import 'package:hvac_control/presentation/bloc/auth/auth_event.dart';
@@ -11,12 +14,13 @@ import 'package:hvac_control/presentation/bloc/auth/auth_state.dart';
 
 /// BLoC для управления состоянием аутентификации
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-
   AuthBloc({
     required AuthService authService,
     required AuthStorageService storageService,
+    TokenRefreshService? tokenRefreshService,
   })  : _authService = authService,
         _storageService = storageService,
+        _tokenRefreshService = tokenRefreshService,
         super(const AuthInitial()) {
     on<AuthCheckRequested>(_onCheckRequested);
     on<AuthLoginRequested>(_onLoginRequested);
@@ -29,9 +33,25 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthResetPasswordRequested>(_onResetPasswordRequested);
     on<AuthChangePasswordRequested>(_onChangePasswordRequested);
     on<AuthUpdateProfileRequested>(_onUpdateProfileRequested);
+    on<AuthSessionExpired>(_onSessionExpired);
+
+    // Подписка на события истечения сессии от TokenRefreshService
+    _sessionExpiredSubscription = _tokenRefreshService?.onSessionExpired.listen((_) {
+      add(const AuthSessionExpired());
+    });
   }
+
   final AuthService _authService;
   final AuthStorageService _storageService;
+  final TokenRefreshService? _tokenRefreshService;
+  StreamSubscription<void>? _sessionExpiredSubscription;
+
+  @override
+  Future<void> close() {
+    _sessionExpiredSubscription?.cancel();
+    _tokenRefreshService?.dispose();
+    return super.close();
+  }
 
   /// Проверка сохраненной сессии
   Future<void> _onCheckRequested(
@@ -44,9 +64,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final accessToken = await _storageService.getToken();
       final refreshToken = await _storageService.getRefreshToken();
 
-      if (accessToken != null && accessToken.isNotEmpty &&
-          refreshToken != null && refreshToken.isNotEmpty) {
+      if (accessToken != null &&
+          accessToken.isNotEmpty &&
+          refreshToken != null &&
+          refreshToken.isNotEmpty) {
         final user = await _authService.getCurrentUser(accessToken);
+
+        // Сбросить состояние сессии при успешной проверке
+        AuthHttpInterceptor.resetSessionState();
+
+        // Запустить фоновое обновление токенов
+        _tokenRefreshService?.start();
+
         emit(AuthAuthenticated(
           user: user,
           accessToken: accessToken,
@@ -82,6 +111,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         response.refreshToken,
       );
       await _storageService.saveUserId(response.user.id);
+
+      // Сбросить состояние сессии после успешного логина
+      AuthHttpInterceptor.resetSessionState();
+
+      // Запустить фоновое обновление токенов
+      _tokenRefreshService?.start();
 
       emit(AuthAuthenticated(
         user: response.user,
@@ -126,6 +161,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthLogoutRequested event,
     Emitter<AuthState> emit,
   ) async {
+    // Остановить фоновое обновление токенов
+    _tokenRefreshService?.stop();
+
     try {
       final refreshToken = await _storageService.getRefreshToken();
       if (refreshToken != null && refreshToken.isNotEmpty) {
@@ -144,6 +182,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthLogoutAllRequested event,
     Emitter<AuthState> emit,
   ) async {
+    // Остановить фоновое обновление токенов
+    _tokenRefreshService?.stop();
+
     try {
       final accessToken = await _storageService.getToken();
       if (accessToken != null && accessToken.isNotEmpty) {
@@ -154,6 +195,37 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
 
     await _storageService.deleteToken();
+    emit(const AuthUnauthenticated());
+  }
+
+  /// Сессия истекла
+  Future<void> _onSessionExpired(
+    AuthSessionExpired event,
+    Emitter<AuthState> emit,
+  ) async {
+    // Остановить фоновое обновление токенов
+    _tokenRefreshService?.stop();
+
+    // Сначала показываем предупреждение
+    emit(const AuthSessionExpiredState());
+
+    // Небольшая задержка для показа сообщения
+    await Future<void>.delayed(const Duration(seconds: 2));
+
+    // Проверяем что BLoC не закрыт после await
+    if (isClosed) {
+      return;
+    }
+
+    // Очищаем токены
+    await _storageService.deleteToken();
+
+    // Проверяем что BLoC не закрыт после await
+    if (isClosed) {
+      return;
+    }
+
+    // Переходим в неавторизованное состояние
     emit(const AuthUnauthenticated());
   }
 
@@ -262,6 +334,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await _authService.changePassword(request, accessToken);
 
       // После смены пароля нужно перелогиниться (все токены отозваны на сервере)
+      _tokenRefreshService?.stop();
       await _storageService.deleteToken();
       emit(const AuthPasswordChanged());
     } catch (e) {

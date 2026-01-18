@@ -1121,4 +1121,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get serviceEngineer => 'Сервис';
+
+  @override
+  String get sessionExpired => 'Сессия истекла. Выполняется выход...';
 }

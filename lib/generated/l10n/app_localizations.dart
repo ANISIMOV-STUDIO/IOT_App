@@ -2173,6 +2173,12 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Сервис'**
   String get serviceEngineer;
+
+  /// Session expired toast message
+  ///
+  /// In ru, this message translates to:
+  /// **'Сессия истекла. Выполняется выход...'**
+  String get sessionExpired;
 }
 
 class _AppLocalizationsDelegate

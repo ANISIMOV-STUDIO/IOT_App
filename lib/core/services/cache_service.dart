@@ -6,6 +6,8 @@
 /// - Методы для работы с климатом, устройствами, расписанием и др.
 library;
 
+import 'dart:async';
+
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hvac_control/core/config/app_constants.dart';
 import 'package:hvac_control/domain/entities/climate.dart';
@@ -71,25 +73,52 @@ class CacheService {
 
   bool _initialized = false;
 
+  /// Флаг для предотвращения операций после dispose
+  bool _isDisposed = false;
+
+  /// Completer для синхронизации конкурентных вызовов initialize
+  Completer<void>? _initCompleter;
+
   /// Инициализация Hive и открытие боксов
+  ///
+  /// Потокобезопасный метод - конкурентные вызовы будут ожидать завершения первого
   Future<void> initialize() async {
-    if (_initialized) {
+    if (_initialized || _isDisposed) {
       return;
     }
 
-    await Hive.initFlutter();
+    // Если уже идёт инициализация - ждём её завершения
+    if (_initCompleter != null) {
+      await _initCompleter!.future;
+      return;
+    }
 
-    _climateBox = await Hive.openBox(CacheKeys.climateBox);
-    _devicesBox = await Hive.openBox(CacheKeys.devicesBox);
-    _hvacDevicesBox = await Hive.openBox(CacheKeys.hvacDevicesBox);
-    _energyBox = await Hive.openBox(CacheKeys.energyBox);
-    _scheduleBox = await Hive.openBox(CacheKeys.scheduleBox);
-    _notificationsBox = await Hive.openBox(CacheKeys.notificationsBox);
-    _graphDataBox = await Hive.openBox(CacheKeys.graphDataBox);
-    _metadataBox = await Hive.openBox(CacheKeys.metadataBox);
+    _initCompleter = Completer<void>();
 
-    _initialized = true;
+    try {
+      await Hive.initFlutter();
+
+      _climateBox = await Hive.openBox(CacheKeys.climateBox);
+      _devicesBox = await Hive.openBox(CacheKeys.devicesBox);
+      _hvacDevicesBox = await Hive.openBox(CacheKeys.hvacDevicesBox);
+      _energyBox = await Hive.openBox(CacheKeys.energyBox);
+      _scheduleBox = await Hive.openBox(CacheKeys.scheduleBox);
+      _notificationsBox = await Hive.openBox(CacheKeys.notificationsBox);
+      _graphDataBox = await Hive.openBox(CacheKeys.graphDataBox);
+      _metadataBox = await Hive.openBox(CacheKeys.metadataBox);
+
+      _initialized = true;
+      _initCompleter?.complete();
+    } catch (e) {
+      _initCompleter?.completeError(e);
+      rethrow;
+    } finally {
+      _initCompleter = null;
+    }
   }
+
+  /// Проверить готовность кеша для операций
+  bool get _isReady => _initialized && !_isDisposed;
 
   // ============================================
   // CLIMATE CACHE
@@ -97,6 +126,9 @@ class CacheService {
 
   /// Сохранить состояние климата
   Future<void> cacheClimateState(ClimateState climate, {String? deviceId}) async {
+    if (!_isReady) {
+      return;
+    }
     final key = deviceId ?? CacheKeys.currentClimate;
     await _climateBox.put(key, _climateStateToMap(climate));
     await _saveMetadata('climate_$key');
@@ -104,6 +136,9 @@ class CacheService {
 
   /// Получить состояние климата из кеша
   ClimateState? getCachedClimateState({String? deviceId}) {
+    if (!_isReady) {
+      return null;
+    }
     final key = deviceId ?? CacheKeys.currentClimate;
     if (!_isValidCache('climate_$key')) {
       return null;
@@ -123,6 +158,9 @@ class CacheService {
 
   /// Сохранить список HVAC устройств
   Future<void> cacheHvacDevices(List<HvacDevice> devices) async {
+    if (!_isReady) {
+      return;
+    }
     final data = devices.map(_hvacDeviceToMap).toList();
     await _hvacDevicesBox.put(CacheKeys.allHvacDevices, data);
     await _saveMetadata('hvac_devices');
@@ -130,7 +168,7 @@ class CacheService {
 
   /// Получить HVAC устройства из кеша
   List<HvacDevice>? getCachedHvacDevices() {
-    if (!_isValidCache('hvac_devices')) {
+    if (!_isReady || !_isValidCache('hvac_devices')) {
       return null;
     }
 
@@ -148,6 +186,9 @@ class CacheService {
 
   /// Сохранить список smart устройств
   Future<void> cacheSmartDevices(List<SmartDevice> devices) async {
+    if (!_isReady) {
+      return;
+    }
     final data = devices.map(_smartDeviceToMap).toList();
     await _devicesBox.put(CacheKeys.allDevices, data);
     await _saveMetadata('smart_devices');
@@ -155,7 +196,7 @@ class CacheService {
 
   /// Получить smart устройства из кеша
   List<SmartDevice>? getCachedSmartDevices() {
-    if (!_isValidCache('smart_devices')) {
+    if (!_isReady || !_isValidCache('smart_devices')) {
       return null;
     }
 
@@ -173,13 +214,16 @@ class CacheService {
 
   /// Сохранить статистику энергопотребления
   Future<void> cacheEnergyStats(EnergyStats stats) async {
+    if (!_isReady) {
+      return;
+    }
     await _energyBox.put(CacheKeys.todayEnergy, _energyStatsToMap(stats));
     await _saveMetadata('energy');
   }
 
   /// Получить статистику из кеша
   EnergyStats? getCachedEnergyStats() {
-    if (!_isValidCache('energy')) {
+    if (!_isReady || !_isValidCache('energy')) {
       return null;
     }
 
@@ -197,6 +241,9 @@ class CacheService {
 
   /// Сохранить расписание устройства
   Future<void> cacheSchedule(String deviceId, List<ScheduleEntry> entries) async {
+    if (!_isReady) {
+      return;
+    }
     final data = entries.map(_scheduleEntryToMap).toList();
     await _scheduleBox.put(deviceId, data);
     await _saveMetadata('schedule_$deviceId');
@@ -204,7 +251,7 @@ class CacheService {
 
   /// Получить расписание из кеша
   List<ScheduleEntry>? getCachedSchedule(String deviceId) {
-    if (!_isValidCache('schedule_$deviceId')) {
+    if (!_isReady || !_isValidCache('schedule_$deviceId')) {
       return null;
     }
 
@@ -222,6 +269,9 @@ class CacheService {
 
   /// Сохранить уведомления
   Future<void> cacheNotifications(List<UnitNotification> notifications, {String? deviceId}) async {
+    if (!_isReady) {
+      return;
+    }
     final key = deviceId ?? 'all';
     final data = notifications.map(_notificationToMap).toList();
     await _notificationsBox.put(key, data);
@@ -230,6 +280,9 @@ class CacheService {
 
   /// Получить уведомления из кеша
   List<UnitNotification>? getCachedNotifications({String? deviceId}) {
+    if (!_isReady) {
+      return null;
+    }
     final key = deviceId ?? 'all';
     if (!_isValidCache('notifications_$key')) {
       return null;
@@ -253,6 +306,9 @@ class CacheService {
     GraphMetric metric,
     List<GraphDataPoint> data,
   ) async {
+    if (!_isReady) {
+      return;
+    }
     final key = '${deviceId}_${metric.name}';
     final mapData = data.map(_graphDataPointToMap).toList();
     await _graphDataBox.put(key, mapData);
@@ -261,6 +317,9 @@ class CacheService {
 
   /// Получить данные графика из кеша
   List<GraphDataPoint>? getCachedGraphData(String deviceId, GraphMetric metric) {
+    if (!_isReady) {
+      return null;
+    }
     final key = '${deviceId}_${metric.name}';
     if (!_isValidCache('graph_$key')) {
       return null;
@@ -280,6 +339,9 @@ class CacheService {
 
   /// Очистить весь кеш
   Future<void> clearAll() async {
+    if (!_isReady) {
+      return;
+    }
     await _climateBox.clear();
     await _devicesBox.clear();
     await _hvacDevicesBox.clear();
@@ -459,4 +521,27 @@ class CacheService {
         label: m['label'] as String,
         value: (m['value'] as num).toDouble(),
       );
+
+  /// Освободить ресурсы и закрыть боксы
+  Future<void> dispose() async {
+    // Сначала помечаем как disposed чтобы остановить все операции
+    _isDisposed = true;
+
+    if (!_initialized) {
+      return;
+    }
+
+    try {
+      await _climateBox.close();
+      await _devicesBox.close();
+      await _hvacDevicesBox.close();
+      await _energyBox.close();
+      await _scheduleBox.close();
+      await _notificationsBox.close();
+      await _graphDataBox.close();
+      await _metadataBox.close();
+    } catch (e) {
+      // Игнорируем ошибки при закрытии
+    }
+  }
 }

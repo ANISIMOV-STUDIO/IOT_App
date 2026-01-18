@@ -33,18 +33,27 @@ class RealNotificationRepository implements NotificationRepository {
   StreamSubscription<Map<String, dynamic>>? _signalRSubscription;
   List<UnitNotification> _cachedNotifications = [];
 
+  /// Флаг для предотвращения race condition при dispose
+  bool _isDisposed = false;
+
   /// Настройка real-time обновлений
   void _setupRealTimeUpdates() {
     // Пробуем использовать gRPC streaming из DataSource
     final dataSourceStream = _dataSource.watchNotifications();
     if (dataSourceStream != null) {
       _dataSourceSubscription = dataSourceStream.listen((dto) {
+        if (_isDisposed) {
+          return;
+        }
         final notification = dto.toEntity();
         _addNotificationToCache(notification);
       });
     } else if (_signalR != null) {
       // Fallback на SignalR для web
       _signalRSubscription = _signalR.notifications.listen((data) {
+        if (_isDisposed) {
+          return;
+        }
         try {
           final notification = _parseNotificationFromJson(data);
           _addNotificationToCache(notification);
@@ -57,12 +66,24 @@ class RealNotificationRepository implements NotificationRepository {
 
   /// Добавляет уведомление в кеш с ограничением размера
   void _addNotificationToCache(UnitNotification notification) {
-    _cachedNotifications = [notification, ..._cachedNotifications];
-    // Ограничиваем размер списка для предотвращения утечки памяти
-    if (_cachedNotifications.length > _maxCachedNotifications) {
-      _cachedNotifications = _cachedNotifications.sublist(0, _maxCachedNotifications);
+    if (_isDisposed) {
+      return;
     }
-    _notificationsController.add(_cachedNotifications);
+
+    // Snapshot + update для избежания race condition
+    final currentNotifications = List<UnitNotification>.from(_cachedNotifications);
+    var updatedNotifications = [notification, ...currentNotifications];
+
+    // Ограничиваем размер списка для предотвращения утечки памяти
+    if (updatedNotifications.length > _maxCachedNotifications) {
+      updatedNotifications = updatedNotifications.sublist(0, _maxCachedNotifications);
+    }
+
+    _cachedNotifications = updatedNotifications;
+
+    if (!_notificationsController.isClosed) {
+      _notificationsController.add(updatedNotifications);
+    }
   }
 
   /// Парсинг уведомления из JSON (для SignalR)
@@ -91,11 +112,18 @@ class RealNotificationRepository implements NotificationRepository {
     // Загружаем начальные данные
     getNotifications(deviceId: deviceId).then(
       (notifications) {
+        if (_isDisposed) {
+          return;
+        }
         _cachedNotifications = notifications;
-        _notificationsController.add(notifications);
+        if (!_notificationsController.isClosed) {
+          _notificationsController.add(notifications);
+        }
       },
       onError: (Object error) {
-        _notificationsController.addError(error);
+        if (!_isDisposed && !_notificationsController.isClosed) {
+          _notificationsController.addError(error);
+        }
       },
     );
     return _notificationsController.stream;
@@ -150,6 +178,9 @@ class RealNotificationRepository implements NotificationRepository {
   }
 
   void dispose() {
+    // Сначала помечаем как disposed чтобы остановить все операции
+    _isDisposed = true;
+
     _dataSourceSubscription?.cancel();
     _signalRSubscription?.cancel();
     _notificationsController.close();

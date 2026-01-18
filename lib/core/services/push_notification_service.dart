@@ -39,6 +39,9 @@ class PushNotificationService {
   /// Инициализирован ли сервис
   bool _initialized = false;
 
+  /// Флаг для предотвращения race condition при dispose
+  bool _isDisposed = false;
+
   /// Текущий FCM токен
   String? get token => _currentToken;
 
@@ -52,7 +55,7 @@ class PushNotificationService {
   ///
   /// Должен быть вызван после Firebase.initializeApp()
   Future<void> initialize() async {
-    if (_initialized) {
+    if (_initialized || _isDisposed) {
       return;
     }
 
@@ -96,6 +99,10 @@ class PushNotificationService {
 
   /// Внутренний метод получения токена
   Future<String?> _getToken() async {
+    if (_isDisposed) {
+      return null;
+    }
+
     try {
       // Для Web нужно указать VAPID key
       if (kIsWeb) {
@@ -106,8 +113,10 @@ class PushNotificationService {
         _currentToken = await _messaging.getToken();
       }
 
-      if (_currentToken != null) {
-        _tokenController.add(_currentToken);
+      if (_currentToken != null && !_isDisposed) {
+        if (!_tokenController.isClosed) {
+          _tokenController.add(_currentToken);
+        }
         debugPrint('PushNotificationService: Токен получен');
       }
 
@@ -133,22 +142,37 @@ class PushNotificationService {
 
   /// Обработка обновления токена
   void _handleTokenRefresh(String newToken) {
+    if (_isDisposed) {
+      return;
+    }
     _currentToken = newToken;
-    _tokenController.add(newToken);
+    if (!_tokenController.isClosed) {
+      _tokenController.add(newToken);
+    }
     debugPrint('PushNotificationService: Токен обновлён');
   }
 
   /// Обработка foreground сообщения
   void _handleForegroundMessage(RemoteMessage message) {
+    if (_isDisposed) {
+      return;
+    }
     debugPrint(
         'PushNotificationService: Foreground сообщение: ${message.notification?.title}');
-    _messageController.add(message);
+    if (!_messageController.isClosed) {
+      _messageController.add(message);
+    }
   }
 
   /// Обработка открытия приложения из уведомления
   void _handleMessageOpenedApp(RemoteMessage message) {
+    if (_isDisposed) {
+      return;
+    }
     debugPrint('PushNotificationService: Приложение открыто из уведомления');
-    _messageController.add(message);
+    if (!_messageController.isClosed) {
+      _messageController.add(message);
+    }
   }
 
   /// Подписаться на топик
@@ -185,6 +209,9 @@ class PushNotificationService {
 
   /// Освободить ресурсы
   void dispose() {
+    // Сначала помечаем как disposed чтобы остановить все операции
+    _isDisposed = true;
+
     _tokenController.close();
     _messageController.close();
   }

@@ -1112,4 +1112,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get serviceEngineer => 'Service';
+
+  @override
+  String get sessionExpired => 'Session expired. Logging out...';
 }
