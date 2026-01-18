@@ -9,6 +9,7 @@ import '../../../../core/theme/spacing.dart';
 import '../../../../generated/l10n/app_localizations.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../domain/entities/unit_state.dart';
+import '../../../widgets/breez/breez_time_picker.dart';
 import 'unit_settings_widgets.dart';
 
 // =============================================================================
@@ -27,16 +28,18 @@ abstract class _DialogConstants {
 // =============================================================================
 
 /// Действия доступные в диалоге настроек
-enum UnitSettingsAction { rename, delete }
+enum UnitSettingsAction { rename, delete, setTime }
 
 /// Результат диалога настроек
 class UnitSettingsResult {
   final UnitSettingsAction action;
   final String? newName;
+  final DateTime? time;
 
   const UnitSettingsResult({
     required this.action,
     this.newName,
+    this.time,
   });
 }
 
@@ -99,6 +102,29 @@ class _UnitSettingsDialogState extends State<UnitSettingsDialog> {
       action: UnitSettingsAction.rename,
       newName: newName,
     ));
+  }
+
+  void _setTime() async {
+    final now = DateTime.now();
+    final initialTime = TimeOfDay(hour: now.hour, minute: now.minute);
+    final selectedTime = await showBreezTimePicker(
+      context: context,
+      initialTime: initialTime,
+    );
+
+    if (selectedTime != null && mounted) {
+      final dateTime = DateTime(
+        now.year,
+        now.month,
+        now.day,
+        selectedTime.hour,
+        selectedTime.minute,
+      );
+      Navigator.of(context).pop(UnitSettingsResult(
+        action: UnitSettingsAction.setTime,
+        time: dateTime,
+      ));
+    }
   }
 
   @override
@@ -164,6 +190,7 @@ class _UnitSettingsDialogState extends State<UnitSettingsDialog> {
               _CompactActions(
                 onRename: () => setState(() => _isRenaming = true),
                 onDelete: _confirmDelete,
+                onSetTime: _setTime,
               ),
           ],
         ),
@@ -324,33 +351,45 @@ class _InfoRow extends StatelessWidget {
 class _CompactActions extends StatelessWidget {
   final VoidCallback onRename;
   final VoidCallback onDelete;
+  final VoidCallback onSetTime;
 
   const _CompactActions({
     required this.onRename,
     required this.onDelete,
+    required this.onSetTime,
   });
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Row(
+    return Column(
       children: [
-        Expanded(
-          child: _ActionButton(
-            icon: Icons.edit_outlined,
-            label: l10n.unitSettingsRename,
-            onTap: onRename,
-          ),
+        Row(
+          children: [
+            Expanded(
+              child: _ActionButton(
+                icon: Icons.edit_outlined,
+                label: l10n.unitSettingsRename,
+                onTap: onRename,
+              ),
+            ),
+            SizedBox(width: AppSpacing.xs),
+            Expanded(
+              child: _ActionButton(
+                icon: Icons.delete_outline,
+                label: l10n.unitSettingsDelete,
+                onTap: onDelete,
+                isDanger: true,
+              ),
+            ),
+          ],
         ),
-        SizedBox(width: AppSpacing.xs),
-        Expanded(
-          child: _ActionButton(
-            icon: Icons.delete_outline,
-            label: l10n.unitSettingsDelete,
-            onTap: onDelete,
-            isDanger: true,
-          ),
+        SizedBox(height: AppSpacing.xs),
+        _ActionButton(
+          icon: Icons.access_time,
+          label: l10n.unitSettingsSetTime,
+          onTap: onSetTime,
         ),
       ],
     );

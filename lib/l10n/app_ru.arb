@@ -519,6 +519,10 @@
   "@nameChanged": {
     "description": "Name changed toast"
   },
+  "timeSet": "Время установлено",
+  "@timeSet": {
+    "description": "Time set toast"
+  },
   "notificationsInDevelopment": "Уведомления: функция в разработке",
   "@notificationsInDevelopment": {
     "description": "Notifications feature in development"
@@ -847,6 +851,7 @@
       }
     }
   },
+  "unitSettingsSetTime": "Установить время",
   "updateAvailable": "Доступна новая версия",
   "updateVersionAvailable": "Доступна версия {version}",
   "@updateVersionAvailable": {

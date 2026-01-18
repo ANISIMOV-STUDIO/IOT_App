@@ -125,4 +125,12 @@ abstract class ClimateRepository
 
   /// Получить историю аварий устройства
   Future<List<AlarmHistory>> getAlarmHistory(String deviceId, {int limit = 100});
+
+  // ============================================
+  // DEVICE TIME SETTING
+  // ============================================
+
+  /// Установить время на устройстве
+  @override
+  Future<void> setDeviceTime(DateTime time, {String? deviceId});
 }

@@ -519,6 +519,10 @@
   "@nameChanged": {
     "description": "Name changed toast"
   },
+  "timeSet": "Time set",
+  "@timeSet": {
+    "description": "Time set toast"
+  },
   "notificationsInDevelopment": "Notifications: feature in development",
   "@notificationsInDevelopment": {
     "description": "Notifications feature in development"
@@ -847,6 +851,7 @@
       }
     }
   },
+  "unitSettingsSetTime": "Set Time",
   "updateAvailable": "Update available",
   "updateVersionAvailable": "Version {version} available",
   "@updateVersionAvailable": {

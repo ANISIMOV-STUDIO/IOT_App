@@ -26,6 +26,7 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
   final DeleteDevice _deleteDevice;
   final RenameDevice _renameDevice;
   final SetDevicePower _setDevicePower;
+  final SetDeviceTime _setDeviceTime;
   final void Function(String) _setSelectedDevice;
 
   StreamSubscription<List<HvacDevice>>? _devicesSubscription;
@@ -37,6 +38,7 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
     required DeleteDevice deleteDevice,
     required RenameDevice renameDevice,
     required SetDevicePower setDevicePower,
+    required SetDeviceTime setDeviceTime,
     required void Function(String) setSelectedDevice,
   })  : _getAllHvacDevices = getAllHvacDevices,
         _watchHvacDevices = watchHvacDevices,
@@ -44,6 +46,7 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
         _deleteDevice = deleteDevice,
         _renameDevice = renameDevice,
         _setDevicePower = setDevicePower,
+        _setDeviceTime = setDeviceTime,
         _setSelectedDevice = setSelectedDevice,
         super(const DevicesState()) {
     // События жизненного цикла
@@ -60,6 +63,7 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
     on<DevicesDeletionRequested>(_onDeletionRequested);
     on<DevicesRenameRequested>(_onRenameRequested);
     on<DevicesMasterPowerOffRequested>(_onMasterPowerOffRequested);
+    on<DevicesTimeSetRequested>(_onTimeSetRequested);
   }
 
   /// Запрос на подписку к списку устройств
@@ -266,6 +270,31 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
         isMasterPowerOffInProgress: false,
         masterPowerOffError: errorMessage,
       ));
+    }
+  }
+
+  /// Установка времени на устройстве
+  Future<void> _onTimeSetRequested(
+    DevicesTimeSetRequested event,
+    Emitter<DevicesState> emit,
+  ) async {
+    try {
+      await _setDeviceTime(
+        SetDeviceTimeParams(
+          deviceId: event.deviceId,
+          time: event.time,
+        ),
+      );
+      // Успешная установка времени не требует обновления state
+      // Время обновится в следующем refresh от устройства
+    } catch (e) {
+      String errorMessage;
+      if (e is ApiException) {
+        errorMessage = e.message;
+      } else {
+        errorMessage = 'Failed to set device time';
+      }
+      emit(state.copyWith(operationError: errorMessage));
     }
   }
 

@@ -34,6 +34,7 @@ export 'climate/watch_current_climate.dart';
 export 'device/register_device.dart';
 export 'device/delete_device.dart';
 export 'device/rename_device.dart';
+export 'device/set_device_time.dart';
 export 'device/get_device_full_state.dart';
 export 'device/get_alarm_history.dart';
 export 'device/watch_hvac_devices.dart';

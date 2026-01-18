@@ -291,6 +291,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => RegisterDevice(sl()));
   sl.registerLazySingleton(() => DeleteDevice(sl()));
   sl.registerLazySingleton(() => RenameDevice(sl()));
+  sl.registerLazySingleton(() => SetDeviceTime(sl()));
   sl.registerLazySingleton(() => GetDeviceFullState(sl()));
   sl.registerLazySingleton(() => GetAlarmHistory(sl()));
   sl.registerLazySingleton(() => WatchDeviceFullState(sl<ClimateRepository>()));
@@ -333,6 +334,7 @@ Future<void> init() async {
       deleteDevice: sl(),
       renameDevice: sl(),
       setDevicePower: sl(),
+      setDeviceTime: sl(),
       setSelectedDevice: sl<ClimateRepository>().setSelectedDevice,
     ),
   );

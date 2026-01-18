@@ -1,5 +1,5 @@
 # Этап 1: Сборка Flutter web приложения
-FROM ghcr.io/cirruslabs/flutter:stable AS builder
+FROM ghcr.io/cirruslabs/flutter:3.35.0 AS builder
 
 WORKDIR /app
 

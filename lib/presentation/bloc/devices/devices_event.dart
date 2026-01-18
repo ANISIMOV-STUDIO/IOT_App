@@ -90,3 +90,17 @@ final class DevicesRenameRequested extends DevicesEvent {
 final class DevicesMasterPowerOffRequested extends DevicesEvent {
   const DevicesMasterPowerOffRequested();
 }
+
+/// Запрошена установка времени на устройстве
+final class DevicesTimeSetRequested extends DevicesEvent {
+  final String deviceId;
+  final DateTime time;
+
+  const DevicesTimeSetRequested({
+    required this.deviceId,
+    required this.time,
+  });
+
+  @override
+  List<Object?> get props => [deviceId, time];
+}

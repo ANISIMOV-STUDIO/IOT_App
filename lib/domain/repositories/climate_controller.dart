@@ -31,4 +31,7 @@ abstract class ClimateController {
 
   /// Set preset (auto, night, turbo, eco, away)
   Future<ClimateState> setPreset(String preset, {String? deviceId});
+
+  /// Set device time
+  Future<void> setDeviceTime(DateTime time, {String? deviceId});
 }

@@ -287,6 +287,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ToastService.success(l10n.nameChanged);
         }
         break;
+      case UnitSettingsAction.setTime:
+        if (result.time != null) {
+          context.read<DevicesBloc>().add(
+            DevicesTimeSetRequested(deviceId: unit.id, time: result.time!),
+          );
+          ToastService.success(l10n.timeSet);
+        }
+        break;
     }
   }
 

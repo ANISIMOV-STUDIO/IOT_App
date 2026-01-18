@@ -446,6 +446,21 @@ class MockClimateRepository implements ClimateRepository {
     ];
   }
 
+  @override
+  Future<void> setDeviceTime(DateTime time, {String? deviceId}) async {
+    await Future.delayed(MockData.normalDelay);
+
+    final targetDeviceId = deviceId ?? _selectedDeviceId;
+    if (targetDeviceId == null) {
+      throw Exception('No device selected');
+    }
+
+    // В реальном API здесь будет POST запрос на /api/devices/{deviceId}/time-setting
+    // Формат запроса: {"time": "2024-01-18T15:30:00"}
+    // В моке просто эмулируем успешную установку времени
+    // Время устройства обновится в следующем полном state refresh
+  }
+
   void dispose() {
     _climateController.close();
     _devicesController.close();
