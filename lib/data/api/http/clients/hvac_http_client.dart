@@ -278,12 +278,27 @@ class HvacHttpClient extends BaseHttpClient implements IHvacDataSource {
   // TIME SETTING
   // ===========================================================================
 
-  /// Установить время на устройстве
-  Future<void> setDeviceTime(String deviceId, DateTime time) async {
+  /// Установить дату и время на устройстве
+  ///
+  /// Бэкенд принимает все поля опционально - не переданные берутся из текущего времени.
+  Future<void> setDeviceTime(
+    String deviceId, {
+    int? year,
+    int? month,
+    int? day,
+    int? hour,
+    int? minute,
+  }) async {
     _validateDeviceId(deviceId);
-    await postVoid(
+    await patchVoid(
       '$_baseUrl/$deviceId/time-setting',
-      {'time': time.toIso8601String()},
+      {
+        if (year != null) 'year': year,
+        if (month != null) 'month': month,
+        if (day != null) 'day': day,
+        if (hour != null) 'hour': hour,
+        if (minute != null) 'minute': minute,
+      },
     );
   }
 

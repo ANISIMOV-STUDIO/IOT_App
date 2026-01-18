@@ -560,7 +560,14 @@ class RealClimateRepository implements ClimateRepository {
     if (targetDeviceId.isEmpty) {
       throw StateError('No device selected');
     }
-    await _httpClient.setDeviceTime(targetDeviceId, time);
+    await _httpClient.setDeviceTime(
+      targetDeviceId,
+      year: time.year,
+      month: time.month,
+      day: time.day,
+      hour: time.hour,
+      minute: time.minute,
+    );
   }
 
   void dispose() {
