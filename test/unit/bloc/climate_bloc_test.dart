@@ -43,6 +43,8 @@ class MockSetScheduleEnabled extends Mock implements SetScheduleEnabled {}
 
 class MockWatchDeviceFullState extends Mock implements WatchDeviceFullState {}
 
+class MockRequestDeviceUpdate extends Mock implements RequestDeviceUpdate {}
+
 void main() {
   late MockGetCurrentClimateState mockGetCurrentClimateState;
   late MockGetDeviceState mockGetDeviceState;
@@ -59,6 +61,7 @@ void main() {
   late MockSetAirflow mockSetAirflow;
   late MockSetScheduleEnabled mockSetScheduleEnabled;
   late MockWatchDeviceFullState mockWatchDeviceFullState;
+  late MockRequestDeviceUpdate mockRequestDeviceUpdate;
 
   // Test data
   const testClimate = ClimateState(
@@ -116,6 +119,7 @@ void main() {
     mockSetScheduleEnabled = MockSetScheduleEnabled();
     mockWatchDeviceFullState = MockWatchDeviceFullState();
     mockGetAlarmHistory = MockGetAlarmHistory();
+    mockRequestDeviceUpdate = MockRequestDeviceUpdate();
   });
 
   ClimateBloc createBloc() => ClimateBloc(
@@ -133,6 +137,7 @@ void main() {
         setAirflow: mockSetAirflow,
         setScheduleEnabled: mockSetScheduleEnabled,
         watchDeviceFullState: mockWatchDeviceFullState,
+        requestDeviceUpdate: mockRequestDeviceUpdate,
       );
 
   group('ClimateBloc', () {
