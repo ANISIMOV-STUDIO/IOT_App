@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hvac_control/core/navigation/app_router.dart';
 import 'package:hvac_control/core/services/toast_service.dart';
+import 'package:hvac_control/core/theme/app_animations.dart';
 import 'package:hvac_control/domain/entities/climate.dart';
 import 'package:hvac_control/domain/entities/device_full_state.dart';
 import 'package:hvac_control/domain/entities/hvac_device.dart';
@@ -88,7 +89,7 @@ class DashboardBlocListeners extends StatelessWidget {
         BlocListener<AuthBloc, AuthState>(
           listener: (context, state) {
             if (state is AuthUnauthenticated) {
-              Future.delayed(const Duration(milliseconds: 100), () {
+              Future.delayed(AppStagger.card, () {
                 if (context.mounted) {
                   context.go(AppRoutes.login);
                 }

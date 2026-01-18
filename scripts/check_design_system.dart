@@ -19,6 +19,7 @@ const String reset = '\x1B[0m';
 
 /// Files that are excluded from design system checks
 const List<String> excludedFiles = [
+  // Theme definitions (define the constants themselves)
   'lib/core/theme/app_colors.dart',
   'lib/core/theme/spacing.dart',
   'lib/core/theme/app_radius.dart',
@@ -30,6 +31,14 @@ const List<String> excludedFiles = [
   'lib/core/theme/breakpoints.dart',
   'lib/core/config/app_constants.dart',
   'lib/core/navigation/app_router.dart',
+  // Mock data (test delays, not UI animations)
+  'lib/data/mock/',
+  // Domain entities (business colors, not theme)
+  'lib/domain/entities/preset_data.dart',
+  // BLoC (debounce durations, not UI animations)
+  'lib/presentation/bloc/',
+  // Design system components (they define their own styles)
+  'lib/presentation/widgets/breez/',
 ];
 
 /// Violation types
@@ -75,7 +84,15 @@ class DesignSystemChecker {
 
   /// Check if a file should be excluded
   bool shouldExclude(String filePath) {
-    return excludedFiles.any((excluded) => filePath.contains(excluded));
+    // Normalize path separators
+    final normalized = filePath.replaceAll('\\', '/');
+    return excludedFiles.any((excluded) {
+      // Handle both exact matches and directory patterns
+      if (excluded.endsWith('/')) {
+        return normalized.contains(excluded);
+      }
+      return normalized.endsWith(excluded) || normalized.contains(excluded);
+    });
   }
 
   /// Run all checks
@@ -268,7 +285,7 @@ class DesignSystemChecker {
       ));
     }
 
-    if (content.contains('TextButton')) {
+    if (content.contains('TextButton') && !content.contains('BreezTextButton')) {
       violations.add(Violation(
         file: file,
         line: line,

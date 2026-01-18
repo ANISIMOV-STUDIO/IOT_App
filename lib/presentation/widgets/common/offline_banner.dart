@@ -6,6 +6,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_control/core/services/connectivity_service.dart';
+import 'package:hvac_control/core/theme/app_animations.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
@@ -117,7 +118,7 @@ class AnimatedOfflineBanner extends StatelessWidget {
   const AnimatedOfflineBanner({
     required this.isVisible, super.key,
     this.status,
-    this.duration = const Duration(milliseconds: 300),
+    this.duration = AppDurations.medium,
   });
   /// Отображать ли баннер
   final bool isVisible;

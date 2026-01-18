@@ -4,6 +4,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hvac_control/core/services/toast_service.dart';
+import 'package:hvac_control/core/theme/app_animations.dart';
 import 'package:hvac_control/core/theme/app_radius.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
@@ -88,7 +89,7 @@ class NotificationsScreen extends StatelessWidget {
               context.read<NotificationsBloc>().add(
                 const NotificationsSubscriptionRequested(),
               );
-              await Future<void>.delayed(const Duration(milliseconds: 500));
+              await Future<void>.delayed(AppDurations.long);
             },
             child: ListView.separated(
               padding: const EdgeInsets.all(AppSpacing.lg),

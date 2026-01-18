@@ -5,6 +5,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/theme/app_animations.dart';
 import 'package:hvac_control/core/theme/app_radius.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
@@ -337,7 +338,7 @@ class Shimmer extends StatefulWidget {
 
   const Shimmer({
     required this.child, required this.baseColor, required this.highlightColor, super.key,
-    this.duration = const Duration(milliseconds: 1500),
+    this.duration = AppDurations.shimmer,
   });
   final Widget child;
   final Color baseColor;

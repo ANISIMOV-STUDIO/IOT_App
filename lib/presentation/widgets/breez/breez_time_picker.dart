@@ -21,6 +21,7 @@ abstract class _TimePickerConstants {
   static const double selectedFontSize = 32;
   static const double unselectedFontSize = 20;
   static const double colonFontSize = 32;
+  static const double separatorPadding = 2; // Микро-отступ для разделителей
 }
 
 // =============================================================================
@@ -483,7 +484,7 @@ class _BreezDateTimePickerDialogState extends State<_BreezDateTimePickerDialog> 
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 2),
+                    padding: const EdgeInsets.symmetric(horizontal: _TimePickerConstants.separatorPadding),
                     child: Text('.', style: TextStyle(
                       fontSize: _TimePickerConstants.colonFontSize,
                       fontWeight: FontWeight.w700,
@@ -507,7 +508,7 @@ class _BreezDateTimePickerDialogState extends State<_BreezDateTimePickerDialog> 
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 2),
+                    padding: const EdgeInsets.symmetric(horizontal: _TimePickerConstants.separatorPadding),
                     child: Text('.', style: TextStyle(
                       fontSize: _TimePickerConstants.colonFontSize,
                       fontWeight: FontWeight.w700,

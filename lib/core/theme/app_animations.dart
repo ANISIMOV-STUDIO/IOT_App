@@ -29,6 +29,9 @@ abstract final class AppDurations {
   /// Медленная анимация (400ms) - сложные переходы
   static const Duration slow = Duration(milliseconds: 400);
 
+  /// Длинная задержка (500ms) - pull-to-refresh, tooltip wait
+  static const Duration long = Duration(milliseconds: 500);
+
   /// Очень медленная анимация (600ms) - page transitions
   static const Duration slower = Duration(milliseconds: 600);
 
