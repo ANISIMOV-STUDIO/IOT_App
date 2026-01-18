@@ -802,6 +802,7 @@
   "statusDisabled": "Выключено",
   "holdToToggle": "Удерживайте для активации дня",
   "selectTime": "Выбор времени",
+  "setDateTime": "Установить дату и время",
   "confirm": "Готово",
   "statusResolved": "РЕШЕНА",
   "statusActive": "АКТИВНА",

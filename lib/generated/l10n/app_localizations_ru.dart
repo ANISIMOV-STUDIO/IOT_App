@@ -704,6 +704,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get selectTime => 'Выбор времени';
 
   @override
+  String get setDateTime => 'Установить дату и время';
+
+  @override
   String get confirm => 'Готово';
 
   @override

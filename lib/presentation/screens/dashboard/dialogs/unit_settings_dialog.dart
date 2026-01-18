@@ -104,23 +104,15 @@ class _UnitSettingsDialogState extends State<UnitSettingsDialog> {
 
   Future<void> _setTime() async {
     final now = DateTime.now();
-    final initialTime = TimeOfDay(hour: now.hour, minute: now.minute);
-    final selectedTime = await showBreezTimePicker(
+    final selectedDateTime = await showBreezDateTimePicker(
       context: context,
-      initialTime: initialTime,
+      initialDateTime: now,
     );
 
-    if (selectedTime != null && mounted) {
-      final dateTime = DateTime(
-        now.year,
-        now.month,
-        now.day,
-        selectedTime.hour,
-        selectedTime.minute,
-      );
+    if (selectedDateTime != null && mounted) {
       Navigator.of(context).pop(UnitSettingsResult(
         action: UnitSettingsAction.setTime,
-        time: dateTime,
+        time: selectedDateTime,
       ));
     }
   }

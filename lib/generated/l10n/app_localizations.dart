@@ -1382,6 +1382,12 @@ abstract class AppLocalizations {
   /// **'Выбор времени'**
   String get selectTime;
 
+  /// No description provided for @setDateTime.
+  ///
+  /// In ru, this message translates to:
+  /// **'Установить дату и время'**
+  String get setDateTime;
+
   /// No description provided for @confirm.
   ///
   /// In ru, this message translates to:

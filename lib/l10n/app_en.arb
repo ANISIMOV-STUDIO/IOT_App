@@ -802,6 +802,7 @@
   "statusDisabled": "Disabled",
   "holdToToggle": "Hold to activate day",
   "selectTime": "Select time",
+  "setDateTime": "Set date and time",
   "confirm": "Done",
   "statusResolved": "RESOLVED",
   "statusActive": "ACTIVE",

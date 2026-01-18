@@ -702,6 +702,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get selectTime => 'Select time';
 
   @override
+  String get setDateTime => 'Set date and time';
+
+  @override
   String get confirm => 'Done';
 
   @override
