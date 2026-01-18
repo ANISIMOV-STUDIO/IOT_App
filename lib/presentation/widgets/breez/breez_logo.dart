@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hvac_control/core/config/app_constants.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 
 // =============================================================================
@@ -84,7 +85,7 @@ class BreezLogo extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'BREEZ',
+              AppInfo.appName,
               style: TextStyle(
                 fontSize: effectiveTitleSize,
                 fontWeight: FontWeight.w900,

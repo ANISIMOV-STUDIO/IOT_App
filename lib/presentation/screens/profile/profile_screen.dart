@@ -40,7 +40,6 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   bool _pushNotifications = true;
   bool _emailNotifications = false;
-  bool _alarmNotifications = true;
 
   @override
   Widget build(BuildContext context) {
@@ -113,10 +112,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _NotificationsCard(
                     pushNotifications: _pushNotifications,
                     emailNotifications: _emailNotifications,
-                    alarmNotifications: _alarmNotifications,
                     onPushChanged: (v) => setState(() => _pushNotifications = v),
                     onEmailChanged: (v) => setState(() => _emailNotifications = v),
-                    onAlarmChanged: (v) => setState(() => _alarmNotifications = v),
                   ),
                   const SizedBox(height: AppSpacing.sm),
 
@@ -317,17 +314,13 @@ class _NotificationsCard extends StatelessWidget {
   const _NotificationsCard({
     required this.pushNotifications,
     required this.emailNotifications,
-    required this.alarmNotifications,
     required this.onPushChanged,
     required this.onEmailChanged,
-    required this.onAlarmChanged,
   });
   final bool pushNotifications;
   final bool emailNotifications;
-  final bool alarmNotifications;
   final ValueChanged<bool> onPushChanged;
   final ValueChanged<bool> onEmailChanged;
-  final ValueChanged<bool> onAlarmChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -351,13 +344,6 @@ class _NotificationsCard extends StatelessWidget {
             title: l10n.emailNotifications,
             value: emailNotifications,
             onChanged: onEmailChanged,
-          ),
-          const SizedBox(height: AppSpacing.xs),
-          BreezSwitchTile(
-            icon: Icons.warning_amber_outlined,
-            title: l10n.alarmNotifications,
-            value: alarmNotifications,
-            onChanged: onAlarmChanged,
           ),
         ],
       ),

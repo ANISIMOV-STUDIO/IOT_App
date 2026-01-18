@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/config/app_constants.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 
@@ -22,7 +23,7 @@ class SplashScreen extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.lgx),
             Text(
-              'BREEZ Home',
+              AppInfo.appName,
               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),

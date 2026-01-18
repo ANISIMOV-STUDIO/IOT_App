@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hvac_control/core/config/app_constants.dart';
 import 'package:hvac_control/core/di/injection_container.dart' as di;
 import 'package:hvac_control/core/logging/talker_config.dart';
 import 'package:hvac_control/core/navigation/app_router.dart';
@@ -127,7 +128,7 @@ class _HvacControlAppState extends State<HvacControlApp> {
           return MaterialApp.router(
             scaffoldMessengerKey: scaffoldMessengerKey,
             routerConfig: _router,
-            title: 'BREEZ Home',
+            title: AppInfo.appName,
             debugShowCheckedModeBanner: false,
 
             // Material theme with smooth transition

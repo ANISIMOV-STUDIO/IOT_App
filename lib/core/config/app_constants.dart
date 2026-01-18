@@ -4,6 +4,12 @@
 /// Легко изменять для разных environments.
 library;
 
+/// Информация о приложении
+abstract class AppInfo {
+  /// Название приложения
+  static const appName = 'BREEZ IOT';
+}
+
 /// Константы для работы с сетью
 abstract class NetworkConstants {
   /// Интервал проверки доступности сервера
