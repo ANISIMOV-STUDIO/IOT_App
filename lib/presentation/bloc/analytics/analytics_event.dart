@@ -29,9 +29,9 @@ final class AnalyticsRefreshRequested extends AnalyticsEvent {
 
 /// Смена текущего устройства — перезагрузить графики
 final class AnalyticsDeviceChanged extends AnalyticsEvent {
-  final String deviceId;
 
   const AnalyticsDeviceChanged(this.deviceId);
+  final String deviceId;
 
   @override
   List<Object?> get props => [deviceId];
@@ -43,9 +43,9 @@ final class AnalyticsDeviceChanged extends AnalyticsEvent {
 
 /// Статистика энергопотребления обновлена (из стрима)
 final class AnalyticsEnergyStatsUpdated extends AnalyticsEvent {
-  final EnergyStats stats;
 
   const AnalyticsEnergyStatsUpdated(this.stats);
+  final EnergyStats stats;
 
   @override
   List<Object?> get props => [stats];
@@ -53,9 +53,9 @@ final class AnalyticsEnergyStatsUpdated extends AnalyticsEvent {
 
 /// Данные графика обновлены (из стрима)
 final class AnalyticsGraphDataUpdated extends AnalyticsEvent {
-  final List<GraphDataPoint> data;
 
   const AnalyticsGraphDataUpdated(this.data);
+  final List<GraphDataPoint> data;
 
   @override
   List<Object?> get props => [data];
@@ -67,9 +67,9 @@ final class AnalyticsGraphDataUpdated extends AnalyticsEvent {
 
 /// Изменена метрика графика
 final class AnalyticsGraphMetricChanged extends AnalyticsEvent {
-  final GraphMetric metric;
 
   const AnalyticsGraphMetricChanged(this.metric);
+  final GraphMetric metric;
 
   @override
   List<Object?> get props => [metric];

@@ -3,18 +3,16 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_font_sizes.dart';
-import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../core/services/toast_service.dart';
-import '../../../domain/entities/unit_notification.dart';
-import '../../../generated/l10n/app_localizations.dart';
-import '../../bloc/notifications/notifications_bloc.dart';
-import '../../widgets/error/error_widgets.dart';
-import '../../widgets/breez/breez_button.dart';
-import '../../widgets/breez/breez_icon_button.dart';
+import 'package:hvac_control/core/services/toast_service.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/domain/entities/unit_notification.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
+import 'package:hvac_control/presentation/bloc/notifications/notifications_bloc.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_icon_button.dart';
+import 'package:hvac_control/presentation/widgets/error/error_widgets.dart';
 
 /// Полноэкранный список уведомлений с действиями
 class NotificationsScreen extends StatelessWidget {
@@ -50,7 +48,9 @@ class NotificationsScreen extends StatelessWidget {
         actions: [
           BlocBuilder<NotificationsBloc, NotificationsState>(
             builder: (context, state) {
-              if (!state.hasUnread) return const SizedBox.shrink();
+              if (!state.hasUnread) {
+                return const SizedBox.shrink();
+              }
 
               return BreezButton(
                 onTap: () {
@@ -88,7 +88,7 @@ class NotificationsScreen extends StatelessWidget {
               context.read<NotificationsBloc>().add(
                 const NotificationsSubscriptionRequested(),
               );
-              await Future.delayed(const Duration(milliseconds: 500));
+              await Future<void>.delayed(const Duration(milliseconds: 500));
             },
             child: ListView.separated(
               padding: const EdgeInsets.all(AppSpacing.lg),
@@ -125,10 +125,6 @@ class NotificationsScreen extends StatelessWidget {
 
 /// Плитка уведомления с возможностью свайпа
 class _NotificationTile extends StatelessWidget {
-  final UnitNotification notification;
-  final VoidCallback? onTap;
-  final VoidCallback? onDismiss;
-  final AppLocalizations l10n;
 
   const _NotificationTile({
     required this.notification,
@@ -136,6 +132,10 @@ class _NotificationTile extends StatelessWidget {
     this.onTap,
     this.onDismiss,
   });
+  final UnitNotification notification;
+  final VoidCallback? onTap;
+  final VoidCallback? onDismiss;
+  final AppLocalizations l10n;
 
   Color get _typeColor {
     switch (notification.type) {
@@ -167,10 +167,18 @@ class _NotificationTile extends StatelessWidget {
     final now = DateTime.now();
     final diff = now.difference(notification.timestamp);
 
-    if (diff.inMinutes < 1) return l10n.justNow;
-    if (diff.inMinutes < 60) return '${diff.inMinutes} мин назад';
-    if (diff.inHours < 24) return '${diff.inHours} ч назад';
-    if (diff.inDays < 7) return '${diff.inDays} дн назад';
+    if (diff.inMinutes < 1) {
+      return l10n.justNow;
+    }
+    if (diff.inMinutes < 60) {
+      return '${diff.inMinutes} мин назад';
+    }
+    if (diff.inHours < 24) {
+      return '${diff.inHours} ч назад';
+    }
+    if (diff.inDays < 7) {
+      return '${diff.inDays} дн назад';
+    }
     return '${notification.timestamp.day}.${notification.timestamp.month}.${notification.timestamp.year}';
   }
 

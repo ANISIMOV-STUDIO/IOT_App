@@ -2,13 +2,36 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../core/services/quick_sensors_service.dart';
-import '../../../domain/entities/unit_state.dart';
-import '../../../generated/l10n/app_localizations.dart';
-import 'main_temp_card.dart';
+import 'package:hvac_control/core/services/quick_sensors_service.dart';
+import 'package:hvac_control/domain/entities/unit_state.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
+import 'package:hvac_control/presentation/widgets/breez/main_temp_card.dart';
 
 /// Унифицированная карточка управления для всех layout-ов
 class UnitControlCard extends StatelessWidget {
+
+  const UnitControlCard({
+    required this.unit, super.key,
+    this.onTemperatureIncrease,
+    this.onTemperatureDecrease,
+    this.onHeatingTempIncrease,
+    this.onHeatingTempDecrease,
+    this.onCoolingTempIncrease,
+    this.onCoolingTempDecrease,
+    this.onSupplyFanChanged,
+    this.onExhaustFanChanged,
+    this.onPowerToggle,
+    this.onSettingsTap,
+    this.isPowerLoading = false,
+    this.isScheduleEnabled = false,
+    this.isScheduleLoading = false,
+    this.onScheduleToggle,
+    this.isOnline = true,
+    this.isPendingHeatingTemperature = false,
+    this.isPendingCoolingTemperature = false,
+    this.isPendingSupplyFan = false,
+    this.isPendingExhaustFan = false,
+  });
   final UnitState unit;
   final VoidCallback? onTemperatureIncrease;
   final VoidCallback? onTemperatureDecrease;
@@ -37,30 +60,6 @@ class UnitControlCard extends StatelessWidget {
 
   /// Ожидание подтверждения изменения вытяжного вентилятора
   final bool isPendingExhaustFan;
-
-  const UnitControlCard({
-    super.key,
-    required this.unit,
-    this.onTemperatureIncrease,
-    this.onTemperatureDecrease,
-    this.onHeatingTempIncrease,
-    this.onHeatingTempDecrease,
-    this.onCoolingTempIncrease,
-    this.onCoolingTempDecrease,
-    this.onSupplyFanChanged,
-    this.onExhaustFanChanged,
-    this.onPowerToggle,
-    this.onSettingsTap,
-    this.isPowerLoading = false,
-    this.isScheduleEnabled = false,
-    this.isScheduleLoading = false,
-    this.onScheduleToggle,
-    this.isOnline = true,
-    this.isPendingHeatingTemperature = false,
-    this.isPendingCoolingTemperature = false,
-    this.isPendingSupplyFan = false,
-    this.isPendingExhaustFan = false,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +95,6 @@ class UnitControlCard extends StatelessWidget {
       isScheduleEnabled: isScheduleEnabled,
       isScheduleLoading: isScheduleLoading,
       onScheduleToggle: onScheduleToggle,
-      showStats: true,
       isOnline: isOnline,
       isPendingHeatingTemperature: isPendingHeatingTemperature,
       isPendingCoolingTemperature: isPendingCoolingTemperature,

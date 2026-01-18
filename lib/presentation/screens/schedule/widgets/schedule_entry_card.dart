@@ -2,43 +2,38 @@
 library;
 
 import 'package:flutter/material.dart';
-
-import '../../../../core/theme/app_theme.dart';
-import '../../../../generated/l10n/app_localizations.dart';
-import '../../../../core/theme/app_radius.dart';
-import '../../../../core/theme/spacing.dart';
-import '../../../widgets/breez/breez_card.dart';
-import '../../../widgets/breez/schedule_widget.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
+import 'package:hvac_control/presentation/widgets/breez/schedule_widget.dart';
 
 // =============================================================================
 // CONSTANTS
 // =============================================================================
 
 abstract class _ScheduleEntryCardConstants {
-  static const double fontSize = 14.0;
-  static const double fontSizeSmall = 12.0;
-  static const double fontSizeMedium = 13.0;
-  static const double iconSizeSmall = 16.0;
-  static const double iconSizeMedium = 18.0;
-  static const double modeIconContainerSize = 36.0;
-  static const double badgePaddingHorizontal = 12.0;
-  static const double badgePaddingVertical = 6.0;
+  static const double fontSize = 14;
+  static const double fontSizeSmall = 12;
+  static const double fontSizeMedium = 13;
+  static const double iconSizeSmall = 16;
+  static const double iconSizeMedium = 18;
+  static const double modeIconContainerSize = 36;
+  static const double badgePaddingHorizontal = 12;
+  static const double badgePaddingVertical = 6;
 }
 
 /// Карточка записи расписания
 class ScheduleEntryCard extends StatelessWidget {
+
+  const ScheduleEntryCard({
+    required this.entry, required this.onEdit, required this.onDelete, required this.onToggle, super.key,
+  });
   final ScheduleEntry entry;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
   final ValueChanged<bool> onToggle;
-
-  const ScheduleEntryCard({
-    super.key,
-    required this.entry,
-    required this.onEdit,
-    required this.onDelete,
-    required this.onToggle,
-  });
 
   IconData _getModeIcon() {
     switch (entry.mode.toLowerCase()) {
@@ -75,8 +70,7 @@ class ScheduleEntryCard extends StatelessWidget {
     );
   }
 
-  Widget _buildHeaderRow(BreezColors colors) {
-    return Row(
+  Widget _buildHeaderRow(BreezColors colors) => Row(
       children: [
         _DayBadge(day: entry.day, isActive: entry.isActive),
         const SizedBox(width: AppSpacing.sm),
@@ -85,10 +79,8 @@ class ScheduleEntryCard extends StatelessWidget {
         _ActiveSwitch(isActive: entry.isActive, onToggle: onToggle),
       ],
     );
-  }
 
-  Widget _buildModeRow(BreezColors colors, AppLocalizations l10n) {
-    return Row(
+  Widget _buildModeRow(BreezColors colors, AppLocalizations l10n) => Row(
       children: [
         _ModeIcon(icon: _getModeIcon()),
         const SizedBox(width: AppSpacing.sm),
@@ -136,15 +128,14 @@ class ScheduleEntryCard extends StatelessWidget {
         ),
       ],
     );
-  }
 }
 
 /// Badge showing day name
 class _DayBadge extends StatelessWidget {
-  final String day;
-  final bool isActive;
 
   const _DayBadge({required this.day, required this.isActive});
+  final String day;
+  final bool isActive;
 
   @override
   Widget build(BuildContext context) {
@@ -176,9 +167,9 @@ class _DayBadge extends StatelessWidget {
 
 /// Time range display
 class _TimeRange extends StatelessWidget {
-  final String timeRange;
 
   const _TimeRange({required this.timeRange});
+  final String timeRange;
 
   @override
   Widget build(BuildContext context) {
@@ -207,14 +198,13 @@ class _TimeRange extends StatelessWidget {
 
 /// Active toggle switch
 class _ActiveSwitch extends StatelessWidget {
+
+  const _ActiveSwitch({required this.isActive, required this.onToggle});
   final bool isActive;
   final ValueChanged<bool> onToggle;
 
-  const _ActiveSwitch({required this.isActive, required this.onToggle});
-
   @override
-  Widget build(BuildContext context) {
-    return Switch(
+  Widget build(BuildContext context) => Switch(
       value: isActive,
       onChanged: onToggle,
       activeTrackColor: AppColors.accent,
@@ -225,18 +215,16 @@ class _ActiveSwitch extends StatelessWidget {
         return null;
       }),
     );
-  }
 }
 
 /// Mode icon container
 class _ModeIcon extends StatelessWidget {
-  final IconData icon;
 
   const _ModeIcon({required this.icon});
+  final IconData icon;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(BuildContext context) => Container(
       width: _ScheduleEntryCardConstants.modeIconContainerSize,
       height: _ScheduleEntryCardConstants.modeIconContainerSize,
       decoration: BoxDecoration(
@@ -249,5 +237,4 @@ class _ModeIcon extends StatelessWidget {
         color: AppColors.accent,
       ),
     );
-  }
 }

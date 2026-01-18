@@ -2,11 +2,11 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/breakpoints.dart';
-import '../../../core/theme/spacing.dart';
-import 'breez_card.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/breakpoints.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -15,18 +15,18 @@ import 'breez_card.dart';
 /// Константы для BreezNavigationBar
 abstract class _NavBarConstants {
   // Размеры - компактный режим (mobile)
-  static const double barHeightCompact = 64.0;
-  static const double buttonSizeCompact = 48.0;
-  static const double iconSizeCompact = 24.0;
+  static const double barHeightCompact = 64;
+  static const double buttonSizeCompact = 48;
+  static const double iconSizeCompact = 24;
 
   // Размеры - полный режим (tablet/desktop)
-  static const double barHeightNormal = 64.0;
-  static const double buttonSizeNormal = 48.0;
-  static const double iconSizeNormal = 24.0;
+  static const double barHeightNormal = 64;
+  static const double buttonSizeNormal = 48;
+  static const double iconSizeNormal = 24;
 
   // Тень
-  static const double shadowBlur = 16.0;
-  static const double shadowOffsetY = -4.0;
+  static const double shadowBlur = 16;
+  static const double shadowOffsetY = -4;
   static const double shadowOpacity = 0.1;
 
   // Отступы
@@ -39,29 +39,29 @@ abstract class _NavBarConstants {
 
 /// Navigation item data
 class NavigationItem {
-  final IconData icon;
-  final String label;
 
   const NavigationItem({
     required this.icon,
     required this.label,
   });
+  final IconData icon;
+  final String label;
 }
 
 /// Bottom navigation bar component (adaptive)
 class BreezNavigationBar extends StatelessWidget {
+
+  const BreezNavigationBar({
+    required this.items,
+    required this.selectedIndex,
+    super.key,
+    this.onItemSelected,
+    this.onThemeToggle,
+  });
   final List<NavigationItem> items;
   final int selectedIndex;
   final ValueChanged<int>? onItemSelected;
   final VoidCallback? onThemeToggle;
-
-  const BreezNavigationBar({
-    super.key,
-    required this.items,
-    required this.selectedIndex,
-    this.onItemSelected,
-    this.onThemeToggle,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +86,7 @@ class BreezNavigationBar extends StatelessWidget {
           label: 'Панель навигации',
           child: Container(
             height: barHeight,
-            margin: EdgeInsets.fromLTRB(
+            margin: const EdgeInsets.fromLTRB(
               AppSpacing.sm,
               0,
               AppSpacing.sm,
@@ -100,7 +100,7 @@ class BreezNavigationBar extends StatelessWidget {
                 BoxShadow(
                   color: AppColors.black.withValues(alpha: _NavBarConstants.shadowOpacity),
                   blurRadius: _NavBarConstants.shadowBlur,
-                  offset: Offset(0, _NavBarConstants.shadowOffsetY),
+                  offset: const Offset(0, _NavBarConstants.shadowOffsetY),
                 ),
               ],
             ),
@@ -150,10 +150,10 @@ class BreezNavigationBar extends StatelessWidget {
                     width: 1,
                     height: buttonSize * _NavBarConstants.dividerHeightRatio,
                     color: colors.border,
-                    margin: EdgeInsets.symmetric(horizontal: AppSpacing.xs),
+                    margin: const EdgeInsets.symmetric(horizontal: AppSpacing.xs),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(right: AppSpacing.xxs),
+                    padding: const EdgeInsets.only(right: AppSpacing.xxs),
                     child: Builder(
                       builder: (context) {
                         final isDark = Theme.of(context).brightness == Brightness.dark;

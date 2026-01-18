@@ -81,19 +81,19 @@ abstract final class AppStagger {
 /// Предустановленные Tween'ы для переиспользования
 abstract final class AppTweens {
   /// Появление с прозрачности
-  static final Tween<double> fadeIn = Tween(begin: 0.0, end: 1.0);
+  static final Tween<double> fadeIn = Tween(begin: 0, end: 1);
 
   /// Исчезновение
-  static final Tween<double> fadeOut = Tween(begin: 1.0, end: 0.0);
+  static final Tween<double> fadeOut = Tween(begin: 1, end: 0);
 
   /// Масштабирование от 0.95 до 1.0 (subtle)
-  static final Tween<double> scaleSubtle = Tween(begin: 0.95, end: 1.0);
+  static final Tween<double> scaleSubtle = Tween(begin: 0.95, end: 1);
 
   /// Масштабирование от 0.8 до 1.0 (medium)
-  static final Tween<double> scaleMedium = Tween(begin: 0.8, end: 1.0);
+  static final Tween<double> scaleMedium = Tween(begin: 0.8, end: 1);
 
   /// Масштабирование от 0 до 1.0 (full)
-  static final Tween<double> scaleFull = Tween(begin: 0.0, end: 1.0);
+  static final Tween<double> scaleFull = Tween(begin: 0, end: 1);
 
   /// Сдвиг снизу (для появления)
   static final Tween<Offset> slideUp = Tween(
@@ -127,12 +127,10 @@ extension AnimatedTransitionExtension on Widget {
     Duration duration = AppDurations.normal,
     Curve switchInCurve = AppCurves.easeOut,
     Curve switchOutCurve = AppCurves.easeIn,
-  }) {
-    return AnimatedSwitcher(
+  }) => AnimatedSwitcher(
       duration: duration,
       switchInCurve: switchInCurve,
       switchOutCurve: switchOutCurve,
       child: this,
     );
-  }
 }

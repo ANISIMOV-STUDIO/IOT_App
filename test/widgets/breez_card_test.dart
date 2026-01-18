@@ -57,7 +57,6 @@ void main() {
       await tester.pumpWidget(
         wrapWithBreezTheme(
           const BreezCard(
-            disabled: false,
             child: Text('Enabled Card'),
           ),
         ),

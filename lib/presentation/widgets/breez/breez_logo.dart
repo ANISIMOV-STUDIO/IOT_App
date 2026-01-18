@@ -3,7 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../../core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -11,7 +11,7 @@ import '../../../core/theme/app_theme.dart';
 
 /// Константы для BreezLogo
 abstract class _LogoConstants {
-  static const double textLineHeight = 1.0;
+  static const double textLineHeight = 1;
 }
 
 // =============================================================================
@@ -20,10 +20,6 @@ abstract class _LogoConstants {
 
 /// BREEZ logo with icon and text
 class BreezLogo extends StatelessWidget {
-  final double? iconSize;
-  final double? titleSize;
-  final double? subtitleSize;
-  final double spacing;
 
   const BreezLogo({
     super.key,
@@ -56,6 +52,10 @@ class BreezLogo extends StatelessWidget {
   })  : iconSize = 40,
         titleSize = 24,
         subtitleSize = 10;
+  final double? iconSize;
+  final double? titleSize;
+  final double? subtitleSize;
+  final double spacing;
 
   @override
   Widget build(BuildContext context) {

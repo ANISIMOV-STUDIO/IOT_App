@@ -29,7 +29,7 @@ const ScheduleEntry$json = {
       '4': 1,
       '5': 11,
       '6': '.breez.ScheduleAction',
-      '10': 'action'
+      '10': 'action',
     },
     {'1': 'enabled', '3': 6, '4': 1, '5': 8, '10': 'enabled'},
     {
@@ -38,7 +38,7 @@ const ScheduleEntry$json = {
       '4': 1,
       '5': 11,
       '6': '.google.protobuf.Timestamp',
-      '10': 'createdAt'
+      '10': 'createdAt',
     },
   ],
 };
@@ -65,7 +65,7 @@ const ScheduleAction$json = {
       '6': '.breez.OperationMode',
       '9': 2,
       '10': 'mode',
-      '17': true
+      '17': true,
     },
     {
       '1': 'supply_fan',
@@ -75,7 +75,7 @@ const ScheduleAction$json = {
       '6': '.breez.FanSpeed',
       '9': 3,
       '10': 'supplyFan',
-      '17': true
+      '17': true,
     },
     {
       '1': 'exhaust_fan',
@@ -85,7 +85,7 @@ const ScheduleAction$json = {
       '6': '.breez.FanSpeed',
       '9': 4,
       '10': 'exhaustFan',
-      '17': true
+      '17': true,
     },
     {
       '1': 'preset_id',
@@ -94,7 +94,7 @@ const ScheduleAction$json = {
       '5': 9,
       '9': 5,
       '10': 'presetId',
-      '17': true
+      '17': true,
     },
   ],
   '8': [
@@ -127,7 +127,7 @@ const GetScheduleRequest$json = {
 /// Descriptor for `GetScheduleRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getScheduleRequestDescriptor =
     $convert.base64Decode(
-        'ChJHZXRTY2hlZHVsZVJlcXVlc3QSGwoJZGV2aWNlX2lkGAEgASgJUghkZXZpY2VJZA==');
+        'ChJHZXRTY2hlZHVsZVJlcXVlc3QSGwoJZGV2aWNlX2lkGAEgASgJUghkZXZpY2VJZA==',);
 
 @$core.Deprecated('Use listScheduleResponseDescriptor instead')
 const ListScheduleResponse$json = {
@@ -139,7 +139,7 @@ const ListScheduleResponse$json = {
       '4': 3,
       '5': 11,
       '6': '.breez.ScheduleEntry',
-      '10': 'entries'
+      '10': 'entries',
     },
   ],
 };
@@ -162,7 +162,7 @@ const CreateScheduleRequest$json = {
       '4': 1,
       '5': 11,
       '6': '.breez.ScheduleAction',
-      '10': 'action'
+      '10': 'action',
     },
     {'1': 'enabled', '3': 5, '4': 1, '5': 8, '10': 'enabled'},
   ],
@@ -189,7 +189,7 @@ const UpdateScheduleRequest$json = {
       '6': '.breez.ScheduleAction',
       '9': 1,
       '10': 'action',
-      '17': true
+      '17': true,
     },
     {
       '1': 'enabled',
@@ -198,7 +198,7 @@ const UpdateScheduleRequest$json = {
       '5': 8,
       '9': 2,
       '10': 'enabled',
-      '17': true
+      '17': true,
     },
   ],
   '8': [

@@ -25,7 +25,7 @@ const GraphDataPoint$json = {
       '4': 1,
       '5': 11,
       '6': '.google.protobuf.Timestamp',
-      '10': 'timestamp'
+      '10': 'timestamp',
     },
     {'1': 'value', '3': 2, '4': 1, '5': 1, '10': 'value'},
   ],
@@ -47,7 +47,7 @@ const GraphDataRequest$json = {
       '4': 1,
       '5': 14,
       '6': '.breez.GraphMetric',
-      '10': 'metric'
+      '10': 'metric',
     },
     {
       '1': 'from',
@@ -55,7 +55,7 @@ const GraphDataRequest$json = {
       '4': 1,
       '5': 11,
       '6': '.google.protobuf.Timestamp',
-      '10': 'from'
+      '10': 'from',
     },
     {
       '1': 'to',
@@ -63,7 +63,7 @@ const GraphDataRequest$json = {
       '4': 1,
       '5': 11,
       '6': '.google.protobuf.Timestamp',
-      '10': 'to'
+      '10': 'to',
     },
     {
       '1': 'resolution',
@@ -72,7 +72,7 @@ const GraphDataRequest$json = {
       '5': 5,
       '9': 0,
       '10': 'resolution',
-      '17': true
+      '17': true,
     },
   ],
   '8': [
@@ -98,7 +98,7 @@ const GraphDataResponse$json = {
       '4': 3,
       '5': 11,
       '6': '.breez.GraphDataPoint',
-      '10': 'dataPoints'
+      '10': 'dataPoints',
     },
     {
       '1': 'metric',
@@ -106,7 +106,7 @@ const GraphDataResponse$json = {
       '4': 1,
       '5': 14,
       '6': '.breez.GraphMetric',
-      '10': 'metric'
+      '10': 'metric',
     },
     {
       '1': 'stats',
@@ -114,7 +114,7 @@ const GraphDataResponse$json = {
       '4': 1,
       '5': 11,
       '6': '.breez.GraphStats',
-      '10': 'stats'
+      '10': 'stats',
     },
   ],
 };

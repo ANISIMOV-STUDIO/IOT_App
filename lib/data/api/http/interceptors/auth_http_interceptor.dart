@@ -2,26 +2,26 @@
 library;
 
 import 'dart:async';
-import 'package:http/http.dart' as http;
 
-import '../../../../core/services/auth_storage_service.dart';
-import '../../../services/auth_service.dart';
-import '../../../../core/logging/api_logger.dart';
+import 'package:http/http.dart' as http;
+import 'package:hvac_control/core/logging/api_logger.dart';
+import 'package:hvac_control/core/services/auth_storage_service.dart';
+import 'package:hvac_control/data/services/auth_service.dart';
 
 /// HTTP Client с автоматическим refresh токенов при 401
 class AuthHttpInterceptor extends http.BaseClient {
-  final http.Client _inner;
-  final AuthStorageService _authStorage;
-  final AuthService _authService;
-
-  /// Future для синхронизации одновременных refresh запросов
-  static Future<void>? _refreshingTokens;
 
   AuthHttpInterceptor(
     this._inner,
     this._authStorage,
     this._authService,
   );
+  final http.Client _inner;
+  final AuthStorageService _authStorage;
+  final AuthService _authService;
+
+  /// Future для синхронизации одновременных refresh запросов
+  static Future<void>? _refreshingTokens;
 
   @override
   Future<http.StreamedResponse> send(http.BaseRequest request) async {
@@ -103,9 +103,9 @@ class AuthHttpInterceptor extends http.BaseClient {
     }
 
     requestCopy.headers.addAll(request.headers);
-    requestCopy.persistentConnection = request.persistentConnection;
-    requestCopy.followRedirects = request.followRedirects;
-    requestCopy.maxRedirects = request.maxRedirects;
+    requestCopy..persistentConnection = request.persistentConnection
+    ..followRedirects = request.followRedirects
+    ..maxRedirects = request.maxRedirects;
 
     return requestCopy;
   }

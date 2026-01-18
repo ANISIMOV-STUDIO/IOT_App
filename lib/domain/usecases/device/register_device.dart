@@ -1,26 +1,26 @@
 /// Use Case: Зарегистрировать новое устройство
 library;
 
-import '../../entities/hvac_device.dart';
-import '../../repositories/climate_repository.dart';
-import '../usecase.dart';
+import 'package:hvac_control/domain/entities/hvac_device.dart';
+import 'package:hvac_control/domain/repositories/climate_repository.dart';
+import 'package:hvac_control/domain/usecases/usecase.dart';
 
 /// Параметры для регистрации устройства
 class RegisterDeviceParams {
-  final String macAddress;
-  final String name;
 
   const RegisterDeviceParams({
     required this.macAddress,
     required this.name,
   });
+  final String macAddress;
+  final String name;
 }
 
 /// Зарегистрировать новое HVAC устройство по MAC-адресу
 class RegisterDevice extends UseCaseWithParams<HvacDevice, RegisterDeviceParams> {
-  final ClimateRepository _repository;
 
   RegisterDevice(this._repository);
+  final ClimateRepository _repository;
 
   @override
   Future<HvacDevice> call(RegisterDeviceParams params) async {

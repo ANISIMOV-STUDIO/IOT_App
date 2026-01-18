@@ -1,18 +1,16 @@
 /// Use Case: Подписка на текущий климат
 library;
 
-import '../../entities/climate.dart';
-import '../../repositories/climate_repository.dart';
-import '../usecase.dart';
+import 'package:hvac_control/domain/entities/climate.dart';
+import 'package:hvac_control/domain/repositories/climate_repository.dart';
+import 'package:hvac_control/domain/usecases/usecase.dart';
 
 /// Подписаться на обновления климата выбранного устройства
 class WatchCurrentClimate extends StreamUseCase<ClimateState> {
-  final ClimateRepository _repository;
 
   WatchCurrentClimate(this._repository);
+  final ClimateRepository _repository;
 
   @override
-  Stream<ClimateState> call() {
-    return _repository.watchClimate();
-  }
+  Stream<ClimateState> call() => _repository.watchClimate();
 }

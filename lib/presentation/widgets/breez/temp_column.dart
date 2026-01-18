@@ -2,10 +2,10 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/spacing.dart';
-import 'breez_card.dart';
-import 'breez_loader.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_loader.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -14,21 +14,21 @@ import 'breez_loader.dart';
 /// Константы для TemperatureColumn
 abstract class _TempColumnConstants {
   // Размеры - обычный режим
-  static const double fontSizeNormal = 28.0;
-  static const double iconSizeNormal = 14.0;
-  static const double labelSizeNormal = 10.0;
-  static const double buttonPaddingNormal = 6.0;
-  static const double buttonIconSizeNormal = 18.0;
+  static const double fontSizeNormal = 28;
+  static const double iconSizeNormal = 14;
+  static const double labelSizeNormal = 10;
+  static const double buttonPaddingNormal = 6;
+  static const double buttonIconSizeNormal = 18;
 
   // Размеры - компактный режим
-  static const double fontSizeCompact = 22.0;
-  static const double iconSizeCompact = 12.0;
-  static const double labelSizeCompact = 9.0;
-  static const double buttonPaddingCompact = 4.0;
-  static const double buttonIconSizeCompact = 16.0;
+  static const double fontSizeCompact = 22;
+  static const double iconSizeCompact = 12;
+  static const double labelSizeCompact = 9;
+  static const double buttonPaddingCompact = 4;
+  static const double buttonIconSizeCompact = 16;
 
   // Отступы
-  static const double iconTextGap = 4.0;
+  static const double iconTextGap = 4;
 }
 
 // =============================================================================
@@ -43,6 +43,21 @@ abstract class _TempColumnConstants {
 /// - Disabled state когда устройство выключено
 /// - Accessibility через Semantics
 class TemperatureColumn extends StatelessWidget {
+
+  const TemperatureColumn({
+    required this.label,
+    required this.temperature,
+    required this.icon,
+    required this.color,
+    required this.isPowered,
+    super.key,
+    this.onIncrease,
+    this.onDecrease,
+    this.compact = false,
+    this.isPending = false,
+    this.minTemp,
+    this.maxTemp,
+  });
   final String label;
   final int temperature;
   final IconData icon;
@@ -60,21 +75,6 @@ class TemperatureColumn extends StatelessWidget {
 
   /// Максимальная температура (кнопка + отключается при достижении)
   final int? maxTemp;
-
-  const TemperatureColumn({
-    super.key,
-    required this.label,
-    required this.temperature,
-    required this.icon,
-    required this.color,
-    required this.isPowered,
-    this.onIncrease,
-    this.onDecrease,
-    this.compact = false,
-    this.isPending = false,
-    this.minTemp,
-    this.maxTemp,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +115,7 @@ class TemperatureColumn extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(icon, size: iconSize, color: isPowered ? color : colors.textMuted),
-              SizedBox(width: _TempColumnConstants.iconTextGap),
+              const SizedBox(width: _TempColumnConstants.iconTextGap),
               Text(
                 label.toUpperCase(),
                 style: TextStyle(

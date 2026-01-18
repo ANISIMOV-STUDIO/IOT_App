@@ -2,20 +2,18 @@ import 'package:equatable/equatable.dart';
 
 /// Информация об аварии
 class AlarmInfo extends Equatable {
-  final int code;
-  final String description;
 
   const AlarmInfo({
     required this.code,
     required this.description,
   });
 
-  factory AlarmInfo.fromJson(Map<String, dynamic> json) {
-    return AlarmInfo(
+  factory AlarmInfo.fromJson(Map<String, dynamic> json) => AlarmInfo(
       code: json['code'] as int? ?? 0,
       description: json['description'] as String? ?? 'Неизвестная авария',
     );
-  }
+  final int code;
+  final String description;
 
   @override
   List<Object?> get props => [code, description];
@@ -23,12 +21,6 @@ class AlarmInfo extends Equatable {
 
 /// История аварии
 class AlarmHistory extends Equatable {
-  final String id;
-  final int alarmCode;
-  final String description;
-  final DateTime occurredAt;
-  final bool isCleared;
-  final DateTime? clearedAt;
 
   const AlarmHistory({
     required this.id,
@@ -39,8 +31,7 @@ class AlarmHistory extends Equatable {
     this.clearedAt,
   });
 
-  factory AlarmHistory.fromJson(Map<String, dynamic> json) {
-    return AlarmHistory(
+  factory AlarmHistory.fromJson(Map<String, dynamic> json) => AlarmHistory(
       id: json['id']?.toString() ?? '',
       alarmCode: json['alarmCode'] as int? ?? 0,
       description: json['description'] as String? ?? '',
@@ -48,13 +39,24 @@ class AlarmHistory extends Equatable {
       isCleared: json['isCleared'] as bool? ?? false,
       clearedAt: _parseDateTime(json['clearedAt']),
     );
-  }
+  final String id;
+  final int alarmCode;
+  final String description;
+  final DateTime occurredAt;
+  final bool isCleared;
+  final DateTime? clearedAt;
 
   /// Парсинг даты: поддержка String (ISO) и int (Unix timestamp)
   static DateTime? _parseDateTime(dynamic value) {
-    if (value == null) return null;
-    if (value is String) return DateTime.tryParse(value);
-    if (value is int) return DateTime.fromMillisecondsSinceEpoch(value * 1000);
+    if (value == null) {
+      return null;
+    }
+    if (value is String) {
+      return DateTime.tryParse(value);
+    }
+    if (value is int) {
+      return DateTime.fromMillisecondsSinceEpoch(value * 1000);
+    }
     return null;
   }
 

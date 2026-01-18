@@ -3,8 +3,8 @@ library;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/spacing.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -12,8 +12,8 @@ import '../../../core/theme/spacing.dart';
 
 /// Константы для BreezSlider
 abstract class _SliderConstants {
-  static const double defaultTrackHeight = 6.0;
-  static const double defaultThumbRadius = 8.0;
+  static const double defaultTrackHeight = 6;
+  static const double defaultThumbRadius = 8;
   static const double overlayAlpha = 0.2;
   static const double disabledActiveAlpha = 0.5;
   static const double disabledInactiveAlpha = 0.2;
@@ -21,9 +21,9 @@ abstract class _SliderConstants {
 
 /// Константы для BreezLabeledSlider
 abstract class _LabeledSliderConstants {
-  static const double iconSize = 12.0;
-  static const double labelFontSize = 11.0;
-  static const double valueFontSize = 11.0;
+  static const double iconSize = 12;
+  static const double labelFontSize = 11;
+  static const double valueFontSize = 11;
 }
 
 // =============================================================================
@@ -47,6 +47,22 @@ class _SliderScrollBehavior extends MaterialScrollBehavior {
 /// - Опциональные label и отображение значения
 /// - Локальное состояние для мгновенной визуальной обратной связи
 class BreezSlider extends StatefulWidget {
+
+  const BreezSlider({
+    required this.value, super.key,
+    this.min = 0,
+    this.max = 100,
+    this.onChanged,
+    this.onChangeStart,
+    this.onChangeEnd,
+    this.activeColor,
+    this.inactiveColor,
+    this.trackHeight = _SliderConstants.defaultTrackHeight,
+    this.thumbRadius = _SliderConstants.defaultThumbRadius,
+    this.enabled = true,
+    this.semanticLabel,
+    this.valueFormat,
+  });
   /// Текущее значение (0-100 или кастомный диапазон)
   final double value;
 
@@ -85,23 +101,6 @@ class BreezSlider extends StatefulWidget {
 
   /// Функция форматирования значения для объявлений accessibility
   final String Function(double)? valueFormat;
-
-  const BreezSlider({
-    super.key,
-    required this.value,
-    this.min = 0,
-    this.max = 100,
-    this.onChanged,
-    this.onChangeStart,
-    this.onChangeEnd,
-    this.activeColor,
-    this.inactiveColor,
-    this.trackHeight = _SliderConstants.defaultTrackHeight,
-    this.thumbRadius = _SliderConstants.defaultThumbRadius,
-    this.enabled = true,
-    this.semanticLabel,
-    this.valueFormat,
-  });
 
   @override
   State<BreezSlider> createState() => _BreezSliderState();
@@ -220,6 +219,20 @@ class _BreezSliderState extends State<BreezSlider> {
 ///
 /// Типичный случай для скорости вентилятора, громкости, яркости и т.д.
 class BreezLabeledSlider extends StatelessWidget {
+
+  const BreezLabeledSlider({
+    required this.label, required this.value, super.key,
+    this.min = 0,
+    this.max = 100,
+    this.color,
+    this.icon,
+    this.onChanged,
+    this.onChangeEnd,
+    this.enabled = true,
+    this.semanticLabel,
+    this.suffix,
+    this.valueFormat,
+  });
   final String label;
   final double value;
   final double min;
@@ -232,22 +245,6 @@ class BreezLabeledSlider extends StatelessWidget {
   final String? semanticLabel;
   final String? suffix;
   final String Function(double)? valueFormat;
-
-  const BreezLabeledSlider({
-    super.key,
-    required this.label,
-    required this.value,
-    this.min = 0,
-    this.max = 100,
-    this.color,
-    this.icon,
-    this.onChanged,
-    this.onChangeEnd,
-    this.enabled = true,
-    this.semanticLabel,
-    this.suffix,
-    this.valueFormat,
-  });
 
   String _formatDisplay() {
     if (valueFormat != null) {
@@ -275,7 +272,7 @@ class BreezLabeledSlider extends StatelessWidget {
                 children: [
                   if (icon != null) ...[
                     Icon(icon, size: _LabeledSliderConstants.iconSize, color: effectiveColor),
-                    SizedBox(width: AppSpacing.xxs),
+                    const SizedBox(width: AppSpacing.xxs),
                   ],
                   Text(
                     label,
@@ -297,7 +294,7 @@ class BreezLabeledSlider extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: AppSpacing.xxs + 2), // 6px
+          const SizedBox(height: AppSpacing.xxs + 2), // 6px
           BreezSlider(
             value: value,
             min: min,

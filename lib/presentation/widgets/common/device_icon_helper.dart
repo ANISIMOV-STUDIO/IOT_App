@@ -5,7 +5,7 @@ library;
 
 import 'package:flutter/material.dart';
 
-import '../../../domain/entities/hvac_device.dart';
+import 'package:hvac_control/domain/entities/hvac_device.dart';
 
 /// Получить иконку для типа HVAC устройства
 IconData getDeviceIcon(HvacDeviceType deviceType) {

@@ -2,21 +2,21 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../generated/l10n/app_localizations.dart';
-import 'breez_button.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
 
 // =============================================================================
 // CONSTANTS
 // =============================================================================
 
 abstract class _SegmentedControlConstants {
-  static const double defaultHeight = 40.0;
-  static const double fontSize = 13.0;
-  static const double iconSize = 16.0;
-  static const double iconTextGap = 6.0;
+  static const double defaultHeight = 40;
+  static const double fontSize = 13;
+  static const double iconSize = 16;
+  static const double iconTextGap = 6;
   static const Duration animationDuration = Duration(milliseconds: 150);
 }
 
@@ -28,6 +28,17 @@ abstract class _SegmentedControlConstants {
 /// - Настраиваемое оформление
 /// - Поддержка иконок + текста
 class BreezSegmentedControl<T> extends StatelessWidget {
+
+  const BreezSegmentedControl({
+    required this.value,
+    required this.segments,
+    required this.onChanged,
+    super.key,
+    this.enabled = true,
+    this.semanticLabel,
+    this.height = _SegmentedControlConstants.defaultHeight,
+    this.expanded = true,
+  });
   /// Текущее выбранное значение
   final T value;
 
@@ -48,17 +59,6 @@ class BreezSegmentedControl<T> extends StatelessWidget {
 
   /// Растягивать ли на всю доступную ширину
   final bool expanded;
-
-  const BreezSegmentedControl({
-    super.key,
-    required this.value,
-    required this.segments,
-    required this.onChanged,
-    this.enabled = true,
-    this.semanticLabel,
-    this.height = _SegmentedControlConstants.defaultHeight,
-    this.expanded = true,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -90,8 +90,7 @@ class BreezSegmentedControl<T> extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildSegments(BuildContext context, BreezColors colors) {
-    return segments.asMap().entries.map((entry) {
+  List<Widget> _buildSegments(BuildContext context, BreezColors colors) => segments.asMap().entries.map((entry) {
       final index = entry.key;
       final segment = entry.value;
       final isSelected = segment.value == value;
@@ -116,18 +115,10 @@ class BreezSegmentedControl<T> extends StatelessWidget {
 
       return segmentWidget;
     }).toList();
-  }
 }
 
 /// Кнопка отдельного сегмента
 class _SegmentButton<T> extends StatelessWidget {
-  final BreezSegment<T> segment;
-  final bool isSelected;
-  final bool isFirst;
-  final bool isLast;
-  final bool enabled;
-  final VoidCallback? onTap;
-  final BreezColors colors;
 
   const _SegmentButton({
     required this.segment,
@@ -138,6 +129,13 @@ class _SegmentButton<T> extends StatelessWidget {
     required this.onTap,
     required this.colors,
   });
+  final BreezSegment<T> segment;
+  final bool isSelected;
+  final bool isFirst;
+  final bool isLast;
+  final bool enabled;
+  final VoidCallback? onTap;
+  final BreezColors colors;
 
   @override
   Widget build(BuildContext context) {
@@ -155,7 +153,6 @@ class _SegmentButton<T> extends StatelessWidget {
           ? Border.all(color: AppColors.accent.withValues(alpha: 0.3))
           : null,
       showBorder: false,
-      enableGlow: false,
       enableScale: false,
       borderRadius: AppRadius.nested,
       semanticLabel: segment.semanticLabel ?? segment.label,
@@ -204,23 +201,6 @@ class _SegmentButton<T> extends StatelessWidget {
 
 /// Данные сегмента для BreezSegmentedControl
 class BreezSegment<T> {
-  /// Значение которое представляет сегмент
-  final T value;
-
-  /// Отображаемый текст
-  final String label;
-
-  /// Опциональная иконка
-  final IconData? icon;
-
-  /// Включен ли этот сегмент
-  final bool enabled;
-
-  /// Семантическая метка для screen readers
-  final String? semanticLabel;
-
-  /// Текст tooltip
-  final String? tooltip;
 
   const BreezSegment({
     required this.value,
@@ -239,10 +219,38 @@ class BreezSegment<T> {
     this.semanticLabel,
     this.tooltip,
   }) : label = '';
+  /// Значение которое представляет сегмент
+  final T value;
+
+  /// Отображаемый текст
+  final String label;
+
+  /// Опциональная иконка
+  final IconData? icon;
+
+  /// Включен ли этот сегмент
+  final bool enabled;
+
+  /// Семантическая метка для screen readers
+  final String? semanticLabel;
+
+  /// Текст tooltip
+  final String? tooltip;
 }
 
 /// Строковый сегментированный контрол для простых случаев
 class BreezStringSegmentedControl extends StatelessWidget {
+
+  const BreezStringSegmentedControl({
+    required this.value,
+    required this.segments,
+    required this.onChanged,
+    super.key,
+    this.enabled = true,
+    this.semanticLabel,
+    this.height = _SegmentedControlConstants.defaultHeight,
+    this.expanded = true,
+  });
   final String value;
   final List<String> segments;
   final ValueChanged<String>? onChanged;
@@ -251,20 +259,8 @@ class BreezStringSegmentedControl extends StatelessWidget {
   final double height;
   final bool expanded;
 
-  const BreezStringSegmentedControl({
-    super.key,
-    required this.value,
-    required this.segments,
-    required this.onChanged,
-    this.enabled = true,
-    this.semanticLabel,
-    this.height = _SegmentedControlConstants.defaultHeight,
-    this.expanded = true,
-  });
-
   @override
-  Widget build(BuildContext context) {
-    return BreezSegmentedControl<String>(
+  Widget build(BuildContext context) => BreezSegmentedControl<String>(
       value: value,
       segments: segments
           .map((s) => BreezSegment(value: s, label: s))
@@ -275,11 +271,20 @@ class BreezStringSegmentedControl extends StatelessWidget {
       height: height,
       expanded: expanded,
     );
-  }
 }
 
 /// Иконочный сегментированный контрол для переключения режимов
 class BreezIconSegmentedControl<T> extends StatelessWidget {
+
+  const BreezIconSegmentedControl({
+    required this.value,
+    required this.segments,
+    required this.onChanged,
+    super.key,
+    this.enabled = true,
+    this.semanticLabel,
+    this.height = _SegmentedControlConstants.defaultHeight,
+  });
   final T value;
   final List<BreezIconSegment<T>> segments;
   final ValueChanged<T>? onChanged;
@@ -287,19 +292,8 @@ class BreezIconSegmentedControl<T> extends StatelessWidget {
   final String? semanticLabel;
   final double height;
 
-  const BreezIconSegmentedControl({
-    super.key,
-    required this.value,
-    required this.segments,
-    required this.onChanged,
-    this.enabled = true,
-    this.semanticLabel,
-    this.height = _SegmentedControlConstants.defaultHeight,
-  });
-
   @override
-  Widget build(BuildContext context) {
-    return BreezSegmentedControl<T>(
+  Widget build(BuildContext context) => BreezSegmentedControl<T>(
       value: value,
       segments: segments
           .map((s) => BreezSegment<T>.icon(
@@ -316,16 +310,10 @@ class BreezIconSegmentedControl<T> extends StatelessWidget {
       height: height,
       expanded: false,
     );
-  }
 }
 
 /// Данные иконочного сегмента
 class BreezIconSegment<T> {
-  final T value;
-  final IconData icon;
-  final bool enabled;
-  final String? semanticLabel;
-  final String? tooltip;
 
   const BreezIconSegment({
     required this.value,
@@ -334,4 +322,9 @@ class BreezIconSegment<T> {
     this.semanticLabel,
     this.tooltip,
   });
+  final T value;
+  final IconData icon;
+  final bool enabled;
+  final String? semanticLabel;
+  final String? tooltip;
 }

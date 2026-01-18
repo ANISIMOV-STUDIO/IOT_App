@@ -5,18 +5,43 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_font_sizes.dart';
-import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../generated/l10n/app_localizations.dart';
-import '../breez/breez_button.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
 
 /// Базовый индикатор загрузки
 ///
 /// Отображает circular progress indicator с опциональным текстом.
 /// Используется для индикации процесса загрузки данных.
 class LoadingIndicator extends StatelessWidget {
+
+  const LoadingIndicator({
+    super.key,
+    this.size = 40.0,
+    this.color,
+    this.message,
+    this.strokeWidth = 4.0,
+  });
+
+  /// Фабричный метод для маленького индикатора
+  factory LoadingIndicator.small({Color? color}) => LoadingIndicator(
+      size: 20,
+      strokeWidth: 2.5,
+      color: color,
+    );
+
+  /// Фабричный метод для большого индикатора с сообщением
+  factory LoadingIndicator.large({
+    required String message,
+    Color? color,
+  }) => LoadingIndicator(
+      size: 60,
+      strokeWidth: 5,
+      message: message,
+      color: color,
+    );
   /// Размер индикатора
   final double size;
 
@@ -29,39 +54,8 @@ class LoadingIndicator extends StatelessWidget {
   /// Толщина линии индикатора
   final double strokeWidth;
 
-  const LoadingIndicator({
-    super.key,
-    this.size = 40.0,
-    this.color,
-    this.message,
-    this.strokeWidth = 4.0,
-  });
-
-  /// Фабричный метод для маленького индикатора
-  factory LoadingIndicator.small({Color? color}) {
-    return LoadingIndicator(
-      size: 20,
-      strokeWidth: 2.5,
-      color: color,
-    );
-  }
-
-  /// Фабричный метод для большого индикатора с сообщением
-  factory LoadingIndicator.large({
-    required String message,
-    Color? color,
-  }) {
-    return LoadingIndicator(
-      size: 60,
-      strokeWidth: 5.0,
-      message: message,
-      color: color,
-    );
-  }
-
   @override
-  Widget build(BuildContext context) {
-    return Column(
+  Widget build(BuildContext context) => Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         SizedBox(
@@ -87,7 +81,6 @@ class LoadingIndicator extends StatelessWidget {
         ],
       ],
     );
-  }
 }
 
 /// Полноэкранный overlay с индикатором загрузки
@@ -115,7 +108,7 @@ class LoadingOverlay {
     bool barrierDismissible = false,
   }) {
     final l10n = AppLocalizations.of(context)!;
-    showDialog(
+    showDialog<void>(
       context: context,
       barrierDismissible: barrierDismissible,
       barrierColor: AppColors.black.withValues(alpha: 0.5),
@@ -148,6 +141,15 @@ class LoadingOverlay {
 /// Показывает прогресс выполнения операции от 0% до 100%.
 /// Используется когда известен точный прогресс операции.
 class LoadingProgressBar extends StatelessWidget {
+
+  const LoadingProgressBar({
+    super.key,
+    this.value,
+    this.color,
+    this.backgroundColor,
+    this.height = 4.0,
+    this.showPercentage = false,
+  });
   /// Текущий прогресс (0.0 - 1.0)
   final double? value;
 
@@ -162,15 +164,6 @@ class LoadingProgressBar extends StatelessWidget {
 
   /// Опциональный текст с процентами
   final bool showPercentage;
-
-  const LoadingProgressBar({
-    super.key,
-    this.value,
-    this.color,
-    this.backgroundColor,
-    this.height = 4.0,
-    this.showPercentage = false,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -212,6 +205,15 @@ class LoadingProgressBar extends StatelessWidget {
 /// Универсальный виджет для управления состояниями загрузки, ошибки и успеха.
 /// Автоматически переключается между skeleton loader, error state и content.
 class LoadingState<T> extends StatelessWidget {
+
+  const LoadingState({
+    required this.status, required this.builder, super.key,
+    this.data,
+    this.errorMessage,
+    this.loadingSkeleton,
+    this.errorBuilder,
+    this.onRetry,
+  });
   /// Статус загрузки
   final LoadingStatus status;
 
@@ -232,17 +234,6 @@ class LoadingState<T> extends StatelessWidget {
 
   /// Callback для повторной попытки загрузки
   final VoidCallback? onRetry;
-
-  const LoadingState({
-    super.key,
-    required this.status,
-    this.data,
-    this.errorMessage,
-    required this.builder,
-    this.loadingSkeleton,
-    this.errorBuilder,
-    this.onRetry,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -321,6 +312,11 @@ enum LoadingStatus {
 ///
 /// Добавляет функционал pull-to-refresh к любому scrollable виджету.
 class PullToRefreshWrapper extends StatelessWidget {
+
+  const PullToRefreshWrapper({
+    required this.child, required this.onRefresh, super.key,
+    this.color,
+  });
   /// Дочерний scrollable виджет
   final Widget child;
 
@@ -330,20 +326,11 @@ class PullToRefreshWrapper extends StatelessWidget {
   /// Цвет индикатора
   final Color? color;
 
-  const PullToRefreshWrapper({
-    super.key,
-    required this.child,
-    required this.onRefresh,
-    this.color,
-  });
-
   @override
-  Widget build(BuildContext context) {
-    return RefreshIndicator(
+  Widget build(BuildContext context) => RefreshIndicator(
       onRefresh: onRefresh,
       color: color ?? AppColors.accent,
       backgroundColor: BreezColors.of(context).card,
       child: child,
     );
-  }
 }

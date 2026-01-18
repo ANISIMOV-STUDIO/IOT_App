@@ -8,21 +8,18 @@
 library;
 
 import 'dart:async';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:equatable/equatable.dart';
 
-import '../../../core/error/api_exception.dart';
-import '../../../domain/entities/schedule_entry.dart';
-import '../../../domain/repositories/schedule_repository.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hvac_control/core/error/api_exception.dart';
+import 'package:hvac_control/domain/entities/schedule_entry.dart';
+import 'package:hvac_control/domain/repositories/schedule_repository.dart';
 
 part 'schedule_event.dart';
 part 'schedule_state.dart';
 
 /// BLoC для управления расписанием устройства
 class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
-  final ScheduleRepository _repository;
-
-  StreamSubscription<List<ScheduleEntry>>? _scheduleSubscription;
 
   ScheduleBloc({
     required ScheduleRepository repository,
@@ -38,6 +35,9 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     on<ScheduleEntryDeleted>(_onEntryDeleted);
     on<ScheduleEntryToggled>(_onEntryToggled);
   }
+  final ScheduleRepository _repository;
+
+  StreamSubscription<List<ScheduleEntry>>? _scheduleSubscription;
 
   /// Смена устройства - загружаем расписание для нового устройства
   Future<void> _onDeviceChanged(
@@ -97,7 +97,9 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
       // Заменяем временную запись на реальную с сервера
       final updatedEntries = state.entries.map((e) {
-        if (e.id == event.entry.id) return newEntry;
+        if (e.id == event.entry.id) {
+          return newEntry;
+        }
         return e;
       }).toList();
 
@@ -124,7 +126,9 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
     // Optimistic update - сразу обновляем в UI
     final optimisticEntries = state.entries.map((e) {
-      if (e.id == event.entry.id) return event.entry;
+      if (e.id == event.entry.id) {
+        return event.entry;
+      }
       return e;
     }).toList();
 
@@ -138,7 +142,9 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
       // Обновляем с данными с сервера
       final updatedEntries = state.entries.map((e) {
-        if (e.id == updatedEntry.id) return updatedEntry;
+        if (e.id == updatedEntry.id) {
+          return updatedEntry;
+        }
         return e;
       }).toList();
 
@@ -216,12 +222,14 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     try {
       final toggledEntry = await _repository.toggleEntry(
         event.entryId,
-        event.isActive,
+        isActive: event.isActive,
       );
 
       // Обновляем с данными с сервера
       final updatedEntries = state.entries.map((e) {
-        if (e.id == toggledEntry.id) return toggledEntry;
+        if (e.id == toggledEntry.id) {
+          return toggledEntry;
+        }
         return e;
       }).toList();
 

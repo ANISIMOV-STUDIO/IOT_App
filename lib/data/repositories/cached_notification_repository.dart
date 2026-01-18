@@ -3,17 +3,14 @@
 /// Уведомления: чтение кешируется, изменения статуса требуют сети.
 library;
 
-import '../../core/error/offline_exception.dart';
-import '../../core/services/cache_service.dart';
-import '../../core/services/connectivity_service.dart';
-import '../../domain/entities/unit_notification.dart';
-import '../../domain/repositories/notification_repository.dart';
+import 'package:hvac_control/core/error/offline_exception.dart';
+import 'package:hvac_control/core/services/cache_service.dart';
+import 'package:hvac_control/core/services/connectivity_service.dart';
+import 'package:hvac_control/domain/entities/unit_notification.dart';
+import 'package:hvac_control/domain/repositories/notification_repository.dart';
 
 /// Кеширующий декоратор для NotificationRepository
 class CachedNotificationRepository implements NotificationRepository {
-  final NotificationRepository _inner;
-  final CacheService _cacheService;
-  final ConnectivityService _connectivity;
 
   CachedNotificationRepository({
     required NotificationRepository inner,
@@ -22,6 +19,9 @@ class CachedNotificationRepository implements NotificationRepository {
   })  : _inner = inner,
         _cacheService = cacheService,
         _connectivity = connectivity;
+  final NotificationRepository _inner;
+  final CacheService _cacheService;
+  final ConnectivityService _connectivity;
 
   // ============================================
   // READ OPERATIONS (кешируемые)
@@ -36,13 +36,17 @@ class CachedNotificationRepository implements NotificationRepository {
         return notifications;
       } catch (e) {
         final cached = _cacheService.getCachedNotifications(deviceId: deviceId);
-        if (cached != null) return cached;
+        if (cached != null) {
+          return cached;
+        }
         rethrow;
       }
     }
 
     final cached = _cacheService.getCachedNotifications(deviceId: deviceId);
-    if (cached != null) return cached;
+    if (cached != null) {
+      return cached;
+    }
 
     throw const OfflineException(
       'Нет сохранённых уведомлений',
@@ -51,9 +55,7 @@ class CachedNotificationRepository implements NotificationRepository {
   }
 
   @override
-  Stream<List<UnitNotification>> watchNotifications({String? deviceId}) {
-    return _inner.watchNotifications(deviceId: deviceId);
-  }
+  Stream<List<UnitNotification>> watchNotifications({String? deviceId}) => _inner.watchNotifications(deviceId: deviceId);
 
   @override
   Future<int> getUnreadCount({String? deviceId}) async {
@@ -106,7 +108,9 @@ class CachedNotificationRepository implements NotificationRepository {
   /// Отметить уведомление прочитанным в кеше
   Future<void> _markAsReadInCache(String notificationId) async {
     final cached = _cacheService.getCachedNotifications();
-    if (cached == null) return;
+    if (cached == null) {
+      return;
+    }
 
     final updated = cached.map((n) {
       if (n.id == notificationId) {
@@ -129,10 +133,11 @@ class CachedNotificationRepository implements NotificationRepository {
   /// Отметить все уведомления прочитанными в кеше
   Future<void> _markAllAsReadInCache({String? deviceId}) async {
     final cached = _cacheService.getCachedNotifications(deviceId: deviceId);
-    if (cached == null) return;
+    if (cached == null) {
+      return;
+    }
 
-    final updated = cached.map((n) {
-      return UnitNotification(
+    final updated = cached.map((n) => UnitNotification(
         id: n.id,
         deviceId: n.deviceId,
         title: n.title,
@@ -140,8 +145,7 @@ class CachedNotificationRepository implements NotificationRepository {
         type: n.type,
         timestamp: n.timestamp,
         isRead: true,
-      );
-    }).toList();
+      )).toList();
 
     await _cacheService.cacheNotifications(updated, deviceId: deviceId);
   }
@@ -149,7 +153,9 @@ class CachedNotificationRepository implements NotificationRepository {
   /// Удалить уведомление из кеша
   Future<void> _removeFromCache(String notificationId) async {
     final cached = _cacheService.getCachedNotifications();
-    if (cached == null) return;
+    if (cached == null) {
+      return;
+    }
 
     final updated = cached.where((n) => n.id != notificationId).toList();
     await _cacheService.cacheNotifications(updated);

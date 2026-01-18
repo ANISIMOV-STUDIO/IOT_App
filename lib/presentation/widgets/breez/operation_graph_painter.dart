@@ -3,16 +3,12 @@ library;
 
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../domain/entities/graph_data.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/domain/entities/graph_data.dart';
 
 /// Custom painter for the graph curve with smooth bezier interpolation
 class OperationGraphPainter extends CustomPainter {
-  final List<GraphDataPoint> data;
-  final Color color;
-  final int? hoveredIndex;
-  final int? highlightIndex;
 
   OperationGraphPainter({
     required this.data,
@@ -20,10 +16,16 @@ class OperationGraphPainter extends CustomPainter {
     this.hoveredIndex,
     this.highlightIndex,
   });
+  final List<GraphDataPoint> data;
+  final Color color;
+  final int? hoveredIndex;
+  final int? highlightIndex;
 
   @override
   void paint(Canvas canvas, Size size) {
-    if (data.isEmpty) return;
+    if (data.isEmpty) {
+      return;
+    }
 
     final points = _calculatePoints(size);
     final stepX = size.width / (data.length - 1);
@@ -41,7 +43,7 @@ class OperationGraphPainter extends CustomPainter {
     final stepX = size.width / (data.length - 1);
 
     final points = <Offset>[];
-    for (int i = 0; i < data.length; i++) {
+    for (var i = 0; i < data.length; i++) {
       final x = i * stepX;
       final y = size.height - ((data[i].value - minValue) / range * size.height);
       points.add(Offset(x, y));
@@ -55,17 +57,17 @@ class OperationGraphPainter extends CustomPainter {
       ..strokeWidth = 1
       ..style = PaintingStyle.stroke;
 
-    for (int i = 0; i <= 4; i++) {
+    for (var i = 0; i <= 4; i++) {
       final y = size.height * i / 4;
       canvas.drawLine(Offset(0, y), Offset(size.width, y), gridPaint);
     }
   }
 
   void _drawGradientFill(Canvas canvas, Size size, List<Offset> points, double stepX) {
-    final fillPath = Path();
-    fillPath.moveTo(0, size.height);
+    final fillPath = Path()
+    ..moveTo(0, size.height);
 
-    for (int i = 0; i < points.length; i++) {
+    for (var i = 0; i < points.length; i++) {
       if (i == 0) {
         fillPath.lineTo(points[i].dx, points[i].dy);
       } else {
@@ -74,15 +76,15 @@ class OperationGraphPainter extends CustomPainter {
         fillPath.cubicTo(cp1.dx, cp1.dy, cp2.dx, cp2.dy, points[i].dx, points[i].dy);
       }
     }
-    fillPath.lineTo(size.width, size.height);
-    fillPath.close();
+    fillPath..lineTo(size.width, size.height)
+    ..close();
 
     final fillGradient = LinearGradient(
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
       colors: [
         color.withValues(alpha: 0.3),
-        color.withValues(alpha: 0.0),
+        color.withValues(alpha: 0),
       ],
     );
 
@@ -95,7 +97,7 @@ class OperationGraphPainter extends CustomPainter {
 
   void _drawCurve(Canvas canvas, List<Offset> points, double stepX) {
     final curvePath = Path();
-    for (int i = 0; i < points.length; i++) {
+    for (var i = 0; i < points.length; i++) {
       if (i == 0) {
         curvePath.moveTo(points[i].dx, points[i].dy);
       } else {
@@ -115,7 +117,9 @@ class OperationGraphPainter extends CustomPainter {
 
   void _drawHighlightPoint(Canvas canvas, Size size, List<Offset> points) {
     final activeIndex = hoveredIndex ?? highlightIndex;
-    if (activeIndex == null || activeIndex >= points.length) return;
+    if (activeIndex == null || activeIndex >= points.length) {
+      return;
+    }
 
     final point = points[activeIndex];
 
@@ -169,8 +173,8 @@ class OperationGraphPainter extends CustomPainter {
         ),
       ),
       textDirection: TextDirection.ltr,
-    );
-    textPainter.layout();
+    )
+    ..layout();
 
     final tooltipRect = RRect.fromRectAndRadius(
       Rect.fromCenter(
@@ -194,9 +198,7 @@ class OperationGraphPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant OperationGraphPainter oldDelegate) {
-    return oldDelegate.hoveredIndex != hoveredIndex ||
+  bool shouldRepaint(covariant OperationGraphPainter oldDelegate) => oldDelegate.hoveredIndex != hoveredIndex ||
         oldDelegate.data != data ||
         oldDelegate.highlightIndex != highlightIndex;
-  }
 }

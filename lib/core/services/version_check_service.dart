@@ -1,8 +1,10 @@
+// ignore_for_file: do_not_use_environment
+
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../../data/api/websocket/signalr_hub_connection.dart';
-import '../../domain/entities/version_info.dart';
+import 'package:hvac_control/data/api/websocket/signalr_hub_connection.dart';
+import 'package:hvac_control/domain/entities/version_info.dart';
 
 /// Сервис проверки обновлений приложения
 ///
@@ -10,6 +12,12 @@ import '../../domain/entities/version_info.dart';
 /// - SignalR для real-time уведомлений о новых версиях
 /// - Периодический HTTP опрос как резервный механизм
 class VersionCheckService {
+
+  VersionCheckService(this._client, [this._signalR])
+      : _baseUrl = const String.fromEnvironment(
+          'API_BASE_URL',
+          defaultValue: 'https://hvac.anisimovstudio.ru/api',
+        );
   final http.Client _client;
   final SignalRHubConnection? _signalR;
   final String _baseUrl;
@@ -18,12 +26,6 @@ class VersionCheckService {
   Timer? _fallbackTimer;
   StreamSubscription<Map<String, dynamic>>? _signalRSubscription;
   final _versionChangedController = StreamController<VersionInfo>.broadcast();
-
-  VersionCheckService(this._client, [this._signalR])
-      : _baseUrl = const String.fromEnvironment(
-          'API_BASE_URL',
-          defaultValue: 'https://hvac.anisimovstudio.ru/api',
-        );
 
   /// Стрим для получения уведомлений о новых версиях
   Stream<VersionInfo> get onVersionChanged => _versionChangedController.stream;
@@ -44,7 +46,9 @@ class VersionCheckService {
 
   /// Подписка на SignalR стрим новых релизов
   void _setupSignalRSubscription() {
-    if (_signalR == null) return;
+    if (_signalR == null) {
+      return;
+    }
 
     _signalRSubscription = _signalR.releases.listen((releaseData) {
       try {

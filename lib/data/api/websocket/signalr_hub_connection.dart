@@ -8,12 +8,15 @@
 library;
 
 import 'dart:async';
+
+import 'package:hvac_control/core/config/api_config.dart';
+import 'package:hvac_control/core/logging/api_logger.dart';
+import 'package:hvac_control/data/api/platform/api_client.dart';
 import 'package:signalr_netcore/signalr_client.dart';
-import '../../../core/config/api_config.dart';
-import '../../../core/logging/api_logger.dart';
-import '../platform/api_client.dart';
 
 class SignalRHubConnection {
+
+  SignalRHubConnection(this._apiClient);
   final ApiClient _apiClient;
   HubConnection? _connection;
   final _deviceUpdatesController =
@@ -29,8 +32,6 @@ class SignalRHubConnection {
 
   final Set<String> _deviceSubscriptions = {};
   bool _subscribedToAll = false;
-
-  SignalRHubConnection(this._apiClient);
 
   /// Текущее состояние соединения
   HubConnectionState? get state => _connection?.state;
@@ -93,7 +94,7 @@ class SignalRHubConnection {
       // Если это повторный вызов connect (например, после disconnect), 
       // нужно восстановить подписки, если они остались в памяти
       if (_deviceSubscriptions.isNotEmpty || _subscribedToAll) {
-         _resubscribe();
+         await _resubscribe();
       }
 
     } catch (e) {

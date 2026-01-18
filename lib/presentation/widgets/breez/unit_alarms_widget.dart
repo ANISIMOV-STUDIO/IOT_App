@@ -2,13 +2,13 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../domain/entities/alarm_info.dart';
-import '../../../generated/l10n/app_localizations.dart';
-import 'breez_card.dart';
-import 'breez_list_card.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/domain/entities/alarm_info.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_list_card.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -16,9 +16,9 @@ import 'breez_list_card.dart';
 
 /// Константы для UnitAlarmsWidget
 abstract class _AlarmWidgetConstants {
-  static const double iconSize = 18.0;
-  static const double titleFontSize = 16.0;
-  static const double badgeFontSize = 11.0;
+  static const double iconSize = 18;
+  static const double titleFontSize = 16;
+  static const double badgeFontSize = 11;
   static const int maxVisibleAlarms = 3;
 }
 
@@ -34,20 +34,20 @@ abstract class _AlarmWidgetConstants {
 /// - Empty state когда нет аварий
 /// - Accessibility через Semantics
 class UnitAlarmsWidget extends StatelessWidget {
-  final Map<String, AlarmInfo> alarms;
-  final VoidCallback? onSeeHistory;
-  final ValueChanged<String>? onAlarmTap;
-  final bool compact;
-  final bool showCard;
 
   const UnitAlarmsWidget({
-    super.key,
     required this.alarms,
+    super.key,
     this.onSeeHistory,
     this.onAlarmTap,
     this.compact = false,
     this.showCard = true,
   });
+  final Map<String, AlarmInfo> alarms;
+  final VoidCallback? onSeeHistory;
+  final ValueChanged<String>? onAlarmTap;
+  final bool compact;
+  final bool showCard;
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +74,7 @@ class UnitAlarmsWidget extends StatelessWidget {
                             ? AppColors.accentGreen
                             : AppColors.accentRed,
                       ),
-                      SizedBox(width: AppSpacing.xs),
+                      const SizedBox(width: AppSpacing.xs),
                       Text(
                         l10n.alarms,
                         style: TextStyle(
@@ -87,7 +87,7 @@ class UnitAlarmsWidget extends StatelessWidget {
                   ),
                   if (alarmsList.isNotEmpty)
                     Container(
-                      padding: EdgeInsets.symmetric(
+                      padding: const EdgeInsets.symmetric(
                         horizontal: AppSpacing.xs,
                         vertical: 2,
                       ),
@@ -97,7 +97,7 @@ class UnitAlarmsWidget extends StatelessWidget {
                       ),
                       child: Text(
                         '${alarmsList.length}',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: _AlarmWidgetConstants.badgeFontSize,
                           fontWeight: FontWeight.w700,
                           color: AppColors.accentRed,
@@ -106,7 +106,7 @@ class UnitAlarmsWidget extends StatelessWidget {
                     ),
                 ],
               ),
-              SizedBox(height: AppSpacing.md),
+              const SizedBox(height: AppSpacing.md),
             ],
 
             // Список аварий
@@ -142,7 +142,7 @@ class UnitAlarmsWidget extends StatelessWidget {
 
             // Кнопка истории (скрыта в компактном режиме)
             if (!compact) ...[
-              SizedBox(height: AppSpacing.sm),
+              const SizedBox(height: AppSpacing.sm),
               BreezSeeMoreButton(
                 label: alarmsList.isEmpty ? l10n.alarmHistory : l10n.allAlarms,
                 extraCount: alarmsList.length > _AlarmWidgetConstants.maxVisibleAlarms
@@ -156,7 +156,7 @@ class UnitAlarmsWidget extends StatelessWidget {
 
     final wrappedContent = showCard
         ? BreezCard(
-            padding: EdgeInsets.all(AppSpacing.xs),
+            padding: const EdgeInsets.all(AppSpacing.xs),
             child: content,
           )
         : content;

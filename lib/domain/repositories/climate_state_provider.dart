@@ -1,7 +1,7 @@
 /// Climate State Provider - Interface for climate state access
 library;
 
-import '../entities/climate.dart';
+import 'package:hvac_control/domain/entities/climate.dart';
 
 /// Interface for climate state data access
 abstract class ClimateStateProvider {

@@ -3,15 +3,11 @@
 library;
 
 import 'package:grpc/grpc.dart';
-
-import '../../../../generated/protos/protos.dart';
-import '../grpc_interceptor.dart';
+import 'package:hvac_control/data/api/grpc/grpc_interceptor.dart';
+import 'package:hvac_control/generated/protos/protos.dart';
 
 /// gRPC client for notification operations
 class NotificationGrpcClient {
-  final ClientChannel _channel;
-  final Future<String?> Function() _getToken;
-  late final NotificationServiceClient _client;
 
   NotificationGrpcClient(this._channel, this._getToken) {
     _client = NotificationServiceClient(
@@ -19,6 +15,9 @@ class NotificationGrpcClient {
       interceptors: [AuthGrpcInterceptor(_getToken)],
     );
   }
+  final ClientChannel _channel;
+  final Future<String?> Function() _getToken;
+  late final NotificationServiceClient _client;
 
   /// Get notifications for user
   Future<List<Notification>> getNotifications({

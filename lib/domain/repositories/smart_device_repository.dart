@@ -1,7 +1,7 @@
 /// Репозиторий умных устройств
 library;
 
-import '../entities/smart_device.dart';
+import 'package:hvac_control/domain/entities/smart_device.dart';
 
 abstract class SmartDeviceRepository {
   /// Получить все устройства
@@ -14,7 +14,7 @@ abstract class SmartDeviceRepository {
   Future<SmartDevice?> getDeviceById(String id);
 
   /// Включить/выключить устройство
-  Future<SmartDevice> toggleDevice(String id, bool isOn);
+  Future<SmartDevice> toggleDevice(String id, {required bool isOn});
 
   /// Обновить устройство
   Future<SmartDevice> updateDevice(SmartDevice device);

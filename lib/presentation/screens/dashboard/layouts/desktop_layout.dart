@@ -3,16 +3,49 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/theme/spacing.dart';
-import '../../../../domain/entities/unit_state.dart';
-import '../../../../domain/entities/alarm_info.dart';
-import '../../../../domain/entities/mode_settings.dart';
-import '../../../bloc/analytics/analytics_bloc.dart';
-import '../../../widgets/breez/breez.dart';
-import '../widgets/desktop_header.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/domain/entities/alarm_info.dart';
+import 'package:hvac_control/domain/entities/mode_settings.dart';
+import 'package:hvac_control/domain/entities/unit_state.dart';
+import 'package:hvac_control/presentation/bloc/analytics/analytics_bloc.dart';
+import 'package:hvac_control/presentation/screens/dashboard/widgets/desktop_header.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez.dart';
 
 /// Desktop layout (grid with header)
 class DesktopLayout extends StatefulWidget {
+
+  const DesktopLayout({
+    required this.unit, required this.allUnits, required this.selectedUnitIndex, required this.isDark, required this.userName, required this.userRole, super.key,
+    this.onTemperatureIncrease,
+    this.onTemperatureDecrease,
+    this.onHeatingTempIncrease,
+    this.onHeatingTempDecrease,
+    this.onCoolingTempIncrease,
+    this.onCoolingTempDecrease,
+    this.onSupplyFanChanged,
+    this.onExhaustFanChanged,
+    this.onModeChanged,
+    this.onPowerToggle,
+    this.onSettingsTap,
+    this.isPowerLoading = false,
+    this.isScheduleEnabled = false,
+    this.isScheduleLoading = false,
+    this.onScheduleToggle,
+    this.isPendingHeatingTemperature = false,
+    this.isPendingCoolingTemperature = false,
+    this.isPendingSupplyFan = false,
+    this.isPendingExhaustFan = false,
+    this.onMasterOff,
+    this.onUnitSelected,
+    this.onThemeToggle,
+    this.onAddUnit,
+    this.onLogoutTap,
+    this.onNotificationsTap,
+    this.unreadNotificationsCount = 0,
+    this.timerSettings,
+    this.onTimerSettingsChanged,
+    this.activeAlarms = const {},
+  });
   final UnitState unit;
   final List<UnitState> allUnits;
   final int selectedUnitIndex;
@@ -54,45 +87,6 @@ class DesktopLayout extends StatefulWidget {
   final Map<String, TimerSettings>? timerSettings;
   final DaySettingsCallback? onTimerSettingsChanged;
   final Map<String, AlarmInfo> activeAlarms;
-
-  const DesktopLayout({
-    super.key,
-    required this.unit,
-    required this.allUnits,
-    required this.selectedUnitIndex,
-    required this.isDark,
-    required this.userName,
-    required this.userRole,
-    this.onTemperatureIncrease,
-    this.onTemperatureDecrease,
-    this.onHeatingTempIncrease,
-    this.onHeatingTempDecrease,
-    this.onCoolingTempIncrease,
-    this.onCoolingTempDecrease,
-    this.onSupplyFanChanged,
-    this.onExhaustFanChanged,
-    this.onModeChanged,
-    this.onPowerToggle,
-    this.onSettingsTap,
-    this.isPowerLoading = false,
-    this.isScheduleEnabled = false,
-    this.isScheduleLoading = false,
-    this.onScheduleToggle,
-    this.isPendingHeatingTemperature = false,
-    this.isPendingCoolingTemperature = false,
-    this.isPendingSupplyFan = false,
-    this.isPendingExhaustFan = false,
-    this.onMasterOff,
-    this.onUnitSelected,
-    this.onThemeToggle,
-    this.onAddUnit,
-    this.onLogoutTap,
-    this.onNotificationsTap,
-    this.unreadNotificationsCount = 0,
-    this.timerSettings,
-    this.onTimerSettingsChanged,
-    this.activeAlarms = const {},
-  });
 
   @override
   State<DesktopLayout> createState() => _DesktopLayoutState();
@@ -149,8 +143,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
     );
   }
 
-  Widget _buildLeftColumn(BuildContext context) {
-    return Column(
+  Widget _buildLeftColumn(BuildContext context) => Column(
       children: [
         // Main temperature card with fan sliders
         Expanded(
@@ -195,10 +188,8 @@ class _DesktopLayoutState extends State<DesktopLayout> {
         ),
       ],
     );
-  }
 
-  Widget _buildRightColumn() {
-    return Column(
+  Widget _buildRightColumn() => Column(
       children: [
         // Header row
         DesktopHeader(
@@ -217,10 +208,8 @@ class _DesktopLayoutState extends State<DesktopLayout> {
         Expanded(child: _buildRightColumnContent()),
       ],
     );
-  }
 
-  Widget _buildRightColumnContent() {
-    return Column(
+  Widget _buildRightColumnContent() => Column(
       children: [
         // Schedule + Alarms row
         Expanded(
@@ -256,8 +245,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
             buildWhen: (prev, curr) =>
                 prev.graphData != curr.graphData ||
                 prev.selectedMetric != curr.selectedMetric,
-            builder: (context, state) {
-              return OperationGraph(
+            builder: (context, state) => OperationGraph(
                 data: state.graphData,
                 selectedMetric: state.selectedMetric,
                 onMetricChanged: (metric) {
@@ -265,11 +253,9 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                     AnalyticsGraphMetricChanged(metric),
                   );
                 },
-              );
-            },
+              ),
           ),
         ),
       ],
     );
-  }
 }

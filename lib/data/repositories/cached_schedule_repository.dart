@@ -3,18 +3,15 @@
 /// Расписание: чтение кешируется, изменения требуют сети.
 library;
 
-import '../../core/error/offline_exception.dart';
-import '../../core/logging/api_logger.dart';
-import '../../core/services/cache_service.dart';
-import '../../core/services/connectivity_service.dart';
-import '../../domain/entities/schedule_entry.dart';
-import '../../domain/repositories/schedule_repository.dart';
+import 'package:hvac_control/core/error/offline_exception.dart';
+import 'package:hvac_control/core/logging/api_logger.dart';
+import 'package:hvac_control/core/services/cache_service.dart';
+import 'package:hvac_control/core/services/connectivity_service.dart';
+import 'package:hvac_control/domain/entities/schedule_entry.dart';
+import 'package:hvac_control/domain/repositories/schedule_repository.dart';
 
 /// Кеширующий декоратор для ScheduleRepository
 class CachedScheduleRepository implements ScheduleRepository {
-  final ScheduleRepository _inner;
-  final CacheService _cacheService;
-  final ConnectivityService _connectivity;
 
   CachedScheduleRepository({
     required ScheduleRepository inner,
@@ -23,6 +20,9 @@ class CachedScheduleRepository implements ScheduleRepository {
   })  : _inner = inner,
         _cacheService = cacheService,
         _connectivity = connectivity;
+  final ScheduleRepository _inner;
+  final CacheService _cacheService;
+  final ConnectivityService _connectivity;
 
   // ============================================
   // READ OPERATIONS (кешируемые)
@@ -37,13 +37,17 @@ class CachedScheduleRepository implements ScheduleRepository {
         return schedule;
       } catch (e) {
         final cached = _cacheService.getCachedSchedule(deviceId);
-        if (cached != null) return cached;
+        if (cached != null) {
+          return cached;
+        }
         rethrow;
       }
     }
 
     final cached = _cacheService.getCachedSchedule(deviceId);
-    if (cached != null) return cached;
+    if (cached != null) {
+      return cached;
+    }
 
     throw OfflineException(
       'Нет сохранённого расписания для $deviceId',
@@ -52,9 +56,8 @@ class CachedScheduleRepository implements ScheduleRepository {
   }
 
   @override
-  Stream<List<ScheduleEntry>> watchSchedule(String deviceId) {
-    return _inner.watchSchedule(deviceId);
-  }
+  Stream<List<ScheduleEntry>> watchSchedule(String deviceId) =>
+    _inner.watchSchedule(deviceId);
 
   // ============================================
   // WRITE OPERATIONS (требуют сети)
@@ -85,9 +88,9 @@ class CachedScheduleRepository implements ScheduleRepository {
   }
 
   @override
-  Future<ScheduleEntry> toggleEntry(String entryId, bool isActive) async {
+  Future<ScheduleEntry> toggleEntry(String entryId, {required bool isActive}) async {
     _ensureOnline('toggleEntry');
-    final result = await _inner.toggleEntry(entryId, isActive);
+    final result = await _inner.toggleEntry(entryId, isActive: isActive);
     await _refreshCache(result.deviceId);
     return result;
   }
@@ -117,8 +120,8 @@ class CachedScheduleRepository implements ScheduleRepository {
   }
 
   @override
-  Future<void> setScheduleEnabled(String deviceId, bool enabled) async {
+  Future<void> setScheduleEnabled(String deviceId, {required bool enabled}) async {
     _ensureOnline('setScheduleEnabled');
-    await _inner.setScheduleEnabled(deviceId, enabled);
+    await _inner.setScheduleEnabled(deviceId, enabled: enabled);
   }
 }

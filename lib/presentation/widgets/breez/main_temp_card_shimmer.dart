@@ -2,10 +2,10 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:shimmer/shimmer.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/spacing.dart';
 
 /// Shimmer loading state for MainTempCard
 class MainTempCardShimmer extends StatelessWidget {
@@ -18,17 +18,17 @@ class MainTempCardShimmer extends StatelessWidget {
     return Shimmer.fromColors(
       baseColor: isDark ? AppColors.darkShimmerBase : AppColors.lightShimmerBase,
       highlightColor: isDark ? AppColors.darkShimmerHighlight : AppColors.lightShimmerHighlight,
-      child: Column(
+      child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Header shimmer
-          const _HeaderShimmer(),
-          const SizedBox(height: AppSpacing.xxl),
+          _HeaderShimmer(),
+          SizedBox(height: AppSpacing.xxl),
           // Temperature shimmer
-          const _TemperatureShimmer(),
-          const SizedBox(height: AppSpacing.xxl),
+          _TemperatureShimmer(),
+          SizedBox(height: AppSpacing.xxl),
           // Stats shimmer
-          const _StatsShimmer(),
+          _StatsShimmer(),
         ],
       ),
     );
@@ -40,8 +40,7 @@ class _HeaderShimmer extends StatelessWidget {
   const _HeaderShimmer();
 
   @override
-  Widget build(BuildContext context) {
-    return Row(
+  Widget build(BuildContext context) => Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Column(
@@ -76,7 +75,6 @@ class _HeaderShimmer extends StatelessWidget {
         ),
       ],
     );
-  }
 }
 
 /// Temperature shimmer placeholder
@@ -84,8 +82,7 @@ class _TemperatureShimmer extends StatelessWidget {
   const _TemperatureShimmer();
 
   @override
-  Widget build(BuildContext context) {
-    return Center(
+  Widget build(BuildContext context) => Center(
       child: Column(
         children: [
           Container(
@@ -117,7 +114,6 @@ class _TemperatureShimmer extends StatelessWidget {
         ],
       ),
     );
-  }
 }
 
 /// Stats shimmer placeholder
@@ -125,8 +121,7 @@ class _StatsShimmer extends StatelessWidget {
   const _StatsShimmer();
 
   @override
-  Widget build(BuildContext context) {
-    return Row(
+  Widget build(BuildContext context) => Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: List.generate(
         3,
@@ -162,5 +157,4 @@ class _StatsShimmer extends StatelessWidget {
         ),
       ),
     );
-  }
 }

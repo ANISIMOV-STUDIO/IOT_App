@@ -5,17 +5,10 @@
 /// - gRPC + streaming (mobile/desktop) - gRPC streaming для real-time
 library;
 
-import '../../../domain/entities/unit_notification.dart';
+import 'package:hvac_control/domain/entities/unit_notification.dart';
 
 /// DTO для уведомления (platform-agnostic)
 class NotificationDto {
-  final String id;
-  final String deviceId;
-  final String title;
-  final String message;
-  final String type;
-  final DateTime timestamp;
-  final bool isRead;
 
   const NotificationDto({
     required this.id,
@@ -26,10 +19,16 @@ class NotificationDto {
     required this.timestamp,
     required this.isRead,
   });
+  final String id;
+  final String deviceId;
+  final String title;
+  final String message;
+  final String type;
+  final DateTime timestamp;
+  final bool isRead;
 
   /// Конвертация в domain entity
-  UnitNotification toEntity() {
-    return UnitNotification(
+  UnitNotification toEntity() => UnitNotification(
       id: id,
       deviceId: deviceId,
       title: title,
@@ -38,7 +37,6 @@ class NotificationDto {
       timestamp: timestamp,
       isRead: isRead,
     );
-  }
 
   static NotificationType _parseType(String type) {
     switch (type.toLowerCase()) {

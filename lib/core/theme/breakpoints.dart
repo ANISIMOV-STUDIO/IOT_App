@@ -30,9 +30,7 @@ abstract final class AppBreakpoints {
   static const double widescreen = 1440;
 
   /// Check if current width is mobile
-  static bool isMobile(BuildContext context) {
-    return MediaQuery.sizeOf(context).width < mobile;
-  }
+  static bool isMobile(BuildContext context) => MediaQuery.sizeOf(context).width < mobile;
 
   /// Check if current width is tablet
   static bool isTablet(BuildContext context) {
@@ -41,39 +39,53 @@ abstract final class AppBreakpoints {
   }
 
   /// Check if current width is desktop or larger
-  static bool isDesktop(BuildContext context) {
-    return MediaQuery.sizeOf(context).width >= tablet;
-  }
+  static bool isDesktop(BuildContext context) => MediaQuery.sizeOf(context).width >= tablet;
 
   /// Check if current width is widescreen
-  static bool isWidescreen(BuildContext context) {
-    return MediaQuery.sizeOf(context).width >= widescreen;
-  }
+  static bool isWidescreen(BuildContext context) => MediaQuery.sizeOf(context).width >= widescreen;
 
   /// Get the current device type
   static DeviceType getDeviceType(BuildContext context) {
     final width = MediaQuery.sizeOf(context).width;
-    if (width >= widescreen) return DeviceType.widescreen;
-    if (width >= tablet) return DeviceType.desktop;
-    if (width >= mobile) return DeviceType.tablet;
+    if (width >= widescreen) {
+      return DeviceType.widescreen;
+    }
+    if (width >= tablet) {
+      return DeviceType.desktop;
+    }
+    if (width >= mobile) {
+      return DeviceType.tablet;
+    }
     return DeviceType.mobile;
   }
 
   /// Get number of columns for grid layout
   static int getGridColumns(BuildContext context) {
     final width = MediaQuery.sizeOf(context).width;
-    if (width >= widescreen) return 4;
-    if (width >= desktop) return 3;
-    if (width >= tablet) return 2;
+    if (width >= widescreen) {
+      return 4;
+    }
+    if (width >= desktop) {
+      return 3;
+    }
+    if (width >= tablet) {
+      return 2;
+    }
     return 1;
   }
 
   /// Get horizontal padding based on screen size
   static double getHorizontalPadding(BuildContext context) {
     final width = MediaQuery.sizeOf(context).width;
-    if (width >= widescreen) return 48;
-    if (width >= desktop) return 32;
-    if (width >= tablet) return 24;
+    if (width >= widescreen) {
+      return 48;
+    }
+    if (width >= desktop) {
+      return 32;
+    }
+    if (width >= tablet) {
+      return 24;
+    }
     return 16;
   }
 }

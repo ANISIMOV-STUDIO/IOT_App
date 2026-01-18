@@ -6,24 +6,24 @@ library;
 
 import 'dart:async';
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 
-import '../../data/api/platform/api_client.dart';
-import 'push_notification_service.dart';
+import 'package:flutter/foundation.dart';
+import 'package:hvac_control/core/services/push_notification_service.dart';
+import 'package:hvac_control/data/api/platform/api_client.dart';
 
 /// Сервис для регистрации FCM токена на backend
 class FcmTokenService {
-  final ApiClient _apiClient;
-  final PushNotificationService _pushService;
-
-  StreamSubscription<String?>? _tokenSubscription;
-  String? _registeredToken;
 
   FcmTokenService({
     required ApiClient apiClient,
     required PushNotificationService pushService,
   })  : _apiClient = apiClient,
         _pushService = pushService;
+  final ApiClient _apiClient;
+  final PushNotificationService _pushService;
+
+  StreamSubscription<String?>? _tokenSubscription;
+  String? _registeredToken;
 
   /// Инициализация — подписка на изменения токена
   void initialize() {
@@ -126,7 +126,9 @@ class FcmTokenService {
 
   /// Получить платформу
   String _getPlatform() {
-    if (kIsWeb) return 'web';
+    if (kIsWeb) {
+      return 'web';
+    }
     // Для мобильных платформ можно использовать Platform.isAndroid/isIOS
     return 'unknown';
   }
@@ -141,7 +143,7 @@ class FcmTokenService {
 
   /// Принудительно обновить регистрацию токена
   Future<bool> refreshRegistration() async {
-    final token = await _pushService.getToken();
+    final token = _pushService.token;
     if (token != null) {
       return registerToken(token);
     }

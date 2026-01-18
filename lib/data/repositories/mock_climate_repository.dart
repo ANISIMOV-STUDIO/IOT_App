@@ -4,24 +4,25 @@
 library;
 
 import 'dart:async';
-import '../../domain/entities/climate.dart';
-import '../../domain/entities/hvac_device.dart';
-import '../../domain/entities/device_full_state.dart';
-import '../../domain/entities/alarm_info.dart';
-import '../../domain/repositories/climate_repository.dart';
-import '../mock/mock_data.dart';
+
+import 'package:hvac_control/data/mock/mock_data.dart';
+import 'package:hvac_control/domain/entities/alarm_info.dart';
+import 'package:hvac_control/domain/entities/climate.dart';
+import 'package:hvac_control/domain/entities/device_full_state.dart';
+import 'package:hvac_control/domain/entities/hvac_device.dart';
+import 'package:hvac_control/domain/repositories/climate_repository.dart';
 
 class MockClimateRepository implements ClimateRepository {
+
+  MockClimateRepository() {
+    _initializeFromMockData();
+  }
   final _climateController = StreamController<ClimateState>.broadcast();
   final _devicesController = StreamController<List<HvacDevice>>.broadcast();
 
   final Map<String, ClimateState> _deviceStates = {};
   final Map<String, _DeviceMeta> _deviceMeta = {};
   String? _selectedDeviceId;
-
-  MockClimateRepository() {
-    _initializeFromMockData();
-  }
 
   void _initializeFromMockData() {
     for (final device in MockData.hvacDevices) {
@@ -57,22 +58,20 @@ class MockClimateRepository implements ClimateRepository {
     }
   }
 
-  ClimateMode _parseClimateMode(String mode) {
-    return ClimateMode.values.firstWhere(
+  ClimateMode _parseClimateMode(String mode) => ClimateMode.values.firstWhere(
       (e) => e.name == mode,
       orElse: () => ClimateMode.auto,
     );
-  }
 
-  AirQualityLevel _parseAirQuality(String quality) {
-    return AirQualityLevel.values.firstWhere(
+  AirQualityLevel _parseAirQuality(String quality) => AirQualityLevel.values.firstWhere(
       (e) => e.name == quality,
       orElse: () => AirQualityLevel.good,
     );
-  }
 
   HvacDeviceType _parseDeviceType(String? type) {
-    if (type == null) return HvacDeviceType.ventilation;
+    if (type == null) {
+      return HvacDeviceType.ventilation;
+    }
     switch (type.toLowerCase()) {
       case 'ventilation':
         return HvacDeviceType.ventilation;
@@ -92,13 +91,13 @@ class MockClimateRepository implements ClimateRepository {
 
   @override
   Future<List<HvacDevice>> getAllHvacDevices() async {
-    await Future.delayed(MockData.fastDelay);
+    await Future<void>.delayed(MockData.fastDelay);
     return _buildDeviceList();
   }
 
   @override
   Future<ClimateState> getDeviceState(String deviceId) async {
-    await Future.delayed(MockData.fastDelay);
+    await Future<void>.delayed(MockData.fastDelay);
     return _deviceStates[deviceId] ?? _deviceStates.values.first;
   }
 
@@ -109,9 +108,7 @@ class MockClimateRepository implements ClimateRepository {
   }
 
   @override
-  Stream<ClimateState> watchDeviceClimate(String deviceId) {
-    return _climateController.stream;
-  }
+  Stream<ClimateState> watchDeviceClimate(String deviceId) => _climateController.stream;
 
   @override
   void setSelectedDevice(String deviceId) {
@@ -124,8 +121,7 @@ class MockClimateRepository implements ClimateRepository {
     }
   }
 
-  List<HvacDevice> _buildDeviceList() {
-    return _deviceStates.entries.where((entry) => _deviceMeta.containsKey(entry.key)).map((entry) {
+  List<HvacDevice> _buildDeviceList() => _deviceStates.entries.where((entry) => _deviceMeta.containsKey(entry.key)).map((entry) {
       final meta = _deviceMeta[entry.key]!;
       final state = entry.value;
       return HvacDevice(
@@ -137,7 +133,6 @@ class MockClimateRepository implements ClimateRepository {
         isActive: state.isOn,
       );
     }).toList();
-  }
 
   void _notifyDeviceChange(String deviceId) {
     _devicesController.add(_buildDeviceList());
@@ -155,7 +150,7 @@ class MockClimateRepository implements ClimateRepository {
 
   @override
   Future<ClimateState> getCurrentState() async {
-    await Future.delayed(MockData.normalDelay);
+    await Future<void>.delayed(MockData.normalDelay);
     if (_selectedDeviceId != null && _deviceStates.containsKey(_selectedDeviceId)) {
       return _deviceStates[_selectedDeviceId]!;
     }
@@ -181,8 +176,8 @@ class MockClimateRepository implements ClimateRepository {
   String _resolveDeviceId(String? deviceId) => deviceId ?? _selectedDeviceId ?? _deviceStates.keys.first;
 
   @override
-  Future<ClimateState> setPower(bool isOn, {String? deviceId}) async {
-    await Future.delayed(MockData.slowDelay);
+  Future<ClimateState> setPower({required bool isOn, String? deviceId}) async {
+    await Future<void>.delayed(MockData.slowDelay);
     final id = _resolveDeviceId(deviceId);
     final currentState = _deviceStates[id];
     if (currentState != null) {
@@ -194,13 +189,11 @@ class MockClimateRepository implements ClimateRepository {
   }
 
   @override
-  Future<ClimateState> setTargetTemperature(double temperature, {String? deviceId}) async {
-    return setHeatingTemperature(temperature.toInt(), deviceId: deviceId);
-  }
+  Future<ClimateState> setTargetTemperature(double temperature, {String? deviceId}) async => setHeatingTemperature(temperature.toInt(), deviceId: deviceId);
 
   @override
   Future<ClimateState> setHeatingTemperature(int temperature, {String? deviceId}) async {
-    await Future.delayed(MockData.fastDelay);
+    await Future<void>.delayed(MockData.fastDelay);
     final id = _resolveDeviceId(deviceId);
     final currentState = _deviceStates[id];
     if (currentState != null) {
@@ -213,7 +206,7 @@ class MockClimateRepository implements ClimateRepository {
 
   @override
   Future<ClimateState> setCoolingTemperature(int temperature, {String? deviceId}) async {
-    await Future.delayed(MockData.fastDelay);
+    await Future<void>.delayed(MockData.fastDelay);
     final id = _resolveDeviceId(deviceId);
     final currentState = _deviceStates[id];
     if (currentState != null) {
@@ -226,7 +219,7 @@ class MockClimateRepository implements ClimateRepository {
 
   @override
   Future<ClimateState> setHumidity(double humidity, {String? deviceId}) async {
-    await Future.delayed(MockData.fastDelay);
+    await Future<void>.delayed(MockData.fastDelay);
     final id = _resolveDeviceId(deviceId);
     final currentState = _deviceStates[id];
     if (currentState != null) {
@@ -239,7 +232,7 @@ class MockClimateRepository implements ClimateRepository {
 
   @override
   Future<ClimateState> setMode(ClimateMode mode, {String? deviceId}) async {
-    await Future.delayed(MockData.normalDelay);
+    await Future<void>.delayed(MockData.normalDelay);
     final id = _resolveDeviceId(deviceId);
     final currentState = _deviceStates[id];
     if (currentState != null) {
@@ -255,7 +248,7 @@ class MockClimateRepository implements ClimateRepository {
 
   @override
   Future<ClimateState> setSupplyAirflow(double value, {String? deviceId}) async {
-    await Future.delayed(MockData.fastDelay);
+    await Future<void>.delayed(MockData.fastDelay);
     final id = _resolveDeviceId(deviceId);
     final currentState = _deviceStates[id];
     if (currentState != null) {
@@ -268,7 +261,7 @@ class MockClimateRepository implements ClimateRepository {
 
   @override
   Future<ClimateState> setExhaustAirflow(double value, {String? deviceId}) async {
-    await Future.delayed(MockData.fastDelay);
+    await Future<void>.delayed(MockData.fastDelay);
     final id = _resolveDeviceId(deviceId);
     final currentState = _deviceStates[id];
     if (currentState != null) {
@@ -281,14 +274,14 @@ class MockClimateRepository implements ClimateRepository {
 
   @override
   Future<ClimateState> setPreset(String preset, {String? deviceId}) async {
-    await Future.delayed(MockData.normalDelay);
+    await Future<void>.delayed(MockData.normalDelay);
     final id = _resolveDeviceId(deviceId);
     final currentState = _deviceStates[id];
     if (currentState == null) {
       throw Exception('Device not found: $id');
     }
 
-    ClimateState newState = currentState.copyWith(preset: preset);
+    var newState = currentState.copyWith(preset: preset);
 
     final presetConfig = MockData.climatePresets[preset];
     if (presetConfig != null) {
@@ -313,7 +306,7 @@ class MockClimateRepository implements ClimateRepository {
 
   @override
   Future<ClimateState> setOperatingMode(String mode, {String? deviceId}) async {
-    await Future.delayed(MockData.normalDelay);
+    await Future<void>.delayed(MockData.normalDelay);
     final id = _resolveDeviceId(deviceId);
     final currentState = _deviceStates[id];
     if (currentState == null) {
@@ -328,24 +321,21 @@ class MockClimateRepository implements ClimateRepository {
 
   @override
   Future<HvacDevice> registerDevice(String macAddress, String name) async {
-    await Future.delayed(MockData.normalDelay);
+    await Future<void>.delayed(MockData.normalDelay);
     final newId = 'pv_${_deviceStates.length + 1}';
     final newState = ClimateState(
       roomId: newId,
       deviceName: name,
       isOn: false,
-      currentTemperature: 20.0,
-      targetTemperature: 22.0,
-      humidity: 45.0,
-      targetHumidity: 50.0,
+      currentTemperature: 20,
+      targetTemperature: 22,
+      humidity: 45,
       mode: ClimateMode.auto,
-      preset: 'auto',
-      supplyAirflow: 50.0,
-      exhaustAirflow: 50.0,
+      exhaustAirflow: 50,
       airQuality: AirQualityLevel.good,
     );
     _deviceStates[newId] = newState;
-    _deviceMeta[newId] = _DeviceMeta(
+    _deviceMeta[newId] = const _DeviceMeta(
       brand: 'Breez',
       deviceType: HvacDeviceType.ventilation,
       isOnline: true,
@@ -355,15 +345,12 @@ class MockClimateRepository implements ClimateRepository {
       id: newId,
       name: name,
       brand: 'Breez',
-      deviceType: HvacDeviceType.ventilation,
-      isOnline: true,
-      isActive: false,
     );
   }
 
   @override
   Future<void> deleteDevice(String deviceId) async {
-    await Future.delayed(MockData.normalDelay);
+    await Future<void>.delayed(MockData.normalDelay);
     _deviceStates.remove(deviceId);
     _deviceMeta.remove(deviceId);
     _devicesController.add(_buildDeviceList());
@@ -371,7 +358,7 @@ class MockClimateRepository implements ClimateRepository {
 
   @override
   Future<void> renameDevice(String deviceId, String newName) async {
-    await Future.delayed(MockData.normalDelay);
+    await Future<void>.delayed(MockData.normalDelay);
     final state = _deviceStates[deviceId];
     if (state != null) {
       _deviceStates[deviceId] = state.copyWith(deviceName: newName);
@@ -381,7 +368,7 @@ class MockClimateRepository implements ClimateRepository {
 
   @override
   Future<DeviceFullState> getDeviceFullState(String deviceId) async {
-    await Future.delayed(MockData.fastDelay);
+    await Future<void>.delayed(MockData.fastDelay);
     final state = _deviceStates[deviceId];
     if (state == null) {
       throw Exception('Device not found: $deviceId');
@@ -396,8 +383,8 @@ class MockClimateRepository implements ClimateRepository {
       currentTemperature: state.currentTemperature,
       targetTemperature: state.targetTemperature,
       humidity: state.humidity,
-      activeAlarms: {
-        'alarm1': const AlarmInfo(
+      activeAlarms: const {
+        'alarm1': AlarmInfo(
           code: 1,
           description: 'Тестовая авария: перегрев системы',
         ),
@@ -406,17 +393,16 @@ class MockClimateRepository implements ClimateRepository {
   }
 
   @override
-  Stream<DeviceFullState> watchDeviceFullState(String deviceId) {
+  Stream<DeviceFullState> watchDeviceFullState(String deviceId) =>
     // Mock репозиторий не имеет real-time обновлений
-    return const Stream.empty();
-  }
+    const Stream.empty();
 
   @override
   Future<List<AlarmHistory>> getAlarmHistory(
     String deviceId, {
     int limit = 100,
   }) async {
-    await Future.delayed(MockData.fastDelay);
+    await Future<void>.delayed(MockData.fastDelay);
 
     // Моковые данные для тестирования истории аварий
     return [
@@ -425,7 +411,6 @@ class MockClimateRepository implements ClimateRepository {
         alarmCode: 1,
         description: 'Перегрев системы',
         occurredAt: DateTime.now().subtract(const Duration(hours: 2)),
-        isCleared: false,
       ),
       AlarmHistory(
         id: 'ah_2',
@@ -448,7 +433,7 @@ class MockClimateRepository implements ClimateRepository {
 
   @override
   Future<void> setDeviceTime(DateTime time, {String? deviceId}) async {
-    await Future.delayed(MockData.normalDelay);
+    await Future<void>.delayed(MockData.normalDelay);
 
     final targetDeviceId = deviceId ?? _selectedDeviceId;
     if (targetDeviceId == null) {
@@ -468,13 +453,13 @@ class MockClimateRepository implements ClimateRepository {
 }
 
 class _DeviceMeta {
-  final String brand;
-  final HvacDeviceType deviceType;
-  final bool isOnline;
 
   const _DeviceMeta({
     required this.brand,
     required this.deviceType,
     required this.isOnline,
   });
+  final String brand;
+  final HvacDeviceType deviceType;
+  final bool isOnline;
 }

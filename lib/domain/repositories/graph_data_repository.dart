@@ -1,7 +1,7 @@
 /// Graph Data Repository - Interface for graph/chart data operations
 library;
 
-import '../entities/graph_data.dart';
+import 'package:hvac_control/domain/entities/graph_data.dart';
 
 /// Interface for graph data access
 abstract class GraphDataRepository {

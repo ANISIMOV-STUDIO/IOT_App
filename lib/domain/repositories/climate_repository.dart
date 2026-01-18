@@ -6,13 +6,13 @@
 /// - ClimateController: Control operations
 library;
 
-import '../entities/alarm_info.dart';
-import '../entities/climate.dart';
-import '../entities/hvac_device.dart';
-import '../entities/device_full_state.dart';
-import 'climate_controller.dart';
-import 'climate_state_provider.dart';
-import 'hvac_device_provider.dart';
+import 'package:hvac_control/domain/entities/alarm_info.dart';
+import 'package:hvac_control/domain/entities/climate.dart';
+import 'package:hvac_control/domain/entities/device_full_state.dart';
+import 'package:hvac_control/domain/entities/hvac_device.dart';
+import 'package:hvac_control/domain/repositories/climate_controller.dart';
+import 'package:hvac_control/domain/repositories/climate_state_provider.dart';
+import 'package:hvac_control/domain/repositories/hvac_device_provider.dart';
 
 export 'climate_controller.dart';
 export 'climate_state_provider.dart';
@@ -66,7 +66,7 @@ abstract class ClimateRepository
 
   /// Turn device on/off
   @override
-  Future<ClimateState> setPower(bool isOn, {String? deviceId});
+  Future<ClimateState> setPower({required bool isOn, String? deviceId});
 
   /// Set target temperature
   @override

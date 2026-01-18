@@ -6,12 +6,11 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_font_sizes.dart';
-import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../generated/l10n/app_localizations.dart';
-import '../breez/breez_card.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
 
 /// Базовый виджет ошибки
 ///
@@ -19,6 +18,14 @@ import '../breez/breez_card.dart';
 /// заголовком, описанием и опциональной кнопкой действия.
 /// Используется как базовый строительный блок для специфичных error states.
 class ErrorWidget extends StatelessWidget {
+
+  const ErrorWidget({
+    required this.icon, required this.iconColor, required this.title, required this.message, super.key,
+    this.actionLabel,
+    this.onAction,
+    this.additionalContent,
+    this.showCard = true,
+  });
   /// Иконка ошибки
   final IconData icon;
 
@@ -42,18 +49,6 @@ class ErrorWidget extends StatelessWidget {
 
   /// Показать ли карточку-обертку
   final bool showCard;
-
-  const ErrorWidget({
-    super.key,
-    required this.icon,
-    required this.iconColor,
-    required this.title,
-    required this.message,
-    this.actionLabel,
-    this.onAction,
-    this.additionalContent,
-    this.showCard = true,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +108,7 @@ class ErrorWidget extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: BreezButton(
-              onTap: onAction!,
+              onTap: onAction,
               padding: const EdgeInsets.symmetric(
                 horizontal: AppSpacing.lg,
                 vertical: AppSpacing.md,
@@ -171,6 +166,13 @@ class ErrorWidget extends StatelessWidget {
 ///
 /// Показывает дружелюбное сообщение и кнопку повтора запроса.
 class NetworkError extends StatelessWidget {
+
+  const NetworkError({
+    super.key,
+    this.onRetry,
+    this.customMessage,
+    this.showCard = true,
+  });
   /// Callback для повторной попытки загрузки
   final VoidCallback? onRetry;
 
@@ -179,13 +181,6 @@ class NetworkError extends StatelessWidget {
 
   /// Показать ли карточку-обертку
   final bool showCard;
-
-  const NetworkError({
-    super.key,
-    this.onRetry,
-    this.customMessage,
-    this.showCard = true,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -208,6 +203,13 @@ class NetworkError extends StatelessWidget {
 /// Информирует пользователя, что проблема на стороне сервера,
 /// а не в приложении или действиях пользователя.
 class ServerError extends StatelessWidget {
+
+  const ServerError({
+    super.key,
+    this.onRetry,
+    this.statusCode,
+    this.showCard = true,
+  });
   /// Callback для повторной попытки загрузки
   final VoidCallback? onRetry;
 
@@ -216,13 +218,6 @@ class ServerError extends StatelessWidget {
 
   /// Показать ли карточку-обертку
   final bool showCard;
-
-  const ServerError({
-    super.key,
-    this.onRetry,
-    this.statusCode,
-    this.showCard = true,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -249,6 +244,14 @@ class ServerError extends StatelessWidget {
 /// Отличается от EmptyState тем, что указывает на ошибку
 /// (ресурс должен был быть, но его нет).
 class NotFoundError extends StatelessWidget {
+
+  const NotFoundError({
+    super.key,
+    this.resourceName,
+    this.onAction,
+    this.actionLabel,
+    this.showCard = true,
+  });
   /// Название ресурса, который не найден (null = использовать l10n.dataResource)
   final String? resourceName;
 
@@ -260,14 +263,6 @@ class NotFoundError extends StatelessWidget {
 
   /// Показать ли карточку-обертку
   final bool showCard;
-
-  const NotFoundError({
-    super.key,
-    this.resourceName,
-    this.onAction,
-    this.actionLabel,
-    this.showCard = true,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -292,17 +287,16 @@ class NotFoundError extends StatelessWidget {
 /// Отображается при истечении сессии или отсутствии прав доступа.
 /// Предлагает пользователю войти заново.
 class AuthError extends StatelessWidget {
+
+  const AuthError({
+    required this.onLogin, super.key,
+    this.showCard = true,
+  });
   /// Callback для перехода на страницу входа
   final VoidCallback onLogin;
 
   /// Показать ли карточку-обертку
   final bool showCard;
-
-  const AuthError({
-    super.key,
-    required this.onLogin,
-    this.showCard = true,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -325,6 +319,14 @@ class AuthError extends StatelessWidget {
 /// error state неприменим. Показывает техническое сообщение об ошибке
 /// и предлагает повторить попытку.
 class GenericError extends StatelessWidget {
+
+  const GenericError({
+    super.key,
+    this.errorMessage,
+    this.onRetry,
+    this.showCard = true,
+    this.showTechnicalDetails = false,
+  });
   /// Сообщение об ошибке
   final String? errorMessage;
 
@@ -336,14 +338,6 @@ class GenericError extends StatelessWidget {
 
   /// Показать ли техническое сообщение об ошибке
   final bool showTechnicalDetails;
-
-  const GenericError({
-    super.key,
-    this.errorMessage,
-    this.onRetry,
-    this.showCard = true,
-    this.showTechnicalDetails = false,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -394,6 +388,68 @@ class GenericError extends StatelessWidget {
 /// - Результаты поиска не найдены
 /// - Нет уведомлений
 class EmptyState extends StatelessWidget {
+
+  const EmptyState({
+    required this.icon, required this.title, required this.message, super.key,
+    this.actionLabel,
+    this.onAction,
+    this.iconColor,
+    this.showCard = true,
+  });
+
+  /// Factory для пустого списка устройств
+  factory EmptyState.noDevices(BuildContext context, {VoidCallback? onAddDevice}) {
+    final l10n = AppLocalizations.of(context)!;
+    return EmptyState(
+      icon: Icons.devices_outlined,
+      title: l10n.emptyNoDevicesTitle,
+      message: l10n.emptyNoDevicesMessage,
+      actionLabel: onAddDevice != null ? l10n.addDevice : null,
+      onAction: onAddDevice,
+    );
+  }
+
+  /// Factory для пустых результатов поиска
+  factory EmptyState.noSearchResults(BuildContext context, {required String query}) {
+    final l10n = AppLocalizations.of(context)!;
+    return EmptyState(
+      icon: Icons.search_off_rounded,
+      title: l10n.emptyNothingFound,
+      message: l10n.emptyNoSearchResults(query),
+    );
+  }
+
+  /// Factory для отсутствия уведомлений
+  factory EmptyState.noNotifications(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return EmptyState(
+      icon: Icons.notifications_none_rounded,
+      title: l10n.emptyNoNotificationsTitle,
+      message: l10n.emptyNoNotificationsMessage,
+    );
+  }
+
+  /// Factory для пустой истории
+  factory EmptyState.noHistory(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return EmptyState(
+      icon: Icons.history_rounded,
+      title: l10n.emptyHistoryTitle,
+      message: l10n.emptyHistoryMessage,
+    );
+  }
+
+  /// Factory для пустого расписания
+  factory EmptyState.noSchedule(BuildContext context, {VoidCallback? onAdd}) {
+    final l10n = AppLocalizations.of(context)!;
+    return EmptyState(
+      icon: Icons.schedule_outlined,
+      title: l10n.emptyNoScheduleTitle,
+      message: l10n.emptyNoScheduleMessage,
+      actionLabel: onAdd != null ? l10n.scheduleAdd : null,
+      onAction: onAdd,
+    );
+  }
   /// Иконка для пустого состояния
   final IconData icon;
 
@@ -415,74 +471,8 @@ class EmptyState extends StatelessWidget {
   /// Показать ли карточку-обертку
   final bool showCard;
 
-  const EmptyState({
-    super.key,
-    required this.icon,
-    required this.title,
-    required this.message,
-    this.actionLabel,
-    this.onAction,
-    this.iconColor,
-    this.showCard = true,
-  });
-
-  /// Статический метод для пустого списка устройств
-  static EmptyState noDevices(BuildContext context, {VoidCallback? onAddDevice}) {
-    final l10n = AppLocalizations.of(context)!;
-    return EmptyState(
-      icon: Icons.devices_outlined,
-      title: l10n.emptyNoDevicesTitle,
-      message: l10n.emptyNoDevicesMessage,
-      actionLabel: onAddDevice != null ? l10n.addDevice : null,
-      onAction: onAddDevice,
-    );
-  }
-
-  /// Статический метод для пустых результатов поиска
-  static EmptyState noSearchResults(BuildContext context, {required String query}) {
-    final l10n = AppLocalizations.of(context)!;
-    return EmptyState(
-      icon: Icons.search_off_rounded,
-      title: l10n.emptyNothingFound,
-      message: l10n.emptyNoSearchResults(query),
-    );
-  }
-
-  /// Статический метод для отсутствия уведомлений
-  static EmptyState noNotifications(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return EmptyState(
-      icon: Icons.notifications_none_rounded,
-      title: l10n.emptyNoNotificationsTitle,
-      message: l10n.emptyNoNotificationsMessage,
-    );
-  }
-
-  /// Статический метод для пустой истории
-  static EmptyState noHistory(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return EmptyState(
-      icon: Icons.history_rounded,
-      title: l10n.emptyHistoryTitle,
-      message: l10n.emptyHistoryMessage,
-    );
-  }
-
-  /// Статический метод для пустого расписания
-  static EmptyState noSchedule(BuildContext context, {VoidCallback? onAdd}) {
-    final l10n = AppLocalizations.of(context)!;
-    return EmptyState(
-      icon: Icons.schedule_outlined,
-      title: l10n.emptyNoScheduleTitle,
-      message: l10n.emptyNoScheduleMessage,
-      actionLabel: onAdd != null ? l10n.scheduleAdd : null,
-      onAction: onAdd,
-    );
-  }
-
   @override
-  Widget build(BuildContext context) {
-    return ErrorWidget(
+  Widget build(BuildContext context) => ErrorWidget(
       icon: icon,
       iconColor: iconColor ?? AppColors.accent,
       title: title,
@@ -491,7 +481,6 @@ class EmptyState extends StatelessWidget {
       onAction: onAction,
       showCard: showCard,
     );
-  }
 }
 
 // OfflineBanner удалён - используется версия из common/offline_banner.dart
@@ -501,6 +490,12 @@ class EmptyState extends StatelessWidget {
 /// Универсальная кнопка повтора для использования в различных error states.
 /// Может быть использована отдельно или встроена в другие виджеты.
 class RetryButton extends StatelessWidget {
+
+  const RetryButton({
+    required this.onRetry, super.key,
+    this.label,
+    this.fullWidth = true,
+  });
   /// Callback для повтора
   final VoidCallback onRetry;
 
@@ -509,13 +504,6 @@ class RetryButton extends StatelessWidget {
 
   /// Полная ширина кнопки
   final bool fullWidth;
-
-  const RetryButton({
-    super.key,
-    required this.onRetry,
-    this.label,
-    this.fullWidth = true,
-  });
 
   @override
   Widget build(BuildContext context) {

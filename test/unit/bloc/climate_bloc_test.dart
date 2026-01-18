@@ -5,12 +5,11 @@ library;
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-
 import 'package:hvac_control/domain/entities/climate.dart';
 import 'package:hvac_control/domain/entities/device_full_state.dart';
 import 'package:hvac_control/domain/usecases/usecases.dart';
 import 'package:hvac_control/presentation/bloc/climate/climate_bloc.dart';
+import 'package:mocktail/mocktail.dart';
 
 // Mock classes for Use Cases
 class MockGetCurrentClimateState extends Mock
@@ -66,19 +65,18 @@ void main() {
     roomId: 'room-1',
     deviceName: 'Бризер Гостиная',
     currentTemperature: 22.5,
-    targetTemperature: 23.0,
-    humidity: 45.0,
+    targetTemperature: 23,
+    humidity: 45,
     mode: ClimateMode.auto,
     airQuality: AirQualityLevel.good,
-    isOn: true,
   );
 
   const testClimateOff = ClimateState(
     roomId: 'room-1',
     deviceName: 'Бризер Гостиная',
     currentTemperature: 22.5,
-    targetTemperature: 23.0,
-    humidity: 45.0,
+    targetTemperature: 23,
+    humidity: 45,
     mode: ClimateMode.auto,
     airQuality: AirQualityLevel.good,
     isOn: false,
@@ -88,14 +86,14 @@ void main() {
     registerFallbackValue(const GetDeviceStateParams(deviceId: ''));
     registerFallbackValue(const GetDeviceFullStateParams(deviceId: ''));
     registerFallbackValue(const SetDevicePowerParams(isOn: false));
-    registerFallbackValue(const SetTemperatureParams(temperature: 20.0));
+    registerFallbackValue(const SetTemperatureParams(temperature: 20));
     registerFallbackValue(const SetCoolingTemperatureParams(temperature: 24));
-    registerFallbackValue(const SetHumidityParams(humidity: 50.0));
+    registerFallbackValue(const SetHumidityParams(humidity: 50));
     registerFallbackValue(const SetClimateModeParams(mode: ClimateMode.auto));
     registerFallbackValue(const SetOperatingModeParams(mode: 'basic'));
     registerFallbackValue(const SetPresetParams(preset: 'auto'));
     registerFallbackValue(
-        const SetAirflowParams(type: AirflowType.supply, value: 50.0));
+        const SetAirflowParams(type: AirflowType.supply, value: 50));
     registerFallbackValue(
         const SetScheduleEnabledParams(deviceId: '', enabled: false));
     registerFallbackValue(
@@ -166,7 +164,7 @@ void main() {
         act: (bloc) => bloc.add(const ClimateSubscriptionRequested()),
         expect: () => [
           const ClimateControlState(status: ClimateControlStatus.loading),
-          ClimateControlState(
+          const ClimateControlState(
             status: ClimateControlStatus.success,
             climate: testClimate,
           ),
@@ -243,14 +241,14 @@ void main() {
     group('ClimateStateUpdated', () {
       blocTest<ClimateBloc, ClimateControlState>(
         'обновляет состояние климата из стрима',
-        build: () => createBloc(),
-        seed: () => ClimateControlState(
+        build: createBloc,
+        seed: () => const ClimateControlState(
           status: ClimateControlStatus.success,
           climate: testClimate,
         ),
-        act: (bloc) => bloc.add(ClimateStateUpdated(testClimateOff)),
+        act: (bloc) => bloc.add(const ClimateStateUpdated(testClimateOff)),
         expect: () => [
-          ClimateControlState(
+          const ClimateControlState(
             status: ClimateControlStatus.success,
             climate: testClimateOff,
           ),
@@ -266,7 +264,7 @@ void main() {
               .thenAnswer((_) async => testClimateOff);
           return createBloc();
         },
-        seed: () => ClimateControlState(
+        seed: () => const ClimateControlState(
           status: ClimateControlStatus.success,
           climate: testClimate,
         ),
@@ -283,7 +281,7 @@ void main() {
               .thenThrow(Exception('Device offline'));
           return createBloc();
         },
-        seed: () => ClimateControlState(
+        seed: () => const ClimateControlState(
           status: ClimateControlStatus.success,
           climate: testClimate,
         ),
@@ -306,14 +304,14 @@ void main() {
         'вызывает setTemperature use case',
         build: () {
           when(() => mockSetTemperature(any()))
-              .thenAnswer((_) async => testClimate.copyWith(targetTemperature: 25.0));
+              .thenAnswer((_) async => testClimate.copyWith(targetTemperature: 25));
           return createBloc();
         },
-        seed: () => ClimateControlState(
+        seed: () => const ClimateControlState(
           status: ClimateControlStatus.success,
           climate: testClimate,
         ),
-        act: (bloc) => bloc.add(const ClimateTemperatureChanged(25.0)),
+        act: (bloc) => bloc.add(const ClimateTemperatureChanged(25)),
         wait: const Duration(milliseconds: 600), // Ждём debounce
         verify: (_) {
           verify(() => mockSetTemperature(any())).called(1);
@@ -327,11 +325,11 @@ void main() {
               .thenThrow(Exception('Invalid value'));
           return createBloc();
         },
-        seed: () => ClimateControlState(
+        seed: () => const ClimateControlState(
           status: ClimateControlStatus.success,
           climate: testClimate,
         ),
-        act: (bloc) => bloc.add(const ClimateTemperatureChanged(100.0)),
+        act: (bloc) => bloc.add(const ClimateTemperatureChanged(100)),
         wait: const Duration(milliseconds: 600), // Ждём debounce
         expect: () => [
           // Optimistic update - сразу обновляем температуру
@@ -350,14 +348,14 @@ void main() {
         'вызывает setHumidity use case',
         build: () {
           when(() => mockSetHumidity(any()))
-              .thenAnswer((_) async => testClimate.copyWith(targetHumidity: 60.0));
+              .thenAnswer((_) async => testClimate.copyWith(targetHumidity: 60));
           return createBloc();
         },
-        seed: () => ClimateControlState(
+        seed: () => const ClimateControlState(
           status: ClimateControlStatus.success,
           climate: testClimate,
         ),
-        act: (bloc) => bloc.add(const ClimateHumidityChanged(60.0)),
+        act: (bloc) => bloc.add(const ClimateHumidityChanged(60)),
         verify: (_) {
           verify(() => mockSetHumidity(any())).called(1);
         },
@@ -372,7 +370,7 @@ void main() {
               .thenAnswer((_) async => testClimate.copyWith(mode: ClimateMode.cooling));
           return createBloc();
         },
-        seed: () => ClimateControlState(
+        seed: () => const ClimateControlState(
           status: ClimateControlStatus.success,
           climate: testClimate,
         ),
@@ -391,7 +389,7 @@ void main() {
               .thenAnswer((_) async => testClimate.copyWith(preset: 'turbo'));
           return createBloc();
         },
-        seed: () => ClimateControlState(
+        seed: () => const ClimateControlState(
           status: ClimateControlStatus.success,
           climate: testClimate,
         ),
@@ -407,17 +405,17 @@ void main() {
         'мгновенно обновляет UI и вызывает setAirflow use case после debounce',
         build: () {
           when(() => mockSetAirflow(any()))
-              .thenAnswer((_) async => testClimate.copyWith(supplyAirflow: 80.0));
+              .thenAnswer((_) async => testClimate.copyWith(supplyAirflow: 80));
           return createBloc();
         },
-        seed: () => ClimateControlState(
+        seed: () => const ClimateControlState(
           status: ClimateControlStatus.success,
           climate: testClimate,
         ),
         act: (bloc) async {
-          bloc.add(const ClimateSupplyAirflowChanged(80.0));
+          bloc.add(const ClimateSupplyAirflowChanged(80));
           // Ждём 600мс чтобы debounce сработал
-          await Future.delayed(const Duration(milliseconds: 600));
+          await Future<void>.delayed(const Duration(milliseconds: 600));
         },
         expect: () => [
           // 1. Мгновенное обновление UI + pending
@@ -436,17 +434,17 @@ void main() {
         'мгновенно обновляет UI и вызывает setAirflow use case после debounce',
         build: () {
           when(() => mockSetAirflow(any()))
-              .thenAnswer((_) async => testClimate.copyWith(exhaustAirflow: 70.0));
+              .thenAnswer((_) async => testClimate.copyWith(exhaustAirflow: 70));
           return createBloc();
         },
-        seed: () => ClimateControlState(
+        seed: () => const ClimateControlState(
           status: ClimateControlStatus.success,
           climate: testClimate,
         ),
         act: (bloc) async {
-          bloc.add(const ClimateExhaustAirflowChanged(70.0));
+          bloc.add(const ClimateExhaustAirflowChanged(70));
           // Ждём 600мс чтобы debounce сработал
-          await Future.delayed(const Duration(milliseconds: 600));
+          await Future<void>.delayed(const Duration(milliseconds: 600));
         },
         expect: () => [
            // 1. Мгновенное обновление UI + pending
@@ -465,12 +463,12 @@ void main() {
         'мгновенно обновляет UI и вызывает setTemperature use case после debounce',
         build: () {
           when(() => mockSetTemperature(any()))
-              .thenAnswer((_) async => testClimate.copyWith(targetTemperature: 21.0));
+              .thenAnswer((_) async => testClimate.copyWith(targetTemperature: 21));
           return createBloc();
         },
-        seed: () => ClimateControlState(
+        seed: () => const ClimateControlState(
           status: ClimateControlStatus.success,
-          deviceFullState: const DeviceFullState(
+          deviceFullState: DeviceFullState(
             id: '1',
             name: 'Device 1',
             heatingTemperature: 20,
@@ -479,7 +477,7 @@ void main() {
         act: (bloc) async {
           bloc.add(const ClimateHeatingTempChanged(21));
           // Ждём 600мс чтобы debounce сработал
-          await Future.delayed(const Duration(milliseconds: 600));
+          await Future<void>.delayed(const Duration(milliseconds: 600));
         },
         expect: () => [
           // 1. Мгновенное обновление UI + pending
@@ -501,9 +499,9 @@ void main() {
               .thenAnswer((_) async => testClimate.copyWith());
           return createBloc();
         },
-        seed: () => ClimateControlState(
+        seed: () => const ClimateControlState(
           status: ClimateControlStatus.success,
-          deviceFullState: const DeviceFullState(
+          deviceFullState: DeviceFullState(
             id: '1',
             name: 'Device 1',
             coolingTemperature: 24,
@@ -512,7 +510,7 @@ void main() {
         act: (bloc) async {
           bloc.add(const ClimateCoolingTempChanged(25));
           // Ждём 600мс чтобы debounce сработал
-          await Future.delayed(const Duration(milliseconds: 600));
+          await Future<void>.delayed(const Duration(milliseconds: 600));
         },
         expect: () => [
           // 1. Мгновенное обновление UI + pending
@@ -528,7 +526,7 @@ void main() {
 
     group('ClimateControlState', () {
       test('геттеры возвращают значения из climate', () {
-        final state = ClimateControlState(
+        const state = ClimateControlState(
           status: ClimateControlStatus.success,
           climate: testClimate,
         );
@@ -544,7 +542,7 @@ void main() {
 
       test('геттеры возвращают null/false когда climate null', () {
         const state = ClimateControlState(
-          status: ClimateControlStatus.initial,
+
         );
 
         expect(state.isOn, isFalse);

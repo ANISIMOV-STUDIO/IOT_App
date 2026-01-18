@@ -2,11 +2,11 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../core/theme/app_sizes.dart';
-import '../../../core/theme/app_animations.dart';
+import 'package:hvac_control/core/theme/app_animations.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_sizes.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -14,11 +14,11 @@ import '../../../core/theme/app_animations.dart';
 
 /// Константы для MobileTabBar
 abstract class _MobileTabConstants {
-  static const double iconSize = 14.0;
-  static const double fontSize = 11.0;
-  static const double badgeSize = 16.0;
-  static const double badgeFontSize = 9.0;
-  static const double segmentPadding = 3.0; // Slightly less than xxs (4px) for tighter fit
+  static const double iconSize = 14;
+  static const double fontSize = 11;
+  static const double badgeSize = 16;
+  static const double badgeFontSize = 9;
+  static const double segmentPadding = 3; // Slightly less than xxs (4px) for tighter fit
 }
 
 // =============================================================================
@@ -27,11 +27,6 @@ abstract class _MobileTabConstants {
 
 /// Данные вкладки для MobileTabBar
 class MobileTab {
-  final IconData icon;
-  final String label;
-  final int? badgeCount;
-  final Color? badgeColor;
-  final Color? iconColor;
 
   const MobileTab({
     required this.icon,
@@ -40,6 +35,11 @@ class MobileTab {
     this.badgeColor,
     this.iconColor,
   });
+  final IconData icon;
+  final String label;
+  final int? badgeCount;
+  final Color? badgeColor;
+  final Color? iconColor;
 }
 
 /// Сегментированный контрол для мобильного layout
@@ -51,14 +51,12 @@ class MobileTab {
 /// - Плавную анимацию переключения
 /// - Accessibility через Semantics
 class MobileTabBar extends StatefulWidget {
-  final TabController controller;
-  final List<MobileTab> tabs;
 
   const MobileTabBar({
-    super.key,
-    required this.controller,
-    required this.tabs,
+    required this.controller, required this.tabs, super.key,
   });
+  final TabController controller;
+  final List<MobileTab> tabs;
 
   @override
   State<MobileTabBar> createState() => _MobileTabBarState();
@@ -107,7 +105,7 @@ class _MobileTabBarState extends State<MobileTabBar> {
       label: 'Переключатель контента',
       child: Container(
         height: AppSizes.tabHeight,
-        padding: EdgeInsets.all(_MobileTabConstants.segmentPadding),
+        padding: const EdgeInsets.all(_MobileTabConstants.segmentPadding),
         decoration: BoxDecoration(
           color: colors.buttonBg.withValues(alpha: AppColors.opacityMedium),
           borderRadius: BorderRadius.circular(AppRadius.chip),
@@ -132,10 +130,6 @@ class _MobileTabBarState extends State<MobileTabBar> {
 
 /// Кнопка-сегмент
 class _SegmentButton extends StatelessWidget {
-  final MobileTab tab;
-  final bool isSelected;
-  final VoidCallback onTap;
-  final BreezColors colors;
 
   const _SegmentButton({
     required this.tab,
@@ -143,6 +137,10 @@ class _SegmentButton extends StatelessWidget {
     required this.onTap,
     required this.colors,
   });
+  final MobileTab tab;
+  final bool isSelected;
+  final VoidCallback onTap;
+  final BreezColors colors;
 
   @override
   Widget build(BuildContext context) {
@@ -166,7 +164,7 @@ class _SegmentButton extends StatelessWidget {
           decoration: BoxDecoration(
             color: isSelected
                 ? AppColors.accent.withValues(alpha: AppColors.opacitySubtle)
-                : colors.bg.withValues(alpha: 0.0),
+                : colors.bg.withValues(alpha: 0),
             borderRadius: BorderRadius.circular(AppRadius.chip),
             border: isSelected
                 ? Border.all(color: AppColors.accent.withValues(alpha: AppColors.opacityLow))
@@ -181,7 +179,7 @@ class _SegmentButton extends StatelessWidget {
                   size: _MobileTabConstants.iconSize,
                   color: iconColor,
                 ),
-                SizedBox(width: AppSpacing.xxs),
+                const SizedBox(width: AppSpacing.xxs),
                 Text(
                   tab.label,
                   style: TextStyle(
@@ -191,7 +189,7 @@ class _SegmentButton extends StatelessWidget {
                   ),
                 ),
                 if (hasBadge) ...[
-                  SizedBox(width: AppSpacing.xxs),
+                  const SizedBox(width: AppSpacing.xxs),
                   Container(
                     width: _MobileTabConstants.badgeSize,
                     height: _MobileTabConstants.badgeSize,

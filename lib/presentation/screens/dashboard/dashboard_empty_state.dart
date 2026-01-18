@@ -2,17 +2,16 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../generated/l10n/app_localizations.dart';
-import '../../widgets/breez/breez_button.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
 
 /// Empty state when no devices are registered
 class DashboardEmptyState extends StatelessWidget {
-  final VoidCallback onAddUnit;
 
-  const DashboardEmptyState({super.key, required this.onAddUnit});
+  const DashboardEmptyState({required this.onAddUnit, super.key});
+  final VoidCallback onAddUnit;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +46,6 @@ class DashboardEmptyState extends StatelessWidget {
             onTap: onAddUnit,
             backgroundColor: AppColors.accent,
             hoverColor: AppColors.accentLight,
-            borderRadius: AppRadius.button,
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
             enableGlow: true,
             semanticLabel: l10n.addUnit,

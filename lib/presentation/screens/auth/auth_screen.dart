@@ -4,25 +4,24 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../bloc/auth/auth_bloc.dart';
-import '../../bloc/auth/auth_state.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../core/constants/auth_constants.dart';
-import '../../../core/navigation/app_router.dart';
-import '../../../core/services/native_loading_service.dart';
-import 'widgets/login_form.dart';
-import 'widgets/register_form.dart';
+import 'package:hvac_control/core/constants/auth_constants.dart';
+import 'package:hvac_control/core/navigation/app_router.dart';
+import 'package:hvac_control/core/services/native_loading_service.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/presentation/bloc/auth/auth_bloc.dart';
+import 'package:hvac_control/presentation/bloc/auth/auth_state.dart';
+import 'package:hvac_control/presentation/screens/auth/widgets/login_form.dart';
+import 'package:hvac_control/presentation/screens/auth/widgets/register_form.dart';
 
 /// Единый экран авторизации с переключением между формами
 class AuthScreen extends StatefulWidget {
-  final bool isRegister;
 
   const AuthScreen({
     super.key,
     this.isRegister = false,
   });
+  final bool isRegister;
 
   @override
   State<AuthScreen> createState() => _AuthScreenState();
@@ -78,18 +77,16 @@ class _AuthScreenState extends State<AuthScreen> {
                 duration: const Duration(milliseconds: 300),
                 switchInCurve: Curves.easeInOut,
                 switchOutCurve: Curves.easeInOut,
-                transitionBuilder: (child, animation) {
-                  return FadeTransition(
+                transitionBuilder: (child, animation) => FadeTransition(
                     opacity: animation,
                     child: SlideTransition(
                       position: Tween<Offset>(
-                        begin: const Offset(0.0, 0.05),
+                        begin: const Offset(0, 0.05),
                         end: Offset.zero,
                       ).animate(animation),
                       child: child,
                     ),
-                  );
-                },
+                  ),
                 child: _isRegister
                     ? RegisterForm(
                         key: const ValueKey('register'),

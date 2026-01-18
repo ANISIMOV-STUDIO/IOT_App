@@ -17,6 +17,13 @@ enum NotificationsStatus {
 
 /// Состояние списка уведомлений
 final class NotificationsState extends Equatable {
+
+  const NotificationsState({
+    this.status = NotificationsStatus.initial,
+    this.notifications = const [],
+    this.currentDeviceId,
+    this.errorMessage,
+  });
   /// Статус загрузки
   final NotificationsStatus status;
 
@@ -28,13 +35,6 @@ final class NotificationsState extends Equatable {
 
   /// Сообщение об ошибке
   final String? errorMessage;
-
-  const NotificationsState({
-    this.status = NotificationsStatus.initial,
-    this.notifications = const [],
-    this.currentDeviceId,
-    this.errorMessage,
-  });
 
   // ============================================
   // ГЕТТЕРЫ ДЛЯ УДОБСТВА
@@ -57,14 +57,12 @@ final class NotificationsState extends Equatable {
     List<UnitNotification>? notifications,
     String? currentDeviceId,
     String? errorMessage,
-  }) {
-    return NotificationsState(
+  }) => NotificationsState(
       status: status ?? this.status,
       notifications: notifications ?? this.notifications,
       currentDeviceId: currentDeviceId ?? this.currentDeviceId,
       errorMessage: errorMessage,
     );
-  }
 
   @override
   List<Object?> get props => [

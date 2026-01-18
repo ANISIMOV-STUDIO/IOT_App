@@ -2,9 +2,9 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/spacing.dart';
-import 'breez_button.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -12,8 +12,8 @@ import 'breez_button.dart';
 
 /// Константы для ModeGridItem
 abstract class _ModeGridItemConstants {
-  static const double iconSize = 20.0;
-  static const double labelFontSize = 8.0;
+  static const double iconSize = 20;
+  static const double labelFontSize = 8;
   static const double letterSpacing = 0.3;
   static const double selectedAlpha = 0.15;
   static const double pressedAlpha = 0.2;
@@ -27,10 +27,6 @@ abstract class _ModeGridItemConstants {
 
 /// Данные режима для отображения в сетке
 class OperatingModeData {
-  final String id;
-  final String name;
-  final IconData icon;
-  final Color color;
 
   const OperatingModeData({
     required this.id,
@@ -38,6 +34,10 @@ class OperatingModeData {
     required this.icon,
     required this.color,
   });
+  final String id;
+  final String name;
+  final IconData icon;
+  final Color color;
 }
 
 /// Кнопка режима для сеток (ModeGrid)
@@ -48,18 +48,17 @@ class OperatingModeData {
 /// - Цветовую схему режима
 /// - Адаптивные размеры
 class ModeGridItem extends StatelessWidget {
-  final OperatingModeData mode;
-  final bool isSelected;
-  final bool isEnabled;
-  final VoidCallback? onTap;
 
   const ModeGridItem({
-    super.key,
-    required this.mode,
+    required this.mode, super.key,
     this.isSelected = false,
     this.isEnabled = true,
     this.onTap,
   });
+  final OperatingModeData mode;
+  final bool isSelected;
+  final bool isEnabled;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +93,7 @@ class ModeGridItem extends StatelessWidget {
                 color: isSelected ? color : colors.textMuted,
               ),
             ),
-            SizedBox(height: AppSpacing.xxs / 2),
+            const SizedBox(height: AppSpacing.xxs / 2),
             Text(
               mode.name.toUpperCase(),
               style: TextStyle(

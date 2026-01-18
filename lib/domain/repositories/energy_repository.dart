@@ -1,7 +1,7 @@
 /// Репозиторий статистики энергопотребления
 library;
 
-import '../entities/energy_stats.dart';
+import 'package:hvac_control/domain/entities/energy_stats.dart';
 
 abstract class EnergyRepository {
   /// Получить статистику за сегодня

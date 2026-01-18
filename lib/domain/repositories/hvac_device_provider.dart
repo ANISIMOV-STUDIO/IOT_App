@@ -1,7 +1,7 @@
 /// HVAC Device Provider - Interface for device management
 library;
 
-import '../entities/hvac_device.dart';
+import 'package:hvac_control/domain/entities/hvac_device.dart';
 
 /// Interface for HVAC device data access
 abstract class HvacDeviceProvider {

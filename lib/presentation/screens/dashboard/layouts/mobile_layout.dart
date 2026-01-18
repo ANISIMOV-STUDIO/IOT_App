@@ -4,13 +4,13 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_theme.dart';
-import '../../../../core/theme/spacing.dart';
-import '../../../../domain/entities/unit_state.dart';
-import '../../../../domain/entities/alarm_info.dart';
-import '../../../../domain/entities/mode_settings.dart';
-import '../../../../generated/l10n/app_localizations.dart';
-import '../../../widgets/breez/breez.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/domain/entities/alarm_info.dart';
+import 'package:hvac_control/domain/entities/mode_settings.dart';
+import 'package:hvac_control/domain/entities/unit_state.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -19,7 +19,7 @@ import '../../../widgets/breez/breez.dart';
 /// Константы для MobileLayout
 abstract class _MobileLayoutConstants {
   /// Фиксированная высота TabBarView (режимы/расписание/аварии)
-  static const double tabContentHeight = 150.0;
+  static const double tabContentHeight = 150;
 }
 
 // =============================================================================
@@ -28,6 +28,33 @@ abstract class _MobileLayoutConstants {
 
 /// Mobile layout: UnitControlCard + 3 tabs (Modes, Schedule, Alarms)
 class MobileLayout extends StatefulWidget {
+
+  const MobileLayout({
+    required this.unit,
+    super.key,
+    this.onHeatingTempIncrease,
+    this.onHeatingTempDecrease,
+    this.onCoolingTempIncrease,
+    this.onCoolingTempDecrease,
+    this.onSupplyFanChanged,
+    this.onExhaustFanChanged,
+    this.onModeChanged,
+    this.onPowerToggle,
+    this.onSettingsTap,
+    this.isPowerLoading = false,
+    this.isScheduleEnabled = false,
+    this.isScheduleLoading = false,
+    this.onScheduleToggle,
+    this.isPendingHeatingTemperature = false,
+    this.isPendingCoolingTemperature = false,
+    this.isPendingSupplyFan = false,
+    this.isPendingExhaustFan = false,
+    this.timerSettings,
+    this.onTimerSettingsChanged,
+    this.activeAlarms = const {},
+    this.onAlarmsSeeHistory,
+    this.isOnline = true,
+  });
   final UnitState unit;
   final VoidCallback? onHeatingTempIncrease;
   final VoidCallback? onHeatingTempDecrease;
@@ -56,33 +83,6 @@ class MobileLayout extends StatefulWidget {
   final Map<String, AlarmInfo> activeAlarms;
   final VoidCallback? onAlarmsSeeHistory;
   final bool isOnline;
-
-  const MobileLayout({
-    super.key,
-    required this.unit,
-    this.onHeatingTempIncrease,
-    this.onHeatingTempDecrease,
-    this.onCoolingTempIncrease,
-    this.onCoolingTempDecrease,
-    this.onSupplyFanChanged,
-    this.onExhaustFanChanged,
-    this.onModeChanged,
-    this.onPowerToggle,
-    this.onSettingsTap,
-    this.isPowerLoading = false,
-    this.isScheduleEnabled = false,
-    this.isScheduleLoading = false,
-    this.onScheduleToggle,
-    this.isPendingHeatingTemperature = false,
-    this.isPendingCoolingTemperature = false,
-    this.isPendingSupplyFan = false,
-    this.isPendingExhaustFan = false,
-    this.timerSettings,
-    this.onTimerSettingsChanged,
-    this.activeAlarms = const {},
-    this.onAlarmsSeeHistory,
-    this.isOnline = true,
-  });
 
   @override
   State<MobileLayout> createState() => _MobileLayoutState();
@@ -146,7 +146,7 @@ class _MobileLayoutState extends State<MobileLayout>
 
           // Tabs + Content в одной карточке
           BreezCard(
-            padding: EdgeInsets.all(AppSpacing.xs),
+            padding: const EdgeInsets.all(AppSpacing.xs),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [

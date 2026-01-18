@@ -2,9 +2,9 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_sizes.dart';
-import 'breez_button.dart';
+import 'package:hvac_control/core/theme/app_sizes.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -12,9 +12,9 @@ import 'breez_button.dart';
 
 /// Константы для BreezIconButton
 abstract class _IconButtonConstants {
-  static const double defaultIconSize = 20.0;
-  static const double paddingNormal = 12.0;
-  static const double paddingCompact = 4.0;
+  static const double defaultIconSize = 20;
+  static const double paddingNormal = 12;
+  static const double paddingCompact = 4;
 }
 
 // =============================================================================
@@ -23,6 +23,20 @@ abstract class _IconButtonConstants {
 
 /// Icon button with consistent styling and optional badge
 class BreezIconButton extends StatelessWidget {
+
+  const BreezIconButton({
+    required this.icon, super.key,
+    this.onTap,
+    this.iconColor,
+    this.backgroundColor,
+    this.isActive = false,
+    this.size = _IconButtonConstants.defaultIconSize,
+    this.badge,
+    this.showBorder = true,
+    this.compact = false,
+    this.semanticLabel,
+    this.tooltip,
+  });
   final IconData icon;
   final VoidCallback? onTap;
   final Color? iconColor;
@@ -40,21 +54,6 @@ class BreezIconButton extends StatelessWidget {
 
   /// Tooltip text shown on hover/long-press
   final String? tooltip;
-
-  const BreezIconButton({
-    super.key,
-    required this.icon,
-    this.onTap,
-    this.iconColor,
-    this.backgroundColor,
-    this.isActive = false,
-    this.size = _IconButtonConstants.defaultIconSize,
-    this.badge,
-    this.showBorder = true,
-    this.compact = false,
-    this.semanticLabel,
-    this.tooltip,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -124,6 +123,14 @@ class BreezIconButton extends StatelessWidget {
 
 /// Circular action button (for +/- temperature controls)
 class BreezCircleButton extends StatelessWidget {
+
+  const BreezCircleButton({
+    required this.icon, super.key,
+    this.onTap,
+    this.size = 56,
+    this.semanticLabel,
+    this.tooltip,
+  });
   final IconData icon;
   final VoidCallback? onTap;
   final double size;
@@ -133,15 +140,6 @@ class BreezCircleButton extends StatelessWidget {
 
   /// Tooltip text shown on hover
   final String? tooltip;
-
-  const BreezCircleButton({
-    super.key,
-    required this.icon,
-    this.onTap,
-    this.size = 56,
-    this.semanticLabel,
-    this.tooltip,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -178,6 +176,14 @@ class BreezCircleButton extends StatelessWidget {
 
 /// Power toggle button
 class BreezPowerButton extends StatelessWidget {
+
+  const BreezPowerButton({
+    required this.isPowered, super.key,
+    this.onTap,
+    this.size = 56,
+    this.semanticLabel,
+    this.tooltip,
+  });
   final bool isPowered;
   final VoidCallback? onTap;
   final double size;
@@ -187,15 +193,6 @@ class BreezPowerButton extends StatelessWidget {
 
   /// Tooltip text shown on hover
   final String? tooltip;
-
-  const BreezPowerButton({
-    super.key,
-    required this.isPowered,
-    this.onTap,
-    this.size = 56,
-    this.semanticLabel,
-    this.tooltip,
-  });
 
   @override
   Widget build(BuildContext context) {

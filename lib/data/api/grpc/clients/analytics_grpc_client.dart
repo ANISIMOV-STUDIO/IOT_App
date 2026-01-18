@@ -2,18 +2,14 @@
 /// Provides graph data, energy stats, and climate history
 library;
 
-import 'package:grpc/grpc.dart';
 import 'package:fixnum/fixnum.dart';
-
-import '../../../../generated/protos/protos.dart';
-import '../../../../generated/protos/google/protobuf/timestamp.pb.dart' as ts;
-import '../grpc_interceptor.dart';
+import 'package:grpc/grpc.dart';
+import 'package:hvac_control/data/api/grpc/grpc_interceptor.dart';
+import 'package:hvac_control/generated/protos/google/protobuf/timestamp.pb.dart' as ts;
+import 'package:hvac_control/generated/protos/protos.dart';
 
 /// gRPC client for analytics operations
 class AnalyticsGrpcClient {
-  final ClientChannel _channel;
-  final Future<String?> Function() _getToken;
-  late final AnalyticsServiceClient _client;
 
   AnalyticsGrpcClient(this._channel, this._getToken) {
     _client = AnalyticsServiceClient(
@@ -21,6 +17,9 @@ class AnalyticsGrpcClient {
       interceptors: [AuthGrpcInterceptor(_getToken)],
     );
   }
+  final ClientChannel _channel;
+  final Future<String?> Function() _getToken;
+  late final AnalyticsServiceClient _client;
 
   /// Get graph data for a device
   Future<GraphDataResponse> getGraphData({
@@ -89,9 +88,7 @@ class AnalyticsGrpcClient {
   // HELPERS
   // ============================================
 
-  ts.Timestamp _toTimestamp(DateTime dt) {
-    return ts.Timestamp()
-      ..seconds = Int64(dt.millisecondsSinceEpoch ~/ 1000)
-      ..nanos = (dt.millisecondsSinceEpoch % 1000) * 1000000;
-  }
+  ts.Timestamp _toTimestamp(DateTime dt) => ts.Timestamp()
+    ..seconds = Int64(dt.millisecondsSinceEpoch ~/ 1000)
+    ..nanos = (dt.millisecondsSinceEpoch % 1000) * 1000000;
 }

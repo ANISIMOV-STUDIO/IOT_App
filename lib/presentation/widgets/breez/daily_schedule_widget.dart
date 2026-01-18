@@ -1,14 +1,17 @@
 /// Daily Schedule Widget - Weekly schedule with day tabs
 library;
 
+// Callback typedef uses positional bool for consistency with Flutter callback patterns
+// ignore_for_file: avoid_positional_boolean_parameters
+
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../domain/entities/mode_settings.dart';
-import '../../../generated/l10n/app_localizations.dart';
-import 'breez_card.dart';
-import 'breez_tab.dart';
-import 'breez_time_picker.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/domain/entities/mode_settings.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_tab.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_time_picker.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -16,10 +19,10 @@ import 'breez_time_picker.dart';
 
 /// Константы виджета расписания
 abstract class _ScheduleConstants {
-  static const double desktopTimeBlockHeight = 80.0;
-  static const double borderRadius = 10.0;
+  static const double desktopTimeBlockHeight = 80;
+  static const double borderRadius = 10;
   static const Duration animationDuration = Duration(milliseconds: 150);
-  static const double timeFontSize = 22.0;
+  static const double timeFontSize = 22;
 }
 
 // =============================================================================
@@ -49,6 +52,15 @@ typedef DaySettingsCallback = void Function(
 /// - Optimistic updates для мгновенного отклика UI
 /// - Адаптивный layout (compact для mobile, полный для desktop)
 class DailyScheduleWidget extends StatefulWidget {
+
+  const DailyScheduleWidget({
+    super.key,
+    this.timerSettings,
+    this.onDaySettingsChanged,
+    this.compact = false,
+    this.showCard = true,
+    this.isEnabled = true,
+  });
   /// Настройки таймера по дням (ключ = monday, tuesday, etc.)
   final Map<String, TimerSettings>? timerSettings;
 
@@ -75,15 +87,6 @@ class DailyScheduleWidget extends StatefulWidget {
   /// Включен ли виджет (для offline состояния)
   final bool isEnabled;
 
-  const DailyScheduleWidget({
-    super.key,
-    this.timerSettings,
-    this.onDaySettingsChanged,
-    this.compact = false,
-    this.showCard = true,
-    this.isEnabled = true,
-  });
-
   @override
   State<DailyScheduleWidget> createState() => _DailyScheduleWidgetState();
 }
@@ -101,31 +104,27 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget>
 
   String get _selectedDay => DailyScheduleWidget.daysOrder[_selectedIndex];
 
-  TimerSettings _getSettings(String day) {
-    return _localSettings[day] ??
+  TimerSettings _getSettings(String day) => _localSettings[day] ??
         widget.timerSettings?[day] ??
         const TimerSettings(
           onHour: 8,
           onMinute: 0,
           offHour: 22,
           offMinute: 0,
-          enabled: false,
         );
-  }
 
-  Set<int> get _activeIndices {
-    // Merge local and server settings: prioritize local, fallback to server
-    return DailyScheduleWidget.daysOrder
-        .asMap()
-        .entries
-        .where((e) {
-          final day = e.value;
-          final settings = _localSettings[day] ?? widget.timerSettings?[day];
-          return settings?.enabled ?? false;
-        })
-        .map((e) => e.key)
-        .toSet();
-  }
+  Set<int> get _activeIndices =>
+      // Merge local and server settings: prioritize local, fallback to server
+      DailyScheduleWidget.daysOrder
+          .asMap()
+          .entries
+          .where((e) {
+            final day = e.value;
+            final settings = _localSettings[day] ?? widget.timerSettings?[day];
+            return settings?.enabled ?? false;
+          })
+          .map((e) => e.key)
+          .toSet();
 
   void _updateSettings(String day, TimerSettings newSettings) {
     setState(() {
@@ -198,7 +197,7 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget>
               color: colors.text,
             ),
           ),
-          SizedBox(height: AppSpacing.xs),
+          const SizedBox(height: AppSpacing.xs),
         ],
 
         // Hint for long-press (only in compact mode, above tabs)
@@ -212,7 +211,7 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget>
               ),
             ),
           ),
-          SizedBox(height: AppSpacing.xxs),
+          const SizedBox(height: AppSpacing.xxs),
         ],
 
         // Day tabs with long-press to toggle
@@ -227,7 +226,7 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget>
               : null,
         ),
 
-        SizedBox(height: AppSpacing.xs),
+        const SizedBox(height: AppSpacing.xs),
 
         // Time inputs (without day header)
         Expanded(
@@ -257,7 +256,7 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget>
       child: IgnorePointer(
         ignoring: !widget.isEnabled,
         child: BreezCard(
-          padding: EdgeInsets.all(AppSpacing.xs),
+          padding: const EdgeInsets.all(AppSpacing.xs),
           child: content,
         ),
       ),
@@ -272,8 +271,7 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget>
 /// Резолвер имён дней недели
 abstract class _DayNameResolver {
   /// Получить список коротких имён
-  static List<String> getShortNames(AppLocalizations l10n) {
-    return [
+  static List<String> getShortNames(AppLocalizations l10n) => [
       l10n.mondayShort,
       l10n.tuesdayShort,
       l10n.wednesdayShort,
@@ -282,7 +280,6 @@ abstract class _DayNameResolver {
       l10n.saturdayShort,
       l10n.sundayShort,
     ];
-  }
 }
 
 // =============================================================================
@@ -291,6 +288,13 @@ abstract class _DayNameResolver {
 
 /// Панель настроек выбранного дня
 class _DaySettingsPanel extends StatelessWidget {
+
+  const _DaySettingsPanel({
+    required this.dayKey,
+    required this.settings,
+    required this.compact,
+    this.onSettingsChanged,
+  });
   final String dayKey;
   final TimerSettings settings;
   final bool compact;
@@ -301,13 +305,6 @@ class _DaySettingsPanel extends StatelessWidget {
     int offMinute,
     bool enabled,
   )? onSettingsChanged;
-
-  const _DaySettingsPanel({
-    required this.dayKey,
-    required this.settings,
-    required this.compact,
-    this.onSettingsChanged,
-  });
 
   void _onStartTimeChanged(int hour, int minute) {
     onSettingsChanged?.call(
@@ -351,7 +348,7 @@ class _DaySettingsPanel extends StatelessWidget {
                 : null,
           ),
         ),
-        SizedBox(width: AppSpacing.sm),
+        const SizedBox(width: AppSpacing.sm),
         // End time column
         Expanded(
           child: _TimeColumn(
@@ -393,10 +390,6 @@ class _DaySettingsPanel extends StatelessWidget {
 
 /// Колонка времени с подписью сверху
 class _TimeColumn extends StatelessWidget {
-  final String label;
-  final int hour;
-  final int minute;
-  final void Function(int hour, int minute)? onTimeChanged;
 
   const _TimeColumn({
     required this.label,
@@ -404,6 +397,10 @@ class _TimeColumn extends StatelessWidget {
     required this.minute,
     this.onTimeChanged,
   });
+  final String label;
+  final int hour;
+  final int minute;
+  final void Function(int hour, int minute)? onTimeChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -421,7 +418,7 @@ class _TimeColumn extends StatelessWidget {
             color: colors.textMuted,
           ),
         ),
-        SizedBox(height: AppSpacing.xxs),
+        const SizedBox(height: AppSpacing.xxs),
         // Time block - takes remaining space
         Flexible(
           child: _ScheduleTimeBlock(
@@ -441,15 +438,15 @@ class _TimeColumn extends StatelessWidget {
 
 /// Компактный блок времени (только цифры)
 class _ScheduleTimeBlock extends StatefulWidget {
-  final int hour;
-  final int minute;
-  final void Function(int hour, int minute)? onTimeChanged;
 
   const _ScheduleTimeBlock({
     required this.hour,
     required this.minute,
     this.onTimeChanged,
   });
+  final int hour;
+  final int minute;
+  final void Function(int hour, int minute)? onTimeChanged;
 
   @override
   State<_ScheduleTimeBlock> createState() => _ScheduleTimeBlockState();
@@ -464,7 +461,9 @@ class _ScheduleTimeBlockState extends State<_ScheduleTimeBlock> {
   bool get _isEnabled => widget.onTimeChanged != null;
 
   Future<void> _showTimePicker() async {
-    if (!_isEnabled) return;
+    if (!_isEnabled) {
+      return;
+    }
 
     final time = await showBreezTimePicker(
       context: context,

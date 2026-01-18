@@ -2,8 +2,8 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/spacing.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -11,9 +11,9 @@ import '../../../core/theme/spacing.dart';
 
 /// Константы для StatItem
 abstract class _StatItemConstants {
-  static const double iconSize = 18.0;
-  static const double valueFontSize = 12.0;
-  static const double labelFontSize = 10.0;
+  static const double iconSize = 18;
+  static const double valueFontSize = 12;
+  static const double labelFontSize = 10;
 }
 
 // =============================================================================
@@ -22,18 +22,18 @@ abstract class _StatItemConstants {
 
 /// Stat display item with icon, value, and label
 class StatItem extends StatelessWidget {
+
+  const StatItem({
+    required this.icon,
+    required this.value,
+    required this.label,
+    super.key,
+    this.iconColor,
+  });
   final IconData icon;
   final String value;
   final String label;
   final Color? iconColor;
-
-  const StatItem({
-    super.key,
-    required this.icon,
-    required this.value,
-    required this.label,
-    this.iconColor,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +48,7 @@ class StatItem extends StatelessWidget {
             size: _StatItemConstants.iconSize,
             color: iconColor ?? AppColors.accent,
           ),
-          SizedBox(height: AppSpacing.xxs + 2), // 6px
+          const SizedBox(height: AppSpacing.xxs + 2), // 6px
           Text(
             value,
             style: TextStyle(
@@ -57,7 +57,7 @@ class StatItem extends StatelessWidget {
               color: colors.text,
             ),
           ),
-          SizedBox(height: AppSpacing.xxs / 2), // 2px
+          const SizedBox(height: AppSpacing.xxs / 2), // 2px
           Text(
             label,
             style: TextStyle(

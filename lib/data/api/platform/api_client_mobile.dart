@@ -3,48 +3,44 @@ library;
 
 import 'package:grpc/grpc.dart';
 import 'package:http/http.dart' as http;
-import '../../../core/config/api_config.dart';
-import '../../../core/services/auth_storage_service.dart';
-import '../../../core/logging/api_logger.dart';
-import '../../services/auth_service.dart';
-import '../http/interceptors/auth_http_interceptor.dart';
-import 'api_client.dart';
+import 'package:hvac_control/core/config/api_config.dart';
+import 'package:hvac_control/core/logging/api_logger.dart';
+import 'package:hvac_control/core/services/auth_storage_service.dart';
+import 'package:hvac_control/data/api/http/interceptors/auth_http_interceptor.dart';
+import 'package:hvac_control/data/api/platform/api_client.dart';
+import 'package:hvac_control/data/services/auth_service.dart';
 
 class ApiClientMobile implements ApiClient {
+
+  ApiClientMobile(this._authStorage, this._authService);
   final AuthStorageService _authStorage;
   final AuthService _authService;
   ClientChannel? _channel;
   http.Client? _httpClient;
-
-  ApiClientMobile(this._authStorage, this._authService);
 @override  String get baseUrl => ApiConfig.httpUrl;
 
   @override
-  ClientChannel getGrpcChannel() {
-    return _channel ??= ClientChannel(
+  ClientChannel getGrpcChannel() => _channel ??= ClientChannel(
       ApiConfig.backendHost,
-      port: 443, // Standard HTTPS port through nginx
       options: ChannelOptions(
-        credentials: const ChannelCredentials.secure(),
         codecRegistry: CodecRegistry(codecs: const [GzipCodec()]),
       ),
     );
-  }
 
   @override
-  http.Client getHttpClient() {
-    return _httpClient ??= AuthHttpInterceptor(
+  http.Client getHttpClient() => _httpClient ??= AuthHttpInterceptor(
       http.Client(),
       _authStorage,
       _authService,
     );
-  }
 
   @override
   Future<String?> getAuthToken() async {
     // 1. Проверяем наличие токена
     final hasToken = await _authStorage.hasToken();
-    if (!hasToken) return null;
+    if (!hasToken) {
+      return null;
+    }
 
     // 2. Проверяем истек ли токен
     if (await _authStorage.isAccessTokenExpired()) {
@@ -66,7 +62,7 @@ class ApiClientMobile implements ApiClient {
     }
 
     // 4. Возвращаем валидный токен
-    return await _authStorage.getToken();
+    return _authStorage.getToken();
   }
 
   @override
@@ -80,6 +76,4 @@ class ApiClientMobile implements ApiClient {
 ApiClient createPlatformApiClient(
   AuthStorageService authStorage,
   AuthService authService,
-) {
-  return ApiClientMobile(authStorage, authService);
-}
+) => ApiClientMobile(authStorage, authService);

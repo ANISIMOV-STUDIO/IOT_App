@@ -4,23 +4,23 @@ library;
 import 'dart:math' show min;
 
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_theme.dart';
-import '../../../../core/theme/spacing.dart';
-import '../../../../generated/l10n/app_localizations.dart';
-import '../../../../core/theme/app_radius.dart';
-import '../../../../domain/entities/unit_state.dart';
-import '../../../widgets/breez/breez_time_picker.dart';
-import 'unit_settings_widgets.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/domain/entities/unit_state.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
+import 'package:hvac_control/presentation/screens/dashboard/dialogs/unit_settings_widgets.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_time_picker.dart';
 
 // =============================================================================
 // CONSTANTS
 // =============================================================================
 
 abstract class _DialogConstants {
-  static const double maxWidth = 360.0;
-  static const double headerIconSize = 18.0;
-  static const double closeButtonSize = 28.0;
-  static const double titleFontSize = 16.0;
+  static const double maxWidth = 360;
+  static const double headerIconSize = 18;
+  static const double closeButtonSize = 28;
+  static const double titleFontSize = 16;
 }
 
 // =============================================================================
@@ -32,15 +32,15 @@ enum UnitSettingsAction { rename, delete, setTime }
 
 /// Результат диалога настроек
 class UnitSettingsResult {
-  final UnitSettingsAction action;
-  final String? newName;
-  final DateTime? time;
 
   const UnitSettingsResult({
     required this.action,
     this.newName,
     this.time,
   });
+  final UnitSettingsAction action;
+  final String? newName;
+  final DateTime? time;
 }
 
 // =============================================================================
@@ -49,17 +49,15 @@ class UnitSettingsResult {
 
 /// Диалог настроек устройства
 class UnitSettingsDialog extends StatefulWidget {
+
+  const UnitSettingsDialog({required this.unit, super.key});
   final UnitState unit;
 
-  const UnitSettingsDialog({super.key, required this.unit});
-
   /// Показать диалог и вернуть результат
-  static Future<UnitSettingsResult?> show(BuildContext context, UnitState unit) {
-    return showDialog<UnitSettingsResult>(
+  static Future<UnitSettingsResult?> show(BuildContext context, UnitState unit) => showDialog<UnitSettingsResult>(
       context: context,
       builder: (context) => UnitSettingsDialog(unit: unit),
     );
-  }
 
   @override
   State<UnitSettingsDialog> createState() => _UnitSettingsDialogState();
@@ -81,10 +79,10 @@ class _UnitSettingsDialogState extends State<UnitSettingsDialog> {
     super.dispose();
   }
 
-  void _confirmDelete() async {
+  Future<void> _confirmDelete() async {
     final confirmed = await DeleteConfirmDialog.show(context, widget.unit.name);
 
-    if (confirmed == true && mounted) {
+    if ((confirmed ?? false) && mounted) {
       Navigator.of(context).pop(const UnitSettingsResult(
         action: UnitSettingsAction.delete,
       ));
@@ -104,7 +102,7 @@ class _UnitSettingsDialogState extends State<UnitSettingsDialog> {
     ));
   }
 
-  void _setTime() async {
+  Future<void> _setTime() async {
     final now = DateTime.now();
     final initialTime = TimeOfDay(hour: now.hour, minute: now.minute);
     final selectedTime = await showBreezTimePicker(
@@ -141,7 +139,7 @@ class _UnitSettingsDialogState extends State<UnitSettingsDialog> {
       ),
       child: Container(
         width: maxWidth,
-        padding: EdgeInsets.all(AppSpacing.sm),
+        padding: const EdgeInsets.all(AppSpacing.sm),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -154,7 +152,7 @@ class _UnitSettingsDialogState extends State<UnitSettingsDialog> {
                   size: _DialogConstants.headerIconSize,
                   color: colors.textMuted,
                 ),
-                SizedBox(width: AppSpacing.xs),
+                const SizedBox(width: AppSpacing.xs),
                 Expanded(
                   child: Text(
                     l10n.unitSettingsTitle,
@@ -172,12 +170,12 @@ class _UnitSettingsDialogState extends State<UnitSettingsDialog> {
               ],
             ),
 
-            SizedBox(height: AppSpacing.sm),
+            const SizedBox(height: AppSpacing.sm),
 
             // Device info
             _CompactDeviceInfo(unit: widget.unit),
 
-            SizedBox(height: AppSpacing.sm),
+            const SizedBox(height: AppSpacing.sm),
 
             // Actions or rename field
             if (_isRenaming)
@@ -205,9 +203,9 @@ class _UnitSettingsDialogState extends State<UnitSettingsDialog> {
 
 /// Компактная кнопка закрытия
 class _CloseButton extends StatelessWidget {
-  final VoidCallback onTap;
 
   const _CloseButton({required this.onTap});
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -234,9 +232,9 @@ class _CloseButton extends StatelessWidget {
 
 /// Компактная информация об устройстве
 class _CompactDeviceInfo extends StatelessWidget {
-  final UnitState unit;
 
   const _CompactDeviceInfo({required this.unit});
+  final UnitState unit;
 
   @override
   Widget build(BuildContext context) {
@@ -244,7 +242,7 @@ class _CompactDeviceInfo extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return Container(
-      padding: EdgeInsets.all(AppSpacing.xs),
+      padding: const EdgeInsets.all(AppSpacing.xs),
       decoration: BoxDecoration(
         color: colors.cardLight,
         borderRadius: BorderRadius.circular(AppRadius.nested),
@@ -258,12 +256,12 @@ class _CompactDeviceInfo extends StatelessWidget {
             value: unit.name,
             isBold: true,
           ),
-          SizedBox(height: AppSpacing.xs),
+          const SizedBox(height: AppSpacing.xs),
           // ID and Status in one row
           Row(
             children: [
               Icon(Icons.tag, size: 14, color: colors.textMuted),
-              SizedBox(width: AppSpacing.xxs),
+              const SizedBox(width: AppSpacing.xxs),
               Expanded(
                 child: Text(
                   unit.id,
@@ -275,9 +273,9 @@ class _CompactDeviceInfo extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              SizedBox(width: AppSpacing.xs),
+              const SizedBox(width: AppSpacing.xs),
               Container(
-                padding: EdgeInsets.symmetric(
+                padding: const EdgeInsets.symmetric(
                   horizontal: AppSpacing.xs,
                   vertical: 2,
                 ),
@@ -306,10 +304,6 @@ class _CompactDeviceInfo extends StatelessWidget {
 
 /// Строка информации
 class _InfoRow extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final String value;
-  final bool isBold;
 
   const _InfoRow({
     required this.icon,
@@ -317,6 +311,10 @@ class _InfoRow extends StatelessWidget {
     required this.value,
     this.isBold = false,
   });
+  final IconData icon;
+  final String label;
+  final String value;
+  final bool isBold;
 
   @override
   Widget build(BuildContext context) {
@@ -325,12 +323,12 @@ class _InfoRow extends StatelessWidget {
     return Row(
       children: [
         Icon(icon, size: 14, color: colors.textMuted),
-        SizedBox(width: AppSpacing.xxs),
+        const SizedBox(width: AppSpacing.xxs),
         Text(
           label,
           style: TextStyle(fontSize: AppFontSizes.captionSmall, color: colors.textMuted),
         ),
-        SizedBox(width: AppSpacing.xxs),
+        const SizedBox(width: AppSpacing.xxs),
         Expanded(
           child: Text(
             value,
@@ -349,15 +347,15 @@ class _InfoRow extends StatelessWidget {
 
 /// Компактные кнопки действий
 class _CompactActions extends StatelessWidget {
-  final VoidCallback onRename;
-  final VoidCallback onDelete;
-  final VoidCallback onSetTime;
 
   const _CompactActions({
     required this.onRename,
     required this.onDelete,
     required this.onSetTime,
   });
+  final VoidCallback onRename;
+  final VoidCallback onDelete;
+  final VoidCallback onSetTime;
 
   @override
   Widget build(BuildContext context) {
@@ -374,7 +372,7 @@ class _CompactActions extends StatelessWidget {
                 onTap: onRename,
               ),
             ),
-            SizedBox(width: AppSpacing.xs),
+            const SizedBox(width: AppSpacing.xs),
             Expanded(
               child: _ActionButton(
                 icon: Icons.delete_outline,
@@ -385,7 +383,7 @@ class _CompactActions extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(height: AppSpacing.xs),
+        const SizedBox(height: AppSpacing.xs),
         _ActionButton(
           icon: Icons.access_time,
           label: l10n.unitSettingsSetTime,
@@ -398,10 +396,6 @@ class _CompactActions extends StatelessWidget {
 
 /// Компактная кнопка действия
 class _ActionButton extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-  final bool isDanger;
 
   const _ActionButton({
     required this.icon,
@@ -409,6 +403,10 @@ class _ActionButton extends StatelessWidget {
     required this.onTap,
     this.isDanger = false,
   });
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+  final bool isDanger;
 
   @override
   Widget build(BuildContext context) {
@@ -421,7 +419,7 @@ class _ActionButton extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(AppRadius.nested),
         child: Container(
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             horizontal: AppSpacing.xs,
             vertical: AppSpacing.xs,
           ),
@@ -435,7 +433,7 @@ class _ActionButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(icon, size: 16, color: color),
-              SizedBox(width: AppSpacing.xxs),
+              const SizedBox(width: AppSpacing.xxs),
               Flexible(
                 child: Text(
                   label,
@@ -457,15 +455,15 @@ class _ActionButton extends StatelessWidget {
 
 /// Компактное поле переименования
 class _CompactRenameField extends StatelessWidget {
-  final TextEditingController controller;
-  final VoidCallback onCancel;
-  final VoidCallback onSave;
 
   const _CompactRenameField({
     required this.controller,
     required this.onCancel,
     required this.onSave,
   });
+  final TextEditingController controller;
+  final VoidCallback onCancel;
+  final VoidCallback onSave;
 
   @override
   Widget build(BuildContext context) {
@@ -487,20 +485,20 @@ class _CompactRenameField extends StatelessWidget {
               hintStyle: TextStyle(fontSize: AppFontSizes.bodySmall, color: colors.textMuted),
               filled: true,
               fillColor: colors.cardLight,
-              contentPadding: EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+              contentPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(AppRadius.nested),
                 borderSide: BorderSide.none,
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(AppRadius.nested),
-                borderSide: BorderSide(color: AppColors.accent, width: 1),
+                borderSide: const BorderSide(color: AppColors.accent),
               ),
             ),
             onFieldSubmitted: (_) => onSave(),
           ),
         ),
-        SizedBox(height: AppSpacing.xs),
+        const SizedBox(height: AppSpacing.xs),
         // Buttons
         Row(
           children: [
@@ -511,7 +509,7 @@ class _CompactRenameField extends StatelessWidget {
                 onTap: onCancel,
               ),
             ),
-            SizedBox(width: AppSpacing.xs),
+            const SizedBox(width: AppSpacing.xs),
             Expanded(
               child: _PrimaryButton(
                 label: l10n.save,
@@ -527,23 +525,22 @@ class _CompactRenameField extends StatelessWidget {
 
 /// Основная кнопка (акцентная)
 class _PrimaryButton extends StatelessWidget {
-  final String label;
-  final VoidCallback onTap;
 
   const _PrimaryButton({
     required this.label,
     required this.onTap,
   });
+  final String label;
+  final VoidCallback onTap;
 
   @override
-  Widget build(BuildContext context) {
-    return Material(
+  Widget build(BuildContext context) => Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(AppRadius.nested),
         child: Container(
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             horizontal: AppSpacing.xs,
             vertical: AppSpacing.xs,
           ),
@@ -554,12 +551,12 @@ class _PrimaryButton extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.check, size: 16, color: AppColors.black),
-              SizedBox(width: AppSpacing.xxs),
+              const Icon(Icons.check, size: 16, color: AppColors.black),
+              const SizedBox(width: AppSpacing.xxs),
               Flexible(
                 child: Text(
                   label,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: AppFontSizes.caption,
                     fontWeight: FontWeight.w600,
                     color: AppColors.black,
@@ -572,5 +569,4 @@ class _PrimaryButton extends StatelessWidget {
         ),
       ),
     );
-  }
 }

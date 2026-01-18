@@ -5,22 +5,21 @@ import 'dart:math' show min;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../../../core/theme/app_theme.dart';
-import '../../../../core/theme/app_radius.dart';
-import '../../../../core/theme/app_font_sizes.dart';
-import '../../../../core/theme/spacing.dart';
-import '../../../../generated/l10n/app_localizations.dart';
-import '../../../widgets/breez/breez_card.dart'; // BreezDialogButton, BreezIconButton
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_card.dart'; // BreezDialogButton, BreezIconButton
 
 /// Результат диалога добавления устройства
 class AddUnitResult {
-  final String macAddress;
-  final String name;
 
   const AddUnitResult({
     required this.macAddress,
     required this.name,
   });
+  final String macAddress;
+  final String name;
 }
 
 /// Dialog for registering a new HVAC device by MAC address
@@ -28,12 +27,10 @@ class AddUnitDialog extends StatefulWidget {
   const AddUnitDialog({super.key});
 
   /// Shows the dialog and returns MAC address and name if created
-  static Future<AddUnitResult?> show(BuildContext context) {
-    return showDialog<AddUnitResult>(
+  static Future<AddUnitResult?> show(BuildContext context) => showDialog<AddUnitResult>(
       context: context,
       builder: (context) => const AddUnitDialog(),
     );
-  }
 
   @override
   State<AddUnitDialog> createState() => _AddUnitDialogState();
@@ -85,8 +82,8 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
     final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
-    // Адаптивная ширина: максимум 420, но не больше экрана минус отступы
-    final maxWidth = min(MediaQuery.of(context).size.width - 48, 420.0);
+    // Адаптивная ширина: максимум 420, но не больше экра минус отступы
+    final maxWidth = min(MediaQuery.of(context).size.width - 48, 420).toDouble();
 
     return Dialog(
       backgroundColor: colors.card,
@@ -119,8 +116,7 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
     );
   }
 
-  Widget _buildHeader(BreezColors colors, AppLocalizations l10n) {
-    return Row(
+  Widget _buildHeader(BreezColors colors, AppLocalizations l10n) => Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
@@ -139,10 +135,8 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
         ),
       ],
     );
-  }
 
-  Widget _buildMacField(BreezColors colors, AppLocalizations l10n) {
-    return Column(
+  Widget _buildMacField(BreezColors colors, AppLocalizations l10n) => Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
@@ -199,10 +193,8 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
         ),
       ],
     );
-  }
 
-  Widget _buildNameField(BreezColors colors, AppLocalizations l10n) {
-    return Column(
+  Widget _buildNameField(BreezColors colors, AppLocalizations l10n) => Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
@@ -254,10 +246,8 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
         ),
       ],
     );
-  }
 
-  Widget _buildHelpText(BreezColors colors, AppLocalizations l10n) {
-    return Container(
+  Widget _buildHelpText(BreezColors colors, AppLocalizations l10n) => Container(
       padding: const EdgeInsets.all(AppSpacing.sm),
       decoration: BoxDecoration(
         color: colors.cardLight,
@@ -279,10 +269,8 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
         ],
       ),
     );
-  }
 
-  Widget _buildActions(BreezColors colors, AppLocalizations l10n) {
-    return Row(
+  Widget _buildActions(BreezColors colors, AppLocalizations l10n) => Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         // Cancel button
@@ -299,5 +287,4 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
         ),
       ],
     );
-  }
 }

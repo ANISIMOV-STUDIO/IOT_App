@@ -5,7 +5,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../generated/l10n/app_localizations.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
 
 // =============================================================================
 // QUICK SENSOR TYPE
@@ -33,8 +33,7 @@ enum QuickSensorType {
   final IconData icon;
 
   /// Локализованное название (краткое, как на экране аналитики)
-  String getLabel(AppLocalizations l10n) {
-    return switch (this) {
+  String getLabel(AppLocalizations l10n) => switch (this) {
       QuickSensorType.outsideTemp => l10n.outdoor,
       QuickSensorType.indoorTemp => l10n.indoor,
       QuickSensorType.humidity => l10n.humidity,
@@ -46,11 +45,9 @@ enum QuickSensorType {
       QuickSensorType.filterPercent => l10n.filter,
       QuickSensorType.airflowRate => l10n.airflow,
     };
-  }
 
   /// Цвет иконки
-  Color get color {
-    return switch (this) {
+  Color get color => switch (this) {
       QuickSensorType.outsideTemp => const Color(0xFF00D9C4),
       QuickSensorType.indoorTemp => const Color(0xFF4CAF50),
       QuickSensorType.humidity => const Color(0xFF00D9C4),
@@ -62,13 +59,16 @@ enum QuickSensorType {
       QuickSensorType.filterPercent => const Color(0xFF00D9C4),
       QuickSensorType.airflowRate => const Color(0xFF00D9C4),
     };
-  }
 
   /// Найти тип по ключу
   static QuickSensorType? fromKey(String? key) {
-    if (key == null) return null;
+    if (key == null) {
+      return null;
+    }
     for (final type in QuickSensorType.values) {
-      if (type.key == key) return type;
+      if (type.key == key) {
+        return type;
+      }
     }
     return null;
   }
@@ -112,15 +112,13 @@ abstract class QuickSensorsService {
 
     // Конвертируем что есть (0-3 сенсора)
     return keys
-        .map((key) => QuickSensorType.fromKey(key))
+        .map(QuickSensorType.fromKey)
         .whereType<QuickSensorType>()
         .toList();
   }
 
   /// Конвертировать типы в список ключей
-  static List<String> toKeys(List<QuickSensorType> sensors) {
-    return sensors.map((s) => s.key).toList();
-  }
+  static List<String> toKeys(List<QuickSensorType> sensors) => sensors.map((s) => s.key).toList();
 
   /// Все доступные типы показателей
   static List<QuickSensorType> get availableSensors =>

@@ -30,7 +30,7 @@ const ClimateState$json = {
       '4': 1,
       '5': 14,
       '6': '.breez.AirQuality',
-      '10': 'airQuality'
+      '10': 'airQuality',
     },
     {
       '1': 'timestamp',
@@ -38,7 +38,7 @@ const ClimateState$json = {
       '4': 1,
       '5': 11,
       '6': '.google.protobuf.Timestamp',
-      '10': 'timestamp'
+      '10': 'timestamp',
     },
     {
       '1': 'outdoor_humidity',
@@ -47,7 +47,7 @@ const ClimateState$json = {
       '5': 5,
       '9': 0,
       '10': 'outdoorHumidity',
-      '17': true
+      '17': true,
     },
     {
       '1': 'pressure',
@@ -56,7 +56,7 @@ const ClimateState$json = {
       '5': 1,
       '9': 1,
       '10': 'pressure',
-      '17': true
+      '17': true,
     },
     {'1': 'pm25', '3': 10, '4': 1, '5': 5, '9': 2, '10': 'pm25', '17': true},
     {'1': 'pm10', '3': 11, '4': 1, '5': 5, '9': 3, '10': 'pm10', '17': true},
@@ -92,7 +92,7 @@ const GetClimateStateRequest$json = {
 /// Descriptor for `GetClimateStateRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getClimateStateRequestDescriptor =
     $convert.base64Decode(
-        'ChZHZXRDbGltYXRlU3RhdGVSZXF1ZXN0EhsKCWRldmljZV9pZBgBIAEoCVIIZGV2aWNlSWQ=');
+        'ChZHZXRDbGltYXRlU3RhdGVSZXF1ZXN0EhsKCWRldmljZV9pZBgBIAEoCVIIZGV2aWNlSWQ=',);
 
 @$core.Deprecated('Use climateHistoryRequestDescriptor instead')
 const ClimateHistoryRequest$json = {
@@ -105,7 +105,7 @@ const ClimateHistoryRequest$json = {
       '4': 1,
       '5': 11,
       '6': '.google.protobuf.Timestamp',
-      '10': 'from'
+      '10': 'from',
     },
     {
       '1': 'to',
@@ -113,7 +113,7 @@ const ClimateHistoryRequest$json = {
       '4': 1,
       '5': 11,
       '6': '.google.protobuf.Timestamp',
-      '10': 'to'
+      '10': 'to',
     },
   ],
 };
@@ -134,7 +134,7 @@ const ClimateHistoryResponse$json = {
       '4': 3,
       '5': 11,
       '6': '.breez.ClimateState',
-      '10': 'history'
+      '10': 'history',
     },
   ],
 };

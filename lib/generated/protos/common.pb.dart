@@ -4,7 +4,7 @@
 
 // @dart = 3.3
 
-// ignore_for_file: annotate_overrides, camel_case_types, comment_references
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references, prefer_constructors_over_static_methods, do_not_use_environment
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: curly_braces_in_flow_control_structures
 // ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
@@ -12,11 +12,10 @@
 
 import 'dart:core' as $core;
 
-import 'package:protobuf/protobuf.dart' as $pb;
-import 'google/protobuf/timestamp.pb.dart'
+import 'package:hvac_control/generated/protos/common.pbenum.dart';
+import 'package:hvac_control/generated/protos/google/protobuf/timestamp.pb.dart'
     as $0;
-
-import 'common.pbenum.dart';
+import 'package:protobuf/protobuf.dart' as $pb;
 
 export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
 
@@ -29,16 +28,16 @@ class Empty extends $pb.GeneratedMessage {
   Empty._();
 
   factory Empty.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory Empty.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'Empty',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -68,30 +67,36 @@ class Alert extends $pb.GeneratedMessage {
     $0.Timestamp? timestamp,
   }) {
     final result = create();
-    if (type != null) result.type = type;
-    if (message != null) result.message = message;
-    if (timestamp != null) result.timestamp = timestamp;
+    if (type != null) {
+      result.type = type;
+    }
+    if (message != null) {
+      result.message = message;
+    }
+    if (timestamp != null) {
+      result.timestamp = timestamp;
+    }
     return result;
   }
 
   Alert._();
 
   factory Alert.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory Alert.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'Alert',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aE<AlertType>(1, _omitFieldNames ? '' : 'type',
-        enumValues: AlertType.values)
+        enumValues: AlertType.values,)
     ..aOS(2, _omitFieldNames ? '' : 'message')
     ..aOM<$0.Timestamp>(3, _omitFieldNames ? '' : 'timestamp',
-        subBuilder: $0.Timestamp.create)
+        subBuilder: $0.Timestamp.create,)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')

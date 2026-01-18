@@ -2,24 +2,19 @@
 ///
 /// Используется на Mobile/Desktop платформах.
 /// Real-time обновления через gRPC server-side streaming.
+// ignore_for_file: no_default_cases
+
 library;
 
 import 'dart:async';
 
 import 'package:grpc/grpc.dart';
-
-import '../../../generated/protos/protos.dart' as proto;
-import '../../../generated/protos/google/protobuf/timestamp.pb.dart' as ts;
-import '../../api/grpc/grpc_interceptor.dart';
-import 'notification_data_source.dart';
+import 'package:hvac_control/data/api/grpc/grpc_interceptor.dart';
+import 'package:hvac_control/data/datasources/notification/notification_data_source.dart';
+import 'package:hvac_control/generated/protos/google/protobuf/timestamp.pb.dart' as ts;
+import 'package:hvac_control/generated/protos/protos.dart' as proto;
 
 class NotificationGrpcDataSource implements NotificationDataSource {
-  final ClientChannel _channel;
-  final Future<String?> Function() _getToken;
-  late final proto.NotificationServiceClient _client;
-
-  StreamSubscription<proto.Notification>? _streamSubscription;
-  final _notificationController = StreamController<NotificationDto>.broadcast();
 
   NotificationGrpcDataSource(this._channel, this._getToken) {
     _client = proto.NotificationServiceClient(
@@ -27,6 +22,12 @@ class NotificationGrpcDataSource implements NotificationDataSource {
       interceptors: [AuthGrpcInterceptor(_getToken)],
     );
   }
+  final ClientChannel _channel;
+  final Future<String?> Function() _getToken;
+  late final proto.NotificationServiceClient _client;
+
+  StreamSubscription<proto.Notification>? _streamSubscription;
+  final _notificationController = StreamController<NotificationDto>.broadcast();
 
   @override
   Future<List<NotificationDto>> getNotifications({String? deviceId}) async {
@@ -67,7 +68,7 @@ class NotificationGrpcDataSource implements NotificationDataSource {
       (notification) {
         _notificationController.add(_protoToDto(notification));
       },
-      onError: (error) {
+      onError: (Object error) {
         _notificationController.addError(error);
       },
     );
@@ -85,8 +86,7 @@ class NotificationGrpcDataSource implements NotificationDataSource {
   // ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ
   // ============================================
 
-  NotificationDto _protoToDto(proto.Notification protoNotification) {
-    return NotificationDto(
+  NotificationDto _protoToDto(proto.Notification protoNotification) => NotificationDto(
       id: protoNotification.id,
       deviceId: protoNotification.deviceId,
       title: protoNotification.title,
@@ -95,7 +95,6 @@ class NotificationGrpcDataSource implements NotificationDataSource {
       timestamp: _fromTimestamp(protoNotification.timestamp),
       isRead: protoNotification.isRead,
     );
-  }
 
   String _protoTypeToString(proto.NotificationType type) {
     switch (type) {
@@ -110,9 +109,7 @@ class NotificationGrpcDataSource implements NotificationDataSource {
     }
   }
 
-  DateTime _fromTimestamp(ts.Timestamp timestamp) {
-    return DateTime.fromMillisecondsSinceEpoch(
+  DateTime _fromTimestamp(ts.Timestamp timestamp) => DateTime.fromMillisecondsSinceEpoch(
       timestamp.seconds.toInt() * 1000 + timestamp.nanos ~/ 1000000,
     );
-  }
 }

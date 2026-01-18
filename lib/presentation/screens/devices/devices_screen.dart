@@ -3,19 +3,17 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_font_sizes.dart';
-import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../domain/entities/hvac_device.dart';
-import '../../../generated/l10n/app_localizations.dart';
-import '../../bloc/devices/devices_bloc.dart';
-import '../../widgets/breez/breez_card.dart';
-import '../../widgets/common/device_icon_helper.dart';
-import '../../widgets/loading/loading_indicator.dart';
-import '../../widgets/loading/skeleton.dart';
-import '../../widgets/error/error_widgets.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/domain/entities/hvac_device.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
+import 'package:hvac_control/presentation/bloc/devices/devices_bloc.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
+import 'package:hvac_control/presentation/widgets/common/device_icon_helper.dart';
+import 'package:hvac_control/presentation/widgets/error/error_widgets.dart';
+import 'package:hvac_control/presentation/widgets/loading/loading_indicator.dart';
+import 'package:hvac_control/presentation/widgets/loading/skeleton.dart';
 
 /// Devices screen showing all HVAC units
 class DevicesScreen extends StatelessWidget {
@@ -49,15 +47,13 @@ class DevicesScreen extends StatelessWidget {
                   const SizedBox(height: AppSpacing.xs),
                   BlocBuilder<DevicesBloc, DevicesState>(
                     buildWhen: (prev, curr) => prev.deviceCount != curr.deviceCount,
-                    builder: (context, state) {
-                      return Text(
+                    builder: (context, state) => Text(
                         l10n.devicesCount(state.deviceCount),
                         style: TextStyle(
                           fontSize: AppFontSizes.body,
                           color: colors.textMuted,
                         ),
-                      );
-                    },
+                      ),
                   ),
                 ],
               ),
@@ -75,13 +71,10 @@ class DevicesScreen extends StatelessWidget {
                     case DevicesStatus.initial:
                     case DevicesStatus.loading:
                       loadingStatus = LoadingStatus.loading;
-                      break;
                     case DevicesStatus.failure:
                       loadingStatus = LoadingStatus.error;
-                      break;
                     case DevicesStatus.success:
                       loadingStatus = LoadingStatus.success;
-                      break;
                   }
 
                   return LoadingState<List<HvacDevice>>(

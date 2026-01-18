@@ -2,11 +2,9 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_font_sizes.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/spacing.dart';
-import 'breez_button.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -14,11 +12,11 @@ import 'breez_button.dart';
 
 /// Константы для BreezSettingsTile
 abstract class _SettingsTileConstants {
-  static const double iconSize = 20.0;
-  static const double titleFontSize = 14.0;
-  static const double subtitleFontSize = 12.0;
-  static const double tileVerticalPadding = 10.0;
-  static const double switchTileVerticalPadding = 6.0;
+  static const double iconSize = 20;
+  static const double titleFontSize = 14;
+  static const double subtitleFontSize = 12;
+  static const double tileVerticalPadding = 10;
+  static const double switchTileVerticalPadding = 6;
   static const double switchActiveTrackAlpha = 0.5;
 }
 
@@ -32,6 +30,16 @@ abstract class _SettingsTileConstants {
 ///
 /// Use for navigation items in settings screens
 class BreezSettingsTile extends StatelessWidget {
+
+  const BreezSettingsTile({
+    required this.icon,
+    required this.title,
+    required this.onTap,
+    super.key,
+    this.trailing,
+    this.semanticLabel,
+    this.tooltip,
+  });
   final IconData icon;
   final String title;
   final Widget? trailing;
@@ -43,16 +51,6 @@ class BreezSettingsTile extends StatelessWidget {
   /// Tooltip shown on hover
   final String? tooltip;
 
-  const BreezSettingsTile({
-    super.key,
-    required this.icon,
-    required this.title,
-    this.trailing,
-    required this.onTap,
-    this.semanticLabel,
-    this.tooltip,
-  });
-
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
@@ -63,8 +61,7 @@ class BreezSettingsTile extends StatelessWidget {
       hoverColor: colors.buttonHover,
       showBorder: false,
       enableScale: false,
-      borderRadius: AppRadius.button,
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.sm,
         vertical: _SettingsTileConstants.tileVerticalPadding,
       ),
@@ -73,7 +70,7 @@ class BreezSettingsTile extends StatelessWidget {
       child: Row(
         children: [
           Icon(icon, size: _SettingsTileConstants.iconSize, color: AppColors.accent),
-          SizedBox(width: AppSpacing.sm),
+          const SizedBox(width: AppSpacing.sm),
           Expanded(
             child: Text(
               title,
@@ -85,7 +82,7 @@ class BreezSettingsTile extends StatelessWidget {
             ),
           ),
           if (trailing != null) trailing!,
-          SizedBox(width: AppSpacing.xxs),
+          const SizedBox(width: AppSpacing.xxs),
           Icon(Icons.chevron_right, size: _SettingsTileConstants.iconSize, color: colors.textMuted),
         ],
       ),
@@ -97,6 +94,16 @@ class BreezSettingsTile extends StatelessWidget {
 ///
 /// Use for toggle settings like "Push Notifications", "Dark Mode"
 class BreezSwitchTile extends StatelessWidget {
+
+  const BreezSwitchTile({
+    required this.icon,
+    required this.title,
+    required this.value,
+    required this.onChanged,
+    super.key,
+    this.subtitle,
+    this.semanticLabel,
+  });
   final IconData icon;
   final String title;
   final String? subtitle;
@@ -105,16 +112,6 @@ class BreezSwitchTile extends StatelessWidget {
 
   /// Semantic label for screen readers
   final String? semanticLabel;
-
-  const BreezSwitchTile({
-    super.key,
-    required this.icon,
-    required this.title,
-    this.subtitle,
-    required this.value,
-    required this.onChanged,
-    this.semanticLabel,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -126,8 +123,7 @@ class BreezSwitchTile extends StatelessWidget {
       hoverColor: colors.buttonHover,
       showBorder: false,
       enableScale: false,
-      borderRadius: AppRadius.button,
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.sm,
         vertical: _SettingsTileConstants.switchTileVerticalPadding,
       ),
@@ -136,7 +132,7 @@ class BreezSwitchTile extends StatelessWidget {
       child: Row(
         children: [
           Icon(icon, size: _SettingsTileConstants.iconSize, color: AppColors.accent),
-          SizedBox(width: AppSpacing.sm),
+          const SizedBox(width: AppSpacing.sm),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,12 +181,12 @@ class BreezSwitchTile extends StatelessWidget {
 ///
 /// Use above a group of related settings tiles
 class BreezSectionTitle extends StatelessWidget {
-  final String title;
 
   const BreezSectionTitle({
-    super.key,
     required this.title,
+    super.key,
   });
+  final String title;
 
   @override
   Widget build(BuildContext context) {

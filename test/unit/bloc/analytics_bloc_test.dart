@@ -5,12 +5,11 @@ library;
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-
 import 'package:hvac_control/domain/entities/energy_stats.dart';
 import 'package:hvac_control/domain/entities/graph_data.dart';
 import 'package:hvac_control/domain/usecases/usecases.dart';
 import 'package:hvac_control/presentation/bloc/analytics/analytics_bloc.dart';
+import 'package:mocktail/mocktail.dart';
 
 // Mock classes for Use Cases
 class MockGetTodayStats extends Mock implements GetTodayStats {}
@@ -35,7 +34,7 @@ void main() {
   late List<DeviceEnergyUsage> testPowerUsage;
   const testGraphData = <GraphDataPoint>[
     GraphDataPoint(label: '10:00', value: 22.5),
-    GraphDataPoint(label: '11:00', value: 23.0),
+    GraphDataPoint(label: '11:00', value: 23),
     GraphDataPoint(label: '12:00', value: 22.8),
   ];
 
@@ -58,7 +57,7 @@ void main() {
         deviceName: 'Бризер',
         deviceType: 'ventilation',
         unitCount: 1,
-        totalKwh: 10.0,
+        totalKwh: 10,
       ),
       DeviceEnergyUsage(
         deviceId: 'device-2',
@@ -74,7 +73,7 @@ void main() {
     registerFallbackValue(GetGraphDataParams(
       deviceId: '',
       metric: GraphMetric.temperature,
-      from: DateTime(2024, 1, 1),
+      from: DateTime(2024),
       to: DateTime(2024, 1, 2),
     ));
     registerFallbackValue(const WatchGraphDataParams(
@@ -197,7 +196,6 @@ void main() {
         seed: () => const AnalyticsState(
           status: AnalyticsStatus.success,
           currentDeviceId: 'device-1',
-          selectedMetric: GraphMetric.temperature,
         ),
         act: (bloc) =>
             bloc.add(const AnalyticsGraphMetricChanged(GraphMetric.humidity)),
@@ -227,11 +225,11 @@ void main() {
             date: DateTime(2024, 1, 15),
           );
         },
-        build: () => createBloc(),
+        build: createBloc,
         seed: () => AnalyticsState(
           status: AnalyticsStatus.success,
           energyStats: EnergyStats(
-            totalKwh: 10.0,
+            totalKwh: 10,
             totalHours: 100,
             date: DateTime(2024, 1, 14),
           ),
@@ -248,7 +246,7 @@ void main() {
     group('AnalyticsGraphDataUpdated', () {
       blocTest<AnalyticsBloc, AnalyticsState>(
         'обновляет данные графика из стрима',
-        build: () => createBloc(),
+        build: createBloc,
         seed: () => const AnalyticsState(status: AnalyticsStatus.success),
         act: (bloc) =>
             bloc.add(const AnalyticsGraphDataUpdated(testGraphData)),
@@ -272,7 +270,7 @@ void main() {
       });
 
       test('totalKwh возвращает 0 когда energyStats null', () {
-        const state = AnalyticsState(status: AnalyticsStatus.initial);
+        const state = AnalyticsState();
 
         expect(state.totalKwh, 0.0);
       });
@@ -289,7 +287,6 @@ void main() {
       test('hasGraphData возвращает false для пустого списка', () {
         const state = AnalyticsState(
           status: AnalyticsStatus.success,
-          graphData: [],
         );
 
         expect(state.hasGraphData, isFalse);

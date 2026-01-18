@@ -3,28 +3,25 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../generated/l10n/app_localizations.dart';
-import '../../../core/utils/snackbar_utils.dart';
-import '../../widgets/breez/breez_button.dart';
-import '../../bloc/schedule/schedule_bloc.dart';
-import '../../widgets/breez/schedule_widget.dart';
-import 'widgets/schedule_entry_dialog.dart';
-import 'widgets/schedule_empty_state.dart';
-import 'widgets/schedule_list.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/core/utils/snackbar_utils.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
+import 'package:hvac_control/presentation/bloc/schedule/schedule_bloc.dart';
+import 'package:hvac_control/presentation/screens/schedule/widgets/schedule_empty_state.dart';
+import 'package:hvac_control/presentation/screens/schedule/widgets/schedule_entry_dialog.dart';
+import 'package:hvac_control/presentation/screens/schedule/widgets/schedule_list.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
+import 'package:hvac_control/presentation/widgets/breez/schedule_widget.dart';
 
 /// Экран управления расписанием устройства
 class ScheduleScreen extends StatelessWidget {
-  final String deviceId;
-  final String deviceName;
 
   const ScheduleScreen({
-    super.key,
-    required this.deviceId,
-    required this.deviceName,
+    required this.deviceId, required this.deviceName, super.key,
   });
+  final String deviceId;
+  final String deviceName;
 
   @override
   Widget build(BuildContext context) {
@@ -72,8 +69,7 @@ class ScheduleScreen extends StatelessWidget {
     );
   }
 
-  AppBar _buildAppBar(BreezColors colors, AppLocalizations l10n, BuildContext context) {
-    return AppBar(
+  AppBar _buildAppBar(BreezColors colors, AppLocalizations l10n, BuildContext context) => AppBar(
       backgroundColor: colors.card,
       elevation: 0,
       title: Column(
@@ -108,10 +104,9 @@ class ScheduleScreen extends StatelessWidget {
         ),
       ],
     );
-  }
 
   void _showAddDialog(BuildContext context) {
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (dialogContext) => ScheduleEntryDialog(
         deviceId: deviceId,
@@ -124,7 +119,7 @@ class ScheduleScreen extends StatelessWidget {
   }
 
   void _showEditDialog(BuildContext context, ScheduleEntry entry) {
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (dialogContext) => ScheduleEntryDialog(
         deviceId: deviceId,
@@ -141,7 +136,7 @@ class ScheduleScreen extends StatelessWidget {
     final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (dialogContext) => AlertDialog(
         backgroundColor: colors.card,

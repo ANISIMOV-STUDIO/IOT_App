@@ -43,28 +43,28 @@ const EnergyStats$json = {
       '3': 2,
       '4': 1,
       '5': 1,
-      '10': 'currentConsumption'
+      '10': 'currentConsumption',
     },
     {
       '1': 'daily_consumption',
       '3': 3,
       '4': 1,
       '5': 1,
-      '10': 'dailyConsumption'
+      '10': 'dailyConsumption',
     },
     {
       '1': 'weekly_consumption',
       '3': 4,
       '4': 1,
       '5': 1,
-      '10': 'weeklyConsumption'
+      '10': 'weeklyConsumption',
     },
     {
       '1': 'monthly_consumption',
       '3': 5,
       '4': 1,
       '5': 1,
-      '10': 'monthlyConsumption'
+      '10': 'monthlyConsumption',
     },
     {'1': 'cost_per_hour', '3': 6, '4': 1, '5': 1, '10': 'costPerHour'},
     {'1': 'daily_cost', '3': 7, '4': 1, '5': 1, '10': 'dailyCost'},
@@ -75,7 +75,7 @@ const EnergyStats$json = {
       '4': 1,
       '5': 11,
       '6': '.google.protobuf.Timestamp',
-      '10': 'lastUpdate'
+      '10': 'lastUpdate',
     },
   ],
 };
@@ -101,7 +101,7 @@ const GetEnergyStatsRequest$json = {
 
 /// Descriptor for `GetEnergyStatsRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List getEnergyStatsRequestDescriptor = $convert.base64Decode(
-    'ChVHZXRFbmVyZ3lTdGF0c1JlcXVlc3QSGwoJZGV2aWNlX2lkGAEgASgJUghkZXZpY2VJZA==');
+    'ChVHZXRFbmVyZ3lTdGF0c1JlcXVlc3QSGwoJZGV2aWNlX2lkGAEgASgJUghkZXZpY2VJZA==',);
 
 @$core.Deprecated('Use energyHistoryRequestDescriptor instead')
 const EnergyHistoryRequest$json = {
@@ -114,7 +114,7 @@ const EnergyHistoryRequest$json = {
       '4': 1,
       '5': 11,
       '6': '.google.protobuf.Timestamp',
-      '10': 'from'
+      '10': 'from',
     },
     {
       '1': 'to',
@@ -122,7 +122,7 @@ const EnergyHistoryRequest$json = {
       '4': 1,
       '5': 11,
       '6': '.google.protobuf.Timestamp',
-      '10': 'to'
+      '10': 'to',
     },
     {
       '1': 'period',
@@ -130,7 +130,7 @@ const EnergyHistoryRequest$json = {
       '4': 1,
       '5': 14,
       '6': '.breez.EnergyPeriod',
-      '10': 'period'
+      '10': 'period',
     },
   ],
 };
@@ -152,14 +152,14 @@ const EnergyHistoryResponse$json = {
       '4': 3,
       '5': 11,
       '6': '.breez.EnergyDataPoint',
-      '10': 'dataPoints'
+      '10': 'dataPoints',
     },
     {
       '1': 'total_consumption',
       '3': 2,
       '4': 1,
       '5': 1,
-      '10': 'totalConsumption'
+      '10': 'totalConsumption',
     },
     {'1': 'total_cost', '3': 3, '4': 1, '5': 1, '10': 'totalCost'},
   ],
@@ -181,7 +181,7 @@ const EnergyDataPoint$json = {
       '4': 1,
       '5': 11,
       '6': '.google.protobuf.Timestamp',
-      '10': 'timestamp'
+      '10': 'timestamp',
     },
     {'1': 'consumption', '3': 2, '4': 1, '5': 1, '10': 'consumption'},
     {'1': 'cost', '3': 3, '4': 1, '5': 1, '10': 'cost'},

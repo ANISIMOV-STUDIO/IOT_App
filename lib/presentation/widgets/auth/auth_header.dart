@@ -2,19 +2,17 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_font_sizes.dart';
-import '../../../core/theme/spacing.dart';
-import '../breez/breez_logo.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_logo.dart';
 
 /// Заголовок для страниц авторизации
 class AuthHeader extends StatelessWidget {
-  final String title;
 
   const AuthHeader({
-    super.key,
-    required this.title,
+    required this.title, super.key,
   });
+  final String title;
 
   @override
   Widget build(BuildContext context) {

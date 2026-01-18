@@ -2,15 +2,30 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../../core/theme/spacing.dart';
-import '../../../../domain/entities/unit_state.dart';
-import '../../../widgets/breez/breez_logo.dart';
-import '../../../widgets/breez/breez_card.dart';
-import '../../../widgets/breez/unit_tab_button.dart';
-import 'add_unit_button.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/domain/entities/unit_state.dart';
+import 'package:hvac_control/presentation/screens/dashboard/widgets/add_unit_button.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_logo.dart';
+import 'package:hvac_control/presentation/widgets/breez/unit_tab_button.dart';
 
 /// Desktop header with unit tabs
 class DesktopHeader extends StatelessWidget {
+
+  const DesktopHeader({
+    required this.units,
+    required this.selectedUnitIndex,
+    required this.isDark,
+    super.key,
+    this.onUnitSelected,
+    this.onAddUnit,
+    this.onThemeToggle,
+    this.showMenuButton = false,
+    this.onMenuTap,
+    this.showLogo = false,
+    this.onNotificationsTap,
+    this.unreadNotificationsCount = 0,
+  });
   final List<UnitState> units;
   final int selectedUnitIndex;
   final ValueChanged<int>? onUnitSelected;
@@ -23,24 +38,8 @@ class DesktopHeader extends StatelessWidget {
   final VoidCallback? onNotificationsTap;
   final int unreadNotificationsCount;
 
-  const DesktopHeader({
-    super.key,
-    required this.units,
-    required this.selectedUnitIndex,
-    this.onUnitSelected,
-    this.onAddUnit,
-    required this.isDark,
-    this.onThemeToggle,
-    this.showMenuButton = false,
-    this.onMenuTap,
-    this.showLogo = false,
-    this.onNotificationsTap,
-    this.unreadNotificationsCount = 0,
-  });
-
   @override
-  Widget build(BuildContext context) {
-    return Row(
+  Widget build(BuildContext context) => Row(
       children: [
         // Menu button (tablet only)
         if (showMenuButton) ...[
@@ -67,15 +66,12 @@ class DesktopHeader extends StatelessWidget {
         ),
       ],
     );
-  }
 
-  Widget _buildUnitTabs(BuildContext context) {
-    return UnitTabsContainer(
+  Widget _buildUnitTabs(BuildContext context) => UnitTabsContainer(
       units: units,
       selectedIndex: selectedUnitIndex,
       onUnitSelected: onUnitSelected,
       leading: showLogo ? const BreezLogo.small() : null,
       trailing: AddUnitButton(onTap: onAddUnit),
     );
-  }
 }

@@ -1,7 +1,7 @@
 /// JSON Mapper: Energy data
 library;
 
-import '../../../domain/entities/energy_stats.dart';
+import 'package:hvac_control/domain/entities/energy_stats.dart';
 
 class EnergyJsonMapper {
   /// JSON → Domain EnergyStats
@@ -25,7 +25,7 @@ class EnergyJsonMapper {
     }
 
     // Безопасный парсинг даты с fallback
-    DateTime parsedDate = DateTime.now();
+    var parsedDate = DateTime.now();
     final dateStr = json['date'];
     if (dateStr is String) {
       parsedDate = DateTime.tryParse(dateStr) ?? DateTime.now();
@@ -45,11 +45,15 @@ class EnergyJsonMapper {
 
     for (final json in jsonList) {
       // Пропускаем элементы неправильного типа
-      if (json is! Map<String, dynamic>) continue;
+      if (json is! Map<String, dynamic>) {
+        continue;
+      }
 
       final deviceId = json['deviceId'];
       // deviceId обязателен
-      if (deviceId is! String) continue;
+      if (deviceId is! String) {
+        continue;
+      }
 
       result.add(DeviceEnergyUsage(
         deviceId: deviceId,

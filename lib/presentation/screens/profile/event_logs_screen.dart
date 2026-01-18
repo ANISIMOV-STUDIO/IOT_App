@@ -7,25 +7,24 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+// ignore: directives_ordering
+import 'package:hvac_control/core/navigation/app_router.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/data/api/http/clients/hvac_http_client.dart';
+import 'package:hvac_control/domain/entities/device_event_log.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
+import 'package:hvac_control/presentation/bloc/devices/devices_bloc.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez.dart';
 import 'package:intl/intl.dart';
-
-import '../../../core/navigation/app_router.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_font_sizes.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../data/api/http/clients/hvac_http_client.dart';
-import '../../../domain/entities/device_event_log.dart';
-import '../../../generated/l10n/app_localizations.dart';
-import '../../bloc/devices/devices_bloc.dart';
-import '../../widgets/breez/breez.dart';
 
 // =============================================================================
 // CONSTANTS
 // =============================================================================
 
 abstract class _LogsScreenConstants {
-  static const double labelColumnWidth = 100.0;
-  static const double smallIconSize = 18.0;
+  static const double labelColumnWidth = 100;
+  static const double smallIconSize = 18;
   static const int pageSize = 50;
 }
 
@@ -121,8 +120,12 @@ class _EventLogsScreenState extends State<EventLogsScreen> {
   }
 
   List<DeviceEventLog> get _filteredLogs {
-    if (_logs == null) return [];
-    if (_filterType == null) return _logs!.items;
+    if (_logs == null) {
+      return [];
+    }
+    if (_filterType == null) {
+      return _logs!.items;
+    }
     return _logs!.items.where((log) => log.eventType == _filterType).toList();
   }
 
@@ -136,7 +139,7 @@ class _EventLogsScreenState extends State<EventLogsScreen> {
     final typeColor = isAlarm ? AppColors.accentRed : AppColors.accent;
     final typeText = isAlarm ? l10n.logTypeAlarm : l10n.logTypeSettings;
 
-    showModalBottomSheet(
+    showModalBottomSheet<void>(
       context: context,
       backgroundColor: colors.card,
       shape: const RoundedRectangleBorder(
@@ -268,7 +271,7 @@ class _EventLogsScreenState extends State<EventLogsScreen> {
               ),
               child: BreezSegmentedControl<DeviceEventType?>(
                 value: _filterType,
-                height: 36.0,
+                height: 36,
                 segments: [
                   BreezSegment(
                     value: null,
@@ -308,7 +311,7 @@ class _EventLogsScreenState extends State<EventLogsScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.error_outline, size: 48, color: AppColors.critical),
+            const Icon(Icons.error_outline, size: 48, color: AppColors.critical),
             const SizedBox(height: AppSpacing.md),
             Text(
               _error!,
@@ -379,15 +382,14 @@ class _EventLogsScreenState extends State<EventLogsScreen> {
 // =============================================================================
 
 class _DetailRow extends StatelessWidget {
+
+  const _DetailRow(this.label, this.value, this.colors);
   final String label;
   final String value;
   final BreezColors colors;
 
-  const _DetailRow(this.label, this.value, this.colors);
-
   @override
-  Widget build(BuildContext context) {
-    return Padding(
+  Widget build(BuildContext context) => Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.sm),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -414,7 +416,6 @@ class _DetailRow extends StatelessWidget {
         ],
       ),
     );
-  }
 }
 
 // =============================================================================
@@ -422,12 +423,6 @@ class _DetailRow extends StatelessWidget {
 // =============================================================================
 
 class _PaginationFooter extends StatelessWidget {
-  final PaginatedLogs logs;
-  final int filteredCount;
-  final bool isLoading;
-  final VoidCallback onLoadMore;
-  final BreezColors colors;
-  final AppLocalizations l10n;
 
   const _PaginationFooter({
     required this.logs,
@@ -437,10 +432,15 @@ class _PaginationFooter extends StatelessWidget {
     required this.colors,
     required this.l10n,
   });
+  final PaginatedLogs logs;
+  final int filteredCount;
+  final bool isLoading;
+  final VoidCallback onLoadMore;
+  final BreezColors colors;
+  final AppLocalizations l10n;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(BuildContext context) => Container(
       padding: const EdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
         color: colors.card,
@@ -474,7 +474,7 @@ class _PaginationFooter extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.expand_more,
                           size: _LogsScreenConstants.smallIconSize,
                           color: AppColors.accent,
@@ -490,5 +490,4 @@ class _PaginationFooter extends StatelessWidget {
         ],
       ),
     );
-  }
 }

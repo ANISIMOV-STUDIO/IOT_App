@@ -10,26 +10,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
-
-import 'core/theme/app_theme.dart';
-import 'generated/l10n/app_localizations.dart';
-import 'core/di/injection_container.dart' as di;
-import 'core/services/language_service.dart';
-import 'core/services/theme_service.dart';
-import 'core/services/toast_service.dart';
-import 'core/services/push_notification_service.dart';
-import 'core/services/fcm_token_service.dart';
-import 'core/navigation/app_router.dart';
-import 'core/logging/talker_config.dart';
-import 'firebase_options.dart';
-import 'presentation/bloc/auth/auth_bloc.dart';
-import 'presentation/bloc/auth/auth_event.dart';
-import 'presentation/bloc/devices/devices_bloc.dart';
-import 'presentation/bloc/climate/climate_bloc.dart';
-import 'presentation/bloc/notifications/notifications_bloc.dart';
-import 'presentation/bloc/analytics/analytics_bloc.dart';
-import 'presentation/bloc/connectivity/connectivity_bloc.dart';
-import 'presentation/bloc/schedule/schedule_bloc.dart';
+import 'package:hvac_control/core/di/injection_container.dart' as di;
+import 'package:hvac_control/core/logging/talker_config.dart';
+import 'package:hvac_control/core/navigation/app_router.dart';
+import 'package:hvac_control/core/services/fcm_token_service.dart';
+import 'package:hvac_control/core/services/language_service.dart';
+import 'package:hvac_control/core/services/push_notification_service.dart';
+import 'package:hvac_control/core/services/theme_service.dart';
+import 'package:hvac_control/core/services/toast_service.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/firebase_options.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
+import 'package:hvac_control/presentation/bloc/analytics/analytics_bloc.dart';
+import 'package:hvac_control/presentation/bloc/auth/auth_bloc.dart';
+import 'package:hvac_control/presentation/bloc/auth/auth_event.dart';
+import 'package:hvac_control/presentation/bloc/climate/climate_bloc.dart';
+import 'package:hvac_control/presentation/bloc/connectivity/connectivity_bloc.dart';
+import 'package:hvac_control/presentation/bloc/devices/devices_bloc.dart';
+import 'package:hvac_control/presentation/bloc/notifications/notifications_bloc.dart';
+import 'package:hvac_control/presentation/bloc/schedule/schedule_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -87,8 +86,7 @@ class _HvacControlAppState extends State<HvacControlApp> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return MultiBlocProvider(
+  Widget build(BuildContext context) => MultiBlocProvider(
       providers: [
         // AuthBloc уже создан в initState - используем .value
         BlocProvider.value(value: _authBloc),
@@ -171,5 +169,4 @@ class _HvacControlAppState extends State<HvacControlApp> {
         },
       ),
     );
-  }
 }

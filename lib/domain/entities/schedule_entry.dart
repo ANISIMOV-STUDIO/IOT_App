@@ -5,14 +5,6 @@ import 'package:equatable/equatable.dart';
 
 /// Schedule entry data for weekly schedule
 class ScheduleEntry extends Equatable {
-  final String id;
-  final String deviceId;
-  final String day;
-  final String mode;
-  final String timeRange;
-  final int tempDay;
-  final int tempNight;
-  final bool isActive;
 
   const ScheduleEntry({
     required this.id,
@@ -24,6 +16,14 @@ class ScheduleEntry extends Equatable {
     required this.tempNight,
     this.isActive = false,
   });
+  final String id;
+  final String deviceId;
+  final String day;
+  final String mode;
+  final String timeRange;
+  final int tempDay;
+  final int tempNight;
+  final bool isActive;
 
   ScheduleEntry copyWith({
     String? id,
@@ -34,8 +34,7 @@ class ScheduleEntry extends Equatable {
     int? tempDay,
     int? tempNight,
     bool? isActive,
-  }) {
-    return ScheduleEntry(
+  }) => ScheduleEntry(
       id: id ?? this.id,
       deviceId: deviceId ?? this.deviceId,
       day: day ?? this.day,
@@ -45,7 +44,6 @@ class ScheduleEntry extends Equatable {
       tempNight: tempNight ?? this.tempNight,
       isActive: isActive ?? this.isActive,
     );
-  }
 
   @override
   List<Object?> get props => [id, deviceId, day, mode, timeRange, tempDay, tempNight, isActive];

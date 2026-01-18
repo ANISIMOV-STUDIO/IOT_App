@@ -4,7 +4,7 @@
 
 // @dart = 3.3
 
-// ignore_for_file: annotate_overrides, camel_case_types, comment_references
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references, prefer_constructors_over_static_methods, do_not_use_environment
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: curly_braces_in_flow_control_structures
 // ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
@@ -12,11 +12,10 @@
 
 import 'dart:core' as $core;
 
-import 'package:protobuf/protobuf.dart' as $pb;
-import 'google/protobuf/timestamp.pb.dart'
+import 'package:hvac_control/generated/protos/common.pb.dart' as $0;
+import 'package:hvac_control/generated/protos/google/protobuf/timestamp.pb.dart'
     as $1;
-
-import 'common.pb.dart' as $0;
+import 'package:protobuf/protobuf.dart' as $pb;
 
 export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
 
@@ -41,61 +40,93 @@ class HvacDevice extends $pb.GeneratedMessage {
     $core.Iterable<Preset>? presets,
   }) {
     final result = create();
-    if (id != null) result.id = id;
-    if (name != null) result.name = name;
-    if (power != null) result.power = power;
-    if (temp != null) result.temp = temp;
-    if (mode != null) result.mode = mode;
-    if (supplyFan != null) result.supplyFan = supplyFan;
-    if (exhaustFan != null) result.exhaustFan = exhaustFan;
-    if (currentTemp != null) result.currentTemp = currentTemp;
-    if (humidity != null) result.humidity = humidity;
-    if (co2 != null) result.co2 = co2;
-    if (airflow != null) result.airflow = airflow;
-    if (alerts != null) result.alerts.addAll(alerts);
-    if (status != null) result.status = status;
-    if (lastUpdate != null) result.lastUpdate = lastUpdate;
-    if (mqttTopic != null) result.mqttTopic = mqttTopic;
-    if (presets != null) result.presets.addAll(presets);
+    if (id != null) {
+      result.id = id;
+    }
+    if (name != null) {
+      result.name = name;
+    }
+    if (power != null) {
+      result.power = power;
+    }
+    if (temp != null) {
+      result.temp = temp;
+    }
+    if (mode != null) {
+      result.mode = mode;
+    }
+    if (supplyFan != null) {
+      result.supplyFan = supplyFan;
+    }
+    if (exhaustFan != null) {
+      result.exhaustFan = exhaustFan;
+    }
+    if (currentTemp != null) {
+      result.currentTemp = currentTemp;
+    }
+    if (humidity != null) {
+      result.humidity = humidity;
+    }
+    if (co2 != null) {
+      result.co2 = co2;
+    }
+    if (airflow != null) {
+      result.airflow = airflow;
+    }
+    if (alerts != null) {
+      result.alerts.addAll(alerts);
+    }
+    if (status != null) {
+      result.status = status;
+    }
+    if (lastUpdate != null) {
+      result.lastUpdate = lastUpdate;
+    }
+    if (mqttTopic != null) {
+      result.mqttTopic = mqttTopic;
+    }
+    if (presets != null) {
+      result.presets.addAll(presets);
+    }
     return result;
   }
 
   HvacDevice._();
 
   factory HvacDevice.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory HvacDevice.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'HvacDevice',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOB(3, _omitFieldNames ? '' : 'power')
     ..aI(4, _omitFieldNames ? '' : 'temp')
     ..aE<$0.OperationMode>(5, _omitFieldNames ? '' : 'mode',
-        enumValues: $0.OperationMode.values)
+        enumValues: $0.OperationMode.values,)
     ..aE<$0.FanSpeed>(6, _omitFieldNames ? '' : 'supplyFan',
-        enumValues: $0.FanSpeed.values)
+        enumValues: $0.FanSpeed.values,)
     ..aE<$0.FanSpeed>(7, _omitFieldNames ? '' : 'exhaustFan',
-        enumValues: $0.FanSpeed.values)
+        enumValues: $0.FanSpeed.values,)
     ..aI(8, _omitFieldNames ? '' : 'currentTemp')
     ..aI(9, _omitFieldNames ? '' : 'humidity')
     ..aI(10, _omitFieldNames ? '' : 'co2')
     ..aI(11, _omitFieldNames ? '' : 'airflow')
     ..pPM<$0.Alert>(12, _omitFieldNames ? '' : 'alerts',
-        subBuilder: $0.Alert.create)
+        subBuilder: $0.Alert.create,)
     ..aE<$0.DeviceStatus>(13, _omitFieldNames ? '' : 'status',
-        enumValues: $0.DeviceStatus.values)
+        enumValues: $0.DeviceStatus.values,)
     ..aOM<$1.Timestamp>(14, _omitFieldNames ? '' : 'lastUpdate',
-        subBuilder: $1.Timestamp.create)
+        subBuilder: $1.Timestamp.create,)
     ..aOS(15, _omitFieldNames ? '' : 'mqttTopic')
     ..pPM<Preset>(16, _omitFieldNames ? '' : 'presets',
-        subBuilder: Preset.create)
+        subBuilder: Preset.create,)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -264,38 +295,52 @@ class Preset extends $pb.GeneratedMessage {
     $core.String? icon,
   }) {
     final result = create();
-    if (id != null) result.id = id;
-    if (name != null) result.name = name;
-    if (temp != null) result.temp = temp;
-    if (mode != null) result.mode = mode;
-    if (supplyFan != null) result.supplyFan = supplyFan;
-    if (exhaustFan != null) result.exhaustFan = exhaustFan;
-    if (icon != null) result.icon = icon;
+    if (id != null) {
+      result.id = id;
+    }
+    if (name != null) {
+      result.name = name;
+    }
+    if (temp != null) {
+      result.temp = temp;
+    }
+    if (mode != null) {
+      result.mode = mode;
+    }
+    if (supplyFan != null) {
+      result.supplyFan = supplyFan;
+    }
+    if (exhaustFan != null) {
+      result.exhaustFan = exhaustFan;
+    }
+    if (icon != null) {
+      result.icon = icon;
+    }
     return result;
   }
 
   Preset._();
 
   factory Preset.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory Preset.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'Preset',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aI(3, _omitFieldNames ? '' : 'temp')
     ..aE<$0.OperationMode>(4, _omitFieldNames ? '' : 'mode',
-        enumValues: $0.OperationMode.values)
+        enumValues: $0.OperationMode.values,)
     ..aE<$0.FanSpeed>(5, _omitFieldNames ? '' : 'supplyFan',
-        enumValues: $0.FanSpeed.values)
+        enumValues: $0.FanSpeed.values,)
     ..aE<$0.FanSpeed>(6, _omitFieldNames ? '' : 'exhaustFan',
-        enumValues: $0.FanSpeed.values)
+        enumValues: $0.FanSpeed.values,)
     ..aOS(7, _omitFieldNames ? '' : 'icon')
     ..hasRequiredFields = false;
 
@@ -388,24 +433,28 @@ class CreateDeviceRequest extends $pb.GeneratedMessage {
     $core.String? mqttTopic,
   }) {
     final result = create();
-    if (name != null) result.name = name;
-    if (mqttTopic != null) result.mqttTopic = mqttTopic;
+    if (name != null) {
+      result.name = name;
+    }
+    if (mqttTopic != null) {
+      result.mqttTopic = mqttTopic;
+    }
     return result;
   }
 
   CreateDeviceRequest._();
 
   factory CreateDeviceRequest.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory CreateDeviceRequest.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'CreateDeviceRequest',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOS(1, _omitFieldNames ? '' : 'name')
     ..aOS(2, _omitFieldNames ? '' : 'mqttTopic')
     ..hasRequiredFields = false;
@@ -454,23 +503,25 @@ class GetDeviceRequest extends $pb.GeneratedMessage {
     $core.String? id,
   }) {
     final result = create();
-    if (id != null) result.id = id;
+    if (id != null) {
+      result.id = id;
+    }
     return result;
   }
 
   GetDeviceRequest._();
 
   factory GetDeviceRequest.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory GetDeviceRequest.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'GetDeviceRequest',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..hasRequiredFields = false;
 
@@ -509,25 +560,27 @@ class ListDevicesResponse extends $pb.GeneratedMessage {
     $core.Iterable<HvacDevice>? devices,
   }) {
     final result = create();
-    if (devices != null) result.devices.addAll(devices);
+    if (devices != null) {
+      result.devices.addAll(devices);
+    }
     return result;
   }
 
   ListDevicesResponse._();
 
   factory ListDevicesResponse.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory ListDevicesResponse.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ListDevicesResponse',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..pPM<HvacDevice>(1, _omitFieldNames ? '' : 'devices',
-        subBuilder: HvacDevice.create)
+        subBuilder: HvacDevice.create,)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -565,39 +618,53 @@ class UpdateDeviceRequest extends $pb.GeneratedMessage {
     $0.FanSpeed? exhaustFan,
   }) {
     final result = create();
-    if (id != null) result.id = id;
-    if (name != null) result.name = name;
-    if (power != null) result.power = power;
-    if (temp != null) result.temp = temp;
-    if (mode != null) result.mode = mode;
-    if (supplyFan != null) result.supplyFan = supplyFan;
-    if (exhaustFan != null) result.exhaustFan = exhaustFan;
+    if (id != null) {
+      result.id = id;
+    }
+    if (name != null) {
+      result.name = name;
+    }
+    if (power != null) {
+      result.power = power;
+    }
+    if (temp != null) {
+      result.temp = temp;
+    }
+    if (mode != null) {
+      result.mode = mode;
+    }
+    if (supplyFan != null) {
+      result.supplyFan = supplyFan;
+    }
+    if (exhaustFan != null) {
+      result.exhaustFan = exhaustFan;
+    }
     return result;
   }
 
   UpdateDeviceRequest._();
 
   factory UpdateDeviceRequest.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory UpdateDeviceRequest.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'UpdateDeviceRequest',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOB(3, _omitFieldNames ? '' : 'power')
     ..aI(4, _omitFieldNames ? '' : 'temp')
     ..aE<$0.OperationMode>(5, _omitFieldNames ? '' : 'mode',
-        enumValues: $0.OperationMode.values)
+        enumValues: $0.OperationMode.values,)
     ..aE<$0.FanSpeed>(6, _omitFieldNames ? '' : 'supplyFan',
-        enumValues: $0.FanSpeed.values)
+        enumValues: $0.FanSpeed.values,)
     ..aE<$0.FanSpeed>(7, _omitFieldNames ? '' : 'exhaustFan',
-        enumValues: $0.FanSpeed.values)
+        enumValues: $0.FanSpeed.values,)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -690,24 +757,28 @@ class SetPowerRequest extends $pb.GeneratedMessage {
     $core.bool? power,
   }) {
     final result = create();
-    if (deviceId != null) result.deviceId = deviceId;
-    if (power != null) result.power = power;
+    if (deviceId != null) {
+      result.deviceId = deviceId;
+    }
+    if (power != null) {
+      result.power = power;
+    }
     return result;
   }
 
   SetPowerRequest._();
 
   factory SetPowerRequest.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory SetPowerRequest.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'SetPowerRequest',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOS(1, _omitFieldNames ? '' : 'deviceId')
     ..aOB(2, _omitFieldNames ? '' : 'power')
     ..hasRequiredFields = false;
@@ -757,24 +828,28 @@ class SetTemperatureRequest extends $pb.GeneratedMessage {
     $core.int? temperature,
   }) {
     final result = create();
-    if (deviceId != null) result.deviceId = deviceId;
-    if (temperature != null) result.temperature = temperature;
+    if (deviceId != null) {
+      result.deviceId = deviceId;
+    }
+    if (temperature != null) {
+      result.temperature = temperature;
+    }
     return result;
   }
 
   SetTemperatureRequest._();
 
   factory SetTemperatureRequest.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory SetTemperatureRequest.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'SetTemperatureRequest',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOS(1, _omitFieldNames ? '' : 'deviceId')
     ..aI(2, _omitFieldNames ? '' : 'temperature')
     ..hasRequiredFields = false;
@@ -783,7 +858,7 @@ class SetTemperatureRequest extends $pb.GeneratedMessage {
   SetTemperatureRequest clone() => deepCopy();
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   SetTemperatureRequest copyWith(
-          void Function(SetTemperatureRequest) updates) =>
+          void Function(SetTemperatureRequest) updates,) =>
       super.copyWith((message) => updates(message as SetTemperatureRequest))
           as SetTemperatureRequest;
 
@@ -825,27 +900,31 @@ class SetModeRequest extends $pb.GeneratedMessage {
     $0.OperationMode? mode,
   }) {
     final result = create();
-    if (deviceId != null) result.deviceId = deviceId;
-    if (mode != null) result.mode = mode;
+    if (deviceId != null) {
+      result.deviceId = deviceId;
+    }
+    if (mode != null) {
+      result.mode = mode;
+    }
     return result;
   }
 
   SetModeRequest._();
 
   factory SetModeRequest.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory SetModeRequest.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'SetModeRequest',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOS(1, _omitFieldNames ? '' : 'deviceId')
     ..aE<$0.OperationMode>(2, _omitFieldNames ? '' : 'mode',
-        enumValues: $0.OperationMode.values)
+        enumValues: $0.OperationMode.values,)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -894,30 +973,36 @@ class SetFanSpeedRequest extends $pb.GeneratedMessage {
     $0.FanSpeed? exhaustFan,
   }) {
     final result = create();
-    if (deviceId != null) result.deviceId = deviceId;
-    if (supplyFan != null) result.supplyFan = supplyFan;
-    if (exhaustFan != null) result.exhaustFan = exhaustFan;
+    if (deviceId != null) {
+      result.deviceId = deviceId;
+    }
+    if (supplyFan != null) {
+      result.supplyFan = supplyFan;
+    }
+    if (exhaustFan != null) {
+      result.exhaustFan = exhaustFan;
+    }
     return result;
   }
 
   SetFanSpeedRequest._();
 
   factory SetFanSpeedRequest.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory SetFanSpeedRequest.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'SetFanSpeedRequest',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOS(1, _omitFieldNames ? '' : 'deviceId')
     ..aE<$0.FanSpeed>(2, _omitFieldNames ? '' : 'supplyFan',
-        enumValues: $0.FanSpeed.values)
+        enumValues: $0.FanSpeed.values,)
     ..aE<$0.FanSpeed>(3, _omitFieldNames ? '' : 'exhaustFan',
-        enumValues: $0.FanSpeed.values)
+        enumValues: $0.FanSpeed.values,)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -974,24 +1059,28 @@ class ApplyPresetRequest extends $pb.GeneratedMessage {
     $core.String? presetId,
   }) {
     final result = create();
-    if (deviceId != null) result.deviceId = deviceId;
-    if (presetId != null) result.presetId = presetId;
+    if (deviceId != null) {
+      result.deviceId = deviceId;
+    }
+    if (presetId != null) {
+      result.presetId = presetId;
+    }
     return result;
   }
 
   ApplyPresetRequest._();
 
   factory ApplyPresetRequest.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory ApplyPresetRequest.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ApplyPresetRequest',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOS(1, _omitFieldNames ? '' : 'deviceId')
     ..aOS(2, _omitFieldNames ? '' : 'presetId')
     ..hasRequiredFields = false;
@@ -1040,23 +1129,25 @@ class DeleteDeviceRequest extends $pb.GeneratedMessage {
     $core.String? id,
   }) {
     final result = create();
-    if (id != null) result.id = id;
+    if (id != null) {
+      result.id = id;
+    }
     return result;
   }
 
   DeleteDeviceRequest._();
 
   factory DeleteDeviceRequest.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory DeleteDeviceRequest.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'DeleteDeviceRequest',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..hasRequiredFields = false;
 
@@ -1095,23 +1186,25 @@ class StreamDeviceUpdatesRequest extends $pb.GeneratedMessage {
     $core.String? deviceId,
   }) {
     final result = create();
-    if (deviceId != null) result.deviceId = deviceId;
+    if (deviceId != null) {
+      result.deviceId = deviceId;
+    }
     return result;
   }
 
   StreamDeviceUpdatesRequest._();
 
   factory StreamDeviceUpdatesRequest.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory StreamDeviceUpdatesRequest.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'StreamDeviceUpdatesRequest',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOS(1, _omitFieldNames ? '' : 'deviceId')
     ..hasRequiredFields = false;
 
@@ -1119,9 +1212,9 @@ class StreamDeviceUpdatesRequest extends $pb.GeneratedMessage {
   StreamDeviceUpdatesRequest clone() => deepCopy();
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   StreamDeviceUpdatesRequest copyWith(
-          void Function(StreamDeviceUpdatesRequest) updates) =>
+          void Function(StreamDeviceUpdatesRequest) updates,) =>
       super.copyWith(
-              (message) => updates(message as StreamDeviceUpdatesRequest))
+              (message) => updates(message as StreamDeviceUpdatesRequest),)
           as StreamDeviceUpdatesRequest;
 
   @$core.override

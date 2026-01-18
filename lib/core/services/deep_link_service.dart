@@ -5,8 +5,8 @@ import 'dart:async';
 
 import 'package:go_router/go_router.dart';
 
-import '../logging/talker_config.dart';
-import '../navigation/app_routes.dart';
+import 'package:hvac_control/core/logging/talker_config.dart';
+import 'package:hvac_control/core/navigation/app_routes.dart';
 
 /// Сервис для обработки deep links
 ///
@@ -23,6 +23,8 @@ import '../navigation/app_routes.dart';
 ///
 /// И раскомментируйте код инициализации ниже.
 class DeepLinkService {
+
+  DeepLinkService({required this.router});
   final GoRouter router;
 
   // Для полной поддержки deep links:
@@ -33,13 +35,13 @@ class DeepLinkService {
   Uri? _pendingDeepLink;
   bool _isInitialized = false;
 
-  DeepLinkService({required this.router});
-
   /// Инициализация сервиса
   ///
   /// Вызывать после создания GoRouter
   Future<void> initialize() async {
-    if (_isInitialized) return;
+    if (_isInitialized) {
+      return;
+    }
     _isInitialized = true;
 
     // GoRouter автоматически обрабатывает deep links если настроен правильно.
@@ -134,7 +136,9 @@ class DeepLinkService {
 
   /// Парсинг путей устройства
   String? _parseDevicePath(List<String> pathSegments) {
-    if (pathSegments.isEmpty) return null;
+    if (pathSegments.isEmpty) {
+      return null;
+    }
 
     final deviceId = pathSegments[0];
     if (pathSegments.length == 1) {
@@ -186,26 +190,22 @@ abstract final class DeepLinkUtils {
       scheme: useWebDomain ? 'https' : AppDeepLinks.scheme,
       host: useWebDomain ? AppDeepLinks.webDomain : null,
       path: path,
-      queryParameters: queryParams?.isNotEmpty == true ? queryParams : null,
+      queryParameters: queryParams?.isNotEmpty ?? false ? queryParams : null,
     );
     return uri.toString();
   }
 
   /// Создать deep link для устройства
-  static String deviceLink(String deviceId, {bool webLink = true}) {
-    return createShareLink(
+  static String deviceLink(String deviceId, {bool webLink = true}) => createShareLink(
       path: '/device/$deviceId',
       useWebDomain: webLink,
     );
-  }
 
   /// Создать deep link для расписания устройства
-  static String scheduleLink(String deviceId, {bool webLink = true}) {
-    return createShareLink(
+  static String scheduleLink(String deviceId, {bool webLink = true}) => createShareLink(
       path: '/device/$deviceId/schedule',
       useWebDomain: webLink,
     );
-  }
 
   /// Валидация deep link URI
   static bool isValidDeepLink(Uri uri) {

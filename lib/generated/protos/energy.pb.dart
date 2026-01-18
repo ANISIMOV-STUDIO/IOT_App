@@ -4,7 +4,7 @@
 
 // @dart = 3.3
 
-// ignore_for_file: annotate_overrides, camel_case_types, comment_references
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references, prefer_constructors_over_static_methods, do_not_use_environment
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: curly_braces_in_flow_control_structures
 // ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
@@ -12,11 +12,10 @@
 
 import 'dart:core' as $core;
 
-import 'package:protobuf/protobuf.dart' as $pb;
-import 'google/protobuf/timestamp.pb.dart'
+import 'package:hvac_control/generated/protos/energy.pbenum.dart';
+import 'package:hvac_control/generated/protos/google/protobuf/timestamp.pb.dart'
     as $0;
-
-import 'energy.pbenum.dart';
+import 'package:protobuf/protobuf.dart' as $pb;
 
 export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
 
@@ -36,33 +35,47 @@ class EnergyStats extends $pb.GeneratedMessage {
     $0.Timestamp? lastUpdate,
   }) {
     final result = create();
-    if (deviceId != null) result.deviceId = deviceId;
+    if (deviceId != null) {
+      result.deviceId = deviceId;
+    }
     if (currentConsumption != null)
       result.currentConsumption = currentConsumption;
-    if (dailyConsumption != null) result.dailyConsumption = dailyConsumption;
-    if (weeklyConsumption != null) result.weeklyConsumption = weeklyConsumption;
+    if (dailyConsumption != null) {
+      result.dailyConsumption = dailyConsumption;
+    }
+    if (weeklyConsumption != null) {
+      result.weeklyConsumption = weeklyConsumption;
+    }
     if (monthlyConsumption != null)
       result.monthlyConsumption = monthlyConsumption;
-    if (costPerHour != null) result.costPerHour = costPerHour;
-    if (dailyCost != null) result.dailyCost = dailyCost;
-    if (monthlyCost != null) result.monthlyCost = monthlyCost;
-    if (lastUpdate != null) result.lastUpdate = lastUpdate;
+    if (costPerHour != null) {
+      result.costPerHour = costPerHour;
+    }
+    if (dailyCost != null) {
+      result.dailyCost = dailyCost;
+    }
+    if (monthlyCost != null) {
+      result.monthlyCost = monthlyCost;
+    }
+    if (lastUpdate != null) {
+      result.lastUpdate = lastUpdate;
+    }
     return result;
   }
 
   EnergyStats._();
 
   factory EnergyStats.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory EnergyStats.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'EnergyStats',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOS(1, _omitFieldNames ? '' : 'deviceId')
     ..aD(2, _omitFieldNames ? '' : 'currentConsumption')
     ..aD(3, _omitFieldNames ? '' : 'dailyConsumption')
@@ -72,7 +85,7 @@ class EnergyStats extends $pb.GeneratedMessage {
     ..aD(7, _omitFieldNames ? '' : 'dailyCost')
     ..aD(8, _omitFieldNames ? '' : 'monthlyCost')
     ..aOM<$0.Timestamp>(9, _omitFieldNames ? '' : 'lastUpdate',
-        subBuilder: $0.Timestamp.create)
+        subBuilder: $0.Timestamp.create,)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -184,23 +197,25 @@ class GetEnergyStatsRequest extends $pb.GeneratedMessage {
     $core.String? deviceId,
   }) {
     final result = create();
-    if (deviceId != null) result.deviceId = deviceId;
+    if (deviceId != null) {
+      result.deviceId = deviceId;
+    }
     return result;
   }
 
   GetEnergyStatsRequest._();
 
   factory GetEnergyStatsRequest.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory GetEnergyStatsRequest.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'GetEnergyStatsRequest',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOS(1, _omitFieldNames ? '' : 'deviceId')
     ..hasRequiredFields = false;
 
@@ -208,7 +223,7 @@ class GetEnergyStatsRequest extends $pb.GeneratedMessage {
   GetEnergyStatsRequest clone() => deepCopy();
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   GetEnergyStatsRequest copyWith(
-          void Function(GetEnergyStatsRequest) updates) =>
+          void Function(GetEnergyStatsRequest) updates,) =>
       super.copyWith((message) => updates(message as GetEnergyStatsRequest))
           as GetEnergyStatsRequest;
 
@@ -243,33 +258,41 @@ class EnergyHistoryRequest extends $pb.GeneratedMessage {
     EnergyPeriod? period,
   }) {
     final result = create();
-    if (deviceId != null) result.deviceId = deviceId;
-    if (from != null) result.from = from;
-    if (to != null) result.to = to;
-    if (period != null) result.period = period;
+    if (deviceId != null) {
+      result.deviceId = deviceId;
+    }
+    if (from != null) {
+      result.from = from;
+    }
+    if (to != null) {
+      result.to = to;
+    }
+    if (period != null) {
+      result.period = period;
+    }
     return result;
   }
 
   EnergyHistoryRequest._();
 
   factory EnergyHistoryRequest.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory EnergyHistoryRequest.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'EnergyHistoryRequest',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOS(1, _omitFieldNames ? '' : 'deviceId')
     ..aOM<$0.Timestamp>(2, _omitFieldNames ? '' : 'from',
-        subBuilder: $0.Timestamp.create)
+        subBuilder: $0.Timestamp.create,)
     ..aOM<$0.Timestamp>(3, _omitFieldNames ? '' : 'to',
-        subBuilder: $0.Timestamp.create)
+        subBuilder: $0.Timestamp.create,)
     ..aE<EnergyPeriod>(4, _omitFieldNames ? '' : 'period',
-        enumValues: EnergyPeriod.values)
+        enumValues: EnergyPeriod.values,)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -340,27 +363,33 @@ class EnergyHistoryResponse extends $pb.GeneratedMessage {
     $core.double? totalCost,
   }) {
     final result = create();
-    if (dataPoints != null) result.dataPoints.addAll(dataPoints);
-    if (totalConsumption != null) result.totalConsumption = totalConsumption;
-    if (totalCost != null) result.totalCost = totalCost;
+    if (dataPoints != null) {
+      result.dataPoints.addAll(dataPoints);
+    }
+    if (totalConsumption != null) {
+      result.totalConsumption = totalConsumption;
+    }
+    if (totalCost != null) {
+      result.totalCost = totalCost;
+    }
     return result;
   }
 
   EnergyHistoryResponse._();
 
   factory EnergyHistoryResponse.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory EnergyHistoryResponse.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'EnergyHistoryResponse',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..pPM<EnergyDataPoint>(1, _omitFieldNames ? '' : 'dataPoints',
-        subBuilder: EnergyDataPoint.create)
+        subBuilder: EnergyDataPoint.create,)
     ..aD(2, _omitFieldNames ? '' : 'totalConsumption')
     ..aD(3, _omitFieldNames ? '' : 'totalCost')
     ..hasRequiredFields = false;
@@ -369,7 +398,7 @@ class EnergyHistoryResponse extends $pb.GeneratedMessage {
   EnergyHistoryResponse clone() => deepCopy();
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   EnergyHistoryResponse copyWith(
-          void Function(EnergyHistoryResponse) updates) =>
+          void Function(EnergyHistoryResponse) updates,) =>
       super.copyWith((message) => updates(message as EnergyHistoryResponse))
           as EnergyHistoryResponse;
 
@@ -415,27 +444,33 @@ class EnergyDataPoint extends $pb.GeneratedMessage {
     $core.double? cost,
   }) {
     final result = create();
-    if (timestamp != null) result.timestamp = timestamp;
-    if (consumption != null) result.consumption = consumption;
-    if (cost != null) result.cost = cost;
+    if (timestamp != null) {
+      result.timestamp = timestamp;
+    }
+    if (consumption != null) {
+      result.consumption = consumption;
+    }
+    if (cost != null) {
+      result.cost = cost;
+    }
     return result;
   }
 
   EnergyDataPoint._();
 
   factory EnergyDataPoint.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory EnergyDataPoint.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'EnergyDataPoint',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOM<$0.Timestamp>(1, _omitFieldNames ? '' : 'timestamp',
-        subBuilder: $0.Timestamp.create)
+        subBuilder: $0.Timestamp.create,)
     ..aD(2, _omitFieldNames ? '' : 'consumption')
     ..aD(3, _omitFieldNames ? '' : 'cost')
     ..hasRequiredFields = false;

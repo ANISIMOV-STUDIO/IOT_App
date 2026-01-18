@@ -2,23 +2,22 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_font_sizes.dart';
-import '../breez/breez_button.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
 
 /// Ссылка для перехода между страницами авторизации
 /// Например: "Нет аккаунта? Зарегистрироваться"
 class AuthActionLink extends StatelessWidget {
-  final String text;
-  final String actionText;
-  final VoidCallback onTap;
 
   const AuthActionLink({
-    super.key,
     required this.text,
     required this.actionText,
     required this.onTap,
+    super.key,
   });
+  final String text;
+  final String actionText;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {

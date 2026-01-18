@@ -1,25 +1,25 @@
 /// Use Case: Установить время на устройстве
 library;
 
-import '../../repositories/climate_repository.dart';
-import '../usecase.dart';
+import 'package:hvac_control/domain/repositories/climate_repository.dart';
+import 'package:hvac_control/domain/usecases/usecase.dart';
 
 /// Параметры для установки времени на устройстве
 class SetDeviceTimeParams {
-  final String deviceId;
-  final DateTime time;
 
   const SetDeviceTimeParams({
     required this.deviceId,
     required this.time,
   });
+  final String deviceId;
+  final DateTime time;
 }
 
 /// Установить время на HVAC устройстве
 class SetDeviceTime extends UseCaseWithParams<void, SetDeviceTimeParams> {
-  final ClimateRepository _repository;
 
   SetDeviceTime(this._repository);
+  final ClimateRepository _repository;
 
   @override
   Future<void> call(SetDeviceTimeParams params) async {

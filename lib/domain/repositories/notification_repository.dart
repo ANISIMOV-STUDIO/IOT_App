@@ -1,7 +1,7 @@
 /// Notification Repository - Interface for notification operations
 library;
 
-import '../entities/unit_notification.dart';
+import 'package:hvac_control/domain/entities/unit_notification.dart';
 
 /// Interface for notification data access and operations
 abstract class NotificationRepository {

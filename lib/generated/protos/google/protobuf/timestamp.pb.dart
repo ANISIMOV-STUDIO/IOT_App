@@ -4,7 +4,7 @@
 
 // @dart = 3.3
 
-// ignore_for_file: annotate_overrides, camel_case_types, comment_references
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references, do_not_use_environment, prefer_constructors_over_static_methods
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: curly_braces_in_flow_control_structures
 // ignore_for_file: deprecated_member_use_from_same_package
@@ -114,18 +114,22 @@ class Timestamp extends $pb.GeneratedMessage with $mixin.TimestampMixin {
     $core.int? nanos,
   }) {
     final result = create();
-    if (seconds != null) result.seconds = seconds;
-    if (nanos != null) result.nanos = nanos;
+    if (seconds != null) {
+      result.seconds = seconds;
+    }
+    if (nanos != null) {
+      result.nanos = nanos;
+    }
     return result;
   }
 
   Timestamp._();
 
   factory Timestamp.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory Timestamp.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
@@ -133,7 +137,7 @@ class Timestamp extends $pb.GeneratedMessage with $mixin.TimestampMixin {
       package:
           const $pb.PackageName(_omitMessageNames ? '' : 'google.protobuf'),
       createEmptyInstance: create,
-      wellKnownType: $mixin.WellKnownType.timestamp)
+      wellKnownType: $mixin.WellKnownType.timestamp,)
     ..aInt64(1, _omitFieldNames ? '' : 'seconds')
     ..aI(2, _omitFieldNames ? '' : 'nanos')
     ..hasRequiredFields = false;

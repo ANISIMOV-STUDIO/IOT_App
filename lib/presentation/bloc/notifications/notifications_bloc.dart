@@ -7,23 +7,17 @@
 library;
 
 import 'dart:async';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:equatable/equatable.dart';
 
-import '../../../domain/entities/unit_notification.dart';
-import '../../../domain/usecases/usecases.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hvac_control/domain/entities/unit_notification.dart';
+import 'package:hvac_control/domain/usecases/usecases.dart';
 
 part 'notifications_event.dart';
 part 'notifications_state.dart';
 
 /// BLoC для управления уведомлениями
 class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
-  final GetNotifications _getNotifications;
-  final WatchNotifications _watchNotifications;
-  final MarkNotificationAsRead _markNotificationAsRead;
-  final DismissNotification _dismissNotification;
-
-  StreamSubscription<List<UnitNotification>>? _notificationsSubscription;
 
   NotificationsBloc({
     required GetNotifications getNotifications,
@@ -45,6 +39,12 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     on<NotificationsMarkAllAsReadRequested>(_onMarkAllAsReadRequested);
     on<NotificationsDismissRequested>(_onDismissRequested);
   }
+  final GetNotifications _getNotifications;
+  final WatchNotifications _watchNotifications;
+  final MarkNotificationAsRead _markNotificationAsRead;
+  final DismissNotification _dismissNotification;
+
+  StreamSubscription<List<UnitNotification>>? _notificationsSubscription;
 
   /// Запрос на подписку к уведомлениям
   Future<void> _onSubscriptionRequested(
@@ -172,17 +172,15 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     final previousNotifications = List<UnitNotification>.from(state.notifications);
 
     // Optimistic update - сразу обновляем UI
-    final optimisticNotifications = state.notifications.map((n) {
-      return UnitNotification(
-        id: n.id,
-        deviceId: n.deviceId,
-        title: n.title,
-        message: n.message,
-        type: n.type,
-        timestamp: n.timestamp,
-        isRead: true,
-      );
-    }).toList();
+    final optimisticNotifications = state.notifications.map((n) => UnitNotification(
+          id: n.id,
+          deviceId: n.deviceId,
+          title: n.title,
+          message: n.message,
+          type: n.type,
+          timestamp: n.timestamp,
+          isRead: true,
+        )).toList();
 
     emit(state.copyWith(notifications: optimisticNotifications));
 

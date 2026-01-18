@@ -1,22 +1,22 @@
 /// Use Case: Удалить уведомление
 library;
 
-import '../../repositories/notification_repository.dart';
-import '../usecase.dart';
+import 'package:hvac_control/domain/repositories/notification_repository.dart';
+import 'package:hvac_control/domain/usecases/usecase.dart';
 
 /// Параметры для удаления уведомления
 class DismissNotificationParams {
-  final String notificationId;
 
   const DismissNotificationParams({required this.notificationId});
+  final String notificationId;
 }
 
 /// Удалить уведомление
 class DismissNotification
     extends UseCaseWithParams<void, DismissNotificationParams> {
-  final NotificationRepository _repository;
 
   DismissNotification(this._repository);
+  final NotificationRepository _repository;
 
   @override
   Future<void> call(DismissNotificationParams params) async {

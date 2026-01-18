@@ -3,22 +3,22 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../generated/l10n/app_localizations.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
 
 // =============================================================================
 // CONSTANTS
 // =============================================================================
 
 abstract class _TimePickerConstants {
-  static const double dialogWidth = 280.0;
-  static const double wheelHeight = 150.0;
-  static const double itemExtent = 50.0;
-  static const double selectedFontSize = 32.0;
-  static const double unselectedFontSize = 20.0;
-  static const double colonFontSize = 32.0;
+  static const double dialogWidth = 280;
+  static const double wheelHeight = 150;
+  static const double itemExtent = 50;
+  static const double selectedFontSize = 32;
+  static const double unselectedFontSize = 20;
+  static const double colonFontSize = 32;
 }
 
 // =============================================================================
@@ -29,21 +29,19 @@ abstract class _TimePickerConstants {
 Future<TimeOfDay?> showBreezTimePicker({
   required BuildContext context,
   required TimeOfDay initialTime,
-}) {
-  return showDialog<TimeOfDay>(
+}) => showDialog<TimeOfDay>(
     context: context,
     builder: (context) => _BreezTimePickerDialog(initialTime: initialTime),
   );
-}
 
 // =============================================================================
 // DIALOG
 // =============================================================================
 
 class _BreezTimePickerDialog extends StatefulWidget {
-  final TimeOfDay initialTime;
 
   const _BreezTimePickerDialog({required this.initialTime});
+  final TimeOfDay initialTime;
 
   @override
   State<_BreezTimePickerDialog> createState() => _BreezTimePickerDialogState();
@@ -93,7 +91,7 @@ class _BreezTimePickerDialogState extends State<_BreezTimePickerDialog> {
       ),
       child: Container(
         width: _TimePickerConstants.dialogWidth,
-        padding: EdgeInsets.all(AppSpacing.md),
+        padding: const EdgeInsets.all(AppSpacing.md),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -106,7 +104,7 @@ class _BreezTimePickerDialogState extends State<_BreezTimePickerDialog> {
                 color: colors.textMuted,
               ),
             ),
-            SizedBox(height: AppSpacing.md),
+            const SizedBox(height: AppSpacing.md),
 
             // Time wheels
             SizedBox(
@@ -129,7 +127,7 @@ class _BreezTimePickerDialogState extends State<_BreezTimePickerDialog> {
 
                   // Colon separator
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: AppSpacing.xs),
+                    padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs),
                     child: Text(
                       ':',
                       style: TextStyle(
@@ -156,7 +154,7 @@ class _BreezTimePickerDialogState extends State<_BreezTimePickerDialog> {
               ),
             ),
 
-            SizedBox(height: AppSpacing.md),
+            const SizedBox(height: AppSpacing.md),
 
             // Buttons
             Row(
@@ -167,7 +165,7 @@ class _BreezTimePickerDialogState extends State<_BreezTimePickerDialog> {
                     onTap: _onCancel,
                   ),
                 ),
-                SizedBox(width: AppSpacing.xs),
+                const SizedBox(width: AppSpacing.xs),
                 Expanded(
                   child: _DialogButton(
                     label: l10n.confirm,
@@ -189,23 +187,22 @@ class _BreezTimePickerDialogState extends State<_BreezTimePickerDialog> {
 // =============================================================================
 
 class _TimeWheel extends StatelessWidget {
-  final FixedExtentScrollController controller;
-  final int itemCount;
-  final ValueChanged<int> onChanged;
 
   const _TimeWheel({
     required this.controller,
     required this.itemCount,
     required this.onChanged,
   });
+  final FixedExtentScrollController controller;
+  final int itemCount;
+  final ValueChanged<int> onChanged;
 
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
 
     return ShaderMask(
-      shaderCallback: (bounds) {
-        return LinearGradient(
+      shaderCallback: (bounds) => LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
@@ -215,8 +212,7 @@ class _TimeWheel extends StatelessWidget {
             colors.card,
           ],
           stops: const [0.0, 0.2, 0.8, 1.0],
-        ).createShader(bounds);
-      },
+        ).createShader(bounds),
       blendMode: BlendMode.dstOut,
       child: ListWheelScrollView.useDelegate(
         controller: controller,
@@ -227,12 +223,10 @@ class _TimeWheel extends StatelessWidget {
         onSelectedItemChanged: onChanged,
         childDelegate: ListWheelChildBuilderDelegate(
           childCount: itemCount,
-          builder: (context, index) {
-            return _WheelItem(
+          builder: (context, index) => _WheelItem(
               value: index,
               controller: controller,
-            );
-          },
+            ),
         ),
       ),
     );
@@ -240,13 +234,13 @@ class _TimeWheel extends StatelessWidget {
 }
 
 class _WheelItem extends StatelessWidget {
-  final int value;
-  final FixedExtentScrollController controller;
 
   const _WheelItem({
     required this.value,
     required this.controller,
   });
+  final int value;
+  final FixedExtentScrollController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -289,15 +283,15 @@ class _WheelItem extends StatelessWidget {
 // =============================================================================
 
 class _DialogButton extends StatelessWidget {
-  final String label;
-  final VoidCallback onTap;
-  final bool isPrimary;
 
   const _DialogButton({
     required this.label,
     required this.onTap,
     this.isPrimary = false,
   });
+  final String label;
+  final VoidCallback onTap;
+  final bool isPrimary;
 
   @override
   Widget build(BuildContext context) {
@@ -309,7 +303,7 @@ class _DialogButton extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(AppRadius.button),
         child: Container(
-          padding: EdgeInsets.symmetric(vertical: AppSpacing.sm),
+          padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
           decoration: BoxDecoration(
             color: isPrimary ? AppColors.accent : colors.buttonBg.withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(AppRadius.button),

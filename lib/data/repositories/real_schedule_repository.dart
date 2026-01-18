@@ -2,33 +2,34 @@
 library;
 
 import 'dart:async';
-import '../../domain/entities/schedule_entry.dart';
-import '../../domain/repositories/schedule_repository.dart';
-import '../api/platform/api_client.dart';
-import '../api/http/clients/schedule_http_client.dart';
+
+import 'package:hvac_control/data/api/http/clients/schedule_http_client.dart';
+import 'package:hvac_control/data/api/platform/api_client.dart';
+import 'package:hvac_control/domain/entities/schedule_entry.dart';
+import 'package:hvac_control/domain/repositories/schedule_repository.dart';
 
 class RealScheduleRepository implements ScheduleRepository {
-  final ApiClient _apiClient;
-  late final ScheduleHttpClient _httpClient;
-
-  final _scheduleController = StreamController<List<ScheduleEntry>>.broadcast();
 
   RealScheduleRepository(this._apiClient) {
     _httpClient = ScheduleHttpClient(_apiClient);
   }
+  final ApiClient _apiClient;
+  late final ScheduleHttpClient _httpClient;
+
+  final _scheduleController = StreamController<List<ScheduleEntry>>.broadcast();
 
   @override
   Future<List<ScheduleEntry>> getSchedule(String deviceId) async {
     final jsonSchedules = await _httpClient.getSchedules(deviceId);
 
     // Если API вернул пустой массив или неправильный формат - вернуть пустой список
-    if (jsonSchedules.isEmpty) return [];
+    if (jsonSchedules.isEmpty) {
+      return [];
+    }
 
-    return jsonSchedules.where((json) {
+    return jsonSchedules.where((json) =>
       // Фильтруем только валидные записи расписания
-      return json['day'] != null;
-    }).map((json) {
-      return ScheduleEntry(
+      json['day'] != null).map((json) => ScheduleEntry(
         id: json['id'] as String? ?? '',
         deviceId: json['deviceId'] as String? ?? deviceId,
         day: json['day'] as String? ?? 'monday',
@@ -37,15 +38,14 @@ class RealScheduleRepository implements ScheduleRepository {
         tempDay: (json['tempDay'] as num?)?.toInt() ?? 22,
         tempNight: (json['tempNight'] as num?)?.toInt() ?? 20,
         isActive: json['isActive'] as bool? ?? json['enabled'] as bool? ?? true,
-      );
-    }).toList();
+      )).toList();
   }
 
   @override
   Stream<List<ScheduleEntry>> watchSchedule(String deviceId) {
     getSchedule(deviceId).then(
       _scheduleController.add,
-      onError: (error) {
+      onError: (Object error) {
         // Логировать ошибку и добавить в stream
         _scheduleController.addError(error);
       },
@@ -106,7 +106,7 @@ class RealScheduleRepository implements ScheduleRepository {
   }
 
   @override
-  Future<ScheduleEntry> toggleEntry(String entryId, bool isActive) async {
+  Future<ScheduleEntry> toggleEntry(String entryId, {required bool isActive}) async {
     // Get current entry from all schedules
     final schedule = await getSchedule('');
     final entry = schedule.firstWhere(
@@ -118,8 +118,8 @@ class RealScheduleRepository implements ScheduleRepository {
   }
 
   @override
-  Future<void> setScheduleEnabled(String deviceId, bool enabled) async {
-    await _httpClient.setScheduleEnabled(deviceId, enabled);
+  Future<void> setScheduleEnabled(String deviceId, {required bool enabled}) async {
+    await _httpClient.setScheduleEnabled(deviceId, enabled: enabled);
   }
 
   void dispose() {

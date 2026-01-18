@@ -10,9 +10,10 @@
 /// - Легкое добавление новых языков
 library;
 
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:ui' as ui;
 
 /// Поддерживаемые языки приложения.
 ///
@@ -43,9 +44,13 @@ enum AppLanguage {
 
   /// Найти язык по коду, возвращает null если не найден
   static AppLanguage? fromCode(String? code) {
-    if (code == null) return null;
+    if (code == null) {
+      return null;
+    }
     for (final lang in AppLanguage.values) {
-      if (lang.code == code) return lang;
+      if (lang.code == code) {
+        return lang;
+      }
     }
     return null;
   }
@@ -58,15 +63,15 @@ enum AppLanguage {
 ///
 /// Observer Pattern - реактивные обновления UI через ChangeNotifier.
 /// Strategy Pattern - стратегия выбора локали (явный выбор или системный).
-class LanguageService extends ChangeNotifier {
-  static const String _localeKey = 'app_locale';
-
-  final SharedPreferences _prefs;
-  Locale? _currentLocale; // null = использовать системный
+class LanguageService extends ChangeNotifier { // null = использовать системный
 
   LanguageService(this._prefs) {
     _loadSavedLocale();
   }
+  static const String _localeKey = 'app_locale';
+
+  final SharedPreferences _prefs;
+  Locale? _currentLocale;
 
   /// Инициализация по умолчанию - ничего не делаем, используем системный
   Future<void> initializeDefaults() async {

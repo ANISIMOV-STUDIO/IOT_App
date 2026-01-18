@@ -3,8 +3,8 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hvac_control/presentation/widgets/breez/breez_icon_button.dart';
 import 'package:hvac_control/core/theme/app_colors.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_icon_button.dart';
 
 import 'test_wrapper.dart';
 
@@ -24,7 +24,7 @@ void main() {
     });
 
     testWidgets('calls onTap when pressed', (WidgetTester tester) async {
-      bool tapped = false;
+      var tapped = false;
 
       await tester.pumpWidget(
         wrapWithBreezTheme(
@@ -42,13 +42,12 @@ void main() {
     });
 
     testWidgets('does not call onTap when disabled', (WidgetTester tester) async {
-      bool tapped = false;
+      const tapped = false;
 
       await tester.pumpWidget(
         wrapWithBreezTheme(
-          BreezIconButton(
+          const BreezIconButton(
             icon: Icons.close,
-            onTap: null,
           ),
         ),
       );
@@ -150,7 +149,7 @@ void main() {
     });
 
     testWidgets('calls onTap when pressed', (WidgetTester tester) async {
-      bool tapped = false;
+      var tapped = false;
 
       await tester.pumpWidget(
         wrapWithBreezTheme(
@@ -197,7 +196,7 @@ void main() {
     });
 
     testWidgets('calls onTap when pressed', (WidgetTester tester) async {
-      bool tapped = false;
+      var tapped = false;
 
       await tester.pumpWidget(
         wrapWithBreezTheme(

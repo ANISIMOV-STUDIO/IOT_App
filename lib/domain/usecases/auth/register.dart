@@ -1,16 +1,11 @@
 /// Use Case: Регистрация пользователя
 library;
 
-import '../usecase.dart';
-import 'login.dart';
+import 'package:hvac_control/domain/usecases/auth/login.dart';
+import 'package:hvac_control/domain/usecases/usecase.dart';
 
 /// Параметры для регистрации
 class RegisterParams {
-  final String email;
-  final String password;
-  final String firstName;
-  final String lastName;
-  final bool dataProcessingConsent;
 
   const RegisterParams({
     required this.email,
@@ -19,13 +14,18 @@ class RegisterParams {
     required this.lastName,
     required this.dataProcessingConsent,
   });
+  final String email;
+  final String password;
+  final String firstName;
+  final String lastName;
+  final bool dataProcessingConsent;
 }
 
 /// Зарегистрировать нового пользователя
 class Register extends UseCaseWithParams<void, RegisterParams> {
-  final AuthRepository _repository;
 
   Register(this._repository);
+  final AuthRepository _repository;
 
   @override
   Future<void> call(RegisterParams params) async {

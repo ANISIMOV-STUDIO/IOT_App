@@ -2,11 +2,11 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../generated/l10n/app_localizations.dart';
-import 'breez_card.dart';
-import 'mode_grid_item.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
+import 'package:hvac_control/presentation/widgets/breez/mode_grid_item.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -15,7 +15,7 @@ import 'mode_grid_item.dart';
 /// Константы для ModeGrid
 abstract class _ModeGridConstants {
   static const double minAspectRatio = 0.8;
-  static const double maxAspectRatio = 2.0;
+  static const double maxAspectRatio = 2;
   static const int defaultColumns = 4;
 }
 
@@ -42,22 +42,21 @@ List<OperatingModeData> getOperatingModes(AppLocalizations l10n) => [
 ///
 /// По умолчанию 4 колонки x 2 ряда для 8 режимов.
 class ModeGrid extends StatelessWidget {
-  final String selectedMode;
-  final ValueChanged<String>? onModeChanged;
-  final bool isEnabled;
-  final List<OperatingModeData>? modes;
-  final int columns;
-  final bool showCard;
 
   const ModeGrid({
-    super.key,
-    required this.selectedMode,
+    required this.selectedMode, super.key,
     this.onModeChanged,
     this.isEnabled = true,
     this.modes,
     this.columns = _ModeGridConstants.defaultColumns,
     this.showCard = true,
   });
+  final String selectedMode;
+  final ValueChanged<String>? onModeChanged;
+  final bool isEnabled;
+  final List<OperatingModeData>? modes;
+  final int columns;
+  final bool showCard;
 
   @override
   Widget build(BuildContext context) {

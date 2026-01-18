@@ -1,31 +1,31 @@
 /// Use Case: Вход пользователя
 library;
 
-import '../../entities/user.dart';
-import '../usecase.dart';
+import 'package:hvac_control/domain/entities/user.dart';
+import 'package:hvac_control/domain/usecases/usecase.dart';
 
 /// Параметры для входа
 class LoginParams {
-  final String email;
-  final String password;
 
   const LoginParams({
     required this.email,
     required this.password,
   });
+  final String email;
+  final String password;
 }
 
 /// Результат входа
 class LoginResult {
-  final User user;
-  final String accessToken;
-  final String refreshToken;
 
   const LoginResult({
     required this.user,
     required this.accessToken,
     required this.refreshToken,
   });
+  final User user;
+  final String accessToken;
+  final String refreshToken;
 }
 
 /// Абстракция репозитория авторизации для Use Case
@@ -47,12 +47,11 @@ abstract class AuthRepository {
 
 /// Выполнить вход пользователя
 class Login extends UseCaseWithParams<LoginResult, LoginParams> {
-  final AuthRepository _repository;
 
   Login(this._repository);
+  final AuthRepository _repository;
 
   @override
-  Future<LoginResult> call(LoginParams params) async {
-    return _repository.login(params.email, params.password);
-  }
+  Future<LoginResult> call(LoginParams params) async =>
+      _repository.login(params.email, params.password);
 }

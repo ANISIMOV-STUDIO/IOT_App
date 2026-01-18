@@ -6,20 +6,17 @@
 /// - Операции управления требуют сети (выбрасывают OfflineException)
 library;
 
-import '../../core/error/offline_exception.dart';
-import '../../core/services/cache_service.dart';
-import '../../core/services/connectivity_service.dart';
-import '../../domain/entities/alarm_info.dart';
-import '../../domain/entities/climate.dart';
-import '../../domain/entities/hvac_device.dart';
-import '../../domain/entities/device_full_state.dart';
-import '../../domain/repositories/climate_repository.dart';
+import 'package:hvac_control/core/error/offline_exception.dart';
+import 'package:hvac_control/core/services/cache_service.dart';
+import 'package:hvac_control/core/services/connectivity_service.dart';
+import 'package:hvac_control/domain/entities/alarm_info.dart';
+import 'package:hvac_control/domain/entities/climate.dart';
+import 'package:hvac_control/domain/entities/device_full_state.dart';
+import 'package:hvac_control/domain/entities/hvac_device.dart';
+import 'package:hvac_control/domain/repositories/climate_repository.dart';
 
 /// Кеширующий декоратор для ClimateRepository
 class CachedClimateRepository implements ClimateRepository {
-  final ClimateRepository _inner;
-  final CacheService _cacheService;
-  final ConnectivityService _connectivity;
 
   CachedClimateRepository({
     required ClimateRepository inner,
@@ -28,6 +25,9 @@ class CachedClimateRepository implements ClimateRepository {
   })  : _inner = inner,
         _cacheService = cacheService,
         _connectivity = connectivity;
+  final ClimateRepository _inner;
+  final CacheService _cacheService;
+  final ConnectivityService _connectivity;
 
   // ============================================
   // HVAC DEVICES (read-only, кешируемые)
@@ -43,14 +43,18 @@ class CachedClimateRepository implements ClimateRepository {
       } catch (e) {
         // При ошибке сети — пробуем кеш
         final cached = _cacheService.getCachedHvacDevices();
-        if (cached != null) return cached;
+        if (cached != null) {
+          return cached;
+        }
         rethrow;
       }
     }
 
     // Offline — возвращаем из кеша
     final cached = _cacheService.getCachedHvacDevices();
-    if (cached != null) return cached;
+    if (cached != null) {
+      return cached;
+    }
 
     throw const OfflineException(
       'Нет сохранённых устройств',
@@ -59,10 +63,9 @@ class CachedClimateRepository implements ClimateRepository {
   }
 
   @override
-  Stream<List<HvacDevice>> watchHvacDevices() {
+  Stream<List<HvacDevice>> watchHvacDevices() =>
     // Стрим передаём напрямую — он сам обработает подключение
-    return _inner.watchHvacDevices();
-  }
+    _inner.watchHvacDevices();
 
   @override
   void setSelectedDevice(String deviceId) {
@@ -82,13 +85,17 @@ class CachedClimateRepository implements ClimateRepository {
         return state;
       } catch (e) {
         final cached = _cacheService.getCachedClimateState(deviceId: deviceId);
-        if (cached != null) return cached;
+        if (cached != null) {
+          return cached;
+        }
         rethrow;
       }
     }
 
     final cached = _cacheService.getCachedClimateState(deviceId: deviceId);
-    if (cached != null) return cached;
+    if (cached != null) {
+      return cached;
+    }
 
     throw OfflineException(
       'Нет сохранённого состояния для $deviceId',
@@ -97,9 +104,8 @@ class CachedClimateRepository implements ClimateRepository {
   }
 
   @override
-  Stream<ClimateState> watchDeviceClimate(String deviceId) {
-    return _inner.watchDeviceClimate(deviceId);
-  }
+  Stream<ClimateState> watchDeviceClimate(String deviceId) =>
+    _inner.watchDeviceClimate(deviceId);
 
   @override
   Future<ClimateState> getCurrentState() async {
@@ -110,13 +116,17 @@ class CachedClimateRepository implements ClimateRepository {
         return state;
       } catch (e) {
         final cached = _cacheService.getCachedClimateState();
-        if (cached != null) return cached;
+        if (cached != null) {
+          return cached;
+        }
         rethrow;
       }
     }
 
     final cached = _cacheService.getCachedClimateState();
-    if (cached != null) return cached;
+    if (cached != null) {
+      return cached;
+    }
 
     throw const OfflineException(
       'Нет сохранённого состояния климата',
@@ -125,18 +135,16 @@ class CachedClimateRepository implements ClimateRepository {
   }
 
   @override
-  Stream<ClimateState> watchClimate() {
-    return _inner.watchClimate();
-  }
+  Stream<ClimateState> watchClimate() => _inner.watchClimate();
 
   // ============================================
   // CONTROL OPERATIONS (требуют сети)
   // ============================================
 
   @override
-  Future<ClimateState> setPower(bool isOn, {String? deviceId}) async {
+  Future<ClimateState> setPower({required bool isOn, String? deviceId}) async {
     _ensureOnline('setPower');
-    final result = await _inner.setPower(isOn, deviceId: deviceId);
+    final result = await _inner.setPower(isOn: isOn, deviceId: deviceId);
     await _cacheService.cacheClimateState(result, deviceId: deviceId);
     return result;
   }
@@ -246,17 +254,15 @@ class CachedClimateRepository implements ClimateRepository {
   // ============================================
 
   @override
-  Future<DeviceFullState> getDeviceFullState(String deviceId) async {
+  Future<DeviceFullState> getDeviceFullState(String deviceId) =>
     // Полное состояние пока не кешируем — делегируем во inner
     // TODO: Добавить кеширование при необходимости
-    return await _inner.getDeviceFullState(deviceId);
-  }
+    _inner.getDeviceFullState(deviceId);
 
   @override
-  Stream<DeviceFullState> watchDeviceFullState(String deviceId) {
+  Stream<DeviceFullState> watchDeviceFullState(String deviceId) =>
     // Real-time stream — делегируем во inner (SignalR)
-    return _inner.watchDeviceFullState(deviceId);
-  }
+    _inner.watchDeviceFullState(deviceId);
 
   // ============================================
   // ALARM HISTORY
@@ -266,10 +272,9 @@ class CachedClimateRepository implements ClimateRepository {
   Future<List<AlarmHistory>> getAlarmHistory(
     String deviceId, {
     int limit = 100,
-  }) async {
+  }) =>
     // История аварий — делегируем во inner (требует сети)
-    return await _inner.getAlarmHistory(deviceId, limit: limit);
-  }
+    _inner.getAlarmHistory(deviceId, limit: limit);
 
   // ============================================
   // DEVICE TIME SETTING

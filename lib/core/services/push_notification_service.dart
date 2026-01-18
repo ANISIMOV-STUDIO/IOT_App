@@ -5,7 +5,12 @@
 /// - Запрос разрешений на уведомления
 /// - Получение и обновление FCM токена
 /// - Обработку входящих уведомлений
+// ignore_for_file: do_not_use_environment
+
 library;
+
+// Сервис используется через DI (GetIt), analyzer не может отследить использование
+// ignore_for_file: unreachable_from_main
 
 import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
@@ -17,6 +22,9 @@ typedef NotificationCallback = void Function(RemoteMessage message);
 
 /// Сервис управления push уведомлениями
 class PushNotificationService {
+  /// Конструктор с возможностью инжекции (для тестов)
+  PushNotificationService([FirebaseMessaging? messaging])
+      : _messaging = messaging ?? FirebaseMessaging.instance;
   final FirebaseMessaging _messaging;
 
   /// Контроллер для токена FCM
@@ -31,18 +39,11 @@ class PushNotificationService {
   /// Инициализирован ли сервис
   bool _initialized = false;
 
-  /// Конструктор с возможностью инжекции (для тестов)
-  PushNotificationService([FirebaseMessaging? messaging])
-      : _messaging = messaging ?? FirebaseMessaging.instance;
-
   /// Текущий FCM токен
   String? get token => _currentToken;
 
   /// Stream изменений токена
   Stream<String?> get onTokenRefresh => _tokenController.stream;
-
-  /// Stream входящих уведомлений (foreground)
-  Stream<RemoteMessage> get onMessage => _messageController.stream;
 
   /// Инициализирован ли сервис
   bool get isInitialized => _initialized;
@@ -51,7 +52,9 @@ class PushNotificationService {
   ///
   /// Должен быть вызван после Firebase.initializeApp()
   Future<void> initialize() async {
-    if (_initialized) return;
+    if (_initialized) {
+      return;
+    }
 
     try {
       // Запрашиваем разрешения
@@ -88,23 +91,8 @@ class PushNotificationService {
   }
 
   /// Запросить разрешения на уведомления
-  Future<NotificationSettings> requestPermission() async {
-    return _messaging.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
-    );
-  }
-
-  /// Получить текущий токен
-  Future<String?> getToken() async {
-    if (_currentToken != null) return _currentToken;
-    return _getToken();
-  }
+  Future<NotificationSettings> requestPermission() async =>
+      _messaging.requestPermission();
 
   /// Внутренний метод получения токена
   Future<String?> _getToken() async {
@@ -139,7 +127,6 @@ class PushNotificationService {
     // Этот ключ нужно получить из Firebase Console после создания проекта
     const vapidKey = String.fromEnvironment(
       'FIREBASE_VAPID_KEY',
-      defaultValue: '',
     );
     return vapidKey.isNotEmpty ? vapidKey : null;
   }
@@ -153,7 +140,8 @@ class PushNotificationService {
 
   /// Обработка foreground сообщения
   void _handleForegroundMessage(RemoteMessage message) {
-    debugPrint('PushNotificationService: Foreground сообщение: ${message.notification?.title}');
+    debugPrint(
+        'PushNotificationService: Foreground сообщение: ${message.notification?.title}');
     _messageController.add(message);
   }
 

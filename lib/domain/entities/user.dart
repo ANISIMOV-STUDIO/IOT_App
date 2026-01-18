@@ -8,6 +8,15 @@ import 'package:equatable/equatable.dart';
 
 /// Пользователь системы
 class User extends Equatable {
+
+  const User({
+    required this.id,
+    required this.email,
+    required this.firstName,
+    required this.lastName,
+    required this.role,
+    required this.emailConfirmed,
+  });
   /// Уникальный идентификатор
   final String id;
 
@@ -26,15 +35,6 @@ class User extends Equatable {
   /// Email подтверждён
   final bool emailConfirmed;
 
-  const User({
-    required this.id,
-    required this.email,
-    required this.firstName,
-    required this.lastName,
-    required this.role,
-    required this.emailConfirmed,
-  });
-
   /// Полное имя
   String get fullName => '$firstName $lastName';
 
@@ -46,8 +46,7 @@ class User extends Equatable {
     String? lastName,
     String? role,
     bool? emailConfirmed,
-  }) {
-    return User(
+  }) => User(
       id: id ?? this.id,
       email: email ?? this.email,
       firstName: firstName ?? this.firstName,
@@ -55,7 +54,6 @@ class User extends Equatable {
       role: role ?? this.role,
       emailConfirmed: emailConfirmed ?? this.emailConfirmed,
     );
-  }
 
   @override
   List<Object?> get props => [id, email, firstName, lastName, role, emailConfirmed];

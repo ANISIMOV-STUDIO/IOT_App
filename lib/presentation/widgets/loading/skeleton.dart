@@ -5,27 +5,15 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../core/theme/app_font_sizes.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
 
 /// Базовый skeleton box
 ///
 /// Простой прямоугольник с shimmer эффектом для создания skeleton UI.
 /// Может быть использован как строительный блок для более сложных skeleton виджетов.
 class SkeletonBox extends StatelessWidget {
-  /// Ширина skeleton box
-  final double? width;
-
-  /// Высота skeleton box
-  final double? height;
-
-  /// Радиус скругления углов
-  final double borderRadius;
-
-  /// Форма (прямоугольник или круг)
-  final BoxShape shape;
 
   const SkeletonBox({
     super.key,
@@ -38,13 +26,22 @@ class SkeletonBox extends StatelessWidget {
   /// Фабричный метод для создания круглого skeleton
   factory SkeletonBox.circle({
     required double size,
-  }) {
-    return SkeletonBox(
+  }) => SkeletonBox(
       width: size,
       height: size,
       shape: BoxShape.circle,
     );
-  }
+  /// Ширина skeleton box
+  final double? width;
+
+  /// Высота skeleton box
+  final double? height;
+
+  /// Радиус скругления углов
+  final double borderRadius;
+
+  /// Форма (прямоугольник или круг)
+  final BoxShape shape;
 
   @override
   Widget build(BuildContext context) {
@@ -76,8 +73,7 @@ class SkeletonDeviceCard extends StatelessWidget {
   const SkeletonDeviceCard({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(BuildContext context) => Container(
       padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
         color: BreezColors.of(context).card,
@@ -122,7 +118,6 @@ class SkeletonDeviceCard extends StatelessWidget {
         ],
       ),
     );
-  }
 }
 
 /// Skeleton для карточки статистики
@@ -132,8 +127,7 @@ class SkeletonStatCard extends StatelessWidget {
   const SkeletonStatCard({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(BuildContext context) => Container(
       padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
         color: BreezColors.of(context).card,
@@ -174,24 +168,22 @@ class SkeletonStatCard extends StatelessWidget {
         ],
       ),
     );
-  }
 }
 
 /// Skeleton для графика
 ///
 /// Имитирует структуру графика с заголовком и областью построения.
 class SkeletonGraph extends StatelessWidget {
-  /// Высота графика
-  final double height;
 
   const SkeletonGraph({
     super.key,
     this.height = 300,
   });
+  /// Высота графика
+  final double height;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(BuildContext context) => Container(
       height: height,
       padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
@@ -221,13 +213,35 @@ class SkeletonGraph extends StatelessWidget {
         ],
       ),
     );
-  }
 }
 
 /// Skeleton для списка элементов
 ///
 /// Создает список из нескольких skeleton элементов заданного типа.
 class SkeletonList extends StatelessWidget {
+
+  const SkeletonList({
+    required this.itemCount, required this.itemBuilder, super.key,
+    this.separator,
+  });
+
+  /// Фабричный метод для создания списка карточек устройств
+  factory SkeletonList.devices({
+    int count = 3,
+  }) => SkeletonList(
+      itemCount: count,
+      itemBuilder: (context, index) => const SkeletonDeviceCard(),
+      separator: const SizedBox(height: AppSpacing.md),
+    );
+
+  /// Фабричный метод для создания сетки карточек статистики
+  factory SkeletonList.stats({
+    int count = 3,
+  }) => SkeletonList(
+      itemCount: count,
+      itemBuilder: (context, index) => const SkeletonStatCard(),
+      separator: const SizedBox(width: AppSpacing.lg),
+    );
   /// Количество skeleton элементов
   final int itemCount;
 
@@ -237,38 +251,8 @@ class SkeletonList extends StatelessWidget {
   /// Разделитель между элементами
   final Widget? separator;
 
-  const SkeletonList({
-    super.key,
-    required this.itemCount,
-    required this.itemBuilder,
-    this.separator,
-  });
-
-  /// Фабричный метод для создания списка карточек устройств
-  factory SkeletonList.devices({
-    int count = 3,
-  }) {
-    return SkeletonList(
-      itemCount: count,
-      itemBuilder: (context, index) => const SkeletonDeviceCard(),
-      separator: const SizedBox(height: AppSpacing.md),
-    );
-  }
-
-  /// Фабричный метод для создания сетки карточек статистики
-  factory SkeletonList.stats({
-    int count = 3,
-  }) {
-    return SkeletonList(
-      itemCount: count,
-      itemBuilder: (context, index) => const SkeletonStatCard(),
-      separator: const SizedBox(width: AppSpacing.lg),
-    );
-  }
-
   @override
-  Widget build(BuildContext context) {
-    return ListView.separated(
+  Widget build(BuildContext context) => ListView.separated(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: itemCount,
@@ -276,13 +260,32 @@ class SkeletonList extends StatelessWidget {
           separator ?? const SizedBox(height: AppSpacing.md),
       itemBuilder: itemBuilder,
     );
-  }
 }
 
 /// Skeleton для текстовой строки
 ///
 /// Имитирует одну или несколько строк текста с учетом выравнивания и ширины.
 class SkeletonText extends StatelessWidget {
+
+  const SkeletonText({
+    super.key,
+    this.lines = 1,
+    this.lineHeight = 12,
+    this.lastLineWidth = 0.7,
+    this.spacing = 8,
+  });
+
+  /// Фабричный метод для заголовка
+  factory SkeletonText.heading() => const SkeletonText(
+      lineHeight: 20,
+    );
+
+  /// Фабричный метод для параграфа
+  factory SkeletonText.paragraph({int lines = 3}) => SkeletonText(
+      lines: lines,
+      lineHeight: 14,
+      lastLineWidth: 0.6,
+    );
   /// Количество строк
   final int lines;
 
@@ -295,35 +298,8 @@ class SkeletonText extends StatelessWidget {
   /// Расстояние между строками
   final double spacing;
 
-  const SkeletonText({
-    super.key,
-    this.lines = 1,
-    this.lineHeight = 12,
-    this.lastLineWidth = 0.7,
-    this.spacing = 8,
-  });
-
-  /// Фабричный метод для заголовка
-  factory SkeletonText.heading() {
-    return const SkeletonText(
-      lines: 1,
-      lineHeight: 20,
-    );
-  }
-
-  /// Фабричный метод для параграфа
-  factory SkeletonText.paragraph({int lines = 3}) {
-    return SkeletonText(
-      lines: lines,
-      lineHeight: 14,
-      lastLineWidth: 0.6,
-      spacing: 8,
-    );
-  }
-
   @override
-  Widget build(BuildContext context) {
-    return Column(
+  Widget build(BuildContext context) => Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: List.generate(lines, (index) {
         final isLast = index == lines - 1;
@@ -347,7 +323,6 @@ class SkeletonText extends StatelessWidget {
         );
       }),
     );
-  }
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -359,18 +334,15 @@ class SkeletonText extends StatelessWidget {
 /// Создаёт анимированный градиент, скользящий по child виджету.
 /// Используется внутри SkeletonBox для создания loading эффекта.
 class Shimmer extends StatefulWidget {
+
+  const Shimmer({
+    required this.child, required this.baseColor, required this.highlightColor, super.key,
+    this.duration = const Duration(milliseconds: 1500),
+  });
   final Widget child;
   final Color baseColor;
   final Color highlightColor;
   final Duration duration;
-
-  const Shimmer({
-    super.key,
-    required this.child,
-    required this.baseColor,
-    required this.highlightColor,
-    this.duration = const Duration(milliseconds: 1500),
-  });
 
   @override
   State<Shimmer> createState() => _ShimmerState();
@@ -395,28 +367,22 @@ class _ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
+  Widget build(BuildContext context) => AnimatedBuilder(
       animation: _controller,
-      builder: (context, child) {
-        return ShaderMask(
+      builder: (context, child) => ShaderMask(
           blendMode: BlendMode.srcATop,
-          shaderCallback: (bounds) {
-            return LinearGradient(
+          shaderCallback: (bounds) => LinearGradient(
               colors: [
                 widget.baseColor,
                 widget.highlightColor,
                 widget.baseColor,
               ],
               stops: const [0.0, 0.5, 1.0],
-              begin: Alignment(-1.0 + 2 * _controller.value, 0.0),
-              end: Alignment(1.0 + 2 * _controller.value, 0.0),
-            ).createShader(bounds);
-          },
+              begin: Alignment(-1.0 + 2 * _controller.value, 0),
+              end: Alignment(1.0 + 2 * _controller.value, 0),
+            ).createShader(bounds),
           child: child,
-        );
-      },
+        ),
       child: widget.child,
     );
-  }
 }

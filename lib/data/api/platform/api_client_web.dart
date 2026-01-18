@@ -3,41 +3,39 @@ library;
 
 import 'package:grpc/grpc.dart';
 import 'package:http/http.dart' as http;
-import '../../../core/services/auth_storage_service.dart';
-import '../../../core/logging/api_logger.dart';
-import '../../../core/config/api_config.dart';
-import '../../services/auth_service.dart';
-import '../http/interceptors/auth_http_interceptor.dart';
-import 'api_client.dart';
+import 'package:hvac_control/core/config/api_config.dart';
+import 'package:hvac_control/core/logging/api_logger.dart';
+import 'package:hvac_control/core/services/auth_storage_service.dart';
+import 'package:hvac_control/data/api/http/interceptors/auth_http_interceptor.dart';
+import 'package:hvac_control/data/api/platform/api_client.dart';
+import 'package:hvac_control/data/services/auth_service.dart';
 
 class ApiClientWeb implements ApiClient {
+
+  ApiClientWeb(this._authStorage, this._authService);
   final AuthStorageService _authStorage;
   final AuthService _authService;
   http.Client? _httpClient;
-
-  ApiClientWeb(this._authStorage, this._authService);
 @override  String get baseUrl => ApiConfig.httpUrl;
 
   @override
-  ClientChannel? getGrpcChannel() {
-    // gRPC не поддерживается на web
-    return null;
-  }
+  // gRPC не поддерживается на web
+  ClientChannel? getGrpcChannel() => null;
 
   @override
-  http.Client getHttpClient() {
-    return _httpClient ??= AuthHttpInterceptor(
+  http.Client getHttpClient() => _httpClient ??= AuthHttpInterceptor(
       http.Client(),
       _authStorage,
       _authService,
     );
-  }
 
   @override
   Future<String?> getAuthToken() async {
     // 1. Проверяем наличие токена
     final hasToken = await _authStorage.hasToken();
-    if (!hasToken) return null;
+    if (!hasToken) {
+      return null;
+    }
 
     // 2. Проверяем истек ли токен
     if (await _authStorage.isAccessTokenExpired()) {
@@ -56,7 +54,7 @@ class ApiClientWeb implements ApiClient {
     }
 
     // 4. Возвращаем валидный токен
-    return await _authStorage.getToken();
+    return _authStorage.getToken();
   }
 
   @override
@@ -69,6 +67,4 @@ class ApiClientWeb implements ApiClient {
 ApiClient createPlatformApiClient(
   AuthStorageService authStorage,
   AuthService authService,
-) {
-  return ApiClientWeb(authStorage, authService);
-}
+) => ApiClientWeb(authStorage, authService);

@@ -2,10 +2,9 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../theme/app_theme.dart';
-import '../theme/app_font_sizes.dart';
-import '../theme/app_radius.dart';
-import '../theme/spacing.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
 
 /// Вспомогательные функции для показа SnackBar с единым стилем
 class SnackBarUtils {

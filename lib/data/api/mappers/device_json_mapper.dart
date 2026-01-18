@@ -4,17 +4,16 @@
 /// Не содержит Flutter зависимостей - только Dart.
 library;
 
-import '../../../domain/entities/hvac_device.dart';
-import '../../../domain/entities/climate.dart';
-import '../../../domain/entities/alarm_info.dart';
-import '../../../domain/entities/mode_settings.dart';
-import '../../../domain/entities/device_full_state.dart';
-import '../../../domain/entities/sensor_history.dart';
+import 'package:hvac_control/domain/entities/alarm_info.dart';
+import 'package:hvac_control/domain/entities/climate.dart';
+import 'package:hvac_control/domain/entities/device_full_state.dart';
+import 'package:hvac_control/domain/entities/hvac_device.dart';
+import 'package:hvac_control/domain/entities/mode_settings.dart';
+import 'package:hvac_control/domain/entities/sensor_history.dart';
 
 class DeviceJsonMapper {
   /// JSON → Domain HvacDevice
-  static HvacDevice hvacDeviceFromJson(Map<String, dynamic> json) {
-    return HvacDevice(
+  static HvacDevice hvacDeviceFromJson(Map<String, dynamic> json) => HvacDevice(
       id: json['id'] as String,
       name: json['name'] as String? ?? 'Unknown Device',
       brand: json['brand'] as String? ?? 'ZILON',
@@ -22,11 +21,12 @@ class DeviceJsonMapper {
       isOnline: json['isOnline'] as bool? ?? true,
       isActive: json['running'] as bool? ?? false, // running = фактически работает
     );
-  }
 
   /// Преобразование строки типа в enum
   static HvacDeviceType _stringToDeviceType(String? type) {
-    if (type == null) return HvacDeviceType.ventilation;
+    if (type == null) {
+      return HvacDeviceType.ventilation;
+    }
 
     switch (type.toLowerCase()) {
       case 'ventilation':
@@ -45,8 +45,7 @@ class DeviceJsonMapper {
   }
 
   /// JSON → Domain ClimateState
-  static ClimateState climateStateFromJson(Map<String, dynamic> json) {
-    return ClimateState(
+  static ClimateState climateStateFromJson(Map<String, dynamic> json) => ClimateState(
       roomId: json['id'] as String? ?? json['deviceId'] as String,
       deviceName: json['name'] as String? ?? 'Unknown Device',
       currentTemperature:
@@ -65,13 +64,14 @@ class DeviceJsonMapper {
       pollutantsAqi: json['pollutantsAqi'] as int? ?? 50,
       isOn: json['running'] as bool? ?? false, // running = device is on
     );
-  }
 
   /// Конвертирует имя режима от бэкенда в snake_case для API
   /// Backend: "Basic", "Intensive", "MaxPerformance"
   /// API: "basic", "intensive", "max_performance"
   static String _modeToOperatingMode(String? mode) {
-    if (mode == null || mode.isEmpty) return 'basic';
+    if (mode == null || mode.isEmpty) {
+      return 'basic';
+    }
     
     final lower = mode.toLowerCase();
     return switch (lower) {
@@ -90,7 +90,9 @@ class DeviceJsonMapper {
 
   /// String mode → ClimateMode enum
   static ClimateMode _stringToClimateMode(String? mode) {
-    if (mode == null) return ClimateMode.auto;
+    if (mode == null) {
+      return ClimateMode.auto;
+    }
 
     switch (mode.toLowerCase()) {
       case 'heat':
@@ -134,7 +136,9 @@ class DeviceJsonMapper {
 
   /// String air quality → AirQualityLevel enum
   static AirQualityLevel _stringToAirQuality(String? quality) {
-    if (quality == null) return AirQualityLevel.good;
+    if (quality == null) {
+      return AirQualityLevel.good;
+    }
 
     switch (quality.toLowerCase()) {
       case 'excellent':
@@ -153,30 +157,36 @@ class DeviceJsonMapper {
 
   /// Parse fan value (can be int or String) → Percent (0-100)
   static double parseFanValue(dynamic value) {
-    if (value == null) return 50.0;
+    if (value == null) {
+      return 50;
+    }
 
     // Если int - возвращаем напрямую как double
-    if (value is int) return value.toDouble();
-    if (value is num) return value.toDouble();
+    if (value is int) {
+      return value.toDouble();
+    }
+    if (value is num) {
+      return value.toDouble();
+    }
 
     // Если String - конвертируем по названию
     if (value is String) {
       switch (value.toLowerCase()) {
         case 'low':
-          return 33.0;
+          return 33;
         case 'medium':
-          return 66.0;
+          return 66;
         case 'high':
-          return 100.0;
+          return 100;
         case 'auto':
-          return 50.0;
+          return 50;
         default:
           // Попробовать распарсить как число
           return double.tryParse(value) ?? 50.0;
       }
     }
 
-    return 50.0;
+    return 50;
   }
 
 
@@ -192,15 +202,21 @@ class DeviceJsonMapper {
     // Ограничить значение в диапазоне 0-100
     final clamped = percent.clamp(0.0, 100.0);
 
-    if (clamped < 33) return 'low';
-    if (clamped < 66) return 'medium';
+    if (clamped < 33) {
+      return 'low';
+    }
+    if (clamped < 66) {
+      return 'medium';
+    }
     return 'high'; // 66-100
   }
 
   /// Парсинг настроек режимов из JSON объекта
   static Map<String, ModeSettings>? modeSettingsFromJson(
       Map<String, dynamic>? json) {
-    if (json == null) return null;
+    if (json == null) {
+      return null;
+    }
     return json.map((key, value) =>
         MapEntry(key, ModeSettings.fromJson(value as Map<String, dynamic>)));
   }
@@ -208,7 +224,9 @@ class DeviceJsonMapper {
   /// Парсинг настроек таймера из JSON объекта
   static Map<String, TimerSettings>? timerSettingsFromJson(
       Map<String, dynamic>? json) {
-    if (json == null) return null;
+    if (json == null) {
+      return null;
+    }
     return json.map((key, value) => MapEntry(
         key.toLowerCase(), TimerSettings.fromJson(value as Map<String, dynamic>)));
   }
@@ -216,21 +234,20 @@ class DeviceJsonMapper {
   /// Парсинг активных аварий из JSON объекта
   static Map<String, AlarmInfo>? activeAlarmsFromJson(
       Map<String, dynamic>? json) {
-    if (json == null) return null;
+    if (json == null) {
+      return null;
+    }
     return json.map((key, value) =>
         MapEntry(key, AlarmInfo.fromJson(value as Map<String, dynamic>)));
   }
 
   /// Парсинг истории аварий из JSON списка
-  static List<AlarmHistory> alarmHistoryListFromJson(List<dynamic> json) {
-    return json
+  static List<AlarmHistory> alarmHistoryListFromJson(List<dynamic> json) => json
         .map((item) => AlarmHistory.fromJson(item as Map<String, dynamic>))
         .toList();
-  }
 
   /// JSON → DeviceFullState (полное состояние с настройками и авариями)
-  static DeviceFullState deviceFullStateFromJson(Map<String, dynamic> json) {
-    return DeviceFullState(
+  static DeviceFullState deviceFullStateFromJson(Map<String, dynamic> json) => DeviceFullState(
       id: json['id'] as String,
       name: json['name'] as String? ?? 'Unknown Device',
       macAddress: json['macAddress'] as String? ?? '',
@@ -272,7 +289,6 @@ class DeviceJsonMapper {
       quickSensors: _parseQuickSensors(json['quickSensors']),
       deviceTime: _parseDeviceTime(json),
     );
-  }
 
   /// Парсинг времени устройства из JSON
   static DateTime? _parseDeviceTime(Map<String, dynamic> json) {
@@ -296,7 +312,9 @@ class DeviceJsonMapper {
   static List<String> _parseQuickSensors(dynamic json) {
     const defaultSensors = ['outside_temp', 'indoor_temp', 'humidity'];
     // null = не настроено, используем дефолтные
-    if (json == null) return defaultSensors;
+    if (json == null) {
+      return defaultSensors;
+    }
     if (json is List) {
       // Возвращаем что есть (0-3 сенсора)
       return json.whereType<String>().toList();
@@ -330,9 +348,7 @@ class DeviceJsonMapper {
   }
 
   /// JSON List → List<SensorHistory>
-  static List<SensorHistory> sensorHistoryListFromJson(List<dynamic> json) {
-    return json
+  static List<SensorHistory> sensorHistoryListFromJson(List<dynamic> json) => json
         .map((item) => sensorHistoryFromJson(item as Map<String, dynamic>))
         .toList();
-  }
 }

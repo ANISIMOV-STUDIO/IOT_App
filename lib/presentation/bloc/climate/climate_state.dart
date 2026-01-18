@@ -17,6 +17,20 @@ enum ClimateControlStatus {
 
 /// Состояние управления климатом
 final class ClimateControlState extends Equatable {
+
+  const ClimateControlState({
+    this.status = ClimateControlStatus.initial,
+    this.climate,
+    this.deviceFullState,
+    this.alarmHistory = const [],
+    this.errorMessage,
+    this.isTogglingPower = false,
+    this.isTogglingSchedule = false,
+    this.isPendingHeatingTemperature = false,
+    this.isPendingCoolingTemperature = false,
+    this.isPendingSupplyFan = false,
+    this.isPendingExhaustFan = false,
+  });
   /// Статус загрузки
   final ClimateControlStatus status;
 
@@ -49,20 +63,6 @@ final class ClimateControlState extends Equatable {
 
   /// Ожидание подтверждения изменения вытяжного вентилятора
   final bool isPendingExhaustFan;
-
-  const ClimateControlState({
-    this.status = ClimateControlStatus.initial,
-    this.climate,
-    this.deviceFullState,
-    this.alarmHistory = const [],
-    this.errorMessage,
-    this.isTogglingPower = false,
-    this.isTogglingSchedule = false,
-    this.isPendingHeatingTemperature = false,
-    this.isPendingCoolingTemperature = false,
-    this.isPendingSupplyFan = false,
-    this.isPendingExhaustFan = false,
-  });
 
   // ============================================
   // ГЕТТЕРЫ ДЛЯ УДОБСТВА
@@ -132,8 +132,7 @@ final class ClimateControlState extends Equatable {
     bool? isPendingCoolingTemperature,
     bool? isPendingSupplyFan,
     bool? isPendingExhaustFan,
-  }) {
-    return ClimateControlState(
+  }) => ClimateControlState(
       status: status ?? this.status,
       climate: climate ?? this.climate,
       deviceFullState: deviceFullState ?? this.deviceFullState,
@@ -148,7 +147,6 @@ final class ClimateControlState extends Equatable {
       isPendingSupplyFan: isPendingSupplyFan ?? this.isPendingSupplyFan,
       isPendingExhaustFan: isPendingExhaustFan ?? this.isPendingExhaustFan,
     );
-  }
 
   @override
   List<Object?> get props => [

@@ -2,13 +2,13 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../domain/entities/unit_notification.dart';
-import '../../../generated/l10n/app_localizations.dart';
-import 'breez_card.dart';
-import 'breez_list_card.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/domain/entities/unit_notification.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_list_card.dart';
 
 export '../../../domain/entities/unit_notification.dart';
 
@@ -18,9 +18,9 @@ export '../../../domain/entities/unit_notification.dart';
 
 /// Константы для UnitNotificationsWidget
 abstract class _NotificationWidgetConstants {
-  static const double iconSize = 18.0;
-  static const double titleFontSize = 16.0;
-  static const double badgeFontSize = 11.0;
+  static const double iconSize = 18;
+  static const double titleFontSize = 16;
+  static const double badgeFontSize = 11;
   static const int maxVisibleNotifications = 3;
 }
 
@@ -30,18 +30,18 @@ abstract class _NotificationWidgetConstants {
 
 /// Unit notifications widget
 class UnitNotificationsWidget extends StatelessWidget {
+
+  const UnitNotificationsWidget({
+    required this.unitName,
+    required this.notifications,
+    super.key,
+    this.onSeeAll,
+    this.onNotificationTap,
+  });
   final String unitName;
   final List<UnitNotification> notifications;
   final VoidCallback? onSeeAll;
   final ValueChanged<String>? onNotificationTap;
-
-  const UnitNotificationsWidget({
-    super.key,
-    required this.unitName,
-    required this.notifications,
-    this.onSeeAll,
-    this.onNotificationTap,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +52,7 @@ class UnitNotificationsWidget extends StatelessWidget {
     return Semantics(
       label: '${l10n.notifications}: ${notifications.length}',
       child: BreezCard(
-        padding: EdgeInsets.all(AppSpacing.xs),
+        padding: const EdgeInsets.all(AppSpacing.xs),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -62,12 +62,12 @@ class UnitNotificationsWidget extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.notifications_outlined,
                       size: _NotificationWidgetConstants.iconSize,
                       color: AppColors.accent,
                     ),
-                    SizedBox(width: AppSpacing.xs),
+                    const SizedBox(width: AppSpacing.xs),
                     Text(
                       l10n.notifications,
                       style: TextStyle(
@@ -80,7 +80,7 @@ class UnitNotificationsWidget extends StatelessWidget {
                 ),
                 if (notifications.isNotEmpty)
                   Container(
-                    padding: EdgeInsets.symmetric(
+                    padding: const EdgeInsets.symmetric(
                       horizontal: AppSpacing.xs,
                       vertical: AppSpacing.xxs / 2,
                     ),
@@ -90,7 +90,7 @@ class UnitNotificationsWidget extends StatelessWidget {
                     ),
                     child: Text(
                       '${notifications.length}',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: _NotificationWidgetConstants.badgeFontSize,
                         fontWeight: FontWeight.w700,
                         color: AppColors.accentRed,
@@ -100,7 +100,7 @@ class UnitNotificationsWidget extends StatelessWidget {
               ],
             ),
 
-            SizedBox(height: AppSpacing.md),
+            const SizedBox(height: AppSpacing.md),
 
             // Notifications list (no scroll, max 3 visible)
             Expanded(
@@ -109,7 +109,7 @@ class UnitNotificationsWidget extends StatelessWidget {
                   : Column(
                       children: [
                         for (var i = 0; i < notifications.length && i < maxVisible; i++) ...[
-                          if (i > 0) SizedBox(height: AppSpacing.xs),
+                          if (i > 0) const SizedBox(height: AppSpacing.xs),
                           BreezListCard.notification(
                             title: notifications[i].title,
                             message: notifications[i].message,
@@ -125,7 +125,7 @@ class UnitNotificationsWidget extends StatelessWidget {
 
             // See all button
             if (notifications.length > maxVisible) ...[
-              SizedBox(height: AppSpacing.sm),
+              const SizedBox(height: AppSpacing.sm),
               BreezSeeMoreButton(
                 label: l10n.allNotifications,
                 extraCount: notifications.length - maxVisible,
@@ -154,9 +154,15 @@ class UnitNotificationsWidget extends StatelessWidget {
     final now = DateTime.now();
     final diff = now.difference(timestamp);
 
-    if (diff.inMinutes < 1) return l10n.justNow;
-    if (diff.inMinutes < 60) return l10n.minutesAgo(diff.inMinutes);
-    if (diff.inHours < 24) return l10n.hoursAgo(diff.inHours);
+    if (diff.inMinutes < 1) {
+      return l10n.justNow;
+    }
+    if (diff.inMinutes < 60) {
+      return l10n.minutesAgo(diff.inMinutes);
+    }
+    if (diff.inHours < 24) {
+      return l10n.hoursAgo(diff.inHours);
+    }
     return l10n.daysAgo(diff.inDays);
   }
 }

@@ -2,15 +2,15 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:shimmer/shimmer.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/spacing.dart';
 
 // Re-export button components for backwards compatibility
 export 'breez_button.dart';
-export 'breez_icon_button.dart';
 export 'breez_dialog_button.dart';
+export 'breez_icon_button.dart';
 export 'breez_settings_tile.dart';
 
 // =============================================================================
@@ -22,10 +22,10 @@ abstract class _CardConstants {
   static const double defaultPadding = AppSpacing.lgx; // 24px
   static const Duration animationDuration = Duration(milliseconds: 300);
   static const double disabledOpacity = 0.3;
-  static const double titleFontSize = 10.0;
-  static const double descriptionFontSize = 12.0;
-  static const double titleLetterSpacing = 2.0;
-  static const double shimmerHeight = 100.0;
+  static const double titleFontSize = 10;
+  static const double descriptionFontSize = 12;
+  static const double titleLetterSpacing = 2;
+  static const double shimmerHeight = 100;
 }
 
 // =============================================================================
@@ -40,22 +40,21 @@ abstract class _CardConstants {
 /// - Опциональные title и description
 /// - Accessibility через Semantics
 class BreezCard extends StatelessWidget {
-  final Widget child;
-  final EdgeInsets? padding;
-  final bool disabled;
-  final bool isLoading;
-  final String? title;
-  final String? description;
 
   const BreezCard({
-    super.key,
-    required this.child,
+    required this.child, super.key,
     this.padding,
     this.disabled = false,
     this.isLoading = false,
     this.title,
     this.description,
   });
+  final Widget child;
+  final EdgeInsets? padding;
+  final bool disabled;
+  final bool isLoading;
+  final String? title;
+  final String? description;
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +84,7 @@ class BreezCard extends StatelessWidget {
                         children: [
                           if (title != null)
                             Padding(
-                              padding: EdgeInsets.only(bottom: AppSpacing.xxs),
+                              padding: const EdgeInsets.only(bottom: AppSpacing.xxs),
                               child: Text(
                                 (title ?? '').toUpperCase(),
                                 style: TextStyle(
@@ -98,7 +97,7 @@ class BreezCard extends StatelessWidget {
                             ),
                           if (description != null)
                             Padding(
-                              padding: EdgeInsets.only(bottom: AppSpacing.md),
+                              padding: const EdgeInsets.only(bottom: AppSpacing.md),
                               child: Text(
                                 description ?? '',
                                 style: TextStyle(
@@ -117,8 +116,7 @@ class BreezCard extends StatelessWidget {
     );
   }
 
-  Widget _buildShimmer(BuildContext context, BreezColors colors, bool isDark) {
-    return Shimmer.fromColors(
+  Widget _buildShimmer(BuildContext context, BreezColors colors, bool isDark) => Shimmer.fromColors(
       baseColor: isDark ? AppColors.darkShimmerBase : AppColors.lightShimmerBase,
       highlightColor: isDark ? AppColors.darkShimmerHighlight : AppColors.lightShimmerHighlight,
       child: Column(
@@ -133,7 +131,7 @@ class BreezCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(AppRadius.indicator),
               ),
             ),
-          if (title != null) SizedBox(height: AppSpacing.xxs),
+          if (title != null) const SizedBox(height: AppSpacing.xxs),
           if (description != null)
             Container(
               width: 120,
@@ -143,7 +141,7 @@ class BreezCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(AppRadius.indicator),
               ),
             ),
-          if (description != null) SizedBox(height: AppSpacing.md),
+          if (description != null) const SizedBox(height: AppSpacing.md),
           Container(
             width: double.infinity,
             height: _CardConstants.shimmerHeight,
@@ -155,23 +153,20 @@ class BreezCard extends StatelessWidget {
         ],
       ),
     );
-  }
 }
 
 /// Status indicator dot
 class StatusDot extends StatelessWidget {
+
+  const StatusDot({
+    required this.isActive, super.key,
+    this.size = 6,
+  });
   final bool isActive;
   final double size;
 
-  const StatusDot({
-    super.key,
-    required this.isActive,
-    this.size = 6,
-  });
-
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(BuildContext context) => Container(
       width: size,
       height: size,
       decoration: BoxDecoration(
@@ -187,15 +182,10 @@ class StatusDot extends StatelessWidget {
             : null,
       ),
     );
-  }
 }
 
 /// Label with uppercase styling
 class BreezLabel extends StatelessWidget {
-  final String text;
-  final double fontSize;
-  final Color? color;
-  final FontWeight fontWeight;
 
   const BreezLabel(
     this.text, {
@@ -204,6 +194,10 @@ class BreezLabel extends StatelessWidget {
     this.color,
     this.fontWeight = FontWeight.w900,
   });
+  final String text;
+  final double fontSize;
+  final Color? color;
+  final FontWeight fontWeight;
 
   @override
   Widget build(BuildContext context) {

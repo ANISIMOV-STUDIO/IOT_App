@@ -5,11 +5,10 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../config/app_constants.dart';
-import '../theme/app_theme.dart';
-import '../theme/app_font_sizes.dart';
-import '../theme/app_radius.dart';
-import '../theme/spacing.dart';
+import 'package:hvac_control/core/config/app_constants.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
 
 /// Глобальный ключ для доступа к ScaffoldMessenger
 final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
@@ -51,7 +50,9 @@ class ToastService {
     bool showIcon = true,
   }) {
     final messenger = scaffoldMessengerKey.currentState;
-    if (messenger == null) return;
+    if (messenger == null) {
+      return;
+    }
 
     // Скрыть текущий snackbar перед показом нового
     messenger.hideCurrentSnackBar();
@@ -113,7 +114,7 @@ class ToastService {
 
   /// Показать info toast
   static void info(String message, {String? actionLabel, VoidCallback? onAction}) {
-    show(message, type: ToastType.info, actionLabel: actionLabel, onAction: onAction);
+    show(message, actionLabel: actionLabel, onAction: onAction);
   }
 
   /// Скрыть текущий toast
@@ -122,12 +123,10 @@ class ToastService {
   }
 
   /// Получить стиль для типа toast
-  static (Color, IconData) _getTypeStyle(ToastType type) {
-    return switch (type) {
+  static (Color, IconData) _getTypeStyle(ToastType type) => switch (type) {
       ToastType.success => (AppColors.success, Icons.check_circle_outline),
       ToastType.error => (AppColors.critical, Icons.error_outline),
       ToastType.warning => (AppColors.warning, Icons.warning_amber_outlined),
       ToastType.info => (AppColors.info, Icons.info_outline),
     };
-  }
 }

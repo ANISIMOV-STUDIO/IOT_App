@@ -29,7 +29,7 @@ const Occupant$json = {
       '4': 1,
       '5': 11,
       '6': '.google.protobuf.Timestamp',
-      '10': 'lastSeen'
+      '10': 'lastSeen',
     },
     {'1': 'device_ids', '3': 6, '4': 3, '5': 9, '10': 'deviceIds'},
   ],
@@ -53,7 +53,7 @@ const GetOccupantsRequest$json = {
       '5': 9,
       '9': 0,
       '10': 'deviceId',
-      '17': true
+      '17': true,
     },
   ],
   '8': [
@@ -76,7 +76,7 @@ const ListOccupantsResponse$json = {
       '4': 3,
       '5': 11,
       '6': '.breez.Occupant',
-      '10': 'occupants'
+      '10': 'occupants',
     },
     {'1': 'home_count', '3': 2, '4': 1, '5': 5, '10': 'homeCount'},
   ],
@@ -99,7 +99,7 @@ const CreateOccupantRequest$json = {
       '5': 9,
       '9': 0,
       '10': 'avatarUrl',
-      '17': true
+      '17': true,
     },
     {'1': 'device_ids', '3': 3, '4': 3, '5': 9, '10': 'deviceIds'},
   ],
@@ -127,7 +127,7 @@ const UpdateOccupantRequest$json = {
       '5': 9,
       '9': 1,
       '10': 'avatarUrl',
-      '17': true
+      '17': true,
     },
     {
       '1': 'is_home',
@@ -136,7 +136,7 @@ const UpdateOccupantRequest$json = {
       '5': 8,
       '9': 2,
       '10': 'isHome',
-      '17': true
+      '17': true,
     },
     {'1': 'device_ids', '3': 5, '4': 3, '5': 9, '10': 'deviceIds'},
   ],

@@ -7,10 +7,9 @@ import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-
 import 'package:hvac_control/core/services/connectivity_service.dart';
 import 'package:hvac_control/presentation/bloc/connectivity/connectivity_bloc.dart';
+import 'package:mocktail/mocktail.dart';
 
 // Mock classes
 class MockConnectivityService extends Mock implements ConnectivityService {}
@@ -52,8 +51,6 @@ void main() {
         expect: () => [
           const ConnectivityState(
             status: NetworkStatus.online,
-            isOffline: false,
-            isServerUnavailable: false,
           ),
         ],
       );
@@ -71,7 +68,6 @@ void main() {
           const ConnectivityState(
             status: NetworkStatus.offline,
             isOffline: true,
-            isServerUnavailable: false,
           ),
         ],
       );
@@ -88,7 +84,6 @@ void main() {
         expect: () => [
           const ConnectivityState(
             status: NetworkStatus.serverUnavailable,
-            isOffline: false,
             isServerUnavailable: true,
           ),
         ],
@@ -104,7 +99,6 @@ void main() {
           const ConnectivityState(
             status: NetworkStatus.offline,
             isOffline: true,
-            isServerUnavailable: false,
           ),
         ],
       );
@@ -120,38 +114,42 @@ void main() {
         expect: () => [
           const ConnectivityState(
             status: NetworkStatus.online,
-            isOffline: false,
-            isServerUnavailable: false,
           ),
         ],
       );
     });
 
     group('Подписка на изменения', () {
+      late StreamController<NetworkStatus> statusController;
+
+      setUp(() {
+        statusController = StreamController<NetworkStatus>.broadcast();
+      });
+
+      tearDown(() {
+        statusController.close();
+      });
+
       blocTest<ConnectivityBloc, ConnectivityState>(
         'реагирует на изменения статуса из стрима',
         build: () {
-          final controller = StreamController<NetworkStatus>.broadcast();
           when(() => mockService.status).thenReturn(NetworkStatus.online);
-          when(() => mockService.onStatusChange).thenAnswer((_) => controller.stream);
+          when(() => mockService.onStatusChange).thenAnswer((_) => statusController.stream);
           return ConnectivityBloc(connectivityService: mockService);
         },
         act: (bloc) async {
           bloc.add(const ConnectivitySubscriptionRequested());
-          await Future.delayed(const Duration(milliseconds: 10));
+          await Future<void>.delayed(const Duration(milliseconds: 10));
           // Стрим симулируется через событие
           bloc.add(const ConnectivityStatusChanged(NetworkStatus.offline));
         },
         expect: () => [
           const ConnectivityState(
             status: NetworkStatus.online,
-            isOffline: false,
-            isServerUnavailable: false,
           ),
           const ConnectivityState(
             status: NetworkStatus.offline,
             isOffline: true,
-            isServerUnavailable: false,
           ),
         ],
       );
@@ -179,8 +177,6 @@ void main() {
       test('showBanner возвращает false когда online', () {
         const state = ConnectivityState(
           status: NetworkStatus.online,
-          isOffline: false,
-          isServerUnavailable: false,
         );
 
         expect(state.showBanner, isFalse);
@@ -189,7 +185,7 @@ void main() {
       test('isOnline возвращает true только для online статуса', () {
         const onlineState = ConnectivityState(status: NetworkStatus.online);
         const offlineState = ConnectivityState(status: NetworkStatus.offline);
-        const unknownState = ConnectivityState(status: NetworkStatus.unknown);
+        const unknownState = ConnectivityState();
 
         expect(onlineState.isOnline, isTrue);
         expect(offlineState.isOnline, isFalse);

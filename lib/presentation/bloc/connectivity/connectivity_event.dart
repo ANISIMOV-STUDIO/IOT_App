@@ -15,9 +15,9 @@ final class ConnectivitySubscriptionRequested extends ConnectivityEvent {
 
 /// Статус соединения изменился
 final class ConnectivityStatusChanged extends ConnectivityEvent {
-  final NetworkStatus status;
 
   const ConnectivityStatusChanged(this.status);
+  final NetworkStatus status;
 
   @override
   List<Object?> get props => [status];

@@ -5,11 +5,11 @@
 /// - Mobile/Desktop: gRPC (лучшая производительность)
 library;
 
-import '../../api/platform/api_client.dart';
-import 'analytics_data_source.dart';
+import 'package:hvac_control/data/api/platform/api_client.dart';
+import 'package:hvac_control/data/datasources/analytics/analytics_data_source.dart';
 
 // Conditional imports - выбор реализации в зависимости от платформы
-import 'analytics_data_source_mobile.dart'
+import 'package:hvac_control/data/datasources/analytics/analytics_data_source_mobile.dart'
     if (dart.library.html) 'analytics_data_source_web.dart';
 
 /// Фабрика для создания platform-specific AnalyticsDataSource
@@ -17,7 +17,5 @@ class AnalyticsDataSourceFactory {
   /// Создает AnalyticsDataSource для текущей платформы
   ///
   /// [apiClient] - клиент API с gRPC channel (mobile) или HTTP client (web)
-  static AnalyticsDataSource create(ApiClient apiClient) {
-    return createPlatformAnalyticsDataSource(apiClient);
-  }
+  static AnalyticsDataSource create(ApiClient apiClient) => createPlatformAnalyticsDataSource(apiClient);
 }

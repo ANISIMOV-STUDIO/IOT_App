@@ -4,19 +4,18 @@ library;
 import 'package:flutter/widgets.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
-import '../../generated/l10n/app_localizations.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
 
 /// Статические валидаторы с локализованными сообщениями.
 /// Требует передачи AppLocalizations для корректного отображения ошибок.
 class Validators {
-  final AppLocalizations l10n;
 
   const Validators(this.l10n);
 
   /// Получить валидатор из BuildContext
-  static Validators of(BuildContext context) {
-    return Validators(AppLocalizations.of(context)!);
-  }
+  factory Validators.of(BuildContext context) => Validators(AppLocalizations.of(context)!);
+
+  final AppLocalizations l10n;
 
   /// Упрощенная валидация email для логина (только проверка на пустоту)
   String? loginEmail(String? value) {
@@ -35,12 +34,10 @@ class Validators {
   }
 
   /// Валидация email для регистрации с проверкой формата
-  String? email(String? value) {
-    return FormBuilderValidators.compose([
-      FormBuilderValidators.required(errorText: l10n.enterEmail),
+  String? email(String? value) => FormBuilderValidators.compose<String>([
+      FormBuilderValidators.required<String>(errorText: l10n.enterEmail),
       FormBuilderValidators.email(errorText: l10n.invalidEmailFormat),
     ])(value);
-  }
 
   /// Валидация пароля (соответствует требованиям бэкенда)
   /// - Минимум 8 символов
@@ -57,17 +54,17 @@ class Validators {
     }
 
     // Проверка на кириллицу
-    if (RegExp(r'[а-яА-ЯёЁ]').hasMatch(value)) {
+    if (RegExp('[а-яА-ЯёЁ]').hasMatch(value)) {
       return l10n.passwordOnlyLatin;
     }
 
     // Проверка на наличие цифры
-    if (!RegExp(r'[0-9]').hasMatch(value)) {
+    if (!RegExp('[0-9]').hasMatch(value)) {
       return l10n.passwordMustContainDigit;
     }
 
     // Проверка на наличие латинской буквы
-    if (!RegExp(r'[a-zA-Z]').hasMatch(value)) {
+    if (!RegExp('[a-zA-Z]').hasMatch(value)) {
       return l10n.passwordMustContainLetter;
     }
 
@@ -75,23 +72,20 @@ class Validators {
   }
 
   /// Валидация подтверждения пароля
-  String? confirmPassword(String? value, String? password) {
-    return FormBuilderValidators.compose([
-      FormBuilderValidators.required(errorText: l10n.confirmPasswordRequired),
-      FormBuilderValidators.equal(
+  String? confirmPassword(String? value, String? password) => FormBuilderValidators.compose<String>([
+      FormBuilderValidators.required<String>(errorText: l10n.confirmPasswordRequired),
+      FormBuilderValidators.equal<String>(
         password ?? '',
         errorText: l10n.passwordsDoNotMatch,
       ),
     ])(value);
-  }
 
   /// Валидация имени (без цифр и спецсимволов)
-  String? name(String? value, {String? fieldName}) {
-    return FormBuilderValidators.compose([
-      FormBuilderValidators.required(
+  String? name(String? value, {String? fieldName}) => FormBuilderValidators.compose<String>([
+      FormBuilderValidators.required<String>(
         errorText: fieldName != null ? l10n.enterField(fieldName) : l10n.enterName,
       ),
-      FormBuilderValidators.minLength(
+      FormBuilderValidators.minLength<String>(
         2,
         errorText: l10n.nameTooShort(fieldName ?? l10n.firstName),
       ),
@@ -100,5 +94,4 @@ class Validators {
         errorText: l10n.nameOnlyLetters,
       ),
     ])(value);
-  }
 }

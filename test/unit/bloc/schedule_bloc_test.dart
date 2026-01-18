@@ -8,13 +8,12 @@
 /// - Переключение активности
 library;
 
-import 'package:flutter_test/flutter_test.dart';
 import 'package:bloc_test/bloc_test.dart';
-import 'package:mocktail/mocktail.dart';
-
-import 'package:hvac_control/presentation/bloc/schedule/schedule_bloc.dart';
-import 'package:hvac_control/domain/entities/schedule_entry.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:hvac_control/core/error/api_exception.dart';
+import 'package:hvac_control/domain/entities/schedule_entry.dart';
+import 'package:hvac_control/presentation/bloc/schedule/schedule_bloc.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../fixtures/mock_services.dart';
 import '../../fixtures/test_data.dart';
@@ -30,9 +29,7 @@ void main() {
     mockRepository = MockScheduleRepository();
   });
 
-  ScheduleBloc createBloc() {
-    return ScheduleBloc(repository: mockRepository);
-  }
+  ScheduleBloc createBloc() => ScheduleBloc(repository: mockRepository);
 
   group('ScheduleBloc - Инициализация', () {
     test('начальное состояние - ScheduleState с initial status', () {
@@ -146,7 +143,7 @@ void main() {
             .thenAnswer((_) async => updatedEntry);
         return createBloc();
       },
-      act: (bloc) => bloc.add(ScheduleEntryUpdated(updatedEntry)),
+      act: (bloc) => bloc.add(const ScheduleEntryUpdated(updatedEntry)),
       expect: () => [
         isA<ScheduleState>().having((s) => s.isSubmitting, 'isSubmitting', true),
         isA<ScheduleState>()
@@ -173,7 +170,7 @@ void main() {
             ));
         return createBloc();
       },
-      act: (bloc) => bloc.add(ScheduleEntryUpdated(updatedEntry)),
+      act: (bloc) => bloc.add(const ScheduleEntryUpdated(updatedEntry)),
       expect: () => [
         isA<ScheduleState>().having((s) => s.isSubmitting, 'isSubmitting', true),
         isA<ScheduleState>()
@@ -243,7 +240,7 @@ void main() {
         entries: [TestData.testScheduleEntryActive],
       ),
       build: () {
-        when(() => mockRepository.toggleEntry(any(), any()))
+        when(() => mockRepository.toggleEntry(any(), isActive: any(named: 'isActive')))
             .thenAnswer((_) async => toggledEntry);
         return createBloc();
       },
@@ -267,7 +264,7 @@ void main() {
         entries: [TestData.testScheduleEntryActive],
       ),
       build: () {
-        when(() => mockRepository.toggleEntry(any(), any()))
+        when(() => mockRepository.toggleEntry(any(), isActive: any(named: 'isActive')))
             .thenThrow(const ApiException(
               type: ApiErrorType.serverError,
               message: 'Ошибка переключения',

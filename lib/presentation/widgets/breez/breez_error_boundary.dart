@@ -6,10 +6,10 @@ library;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/spacing.dart';
-import 'breez_button.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -17,11 +17,11 @@ import 'breez_button.dart';
 
 /// Константы для ErrorBoundary
 abstract class _ErrorBoundaryConstants {
-  static const double iconSize = 48.0;
-  static const double compactIconSize = 32.0;
-  static const double titleFontSize = 16.0;
-  static const double messageFontSize = 13.0;
-  static const double buttonFontSize = 13.0;
+  static const double iconSize = 48;
+  static const double compactIconSize = 32;
+  static const double titleFontSize = 16;
+  static const double messageFontSize = 13;
+  static const double buttonFontSize = 13;
 }
 
 // =============================================================================
@@ -38,6 +38,14 @@ abstract class _ErrorBoundaryConstants {
 /// )
 /// ```
 class BreezErrorBoundary extends StatefulWidget {
+
+  const BreezErrorBoundary({
+    required this.child, super.key,
+    this.onRetry,
+    this.fallbackBuilder,
+    this.compact = false,
+    this.showDetails = true,
+  });
   /// Дочерний виджет
   final Widget child;
 
@@ -52,15 +60,6 @@ class BreezErrorBoundary extends StatefulWidget {
 
   /// Показывать детали ошибки (только в debug)
   final bool showDetails;
-
-  const BreezErrorBoundary({
-    super.key,
-    required this.child,
-    this.onRetry,
-    this.fallbackBuilder,
-    this.compact = false,
-    this.showDetails = true,
-  });
 
   @override
   State<BreezErrorBoundary> createState() => _BreezErrorBoundaryState();
@@ -111,40 +110,39 @@ class _BreezErrorBoundaryState extends State<BreezErrorBoundary> {
 
 /// Внутренний виджет для перехвата ошибок build
 class _ErrorCatcher extends StatelessWidget {
-  final Widget child;
-  final void Function(FlutterErrorDetails) onError;
 
   const _ErrorCatcher({
     required this.child,
     required this.onError,
   });
+  final Widget child;
+  final void Function(FlutterErrorDetails) onError;
 
   @override
-  Widget build(BuildContext context) {
-    // ErrorWidget.builder не работает для build-time ошибок напрямую,
-    // поэтому используем Builder для дополнительной защиты
-    return Builder(
-      builder: (context) {
-        try {
-          return child;
-        } catch (e, stack) {
-          final error = FlutterErrorDetails(
-            exception: e,
-            stack: stack,
-            library: 'breez_error_boundary',
-            context: ErrorDescription('при построении виджета'),
-          );
+  Widget build(BuildContext context) =>
+      // ErrorWidget.builder не работает для build-time ошибок напрямую,
+      // поэтому используем Builder для дополнительной защиты
+      Builder(
+        builder: (context) {
+          try {
+            return child;
+          } catch (e, stack) {
+            final error = FlutterErrorDetails(
+              exception: e,
+              stack: stack,
+              library: 'breez_error_boundary',
+              context: ErrorDescription('при построении виджета'),
+            );
 
-          // Вызываем onError асинхронно чтобы избежать setState во время build
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            onError(error);
-          });
+            // Вызываем onError асинхронно чтобы избежать setState во время build
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              onError(error);
+            });
 
-          return const SizedBox.shrink();
-        }
-      },
-    );
-  }
+            return const SizedBox.shrink();
+          }
+        },
+      );
 }
 
 // =============================================================================
@@ -153,10 +151,6 @@ class _ErrorCatcher extends StatelessWidget {
 
 /// Виджет отображения ошибки по умолчанию
 class _DefaultErrorWidget extends StatelessWidget {
-  final FlutterErrorDetails? error;
-  final VoidCallback? onRetry;
-  final bool compact;
-  final bool showDetails;
 
   const _DefaultErrorWidget({
     this.error,
@@ -164,6 +158,10 @@ class _DefaultErrorWidget extends StatelessWidget {
     this.compact = false,
     this.showDetails = true,
   });
+  final FlutterErrorDetails? error;
+  final VoidCallback? onRetry;
+  final bool compact;
+  final bool showDetails;
 
   @override
   Widget build(BuildContext context) {
@@ -173,7 +171,7 @@ class _DefaultErrorWidget extends StatelessWidget {
         : _ErrorBoundaryConstants.iconSize;
 
     return Container(
-      padding: EdgeInsets.all(AppSpacing.xs),
+      padding: const EdgeInsets.all(AppSpacing.xs),
       decoration: BoxDecoration(
         color: AppColors.critical.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(AppRadius.button),
@@ -207,7 +205,7 @@ class _DefaultErrorWidget extends StatelessWidget {
 
           // Сообщение об ошибке (только в debug)
           if (showDetails && kDebugMode && error != null) ...[
-            SizedBox(height: AppSpacing.xs),
+            const SizedBox(height: AppSpacing.xs),
             Text(
               error!.exceptionAsString(),
               style: TextStyle(
@@ -232,7 +230,7 @@ class _DefaultErrorWidget extends StatelessWidget {
                 horizontal: AppSpacing.md,
                 vertical: compact ? AppSpacing.xs : AppSpacing.sm,
               ),
-              child: Row(
+              child: const Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(
@@ -240,7 +238,7 @@ class _DefaultErrorWidget extends StatelessWidget {
                     size: 16,
                     color: AppColors.critical,
                   ),
-                  const SizedBox(width: AppSpacing.xs),
+                  SizedBox(width: AppSpacing.xs),
                   Text(
                     'Повторить',
                     style: TextStyle(

@@ -1,12 +1,12 @@
 /// Climate Controller - Interface for climate control operations
 library;
 
-import '../entities/climate.dart';
+import 'package:hvac_control/domain/entities/climate.dart';
 
 /// Interface for climate control operations
 abstract class ClimateController {
   /// Turn device on/off
-  Future<ClimateState> setPower(bool isOn, {String? deviceId});
+  Future<ClimateState> setPower({required bool isOn, String? deviceId});
 
   /// Set target temperature (defaults to heating)
   Future<ClimateState> setTargetTemperature(double temperature, {String? deviceId});

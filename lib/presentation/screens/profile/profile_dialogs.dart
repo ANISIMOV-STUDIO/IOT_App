@@ -4,38 +4,34 @@ library;
 import 'dart:math' show min;
 
 import 'package:flutter/material.dart';
-import '../../../core/services/language_service.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/app_font_sizes.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../core/utils/validators.dart';
-import '../../../generated/l10n/app_localizations.dart';
-import '../../widgets/breez/breez.dart';
+import 'package:hvac_control/core/services/language_service.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/core/utils/validators.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez.dart';
 
 // =============================================================================
 // CONSTANTS
 // =============================================================================
 
 abstract class _ProfileDialogsConstants {
-  static const double flagFontSize = 20.0;
+  static const double flagFontSize = 20;
   static const double bodyFontSize = AppFontSizes.body;
   static const double headerFontSize = AppFontSizes.h3;
-  static const double checkIconSize = 18.0;
+  static const double checkIconSize = 18;
 }
 
 /// Language option widget for language picker dialog
 class LanguageOption extends StatelessWidget {
+
+  const LanguageOption({
+    required this.language, required this.isSelected, required this.onTap, super.key,
+  });
   final AppLanguage language;
   final bool isSelected;
   final VoidCallback onTap;
-
-  const LanguageOption({
-    super.key,
-    required this.language,
-    required this.isSelected,
-    required this.onTap,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +45,6 @@ class LanguageOption extends StatelessWidget {
       hoverColor: isSelected
           ? AppColors.accent.withValues(alpha: 0.15)
           : colors.card,
-      borderRadius: AppRadius.button,
       border: isSelected
           ? Border.all(color: AppColors.accent.withValues(alpha: 0.3))
           : null,
@@ -88,16 +83,13 @@ class LanguageOption extends StatelessWidget {
 
 /// Edit profile dialog
 class EditProfileDialog extends StatefulWidget {
+
+  const EditProfileDialog({
+    required this.firstName, required this.lastName, required this.onSave, super.key,
+  });
   final String firstName;
   final String lastName;
   final void Function(String firstName, String lastName) onSave;
-
-  const EditProfileDialog({
-    super.key,
-    required this.firstName,
-    required this.lastName,
-    required this.onSave,
-  });
 
   @override
   State<EditProfileDialog> createState() => _EditProfileDialogState();
@@ -135,7 +127,7 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final maxWidth = min(MediaQuery.of(context).size.width - 48, 400.0);
+    final maxWidth = min(MediaQuery.of(context).size.width - 48, 400).toDouble();
 
     return Dialog(
       backgroundColor: colors.card,
@@ -193,9 +185,9 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
 
 /// Change password dialog
 class ChangePasswordDialog extends StatefulWidget {
-  final void Function(String currentPassword, String newPassword) onSave;
 
-  const ChangePasswordDialog({super.key, required this.onSave});
+  const ChangePasswordDialog({required this.onSave, super.key});
+  final void Function(String currentPassword, String newPassword) onSave;
 
   @override
   State<ChangePasswordDialog> createState() => _ChangePasswordDialogState();
@@ -228,7 +220,7 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final maxWidth = min(MediaQuery.of(context).size.width - 48, 400.0);
+    final maxWidth = min(MediaQuery.of(context).size.width - 48, 400).toDouble();
 
     return Dialog(
       backgroundColor: colors.card,
@@ -300,19 +292,18 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
 
 /// Dialog header with icon and title
 class _DialogHeader extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final BreezColors colors;
 
   const _DialogHeader({
     required this.icon,
     required this.title,
     required this.colors,
   });
+  final IconData icon;
+  final String title;
+  final BreezColors colors;
 
   @override
-  Widget build(BuildContext context) {
-    return Row(
+  Widget build(BuildContext context) => Row(
       children: [
         Icon(icon, color: AppColors.accent),
         const SizedBox(width: AppSpacing.sm),
@@ -326,16 +317,10 @@ class _DialogHeader extends StatelessWidget {
         ),
       ],
     );
-  }
 }
 
 /// Dialog action buttons (Cancel + Save)
 class _DialogActions extends StatelessWidget {
-  final VoidCallback onCancel;
-  final VoidCallback onSave;
-  final String saveLabel;
-  final BreezColors colors;
-  final AppLocalizations l10n;
 
   const _DialogActions({
     required this.onCancel,
@@ -344,10 +329,14 @@ class _DialogActions extends StatelessWidget {
     required this.colors,
     required this.l10n,
   });
+  final VoidCallback onCancel;
+  final VoidCallback onSave;
+  final String saveLabel;
+  final BreezColors colors;
+  final AppLocalizations l10n;
 
   @override
-  Widget build(BuildContext context) {
-    return Row(
+  Widget build(BuildContext context) => Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         BreezButton(
@@ -376,7 +365,6 @@ class _DialogActions extends StatelessWidget {
         ),
       ],
     );
-  }
 }
 
 /// Shows language picker dialog
@@ -387,7 +375,7 @@ void showLanguagePickerDialog(
   final colors = BreezColors.of(context);
   final l10n = AppLocalizations.of(context)!;
 
-  showDialog(
+  showDialog<void>(
     context: context,
     builder: (dialogContext) => AlertDialog(
       backgroundColor: colors.card,

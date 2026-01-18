@@ -2,10 +2,10 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/spacing.dart';
-import 'breez_card.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -13,31 +13,28 @@ import 'breez_card.dart';
 
 abstract class _GraphWidgetConstants {
   // Badge
-  static const double badgeLabelFontSize = 9.0;
-  static const double badgeValueFontSize = 11.0;
-  static const double badgePaddingH = 8.0;
-  static const double badgePaddingV = 4.0;
+  static const double badgeLabelFontSize = 9;
+  static const double badgeValueFontSize = 11;
+  static const double badgePaddingH = 8;
+  static const double badgePaddingV = 4;
 
   // Metric tab
-  static const double tabIconSize = 20.0;
-  static const double tabLabelFontSize = 8.0;
-  static const double tabPaddingH = 14.0;
-  static const double tabPaddingV = 4.0;
-  static const double tabIconLabelGap = 3.0;
+  static const double tabIconSize = 20;
+  static const double tabLabelFontSize = 8;
+  static const double tabPaddingH = 14;
+  static const double tabPaddingV = 4;
+  static const double tabIconLabelGap = 3;
 }
 
 /// Statistic badge showing min/max/avg values
 class GraphStatBadge extends StatelessWidget {
+
+  const GraphStatBadge({
+    required this.label, required this.value, required this.color, super.key,
+  });
   final String label;
   final String value;
   final Color color;
-
-  const GraphStatBadge({
-    super.key,
-    required this.label,
-    required this.value,
-    required this.color,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -83,18 +80,16 @@ class GraphStatBadge extends StatelessWidget {
 
 /// Metric selection tab for switching between temperature/humidity/airflow
 class GraphMetricTab extends StatelessWidget {
+
+  const GraphMetricTab({
+    required this.icon, required this.label, super.key,
+    this.isSelected = false,
+    this.onTap,
+  });
   final IconData icon;
   final String label;
   final bool isSelected;
   final VoidCallback? onTap;
-
-  const GraphMetricTab({
-    super.key,
-    required this.icon,
-    required this.label,
-    this.isSelected = false,
-    this.onTap,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +108,6 @@ class GraphMetricTab extends StatelessWidget {
           : colors.buttonBg,
       border: Border.all(
         color: isSelected ? AppColors.accent.withValues(alpha: 0.4) : colors.border,
-        width: 1,
       ),
       shadows: isSelected
           ? [

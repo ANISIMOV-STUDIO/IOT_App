@@ -7,10 +7,9 @@ library;
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import '../../../core/theme/app_font_sizes.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/spacing.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -18,9 +17,9 @@ import '../../../core/theme/spacing.dart';
 
 abstract class _LoaderConstants {
   // Sizes
-  static const double sizeSmall = 16.0;
-  static const double sizeMedium = 24.0;
-  static const double sizeLarge = 32.0;
+  static const double sizeSmall = 16;
+  static const double sizeMedium = 24;
+  static const double sizeLarge = 32;
 
   // Animation
   static const Duration rotationDuration = Duration(milliseconds: 1200);
@@ -49,17 +48,18 @@ abstract class _LoaderConstants {
 /// BreezLoader.large(color: AppColors.white)
 /// ```
 class BreezLoader extends StatefulWidget {
-  /// Размер иконки
-  final double size;
-
-  /// Цвет иконки (по умолчанию AppColors.accent)
-  final Color? color;
 
   const BreezLoader({
     super.key,
     this.size = _LoaderConstants.sizeMedium,
     this.color,
   });
+
+  /// Большой лоадер (32px) - для центрированного отображения
+  const BreezLoader.large({
+    super.key,
+    this.color,
+  }) : size = _LoaderConstants.sizeLarge;
 
   /// Маленький лоадер (16px) - для inline использования
   const BreezLoader.small({
@@ -72,12 +72,11 @@ class BreezLoader extends StatefulWidget {
     super.key,
     this.color,
   }) : size = _LoaderConstants.sizeMedium;
+  /// Размер иконки
+  final double size;
 
-  /// Большой лоадер (32px) - для центрированного отображения
-  const BreezLoader.large({
-    super.key,
-    this.color,
-  }) : size = _LoaderConstants.sizeLarge;
+  /// Цвет иконки (по умолчанию AppColors.accent)
+  final Color? color;
 
   @override
   State<BreezLoader> createState() => _BreezLoaderState();
@@ -113,12 +112,10 @@ class _BreezLoaderState extends State<BreezLoader>
         height: widget.size,
         child: AnimatedBuilder(
           animation: _controller,
-          builder: (context, child) {
-            return Transform.rotate(
+          builder: (context, child) => Transform.rotate(
               angle: _controller.value * math.pi * 2,
               child: child,
-            );
-          },
+            ),
           child: Icon(
             Symbols.mode_fan,
             size: widget.size,
@@ -135,6 +132,13 @@ class _BreezLoaderState extends State<BreezLoader>
 /// Показывает вращающуюся иконку с опциональным текстом снизу.
 /// Используется для полноэкранных состояний загрузки.
 class BreezLoaderWithText extends StatelessWidget {
+
+  const BreezLoaderWithText({
+    super.key,
+    this.text,
+    this.size = _LoaderConstants.sizeLarge,
+    this.color,
+  });
   /// Текст под лоадером
   final String? text;
 
@@ -143,13 +147,6 @@ class BreezLoaderWithText extends StatelessWidget {
 
   /// Цвет иконки
   final Color? color;
-
-  const BreezLoaderWithText({
-    super.key,
-    this.text,
-    this.size = _LoaderConstants.sizeLarge,
-    this.color,
-  });
 
   @override
   Widget build(BuildContext context) {

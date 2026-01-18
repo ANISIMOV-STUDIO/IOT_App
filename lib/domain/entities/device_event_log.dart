@@ -16,6 +16,33 @@ enum DeviceEventType {
 
 /// Запись лога события устройства
 class DeviceEventLog extends Equatable {
+
+  const DeviceEventLog({
+    required this.id,
+    required this.eventType,
+    required this.category,
+    required this.property,
+    required this.newValue,
+    required this.description,
+    required this.serverTimestamp,
+    this.oldValue,
+    this.deviceTimestamp,
+  });
+
+  /// Создать из JSON
+  factory DeviceEventLog.fromJson(Map<String, dynamic> json) => DeviceEventLog(
+      id: json['id'] as String,
+      eventType: _parseEventType(json['eventType'] as String),
+      category: json['category'] as String,
+      property: json['property'] as String,
+      oldValue: json['oldValue'] as String?,
+      newValue: json['newValue'] as String,
+      description: json['description'] as String,
+      deviceTimestamp: json['deviceTimestamp'] != null
+          ? DateTime.parse(json['deviceTimestamp'] as String)
+          : null,
+      serverTimestamp: DateTime.parse(json['serverTimestamp'] as String),
+    );
   /// Уникальный идентификатор
   final String id;
 
@@ -43,42 +70,11 @@ class DeviceEventLog extends Equatable {
   /// Время сервера (UTC)
   final DateTime serverTimestamp;
 
-  const DeviceEventLog({
-    required this.id,
-    required this.eventType,
-    required this.category,
-    required this.property,
-    this.oldValue,
-    required this.newValue,
-    required this.description,
-    this.deviceTimestamp,
-    required this.serverTimestamp,
-  });
-
-  /// Создать из JSON
-  factory DeviceEventLog.fromJson(Map<String, dynamic> json) {
-    return DeviceEventLog(
-      id: json['id'] as String,
-      eventType: _parseEventType(json['eventType'] as String),
-      category: json['category'] as String,
-      property: json['property'] as String,
-      oldValue: json['oldValue'] as String?,
-      newValue: json['newValue'] as String,
-      description: json['description'] as String,
-      deviceTimestamp: json['deviceTimestamp'] != null
-          ? DateTime.parse(json['deviceTimestamp'] as String)
-          : null,
-      serverTimestamp: DateTime.parse(json['serverTimestamp'] as String),
-    );
-  }
-
-  static DeviceEventType _parseEventType(String type) {
-    return switch (type.toLowerCase()) {
+  static DeviceEventType _parseEventType(String type) => switch (type.toLowerCase()) {
       'settingschange' => DeviceEventType.settingsChange,
       'alarm' => DeviceEventType.alarm,
       _ => DeviceEventType.settingsChange,
     };
-  }
 
   @override
   List<Object?> get props => [
@@ -96,10 +92,6 @@ class DeviceEventLog extends Equatable {
 
 /// Результат с пагинацией для логов
 class PaginatedLogs extends Equatable {
-  final List<DeviceEventLog> items;
-  final int totalCount;
-  final int limit;
-  final int offset;
 
   const PaginatedLogs({
     required this.items,
@@ -120,6 +112,10 @@ class PaginatedLogs extends Equatable {
       offset: json['offset'] as int,
     );
   }
+  final List<DeviceEventLog> items;
+  final int totalCount;
+  final int limit;
+  final int offset;
 
   /// Есть ли ещё страницы
   bool get hasMore => offset + items.length < totalCount;

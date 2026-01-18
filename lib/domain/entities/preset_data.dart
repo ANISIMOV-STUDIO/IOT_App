@@ -3,17 +3,10 @@ library;
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import '../../generated/l10n/app_localizations.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
 
 /// HVAC preset configuration
 class PresetData extends Equatable {
-  final String id;
-  final String name;
-  final String description;
-  final IconData icon;
-  final int temperature;
-  final int airflow;
-  final Color? color;
 
   const PresetData({
     required this.id,
@@ -24,6 +17,13 @@ class PresetData extends Equatable {
     required this.airflow,
     this.color,
   });
+  final String id;
+  final String name;
+  final String description;
+  final IconData icon;
+  final int temperature;
+  final int airflow;
+  final Color? color;
 
   PresetData copyWith({
     String? id,
@@ -33,8 +33,7 @@ class PresetData extends Equatable {
     int? temperature,
     int? airflow,
     Color? color,
-  }) {
-    return PresetData(
+  }) => PresetData(
       id: id ?? this.id,
       name: name ?? this.name,
       description: description ?? this.description,
@@ -43,7 +42,6 @@ class PresetData extends Equatable {
       airflow: airflow ?? this.airflow,
       color: color ?? this.color,
     );
-  }
 
   @override
   List<Object?> get props => [id, name, description, icon, temperature, airflow, color];

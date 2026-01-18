@@ -13,15 +13,15 @@ library;
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../../../../core/config/api_config.dart';
-import '../../../../core/error/http_error_handler.dart';
-import '../../../../core/logging/api_logger.dart';
-import '../../platform/api_client.dart';
+import 'package:hvac_control/core/config/api_config.dart';
+import 'package:hvac_control/core/error/http_error_handler.dart';
+import 'package:hvac_control/core/logging/api_logger.dart';
+import 'package:hvac_control/data/api/platform/api_client.dart';
 
 class ScheduleHttpClient {
-  final ApiClient _apiClient;
 
   ScheduleHttpClient(this._apiClient);
+  final ApiClient _apiClient;
 
   /// Получить расписание устройства
   ///
@@ -78,7 +78,9 @@ class ScheduleHttpClient {
       final day = dayEntry.key; // monday, tuesday, etc.
       final settings = dayEntry.value as Map<String, dynamic>?;
 
-      if (settings == null) continue;
+      if (settings == null) {
+        continue;
+      }
 
       final onHour = settings['onHour'] as int? ?? 0;
       final onMinute = settings['onMinute'] as int? ?? 0;
@@ -277,7 +279,7 @@ class ScheduleHttpClient {
   /// Включить/выключить расписание для устройства
   ///
   /// Backend: POST /api/device/{id}/schedule
-  Future<void> setScheduleEnabled(String deviceId, bool enabled) async {
+  Future<void> setScheduleEnabled(String deviceId, {required bool enabled}) async {
     final url = '${ApiConfig.deviceApiUrl}/$deviceId/schedule';
     final body = json.encode({'enabled': enabled});
 

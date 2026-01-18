@@ -2,37 +2,33 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_theme.dart';
-import '../../../../core/theme/app_radius.dart';
-import '../../../../core/theme/spacing.dart';
-import '../../../widgets/breez/breez_card.dart';
-import '../../../widgets/breez/breez_button.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
 
 // =============================================================================
 // CONSTANTS
 // =============================================================================
 
 abstract class _ScheduleFormConstants {
-  static const double labelFontSize = 12.0;
-  static const double valueFontSize = 14.0;
-  static const double headerFontSize = 18.0;
-  static const double iconSize = 18.0;
+  static const double labelFontSize = 12;
+  static const double valueFontSize = 14;
+  static const double headerFontSize = 18;
+  static const double iconSize = 18;
 }
 
 /// Dropdown selector with label
 class ScheduleDropdown extends StatelessWidget {
+
+  const ScheduleDropdown({
+    required this.label, required this.value, required this.items, required this.onChanged, super.key,
+  });
   final String label;
   final String value;
   final List<String> items;
   final ValueChanged<String?> onChanged;
-
-  const ScheduleDropdown({
-    super.key,
-    required this.label,
-    required this.value,
-    required this.items,
-    required this.onChanged,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -64,9 +60,7 @@ class ScheduleDropdown extends StatelessWidget {
               fontSize: _ScheduleFormConstants.valueFontSize,
               color: colors.text,
             ),
-            items: items.map((item) {
-              return DropdownMenuItem(value: item, child: Text(item));
-            }).toList(),
+            items: items.map((item) => DropdownMenuItem(value: item, child: Text(item))).toList(),
             onChanged: onChanged,
           ),
         ),
@@ -77,20 +71,15 @@ class ScheduleDropdown extends StatelessWidget {
 
 /// Time picker button with label
 class ScheduleTimeButton extends StatelessWidget {
+
+  const ScheduleTimeButton({
+    required this.label, required this.time, required this.onTap, super.key,
+  });
   final String label;
   final TimeOfDay time;
   final VoidCallback onTap;
 
-  const ScheduleTimeButton({
-    super.key,
-    required this.label,
-    required this.time,
-    required this.onTap,
-  });
-
-  String _formatTime(TimeOfDay time) {
-    return '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
-  }
+  String _formatTime(TimeOfDay time) => '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
 
   @override
   Widget build(BuildContext context) {
@@ -140,20 +129,17 @@ class ScheduleTimeButton extends StatelessWidget {
 
 /// Temperature slider with label and value display
 class ScheduleTemperatureSlider extends StatelessWidget {
+
+  const ScheduleTemperatureSlider({
+    required this.label, required this.value, required this.onChanged, super.key,
+    this.min = 16,
+    this.max = 30,
+  });
   final String label;
   final int value;
   final ValueChanged<double> onChanged;
   final double min;
   final double max;
-
-  const ScheduleTemperatureSlider({
-    super.key,
-    required this.label,
-    required this.value,
-    required this.onChanged,
-    this.min = 16,
-    this.max = 30,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -198,16 +184,13 @@ class ScheduleTemperatureSlider extends StatelessWidget {
 
 /// Active toggle switch with label
 class ScheduleActiveToggle extends StatelessWidget {
+
+  const ScheduleActiveToggle({
+    required this.label, required this.value, required this.onChanged, super.key,
+  });
   final String label;
   final bool value;
   final ValueChanged<bool> onChanged;
-
-  const ScheduleActiveToggle({
-    super.key,
-    required this.label,
-    required this.value,
-    required this.onChanged,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -251,14 +234,12 @@ class ScheduleActiveToggle extends StatelessWidget {
 
 /// Dialog header with icon and title
 class ScheduleDialogHeader extends StatelessWidget {
-  final IconData icon;
-  final String title;
 
   const ScheduleDialogHeader({
-    super.key,
-    required this.icon,
-    required this.title,
+    required this.icon, required this.title, super.key,
   });
+  final IconData icon;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -283,18 +264,14 @@ class ScheduleDialogHeader extends StatelessWidget {
 
 /// Dialog action buttons (Cancel + Save/Add)
 class ScheduleDialogActions extends StatelessWidget {
+
+  const ScheduleDialogActions({
+    required this.cancelLabel, required this.saveLabel, required this.onCancel, required this.onSave, super.key,
+  });
   final String cancelLabel;
   final String saveLabel;
   final VoidCallback onCancel;
   final VoidCallback onSave;
-
-  const ScheduleDialogActions({
-    super.key,
-    required this.cancelLabel,
-    required this.saveLabel,
-    required this.onCancel,
-    required this.onSave,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -340,12 +317,10 @@ class ScheduleDialogActions extends StatelessWidget {
 Future<TimeOfDay?> showScheduleTimePicker(
   BuildContext context,
   TimeOfDay initialTime,
-) {
-  return showTimePicker(
+) => showTimePicker(
     context: context,
     initialTime: initialTime,
-    builder: (context, child) {
-      return Theme(
+    builder: (context, child) => Theme(
         data: Theme.of(context).copyWith(
           colorScheme: ColorScheme.dark(
             primary: AppColors.accent,
@@ -353,7 +328,5 @@ Future<TimeOfDay?> showScheduleTimePicker(
           ),
         ),
         child: child!,
-      );
-    },
+      ),
   );
-}

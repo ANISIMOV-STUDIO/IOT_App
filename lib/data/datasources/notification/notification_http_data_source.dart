@@ -4,22 +4,21 @@
 /// Real-time обновления через SignalR (обрабатываются в repository).
 library;
 
-import '../../api/http/clients/notification_http_client.dart';
-import '../../api/platform/api_client.dart';
-import 'notification_data_source.dart';
+import 'package:hvac_control/data/api/http/clients/notification_http_client.dart';
+import 'package:hvac_control/data/api/platform/api_client.dart';
+import 'package:hvac_control/data/datasources/notification/notification_data_source.dart';
 
 class NotificationHttpDataSource implements NotificationDataSource {
-  final NotificationHttpClient _httpClient;
 
   NotificationHttpDataSource(ApiClient apiClient)
       : _httpClient = NotificationHttpClient(apiClient);
+  final NotificationHttpClient _httpClient;
 
   @override
   Future<List<NotificationDto>> getNotifications({String? deviceId}) async {
     final jsonList = await _httpClient.getNotifications(deviceId: deviceId);
 
-    return jsonList.map((json) {
-      return NotificationDto(
+    return jsonList.map((json) => NotificationDto(
         id: json['id'] as String,
         deviceId: json['deviceId'] as String? ?? '',
         title: json['title'] as String,
@@ -29,8 +28,7 @@ class NotificationHttpDataSource implements NotificationDataSource {
             ? DateTime.parse(json['timestamp'] as String)
             : DateTime.now(),
         isRead: json['isRead'] as bool? ?? false,
-      );
-    }).toList();
+      )).toList();
   }
 
   @override
@@ -44,10 +42,9 @@ class NotificationHttpDataSource implements NotificationDataSource {
   }
 
   @override
-  Stream<NotificationDto>? watchNotifications({String? deviceId}) {
+  Stream<NotificationDto>? watchNotifications({String? deviceId}) =>
     // Web использует SignalR для real-time, который обрабатывается в repository
-    return null;
-  }
+    null;
 
   @override
   void dispose() {

@@ -5,24 +5,23 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../core/services/connectivity_service.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../generated/l10n/app_localizations.dart';
+import 'package:hvac_control/core/services/connectivity_service.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
 
 /// Баннер "Нет подключения к интернету"
 class OfflineBanner extends StatelessWidget {
+
+  const OfflineBanner({
+    required this.isVisible, super.key,
+    this.status,
+  });
   /// Отображать ли баннер
   final bool isVisible;
 
   /// Статус сети для определения сообщения
   final NetworkStatus? status;
-
-  const OfflineBanner({
-    super.key,
-    required this.isVisible,
-    this.status,
-  });
 
   String _getMessage(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -40,7 +39,9 @@ class OfflineBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (!isVisible) return const SizedBox.shrink();
+    if (!isVisible) {
+      return const SizedBox.shrink();
+    }
 
     return Container(
       width: double.infinity,
@@ -74,6 +75,13 @@ class OfflineBanner extends StatelessWidget {
 
 /// Обёртка для экрана с offline баннером
 class OfflineAwareScaffold extends StatelessWidget {
+
+  const OfflineAwareScaffold({
+    required this.isOffline, required this.body, super.key,
+    this.appBar,
+    this.bottomNavigationBar,
+    this.floatingActionButton,
+  });
   /// Показывать ли offline баннер
   final bool isOffline;
 
@@ -89,18 +97,8 @@ class OfflineAwareScaffold extends StatelessWidget {
   /// FloatingActionButton
   final Widget? floatingActionButton;
 
-  const OfflineAwareScaffold({
-    super.key,
-    required this.isOffline,
-    required this.body,
-    this.appBar,
-    this.bottomNavigationBar,
-    this.floatingActionButton,
-  });
-
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       appBar: appBar,
       body: Column(
         children: [
@@ -111,11 +109,16 @@ class OfflineAwareScaffold extends StatelessWidget {
       bottomNavigationBar: bottomNavigationBar,
       floatingActionButton: floatingActionButton,
     );
-  }
 }
 
 /// Анимированный баннер с плавным появлением/исчезновением
 class AnimatedOfflineBanner extends StatelessWidget {
+
+  const AnimatedOfflineBanner({
+    required this.isVisible, super.key,
+    this.status,
+    this.duration = const Duration(milliseconds: 300),
+  });
   /// Отображать ли баннер
   final bool isVisible;
 
@@ -125,17 +128,12 @@ class AnimatedOfflineBanner extends StatelessWidget {
   /// Длительность анимации
   final Duration duration;
 
-  const AnimatedOfflineBanner({
-    super.key,
-    required this.isVisible,
-    this.status,
-    this.duration = const Duration(milliseconds: 300),
-  });
-
   @override
   Widget build(BuildContext context) {
     // Не занимает место когда скрыт
-    if (!isVisible) return const SizedBox.shrink();
+    if (!isVisible) {
+      return const SizedBox.shrink();
+    }
 
     return OfflineBanner(
       isVisible: true,

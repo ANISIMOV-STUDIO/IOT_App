@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mocktail/mocktail.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mocktail/mocktail.dart';
 
 /// Test helper utilities for widget and integration testing
 class TestHelper {
@@ -13,7 +13,7 @@ class TestHelper {
     NavigatorObserver? navigatorObserver,
     ThemeData? theme,
   }) {
-    Widget child = widget;
+    var child = widget;
 
     // Wrap with BLoC providers if provided
     if (blocProviders != null && blocProviders.isNotEmpty) {
@@ -44,9 +44,7 @@ class TestHelper {
   }
 
   /// Creates a mock navigation observer for testing navigation
-  static NavigatorObserver createMockNavigatorObserver() {
-    return MockNavigatorObserver();
-  }
+  static NavigatorObserver createMockNavigatorObserver() => MockNavigatorObserver();
 
   /// Setup GetIt for testing with mock dependencies
   static void setupTestDependencies() {
@@ -65,11 +63,9 @@ class TestHelper {
   static Widget createTestableWidget(
     Widget widget, {
     Size designSize = const Size(375, 812),
-  }) {
-    return MaterialApp(
+  }) => MaterialApp(
       home: Material(child: widget),
     );
-  }
 
   /// Verify widget has proper responsive dimensions
   static void verifyResponsiveDimensions(
@@ -96,8 +92,7 @@ class TestDataBuilder {
     String? name,
     double? currentTemp,
     double? targetTemp,
-  }) {
-    return {
+  }) => {
       'id': id ?? 'test-unit-1',
       'name': name ?? 'Test HVAC Unit',
       'currentTemp': currentTemp ?? 22.5,
@@ -108,28 +103,24 @@ class TestDataBuilder {
       'power': true,
       'timestamp': DateTime.now().toIso8601String(),
     };
-  }
 
   static Map<String, dynamic> createMockUser({
     String? id,
     String? email,
     String? name,
-  }) {
-    return {
+  }) => {
       'id': id ?? 'test-user-1',
       'email': email ?? 'test@example.com',
       'name': name ?? 'Test User',
       'role': 'admin',
       'createdAt': DateTime.now().toIso8601String(),
     };
-  }
 
   static Map<String, dynamic> createMockSchedule({
     String? id,
     String? unitId,
     String? name,
-  }) {
-    return {
+  }) => {
       'id': id ?? 'test-schedule-1',
       'unitId': unitId ?? 'test-unit-1',
       'name': name ?? 'Test Schedule',
@@ -140,75 +131,57 @@ class TestDataBuilder {
       'temperature': 22.0,
       'mode': 'auto',
     };
-  }
 }
 
 /// Custom matchers for testing
 class CustomMatchers {
-  static Matcher hasResponsiveWidth() {
-    return const _HasResponsiveWidth();
-  }
+  static Matcher hasResponsiveWidth() => const _HasResponsiveWidth();
 
-  static Matcher hasResponsiveHeight() {
-    return const _HasResponsiveHeight();
-  }
+  static Matcher hasResponsiveHeight() => const _HasResponsiveHeight();
 
-  static Matcher hasProperConst() {
-    return const _HasProperConst();
-  }
+  static Matcher hasProperConst() => const _HasProperConst();
 }
 
 class _HasResponsiveWidth extends Matcher {
   const _HasResponsiveWidth();
 
   @override
-  bool matches(dynamic item, Map matchState) {
-    // Implementation to check if widget uses .w extension
-    return true;
-  }
+  bool matches(dynamic item, Map<dynamic, dynamic> matchState) =>
+      // Implementation to check if widget uses .w extension
+      true;
 
   @override
-  Description describe(Description description) {
-    return description.add('has responsive width using .w extension');
-  }
+  Description describe(Description description) => description.add('has responsive width using .w extension');
 }
 
 class _HasResponsiveHeight extends Matcher {
   const _HasResponsiveHeight();
 
   @override
-  bool matches(dynamic item, Map matchState) {
-    // Implementation to check if widget uses .h extension
-    return true;
-  }
+  bool matches(dynamic item, Map<dynamic, dynamic> matchState) =>
+      // Implementation to check if widget uses .h extension
+      true;
 
   @override
-  Description describe(Description description) {
-    return description.add('has responsive height using .h extension');
-  }
+  Description describe(Description description) => description.add('has responsive height using .h extension');
 }
 
 class _HasProperConst extends Matcher {
   const _HasProperConst();
 
   @override
-  bool matches(dynamic item, Map matchState) {
-    // Check if widget properly uses const constructors
-    return true;
-  }
+  bool matches(dynamic item, Map<dynamic, dynamic> matchState) =>
+      // Check if widget properly uses const constructors
+      true;
 
   @override
-  Description describe(Description description) {
-    return description.add('uses const constructors where appropriate');
-  }
+  Description describe(Description description) => description.add('uses const constructors where appropriate');
 }
 
 /// Extension methods for testing
 extension WidgetTesterExtensions on WidgetTester {
   /// Finds widget by key with type safety
-  T widget<T extends Widget>(Key key) {
-    return find.byKey(key).evaluate().single.widget as T;
-  }
+  T widget<T extends Widget>(Key key) => find.byKey(key).evaluate().single.widget as T;
 
   /// Pumps widget multiple times for animations
   Future<void> pumpAnimations([
@@ -225,7 +198,7 @@ extension WidgetTesterExtensions on WidgetTester {
     Finder? scrollable,
     int maxScrolls = 50,
   }) async {
-    for (int i = 0; i < maxScrolls; i++) {
+    for (var i = 0; i < maxScrolls; i++) {
       if (finder.evaluate().isNotEmpty) {
         break;
       }

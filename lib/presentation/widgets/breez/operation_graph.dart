@@ -3,13 +3,13 @@ library;
 
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../domain/entities/graph_data.dart';
-import '../../../generated/l10n/app_localizations.dart';
-import 'breez_card.dart';
-import 'operation_graph_painter.dart';
-import 'operation_graph_widgets.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/domain/entities/graph_data.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
+import 'package:hvac_control/presentation/widgets/breez/operation_graph_painter.dart';
+import 'package:hvac_control/presentation/widgets/breez/operation_graph_widgets.dart';
 
 export '../../../domain/entities/graph_data.dart';
 
@@ -20,15 +20,15 @@ export '../../../domain/entities/graph_data.dart';
 /// Константы для OperationGraph
 abstract class _GraphConstants {
   // Размеры
-  static const double yAxisWidth = 28.0;
-  static const double xAxisHeight = 30.0;
+  static const double yAxisWidth = 28;
+  static const double xAxisHeight = 30;
 
   // Шрифты
-  static const double labelFontSize = 9.0;
-  static const double valueFontSize = 32.0;
-  static const double unitFontSize = 16.0;
-  static const double axisFontSize = 9.0;
-  static const double xAxisFontSize = 10.0;
+  static const double labelFontSize = 9;
+  static const double valueFontSize = 32;
+  static const double unitFontSize = 16;
+  static const double axisFontSize = 9;
+  static const double xAxisFontSize = 10;
 
   // Отступы
   static const int maxXAxisLabels = 6;
@@ -46,20 +46,19 @@ abstract class _GraphConstants {
 /// - Кэширование статистики
 /// - Accessibility через Semantics
 class OperationGraph extends StatefulWidget {
-  final List<GraphDataPoint> data;
-  final GraphMetric selectedMetric;
-  final ValueChanged<GraphMetric>? onMetricChanged;
-  final double? highlightValue;
-  final int? highlightIndex;
 
   const OperationGraph({
-    super.key,
-    required this.data,
+    required this.data, super.key,
     this.selectedMetric = GraphMetric.temperature,
     this.onMetricChanged,
     this.highlightValue,
     this.highlightIndex,
   });
+  final List<GraphDataPoint> data;
+  final GraphMetric selectedMetric;
+  final ValueChanged<GraphMetric>? onMetricChanged;
+  final double? highlightValue;
+  final int? highlightIndex;
 
   @override
   State<OperationGraph> createState() => _OperationGraphState();
@@ -133,14 +132,18 @@ class _OperationGraphState extends State<OperationGraph> {
     }
 
     // Один проход вместо 4 отдельных reduce
-    double minVal = data.first.value;
-    double maxVal = data.first.value;
+    var minVal = data.first.value;
+    var maxVal = data.first.value;
     double sum = 0;
 
     for (final point in data) {
       final v = point.value;
-      if (v < minVal) minVal = v;
-      if (v > maxVal) maxVal = v;
+      if (v < minVal) {
+        minVal = v;
+      }
+      if (v > maxVal) {
+        maxVal = v;
+      }
       sum += v;
     }
 
@@ -173,10 +176,6 @@ class _OperationGraphState extends State<OperationGraph> {
 
 /// Graph statistics data
 class _GraphStats {
-  final double current;
-  final double min;
-  final double max;
-  final double avg;
 
   const _GraphStats({
     required this.current,
@@ -184,10 +183,22 @@ class _GraphStats {
     required this.max,
     required this.avg,
   });
+  final double current;
+  final double min;
+  final double max;
+  final double avg;
 }
 
 /// Header with current value and metric tabs
 class _GraphHeader extends StatelessWidget {
+
+  const _GraphHeader({
+    required this.currentValue,
+    required this.metricLabel,
+    required this.metricUnit,
+    required this.selectedMetric,
+    required this.l10n, required this.colors, this.onMetricChanged,
+  });
   final double currentValue;
   final String metricLabel;
   final String metricUnit;
@@ -196,19 +207,8 @@ class _GraphHeader extends StatelessWidget {
   final AppLocalizations l10n;
   final BreezColors colors;
 
-  const _GraphHeader({
-    required this.currentValue,
-    required this.metricLabel,
-    required this.metricUnit,
-    required this.selectedMetric,
-    this.onMetricChanged,
-    required this.l10n,
-    required this.colors,
-  });
-
   @override
-  Widget build(BuildContext context) {
-    return Semantics(
+  Widget build(BuildContext context) => Semantics(
       label: '$metricLabel: ${currentValue.toStringAsFixed(1)} $metricUnit',
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -226,7 +226,7 @@ class _GraphHeader extends StatelessWidget {
                     color: colors.textMuted,
                   ),
                 ),
-                SizedBox(height: AppSpacing.xxs),
+                const SizedBox(height: AppSpacing.xxs),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.baseline,
                   textBaseline: TextBaseline.alphabetic,
@@ -240,7 +240,7 @@ class _GraphHeader extends StatelessWidget {
                         color: colors.text,
                       ),
                     ),
-                    SizedBox(width: AppSpacing.xxs),
+                    const SizedBox(width: AppSpacing.xxs),
                     Text(
                       metricUnit,
                       style: TextStyle(
@@ -264,14 +264,14 @@ class _GraphHeader extends StatelessWidget {
                 isSelected: selectedMetric == GraphMetric.temperature,
                 onTap: () => onMetricChanged?.call(GraphMetric.temperature),
               ),
-              SizedBox(width: AppSpacing.xs),
+              const SizedBox(width: AppSpacing.xs),
               GraphMetricTab(
                 icon: Icons.water_drop_outlined,
                 label: l10n.humidShort,
                 isSelected: selectedMetric == GraphMetric.humidity,
                 onTap: () => onMetricChanged?.call(GraphMetric.humidity),
               ),
-              SizedBox(width: AppSpacing.xs),
+              const SizedBox(width: AppSpacing.xs),
               GraphMetricTab(
                 icon: Icons.air,
                 label: l10n.airflowShort,
@@ -283,16 +283,10 @@ class _GraphHeader extends StatelessWidget {
         ],
       ),
     );
-  }
 }
 
 /// Statistics row with min/max/avg badges
 class _StatisticsRow extends StatelessWidget {
-  final double minValue;
-  final double maxValue;
-  final double avgValue;
-  final String unit;
-  final AppLocalizations l10n;
 
   const _StatisticsRow({
     required this.minValue,
@@ -301,10 +295,14 @@ class _StatisticsRow extends StatelessWidget {
     required this.unit,
     required this.l10n,
   });
+  final double minValue;
+  final double maxValue;
+  final double avgValue;
+  final String unit;
+  final AppLocalizations l10n;
 
   @override
-  Widget build(BuildContext context) {
-    return Row(
+  Widget build(BuildContext context) => Row(
       children: [
         GraphStatBadge(
           label: l10n.minShort,
@@ -325,30 +323,25 @@ class _StatisticsRow extends StatelessWidget {
         ),
       ],
     );
-  }
 }
 
 /// Graph area with Y-axis, canvas, and X-axis
 class _GraphArea extends StatelessWidget {
+
+  const _GraphArea({
+    required this.data,
+    required this.onHoverChanged, required this.colors, this.hoveredIndex,
+    this.highlightIndex,
+  });
   final List<GraphDataPoint> data;
   final int? hoveredIndex;
   final int? highlightIndex;
   final ValueChanged<int?> onHoverChanged;
   final BreezColors colors;
 
-  const _GraphArea({
-    required this.data,
-    this.hoveredIndex,
-    this.highlightIndex,
-    required this.onHoverChanged,
-    required this.colors,
-  });
-
   @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return Row(
+  Widget build(BuildContext context) => LayoutBuilder(
+      builder: (context, constraints) => Row(
           children: [
             // Y-axis labels
             _YAxis(data: data, colors: colors),
@@ -381,20 +374,20 @@ class _GraphArea extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: AppSpacing.xs),
+                  const SizedBox(height: AppSpacing.xs),
                   // X-axis labels
                   _XAxis(data: data, colors: colors),
                 ],
               ),
             ),
           ],
-        );
-      },
+        ),
     );
-  }
 
   int? _getIndexFromPosition(double dx, double width) {
-    if (data.isEmpty) return null;
+    if (data.isEmpty) {
+      return null;
+    }
     final stepWidth = width / (data.length - 1);
     final index = (dx / stepWidth).round();
     if (index >= 0 && index < data.length) {
@@ -406,13 +399,13 @@ class _GraphArea extends StatelessWidget {
 
 /// Y-axis labels widget
 class _YAxis extends StatelessWidget {
-  final List<GraphDataPoint> data;
-  final BreezColors colors;
 
   const _YAxis({
     required this.data,
     required this.colors,
   });
+  final List<GraphDataPoint> data;
+  final BreezColors colors;
 
   @override
   Widget build(BuildContext context) {
@@ -437,8 +430,7 @@ class _YAxis extends StatelessWidget {
     );
   }
 
-  Widget _buildLabel(String text, BreezColors colors) {
-    return Text(
+  Widget _buildLabel(String text, BreezColors colors) => Text(
       text,
       style: TextStyle(
         fontSize: _GraphConstants.axisFontSize,
@@ -446,18 +438,17 @@ class _YAxis extends StatelessWidget {
         color: colors.textMuted.withValues(alpha: 0.6),
       ),
     );
-  }
 }
 
 /// X-axis labels widget
 class _XAxis extends StatelessWidget {
-  final List<GraphDataPoint> data;
-  final BreezColors colors;
 
   const _XAxis({
     required this.data,
     required this.colors,
   });
+  final List<GraphDataPoint> data;
+  final BreezColors colors;
 
   @override
   Widget build(BuildContext context) {

@@ -2,16 +2,21 @@
 library;
 
 import 'dart:async';
+
+import 'package:hvac_control/core/error/api_exception.dart';
+import 'package:hvac_control/core/logging/api_logger.dart';
+import 'package:hvac_control/data/api/http/clients/hvac_http_client.dart';
+import 'package:hvac_control/data/api/platform/api_client.dart';
+import 'package:hvac_control/data/api/websocket/signalr_hub_connection.dart';
+import 'package:hvac_control/domain/entities/smart_device.dart';
+import 'package:hvac_control/domain/repositories/smart_device_repository.dart';
 import 'package:signalr_netcore/signalr_client.dart';
-import '../../domain/entities/smart_device.dart';
-import '../../domain/repositories/smart_device_repository.dart';
-import '../api/platform/api_client.dart';
-import '../api/http/clients/hvac_http_client.dart';
-import '../api/websocket/signalr_hub_connection.dart';
-import '../../core/error/api_exception.dart';
-import '../../core/logging/api_logger.dart';
 
 class RealSmartDeviceRepository implements SmartDeviceRepository {
+
+  RealSmartDeviceRepository(this._apiClient, [this._signalR]) {
+    _httpClient = HvacHttpClient(_apiClient);
+  }
   final ApiClient _apiClient;
   final SignalRHubConnection? _signalR;
   late final HvacHttpClient _httpClient;
@@ -23,10 +28,6 @@ class RealSmartDeviceRepository implements SmartDeviceRepository {
 
   /// Интервал polling когда SignalR не работает
   static const _pollInterval = Duration(seconds: 30);
-
-  RealSmartDeviceRepository(this._apiClient, [this._signalR]) {
-    _httpClient = HvacHttpClient(_apiClient);
-  }
 
   @override
   Future<List<SmartDevice>> getAllDevices() async {
@@ -59,7 +60,9 @@ class RealSmartDeviceRepository implements SmartDeviceRepository {
 
   /// Парсинг типа устройства из строки
   SmartDeviceType _parseDeviceType(String? type) {
-    if (type == null) return SmartDeviceType.ventilation;
+    if (type == null) {
+      return SmartDeviceType.ventilation;
+    }
 
     switch (type.toLowerCase()) {
       case 'ventilation':
@@ -111,7 +114,7 @@ class RealSmartDeviceRepository implements SmartDeviceRepository {
   }
 
   @override
-  Future<SmartDevice> toggleDevice(String id, bool isOn) async {
+  Future<SmartDevice> toggleDevice(String id, {required bool isOn}) async {
     final current = await getDeviceById(id);
     if (current == null) {
       final error = 'Device not found: $id';
@@ -123,7 +126,7 @@ class RealSmartDeviceRepository implements SmartDeviceRepository {
       );
     }
 
-    final jsonDevice = await _httpClient.setPower(id, isOn);
+    final jsonDevice = await _httpClient.setPower(id, power: isOn);
 
     return SmartDevice(
       id: (jsonDevice['id'] as String?) ?? id,
@@ -139,10 +142,9 @@ class RealSmartDeviceRepository implements SmartDeviceRepository {
   }
 
   @override
-  Future<SmartDevice> updateDevice(SmartDevice device) async {
+  Future<SmartDevice> updateDevice(SmartDevice device) async =>
     // TODO: Implement update endpoint when available
-    return device;
-  }
+    device;
 
   @override
   Stream<List<SmartDevice>> watchDevices() {

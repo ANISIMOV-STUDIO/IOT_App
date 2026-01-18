@@ -2,29 +2,38 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/spacing.dart';
-import 'breez_button.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
 
 // =============================================================================
 // CONSTANTS
 // =============================================================================
 
 abstract class _DialogButtonConstants {
-  static const double fontSize = 14.0;
-  static const double fontSizeSmall = 12.0;
-  static const double iconSize = 18.0;
-  static const double iconSizeMedium = 20.0;
-  static const double verticalPadding = 12.0;
-  static const double horizontalPadding = 20.0;
-  static const double subtitleGap = 2.0;
+  static const double fontSize = 14;
+  static const double fontSizeSmall = 12;
+  static const double iconSize = 18;
+  static const double iconSizeMedium = 20;
+  static const double verticalPadding = 12;
+  static const double horizontalPadding = 20;
+  static const double subtitleGap = 2;
 }
 
 /// Dialog action button (primary/secondary/danger)
 ///
 /// Использует базовый BreezButton для единообразия анимаций и accessibility.
 class BreezDialogButton extends StatelessWidget {
+
+  const BreezDialogButton({
+    required this.label, super.key,
+    this.onTap,
+    this.isPrimary = false,
+    this.isLoading = false,
+    this.isDanger = false,
+    this.semanticLabel,
+    this.tooltip,
+  });
   final String label;
   final VoidCallback? onTap;
   final bool isPrimary;
@@ -36,17 +45,6 @@ class BreezDialogButton extends StatelessWidget {
 
   /// Tooltip shown on hover
   final String? tooltip;
-
-  const BreezDialogButton({
-    super.key,
-    required this.label,
-    this.onTap,
-    this.isPrimary = false,
-    this.isLoading = false,
-    this.isDanger = false,
-    this.semanticLabel,
-    this.tooltip,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -75,9 +73,7 @@ class BreezDialogButton extends StatelessWidget {
       isLoading: isLoading,
       backgroundColor: bgColor,
       hoverColor: hoverColor,
-      borderRadius: AppRadius.button,
       showBorder: !isPrimary && !isDanger,
-      enableScale: true,
       enableGlow: isPrimary || isDanger,
       padding: const EdgeInsets.symmetric(
         horizontal: _DialogButtonConstants.horizontalPadding,
@@ -101,6 +97,12 @@ class BreezDialogButton extends StatelessWidget {
 ///
 /// Use for secondary actions like "Edit Profile", "Change Password"
 class BreezActionButton extends StatelessWidget {
+
+  const BreezActionButton({
+    required this.icon, required this.label, required this.onTap, super.key,
+    this.semanticLabel,
+    this.tooltip,
+  });
   final IconData icon;
   final String label;
   final VoidCallback onTap;
@@ -111,18 +113,8 @@ class BreezActionButton extends StatelessWidget {
   /// Tooltip shown on hover
   final String? tooltip;
 
-  const BreezActionButton({
-    super.key,
-    required this.icon,
-    required this.label,
-    required this.onTap,
-    this.semanticLabel,
-    this.tooltip,
-  });
-
   @override
-  Widget build(BuildContext context) {
-    return BreezButton(
+  Widget build(BuildContext context) => BreezButton(
       onTap: onTap,
       backgroundColor: Colors.transparent,
       hoverColor: AppColors.accent.withValues(alpha: 0.1),
@@ -148,11 +140,18 @@ class BreezActionButton extends StatelessWidget {
         ],
       ),
     );
-  }
 }
 
 /// Settings list button with icon, label and optional subtitle
 class BreezSettingsButton extends StatelessWidget {
+
+  const BreezSettingsButton({
+    required this.icon, required this.label, required this.onTap, super.key,
+    this.subtitle,
+    this.isDanger = false,
+    this.semanticLabel,
+    this.tooltip,
+  });
   final IconData icon;
   final String label;
   final String? subtitle;
@@ -164,17 +163,6 @@ class BreezSettingsButton extends StatelessWidget {
 
   /// Tooltip shown on hover
   final String? tooltip;
-
-  const BreezSettingsButton({
-    super.key,
-    required this.icon,
-    required this.label,
-    this.subtitle,
-    required this.onTap,
-    this.isDanger = false,
-    this.semanticLabel,
-    this.tooltip,
-  });
 
   @override
   Widget build(BuildContext context) {

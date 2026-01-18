@@ -14,6 +14,13 @@ const Duration _kShimmerDuration = Duration(milliseconds: 1500);
 /// Оборачивает виджет и добавляет пульсирующую прозрачность
 /// когда [isPending] == true
 class PendingIndicator extends StatefulWidget {
+
+  const PendingIndicator({
+    required this.child, super.key,
+    this.isPending = false,
+    this.minOpacity = 0.5,
+    this.maxOpacity = 1.0,
+  });
   /// Дочерний виджет
   final Widget child;
 
@@ -25,14 +32,6 @@ class PendingIndicator extends StatefulWidget {
 
   /// Максимальная прозрачность (обычно 1.0)
   final double maxOpacity;
-
-  const PendingIndicator({
-    super.key,
-    required this.child,
-    this.isPending = false,
-    this.minOpacity = 0.5,
-    this.maxOpacity = 1.0,
-  });
 
   @override
   State<PendingIndicator> createState() => _PendingIndicatorState();
@@ -71,8 +70,8 @@ class _PendingIndicatorState extends State<PendingIndicator>
       if (widget.isPending) {
         _controller.repeat(reverse: true);
       } else {
-        _controller.stop();
-        _controller.value = 0.0; // Reset to full opacity
+        _controller..stop()
+        ..value = 0.0; // Reset to full opacity
       }
     }
   }
@@ -91,12 +90,10 @@ class _PendingIndicatorState extends State<PendingIndicator>
 
     return AnimatedBuilder(
       animation: _opacityAnimation,
-      builder: (context, child) {
-        return Opacity(
+      builder: (context, child) => Opacity(
           opacity: _opacityAnimation.value,
           child: child,
-        );
-      },
+        ),
       child: widget.child,
     );
   }

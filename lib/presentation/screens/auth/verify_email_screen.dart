@@ -4,30 +4,29 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../../core/constants/auth_constants.dart';
-import '../../../core/navigation/app_router.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../core/utils/snackbar_utils.dart';
-import '../../bloc/auth/auth_bloc.dart';
-import '../../../generated/l10n/app_localizations.dart';
-import '../../bloc/auth/auth_event.dart';
-import '../../bloc/auth/auth_state.dart';
-import '../../widgets/auth/auth_header.dart';
-import '../../widgets/breez/breez_pin_code_field.dart';
-import '../../widgets/breez/breez_text_button.dart';
+import 'package:hvac_control/core/constants/auth_constants.dart';
+import 'package:hvac_control/core/navigation/app_router.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/core/utils/snackbar_utils.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
+import 'package:hvac_control/presentation/bloc/auth/auth_bloc.dart';
+import 'package:hvac_control/presentation/bloc/auth/auth_event.dart';
+import 'package:hvac_control/presentation/bloc/auth/auth_state.dart';
+import 'package:hvac_control/presentation/widgets/auth/auth_header.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_pin_code_field.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_text_button.dart';
 
 /// Экран подтверждения email с вводом 6-значного кода
 class VerifyEmailScreen extends StatefulWidget {
-  final String email;
-  final String password;
 
   const VerifyEmailScreen({
-    super.key,
     required this.email,
     required this.password,
+    super.key,
   });
+  final String email;
+  final String password;
 
   @override
   State<VerifyEmailScreen> createState() => _VerifyEmailScreenState();
@@ -136,7 +135,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                         final isLoading = state is AuthLoading;
 
                         return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          padding: const EdgeInsets.symmetric(vertical: 8),
                           child: BreezTextButton(
                             text: l10n.verifyEmailResend,
                             onPressed: isLoading ? null : _handleResendCode,

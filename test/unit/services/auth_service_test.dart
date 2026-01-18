@@ -11,19 +11,17 @@
 library;
 
 import 'dart:convert';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-import 'package:http/http.dart' as http;
 
+import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 import 'package:hvac_control/data/services/auth_service.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../fixtures/test_data.dart';
 
 /// Mock для HTTP клиента
 class MockHttpClient extends Mock implements http.Client {}
 
-/// Mock для HTTP Response
-class MockResponse extends Mock implements http.Response {}
 
 void main() {
   late MockHttpClient mockClient;
@@ -41,22 +39,18 @@ void main() {
   });
 
   /// Создаёт успешный HTTP ответ с JSON
-  http.Response successResponse(Map<String, dynamic> body) {
-    return http.Response(
+  http.Response successResponse(Map<String, dynamic> body) => http.Response(
       json.encode(body),
       200,
       headers: {'content-type': 'application/json'},
     );
-  }
 
   /// Создаёт ошибочный HTTP ответ
-  http.Response errorResponse(int statusCode, String message) {
-    return http.Response(
+  http.Response errorResponse(int statusCode, String message) => http.Response(
       json.encode({'message': message}),
       statusCode,
       headers: {'content-type': 'application/json'},
     );
-  }
 
   group('AuthService.register', () {
     test('возвращает RegisterResponse при успешной регистрации', () async {

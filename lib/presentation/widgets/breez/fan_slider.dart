@@ -2,11 +2,21 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'breez_slider.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_slider.dart';
 
 /// Compact fan slider with label, icon, and percentage display
 /// Uses BreezLabeledSlider for consistent styling and accessibility
 class FanSlider extends StatefulWidget {
+
+  const FanSlider({
+    required this.label,
+    required this.value,
+    required this.color,
+    required this.icon,
+    super.key,
+    this.onChanged,
+    this.isPending = false,
+  });
   final String label;
   final int value;
   final Color color;
@@ -15,16 +25,6 @@ class FanSlider extends StatefulWidget {
 
   /// Ожидание подтверждения от сервера - блокирует слайдер
   final bool isPending;
-
-  const FanSlider({
-    super.key,
-    required this.label,
-    required this.value,
-    required this.color,
-    required this.icon,
-    this.onChanged,
-    this.isPending = false,
-  });
 
   @override
   State<FanSlider> createState() => _FanSliderState();

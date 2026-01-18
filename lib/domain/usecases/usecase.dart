@@ -2,6 +2,8 @@
 ///
 /// Use Case инкапсулирует бизнес-логику и координирует поток данных.
 /// Presentation layer вызывает Use Case, а не Repository напрямую.
+// ignore_for_file: one_member_abstracts
+
 library;
 
 /// Базовый класс для Use Case без параметров

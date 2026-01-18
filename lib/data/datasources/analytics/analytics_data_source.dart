@@ -4,15 +4,11 @@
 /// реализациями без изменения логики репозитория.
 library;
 
-import '../../../domain/entities/graph_data.dart';
-import '../../../domain/entities/sensor_history.dart';
+import 'package:hvac_control/domain/entities/graph_data.dart';
+import 'package:hvac_control/domain/entities/sensor_history.dart';
 
 /// DTO для статистики энергопотребления
 class EnergyStatsDto {
-  final double todayKwh;
-  final double weekKwh;
-  final double monthKwh;
-  final double currentPowerW;
 
   const EnergyStatsDto({
     required this.todayKwh,
@@ -20,17 +16,21 @@ class EnergyStatsDto {
     required this.monthKwh,
     required this.currentPowerW,
   });
+  final double todayKwh;
+  final double weekKwh;
+  final double monthKwh;
+  final double currentPowerW;
 }
 
 /// DTO для записи истории энергопотребления
 class EnergyHistoryEntryDto {
-  final DateTime timestamp;
-  final double kwh;
 
   const EnergyHistoryEntryDto({
     required this.timestamp,
     required this.kwh,
   });
+  final DateTime timestamp;
+  final double kwh;
 }
 
 /// Абстрактный источник данных для аналитики

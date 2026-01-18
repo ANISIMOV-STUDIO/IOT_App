@@ -5,17 +5,14 @@
 /// - Управление: только онлайн
 library;
 
-import '../../core/error/offline_exception.dart';
-import '../../core/services/cache_service.dart';
-import '../../core/services/connectivity_service.dart';
-import '../../domain/entities/smart_device.dart';
-import '../../domain/repositories/smart_device_repository.dart';
+import 'package:hvac_control/core/error/offline_exception.dart';
+import 'package:hvac_control/core/services/cache_service.dart';
+import 'package:hvac_control/core/services/connectivity_service.dart';
+import 'package:hvac_control/domain/entities/smart_device.dart';
+import 'package:hvac_control/domain/repositories/smart_device_repository.dart';
 
 /// Кеширующий декоратор для SmartDeviceRepository
 class CachedSmartDeviceRepository implements SmartDeviceRepository {
-  final SmartDeviceRepository _inner;
-  final CacheService _cacheService;
-  final ConnectivityService _connectivity;
 
   CachedSmartDeviceRepository({
     required SmartDeviceRepository inner,
@@ -24,6 +21,9 @@ class CachedSmartDeviceRepository implements SmartDeviceRepository {
   })  : _inner = inner,
         _cacheService = cacheService,
         _connectivity = connectivity;
+  final SmartDeviceRepository _inner;
+  final CacheService _cacheService;
+  final ConnectivityService _connectivity;
 
   // ============================================
   // READ OPERATIONS (кешируемые)
@@ -38,13 +38,17 @@ class CachedSmartDeviceRepository implements SmartDeviceRepository {
         return devices;
       } catch (e) {
         final cached = _cacheService.getCachedSmartDevices();
-        if (cached != null) return cached;
+        if (cached != null) {
+          return cached;
+        }
         rethrow;
       }
     }
 
     final cached = _cacheService.getCachedSmartDevices();
-    if (cached != null) return cached;
+    if (cached != null) {
+      return cached;
+    }
 
     throw const OfflineException(
       'Нет сохранённых устройств',
@@ -70,18 +74,16 @@ class CachedSmartDeviceRepository implements SmartDeviceRepository {
   }
 
   @override
-  Stream<List<SmartDevice>> watchDevices() {
-    return _inner.watchDevices();
-  }
+  Stream<List<SmartDevice>> watchDevices() => _inner.watchDevices();
 
   // ============================================
   // WRITE OPERATIONS (требуют сети)
   // ============================================
 
   @override
-  Future<SmartDevice> toggleDevice(String id, bool isOn) async {
+  Future<SmartDevice> toggleDevice(String id, {required bool isOn}) async {
     _ensureOnline('toggleDevice');
-    final result = await _inner.toggleDevice(id, isOn);
+    final result = await _inner.toggleDevice(id, isOn: isOn);
     // Обновляем кеш
     await _updateDeviceInCache(result);
     return result;
@@ -111,11 +113,11 @@ class CachedSmartDeviceRepository implements SmartDeviceRepository {
   /// Обновить одно устройство в кеше
   Future<void> _updateDeviceInCache(SmartDevice updated) async {
     final cached = _cacheService.getCachedSmartDevices();
-    if (cached == null) return;
+    if (cached == null) {
+      return;
+    }
 
-    final updatedList = cached.map((d) {
-      return d.id == updated.id ? updated : d;
-    }).toList();
+    final updatedList = cached.map((d) => d.id == updated.id ? updated : d).toList();
 
     await _cacheService.cacheSmartDevices(updatedList);
   }

@@ -2,14 +2,13 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../core/theme/spacing.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -33,5 +32,4 @@ class SplashScreen extends StatelessWidget {
         ),
       ),
     );
-  }
 }

@@ -1,26 +1,29 @@
 /// Real implementation of EnergyRepository
+// ignore_for_file: use_setters_to_change_properties
+
 library;
 
 import 'dart:async';
-import '../../domain/entities/energy_stats.dart';
-import '../../domain/repositories/energy_repository.dart';
-import '../api/platform/api_client.dart';
-import '../api/http/clients/analytics_http_client.dart';
-import '../api/mappers/energy_json_mapper.dart';
 
-class RealEnergyRepository implements EnergyRepository {
+import 'package:hvac_control/data/api/http/clients/analytics_http_client.dart';
+import 'package:hvac_control/data/api/mappers/energy_json_mapper.dart';
+import 'package:hvac_control/data/api/platform/api_client.dart';
+import 'package:hvac_control/domain/entities/energy_stats.dart';
+import 'package:hvac_control/domain/repositories/energy_repository.dart';
+
+class RealEnergyRepository implements EnergyRepository { // Для отслеживания и отмены polling
+
+  RealEnergyRepository(this._apiClient, {String? deviceId})
+      : _selectedDeviceId = deviceId {
+    _httpClient = AnalyticsHttpClient(_apiClient);
+  }
   final ApiClient _apiClient;
   String? _selectedDeviceId;
 
   late final AnalyticsHttpClient _httpClient;
 
   final _statsController = StreamController<EnergyStats>.broadcast();
-  Timer? _pollTimer; // Для отслеживания и отмены polling
-
-  RealEnergyRepository(this._apiClient, {String? deviceId})
-      : _selectedDeviceId = deviceId {
-    _httpClient = AnalyticsHttpClient(_apiClient);
-  }
+  Timer? _pollTimer;
 
   /// Установить ID выбранного устройства
   void setSelectedDeviceId(String? deviceId) {
@@ -32,7 +35,6 @@ class RealEnergyRepository implements EnergyRepository {
         totalKwh: 0,
         totalHours: 0,
         date: DateTime.now(),
-        hourlyData: const [],
       );
 
   @override
@@ -59,10 +61,9 @@ class RealEnergyRepository implements EnergyRepository {
   }
 
   @override
-  Future<List<DeviceEnergyUsage>> getDevicePowerUsage() async {
+  Future<List<DeviceEnergyUsage>> getDevicePowerUsage() async =>
     // TODO: Implement when backend API is available
-    return [];
-  }
+    [];
 
   @override
   Stream<EnergyStats> watchStats() {

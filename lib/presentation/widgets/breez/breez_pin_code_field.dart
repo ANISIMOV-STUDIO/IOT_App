@@ -3,24 +3,24 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/spacing.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
 
 /// Поле для ввода PIN-кода (6 цифр)
 class BreezPinCodeField extends StatefulWidget {
-  final Function(String) onCompleted;
-  final Function(String)? onChanged;
-  final int length;
-  final String? errorText;
 
   const BreezPinCodeField({
-    super.key,
     required this.onCompleted,
+    super.key,
     this.onChanged,
     this.length = 6,
     this.errorText,
   });
+  final void Function(String) onCompleted;
+  final void Function(String)? onChanged;
+  final int length;
+  final String? errorText;
 
   @override
   State<BreezPinCodeField> createState() => _BreezPinCodeFieldState();
@@ -36,7 +36,7 @@ class _BreezPinCodeFieldState extends State<BreezPinCodeField> {
   @override
   void initState() {
     super.initState();
-    for (int i = 0; i < widget.length; i++) {
+    for (var i = 0; i < widget.length; i++) {
       _controllers.add(TextEditingController());
       _focusNodes.add(FocusNode());
       _keyboardListenerFocusNodes.add(FocusNode());
@@ -51,13 +51,13 @@ class _BreezPinCodeFieldState extends State<BreezPinCodeField> {
 
   @override
   void dispose() {
-    for (var controller in _controllers) {
+    for (final controller in _controllers) {
       controller.dispose();
     }
-    for (var node in _focusNodes) {
+    for (final node in _focusNodes) {
       node.dispose();
     }
-    for (var node in _keyboardListenerFocusNodes) {
+    for (final node in _keyboardListenerFocusNodes) {
       node.dispose();
     }
     super.dispose();
@@ -86,7 +86,7 @@ class _BreezPinCodeFieldState extends State<BreezPinCodeField> {
     // Очистка - только цифры
     final digits = pastedText.replaceAll(RegExp(r'\D'), '');
 
-    for (int i = 0; i < widget.length && i < digits.length; i++) {
+    for (var i = 0; i < widget.length && i < digits.length; i++) {
       _controllers[i].text = digits[i];
     }
 
@@ -128,8 +128,7 @@ class _BreezPinCodeFieldState extends State<BreezPinCodeField> {
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(widget.length, (index) {
-            return Container(
+          children: List.generate(widget.length, (index) => Container(
               width: 56,
               margin: EdgeInsets.only(
                 left: index == 0 ? 0 : AppSpacing.xs / 2,
@@ -181,8 +180,7 @@ class _BreezPinCodeFieldState extends State<BreezPinCodeField> {
                     onChanged: (value) => _onChanged(value, index),
                   ),
                 ),
-              );
-          }),
+              )),
         ),
         if (hasError) ...[
           const SizedBox(height: AppSpacing.xs),

@@ -4,21 +4,19 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_font_sizes.dart';
-import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../data/api/http/clients/hvac_http_client.dart';
-import '../../../domain/entities/unit_state.dart';
-import '../../../domain/entities/device_full_state.dart';
-import '../../../domain/entities/climate.dart';
-import '../../../generated/l10n/app_localizations.dart';
-import '../../bloc/analytics/analytics_bloc.dart';
-import '../../bloc/climate/climate_bloc.dart';
-import '../../bloc/devices/devices_bloc.dart';
-import '../../widgets/breez/breez.dart';
-import '../../widgets/loading/skeleton.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/data/api/http/clients/hvac_http_client.dart';
+import 'package:hvac_control/domain/entities/climate.dart';
+import 'package:hvac_control/domain/entities/device_full_state.dart';
+import 'package:hvac_control/domain/entities/unit_state.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
+import 'package:hvac_control/presentation/bloc/analytics/analytics_bloc.dart';
+import 'package:hvac_control/presentation/bloc/climate/climate_bloc.dart';
+import 'package:hvac_control/presentation/bloc/devices/devices_bloc.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez.dart';
+import 'package:hvac_control/presentation/widgets/loading/skeleton.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -29,32 +27,32 @@ abstract class _AnalyticsConstants {
   static const int maxSelectedSensors = 3;
 
   // Tile sizes
-  static const double tileIconSize = 24.0;
-  static const double tileValueFontSize = 16.0;
-  static const double tileLabelFontSize = 10.0;
-  static const double tileLabelSpacing = 2.0;
+  static const double tileIconSize = 24;
+  static const double tileValueFontSize = 16;
+  static const double tileLabelFontSize = 10;
+  static const double tileLabelSpacing = 2;
 
   // Tile selection indicator
-  static const double checkBadgeTop = 4.0;
-  static const double checkBadgeRight = 4.0;
-  static const double checkBadgePadding = 2.0;
-  static const double checkIconSize = 10.0;
-  static const double selectedBorderWidth = 2.0;
-  static const double defaultBorderWidth = 1.0;
+  static const double checkBadgeTop = 4;
+  static const double checkBadgeRight = 4;
+  static const double checkBadgePadding = 2;
+  static const double checkIconSize = 10;
+  static const double selectedBorderWidth = 2;
+  static const double defaultBorderWidth = 1;
 
   // Dialog
-  static const double dialogIconSize = 48.0;
-  static const double dialogValueFontSize = 28.0;
-  static const double dialogLabelFontSize = 16.0;
-  static const double dialogDescFontSize = 14.0;
+  static const double dialogIconSize = 48;
+  static const double dialogValueFontSize = 28;
+  static const double dialogLabelFontSize = 16;
+  static const double dialogDescFontSize = 14;
   static const double dialogDescLineHeight = 1.4;
 
   // Graph
-  static const double graphHeight = 280.0;
+  static const double graphHeight = 280;
 
   // Indicator
-  static const double indicatorIconSize = 16.0;
-  static const double indicatorFontSize = 13.0;
+  static const double indicatorIconSize = 16;
+  static const double indicatorFontSize = 13;
 }
 
 // =============================================================================
@@ -83,7 +81,9 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   /// Синхронизирует _selectedSensorKeys с сервером при первой загрузке
   /// Вызывается из BlocListener когда deviceFullState становится доступным
   void _syncFromServerIfNeeded(DeviceFullState? fullState) {
-    if (_isInitializedFromServer || fullState == null) return;
+    if (_isInitializedFromServer || fullState == null) {
+      return;
+    }
 
     _isInitializedFromServer = true;
     setState(() {
@@ -129,7 +129,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
     final l10n = AppLocalizations.of(context)!;
     final isSelected = _selectedSensorKeys.contains(sensor.key);
 
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (dialogContext) => Dialog(
         backgroundColor: colors.card,
@@ -241,7 +241,6 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                           hoverColor: isSelected
                               ? colors.cardLight
                               : AppColors.accent.withValues(alpha: 0.2),
-                          borderRadius: AppRadius.button,
                           border: isSelected || !isEnabled
                               ? null
                               : Border.all(color: AppColors.accent),
@@ -292,7 +291,6 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                       onTap: () => Navigator.pop(dialogContext),
                       backgroundColor: colors.buttonBg,
                       hoverColor: colors.cardLight,
-                      borderRadius: AppRadius.button,
                       padding: const EdgeInsets.symmetric(
                         vertical: AppSpacing.sm,
                       ),
@@ -313,11 +311,15 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   }
 
   Future<void> _saveSensors() async {
-    if (_isSaving) return;
+    if (_isSaving) {
+      return;
+    }
 
     final devicesState = context.read<DevicesBloc>().state;
     final deviceId = devicesState.selectedDeviceId;
-    if (deviceId == null) return;
+    if (deviceId == null) {
+      return;
+    }
 
     setState(() => _isSaving = true);
 
@@ -366,7 +368,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                 const AnalyticsRefreshRequested(),
               );
               _loadSelectedSensors();
-              await Future.delayed(const Duration(milliseconds: 500));
+              await Future<void>.delayed(const Duration(milliseconds: 500));
             },
             child: CustomScrollView(
               slivers: [
@@ -568,8 +570,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   UnitState _createUnitState(
     DeviceFullState? fullState,
     ClimateState? climate,
-  ) {
-    return UnitState(
+  ) => UnitState(
       id: fullState?.id ?? '',
       name: fullState?.name ?? 'Device',
       power: fullState?.power ?? climate?.isOn ?? false,
@@ -595,10 +596,8 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
       ductPressure: fullState?.ductPressure ?? 0,
       isOnline: fullState?.isOnline ?? true,
     );
-  }
 
-  List<_SensorInfo> _buildSensorsList(UnitState unit, AppLocalizations l10n) {
-    return [
+  List<_SensorInfo> _buildSensorsList(UnitState unit, AppLocalizations l10n) => [
       _SensorInfo(
         key: 'outside_temp',
         icon: Icons.thermostat_outlined,
@@ -690,10 +689,8 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
         color: AppColors.accent,
       ),
     ];
-  }
 
-  Widget _buildNoDeviceState(BreezColors colors, AppLocalizations l10n) {
-    return BreezCard(
+  Widget _buildNoDeviceState(BreezColors colors, AppLocalizations l10n) => BreezCard(
       padding: const EdgeInsets.all(AppSpacing.xl),
       child: Center(
         child: Column(
@@ -708,14 +705,12 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
         ),
       ),
     );
-  }
 
   Widget _buildErrorState(
     BreezColors colors,
     AppLocalizations l10n,
     String? errorMessage,
-  ) {
-    return BreezCard(
+  ) => BreezCard(
       padding: const EdgeInsets.all(AppSpacing.xl),
       child: Center(
         child: Column(
@@ -762,14 +757,12 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
         ),
       ),
     );
-  }
 
   Widget _buildGraphErrorState(
     BreezColors colors,
     AppLocalizations l10n,
     String? errorMessage,
-  ) {
-    return SizedBox(
+  ) => SizedBox(
       height: _AnalyticsConstants.graphHeight,
       child: BreezCard(
         padding: const EdgeInsets.all(AppSpacing.xl),
@@ -816,7 +809,6 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
         ),
       ),
     );
-  }
 }
 
 // =============================================================================
@@ -824,12 +816,6 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
 // =============================================================================
 
 class _SensorInfo {
-  final String key;
-  final IconData icon;
-  final String value;
-  final String label;
-  final String description;
-  final Color color;
 
   const _SensorInfo({
     required this.key,
@@ -839,18 +825,24 @@ class _SensorInfo {
     required this.description,
     required this.color,
   });
+  final String key;
+  final IconData icon;
+  final String value;
+  final String label;
+  final String description;
+  final Color color;
 }
 
 class _SensorTile extends StatelessWidget {
-  final _SensorInfo sensor;
-  final bool isSelected;
-  final VoidCallback onTap;
 
   const _SensorTile({
     required this.sensor,
     required this.isSelected,
     required this.onTap,
   });
+  final _SensorInfo sensor;
+  final bool isSelected;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -862,7 +854,6 @@ class _SensorTile extends StatelessWidget {
       hoverColor: isSelected
           ? AppColors.accent.withValues(alpha: 0.15)
           : colors.cardLight,
-      borderRadius: AppRadius.cardSmall,
       border: Border.all(
         color: isSelected ? AppColors.accent : colors.border,
         width: isSelected
@@ -893,7 +884,7 @@ class _SensorTile extends StatelessWidget {
                     color: colors.text,
                   ),
                 ),
-                SizedBox(height: _AnalyticsConstants.tileLabelSpacing),
+                const SizedBox(height: _AnalyticsConstants.tileLabelSpacing),
                 Text(
                   sensor.label,
                   textAlign: TextAlign.center,
@@ -913,12 +904,12 @@ class _SensorTile extends StatelessWidget {
               top: _AnalyticsConstants.checkBadgeTop,
               right: _AnalyticsConstants.checkBadgeRight,
               child: Container(
-                padding: EdgeInsets.all(_AnalyticsConstants.checkBadgePadding),
+                padding: const EdgeInsets.all(_AnalyticsConstants.checkBadgePadding),
                 decoration: const BoxDecoration(
                   color: AppColors.accent,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
+                child: const Icon(
                   Icons.check,
                   size: _AnalyticsConstants.checkIconSize,
                   color: AppColors.white,
@@ -939,8 +930,7 @@ class _SensorsSkeletonGrid extends StatelessWidget {
   const _SensorsSkeletonGrid();
 
   @override
-  Widget build(BuildContext context) {
-    return GridView.builder(
+  Widget build(BuildContext context) => GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -953,5 +943,4 @@ class _SensorsSkeletonGrid extends StatelessWidget {
       itemBuilder: (context, index) =>
           const SkeletonBox(height: 80, borderRadius: AppRadius.cardSmall),
     );
-  }
 }

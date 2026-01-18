@@ -1,15 +1,15 @@
 /// Фабрика тестовых данных
 library;
 
-import 'package:hvac_control/domain/entities/user.dart';
-import 'package:hvac_control/domain/entities/smart_device.dart';
-import 'package:hvac_control/domain/entities/climate.dart';
-import 'package:hvac_control/domain/entities/hvac_device.dart';
-import 'package:hvac_control/domain/entities/energy_stats.dart';
-import 'package:hvac_control/domain/entities/schedule_entry.dart';
-import 'package:hvac_control/domain/entities/unit_notification.dart';
-import 'package:hvac_control/domain/entities/graph_data.dart';
 import 'package:hvac_control/data/models/auth_models.dart';
+import 'package:hvac_control/domain/entities/climate.dart';
+import 'package:hvac_control/domain/entities/energy_stats.dart';
+import 'package:hvac_control/domain/entities/graph_data.dart';
+import 'package:hvac_control/domain/entities/hvac_device.dart';
+import 'package:hvac_control/domain/entities/schedule_entry.dart';
+import 'package:hvac_control/domain/entities/smart_device.dart';
+import 'package:hvac_control/domain/entities/unit_notification.dart';
+import 'package:hvac_control/domain/entities/user.dart';
 
 /// Класс с тестовыми данными
 class TestData {
@@ -219,8 +219,6 @@ class TestData {
         id: 'hvac-device-1',
         name: 'Бризер Гостиная',
         brand: 'Breez',
-        deviceType: HvacDeviceType.ventilation,
-        isOnline: true,
         isActive: true,
       );
 
@@ -229,9 +227,6 @@ class TestData {
         id: 'hvac-device-2',
         name: 'Бризер Спальня',
         brand: 'Breez',
-        deviceType: HvacDeviceType.ventilation,
-        isOnline: true,
-        isActive: false,
       );
 
   /// Список HVAC устройств
@@ -278,7 +273,6 @@ class TestData {
         targetTemperature: 22,
         humidity: 45,
         mode: ClimateMode.heating,
-        isOn: true,
         supplyAirflow: 150,
         exhaustAirflow: 130,
         co2Ppm: 650,
@@ -290,11 +284,10 @@ class TestData {
   static ClimateState get testClimateStateCooling => const ClimateState(
         roomId: 'room-2',
         deviceName: 'Бризер Спальня',
-        currentTemperature: 26.0,
+        currentTemperature: 26,
         targetTemperature: 24,
         humidity: 50,
         mode: ClimateMode.cooling,
-        isOn: true,
         supplyAirflow: 200,
         exhaustAirflow: 180,
         co2Ppm: 450,
@@ -330,7 +323,7 @@ class TestData {
           deviceName: 'Термостат',
           deviceType: 'thermostat',
           unitCount: 1,
-          totalKwh: 4.0,
+          totalKwh: 4,
         ),
       ];
 
@@ -357,7 +350,6 @@ class TestData {
         timeRange: '09:00-17:00',
         tempDay: 20,
         tempNight: 18,
-        isActive: false,
       );
 
   /// Список записей расписания
@@ -369,8 +361,8 @@ class TestData {
   // ==================== Уведомления ====================
 
   /// Фиксированный timestamp для тестов (избегаем DateTime.now())
-  static final DateTime _fixedTimestamp = DateTime(2024, 1, 15, 12, 0, 0);
-  static final DateTime _fixedTimestampYesterday = DateTime(2024, 1, 14, 12, 0, 0);
+  static final DateTime _fixedTimestamp = DateTime(2024, 1, 15, 12);
+  static final DateTime _fixedTimestampYesterday = DateTime(2024, 1, 14, 12);
 
   /// Тестовое уведомление (непрочитанное)
   static UnitNotification get testNotificationUnread => UnitNotification(
@@ -380,7 +372,6 @@ class TestData {
         message: 'Рекомендуется заменить фильтр через 30 дней',
         type: NotificationType.warning,
         timestamp: _fixedTimestamp,
-        isRead: false,
       );
 
   /// Тестовое уведомление (прочитанное)
@@ -403,7 +394,6 @@ class TestData {
       message: 'Рекомендуется заменить фильтр через 30 дней',
       type: NotificationType.warning,
       timestamp: _fixedTimestamp,
-      isRead: false,
     ),
     UnitNotification(
       id: 'notif-2',
@@ -423,10 +413,10 @@ class TestData {
 
   /// Тестовые точки графика
   static List<GraphDataPoint> get testGraphData => const [
-        GraphDataPoint(label: 'Пн', value: 22.0),
+        GraphDataPoint(label: 'Пн', value: 22),
         GraphDataPoint(label: 'Вт', value: 22.5),
-        GraphDataPoint(label: 'Ср', value: 23.0),
+        GraphDataPoint(label: 'Ср', value: 23),
         GraphDataPoint(label: 'Чт', value: 21.5),
-        GraphDataPoint(label: 'Пт', value: 22.0),
+        GraphDataPoint(label: 'Пт', value: 22),
       ];
 }

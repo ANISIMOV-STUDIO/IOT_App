@@ -2,17 +2,18 @@
 library;
 
 import 'dart:async';
-import '../../domain/entities/schedule_entry.dart';
-import '../../domain/repositories/schedule_repository.dart';
-import '../mock/mock_data.dart';
+
+import 'package:hvac_control/data/mock/mock_data.dart';
+import 'package:hvac_control/domain/entities/schedule_entry.dart';
+import 'package:hvac_control/domain/repositories/schedule_repository.dart';
 
 class MockScheduleRepository implements ScheduleRepository {
-  final _controller = StreamController<List<ScheduleEntry>>.broadcast();
-  final Map<String, List<ScheduleEntry>> _schedules = {};
 
   MockScheduleRepository() {
     _initializeFromMockData();
   }
+  final _controller = StreamController<List<ScheduleEntry>>.broadcast();
+  final Map<String, List<ScheduleEntry>> _schedules = {};
 
   void _initializeFromMockData() {
     for (final entry in MockData.schedules.entries) {
@@ -32,7 +33,7 @@ class MockScheduleRepository implements ScheduleRepository {
 
   @override
   Future<List<ScheduleEntry>> getSchedule(String deviceId) async {
-    await Future.delayed(MockData.fastDelay);
+    await Future<void>.delayed(MockData.fastDelay);
     return List.unmodifiable(_schedules[deviceId] ?? []);
   }
 
@@ -44,7 +45,7 @@ class MockScheduleRepository implements ScheduleRepository {
 
   @override
   Future<ScheduleEntry> addEntry(ScheduleEntry entry) async {
-    await Future.delayed(MockData.normalDelay);
+    await Future<void>.delayed(MockData.normalDelay);
 
     final deviceSchedule = _schedules.putIfAbsent(entry.deviceId, () => []);
     final newEntry = entry.copyWith(
@@ -57,7 +58,7 @@ class MockScheduleRepository implements ScheduleRepository {
 
   @override
   Future<ScheduleEntry> updateEntry(ScheduleEntry entry) async {
-    await Future.delayed(MockData.normalDelay);
+    await Future<void>.delayed(MockData.normalDelay);
 
     final deviceSchedule = _schedules[entry.deviceId];
     if (deviceSchedule == null) {
@@ -76,7 +77,7 @@ class MockScheduleRepository implements ScheduleRepository {
 
   @override
   Future<void> deleteEntry(String entryId) async {
-    await Future.delayed(MockData.fastDelay);
+    await Future<void>.delayed(MockData.fastDelay);
 
     for (final deviceSchedule in _schedules.values) {
       final index = deviceSchedule.indexWhere((e) => e.id == entryId);
@@ -89,8 +90,8 @@ class MockScheduleRepository implements ScheduleRepository {
   }
 
   @override
-  Future<ScheduleEntry> toggleEntry(String entryId, bool isActive) async {
-    await Future.delayed(MockData.fastDelay);
+  Future<ScheduleEntry> toggleEntry(String entryId, {required bool isActive}) async {
+    await Future<void>.delayed(MockData.fastDelay);
 
     for (final entry in _schedules.entries) {
       final deviceSchedule = entry.value;
@@ -107,8 +108,8 @@ class MockScheduleRepository implements ScheduleRepository {
   }
 
   @override
-  Future<void> setScheduleEnabled(String deviceId, bool enabled) async {
-    await Future.delayed(MockData.fastDelay);
+  Future<void> setScheduleEnabled(String deviceId, {required bool enabled}) async {
+    await Future<void>.delayed(MockData.fastDelay);
     // Mock implementation - just simulate API call
   }
 

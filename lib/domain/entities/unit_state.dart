@@ -7,7 +7,35 @@ library;
 import 'package:equatable/equatable.dart';
 
 /// Неизменяемое состояние HVAC юнита
-class UnitState extends Equatable {
+class UnitState extends Equatable {        // Текущее время устройства
+
+  const UnitState({
+    required this.id,
+    required this.name,
+    required this.power,
+    required this.temp,
+    required this.supplyFan,
+    required this.exhaustFan,
+    required this.mode,
+    required this.humidity,
+    required this.outsideTemp,
+    required this.filterPercent,
+    required this.airflowRate,
+    this.heatingTemp = 21,
+    this.coolingTemp = 24,
+    this.indoorTemp = 22.0,
+    this.supplyTemp = 20.0,
+    this.supplyTempAfterRecup = 18.0,
+    this.co2Level = 450,
+    this.recuperatorEfficiency = 85,
+    this.freeCooling = false,
+    this.heaterPerformance = 0,
+    this.coolerStatus = 'Н/Д',
+    this.ductPressure = 120,
+    this.isOnline = true,
+    this.quickSensors = const ['outside_temp', 'indoor_temp', 'humidity'],
+    this.deviceTime,
+  });
   final String id;
   final String name;
   final bool power;
@@ -34,35 +62,7 @@ class UnitState extends Equatable {
   final int ductPressure;            // Давление в воздуховоде (Па)
   final bool isOnline;                // Устройство онлайн
   final List<String> quickSensors;   // Быстрые показатели на главном экране
-  final DateTime? deviceTime;        // Текущее время устройства
-
-  const UnitState({
-    required this.id,
-    required this.name,
-    required this.power,
-    required this.temp,
-    this.heatingTemp = 21,
-    this.coolingTemp = 24,
-    required this.supplyFan,
-    required this.exhaustFan,
-    required this.mode,
-    required this.humidity,
-    required this.outsideTemp,
-    required this.filterPercent,
-    required this.airflowRate,
-    this.indoorTemp = 22.0,
-    this.supplyTemp = 20.0,
-    this.supplyTempAfterRecup = 18.0,
-    this.co2Level = 450,
-    this.recuperatorEfficiency = 85,
-    this.freeCooling = false,
-    this.heaterPerformance = 0,
-    this.coolerStatus = 'Н/Д',
-    this.ductPressure = 120,
-    this.isOnline = true,
-    this.quickSensors = const ['outside_temp', 'indoor_temp', 'humidity'],
-    this.deviceTime,
-  });
+  final DateTime? deviceTime;
 
   UnitState copyWith({
     String? id,
@@ -90,8 +90,7 @@ class UnitState extends Equatable {
     bool? isOnline,
     List<String>? quickSensors,
     DateTime? deviceTime,
-  }) {
-    return UnitState(
+  }) => UnitState(
       id: id ?? this.id,
       name: name ?? this.name,
       power: power ?? this.power,
@@ -118,7 +117,6 @@ class UnitState extends Equatable {
       quickSensors: quickSensors ?? this.quickSensors,
       deviceTime: deviceTime ?? this.deviceTime,
     );
-  }
 
   @override
   List<Object?> get props => [

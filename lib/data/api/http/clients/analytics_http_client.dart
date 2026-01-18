@@ -6,18 +6,19 @@
 library;
 
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
-import '../../../../core/config/api_config.dart';
-import '../../../../core/error/http_error_handler.dart';
-import '../../../../core/logging/api_logger.dart';
-import '../../platform/api_client.dart';
-import '../../../../domain/entities/sensor_history.dart';
-import '../../mappers/device_json_mapper.dart';
+import 'package:hvac_control/core/config/api_config.dart';
+import 'package:hvac_control/core/error/http_error_handler.dart';
+import 'package:hvac_control/core/logging/api_logger.dart';
+import 'package:hvac_control/data/api/mappers/device_json_mapper.dart';
+import 'package:hvac_control/data/api/platform/api_client.dart';
+import 'package:hvac_control/domain/entities/sensor_history.dart';
 
 class AnalyticsHttpClient {
-  final ApiClient _apiClient;
 
   AnalyticsHttpClient(this._apiClient);
+  final ApiClient _apiClient;
 
   /// Get energy stats for device
   ///
@@ -27,7 +28,6 @@ class AnalyticsHttpClient {
     // TODO: Реализовать когда backend добавит AnalyticsController
     ApiLogger.warning(
       'getEnergyStats: Backend не имеет /api/analytics/* - возвращаем заглушку',
-      null,
     );
 
     // Возвращаем пустую статистику вместо 404 ошибки
@@ -54,7 +54,6 @@ class AnalyticsHttpClient {
     // TODO: Реализовать когда backend добавит AnalyticsController
     ApiLogger.warning(
       'getEnergyHistory: Backend не имеет /api/analytics/* - возвращаем заглушку',
-      null,
     );
 
     // Возвращаем пустую историю вместо 404 ошибки
@@ -76,8 +75,12 @@ class AnalyticsHttpClient {
     final queryParams = <String, String>{
       'limit': limit.toString(),
     };
-    if (from != null) queryParams['from'] = from.toIso8601String();
-    if (to != null) queryParams['to'] = to.toIso8601String();
+    if (from != null) {
+      queryParams['from'] = from.toIso8601String();
+    }
+    if (to != null) {
+      queryParams['to'] = to.toIso8601String();
+    }
 
     final url = Uri.parse('${ApiConfig.deviceApiUrl}/$deviceId/history')
         .replace(queryParameters: queryParams)
@@ -165,7 +168,7 @@ class AnalyticsHttpClient {
           }
           return {'dataPoints': dataPoints};
         }
-        return {'dataPoints': []};
+        return {'dataPoints': <Map<String, dynamic>>[]};
       } else {
         throw HttpErrorHandler.handle(response);
       }

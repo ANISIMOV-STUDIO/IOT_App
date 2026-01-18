@@ -4,7 +4,7 @@
 
 // @dart = 3.3
 
-// ignore_for_file: annotate_overrides, camel_case_types, comment_references
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references, prefer_constructors_over_static_methods, do_not_use_environment
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: curly_braces_in_flow_control_structures
 // ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
@@ -12,9 +12,9 @@
 
 import 'dart:core' as $core;
 
-import 'package:protobuf/protobuf.dart' as $pb;
-import 'google/protobuf/timestamp.pb.dart'
+import 'package:hvac_control/generated/protos/google/protobuf/timestamp.pb.dart'
     as $0;
+import 'package:protobuf/protobuf.dart' as $pb;
 
 export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
 
@@ -29,34 +29,46 @@ class Occupant extends $pb.GeneratedMessage {
     $core.Iterable<$core.String>? deviceIds,
   }) {
     final result = create();
-    if (id != null) result.id = id;
-    if (name != null) result.name = name;
-    if (avatarUrl != null) result.avatarUrl = avatarUrl;
-    if (isHome != null) result.isHome = isHome;
-    if (lastSeen != null) result.lastSeen = lastSeen;
-    if (deviceIds != null) result.deviceIds.addAll(deviceIds);
+    if (id != null) {
+      result.id = id;
+    }
+    if (name != null) {
+      result.name = name;
+    }
+    if (avatarUrl != null) {
+      result.avatarUrl = avatarUrl;
+    }
+    if (isHome != null) {
+      result.isHome = isHome;
+    }
+    if (lastSeen != null) {
+      result.lastSeen = lastSeen;
+    }
+    if (deviceIds != null) {
+      result.deviceIds.addAll(deviceIds);
+    }
     return result;
   }
 
   Occupant._();
 
   factory Occupant.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory Occupant.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'Occupant',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'avatarUrl')
     ..aOB(4, _omitFieldNames ? '' : 'isHome')
     ..aOM<$0.Timestamp>(5, _omitFieldNames ? '' : 'lastSeen',
-        subBuilder: $0.Timestamp.create)
+        subBuilder: $0.Timestamp.create,)
     ..pPS(6, _omitFieldNames ? '' : 'deviceIds')
     ..hasRequiredFields = false;
 
@@ -135,23 +147,25 @@ class GetOccupantsRequest extends $pb.GeneratedMessage {
     $core.String? deviceId,
   }) {
     final result = create();
-    if (deviceId != null) result.deviceId = deviceId;
+    if (deviceId != null) {
+      result.deviceId = deviceId;
+    }
     return result;
   }
 
   GetOccupantsRequest._();
 
   factory GetOccupantsRequest.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory GetOccupantsRequest.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'GetOccupantsRequest',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOS(1, _omitFieldNames ? '' : 'deviceId')
     ..hasRequiredFields = false;
 
@@ -191,26 +205,30 @@ class ListOccupantsResponse extends $pb.GeneratedMessage {
     $core.int? homeCount,
   }) {
     final result = create();
-    if (occupants != null) result.occupants.addAll(occupants);
-    if (homeCount != null) result.homeCount = homeCount;
+    if (occupants != null) {
+      result.occupants.addAll(occupants);
+    }
+    if (homeCount != null) {
+      result.homeCount = homeCount;
+    }
     return result;
   }
 
   ListOccupantsResponse._();
 
   factory ListOccupantsResponse.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory ListOccupantsResponse.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ListOccupantsResponse',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..pPM<Occupant>(1, _omitFieldNames ? '' : 'occupants',
-        subBuilder: Occupant.create)
+        subBuilder: Occupant.create,)
     ..aI(2, _omitFieldNames ? '' : 'homeCount')
     ..hasRequiredFields = false;
 
@@ -218,7 +236,7 @@ class ListOccupantsResponse extends $pb.GeneratedMessage {
   ListOccupantsResponse clone() => deepCopy();
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   ListOccupantsResponse copyWith(
-          void Function(ListOccupantsResponse) updates) =>
+          void Function(ListOccupantsResponse) updates,) =>
       super.copyWith((message) => updates(message as ListOccupantsResponse))
           as ListOccupantsResponse;
 
@@ -255,25 +273,31 @@ class CreateOccupantRequest extends $pb.GeneratedMessage {
     $core.Iterable<$core.String>? deviceIds,
   }) {
     final result = create();
-    if (name != null) result.name = name;
-    if (avatarUrl != null) result.avatarUrl = avatarUrl;
-    if (deviceIds != null) result.deviceIds.addAll(deviceIds);
+    if (name != null) {
+      result.name = name;
+    }
+    if (avatarUrl != null) {
+      result.avatarUrl = avatarUrl;
+    }
+    if (deviceIds != null) {
+      result.deviceIds.addAll(deviceIds);
+    }
     return result;
   }
 
   CreateOccupantRequest._();
 
   factory CreateOccupantRequest.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory CreateOccupantRequest.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'CreateOccupantRequest',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOS(1, _omitFieldNames ? '' : 'name')
     ..aOS(2, _omitFieldNames ? '' : 'avatarUrl')
     ..pPS(3, _omitFieldNames ? '' : 'deviceIds')
@@ -283,7 +307,7 @@ class CreateOccupantRequest extends $pb.GeneratedMessage {
   CreateOccupantRequest clone() => deepCopy();
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   CreateOccupantRequest copyWith(
-          void Function(CreateOccupantRequest) updates) =>
+          void Function(CreateOccupantRequest) updates,) =>
       super.copyWith((message) => updates(message as CreateOccupantRequest))
           as CreateOccupantRequest;
 
@@ -331,27 +355,37 @@ class UpdateOccupantRequest extends $pb.GeneratedMessage {
     $core.Iterable<$core.String>? deviceIds,
   }) {
     final result = create();
-    if (id != null) result.id = id;
-    if (name != null) result.name = name;
-    if (avatarUrl != null) result.avatarUrl = avatarUrl;
-    if (isHome != null) result.isHome = isHome;
-    if (deviceIds != null) result.deviceIds.addAll(deviceIds);
+    if (id != null) {
+      result.id = id;
+    }
+    if (name != null) {
+      result.name = name;
+    }
+    if (avatarUrl != null) {
+      result.avatarUrl = avatarUrl;
+    }
+    if (isHome != null) {
+      result.isHome = isHome;
+    }
+    if (deviceIds != null) {
+      result.deviceIds.addAll(deviceIds);
+    }
     return result;
   }
 
   UpdateOccupantRequest._();
 
   factory UpdateOccupantRequest.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory UpdateOccupantRequest.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'UpdateOccupantRequest',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'avatarUrl')
@@ -363,7 +397,7 @@ class UpdateOccupantRequest extends $pb.GeneratedMessage {
   UpdateOccupantRequest clone() => deepCopy();
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   UpdateOccupantRequest copyWith(
-          void Function(UpdateOccupantRequest) updates) =>
+          void Function(UpdateOccupantRequest) updates,) =>
       super.copyWith((message) => updates(message as UpdateOccupantRequest))
           as UpdateOccupantRequest;
 
@@ -425,23 +459,25 @@ class DeleteOccupantRequest extends $pb.GeneratedMessage {
     $core.String? id,
   }) {
     final result = create();
-    if (id != null) result.id = id;
+    if (id != null) {
+      result.id = id;
+    }
     return result;
   }
 
   DeleteOccupantRequest._();
 
   factory DeleteOccupantRequest.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory DeleteOccupantRequest.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'DeleteOccupantRequest',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..hasRequiredFields = false;
 
@@ -449,7 +485,7 @@ class DeleteOccupantRequest extends $pb.GeneratedMessage {
   DeleteOccupantRequest clone() => deepCopy();
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   DeleteOccupantRequest copyWith(
-          void Function(DeleteOccupantRequest) updates) =>
+          void Function(DeleteOccupantRequest) updates,) =>
       super.copyWith((message) => updates(message as DeleteOccupantRequest))
           as DeleteOccupantRequest;
 
@@ -482,24 +518,28 @@ class UpdatePresenceRequest extends $pb.GeneratedMessage {
     $core.bool? isHome,
   }) {
     final result = create();
-    if (occupantId != null) result.occupantId = occupantId;
-    if (isHome != null) result.isHome = isHome;
+    if (occupantId != null) {
+      result.occupantId = occupantId;
+    }
+    if (isHome != null) {
+      result.isHome = isHome;
+    }
     return result;
   }
 
   UpdatePresenceRequest._();
 
   factory UpdatePresenceRequest.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory UpdatePresenceRequest.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'UpdatePresenceRequest',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOS(1, _omitFieldNames ? '' : 'occupantId')
     ..aOB(2, _omitFieldNames ? '' : 'isHome')
     ..hasRequiredFields = false;
@@ -508,7 +548,7 @@ class UpdatePresenceRequest extends $pb.GeneratedMessage {
   UpdatePresenceRequest clone() => deepCopy();
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   UpdatePresenceRequest copyWith(
-          void Function(UpdatePresenceRequest) updates) =>
+          void Function(UpdatePresenceRequest) updates,) =>
       super.copyWith((message) => updates(message as UpdatePresenceRequest))
           as UpdatePresenceRequest;
 

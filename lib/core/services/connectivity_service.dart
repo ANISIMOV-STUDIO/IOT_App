@@ -7,9 +7,9 @@ library;
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:http/http.dart' as http;
-import '../config/api_config.dart';
-import '../config/app_constants.dart';
-import '../logging/api_logger.dart';
+import 'package:hvac_control/core/config/api_config.dart';
+import 'package:hvac_control/core/config/app_constants.dart';
+import 'package:hvac_control/core/logging/api_logger.dart';
 
 /// Состояние сетевого подключения
 enum NetworkStatus {
@@ -25,6 +25,11 @@ enum NetworkStatus {
 
 /// Сервис для мониторинга сетевого подключения и доступности API
 class ConnectivityService {
+
+  /// Конструктор с возможностью инжекции зависимости
+  ConnectivityService([Connectivity? connectivity, http.Client? httpClient])
+      : _connectivity = connectivity ?? Connectivity(),
+        _httpClient = httpClient;
   final Connectivity _connectivity;
   final http.Client? _httpClient;
 
@@ -45,11 +50,6 @@ class ConnectivityService {
 
   /// Таймаут для ping запроса
   static const _pingTimeout = NetworkConstants.pingTimeout;
-
-  /// Конструктор с возможностью инжекции зависимости
-  ConnectivityService([Connectivity? connectivity, http.Client? httpClient])
-      : _connectivity = connectivity ?? Connectivity(),
-        _httpClient = httpClient;
 
   /// Текущий статус сети
   NetworkStatus get status => _currentStatus;
@@ -148,7 +148,7 @@ class ConnectivityService {
   }
 
   /// Обработчик изменений connectivity
-  void _handleConnectivityChange(List<ConnectivityResult> results) async {
+  Future<void> _handleConnectivityChange(List<ConnectivityResult> results) async {
     final hasNetwork = _hasNetworkConnection(results);
 
     if (!hasNetwork) {

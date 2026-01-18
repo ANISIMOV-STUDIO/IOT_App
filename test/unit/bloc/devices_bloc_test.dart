@@ -5,12 +5,11 @@ library;
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-
 import 'package:hvac_control/core/error/api_exception.dart';
 import 'package:hvac_control/domain/entities/hvac_device.dart';
 import 'package:hvac_control/domain/usecases/usecases.dart';
 import 'package:hvac_control/presentation/bloc/devices/devices_bloc.dart';
+import 'package:mocktail/mocktail.dart';
 
 // Mock classes for Use Cases
 class MockGetAllHvacDevices extends Mock implements GetAllHvacDevices {}
@@ -43,7 +42,6 @@ void main() {
     id: 'device-1',
     name: 'Бризер Гостиная',
     brand: 'Breez',
-    isOnline: true,
   );
 
   const testDevice2 = HvacDevice(
@@ -140,8 +138,6 @@ void main() {
           const DevicesState(status: DevicesStatus.loading),
           const DevicesState(
             status: DevicesStatus.success,
-            devices: [],
-            selectedDeviceId: null,
           ),
         ],
         verify: (_) {
@@ -169,7 +165,7 @@ void main() {
     group('DevicesDeviceSelected', () {
       blocTest<DevicesBloc, DevicesState>(
         'обновляет selectedDeviceId при выборе устройства',
-        build: () => createBloc(),
+        build: createBloc,
         seed: () => DevicesState(
           status: DevicesStatus.success,
           devices: testDevices,
@@ -192,10 +188,10 @@ void main() {
     group('DevicesListUpdated', () {
       blocTest<DevicesBloc, DevicesState>(
         'обновляет список устройств из стрима',
-        build: () => createBloc(),
+        build: createBloc,
         seed: () => DevicesState(
           status: DevicesStatus.success,
-          devices: [testDevice1],
+          devices: const [testDevice1],
           selectedDeviceId: testDevice1.id,
         ),
         act: (bloc) => bloc.add(DevicesListUpdated(testDevices)),
@@ -219,7 +215,7 @@ void main() {
         },
         seed: () => DevicesState(
           status: DevicesStatus.success,
-          devices: [testDevice1],
+          devices: const [testDevice1],
           selectedDeviceId: testDevice1.id,
         ),
         act: (bloc) => bloc.add(const DevicesRegistrationRequested(
@@ -229,15 +225,14 @@ void main() {
         expect: () => [
           DevicesState(
             status: DevicesStatus.success,
-            devices: [testDevice1],
+            devices: const [testDevice1],
             selectedDeviceId: testDevice1.id,
             isRegistering: true,
           ),
           DevicesState(
             status: DevicesStatus.success,
-            devices: [testDevice1, testDevice2],
+            devices: const [testDevice1, testDevice2],
             selectedDeviceId: testDevice2.id,
-            isRegistering: false,
           ),
         ],
         verify: (_) {
@@ -257,7 +252,7 @@ void main() {
         },
         seed: () => DevicesState(
           status: DevicesStatus.success,
-          devices: [testDevice1],
+          devices: const [testDevice1],
           selectedDeviceId: testDevice1.id,
         ),
         act: (bloc) => bloc.add(const DevicesRegistrationRequested(
@@ -267,15 +262,14 @@ void main() {
         expect: () => [
           DevicesState(
             status: DevicesStatus.success,
-            devices: [testDevice1],
+            devices: const [testDevice1],
             selectedDeviceId: testDevice1.id,
             isRegistering: true,
           ),
           DevicesState(
             status: DevicesStatus.success,
-            devices: [testDevice1],
+            devices: const [testDevice1],
             selectedDeviceId: testDevice1.id,
-            isRegistering: false,
             registrationError: 'Устройство уже зарегистрировано',
           ),
         ],
@@ -285,10 +279,10 @@ void main() {
     group('DevicesRegistrationErrorCleared', () {
       blocTest<DevicesBloc, DevicesState>(
         'очищает ошибку регистрации',
-        build: () => createBloc(),
+        build: createBloc,
         seed: () => DevicesState(
           status: DevicesStatus.success,
-          devices: [testDevice1],
+          devices: const [testDevice1],
           selectedDeviceId: testDevice1.id,
           registrationError: 'Какая-то ошибка',
         ),
@@ -296,9 +290,8 @@ void main() {
         expect: () => [
           DevicesState(
             status: DevicesStatus.success,
-            devices: [testDevice1],
+            devices: const [testDevice1],
             selectedDeviceId: testDevice1.id,
-            registrationError: null,
           ),
         ],
       );
@@ -320,7 +313,7 @@ void main() {
         expect: () => [
           DevicesState(
             status: DevicesStatus.success,
-            devices: [testDevice2],
+            devices: const [testDevice2],
             selectedDeviceId: testDevice2.id,
           ),
         ],
@@ -338,15 +331,13 @@ void main() {
         },
         seed: () => DevicesState(
           status: DevicesStatus.success,
-          devices: [testDevice1],
+          devices: const [testDevice1],
           selectedDeviceId: testDevice1.id,
         ),
         act: (bloc) => bloc.add(DevicesDeletionRequested(testDevice1.id)),
         expect: () => [
           const DevicesState(
             status: DevicesStatus.success,
-            devices: [],
-            selectedDeviceId: null,
           ),
         ],
       );
@@ -461,7 +452,6 @@ void main() {
       test('selectedDevice возвращает null для пустого списка', () {
         const state = DevicesState(
           status: DevicesStatus.success,
-          devices: [],
           selectedDeviceId: 'device-1',
         );
 
@@ -480,7 +470,6 @@ void main() {
       test('hasDevices возвращает false для пустого списка', () {
         const state = DevicesState(
           status: DevicesStatus.success,
-          devices: [],
         );
 
         expect(state.hasDevices, isFalse);

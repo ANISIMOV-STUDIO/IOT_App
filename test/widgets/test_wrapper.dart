@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 
 /// Wraps a widget with MaterialApp and BREEZ theme for testing
-Widget wrapWithBreezTheme(Widget child, {bool darkMode = false}) {
-  return MaterialApp(
+Widget wrapWithBreezTheme(Widget child, {bool darkMode = false}) => MaterialApp(
     debugShowCheckedModeBanner: false,
     theme: ThemeData(
       brightness: Brightness.light,
@@ -19,4 +18,3 @@ Widget wrapWithBreezTheme(Widget child, {bool darkMode = false}) {
     themeMode: darkMode ? ThemeMode.dark : ThemeMode.light,
     home: Scaffold(body: child),
   );
-}

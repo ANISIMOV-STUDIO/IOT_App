@@ -23,9 +23,9 @@ class BadExampleWidget extends StatelessWidget {
           ),
 
           // ❌ VIOLATION: Hardcoded EdgeInsets
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: const Text('Violation 2: Hardcoded padding'),
+          const Padding(
+            padding: EdgeInsets.all(16),
+            child: Text('Violation 2: Hardcoded padding'),
           ),
 
           // ❌ VIOLATION: Hardcoded SizedBox

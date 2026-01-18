@@ -4,35 +4,24 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import '../../../core/navigation/app_router.dart';
-import '../../../core/services/toast_service.dart';
-import '../../../domain/entities/unit_state.dart';
-import '../../../domain/entities/hvac_device.dart';
-import '../../../domain/entities/climate.dart';
-import '../../../domain/entities/device_full_state.dart';
-import '../../../generated/l10n/app_localizations.dart';
-import '../../bloc/auth/auth_bloc.dart';
-import '../../bloc/auth/auth_state.dart';
-import '../../bloc/devices/devices_bloc.dart';
-import '../../bloc/climate/climate_bloc.dart';
-import '../../bloc/connectivity/connectivity_bloc.dart';
-import '../../bloc/analytics/analytics_bloc.dart';
-import '../../bloc/notifications/notifications_bloc.dart';
-import '../../bloc/schedule/schedule_bloc.dart';
+import 'package:hvac_control/core/navigation/app_router.dart';
+import 'package:hvac_control/core/services/toast_service.dart';
+import 'package:hvac_control/domain/entities/climate.dart';
+import 'package:hvac_control/domain/entities/device_full_state.dart';
+import 'package:hvac_control/domain/entities/hvac_device.dart';
+import 'package:hvac_control/domain/entities/unit_state.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
+import 'package:hvac_control/presentation/bloc/analytics/analytics_bloc.dart';
+import 'package:hvac_control/presentation/bloc/auth/auth_bloc.dart';
+import 'package:hvac_control/presentation/bloc/auth/auth_state.dart';
+import 'package:hvac_control/presentation/bloc/climate/climate_bloc.dart';
+import 'package:hvac_control/presentation/bloc/connectivity/connectivity_bloc.dart';
+import 'package:hvac_control/presentation/bloc/devices/devices_bloc.dart';
+import 'package:hvac_control/presentation/bloc/notifications/notifications_bloc.dart';
+import 'package:hvac_control/presentation/bloc/schedule/schedule_bloc.dart';
 
 /// Combined dashboard state from all BLoCs
 class DashboardData {
-  final List<UnitState> units;
-  final int activeIndex;
-  final UnitState? currentUnit;
-  final ClimateControlState climateState;
-  final ConnectivityState connectivityState;
-  final AnalyticsState analyticsState;
-  final NotificationsState notificationsState;
-  final ScheduleState scheduleState;
-
-  /// Идёт загрузка списка устройств
-  final bool isLoadingDevices;
 
   const DashboardData({
     required this.units,
@@ -45,17 +34,27 @@ class DashboardData {
     required this.scheduleState,
     this.isLoadingDevices = false,
   });
+  final List<UnitState> units;
+  final int activeIndex;
+  final UnitState? currentUnit;
+  final ClimateControlState climateState;
+  final ConnectivityState connectivityState;
+  final AnalyticsState analyticsState;
+  final NotificationsState notificationsState;
+  final ScheduleState scheduleState;
+
+  /// Идёт загрузка списка устройств
+  final bool isLoadingDevices;
 }
 
 /// Wrapper that combines all BLoC listeners
 class DashboardBlocListeners extends StatelessWidget {
+
+  const DashboardBlocListeners({required this.child, super.key});
   final Widget child;
 
-  const DashboardBlocListeners({super.key, required this.child});
-
   @override
-  Widget build(BuildContext context) {
-    return MultiBlocListener(
+  Widget build(BuildContext context) => MultiBlocListener(
       listeners: [
         // Device registration error
         BlocListener<DevicesBloc, DevicesState>(
@@ -113,46 +112,39 @@ class DashboardBlocListeners extends StatelessWidget {
       ],
       child: child,
     );
-  }
 }
 
 /// Builder that combines all BLoC states into DashboardData
 class DashboardBlocBuilder extends StatelessWidget {
+
+  const DashboardBlocBuilder({required this.builder, super.key});
   final Widget Function(BuildContext context, DashboardData data) builder;
 
-  const DashboardBlocBuilder({super.key, required this.builder});
-
   @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<DevicesBloc, DevicesState>(
+  Widget build(BuildContext context) => BlocBuilder<DevicesBloc, DevicesState>(
       buildWhen: (previous, current) =>
           previous.devices != current.devices ||
           previous.selectedDeviceId != current.selectedDeviceId ||
           previous.status != current.status,
-      builder: (context, devicesState) {
-        return BlocBuilder<ClimateBloc, ClimateControlState>(
+      builder: (context, devicesState) => BlocBuilder<ClimateBloc, ClimateControlState>(
           buildWhen: (previous, current) =>
               previous.climate != current.climate ||
               previous.isTogglingPower != current.isTogglingPower ||
               previous.deviceFullState != current.deviceFullState ||
               previous.activeAlarms != current.activeAlarms,
-          builder: (context, climateState) {
-            return BlocBuilder<ConnectivityBloc, ConnectivityState>(
+          builder: (context, climateState) => BlocBuilder<ConnectivityBloc, ConnectivityState>(
               buildWhen: (previous, current) =>
                   previous.showBanner != current.showBanner ||
                   previous.status != current.status,
-              builder: (context, connectivityState) {
-                return BlocBuilder<AnalyticsBloc, AnalyticsState>(
+              builder: (context, connectivityState) => BlocBuilder<AnalyticsBloc, AnalyticsState>(
                   buildWhen: (previous, current) =>
                       previous.graphData != current.graphData ||
                       previous.selectedMetric != current.selectedMetric,
-                  builder: (context, analyticsState) {
-                    return BlocBuilder<NotificationsBloc, NotificationsState>(
+                  builder: (context, analyticsState) => BlocBuilder<NotificationsBloc, NotificationsState>(
                       buildWhen: (previous, current) =>
                           previous.notifications != current.notifications ||
                           previous.unreadCount != current.unreadCount,
-                      builder: (context, notificationsState) {
-                        return BlocBuilder<ScheduleBloc, ScheduleState>(
+                      builder: (context, notificationsState) => BlocBuilder<ScheduleBloc, ScheduleState>(
                           buildWhen: (previous, current) =>
                               previous.entries != current.entries,
                           builder: (context, scheduleState) {
@@ -166,18 +158,12 @@ class DashboardBlocBuilder extends StatelessWidget {
                             );
                             return builder(context, data);
                           },
-                        );
-                      },
-                    );
-                  },
-                );
-              },
-            );
-          },
-        );
-      },
+                        ),
+                    ),
+                ),
+            ),
+        ),
     );
-  }
 
   DashboardData _buildDashboardData(
     DevicesState devicesState,
@@ -225,8 +211,7 @@ class DashboardBlocBuilder extends StatelessWidget {
     HvacDevice device,
     ClimateState? climate,
     DeviceFullState? fullState,
-  ) {
-    return UnitState(
+  ) => UnitState(
       id: device.id,
       name: device.name,
       power: fullState?.power ?? climate?.isOn ?? device.isActive,
@@ -253,11 +238,12 @@ class DashboardBlocBuilder extends StatelessWidget {
       quickSensors: fullState?.quickSensors ?? const ['outside_temp', 'indoor_temp', 'humidity'],
       deviceTime: fullState?.deviceTime,
     );
-  }
 
   /// Parse fan value from String to int (fan speed is 20-100)
   int? _parseFanValue(String? value) {
-    if (value == null || value.isEmpty) return null;
+    if (value == null || value.isEmpty) {
+      return null;
+    }
     return int.tryParse(value);
   }
 }

@@ -24,9 +24,9 @@ final class NotificationsSubscriptionRequested extends NotificationsEvent {
 
 /// Смена текущего устройства — перезагрузить уведомления
 final class NotificationsDeviceChanged extends NotificationsEvent {
-  final String? deviceId;
 
   const NotificationsDeviceChanged(this.deviceId);
+  final String? deviceId;
 
   @override
   List<Object?> get props => [deviceId];
@@ -34,9 +34,9 @@ final class NotificationsDeviceChanged extends NotificationsEvent {
 
 /// Список уведомлений обновлён (из стрима)
 final class NotificationsListUpdated extends NotificationsEvent {
-  final List<UnitNotification> notifications;
 
   const NotificationsListUpdated(this.notifications);
+  final List<UnitNotification> notifications;
 
   @override
   List<Object?> get props => [notifications];
@@ -48,9 +48,9 @@ final class NotificationsListUpdated extends NotificationsEvent {
 
 /// Запрос на отметку уведомления как прочитанного
 final class NotificationsMarkAsReadRequested extends NotificationsEvent {
-  final String notificationId;
 
   const NotificationsMarkAsReadRequested(this.notificationId);
+  final String notificationId;
 
   @override
   List<Object?> get props => [notificationId];
@@ -63,9 +63,9 @@ final class NotificationsMarkAllAsReadRequested extends NotificationsEvent {
 
 /// Запрос на удаление уведомления
 final class NotificationsDismissRequested extends NotificationsEvent {
-  final String notificationId;
 
   const NotificationsDismissRequested(this.notificationId);
+  final String notificationId;
 
   @override
   List<Object?> get props => [notificationId];

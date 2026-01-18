@@ -4,7 +4,7 @@
 
 // @dart = 3.3
 
-// ignore_for_file: annotate_overrides, camel_case_types, comment_references
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references, do_not_use_environment, prefer_constructors_over_static_methods
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: curly_braces_in_flow_control_structures
 // ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
@@ -12,11 +12,10 @@
 
 import 'dart:core' as $core;
 
-import 'package:protobuf/protobuf.dart' as $pb;
-import 'google/protobuf/timestamp.pb.dart'
+import 'package:hvac_control/generated/protos/common.pbenum.dart' as $1;
+import 'package:hvac_control/generated/protos/google/protobuf/timestamp.pb.dart'
     as $0;
-
-import 'common.pbenum.dart' as $1;
+import 'package:protobuf/protobuf.dart' as $pb;
 
 export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
 
@@ -27,26 +26,30 @@ class GraphDataPoint extends $pb.GeneratedMessage {
     $core.double? value,
   }) {
     final result = create();
-    if (timestamp != null) result.timestamp = timestamp;
-    if (value != null) result.value = value;
+    if (timestamp != null) {
+      result.timestamp = timestamp;
+    }
+    if (value != null) {
+      result.value = value;
+    }
     return result;
   }
 
   GraphDataPoint._();
 
   factory GraphDataPoint.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory GraphDataPoint.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'GraphDataPoint',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOM<$0.Timestamp>(1, _omitFieldNames ? '' : 'timestamp',
-        subBuilder: $0.Timestamp.create)
+        subBuilder: $0.Timestamp.create,)
     ..aD(2, _omitFieldNames ? '' : 'value')
     ..hasRequiredFields = false;
 
@@ -100,34 +103,44 @@ class GraphDataRequest extends $pb.GeneratedMessage {
     $core.int? resolution,
   }) {
     final result = create();
-    if (deviceId != null) result.deviceId = deviceId;
-    if (metric != null) result.metric = metric;
-    if (from != null) result.from = from;
-    if (to != null) result.to = to;
-    if (resolution != null) result.resolution = resolution;
+    if (deviceId != null) {
+      result.deviceId = deviceId;
+    }
+    if (metric != null) {
+      result.metric = metric;
+    }
+    if (from != null) {
+      result.from = from;
+    }
+    if (to != null) {
+      result.to = to;
+    }
+    if (resolution != null) {
+      result.resolution = resolution;
+    }
     return result;
   }
 
   GraphDataRequest._();
 
   factory GraphDataRequest.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory GraphDataRequest.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'GraphDataRequest',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOS(1, _omitFieldNames ? '' : 'deviceId')
     ..aE<$1.GraphMetric>(2, _omitFieldNames ? '' : 'metric',
-        enumValues: $1.GraphMetric.values)
+        enumValues: $1.GraphMetric.values,)
     ..aOM<$0.Timestamp>(3, _omitFieldNames ? '' : 'from',
-        subBuilder: $0.Timestamp.create)
+        subBuilder: $0.Timestamp.create,)
     ..aOM<$0.Timestamp>(4, _omitFieldNames ? '' : 'to',
-        subBuilder: $0.Timestamp.create)
+        subBuilder: $0.Timestamp.create,)
     ..aI(5, _omitFieldNames ? '' : 'resolution')
     ..hasRequiredFields = false;
 
@@ -208,31 +221,37 @@ class GraphDataResponse extends $pb.GeneratedMessage {
     GraphStats? stats,
   }) {
     final result = create();
-    if (dataPoints != null) result.dataPoints.addAll(dataPoints);
-    if (metric != null) result.metric = metric;
-    if (stats != null) result.stats = stats;
+    if (dataPoints != null) {
+      result.dataPoints.addAll(dataPoints);
+    }
+    if (metric != null) {
+      result.metric = metric;
+    }
+    if (stats != null) {
+      result.stats = stats;
+    }
     return result;
   }
 
   GraphDataResponse._();
 
   factory GraphDataResponse.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory GraphDataResponse.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'GraphDataResponse',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..pPM<GraphDataPoint>(1, _omitFieldNames ? '' : 'dataPoints',
-        subBuilder: GraphDataPoint.create)
+        subBuilder: GraphDataPoint.create,)
     ..aE<$1.GraphMetric>(2, _omitFieldNames ? '' : 'metric',
-        enumValues: $1.GraphMetric.values)
+        enumValues: $1.GraphMetric.values,)
     ..aOM<GraphStats>(3, _omitFieldNames ? '' : 'stats',
-        subBuilder: GraphStats.create)
+        subBuilder: GraphStats.create,)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -287,26 +306,34 @@ class GraphStats extends $pb.GeneratedMessage {
     $core.double? current,
   }) {
     final result = create();
-    if (min != null) result.min = min;
-    if (max != null) result.max = max;
-    if (avg != null) result.avg = avg;
-    if (current != null) result.current = current;
+    if (min != null) {
+      result.min = min;
+    }
+    if (max != null) {
+      result.max = max;
+    }
+    if (avg != null) {
+      result.avg = avg;
+    }
+    if (current != null) {
+      result.current = current;
+    }
     return result;
   }
 
   GraphStats._();
 
   factory GraphStats.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory GraphStats.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'GraphStats',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aD(1, _omitFieldNames ? '' : 'min')
     ..aD(2, _omitFieldNames ? '' : 'max')
     ..aD(3, _omitFieldNames ? '' : 'avg')

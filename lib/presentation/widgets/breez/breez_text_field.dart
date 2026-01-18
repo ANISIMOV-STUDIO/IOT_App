@@ -2,9 +2,9 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/spacing.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -12,14 +12,14 @@ import '../../../core/theme/spacing.dart';
 
 /// Константы для BreezTextField
 abstract class _TextFieldConstants {
-  static const double iconSize = 20.0;
-  static const double labelFontSize = 10.0;
-  static const double labelLetterSpacing = 2.0;
-  static const double inputFontSize = 14.0;
-  static const double errorIconSize = 12.0;
-  static const double errorFontSize = 11.0;
-  static const double errorPositionLeft = 12.0;
-  static const double errorPositionBottom = -7.0;
+  static const double iconSize = 20;
+  static const double labelFontSize = 10;
+  static const double labelLetterSpacing = 2;
+  static const double inputFontSize = 14;
+  static const double errorIconSize = 12;
+  static const double errorFontSize = 11;
+  static const double errorPositionLeft = 12;
+  static const double errorPositionBottom = -7;
 }
 
 // =============================================================================
@@ -28,23 +28,6 @@ abstract class _TextFieldConstants {
 
 /// BREEZ styled text field
 class BreezTextField extends StatefulWidget {
-  final TextEditingController? controller;
-  final String? label;
-  final String? hint;
-  final IconData? prefixIcon;
-  final Widget? suffixIcon;
-  final bool obscureText;
-  final TextInputType? keyboardType;
-  final String? Function(String?)? validator;
-  final void Function(String)? onChanged;
-  final int? maxLines;
-  final bool enabled;
-  final bool validateOnChange;
-  final bool showPasswordToggle;
-  final Iterable<String>? autofillHints;
-  final TextInputAction? textInputAction;
-  final void Function(String)? onFieldSubmitted;
-  final FocusNode? focusNode;
 
   const BreezTextField({
     super.key,
@@ -66,6 +49,23 @@ class BreezTextField extends StatefulWidget {
     this.onFieldSubmitted,
     this.focusNode,
   });
+  final TextEditingController? controller;
+  final String? label;
+  final String? hint;
+  final IconData? prefixIcon;
+  final Widget? suffixIcon;
+  final bool obscureText;
+  final TextInputType? keyboardType;
+  final String? Function(String?)? validator;
+  final void Function(String)? onChanged;
+  final int? maxLines;
+  final bool enabled;
+  final bool validateOnChange;
+  final bool showPasswordToggle;
+  final Iterable<String>? autofillHints;
+  final TextInputAction? textInputAction;
+  final void Function(String)? onFieldSubmitted;
+  final FocusNode? focusNode;
 
   @override
   State<BreezTextField> createState() => _BreezTextFieldState();
@@ -76,7 +76,7 @@ class _BreezTextFieldState extends State<BreezTextField> {
   bool _hasError = false;
   String? _errorText;
   late bool _obscureTextInternal;
-  final GlobalKey<FormFieldState> _fieldKey = GlobalKey<FormFieldState>();
+  final GlobalKey<FormFieldState<String>> _fieldKey = GlobalKey<FormFieldState<String>>();
   FocusNode? _internalFocusNode;
 
   FocusNode get _effectiveFocusNode => widget.focusNode ?? (_internalFocusNode ??= FocusNode());
@@ -121,7 +121,7 @@ class _BreezTextFieldState extends State<BreezTextField> {
     final colors = BreezColors.of(context);
 
     // Определяем suffixIcon с учетом passwordToggle
-    Widget? effectiveSuffixIcon = widget.suffixIcon;
+    var effectiveSuffixIcon = widget.suffixIcon;
     if (widget.showPasswordToggle && widget.suffixIcon == null) {
       effectiveSuffixIcon = IconButton(
         icon: Icon(
@@ -169,7 +169,6 @@ class _BreezTextFieldState extends State<BreezTextField> {
                       : _isFocused
                           ? AppColors.accent
                           : colors.border,
-                  width: 1,
                 ),
               ),
               // Сбрасываем глобальную InputDecorationTheme
@@ -201,8 +200,8 @@ class _BreezTextFieldState extends State<BreezTextField> {
                     ),
                     prefixIcon: widget.prefixIcon != null
                         ? Align(
-                            widthFactor: 1.0,
-                            heightFactor: 1.0,
+                            widthFactor: 1,
+                            heightFactor: 1,
                             child: Icon(
                               widget.prefixIcon,
                               color: colors.textMuted,
@@ -212,8 +211,8 @@ class _BreezTextFieldState extends State<BreezTextField> {
                         : null,
                     suffixIcon: effectiveSuffixIcon != null
                         ? Align(
-                            widthFactor: 1.0,
-                            heightFactor: 1.0,
+                            widthFactor: 1,
+                            heightFactor: 1,
                             child: effectiveSuffixIcon,
                           )
                         : null,
@@ -248,20 +247,20 @@ class _BreezTextFieldState extends State<BreezTextField> {
                 left: _TextFieldConstants.errorPositionLeft,
                 bottom: _TextFieldConstants.errorPositionBottom,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: AppSpacing.xxs),
+                  padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxs),
                   color: colors.card,
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.error_outline,
                         size: _TextFieldConstants.errorIconSize,
                         color: AppColors.accentRed,
                       ),
-                      SizedBox(width: AppSpacing.xxs),
+                      const SizedBox(width: AppSpacing.xxs),
                       Text(
                         _errorText ?? '',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: _TextFieldConstants.errorFontSize,
                           color: AppColors.accentRed,
                         ),

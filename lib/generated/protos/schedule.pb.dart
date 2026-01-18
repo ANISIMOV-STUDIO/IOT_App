@@ -4,7 +4,7 @@
 
 // @dart = 3.3
 
-// ignore_for_file: annotate_overrides, camel_case_types, comment_references
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references, prefer_constructors_over_static_methods, do_not_use_environment
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: curly_braces_in_flow_control_structures
 // ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
@@ -12,11 +12,10 @@
 
 import 'dart:core' as $core;
 
-import 'package:protobuf/protobuf.dart' as $pb;
-import 'google/protobuf/timestamp.pb.dart'
+import 'package:hvac_control/generated/protos/common.pbenum.dart' as $1;
+import 'package:hvac_control/generated/protos/google/protobuf/timestamp.pb.dart'
     as $0;
-
-import 'common.pbenum.dart' as $1;
+import 'package:protobuf/protobuf.dart' as $pb;
 
 export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
 
@@ -32,38 +31,52 @@ class ScheduleEntry extends $pb.GeneratedMessage {
     $0.Timestamp? createdAt,
   }) {
     final result = create();
-    if (id != null) result.id = id;
-    if (deviceId != null) result.deviceId = deviceId;
-    if (time != null) result.time = time;
-    if (days != null) result.days.addAll(days);
-    if (action != null) result.action = action;
-    if (enabled != null) result.enabled = enabled;
-    if (createdAt != null) result.createdAt = createdAt;
+    if (id != null) {
+      result.id = id;
+    }
+    if (deviceId != null) {
+      result.deviceId = deviceId;
+    }
+    if (time != null) {
+      result.time = time;
+    }
+    if (days != null) {
+      result.days.addAll(days);
+    }
+    if (action != null) {
+      result.action = action;
+    }
+    if (enabled != null) {
+      result.enabled = enabled;
+    }
+    if (createdAt != null) {
+      result.createdAt = createdAt;
+    }
     return result;
   }
 
   ScheduleEntry._();
 
   factory ScheduleEntry.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory ScheduleEntry.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ScheduleEntry',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'deviceId')
     ..aOS(3, _omitFieldNames ? '' : 'time')
     ..p<$core.int>(4, _omitFieldNames ? '' : 'days', $pb.PbFieldType.K3)
     ..aOM<ScheduleAction>(5, _omitFieldNames ? '' : 'action',
-        subBuilder: ScheduleAction.create)
+        subBuilder: ScheduleAction.create,)
     ..aOB(6, _omitFieldNames ? '' : 'enabled')
     ..aOM<$0.Timestamp>(7, _omitFieldNames ? '' : 'createdAt',
-        subBuilder: $0.Timestamp.create)
+        subBuilder: $0.Timestamp.create,)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -158,36 +171,48 @@ class ScheduleAction extends $pb.GeneratedMessage {
     $core.String? presetId,
   }) {
     final result = create();
-    if (power != null) result.power = power;
-    if (temp != null) result.temp = temp;
-    if (mode != null) result.mode = mode;
-    if (supplyFan != null) result.supplyFan = supplyFan;
-    if (exhaustFan != null) result.exhaustFan = exhaustFan;
-    if (presetId != null) result.presetId = presetId;
+    if (power != null) {
+      result.power = power;
+    }
+    if (temp != null) {
+      result.temp = temp;
+    }
+    if (mode != null) {
+      result.mode = mode;
+    }
+    if (supplyFan != null) {
+      result.supplyFan = supplyFan;
+    }
+    if (exhaustFan != null) {
+      result.exhaustFan = exhaustFan;
+    }
+    if (presetId != null) {
+      result.presetId = presetId;
+    }
     return result;
   }
 
   ScheduleAction._();
 
   factory ScheduleAction.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory ScheduleAction.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ScheduleAction',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOB(1, _omitFieldNames ? '' : 'power')
     ..aI(2, _omitFieldNames ? '' : 'temp')
     ..aE<$1.OperationMode>(3, _omitFieldNames ? '' : 'mode',
-        enumValues: $1.OperationMode.values)
+        enumValues: $1.OperationMode.values,)
     ..aE<$1.FanSpeed>(4, _omitFieldNames ? '' : 'supplyFan',
-        enumValues: $1.FanSpeed.values)
+        enumValues: $1.FanSpeed.values,)
     ..aE<$1.FanSpeed>(5, _omitFieldNames ? '' : 'exhaustFan',
-        enumValues: $1.FanSpeed.values)
+        enumValues: $1.FanSpeed.values,)
     ..aOS(6, _omitFieldNames ? '' : 'presetId')
     ..hasRequiredFields = false;
 
@@ -271,23 +296,25 @@ class GetScheduleRequest extends $pb.GeneratedMessage {
     $core.String? deviceId,
   }) {
     final result = create();
-    if (deviceId != null) result.deviceId = deviceId;
+    if (deviceId != null) {
+      result.deviceId = deviceId;
+    }
     return result;
   }
 
   GetScheduleRequest._();
 
   factory GetScheduleRequest.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory GetScheduleRequest.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'GetScheduleRequest',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOS(1, _omitFieldNames ? '' : 'deviceId')
     ..hasRequiredFields = false;
 
@@ -326,25 +353,27 @@ class ListScheduleResponse extends $pb.GeneratedMessage {
     $core.Iterable<ScheduleEntry>? entries,
   }) {
     final result = create();
-    if (entries != null) result.entries.addAll(entries);
+    if (entries != null) {
+      result.entries.addAll(entries);
+    }
     return result;
   }
 
   ListScheduleResponse._();
 
   factory ListScheduleResponse.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory ListScheduleResponse.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ListScheduleResponse',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..pPM<ScheduleEntry>(1, _omitFieldNames ? '' : 'entries',
-        subBuilder: ScheduleEntry.create)
+        subBuilder: ScheduleEntry.create,)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -380,32 +409,42 @@ class CreateScheduleRequest extends $pb.GeneratedMessage {
     $core.bool? enabled,
   }) {
     final result = create();
-    if (deviceId != null) result.deviceId = deviceId;
-    if (time != null) result.time = time;
-    if (days != null) result.days.addAll(days);
-    if (action != null) result.action = action;
-    if (enabled != null) result.enabled = enabled;
+    if (deviceId != null) {
+      result.deviceId = deviceId;
+    }
+    if (time != null) {
+      result.time = time;
+    }
+    if (days != null) {
+      result.days.addAll(days);
+    }
+    if (action != null) {
+      result.action = action;
+    }
+    if (enabled != null) {
+      result.enabled = enabled;
+    }
     return result;
   }
 
   CreateScheduleRequest._();
 
   factory CreateScheduleRequest.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory CreateScheduleRequest.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'CreateScheduleRequest',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOS(1, _omitFieldNames ? '' : 'deviceId')
     ..aOS(2, _omitFieldNames ? '' : 'time')
     ..p<$core.int>(3, _omitFieldNames ? '' : 'days', $pb.PbFieldType.K3)
     ..aOM<ScheduleAction>(4, _omitFieldNames ? '' : 'action',
-        subBuilder: ScheduleAction.create)
+        subBuilder: ScheduleAction.create,)
     ..aOB(5, _omitFieldNames ? '' : 'enabled')
     ..hasRequiredFields = false;
 
@@ -413,7 +452,7 @@ class CreateScheduleRequest extends $pb.GeneratedMessage {
   CreateScheduleRequest clone() => deepCopy();
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   CreateScheduleRequest copyWith(
-          void Function(CreateScheduleRequest) updates) =>
+          void Function(CreateScheduleRequest) updates,) =>
       super.copyWith((message) => updates(message as CreateScheduleRequest))
           as CreateScheduleRequest;
 
@@ -481,32 +520,42 @@ class UpdateScheduleRequest extends $pb.GeneratedMessage {
     $core.bool? enabled,
   }) {
     final result = create();
-    if (id != null) result.id = id;
-    if (time != null) result.time = time;
-    if (days != null) result.days.addAll(days);
-    if (action != null) result.action = action;
-    if (enabled != null) result.enabled = enabled;
+    if (id != null) {
+      result.id = id;
+    }
+    if (time != null) {
+      result.time = time;
+    }
+    if (days != null) {
+      result.days.addAll(days);
+    }
+    if (action != null) {
+      result.action = action;
+    }
+    if (enabled != null) {
+      result.enabled = enabled;
+    }
     return result;
   }
 
   UpdateScheduleRequest._();
 
   factory UpdateScheduleRequest.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory UpdateScheduleRequest.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'UpdateScheduleRequest',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'time')
     ..p<$core.int>(3, _omitFieldNames ? '' : 'days', $pb.PbFieldType.K3)
     ..aOM<ScheduleAction>(4, _omitFieldNames ? '' : 'action',
-        subBuilder: ScheduleAction.create)
+        subBuilder: ScheduleAction.create,)
     ..aOB(5, _omitFieldNames ? '' : 'enabled')
     ..hasRequiredFields = false;
 
@@ -514,7 +563,7 @@ class UpdateScheduleRequest extends $pb.GeneratedMessage {
   UpdateScheduleRequest clone() => deepCopy();
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   UpdateScheduleRequest copyWith(
-          void Function(UpdateScheduleRequest) updates) =>
+          void Function(UpdateScheduleRequest) updates,) =>
       super.copyWith((message) => updates(message as UpdateScheduleRequest))
           as UpdateScheduleRequest;
 
@@ -578,23 +627,25 @@ class DeleteScheduleRequest extends $pb.GeneratedMessage {
     $core.String? id,
   }) {
     final result = create();
-    if (id != null) result.id = id;
+    if (id != null) {
+      result.id = id;
+    }
     return result;
   }
 
   DeleteScheduleRequest._();
 
   factory DeleteScheduleRequest.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory DeleteScheduleRequest.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'DeleteScheduleRequest',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..hasRequiredFields = false;
 
@@ -602,7 +653,7 @@ class DeleteScheduleRequest extends $pb.GeneratedMessage {
   DeleteScheduleRequest clone() => deepCopy();
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   DeleteScheduleRequest copyWith(
-          void Function(DeleteScheduleRequest) updates) =>
+          void Function(DeleteScheduleRequest) updates,) =>
       super.copyWith((message) => updates(message as DeleteScheduleRequest))
           as DeleteScheduleRequest;
 

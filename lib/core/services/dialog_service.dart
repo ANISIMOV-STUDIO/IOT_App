@@ -5,11 +5,10 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../theme/app_theme.dart';
-import '../theme/app_font_sizes.dart';
-import '../theme/app_radius.dart';
-import '../theme/spacing.dart';
-import '../../presentation/widgets/breez/breez_button.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
 
 /// Сервис для показа диалогов подтверждения
 ///
@@ -42,7 +41,6 @@ class DialogService {
     final colors = BreezColors.of(context);
     final result = await showDialog<bool>(
       context: context,
-      barrierDismissible: true,
       builder: (context) => AlertDialog(
         backgroundColor: colors.card,
         shape: RoundedRectangleBorder(
@@ -125,8 +123,7 @@ class DialogService {
   }
 
   /// Подтверждение выключения устройства
-  static Future<bool> confirmPowerOff(BuildContext context, {String? deviceName}) {
-    return confirm(
+  static Future<bool> confirmPowerOff(BuildContext context, {String? deviceName}) => confirm(
       context,
       title: 'Выключить устройство?',
       message: deviceName != null
@@ -136,11 +133,9 @@ class DialogService {
       isDestructive: true,
       icon: Icons.power_settings_new,
     );
-  }
 
   /// Подтверждение выхода из аккаунта
-  static Future<bool> confirmLogout(BuildContext context) {
-    return confirm(
+  static Future<bool> confirmLogout(BuildContext context) => confirm(
       context,
       title: 'Выйти из аккаунта?',
       message: 'Вы будете перенаправлены на экран входа.',
@@ -148,11 +143,9 @@ class DialogService {
       isDestructive: true,
       icon: Icons.logout,
     );
-  }
 
   /// Подтверждение удаления
-  static Future<bool> confirmDelete(BuildContext context, {required String itemName}) {
-    return confirm(
+  static Future<bool> confirmDelete(BuildContext context, {required String itemName}) => confirm(
       context,
       title: 'Удалить $itemName?',
       message: 'Это действие нельзя отменить.',
@@ -160,11 +153,9 @@ class DialogService {
       isDestructive: true,
       icon: Icons.delete_outline,
     );
-  }
 
   /// Подтверждение выключения всех устройств
-  static Future<bool> confirmMasterOff(BuildContext context) {
-    return confirm(
+  static Future<bool> confirmMasterOff(BuildContext context) => confirm(
       context,
       title: 'Выключить все устройства?',
       message: 'Все подключённые устройства будут выключены.',
@@ -172,5 +163,4 @@ class DialogService {
       isDestructive: true,
       icon: Icons.power_off,
     );
-  }
 }

@@ -2,10 +2,10 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../domain/entities/unit_state.dart';
-import '../../../generated/l10n/app_localizations.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/domain/entities/unit_state.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -13,9 +13,9 @@ import '../../../generated/l10n/app_localizations.dart';
 
 /// Константы для SensorsGrid
 abstract class _SensorGridConstants {
-  static const double iconSize = 20.0;
-  static const double valueFontSize = 13.0;
-  static const double labelFontSize = 9.0;
+  static const double iconSize = 20;
+  static const double valueFontSize = 13;
+  static const double labelFontSize = 9;
   static const double labelLineHeight = 1.2;
 }
 
@@ -25,12 +25,12 @@ abstract class _SensorGridConstants {
 
 /// Grid of HVAC sensors (4 rows x 3 columns)
 class SensorsGrid extends StatelessWidget {
-  final UnitState unit;
 
   const SensorsGrid({
-    super.key,
     required this.unit,
+    super.key,
   });
+  final UnitState unit;
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +99,7 @@ class SensorsGrid extends StatelessWidget {
             size: _SensorGridConstants.iconSize,
             color: AppColors.accent,
           ),
-          SizedBox(height: AppSpacing.xxs),
+          const SizedBox(height: AppSpacing.xxs),
           Text(
             sensor.value,
             style: TextStyle(
@@ -108,7 +108,7 @@ class SensorsGrid extends StatelessWidget {
               color: colors.text,
             ),
           ),
-          SizedBox(height: AppSpacing.xxs / 2),
+          const SizedBox(height: AppSpacing.xxs / 2),
           Text(
             sensor.label,
             textAlign: TextAlign.center,
@@ -127,9 +127,9 @@ class SensorsGrid extends StatelessWidget {
 }
 
 class _SensorData {
+
+  const _SensorData(this.icon, this.value, this.label);
   final IconData icon;
   final String value;
   final String label;
-
-  const _SensorData(this.icon, this.value, this.label);
 }

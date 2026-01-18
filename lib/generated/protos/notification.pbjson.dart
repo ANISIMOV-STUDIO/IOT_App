@@ -27,7 +27,7 @@ const Notification$json = {
       '4': 1,
       '5': 14,
       '6': '.breez.NotificationType',
-      '10': 'type'
+      '10': 'type',
     },
     {'1': 'title', '3': 4, '4': 1, '5': 9, '10': 'title'},
     {'1': 'message', '3': 5, '4': 1, '5': 9, '10': 'message'},
@@ -37,7 +37,7 @@ const Notification$json = {
       '4': 1,
       '5': 11,
       '6': '.google.protobuf.Timestamp',
-      '10': 'timestamp'
+      '10': 'timestamp',
     },
     {'1': 'is_read', '3': 7, '4': 1, '5': 8, '10': 'isRead'},
     {
@@ -47,7 +47,7 @@ const Notification$json = {
       '5': 9,
       '9': 0,
       '10': 'actionUrl',
-      '17': true
+      '17': true,
     },
   ],
   '8': [
@@ -75,7 +75,7 @@ const GetNotificationsRequest$json = {
       '5': 9,
       '9': 0,
       '10': 'deviceId',
-      '17': true
+      '17': true,
     },
     {
       '1': 'unread_only',
@@ -84,7 +84,7 @@ const GetNotificationsRequest$json = {
       '5': 8,
       '9': 1,
       '10': 'unreadOnly',
-      '17': true
+      '17': true,
     },
     {'1': 'limit', '3': 3, '4': 1, '5': 5, '9': 2, '10': 'limit', '17': true},
   ],
@@ -111,7 +111,7 @@ const ListNotificationsResponse$json = {
       '4': 3,
       '5': 11,
       '6': '.breez.Notification',
-      '10': 'notifications'
+      '10': 'notifications',
     },
     {'1': 'unread_count', '3': 2, '4': 1, '5': 5, '10': 'unreadCount'},
   ],
@@ -147,7 +147,7 @@ const StreamNotificationsRequest$json = {
       '5': 9,
       '9': 0,
       '10': 'deviceId',
-      '17': true
+      '17': true,
     },
   ],
   '8': [
@@ -172,4 +172,4 @@ const DeleteNotificationRequest$json = {
 /// Descriptor for `DeleteNotificationRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List deleteNotificationRequestDescriptor =
     $convert.base64Decode(
-        'ChlEZWxldGVOb3RpZmljYXRpb25SZXF1ZXN0Eg4KAmlkGAEgASgJUgJpZA==');
+        'ChlEZWxldGVOb3RpZmljYXRpb25SZXF1ZXN0Eg4KAmlkGAEgASgJUgJpZA==',);

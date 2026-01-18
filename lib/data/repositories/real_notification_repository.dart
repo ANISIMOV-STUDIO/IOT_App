@@ -4,15 +4,22 @@
 /// Real-time обновления:
 /// - Mobile/Desktop: gRPC streaming (через DataSource)
 /// - Web: SignalR (передается отдельно)
+// ignore_for_file: join_return_with_assignment
+
 library;
 
 import 'dart:async';
-import '../../domain/entities/unit_notification.dart';
-import '../../domain/repositories/notification_repository.dart';
-import '../api/websocket/signalr_hub_connection.dart';
-import '../datasources/notification/notification_data_source.dart';
+
+import 'package:hvac_control/data/api/websocket/signalr_hub_connection.dart';
+import 'package:hvac_control/data/datasources/notification/notification_data_source.dart';
+import 'package:hvac_control/domain/entities/unit_notification.dart';
+import 'package:hvac_control/domain/repositories/notification_repository.dart';
 
 class RealNotificationRepository implements NotificationRepository {
+
+  RealNotificationRepository(this._dataSource, [this._signalR]) {
+    _setupRealTimeUpdates();
+  }
   final NotificationDataSource _dataSource;
   final SignalRHubConnection? _signalR;
 
@@ -25,10 +32,6 @@ class RealNotificationRepository implements NotificationRepository {
   StreamSubscription<NotificationDto>? _dataSourceSubscription;
   StreamSubscription<Map<String, dynamic>>? _signalRSubscription;
   List<UnitNotification> _cachedNotifications = [];
-
-  RealNotificationRepository(this._dataSource, [this._signalR]) {
-    _setupRealTimeUpdates();
-  }
 
   /// Настройка real-time обновлений
   void _setupRealTimeUpdates() {
@@ -63,8 +66,8 @@ class RealNotificationRepository implements NotificationRepository {
   }
 
   /// Парсинг уведомления из JSON (для SignalR)
-  UnitNotification _parseNotificationFromJson(Map<String, dynamic> json) {
-    return UnitNotification(
+  UnitNotification _parseNotificationFromJson(Map<String, dynamic> json) =>
+    UnitNotification(
       id: json['id'] as String,
       deviceId: json['deviceId'] as String? ?? '',
       title: json['title'] as String,
@@ -75,7 +78,6 @@ class RealNotificationRepository implements NotificationRepository {
           : DateTime.now(),
       isRead: json['isRead'] as bool? ?? false,
     );
-  }
 
   @override
   Future<List<UnitNotification>> getNotifications({String? deviceId}) async {
@@ -92,7 +94,7 @@ class RealNotificationRepository implements NotificationRepository {
         _cachedNotifications = notifications;
         _notificationsController.add(notifications);
       },
-      onError: (error) {
+      onError: (Object error) {
         _notificationsController.addError(error);
       },
     );
@@ -129,7 +131,9 @@ class RealNotificationRepository implements NotificationRepository {
   }
 
   NotificationType _stringToNotificationType(String? type) {
-    if (type == null) return NotificationType.info;
+    if (type == null) {
+      return NotificationType.info;
+    }
 
     switch (type.toLowerCase()) {
       case 'info':

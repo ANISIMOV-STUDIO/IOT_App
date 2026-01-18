@@ -5,11 +5,10 @@ library;
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-
 import 'package:hvac_control/domain/entities/unit_notification.dart';
 import 'package:hvac_control/domain/usecases/usecases.dart';
 import 'package:hvac_control/presentation/bloc/notifications/notifications_bloc.dart';
+import 'package:mocktail/mocktail.dart';
 
 // Mock classes for Use Cases
 class MockGetNotifications extends Mock implements GetNotifications {}
@@ -35,7 +34,6 @@ void main() {
     message: 'Ресурс фильтра исчерпан на 95%',
     type: NotificationType.warning,
     timestamp: DateTime(2024, 1, 15, 10, 30),
-    isRead: false,
   );
 
   final testNotification2 = UnitNotification(
@@ -44,7 +42,7 @@ void main() {
     title: 'Устройство включено',
     message: 'Бризер Гостиная запущен',
     type: NotificationType.info,
-    timestamp: DateTime(2024, 1, 15, 9, 0),
+    timestamp: DateTime(2024, 1, 15, 9),
     isRead: true,
   );
 
@@ -154,7 +152,7 @@ void main() {
     group('NotificationsListUpdated', () {
       blocTest<NotificationsBloc, NotificationsState>(
         'обновляет список уведомлений из стрима',
-        build: () => createBloc(),
+        build: createBloc,
         seed: () => NotificationsState(
           status: NotificationsStatus.success,
           notifications: [testNotification1],

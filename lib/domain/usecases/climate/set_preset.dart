@@ -1,29 +1,27 @@
 /// Use Case: Установить пресет
 library;
 
-import '../../entities/climate.dart';
-import '../../repositories/climate_repository.dart';
-import '../usecase.dart';
+import 'package:hvac_control/domain/entities/climate.dart';
+import 'package:hvac_control/domain/repositories/climate_repository.dart';
+import 'package:hvac_control/domain/usecases/usecase.dart';
 
 /// Параметры для установки пресета
 class SetPresetParams {
-  final String preset;
-  final String? deviceId;
 
   const SetPresetParams({
     required this.preset,
     this.deviceId,
   });
+  final String preset;
+  final String? deviceId;
 }
 
 /// Установить пресет (auto, night, turbo, eco, away)
 class SetPreset extends UseCaseWithParams<ClimateState, SetPresetParams> {
-  final ClimateRepository _repository;
 
   SetPreset(this._repository);
+  final ClimateRepository _repository;
 
   @override
-  Future<ClimateState> call(SetPresetParams params) async {
-    return _repository.setPreset(params.preset, deviceId: params.deviceId);
-  }
+  Future<ClimateState> call(SetPresetParams params) async => _repository.setPreset(params.preset, deviceId: params.deviceId);
 }

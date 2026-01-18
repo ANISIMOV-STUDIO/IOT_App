@@ -2,19 +2,19 @@
 library;
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:hvac_control/core/logging/api_logger.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-import '../logging/api_logger.dart';
 
 /// Сервис для безопасного хранения токена аутентификации
 class AuthStorageService {
+
+  AuthStorageService(this._secureStorage);
   static const String _accessTokenKey = 'auth_access_token';
   static const String _refreshTokenKey = 'auth_refresh_token';
   static const String _tokenExpiryKey = 'auth_token_expiry';
   static const String _userIdKey = 'user_id';
 
   final FlutterSecureStorage _secureStorage;
-
-  AuthStorageService(this._secureStorage);
 
   /// Сохранить оба токена (access и refresh)
   Future<void> saveTokens(String accessToken, String refreshToken) async {
@@ -58,19 +58,17 @@ class AuthStorageService {
   }
 
   /// Получить access token
-  Future<String?> getToken() async {
-    return await _secureStorage.read(key: _accessTokenKey);
-  }
+  Future<String?> getToken() async => _secureStorage.read(key: _accessTokenKey);
 
   /// Получить refresh token
-  Future<String?> getRefreshToken() async {
-    return await _secureStorage.read(key: _refreshTokenKey);
-  }
+  Future<String?> getRefreshToken() async => _secureStorage.read(key: _refreshTokenKey);
 
   /// Проверить, истек ли access token
   Future<bool> isAccessTokenExpired() async {
     final expiryStr = await _secureStorage.read(key: _tokenExpiryKey);
-    if (expiryStr == null) return false;
+    if (expiryStr == null) {
+      return false;
+    }
 
     try {
       final expiry = DateTime.parse(expiryStr);
@@ -88,9 +86,7 @@ class AuthStorageService {
   }
 
   /// Получить ID пользователя
-  Future<String?> getUserId() async {
-    return await _secureStorage.read(key: _userIdKey);
-  }
+  Future<String?> getUserId() async => _secureStorage.read(key: _userIdKey);
 
   /// Удалить все токены (logout)
   Future<void> deleteToken() async {

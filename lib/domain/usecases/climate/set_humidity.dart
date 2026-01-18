@@ -1,26 +1,26 @@
 /// Use Case: Установить влажность
 library;
 
-import '../../entities/climate.dart';
-import '../../repositories/climate_repository.dart';
-import '../usecase.dart';
+import 'package:hvac_control/domain/entities/climate.dart';
+import 'package:hvac_control/domain/repositories/climate_repository.dart';
+import 'package:hvac_control/domain/usecases/usecase.dart';
 
 /// Параметры для установки влажности
 class SetHumidityParams {
-  final double humidity;
-  final String? deviceId;
 
   const SetHumidityParams({
     required this.humidity,
     this.deviceId,
   });
+  final double humidity;
+  final String? deviceId;
 }
 
 /// Установить целевую влажность
 class SetHumidity extends UseCaseWithParams<ClimateState, SetHumidityParams> {
-  final ClimateRepository _repository;
 
   SetHumidity(this._repository);
+  final ClimateRepository _repository;
 
   @override
   Future<ClimateState> call(SetHumidityParams params) async {

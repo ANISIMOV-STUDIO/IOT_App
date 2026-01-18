@@ -6,9 +6,9 @@ import 'package:grpc/grpc.dart';
 
 /// Interceptor that adds Bearer token to gRPC calls
 class AuthGrpcInterceptor extends ClientInterceptor {
-  final Future<String?> Function() _getToken;
 
   AuthGrpcInterceptor(this._getToken);
+  final Future<String?> Function() _getToken;
 
   @override
   ResponseFuture<R> interceptUnary<Q, R>(
@@ -16,13 +16,11 @@ class AuthGrpcInterceptor extends ClientInterceptor {
     Q request,
     CallOptions options,
     ClientUnaryInvoker<Q, R> invoker,
-  ) {
-    return invoker(
+  ) => invoker(
       method,
       request,
       options.mergedWith(_authOptions()),
     );
-  }
 
   @override
   ResponseStream<R> interceptStreaming<Q, R>(
@@ -30,16 +28,13 @@ class AuthGrpcInterceptor extends ClientInterceptor {
     Stream<Q> requests,
     CallOptions options,
     ClientStreamingInvoker<Q, R> invoker,
-  ) {
-    return invoker(
+  ) => invoker(
       method,
       requests,
       options.mergedWith(_authOptions()),
     );
-  }
 
-  CallOptions _authOptions() {
-    return CallOptions(
+  CallOptions _authOptions() => CallOptions(
       providers: [
         (metadata, uri) async {
           final token = await _getToken();
@@ -49,5 +44,4 @@ class AuthGrpcInterceptor extends ClientInterceptor {
         },
       ],
     );
-  }
 }

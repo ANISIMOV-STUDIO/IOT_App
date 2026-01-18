@@ -4,7 +4,7 @@
 
 // @dart = 3.3
 
-// ignore_for_file: annotate_overrides, camel_case_types, comment_references
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references, prefer_constructors_over_static_methods, do_not_use_environment
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: curly_braces_in_flow_control_structures
 // ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
@@ -12,11 +12,10 @@
 
 import 'dart:core' as $core;
 
-import 'package:protobuf/protobuf.dart' as $pb;
-import 'google/protobuf/timestamp.pb.dart'
+import 'package:hvac_control/generated/protos/common.pbenum.dart' as $1;
+import 'package:hvac_control/generated/protos/google/protobuf/timestamp.pb.dart'
     as $0;
-
-import 'common.pbenum.dart' as $1;
+import 'package:protobuf/protobuf.dart' as $pb;
 
 export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
 
@@ -36,42 +35,64 @@ class ClimateState extends $pb.GeneratedMessage {
     $core.int? pm10,
   }) {
     final result = create();
-    if (deviceId != null) result.deviceId = deviceId;
-    if (indoorTemp != null) result.indoorTemp = indoorTemp;
-    if (outdoorTemp != null) result.outdoorTemp = outdoorTemp;
-    if (humidity != null) result.humidity = humidity;
-    if (co2 != null) result.co2 = co2;
-    if (airQuality != null) result.airQuality = airQuality;
-    if (timestamp != null) result.timestamp = timestamp;
-    if (outdoorHumidity != null) result.outdoorHumidity = outdoorHumidity;
-    if (pressure != null) result.pressure = pressure;
-    if (pm25 != null) result.pm25 = pm25;
-    if (pm10 != null) result.pm10 = pm10;
+    if (deviceId != null) {
+      result.deviceId = deviceId;
+    }
+    if (indoorTemp != null) {
+      result.indoorTemp = indoorTemp;
+    }
+    if (outdoorTemp != null) {
+      result.outdoorTemp = outdoorTemp;
+    }
+    if (humidity != null) {
+      result.humidity = humidity;
+    }
+    if (co2 != null) {
+      result.co2 = co2;
+    }
+    if (airQuality != null) {
+      result.airQuality = airQuality;
+    }
+    if (timestamp != null) {
+      result.timestamp = timestamp;
+    }
+    if (outdoorHumidity != null) {
+      result.outdoorHumidity = outdoorHumidity;
+    }
+    if (pressure != null) {
+      result.pressure = pressure;
+    }
+    if (pm25 != null) {
+      result.pm25 = pm25;
+    }
+    if (pm10 != null) {
+      result.pm10 = pm10;
+    }
     return result;
   }
 
   ClimateState._();
 
   factory ClimateState.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory ClimateState.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ClimateState',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOS(1, _omitFieldNames ? '' : 'deviceId')
     ..aI(2, _omitFieldNames ? '' : 'indoorTemp')
     ..aI(3, _omitFieldNames ? '' : 'outdoorTemp')
     ..aI(4, _omitFieldNames ? '' : 'humidity')
     ..aI(5, _omitFieldNames ? '' : 'co2')
     ..aE<$1.AirQuality>(6, _omitFieldNames ? '' : 'airQuality',
-        enumValues: $1.AirQuality.values)
+        enumValues: $1.AirQuality.values,)
     ..aOM<$0.Timestamp>(7, _omitFieldNames ? '' : 'timestamp',
-        subBuilder: $0.Timestamp.create)
+        subBuilder: $0.Timestamp.create,)
     ..aI(8, _omitFieldNames ? '' : 'outdoorHumidity')
     ..aD(9, _omitFieldNames ? '' : 'pressure')
     ..aI(10, _omitFieldNames ? '' : 'pm25')
@@ -206,23 +227,25 @@ class GetClimateStateRequest extends $pb.GeneratedMessage {
     $core.String? deviceId,
   }) {
     final result = create();
-    if (deviceId != null) result.deviceId = deviceId;
+    if (deviceId != null) {
+      result.deviceId = deviceId;
+    }
     return result;
   }
 
   GetClimateStateRequest._();
 
   factory GetClimateStateRequest.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory GetClimateStateRequest.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'GetClimateStateRequest',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOS(1, _omitFieldNames ? '' : 'deviceId')
     ..hasRequiredFields = false;
 
@@ -230,7 +253,7 @@ class GetClimateStateRequest extends $pb.GeneratedMessage {
   GetClimateStateRequest clone() => deepCopy();
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   GetClimateStateRequest copyWith(
-          void Function(GetClimateStateRequest) updates) =>
+          void Function(GetClimateStateRequest) updates,) =>
       super.copyWith((message) => updates(message as GetClimateStateRequest))
           as GetClimateStateRequest;
 
@@ -264,37 +287,43 @@ class ClimateHistoryRequest extends $pb.GeneratedMessage {
     $0.Timestamp? to,
   }) {
     final result = create();
-    if (deviceId != null) result.deviceId = deviceId;
-    if (from != null) result.from = from;
-    if (to != null) result.to = to;
+    if (deviceId != null) {
+      result.deviceId = deviceId;
+    }
+    if (from != null) {
+      result.from = from;
+    }
+    if (to != null) {
+      result.to = to;
+    }
     return result;
   }
 
   ClimateHistoryRequest._();
 
   factory ClimateHistoryRequest.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory ClimateHistoryRequest.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ClimateHistoryRequest',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOS(1, _omitFieldNames ? '' : 'deviceId')
     ..aOM<$0.Timestamp>(2, _omitFieldNames ? '' : 'from',
-        subBuilder: $0.Timestamp.create)
+        subBuilder: $0.Timestamp.create,)
     ..aOM<$0.Timestamp>(3, _omitFieldNames ? '' : 'to',
-        subBuilder: $0.Timestamp.create)
+        subBuilder: $0.Timestamp.create,)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   ClimateHistoryRequest clone() => deepCopy();
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   ClimateHistoryRequest copyWith(
-          void Function(ClimateHistoryRequest) updates) =>
+          void Function(ClimateHistoryRequest) updates,) =>
       super.copyWith((message) => updates(message as ClimateHistoryRequest))
           as ClimateHistoryRequest;
 
@@ -348,32 +377,34 @@ class ClimateHistoryResponse extends $pb.GeneratedMessage {
     $core.Iterable<ClimateState>? history,
   }) {
     final result = create();
-    if (history != null) result.history.addAll(history);
+    if (history != null) {
+      result.history.addAll(history);
+    }
     return result;
   }
 
   ClimateHistoryResponse._();
 
   factory ClimateHistoryResponse.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory ClimateHistoryResponse.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ClimateHistoryResponse',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..pPM<ClimateState>(1, _omitFieldNames ? '' : 'history',
-        subBuilder: ClimateState.create)
+        subBuilder: ClimateState.create,)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   ClimateHistoryResponse clone() => deepCopy();
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   ClimateHistoryResponse copyWith(
-          void Function(ClimateHistoryResponse) updates) =>
+          void Function(ClimateHistoryResponse) updates,) =>
       super.copyWith((message) => updates(message as ClimateHistoryResponse))
           as ClimateHistoryResponse;
 

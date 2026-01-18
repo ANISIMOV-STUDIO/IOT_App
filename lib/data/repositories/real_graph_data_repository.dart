@@ -7,15 +7,16 @@
 library;
 
 import 'dart:async';
-import '../../domain/entities/graph_data.dart';
-import '../../domain/repositories/graph_data_repository.dart';
-import '../datasources/analytics/analytics_data_source.dart';
+
+import 'package:hvac_control/data/datasources/analytics/analytics_data_source.dart';
+import 'package:hvac_control/domain/entities/graph_data.dart';
+import 'package:hvac_control/domain/repositories/graph_data_repository.dart';
 
 class RealGraphDataRepository implements GraphDataRepository {
-  final AnalyticsDataSource _dataSource;
-  final _graphDataController = StreamController<List<GraphDataPoint>>.broadcast();
 
   RealGraphDataRepository(this._dataSource);
+  final AnalyticsDataSource _dataSource;
+  final _graphDataController = StreamController<List<GraphDataPoint>>.broadcast();
 
   @override
   Future<List<GraphDataPoint>> getGraphData({
@@ -50,7 +51,7 @@ class RealGraphDataRepository implements GraphDataRepository {
       metric: metric,
       from: from,
       to: now,
-    ).catchError((error) {
+    ).catchError((Object error) {
       _graphDataController.addError(error);
       return <GraphDataPoint>[]; // Возвращаем пустой список для типизации
     });
@@ -58,13 +59,11 @@ class RealGraphDataRepository implements GraphDataRepository {
   }
 
   @override
-  Future<List<GraphMetric>> getAvailableMetrics(String deviceId) async {
-    return [
+  Future<List<GraphMetric>> getAvailableMetrics(String deviceId) async => [
       GraphMetric.temperature,
       GraphMetric.humidity,
       GraphMetric.airflow,
     ];
-  }
 
   String _metricToString(GraphMetric metric) {
     switch (metric) {

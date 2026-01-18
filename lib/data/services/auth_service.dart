@@ -2,17 +2,17 @@
 library;
 
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 
-import '../models/auth_models.dart';
-import '../models/user_model.dart';
-import '../../domain/entities/user.dart';
-import '../../core/config/api_config.dart';
+import 'package:http/http.dart' as http;
+import 'package:hvac_control/core/config/api_config.dart';
+import 'package:hvac_control/data/models/auth_models.dart';
+import 'package:hvac_control/data/models/user_model.dart';
+import 'package:hvac_control/domain/entities/user.dart';
 
 /// Исключение авторизации
 class AuthException implements Exception {
-  final String message;
   const AuthException(this.message);
+  final String message;
 
   @override
   String toString() => message;
@@ -20,12 +20,12 @@ class AuthException implements Exception {
 
 /// Сервис для работы с API аутентификации
 class AuthService {
-  final http.Client _client;
-  late final String _baseUrl;
 
   AuthService(this._client) {
     _baseUrl = ApiConfig.apiBaseUrl;
   }
+  final http.Client _client;
+  late final String _baseUrl;
 
   /// Регистрация нового пользователя
   Future<RegisterResponse> register(RegisterRequest request) async {
@@ -42,13 +42,15 @@ class AuthService {
         final data = json.decode(response.body) as Map<String, dynamic>;
         return RegisterResponse.fromJson(data);
       } else {
-        final error = json.decode(response.body);
+        final error = json.decode(response.body) as Map<String, dynamic>;
         throw AuthException(
           error['message'] as String? ?? 'Ошибка регистрации',
         );
       }
     } catch (e) {
-      if (e is AuthException) rethrow;
+      if (e is AuthException) {
+        rethrow;
+      }
       throw AuthException('Ошибка подключения к серверу: $e');
     }
   }
@@ -70,13 +72,15 @@ class AuthService {
       } else if (response.statusCode == 401) {
         throw const AuthException('Неверный email или пароль');
       } else {
-        final error = json.decode(response.body);
+        final error = json.decode(response.body) as Map<String, dynamic>;
         throw AuthException(
           error['message'] as String? ?? 'Ошибка входа',
         );
       }
     } catch (e) {
-      if (e is AuthException) rethrow;
+      if (e is AuthException) {
+        rethrow;
+      }
       throw AuthException('Ошибка подключения к серверу: $e');
     }
   }
@@ -102,7 +106,9 @@ class AuthService {
         throw const AuthException('Ошибка получения данных пользователя');
       }
     } catch (e) {
-      if (e is AuthException) rethrow;
+      if (e is AuthException) {
+        rethrow;
+      }
       throw AuthException('Ошибка подключения к серверу: $e');
     }
   }
@@ -121,13 +127,15 @@ class AuthService {
       if (response.statusCode == 200) {
         return;
       } else {
-        final error = json.decode(response.body);
+        final error = json.decode(response.body) as Map<String, dynamic>;
         throw AuthException(
           error['message'] as String? ?? 'Ошибка подтверждения email',
         );
       }
     } catch (e) {
-      if (e is AuthException) rethrow;
+      if (e is AuthException) {
+        rethrow;
+      }
       throw AuthException('Ошибка подключения к серверу: $e');
     }
   }
@@ -146,13 +154,15 @@ class AuthService {
       if (response.statusCode == 200) {
         return;
       } else {
-        final error = json.decode(response.body);
+        final error = json.decode(response.body) as Map<String, dynamic>;
         throw AuthException(
           error['message'] as String? ?? 'Ошибка отправки кода',
         );
       }
     } catch (e) {
-      if (e is AuthException) rethrow;
+      if (e is AuthException) {
+        rethrow;
+      }
       throw AuthException('Ошибка подключения к серверу: $e');
     }
   }
@@ -174,13 +184,15 @@ class AuthService {
       } else if (response.statusCode == 401) {
         throw const AuthException('Refresh token истек или недействителен');
       } else {
-        final error = json.decode(response.body);
+        final error = json.decode(response.body) as Map<String, dynamic>;
         throw AuthException(
           error['message'] as String? ?? 'Ошибка обновления токена',
         );
       }
     } catch (e) {
-      if (e is AuthException) rethrow;
+      if (e is AuthException) {
+        rethrow;
+      }
       throw AuthException('Ошибка подключения к серверу: $e');
     }
   }
@@ -231,13 +243,15 @@ class AuthService {
       if (response.statusCode == 200) {
         return;
       } else {
-        final error = json.decode(response.body);
+        final error = json.decode(response.body) as Map<String, dynamic>;
         throw AuthException(
           error['message'] as String? ?? 'Ошибка отправки кода',
         );
       }
     } catch (e) {
-      if (e is AuthException) rethrow;
+      if (e is AuthException) {
+        rethrow;
+      }
       throw AuthException('Ошибка подключения к серверу: $e');
     }
   }
@@ -256,13 +270,15 @@ class AuthService {
       if (response.statusCode == 200) {
         return;
       } else {
-        final error = json.decode(response.body);
+        final error = json.decode(response.body) as Map<String, dynamic>;
         throw AuthException(
           error['message'] as String? ?? 'Ошибка сброса пароля',
         );
       }
     } catch (e) {
-      if (e is AuthException) rethrow;
+      if (e is AuthException) {
+        rethrow;
+      }
       throw AuthException('Ошибка подключения к серверу: $e');
     }
   }
@@ -282,13 +298,15 @@ class AuthService {
       if (response.statusCode == 200) {
         return;
       } else {
-        final error = json.decode(response.body);
+        final error = json.decode(response.body) as Map<String, dynamic>;
         throw AuthException(
           error['message'] as String? ?? 'Ошибка смены пароля',
         );
       }
     } catch (e) {
-      if (e is AuthException) rethrow;
+      if (e is AuthException) {
+        rethrow;
+      }
       throw AuthException('Ошибка подключения к серверу: $e');
     }
   }
@@ -309,13 +327,15 @@ class AuthService {
         final data = json.decode(response.body) as Map<String, dynamic>;
         return UserModel.fromJson(data).toEntity();
       } else {
-        final error = json.decode(response.body);
+        final error = json.decode(response.body) as Map<String, dynamic>;
         throw AuthException(
           error['message'] as String? ?? 'Ошибка обновления профиля',
         );
       }
     } catch (e) {
-      if (e is AuthException) rethrow;
+      if (e is AuthException) {
+        rethrow;
+      }
       throw AuthException('Ошибка подключения к серверу: $e');
     }
   }

@@ -2,20 +2,18 @@ import 'package:equatable/equatable.dart';
 
 /// Настройки режима (нагрев/охлаждение)
 class ModeSettings extends Equatable {
-  final int heatingTemperature;
-  final int coolingTemperature;
 
   const ModeSettings({
     required this.heatingTemperature,
     required this.coolingTemperature,
   });
 
-  factory ModeSettings.fromJson(Map<String, dynamic> json) {
-    return ModeSettings(
+  factory ModeSettings.fromJson(Map<String, dynamic> json) => ModeSettings(
       heatingTemperature: json['heatingTemperature'] as int? ?? 22,
       coolingTemperature: json['coolingTemperature'] as int? ?? 24,
     );
-  }
+  final int heatingTemperature;
+  final int coolingTemperature;
 
   Map<String, dynamic> toJson() => {
     'heatingTemperature': heatingTemperature,
@@ -28,11 +26,6 @@ class ModeSettings extends Equatable {
 
 /// Настройки таймера для дня недели
 class TimerSettings extends Equatable {
-  final int onHour;
-  final int onMinute;
-  final int offHour;
-  final int offMinute;
-  final bool enabled;
 
   const TimerSettings({
     required this.onHour,
@@ -42,15 +35,18 @@ class TimerSettings extends Equatable {
     this.enabled = false,
   });
 
-  factory TimerSettings.fromJson(Map<String, dynamic> json) {
-    return TimerSettings(
+  factory TimerSettings.fromJson(Map<String, dynamic> json) => TimerSettings(
       onHour: json['onHour'] as int? ?? 8,
       onMinute: json['onMinute'] as int? ?? 0,
       offHour: json['offHour'] as int? ?? 22,
       offMinute: json['offMinute'] as int? ?? 0,
       enabled: json['enabled'] as bool? ?? false,
     );
-  }
+  final int onHour;
+  final int onMinute;
+  final int offHour;
+  final int offMinute;
+  final bool enabled;
 
   Map<String, dynamic> toJson() => {
     'onHour': onHour,

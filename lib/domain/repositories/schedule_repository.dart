@@ -1,7 +1,7 @@
 /// Schedule Repository - Interface for schedule operations
 library;
 
-import '../entities/schedule_entry.dart';
+import 'package:hvac_control/domain/entities/schedule_entry.dart';
 
 /// Interface for schedule data access and operations
 abstract class ScheduleRepository {
@@ -21,8 +21,8 @@ abstract class ScheduleRepository {
   Future<void> deleteEntry(String entryId);
 
   /// Toggle schedule entry active state
-  Future<ScheduleEntry> toggleEntry(String entryId, bool isActive);
+  Future<ScheduleEntry> toggleEntry(String entryId, {required bool isActive});
 
   /// Enable/disable the schedule for a device
-  Future<void> setScheduleEnabled(String deviceId, bool enabled);
+  Future<void> setScheduleEnabled(String deviceId, {required bool enabled});
 }

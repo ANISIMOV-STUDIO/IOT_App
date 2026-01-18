@@ -8,9 +8,9 @@
 /// - D: Зависит от абстракций (ApiClient, IHvacDataSource)
 library;
 
-import '../../../../core/config/api_config.dart';
-import '../../../../domain/datasources/hvac_datasource.dart';
-import '../base_http_client.dart';
+import 'package:hvac_control/core/config/api_config.dart';
+import 'package:hvac_control/data/api/http/base_http_client.dart';
+import 'package:hvac_control/domain/datasources/hvac_datasource.dart';
 
 /// HTTP реализация HVAC Data Source
 class HvacHttpClient extends BaseHttpClient implements IHvacDataSource {
@@ -24,13 +24,11 @@ class HvacHttpClient extends BaseHttpClient implements IHvacDataSource {
   // ===========================================================================
 
   @override
-  Future<List<Map<String, dynamic>>> listDevices() async {
-    return getList(
+  Future<List<Map<String, dynamic>>> listDevices() async => getList(
       _baseUrl,
       (json) => json,
       listKey: 'devices',
     );
-  }
 
   @override
   Future<Map<String, dynamic>> getDevice(String deviceId) async {
@@ -42,13 +40,11 @@ class HvacHttpClient extends BaseHttpClient implements IHvacDataSource {
   Future<Map<String, dynamic>> registerDevice(
     String macAddress,
     String name,
-  ) async {
-    return post(
+  ) async => post(
       '$_baseUrl/register',
       {'macAddress': macAddress, 'name': name},
       (json) => json as Map<String, dynamic>,
     );
-  }
 
   @override
   Future<void> deleteDevice(String deviceId) async {
@@ -67,7 +63,7 @@ class HvacHttpClient extends BaseHttpClient implements IHvacDataSource {
   // ===========================================================================
 
   @override
-  Future<Map<String, dynamic>> setPower(String deviceId, bool power) async {
+  Future<Map<String, dynamic>> setPower(String deviceId, {required bool power}) async {
     _validateDeviceId(deviceId);
     return post(
       '$_baseUrl/$deviceId/power',
@@ -123,10 +119,18 @@ class HvacHttpClient extends BaseHttpClient implements IHvacDataSource {
     _validateDeviceId(deviceId);
 
     final body = <String, dynamic>{};
-    if (heatingTemperature != null) body['heatingTemperature'] = heatingTemperature;
-    if (coolingTemperature != null) body['coolingTemperature'] = coolingTemperature;
-    if (supplyFan != null) body['supplyFan'] = supplyFan;
-    if (exhaustFan != null) body['exhaustFan'] = exhaustFan;
+    if (heatingTemperature != null) {
+      body['heatingTemperature'] = heatingTemperature;
+    }
+    if (coolingTemperature != null) {
+      body['coolingTemperature'] = coolingTemperature;
+    }
+    if (supplyFan != null) {
+      body['supplyFan'] = supplyFan;
+    }
+    if (exhaustFan != null) {
+      body['exhaustFan'] = exhaustFan;
+    }
 
     return patch(
       '$_baseUrl/$deviceId',

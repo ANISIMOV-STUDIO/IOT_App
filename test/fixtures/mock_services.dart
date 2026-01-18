@@ -1,13 +1,12 @@
 /// Mock-сервисы для тестирования
 library;
 
-import 'package:mocktail/mocktail.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
-import 'package:hvac_control/data/services/auth_service.dart';
+import 'package:http/http.dart' as http;
 import 'package:hvac_control/core/services/auth_storage_service.dart';
+import 'package:hvac_control/data/services/auth_service.dart';
 import 'package:hvac_control/domain/repositories/schedule_repository.dart';
+import 'package:mocktail/mocktail.dart';
 
 /// Mock для AuthService
 class MockAuthService extends Mock implements AuthService {}

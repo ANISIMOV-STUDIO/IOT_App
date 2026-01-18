@@ -3,19 +3,19 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'breakpoints.dart';
+import 'package:hvac_control/core/theme/breakpoints.dart';
 
 class AppSpacing {
   // Spacing scale (based on 8px grid system) - FIXED values, no scaling
-  static const double xxs = 4.0;
-  static const double xs = 8.0;
-  static const double sm = 12.0;
-  static const double md = 16.0;
-  static const double lg = 20.0;
-  static const double lgx = 24.0; // 24px - между lg и xl
-  static const double xl = 32.0;
-  static const double xxl = 48.0;
-  static const double xxxl = 64.0;
+  static const double xxs = 4;
+  static const double xs = 8;
+  static const double sm = 12;
+  static const double md = 16;
+  static const double lg = 20;
+  static const double lgx = 24; // 24px - между lg и xl
+  static const double xl = 32;
+  static const double xxl = 48;
+  static const double xxxl = 64;
 
   // Common padding presets
   static double get paddingXs => xs;
@@ -51,8 +51,12 @@ class AppSpacing {
   // Snackbar margins (responsive based on breakpoints)
   static double snackbarMargin(BuildContext context) {
     final width = MediaQuery.sizeOf(context).width;
-    if (width < AppBreakpoints.mobile) return md; // 16 for mobile
-    if (width < AppBreakpoints.tablet) return lg; // 24 for tablet
+    if (width < AppBreakpoints.mobile) {
+      return md; // 16 for mobile
+    }
+    if (width < AppBreakpoints.tablet) {
+      return lg; // 24 for tablet
+    }
     return xl; // 32 for desktop
   }
 

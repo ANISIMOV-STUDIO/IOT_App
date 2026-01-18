@@ -7,14 +7,13 @@
 library;
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-
-import 'package:hvac_control/data/repositories/cached_schedule_repository.dart';
-import 'package:hvac_control/domain/repositories/schedule_repository.dart';
-import 'package:hvac_control/domain/entities/schedule_entry.dart';
+import 'package:hvac_control/core/error/offline_exception.dart';
 import 'package:hvac_control/core/services/cache_service.dart';
 import 'package:hvac_control/core/services/connectivity_service.dart';
-import 'package:hvac_control/core/error/offline_exception.dart';
+import 'package:hvac_control/data/repositories/cached_schedule_repository.dart';
+import 'package:hvac_control/domain/entities/schedule_entry.dart';
+import 'package:hvac_control/domain/repositories/schedule_repository.dart';
+import 'package:mocktail/mocktail.dart';
 
 /// Mock для ScheduleRepository (внутренний репозиторий)
 class MockScheduleRepository extends Mock implements ScheduleRepository {}
@@ -247,7 +246,7 @@ void main() {
       // Arrange
       final toggledEntry = testEntries.first;
       when(() => mockConnectivity.isOnline).thenReturn(true);
-      when(() => mockInner.toggleEntry('entry-1', false))
+      when(() => mockInner.toggleEntry('entry-1', isActive: false))
           .thenAnswer((_) async => toggledEntry);
       when(() => mockInner.getSchedule(testDeviceId))
           .thenAnswer((_) async => testEntries);
@@ -255,11 +254,11 @@ void main() {
           .thenAnswer((_) async {});
 
       // Act
-      final result = await repository.toggleEntry('entry-1', false);
+      final result = await repository.toggleEntry('entry-1', isActive: false);
 
       // Assert
       expect(result, equals(toggledEntry));
-      verify(() => mockInner.toggleEntry('entry-1', false)).called(1);
+      verify(() => mockInner.toggleEntry('entry-1', isActive: false)).called(1);
     });
 
     test('offline: выбрасывает OfflineException', () async {
@@ -268,7 +267,7 @@ void main() {
 
       // Act & Assert
       expect(
-        () => repository.toggleEntry('entry-1', false),
+        () => repository.toggleEntry('entry-1', isActive: false),
         throwsA(isA<OfflineException>()),
       );
     });

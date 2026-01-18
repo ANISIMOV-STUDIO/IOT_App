@@ -8,6 +8,16 @@ enum NotificationType { info, warning, error, success }
 
 /// Notification item for HVAC unit
 class UnitNotification extends Equatable {
+
+  const UnitNotification({
+    required this.id,
+    required this.title,
+    required this.message,
+    required this.type,
+    required this.timestamp,
+    this.deviceId,
+    this.isRead = false,
+  });
   final String id;
   final String? deviceId;
   final String title;
@@ -15,16 +25,6 @@ class UnitNotification extends Equatable {
   final NotificationType type;
   final DateTime timestamp;
   final bool isRead;
-
-  const UnitNotification({
-    required this.id,
-    this.deviceId,
-    required this.title,
-    required this.message,
-    required this.type,
-    required this.timestamp,
-    this.isRead = false,
-  });
 
   UnitNotification copyWith({
     String? id,
@@ -34,8 +34,7 @@ class UnitNotification extends Equatable {
     NotificationType? type,
     DateTime? timestamp,
     bool? isRead,
-  }) {
-    return UnitNotification(
+  }) => UnitNotification(
       id: id ?? this.id,
       deviceId: deviceId ?? this.deviceId,
       title: title ?? this.title,
@@ -44,7 +43,6 @@ class UnitNotification extends Equatable {
       timestamp: timestamp ?? this.timestamp,
       isRead: isRead ?? this.isRead,
     );
-  }
 
   /// Mark notification as read
   UnitNotification markAsRead() => copyWith(isRead: true);

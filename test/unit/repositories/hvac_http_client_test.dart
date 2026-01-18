@@ -10,12 +10,12 @@
 library;
 
 import 'dart:convert';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-import 'package:http/http.dart' as http;
 
+import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 import 'package:hvac_control/data/api/http/clients/hvac_http_client.dart';
 import 'package:hvac_control/data/api/platform/api_client.dart';
+import 'package:mocktail/mocktail.dart';
 
 /// Mock для ApiClient
 class MockApiClient extends Mock implements ApiClient {}
@@ -44,22 +44,18 @@ void main() {
   });
 
   /// Создаёт успешный HTTP ответ с JSON
-  http.Response successResponse(dynamic body) {
-    return http.Response(
+  http.Response successResponse(dynamic body) => http.Response(
       json.encode(body),
       200,
       headers: {'content-type': 'application/json'},
     );
-  }
 
   /// Создаёт ошибочный HTTP ответ
-  http.Response errorResponse(int statusCode, String message) {
-    return http.Response(
+  http.Response errorResponse(int statusCode, String message) => http.Response(
       json.encode({'message': message}),
       statusCode,
       headers: {'content-type': 'application/json'},
     );
-  }
 
   group('HvacHttpClient.listDevices', () {
     test('возвращает список устройств при успешном ответе (массив)', () async {
@@ -185,7 +181,7 @@ void main() {
           )).thenAnswer((_) async => successResponse(responseJson));
 
       // Act
-      final result = await hvacClient.setPower('device-1', true);
+      final result = await hvacClient.setPower('device-1', power: true);
 
       // Assert
       expect(result['isOn'], isTrue);
@@ -211,7 +207,7 @@ void main() {
           )).thenAnswer((_) async => successResponse(responseJson));
 
       // Act
-      final result = await hvacClient.setPower('device-1', false);
+      final result = await hvacClient.setPower('device-1', power: false);
 
       // Assert
       expect(result['isOn'], isFalse);
@@ -387,7 +383,7 @@ void main() {
       when(() => mockHttpClient.get(
             any(),
             headers: any(named: 'headers'),
-          )).thenAnswer((_) async => successResponse([]));
+          )).thenAnswer((_) async => successResponse(<Map<String, dynamic>>[]));
 
       // Act
       await hvacClient.listDevices();
@@ -402,7 +398,7 @@ void main() {
       when(() => mockHttpClient.get(
             any(),
             headers: any(named: 'headers'),
-          )).thenAnswer((_) async => successResponse([]));
+          )).thenAnswer((_) async => successResponse(<Map<String, dynamic>>[]));
 
       // Act & Assert - не должно выбрасывать исключение
       await expectLater(

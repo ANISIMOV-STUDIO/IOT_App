@@ -4,28 +4,26 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../../bloc/auth/auth_bloc.dart';
-import '../../../bloc/auth/auth_event.dart';
-import '../../../bloc/auth/auth_state.dart';
-import '../../../widgets/auth/auth_action_link.dart';
-import '../../../widgets/breez/breez.dart';
-import '../../../../core/constants/auth_constants.dart';
-import '../../../../core/navigation/app_router.dart';
-import '../../../../core/theme/app_theme.dart';
-import '../../../../core/theme/app_font_sizes.dart';
-import '../../../../core/theme/spacing.dart';
-import '../../../../core/utils/validators.dart';
-import '../../../../core/utils/snackbar_utils.dart';
-import '../../../../generated/l10n/app_localizations.dart';
+import 'package:hvac_control/core/constants/auth_constants.dart';
+import 'package:hvac_control/core/navigation/app_router.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/core/utils/snackbar_utils.dart';
+import 'package:hvac_control/core/utils/validators.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
+import 'package:hvac_control/presentation/bloc/auth/auth_bloc.dart';
+import 'package:hvac_control/presentation/bloc/auth/auth_event.dart';
+import 'package:hvac_control/presentation/bloc/auth/auth_state.dart';
+import 'package:hvac_control/presentation/widgets/auth/auth_action_link.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez.dart';
 
 class LoginForm extends StatefulWidget {
-  final VoidCallback onSwitchToRegister;
 
   const LoginForm({
-    super.key,
     required this.onSwitchToRegister,
+    super.key,
   });
+  final VoidCallback onSwitchToRegister;
 
   @override
   State<LoginForm> createState() => _LoginFormState();

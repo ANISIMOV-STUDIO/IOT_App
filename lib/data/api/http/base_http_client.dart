@@ -9,9 +9,9 @@ library;
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../../../core/error/http_error_handler.dart';
-import '../../../core/logging/api_logger.dart';
-import '../platform/api_client.dart';
+import 'package:hvac_control/core/error/http_error_handler.dart';
+import 'package:hvac_control/core/logging/api_logger.dart';
+import 'package:hvac_control/data/api/platform/api_client.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -39,9 +39,9 @@ abstract class HttpStatus {
 /// }
 /// ```
 abstract class BaseHttpClient {
-  final ApiClient _apiClient;
-
   BaseHttpClient(this._apiClient);
+
+  final ApiClient _apiClient;
 
   /// Получить HTTP клиент
   http.Client get httpClient => _apiClient.getHttpClient();
@@ -57,8 +57,7 @@ abstract class BaseHttpClient {
   Future<T> get<T>(
     String url,
     T Function(dynamic json) parser,
-  ) async {
-    return _executeRequest(
+  ) async => _executeRequest(
       method: 'GET',
       url: url,
       execute: () async {
@@ -67,15 +66,13 @@ abstract class BaseHttpClient {
       },
       parser: parser,
     );
-  }
 
   /// GET запрос возвращающий список
   Future<List<T>> getList<T>(
     String url,
     T Function(Map<String, dynamic> json) itemParser, {
     String? listKey,
-  }) async {
-    return _executeRequest(
+  }) async => _executeRequest(
       method: 'GET',
       url: url,
       execute: () async {
@@ -97,12 +94,9 @@ abstract class BaseHttpClient {
             .toList();
       },
     );
-  }
 
   /// GET запрос возвращающий raw Map
-  Future<Map<String, dynamic>> getRaw(String url) async {
-    return get(url, (json) => json as Map<String, dynamic>);
-  }
+  Future<Map<String, dynamic>> getRaw(String url) async => get(url, (json) => json as Map<String, dynamic>);
 
   /// POST запрос с телом и парсингом ответа
   Future<T> post<T>(
@@ -215,9 +209,9 @@ abstract class BaseHttpClient {
   Future<T> _executeRequest<T>({
     required String method,
     required String url,
-    String? body,
     required Future<http.Response> Function() execute,
     required T Function(dynamic json) parser,
+    String? body,
   }) async {
     try {
       ApiLogger.logHttpRequest(method, url, body);
@@ -246,8 +240,8 @@ abstract class BaseHttpClient {
   Future<void> _executeVoidRequest({
     required String method,
     required String url,
-    String? body,
     required Future<http.Response> Function() execute,
+    String? body,
   }) async {
     try {
       ApiLogger.logHttpRequest(method, url, body);

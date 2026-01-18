@@ -3,17 +3,29 @@ library;
 
 import 'dart:async';
 import 'dart:developer' as developer;
-import '../../domain/entities/alarm_info.dart';
-import '../../domain/entities/climate.dart';
-import '../../domain/entities/hvac_device.dart';
-import '../../domain/entities/device_full_state.dart';
-import '../../domain/repositories/climate_repository.dart';
-import '../api/platform/api_client.dart';
-import '../api/http/clients/hvac_http_client.dart';
-import '../api/websocket/signalr_hub_connection.dart';
-import '../api/mappers/device_json_mapper.dart';
+
+import 'package:hvac_control/data/api/http/clients/hvac_http_client.dart';
+import 'package:hvac_control/data/api/mappers/device_json_mapper.dart';
+import 'package:hvac_control/data/api/platform/api_client.dart';
+import 'package:hvac_control/data/api/websocket/signalr_hub_connection.dart';
+import 'package:hvac_control/domain/entities/alarm_info.dart';
+import 'package:hvac_control/domain/entities/climate.dart';
+import 'package:hvac_control/domain/entities/device_full_state.dart';
+import 'package:hvac_control/domain/entities/hvac_device.dart';
+import 'package:hvac_control/domain/repositories/climate_repository.dart';
 
 class RealClimateRepository implements ClimateRepository {
+
+  /// Конструктор с инжекцией зависимостей
+  ///
+  /// [_apiClient] - Platform-specific API client
+  /// [_httpClient] - HTTP client для REST API вызовов
+  /// [_signalR] - SignalR connection для real-time обновлений (опционально для web)
+  RealClimateRepository(
+    this._apiClient,
+    this._httpClient,
+    this._signalR,
+  );
   // ignore: unused_field
   final ApiClient _apiClient;
   final HvacHttpClient _httpClient;
@@ -28,19 +40,8 @@ class RealClimateRepository implements ClimateRepository {
   ClimateState? _lastClimateState;  // Кэшированное состояние для быстрого доступа к preset
 
   // SignalR subscription для отмены при dispose
-  StreamSubscription? _deviceUpdatesSubscription;
-  StreamSubscription? _statusChangesSubscription;
-
-  /// Конструктор с инжекцией зависимостей
-  ///
-  /// [_apiClient] - Platform-specific API client
-  /// [_httpClient] - HTTP client для REST API вызовов
-  /// [_signalR] - SignalR connection для real-time обновлений (опционально для web)
-  RealClimateRepository(
-    this._apiClient,
-    this._httpClient,
-    this._signalR,
-  );
+  StreamSubscription<Map<String, dynamic>>? _deviceUpdatesSubscription;
+  StreamSubscription<Map<String, dynamic>>? _statusChangesSubscription;
 
   /// Инициализировать SignalR подключение
   /// Должен быть вызван после создания repository
@@ -82,7 +83,7 @@ class RealClimateRepository implements ClimateRepository {
             }
           }
         },
-        onError: (error) {
+        onError: (Object error) {
           // Логируем ошибку, но не прерываем стрим
           developer.log(
             'SignalR device updates error: $error',
@@ -94,10 +95,8 @@ class RealClimateRepository implements ClimateRepository {
 
       // Подписка на изменения онлайн-статуса устройств
       _statusChangesSubscription = _signalR?.statusChanges.listen(
-        (statusData) {
-          _handleStatusChange(statusData);
-        },
-        onError: (error) {
+        _handleStatusChange,
+        onError: (Object error) {
           developer.log(
             'SignalR status changes error: $error',
             name: 'ClimateRepository',
@@ -117,7 +116,9 @@ class RealClimateRepository implements ClimateRepository {
     final macAddress = statusData['macAddress'] as String?;
     final isOnline = statusData['isOnline'] as bool? ?? false;
 
-    if (deviceId == null && macAddress == null) return;
+    if (deviceId == null && macAddress == null) {
+      return;
+    }
 
     developer.log(
       'SignalR: Device status changed - deviceId: $deviceId, mac: $macAddress, isOnline: $isOnline',
@@ -140,9 +141,7 @@ class RealClimateRepository implements ClimateRepository {
     // Если это текущее выбранное устройство — обновляем DeviceFullState
     if (_selectedDeviceId == deviceId) {
       // Запрашиваем полное состояние устройства для обновления UI
-      getDeviceFullState(_selectedDeviceId).then((fullState) {
-        _deviceFullStateController.add(fullState);
-      }).catchError((e) {
+      getDeviceFullState(_selectedDeviceId).then(_deviceFullStateController.add).catchError((Object e) {
         developer.log(
           'Failed to refresh device state after status change: $e',
           name: 'ClimateRepository',
@@ -153,9 +152,13 @@ class RealClimateRepository implements ClimateRepository {
 
   /// Сравнение списков устройств
   bool _listEquals(List<HvacDevice> a, List<HvacDevice> b) {
-    if (a.length != b.length) return false;
-    for (int i = 0; i < a.length; i++) {
-      if (a[i].id != b[i].id || a[i].isOnline != b[i].isOnline) return false;
+    if (a.length != b.length) {
+      return false;
+    }
+    for (var i = 0; i < a.length; i++) {
+      if (a[i].id != b[i].id || a[i].isOnline != b[i].isOnline) {
+        return false;
+      }
     }
     return true;
   }
@@ -171,7 +174,7 @@ class RealClimateRepository implements ClimateRepository {
   Future<List<HvacDevice>> getAllHvacDevices() async {
     final jsonDevices = await _httpClient.listDevices();
     final devices = jsonDevices
-        .map((json) => DeviceJsonMapper.hvacDeviceFromJson(json))
+        .map(DeviceJsonMapper.hvacDeviceFromJson)
         .toList();
 
     _cachedDevices = devices; // Сохраняем для последующих операций
@@ -296,7 +299,7 @@ class RealClimateRepository implements ClimateRepository {
   // ============================================
 
   @override
-  Future<ClimateState> setPower(bool isOn, {String? deviceId}) async {
+  Future<ClimateState> setPower({required bool isOn, String? deviceId}) async {
     final id = deviceId ?? _selectedDeviceId;
     developer.log(
       'setPower called: isOn=$isOn, deviceId=$deviceId, selectedDeviceId=$_selectedDeviceId, resolved id=$id',
@@ -308,7 +311,7 @@ class RealClimateRepository implements ClimateRepository {
       throw StateError('No device selected for power control');
     }
 
-    final jsonDevice = await _httpClient.setPower(id, isOn);
+    final jsonDevice = await _httpClient.setPower(id, power: isOn);
     final state = DeviceJsonMapper.climateStateFromJson(jsonDevice);
     _climateController.add(state);
     return state;
@@ -318,10 +321,9 @@ class RealClimateRepository implements ClimateRepository {
   Future<ClimateState> setTargetTemperature(
     double temperature, {
     String? deviceId,
-  }) async {
+  }) =>
     // Default to heating temperature for backward compatibility
-    return setHeatingTemperature(temperature.toInt(), deviceId: deviceId);
-  }
+    setHeatingTemperature(temperature.toInt(), deviceId: deviceId);
 
   @override
   Future<ClimateState> setHeatingTemperature(
@@ -384,11 +386,10 @@ class RealClimateRepository implements ClimateRepository {
 
 
   @override
-  Future<ClimateState> setHumidity(double humidity, {String? deviceId}) async {
+  Future<ClimateState> setHumidity(double humidity, {String? deviceId}) =>
     // Backend might not have dedicated humidity endpoint
     // Return current state for now
-    return getCurrentState();
-  }
+    getCurrentState();
 
   @override
   Future<ClimateState> setMode(ClimateMode mode, {String? deviceId}) async {
@@ -453,11 +454,10 @@ class RealClimateRepository implements ClimateRepository {
 
 
   @override
-  Future<ClimateState> setPreset(String preset, {String? deviceId}) async {
+  Future<ClimateState> setPreset(String preset, {String? deviceId}) =>
     // Backend might not have preset endpoint via HTTP
     // Return current state for now
-    return getCurrentState();
-  }
+    getCurrentState();
 
   @override
   Future<HvacDevice> registerDevice(String macAddress, String name) async {
@@ -547,7 +547,7 @@ class RealClimateRepository implements ClimateRepository {
       throw StateError('No device selected');
     }
     final jsonList = await _httpClient.getAlarmHistory(deviceId, limit: limit);
-    return jsonList.map((json) => AlarmHistory.fromJson(json)).toList();
+    return jsonList.map(AlarmHistory.fromJson).toList();
   }
 
   // ============================================

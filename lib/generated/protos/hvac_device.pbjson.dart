@@ -29,7 +29,7 @@ const HvacDevice$json = {
       '4': 1,
       '5': 14,
       '6': '.breez.OperationMode',
-      '10': 'mode'
+      '10': 'mode',
     },
     {
       '1': 'supply_fan',
@@ -37,7 +37,7 @@ const HvacDevice$json = {
       '4': 1,
       '5': 14,
       '6': '.breez.FanSpeed',
-      '10': 'supplyFan'
+      '10': 'supplyFan',
     },
     {
       '1': 'exhaust_fan',
@@ -45,7 +45,7 @@ const HvacDevice$json = {
       '4': 1,
       '5': 14,
       '6': '.breez.FanSpeed',
-      '10': 'exhaustFan'
+      '10': 'exhaustFan',
     },
     {'1': 'current_temp', '3': 8, '4': 1, '5': 5, '10': 'currentTemp'},
     {'1': 'humidity', '3': 9, '4': 1, '5': 5, '10': 'humidity'},
@@ -57,7 +57,7 @@ const HvacDevice$json = {
       '4': 3,
       '5': 11,
       '6': '.breez.Alert',
-      '10': 'alerts'
+      '10': 'alerts',
     },
     {
       '1': 'status',
@@ -65,7 +65,7 @@ const HvacDevice$json = {
       '4': 1,
       '5': 14,
       '6': '.breez.DeviceStatus',
-      '10': 'status'
+      '10': 'status',
     },
     {
       '1': 'last_update',
@@ -73,7 +73,7 @@ const HvacDevice$json = {
       '4': 1,
       '5': 11,
       '6': '.google.protobuf.Timestamp',
-      '10': 'lastUpdate'
+      '10': 'lastUpdate',
     },
     {'1': 'mqtt_topic', '3': 15, '4': 1, '5': 9, '10': 'mqttTopic'},
     {
@@ -82,7 +82,7 @@ const HvacDevice$json = {
       '4': 3,
       '5': 11,
       '6': '.breez.Preset',
-      '10': 'presets'
+      '10': 'presets',
     },
   ],
 };
@@ -113,7 +113,7 @@ const Preset$json = {
       '4': 1,
       '5': 14,
       '6': '.breez.OperationMode',
-      '10': 'mode'
+      '10': 'mode',
     },
     {
       '1': 'supply_fan',
@@ -121,7 +121,7 @@ const Preset$json = {
       '4': 1,
       '5': 14,
       '6': '.breez.FanSpeed',
-      '10': 'supplyFan'
+      '10': 'supplyFan',
     },
     {
       '1': 'exhaust_fan',
@@ -129,7 +129,7 @@ const Preset$json = {
       '4': 1,
       '5': 14,
       '6': '.breez.FanSpeed',
-      '10': 'exhaustFan'
+      '10': 'exhaustFan',
     },
     {'1': 'icon', '3': 7, '4': 1, '5': 9, '10': 'icon'},
   ],
@@ -179,7 +179,7 @@ const ListDevicesResponse$json = {
       '4': 3,
       '5': 11,
       '6': '.breez.HvacDevice',
-      '10': 'devices'
+      '10': 'devices',
     },
   ],
 };
@@ -205,7 +205,7 @@ const UpdateDeviceRequest$json = {
       '6': '.breez.OperationMode',
       '9': 3,
       '10': 'mode',
-      '17': true
+      '17': true,
     },
     {
       '1': 'supply_fan',
@@ -215,7 +215,7 @@ const UpdateDeviceRequest$json = {
       '6': '.breez.FanSpeed',
       '9': 4,
       '10': 'supplyFan',
-      '17': true
+      '17': true,
     },
     {
       '1': 'exhaust_fan',
@@ -225,7 +225,7 @@ const UpdateDeviceRequest$json = {
       '6': '.breez.FanSpeed',
       '9': 5,
       '10': 'exhaustFan',
-      '17': true
+      '17': true,
     },
   ],
   '8': [
@@ -287,7 +287,7 @@ const SetModeRequest$json = {
       '4': 1,
       '5': 14,
       '6': '.breez.OperationMode',
-      '10': 'mode'
+      '10': 'mode',
     },
   ],
 };
@@ -308,7 +308,7 @@ const SetFanSpeedRequest$json = {
       '4': 1,
       '5': 14,
       '6': '.breez.FanSpeed',
-      '10': 'supplyFan'
+      '10': 'supplyFan',
     },
     {
       '1': 'exhaust_fan',
@@ -316,7 +316,7 @@ const SetFanSpeedRequest$json = {
       '4': 1,
       '5': 14,
       '6': '.breez.FanSpeed',
-      '10': 'exhaustFan'
+      '10': 'exhaustFan',
     },
   ],
 };
@@ -364,7 +364,7 @@ const StreamDeviceUpdatesRequest$json = {
       '5': 9,
       '9': 0,
       '10': 'deviceId',
-      '17': true
+      '17': true,
     },
   ],
   '8': [

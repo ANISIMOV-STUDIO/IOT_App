@@ -4,16 +4,11 @@
 /// Преобразование в Domain Entities выполняется через методы toEntity().
 library;
 
-import '../../domain/entities/user.dart';
-import 'user_model.dart';
+import 'package:hvac_control/data/models/user_model.dart';
+import 'package:hvac_control/domain/entities/user.dart';
 
 /// Запрос на регистрацию
 class RegisterRequest {
-  final String email;
-  final String password;
-  final String firstName;
-  final String lastName;
-  final bool dataProcessingConsent;
 
   const RegisterRequest({
     required this.email,
@@ -22,41 +17,39 @@ class RegisterRequest {
     required this.lastName,
     required this.dataProcessingConsent,
   });
+  final String email;
+  final String password;
+  final String firstName;
+  final String lastName;
+  final bool dataProcessingConsent;
 
-  Map<String, dynamic> toJson() {
-    return {
+  Map<String, dynamic> toJson() => {
       'email': email,
       'password': password,
       'firstName': firstName,
       'lastName': lastName,
       'dataProcessingConsent': dataProcessingConsent,
     };
-  }
 }
 
 /// Запрос на вход
 class LoginRequest {
-  final String email;
-  final String password;
 
   const LoginRequest({
     required this.email,
     required this.password,
   });
+  final String email;
+  final String password;
 
-  Map<String, dynamic> toJson() {
-    return {
+  Map<String, dynamic> toJson() => {
       'email': email,
       'password': password,
     };
-  }
 }
 
 /// Ответ при успешной аутентификации
 class AuthResponse {
-  final String accessToken;
-  final String refreshToken;
-  final UserModel _userModel;
 
   const AuthResponse._({
     required this.accessToken,
@@ -64,32 +57,28 @@ class AuthResponse {
     required UserModel userModel,
   }) : _userModel = userModel;
 
-  factory AuthResponse.fromJson(Map<String, dynamic> json) {
-    return AuthResponse._(
+  factory AuthResponse.fromJson(Map<String, dynamic> json) => AuthResponse._(
       // Поддержка старого формата (token) и нового (accessToken)
       accessToken: (json['accessToken'] ?? json['token']) as String? ?? '',
       refreshToken: json['refreshToken'] as String? ?? '',
       userModel: UserModel.fromJson((json['user'] as Map<String, dynamic>?) ?? {}),
     );
-  }
+  final String accessToken;
+  final String refreshToken;
+  final UserModel _userModel;
 
   /// Получить Domain Entity пользователя
   User get user => _userModel.toEntity();
 
-  Map<String, dynamic> toJson() {
-    return {
+  Map<String, dynamic> toJson() => {
       'accessToken': accessToken,
       'refreshToken': refreshToken,
       'user': _userModel.toJson(),
     };
-  }
 }
 
 /// Ответ при успешной регистрации
 class RegisterResponse {
-  final String message;
-  final String email;
-  final bool requiresEmailVerification;
 
   const RegisterResponse({
     required this.message,
@@ -97,146 +86,131 @@ class RegisterResponse {
     required this.requiresEmailVerification,
   });
 
-  factory RegisterResponse.fromJson(Map<String, dynamic> json) {
-    return RegisterResponse(
+  factory RegisterResponse.fromJson(Map<String, dynamic> json) => RegisterResponse(
       message: json['message'] as String? ?? 'Регистрация выполнена',
       email: json['email'] as String? ?? '',
       requiresEmailVerification: json['requiresEmailVerification'] as bool? ?? false,
     );
-  }
+  final String message;
+  final String email;
+  final bool requiresEmailVerification;
 }
 
 /// Запрос на подтверждение email
 class VerifyEmailRequest {
-  final String email;
-  final String code;
 
   const VerifyEmailRequest({
     required this.email,
     required this.code,
   });
+  final String email;
+  final String code;
 
-  Map<String, dynamic> toJson() {
-    return {
+  Map<String, dynamic> toJson() => {
       'email': email,
       'code': code,
     };
-  }
 }
 
 /// Запрос на повторную отправку кода
 class ResendCodeRequest {
-  final String email;
 
   const ResendCodeRequest({
     required this.email,
   });
+  final String email;
 
-  Map<String, dynamic> toJson() {
-    return {
+  Map<String, dynamic> toJson() => {
       'email': email,
     };
-  }
 }
 
 /// Запрос на обновление токенов через refresh token
 class RefreshTokenRequest {
-  final String refreshToken;
 
   const RefreshTokenRequest({
     required this.refreshToken,
   });
+  final String refreshToken;
 
-  Map<String, dynamic> toJson() {
-    return {
+  Map<String, dynamic> toJson() => {
       'refreshToken': refreshToken,
     };
-  }
 }
 
 /// Запрос на выход из системы
 class LogoutRequest {
-  final String refreshToken;
 
   const LogoutRequest({
     required this.refreshToken,
   });
+  final String refreshToken;
 
-  Map<String, dynamic> toJson() {
-    return {
+  Map<String, dynamic> toJson() => {
       'refreshToken': refreshToken,
     };
-  }
 }
 
 /// Запрос на восстановление пароля (forgot password)
 class ForgotPasswordRequest {
-  final String email;
 
   const ForgotPasswordRequest({
     required this.email,
   });
+  final String email;
 
-  Map<String, dynamic> toJson() {
-    return {
+  Map<String, dynamic> toJson() => {
       'email': email,
     };
-  }
 }
 
 /// Запрос на сброс пароля (reset password)
 class ResetPasswordRequest {
-  final String email;
-  final String code;
-  final String newPassword;
 
   const ResetPasswordRequest({
     required this.email,
     required this.code,
     required this.newPassword,
   });
+  final String email;
+  final String code;
+  final String newPassword;
 
-  Map<String, dynamic> toJson() {
-    return {
+  Map<String, dynamic> toJson() => {
       'email': email,
       'code': code,
       'newPassword': newPassword,
     };
-  }
 }
 
 /// Запрос на смену пароля (авторизованный пользователь)
 class ChangePasswordRequest {
-  final String currentPassword;
-  final String newPassword;
 
   const ChangePasswordRequest({
     required this.currentPassword,
     required this.newPassword,
   });
+  final String currentPassword;
+  final String newPassword;
 
-  Map<String, dynamic> toJson() {
-    return {
+  Map<String, dynamic> toJson() => {
       'currentPassword': currentPassword,
       'newPassword': newPassword,
     };
-  }
 }
 
 /// Запрос на обновление профиля
 class UpdateProfileRequest {
-  final String firstName;
-  final String lastName;
 
   const UpdateProfileRequest({
     required this.firstName,
     required this.lastName,
   });
+  final String firstName;
+  final String lastName;
 
-  Map<String, dynamic> toJson() {
-    return {
+  Map<String, dynamic> toJson() => {
       'firstName': firstName,
       'lastName': lastName,
     };
-  }
 }

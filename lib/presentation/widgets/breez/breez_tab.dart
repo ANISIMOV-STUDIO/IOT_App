@@ -7,9 +7,9 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -18,16 +18,15 @@ import '../../../core/theme/app_radius.dart';
 /// Константы для табов
 abstract class _TabConstants {
   // Размеры
-  static const double indicatorSize = 6.0;
-  static const double borderWidth = 1.0;
-  static const double paddingVerticalCompact = 6.0; // Between xxs (4) and xs (8)
+  static const double indicatorSize = 6;
+  static const double paddingVerticalCompact = 6; // Between xxs (4) and xs (8)
 
   // Анимации
   static const Duration animationDuration = Duration(milliseconds: 150);
 
   // Типографика
-  static const double fontSizeCompact = 10.0;
-  static const double fontSizeNormal = 11.0;
+  static const double fontSizeCompact = 10;
+  static const double fontSizeNormal = 11;
 }
 
 // =============================================================================
@@ -55,6 +54,17 @@ abstract class _TabConstants {
 /// )
 /// ```
 class BreezTab extends StatefulWidget {
+
+  const BreezTab({
+    required this.label,
+    super.key,
+    this.isSelected = false,
+    this.isActive = false,
+    this.onTap,
+    this.onLongPress,
+    this.compact = false,
+    this.activeIndicatorColor,
+  });
   /// Текст таба
   final String label;
 
@@ -75,17 +85,6 @@ class BreezTab extends StatefulWidget {
 
   /// Цвет индикатора активности (по умолчанию [AppColors.accentGreen])
   final Color? activeIndicatorColor;
-
-  const BreezTab({
-    super.key,
-    required this.label,
-    this.isSelected = false,
-    this.isActive = false,
-    this.onTap,
-    this.onLongPress,
-    this.compact = false,
-    this.activeIndicatorColor,
-  });
 
   @override
   State<BreezTab> createState() => _BreezTabState();
@@ -132,7 +131,6 @@ class _BreezTabState extends State<BreezTab> {
               borderRadius: BorderRadius.circular(AppRadius.chip),
               border: Border.all(
                 color: _buildBorderColor(colors),
-                width: _TabConstants.borderWidth,
               ),
             ),
             child: Column(
@@ -221,6 +219,16 @@ class _BreezTabState extends State<BreezTab> {
 /// )
 /// ```
 class BreezTabGroup extends StatelessWidget {
+
+  const BreezTabGroup({
+    required this.labels,
+    required this.selectedIndex,
+    super.key,
+    this.activeIndices,
+    this.onTabSelected,
+    this.onTabLongPress,
+    this.compact = false,
+  });
   /// Список меток табов
   final List<String> labels;
 
@@ -239,25 +247,13 @@ class BreezTabGroup extends StatelessWidget {
   /// Компактный режим
   final bool compact;
 
-  const BreezTabGroup({
-    super.key,
-    required this.labels,
-    required this.selectedIndex,
-    this.activeIndices,
-    this.onTabSelected,
-    this.onTabLongPress,
-    this.compact = false,
-  });
-
   @override
-  Widget build(BuildContext context) {
-    return Semantics(
+  Widget build(BuildContext context) => Semantics(
       label: 'Выбор дня недели',
       child: Row(
         children: List.generate(labels.length, _buildTab),
       ),
     );
-  }
 
   Widget _buildTab(int index) {
     final isFirst = index == 0;

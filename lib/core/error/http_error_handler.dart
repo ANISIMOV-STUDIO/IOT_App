@@ -3,8 +3,8 @@ library;
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'api_exception.dart';
-import '../logging/api_logger.dart';
+import 'package:hvac_control/core/error/api_exception.dart';
+import 'package:hvac_control/core/logging/api_logger.dart';
 
 class HttpErrorHandler {
   /// Извлечь сообщение об ошибке из тела ответа
@@ -84,11 +84,9 @@ class HttpErrorHandler {
     }
   }
 
-  static ApiException handleException(Object error) {
-    return ApiException(
+  static ApiException handleException(Object error) => ApiException(
       type: ApiErrorType.network,
       message: 'Ошибка подключения к серверу',
       originalError: error,
     );
-  }
 }

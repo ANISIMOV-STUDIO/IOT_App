@@ -1,25 +1,24 @@
 /// Use Case: Получить состояние устройства
 library;
 
-import '../../entities/climate.dart';
-import '../../repositories/climate_repository.dart';
-import '../usecase.dart';
+import 'package:hvac_control/domain/entities/climate.dart';
+import 'package:hvac_control/domain/repositories/climate_repository.dart';
+import 'package:hvac_control/domain/usecases/usecase.dart';
 
 /// Параметры для получения состояния устройства
 class GetDeviceStateParams {
-  final String deviceId;
 
   const GetDeviceStateParams({required this.deviceId});
+  final String deviceId;
 }
 
 /// Получить текущее состояние климата устройства
 class GetDeviceState extends UseCaseWithParams<ClimateState, GetDeviceStateParams> {
-  final ClimateRepository _repository;
 
   GetDeviceState(this._repository);
+  final ClimateRepository _repository;
 
   @override
-  Future<ClimateState> call(GetDeviceStateParams params) async {
-    return _repository.getDeviceState(params.deviceId);
-  }
+  Future<ClimateState> call(GetDeviceStateParams params) async =>
+      _repository.getDeviceState(params.deviceId);
 }

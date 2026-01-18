@@ -6,11 +6,13 @@
 /// Для генерации этого файла автоматически используйте FlutterFire CLI:
 /// dart pub global activate flutterfire_cli
 /// flutterfire configure
+// ignore_for_file: do_not_use_environment, no_default_cases
+
 library;
 
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
-    show defaultTargetPlatform, kIsWeb, TargetPlatform;
+    show TargetPlatform, defaultTargetPlatform, kIsWeb;
 
 /// Конфигурация Firebase для текущей платформы
 class DefaultFirebaseOptions {

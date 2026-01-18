@@ -38,7 +38,7 @@ abstract class IHvacDataSource {
   // ===========================================================================
 
   /// Включить/выключить устройство
-  Future<Map<String, dynamic>> setPower(String deviceId, bool power);
+  Future<Map<String, dynamic>> setPower(String deviceId, {required bool power});
 
   /// Установить режим работы
   Future<Map<String, dynamic>> setMode(String deviceId, String mode);

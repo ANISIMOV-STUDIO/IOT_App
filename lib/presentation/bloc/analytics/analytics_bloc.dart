@@ -7,26 +7,18 @@
 library;
 
 import 'dart:async';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:equatable/equatable.dart';
 
-import '../../../domain/entities/energy_stats.dart';
-import '../../../domain/entities/graph_data.dart';
-import '../../../domain/usecases/usecases.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hvac_control/domain/entities/energy_stats.dart';
+import 'package:hvac_control/domain/entities/graph_data.dart';
+import 'package:hvac_control/domain/usecases/usecases.dart';
 
 part 'analytics_event.dart';
 part 'analytics_state.dart';
 
 /// BLoC для аналитики и статистики
 class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
-  final GetTodayStats _getTodayStats;
-  final GetDevicePowerUsage _getDevicePowerUsage;
-  final WatchEnergyStats _watchEnergyStats;
-  final GetGraphData _getGraphData;
-  final WatchGraphData _watchGraphData;
-
-  StreamSubscription<EnergyStats>? _energySubscription;
-  StreamSubscription<List<GraphDataPoint>>? _graphDataSubscription;
 
   AnalyticsBloc({
     required GetTodayStats getTodayStats,
@@ -52,6 +44,14 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
     // Действия
     on<AnalyticsGraphMetricChanged>(_onGraphMetricChanged);
   }
+  final GetTodayStats _getTodayStats;
+  final GetDevicePowerUsage _getDevicePowerUsage;
+  final WatchEnergyStats _watchEnergyStats;
+  final GetGraphData _getGraphData;
+  final WatchGraphData _watchGraphData;
+
+  StreamSubscription<EnergyStats>? _energySubscription;
+  StreamSubscription<List<GraphDataPoint>>? _graphDataSubscription;
 
   /// Запрос на подписку к данным аналитики
   Future<void> _onSubscriptionRequested(

@@ -2,9 +2,9 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/spacing.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -12,11 +12,11 @@ import '../../../core/theme/spacing.dart';
 
 /// Константы для BreezDropdown
 abstract class _DropdownConstants {
-  static const double labelFontSize = 12.0;
-  static const double textFontSize = 14.0;
-  static const double subtitleFontSize = 12.0;
-  static const double helperFontSize = 11.0;
-  static const double iconSize = 18.0;
+  static const double labelFontSize = 12;
+  static const double textFontSize = 14;
+  static const double subtitleFontSize = 12;
+  static const double helperFontSize = 11;
+  static const double iconSize = 18;
   static const double disabledAlpha = 0.5;
 }
 
@@ -32,6 +32,17 @@ abstract class _DropdownConstants {
 /// - Опциональные label и helper text
 /// - Поддержка состояния ошибки
 class BreezDropdown<T> extends StatelessWidget {
+
+  const BreezDropdown({
+    required this.value, required this.items, required this.onChanged, super.key,
+    this.label,
+    this.hint,
+    this.helperText,
+    this.errorText,
+    this.enabled = true,
+    this.semanticLabel,
+    this.prefixIcon,
+  });
   /// Текущее выбранное значение
   final T? value;
 
@@ -62,20 +73,6 @@ class BreezDropdown<T> extends StatelessWidget {
   /// Иконка в начале
   final IconData? prefixIcon;
 
-  const BreezDropdown({
-    super.key,
-    required this.value,
-    required this.items,
-    required this.onChanged,
-    this.label,
-    this.hint,
-    this.helperText,
-    this.errorText,
-    this.enabled = true,
-    this.semanticLabel,
-    this.prefixIcon,
-  });
-
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
@@ -98,11 +95,11 @@ class BreezDropdown<T> extends StatelessWidget {
                 color: hasError ? AppColors.accentRed : colors.textMuted,
               ),
             ),
-            SizedBox(height: AppSpacing.xxs + 2), // 6px
+            const SizedBox(height: AppSpacing.xxs + 2), // 6px
           ],
 
           // Dropdown
-          Container(
+          DecoratedBox(
             decoration: BoxDecoration(
               color: colors.buttonBg,
               borderRadius: BorderRadius.circular(AppRadius.button),
@@ -142,13 +139,11 @@ class BreezDropdown<T> extends StatelessWidget {
                     right: AppSpacing.xs,
                   ),
                   onChanged: enabled ? onChanged : null,
-                  selectedItemBuilder: (context) {
-                    return items.map((item) {
-                      return Row(
+                  selectedItemBuilder: (context) => items.map((item) => Row(
                         children: [
                           if (prefixIcon != null) ...[
                             Icon(prefixIcon, size: _DropdownConstants.iconSize, color: colors.textMuted),
-                            SizedBox(width: AppSpacing.xs),
+                            const SizedBox(width: AppSpacing.xs),
                           ],
                           Expanded(
                             child: Text(
@@ -161,9 +156,7 @@ class BreezDropdown<T> extends StatelessWidget {
                             ),
                           ),
                         ],
-                      );
-                    }).toList();
-                  },
+                      )).toList(),
                   items: items.map((item) {
                     final isSelected = item.value == value;
                     return DropdownMenuItem<T>(
@@ -176,7 +169,7 @@ class BreezDropdown<T> extends StatelessWidget {
                               size: _DropdownConstants.iconSize,
                               color: isSelected ? AppColors.accent : colors.textMuted,
                             ),
-                            SizedBox(width: AppSpacing.sm),
+                            const SizedBox(width: AppSpacing.sm),
                           ],
                           Expanded(
                             child: Column(
@@ -203,7 +196,7 @@ class BreezDropdown<T> extends StatelessWidget {
                             ),
                           ),
                           if (isSelected)
-                            Icon(
+                            const Icon(
                               Icons.check,
                               size: _DropdownConstants.iconSize,
                               color: AppColors.accent,
@@ -219,7 +212,7 @@ class BreezDropdown<T> extends StatelessWidget {
 
           // Helper/Error text
           if (helperText != null || errorText != null) ...[
-            SizedBox(height: AppSpacing.xxs),
+            const SizedBox(height: AppSpacing.xxs),
             Text(
               errorText ?? helperText ?? '',
               style: TextStyle(
@@ -236,6 +229,13 @@ class BreezDropdown<T> extends StatelessWidget {
 
 /// Элемент для BreezDropdown
 class BreezDropdownItem<T> {
+
+  const BreezDropdownItem({
+    required this.value,
+    required this.label,
+    this.subtitle,
+    this.icon,
+  });
   /// Значение которое представляет элемент
   final T value;
 
@@ -247,17 +247,18 @@ class BreezDropdownItem<T> {
 
   /// Опциональная иконка
   final IconData? icon;
-
-  const BreezDropdownItem({
-    required this.value,
-    required this.label,
-    this.subtitle,
-    this.icon,
-  });
 }
 
 /// Простой строковый dropdown для типичных случаев
 class BreezStringDropdown extends StatelessWidget {
+
+  const BreezStringDropdown({
+    required this.value, required this.items, required this.onChanged, super.key,
+    this.label,
+    this.hint,
+    this.enabled = true,
+    this.semanticLabel,
+  });
   final String? value;
   final List<String> items;
   final ValueChanged<String?>? onChanged;
@@ -266,20 +267,8 @@ class BreezStringDropdown extends StatelessWidget {
   final bool enabled;
   final String? semanticLabel;
 
-  const BreezStringDropdown({
-    super.key,
-    required this.value,
-    required this.items,
-    required this.onChanged,
-    this.label,
-    this.hint,
-    this.enabled = true,
-    this.semanticLabel,
-  });
-
   @override
-  Widget build(BuildContext context) {
-    return BreezDropdown<String>(
+  Widget build(BuildContext context) => BreezDropdown<String>(
       value: value,
       items: items.map((s) => BreezDropdownItem(value: s, label: s)).toList(),
       onChanged: onChanged,
@@ -288,5 +277,4 @@ class BreezStringDropdown extends StatelessWidget {
       enabled: enabled,
       semanticLabel: semanticLabel,
     );
-  }
 }

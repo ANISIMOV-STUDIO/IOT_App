@@ -22,6 +22,18 @@ enum SmartDeviceType {
 }
 
 class SmartDevice extends Equatable {
+
+  const SmartDevice({
+    required this.id,
+    required this.name,
+    required this.type,
+    required this.isOn,
+    required this.lastUpdated,
+    this.roomId,
+    this.powerConsumption = 0,
+    this.activeTime = Duration.zero,
+    this.metadata,
+  });
   final String id;
   final String name;
   final SmartDeviceType type;
@@ -31,18 +43,6 @@ class SmartDevice extends Equatable {
   final Duration activeTime;
   final DateTime lastUpdated;
   final Map<String, dynamic>? metadata;
-
-  const SmartDevice({
-    required this.id,
-    required this.name,
-    required this.type,
-    required this.isOn,
-    this.roomId,
-    this.powerConsumption = 0,
-    this.activeTime = Duration.zero,
-    required this.lastUpdated,
-    this.metadata,
-  });
 
   SmartDevice copyWith({
     String? id,
@@ -54,8 +54,7 @@ class SmartDevice extends Equatable {
     Duration? activeTime,
     DateTime? lastUpdated,
     Map<String, dynamic>? metadata,
-  }) {
-    return SmartDevice(
+  }) => SmartDevice(
       id: id ?? this.id,
       name: name ?? this.name,
       type: type ?? this.type,
@@ -66,7 +65,6 @@ class SmartDevice extends Equatable {
       lastUpdated: lastUpdated ?? this.lastUpdated,
       metadata: metadata ?? this.metadata,
     );
-  }
 
   @override
   List<Object?> get props => [id, name, type, isOn, roomId, powerConsumption, activeTime, lastUpdated, metadata];

@@ -1,17 +1,11 @@
 /// Историческая запись показаний датчиков устройства
 library;
 
+import 'package:meta/meta.dart';
+
 /// Запись истории сенсоров устройства
+@immutable
 class SensorHistory {
-  final String id;
-  final DateTime timestamp;
-  final double? supplyTemperature;
-  final double? roomTemperature;
-  final double? outdoorTemperature;
-  final int? humidity;
-  final int? supplyFan;
-  final int? exhaustFan;
-  final int? power;
 
   const SensorHistory({
     required this.id,
@@ -24,6 +18,15 @@ class SensorHistory {
     this.exhaustFan,
     this.power,
   });
+  final String id;
+  final DateTime timestamp;
+  final double? supplyTemperature;
+  final double? roomTemperature;
+  final double? outdoorTemperature;
+  final int? humidity;
+  final int? supplyFan;
+  final int? exhaustFan;
+  final int? power;
 
   /// Получить значение по названию метрики
   double? getValueByMetric(String metric) {

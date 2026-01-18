@@ -4,17 +4,14 @@
 /// все методы кешируемые.
 library;
 
-import '../../core/error/offline_exception.dart';
-import '../../core/services/cache_service.dart';
-import '../../core/services/connectivity_service.dart';
-import '../../domain/entities/energy_stats.dart';
-import '../../domain/repositories/energy_repository.dart';
+import 'package:hvac_control/core/error/offline_exception.dart';
+import 'package:hvac_control/core/services/cache_service.dart';
+import 'package:hvac_control/core/services/connectivity_service.dart';
+import 'package:hvac_control/domain/entities/energy_stats.dart';
+import 'package:hvac_control/domain/repositories/energy_repository.dart';
 
 /// Кеширующий декоратор для EnergyRepository
 class CachedEnergyRepository implements EnergyRepository {
-  final EnergyRepository _inner;
-  final CacheService _cacheService;
-  final ConnectivityService _connectivity;
 
   CachedEnergyRepository({
     required EnergyRepository inner,
@@ -23,6 +20,9 @@ class CachedEnergyRepository implements EnergyRepository {
   })  : _inner = inner,
         _cacheService = cacheService,
         _connectivity = connectivity;
+  final EnergyRepository _inner;
+  final CacheService _cacheService;
+  final ConnectivityService _connectivity;
 
   @override
   Future<EnergyStats> getTodayStats() async {
@@ -33,13 +33,17 @@ class CachedEnergyRepository implements EnergyRepository {
         return stats;
       } catch (e) {
         final cached = _cacheService.getCachedEnergyStats();
-        if (cached != null) return cached;
+        if (cached != null) {
+          return cached;
+        }
         rethrow;
       }
     }
 
     final cached = _cacheService.getCachedEnergyStats();
-    if (cached != null) return cached;
+    if (cached != null) {
+      return cached;
+    }
 
     throw const OfflineException(
       'Нет сохранённой статистики энергопотребления',
@@ -73,7 +77,5 @@ class CachedEnergyRepository implements EnergyRepository {
   }
 
   @override
-  Stream<EnergyStats> watchStats() {
-    return _inner.watchStats();
-  }
+  Stream<EnergyStats> watchStats() => _inner.watchStats();
 }

@@ -2,40 +2,43 @@
 library;
 
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import '../../../core/di/injection_container.dart' as di;
-import '../../../core/navigation/app_router.dart';
-import '../../../core/services/dialog_service.dart';
-import '../../../core/services/theme_service.dart';
-import '../../../core/services/toast_service.dart';
-import '../../../core/services/version_check_service.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/breakpoints.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../domain/entities/unit_state.dart';
-import '../../../generated/l10n/app_localizations.dart';
-import '../../bloc/auth/auth_bloc.dart';
-import '../../bloc/auth/auth_event.dart';
-import '../../bloc/auth/auth_state.dart';
-import '../../bloc/devices/devices_bloc.dart';
-import '../../bloc/climate/climate_bloc.dart';
-import '../../bloc/analytics/analytics_bloc.dart';
-import '../../bloc/notifications/notifications_bloc.dart';
-import '../../bloc/schedule/schedule_bloc.dart';
-import '../../widgets/common/offline_banner.dart';
-import '../../../data/api/http/clients/hvac_http_client.dart';
-import 'dashboard_bloc_wrapper.dart';
-import 'dashboard_empty_state.dart';
-import 'dialogs/add_unit_dialog.dart';
-import 'dialogs/unit_settings_dialog.dart';
-import 'dialogs/update_available_dialog.dart';
-import 'layouts/desktop_layout.dart';
-import 'layouts/mobile_layout.dart';
-import '../../../core/services/native_loading_service.dart';
-import '../../widgets/breez/breez.dart';
-import 'widgets/add_unit_button.dart';
+import 'package:hvac_control/core/di/injection_container.dart' as di;
+import 'package:hvac_control/core/navigation/app_router.dart';
+import 'package:hvac_control/core/services/dialog_service.dart';
+import 'package:hvac_control/core/services/native_loading_service.dart';
+import 'package:hvac_control/core/services/theme_service.dart';
+import 'package:hvac_control/core/services/toast_service.dart';
+import 'package:hvac_control/core/services/version_check_service.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/breakpoints.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/data/api/http/clients/hvac_http_client.dart';
+import 'package:hvac_control/domain/entities/unit_state.dart';
+import 'package:hvac_control/domain/entities/user.dart';
+import 'package:hvac_control/domain/entities/version_info.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
+import 'package:hvac_control/presentation/bloc/analytics/analytics_bloc.dart';
+import 'package:hvac_control/presentation/bloc/auth/auth_bloc.dart';
+import 'package:hvac_control/presentation/bloc/auth/auth_event.dart';
+import 'package:hvac_control/presentation/bloc/auth/auth_state.dart';
+import 'package:hvac_control/presentation/bloc/climate/climate_bloc.dart';
+import 'package:hvac_control/presentation/bloc/devices/devices_bloc.dart';
+import 'package:hvac_control/presentation/bloc/notifications/notifications_bloc.dart';
+import 'package:hvac_control/presentation/bloc/schedule/schedule_bloc.dart';
+import 'package:hvac_control/presentation/screens/dashboard/dashboard_bloc_wrapper.dart';
+import 'package:hvac_control/presentation/screens/dashboard/dashboard_empty_state.dart';
+import 'package:hvac_control/presentation/screens/dashboard/dialogs/add_unit_dialog.dart';
+import 'package:hvac_control/presentation/screens/dashboard/dialogs/unit_settings_dialog.dart';
+import 'package:hvac_control/presentation/screens/dashboard/dialogs/update_available_dialog.dart';
+import 'package:hvac_control/presentation/screens/dashboard/layouts/desktop_layout.dart';
+import 'package:hvac_control/presentation/screens/dashboard/layouts/mobile_layout.dart';
+import 'package:hvac_control/presentation/screens/dashboard/widgets/add_unit_button.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez.dart';
+import 'package:hvac_control/presentation/widgets/common/offline_banner.dart';
 
 /// Main dashboard screen
 class DashboardScreen extends StatefulWidget {
@@ -48,7 +51,7 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   late final ThemeService _themeService;
   late final VersionCheckService _versionCheckService;
-  StreamSubscription? _versionSubscription;
+  StreamSubscription<VersionInfo>? _versionSubscription;
 
   @override
   void initState() {
@@ -124,7 +127,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildDesktopLayout(DashboardData data, user, bool isDark) {
+  Widget _buildDesktopLayout(DashboardData data, User? user, bool isDark) {
     final unit = data.currentUnit!;
     return DesktopLayout(
       unit: unit,
@@ -271,14 +274,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Future<void> _showUnitSettings(UnitState unit) async {
     final result = await UnitSettingsDialog.show(context, unit);
-    if (result == null || !mounted) return;
+    if (result == null || !mounted) {
+      return;
+    }
 
     final l10n = AppLocalizations.of(context)!;
     switch (result.action) {
       case UnitSettingsAction.delete:
         context.read<DevicesBloc>().add(DevicesDeletionRequested(unit.id));
         ToastService.success(l10n.deviceDeleted);
-        break;
       case UnitSettingsAction.rename:
         if (result.newName != null) {
           context.read<DevicesBloc>().add(
@@ -286,7 +290,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           );
           ToastService.success(l10n.nameChanged);
         }
-        break;
       case UnitSettingsAction.setTime:
         if (result.time != null) {
           context.read<DevicesBloc>().add(
@@ -294,7 +297,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           );
           ToastService.success(l10n.timeSet);
         }
-        break;
     }
   }
 
@@ -326,7 +328,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
     // Get current device ID and call HTTP client
     final climateState = context.read<ClimateBloc>().state;
     final deviceId = climateState.deviceFullState?.id;
-    if (deviceId == null) return;
+    if (deviceId == null) {
+      return;
+    }
 
     // Use HTTP client directly for timer settings
     final httpClient = di.sl<HvacHttpClient>();
@@ -338,7 +342,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       offHour: offHour,
       offMinute: offMinute,
       enabled: enabled,
-    ).catchError((e) {
+    ).catchError((Object e) {
       if (mounted) {
         ToastService.error('Ошибка сохранения расписания: $e');
       }

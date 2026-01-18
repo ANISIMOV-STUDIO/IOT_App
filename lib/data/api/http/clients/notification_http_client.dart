@@ -3,15 +3,15 @@ library;
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../../../../core/config/api_config.dart';
-import '../../../../core/error/http_error_handler.dart';
-import '../../../../core/logging/api_logger.dart';
-import '../../platform/api_client.dart';
+import 'package:hvac_control/core/config/api_config.dart';
+import 'package:hvac_control/core/error/http_error_handler.dart';
+import 'package:hvac_control/core/logging/api_logger.dart';
+import 'package:hvac_control/data/api/platform/api_client.dart';
 
 class NotificationHttpClient {
-  final ApiClient _apiClient;
 
   NotificationHttpClient(this._apiClient);
+  final ApiClient _apiClient;
 
   /// Get notifications
   Future<List<Map<String, dynamic>>> getNotifications({String? deviceId}) async {

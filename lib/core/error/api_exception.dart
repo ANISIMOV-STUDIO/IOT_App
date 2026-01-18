@@ -14,10 +14,6 @@ enum ApiErrorType {
 }
 
 class ApiException implements Exception {
-  final ApiErrorType type;
-  final String message;
-  final int? statusCode;
-  final dynamic originalError;
 
   const ApiException({
     required this.type,
@@ -25,6 +21,10 @@ class ApiException implements Exception {
     this.statusCode,
     this.originalError,
   });
+  final ApiErrorType type;
+  final String message;
+  final int? statusCode;
+  final dynamic originalError;
 
   @override
   String toString() => 'ApiException($type): $message';

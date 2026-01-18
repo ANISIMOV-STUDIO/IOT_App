@@ -7,6 +7,6 @@
 /// HVAC devices use HTTP REST API (DeviceController)
 library;
 
-export 'grpc_interceptor.dart';
 export 'clients/analytics_grpc_client.dart';
 export 'clients/notification_grpc_client.dart';
+export 'grpc_interceptor.dart';

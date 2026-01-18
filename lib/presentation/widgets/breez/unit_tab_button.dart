@@ -2,12 +2,12 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../domain/entities/unit_state.dart';
-import '../../../generated/l10n/app_localizations.dart';
-import 'breez_button.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/domain/entities/unit_state.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -15,10 +15,10 @@ import 'breez_button.dart';
 
 /// Константы для UnitTabButton и UnitTabsContainer
 abstract class _UnitTabConstants {
-  static const double containerHeight = 48.0;
-  static const double statusIndicatorSize = 8.0;
-  static const double nameFontSize = 13.0;
-  static const double textLineHeight = 1.0;
+  static const double containerHeight = 48;
+  static const double statusIndicatorSize = 8;
+  static const double nameFontSize = 13;
+  static const double textLineHeight = 1;
 }
 
 // =============================================================================
@@ -27,31 +27,24 @@ abstract class _UnitTabConstants {
 
 /// Unified unit tab button used across all layouts (mobile, tablet, desktop)
 class UnitTabButton extends StatelessWidget {
-  final UnitState unit;
-  final bool isSelected;
-  final VoidCallback? onTap;
-
-  /// Semantic label for screen readers (defaults to unit name + status)
-  final String? semanticLabel;
 
   const UnitTabButton({
-    super.key,
     required this.unit,
     required this.isSelected,
+    super.key,
     this.onTap,
     this.semanticLabel,
   });
 
   /// Create from unit data with name and power status
   factory UnitTabButton.fromData({
-    Key? key,
     required String name,
     required bool power,
     required bool isSelected,
+    Key? key,
     VoidCallback? onTap,
     String? semanticLabel,
-  }) {
-    return UnitTabButton(
+  }) => UnitTabButton(
       key: key,
       unit: UnitState(
         id: '',
@@ -70,7 +63,12 @@ class UnitTabButton extends StatelessWidget {
       onTap: onTap,
       semanticLabel: semanticLabel,
     );
-  }
+  final UnitState unit;
+  final bool isSelected;
+  final VoidCallback? onTap;
+
+  /// Semantic label for screen readers (defaults to unit name + status)
+  final String? semanticLabel;
 
   String _buildSemanticLabel(AppLocalizations l10n) {
     final status = unit.power ? l10n.unitPoweredOn : l10n.unitPoweredOff;
@@ -102,7 +100,6 @@ class UnitTabButton extends StatelessWidget {
           ? Border.all(color: AppColors.accent.withValues(alpha: 0.3))
           : null,
       showBorder: false,
-      enableGlow: false,
       semanticLabel: semanticLabel ?? _buildSemanticLabel(l10n),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -142,22 +139,22 @@ class UnitTabButton extends StatelessWidget {
 
 /// Unit tabs container - wraps unit tab buttons in a styled container
 class UnitTabsContainer extends StatelessWidget {
+
+  const UnitTabsContainer({
+    required this.units,
+    required this.selectedIndex,
+    super.key,
+    this.onUnitSelected,
+    this.leading,
+    this.trailing,
+    this.height = _UnitTabConstants.containerHeight,
+  });
   final List<UnitState> units;
   final int selectedIndex;
   final ValueChanged<int>? onUnitSelected;
   final Widget? leading;
   final Widget? trailing;
   final double height;
-
-  const UnitTabsContainer({
-    super.key,
-    required this.units,
-    required this.selectedIndex,
-    this.onUnitSelected,
-    this.leading,
-    this.trailing,
-    this.height = _UnitTabConstants.containerHeight,
-  });
 
   @override
   Widget build(BuildContext context) {

@@ -3,11 +3,11 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/app_animations.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../core/theme/app_sizes.dart';
+import 'package:hvac_control/core/theme/app_animations.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_sizes.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
 
 /// Base BREEZ button with premium animations
 ///
@@ -15,6 +15,30 @@ import '../../../core/theme/app_sizes.dart';
 /// Поддерживает hover, press, loading состояния с плавными анимациями.
 /// Включает accessibility (Semantics, Tooltip).
 class BreezButton extends StatefulWidget {
+
+  const BreezButton({
+    required this.child,
+    super.key,
+    this.onTap,
+    this.backgroundColor,
+    this.hoverColor,
+    this.pressedColor,
+    this.width,
+    this.height,
+    this.padding,
+    this.borderRadius = AppRadius.button,
+    this.shadows,
+    this.border,
+    this.isLoading = false,
+    this.showBorder = true,
+    this.enableScale = true,
+    this.enableGlow = false,
+    this.enforceMinTouchTarget = true,
+    this.enableHaptic = true,
+    this.semanticLabel,
+    this.tooltip,
+    this.isButton = true,
+  });
   final Widget child;
   final VoidCallback? onTap;
   final Color? backgroundColor;
@@ -44,30 +68,6 @@ class BreezButton extends StatefulWidget {
   /// Whether this is a button (for Semantics)
   final bool isButton;
 
-  const BreezButton({
-    super.key,
-    required this.child,
-    this.onTap,
-    this.backgroundColor,
-    this.hoverColor,
-    this.pressedColor,
-    this.width,
-    this.height,
-    this.padding,
-    this.borderRadius = AppRadius.button,
-    this.shadows,
-    this.border,
-    this.isLoading = false,
-    this.showBorder = true,
-    this.enableScale = true,
-    this.enableGlow = false,
-    this.enforceMinTouchTarget = true,
-    this.enableHaptic = true,
-    this.semanticLabel,
-    this.tooltip,
-    this.isButton = true,
-  });
-
   @override
   State<BreezButton> createState() => _BreezButtonState();
 }
@@ -88,7 +88,7 @@ class _BreezButtonState extends State<BreezButton>
       duration: AppDurations.fast,
     );
 
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.96).animate(
+    _scaleAnimation = Tween<double>(begin: 1, end: 0.96).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
     );
   }
@@ -101,7 +101,9 @@ class _BreezButtonState extends State<BreezButton>
 
   void _handleTapDown(TapDownDetails _) {
     setState(() => _isPressed = true);
-    if (widget.enableScale) _controller.forward();
+    if (widget.enableScale) {
+      _controller.forward();
+    }
     // Тактильная обратная связь при нажатии
     if (widget.enableHaptic && widget.onTap != null) {
       HapticFeedback.lightImpact();
@@ -113,14 +115,18 @@ class _BreezButtonState extends State<BreezButton>
     Future.delayed(AppDurations.instant, () {
       if (mounted) {
         setState(() => _isPressed = false);
-        if (widget.enableScale) _controller.reverse();
+        if (widget.enableScale) {
+          _controller.reverse();
+        }
       }
     });
   }
 
   void _handleTapCancel() {
     setState(() => _isPressed = false);
-    if (widget.enableScale) _controller.reverse();
+    if (widget.enableScale) {
+      _controller.reverse();
+    }
   }
 
   @override
@@ -192,7 +198,7 @@ class _BreezButtonState extends State<BreezButton>
                   minWidth: buttonWidth ?? 0,
                 ),
                 padding: widget.padding ??
-                    EdgeInsets.symmetric(
+                    const EdgeInsets.symmetric(
                       horizontal: AppSpacing.md,
                       vertical: AppSpacing.sm,
                     ),
@@ -237,7 +243,7 @@ class _BreezButtonState extends State<BreezButton>
     // Wrap with Tooltip if provided
     if (widget.tooltip != null) {
       button = Tooltip(
-        message: widget.tooltip!,
+        message: widget.tooltip,
         waitDuration: const Duration(milliseconds: 500),
         child: button,
       );

@@ -6,19 +6,16 @@
 library;
 
 import 'dart:async';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:equatable/equatable.dart';
 
-import '../../../core/services/connectivity_service.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hvac_control/core/services/connectivity_service.dart';
 
 part 'connectivity_event.dart';
 part 'connectivity_state.dart';
 
 /// BLoC для мониторинга сетевого соединения
 class ConnectivityBloc extends Bloc<ConnectivityEvent, ConnectivityState> {
-  final ConnectivityService _connectivityService;
-
-  StreamSubscription<NetworkStatus>? _statusSubscription;
 
   ConnectivityBloc({
     required ConnectivityService connectivityService,
@@ -27,6 +24,9 @@ class ConnectivityBloc extends Bloc<ConnectivityEvent, ConnectivityState> {
     on<ConnectivitySubscriptionRequested>(_onSubscriptionRequested);
     on<ConnectivityStatusChanged>(_onStatusChanged);
   }
+  final ConnectivityService _connectivityService;
+
+  StreamSubscription<NetworkStatus>? _statusSubscription;
 
   /// Запрос на подписку к статусу соединения
   Future<void> _onSubscriptionRequested(
@@ -57,13 +57,11 @@ class ConnectivityBloc extends Bloc<ConnectivityEvent, ConnectivityState> {
   }
 
   /// Преобразование NetworkStatus в ConnectivityState
-  ConnectivityState _mapStatusToState(NetworkStatus status) {
-    return ConnectivityState(
+  ConnectivityState _mapStatusToState(NetworkStatus status) => ConnectivityState(
       status: status,
       isOffline: status == NetworkStatus.offline,
       isServerUnavailable: status == NetworkStatus.serverUnavailable,
     );
-  }
 
   @override
   Future<void> close() {

@@ -2,19 +2,13 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/spacing.dart';
-import 'breez_card.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
 
 /// Данные датчика
 class SensorData {
-  final IconData icon;
-  final String value;
-  final String shortLabel;
-  final String fullLabel;
-  final String? description;
-  final Color? accentColor;
 
   const SensorData({
     required this.icon,
@@ -24,20 +18,26 @@ class SensorData {
     this.description,
     this.accentColor,
   });
+  final IconData icon;
+  final String value;
+  final String shortLabel;
+  final String fullLabel;
+  final String? description;
+  final Color? accentColor;
 }
 
 /// Тайл датчика с возможностью нажатия
 class SensorTile extends StatelessWidget {
-  final SensorData sensor;
-  final VoidCallback? onTap;
-  final bool compact;
 
   const SensorTile({
-    super.key,
     required this.sensor,
+    super.key,
     this.onTap,
     this.compact = false,
   });
+  final SensorData sensor;
+  final VoidCallback? onTap;
+  final bool compact;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +48,7 @@ class SensorTile extends StatelessWidget {
       onTap: onTap ?? () => _showSensorInfo(context),
       backgroundColor: colors.card,
       hoverColor: accentColor.withValues(alpha: 0.1),
-      padding: EdgeInsets.all(AppSpacing.xs),
+      padding: const EdgeInsets.all(AppSpacing.xs),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -87,7 +87,7 @@ class SensorTile extends StatelessWidget {
     final colors = BreezColors.of(context);
     final accentColor = sensor.accentColor ?? AppColors.accent;
 
-    showDialog(
+    showDialog<void>(
       context: context,
       barrierColor: AppColors.black.withValues(alpha: 0.54),
       builder: (context) => Center(
@@ -191,27 +191,25 @@ class SensorTile extends StatelessWidget {
 
 /// Сетка датчиков для аналитики
 class AnalyticsSensorsGrid extends StatelessWidget {
+
+  const AnalyticsSensorsGrid({
+    required this.sensors,
+    super.key,
+    this.crossAxisCount = 4,
+    this.compact = false,
+  });
   final List<SensorData> sensors;
   final int crossAxisCount;
   final bool compact;
 
-  const AnalyticsSensorsGrid({
-    super.key,
-    required this.sensors,
-    this.crossAxisCount = 4,
-    this.compact = false,
-  });
-
   @override
-  Widget build(BuildContext context) {
-    return GridView.builder(
+  Widget build(BuildContext context) => GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: crossAxisCount,
         mainAxisSpacing: AppSpacing.xs,
         crossAxisSpacing: AppSpacing.xs,
-        childAspectRatio: 1.0, // Все плитки одинакового размера (квадратные)
       ),
       itemCount: sensors.length,
       itemBuilder: (context, index) => SensorTile(
@@ -219,5 +217,4 @@ class AnalyticsSensorsGrid extends StatelessWidget {
         compact: compact,
       ),
     );
-  }
 }

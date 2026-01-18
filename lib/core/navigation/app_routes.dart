@@ -81,7 +81,9 @@ abstract final class AppPaths {
 
   /// Путь к восстановлению пароля
   static String forgotPassword({String? email}) {
-    if (email == null) return AppRoutes.forgotPassword;
+    if (email == null) {
+      return AppRoutes.forgotPassword;
+    }
     return '${AppRoutes.forgotPassword}?email=${Uri.encodeComponent(email)}';
   }
 }
@@ -119,22 +121,22 @@ enum MainTab {
   analytics(2, 'analytics'),
   profile(3, 'profile');
 
+  const MainTab(this.tabIndex, this.tabName);
+
   final int tabIndex;
   final String tabName;
 
-  const MainTab(this.tabIndex, this.tabName);
-
   /// Получить вкладку по имени
   static MainTab? fromName(String? name) {
-    if (name == null) return null;
+    if (name == null) {
+      return null;
+    }
     return MainTab.values.where((t) => t.tabName == name).firstOrNull;
   }
 
   /// Получить вкладку по индексу
-  static MainTab fromIndex(int idx) {
-    return MainTab.values.firstWhere(
+  static MainTab fromIndex(int idx) => MainTab.values.firstWhere(
       (t) => t.tabIndex == idx,
       orElse: () => MainTab.dashboard,
     );
-  }
 }

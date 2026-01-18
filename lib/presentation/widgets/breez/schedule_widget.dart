@@ -2,12 +2,12 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../domain/entities/schedule_entry.dart';
-import '../../../generated/l10n/app_localizations.dart';
-import 'breez_card.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/domain/entities/schedule_entry.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
 
 export '../../../domain/entities/schedule_entry.dart';
 
@@ -17,60 +17,60 @@ export '../../../domain/entities/schedule_entry.dart';
 
 abstract class _ScheduleWidgetConstants {
   // Title font size
-  static const double titleFontSize = 16.0;
+  static const double titleFontSize = 16;
 
   // Button icons
-  static const double addIconSize = 16.0;
-  static const double seeAllFontSize = 12.0;
+  static const double addIconSize = 16;
+  static const double seeAllFontSize = 12;
 
   // Day selector
-  static const double dayFontSizeCompact = 10.0;
-  static const double dayFontSizeNormal = 11.0;
-  static const double indicatorGap = 2.0;
-  static const double indicatorSize = 4.0;
+  static const double dayFontSizeCompact = 10;
+  static const double dayFontSizeNormal = 11;
+  static const double indicatorGap = 2;
+  static const double indicatorSize = 4;
 
   // Empty state
-  static const double emptyIconSizeCompact = 28.0;
-  static const double emptyIconSizeNormal = 36.0;
-  static const double emptyFontSizeCompact = 11.0;
-  static const double emptyFontSizeNormal = 12.0;
-  static const double hintFontSize = 11.0;
+  static const double emptyIconSizeCompact = 28;
+  static const double emptyIconSizeNormal = 36;
+  static const double emptyFontSizeCompact = 11;
+  static const double emptyFontSizeNormal = 12;
+  static const double hintFontSize = 11;
 
   // Schedule row
-  static const double rowIconSizeCompact = 24.0;
-  static const double rowIconSizeNormal = 32.0;
-  static const double rowFontSizeCompact = 11.0;
-  static const double rowFontSizeNormal = 13.0;
-  static const double rowSmallFontSizeCompact = 10.0;
-  static const double rowSmallFontSizeNormal = 12.0;
-  static const double timeRangeFontSizeCompact = 9.0;
-  static const double timeRangeFontSizeNormal = 10.0;
-  static const double modeIconSizeCompact = 12.0;
-  static const double modeIconSizeNormal = 16.0;
-  static const double activeIndicatorSize = 6.0;
+  static const double rowIconSizeCompact = 24;
+  static const double rowIconSizeNormal = 32;
+  static const double rowFontSizeCompact = 11;
+  static const double rowFontSizeNormal = 13;
+  static const double rowSmallFontSizeCompact = 10;
+  static const double rowSmallFontSizeNormal = 12;
+  static const double timeRangeFontSizeCompact = 9;
+  static const double timeRangeFontSizeNormal = 10;
+  static const double modeIconSizeCompact = 12;
+  static const double modeIconSizeNormal = 16;
+  static const double activeIndicatorSize = 6;
 
   // Padding values
-  static const double buttonPaddingVertical = 6.0; // AppSpacing.xxs + 2
-  static const double timePaddingVerticalCompact = 3.0;
-  static const double timePaddingVerticalNormal = 4.0;
+  static const double buttonPaddingVertical = 6; // AppSpacing.xxs + 2
+  static const double timePaddingVerticalCompact = 3;
+  static const double timePaddingVerticalNormal = 4;
 }
 
 /// Weekly schedule widget with day selector
 class ScheduleWidget extends StatefulWidget {
-  final List<ScheduleEntry> entries;
-  final VoidCallback? onSeeAll;
-  final VoidCallback? onAddEntry;
-  final ValueChanged<ScheduleEntry>? onEntryTap;
-  final bool compact;
 
   const ScheduleWidget({
-    super.key,
     required this.entries,
+    super.key,
     this.onSeeAll,
     this.onAddEntry,
     this.onEntryTap,
     this.compact = false,
   });
+  final List<ScheduleEntry> entries;
+  final VoidCallback? onSeeAll;
+  final VoidCallback? onAddEntry;
+  final ValueChanged<ScheduleEntry>? onEntryTap;
+  final bool compact;
 
   /// Перевод английского названия дня недели в локализованное
   ///
@@ -142,7 +142,9 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
   }
 
   List<ScheduleEntry> get _filteredEntries {
-    if (_selectedDay == null) return widget.entries;
+    if (_selectedDay == null) {
+      return widget.entries;
+    }
     return widget.entries
         .where((e) => e.day.toLowerCase() == _selectedDay!.toLowerCase())
         .toList();
@@ -154,7 +156,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
     final l10n = AppLocalizations.of(context)!;
 
     return BreezCard(
-      padding: EdgeInsets.all(AppSpacing.xs),
+      padding: const EdgeInsets.all(AppSpacing.xs),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -162,7 +164,6 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
           if (!widget.compact) ...[
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
                   l10n.schedule,
@@ -271,11 +272,6 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
 
 /// Day selector row using BreezButton
 class _DaySelector extends StatelessWidget {
-  final List<String> days;
-  final String? selectedDay;
-  final List<ScheduleEntry> entries;
-  final bool compact;
-  final ValueChanged<String> onDaySelected;
 
   const _DaySelector({
     required this.days,
@@ -284,10 +280,14 @@ class _DaySelector extends StatelessWidget {
     required this.compact,
     required this.onDaySelected,
   });
+  final List<String> days;
+  final String? selectedDay;
+  final List<ScheduleEntry> entries;
+  final bool compact;
+  final ValueChanged<String> onDaySelected;
 
-  bool _hasEntries(String day) {
-    return entries.any((e) => e.day.toLowerCase() == day.toLowerCase());
-  }
+  bool _hasEntries(String day) =>
+      entries.any((e) => e.day.toLowerCase() == day.toLowerCase());
 
   @override
   Widget build(BuildContext context) {
@@ -295,7 +295,7 @@ class _DaySelector extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final spacing = compact ? AppSpacing.xs : AppSpacing.sm;
 
-    final List<Widget> children = [];
+    final children = <Widget>[];
     for (var i = 0; i < days.length; i++) {
       final day = days[i];
       final isSelected = selectedDay?.toLowerCase() == day.toLowerCase();
@@ -315,7 +315,6 @@ class _DaySelector extends StatelessWidget {
               vertical: compact
                   ? _ScheduleWidgetConstants.buttonPaddingVertical
                   : AppSpacing.xs,
-              horizontal: 0,
             ),
             backgroundColor: isSelected
                 ? AppColors.accent
@@ -376,15 +375,15 @@ class _DaySelector extends StatelessWidget {
 
 /// Empty state for selected day
 class _EmptyDayState extends StatelessWidget {
-  final String day;
-  final bool compact;
-  final bool showAddHint;
 
   const _EmptyDayState({
     required this.day,
     required this.compact,
     this.showAddHint = false,
   });
+  final String day;
+  final bool compact;
+  final bool showAddHint;
 
   @override
   Widget build(BuildContext context) {
@@ -436,15 +435,15 @@ class _EmptyDayState extends StatelessWidget {
 
 /// Individual schedule row
 class _ScheduleRow extends StatelessWidget {
-  final ScheduleEntry entry;
-  final VoidCallback? onTap;
-  final bool compact;
 
   const _ScheduleRow({
     required this.entry,
     this.onTap,
     this.compact = false,
   });
+  final ScheduleEntry entry;
+  final VoidCallback? onTap;
+  final bool compact;
 
   IconData _getModeIcon() {
     switch (entry.mode.toLowerCase()) {
@@ -478,7 +477,7 @@ class _ScheduleRow extends StatelessWidget {
 
     return BreezButton(
       onTap: onTap,
-      padding: EdgeInsets.all(AppSpacing.xs),
+      padding: const EdgeInsets.all(AppSpacing.xs),
       backgroundColor: entry.isActive
           ? AppColors.accent.withValues(alpha: 0.08)
           : colors.buttonBg,

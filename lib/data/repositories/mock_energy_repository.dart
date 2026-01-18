@@ -3,9 +3,10 @@ library;
 
 import 'dart:async';
 import 'dart:math';
-import '../../domain/entities/energy_stats.dart';
-import '../../domain/repositories/energy_repository.dart';
-import '../mock/mock_data.dart';
+
+import 'package:hvac_control/data/mock/mock_data.dart';
+import 'package:hvac_control/domain/entities/energy_stats.dart';
+import 'package:hvac_control/domain/repositories/energy_repository.dart';
 
 class MockEnergyRepository implements EnergyRepository {
   final _controller = StreamController<EnergyStats>.broadcast();
@@ -13,19 +14,19 @@ class MockEnergyRepository implements EnergyRepository {
 
   @override
   Future<EnergyStats> getTodayStats() async {
-    await Future.delayed(MockData.slowDelay);
+    await Future<void>.delayed(MockData.slowDelay);
     return _generateStats(DateTime.now());
   }
 
   @override
   Future<EnergyStats> getStats(DateTime from, DateTime to) async {
-    await Future.delayed(MockData.loadDelay);
+    await Future<void>.delayed(MockData.loadDelay);
     return _generateStats(from);
   }
 
   @override
   Future<List<DeviceEnergyUsage>> getDevicePowerUsage() async {
-    await Future.delayed(MockData.slowDelay);
+    await Future<void>.delayed(MockData.slowDelay);
     return MockData.energyUsage.map((d) => DeviceEnergyUsage(
       deviceId: d['deviceId'] as String,
       deviceName: d['deviceName'] as String,

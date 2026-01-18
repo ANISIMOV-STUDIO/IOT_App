@@ -3,17 +3,14 @@
 /// Данные графиков — только для чтения, кешируются по устройству и метрике.
 library;
 
-import '../../core/error/offline_exception.dart';
-import '../../core/services/cache_service.dart';
-import '../../core/services/connectivity_service.dart';
-import '../../domain/entities/graph_data.dart';
-import '../../domain/repositories/graph_data_repository.dart';
+import 'package:hvac_control/core/error/offline_exception.dart';
+import 'package:hvac_control/core/services/cache_service.dart';
+import 'package:hvac_control/core/services/connectivity_service.dart';
+import 'package:hvac_control/domain/entities/graph_data.dart';
+import 'package:hvac_control/domain/repositories/graph_data_repository.dart';
 
 /// Кеширующий декоратор для GraphDataRepository
 class CachedGraphDataRepository implements GraphDataRepository {
-  final GraphDataRepository _inner;
-  final CacheService _cacheService;
-  final ConnectivityService _connectivity;
 
   CachedGraphDataRepository({
     required GraphDataRepository inner,
@@ -22,6 +19,9 @@ class CachedGraphDataRepository implements GraphDataRepository {
   })  : _inner = inner,
         _cacheService = cacheService,
         _connectivity = connectivity;
+  final GraphDataRepository _inner;
+  final CacheService _cacheService;
+  final ConnectivityService _connectivity;
 
   @override
   Future<List<GraphDataPoint>> getGraphData({
@@ -43,14 +43,18 @@ class CachedGraphDataRepository implements GraphDataRepository {
         return data;
       } catch (e) {
         final cached = _cacheService.getCachedGraphData(deviceId, metric);
-        if (cached != null) return cached;
+        if (cached != null) {
+          return cached;
+        }
         rethrow;
       }
     }
 
     // Offline — возвращаем последние закешированные данные
     final cached = _cacheService.getCachedGraphData(deviceId, metric);
-    if (cached != null) return cached;
+    if (cached != null) {
+      return cached;
+    }
 
     throw OfflineException(
       'Нет сохранённых данных графика для $deviceId',
@@ -62,9 +66,8 @@ class CachedGraphDataRepository implements GraphDataRepository {
   Stream<List<GraphDataPoint>> watchGraphData({
     required String deviceId,
     required GraphMetric metric,
-  }) {
-    return _inner.watchGraphData(deviceId: deviceId, metric: metric);
-  }
+  }) =>
+    _inner.watchGraphData(deviceId: deviceId, metric: metric);
 
   @override
   Future<List<GraphMetric>> getAvailableMetrics(String deviceId) async {

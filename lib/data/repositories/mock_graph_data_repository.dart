@@ -3,9 +3,10 @@ library;
 
 import 'dart:async';
 import 'dart:math';
-import '../../domain/entities/graph_data.dart';
-import '../../domain/repositories/graph_data_repository.dart';
-import '../mock/mock_data.dart';
+
+import 'package:hvac_control/data/mock/mock_data.dart';
+import 'package:hvac_control/domain/entities/graph_data.dart';
+import 'package:hvac_control/domain/repositories/graph_data_repository.dart';
 
 class MockGraphDataRepository implements GraphDataRepository {
   final _controller = StreamController<List<GraphDataPoint>>.broadcast();
@@ -18,12 +19,12 @@ class MockGraphDataRepository implements GraphDataRepository {
     required DateTime from,
     required DateTime to,
   }) async {
-    await Future.delayed(MockData.normalDelay);
+    await Future<void>.delayed(MockData.normalDelay);
     return _generateGraphData(deviceId, metric);
   }
 
-  List<GraphDataPoint> _generateGraphData(String deviceId, GraphMetric metric) {
-    return MockData.graphDataTemplate.map((t) {
+  List<GraphDataPoint> _generateGraphData(String deviceId, GraphMetric metric) =>
+    MockData.graphDataTemplate.map((t) {
       final baseValue = switch (metric) {
         GraphMetric.temperature => (t['baseTemp'] as num).toDouble(),
         GraphMetric.humidity => (t['baseHumidity'] as num).toDouble(),
@@ -40,7 +41,6 @@ class MockGraphDataRepository implements GraphDataRepository {
         value: baseValue + variance,
       );
     }).toList();
-  }
 
   @override
   Stream<List<GraphDataPoint>> watchGraphData({
@@ -61,7 +61,7 @@ class MockGraphDataRepository implements GraphDataRepository {
 
   @override
   Future<List<GraphMetric>> getAvailableMetrics(String deviceId) async {
-    await Future.delayed(MockData.fastDelay);
+    await Future<void>.delayed(MockData.fastDelay);
     // All metrics are available for all devices
     return GraphMetric.values;
   }

@@ -20,9 +20,9 @@ final class DevicesSubscriptionRequested extends DevicesEvent {
 
 /// Устройство выбрано пользователем
 final class DevicesDeviceSelected extends DevicesEvent {
-  final String deviceId;
 
   const DevicesDeviceSelected(this.deviceId);
+  final String deviceId;
 
   @override
   List<Object?> get props => [deviceId];
@@ -30,9 +30,9 @@ final class DevicesDeviceSelected extends DevicesEvent {
 
 /// Список устройств обновлён (из стрима)
 final class DevicesListUpdated extends DevicesEvent {
-  final List<HvacDevice> devices;
 
   const DevicesListUpdated(this.devices);
+  final List<HvacDevice> devices;
 
   @override
   List<Object?> get props => [devices];
@@ -40,13 +40,13 @@ final class DevicesListUpdated extends DevicesEvent {
 
 /// Запрошена регистрация нового устройства
 final class DevicesRegistrationRequested extends DevicesEvent {
-  final String macAddress;
-  final String name;
 
   const DevicesRegistrationRequested({
     required this.macAddress,
     required this.name,
   });
+  final String macAddress;
+  final String name;
 
   @override
   List<Object?> get props => [macAddress, name];
@@ -64,9 +64,9 @@ final class DevicesOperationErrorCleared extends DevicesEvent {
 
 /// Запрошено удаление устройства
 final class DevicesDeletionRequested extends DevicesEvent {
-  final String deviceId;
 
   const DevicesDeletionRequested(this.deviceId);
+  final String deviceId;
 
   @override
   List<Object?> get props => [deviceId];
@@ -74,13 +74,13 @@ final class DevicesDeletionRequested extends DevicesEvent {
 
 /// Запрошено переименование устройства
 final class DevicesRenameRequested extends DevicesEvent {
-  final String deviceId;
-  final String newName;
 
   const DevicesRenameRequested({
     required this.deviceId,
     required this.newName,
   });
+  final String deviceId;
+  final String newName;
 
   @override
   List<Object?> get props => [deviceId, newName];
@@ -93,13 +93,13 @@ final class DevicesMasterPowerOffRequested extends DevicesEvent {
 
 /// Запрошена установка времени на устройстве
 final class DevicesTimeSetRequested extends DevicesEvent {
-  final String deviceId;
-  final DateTime time;
 
   const DevicesTimeSetRequested({
     required this.deviceId,
     required this.time,
   });
+  final String deviceId;
+  final DateTime time;
 
   @override
   List<Object?> get props => [deviceId, time];

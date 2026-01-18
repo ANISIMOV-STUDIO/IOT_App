@@ -8,23 +8,21 @@ enum GraphMetric { temperature, humidity, airflow }
 
 /// Graph data point for charts
 class GraphDataPoint extends Equatable {
-  final String label;
-  final double value;
 
   const GraphDataPoint({
     required this.label,
     required this.value,
   });
+  final String label;
+  final double value;
 
   GraphDataPoint copyWith({
     String? label,
     double? value,
-  }) {
-    return GraphDataPoint(
+  }) => GraphDataPoint(
       label: label ?? this.label,
       value: value ?? this.value,
     );
-  }
 
   @override
   List<Object?> get props => [label, value];

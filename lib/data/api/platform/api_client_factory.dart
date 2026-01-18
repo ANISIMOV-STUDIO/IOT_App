@@ -1,19 +1,18 @@
 /// Platform-aware API client factory
 library;
 
-import 'api_client.dart';
-import '../../../core/services/auth_storage_service.dart';
-import '../../services/auth_service.dart';
+import 'package:hvac_control/core/services/auth_storage_service.dart';
+import 'package:hvac_control/data/api/platform/api_client.dart';
 // Conditional imports - функция createPlatformApiClient будет из разных файлов
-import 'api_client_mobile.dart'
+import 'package:hvac_control/data/api/platform/api_client_mobile.dart'
     if (dart.library.html) 'api_client_web.dart';
+import 'package:hvac_control/data/services/auth_service.dart';
 
 class ApiClientFactory {
   static ApiClient create(
     AuthStorageService authStorage,
     AuthService authService,
-  ) {
-    // Использует createPlatformApiClient из conditional import
-    return createPlatformApiClient(authStorage, authService);
-  }
+  ) =>
+      // Использует createPlatformApiClient из conditional import
+      createPlatformApiClient(authStorage, authService);
 }

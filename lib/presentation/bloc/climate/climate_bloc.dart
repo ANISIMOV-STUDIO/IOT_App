@@ -10,16 +10,16 @@ library;
 
 import 'dart:async';
 import 'dart:developer' as developer;
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
-
-import '../../../core/logging/api_logger.dart';
-import '../../../domain/entities/climate.dart';
-import '../../../domain/entities/device_full_state.dart';
-import '../../../domain/entities/alarm_info.dart';
-import '../../../domain/usecases/usecases.dart';
-import '../../../data/api/mappers/device_json_mapper.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hvac_control/core/logging/api_logger.dart';
+import 'package:hvac_control/data/api/mappers/device_json_mapper.dart';
+import 'package:hvac_control/domain/entities/alarm_info.dart';
+import 'package:hvac_control/domain/entities/climate.dart';
+import 'package:hvac_control/domain/entities/device_full_state.dart';
+import 'package:hvac_control/domain/usecases/usecases.dart';
 
 part 'climate_event.dart';
 part 'climate_state.dart';
@@ -41,14 +41,11 @@ abstract class TemperatureLimits {
 /// Ждёт 500мс после последнего события, затем обрабатывает только последнее
 EventTransformer<E> debounceRestartable<E>({
   Duration duration = const Duration(milliseconds: 500),
-}) {
-  return (events, mapper) {
-    return restartable<E>().call(
-      events.debounce(duration),
-      mapper,
-    );
-  };
-}
+}) =>
+    (events, mapper) => restartable<E>().call(
+          events.debounce(duration),
+          mapper,
+        );
 
 /// Extension для debounce на Stream
 extension DebounceExtension<T> on Stream<T> {
@@ -69,23 +66,6 @@ extension DebounceExtension<T> on Stream<T> {
 
 /// BLoC для управления климатом текущего устройства
 class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
-  final GetCurrentClimateState _getCurrentClimateState;
-  final GetDeviceFullState _getDeviceFullState;
-  final GetAlarmHistory _getAlarmHistory;
-  final WatchCurrentClimate _watchCurrentClimate;
-  final SetDevicePower _setDevicePower;
-  final SetTemperature _setTemperature;
-  final SetCoolingTemperature _setCoolingTemperature;
-  final SetHumidity _setHumidity;
-  final SetClimateMode _setClimateMode;
-  final SetOperatingMode _setOperatingMode;
-  final SetPreset _setPreset;
-  final SetAirflow _setAirflow;
-  final SetScheduleEnabled _setScheduleEnabled;
-  final WatchDeviceFullState _watchDeviceFullState;
-
-  StreamSubscription<ClimateState>? _climateSubscription;
-  StreamSubscription<DeviceFullState>? _deviceFullStateSubscription;
 
   ClimateBloc({
     required GetCurrentClimateState getCurrentClimateState,
@@ -131,7 +111,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
 
     // Управление устройством
     on<ClimatePowerToggled>(_onPowerToggled);
-    
+
     // Температура (мгновенное обновление UI, отправка через Commit)
     on<ClimateTemperatureChanged>(_onTemperatureChanged, transformer: debounceRestartable());
     on<ClimateHeatingTempChanged>(_onHeatingTempChanged);
@@ -146,7 +126,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     // Вентиляторы (мгновенное обновление UI, отправка через Commit)
     on<ClimateSupplyAirflowChanged>(_onSupplyAirflowChanged);
     on<ClimateSupplyAirflowCommit>(_onSupplyAirflowCommit, transformer: debounceRestartable());
-    
+
     on<ClimateExhaustAirflowChanged>(_onExhaustAirflowChanged);
     on<ClimateExhaustAirflowCommit>(_onExhaustAirflowCommit, transformer: debounceRestartable());
 
@@ -156,6 +136,23 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     // Обновление локального состояния
     on<ClimateQuickSensorsUpdated>(_onQuickSensorsUpdated);
   }
+  final GetCurrentClimateState _getCurrentClimateState;
+  final GetDeviceFullState _getDeviceFullState;
+  final GetAlarmHistory _getAlarmHistory;
+  final WatchCurrentClimate _watchCurrentClimate;
+  final SetDevicePower _setDevicePower;
+  final SetTemperature _setTemperature;
+  final SetCoolingTemperature _setCoolingTemperature;
+  final SetHumidity _setHumidity;
+  final SetClimateMode _setClimateMode;
+  final SetOperatingMode _setOperatingMode;
+  final SetPreset _setPreset;
+  final SetAirflow _setAirflow;
+  final SetScheduleEnabled _setScheduleEnabled;
+  final WatchDeviceFullState _watchDeviceFullState;
+
+  StreamSubscription<ClimateState>? _climateSubscription;
+  StreamSubscription<DeviceFullState>? _deviceFullStateSubscription;
 
   /// Запрос на подписку к состоянию климата
   Future<void> _onSubscriptionRequested(
@@ -218,7 +215,6 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         preset: fullState.operatingMode, // Теперь у нас есть точное значение
         airQuality: AirQualityLevel.good, // В DeviceFullState нет явного airQuality, используем default
         co2Ppm: fullState.co2Level ?? 400,
-        pollutantsAqi: 50, // Нет в DeviceFullState
         isOn: fullState.power,
       );
 
@@ -234,7 +230,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         WatchDeviceFullStateParams(deviceId: event.deviceId),
       ).listen(
         (fullState) => add(ClimateFullStateLoaded(fullState)),
-        onError: (error) {
+        onError: (Object error) {
           // Не критично, если SignalR не работает
           ApiLogger.warning('[ClimateBloc] DeviceFullState stream error', error);
         },
@@ -320,7 +316,9 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     Emitter<ClimateControlState> emit,
   ) async {
     // Блокируем кнопку и делаем optimistic update
-    if (state.isTogglingPower) return; // Предотвращаем двойные нажатия
+    if (state.isTogglingPower) {
+      return; // Предотвращаем двойные нажатия
+    }
 
     developer.log('_onPowerToggled called: isOn=${event.isOn}', name: 'ClimateBloc');
 
@@ -595,7 +593,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     if (state.climate != null) {
       emit(state.copyWith(
         isPendingSupplyFan: true,
-        climate: state.climate!.copyWith(supplyAirflow: event.value.toDouble()),
+        climate: state.climate!.copyWith(supplyAirflow: event.value),
       ));
       
       add(ClimateSupplyAirflowCommit(event.value));
@@ -630,7 +628,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     if (state.climate != null) {
       emit(state.copyWith(
         isPendingExhaustFan: true,
-        climate: state.climate!.copyWith(exhaustAirflow: event.value.toDouble()),
+        climate: state.climate!.copyWith(exhaustAirflow: event.value),
       ));
       
       add(ClimateExhaustAirflowCommit(event.value));
@@ -662,7 +660,9 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     Emitter<ClimateControlState> emit,
   ) async {
     // Блокируем кнопку на время запроса
-    if (state.isTogglingSchedule) return;
+    if (state.isTogglingSchedule) {
+      return;
+    }
 
     final deviceId = state.deviceFullState?.id;
     if (deviceId == null) {

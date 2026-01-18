@@ -2,13 +2,22 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_theme.dart';
-import 'breez_button.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
 
 /// Текстовая кнопка-ссылка с акцентным цветом
 ///
 /// Использует базовый BreezButton для единообразия анимаций и accessibility.
 class BreezTextButton extends StatelessWidget {
+
+  const BreezTextButton({
+    required this.text, required this.onPressed, super.key,
+    this.fontSize = 14,
+    this.fontWeight = FontWeight.normal,
+    this.underline = true,
+    this.semanticLabel,
+    this.tooltip,
+  });
   final String text;
   final VoidCallback? onPressed;
   final double fontSize;
@@ -20,17 +29,6 @@ class BreezTextButton extends StatelessWidget {
 
   /// Tooltip shown on hover
   final String? tooltip;
-
-  const BreezTextButton({
-    super.key,
-    required this.text,
-    required this.onPressed,
-    this.fontSize = 14,
-    this.fontWeight = FontWeight.normal,
-    this.underline = true,
-    this.semanticLabel,
-    this.tooltip,
-  });
 
   @override
   Widget build(BuildContext context) {

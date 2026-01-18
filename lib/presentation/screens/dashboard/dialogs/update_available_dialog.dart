@@ -1,41 +1,39 @@
 /// Update Available Dialog - Notify user about new version
 library;
 
-import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import '../../../widgets/breez/breez_card.dart';
-import '../../../../core/theme/app_theme.dart';
-import '../../../../core/theme/spacing.dart';
-import '../../../../generated/l10n/app_localizations.dart';
-
+import 'package:flutter/material.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
 // Conditional import для web-специфичных функций
-import 'update_available_dialog_stub.dart'
+import 'package:hvac_control/presentation/screens/dashboard/dialogs/update_available_dialog_stub.dart'
     if (dart.library.html) 'update_available_dialog_web.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
 
 class UpdateAvailableDialog extends StatefulWidget {
-  final String? version;
-  final String? changelog;
 
   const UpdateAvailableDialog({
     super.key,
     this.version,
     this.changelog,
   });
+  final String? version;
+  final String? changelog;
 
   static Future<void> show(
     BuildContext context, {
     String? version,
     String? changelog,
-  }) async {
-    return showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => UpdateAvailableDialog(
-        version: version,
-        changelog: changelog,
-      ),
-    );
-  }
+  }) async =>
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => UpdateAvailableDialog(
+          version: version,
+          changelog: changelog,
+        ),
+      );
 
   @override
   State<UpdateAvailableDialog> createState() => _UpdateAvailableDialogState();

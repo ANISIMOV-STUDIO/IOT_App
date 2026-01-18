@@ -1,17 +1,15 @@
 /// Use Case: Проверка сохранённой сессии
 library;
 
-import '../usecase.dart';
-import 'login.dart';
+import 'package:hvac_control/domain/usecases/auth/login.dart';
+import 'package:hvac_control/domain/usecases/usecase.dart';
 
 /// Проверить наличие сохранённой сессии при запуске приложения
 class CheckSession extends UseCase<LoginResult?> {
-  final AuthRepository _repository;
 
   CheckSession(this._repository);
+  final AuthRepository _repository;
 
   @override
-  Future<LoginResult?> call() async {
-    return _repository.checkSession();
-  }
+  Future<LoginResult?> call() async => _repository.checkSession();
 }

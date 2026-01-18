@@ -12,14 +12,13 @@
 /// - Сброс пароля
 library;
 
-import 'package:flutter_test/flutter_test.dart';
 import 'package:bloc_test/bloc_test.dart';
-import 'package:mocktail/mocktail.dart';
-
+import 'package:flutter_test/flutter_test.dart';
+import 'package:hvac_control/data/services/auth_service.dart';
 import 'package:hvac_control/presentation/bloc/auth/auth_bloc.dart';
 import 'package:hvac_control/presentation/bloc/auth/auth_event.dart';
 import 'package:hvac_control/presentation/bloc/auth/auth_state.dart';
-import 'package:hvac_control/data/services/auth_service.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../fixtures/mock_services.dart';
 import '../../fixtures/test_data.dart';
@@ -46,12 +45,10 @@ void main() {
   });
 
   /// Создаёт экземпляр AuthBloc с mock-зависимостями
-  AuthBloc createBloc() {
-    return AuthBloc(
+  AuthBloc createBloc() => AuthBloc(
       authService: mockAuthService,
       storageService: mockStorageService,
     );
-  }
 
   group('AuthBloc - Инициализация', () {
     test('начальное состояние - AuthInitial', () {

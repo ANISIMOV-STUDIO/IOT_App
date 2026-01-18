@@ -3,45 +3,45 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../generated/l10n/app_localizations.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../domain/entities/alarm_info.dart';
-import '../../bloc/climate/climate_bloc.dart';
-import '../../widgets/breez/breez_card.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/domain/entities/alarm_info.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
+import 'package:hvac_control/presentation/bloc/climate/climate_bloc.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
 
 // =============================================================================
 // CONSTANTS
 // =============================================================================
 
 abstract class _AlarmHistoryConstants {
-  static const double headerFontSize = 18.0;
-  static const double subtitleFontSize = 12.0;
-  static const double emptyIconSize = 64.0;
-  static const double bodyFontSize = 16.0;
-  static const double captionFontSize = 13.0;
-  static const double smallFontSize = 14.0;
-  static const double tinyFontSize = 10.0;
-  static const double valueFontSize = 12.0;
-  static const double iconSize = 20.0;
-  static const double iconContainerSize = 40.0;
-  static const double dividerHeight = 30.0;
-  static const double textGap = 2.0;
+  static const double headerFontSize = 18;
+  static const double subtitleFontSize = 12;
+  static const double emptyIconSize = 64;
+  static const double bodyFontSize = 16;
+  static const double captionFontSize = 13;
+  static const double smallFontSize = 14;
+  static const double tinyFontSize = 10;
+  static const double valueFontSize = 12;
+  static const double iconSize = 20;
+  static const double iconContainerSize = 40;
+  static const double dividerHeight = 30;
+  static const double textGap = 2;
 }
 
 /// Экран истории аварий
 ///
 /// Загружает историю аварий из ClimateBloc при инициализации.
 class AlarmHistoryScreen extends StatefulWidget {
-  final String deviceId;
-  final String deviceName;
-
   const AlarmHistoryScreen({
-    super.key,
     required this.deviceId,
     required this.deviceName,
+    super.key,
   });
+
+  final String deviceId;
+  final String deviceName;
 
   @override
   State<AlarmHistoryScreen> createState() => _AlarmHistoryScreenState();
@@ -129,8 +129,7 @@ class _AlarmHistoryScreenState extends State<AlarmHistoryScreen> {
     );
   }
 
-  Widget _buildEmptyState(BreezColors colors, AppLocalizations l10n) {
-    return Center(
+  Widget _buildEmptyState(BreezColors colors, AppLocalizations l10n) => Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -159,14 +158,12 @@ class _AlarmHistoryScreenState extends State<AlarmHistoryScreen> {
         ],
       ),
     );
-  }
 
   Widget _buildHistoryList(
     List<AlarmHistory> history,
     BreezColors colors,
     AppLocalizations l10n,
-  ) {
-    return ListView.builder(
+  ) => ListView.builder(
       padding: const EdgeInsets.all(AppSpacing.md),
       itemCount: history.length,
       itemBuilder: (context, index) {
@@ -179,15 +176,14 @@ class _AlarmHistoryScreenState extends State<AlarmHistoryScreen> {
         );
       },
     );
-  }
 }
 
 /// Карточка истории аварии
 class _AlarmHistoryCard extends StatelessWidget {
+  const _AlarmHistoryCard({required this.alarm, required this.l10n});
+
   final AlarmHistory alarm;
   final AppLocalizations l10n;
-
-  const _AlarmHistoryCard({required this.alarm, required this.l10n});
 
   @override
   Widget build(BuildContext context) {
@@ -330,7 +326,7 @@ class _AlarmHistoryCard extends StatelessWidget {
                         const SizedBox(height: _AlarmHistoryConstants.textGap),
                         Text(
                           _formatDateTime(alarm.clearedAt!, l10n),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: _AlarmHistoryConstants.valueFontSize,
                             fontWeight: FontWeight.w600,
                             color: AppColors.accentGreen,

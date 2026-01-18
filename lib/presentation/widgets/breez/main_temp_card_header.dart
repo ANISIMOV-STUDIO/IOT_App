@@ -2,15 +2,33 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
 import 'package:intl/intl.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../generated/l10n/app_localizations.dart';
-import 'breez_card.dart';
 
 /// Header section of MainTempCard with date, unit name, alarm badge, and controls
 class MainTempCardHeader extends StatelessWidget {
+
+  const MainTempCardHeader({
+    required this.unitName,
+    required this.isPowered,
+    super.key,
+    this.status,
+    this.showControls = false,
+    this.alarmCount = 0,
+    this.isPowerLoading = false,
+    this.isScheduleEnabled = false,
+    this.isScheduleLoading = false,
+    this.onPowerToggle,
+    this.onScheduleToggle,
+    this.onSettingsTap,
+    this.onAlarmsTap,
+    this.isOnline = true,
+    this.deviceTime,
+  });
   final String unitName;
   final String? status;
   final bool isPowered;
@@ -26,24 +44,6 @@ class MainTempCardHeader extends StatelessWidget {
   final bool isOnline;
   /// Время устройства (если null, используется системное время)
   final DateTime? deviceTime;
-
-  const MainTempCardHeader({
-    super.key,
-    required this.unitName,
-    this.status,
-    required this.isPowered,
-    this.showControls = false,
-    this.alarmCount = 0,
-    this.isPowerLoading = false,
-    this.isScheduleEnabled = false,
-    this.isScheduleLoading = false,
-    this.onPowerToggle,
-    this.onScheduleToggle,
-    this.onSettingsTap,
-    this.onAlarmsTap,
-    this.isOnline = true,
-    this.deviceTime,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -90,13 +90,13 @@ class MainTempCardHeader extends StatelessWidget {
 
 /// Date and time section
 class _DateUnitSection extends StatelessWidget {
-  final BreezColors colors;
-  final DateTime? deviceTime;
 
   const _DateUnitSection({
     required this.colors,
     this.deviceTime,
   });
+  final BreezColors colors;
+  final DateTime? deviceTime;
 
   @override
   Widget build(BuildContext context) {
@@ -121,22 +121,21 @@ class _DateUnitSection extends StatelessWidget {
 
 /// Alarm badge widget
 class _AlarmBadge extends StatelessWidget {
-  final int alarmCount;
-  final VoidCallback? onTap;
 
   const _AlarmBadge({
     required this.alarmCount,
     this.onTap,
   });
+  final int alarmCount;
+  final VoidCallback? onTap;
 
   @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(right: AppSpacing.xs),
+  Widget build(BuildContext context) => Padding(
+      padding: const EdgeInsets.only(right: AppSpacing.xs),
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: AppSpacing.xs, vertical: AppSpacing.xxs),
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs, vertical: AppSpacing.xxs),
           decoration: BoxDecoration(
             color: AppColors.accentRed.withValues(alpha: 0.15),
             borderRadius: BorderRadius.circular(AppRadius.button),
@@ -152,7 +151,7 @@ class _AlarmBadge extends StatelessWidget {
                 size: 12,
                 color: AppColors.accentRed,
               ),
-              SizedBox(width: AppSpacing.xxs),
+              const SizedBox(width: AppSpacing.xxs),
               Text(
                 '$alarmCount',
                 style: const TextStyle(
@@ -166,19 +165,10 @@ class _AlarmBadge extends StatelessWidget {
         ),
       ),
     );
-  }
 }
 
 /// Controls section with settings, schedule, and power buttons
 class _ControlsSection extends StatelessWidget {
-  final bool isPowered;
-  final bool isPowerLoading;
-  final bool isScheduleEnabled;
-  final bool isScheduleLoading;
-  final VoidCallback? onSettingsTap;
-  final VoidCallback? onScheduleToggle;
-  final VoidCallback? onPowerToggle;
-  final bool isOnline;
 
   const _ControlsSection({
     required this.isPowered,
@@ -190,6 +180,14 @@ class _ControlsSection extends StatelessWidget {
     this.onPowerToggle,
     this.isOnline = true,
   });
+  final bool isPowered;
+  final bool isPowerLoading;
+  final bool isScheduleEnabled;
+  final bool isScheduleLoading;
+  final VoidCallback? onSettingsTap;
+  final VoidCallback? onScheduleToggle;
+  final VoidCallback? onPowerToggle;
+  final bool isOnline;
 
   @override
   Widget build(BuildContext context) {
@@ -205,7 +203,7 @@ class _ControlsSection extends StatelessWidget {
           iconColor: !isOnline ? mutedColor : isPowered ? AppColors.accentGreen : mutedColor,
           onTap: isPowerLoading ? null : onPowerToggle,
         ),
-        SizedBox(width: AppSpacing.xs),
+        const SizedBox(width: AppSpacing.xs),
         // Schedule toggle button
         if (isScheduleLoading)
           const SizedBox(
@@ -225,7 +223,7 @@ class _ControlsSection extends StatelessWidget {
             iconColor: !isOnline ? mutedColor : isScheduleEnabled ? AppColors.accentGreen : mutedColor,
             onTap: onScheduleToggle,
           ),
-        SizedBox(width: AppSpacing.xs),
+        const SizedBox(width: AppSpacing.xs),
         BreezIconButton(
           icon: Icons.settings_outlined,
           iconColor: isOnline ? null : mutedColor,
@@ -238,22 +236,22 @@ class _ControlsSection extends StatelessWidget {
 
 /// Status badge showing powered state
 class _StatusBadge extends StatelessWidget {
-  final bool isPowered;
-  final String? status;
-  final AppLocalizations l10n;
 
   const _StatusBadge({
     required this.isPowered,
-    this.status,
     required this.l10n,
+    this.status,
   });
+  final bool isPowered;
+  final String? status;
+  final AppLocalizations l10n;
 
   @override
   Widget build(BuildContext context) {
     final statusColor = isPowered ? AppColors.accentGreen : AppColors.accentRed;
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: AppSpacing.xs, vertical: AppSpacing.xxs),
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs, vertical: AppSpacing.xxs),
       decoration: BoxDecoration(
         color: statusColor.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(AppRadius.button),
@@ -272,7 +270,7 @@ class _StatusBadge extends StatelessWidget {
               shape: BoxShape.circle,
             ),
           ),
-          SizedBox(width: AppSpacing.xxs),
+          const SizedBox(width: AppSpacing.xxs),
           Text(
             status ?? l10n.statusRunning,
             style: TextStyle(

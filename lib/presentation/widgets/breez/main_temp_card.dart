@@ -2,19 +2,19 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../core/services/quick_sensors_service.dart';
-import '../../../domain/entities/unit_state.dart';
-import '../../../generated/l10n/app_localizations.dart';
-import '../../bloc/climate/climate_bloc.dart' show TemperatureLimits;
-import 'breez_loader.dart';
-import 'fan_slider.dart';
-import 'main_temp_card_header.dart';
-import 'main_temp_card_shimmer.dart';
-import 'stat_item.dart';
-import 'temp_column.dart';
+import 'package:hvac_control/core/services/quick_sensors_service.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/domain/entities/unit_state.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
+import 'package:hvac_control/presentation/bloc/climate/climate_bloc.dart' show TemperatureLimits;
+import 'package:hvac_control/presentation/widgets/breez/breez_loader.dart';
+import 'package:hvac_control/presentation/widgets/breez/fan_slider.dart';
+import 'package:hvac_control/presentation/widgets/breez/main_temp_card_header.dart';
+import 'package:hvac_control/presentation/widgets/breez/main_temp_card_shimmer.dart';
+import 'package:hvac_control/presentation/widgets/breez/stat_item.dart';
+import 'package:hvac_control/presentation/widgets/breez/temp_column.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -23,16 +23,16 @@ import 'temp_column.dart';
 /// Константы для MainTempCard
 abstract class _MainTempCardConstants {
   static const double borderWidthOn = 1.5;
-  static const double borderWidthOff = 1.0;
+  static const double borderWidthOff = 1;
   static const double borderOpacity = 0.5;
-  static const double shadowBlurPrimary = 24.0;
-  static const double shadowBlurGlow = 40.0;
-  static const double shadowSpread = 4.0;
-  static const double shadowOffsetY = 8.0;
+  static const double shadowBlurPrimary = 24;
+  static const double shadowBlurGlow = 40;
+  static const double shadowSpread = 4;
+  static const double shadowOffsetY = 8;
   static const double shadowOpacityPrimary = 0.2;
   static const double shadowOpacityGlow = 0.1;
-  static const double dividerHeight = 80.0;
-  static const double dividerWidth = 1.0;
+  static const double dividerHeight = 80;
+  static const double dividerWidth = 1;
 }
 
 // =============================================================================
@@ -47,6 +47,46 @@ abstract class _MainTempCardConstants {
 /// - Shimmer loading state
 /// - Accessibility через Semantics
 class MainTempCard extends StatelessWidget {
+
+  const MainTempCard({
+    required this.unitName, required this.temperature, super.key,
+    this.heatingTemp = 21,
+    this.coolingTemp = 24,
+    this.status,
+    this.humidity = 45,
+    this.outsideTemp = 0.0,
+    this.indoorTemp = 22.0,
+    this.airflow = 420,
+    this.filterPercent = 88,
+    this.isPowered = true,
+    this.isLoading = false,
+    this.supplyFan = 50,
+    this.exhaustFan = 50,
+    this.onPowerToggle,
+    this.onSupplyFanChanged,
+    this.onExhaustFanChanged,
+    this.onSettingsTap,
+    this.onHeatingTempIncrease,
+    this.onHeatingTempDecrease,
+    this.onCoolingTempIncrease,
+    this.onCoolingTempDecrease,
+    this.showControls = false,
+    this.alarmCount = 0,
+    this.onAlarmsTap,
+    this.isPowerLoading = false,
+    this.isScheduleEnabled = false,
+    this.isScheduleLoading = false,
+    this.onScheduleToggle,
+    this.sensorUnit,
+    this.showStats = true,
+    this.isOnline = true,
+    this.selectedSensors = QuickSensorsService.defaultSensors,
+    this.isPendingHeatingTemperature = false,
+    this.isPendingCoolingTemperature = false,
+    this.isPendingSupplyFan = false,
+    this.isPendingExhaustFan = false,
+    this.deviceTime,
+  });
   final String unitName;
   final String? status;
   final int temperature;
@@ -96,48 +136,6 @@ class MainTempCard extends StatelessWidget {
   /// Время устройства (если null, используется системное время)
   final DateTime? deviceTime;
 
-  const MainTempCard({
-    super.key,
-    required this.unitName,
-    required this.temperature,
-    this.heatingTemp = 21,
-    this.coolingTemp = 24,
-    this.status,
-    this.humidity = 45,
-    this.outsideTemp = 0.0,
-    this.indoorTemp = 22.0,
-    this.airflow = 420,
-    this.filterPercent = 88,
-    this.isPowered = true,
-    this.isLoading = false,
-    this.supplyFan = 50,
-    this.exhaustFan = 50,
-    this.onPowerToggle,
-    this.onSupplyFanChanged,
-    this.onExhaustFanChanged,
-    this.onSettingsTap,
-    this.onHeatingTempIncrease,
-    this.onHeatingTempDecrease,
-    this.onCoolingTempIncrease,
-    this.onCoolingTempDecrease,
-    this.showControls = false,
-    this.alarmCount = 0,
-    this.onAlarmsTap,
-    this.isPowerLoading = false,
-    this.isScheduleEnabled = false,
-    this.isScheduleLoading = false,
-    this.onScheduleToggle,
-    this.sensorUnit,
-    this.showStats = true,
-    this.isOnline = true,
-    this.selectedSensors = QuickSensorsService.defaultSensors,
-    this.isPendingHeatingTemperature = false,
-    this.isPendingCoolingTemperature = false,
-    this.isPendingSupplyFan = false,
-    this.isPendingExhaustFan = false,
-    this.deviceTime,
-  });
-
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
@@ -178,7 +176,7 @@ class MainTempCard extends StatelessWidget {
                       alpha: _MainTempCardConstants.shadowOpacityPrimary,
                     ),
                     blurRadius: _MainTempCardConstants.shadowBlurPrimary,
-                    offset: Offset(0, _MainTempCardConstants.shadowOffsetY),
+                    offset: const Offset(0, _MainTempCardConstants.shadowOffsetY),
                   ),
                   // Glow эффект
                   BoxShadow(
@@ -191,7 +189,7 @@ class MainTempCard extends StatelessWidget {
                 ]
               : null,
         ),
-        padding: EdgeInsets.all(AppSpacing.xs),
+        padding: const EdgeInsets.all(AppSpacing.xs),
       child: isLoading
           ? const MainTempCardShimmer()
           : Stack(
@@ -302,7 +300,7 @@ class MainTempCard extends StatelessWidget {
                 // Overlay блокировки при переключении питания
                 if (isPowerLoading)
                   Positioned.fill(
-                    child: Container(
+                    child: DecoratedBox(
                       decoration: BoxDecoration(
                         color: colors.card.withValues(alpha: 0.7),
                         borderRadius: BorderRadius.circular(AppRadius.nested),
@@ -321,17 +319,6 @@ class MainTempCard extends StatelessWidget {
 
 /// Temperature section with heating and cooling columns
 class _TemperatureSection extends StatelessWidget {
-  final int heatingTemp;
-  final int coolingTemp;
-  final bool isPowered;
-  final BreezColors colors;
-  final AppLocalizations l10n;
-  final VoidCallback? onHeatingTempIncrease;
-  final VoidCallback? onHeatingTempDecrease;
-  final VoidCallback? onCoolingTempIncrease;
-  final VoidCallback? onCoolingTempDecrease;
-  final bool isPendingHeatingTemperature;
-  final bool isPendingCoolingTemperature;
 
   const _TemperatureSection({
     required this.heatingTemp,
@@ -346,10 +333,20 @@ class _TemperatureSection extends StatelessWidget {
     this.isPendingHeatingTemperature = false,
     this.isPendingCoolingTemperature = false,
   });
+  final int heatingTemp;
+  final int coolingTemp;
+  final bool isPowered;
+  final BreezColors colors;
+  final AppLocalizations l10n;
+  final VoidCallback? onHeatingTempIncrease;
+  final VoidCallback? onHeatingTempDecrease;
+  final VoidCallback? onCoolingTempIncrease;
+  final VoidCallback? onCoolingTempDecrease;
+  final bool isPendingHeatingTemperature;
+  final bool isPendingCoolingTemperature;
 
   @override
-  Widget build(BuildContext context) {
-    return Row(
+  Widget build(BuildContext context) => Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         // Heating temperature
@@ -372,7 +369,7 @@ class _TemperatureSection extends StatelessWidget {
           width: _MainTempCardConstants.dividerWidth,
           height: _MainTempCardConstants.dividerHeight,
           color: colors.border,
-          margin: EdgeInsets.symmetric(horizontal: AppSpacing.xs),
+          margin: const EdgeInsets.symmetric(horizontal: AppSpacing.xs),
         ),
         // Cooling temperature
         Expanded(
@@ -391,11 +388,14 @@ class _TemperatureSection extends StatelessWidget {
         ),
       ],
     );
-  }
 }
 
 /// Stats section - Динамически отображает выбранные показатели
 class _StatsSection extends StatelessWidget {
+
+  const _StatsSection({
+    required this.outsideTemp, required this.indoorTemp, required this.humidity, required this.airflow, required this.filterPercent, required this.selectedSensors, required this.colors, required this.l10n, this.sensorUnit,
+  });
   final UnitState? sensorUnit;
   final double outsideTemp;
   final double indoorTemp;
@@ -405,18 +405,6 @@ class _StatsSection extends StatelessWidget {
   final List<QuickSensorType> selectedSensors;
   final BreezColors colors;
   final AppLocalizations l10n;
-
-  const _StatsSection({
-    this.sensorUnit,
-    required this.outsideTemp,
-    required this.indoorTemp,
-    required this.humidity,
-    required this.airflow,
-    required this.filterPercent,
-    required this.selectedSensors,
-    required this.colors,
-    required this.l10n,
-  });
 
   /// Получить значение для типа сенсора
   String _getSensorValue(QuickSensorType type) {
@@ -446,9 +434,8 @@ class _StatsSection extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(top: AppSpacing.xs),
+  Widget build(BuildContext context) => Container(
+      padding: const EdgeInsets.only(top: AppSpacing.xs),
       decoration: BoxDecoration(
         border: Border(
           top: BorderSide(color: colors.border),
@@ -456,21 +443,27 @@ class _StatsSection extends StatelessWidget {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: selectedSensors.map((sensor) {
-          return StatItem(
+        children: selectedSensors.map((sensor) => StatItem(
             icon: sensor.icon,
             value: _getSensorValue(sensor),
             label: sensor.getLabel(l10n),
             iconColor: sensor.color,
-          );
-        }).toList(),
+          )).toList(),
       ),
     );
-  }
 }
 
 /// Fan sliders section
 class _FanSlidersSection extends StatelessWidget {
+
+  const _FanSlidersSection({
+    required this.supplyFan,
+    required this.exhaustFan,
+    required this.colors, required this.l10n, this.onSupplyFanChanged,
+    this.onExhaustFanChanged,
+    this.isPendingSupplyFan = false,
+    this.isPendingExhaustFan = false,
+  });
   final int supplyFan;
   final int exhaustFan;
   final ValueChanged<int>? onSupplyFanChanged;
@@ -480,24 +473,12 @@ class _FanSlidersSection extends StatelessWidget {
   final bool isPendingSupplyFan;
   final bool isPendingExhaustFan;
 
-  const _FanSlidersSection({
-    required this.supplyFan,
-    required this.exhaustFan,
-    this.onSupplyFanChanged,
-    this.onExhaustFanChanged,
-    required this.colors,
-    required this.l10n,
-    this.isPendingSupplyFan = false,
-    this.isPendingExhaustFan = false,
-  });
-
   @override
-  Widget build(BuildContext context) {
-    return Column(
+  Widget build(BuildContext context) => Column(
       children: [
-        SizedBox(height: AppSpacing.xs),
+        const SizedBox(height: AppSpacing.xs),
         Container(
-          padding: EdgeInsets.only(top: AppSpacing.xs),
+          padding: const EdgeInsets.only(top: AppSpacing.xs),
           decoration: BoxDecoration(
             border: Border(
               top: BorderSide(color: colors.border),
@@ -515,7 +496,7 @@ class _FanSlidersSection extends StatelessWidget {
                   isPending: isPendingSupplyFan,
                 ),
               ),
-              SizedBox(width: AppSpacing.xs),
+              const SizedBox(width: AppSpacing.xs),
               Expanded(
                 child: FanSlider(
                   label: l10n.exhaust,
@@ -531,5 +512,4 @@ class _FanSlidersSection extends StatelessWidget {
         ),
       ],
     );
-  }
 }

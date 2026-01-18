@@ -2,25 +2,23 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_theme.dart';
-import '../../../../generated/l10n/app_localizations.dart';
-import '../../../../core/theme/app_radius.dart';
-import '../../../../core/theme/spacing.dart';
-import '../../../widgets/breez/breez_button.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
 
 /// Delete confirmation dialog
 class DeleteConfirmDialog extends StatelessWidget {
+
+  const DeleteConfirmDialog({required this.unitName, super.key});
   final String unitName;
 
-  const DeleteConfirmDialog({super.key, required this.unitName});
-
   /// Shows the dialog and returns true if confirmed
-  static Future<bool?> show(BuildContext context, String unitName) {
-    return showDialog<bool>(
+  static Future<bool?> show(BuildContext context, String unitName) => showDialog<bool>(
       context: context,
       builder: (context) => DeleteConfirmDialog(unitName: unitName),
     );
-  }
 
   @override
   Widget build(BuildContext context) {

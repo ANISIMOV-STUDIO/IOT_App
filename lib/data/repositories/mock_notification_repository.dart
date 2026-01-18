@@ -2,17 +2,18 @@
 library;
 
 import 'dart:async';
-import '../../domain/entities/unit_notification.dart';
-import '../../domain/repositories/notification_repository.dart';
-import '../mock/mock_data.dart';
+
+import 'package:hvac_control/data/mock/mock_data.dart';
+import 'package:hvac_control/domain/entities/unit_notification.dart';
+import 'package:hvac_control/domain/repositories/notification_repository.dart';
 
 class MockNotificationRepository implements NotificationRepository {
-  final _controller = StreamController<List<UnitNotification>>.broadcast();
-  List<UnitNotification> _notifications = [];
 
   MockNotificationRepository() {
     _initializeFromMockData();
   }
+  final _controller = StreamController<List<UnitNotification>>.broadcast();
+  List<UnitNotification> _notifications = [];
 
   void _initializeFromMockData() {
     final now = DateTime.now();
@@ -27,16 +28,15 @@ class MockNotificationRepository implements NotificationRepository {
     )).toList();
   }
 
-  NotificationType _parseNotificationType(String type) {
-    return NotificationType.values.firstWhere(
+  NotificationType _parseNotificationType(String type) =>
+    NotificationType.values.firstWhere(
       (e) => e.name == type,
       orElse: () => NotificationType.info,
     );
-  }
 
   @override
   Future<List<UnitNotification>> getNotifications({String? deviceId}) async {
-    await Future.delayed(MockData.fastDelay);
+    await Future<void>.delayed(MockData.fastDelay);
 
     if (deviceId != null) {
       return List.unmodifiable(
@@ -62,7 +62,7 @@ class MockNotificationRepository implements NotificationRepository {
 
   @override
   Future<void> markAsRead(String notificationId) async {
-    await Future.delayed(MockData.fastDelay);
+    await Future<void>.delayed(MockData.fastDelay);
 
     final index = _notifications.indexWhere((n) => n.id == notificationId);
     if (index != -1) {
@@ -74,7 +74,7 @@ class MockNotificationRepository implements NotificationRepository {
 
   @override
   Future<void> markAllAsRead({String? deviceId}) async {
-    await Future.delayed(MockData.normalDelay);
+    await Future<void>.delayed(MockData.normalDelay);
 
     _notifications = _notifications.map((n) {
       if (deviceId == null || n.deviceId == deviceId) {
@@ -87,7 +87,7 @@ class MockNotificationRepository implements NotificationRepository {
 
   @override
   Future<void> dismiss(String notificationId) async {
-    await Future.delayed(MockData.fastDelay);
+    await Future<void>.delayed(MockData.fastDelay);
 
     _notifications = _notifications.where((n) => n.id != notificationId).toList();
     _controller.add(List.unmodifiable(_notifications));
@@ -95,7 +95,7 @@ class MockNotificationRepository implements NotificationRepository {
 
   @override
   Future<int> getUnreadCount({String? deviceId}) async {
-    await Future.delayed(MockData.fastDelay);
+    await Future<void>.delayed(MockData.fastDelay);
 
     if (deviceId != null) {
       return _notifications

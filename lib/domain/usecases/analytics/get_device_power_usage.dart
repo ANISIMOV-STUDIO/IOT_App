@@ -1,18 +1,16 @@
 /// Use Case: Получить потребление энергии по устройствам
 library;
 
-import '../../entities/energy_stats.dart';
-import '../../repositories/energy_repository.dart';
-import '../usecase.dart';
+import 'package:hvac_control/domain/entities/energy_stats.dart';
+import 'package:hvac_control/domain/repositories/energy_repository.dart';
+import 'package:hvac_control/domain/usecases/usecase.dart';
 
 /// Получить потребление энергии по устройствам
 class GetDevicePowerUsage extends UseCase<List<DeviceEnergyUsage>> {
-  final EnergyRepository _repository;
 
   GetDevicePowerUsage(this._repository);
+  final EnergyRepository _repository;
 
   @override
-  Future<List<DeviceEnergyUsage>> call() async {
-    return _repository.getDevicePowerUsage();
-  }
+  Future<List<DeviceEnergyUsage>> call() async => _repository.getDevicePowerUsage();
 }

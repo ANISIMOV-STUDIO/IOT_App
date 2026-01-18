@@ -5,26 +5,16 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'app_radius.dart';
-import 'app_animations.dart';
+import 'package:hvac_control/core/theme/app_animations.dart';
+import 'package:hvac_control/core/theme/app_colors.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
 
-// Re-export colors for backwards compatibility
+// Re-export theme components for convenience
 export 'app_colors.dart';
-import 'app_colors.dart';
+export 'app_font_sizes.dart';
 
 /// Theme-aware colors accessible via BreezColors.of(context)
 class BreezColors extends ThemeExtension<BreezColors> {
-  final Color bg;
-  final Color card;
-  final Color cardLight;
-  final Color border;
-  final Color borderAccent;
-  final Color text;
-  final Color textMuted;
-  final Color buttonBg;
-  final Color buttonHover;
-  final Color hoverOverlay;
-  final Color pressedOverlay;
 
   const BreezColors({
     required this.bg,
@@ -39,11 +29,20 @@ class BreezColors extends ThemeExtension<BreezColors> {
     required this.hoverOverlay,
     required this.pressedOverlay,
   });
+  final Color bg;
+  final Color card;
+  final Color cardLight;
+  final Color border;
+  final Color borderAccent;
+  final Color text;
+  final Color textMuted;
+  final Color buttonBg;
+  final Color buttonHover;
+  final Color hoverOverlay;
+  final Color pressedOverlay;
 
   /// Get colors from context
-  static BreezColors of(BuildContext context) {
-    return Theme.of(context).extension<BreezColors>()!;
-  }
+  static BreezColors of(BuildContext context) => Theme.of(context).extension<BreezColors>()!;
 
   /// Dark theme colors - Premium Dark
   static const dark = BreezColors(
@@ -88,8 +87,7 @@ class BreezColors extends ThemeExtension<BreezColors> {
     Color? buttonHover,
     Color? hoverOverlay,
     Color? pressedOverlay,
-  }) {
-    return BreezColors(
+  }) => BreezColors(
       bg: bg ?? this.bg,
       card: card ?? this.card,
       cardLight: cardLight ?? this.cardLight,
@@ -102,11 +100,12 @@ class BreezColors extends ThemeExtension<BreezColors> {
       hoverOverlay: hoverOverlay ?? this.hoverOverlay,
       pressedOverlay: pressedOverlay ?? this.pressedOverlay,
     );
-  }
 
   @override
   BreezColors lerp(ThemeExtension<BreezColors>? other, double t) {
-    if (other is! BreezColors) return this;
+    if (other is! BreezColors) {
+      return this;
+    }
     return BreezColors(
       bg: Color.lerp(bg, other.bg, t)!,
       card: Color.lerp(card, other.card, t)!,
@@ -125,9 +124,9 @@ class BreezColors extends ThemeExtension<BreezColors> {
 
 /// Theme configuration with Material 3 support
 class AppTheme {
-  final bool isDark;
 
   AppTheme({required this.isDark});
+  final bool isDark;
 
   // Getters for current theme colors
   BreezColors get colors => isDark ? BreezColors.dark : BreezColors.light;
@@ -210,8 +209,12 @@ class AppTheme {
               return Colors.transparent;
             }),
             elevation: WidgetStateProperty.resolveWith((states) {
-              if (states.contains(WidgetState.hovered)) return 4;
-              if (states.contains(WidgetState.pressed)) return 2;
+              if (states.contains(WidgetState.hovered)) {
+                return 4;
+              }
+              if (states.contains(WidgetState.pressed)) {
+                return 2;
+              }
               return 0;
             }),
             shadowColor: WidgetStateProperty.all(AppColors.accentGlow),
@@ -250,7 +253,7 @@ class AppTheme {
             }),
             side: WidgetStateProperty.resolveWith((states) {
               if (states.contains(WidgetState.hovered)) {
-                return BorderSide(color: AppColors.accent, width: 1.5);
+                return const BorderSide(color: AppColors.accent, width: 1.5);
               }
               return BorderSide(color: border);
             }),
@@ -329,7 +332,6 @@ class AppTheme {
           overlayColor: AppColors.accent.withValues(alpha: 0.2),
           trackHeight: 8,
           thumbShape: const RoundSliderThumbShape(
-            enabledThumbRadius: 10,
             elevation: 4,
           ),
         ),

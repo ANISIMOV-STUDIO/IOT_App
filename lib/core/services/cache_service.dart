@@ -7,15 +7,14 @@
 library;
 
 import 'package:hive_flutter/hive_flutter.dart';
-
-import '../config/app_constants.dart';
-import '../../domain/entities/climate.dart';
-import '../../domain/entities/hvac_device.dart';
-import '../../domain/entities/smart_device.dart';
-import '../../domain/entities/energy_stats.dart';
-import '../../domain/entities/schedule_entry.dart';
-import '../../domain/entities/unit_notification.dart';
-import '../../domain/entities/graph_data.dart';
+import 'package:hvac_control/core/config/app_constants.dart';
+import 'package:hvac_control/domain/entities/climate.dart';
+import 'package:hvac_control/domain/entities/energy_stats.dart';
+import 'package:hvac_control/domain/entities/graph_data.dart';
+import 'package:hvac_control/domain/entities/hvac_device.dart';
+import 'package:hvac_control/domain/entities/schedule_entry.dart';
+import 'package:hvac_control/domain/entities/smart_device.dart';
+import 'package:hvac_control/domain/entities/unit_notification.dart';
 
 /// Ключи для Hive боксов
 class CacheKeys {
@@ -37,13 +36,18 @@ class CacheKeys {
 
 /// Метаданные кеша (время сохранения)
 class CacheMetadata {
-  final DateTime timestamp;
-  final Duration ttl;
 
   CacheMetadata({
     required this.timestamp,
     this.ttl = CacheConstants.defaultTtl,
   });
+
+  factory CacheMetadata.fromJson(Map<String, dynamic> json) => CacheMetadata(
+        timestamp: DateTime.parse(json['timestamp'] as String),
+        ttl: Duration(minutes: json['ttlMinutes'] as int? ?? 30),
+      );
+  final DateTime timestamp;
+  final Duration ttl;
 
   /// Кеш истёк?
   bool get isExpired => DateTime.now().difference(timestamp) > ttl;
@@ -52,11 +56,6 @@ class CacheMetadata {
         'timestamp': timestamp.toIso8601String(),
         'ttlMinutes': ttl.inMinutes,
       };
-
-  factory CacheMetadata.fromJson(Map<String, dynamic> json) => CacheMetadata(
-        timestamp: DateTime.parse(json['timestamp'] as String),
-        ttl: Duration(minutes: json['ttlMinutes'] as int? ?? 30),
-      );
 }
 
 /// Сервис для управления кешем приложения
@@ -74,7 +73,9 @@ class CacheService {
 
   /// Инициализация Hive и открытие боксов
   Future<void> initialize() async {
-    if (_initialized) return;
+    if (_initialized) {
+      return;
+    }
 
     await Hive.initFlutter();
 
@@ -104,12 +105,16 @@ class CacheService {
   /// Получить состояние климата из кеша
   ClimateState? getCachedClimateState({String? deviceId}) {
     final key = deviceId ?? CacheKeys.currentClimate;
-    if (!_isValidCache('climate_$key')) return null;
+    if (!_isValidCache('climate_$key')) {
+      return null;
+    }
 
     final data = _climateBox.get(key);
-    if (data == null) return null;
+    if (data == null) {
+      return null;
+    }
 
-    return _climateStateFromMap(Map<String, dynamic>.from(data));
+    return _climateStateFromMap(Map<String, dynamic>.from(data as Map));
   }
 
   // ============================================
@@ -118,21 +123,23 @@ class CacheService {
 
   /// Сохранить список HVAC устройств
   Future<void> cacheHvacDevices(List<HvacDevice> devices) async {
-    final data = devices.map((d) => _hvacDeviceToMap(d)).toList();
+    final data = devices.map(_hvacDeviceToMap).toList();
     await _hvacDevicesBox.put(CacheKeys.allHvacDevices, data);
     await _saveMetadata('hvac_devices');
   }
 
   /// Получить HVAC устройства из кеша
   List<HvacDevice>? getCachedHvacDevices() {
-    if (!_isValidCache('hvac_devices')) return null;
+    if (!_isValidCache('hvac_devices')) {
+      return null;
+    }
 
     final data = _hvacDevicesBox.get(CacheKeys.allHvacDevices);
-    if (data == null) return null;
+    if (data == null) {
+      return null;
+    }
 
-    return (data as List).map((item) {
-      return _hvacDeviceFromMap(Map<String, dynamic>.from(item));
-    }).toList();
+    return (data as List).map((item) => _hvacDeviceFromMap(Map<String, dynamic>.from(item as Map))).toList();
   }
 
   // ============================================
@@ -141,21 +148,23 @@ class CacheService {
 
   /// Сохранить список smart устройств
   Future<void> cacheSmartDevices(List<SmartDevice> devices) async {
-    final data = devices.map((d) => _smartDeviceToMap(d)).toList();
+    final data = devices.map(_smartDeviceToMap).toList();
     await _devicesBox.put(CacheKeys.allDevices, data);
     await _saveMetadata('smart_devices');
   }
 
   /// Получить smart устройства из кеша
   List<SmartDevice>? getCachedSmartDevices() {
-    if (!_isValidCache('smart_devices')) return null;
+    if (!_isValidCache('smart_devices')) {
+      return null;
+    }
 
     final data = _devicesBox.get(CacheKeys.allDevices);
-    if (data == null) return null;
+    if (data == null) {
+      return null;
+    }
 
-    return (data as List).map((item) {
-      return _smartDeviceFromMap(Map<String, dynamic>.from(item));
-    }).toList();
+    return (data as List).map((item) => _smartDeviceFromMap(Map<String, dynamic>.from(item as Map))).toList();
   }
 
   // ============================================
@@ -170,12 +179,16 @@ class CacheService {
 
   /// Получить статистику из кеша
   EnergyStats? getCachedEnergyStats() {
-    if (!_isValidCache('energy')) return null;
+    if (!_isValidCache('energy')) {
+      return null;
+    }
 
     final data = _energyBox.get(CacheKeys.todayEnergy);
-    if (data == null) return null;
+    if (data == null) {
+      return null;
+    }
 
-    return _energyStatsFromMap(Map<String, dynamic>.from(data));
+    return _energyStatsFromMap(Map<String, dynamic>.from(data as Map));
   }
 
   // ============================================
@@ -184,21 +197,23 @@ class CacheService {
 
   /// Сохранить расписание устройства
   Future<void> cacheSchedule(String deviceId, List<ScheduleEntry> entries) async {
-    final data = entries.map((e) => _scheduleEntryToMap(e)).toList();
+    final data = entries.map(_scheduleEntryToMap).toList();
     await _scheduleBox.put(deviceId, data);
     await _saveMetadata('schedule_$deviceId');
   }
 
   /// Получить расписание из кеша
   List<ScheduleEntry>? getCachedSchedule(String deviceId) {
-    if (!_isValidCache('schedule_$deviceId')) return null;
+    if (!_isValidCache('schedule_$deviceId')) {
+      return null;
+    }
 
     final data = _scheduleBox.get(deviceId);
-    if (data == null) return null;
+    if (data == null) {
+      return null;
+    }
 
-    return (data as List).map((item) {
-      return _scheduleEntryFromMap(Map<String, dynamic>.from(item));
-    }).toList();
+    return (data as List).map((item) => _scheduleEntryFromMap(Map<String, dynamic>.from(item as Map))).toList();
   }
 
   // ============================================
@@ -208,7 +223,7 @@ class CacheService {
   /// Сохранить уведомления
   Future<void> cacheNotifications(List<UnitNotification> notifications, {String? deviceId}) async {
     final key = deviceId ?? 'all';
-    final data = notifications.map((n) => _notificationToMap(n)).toList();
+    final data = notifications.map(_notificationToMap).toList();
     await _notificationsBox.put(key, data);
     await _saveMetadata('notifications_$key');
   }
@@ -216,14 +231,16 @@ class CacheService {
   /// Получить уведомления из кеша
   List<UnitNotification>? getCachedNotifications({String? deviceId}) {
     final key = deviceId ?? 'all';
-    if (!_isValidCache('notifications_$key')) return null;
+    if (!_isValidCache('notifications_$key')) {
+      return null;
+    }
 
     final data = _notificationsBox.get(key);
-    if (data == null) return null;
+    if (data == null) {
+      return null;
+    }
 
-    return (data as List).map((item) {
-      return _notificationFromMap(Map<String, dynamic>.from(item));
-    }).toList();
+    return (data as List).map((item) => _notificationFromMap(Map<String, dynamic>.from(item as Map))).toList();
   }
 
   // ============================================
@@ -237,7 +254,7 @@ class CacheService {
     List<GraphDataPoint> data,
   ) async {
     final key = '${deviceId}_${metric.name}';
-    final mapData = data.map((d) => _graphDataPointToMap(d)).toList();
+    final mapData = data.map(_graphDataPointToMap).toList();
     await _graphDataBox.put(key, mapData);
     await _saveMetadata('graph_$key');
   }
@@ -245,14 +262,16 @@ class CacheService {
   /// Получить данные графика из кеша
   List<GraphDataPoint>? getCachedGraphData(String deviceId, GraphMetric metric) {
     final key = '${deviceId}_${metric.name}';
-    if (!_isValidCache('graph_$key')) return null;
+    if (!_isValidCache('graph_$key')) {
+      return null;
+    }
 
     final data = _graphDataBox.get(key);
-    if (data == null) return null;
+    if (data == null) {
+      return null;
+    }
 
-    return (data as List).map((item) {
-      return _graphDataPointFromMap(Map<String, dynamic>.from(item));
-    }).toList();
+    return (data as List).map((item) => _graphDataPointFromMap(Map<String, dynamic>.from(item as Map))).toList();
   }
 
   // ============================================
@@ -280,9 +299,11 @@ class CacheService {
   /// Проверить валидность кеша (не истёк ли TTL)
   bool _isValidCache(String key) {
     final metaJson = _metadataBox.get(key);
-    if (metaJson == null) return false;
+    if (metaJson == null) {
+      return false;
+    }
 
-    final metadata = CacheMetadata.fromJson(Map<String, dynamic>.from(metaJson));
+    final metadata = CacheMetadata.fromJson(Map<String, dynamic>.from(metaJson as Map));
     return !metadata.isExpired;
   }
 
@@ -376,10 +397,13 @@ class CacheService {
         totalHours: m['totalHours'] as int,
         date: DateTime.parse(m['date'] as String),
         hourlyData: (m['hourlyData'] as List?)
-                ?.map((h) => HourlyUsage(
-                      hour: h['hour'] as int,
-                      kwh: (h['kwh'] as num).toDouble(),
-                    ))
+                ?.map((h) {
+                  final hMap = h as Map<String, dynamic>;
+                  return HourlyUsage(
+                    hour: hMap['hour'] as int,
+                    kwh: (hMap['kwh'] as num).toDouble(),
+                  );
+                })
                 .toList() ??
             [],
       );

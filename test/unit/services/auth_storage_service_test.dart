@@ -7,11 +7,10 @@
 /// - Удаление токенов
 library;
 
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
+import 'package:flutter_test/flutter_test.dart';
 import 'package:hvac_control/core/services/auth_storage_service.dart';
+import 'package:mocktail/mocktail.dart';
 
 /// Mock для FlutterSecureStorage
 class MockFlutterSecureStorage extends Mock implements FlutterSecureStorage {}
@@ -150,7 +149,7 @@ void main() {
   group('AuthStorageService.isAccessTokenExpired', () {
     test('возвращает false для валидного токена', () async {
       // Arrange - токен истекает в 2286 году
-      final futureExpiry = DateTime(2286, 1, 1).toIso8601String();
+      final futureExpiry = DateTime(2286).toIso8601String();
       when(() => mockStorage.read(key: 'auth_token_expiry'))
           .thenAnswer((_) async => futureExpiry);
 
@@ -163,7 +162,7 @@ void main() {
 
     test('возвращает true для истёкшего токена', () async {
       // Arrange - токен истёк в 2020 году
-      final pastExpiry = DateTime(2020, 1, 1).toIso8601String();
+      final pastExpiry = DateTime(2020).toIso8601String();
       when(() => mockStorage.read(key: 'auth_token_expiry'))
           .thenAnswer((_) async => pastExpiry);
 

@@ -21,9 +21,9 @@ class TestConfig {
   static const int largeDatasetSize = 1000;
 
   /// Coverage targets
-  static const double targetUnitTestCoverage = 80.0; // %
-  static const double targetWidgetTestCoverage = 70.0; // %
-  static const double targetIntegrationTestCoverage = 60.0; // %
+  static const double targetUnitTestCoverage = 80; // %
+  static const double targetWidgetTestCoverage = 70; // %
+  static const double targetIntegrationTestCoverage = 60; // %
 
   /// Timeout configurations
   static const Duration shortTimeout = Duration(seconds: 5);
@@ -92,36 +92,28 @@ class TestGroups {
 /// Custom test matchers
 class TestMatchers {
   /// Matcher for responsive dimensions
-  static Matcher hasResponsiveDimensions() {
-    return predicate<dynamic>(
+  static Matcher hasResponsiveDimensions() => predicate<dynamic>(
       (widget) => true, // Implementation would check for .w, .h, .sp usage
       'has responsive dimensions',
     );
-  }
 
   /// Matcher for proper const usage
-  static Matcher usesConstConstructors() {
-    return predicate<dynamic>(
+  static Matcher usesConstConstructors() => predicate<dynamic>(
       (widget) => true, // Implementation would check const usage
       'uses const constructors',
     );
-  }
 
   /// Matcher for memory efficiency
-  static Matcher isMemoryEfficient(int maxBytes) {
-    return predicate<dynamic>(
+  static Matcher isMemoryEfficient(int maxBytes) => predicate<dynamic>(
       (object) => true, // Implementation would check memory usage
       'uses less than ${maxBytes ~/ 1024}KB',
     );
-  }
 
   /// Matcher for performance
-  static Matcher completesWithin(Duration duration) {
-    return predicate<Future<dynamic>>(
+  static Matcher completesWithin(Duration duration) => predicate<Future<dynamic>>(
       (future) => true, // Implementation would check completion time
       'completes within ${duration.inMilliseconds}ms',
     );
-  }
 }
 
 /// Test report generator
@@ -135,11 +127,11 @@ class TestReporter {
 
   /// Generate summary report
   static String generateSummary() {
-    final buffer = StringBuffer();
+    final buffer = StringBuffer()
 
-    buffer.writeln('=' * 50);
-    buffer.writeln('TEST EXECUTION SUMMARY');
-    buffer.writeln('=' * 50);
+    ..writeln('=' * 50)
+    ..writeln('TEST EXECUTION SUMMARY')
+    ..writeln('=' * 50);
 
     final totalTests = _results.length;
     final passedTests =
@@ -149,11 +141,11 @@ class TestReporter {
     final skippedTests =
         _results.values.where((r) => r.status == TestStatus.skipped).length;
 
-    buffer.writeln('Total Tests: $totalTests');
-    buffer.writeln('✅ Passed: $passedTests');
-    buffer.writeln('❌ Failed: $failedTests');
-    buffer.writeln('⏭️ Skipped: $skippedTests');
-    buffer.writeln('');
+    buffer..writeln('Total Tests: $totalTests')
+    ..writeln('✅ Passed: $passedTests')
+    ..writeln('❌ Failed: $failedTests')
+    ..writeln('⏭️ Skipped: $skippedTests')
+    ..writeln();
 
     // Performance metrics
     final performanceTests = _results.entries
@@ -169,7 +161,7 @@ class TestReporter {
           '  ${test.key}: ${test.value.executionTime!.inMilliseconds}ms',
         );
       }
-      buffer.writeln('');
+      buffer.writeln();
     }
 
     // Coverage summary
@@ -180,9 +172,9 @@ class TestReporter {
               .reduce((a, b) => a + b) /
           _results.values.where((r) => r.coverage != null).length;
 
-      buffer.writeln('COVERAGE:');
-      buffer.writeln('  Average: ${avgCoverage.toStringAsFixed(1)}%');
-      buffer.writeln('');
+      buffer..writeln('COVERAGE:')
+      ..writeln('  Average: ${avgCoverage.toStringAsFixed(1)}%')
+      ..writeln();
     }
 
     buffer.writeln('=' * 50);
@@ -191,8 +183,7 @@ class TestReporter {
   }
 
   /// Export results to JSON
-  static Map<String, dynamic> exportToJson() {
-    return {
+  static Map<String, dynamic> exportToJson() => {
       'timestamp': DateTime.now().toIso8601String(),
       'results': _results.map((key, value) => MapEntry(key, value.toJson())),
       'summary': {
@@ -205,7 +196,6 @@ class TestReporter {
             _results.values.where((r) => r.status == TestStatus.skipped).length,
       },
     };
-  }
 
   /// Clear results
   static void clear() {
@@ -215,11 +205,6 @@ class TestReporter {
 
 /// Test result model
 class TestResult {
-  final TestStatus status;
-  final Duration? executionTime;
-  final double? coverage;
-  final String? errorMessage;
-  final List<String> tags;
 
   TestResult({
     required this.status,
@@ -228,6 +213,11 @@ class TestResult {
     this.errorMessage,
     this.tags = const [],
   });
+  final TestStatus status;
+  final Duration? executionTime;
+  final double? coverage;
+  final String? errorMessage;
+  final List<String> tags;
 
   Map<String, dynamic> toJson() => {
         'status': status.name,
@@ -251,9 +241,7 @@ class TestProfiler {
   static final Map<String, List<Duration>> _measurements = {};
 
   /// Start profiling
-  static Stopwatch startProfiling() {
-    return Stopwatch()..start();
-  }
+  static Stopwatch startProfiling() => Stopwatch()..start();
 
   /// Record measurement
   static void recordMeasurement(String operation, Stopwatch stopwatch) {

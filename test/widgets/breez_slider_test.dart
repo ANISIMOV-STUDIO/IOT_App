@@ -30,7 +30,7 @@ void main() {
           SizedBox(
             width: 300,
             child: BreezSlider(
-              value: 0.0,
+              value: 0,
               onChanged: (v) => newValue = v,
             ),
           ),
@@ -51,11 +51,10 @@ void main() {
 
       await tester.pumpWidget(
         wrapWithBreezTheme(
-          SizedBox(
+          const SizedBox(
             width: 300,
             child: BreezSlider(
               value: 0.5,
-              onChanged: null,
             ),
           ),
         ),
@@ -72,8 +71,6 @@ void main() {
         wrapWithBreezTheme(
           BreezSlider(
             value: 50,
-            min: 0,
-            max: 100,
             onChanged: (_) {},
           ),
         ),
@@ -104,7 +101,7 @@ void main() {
           BreezSlider(
             value: 0.5,
             onChanged: (_) {},
-            trackHeight: 12.0,
+            trackHeight: 12,
           ),
         ),
       );
@@ -118,7 +115,7 @@ void main() {
           BreezSlider(
             value: 0.5,
             onChanged: (_) {},
-            thumbRadius: 16.0,
+            thumbRadius: 16,
           ),
         ),
       );
@@ -162,9 +159,7 @@ void main() {
         wrapWithBreezTheme(
           BreezLabeledSlider(
             label: 'Speed',
-            value: 75.0,
-            min: 0,
-            max: 100,
+            value: 75,
             onChanged: (_) {},
           ),
         ),
@@ -179,7 +174,7 @@ void main() {
         wrapWithBreezTheme(
           BreezLabeledSlider(
             label: 'Temperature',
-            value: 22.0,
+            value: 22,
             min: 15,
             max: 30,
             onChanged: (_) {},
@@ -216,7 +211,7 @@ void main() {
             width: 300,
             child: BreezLabeledSlider(
               label: 'Test',
-              value: 0.0,
+              value: 0,
               onChanged: (v) => newValue = v,
             ),
           ),
@@ -233,10 +228,9 @@ void main() {
         (WidgetTester tester) async {
       await tester.pumpWidget(
         wrapWithBreezTheme(
-          BreezLabeledSlider(
+          const BreezLabeledSlider(
             label: 'Disabled',
             value: 50,
-            onChanged: null,
           ),
         ),
       );

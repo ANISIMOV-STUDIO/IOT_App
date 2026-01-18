@@ -2,8 +2,8 @@
 library;
 
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
 
 /// Компонент отображения и выбора времени
 ///
@@ -14,6 +14,15 @@ import '../../../core/theme/app_radius.dart';
 /// - Кастомные цвета
 /// - Label (опционально)
 class BreezTimeInput extends StatefulWidget {
+
+  const BreezTimeInput({
+    required this.hour, required this.minute, super.key,
+    this.onTimeChanged,
+    this.label,
+    this.compact = false,
+    this.backgroundColor,
+    this.borderColor,
+  });
   /// Часы (0-23)
   final int hour;
 
@@ -35,17 +44,6 @@ class BreezTimeInput extends StatefulWidget {
   /// Цвет границы
   final Color? borderColor;
 
-  const BreezTimeInput({
-    super.key,
-    required this.hour,
-    required this.minute,
-    this.onTimeChanged,
-    this.label,
-    this.compact = false,
-    this.backgroundColor,
-    this.borderColor,
-  });
-
   @override
   State<BreezTimeInput> createState() => _BreezTimeInputState();
 }
@@ -59,17 +57,17 @@ class _BreezTimeInputState extends State<BreezTimeInput> {
   bool get _isEnabled => widget.onTimeChanged != null;
 
   Future<void> _showTimePicker() async {
-    if (!_isEnabled) return;
+    if (!_isEnabled) {
+      return;
+    }
 
     final time = await showTimePicker(
       context: context,
       initialTime: TimeOfDay(hour: widget.hour, minute: widget.minute),
-      builder: (context, child) {
-        return MediaQuery(
+      builder: (context, child) => MediaQuery(
           data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
           child: child!,
-        );
-      },
+        ),
     );
 
     if (time != null) {
@@ -140,6 +138,12 @@ class _BreezTimeInputState extends State<BreezTimeInput> {
 
 /// Компактный inline time display (без TimePicker)
 class BreezTimeDisplay extends StatelessWidget {
+
+  const BreezTimeDisplay({
+    required this.hour, required this.minute, super.key,
+    this.fontSize,
+    this.color,
+  });
   /// Часы (0-23)
   final int hour;
 
@@ -151,14 +155,6 @@ class BreezTimeDisplay extends StatelessWidget {
 
   /// Цвет текста
   final Color? color;
-
-  const BreezTimeDisplay({
-    super.key,
-    required this.hour,
-    required this.minute,
-    this.fontSize,
-    this.color,
-  });
 
   @override
   Widget build(BuildContext context) {

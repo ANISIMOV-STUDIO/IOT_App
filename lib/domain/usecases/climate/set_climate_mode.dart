@@ -1,29 +1,28 @@
 /// Use Case: Установить режим климата
 library;
 
-import '../../entities/climate.dart';
-import '../../repositories/climate_repository.dart';
-import '../usecase.dart';
+import 'package:hvac_control/domain/entities/climate.dart';
+import 'package:hvac_control/domain/repositories/climate_repository.dart';
+import 'package:hvac_control/domain/usecases/usecase.dart';
 
 /// Параметры для установки режима
 class SetClimateModeParams {
-  final ClimateMode mode;
-  final String? deviceId;
 
   const SetClimateModeParams({
     required this.mode,
     this.deviceId,
   });
+  final ClimateMode mode;
+  final String? deviceId;
 }
 
 /// Установить режим работы климатической системы
 class SetClimateMode extends UseCaseWithParams<ClimateState, SetClimateModeParams> {
-  final ClimateRepository _repository;
 
   SetClimateMode(this._repository);
+  final ClimateRepository _repository;
 
   @override
-  Future<ClimateState> call(SetClimateModeParams params) async {
-    return _repository.setMode(params.mode, deviceId: params.deviceId);
-  }
+  Future<ClimateState> call(SetClimateModeParams params) async =>
+      _repository.setMode(params.mode, deviceId: params.deviceId);
 }

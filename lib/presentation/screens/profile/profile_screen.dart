@@ -4,31 +4,29 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../../core/di/injection_container.dart' as di;
-import '../../../core/navigation/app_router.dart';
-import '../../../core/services/language_service.dart';
-import '../../../core/services/theme_service.dart';
-import '../../../core/theme/app_font_sizes.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/theme/spacing.dart';
-import '../../../core/utils/snackbar_utils.dart';
-import '../../../generated/l10n/app_localizations.dart';
-import '../../bloc/auth/auth_bloc.dart';
-import '../../bloc/auth/auth_event.dart';
-import '../../bloc/auth/auth_state.dart';
-import '../../widgets/breez/breez.dart';
-import 'profile_dialogs.dart';
+import 'package:hvac_control/core/di/injection_container.dart' as di;
+import 'package:hvac_control/core/navigation/app_router.dart';
+import 'package:hvac_control/core/services/language_service.dart';
+import 'package:hvac_control/core/services/theme_service.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/core/utils/snackbar_utils.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
+import 'package:hvac_control/presentation/bloc/auth/auth_bloc.dart';
+import 'package:hvac_control/presentation/bloc/auth/auth_event.dart';
+import 'package:hvac_control/presentation/bloc/auth/auth_state.dart';
+import 'package:hvac_control/presentation/screens/profile/profile_dialogs.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez.dart';
 
 // =============================================================================
 // CONSTANTS
 // =============================================================================
 
 abstract class _ProfileScreenConstants {
-  static const double avatarSize = 56.0;
-  static const double initialsFontSize = 20.0;
-  static const double iconSize = 20.0;
-  static const double buttonPaddingVertical = 14.0;
+  static const double avatarSize = 56;
+  static const double initialsFontSize = 20;
+  static const double iconSize = 20;
+  static const double buttonPaddingVertical = 14;
 }
 
 /// Profile screen with user info and settings
@@ -150,7 +148,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     String currentFirstName,
     String currentLastName,
   ) {
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (dialogContext) => EditProfileDialog(
         firstName: currentFirstName,
@@ -167,7 +165,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _showChangePasswordDialog(BuildContext context) {
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (dialogContext) => ChangePasswordDialog(
         onSave: (currentPassword, newPassword) {
@@ -184,11 +182,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
 /// User info card - горизонтальный layout с аватаром и действиями
 class _UserCard extends StatelessWidget {
-  final String firstName;
-  final String lastName;
-  final String email;
-  final VoidCallback onEditProfile;
-  final VoidCallback onChangePassword;
 
   const _UserCard({
     required this.firstName,
@@ -197,6 +190,11 @@ class _UserCard extends StatelessWidget {
     required this.onEditProfile,
     required this.onChangePassword,
   });
+  final String firstName;
+  final String lastName;
+  final String email;
+  final VoidCallback onEditProfile;
+  final VoidCallback onChangePassword;
 
   @override
   Widget build(BuildContext context) {
@@ -315,12 +313,6 @@ class _ServiceCard extends StatelessWidget {
 
 /// Notifications settings card
 class _NotificationsCard extends StatelessWidget {
-  final bool pushNotifications;
-  final bool emailNotifications;
-  final bool alarmNotifications;
-  final ValueChanged<bool> onPushChanged;
-  final ValueChanged<bool> onEmailChanged;
-  final ValueChanged<bool> onAlarmChanged;
 
   const _NotificationsCard({
     required this.pushNotifications,
@@ -330,6 +322,12 @@ class _NotificationsCard extends StatelessWidget {
     required this.onEmailChanged,
     required this.onAlarmChanged,
   });
+  final bool pushNotifications;
+  final bool emailNotifications;
+  final bool alarmNotifications;
+  final ValueChanged<bool> onPushChanged;
+  final ValueChanged<bool> onEmailChanged;
+  final ValueChanged<bool> onAlarmChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -369,13 +367,13 @@ class _NotificationsCard extends StatelessWidget {
 
 /// App settings card (theme, language)
 class _SettingsCard extends StatelessWidget {
-  final ThemeService themeService;
-  final LanguageService languageService;
 
   const _SettingsCard({
     required this.themeService,
     required this.languageService,
   });
+  final ThemeService themeService;
+  final LanguageService languageService;
 
   @override
   Widget build(BuildContext context) {

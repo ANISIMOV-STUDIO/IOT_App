@@ -6,19 +6,15 @@ library;
 
 import 'package:fixnum/fixnum.dart';
 import 'package:grpc/grpc.dart';
-
-import '../../../domain/entities/graph_data.dart' as domain;
-import '../../../domain/entities/sensor_history.dart';
-import '../../../generated/protos/protos.dart' as proto;
-import '../../../generated/protos/climate.pb.dart' as proto_climate;
-import '../../../generated/protos/google/protobuf/timestamp.pb.dart' as ts;
-import '../../api/grpc/grpc_interceptor.dart';
-import 'analytics_data_source.dart';
+import 'package:hvac_control/data/api/grpc/grpc_interceptor.dart';
+import 'package:hvac_control/data/datasources/analytics/analytics_data_source.dart';
+import 'package:hvac_control/domain/entities/graph_data.dart' as domain;
+import 'package:hvac_control/domain/entities/sensor_history.dart';
+import 'package:hvac_control/generated/protos/climate.pb.dart' as proto_climate;
+import 'package:hvac_control/generated/protos/google/protobuf/timestamp.pb.dart' as ts;
+import 'package:hvac_control/generated/protos/protos.dart' as proto;
 
 class AnalyticsGrpcDataSource implements AnalyticsDataSource {
-  final ClientChannel _channel;
-  final Future<String?> Function() _getToken;
-  late final proto.AnalyticsServiceClient _client;
 
   AnalyticsGrpcDataSource(this._channel, this._getToken) {
     _client = proto.AnalyticsServiceClient(
@@ -26,6 +22,9 @@ class AnalyticsGrpcDataSource implements AnalyticsDataSource {
       interceptors: [AuthGrpcInterceptor(_getToken)],
     );
   }
+  final ClientChannel _channel;
+  final Future<String?> Function() _getToken;
+  late final proto.AnalyticsServiceClient _client;
 
   @override
   Future<List<domain.GraphDataPoint>> getGraphData({
@@ -79,12 +78,10 @@ class AnalyticsGrpcDataSource implements AnalyticsDataSource {
 
     final response = await _client.getEnergyHistory(request);
 
-    return response.dataPoints.map((point) {
-      return EnergyHistoryEntryDto(
+    return response.dataPoints.map((point) => EnergyHistoryEntryDto(
         timestamp: _fromTimestamp(point.timestamp),
         kwh: point.consumption,
-      );
-    }).toList();
+      )).toList();
   }
 
   @override
@@ -95,8 +92,12 @@ class AnalyticsGrpcDataSource implements AnalyticsDataSource {
     int limit = 1000,
   }) async {
     final request = proto_climate.ClimateHistoryRequest()..deviceId = deviceId;
-    if (from != null) request.from = _toTimestamp(from);
-    if (to != null) request.to = _toTimestamp(to);
+    if (from != null) {
+      request.from = _toTimestamp(from);
+    }
+    if (to != null) {
+      request.to = _toTimestamp(to);
+    }
 
     final response = await _client.getClimateHistory(request);
 
@@ -116,17 +117,13 @@ class AnalyticsGrpcDataSource implements AnalyticsDataSource {
   // ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ
   // ============================================
 
-  ts.Timestamp _toTimestamp(DateTime dt) {
-    return ts.Timestamp()
+  ts.Timestamp _toTimestamp(DateTime dt) => ts.Timestamp()
       ..seconds = Int64(dt.millisecondsSinceEpoch ~/ 1000)
       ..nanos = (dt.millisecondsSinceEpoch % 1000) * 1000000;
-  }
 
-  DateTime _fromTimestamp(ts.Timestamp timestamp) {
-    return DateTime.fromMillisecondsSinceEpoch(
+  DateTime _fromTimestamp(ts.Timestamp timestamp) => DateTime.fromMillisecondsSinceEpoch(
       timestamp.seconds.toInt() * 1000 + timestamp.nanos ~/ 1000000,
     );
-  }
 
   proto.GraphMetric _stringToGraphMetric(String metric) {
     switch (metric.toLowerCase()) {

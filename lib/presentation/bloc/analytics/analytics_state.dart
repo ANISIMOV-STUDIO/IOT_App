@@ -17,6 +17,16 @@ enum AnalyticsStatus {
 
 /// Состояние аналитики
 final class AnalyticsState extends Equatable {
+
+  const AnalyticsState({
+    this.status = AnalyticsStatus.initial,
+    this.energyStats,
+    this.powerUsage = const [],
+    this.graphData = const [],
+    this.selectedMetric = GraphMetric.temperature,
+    this.currentDeviceId,
+    this.errorMessage,
+  });
   /// Статус загрузки
   final AnalyticsStatus status;
 
@@ -37,16 +47,6 @@ final class AnalyticsState extends Equatable {
 
   /// Сообщение об ошибке
   final String? errorMessage;
-
-  const AnalyticsState({
-    this.status = AnalyticsStatus.initial,
-    this.energyStats,
-    this.powerUsage = const [],
-    this.graphData = const [],
-    this.selectedMetric = GraphMetric.temperature,
-    this.currentDeviceId,
-    this.errorMessage,
-  });
 
   // ============================================
   // ГЕТТЕРЫ ДЛЯ УДОБСТВА
@@ -72,8 +72,7 @@ final class AnalyticsState extends Equatable {
     GraphMetric? selectedMetric,
     String? currentDeviceId,
     String? errorMessage,
-  }) {
-    return AnalyticsState(
+  }) => AnalyticsState(
       status: status ?? this.status,
       energyStats: energyStats ?? this.energyStats,
       powerUsage: powerUsage ?? this.powerUsage,
@@ -82,7 +81,6 @@ final class AnalyticsState extends Equatable {
       currentDeviceId: currentDeviceId ?? this.currentDeviceId,
       errorMessage: errorMessage,
     );
-  }
 
   @override
   List<Object?> get props => [

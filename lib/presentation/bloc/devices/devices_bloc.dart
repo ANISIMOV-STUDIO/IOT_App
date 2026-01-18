@@ -8,28 +8,18 @@
 library;
 
 import 'dart:async';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:equatable/equatable.dart';
 
-import '../../../core/error/api_exception.dart';
-import '../../../domain/entities/hvac_device.dart';
-import '../../../domain/usecases/usecases.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hvac_control/core/error/api_exception.dart';
+import 'package:hvac_control/domain/entities/hvac_device.dart';
+import 'package:hvac_control/domain/usecases/usecases.dart';
 
 part 'devices_event.dart';
 part 'devices_state.dart';
 
 /// BLoC для управления списком HVAC устройств
 class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
-  final GetAllHvacDevices _getAllHvacDevices;
-  final WatchHvacDevices _watchHvacDevices;
-  final RegisterDevice _registerDevice;
-  final DeleteDevice _deleteDevice;
-  final RenameDevice _renameDevice;
-  final SetDevicePower _setDevicePower;
-  final SetDeviceTime _setDeviceTime;
-  final void Function(String) _setSelectedDevice;
-
-  StreamSubscription<List<HvacDevice>>? _devicesSubscription;
 
   DevicesBloc({
     required GetAllHvacDevices getAllHvacDevices,
@@ -65,6 +55,16 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
     on<DevicesMasterPowerOffRequested>(_onMasterPowerOffRequested);
     on<DevicesTimeSetRequested>(_onTimeSetRequested);
   }
+  final GetAllHvacDevices _getAllHvacDevices;
+  final WatchHvacDevices _watchHvacDevices;
+  final RegisterDevice _registerDevice;
+  final DeleteDevice _deleteDevice;
+  final RenameDevice _renameDevice;
+  final SetDevicePower _setDevicePower;
+  final SetDeviceTime _setDeviceTime;
+  final void Function(String) _setSelectedDevice;
+
+  StreamSubscription<List<HvacDevice>>? _devicesSubscription;
 
   /// Запрос на подписку к списку устройств
   Future<void> _onSubscriptionRequested(
@@ -127,7 +127,7 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
     DevicesRegistrationRequested event,
     Emitter<DevicesState> emit,
   ) async {
-    emit(state.copyWith(isRegistering: true, registrationError: null));
+    emit(state.copyWith(isRegistering: true));
 
     try {
       final device = await _registerDevice(RegisterDeviceParams(
@@ -161,7 +161,7 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
     DevicesRegistrationErrorCleared event,
     Emitter<DevicesState> emit,
   ) {
-    emit(state.copyWith(registrationError: null));
+    emit(state.copyWith());
   }
 
   /// Очистка ошибки операции
@@ -169,7 +169,7 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
     DevicesOperationErrorCleared event,
     Emitter<DevicesState> emit,
   ) {
-    emit(state.copyWith(operationError: null));
+    emit(state.copyWith());
   }
 
   /// Удаление устройства
@@ -186,7 +186,7 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
           .toList();
 
       // Выбираем другое устройство если удалено текущее
-      String? newSelectedId = state.selectedDeviceId;
+      var newSelectedId = state.selectedDeviceId;
       if (state.selectedDeviceId == event.deviceId) {
         newSelectedId = updatedDevices.isNotEmpty ? updatedDevices.first.id : null;
         if (newSelectedId != null) {

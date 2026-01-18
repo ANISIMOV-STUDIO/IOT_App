@@ -1,21 +1,21 @@
 /// Use Case: Повторная отправка кода подтверждения
 library;
 
-import '../usecase.dart';
-import 'login.dart';
+import 'package:hvac_control/domain/usecases/auth/login.dart';
+import 'package:hvac_control/domain/usecases/usecase.dart';
 
 /// Параметры для повторной отправки кода
 class ResendCodeParams {
-  final String email;
 
   const ResendCodeParams({required this.email});
+  final String email;
 }
 
 /// Повторно отправить код подтверждения email
 class ResendCode extends UseCaseWithParams<void, ResendCodeParams> {
-  final AuthRepository _repository;
 
   ResendCode(this._repository);
+  final AuthRepository _repository;
 
   @override
   Future<void> call(ResendCodeParams params) async {

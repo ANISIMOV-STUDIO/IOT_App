@@ -2,6 +2,12 @@ part of 'connectivity_bloc.dart';
 
 /// Состояние сетевого соединения
 final class ConnectivityState extends Equatable {
+
+  const ConnectivityState({
+    this.status = NetworkStatus.unknown,
+    this.isOffline = false,
+    this.isServerUnavailable = false,
+  });
   /// Текущий статус сети
   final NetworkStatus status;
 
@@ -10,12 +16,6 @@ final class ConnectivityState extends Equatable {
 
   /// Сервер недоступен
   final bool isServerUnavailable;
-
-  const ConnectivityState({
-    this.status = NetworkStatus.unknown,
-    this.isOffline = false,
-    this.isServerUnavailable = false,
-  });
 
   /// Показывать ли баннер о проблемах с соединением
   bool get showBanner => isOffline || isServerUnavailable;

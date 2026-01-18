@@ -166,7 +166,7 @@ const Alert$json = {
       '4': 1,
       '5': 14,
       '6': '.breez.AlertType',
-      '10': 'type'
+      '10': 'type',
     },
     {'1': 'message', '3': 2, '4': 1, '5': 9, '10': 'message'},
     {
@@ -175,7 +175,7 @@ const Alert$json = {
       '4': 1,
       '5': 11,
       '6': '.google.protobuf.Timestamp',
-      '10': 'timestamp'
+      '10': 'timestamp',
     },
   ],
 };

@@ -4,18 +4,18 @@
 /// Делегирует вызовы к AnalyticsHttpClient.
 library;
 
-import '../../../core/logging/api_logger.dart';
-import '../../../domain/entities/graph_data.dart';
-import '../../../domain/entities/sensor_history.dart';
-import '../../api/http/clients/analytics_http_client.dart';
-import '../../api/platform/api_client.dart';
-import 'analytics_data_source.dart';
+import 'package:hvac_control/core/logging/api_logger.dart';
+import 'package:hvac_control/data/api/http/clients/analytics_http_client.dart';
+import 'package:hvac_control/data/api/platform/api_client.dart';
+import 'package:hvac_control/data/datasources/analytics/analytics_data_source.dart';
+import 'package:hvac_control/domain/entities/graph_data.dart';
+import 'package:hvac_control/domain/entities/sensor_history.dart';
 
 class AnalyticsHttpDataSource implements AnalyticsDataSource {
-  final AnalyticsHttpClient _httpClient;
 
   AnalyticsHttpDataSource(ApiClient apiClient)
       : _httpClient = AnalyticsHttpClient(apiClient);
+  final AnalyticsHttpClient _httpClient;
 
   @override
   Future<List<GraphDataPoint>> getGraphData({
@@ -70,9 +70,13 @@ class AnalyticsHttpDataSource implements AnalyticsDataSource {
         if (entry is Map<String, dynamic>) {
           // Безопасный парсинг timestamp
           final timestampStr = entry['timestamp'];
-          if (timestampStr is! String) continue;
+          if (timestampStr is! String) {
+            continue;
+          }
           final timestamp = DateTime.tryParse(timestampStr);
-          if (timestamp == null) continue;
+          if (timestamp == null) {
+            continue;
+          }
 
           entries.add(EnergyHistoryEntryDto(
             timestamp: timestamp,
@@ -91,17 +95,17 @@ class AnalyticsHttpDataSource implements AnalyticsDataSource {
     DateTime? from,
     DateTime? to,
     int limit = 1000,
-  }) async {
-    return await _httpClient.getSensorHistory(
+  }) async => _httpClient.getSensorHistory(
       deviceId,
       from: from,
       to: to,
       limit: limit,
     );
-  }
 
   String _formatLabel(String rawLabel) {
-    if (rawLabel.isEmpty) return '';
+    if (rawLabel.isEmpty) {
+      return '';
+    }
     try {
       final dateTime = DateTime.parse(rawLabel);
       return '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';

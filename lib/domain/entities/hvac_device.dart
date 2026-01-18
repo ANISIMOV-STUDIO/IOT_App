@@ -23,12 +23,6 @@ enum HvacDeviceType {
 
 /// HVAC устройство для отображения в переключателе
 class HvacDevice extends Equatable {
-  final String id;
-  final String name;
-  final String brand;
-  final HvacDeviceType deviceType;
-  final bool isOnline;
-  final bool isActive;
 
   const HvacDevice({
     required this.id,
@@ -38,6 +32,12 @@ class HvacDevice extends Equatable {
     this.isOnline = true,
     this.isActive = false,
   });
+  final String id;
+  final String name;
+  final String brand;
+  final HvacDeviceType deviceType;
+  final bool isOnline;
+  final bool isActive;
 
   HvacDevice copyWith({
     String? id,
@@ -46,8 +46,7 @@ class HvacDevice extends Equatable {
     HvacDeviceType? deviceType,
     bool? isOnline,
     bool? isActive,
-  }) {
-    return HvacDevice(
+  }) => HvacDevice(
       id: id ?? this.id,
       name: name ?? this.name,
       brand: brand ?? this.brand,
@@ -55,7 +54,6 @@ class HvacDevice extends Equatable {
       isOnline: isOnline ?? this.isOnline,
       isActive: isActive ?? this.isActive,
     );
-  }
 
   @override
   List<Object?> get props => [id, name, brand, deviceType, isOnline, isActive];

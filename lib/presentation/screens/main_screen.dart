@@ -3,25 +3,23 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../generated/l10n/app_localizations.dart';
-import '../bloc/devices/devices_bloc.dart';
-import '../bloc/climate/climate_bloc.dart';
-import '../bloc/notifications/notifications_bloc.dart';
-import '../bloc/analytics/analytics_bloc.dart';
-import '../bloc/connectivity/connectivity_bloc.dart';
-
-import '../widgets/breez/navigation_bar.dart';
-import 'dashboard/dashboard_screen.dart';
-import 'analytics/analytics_screen.dart';
-import 'devices/devices_screen.dart';
-import 'profile/profile_screen.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
+import 'package:hvac_control/presentation/bloc/analytics/analytics_bloc.dart';
+import 'package:hvac_control/presentation/bloc/climate/climate_bloc.dart';
+import 'package:hvac_control/presentation/bloc/connectivity/connectivity_bloc.dart';
+import 'package:hvac_control/presentation/bloc/devices/devices_bloc.dart';
+import 'package:hvac_control/presentation/bloc/notifications/notifications_bloc.dart';
+import 'package:hvac_control/presentation/screens/analytics/analytics_screen.dart';
+import 'package:hvac_control/presentation/screens/dashboard/dashboard_screen.dart';
+import 'package:hvac_control/presentation/screens/devices/devices_screen.dart';
+import 'package:hvac_control/presentation/screens/profile/profile_screen.dart';
+import 'package:hvac_control/presentation/widgets/breez/navigation_bar.dart';
 
 /// Main screen with bottom navigation
 class MainScreen extends StatefulWidget {
-  final int? initialTab;
 
   const MainScreen({super.key, this.initialTab});
+  final int? initialTab;
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -84,39 +82,38 @@ class _MainScreenState extends State<MainScreen> {
   ];
 
   @override
-  Widget build(BuildContext context) {
-    // BlocListener для синхронизации DevicesBloc → ClimateBloc
-    // Когда выбрано устройство, обновляем ClimateBloc
-    return BlocListener<DevicesBloc, DevicesState>(
-      listenWhen: (previous, current) =>
-          previous.selectedDeviceId != current.selectedDeviceId,
-      listener: (context, state) {
-        if (state.selectedDeviceId != null) {
-          context.read<ClimateBloc>().add(
-                ClimateDeviceChanged(state.selectedDeviceId!),
+  Widget build(BuildContext context) =>
+      // BlocListener для синхронизации DevicesBloc → ClimateBloc
+      // Когда выбрано устройство, обновляем ClimateBloc
+      BlocListener<DevicesBloc, DevicesState>(
+        listenWhen: (previous, current) =>
+            previous.selectedDeviceId != current.selectedDeviceId,
+        listener: (context, state) {
+          if (state.selectedDeviceId != null) {
+            context.read<ClimateBloc>().add(
+                  ClimateDeviceChanged(state.selectedDeviceId!),
+                );
+          }
+        },
+        child: Scaffold(
+          body: IndexedStack(
+            index: _currentIndex,
+            children: _screens,
+          ),
+          bottomNavigationBar: Builder(
+            builder: (context) {
+              final l10n = AppLocalizations.of(context)!;
+              return BreezNavigationBar(
+                items: _getNavigationItems(l10n),
+                selectedIndex: _currentIndex,
+                onItemSelected: (index) {
+                  setState(() {
+                    _currentIndex = index;
+                  });
+                },
               );
-        }
-      },
-      child: Scaffold(
-        body: IndexedStack(
-          index: _currentIndex,
-          children: _screens,
+            },
+          ),
         ),
-        bottomNavigationBar: Builder(
-          builder: (context) {
-            final l10n = AppLocalizations.of(context)!;
-            return BreezNavigationBar(
-              items: _getNavigationItems(l10n),
-              selectedIndex: _currentIndex,
-              onItemSelected: (index) {
-                setState(() {
-                  _currentIndex = index;
-                });
-              },
-            );
-          },
-        ),
-      ),
-    );
-  }
+      );
 }

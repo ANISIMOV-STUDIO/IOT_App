@@ -20,6 +20,19 @@ enum DevicesStatus {
 
 /// Состояние списка HVAC устройств
 final class DevicesState extends Equatable {
+
+  const DevicesState({
+    this.status = DevicesStatus.initial,
+    this.devices = const [],
+    this.selectedDeviceId,
+    this.errorMessage,
+    this.isRegistering = false,
+    this.registrationError,
+    this.operationError,
+    this.isMasterPowerOffInProgress = false,
+    this.masterPowerOffSuccess = false,
+    this.masterPowerOffError,
+  });
   /// Статус загрузки
   final DevicesStatus status;
 
@@ -50,22 +63,11 @@ final class DevicesState extends Equatable {
   /// Ошибка выключения всех устройств
   final String? masterPowerOffError;
 
-  const DevicesState({
-    this.status = DevicesStatus.initial,
-    this.devices = const [],
-    this.selectedDeviceId,
-    this.errorMessage,
-    this.isRegistering = false,
-    this.registrationError,
-    this.operationError,
-    this.isMasterPowerOffInProgress = false,
-    this.masterPowerOffSuccess = false,
-    this.masterPowerOffError,
-  });
-
   /// Получить выбранное устройство
   HvacDevice? get selectedDevice {
-    if (selectedDeviceId == null || devices.isEmpty) return null;
+    if (selectedDeviceId == null || devices.isEmpty) {
+      return null;
+    }
     return devices.firstWhere(
       (d) => d.id == selectedDeviceId,
       orElse: () => devices.first,
@@ -92,23 +94,22 @@ final class DevicesState extends Equatable {
     bool? isMasterPowerOffInProgress,
     bool? masterPowerOffSuccess,
     String? masterPowerOffError,
-  }) {
-    return DevicesState(
-      status: status ?? this.status,
-      devices: devices ?? this.devices,
-      selectedDeviceId: selectedDeviceId == _sentinel
-          ? this.selectedDeviceId
-          : selectedDeviceId as String?,
-      errorMessage: errorMessage,
-      isRegistering: isRegistering ?? this.isRegistering,
-      registrationError: registrationError,
-      operationError: operationError,
-      isMasterPowerOffInProgress:
-          isMasterPowerOffInProgress ?? this.isMasterPowerOffInProgress,
-      masterPowerOffSuccess: masterPowerOffSuccess ?? false,
-      masterPowerOffError: masterPowerOffError,
-    );
-  }
+  }) =>
+      DevicesState(
+        status: status ?? this.status,
+        devices: devices ?? this.devices,
+        selectedDeviceId: selectedDeviceId == _sentinel
+            ? this.selectedDeviceId
+            : selectedDeviceId as String?,
+        errorMessage: errorMessage,
+        isRegistering: isRegistering ?? this.isRegistering,
+        registrationError: registrationError,
+        operationError: operationError,
+        isMasterPowerOffInProgress:
+            isMasterPowerOffInProgress ?? this.isMasterPowerOffInProgress,
+        masterPowerOffSuccess: masterPowerOffSuccess ?? false,
+        masterPowerOffError: masterPowerOffError,
+      );
 
   @override
   List<Object?> get props => [

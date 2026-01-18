@@ -12,7 +12,6 @@ import 'package:flutter/foundation.dart';
 /// Каждое событие в стриме вызывает notifyListeners(),
 /// что заставляет GoRouter перепроверить redirect
 class RouterRefreshStream extends ChangeNotifier {
-  late final StreamSubscription<dynamic> _subscription;
 
   RouterRefreshStream(Stream<dynamic> stream) {
     // Сразу уведомляем при инициализации
@@ -23,6 +22,7 @@ class RouterRefreshStream extends ChangeNotifier {
       (_) => notifyListeners(),
     );
   }
+  late final StreamSubscription<dynamic> _subscription;
 
   @override
   void dispose() {

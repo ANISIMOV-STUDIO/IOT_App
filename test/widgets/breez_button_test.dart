@@ -23,7 +23,7 @@ void main() {
     });
 
     testWidgets('calls onTap when pressed', (WidgetTester tester) async {
-      bool tapped = false;
+      var tapped = false;
 
       await tester.pumpWidget(
         wrapWithBreezTheme(
@@ -42,13 +42,12 @@ void main() {
 
     testWidgets('does not call onTap when disabled (onTap is null)',
         (WidgetTester tester) async {
-      bool tapped = false;
+      const tapped = false;
 
       await tester.pumpWidget(
         wrapWithBreezTheme(
-          BreezButton(
-            onTap: null,
-            child: const Text('Disabled'),
+          const BreezButton(
+            child: Text('Disabled'),
           ),
         ),
       );
@@ -76,7 +75,7 @@ void main() {
     });
 
     testWidgets('does not call onTap when loading', (WidgetTester tester) async {
-      bool tapped = false;
+      var tapped = false;
 
       await tester.pumpWidget(
         wrapWithBreezTheme(

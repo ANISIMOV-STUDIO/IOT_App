@@ -2,7 +2,7 @@
 library;
 
 import 'package:equatable/equatable.dart';
-import '../../../domain/entities/user.dart';
+import 'package:hvac_control/domain/entities/user.dart';
 
 /// Базовое состояние аутентификации
 sealed class AuthState extends Equatable {
@@ -29,15 +29,15 @@ class AuthUnauthenticated extends AuthState {
 
 /// Пользователь авторизован
 class AuthAuthenticated extends AuthState {
-  final User user;
-  final String accessToken;
-  final String refreshToken;
 
   const AuthAuthenticated({
     required this.user,
     required this.accessToken,
     required this.refreshToken,
   });
+  final User user;
+  final String accessToken;
+  final String refreshToken;
 
   /// Для обратной совместимости
   String get token => accessToken;
@@ -48,9 +48,9 @@ class AuthAuthenticated extends AuthState {
 
 /// Ошибка аутентификации
 class AuthError extends AuthState {
-  final String message;
 
   const AuthError(this.message);
+  final String message;
 
   @override
   List<Object?> get props => [message];
@@ -58,13 +58,13 @@ class AuthError extends AuthState {
 
 /// Регистрация успешна, требуется подтверждение email
 class AuthRegistered extends AuthState {
-  final String email;
-  final String password;
 
   const AuthRegistered({
     required this.email,
     required this.password,
   });
+  final String email;
+  final String password;
 
   @override
   List<Object?> get props => [email, password];
@@ -82,9 +82,9 @@ class AuthCodeResent extends AuthState {
 
 /// Код сброса пароля отправлен на email
 class AuthPasswordResetCodeSent extends AuthState {
-  final String email;
 
   const AuthPasswordResetCodeSent({required this.email});
+  final String email;
 
   @override
   List<Object?> get props => [email];
@@ -102,9 +102,9 @@ class AuthPasswordChanged extends AuthState {
 
 /// Профиль успешно обновлён
 class AuthProfileUpdated extends AuthState {
-  final User user;
 
   const AuthProfileUpdated({required this.user});
+  final User user;
 
   @override
   List<Object?> get props => [user];

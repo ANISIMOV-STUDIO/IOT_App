@@ -15,9 +15,9 @@ sealed class ScheduleEvent extends Equatable {
 
 /// Устройство изменено - загружаем расписание для нового устройства
 final class ScheduleDeviceChanged extends ScheduleEvent {
-  final String deviceId;
 
   const ScheduleDeviceChanged(this.deviceId);
+  final String deviceId;
 
   @override
   List<Object?> get props => [deviceId];
@@ -25,9 +25,9 @@ final class ScheduleDeviceChanged extends ScheduleEvent {
 
 /// Список записей обновлён (из стрима)
 final class ScheduleEntriesUpdated extends ScheduleEvent {
-  final List<ScheduleEntry> entries;
 
   const ScheduleEntriesUpdated(this.entries);
+  final List<ScheduleEntry> entries;
 
   @override
   List<Object?> get props => [entries];
@@ -35,9 +35,9 @@ final class ScheduleEntriesUpdated extends ScheduleEvent {
 
 /// Запрошено добавление записи расписания
 final class ScheduleEntryAdded extends ScheduleEvent {
-  final ScheduleEntry entry;
 
   const ScheduleEntryAdded(this.entry);
+  final ScheduleEntry entry;
 
   @override
   List<Object?> get props => [entry];
@@ -45,9 +45,9 @@ final class ScheduleEntryAdded extends ScheduleEvent {
 
 /// Запрошено обновление записи расписания
 final class ScheduleEntryUpdated extends ScheduleEvent {
-  final ScheduleEntry entry;
 
   const ScheduleEntryUpdated(this.entry);
+  final ScheduleEntry entry;
 
   @override
   List<Object?> get props => [entry];
@@ -55,9 +55,9 @@ final class ScheduleEntryUpdated extends ScheduleEvent {
 
 /// Запрошено удаление записи расписания
 final class ScheduleEntryDeleted extends ScheduleEvent {
-  final String entryId;
 
   const ScheduleEntryDeleted(this.entryId);
+  final String entryId;
 
   @override
   List<Object?> get props => [entryId];
@@ -65,13 +65,13 @@ final class ScheduleEntryDeleted extends ScheduleEvent {
 
 /// Запрошено переключение активности записи
 final class ScheduleEntryToggled extends ScheduleEvent {
-  final String entryId;
-  final bool isActive;
 
   const ScheduleEntryToggled({
     required this.entryId,
     required this.isActive,
   });
+  final String entryId;
+  final bool isActive;
 
   @override
   List<Object?> get props => [entryId, isActive];

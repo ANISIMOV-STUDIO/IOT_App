@@ -3,16 +3,14 @@ library;
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/services/auth_storage_service.dart';
-import '../../../data/models/auth_models.dart';
-import '../../../data/services/auth_service.dart';
-import 'auth_event.dart';
-import 'auth_state.dart';
+import 'package:hvac_control/core/services/auth_storage_service.dart';
+import 'package:hvac_control/data/models/auth_models.dart';
+import 'package:hvac_control/data/services/auth_service.dart';
+import 'package:hvac_control/presentation/bloc/auth/auth_event.dart';
+import 'package:hvac_control/presentation/bloc/auth/auth_state.dart';
 
 /// BLoC для управления состоянием аутентификации
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final AuthService _authService;
-  final AuthStorageService _storageService;
 
   AuthBloc({
     required AuthService authService,
@@ -32,6 +30,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthChangePasswordRequested>(_onChangePasswordRequested);
     on<AuthUpdateProfileRequested>(_onUpdateProfileRequested);
   }
+  final AuthService _authService;
+  final AuthStorageService _storageService;
 
   /// Проверка сохраненной сессии
   Future<void> _onCheckRequested(

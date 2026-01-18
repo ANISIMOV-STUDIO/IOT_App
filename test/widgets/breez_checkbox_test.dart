@@ -98,7 +98,7 @@ void main() {
 
       await tester.pumpWidget(
         wrapWithBreezTheme(
-          BreezCheckbox(
+          const BreezCheckbox(
             value: false,
             onChanged: null,
             label: 'Disabled',

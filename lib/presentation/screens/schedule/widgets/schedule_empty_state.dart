@@ -3,17 +3,16 @@ library;
 
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_theme.dart';
-import '../../../../core/theme/app_radius.dart';
-import '../../../../core/theme/spacing.dart';
-import '../../../../generated/l10n/app_localizations.dart';
-import '../../../widgets/breez/breez_button.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
 
 /// Пустое состояние - нет записей расписания
 class ScheduleEmptyState extends StatelessWidget {
-  final VoidCallback onAdd;
 
-  const ScheduleEmptyState({super.key, required this.onAdd});
+  const ScheduleEmptyState({required this.onAdd, super.key});
+  final VoidCallback onAdd;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +48,6 @@ class ScheduleEmptyState extends StatelessWidget {
             onTap: onAdd,
             backgroundColor: AppColors.accent,
             hoverColor: AppColors.accentLight,
-            borderRadius: AppRadius.button,
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
             enableGlow: true,
             semanticLabel: l10n.scheduleAdd,

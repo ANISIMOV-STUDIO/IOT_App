@@ -4,7 +4,7 @@
 
 // @dart = 3.3
 
-// ignore_for_file: annotate_overrides, camel_case_types, comment_references
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references, prefer_constructors_over_static_methods, do_not_use_environment
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: curly_braces_in_flow_control_structures
 // ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
@@ -12,11 +12,10 @@
 
 import 'dart:core' as $core;
 
-import 'package:protobuf/protobuf.dart' as $pb;
-import 'google/protobuf/timestamp.pb.dart'
+import 'package:hvac_control/generated/protos/common.pbenum.dart' as $1;
+import 'package:hvac_control/generated/protos/google/protobuf/timestamp.pb.dart'
     as $0;
-
-import 'common.pbenum.dart' as $1;
+import 'package:protobuf/protobuf.dart' as $pb;
 
 export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
 
@@ -33,38 +32,54 @@ class Notification extends $pb.GeneratedMessage {
     $core.String? actionUrl,
   }) {
     final result = create();
-    if (id != null) result.id = id;
-    if (deviceId != null) result.deviceId = deviceId;
-    if (type != null) result.type = type;
-    if (title != null) result.title = title;
-    if (message != null) result.message = message;
-    if (timestamp != null) result.timestamp = timestamp;
-    if (isRead != null) result.isRead = isRead;
-    if (actionUrl != null) result.actionUrl = actionUrl;
+    if (id != null) {
+      result.id = id;
+    }
+    if (deviceId != null) {
+      result.deviceId = deviceId;
+    }
+    if (type != null) {
+      result.type = type;
+    }
+    if (title != null) {
+      result.title = title;
+    }
+    if (message != null) {
+      result.message = message;
+    }
+    if (timestamp != null) {
+      result.timestamp = timestamp;
+    }
+    if (isRead != null) {
+      result.isRead = isRead;
+    }
+    if (actionUrl != null) {
+      result.actionUrl = actionUrl;
+    }
     return result;
   }
 
   Notification._();
 
   factory Notification.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory Notification.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'Notification',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'deviceId')
     ..aE<$1.NotificationType>(3, _omitFieldNames ? '' : 'type',
-        enumValues: $1.NotificationType.values)
+        enumValues: $1.NotificationType.values,)
     ..aOS(4, _omitFieldNames ? '' : 'title')
     ..aOS(5, _omitFieldNames ? '' : 'message')
     ..aOM<$0.Timestamp>(6, _omitFieldNames ? '' : 'timestamp',
-        subBuilder: $0.Timestamp.create)
+        subBuilder: $0.Timestamp.create,)
     ..aOB(7, _omitFieldNames ? '' : 'isRead')
     ..aOS(8, _omitFieldNames ? '' : 'actionUrl')
     ..hasRequiredFields = false;
@@ -171,25 +186,31 @@ class GetNotificationsRequest extends $pb.GeneratedMessage {
     $core.int? limit,
   }) {
     final result = create();
-    if (deviceId != null) result.deviceId = deviceId;
-    if (unreadOnly != null) result.unreadOnly = unreadOnly;
-    if (limit != null) result.limit = limit;
+    if (deviceId != null) {
+      result.deviceId = deviceId;
+    }
+    if (unreadOnly != null) {
+      result.unreadOnly = unreadOnly;
+    }
+    if (limit != null) {
+      result.limit = limit;
+    }
     return result;
   }
 
   GetNotificationsRequest._();
 
   factory GetNotificationsRequest.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory GetNotificationsRequest.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'GetNotificationsRequest',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOS(1, _omitFieldNames ? '' : 'deviceId')
     ..aOB(2, _omitFieldNames ? '' : 'unreadOnly')
     ..aI(3, _omitFieldNames ? '' : 'limit')
@@ -199,7 +220,7 @@ class GetNotificationsRequest extends $pb.GeneratedMessage {
   GetNotificationsRequest clone() => deepCopy();
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   GetNotificationsRequest copyWith(
-          void Function(GetNotificationsRequest) updates) =>
+          void Function(GetNotificationsRequest) updates,) =>
       super.copyWith((message) => updates(message as GetNotificationsRequest))
           as GetNotificationsRequest;
 
@@ -250,26 +271,30 @@ class ListNotificationsResponse extends $pb.GeneratedMessage {
     $core.int? unreadCount,
   }) {
     final result = create();
-    if (notifications != null) result.notifications.addAll(notifications);
-    if (unreadCount != null) result.unreadCount = unreadCount;
+    if (notifications != null) {
+      result.notifications.addAll(notifications);
+    }
+    if (unreadCount != null) {
+      result.unreadCount = unreadCount;
+    }
     return result;
   }
 
   ListNotificationsResponse._();
 
   factory ListNotificationsResponse.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory ListNotificationsResponse.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ListNotificationsResponse',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..pPM<Notification>(1, _omitFieldNames ? '' : 'notifications',
-        subBuilder: Notification.create)
+        subBuilder: Notification.create,)
     ..aI(2, _omitFieldNames ? '' : 'unreadCount')
     ..hasRequiredFields = false;
 
@@ -277,7 +302,7 @@ class ListNotificationsResponse extends $pb.GeneratedMessage {
   ListNotificationsResponse clone() => deepCopy();
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   ListNotificationsResponse copyWith(
-          void Function(ListNotificationsResponse) updates) =>
+          void Function(ListNotificationsResponse) updates,) =>
       super.copyWith((message) => updates(message as ListNotificationsResponse))
           as ListNotificationsResponse;
 
@@ -312,23 +337,25 @@ class MarkAsReadRequest extends $pb.GeneratedMessage {
     $core.Iterable<$core.String>? notificationIds,
   }) {
     final result = create();
-    if (notificationIds != null) result.notificationIds.addAll(notificationIds);
+    if (notificationIds != null) {
+      result.notificationIds.addAll(notificationIds);
+    }
     return result;
   }
 
   MarkAsReadRequest._();
 
   factory MarkAsReadRequest.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory MarkAsReadRequest.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'MarkAsReadRequest',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..pPS(1, _omitFieldNames ? '' : 'notificationIds')
     ..hasRequiredFields = false;
 
@@ -361,23 +388,25 @@ class StreamNotificationsRequest extends $pb.GeneratedMessage {
     $core.String? deviceId,
   }) {
     final result = create();
-    if (deviceId != null) result.deviceId = deviceId;
+    if (deviceId != null) {
+      result.deviceId = deviceId;
+    }
     return result;
   }
 
   StreamNotificationsRequest._();
 
   factory StreamNotificationsRequest.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory StreamNotificationsRequest.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'StreamNotificationsRequest',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOS(1, _omitFieldNames ? '' : 'deviceId')
     ..hasRequiredFields = false;
 
@@ -385,9 +414,9 @@ class StreamNotificationsRequest extends $pb.GeneratedMessage {
   StreamNotificationsRequest clone() => deepCopy();
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   StreamNotificationsRequest copyWith(
-          void Function(StreamNotificationsRequest) updates) =>
+          void Function(StreamNotificationsRequest) updates,) =>
       super.copyWith(
-              (message) => updates(message as StreamNotificationsRequest))
+              (message) => updates(message as StreamNotificationsRequest),)
           as StreamNotificationsRequest;
 
   @$core.override
@@ -418,23 +447,25 @@ class DeleteNotificationRequest extends $pb.GeneratedMessage {
     $core.String? id,
   }) {
     final result = create();
-    if (id != null) result.id = id;
+    if (id != null) {
+      result.id = id;
+    }
     return result;
   }
 
   DeleteNotificationRequest._();
 
   factory DeleteNotificationRequest.fromBuffer($core.List<$core.int> data,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromBuffer(data, registry);
   factory DeleteNotificationRequest.fromJson($core.String json,
-          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY,]) =>
       create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'DeleteNotificationRequest',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'breez'),
-      createEmptyInstance: create)
+      createEmptyInstance: create,)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..hasRequiredFields = false;
 
@@ -442,7 +473,7 @@ class DeleteNotificationRequest extends $pb.GeneratedMessage {
   DeleteNotificationRequest clone() => deepCopy();
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   DeleteNotificationRequest copyWith(
-          void Function(DeleteNotificationRequest) updates) =>
+          void Function(DeleteNotificationRequest) updates,) =>
       super.copyWith((message) => updates(message as DeleteNotificationRequest))
           as DeleteNotificationRequest;
 

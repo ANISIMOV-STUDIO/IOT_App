@@ -4,26 +4,23 @@ library;
 import 'dart:math' show min;
 
 import 'package:flutter/material.dart';
-
-import '../../../../core/theme/app_theme.dart';
-import '../../../../generated/l10n/app_localizations.dart';
-import '../../../../core/theme/app_radius.dart';
-import '../../../../core/theme/spacing.dart';
-import '../../../widgets/breez/schedule_widget.dart';
-import 'schedule_form_widgets.dart';
+import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
+import 'package:hvac_control/presentation/screens/schedule/widgets/schedule_form_widgets.dart';
+import 'package:hvac_control/presentation/widgets/breez/schedule_widget.dart';
 
 /// Диалог добавления/редактирования записи расписания
 class ScheduleEntryDialog extends StatefulWidget {
+
+  const ScheduleEntryDialog({
+    required this.deviceId, required this.onSave, super.key,
+    this.entry,
+  });
   final String deviceId;
   final ScheduleEntry? entry;
   final ValueChanged<ScheduleEntry> onSave;
-
-  const ScheduleEntryDialog({
-    super.key,
-    required this.deviceId,
-    this.entry,
-    required this.onSave,
-  });
 
   @override
   State<ScheduleEntryDialog> createState() => _ScheduleEntryDialogState();
@@ -117,9 +114,7 @@ class _ScheduleEntryDialogState extends State<ScheduleEntryDialog> {
     );
   }
 
-  String _formatTime(TimeOfDay time) {
-    return '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
-  }
+  String _formatTime(TimeOfDay time) => '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
 
   String _getTimeRange() => '${_formatTime(_startTime)} - ${_formatTime(_endTime)}';
 
@@ -165,7 +160,7 @@ class _ScheduleEntryDialogState extends State<ScheduleEntryDialog> {
     final isEditing = widget.entry != null;
     final days = _getDays(l10n);
     final modes = _getModes(l10n);
-    final maxWidth = min(MediaQuery.of(context).size.width - 48, 400.0);
+    final maxWidth = min(MediaQuery.of(context).size.width - 48, 400).toDouble();
 
     // Безопасные значения с fallback
     final selectedDay = _selectedDay ?? days[0];

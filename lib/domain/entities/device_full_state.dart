@@ -1,12 +1,47 @@
 import 'package:equatable/equatable.dart';
-
-import 'climate.dart';
-import 'alarm_info.dart';
-import 'mode_settings.dart';
+import 'package:hvac_control/domain/entities/alarm_info.dart';
+import 'package:hvac_control/domain/entities/climate.dart';
+import 'package:hvac_control/domain/entities/mode_settings.dart';
 
 /// Полное состояние устройства с бэкенда
 /// Включает настройки режимов, таймера и аварии
 class DeviceFullState extends Equatable {
+
+  const DeviceFullState({
+    required this.id,
+    required this.name,
+    this.macAddress = '',
+    this.power = false,
+    this.mode = ClimateMode.auto,
+    this.currentTemperature = 20.0,
+    this.targetTemperature = 22.0,
+    this.humidity = 50.0,
+    this.targetHumidity = 50.0,
+    this.operatingMode = 'basic',
+    this.heatingTemperature,
+    this.coolingTemperature,
+    this.supplyFan,
+    this.exhaustFan,
+    this.scheduleIndicator,
+    this.devicePower,
+    this.isOnline = true,
+    this.outdoorTemperature,
+    this.kpdRecuperator,
+    this.indoorTemperature,
+    this.supplyTemperature,
+    this.supplyTempAfterRecup,
+    this.co2Level,
+    this.freeCooling = false,
+    this.heaterPerformance,
+    this.coolerStatus,
+    this.ductPressure,
+    this.modeSettings,
+    this.timerSettings,
+    this.activeAlarms,
+    this.isScheduleEnabled = false,
+    this.quickSensors = const ['outside_temp', 'indoor_temp', 'humidity'],
+    this.deviceTime,
+  });
   final String id;
   final String name;
   final String macAddress;
@@ -83,42 +118,6 @@ class DeviceFullState extends Equatable {
   /// Текущее время устройства
   final DateTime? deviceTime;
 
-  const DeviceFullState({
-    required this.id,
-    required this.name,
-    this.macAddress = '',
-    this.power = false,
-    this.mode = ClimateMode.auto,
-    this.currentTemperature = 20.0,
-    this.targetTemperature = 22.0,
-    this.humidity = 50.0,
-    this.targetHumidity = 50.0,
-    this.operatingMode = 'basic',
-    this.heatingTemperature,
-    this.coolingTemperature,
-    this.supplyFan,
-    this.exhaustFan,
-    this.scheduleIndicator,
-    this.devicePower,
-    this.isOnline = true,
-    this.outdoorTemperature,
-    this.kpdRecuperator,
-    this.indoorTemperature,
-    this.supplyTemperature,
-    this.supplyTempAfterRecup,
-    this.co2Level,
-    this.freeCooling = false,
-    this.heaterPerformance,
-    this.coolerStatus,
-    this.ductPressure,
-    this.modeSettings,
-    this.timerSettings,
-    this.activeAlarms,
-    this.isScheduleEnabled = false,
-    this.quickSensors = const ['outside_temp', 'indoor_temp', 'humidity'],
-    this.deviceTime,
-  });
-
   /// Есть ли активные аварии
   bool get hasAlarms => activeAlarms != null && activeAlarms!.isNotEmpty;
 
@@ -159,8 +158,7 @@ class DeviceFullState extends Equatable {
     String? operatingMode,
     List<String>? quickSensors,
     DateTime? deviceTime,
-  }) {
-    return DeviceFullState(
+  }) => DeviceFullState(
       id: id ?? this.id,
       name: name ?? this.name,
       macAddress: macAddress ?? this.macAddress,
@@ -195,7 +193,6 @@ class DeviceFullState extends Equatable {
       quickSensors: quickSensors ?? this.quickSensors,
       deviceTime: deviceTime ?? this.deviceTime,
     );
-  }
 
   @override
   List<Object?> get props => [

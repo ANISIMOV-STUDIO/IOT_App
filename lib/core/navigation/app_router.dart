@@ -8,23 +8,22 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-import '../theme/spacing.dart';
-import '../../presentation/widgets/breez/breez_button.dart';
-import '../../presentation/screens/main_screen.dart';
-import '../../presentation/screens/auth/auth_screen.dart';
-import '../../presentation/screens/auth/verify_email_screen.dart';
-import '../../presentation/screens/auth/forgot_password_screen.dart';
-import '../../presentation/screens/notifications/notifications_screen.dart';
-import '../../presentation/screens/schedule/schedule_screen.dart';
-import '../../presentation/screens/alarms/alarm_history_screen.dart';
-import '../../presentation/screens/splash/splash_screen.dart';
-import '../../presentation/screens/profile/profile_screen.dart';
-import '../../presentation/screens/profile/event_logs_screen.dart';
-import '../../presentation/bloc/auth/auth_bloc.dart';
-import '../../presentation/bloc/auth/auth_state.dart';
-import 'app_routes.dart';
-import 'router_refresh_stream.dart';
+import 'package:hvac_control/core/navigation/app_routes.dart';
+import 'package:hvac_control/core/navigation/router_refresh_stream.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
+import 'package:hvac_control/presentation/bloc/auth/auth_bloc.dart';
+import 'package:hvac_control/presentation/bloc/auth/auth_state.dart';
+import 'package:hvac_control/presentation/screens/alarms/alarm_history_screen.dart';
+import 'package:hvac_control/presentation/screens/auth/auth_screen.dart';
+import 'package:hvac_control/presentation/screens/auth/forgot_password_screen.dart';
+import 'package:hvac_control/presentation/screens/auth/verify_email_screen.dart';
+import 'package:hvac_control/presentation/screens/main_screen.dart';
+import 'package:hvac_control/presentation/screens/notifications/notifications_screen.dart';
+import 'package:hvac_control/presentation/screens/profile/event_logs_screen.dart';
+import 'package:hvac_control/presentation/screens/profile/profile_screen.dart';
+import 'package:hvac_control/presentation/screens/schedule/schedule_screen.dart';
+import 'package:hvac_control/presentation/screens/splash/splash_screen.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
 
 // Реэкспорт для обратной совместимости
 export 'app_routes.dart';
@@ -41,8 +40,7 @@ GlobalKey<NavigatorState> get rootNavigatorKey => _rootNavigatorKey;
 /// Требует AuthBloc для:
 /// - refreshListenable: перепроверяет routes при изменении auth state
 /// - redirect: решает куда направить пользователя
-GoRouter createRouter(AuthBloc authBloc) {
-  return GoRouter(
+GoRouter createRouter(AuthBloc authBloc) => GoRouter(
     navigatorKey: _rootNavigatorKey,
     debugLogDiagnostics: true,
 
@@ -142,7 +140,6 @@ GoRouter createRouter(AuthBloc authBloc) {
         path: AppRoutes.login,
         builder: (context, state) => const AuthScreen(
           key: ValueKey('login'),
-          isRegister: false,
         ),
       ),
       GoRoute(
@@ -262,7 +259,6 @@ GoRouter createRouter(AuthBloc authBloc) {
       ),
     ],
   );
-}
 
 /// Расширения для удобной навигации
 extension GoRouterNavigation on BuildContext {
