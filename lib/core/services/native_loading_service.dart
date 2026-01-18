@@ -4,8 +4,8 @@
 /// после полной загрузки данных.
 library;
 
-import 'package:flutter/foundation.dart';
-import 'dart:js_interop';
+import 'native_loading_service_stub.dart'
+    if (dart.library.js_interop) 'native_loading_service_web.dart' as platform;
 
 /// Сервис для управления нативным HTML loading экраном
 class NativeLoadingService {
@@ -19,20 +19,6 @@ class NativeLoadingService {
     if (_isHidden) return;
     _isHidden = true;
 
-    if (kIsWeb) {
-      _hideNativeLoadingWeb();
-    }
-  }
-}
-
-@JS('hideNativeLoading')
-external void _hideNativeLoadingJS();
-
-void _hideNativeLoadingWeb() {
-  try {
-    _hideNativeLoadingJS();
-  } catch (e) {
-    // Игнорируем ошибки если функция не существует
-    debugPrint('NativeLoadingService: hideNativeLoading not available');
+    platform.hideNativeLoading();
   }
 }
