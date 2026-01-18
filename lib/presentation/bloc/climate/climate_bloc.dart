@@ -189,6 +189,12 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
           // Игнорируем ошибки стрима - данные уже загружены
         },
       );
+
+      // Запрашиваем актуальные данные от устройства (fire-and-forget)
+      // Устройство опубликует свежие данные в MQTT, которые придут через SignalR
+      if (climate.roomId.isNotEmpty) {
+        _requestDeviceUpdate(climate.roomId).ignore();
+      }
     } catch (e) {
       emit(state.copyWith(
         status: ClimateControlStatus.failure,
