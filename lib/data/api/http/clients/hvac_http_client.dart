@@ -303,6 +303,16 @@ class HvacHttpClient extends BaseHttpClient implements IHvacDataSource {
   }
 
   // ===========================================================================
+  // DEVICE UPDATE REQUEST
+  // ===========================================================================
+
+  @override
+  Future<void> requestUpdate(String deviceId) async {
+    _validateDeviceId(deviceId);
+    await postVoid('$_baseUrl/$deviceId/request-update');
+  }
+
+  // ===========================================================================
   // PRIVATE HELPERS
   // ===========================================================================
 

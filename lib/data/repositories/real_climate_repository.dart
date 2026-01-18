@@ -616,6 +616,15 @@ class RealClimateRepository implements ClimateRepository {
     );
   }
 
+  @override
+  Future<void> requestDeviceUpdate({String? deviceId}) async {
+    final targetDeviceId = deviceId ?? _selectedDeviceId;
+    if (targetDeviceId.isEmpty) {
+      throw StateError('No device selected');
+    }
+    await _httpClient.requestUpdate(targetDeviceId);
+  }
+
   void dispose() {
     // Сначала помечаем как disposed чтобы остановить все операции
     _isDisposed = true;

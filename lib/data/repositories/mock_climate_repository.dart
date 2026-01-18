@@ -446,6 +446,12 @@ class MockClimateRepository implements ClimateRepository {
     // Время устройства обновится в следующем полном state refresh
   }
 
+  @override
+  Future<void> requestDeviceUpdate({String? deviceId}) async {
+    await Future<void>.delayed(MockData.normalDelay);
+    // В моке просто эмулируем успешный запрос - данные уже актуальны
+  }
+
   void dispose() {
     _climateController.close();
     _devicesController.close();

@@ -37,6 +37,7 @@ export 'device/get_device_full_state.dart';
 // Device Management Use Cases
 export 'device/register_device.dart';
 export 'device/rename_device.dart';
+export 'device/request_device_update.dart';
 export 'device/set_device_time.dart';
 export 'device/watch_device_full_state.dart';
 export 'device/watch_hvac_devices.dart';

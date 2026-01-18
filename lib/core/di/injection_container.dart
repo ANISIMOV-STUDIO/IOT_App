@@ -289,6 +289,7 @@ Future<void> init() async {
   ..registerLazySingleton(() => DeleteDevice(sl()))
   ..registerLazySingleton(() => RenameDevice(sl()))
   ..registerLazySingleton(() => SetDeviceTime(sl()))
+  ..registerLazySingleton(() => RequestDeviceUpdate(sl()))
   ..registerLazySingleton(() => GetDeviceFullState(sl()))
   ..registerLazySingleton(() => GetAlarmHistory(sl()))
   ..registerLazySingleton(() => WatchDeviceFullState(sl<ClimateRepository>()))
@@ -353,6 +354,7 @@ Future<void> init() async {
       setAirflow: sl(),
       setScheduleEnabled: sl(),
       watchDeviceFullState: sl(),
+      requestDeviceUpdate: sl(),
     ),
   )
 

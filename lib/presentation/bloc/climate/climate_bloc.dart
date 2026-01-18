@@ -90,6 +90,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     required SetAirflow setAirflow,
     required SetScheduleEnabled setScheduleEnabled,
     required WatchDeviceFullState watchDeviceFullState,
+    required RequestDeviceUpdate requestDeviceUpdate,
   })  : _getCurrentClimateState = getCurrentClimateState,
         _getDeviceFullState = getDeviceFullState,
         _getAlarmHistory = getAlarmHistory,
@@ -104,6 +105,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         _setAirflow = setAirflow,
         _setScheduleEnabled = setScheduleEnabled,
         _watchDeviceFullState = watchDeviceFullState,
+        _requestDeviceUpdate = requestDeviceUpdate,
         super(const ClimateControlState()) {
     // События жизненного цикла
     on<ClimateSubscriptionRequested>(_onSubscriptionRequested);
@@ -158,6 +160,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   final SetAirflow _setAirflow;
   final SetScheduleEnabled _setScheduleEnabled;
   final WatchDeviceFullState _watchDeviceFullState;
+  final RequestDeviceUpdate _requestDeviceUpdate;
 
   StreamSubscription<ClimateState>? _climateSubscription;
   StreamSubscription<DeviceFullState>? _deviceFullStateSubscription;
@@ -243,6 +246,9 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
           ApiLogger.warning('[ClimateBloc] DeviceFullState stream error', error);
         },
       );
+
+      // Запрашиваем актуальные данные от устройства (fire-and-forget)
+      _requestDeviceUpdate(event.deviceId).ignore();
     } catch (e) {
       emit(state.copyWith(
         status: ClimateControlStatus.failure,
