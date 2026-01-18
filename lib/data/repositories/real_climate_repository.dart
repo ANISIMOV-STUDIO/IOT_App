@@ -550,6 +550,19 @@ class RealClimateRepository implements ClimateRepository {
     return jsonList.map((json) => AlarmHistory.fromJson(json)).toList();
   }
 
+  // ============================================
+  // DEVICE TIME SETTING
+  // ============================================
+
+  @override
+  Future<void> setDeviceTime(DateTime time, {String? deviceId}) async {
+    final targetDeviceId = deviceId ?? _selectedDeviceId;
+    if (targetDeviceId.isEmpty) {
+      throw StateError('No device selected');
+    }
+    await _httpClient.setDeviceTime(targetDeviceId, time);
+  }
+
   void dispose() {
     _deviceUpdatesSubscription?.cancel(); // Отменить SignalR subscription
     _statusChangesSubscription?.cancel(); // Отменить status changes subscription

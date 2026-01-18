@@ -794,6 +794,12 @@ abstract class AppLocalizations {
   /// **'Название изменено'**
   String get nameChanged;
 
+  /// Time set toast
+  ///
+  /// In ru, this message translates to:
+  /// **'Время установлено'**
+  String get timeSet;
+
   /// Notifications feature in development
   ///
   /// In ru, this message translates to:
@@ -1585,6 +1591,12 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Установка «{name}» будет отвязана от вашего аккаунта. Вы сможете снова добавить её по MAC-адресу.'**
   String unitSettingsDeleteMessage(String name);
+
+  /// No description provided for @unitSettingsSetTime.
+  ///
+  /// In ru, this message translates to:
+  /// **'Установить время'**
+  String get unitSettingsSetTime;
 
   /// No description provided for @updateAvailable.
   ///

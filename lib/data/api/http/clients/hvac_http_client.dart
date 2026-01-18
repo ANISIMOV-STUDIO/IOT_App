@@ -271,6 +271,19 @@ class HvacHttpClient extends BaseHttpClient implements IHvacDataSource {
   }
 
   // ===========================================================================
+  // TIME SETTING
+  // ===========================================================================
+
+  /// Установить время на устройстве
+  Future<void> setDeviceTime(String deviceId, DateTime time) async {
+    _validateDeviceId(deviceId);
+    await postVoid(
+      '$_baseUrl/$deviceId/time-setting',
+      {'time': time.toIso8601String()},
+    );
+  }
+
+  // ===========================================================================
   // PRIVATE HELPERS
   // ===========================================================================
 

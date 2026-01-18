@@ -272,6 +272,16 @@ class CachedClimateRepository implements ClimateRepository {
   }
 
   // ============================================
+  // DEVICE TIME SETTING
+  // ============================================
+
+  @override
+  Future<void> setDeviceTime(DateTime time, {String? deviceId}) async {
+    _ensureOnline('setDeviceTime');
+    await _inner.setDeviceTime(time, deviceId: deviceId);
+  }
+
+  // ============================================
   // HELPERS
   // ============================================
 

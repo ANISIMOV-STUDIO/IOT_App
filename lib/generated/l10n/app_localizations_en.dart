@@ -381,6 +381,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nameChanged => 'Name changed';
 
   @override
+  String get timeSet => 'Time set';
+
+  @override
   String get notificationsInDevelopment =>
       'Notifications: feature in development';
 
@@ -806,6 +809,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String unitSettingsDeleteMessage(String name) {
     return 'Unit \"$name\" will be unlinked from your account. You can add it again using MAC address.';
   }
+
+  @override
+  String get unitSettingsSetTime => 'Set Time';
 
   @override
   String get updateAvailable => 'Update available';

@@ -383,6 +383,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get nameChanged => 'Название изменено';
 
   @override
+  String get timeSet => 'Время установлено';
+
+  @override
   String get notificationsInDevelopment => 'Уведомления: функция в разработке';
 
   @override
@@ -808,6 +811,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String unitSettingsDeleteMessage(String name) {
     return 'Установка «$name» будет отвязана от вашего аккаунта. Вы сможете снова добавить её по MAC-адресу.';
   }
+
+  @override
+  String get unitSettingsSetTime => 'Установить время';
 
   @override
   String get updateAvailable => 'Доступна новая версия';
