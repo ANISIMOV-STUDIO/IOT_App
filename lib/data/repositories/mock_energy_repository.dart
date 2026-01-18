@@ -13,19 +13,19 @@ class MockEnergyRepository implements EnergyRepository {
 
   @override
   Future<EnergyStats> getTodayStats() async {
-    await Future.delayed(Duration(milliseconds: MockData.networkDelays['slow']!));
+    await Future.delayed(MockData.slowDelay);
     return _generateStats(DateTime.now());
   }
 
   @override
   Future<EnergyStats> getStats(DateTime from, DateTime to) async {
-    await Future.delayed(Duration(milliseconds: MockData.networkDelays['load']!));
+    await Future.delayed(MockData.loadDelay);
     return _generateStats(from);
   }
 
   @override
   Future<List<DeviceEnergyUsage>> getDevicePowerUsage() async {
-    await Future.delayed(Duration(milliseconds: MockData.networkDelays['slow']!));
+    await Future.delayed(MockData.slowDelay);
     return MockData.energyUsage.map((d) => DeviceEnergyUsage(
       deviceId: d['deviceId'] as String,
       deviceName: d['deviceName'] as String,

@@ -145,6 +145,12 @@ abstract class MockData {
     'load': 400,
   };
 
+  /// Duration константы для имитации сети
+  static const Duration fastDelay = Duration(milliseconds: 100);
+  static const Duration normalDelay = Duration(milliseconds: 200);
+  static const Duration slowDelay = Duration(milliseconds: 300);
+  static const Duration loadDelay = Duration(milliseconds: 400);
+
   // ============================================
   // SCHEDULE DATA (расписание по устройствам)
   // ============================================

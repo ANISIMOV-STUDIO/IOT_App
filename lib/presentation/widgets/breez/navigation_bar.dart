@@ -98,7 +98,7 @@ class BreezNavigationBar extends StatelessWidget {
               border: Border.all(color: colors.border),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: _NavBarConstants.shadowOpacity),
+                  color: AppColors.black.withValues(alpha: _NavBarConstants.shadowOpacity),
                   blurRadius: _NavBarConstants.shadowBlur,
                   offset: Offset(0, _NavBarConstants.shadowOffsetY),
                 ),

@@ -9,6 +9,8 @@ library;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../theme/spacing.dart';
+import '../../presentation/widgets/breez/breez_button.dart';
 import '../../presentation/screens/main_screen.dart';
 import '../../presentation/screens/auth/auth_screen.dart';
 import '../../presentation/screens/auth/verify_email_screen.dart';
@@ -116,11 +118,11 @@ GoRouter createRouter(AuthBloc authBloc) {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Icon(Icons.error_outline, size: 48, color: Colors.red),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.md),
             Text('Страница не найдена: ${state.matchedLocation}'),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: () => context.go(AppRoutes.home),
+            const SizedBox(height: AppSpacing.lgx),
+            BreezButton(
+              onTap: () => context.go(AppRoutes.home),
               child: const Text('На главную'),
             ),
           ],

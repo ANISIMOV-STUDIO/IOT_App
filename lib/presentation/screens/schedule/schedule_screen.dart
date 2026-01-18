@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/spacing.dart';
 import '../../../generated/l10n/app_localizations.dart';
 import '../../../core/utils/snackbar_utils.dart';
+import '../../widgets/breez/breez_button.dart';
 import '../../bloc/schedule/schedule_bloc.dart';
 import '../../widgets/breez/schedule_widget.dart';
 import 'widgets/schedule_entry_dialog.dart';
@@ -65,7 +67,7 @@ class ScheduleScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showAddDialog(context),
         backgroundColor: AppColors.accent,
-        child: const Icon(Icons.add, color: Colors.white),
+        child: const Icon(Icons.add, color: AppColors.white),
       ),
     );
   }
@@ -80,7 +82,7 @@ class ScheduleScreen extends StatelessWidget {
           Text(
             l10n.schedule,
             style: TextStyle(
-              fontSize: 18,
+              fontSize: AppFontSizes.h3,
               fontWeight: FontWeight.w600,
               color: colors.text,
             ),
@@ -88,7 +90,7 @@ class ScheduleScreen extends StatelessWidget {
           Text(
             deviceName,
             style: TextStyle(
-              fontSize: 12,
+              fontSize: AppFontSizes.caption,
               color: colors.textMuted,
             ),
           ),
@@ -152,18 +154,30 @@ class ScheduleScreen extends StatelessWidget {
           style: TextStyle(color: colors.textMuted),
         ),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(),
+          BreezButton(
+            onTap: () => Navigator.of(dialogContext).pop(),
+            backgroundColor: Colors.transparent,
+            showBorder: false,
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.md,
+              vertical: AppSpacing.sm,
+            ),
             child: Text(
               l10n.cancel,
               style: TextStyle(color: colors.textMuted),
             ),
           ),
-          TextButton(
-            onPressed: () {
+          BreezButton(
+            onTap: () {
               context.read<ScheduleBloc>().add(ScheduleEntryDeleted(entry.id));
               Navigator.of(dialogContext).pop();
             },
+            backgroundColor: Colors.transparent,
+            showBorder: false,
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.md,
+              vertical: AppSpacing.sm,
+            ),
             child: Text(
               l10n.delete,
               style: const TextStyle(color: Colors.red),

@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/app_sizes.dart';
 import 'breez_button.dart';
 
 // =============================================================================
@@ -61,7 +62,7 @@ class BreezIconButton extends StatelessWidget {
     final padding = compact
         ? _IconButtonConstants.paddingCompact
         : _IconButtonConstants.paddingNormal;
-    final minSize = compact ? 0.0 : kMinTouchTarget;
+    final minSize = compact ? 0.0 : AppSizes.minTouchTarget;
     final buttonSize = (size + padding * 2) < minSize
         ? minSize
         : (size + padding * 2);
@@ -69,7 +70,7 @@ class BreezIconButton extends StatelessWidget {
 
     final bg = backgroundColor ?? (isActive ? AppColors.accent : colors.card);
     final effectiveIconColor =
-        iconColor ?? (isActive ? Colors.white : colors.textMuted);
+        iconColor ?? (isActive ? AppColors.white : colors.textMuted);
 
     return Stack(
       alignment: Alignment.center,
@@ -108,9 +109,9 @@ class BreezIconButton extends StatelessWidget {
                 child: Text(
                   badge!,
                   style: const TextStyle(
-                    fontSize: 10,
+                    fontSize: AppFontSizes.captionSmall,
                     fontWeight: FontWeight.w700,
-                    color: Colors.white,
+                    color: AppColors.white,
                   ),
                 ),
               ),
@@ -144,7 +145,7 @@ class BreezCircleButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final buttonSize = size < kMinTouchTarget ? kMinTouchTarget : size;
+    final buttonSize = size < AppSizes.minTouchTarget ? AppSizes.minTouchTarget : size;
 
     return BreezButton(
       onTap: onTap,
@@ -167,7 +168,7 @@ class BreezCircleButton extends StatelessWidget {
       child: Center(
         child: Icon(
           icon,
-          color: Colors.white,
+          color: AppColors.white,
           size: buttonSize * 0.5,
         ),
       ),
@@ -199,7 +200,7 @@ class BreezPowerButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
-    final buttonSize = size < kMinTouchTarget ? kMinTouchTarget : size;
+    final buttonSize = size < AppSizes.minTouchTarget ? AppSizes.minTouchTarget : size;
 
     return BreezButton(
       onTap: onTap,

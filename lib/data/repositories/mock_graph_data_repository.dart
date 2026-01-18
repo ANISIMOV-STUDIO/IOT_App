@@ -18,7 +18,7 @@ class MockGraphDataRepository implements GraphDataRepository {
     required DateTime from,
     required DateTime to,
   }) async {
-    await Future.delayed(Duration(milliseconds: MockData.networkDelays['normal']!));
+    await Future.delayed(MockData.normalDelay);
     return _generateGraphData(deviceId, metric);
   }
 
@@ -61,7 +61,7 @@ class MockGraphDataRepository implements GraphDataRepository {
 
   @override
   Future<List<GraphMetric>> getAvailableMetrics(String deviceId) async {
-    await Future.delayed(Duration(milliseconds: MockData.networkDelays['fast']!));
+    await Future.delayed(MockData.fastDelay);
     // All metrics are available for all devices
     return GraphMetric.values;
   }

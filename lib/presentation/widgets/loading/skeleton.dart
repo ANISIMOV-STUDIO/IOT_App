@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/spacing.dart';
+import '../../../core/theme/app_font_sizes.dart';
 
 /// Базовый skeleton box
 ///
@@ -97,15 +98,15 @@ class SkeletonDeviceCard extends StatelessWidget {
                 // Название устройства
                 SkeletonBox(
                   width: double.infinity,
-                  height: 16,
-                  borderRadius: 8,
+                  height: AppFontSizes.h4,
+                  borderRadius: AppRadius.indicator,
                 ),
                 SizedBox(height: AppSpacing.xs),
                 // Дополнительная информация
                 SkeletonBox(
                   width: 120,
-                  height: 12,
-                  borderRadius: 6,
+                  height: AppFontSizes.caption,
+                  borderRadius: AppRadius.indicator,
                 ),
               ],
             ),
@@ -116,7 +117,7 @@ class SkeletonDeviceCard extends StatelessWidget {
           const SkeletonBox(
             width: 60,
             height: 24,
-            borderRadius: 8,
+            borderRadius: AppRadius.chip,
           ),
         ],
       ),
@@ -157,15 +158,15 @@ class SkeletonStatCard extends StatelessWidget {
                 // Заголовок
                 SkeletonBox(
                   width: 80,
-                  height: 12,
-                  borderRadius: 6,
+                  height: AppFontSizes.caption,
+                  borderRadius: AppRadius.indicator,
                 ),
                 SizedBox(height: AppSpacing.xs),
                 // Значение
                 SkeletonBox(
                   width: double.infinity,
-                  height: 20,
-                  borderRadius: 8,
+                  height: AppFontSizes.h3,
+                  borderRadius: AppRadius.chip,
                 ),
               ],
             ),
@@ -204,8 +205,8 @@ class SkeletonGraph extends StatelessWidget {
           // Заголовок графика
           SkeletonBox(
             width: 150,
-            height: 16,
-            borderRadius: 8,
+            height: AppFontSizes.h4,
+            borderRadius: AppRadius.chip,
           ),
           SizedBox(height: AppSpacing.lg),
 

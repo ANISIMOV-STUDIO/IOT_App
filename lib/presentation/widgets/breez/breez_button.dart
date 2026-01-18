@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
-
-/// Минимальный размер touch target по Material Design
-const double kMinTouchTarget = 48.0;
+import '../../../core/theme/app_animations.dart';
+import '../../../core/theme/spacing.dart';
+import '../../../core/theme/app_sizes.dart';
 
 /// Base BREEZ button with premium animations
 ///
@@ -85,7 +85,7 @@ class _BreezButtonState extends State<BreezButton>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 120),
+      duration: AppDurations.fast,
     );
 
     _scaleAnimation = Tween<double>(begin: 1.0, end: 0.96).animate(
@@ -110,7 +110,7 @@ class _BreezButtonState extends State<BreezButton>
 
   void _handleTapUp(TapUpDetails _) {
     // Задержка перед сбросом для видимого эффекта нажатия
-    Future.delayed(const Duration(milliseconds: 100), () {
+    Future.delayed(AppDurations.instant, () {
       if (mounted) {
         setState(() => _isPressed = false);
         if (widget.enableScale) _controller.reverse();
@@ -130,7 +130,7 @@ class _BreezButtonState extends State<BreezButton>
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     // Touch target constraints
-    final minTarget = widget.enforceMinTouchTarget ? kMinTouchTarget : 0.0;
+    final minTarget = widget.enforceMinTouchTarget ? AppSizes.minTouchTarget : 0.0;
     final buttonWidth = widget.width != null
         ? ((widget.width ?? 0) < minTarget ? minTarget : widget.width)
         : null;
@@ -142,10 +142,10 @@ class _BreezButtonState extends State<BreezButton>
     // pressedColor используется для прозрачных кнопок где lerp не работает
     final effectiveBg = _isPressed
         ? (widget.pressedColor ??
-            Color.lerp(bg, isDark ? Colors.white : Colors.black, 0.1)!)
+            Color.lerp(bg, isDark ? colors.text : colors.bg, 0.1)!)
         : _isHovered
             ? (widget.hoverColor ??
-                Color.lerp(bg, isDark ? Colors.white : Colors.black, 0.05)!)
+                Color.lerp(bg, isDark ? colors.text : colors.bg, 0.05)!)
             : bg;
 
     final effectiveBorder = widget.showBorder
@@ -183,7 +183,7 @@ class _BreezButtonState extends State<BreezButton>
               scale: scale,
               // AnimatedContainer для плавного перехода цвета
               child: AnimatedContainer(
-                duration: const Duration(milliseconds: 150),
+                duration: AppDurations.fast,
                 curve: Curves.easeOut,
                 width: buttonWidth,
                 height: buttonHeight,
@@ -192,7 +192,10 @@ class _BreezButtonState extends State<BreezButton>
                   minWidth: buttonWidth ?? 0,
                 ),
                 padding: widget.padding ??
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    EdgeInsets.symmetric(
+                      horizontal: AppSpacing.md,
+                      vertical: AppSpacing.sm,
+                    ),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   color: effectiveBg,

@@ -10,7 +10,6 @@ import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/navigation/app_router.dart';
-import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_font_sizes.dart';
 import '../../../core/theme/spacing.dart';
@@ -261,10 +260,34 @@ class _EventLogsScreenState extends State<EventLogsScreen> {
             ),
 
             // Filter chips
-            _FilterBar(
-              selectedType: _filterType,
-              onFilterChanged: _setFilter,
-              l10n: l10n,
+            Padding(
+              padding: const EdgeInsets.only(
+                left: AppSpacing.sm,
+                right: AppSpacing.sm,
+                bottom: AppSpacing.sm,
+              ),
+              child: BreezSegmentedControl<DeviceEventType?>(
+                value: _filterType,
+                height: 36.0,
+                segments: [
+                  BreezSegment(
+                    value: null,
+                    label: l10n.filterAll,
+                    icon: Icons.filter_list,
+                  ),
+                  BreezSegment(
+                    value: DeviceEventType.settingsChange,
+                    label: l10n.logTypeSettings,
+                    icon: Icons.settings_outlined,
+                  ),
+                  BreezSegment(
+                    value: DeviceEventType.alarm,
+                    label: l10n.logTypeAlarm,
+                    icon: Icons.warning_amber,
+                  ),
+                ],
+                onChanged: _setFilter,
+              ),
             ),
 
             // Content
@@ -347,150 +370,6 @@ class _EventLogsScreenState extends State<EventLogsScreen> {
           l10n: l10n,
         ),
       ],
-    );
-  }
-}
-
-// =============================================================================
-// FILTER BAR (по паттерну MobileTabBar)
-// =============================================================================
-
-/// Константы фильтр-бара (как в MobileTabBar)
-abstract class _FilterBarConstants {
-  static const double height = 36.0;
-  static const double iconSize = 14.0;
-  static const double fontSize = 11.0;
-  static const double segmentPadding = 3.0;
-}
-
-/// Данные фильтра
-class _FilterOption {
-  final DeviceEventType? value;
-  final IconData icon;
-  final String label;
-
-  const _FilterOption({
-    required this.value,
-    required this.icon,
-    required this.label,
-  });
-}
-
-class _FilterBar extends StatelessWidget {
-  final DeviceEventType? selectedType;
-  final ValueChanged<DeviceEventType?> onFilterChanged;
-  final AppLocalizations l10n;
-
-  const _FilterBar({
-    required this.selectedType,
-    required this.onFilterChanged,
-    required this.l10n,
-  });
-
-  List<_FilterOption> _buildOptions() => [
-        _FilterOption(value: null, icon: Icons.filter_list, label: l10n.filterAll),
-        _FilterOption(value: DeviceEventType.settingsChange, icon: Icons.settings_outlined, label: l10n.logTypeSettings),
-        _FilterOption(value: DeviceEventType.alarm, icon: Icons.warning_amber, label: l10n.logTypeAlarm),
-      ];
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
-    final options = _buildOptions();
-
-    return Padding(
-      padding: const EdgeInsets.only(
-        left: AppSpacing.sm,
-        right: AppSpacing.sm,
-        bottom: AppSpacing.sm,
-      ),
-      child: Container(
-        height: _FilterBarConstants.height,
-        padding: const EdgeInsets.all(_FilterBarConstants.segmentPadding),
-        decoration: BoxDecoration(
-          color: colors.buttonBg.withValues(alpha: 0.5),
-          borderRadius: BorderRadius.circular(AppRadius.chip),
-        ),
-        child: Row(
-          children: options.map((option) {
-            final isSelected = selectedType == option.value;
-            return Expanded(
-              child: _FilterSegment(
-                option: option,
-                isSelected: isSelected,
-                onTap: () => onFilterChanged(option.value),
-                colors: colors,
-              ),
-            );
-          }).toList(),
-        ),
-      ),
-    );
-  }
-}
-
-/// Кнопка-сегмент фильтра (как _SegmentButton в MobileTabBar)
-class _FilterSegment extends StatelessWidget {
-  final _FilterOption option;
-  final bool isSelected;
-  final VoidCallback onTap;
-  final BreezColors colors;
-
-  const _FilterSegment({
-    required this.option,
-    required this.isSelected,
-    required this.onTap,
-    required this.colors,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final textColor = isSelected ? AppColors.accent : colors.textMuted;
-
-    return Semantics(
-      label: option.label,
-      selected: isSelected,
-      button: true,
-      child: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: GestureDetector(
-          onTap: onTap,
-          child: AnimatedContainer(
-          duration: AppDurations.normal,
-          curve: Curves.easeOutCubic,
-          decoration: BoxDecoration(
-            color: isSelected
-                ? AppColors.accent.withValues(alpha: 0.15)
-                : Colors.transparent,
-            borderRadius: BorderRadius.circular(AppRadius.chip),
-            border: isSelected
-                ? Border.all(color: AppColors.accent.withValues(alpha: 0.3))
-                : null,
-          ),
-          child: Center(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  option.icon,
-                  size: _FilterBarConstants.iconSize,
-                  color: textColor,
-                ),
-                const SizedBox(width: AppSpacing.xxs),
-                Text(
-                  option.label,
-                  style: TextStyle(
-                    fontSize: _FilterBarConstants.fontSize,
-                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                    color: textColor,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        ),
-      ),
     );
   }
 }

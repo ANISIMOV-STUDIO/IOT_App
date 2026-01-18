@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/spacing.dart';
+import '../../../core/theme/app_sizes.dart';
+import '../../../core/theme/app_animations.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -12,12 +14,11 @@ import '../../../core/theme/spacing.dart';
 
 /// Константы для MobileTabBar
 abstract class _MobileTabConstants {
-  static const double height = 36.0;
   static const double iconSize = 14.0;
   static const double fontSize = 11.0;
   static const double badgeSize = 16.0;
   static const double badgeFontSize = 9.0;
-  static const double segmentPadding = 3.0;
+  static const double segmentPadding = 3.0; // Slightly less than xxs (4px) for tighter fit
 }
 
 // =============================================================================
@@ -105,10 +106,10 @@ class _MobileTabBarState extends State<MobileTabBar> {
     return Semantics(
       label: 'Переключатель контента',
       child: Container(
-        height: _MobileTabConstants.height,
+        height: AppSizes.tabHeight,
         padding: EdgeInsets.all(_MobileTabConstants.segmentPadding),
         decoration: BoxDecoration(
-          color: colors.buttonBg.withValues(alpha: 0.5),
+          color: colors.buttonBg.withValues(alpha: AppColors.opacityMedium),
           borderRadius: BorderRadius.circular(AppRadius.chip),
         ),
         child: Row(
@@ -164,11 +165,11 @@ class _SegmentButton extends StatelessWidget {
           curve: Curves.easeOutCubic,
           decoration: BoxDecoration(
             color: isSelected
-                ? AppColors.accent.withValues(alpha: 0.15)
-                : Colors.transparent,
+                ? AppColors.accent.withValues(alpha: AppColors.opacitySubtle)
+                : colors.bg.withValues(alpha: 0.0),
             borderRadius: BorderRadius.circular(AppRadius.chip),
             border: isSelected
-                ? Border.all(color: AppColors.accent.withValues(alpha: 0.3))
+                ? Border.all(color: AppColors.accent.withValues(alpha: AppColors.opacityLow))
                 : null,
           ),
           child: Center(
@@ -204,7 +205,7 @@ class _SegmentButton extends StatelessWidget {
                         style: const TextStyle(
                           fontSize: _MobileTabConstants.badgeFontSize,
                           fontWeight: FontWeight.w700,
-                          color: Colors.white,
+                          color: AppColors.white,
                         ),
                       ),
                     ),

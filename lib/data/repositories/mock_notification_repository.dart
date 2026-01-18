@@ -36,7 +36,7 @@ class MockNotificationRepository implements NotificationRepository {
 
   @override
   Future<List<UnitNotification>> getNotifications({String? deviceId}) async {
-    await Future.delayed(Duration(milliseconds: MockData.networkDelays['fast']!));
+    await Future.delayed(MockData.fastDelay);
 
     if (deviceId != null) {
       return List.unmodifiable(
@@ -62,7 +62,7 @@ class MockNotificationRepository implements NotificationRepository {
 
   @override
   Future<void> markAsRead(String notificationId) async {
-    await Future.delayed(Duration(milliseconds: MockData.networkDelays['fast']!));
+    await Future.delayed(MockData.fastDelay);
 
     final index = _notifications.indexWhere((n) => n.id == notificationId);
     if (index != -1) {
@@ -74,7 +74,7 @@ class MockNotificationRepository implements NotificationRepository {
 
   @override
   Future<void> markAllAsRead({String? deviceId}) async {
-    await Future.delayed(Duration(milliseconds: MockData.networkDelays['normal']!));
+    await Future.delayed(MockData.normalDelay);
 
     _notifications = _notifications.map((n) {
       if (deviceId == null || n.deviceId == deviceId) {
@@ -87,7 +87,7 @@ class MockNotificationRepository implements NotificationRepository {
 
   @override
   Future<void> dismiss(String notificationId) async {
-    await Future.delayed(Duration(milliseconds: MockData.networkDelays['fast']!));
+    await Future.delayed(MockData.fastDelay);
 
     _notifications = _notifications.where((n) => n.id != notificationId).toList();
     _controller.add(List.unmodifiable(_notifications));
@@ -95,7 +95,7 @@ class MockNotificationRepository implements NotificationRepository {
 
   @override
   Future<int> getUnreadCount({String? deviceId}) async {
-    await Future.delayed(Duration(milliseconds: MockData.networkDelays['fast']!));
+    await Future.delayed(MockData.fastDelay);
 
     if (deviceId != null) {
       return _notifications

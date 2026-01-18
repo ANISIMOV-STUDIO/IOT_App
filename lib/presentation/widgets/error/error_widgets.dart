@@ -8,6 +8,7 @@ library;
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_font_sizes.dart';
+import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/spacing.dart';
 import '../../../generated/l10n/app_localizations.dart';
 import '../breez/breez_card.dart';
@@ -123,7 +124,7 @@ class ErrorWidget extends StatelessWidget {
                   const Icon(
                     Icons.refresh,
                     size: 20,
-                    color: Colors.white,
+                    color: AppColors.white,
                   ),
                   const SizedBox(width: AppSpacing.xs),
                   Text(
@@ -131,7 +132,7 @@ class ErrorWidget extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: AppFontSizes.body,
                       fontWeight: FontWeight.w600,
-                      color: Colors.white,
+                      color: AppColors.white,
                     ),
                   ),
                 ],
@@ -354,7 +355,7 @@ class GenericError extends StatelessWidget {
         padding: const EdgeInsets.all(AppSpacing.md),
         decoration: BoxDecoration(
           color: colors.border.withValues(alpha: 0.3),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(AppRadius.chip),
         ),
         child: Text(
           errorMessage!,
@@ -533,7 +534,7 @@ class RetryButton extends StatelessWidget {
           const Icon(
             Icons.refresh,
             size: 20,
-            color: Colors.white,
+            color: AppColors.white,
           ),
           const SizedBox(width: AppSpacing.xs),
           Text(
@@ -541,7 +542,7 @@ class RetryButton extends StatelessWidget {
             style: const TextStyle(
               fontSize: AppFontSizes.body,
               fontWeight: FontWeight.w600,
-              color: Colors.white,
+              color: AppColors.white,
             ),
           ),
         ],

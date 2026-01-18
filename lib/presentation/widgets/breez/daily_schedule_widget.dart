@@ -193,7 +193,7 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget>
           Text(
             l10n.schedule,
             style: TextStyle(
-              fontSize: 16,
+              fontSize: AppFontSizes.h4,
               fontWeight: FontWeight.w700,
               color: colors.text,
             ),
@@ -207,7 +207,7 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget>
             child: Text(
               l10n.holdToToggle,
               style: TextStyle(
-                fontSize: 10,
+                fontSize: AppFontSizes.captionSmall,
                 color: colors.textMuted,
               ),
             ),
@@ -417,7 +417,7 @@ class _TimeColumn extends StatelessWidget {
           label,
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 11,
+            fontSize: AppFontSizes.captionSmall,
             color: colors.textMuted,
           ),
         ),

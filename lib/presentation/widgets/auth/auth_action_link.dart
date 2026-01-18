@@ -4,6 +4,7 @@ library;
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_font_sizes.dart';
+import '../breez/breez_button.dart';
 
 /// Ссылка для перехода между страницами авторизации
 /// Например: "Нет аккаунта? Зарегистрироваться"
@@ -33,8 +34,14 @@ class AuthActionLink extends StatelessWidget {
             fontSize: AppFontSizes.bodySmall,
           ),
         ),
-        TextButton(
-          onPressed: onTap,
+        BreezButton(
+          onTap: onTap,
+          backgroundColor: Colors.transparent,
+          hoverColor: AppColors.accent.withValues(alpha: 0.1),
+          pressedColor: AppColors.accent.withValues(alpha: 0.15),
+          showBorder: false,
+          enforceMinTouchTarget: false,
+          semanticLabel: actionText,
           child: Text(
             actionText,
             style: const TextStyle(

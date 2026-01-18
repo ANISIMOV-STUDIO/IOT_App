@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/app_radius.dart';
 
 /// Компонент отображения и выбора времени
 ///
@@ -98,7 +99,7 @@ class _BreezTimeInputState extends State<BreezTimeInput> {
             color: _isHovered && _isEnabled
                 ? bgColor.withValues(alpha: 0.2)
                 : bgColor,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(AppRadius.chip),
             border: Border.all(
               color: _isHovered && _isEnabled
                   ? AppColors.accent.withValues(alpha: 0.5)

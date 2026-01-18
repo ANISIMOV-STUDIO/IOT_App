@@ -4,6 +4,7 @@ library;
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_radius.dart';
+import '../../../core/theme/app_theme.dart';
 import '../../../domain/entities/graph_data.dart';
 
 /// Custom painter for the graph curve with smooth bezier interpolation
@@ -50,7 +51,7 @@ class OperationGraphPainter extends CustomPainter {
 
   void _drawGridLines(Canvas canvas, Size size) {
     final gridPaint = Paint()
-      ..color = Colors.white.withValues(alpha: 0.08)
+      ..color = AppColors.white.withValues(alpha: 0.08)
       ..strokeWidth = 1
       ..style = PaintingStyle.stroke;
 
@@ -148,7 +149,7 @@ class OperationGraphPainter extends CustomPainter {
 
     // Center dot
     final centerPaint = Paint()
-      ..color = Colors.white
+      ..color = AppColors.white
       ..style = PaintingStyle.fill;
     canvas.drawCircle(point, 2, centerPaint);
 
@@ -162,9 +163,9 @@ class OperationGraphPainter extends CustomPainter {
       text: TextSpan(
         text: '$value°',
         style: const TextStyle(
-          fontSize: 12,
+          fontSize: AppFontSizes.caption,
           fontWeight: FontWeight.w700,
-          color: Colors.white,
+          color: AppColors.white,
         ),
       ),
       textDirection: TextDirection.ltr,

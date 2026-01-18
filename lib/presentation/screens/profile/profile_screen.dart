@@ -228,7 +228,7 @@ class _UserCard extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: _ProfileScreenConstants.initialsFontSize,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: AppColors.white,
                     ),
                   ),
                 ),

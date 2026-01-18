@@ -7,8 +7,10 @@ library;
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_font_sizes.dart';
+import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/spacing.dart';
 import '../../../generated/l10n/app_localizations.dart';
+import '../breez/breez_button.dart';
 
 /// Базовый индикатор загрузки
 ///
@@ -116,7 +118,7 @@ class LoadingOverlay {
     showDialog(
       context: context,
       barrierDismissible: barrierDismissible,
-      barrierColor: Colors.black.withValues(alpha: 0.5),
+      barrierColor: AppColors.black.withValues(alpha: 0.5),
       builder: (dialogContext) => PopScope(
         canPop: barrierDismissible,
         child: Center(
@@ -124,7 +126,7 @@ class LoadingOverlay {
             padding: const EdgeInsets.all(AppSpacing.xl),
             decoration: BoxDecoration(
               color: BreezColors.of(dialogContext).card,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(AppRadius.card),
             ),
             child: LoadingIndicator.large(
               message: message ?? l10n.loading,
@@ -284,10 +286,16 @@ class LoadingState<T> extends StatelessWidget {
               ),
               if (onRetry != null) ...[
                 const SizedBox(height: AppSpacing.lg),
-                ElevatedButton.icon(
-                  onPressed: onRetry,
-                  icon: const Icon(Icons.refresh),
-                  label: Text(l10n.retry),
+                BreezButton(
+                  onTap: onRetry,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.refresh, size: 20),
+                      const SizedBox(width: AppSpacing.xs),
+                      Text(l10n.retry),
+                    ],
+                  ),
                 ),
               ],
             ],

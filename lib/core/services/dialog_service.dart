@@ -9,6 +9,7 @@ import '../theme/app_theme.dart';
 import '../theme/app_font_sizes.dart';
 import '../theme/app_radius.dart';
 import '../theme/spacing.dart';
+import '../../presentation/widgets/breez/breez_button.dart';
 
 /// Сервис для показа диалогов подтверждения
 ///
@@ -81,13 +82,13 @@ class DialogService {
         ),
         actions: [
           // Кнопка отмены
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            style: TextButton.styleFrom(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.lg,
-                vertical: AppSpacing.md,
-              ),
+          BreezButton(
+            onTap: () => Navigator.of(context).pop(false),
+            backgroundColor: Colors.transparent,
+            showBorder: false,
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.lg,
+              vertical: AppSpacing.md,
             ),
             child: Text(
               cancelLabel,

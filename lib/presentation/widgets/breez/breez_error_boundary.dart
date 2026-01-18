@@ -7,6 +7,7 @@ library;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/spacing.dart';
 import 'breez_button.dart';
 
@@ -175,7 +176,7 @@ class _DefaultErrorWidget extends StatelessWidget {
       padding: EdgeInsets.all(AppSpacing.xs),
       decoration: BoxDecoration(
         color: AppColors.critical.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppRadius.button),
         border: Border.all(
           color: AppColors.critical.withValues(alpha: 0.2),
         ),
@@ -307,7 +308,7 @@ void setupGlobalErrorHandler({
               details.exceptionAsString(),
               style: const TextStyle(
                 color: AppColors.critical,
-                fontSize: 12,
+                fontSize: AppFontSizes.caption,
               ),
               maxLines: 5,
               overflow: TextOverflow.ellipsis,

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import '../../../core/services/language_service.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
+import '../../../core/theme/app_font_sizes.dart';
 import '../../../core/theme/spacing.dart';
 import '../../../core/utils/validators.dart';
 import '../../../generated/l10n/app_localizations.dart';
@@ -18,8 +19,8 @@ import '../../widgets/breez/breez.dart';
 
 abstract class _ProfileDialogsConstants {
   static const double flagFontSize = 20.0;
-  static const double bodyFontSize = 14.0;
-  static const double headerFontSize = 18.0;
+  static const double bodyFontSize = AppFontSizes.body;
+  static const double headerFontSize = AppFontSizes.h3;
   static const double checkIconSize = 18.0;
 }
 
@@ -40,48 +41,46 @@ class LanguageOption extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(AppRadius.button),
-        child: Ink(
-          padding: const EdgeInsets.all(AppSpacing.sm),
-          decoration: BoxDecoration(
-            color: isSelected
-                ? AppColors.accent.withValues(alpha: 0.1)
-                : colors.cardLight,
-            borderRadius: BorderRadius.circular(AppRadius.button),
-            border: isSelected
-                ? Border.all(color: AppColors.accent.withValues(alpha: 0.3))
-                : null,
+    return BreezButton(
+      onTap: onTap,
+      backgroundColor: isSelected
+          ? AppColors.accent.withValues(alpha: 0.1)
+          : colors.cardLight,
+      hoverColor: isSelected
+          ? AppColors.accent.withValues(alpha: 0.15)
+          : colors.card,
+      borderRadius: AppRadius.button,
+      border: isSelected
+          ? Border.all(color: AppColors.accent.withValues(alpha: 0.3))
+          : null,
+      padding: const EdgeInsets.all(AppSpacing.sm),
+      semanticLabel: '${language.nativeName}${isSelected ? ' (выбран)' : ''}',
+      child: Row(
+        children: [
+          Text(
+            language.flag,
+            style: const TextStyle(
+              fontSize: _ProfileDialogsConstants.flagFontSize,
+            ),
           ),
-          child: Row(
-            children: [
-              Text(
-                language.flag,
-                style: const TextStyle(fontSize: _ProfileDialogsConstants.flagFontSize),
+          const SizedBox(width: AppSpacing.sm),
+          Expanded(
+            child: Text(
+              language.nativeName,
+              style: TextStyle(
+                fontSize: _ProfileDialogsConstants.bodyFontSize,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                color: isSelected ? AppColors.accent : colors.text,
               ),
-              const SizedBox(width: AppSpacing.sm),
-              Expanded(
-                child: Text(
-                  language.nativeName,
-                  style: TextStyle(
-                    fontSize: _ProfileDialogsConstants.bodyFontSize,
-                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                    color: isSelected ? AppColors.accent : colors.text,
-                  ),
-                ),
-              ),
-              if (isSelected)
-                const Icon(
-                  Icons.check_circle,
-                  color: AppColors.accent,
-                  size: _ProfileDialogsConstants.checkIconSize,
-                ),
-            ],
+            ),
           ),
-        ),
+          if (isSelected)
+            const Icon(
+              Icons.check_circle,
+              color: AppColors.accent,
+              size: _ProfileDialogsConstants.checkIconSize,
+            ),
+        ],
       ),
     );
   }
@@ -162,7 +161,8 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
                 controller: _firstNameController,
                 label: l10n.firstName,
                 prefixIcon: Icons.person_outlined,
-                validator: (v) => Validators.of(context).name(v, fieldName: l10n.firstName),
+                validator: (v) =>
+                    Validators.of(context).name(v, fieldName: l10n.firstName),
                 textInputAction: TextInputAction.next,
               ),
               const SizedBox(height: AppSpacing.md),
@@ -170,7 +170,8 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
                 controller: _lastNameController,
                 label: l10n.lastName,
                 prefixIcon: Icons.person_outlined,
-                validator: (v) => Validators.of(context).name(v, fieldName: l10n.lastName),
+                validator: (v) =>
+                    Validators.of(context).name(v, fieldName: l10n.lastName),
                 textInputAction: TextInputAction.done,
                 onFieldSubmitted: (_) => _save(),
               ),
@@ -275,10 +276,9 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
                 prefixIcon: Icons.lock_outlined,
                 obscureText: true,
                 showPasswordToggle: true,
-                validator: (value) => Validators.of(context).confirmPassword(
-                  value,
-                  _newPasswordController.text,
-                ),
+                validator: (value) => Validators.of(
+                  context,
+                ).confirmPassword(value, _newPasswordController.text),
                 textInputAction: TextInputAction.done,
                 onFieldSubmitted: (_) => _save(),
               ),
@@ -350,18 +350,29 @@ class _DialogActions extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        TextButton(
-          onPressed: onCancel,
+        BreezButton(
+          onTap: onCancel,
+          backgroundColor: Colors.transparent,
+          hoverColor: colors.cardLight,
+          pressedColor: colors.buttonBg,
+          showBorder: false,
+          semanticLabel: l10n.cancel,
           child: Text(l10n.cancel, style: TextStyle(color: colors.textMuted)),
         ),
         const SizedBox(width: AppSpacing.md),
-        ElevatedButton(
-          onPressed: onSave,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.accent,
-            foregroundColor: Colors.white,
+        BreezButton(
+          onTap: onSave,
+          backgroundColor: AppColors.accent,
+          hoverColor: AppColors.accentLight,
+          enableGlow: true,
+          semanticLabel: saveLabel,
+          child: Text(
+            saveLabel,
+            style: const TextStyle(
+              color: AppColors.white,
+              fontWeight: FontWeight.w600,
+            ),
           ),
-          child: Text(saveLabel),
         ),
       ],
     );
@@ -420,12 +431,14 @@ void showLanguagePickerDialog(
         ],
       ),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.of(dialogContext).pop(),
-          child: Text(
-            l10n.cancel,
-            style: TextStyle(color: colors.textMuted),
-          ),
+        BreezButton(
+          onTap: () => Navigator.of(dialogContext).pop(),
+          backgroundColor: Colors.transparent,
+          hoverColor: colors.cardLight,
+          pressedColor: colors.buttonBg,
+          showBorder: false,
+          semanticLabel: l10n.cancel,
+          child: Text(l10n.cancel, style: TextStyle(color: colors.textMuted)),
         ),
       ],
     ),

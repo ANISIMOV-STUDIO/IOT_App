@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_font_sizes.dart';
+import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/spacing.dart';
 import '../../../domain/entities/hvac_device.dart';
 import '../../../generated/l10n/app_localizations.dart';
@@ -116,7 +117,7 @@ class DevicesScreen extends StatelessWidget {
                                   height: 48,
                                   decoration: BoxDecoration(
                                     color: AppColors.accent.withValues(alpha: 0.1),
-                                    borderRadius: BorderRadius.circular(12),
+                                    borderRadius: BorderRadius.circular(AppRadius.button),
                                   ),
                                   child: Icon(
                                     device.icon, // Использует extension из device_icon_helper
@@ -157,7 +158,7 @@ class DevicesScreen extends StatelessWidget {
                                     color: device.isOnline
                                         ? AppColors.success.withValues(alpha: 0.1)
                                         : colors.textMuted.withValues(alpha: 0.1),
-                                    borderRadius: BorderRadius.circular(8),
+                                    borderRadius: BorderRadius.circular(AppRadius.chip),
                                   ),
                                   child: Text(
                                     device.isOnline ? l10n.statusOnline : l10n.statusOffline,

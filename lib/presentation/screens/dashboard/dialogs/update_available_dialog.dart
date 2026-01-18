@@ -87,7 +87,7 @@ class _UpdateAvailableDialogState extends State<UpdateAvailableDialog> {
                     ? l10n.updateVersionAvailable(widget.version!)
                     : l10n.updateAvailable,
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: AppFontSizes.h3,
                   fontWeight: FontWeight.w700,
                   color: colors.text,
                 ),
@@ -100,7 +100,7 @@ class _UpdateAvailableDialogState extends State<UpdateAvailableDialog> {
               Text(
                 l10n.updateMessage,
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: AppFontSizes.body,
                   color: colors.textMuted,
                 ),
                 textAlign: TextAlign.center,
@@ -127,12 +127,12 @@ class _UpdateAvailableDialogState extends State<UpdateAvailableDialog> {
                         Text(
                           l10n.whatsNew,
                           style: const TextStyle(
-                            fontSize: 13,
+                            fontSize: AppFontSizes.bodySmall,
                             color: AppColors.accent,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        const SizedBox(width: 4),
+                        const SizedBox(width: AppSpacing.xxs),
                         const Icon(
                           Icons.arrow_drop_down,
                           size: 20,
@@ -153,7 +153,7 @@ class _UpdateAvailableDialogState extends State<UpdateAvailableDialog> {
                         child: Text(
                           widget.changelog ?? '',
                           style: TextStyle(
-                            fontSize: 13,
+                            fontSize: AppFontSizes.bodySmall,
                             color: colors.text,
                             height: 1.5,
                           ),
@@ -176,12 +176,12 @@ class _UpdateAvailableDialogState extends State<UpdateAvailableDialog> {
                         Text(
                           l10n.hide,
                           style: TextStyle(
-                            fontSize: 13,
+                            fontSize: AppFontSizes.bodySmall,
                             color: colors.textMuted,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        const SizedBox(width: 4),
+                        const SizedBox(width: AppSpacing.xxs),
                         Icon(
                           Icons.arrow_drop_up,
                           size: 20,
@@ -209,7 +209,7 @@ class _UpdateAvailableDialogState extends State<UpdateAvailableDialog> {
                         child: Text(
                           l10n.later,
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: AppFontSizes.body,
                             fontWeight: FontWeight.w600,
                             color: colors.textMuted,
                           ),
@@ -230,9 +230,9 @@ class _UpdateAvailableDialogState extends State<UpdateAvailableDialog> {
                         child: Text(
                           l10n.updateNow,
                           style: const TextStyle(
-                            fontSize: 14,
+                            fontSize: AppFontSizes.body,
                             fontWeight: FontWeight.w700,
-                            color: Colors.white,
+                            color: AppColors.white,
                           ),
                         ),
                       ),

@@ -4,6 +4,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_icon_button.dart';
+import 'package:hvac_control/core/theme/app_colors.dart';
 
 import 'test_wrapper.dart';
 
@@ -130,7 +131,7 @@ void main() {
 
       // Icon should be white when active
       final icon = tester.widget<Icon>(find.byIcon(Icons.star));
-      expect(icon.color, Colors.white);
+      expect(icon.color, AppColors.white);
     });
   });
 

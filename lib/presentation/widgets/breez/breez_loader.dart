@@ -46,7 +46,7 @@ abstract class _LoaderConstants {
 /// BreezLoader.small()
 ///
 /// // Большой с кастомным цветом
-/// BreezLoader.large(color: Colors.white)
+/// BreezLoader.large(color: AppColors.white)
 /// ```
 class BreezLoader extends StatefulWidget {
   /// Размер иконки

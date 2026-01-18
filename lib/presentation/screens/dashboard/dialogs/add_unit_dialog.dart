@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_font_sizes.dart';
+import '../../../../core/theme/spacing.dart';
 import '../../../../generated/l10n/app_localizations.dart';
 import '../../../widgets/breez/breez_card.dart'; // BreezDialogButton, BreezIconButton
 
@@ -94,7 +96,7 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
       ),
       child: Container(
         width: maxWidth,
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(AppSpacing.lgx),
         child: Form(
           key: _formKey,
           child: Column(
@@ -102,13 +104,13 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildHeader(colors, l10n),
-              const SizedBox(height: 24),
+              const SizedBox(height: AppSpacing.lgx),
               _buildMacField(colors, l10n),
-              const SizedBox(height: 16),
+              const SizedBox(height: AppSpacing.md),
               _buildNameField(colors, l10n),
-              const SizedBox(height: 8),
+              const SizedBox(height: AppSpacing.xs),
               _buildHelpText(colors, l10n),
-              const SizedBox(height: 24),
+              const SizedBox(height: AppSpacing.lgx),
               _buildActions(colors, l10n),
             ],
           ),
@@ -124,7 +126,7 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
         Text(
           l10n.addUnit,
           style: TextStyle(
-            fontSize: 18,
+            fontSize: AppFontSizes.h3,
             fontWeight: FontWeight.w700,
             color: colors.text,
           ),
@@ -146,12 +148,12 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
         Text(
           l10n.deviceMacAddress,
           style: TextStyle(
-            fontSize: 13,
+            fontSize: AppFontSizes.bodySmall,
             fontWeight: FontWeight.w500,
             color: colors.textMuted,
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: AppSpacing.xs),
         TextFormField(
           controller: _macController,
           autofocus: true,
@@ -163,7 +165,7 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
           style: TextStyle(
             color: colors.text,
             fontFamily: 'monospace',
-            fontSize: 16,
+            fontSize: AppFontSizes.h4,
             letterSpacing: 1.5,
           ),
           decoration: InputDecoration(
@@ -206,12 +208,12 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
         Text(
           l10n.deviceName,
           style: TextStyle(
-            fontSize: 13,
+            fontSize: AppFontSizes.bodySmall,
             fontWeight: FontWeight.w500,
             color: colors.textMuted,
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: AppSpacing.xs),
         TextFormField(
           controller: _nameController,
           style: TextStyle(color: colors.text),
@@ -256,7 +258,7 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
 
   Widget _buildHelpText(BreezColors colors, AppLocalizations l10n) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(AppSpacing.sm),
       decoration: BoxDecoration(
         color: colors.cardLight,
         borderRadius: BorderRadius.circular(AppRadius.card),
@@ -264,12 +266,12 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
       child: Row(
         children: [
           Icon(Icons.info_outline, size: 16, color: colors.textMuted),
-          const SizedBox(width: 8),
+          const SizedBox(width: AppSpacing.xs),
           Expanded(
             child: Text(
               l10n.macAddressDisplayedOnRemote,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: AppFontSizes.caption,
                 color: colors.textMuted,
               ),
             ),
@@ -288,7 +290,7 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
           label: l10n.cancelButton,
           onTap: () => Navigator.of(context).pop(),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: AppSpacing.sm),
         // Create button
         BreezDialogButton(
           label: l10n.addButton,

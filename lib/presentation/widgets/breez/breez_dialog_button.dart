@@ -58,11 +58,11 @@ class BreezDialogButton extends StatelessWidget {
 
     if (isDanger) {
       bgColor = AppColors.accentRed;
-      textColor = Colors.white;
+      textColor = AppColors.white;
       hoverColor = AppColors.accentRed.withValues(alpha: 0.8);
     } else if (isPrimary) {
       bgColor = AppColors.accent;
-      textColor = Colors.white;
+      textColor = AppColors.white;
       hoverColor = AppColors.accentLight;
     } else {
       bgColor = Colors.transparent;

@@ -223,7 +223,7 @@ class _RegisterFormState extends State<RegisterForm> {
                           style: const TextStyle(
                             fontSize: AppFontSizes.body,
                             fontWeight: FontWeight.w600,
-                            color: Colors.white,
+                            color: AppColors.white,
                           ),
                         ),
                       ),

@@ -24,10 +24,7 @@ class ForgotPasswordScreen extends StatefulWidget {
   /// Email (если передан из login формы)
   final String? initialEmail;
 
-  const ForgotPasswordScreen({
-    super.key,
-    this.initialEmail,
-  });
+  const ForgotPasswordScreen({super.key, this.initialEmail});
 
   @override
   State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
@@ -66,9 +63,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     if (_emailFormKey.currentState?.validate() ?? false) {
       _email = _emailController.text.trim();
       setState(() => _errorText = null);
-      context.read<AuthBloc>().add(
-            AuthForgotPasswordRequested(email: _email),
-          );
+      context.read<AuthBloc>().add(AuthForgotPasswordRequested(email: _email));
     }
   }
 
@@ -80,20 +75,18 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     if (_passwordFormKey.currentState?.validate() ?? false) {
       setState(() => _errorText = null);
       context.read<AuthBloc>().add(
-            AuthResetPasswordRequested(
-              email: _email,
-              code: _code,
-              newPassword: _passwordController.text,
-            ),
-          );
+        AuthResetPasswordRequested(
+          email: _email,
+          code: _code,
+          newPassword: _passwordController.text,
+        ),
+      );
     }
   }
 
   void _handleResendCode() {
     setState(() => _errorText = null);
-    context.read<AuthBloc>().add(
-          AuthForgotPasswordRequested(email: _email),
-        );
+    context.read<AuthBloc>().add(AuthForgotPasswordRequested(email: _email));
   }
 
   void _onCodeChanged(String code) {
@@ -116,15 +109,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             _step = 1;
             _errorText = null;
           });
-          SnackBarUtils.showSuccess(
-            context,
-            l10n.codeSentTo(_email),
-          );
+          SnackBarUtils.showSuccess(context, l10n.codeSentTo(_email));
         } else if (state is AuthPasswordReset) {
-          SnackBarUtils.showSuccess(
-            context,
-            l10n.passwordChangedSuccess,
-          );
+          SnackBarUtils.showSuccess(context, l10n.passwordChangedSuccess);
           // Возвращаемся на логин
           context.go(AppRoutes.login);
         } else if (state is AuthError) {
@@ -136,15 +123,20 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: colors.text),
-            onPressed: () {
+          leading: BreezIconButton(
+            icon: Icons.arrow_back,
+            iconColor: colors.text,
+            backgroundColor: Colors.transparent,
+            showBorder: false,
+            compact: true,
+            onTap: () {
               if (_step == 1) {
                 setState(() => _step = 0);
               } else {
                 context.go(AppRoutes.login);
               }
             },
+            semanticLabel: 'Back',
           ),
         ),
         body: SafeArea(
@@ -223,7 +215,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 const SizedBox(height: AppSpacing.lg),
 
                 BlocBuilder<AuthBloc, AuthState>(
-                  buildWhen: (prev, curr) => (prev is AuthLoading) != (curr is AuthLoading),
+                  buildWhen: (prev, curr) =>
+                      (prev is AuthLoading) != (curr is AuthLoading),
                   builder: (context, state) {
                     final isLoading = state is AuthLoading;
                     return BreezButton(
@@ -239,7 +232,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           style: const TextStyle(
                             fontSize: AppFontSizes.body,
                             fontWeight: FontWeight.w600,
-                            color: Colors.white,
+                            color: AppColors.white,
                           ),
                         ),
                       ),
@@ -334,11 +327,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 const SizedBox(height: AppSpacing.lg),
 
                 BlocBuilder<AuthBloc, AuthState>(
-                  buildWhen: (prev, curr) => (prev is AuthLoading) != (curr is AuthLoading),
+                  buildWhen: (prev, curr) =>
+                      (prev is AuthLoading) != (curr is AuthLoading),
                   builder: (context, state) {
                     final isLoading = state is AuthLoading;
                     return BreezButton(
-                      onTap: isLoading ? null : () => _handleResetPassword(l10n),
+                      onTap: isLoading
+                          ? null
+                          : () => _handleResetPassword(l10n),
                       isLoading: isLoading,
                       backgroundColor: AppColors.accent,
                       hoverColor: AppColors.accentLight,
@@ -350,7 +346,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           style: const TextStyle(
                             fontSize: AppFontSizes.body,
                             fontWeight: FontWeight.w600,
-                            color: Colors.white,
+                            color: AppColors.white,
                           ),
                         ),
                       ),
@@ -365,7 +361,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
         // Кнопка повторной отправки
         BlocBuilder<AuthBloc, AuthState>(
-          buildWhen: (prev, curr) => (prev is AuthLoading) != (curr is AuthLoading),
+          buildWhen: (prev, curr) =>
+              (prev is AuthLoading) != (curr is AuthLoading),
           builder: (context, state) {
             final isLoading = state is AuthLoading;
             return BreezTextButton(

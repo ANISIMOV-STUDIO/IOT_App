@@ -13,6 +13,8 @@ import '../../../domain/entities/unit_notification.dart';
 import '../../../generated/l10n/app_localizations.dart';
 import '../../bloc/notifications/notifications_bloc.dart';
 import '../../widgets/error/error_widgets.dart';
+import '../../widgets/breez/breez_button.dart';
+import '../../widgets/breez/breez_icon_button.dart';
 
 /// Полноэкранный список уведомлений с действиями
 class NotificationsScreen extends StatelessWidget {
@@ -36,22 +38,32 @@ class NotificationsScreen extends StatelessWidget {
             color: colors.text,
           ),
         ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: colors.text),
-          onPressed: () => Navigator.of(context).pop(),
+        leading: BreezIconButton(
+          icon: Icons.arrow_back,
+          iconColor: colors.text,
+          backgroundColor: Colors.transparent,
+          showBorder: false,
+          compact: true,
+          onTap: () => Navigator.of(context).pop(),
+          semanticLabel: 'Back',
         ),
         actions: [
           BlocBuilder<NotificationsBloc, NotificationsState>(
             builder: (context, state) {
               if (!state.hasUnread) return const SizedBox.shrink();
 
-              return TextButton(
-                onPressed: () {
+              return BreezButton(
+                onTap: () {
                   context.read<NotificationsBloc>().add(
                     const NotificationsMarkAllAsReadRequested(),
                   );
                   ToastService.success(l10n.notificationsReadAll);
                 },
+                backgroundColor: Colors.transparent,
+                hoverColor: AppColors.accent.withValues(alpha: 0.1),
+                pressedColor: AppColors.accent.withValues(alpha: 0.15),
+                showBorder: false,
+                semanticLabel: l10n.readAll,
                 child: Text(
                   l10n.readAll,
                   style: const TextStyle(
@@ -81,7 +93,8 @@ class NotificationsScreen extends StatelessWidget {
             child: ListView.separated(
               padding: const EdgeInsets.all(AppSpacing.lg),
               itemCount: state.notifications.length,
-              separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.sm),
+              separatorBuilder: (_, __) =>
+                  const SizedBox(height: AppSpacing.sm),
               itemBuilder: (context, index) {
                 final notification = state.notifications[index];
                 return _NotificationTile(
@@ -176,10 +189,7 @@ class _NotificationTile extends StatelessWidget {
           color: AppColors.critical,
           borderRadius: BorderRadius.circular(AppRadius.card),
         ),
-        child: const Icon(
-          Icons.delete_outline,
-          color: Colors.white,
-        ),
+        child: const Icon(Icons.delete_outline, color: AppColors.white),
       ),
       child: GestureDetector(
         onTap: onTap,
@@ -207,11 +217,7 @@ class _NotificationTile extends StatelessWidget {
                   color: _typeColor.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(AppRadius.button),
                 ),
-                child: Icon(
-                  _typeIcon,
-                  size: 20,
-                  color: _typeColor,
-                ),
+                child: Icon(_typeIcon, size: 20, color: _typeColor),
               ),
               const SizedBox(width: AppSpacing.md),
 

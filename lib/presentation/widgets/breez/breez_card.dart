@@ -19,7 +19,7 @@ export 'breez_settings_tile.dart';
 
 /// Константы для BreezCard
 abstract class _CardConstants {
-  static const double defaultPadding = 24.0; // = AppSpacing.xl - 8
+  static const double defaultPadding = AppSpacing.lgx; // 24px
   static const Duration animationDuration = Duration(milliseconds: 300);
   static const double disabledOpacity = 0.3;
   static const double titleFontSize = 10.0;
@@ -129,7 +129,7 @@ class BreezCard extends StatelessWidget {
               width: 80,
               height: _CardConstants.titleFontSize,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: isDark ? AppColors.darkShimmerBase : AppColors.lightShimmerBase,
                 borderRadius: BorderRadius.circular(AppRadius.indicator),
               ),
             ),
@@ -139,7 +139,7 @@ class BreezCard extends StatelessWidget {
               width: 120,
               height: _CardConstants.descriptionFontSize,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: isDark ? AppColors.darkShimmerBase : AppColors.lightShimmerBase,
                 borderRadius: BorderRadius.circular(AppRadius.indicator),
               ),
             ),
@@ -148,7 +148,7 @@ class BreezCard extends StatelessWidget {
             width: double.infinity,
             height: _CardConstants.shimmerHeight,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.white,
               borderRadius: BorderRadius.circular(AppRadius.card),
             ),
           ),

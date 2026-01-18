@@ -36,19 +36,19 @@ class MockSmartDeviceRepository implements SmartDeviceRepository {
 
   @override
   Future<List<SmartDevice>> getAllDevices() async {
-    await Future.delayed(Duration(milliseconds: MockData.networkDelays['slow']!));
+    await Future.delayed(MockData.slowDelay);
     return List.unmodifiable(_devices);
   }
 
   @override
   Future<List<SmartDevice>> getDevicesByRoom(String roomId) async {
-    await Future.delayed(Duration(milliseconds: MockData.networkDelays['normal']!));
+    await Future.delayed(MockData.normalDelay);
     return _devices.where((d) => d.roomId == roomId).toList();
   }
 
   @override
   Future<SmartDevice?> getDeviceById(String id) async {
-    await Future.delayed(Duration(milliseconds: MockData.networkDelays['fast']!));
+    await Future.delayed(MockData.fastDelay);
     // Используем cast и where вместо firstWhere + catch
     // для явной обработки случая "не найдено"
     final matches = _devices.where((d) => d.id == id);
@@ -57,7 +57,7 @@ class MockSmartDeviceRepository implements SmartDeviceRepository {
 
   @override
   Future<SmartDevice> toggleDevice(String id, bool isOn) async {
-    await Future.delayed(Duration(milliseconds: MockData.networkDelays['normal']!));
+    await Future.delayed(MockData.normalDelay);
 
     final index = _devices.indexWhere((d) => d.id == id);
     if (index == -1) throw Exception('Устройство не найдено: $id');
@@ -75,7 +75,7 @@ class MockSmartDeviceRepository implements SmartDeviceRepository {
 
   @override
   Future<SmartDevice> updateDevice(SmartDevice device) async {
-    await Future.delayed(Duration(milliseconds: MockData.networkDelays['normal']!));
+    await Future.delayed(MockData.normalDelay);
 
     final index = _devices.indexWhere((d) => d.id == device.id);
     if (index == -1) throw Exception('Устройство не найдено: ${device.id}');

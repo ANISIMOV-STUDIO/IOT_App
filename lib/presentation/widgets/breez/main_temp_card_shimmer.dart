@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/app_radius.dart';
+import '../../../core/theme/spacing.dart';
 
 /// Shimmer loading state for MainTempCard
 class MainTempCardShimmer extends StatelessWidget {
@@ -22,10 +23,10 @@ class MainTempCardShimmer extends StatelessWidget {
         children: [
           // Header shimmer
           const _HeaderShimmer(),
-          const SizedBox(height: 40),
+          const SizedBox(height: AppSpacing.xxl),
           // Temperature shimmer
           const _TemperatureShimmer(),
-          const SizedBox(height: 40),
+          const SizedBox(height: AppSpacing.xxl),
           // Stats shimmer
           const _StatsShimmer(),
         ],
@@ -50,16 +51,16 @@ class _HeaderShimmer extends StatelessWidget {
               width: 100,
               height: 11,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.circular(AppRadius.indicator),
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacing.xs),
             Container(
               width: 120,
               height: 13,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.circular(AppRadius.indicator),
               ),
             ),
@@ -69,7 +70,7 @@ class _HeaderShimmer extends StatelessWidget {
           width: 80,
           height: 24,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             borderRadius: BorderRadius.circular(AppRadius.button),
           ),
         ),
@@ -91,25 +92,25 @@ class _TemperatureShimmer extends StatelessWidget {
             width: 48,
             height: 48,
             decoration: const BoxDecoration(
-              color: Colors.white,
+              color: AppColors.white,
               shape: BoxShape.circle,
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSpacing.md),
           Container(
             width: 120,
             height: 72,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.white,
               borderRadius: BorderRadius.circular(AppRadius.button),
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.xs),
           Container(
             width: 140,
             height: 12,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.white,
               borderRadius: BorderRadius.circular(AppRadius.indicator),
             ),
           ),
@@ -135,25 +136,25 @@ class _StatsShimmer extends StatelessWidget {
               width: 18,
               height: 18,
               decoration: const BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 shape: BoxShape.circle,
               ),
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: AppSpacing.xs),
             Container(
               width: 60,
               height: 12,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.circular(AppRadius.indicator),
               ),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: AppSpacing.xxs),
             Container(
               width: 50,
               height: 10,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.circular(AppRadius.indicator),
               ),
             ),

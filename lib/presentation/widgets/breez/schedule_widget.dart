@@ -191,7 +191,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
                           child: const Icon(
                             Icons.add,
                             size: _ScheduleWidgetConstants.addIconSize,
-                            color: Colors.white,
+                            color: AppColors.white,
                           ),
                         ),
                       ),
@@ -343,7 +343,7 @@ class _DaySelector extends StatelessWidget {
                     // Фиксированный fontWeight для предотвращения layout shift
                     fontWeight: FontWeight.w600,
                     color: isSelected
-                        ? Colors.white
+                        ? AppColors.white
                         : hasEntries
                             ? AppColors.accent
                             : colors.textMuted,

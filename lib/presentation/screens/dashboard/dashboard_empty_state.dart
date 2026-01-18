@@ -3,16 +3,16 @@ library;
 
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/app_radius.dart';
+import '../../../core/theme/spacing.dart';
 import '../../../generated/l10n/app_localizations.dart';
+import '../../widgets/breez/breez_button.dart';
 
 /// Empty state when no devices are registered
 class DashboardEmptyState extends StatelessWidget {
   final VoidCallback onAddUnit;
 
-  const DashboardEmptyState({
-    super.key,
-    required this.onAddUnit,
-  });
+  const DashboardEmptyState({super.key, required this.onAddUnit});
 
   @override
   Widget build(BuildContext context) {
@@ -28,35 +28,42 @@ class DashboardEmptyState extends StatelessWidget {
             size: 80,
             color: colors.textMuted.withValues(alpha: 0.3),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSpacing.lgx),
           Text(
             l10n.noDevices,
             style: TextStyle(
-              fontSize: 24,
+              fontSize: AppFontSizes.h2,
               fontWeight: FontWeight.w700,
               color: colors.text,
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.xs),
           Text(
             l10n.addFirstDeviceByMac,
-            style: TextStyle(
-              fontSize: 14,
-              color: colors.textMuted,
-            ),
+            style: TextStyle(fontSize: AppFontSizes.body, color: colors.textMuted),
           ),
-          const SizedBox(height: 32),
-          ElevatedButton.icon(
-            onPressed: onAddUnit,
-            icon: const Icon(Icons.add),
-            label: Text(l10n.addUnit),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.accent,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
+          const SizedBox(height: AppSpacing.xl),
+          BreezButton(
+            onTap: onAddUnit,
+            backgroundColor: AppColors.accent,
+            hoverColor: AppColors.accentLight,
+            borderRadius: AppRadius.button,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            enableGlow: true,
+            semanticLabel: l10n.addUnit,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.add, color: AppColors.white),
+                const SizedBox(width: AppSpacing.xs),
+                Text(
+                  l10n.addUnit,
+                  style: const TextStyle(
+                    color: AppColors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
             ),
           ),
         ],

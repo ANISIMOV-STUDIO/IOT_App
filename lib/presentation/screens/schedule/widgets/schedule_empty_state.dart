@@ -4,7 +4,10 @@ library;
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/spacing.dart';
 import '../../../../generated/l10n/app_localizations.dart';
+import '../../../widgets/breez/breez_button.dart';
 
 /// Пустое состояние - нет записей расписания
 class ScheduleEmptyState extends StatelessWidget {
@@ -26,36 +29,43 @@ class ScheduleEmptyState extends StatelessWidget {
             size: 64,
             color: AppColors.accent.withValues(alpha: 0.5),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSpacing.md),
           Text(
             l10n.emptyNoScheduleTitle,
             style: TextStyle(
-              fontSize: 18,
+              fontSize: AppFontSizes.h3,
               fontWeight: FontWeight.w600,
               color: colors.text,
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.xs),
           Text(
             l10n.emptyNoScheduleMessage,
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 14,
-              color: colors.textMuted,
-            ),
+            style: TextStyle(fontSize: AppFontSizes.body, color: colors.textMuted),
           ),
-          const SizedBox(height: 24),
-          ElevatedButton.icon(
-            onPressed: onAdd,
-            icon: const Icon(Icons.add),
-            label: Text(l10n.scheduleAdd),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.accent,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24,
-                vertical: 12,
-              ),
+          const SizedBox(height: AppSpacing.lgx),
+          BreezButton(
+            onTap: onAdd,
+            backgroundColor: AppColors.accent,
+            hoverColor: AppColors.accentLight,
+            borderRadius: AppRadius.button,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            enableGlow: true,
+            semanticLabel: l10n.scheduleAdd,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.add, color: AppColors.white),
+                const SizedBox(width: AppSpacing.xs),
+                Text(
+                  l10n.scheduleAdd,
+                  style: const TextStyle(
+                    color: AppColors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
             ),
           ),
         ],

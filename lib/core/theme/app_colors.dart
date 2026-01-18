@@ -230,26 +230,30 @@ abstract class AppColors {
   ];
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // STATIC COLORS (for contexts where theme is not available)
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// Pure white for overlays, shimmer effects, and non-themeable contexts
+  static const Color white = Color(0xFFFFFFFF);
+
+  /// Pure black for overlays, shadows, and non-themeable contexts
+  static const Color black = Color(0xFF000000);
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // OPACITY VALUES
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// Standard opacity values for consistent transparency
+  static const double opacityLow = 0.3;
+  static const double opacityMedium = 0.5;
+  static const double opacityHigh = 0.7;
+  static const double opacitySubtle = 0.15;
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // LEGACY ALIASES (для совместимости)
   // ═══════════════════════════════════════════════════════════════════════════
 
   static const Color accentRed = critical;
   static const Color accentOrange = warning;
   static const Color accentGreen = success;
-}
-
-/// Анимации и переходы
-abstract class AppDurations {
-  static const Duration fast = Duration(milliseconds: 150);
-  static const Duration normal = Duration(milliseconds: 250);
-  static const Duration slow = Duration(milliseconds: 350);
-  static const Duration theme = Duration(milliseconds: 400);
-}
-
-/// Кривые анимации
-abstract class AppCurves {
-  static const Curve standard = Curves.easeOutCubic;
-  static const Curve enter = Curves.easeOut;
-  static const Curve exit = Curves.easeIn;
-  static const Curve bounce = Curves.elasticOut;
 }

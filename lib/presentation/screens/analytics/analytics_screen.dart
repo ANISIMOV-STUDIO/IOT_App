@@ -167,7 +167,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                       top: 0,
                       right: 0,
                       child: Container(
-                        padding: const EdgeInsets.all(2),
+                        padding: const EdgeInsets.all(AppSpacing.xxs),
                         decoration: const BoxDecoration(
                           color: AppColors.accent,
                           shape: BoxShape.circle,
@@ -175,7 +175,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                         child: const Icon(
                           Icons.check,
                           size: 12,
-                          color: Colors.black,
+                          color: AppColors.black,
                         ),
                       ),
                     ),
@@ -218,48 +218,64 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                     child: Builder(
                       builder: (context) {
                         // Можно добавить если не достигнут лимит или убрать если уже выбран
-                        final canAdd = _selectedSensorKeys.length < _AnalyticsConstants.maxSelectedSensors;
+                        final canAdd =
+                            _selectedSensorKeys.length <
+                            _AnalyticsConstants.maxSelectedSensors;
                         final isEnabled = isSelected || canAdd;
-                        final buttonColor = isEnabled ? AppColors.accent : colors.textMuted;
+                        final buttonColor = isEnabled
+                            ? AppColors.accent
+                            : colors.textMuted;
 
-                        return TextButton(
-                          onPressed: isEnabled
+                        return BreezButton(
+                          onTap: isEnabled
                               ? () {
                                   Navigator.pop(dialogContext);
                                   _toggleSensor(sensor.key);
                                 }
                               : null,
-                          style: TextButton.styleFrom(
-                            backgroundColor: isSelected
-                                ? colors.buttonBg
-                                : isEnabled
-                                    ? AppColors.accent.withValues(alpha: 0.15)
-                                    : colors.buttonBg.withValues(alpha: 0.5),
-                            padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(AppRadius.button),
-                              side: isSelected || !isEnabled
-                                  ? BorderSide.none
-                                  : const BorderSide(color: AppColors.accent),
-                            ),
+                          backgroundColor: isSelected
+                              ? colors.buttonBg
+                              : isEnabled
+                              ? AppColors.accent.withValues(alpha: 0.15)
+                              : colors.buttonBg.withValues(alpha: 0.5),
+                          hoverColor: isSelected
+                              ? colors.cardLight
+                              : AppColors.accent.withValues(alpha: 0.2),
+                          borderRadius: AppRadius.button,
+                          border: isSelected || !isEnabled
+                              ? null
+                              : Border.all(color: AppColors.accent),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: AppSpacing.sm,
                           ),
+                          semanticLabel: isSelected
+                              ? 'Убрать'
+                              : isEnabled
+                              ? 'На главную'
+                              : 'Максимум 3',
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
-                                isSelected ? Icons.remove_circle_outline : Icons.add_circle_outline,
+                                isSelected
+                                    ? Icons.remove_circle_outline
+                                    : Icons.add_circle_outline,
                                 size: 18,
-                                color: isSelected ? colors.textMuted : buttonColor,
+                                color: isSelected
+                                    ? colors.textMuted
+                                    : buttonColor,
                               ),
                               const SizedBox(width: AppSpacing.xs),
                               Text(
                                 isSelected
                                     ? 'Убрать'
                                     : isEnabled
-                                        ? 'На главную'
-                                        : 'Максимум 3',
+                                    ? 'На главную'
+                                    : 'Максимум 3',
                                 style: TextStyle(
-                                  color: isSelected ? colors.textMuted : buttonColor,
+                                  color: isSelected
+                                      ? colors.textMuted
+                                      : buttonColor,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -272,15 +288,15 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                   const SizedBox(width: AppSpacing.xs),
                   // Кнопка закрыть
                   Expanded(
-                    child: TextButton(
-                      onPressed: () => Navigator.pop(dialogContext),
-                      style: TextButton.styleFrom(
-                        backgroundColor: colors.buttonBg,
-                        padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(AppRadius.button),
-                        ),
+                    child: BreezButton(
+                      onTap: () => Navigator.pop(dialogContext),
+                      backgroundColor: colors.buttonBg,
+                      hoverColor: colors.cardLight,
+                      borderRadius: AppRadius.button,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: AppSpacing.sm,
                       ),
+                      semanticLabel: l10n.close,
                       child: Text(
                         l10n.close,
                         style: TextStyle(color: colors.text),
@@ -317,9 +333,9 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Ошибка сохранения: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Ошибка сохранения: $e')));
       }
     } finally {
       if (mounted) {
@@ -335,168 +351,183 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
 
     return BlocListener<ClimateBloc, ClimateControlState>(
       listenWhen: (prev, curr) =>
-          prev.deviceFullState?.quickSensors != curr.deviceFullState?.quickSensors,
+          prev.deviceFullState?.quickSensors !=
+          curr.deviceFullState?.quickSensors,
       listener: (context, state) {
         _syncFromServerIfNeeded(state.deviceFullState);
       },
       child: Scaffold(
-      backgroundColor: colors.bg,
-      body: SafeArea(
-        child: RefreshIndicator(
-          color: AppColors.accent,
-          onRefresh: () async {
-            context.read<AnalyticsBloc>().add(const AnalyticsRefreshRequested());
-            _loadSelectedSensors();
-            await Future.delayed(const Duration(milliseconds: 500));
-          },
-          child: CustomScrollView(
-            slivers: [
-              // Заголовок с счётчиком
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                    AppSpacing.lg,
-                    AppSpacing.lg,
-                    AppSpacing.lg,
-                    0,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            l10n.analytics,
-                            style: TextStyle(
-                              fontSize: AppFontSizes.h2,
-                              fontWeight: FontWeight.bold,
-                              color: colors.text,
+        backgroundColor: colors.bg,
+        body: SafeArea(
+          child: RefreshIndicator(
+            color: AppColors.accent,
+            onRefresh: () async {
+              context.read<AnalyticsBloc>().add(
+                const AnalyticsRefreshRequested(),
+              );
+              _loadSelectedSensors();
+              await Future.delayed(const Duration(milliseconds: 500));
+            },
+            child: CustomScrollView(
+              slivers: [
+                // Заголовок с счётчиком
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(
+                      AppSpacing.lg,
+                      AppSpacing.lg,
+                      AppSpacing.lg,
+                      0,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              l10n.analytics,
+                              style: TextStyle(
+                                fontSize: AppFontSizes.h2,
+                                fontWeight: FontWeight.bold,
+                                color: colors.text,
+                              ),
                             ),
-                          ),
-                          _buildSelectionIndicator(colors, l10n),
-                        ],
-                      ),
-                      const SizedBox(height: AppSpacing.xxs),
-                      Text(
-                        'Нажмите на показатель для выбора',
-                        style: TextStyle(
-                          fontSize: AppFontSizes.captionSmall,
-                          color: colors.textMuted,
+                            _buildSelectionIndicator(colors, l10n),
+                          ],
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: AppSpacing.xxs),
+                        Text(
+                          'Нажмите на показатель для выбора',
+                          style: TextStyle(
+                            fontSize: AppFontSizes.captionSmall,
+                            color: colors.textMuted,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
 
-              const SliverToBoxAdapter(
-                child: SizedBox(height: AppSpacing.sm),
-              ),
+                const SliverToBoxAdapter(
+                  child: SizedBox(height: AppSpacing.sm),
+                ),
 
-              // Сетка датчиков
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-                sliver: BlocBuilder<ClimateBloc, ClimateControlState>(
-                  buildWhen: (prev, curr) =>
-                      prev.status != curr.status ||
-                      prev.deviceFullState != curr.deviceFullState ||
-                      prev.climate != curr.climate,
-                  builder: (context, state) {
-                    if (state.status == ClimateControlStatus.loading) {
-                      return const SliverToBoxAdapter(
-                        child: _SensorsSkeletonGrid(),
-                      );
-                    }
+                // Сетка датчиков
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.lg,
+                  ),
+                  sliver: BlocBuilder<ClimateBloc, ClimateControlState>(
+                    buildWhen: (prev, curr) =>
+                        prev.status != curr.status ||
+                        prev.deviceFullState != curr.deviceFullState ||
+                        prev.climate != curr.climate,
+                    builder: (context, state) {
+                      if (state.status == ClimateControlStatus.loading) {
+                        return const SliverToBoxAdapter(
+                          child: _SensorsSkeletonGrid(),
+                        );
+                      }
 
-                    if (state.status == ClimateControlStatus.failure) {
-                      return SliverToBoxAdapter(
-                        child: _buildErrorState(colors, l10n, state.errorMessage),
-                      );
-                    }
+                      if (state.status == ClimateControlStatus.failure) {
+                        return SliverToBoxAdapter(
+                          child: _buildErrorState(
+                            colors,
+                            l10n,
+                            state.errorMessage,
+                          ),
+                        );
+                      }
 
-                    final fullState = state.deviceFullState;
-                    final climate = state.climate;
-                    if (fullState == null && climate == null) {
-                      return SliverToBoxAdapter(
-                        child: _buildNoDeviceState(colors, l10n),
-                      );
-                    }
+                      final fullState = state.deviceFullState;
+                      final climate = state.climate;
+                      if (fullState == null && climate == null) {
+                        return SliverToBoxAdapter(
+                          child: _buildNoDeviceState(colors, l10n),
+                        );
+                      }
 
-                    final unit = _createUnitState(fullState, climate);
-                    final sensors = _buildSensorsList(unit, l10n);
+                      final unit = _createUnitState(fullState, climate);
+                      final sensors = _buildSensorsList(unit, l10n);
 
-                    return SliverGrid(
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 4,
-                        mainAxisSpacing: AppSpacing.xs,
-                        crossAxisSpacing: AppSpacing.xs,
-                        childAspectRatio: 0.85,
-                      ),
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
+                      return SliverGrid(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 4,
+                              mainAxisSpacing: AppSpacing.xs,
+                              crossAxisSpacing: AppSpacing.xs,
+                              childAspectRatio: 0.85,
+                            ),
+                        delegate: SliverChildBuilderDelegate((context, index) {
                           final sensor = sensors[index];
                           return _SensorTile(
                             sensor: sensor,
-                            isSelected: _selectedSensorKeys.contains(sensor.key),
+                            isSelected: _selectedSensorKeys.contains(
+                              sensor.key,
+                            ),
                             onTap: () => _onSensorTap(sensor),
                           );
-                        },
-                        childCount: sensors.length,
-                      ),
-                    );
-                  },
-                ),
-              ),
-
-              const SliverToBoxAdapter(
-                child: SizedBox(height: AppSpacing.lg),
-              ),
-
-              // График
-              SliverPadding(
-                padding: const EdgeInsets.fromLTRB(
-                  AppSpacing.lg,
-                  0,
-                  AppSpacing.lg,
-                  AppSpacing.lg,
-                ),
-                sliver: SliverToBoxAdapter(
-                  child: BlocBuilder<AnalyticsBloc, AnalyticsState>(
-                    buildWhen: (prev, curr) =>
-                        prev.status != curr.status ||
-                        prev.graphData != curr.graphData ||
-                        prev.selectedMetric != curr.selectedMetric,
-                    builder: (context, state) {
-                      if (state.status == AnalyticsStatus.loading ||
-                          state.status == AnalyticsStatus.initial) {
-                        return const SkeletonGraph(height: _AnalyticsConstants.graphHeight);
-                      }
-
-                      if (state.status == AnalyticsStatus.failure) {
-                        return _buildGraphErrorState(colors, l10n, state.errorMessage);
-                      }
-
-                      return SizedBox(
-                        height: _AnalyticsConstants.graphHeight,
-                        child: OperationGraph(
-                          data: state.graphData,
-                          selectedMetric: state.selectedMetric,
-                          onMetricChanged: (metric) {
-                            context.read<AnalyticsBloc>().add(
-                              AnalyticsGraphMetricChanged(metric),
-                            );
-                          },
-                        ),
+                        }, childCount: sensors.length),
                       );
                     },
                   ),
                 ),
-              ),
-            ],
+
+                const SliverToBoxAdapter(
+                  child: SizedBox(height: AppSpacing.lg),
+                ),
+
+                // График
+                SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(
+                    AppSpacing.lg,
+                    0,
+                    AppSpacing.lg,
+                    AppSpacing.lg,
+                  ),
+                  sliver: SliverToBoxAdapter(
+                    child: BlocBuilder<AnalyticsBloc, AnalyticsState>(
+                      buildWhen: (prev, curr) =>
+                          prev.status != curr.status ||
+                          prev.graphData != curr.graphData ||
+                          prev.selectedMetric != curr.selectedMetric,
+                      builder: (context, state) {
+                        if (state.status == AnalyticsStatus.loading ||
+                            state.status == AnalyticsStatus.initial) {
+                          return const SkeletonGraph(
+                            height: _AnalyticsConstants.graphHeight,
+                          );
+                        }
+
+                        if (state.status == AnalyticsStatus.failure) {
+                          return _buildGraphErrorState(
+                            colors,
+                            l10n,
+                            state.errorMessage,
+                          );
+                        }
+
+                        return SizedBox(
+                          height: _AnalyticsConstants.graphHeight,
+                          child: OperationGraph(
+                            data: state.graphData,
+                            selectedMetric: state.selectedMetric,
+                            onMetricChanged: (metric) {
+                              context.read<AnalyticsBloc>().add(
+                                AnalyticsGraphMetricChanged(metric),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-      ),
       ),
     );
   }
@@ -534,7 +565,10 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
     );
   }
 
-  UnitState _createUnitState(DeviceFullState? fullState, ClimateState? climate) {
+  UnitState _createUnitState(
+    DeviceFullState? fullState,
+    ClimateState? climate,
+  ) {
     return UnitState(
       id: fullState?.id ?? '',
       name: fullState?.name ?? 'Device',
@@ -549,7 +583,8 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
       outsideTemp: fullState?.outdoorTemperature ?? 0.0,
       filterPercent: fullState?.kpdRecuperator ?? 0,
       airflowRate: fullState?.devicePower ?? 0,
-      indoorTemp: fullState?.indoorTemperature ?? climate?.currentTemperature ?? 22.0,
+      indoorTemp:
+          fullState?.indoorTemperature ?? climate?.currentTemperature ?? 22.0,
       supplyTemp: fullState?.supplyTemperature ?? 20.0,
       supplyTempAfterRecup: fullState?.supplyTempAfterRecup ?? 18.0,
       co2Level: fullState?.co2Level ?? 0,
@@ -634,7 +669,9 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
         value: unit.freeCooling ? l10n.on : l10n.off,
         label: l10n.freeCool,
         description: l10n.freeCoolingDesc,
-        color: unit.freeCooling ? AppColors.accentGreen : AppColors.darkTextMuted,
+        color: unit.freeCooling
+            ? AppColors.accentGreen
+            : AppColors.darkTextMuted,
       ),
       _SensorInfo(
         key: 'filter_percent',
@@ -665,7 +702,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
             const SizedBox(height: AppSpacing.md),
             Text(
               l10n.noDeviceSelected,
-              style: TextStyle(fontSize: 14, color: colors.textMuted),
+              style: TextStyle(fontSize: AppFontSizes.body, color: colors.textMuted),
             ),
           ],
         ),
@@ -673,26 +710,53 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
     );
   }
 
-  Widget _buildErrorState(BreezColors colors, AppLocalizations l10n, String? errorMessage) {
+  Widget _buildErrorState(
+    BreezColors colors,
+    AppLocalizations l10n,
+    String? errorMessage,
+  ) {
     return BreezCard(
       padding: const EdgeInsets.all(AppSpacing.xl),
       child: Center(
         child: Column(
           children: [
-            const Icon(Icons.error_outline, size: 48, color: AppColors.critical),
+            const Icon(
+              Icons.error_outline,
+              size: 48,
+              color: AppColors.critical,
+            ),
             const SizedBox(height: AppSpacing.md),
             Text(
               errorMessage ?? l10n.errorLoadingFailed,
-              style: TextStyle(fontSize: 14, color: colors.textMuted),
+              style: TextStyle(fontSize: AppFontSizes.body, color: colors.textMuted),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: AppSpacing.md),
-            TextButton.icon(
-              onPressed: () {
-                context.read<ClimateBloc>().add(const ClimateSubscriptionRequested());
+            BreezButton(
+              onTap: () {
+                context.read<ClimateBloc>().add(
+                  const ClimateSubscriptionRequested(),
+                );
               },
-              icon: const Icon(Icons.refresh),
-              label: Text(l10n.retry),
+              backgroundColor: Colors.transparent,
+              hoverColor: AppColors.accent.withValues(alpha: 0.1),
+              pressedColor: AppColors.accent.withValues(alpha: 0.15),
+              showBorder: false,
+              semanticLabel: l10n.retry,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.refresh, color: AppColors.accent),
+                  const SizedBox(width: AppSpacing.xs),
+                  Text(
+                    l10n.retry,
+                    style: const TextStyle(
+                      color: AppColors.accent,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -700,7 +764,11 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
     );
   }
 
-  Widget _buildGraphErrorState(BreezColors colors, AppLocalizations l10n, String? errorMessage) {
+  Widget _buildGraphErrorState(
+    BreezColors colors,
+    AppLocalizations l10n,
+    String? errorMessage,
+  ) {
     return SizedBox(
       height: _AnalyticsConstants.graphHeight,
       child: BreezCard(
@@ -713,16 +781,35 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
               const SizedBox(height: AppSpacing.md),
               Text(
                 errorMessage ?? l10n.errorLoadingFailed,
-                style: TextStyle(fontSize: 14, color: colors.textMuted),
+                style: TextStyle(fontSize: AppFontSizes.body, color: colors.textMuted),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: AppSpacing.md),
-              TextButton.icon(
-                onPressed: () {
-                  context.read<AnalyticsBloc>().add(const AnalyticsRefreshRequested());
+              BreezButton(
+                onTap: () {
+                  context.read<AnalyticsBloc>().add(
+                    const AnalyticsRefreshRequested(),
+                  );
                 },
-                icon: const Icon(Icons.refresh),
-                label: Text(l10n.retry),
+                backgroundColor: Colors.transparent,
+                hoverColor: AppColors.accent.withValues(alpha: 0.1),
+                pressedColor: AppColors.accent.withValues(alpha: 0.15),
+                showBorder: false,
+                semanticLabel: l10n.retry,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.refresh, color: AppColors.accent),
+                    const SizedBox(width: AppSpacing.xs),
+                    Text(
+                      l10n.retry,
+                      style: const TextStyle(
+                        color: AppColors.accent,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -769,87 +856,76 @@ class _SensorTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
 
-    return Semantics(
-      button: true,
-      selected: isSelected,
-      label: '${sensor.label}: ${sensor.value}',
-      hint: 'Нажмите для подробностей',
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(AppRadius.cardSmall),
-          child: Container(
-            decoration: BoxDecoration(
-              color: colors.card,
-              borderRadius: BorderRadius.circular(AppRadius.cardSmall),
-              border: Border.all(
-                color: isSelected ? AppColors.accent : colors.border,
-                width: isSelected
-                    ? _AnalyticsConstants.selectedBorderWidth
-                    : _AnalyticsConstants.defaultBorderWidth,
-              ),
-            ),
-            child: Stack(
+    return BreezButton(
+      onTap: onTap,
+      backgroundColor: colors.card,
+      hoverColor: isSelected
+          ? AppColors.accent.withValues(alpha: 0.15)
+          : colors.cardLight,
+      borderRadius: AppRadius.cardSmall,
+      border: Border.all(
+        color: isSelected ? AppColors.accent : colors.border,
+        width: isSelected
+            ? _AnalyticsConstants.selectedBorderWidth
+            : _AnalyticsConstants.defaultBorderWidth,
+      ),
+      padding: const EdgeInsets.all(AppSpacing.xs),
+      semanticLabel: '${sensor.label}: ${sensor.value}',
+      tooltip: 'Нажмите для подробностей',
+      child: Stack(
+        children: [
+          // Основной контент
+          Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                // Основной контент
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(AppSpacing.xs),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          sensor.icon,
-                          size: _AnalyticsConstants.tileIconSize,
-                          color: isSelected ? AppColors.accent : sensor.color,
-                        ),
-                        const SizedBox(height: AppSpacing.xxs),
-                        Text(
-                          sensor.value,
-                          style: TextStyle(
-                            fontSize: _AnalyticsConstants.tileValueFontSize,
-                            fontWeight: FontWeight.w700,
-                            color: colors.text,
-                          ),
-                        ),
-                        SizedBox(height: _AnalyticsConstants.tileLabelSpacing),
-                        Text(
-                          sensor.label,
-                          textAlign: TextAlign.center,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: _AnalyticsConstants.tileLabelFontSize,
-                            color: colors.textMuted,
-                          ),
-                        ),
-                      ],
-                    ),
+                Icon(
+                  sensor.icon,
+                  size: _AnalyticsConstants.tileIconSize,
+                  color: isSelected ? AppColors.accent : sensor.color,
+                ),
+                const SizedBox(height: AppSpacing.xxs),
+                Text(
+                  sensor.value,
+                  style: TextStyle(
+                    fontSize: _AnalyticsConstants.tileValueFontSize,
+                    fontWeight: FontWeight.w700,
+                    color: colors.text,
                   ),
                 ),
-                // Галочка выбора
-                if (isSelected)
-                  Positioned(
-                    top: _AnalyticsConstants.checkBadgeTop,
-                    right: _AnalyticsConstants.checkBadgeRight,
-                    child: Container(
-                      padding: EdgeInsets.all(_AnalyticsConstants.checkBadgePadding),
-                      decoration: const BoxDecoration(
-                        color: AppColors.accent,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.check,
-                        size: _AnalyticsConstants.checkIconSize,
-                        color: Colors.white,
-                      ),
-                    ),
+                SizedBox(height: _AnalyticsConstants.tileLabelSpacing),
+                Text(
+                  sensor.label,
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: _AnalyticsConstants.tileLabelFontSize,
+                    color: colors.textMuted,
                   ),
+                ),
               ],
             ),
           ),
-        ),
+          // Галочка выбора
+          if (isSelected)
+            Positioned(
+              top: _AnalyticsConstants.checkBadgeTop,
+              right: _AnalyticsConstants.checkBadgeRight,
+              child: Container(
+                padding: EdgeInsets.all(_AnalyticsConstants.checkBadgePadding),
+                decoration: const BoxDecoration(
+                  color: AppColors.accent,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.check,
+                  size: _AnalyticsConstants.checkIconSize,
+                  color: AppColors.white,
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }
@@ -874,10 +950,8 @@ class _SensorsSkeletonGrid extends StatelessWidget {
         childAspectRatio: 0.85,
       ),
       itemCount: 10,
-      itemBuilder: (context, index) => const SkeletonBox(
-        height: 80,
-        borderRadius: AppRadius.cardSmall,
-      ),
+      itemBuilder: (context, index) =>
+          const SkeletonBox(height: 80, borderRadius: AppRadius.cardSmall),
     );
   }
 }

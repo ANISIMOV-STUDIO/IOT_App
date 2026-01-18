@@ -1,0 +1,110 @@
+name: Design System Check
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+    paths:
+      - 'lib/**/*.dart'
+      - 'test/**/*.dart'
+  pull_request:
+    branches:
+      - main
+      - develop
+    paths:
+      - 'lib/**/*.dart'
+      - 'test/**/*.dart'
+
+# Cancel in-progress runs when a new workflow with the same group name starts
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  flutter-analyze:
+    name: Flutter Analyze
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          channel: 'stable'
+          cache: true
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Run Flutter analyze
+        run: flutter analyze --no-fatal-infos
+
+  design-system-check:
+    name: Design System Violations Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Make scripts executable
+        run: chmod +x scripts/check_design_system.sh
+
+      - name: Run design system checks
+        run: ./scripts/check_design_system.sh
+
+  design-system-check-advanced:
+    name: Advanced Design System Analysis
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          channel: 'stable'
+          cache: true
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Run advanced Dart checks
+        run: dart run scripts/check_design_system.dart
+
+  summary:
+    name: Check Summary
+    runs-on: ubuntu-latest
+    needs: [flutter-analyze, design-system-check, design-system-check-advanced]
+    if: always()
+
+    steps:
+      - name: Check results
+        run: |
+          echo "Design System Check Summary:"
+          echo "----------------------------"
+          echo "Flutter Analyze: ${{ needs.flutter-analyze.result }}"
+          echo "Design System Check: ${{ needs.design-system-check.result }}"
+          echo "Advanced Analysis: ${{ needs.design-system-check-advanced.result }}"
+
+          if [[ "${{ needs.flutter-analyze.result }}" != "success" ]] || \
+             [[ "${{ needs.design-system-check.result }}" != "success" ]] || \
+             [[ "${{ needs.design-system-check-advanced.result }}" != "success" ]]; then
+            echo ""
+            echo "❌ Design system checks failed!"
+            echo "Please review the errors above and fix violations."
+            echo "See DESIGN_SYSTEM_CI.md for guidelines."
+            exit 1
+          fi
+
+          echo ""
+          echo "✅ All design system checks passed!"

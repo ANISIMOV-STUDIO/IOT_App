@@ -68,7 +68,7 @@ class BreezCheckbox extends StatelessWidget {
                   ? const Icon(
                       Icons.check,
                       size: AppIconSizes.small,
-                      color: Colors.white,
+                      color: AppColors.white,
                     )
                   : null,
             ),

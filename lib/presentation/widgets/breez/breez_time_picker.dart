@@ -101,7 +101,7 @@ class _BreezTimePickerDialogState extends State<_BreezTimePickerDialog> {
             Text(
               l10n.selectTime,
               style: TextStyle(
-                fontSize: 14,
+                fontSize: AppFontSizes.body,
                 fontWeight: FontWeight.w500,
                 color: colors.textMuted,
               ),
@@ -318,9 +318,9 @@ class _DialogButton extends StatelessWidget {
             child: Text(
               label,
               style: TextStyle(
-                fontSize: 14,
+                fontSize: AppFontSizes.body,
                 fontWeight: FontWeight.w600,
-                color: isPrimary ? Colors.black : colors.text,
+                color: isPrimary ? AppColors.black : colors.text,
               ),
             ),
           ),

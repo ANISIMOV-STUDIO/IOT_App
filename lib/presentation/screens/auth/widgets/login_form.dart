@@ -123,8 +123,8 @@ class _LoginFormState extends State<LoginForm> {
                 // Восстановить пароль
                 Align(
                   alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {
+                  child: BreezButton(
+                    onTap: () {
                       final email = _emailController.text.trim();
                       if (email.isNotEmpty) {
                         context.go('${AppRoutes.forgotPassword}?email=$email');
@@ -132,6 +132,12 @@ class _LoginFormState extends State<LoginForm> {
                         context.go(AppRoutes.forgotPassword);
                       }
                     },
+                    backgroundColor: Colors.transparent,
+                    showBorder: false,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.xs,
+                      vertical: AppSpacing.xxs,
+                    ),
                     child: Text(
                       l10n.forgotPassword,
                       style: const TextStyle(
@@ -161,7 +167,7 @@ class _LoginFormState extends State<LoginForm> {
                           style: const TextStyle(
                             fontSize: AppFontSizes.body,
                             fontWeight: FontWeight.w600,
-                            color: Colors.white,
+                            color: AppColors.white,
                           ),
                         ),
                       ),

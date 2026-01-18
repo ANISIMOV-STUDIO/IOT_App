@@ -89,7 +89,7 @@ class SensorTile extends StatelessWidget {
 
     showDialog(
       context: context,
-      barrierColor: Colors.black54,
+      barrierColor: AppColors.black.withValues(alpha: 0.54),
       builder: (context) => Center(
         child: Container(
           margin: const EdgeInsets.all(AppSpacing.xl),
@@ -98,13 +98,7 @@ class SensorTile extends StatelessWidget {
             color: colors.card,
             borderRadius: BorderRadius.circular(AppRadius.card),
             border: Border.all(color: colors.border),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.3),
-                blurRadius: 24,
-                offset: const Offset(0, 8),
-              ),
-            ],
+            boxShadow: AppColors.darkShadowMd,
           ),
           child: Material(
             color: Colors.transparent,
@@ -134,7 +128,7 @@ class SensorTile extends StatelessWidget {
                       Text(
                         sensor.value,
                         style: TextStyle(
-                          fontSize: 28,
+                          fontSize: AppFontSizes.h1,
                           fontWeight: FontWeight.w700,
                           color: colors.text,
                         ),
@@ -145,7 +139,7 @@ class SensorTile extends StatelessWidget {
                         sensor.fullLabel,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: AppFontSizes.body,
                           fontWeight: FontWeight.w600,
                           color: colors.text,
                         ),
@@ -156,7 +150,7 @@ class SensorTile extends StatelessWidget {
                           sensor.description!,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: AppFontSizes.caption,
                             color: colors.textMuted,
                             height: 1.4,
                           ),

@@ -241,7 +241,7 @@ class _CompactDeviceInfo extends StatelessWidget {
                 child: Text(
                   unit.id,
                   style: TextStyle(
-                    fontSize: 11,
+                    fontSize: AppFontSizes.captionSmall,
                     fontFamily: 'monospace',
                     color: colors.textMuted,
                   ),
@@ -263,7 +263,7 @@ class _CompactDeviceInfo extends StatelessWidget {
                 child: Text(
                   unit.power ? l10n.statusEnabled : l10n.statusDisabled,
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize: AppFontSizes.captionSmall,
                     fontWeight: FontWeight.w600,
                     color: unit.power ? AppColors.accentGreen : colors.textMuted,
                   ),
@@ -301,14 +301,14 @@ class _InfoRow extends StatelessWidget {
         SizedBox(width: AppSpacing.xxs),
         Text(
           label,
-          style: TextStyle(fontSize: 11, color: colors.textMuted),
+          style: TextStyle(fontSize: AppFontSizes.captionSmall, color: colors.textMuted),
         ),
         SizedBox(width: AppSpacing.xxs),
         Expanded(
           child: Text(
             value,
             style: TextStyle(
-              fontSize: 13,
+              fontSize: AppFontSizes.bodySmall,
               fontWeight: isBold ? FontWeight.w600 : FontWeight.normal,
               color: colors.text,
             ),
@@ -401,7 +401,7 @@ class _ActionButton extends StatelessWidget {
                 child: Text(
                   label,
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: AppFontSizes.caption,
                     fontWeight: FontWeight.w500,
                     color: color,
                   ),
@@ -442,10 +442,10 @@ class _CompactRenameField extends StatelessWidget {
           child: TextFormField(
             controller: controller,
             autofocus: true,
-            style: TextStyle(fontSize: 13, color: colors.text),
+            style: TextStyle(fontSize: AppFontSizes.bodySmall, color: colors.text),
             decoration: InputDecoration(
               hintText: l10n.unitSettingsEnterName,
-              hintStyle: TextStyle(fontSize: 13, color: colors.textMuted),
+              hintStyle: TextStyle(fontSize: AppFontSizes.bodySmall, color: colors.textMuted),
               filled: true,
               fillColor: colors.cardLight,
               contentPadding: EdgeInsets.symmetric(horizontal: AppSpacing.sm),
@@ -515,15 +515,15 @@ class _PrimaryButton extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.check, size: 16, color: Colors.black),
+              Icon(Icons.check, size: 16, color: AppColors.black),
               SizedBox(width: AppSpacing.xxs),
               Flexible(
                 child: Text(
                   label,
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: AppFontSizes.caption,
                     fontWeight: FontWeight.w600,
-                    color: Colors.black,
+                    color: AppColors.black,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),

@@ -258,7 +258,7 @@ class MainTempCard extends StatelessWidget {
                             child: Text(
                               'Устройство не в сети',
                               style: TextStyle(
-                                fontSize: 14,
+                                fontSize: AppFontSizes.body,
                                 fontWeight: FontWeight.w600,
                                 color: colors.textMuted,
                               ),

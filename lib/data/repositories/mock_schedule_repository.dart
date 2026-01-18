@@ -32,7 +32,7 @@ class MockScheduleRepository implements ScheduleRepository {
 
   @override
   Future<List<ScheduleEntry>> getSchedule(String deviceId) async {
-    await Future.delayed(Duration(milliseconds: MockData.networkDelays['fast']!));
+    await Future.delayed(MockData.fastDelay);
     return List.unmodifiable(_schedules[deviceId] ?? []);
   }
 
@@ -44,7 +44,7 @@ class MockScheduleRepository implements ScheduleRepository {
 
   @override
   Future<ScheduleEntry> addEntry(ScheduleEntry entry) async {
-    await Future.delayed(Duration(milliseconds: MockData.networkDelays['normal']!));
+    await Future.delayed(MockData.normalDelay);
 
     final deviceSchedule = _schedules.putIfAbsent(entry.deviceId, () => []);
     final newEntry = entry.copyWith(
@@ -57,7 +57,7 @@ class MockScheduleRepository implements ScheduleRepository {
 
   @override
   Future<ScheduleEntry> updateEntry(ScheduleEntry entry) async {
-    await Future.delayed(Duration(milliseconds: MockData.networkDelays['normal']!));
+    await Future.delayed(MockData.normalDelay);
 
     final deviceSchedule = _schedules[entry.deviceId];
     if (deviceSchedule == null) {
@@ -76,7 +76,7 @@ class MockScheduleRepository implements ScheduleRepository {
 
   @override
   Future<void> deleteEntry(String entryId) async {
-    await Future.delayed(Duration(milliseconds: MockData.networkDelays['fast']!));
+    await Future.delayed(MockData.fastDelay);
 
     for (final deviceSchedule in _schedules.values) {
       final index = deviceSchedule.indexWhere((e) => e.id == entryId);
@@ -90,7 +90,7 @@ class MockScheduleRepository implements ScheduleRepository {
 
   @override
   Future<ScheduleEntry> toggleEntry(String entryId, bool isActive) async {
-    await Future.delayed(Duration(milliseconds: MockData.networkDelays['fast']!));
+    await Future.delayed(MockData.fastDelay);
 
     for (final entry in _schedules.entries) {
       final deviceSchedule = entry.value;
@@ -108,7 +108,7 @@ class MockScheduleRepository implements ScheduleRepository {
 
   @override
   Future<void> setScheduleEnabled(String deviceId, bool enabled) async {
-    await Future.delayed(Duration(milliseconds: MockData.networkDelays['fast']!));
+    await Future.delayed(MockData.fastDelay);
     // Mock implementation - just simulate API call
   }
 

@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/spacing.dart';
+import '../../../core/theme/app_radius.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -17,9 +18,9 @@ import '../../../core/theme/spacing.dart';
 /// Константы для табов
 abstract class _TabConstants {
   // Размеры
-  static const double borderRadius = 8.0;
   static const double indicatorSize = 6.0;
   static const double borderWidth = 1.0;
+  static const double paddingVerticalCompact = 6.0; // Between xxs (4) and xs (8)
 
   // Анимации
   static const Duration animationDuration = Duration(milliseconds: 150);
@@ -123,12 +124,12 @@ class _BreezTabState extends State<BreezTab> {
           child: AnimatedContainer(
             duration: _TabConstants.animationDuration,
             padding: EdgeInsets.symmetric(
-              vertical: widget.compact ? AppSpacing.xxs + 2 : AppSpacing.xs,
+              vertical: widget.compact ? _TabConstants.paddingVerticalCompact : AppSpacing.xs,
               horizontal: widget.compact ? AppSpacing.xs : AppSpacing.sm,
             ),
             decoration: BoxDecoration(
               color: _buildBackgroundColor(colors),
-              borderRadius: BorderRadius.circular(_TabConstants.borderRadius),
+              borderRadius: BorderRadius.circular(AppRadius.chip),
               border: Border.all(
                 color: _buildBorderColor(colors),
                 width: _TabConstants.borderWidth,
@@ -170,10 +171,10 @@ class _BreezTabState extends State<BreezTab> {
 
   Color _buildBackgroundColor(BreezColors colors) {
     if (widget.isSelected) {
-      return AppColors.accent.withValues(alpha: 0.15);
+      return AppColors.accent.withValues(alpha: AppColors.opacitySubtle);
     }
     if (_isHovered && _isEnabled) {
-      return colors.border.withValues(alpha: 0.3);
+      return colors.border.withValues(alpha: AppColors.opacityLow);
     }
     return Colors.transparent;
   }
@@ -183,7 +184,7 @@ class _BreezTabState extends State<BreezTab> {
       return AppColors.accent;
     }
     if (widget.isActive) {
-      return _indicatorColor.withValues(alpha: 0.5);
+      return _indicatorColor.withValues(alpha: AppColors.opacityMedium);
     }
     return colors.border;
   }

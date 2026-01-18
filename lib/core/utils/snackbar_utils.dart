@@ -3,6 +3,8 @@ library;
 
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
+import '../theme/app_font_sizes.dart';
+import '../theme/app_radius.dart';
 import '../theme/spacing.dart';
 
 /// Вспомогательные функции для показа SnackBar с единым стилем
@@ -18,14 +20,14 @@ class SnackBarUtils {
       SnackBar(
         content: Row(
           children: [
-            Icon(icon, color: Colors.white, size: 24),
+            Icon(icon, color: AppColors.white, size: 24),
             const SizedBox(width: AppSpacing.sm),
             Expanded(
               child: Text(
                 message,
                 style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
+                  color: AppColors.white,
+                  fontSize: AppFontSizes.body,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -39,7 +41,7 @@ class SnackBarUtils {
           vertical: AppSpacing.lg,
         ),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppRadius.card),
         ),
         elevation: 8,
         padding: const EdgeInsets.symmetric(

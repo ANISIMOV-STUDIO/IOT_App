@@ -6,6 +6,7 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/spacing.dart';
 import '../../../widgets/breez/breez_card.dart';
+import '../../../widgets/breez/breez_button.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -64,10 +65,7 @@ class ScheduleDropdown extends StatelessWidget {
               color: colors.text,
             ),
             items: items.map((item) {
-              return DropdownMenuItem(
-                value: item,
-                child: Text(item),
-              );
+              return DropdownMenuItem(value: item, child: Text(item));
             }).toList(),
             onChanged: onChanged,
           ),
@@ -216,7 +214,10 @@ class ScheduleActiveToggle extends StatelessWidget {
     final colors = BreezColors.of(context);
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.xs),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.md,
+        vertical: AppSpacing.xs,
+      ),
       decoration: BoxDecoration(
         color: colors.buttonBg,
         borderRadius: BorderRadius.circular(AppRadius.button),
@@ -237,7 +238,7 @@ class ScheduleActiveToggle extends StatelessWidget {
             activeTrackColor: AppColors.accent,
             thumbColor: WidgetStateProperty.resolveWith((states) {
               if (states.contains(WidgetState.selected)) {
-                return Colors.white;
+                return AppColors.white;
               }
               return null;
             }),
@@ -302,25 +303,33 @@ class ScheduleDialogActions extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        TextButton(
-          onPressed: onCancel,
-          child: Text(
-            cancelLabel,
-            style: TextStyle(color: colors.textMuted),
-          ),
+        BreezButton(
+          onTap: onCancel,
+          backgroundColor: Colors.transparent,
+          hoverColor: colors.cardLight,
+          pressedColor: colors.buttonBg,
+          showBorder: false,
+          semanticLabel: cancelLabel,
+          child: Text(cancelLabel, style: TextStyle(color: colors.textMuted)),
         ),
         const SizedBox(width: AppSpacing.md),
-        ElevatedButton(
-          onPressed: onSave,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.accent,
-            foregroundColor: Colors.white,
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.lgx,
-              vertical: AppSpacing.sm,
+        BreezButton(
+          onTap: onSave,
+          backgroundColor: AppColors.accent,
+          hoverColor: AppColors.accentLight,
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.lgx,
+            vertical: AppSpacing.sm,
+          ),
+          enableGlow: true,
+          semanticLabel: saveLabel,
+          child: Text(
+            saveLabel,
+            style: const TextStyle(
+              color: AppColors.white,
+              fontWeight: FontWeight.w600,
             ),
           ),
-          child: Text(saveLabel),
         ),
       ],
     );

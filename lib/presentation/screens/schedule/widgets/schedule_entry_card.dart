@@ -114,15 +114,25 @@ class ScheduleEntryCard extends StatelessWidget {
             ],
           ),
         ),
-        IconButton(
-          icon: Icon(Icons.edit_outlined, color: colors.textMuted),
-          onPressed: onEdit,
+        BreezIconButton(
+          icon: Icons.edit_outlined,
+          iconColor: colors.textMuted,
+          backgroundColor: Colors.transparent,
+          showBorder: false,
+          compact: true,
+          onTap: onEdit,
           tooltip: l10n.tooltipEdit,
+          semanticLabel: l10n.tooltipEdit,
         ),
-        IconButton(
-          icon: const Icon(Icons.delete_outline, color: Colors.red),
-          onPressed: onDelete,
+        BreezIconButton(
+          icon: Icons.delete_outline,
+          iconColor: Colors.red,
+          backgroundColor: Colors.transparent,
+          showBorder: false,
+          compact: true,
+          onTap: onDelete,
           tooltip: l10n.tooltipDelete,
+          semanticLabel: l10n.tooltipDelete,
         ),
       ],
     );
@@ -210,7 +220,7 @@ class _ActiveSwitch extends StatelessWidget {
       activeTrackColor: AppColors.accent,
       thumbColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.selected)) {
-          return Colors.white;
+          return AppColors.white;
         }
         return null;
       }),

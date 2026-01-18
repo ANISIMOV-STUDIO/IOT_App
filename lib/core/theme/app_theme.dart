@@ -6,6 +6,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'app_radius.dart';
+import 'app_animations.dart';
 
 // Re-export colors for backwards compatibility
 export 'app_colors.dart';
@@ -150,13 +151,13 @@ class AppTheme {
         colorScheme: ColorScheme(
           brightness: isDark ? Brightness.dark : Brightness.light,
           primary: AppColors.accent,
-          onPrimary: isDark ? AppColors.darkBg : Colors.white,
+          onPrimary: isDark ? AppColors.darkBg : AppColors.white,
           secondary: AppColors.accentLight,
-          onSecondary: isDark ? AppColors.darkBg : Colors.white,
+          onSecondary: isDark ? AppColors.darkBg : AppColors.white,
           tertiary: AppColors.warning,
           onTertiary: AppColors.darkBg,
           error: AppColors.critical,
-          onError: Colors.white,
+          onError: AppColors.white,
           surface: card,
           onSurface: text,
           surfaceContainerHighest: cardLight,
@@ -195,16 +196,16 @@ class AppTheme {
             }),
             foregroundColor: WidgetStateProperty.resolveWith((states) {
               if (states.contains(WidgetState.disabled)) {
-                return Colors.white.withValues(alpha: 0.7);
+                return AppColors.white.withValues(alpha: 0.7);
               }
-              return Colors.white;
+              return AppColors.white;
             }),
             overlayColor: WidgetStateProperty.resolveWith((states) {
               if (states.contains(WidgetState.pressed)) {
-                return Colors.white.withValues(alpha: 0.1);
+                return AppColors.white.withValues(alpha: 0.1);
               }
               if (states.contains(WidgetState.hovered)) {
-                return Colors.white.withValues(alpha: 0.05);
+                return AppColors.white.withValues(alpha: 0.05);
               }
               return Colors.transparent;
             }),
@@ -322,9 +323,9 @@ class AppTheme {
         sliderTheme: SliderThemeData(
           activeTrackColor: AppColors.accent,
           inactiveTrackColor: isDark
-              ? Colors.white.withValues(alpha: 0.1)
-              : Colors.black.withValues(alpha: 0.1),
-          thumbColor: Colors.white,
+              ? AppColors.white.withValues(alpha: 0.1)
+              : AppColors.black.withValues(alpha: 0.1),
+          thumbColor: AppColors.white,
           overlayColor: AppColors.accent.withValues(alpha: 0.2),
           trackHeight: 8,
           thumbShape: const RoundSliderThumbShape(
@@ -337,7 +338,7 @@ class AppTheme {
         switchTheme: SwitchThemeData(
           thumbColor: WidgetStateProperty.resolveWith((states) {
             if (states.contains(WidgetState.selected)) {
-              return Colors.white;
+              return AppColors.white;
             }
             return textMuted;
           }),
@@ -358,7 +359,7 @@ class AppTheme {
             }
             return Colors.transparent;
           }),
-          checkColor: WidgetStateProperty.all(Colors.white),
+          checkColor: WidgetStateProperty.all(AppColors.white),
           side: BorderSide(color: border, width: 1.5),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(4),

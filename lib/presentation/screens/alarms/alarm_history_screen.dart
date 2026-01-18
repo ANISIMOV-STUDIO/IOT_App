@@ -53,8 +53,8 @@ class _AlarmHistoryScreenState extends State<AlarmHistoryScreen> {
     super.initState();
     // Запрос на загрузку истории аварий
     context.read<ClimateBloc>().add(
-          ClimateAlarmHistoryRequested(widget.deviceId),
-        );
+      ClimateAlarmHistoryRequested(widget.deviceId),
+    );
   }
 
   @override
@@ -67,9 +67,14 @@ class _AlarmHistoryScreenState extends State<AlarmHistoryScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: colors.text),
-          onPressed: () => Navigator.of(context).pop(),
+        leading: BreezIconButton(
+          icon: Icons.arrow_back,
+          iconColor: colors.text,
+          backgroundColor: Colors.transparent,
+          showBorder: false,
+          compact: true,
+          onTap: () => Navigator.of(context).pop(),
+          semanticLabel: 'Back',
         ),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,13 +98,19 @@ class _AlarmHistoryScreenState extends State<AlarmHistoryScreen> {
         ),
         actions: [
           // Кнопка обновления
-          IconButton(
-            icon: Icon(Icons.refresh, color: colors.text),
-            onPressed: () {
+          BreezIconButton(
+            icon: Icons.refresh,
+            iconColor: colors.text,
+            backgroundColor: Colors.transparent,
+            showBorder: false,
+            compact: true,
+            onTap: () {
               context.read<ClimateBloc>().add(
-                    ClimateAlarmHistoryRequested(widget.deviceId),
-                  );
+                ClimateAlarmHistoryRequested(widget.deviceId),
+              );
             },
+            semanticLabel: 'Refresh',
+            tooltip: 'Обновить историю',
           ),
         ],
       ),
@@ -204,7 +215,9 @@ class _AlarmHistoryCard extends StatelessWidget {
                 child: Icon(
                   isCleared ? Icons.check_circle_outline : Icons.error_outline,
                   size: _AlarmHistoryConstants.iconSize,
-                  color: isCleared ? AppColors.accentGreen : AppColors.accentRed,
+                  color: isCleared
+                      ? AppColors.accentGreen
+                      : AppColors.accentRed,
                 ),
               ),
               const SizedBox(width: AppSpacing.sm),
@@ -251,7 +264,9 @@ class _AlarmHistoryCard extends StatelessWidget {
                   style: TextStyle(
                     fontSize: _AlarmHistoryConstants.tinyFontSize,
                     fontWeight: FontWeight.w700,
-                    color: isCleared ? AppColors.accentGreen : AppColors.accentRed,
+                    color: isCleared
+                        ? AppColors.accentGreen
+                        : AppColors.accentRed,
                   ),
                 ),
               ),

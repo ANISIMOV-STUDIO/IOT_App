@@ -63,7 +63,7 @@ class ToastService {
         content: Row(
           children: [
             if (showIcon) ...[
-              Icon(icon, color: Colors.white, size: 20),
+              Icon(icon, color: AppColors.white, size: 20),
               const SizedBox(width: AppSpacing.sm),
             ],
             Expanded(
@@ -72,7 +72,7 @@ class ToastService {
                 style: const TextStyle(
                   fontSize: AppFontSizes.body,
                   fontWeight: FontWeight.w500,
-                  color: Colors.white,
+                  color: AppColors.white,
                 ),
               ),
             ),
@@ -88,7 +88,7 @@ class ToastService {
         action: actionLabel != null
             ? SnackBarAction(
                 label: actionLabel,
-                textColor: Colors.white,
+                textColor: AppColors.white,
                 onPressed: onAction ?? () {},
               )
             : null,

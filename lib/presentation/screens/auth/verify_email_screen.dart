@@ -106,7 +106,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                       l10n.verifyEmailSent,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: AppFontSizes.body,
                         color: colors.textMuted,
                       ),
                     ),
@@ -115,7 +115,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                       widget.email,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: AppFontSizes.body,
                         fontWeight: FontWeight.w600,
                         color: colors.text,
                       ),

@@ -4,6 +4,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/spacing.dart';
 
 /// Поле для ввода PIN-кода (6 цифр)
@@ -144,7 +145,7 @@ class _BreezPinCodeFieldState extends State<BreezPinCodeField> {
                     keyboardType: TextInputType.number,
                     maxLength: 1,
                     style: TextStyle(
-                      fontSize: 24,
+                      fontSize: AppFontSizes.h2,
                       fontWeight: FontWeight.w600,
                       color: colors.text,
                     ),
@@ -159,7 +160,7 @@ class _BreezPinCodeFieldState extends State<BreezPinCodeField> {
                         vertical: AppSpacing.md,
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(AppRadius.button),
                         borderSide: BorderSide(
                           color: hasError
                               ? AppColors.critical
@@ -168,7 +169,7 @@ class _BreezPinCodeFieldState extends State<BreezPinCodeField> {
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(AppRadius.button),
                         borderSide: BorderSide(
                           color: hasError
                               ? AppColors.critical
@@ -190,7 +191,7 @@ class _BreezPinCodeFieldState extends State<BreezPinCodeField> {
             child: Text(
               widget.errorText ?? '',
               style: const TextStyle(
-                fontSize: 12,
+                fontSize: AppFontSizes.caption,
                 color: AppColors.critical,
               ),
             ),

@@ -1,0 +1,18 @@
+# Analysis options for scripts directory
+# Scripts are allowed to use print statements and have relaxed linting
+
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    # Allow print statements in scripts
+    avoid_print: false
+
+    # Relax style rules for scripts
+    prefer_expression_function_bodies: false
+    unnecessary_brace_in_string_interps: false
+    always_put_control_body_on_new_line: false
+    use_raw_strings: false
+    unnecessary_string_interpolations: false
+    sort_constructors_first: false
+    dangling_library_doc_comments: false

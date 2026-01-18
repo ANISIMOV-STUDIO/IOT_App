@@ -107,7 +107,7 @@ class _DateUnitSection extends StatelessWidget {
 
     // Единый стиль для даты и времени
     final textStyle = TextStyle(
-      fontSize: 12,
+      fontSize: AppFontSizes.caption,
       fontWeight: FontWeight.w500,
       color: colors.textMuted,
     );
@@ -156,7 +156,7 @@ class _AlarmBadge extends StatelessWidget {
               Text(
                 '$alarmCount',
                 style: const TextStyle(
-                  fontSize: 10,
+                  fontSize: AppFontSizes.captionSmall,
                   fontWeight: FontWeight.w700,
                   color: AppColors.accentRed,
                 ),
@@ -212,7 +212,7 @@ class _ControlsSection extends StatelessWidget {
             width: 32,
             height: 32,
             child: Padding(
-              padding: EdgeInsets.all(6),
+              padding: EdgeInsets.all(AppSpacing.xs),
               child: CircularProgressIndicator(
                 strokeWidth: 2,
                 color: AppColors.accent,
@@ -276,7 +276,7 @@ class _StatusBadge extends StatelessWidget {
           Text(
             status ?? l10n.statusRunning,
             style: TextStyle(
-              fontSize: 10,
+              fontSize: AppFontSizes.captionSmall,
               fontWeight: FontWeight.w600,
               color: statusColor,
             ),
