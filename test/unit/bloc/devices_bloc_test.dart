@@ -25,6 +25,8 @@ class MockRenameDevice extends Mock implements RenameDevice {}
 
 class MockSetDevicePower extends Mock implements SetDevicePower {}
 
+class MockSetDeviceTime extends Mock implements SetDeviceTime {}
+
 void main() {
   late MockGetAllHvacDevices mockGetAllHvacDevices;
   late MockWatchHvacDevices mockWatchHvacDevices;
@@ -32,6 +34,7 @@ void main() {
   late MockDeleteDevice mockDeleteDevice;
   late MockRenameDevice mockRenameDevice;
   late MockSetDevicePower mockSetDevicePower;
+  late MockSetDeviceTime mockSetDeviceTime;
   late void Function(String) mockSetSelectedDevice;
   late List<String> selectedDeviceCalls;
 
@@ -56,6 +59,7 @@ void main() {
     registerFallbackValue(const RegisterDeviceParams(macAddress: '', name: ''));
     registerFallbackValue(const DeleteDeviceParams(deviceId: ''));
     registerFallbackValue(const RenameDeviceParams(deviceId: '', newName: ''));
+    registerFallbackValue(SetDeviceTimeParams(deviceId: '', time: DateTime(2024)));
   });
 
   setUp(() {
@@ -65,6 +69,7 @@ void main() {
     mockDeleteDevice = MockDeleteDevice();
     mockRenameDevice = MockRenameDevice();
     mockSetDevicePower = MockSetDevicePower();
+    mockSetDeviceTime = MockSetDeviceTime();
     selectedDeviceCalls = [];
     mockSetSelectedDevice = (deviceId) => selectedDeviceCalls.add(deviceId);
   });
@@ -76,6 +81,7 @@ void main() {
         deleteDevice: mockDeleteDevice,
         renameDevice: mockRenameDevice,
         setDevicePower: mockSetDevicePower,
+        setDeviceTime: mockSetDeviceTime,
         setSelectedDevice: mockSetSelectedDevice,
       );
 
