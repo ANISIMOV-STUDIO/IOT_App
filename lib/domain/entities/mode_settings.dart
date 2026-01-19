@@ -11,11 +11,10 @@ class ModeSettings extends Equatable {
   });
 
   factory ModeSettings.fromJson(Map<String, dynamic> json) => ModeSettings(
-      // TODO: Раскомментировать после проверки визуала с прочерками
-      // heatingTemperature: json['heatingTemperature'] as int?,
-      // coolingTemperature: json['coolingTemperature'] as int?,
-      // supplyFan: json['supplyFan'] as int?,
-      // exhaustFan: json['exhaustFan'] as int?,
+      heatingTemperature: json['heatingTemperature'] as int?,
+      coolingTemperature: json['coolingTemperature'] as int?,
+      supplyFan: json['supplyFan'] as int?,
+      exhaustFan: json['exhaustFan'] as int?,
     );
 
   /// Температура нагрева (°C)
