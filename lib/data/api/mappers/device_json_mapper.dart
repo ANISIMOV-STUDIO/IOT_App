@@ -259,7 +259,6 @@ class DeviceJsonMapper {
       targetHumidity: (json['targetHumidity'] as num?)?.toDouble() ?? 50.0,
       operatingMode: _modeToOperatingMode(json['mode'] as String?),
       scheduleIndicator: json['scheduleIndicator'] as int?,
-      devicePower: json['devicePower'] as int?,
       isOnline: json['isOnline'] as bool? ?? true,
       outdoorTemperature: (json['outdoorTemperature'] as num?)?.toDouble(),
       kpdRecuperator: json['kpdRecuperator'] as int?,
@@ -269,7 +268,7 @@ class DeviceJsonMapper {
       supplyTempAfterRecup: (json['temperatureSetpoint'] as num?)?.toDouble(),
       co2Level: json['coIndicator'] as int?,
       freeCooling: json['freeCooling'] as bool? ?? false,
-      heaterPerformance: json['devicePower'] as int?,
+      heaterPower: json['power'] as int?,
       coolerStatus: json['coolerStatusLabel'] as String?,
       ductPressure: json['pressure'] as int?,
       modeSettings: json['modeSettings'] != null

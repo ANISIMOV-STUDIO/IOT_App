@@ -57,7 +57,6 @@ class UnitTabButton extends StatelessWidget {
         exhaustFan: 0,
         outsideTemp: 0,
         filterPercent: 100,
-        airflowRate: 0,
       ),
       isSelected: isSelected,
       onTap: onTap,

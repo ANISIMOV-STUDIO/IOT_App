@@ -590,7 +590,6 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
       humidity: climate?.humidity.toInt() ?? 45,
       outsideTemp: fullState?.outdoorTemperature ?? 0.0,
       filterPercent: fullState?.kpdRecuperator ?? 0,
-      airflowRate: fullState?.devicePower ?? 0,
       indoorTemp:
           fullState?.indoorTemperature ?? climate?.currentTemperature ?? 22.0,
       supplyTemp: fullState?.supplyTemperature ?? 20.0,
@@ -598,7 +597,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
       co2Level: fullState?.co2Level ?? 0,
       recuperatorEfficiency: fullState?.kpdRecuperator ?? 0,
       freeCooling: fullState?.freeCooling ?? false,
-      heaterPerformance: fullState?.heaterPerformance ?? 0,
+      heaterPower: fullState?.heaterPower ?? 0,
       coolerStatus: fullState?.coolerStatus ?? 'Н/Д',
       ductPressure: fullState?.ductPressure ?? 0,
       isOnline: fullState?.isOnline ?? true,
@@ -657,7 +656,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
       _SensorInfo(
         key: 'heater_perf',
         icon: Icons.local_fire_department_outlined,
-        value: '${unit.heaterPerformance}%',
+        value: '${unit.heaterPower}%',
         label: l10n.heater,
         description: 'Мощность работы нагревателя',
         color: AppColors.accentOrange,
@@ -686,14 +685,6 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
         value: '${unit.filterPercent}%',
         label: l10n.filter,
         description: 'Загрязнённость фильтра, требует замены при 100%',
-        color: AppColors.accent,
-      ),
-      _SensorInfo(
-        key: 'airflow_rate',
-        icon: Icons.air,
-        value: '${unit.airflowRate}',
-        label: l10n.airflowRate,
-        description: 'Текущий расход воздуха системы (м³/ч)',
         color: AppColors.accent,
       ),
     ];

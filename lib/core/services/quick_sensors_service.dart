@@ -20,10 +20,9 @@ enum QuickSensorType {
   co2Level('co2_level', Icons.cloud_outlined),
   supplyTemp('supply_temp', Icons.air),
   recuperatorEfficiency('recuperator_eff', Icons.recycling),
-  heaterPerformance('heater_perf', Icons.local_fire_department_outlined),
+  heaterPower('heater_perf', Icons.local_fire_department_outlined),
   ductPressure('duct_pressure', Icons.speed),
-  filterPercent('filter_percent', Icons.filter_alt_outlined),
-  airflowRate('airflow_rate', Icons.air);
+  filterPercent('filter_percent', Icons.filter_alt_outlined);
 
   const QuickSensorType(this.key, this.icon);
 
@@ -41,10 +40,9 @@ enum QuickSensorType {
       QuickSensorType.co2Level => 'CO₂',
       QuickSensorType.supplyTemp => l10n.supply,
       QuickSensorType.recuperatorEfficiency => l10n.efficiency,
-      QuickSensorType.heaterPerformance => l10n.heater,
+      QuickSensorType.heaterPower => l10n.heater,
       QuickSensorType.ductPressure => l10n.pressure,
       QuickSensorType.filterPercent => l10n.filter,
-      QuickSensorType.airflowRate => l10n.airflow,
     };
 
   /// Цвет иконки
@@ -55,10 +53,9 @@ enum QuickSensorType {
       QuickSensorType.co2Level => AppColors.accentGreen,
       QuickSensorType.supplyTemp => AppColors.accentOrange,
       QuickSensorType.recuperatorEfficiency => AppColors.accent,
-      QuickSensorType.heaterPerformance => AppColors.accentOrange,
+      QuickSensorType.heaterPower => AppColors.accentOrange,
       QuickSensorType.ductPressure => AppColors.darkTextMuted,
       QuickSensorType.filterPercent => AppColors.accent,
-      QuickSensorType.airflowRate => AppColors.accent,
     };
 
   /// Найти тип по ключу

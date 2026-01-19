@@ -17,7 +17,7 @@ abstract class MockData {
       'humidity': 45,
       'outsideTemp': 18,
       'filterPercent': 88,
-      'airflowRate': 420,
+      'heaterPower': 420,
     },
     {
       'id': 'pv_2',
@@ -30,7 +30,7 @@ abstract class MockData {
       'humidity': 50,
       'outsideTemp': 18,
       'filterPercent': 72,
-      'airflowRate': 280,
+      'heaterPower': 280,
     },
     {
       'id': 'pv_3',
@@ -43,7 +43,7 @@ abstract class MockData {
       'humidity': 40,
       'outsideTemp': 18,
       'filterPercent': 95,
-      'airflowRate': 580,
+      'heaterPower': 580,
     },
     {
       'id': 'pv_4',
@@ -56,7 +56,7 @@ abstract class MockData {
       'humidity': 55,
       'outsideTemp': 18,
       'filterPercent': 65,
-      'airflowRate': 350,
+      'heaterPower': 350,
     },
   ];
 

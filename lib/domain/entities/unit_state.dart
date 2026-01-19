@@ -18,7 +18,6 @@ class UnitState extends Equatable {        // Текущее время устр
     required this.humidity,
     required this.outsideTemp,
     required this.filterPercent,
-    required this.airflowRate,
     this.heatingTemp,
     this.coolingTemp,
     this.supplyFan,
@@ -29,7 +28,7 @@ class UnitState extends Equatable {        // Текущее время устр
     this.co2Level = 450,
     this.recuperatorEfficiency = 85,
     this.freeCooling = false,
-    this.heaterPerformance = 0,
+    this.heaterPower = 0,
     this.coolerStatus = 'Н/Д',
     this.ductPressure = 120,
     this.isOnline = true,
@@ -48,7 +47,6 @@ class UnitState extends Equatable {        // Текущее время устр
   final int humidity;
   final double outsideTemp;
   final int filterPercent;
-  final int airflowRate;
 
   // Новые датчики
   final double indoorTemp;              // Температура воздуха в помещении
@@ -57,7 +55,7 @@ class UnitState extends Equatable {        // Текущее время устр
   final int co2Level;                // Концентрация CO2 (ppm)
   final int recuperatorEfficiency;   // Температурная эффективность рекуператора (%)
   final bool freeCooling;            // Свободное охлаждение рекуператора (Вкл/Выкл)
-  final int heaterPerformance;       // Производительность электрического нагревателя (%)
+  final int heaterPower;             // Мощность работы нагревателя (%)
   final String coolerStatus;            // Статус охладителя
   final int ductPressure;            // Давление в воздуховоде (Па)
   final bool isOnline;                // Устройство онлайн
@@ -77,14 +75,13 @@ class UnitState extends Equatable {        // Текущее время устр
     int? humidity,
     double? outsideTemp,
     int? filterPercent,
-    int? airflowRate,
     double? indoorTemp,
     double? supplyTemp,
     double? supplyTempAfterRecup,
     int? co2Level,
     int? recuperatorEfficiency,
     bool? freeCooling,
-    int? heaterPerformance,
+    int? heaterPower,
     String? coolerStatus,
     int? ductPressure,
     bool? isOnline,
@@ -103,14 +100,13 @@ class UnitState extends Equatable {        // Текущее время устр
       humidity: humidity ?? this.humidity,
       outsideTemp: outsideTemp ?? this.outsideTemp,
       filterPercent: filterPercent ?? this.filterPercent,
-      airflowRate: airflowRate ?? this.airflowRate,
       indoorTemp: indoorTemp ?? this.indoorTemp,
       supplyTemp: supplyTemp ?? this.supplyTemp,
       supplyTempAfterRecup: supplyTempAfterRecup ?? this.supplyTempAfterRecup,
       co2Level: co2Level ?? this.co2Level,
       recuperatorEfficiency: recuperatorEfficiency ?? this.recuperatorEfficiency,
       freeCooling: freeCooling ?? this.freeCooling,
-      heaterPerformance: heaterPerformance ?? this.heaterPerformance,
+      heaterPower: heaterPower ?? this.heaterPower,
       coolerStatus: coolerStatus ?? this.coolerStatus,
       ductPressure: ductPressure ?? this.ductPressure,
       isOnline: isOnline ?? this.isOnline,
@@ -132,14 +128,13 @@ class UnitState extends Equatable {        // Текущее время устр
         humidity,
         outsideTemp,
         filterPercent,
-        airflowRate,
         indoorTemp,
         supplyTemp,
         supplyTempAfterRecup,
         co2Level,
         recuperatorEfficiency,
         freeCooling,
-        heaterPerformance,
+        heaterPower,
         coolerStatus,
         ductPressure,
         isOnline,

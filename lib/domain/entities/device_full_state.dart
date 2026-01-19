@@ -19,7 +19,6 @@ class DeviceFullState extends Equatable {
     this.targetHumidity = 50.0,
     this.operatingMode = 'basic',
     this.scheduleIndicator,
-    this.devicePower,
     this.isOnline = true,
     this.outdoorTemperature,
     this.kpdRecuperator,
@@ -28,7 +27,7 @@ class DeviceFullState extends Equatable {
     this.supplyTempAfterRecup,
     this.co2Level,
     this.freeCooling = false,
-    this.heaterPerformance,
+    this.heaterPower,
     this.coolerStatus,
     this.ductPressure,
     this.modeSettings,
@@ -52,7 +51,6 @@ class DeviceFullState extends Equatable {
   final String operatingMode;
 
   final int? scheduleIndicator;
-  final int? devicePower;
   final bool isOnline;
 
   /// Уличная температура (с датчика устройства)
@@ -80,8 +78,8 @@ class DeviceFullState extends Equatable {
   /// Свободное охлаждение рекуператора (Вкл/Выкл)
   final bool freeCooling;
 
-  /// Производительность электрического нагревателя (%)
-  final int? heaterPerformance;
+  /// Мощность работы нагревателя (%) - из JSON поля "power"
+  final int? heaterPower;
 
   /// Статус охладителя (Отсутствует/Выключен/Включен)
   final String? coolerStatus;
@@ -123,7 +121,6 @@ class DeviceFullState extends Equatable {
     double? targetTemperature,
     double? humidity,
     int? scheduleIndicator,
-    int? devicePower,
     bool? isOnline,
     double? outdoorTemperature,
     int? kpdRecuperator,
@@ -132,7 +129,7 @@ class DeviceFullState extends Equatable {
     double? supplyTempAfterRecup,
     int? co2Level,
     bool? freeCooling,
-    int? heaterPerformance,
+    int? heaterPower,
     String? coolerStatus,
     int? ductPressure,
     Map<String, ModeSettings>? modeSettings,
@@ -155,7 +152,6 @@ class DeviceFullState extends Equatable {
       targetHumidity: targetHumidity ?? this.targetHumidity,
       operatingMode: operatingMode ?? this.operatingMode,
       scheduleIndicator: scheduleIndicator ?? this.scheduleIndicator,
-      devicePower: devicePower ?? this.devicePower,
       isOnline: isOnline ?? this.isOnline,
       outdoorTemperature: outdoorTemperature ?? this.outdoorTemperature,
       kpdRecuperator: kpdRecuperator ?? this.kpdRecuperator,
@@ -164,7 +160,7 @@ class DeviceFullState extends Equatable {
       supplyTempAfterRecup: supplyTempAfterRecup ?? this.supplyTempAfterRecup,
       co2Level: co2Level ?? this.co2Level,
       freeCooling: freeCooling ?? this.freeCooling,
-      heaterPerformance: heaterPerformance ?? this.heaterPerformance,
+      heaterPower: heaterPower ?? this.heaterPower,
       coolerStatus: coolerStatus ?? this.coolerStatus,
       ductPressure: ductPressure ?? this.ductPressure,
       modeSettings: modeSettings ?? this.modeSettings,
@@ -188,7 +184,6 @@ class DeviceFullState extends Equatable {
         targetHumidity,
         operatingMode,
         scheduleIndicator,
-        devicePower,
         isOnline,
         outdoorTemperature,
         kpdRecuperator,
@@ -197,7 +192,7 @@ class DeviceFullState extends Equatable {
         supplyTempAfterRecup,
         co2Level,
         freeCooling,
-        heaterPerformance,
+        heaterPower,
         coolerStatus,
         ductPressure,
         modeSettings,

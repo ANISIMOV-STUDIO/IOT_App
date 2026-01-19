@@ -77,7 +77,7 @@ class UnitControlCard extends StatelessWidget {
       humidity: unit.humidity,
       outsideTemp: unit.outsideTemp,
       indoorTemp: unit.indoorTemp,
-      airflow: unit.airflowRate,
+      airflow: 0,
       filterPercent: unit.filterPercent,
       isPowered: unit.power,
       supplyFan: unit.supplyFan,

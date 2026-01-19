@@ -422,14 +422,12 @@ class _StatsSection extends StatelessWidget {
         '${(unit?.supplyTemp ?? 0).toStringAsFixed(1)}°',
       QuickSensorType.recuperatorEfficiency =>
         '${unit?.recuperatorEfficiency ?? 0}%',
-      QuickSensorType.heaterPerformance =>
-        '${unit?.heaterPerformance ?? 0}%',
+      QuickSensorType.heaterPower =>
+        '${unit?.heaterPower ?? 0}%',
       QuickSensorType.ductPressure =>
         '${unit?.ductPressure ?? 0} Па',
       QuickSensorType.filterPercent =>
         '${unit?.filterPercent ?? filterPercent}%',
-      QuickSensorType.airflowRate =>
-        '${unit?.airflowRate ?? airflow}',
     };
   }
 
