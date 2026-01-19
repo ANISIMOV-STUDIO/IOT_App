@@ -28,6 +28,8 @@ EXCLUDED_FILES=(
     "lib/core/theme/breakpoints.dart"
     "lib/core/config/app_constants.dart"
     "lib/core/navigation/app_router.dart"
+    # Infrastructure code with computed durations (not UI animations)
+    "lib/core/services/retry_service.dart"
 )
 
 # Function to check if file should be excluded

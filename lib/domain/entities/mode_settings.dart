@@ -1,27 +1,60 @@
 import 'package:equatable/equatable.dart';
 
-/// Настройки режима (нагрев/охлаждение)
+/// Настройки режима (температуры и скорости вентиляторов)
 class ModeSettings extends Equatable {
 
   const ModeSettings({
     required this.heatingTemperature,
     required this.coolingTemperature,
+    this.supplyFan = 50,
+    this.exhaustFan = 50,
   });
 
   factory ModeSettings.fromJson(Map<String, dynamic> json) => ModeSettings(
       heatingTemperature: json['heatingTemperature'] as int? ?? 22,
       coolingTemperature: json['coolingTemperature'] as int? ?? 24,
+      supplyFan: json['supplyFan'] as int? ?? 50,
+      exhaustFan: json['exhaustFan'] as int? ?? 50,
     );
+
+  /// Температура нагрева (°C)
   final int heatingTemperature;
+
+  /// Температура охлаждения (°C)
   final int coolingTemperature;
+
+  /// Скорость приточного вентилятора (%)
+  final int supplyFan;
+
+  /// Скорость вытяжного вентилятора (%)
+  final int exhaustFan;
 
   Map<String, dynamic> toJson() => {
     'heatingTemperature': heatingTemperature,
     'coolingTemperature': coolingTemperature,
+    'supplyFan': supplyFan,
+    'exhaustFan': exhaustFan,
   };
 
+  ModeSettings copyWith({
+    int? heatingTemperature,
+    int? coolingTemperature,
+    int? supplyFan,
+    int? exhaustFan,
+  }) => ModeSettings(
+      heatingTemperature: heatingTemperature ?? this.heatingTemperature,
+      coolingTemperature: coolingTemperature ?? this.coolingTemperature,
+      supplyFan: supplyFan ?? this.supplyFan,
+      exhaustFan: exhaustFan ?? this.exhaustFan,
+    );
+
   @override
-  List<Object?> get props => [heatingTemperature, coolingTemperature];
+  List<Object?> get props => [
+    heatingTemperature,
+    coolingTemperature,
+    supplyFan,
+    exhaustFan,
+  ];
 }
 
 /// Настройки таймера для дня недели
