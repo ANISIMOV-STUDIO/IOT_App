@@ -316,9 +316,18 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     final existing = state.deviceFullState;
     final incoming = event.fullState;
 
+    // Мержим modeSettings: если в incoming null, берём из existing
+    final mergedModeSettings = _mergeModeSettings(
+      existing?.modeSettings,
+      incoming.modeSettings,
+    );
+
     // Сохраняем quickSensors - это user preference, не телеметрия
     final mergedState = existing != null
-        ? incoming.copyWith(quickSensors: existing.quickSensors)
+        ? incoming.copyWith(
+            quickSensors: existing.quickSensors,
+            modeSettings: mergedModeSettings,
+          )
         : incoming;
 
     // Проверяем, подтвердилось ли ожидаемое состояние питания
@@ -344,6 +353,36 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       isPendingSupplyFan: false,
       isPendingExhaustFan: false,
     ));
+  }
+
+  /// Мержит modeSettings: incoming значения приоритетнее, но null не перезаписывает
+  Map<String, ModeSettings>? _mergeModeSettings(
+    Map<String, ModeSettings>? existing,
+    Map<String, ModeSettings>? incoming,
+  ) {
+    if (incoming == null) {
+      return existing;
+    }
+    if (existing == null) {
+      return incoming;
+    }
+
+    final merged = <String, ModeSettings>{...existing};
+    for (final entry in incoming.entries) {
+      final existingSettings = existing[entry.key];
+      if (existingSettings == null) {
+        merged[entry.key] = entry.value;
+      } else {
+        // Мержим отдельные поля: incoming приоритетнее, но null не перезаписывает
+        merged[entry.key] = ModeSettings(
+          heatingTemperature: entry.value.heatingTemperature ?? existingSettings.heatingTemperature,
+          coolingTemperature: entry.value.coolingTemperature ?? existingSettings.coolingTemperature,
+          supplyFan: entry.value.supplyFan ?? existingSettings.supplyFan,
+          exhaustFan: entry.value.exhaustFan ?? existingSettings.exhaustFan,
+        );
+      }
+    }
+    return merged;
   }
 
   /// Запрос на загрузку истории аварий
