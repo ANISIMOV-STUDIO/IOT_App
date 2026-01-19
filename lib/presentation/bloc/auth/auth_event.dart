@@ -32,7 +32,6 @@ class AuthLoginRequested extends AuthEvent {
 
 /// Регистрация пользователя
 class AuthRegisterRequested extends AuthEvent {
-
   const AuthRegisterRequested({
     required this.email,
     required this.password,
@@ -40,16 +39,17 @@ class AuthRegisterRequested extends AuthEvent {
     required this.lastName,
     required this.dataProcessingConsent,
   });
+
   final String email;
   final String password;
   final String firstName;
   final String lastName;
   final bool dataProcessingConsent;
 
+  // password исключён из props для безопасного логирования
   @override
   List<Object?> get props => [
         email,
-        password,
         firstName,
         lastName,
         dataProcessingConsent,

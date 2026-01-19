@@ -147,10 +147,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final response = await _authService.register(request);
 
       // Регистрация успешна, требуется подтверждение email
-      emit(AuthRegistered(
-        email: response.email,
-        password: event.password,
-      ));
+      // password НЕ передаётся в состояние для безопасности
+      emit(AuthRegistered(email: response.email));
     } catch (e) {
       emit(AuthError(e.toString()));
     }

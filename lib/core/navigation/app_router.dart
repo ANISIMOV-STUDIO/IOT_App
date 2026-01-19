@@ -153,11 +153,7 @@ GoRouter createRouter(AuthBloc authBloc) => GoRouter(
         path: AppRoutes.verifyEmail,
         builder: (context, state) {
           final email = state.uri.queryParameters[RouteParams.email] ?? '';
-          final password = state.extra as String? ?? '';
-          return VerifyEmailScreen(
-            email: email,
-            password: password,
-          );
+          return VerifyEmailScreen(email: email);
         },
       ),
       GoRoute(
@@ -266,8 +262,7 @@ extension GoRouterNavigation on BuildContext {
   void goToHome() => go(AppRoutes.home);
   void goToLogin() => go(AppRoutes.login);
   void goToRegister() => go(AppRoutes.register);
-  void goToVerifyEmail(String email, {String? password}) =>
-      go(AppPaths.verifyEmail(email), extra: password);
+  void goToVerifyEmail(String email) => go(AppPaths.verifyEmail(email));
   void goToForgotPassword({String? email}) =>
       go(AppPaths.forgotPassword(email: email));
 

@@ -4,10 +4,14 @@
 /// - Единое хранилище для всех типов данных
 /// - Автоматическое управление TTL (time-to-live)
 /// - Методы для работы с климатом, устройствами, расписанием и др.
+/// - Шифрование данных с помощью AES-256
 library;
 
 import 'dart:async';
+import 'dart:convert';
+import 'dart:math';
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hvac_control/core/config/app_constants.dart';
 import 'package:hvac_control/domain/entities/climate.dart';
@@ -60,6 +64,40 @@ class CacheMetadata {
       };
 }
 
+/// Менеджер ключей шифрования Hive
+///
+/// Использует flutter_secure_storage для безопасного хранения ключа AES-256.
+/// Ключ генерируется один раз при первом запуске и переиспользуется.
+class _HiveEncryptionKeyManager {
+  static const FlutterSecureStorage _secureStorage = FlutterSecureStorage(
+    aOptions: AndroidOptions(encryptedSharedPreferences: true),
+    iOptions: IOSOptions(accessibility: KeychainAccessibility.first_unlock),
+  );
+
+  static const String _hiveEncryptionKeyName = 'hive_encryption_key';
+
+  /// Получить или создать ключ шифрования (32 байта для AES-256)
+  static Future<List<int>> getOrCreateEncryptionKey() async {
+    final existingKey = await _secureStorage.read(key: _hiveEncryptionKeyName);
+
+    if (existingKey != null) {
+      return base64Decode(existingKey);
+    }
+
+    // Генерируем новый криптографически безопасный ключ
+    final random = Random.secure();
+    final key = List<int>.generate(32, (_) => random.nextInt(256));
+
+    // Сохраняем в secure storage
+    await _secureStorage.write(
+      key: _hiveEncryptionKeyName,
+      value: base64Encode(key),
+    );
+
+    return key;
+  }
+}
+
 /// Сервис для управления кешем приложения
 class CacheService {
   late Box<dynamic> _climateBox;
@@ -71,6 +109,9 @@ class CacheService {
   late Box<dynamic> _graphDataBox;
   late Box<dynamic> _metadataBox;
 
+  /// Шифр для шифрования Hive боксов
+  HiveCipher? _cipher;
+
   bool _initialized = false;
 
   /// Флаг для предотвращения операций после dispose
@@ -81,7 +122,8 @@ class CacheService {
 
   /// Инициализация Hive и открытие боксов
   ///
-  /// Потокобезопасный метод - конкурентные вызовы будут ожидать завершения первого
+  /// Потокобезопасный метод - конкурентные вызовы будут ожидать завершения первого.
+  /// Все боксы открываются с шифрованием AES-256.
   Future<void> initialize() async {
     if (_initialized || _isDisposed) {
       return;
@@ -98,14 +140,22 @@ class CacheService {
     try {
       await Hive.initFlutter();
 
-      _climateBox = await Hive.openBox(CacheKeys.climateBox);
-      _devicesBox = await Hive.openBox(CacheKeys.devicesBox);
-      _hvacDevicesBox = await Hive.openBox(CacheKeys.hvacDevicesBox);
-      _energyBox = await Hive.openBox(CacheKeys.energyBox);
-      _scheduleBox = await Hive.openBox(CacheKeys.scheduleBox);
-      _notificationsBox = await Hive.openBox(CacheKeys.notificationsBox);
-      _graphDataBox = await Hive.openBox(CacheKeys.graphDataBox);
-      _metadataBox = await Hive.openBox(CacheKeys.metadataBox);
+      // Получаем или создаём ключ шифрования
+      final encryptionKey = await _HiveEncryptionKeyManager.getOrCreateEncryptionKey();
+      _cipher = HiveAesCipher(encryptionKey);
+
+      // Мигрируем незашифрованные боксы (если есть)
+      await _migrateUnencryptedBoxes();
+
+      // Открываем все боксы с шифрованием
+      _climateBox = await Hive.openBox(CacheKeys.climateBox, encryptionCipher: _cipher);
+      _devicesBox = await Hive.openBox(CacheKeys.devicesBox, encryptionCipher: _cipher);
+      _hvacDevicesBox = await Hive.openBox(CacheKeys.hvacDevicesBox, encryptionCipher: _cipher);
+      _energyBox = await Hive.openBox(CacheKeys.energyBox, encryptionCipher: _cipher);
+      _scheduleBox = await Hive.openBox(CacheKeys.scheduleBox, encryptionCipher: _cipher);
+      _notificationsBox = await Hive.openBox(CacheKeys.notificationsBox, encryptionCipher: _cipher);
+      _graphDataBox = await Hive.openBox(CacheKeys.graphDataBox, encryptionCipher: _cipher);
+      _metadataBox = await Hive.openBox(CacheKeys.metadataBox, encryptionCipher: _cipher);
 
       _initialized = true;
       _initCompleter?.complete();
@@ -114,6 +164,61 @@ class CacheService {
       rethrow;
     } finally {
       _initCompleter = null;
+    }
+  }
+
+  /// Миграция незашифрованных боксов в зашифрованные
+  ///
+  /// При первом запуске после обновления:
+  /// 1. Открывает старые незашифрованные боксы
+  /// 2. Копирует данные во временное хранилище
+  /// 3. Удаляет старые боксы
+  /// 4. Создаёт новые зашифрованные боксы с теми же данными
+  Future<void> _migrateUnencryptedBoxes() async {
+    final boxNames = [
+      CacheKeys.climateBox,
+      CacheKeys.devicesBox,
+      CacheKeys.hvacDevicesBox,
+      CacheKeys.energyBox,
+      CacheKeys.scheduleBox,
+      CacheKeys.notificationsBox,
+      CacheKeys.graphDataBox,
+      CacheKeys.metadataBox,
+    ];
+
+    for (final boxName in boxNames) {
+      try {
+        // Пробуем открыть как зашифрованный бокс
+        final encryptedBox = await Hive.openBox(boxName, encryptionCipher: _cipher);
+        await encryptedBox.close();
+        // Бокс уже зашифрован, пропускаем
+      } catch (_) {
+        // Бокс не зашифрован или поврежден - мигрируем
+        try {
+          // Открываем незашифрованный бокс
+          final unencryptedBox = await Hive.openBox<dynamic>(boxName);
+          final data = unencryptedBox.toMap();
+          await unencryptedBox.close();
+
+          // Удаляем старый бокс
+          await Hive.deleteBoxFromDisk(boxName);
+
+          // Создаём новый зашифрованный бокс и переносим данные
+          if (data.isNotEmpty) {
+            final encryptedBox = await Hive.openBox(boxName, encryptionCipher: _cipher);
+            await encryptedBox.putAll(data);
+            await encryptedBox.close();
+          }
+        } catch (migrationError) {
+          // Если миграция не удалась - просто удаляем старый бокс
+          // Данные кеша не критичны, они будут загружены заново
+          try {
+            await Hive.deleteBoxFromDisk(boxName);
+          } catch (_) {
+            // Игнорируем ошибки удаления
+          }
+        }
+      }
     }
   }
 

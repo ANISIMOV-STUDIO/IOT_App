@@ -19,14 +19,12 @@ import 'package:hvac_control/presentation/widgets/breez/breez_text_button.dart';
 
 /// Экран подтверждения email с вводом 6-значного кода
 class VerifyEmailScreen extends StatefulWidget {
-
   const VerifyEmailScreen({
     required this.email,
-    required this.password,
     super.key,
   });
+
   final String email;
-  final String password;
 
   @override
   State<VerifyEmailScreen> createState() => _VerifyEmailScreenState();
@@ -62,18 +60,11 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthEmailVerified) {
-          SnackBarUtils.showSuccess(context, 'Email успешно подтверждён');
-          // Автоматический вход после подтверждения email
-          context.read<AuthBloc>().add(
-                AuthLoginRequested(
-                  email: widget.email,
-                  password: widget.password,
-                ),
-              );
-        } else if (state is AuthAuthenticated) {
-          // Успешный вход после верификации
+          // Email подтверждён - редирект на страницу входа
+          // ignore: lines_longer_than_80_chars
+          SnackBarUtils.showSuccess(context, 'Email успешно подтверждён. Войдите в аккаунт.');
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            rootNavigatorKey.currentContext?.go(AppRoutes.home);
+            rootNavigatorKey.currentContext?.go(AppRoutes.login);
           });
         } else if (state is AuthCodeResent) {
           SnackBarUtils.showSuccess(context, l10n.verifyEmailCodeSent);

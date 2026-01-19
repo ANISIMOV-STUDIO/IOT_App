@@ -62,7 +62,6 @@ class _AuthScreenState extends State<AuthScreen> {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               rootNavigatorKey.currentContext?.go(
                 '${AppRoutes.verifyEmail}?email=${Uri.encodeComponent(state.email)}',
-                extra: state.password,
               );
             });
           }

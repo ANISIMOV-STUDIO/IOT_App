@@ -58,16 +58,12 @@ class AuthError extends AuthState {
 
 /// Регистрация успешна, требуется подтверждение email
 class AuthRegistered extends AuthState {
+  const AuthRegistered({required this.email});
 
-  const AuthRegistered({
-    required this.email,
-    required this.password,
-  });
   final String email;
-  final String password;
 
   @override
-  List<Object?> get props => [email, password];
+  List<Object?> get props => [email];
 }
 
 /// Email подтвержден успешно
