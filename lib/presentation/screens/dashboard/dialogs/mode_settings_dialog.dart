@@ -10,7 +10,6 @@ import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/domain/entities/mode_settings.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
 import 'package:hvac_control/presentation/bloc/climate/climate_bloc.dart';
-import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_slider.dart';
 import 'package:hvac_control/presentation/widgets/breez/temp_column.dart';
 
@@ -198,7 +197,7 @@ class _Header extends StatelessWidget {
         const SizedBox(width: AppSpacing.xs),
         Expanded(
           child: Text(
-            '${l10n.modeFor(modeName)}',
+            l10n.modeFor(modeName),
             style: TextStyle(
               fontSize: _DialogConstants.titleFontSize,
               fontWeight: FontWeight.w600,
@@ -437,7 +436,6 @@ class _ActionButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
     return Row(

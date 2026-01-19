@@ -189,7 +189,7 @@ class CacheService {
     for (final boxName in boxNames) {
       try {
         // Пробуем открыть как зашифрованный бокс
-        final encryptedBox = await Hive.openBox(boxName, encryptionCipher: _cipher);
+        final encryptedBox = await Hive.openBox<dynamic>(boxName, encryptionCipher: _cipher);
         await encryptedBox.close();
         // Бокс уже зашифрован, пропускаем
       } catch (_) {
@@ -205,7 +205,7 @@ class CacheService {
 
           // Создаём новый зашифрованный бокс и переносим данные
           if (data.isNotEmpty) {
-            final encryptedBox = await Hive.openBox(boxName, encryptionCipher: _cipher);
+            final encryptedBox = await Hive.openBox<dynamic>(boxName, encryptionCipher: _cipher);
             await encryptedBox.putAll(data);
             await encryptedBox.close();
           }

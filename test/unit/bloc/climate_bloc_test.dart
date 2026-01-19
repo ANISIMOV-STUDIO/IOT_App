@@ -7,6 +7,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hvac_control/domain/entities/climate.dart';
 import 'package:hvac_control/domain/entities/device_full_state.dart';
+import 'package:hvac_control/domain/entities/mode_settings.dart';
 import 'package:hvac_control/domain/usecases/usecases.dart';
 import 'package:hvac_control/presentation/bloc/climate/climate_bloc.dart';
 import 'package:mocktail/mocktail.dart';
@@ -45,6 +46,8 @@ class MockWatchDeviceFullState extends Mock implements WatchDeviceFullState {}
 
 class MockRequestDeviceUpdate extends Mock implements RequestDeviceUpdate {}
 
+class MockSetModeSettings extends Mock implements SetModeSettings {}
+
 void main() {
   late MockGetCurrentClimateState mockGetCurrentClimateState;
   late MockGetDeviceState mockGetDeviceState;
@@ -62,6 +65,7 @@ void main() {
   late MockSetScheduleEnabled mockSetScheduleEnabled;
   late MockWatchDeviceFullState mockWatchDeviceFullState;
   late MockRequestDeviceUpdate mockRequestDeviceUpdate;
+  late MockSetModeSettings mockSetModeSettings;
 
   // Test data
   const testClimate = ClimateState(
@@ -101,6 +105,11 @@ void main() {
         const SetScheduleEnabledParams(deviceId: '', enabled: false));
     registerFallbackValue(
         const WatchDeviceFullStateParams(deviceId: ''));
+    registerFallbackValue(
+        const SetModeSettingsParams(
+          modeName: '',
+          settings: ModeSettings(heatingTemperature: 22, coolingTemperature: 24),
+        ));
   });
 
   setUp(() {
@@ -120,6 +129,7 @@ void main() {
     mockWatchDeviceFullState = MockWatchDeviceFullState();
     mockGetAlarmHistory = MockGetAlarmHistory();
     mockRequestDeviceUpdate = MockRequestDeviceUpdate();
+    mockSetModeSettings = MockSetModeSettings();
 
     // Default stub for requestDeviceUpdate (fire-and-forget)
     when(() => mockRequestDeviceUpdate(any())).thenAnswer((_) async {});
@@ -141,6 +151,7 @@ void main() {
         setScheduleEnabled: mockSetScheduleEnabled,
         watchDeviceFullState: mockWatchDeviceFullState,
         requestDeviceUpdate: mockRequestDeviceUpdate,
+        setModeSettings: mockSetModeSettings,
       );
 
   group('ClimateBloc', () {

@@ -307,7 +307,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Future<void> _handleModeSettingsTap(String modeId, String modeDisplayName) async {
     final climateState = context.read<ClimateBloc>().state;
     final deviceFullState = climateState.deviceFullState;
-    if (deviceFullState == null) return;
+    if (deviceFullState == null) {
+      return;
+    }
 
     // Получаем текущие настройки режима или создаём дефолтные
     final currentSettings = deviceFullState.modeSettings?[modeId] ??
