@@ -216,16 +216,22 @@ class DashboardBlocBuilder extends StatelessWidget {
     HvacDevice device,
     ClimateState? climate,
     DeviceFullState? fullState,
-  ) => UnitState(
+  ) {
+    // Получаем текущий режим и его настройки
+    final currentMode = fullState?.operatingMode ?? climate?.preset ?? '';
+    final modeSettings = fullState?.modeSettings?[currentMode];
+
+    return UnitState(
       id: device.id,
       name: device.name,
       power: fullState?.power ?? climate?.isOn ?? device.isActive,
       temp: climate?.currentTemperature.toInt() ?? 20,
-      heatingTemp: fullState?.heatingTemperature,
-      coolingTemp: fullState?.coolingTemperature,
-      supplyFan: _parseFanValue(fullState?.supplyFan) ?? climate?.supplyAirflow.toInt(),
-      exhaustFan: _parseFanValue(fullState?.exhaustFan) ?? climate?.exhaustAirflow.toInt(),
-      mode: fullState?.operatingMode ?? climate?.preset ?? '', // Пустая строка = ничего не выбрано
+      // Берём значения из настроек текущего режима
+      heatingTemp: modeSettings?.heatingTemperature,
+      coolingTemp: modeSettings?.coolingTemperature,
+      supplyFan: modeSettings?.supplyFan,
+      exhaustFan: modeSettings?.exhaustFan,
+      mode: currentMode, // Пустая строка = ничего не выбрано
       humidity: climate?.humidity.toInt() ?? 45,
       outsideTemp: fullState?.outdoorTemperature ?? 0.0,
       filterPercent: fullState?.kpdRecuperator ?? 0,
@@ -243,12 +249,5 @@ class DashboardBlocBuilder extends StatelessWidget {
       quickSensors: fullState?.quickSensors ?? const ['outside_temp', 'indoor_temp', 'humidity'],
       deviceTime: fullState?.deviceTime,
     );
-
-  /// Parse fan value from String to int (fan speed is 20-100)
-  int? _parseFanValue(String? value) {
-    if (value == null || value.isEmpty) {
-      return null;
-    }
-    return int.tryParse(value);
   }
 }

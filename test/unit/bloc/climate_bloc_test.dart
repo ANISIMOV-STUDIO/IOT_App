@@ -430,6 +430,13 @@ void main() {
         seed: () => const ClimateControlState(
           status: ClimateControlStatus.success,
           climate: testClimate,
+          deviceFullState: DeviceFullState(
+            id: '1',
+            name: 'Device 1',
+            modeSettings: {
+              'basic': ModeSettings(heatingTemperature: 20, coolingTemperature: 24),
+            },
+          ),
         ),
         act: (bloc) async {
           bloc.add(const ClimateSupplyAirflowChanged(80));
@@ -440,7 +447,7 @@ void main() {
           // 1. Мгновенное обновление UI + pending
           isA<ClimateControlState>()
               .having((s) => s.isPendingSupplyFan, 'isPendingSupplyFan', true)
-              .having((s) => s.climate?.supplyAirflow, 'supplyAirflow', 80.0),
+              .having((s) => s.deviceFullState?.modeSettings?['basic']?.supplyFan, 'supplyFan', 80),
         ],
         verify: (_) {
           verify(() => mockSetAirflow(any())).called(1);
@@ -459,6 +466,13 @@ void main() {
         seed: () => const ClimateControlState(
           status: ClimateControlStatus.success,
           climate: testClimate,
+          deviceFullState: DeviceFullState(
+            id: '1',
+            name: 'Device 1',
+            modeSettings: {
+              'basic': ModeSettings(heatingTemperature: 20, coolingTemperature: 24),
+            },
+          ),
         ),
         act: (bloc) async {
           bloc.add(const ClimateExhaustAirflowChanged(70));
@@ -469,7 +483,7 @@ void main() {
            // 1. Мгновенное обновление UI + pending
           isA<ClimateControlState>()
               .having((s) => s.isPendingExhaustFan, 'isPendingExhaustFan', true)
-              .having((s) => s.climate?.exhaustAirflow, 'exhaustAirflow', 70.0),
+              .having((s) => s.deviceFullState?.modeSettings?['basic']?.exhaustFan, 'exhaustFan', 70),
         ],
         verify: (_) {
           verify(() => mockSetAirflow(any())).called(1);
@@ -490,7 +504,9 @@ void main() {
           deviceFullState: DeviceFullState(
             id: '1',
             name: 'Device 1',
-            heatingTemperature: 20,
+            modeSettings: {
+              'basic': ModeSettings(heatingTemperature: 20, coolingTemperature: 24),
+            },
           ),
         ),
         act: (bloc) async {
@@ -502,7 +518,7 @@ void main() {
           // 1. Мгновенное обновление UI + pending
           isA<ClimateControlState>()
               .having((s) => s.isPendingHeatingTemperature, 'isPendingHeatingTemperature', true)
-              .having((s) => s.deviceFullState?.heatingTemperature, 'heatingTemperature', 21),
+              .having((s) => s.deviceFullState?.modeSettings?['basic']?.heatingTemperature, 'heatingTemperature', 21),
         ],
         verify: (_) {
           verify(() => mockSetTemperature(any())).called(1);
@@ -523,7 +539,9 @@ void main() {
           deviceFullState: DeviceFullState(
             id: '1',
             name: 'Device 1',
-            coolingTemperature: 24,
+            modeSettings: {
+              'basic': ModeSettings(heatingTemperature: 20, coolingTemperature: 24),
+            },
           ),
         ),
         act: (bloc) async {
@@ -535,7 +553,7 @@ void main() {
           // 1. Мгновенное обновление UI + pending
           isA<ClimateControlState>()
               .having((s) => s.isPendingCoolingTemperature, 'isPendingCoolingTemperature', true)
-              .having((s) => s.deviceFullState?.coolingTemperature, 'coolingTemperature', 25),
+              .having((s) => s.deviceFullState?.modeSettings?['basic']?.coolingTemperature, 'coolingTemperature', 25),
         ],
         verify: (_) {
           verify(() => mockSetCoolingTemperature(any())).called(1);

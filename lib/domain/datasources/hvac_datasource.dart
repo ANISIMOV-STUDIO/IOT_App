@@ -47,10 +47,10 @@ abstract class IHvacDataSource {
   Future<void> setModeSettings(
     String deviceId, {
     required String modeName,
-    required int supplyFan,
-    required int exhaustFan,
-    required int heatingTemperature,
-    required int coolingTemperature,
+    int? supplyFan,
+    int? exhaustFan,
+    int? heatingTemperature,
+    int? coolingTemperature,
   });
 
   // ===========================================================================

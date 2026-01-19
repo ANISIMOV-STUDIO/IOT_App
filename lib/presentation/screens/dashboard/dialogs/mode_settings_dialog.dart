@@ -97,10 +97,10 @@ class ModeSettingsDialog extends StatefulWidget {
 }
 
 class _ModeSettingsDialogState extends State<ModeSettingsDialog> {
-  late int _heatingTemperature;
-  late int _coolingTemperature;
-  late int _supplyFan;
-  late int _exhaustFan;
+  int? _heatingTemperature;
+  int? _coolingTemperature;
+  int? _supplyFan;
+  int? _exhaustFan;
 
   @override
   void initState() {
@@ -185,7 +185,9 @@ class _ModeSettingsDialogState extends State<ModeSettingsDialog> {
                     value: _supplyFan,
                     color: AppColors.accent,
                     icon: Icons.arrow_downward_rounded,
-                    onChanged: (value) => setState(() => _supplyFan = value),
+                    onChanged: _supplyFan != null
+                        ? (value) => setState(() => _supplyFan = value)
+                        : null,
                   ),
                 ),
                 const SizedBox(width: AppSpacing.xs),
@@ -195,7 +197,9 @@ class _ModeSettingsDialogState extends State<ModeSettingsDialog> {
                     value: _exhaustFan,
                     color: AppColors.accentOrange,
                     icon: Icons.arrow_upward_rounded,
-                    onChanged: (value) => setState(() => _exhaustFan = value),
+                    onChanged: _exhaustFan != null
+                        ? (value) => setState(() => _exhaustFan = value)
+                        : null,
                   ),
                 ),
               ],
@@ -346,10 +350,10 @@ class _TemperatureRow extends StatelessWidget {
     required this.onCoolingChanged,
   });
 
-  final int heatingTemp;
-  final int coolingTemp;
-  final ValueChanged<int> onHeatingChanged;
-  final ValueChanged<int> onCoolingChanged;
+  final int? heatingTemp;
+  final int? coolingTemp;
+  final ValueChanged<int>? onHeatingChanged;
+  final ValueChanged<int>? onCoolingChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -366,18 +370,22 @@ class _TemperatureRow extends StatelessWidget {
             isPowered: true,
             minTemp: TemperatureLimits.min,
             maxTemp: TemperatureLimits.max,
-            onIncrease: () => onHeatingChanged(
-              (heatingTemp + 1).clamp(
-                TemperatureLimits.min,
-                TemperatureLimits.max,
-              ),
-            ),
-            onDecrease: () => onHeatingChanged(
-              (heatingTemp - 1).clamp(
-                TemperatureLimits.min,
-                TemperatureLimits.max,
-              ),
-            ),
+            onIncrease: heatingTemp != null && onHeatingChanged != null
+                ? () => onHeatingChanged!(
+                      (heatingTemp! + 1).clamp(
+                        TemperatureLimits.min,
+                        TemperatureLimits.max,
+                      ),
+                    )
+                : null,
+            onDecrease: heatingTemp != null && onHeatingChanged != null
+                ? () => onHeatingChanged!(
+                      (heatingTemp! - 1).clamp(
+                        TemperatureLimits.min,
+                        TemperatureLimits.max,
+                      ),
+                    )
+                : null,
           ),
         ),
         Expanded(
@@ -389,18 +397,22 @@ class _TemperatureRow extends StatelessWidget {
             isPowered: true,
             minTemp: TemperatureLimits.min,
             maxTemp: TemperatureLimits.max,
-            onIncrease: () => onCoolingChanged(
-              (coolingTemp + 1).clamp(
-                TemperatureLimits.min,
-                TemperatureLimits.max,
-              ),
-            ),
-            onDecrease: () => onCoolingChanged(
-              (coolingTemp - 1).clamp(
-                TemperatureLimits.min,
-                TemperatureLimits.max,
-              ),
-            ),
+            onIncrease: coolingTemp != null && onCoolingChanged != null
+                ? () => onCoolingChanged!(
+                      (coolingTemp! + 1).clamp(
+                        TemperatureLimits.min,
+                        TemperatureLimits.max,
+                      ),
+                    )
+                : null,
+            onDecrease: coolingTemp != null && onCoolingChanged != null
+                ? () => onCoolingChanged!(
+                      (coolingTemp! - 1).clamp(
+                        TemperatureLimits.min,
+                        TemperatureLimits.max,
+                      ),
+                    )
+                : null,
           ),
         ),
       ],

@@ -4,30 +4,31 @@ import 'package:equatable/equatable.dart';
 class ModeSettings extends Equatable {
 
   const ModeSettings({
-    required this.heatingTemperature,
-    required this.coolingTemperature,
-    this.supplyFan = 50,
-    this.exhaustFan = 50,
+    this.heatingTemperature,
+    this.coolingTemperature,
+    this.supplyFan,
+    this.exhaustFan,
   });
 
   factory ModeSettings.fromJson(Map<String, dynamic> json) => ModeSettings(
-      heatingTemperature: json['heatingTemperature'] as int? ?? 22,
-      coolingTemperature: json['coolingTemperature'] as int? ?? 24,
-      supplyFan: json['supplyFan'] as int? ?? 50,
-      exhaustFan: json['exhaustFan'] as int? ?? 50,
+      // TODO: Раскомментировать после проверки визуала с прочерками
+      // heatingTemperature: json['heatingTemperature'] as int?,
+      // coolingTemperature: json['coolingTemperature'] as int?,
+      // supplyFan: json['supplyFan'] as int?,
+      // exhaustFan: json['exhaustFan'] as int?,
     );
 
   /// Температура нагрева (°C)
-  final int heatingTemperature;
+  final int? heatingTemperature;
 
   /// Температура охлаждения (°C)
-  final int coolingTemperature;
+  final int? coolingTemperature;
 
   /// Скорость приточного вентилятора (%)
-  final int supplyFan;
+  final int? supplyFan;
 
   /// Скорость вытяжного вентилятора (%)
-  final int exhaustFan;
+  final int? exhaustFan;
 
   Map<String, dynamic> toJson() => {
     'heatingTemperature': heatingTemperature,

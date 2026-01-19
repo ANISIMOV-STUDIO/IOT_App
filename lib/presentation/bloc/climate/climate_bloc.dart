@@ -15,7 +15,6 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hvac_control/core/logging/api_logger.dart';
-import 'package:hvac_control/data/api/mappers/device_json_mapper.dart';
 import 'package:hvac_control/domain/entities/alarm_info.dart';
 import 'package:hvac_control/domain/entities/climate.dart';
 import 'package:hvac_control/domain/entities/device_full_state.dart';
@@ -235,12 +234,11 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         targetTemperature: fullState.targetTemperature,
         humidity: fullState.humidity,
         targetHumidity: fullState.targetHumidity,
-        // Используем маппер из entities package или парсим вручную если хелперы недоступны.
-        // Здесь мы знаем формат данных:
-        supplyAirflow: DeviceJsonMapper.parseFanValue(fullState.supplyFan),
-        exhaustAirflow: DeviceJsonMapper.parseFanValue(fullState.exhaustFan),
+        // Получаем значения вентиляторов из настроек текущего режима
+        supplyAirflow: fullState.modeSettings?[fullState.operatingMode]?.supplyFan?.toDouble() ?? 50,
+        exhaustAirflow: fullState.modeSettings?[fullState.operatingMode]?.exhaustFan?.toDouble() ?? 50,
         mode: fullState.mode,
-        preset: fullState.operatingMode, // Теперь у нас есть точное значение
+        preset: fullState.operatingMode,
         airQuality: AirQualityLevel.good, // В DeviceFullState нет явного airQuality, используем default
         co2Ppm: fullState.co2Level ?? 400,
         isOn: fullState.power,
@@ -461,6 +459,37 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     }
   }
 
+  /// Обновляет modeSettings для текущего режима
+  Map<String, ModeSettings>? _updateCurrentModeSettings({
+    int? heatingTemperature,
+    int? coolingTemperature,
+    int? supplyFan,
+    int? exhaustFan,
+  }) {
+    final fullState = state.deviceFullState;
+    if (fullState == null) {
+      return null;
+    }
+
+    final currentMode = fullState.operatingMode;
+    final currentSettings = fullState.modeSettings?[currentMode];
+    if (currentSettings == null) {
+      return fullState.modeSettings;
+    }
+
+    final updatedSettings = currentSettings.copyWith(
+      heatingTemperature: heatingTemperature,
+      coolingTemperature: coolingTemperature,
+      supplyFan: supplyFan,
+      exhaustFan: exhaustFan,
+    );
+
+    return {
+      ...?fullState.modeSettings,
+      currentMode: updatedSettings,
+    };
+  }
+
   /// UI update: Изменение температуры нагрева
   void _onHeatingTempChanged(
     ClimateHeatingTempChanged event,
@@ -473,11 +502,16 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     );
 
     // Optimistic update - сразу обновляем UI + показываем pending
-    if (state.deviceFullState != null) {
+    final fullState = state.deviceFullState;
+    if (fullState != null) {
+      final updatedModeSettings = _updateCurrentModeSettings(
+        heatingTemperature: clampedTemp,
+      );
+
       emit(state.copyWith(
         isPendingHeatingTemperature: true,
-        deviceFullState: state.deviceFullState!.copyWith(
-          heatingTemperature: clampedTemp,
+        deviceFullState: fullState.copyWith(
+          modeSettings: updatedModeSettings,
         ),
       ));
 
@@ -520,11 +554,16 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     );
 
     // Optimistic update - сразу обновляем UI + показываем pending
-    if (state.deviceFullState != null) {
+    final fullState = state.deviceFullState;
+    if (fullState != null) {
+      final updatedModeSettings = _updateCurrentModeSettings(
+        coolingTemperature: clampedTemp,
+      );
+
       emit(state.copyWith(
         isPendingCoolingTemperature: true,
-        deviceFullState: state.deviceFullState!.copyWith(
-          coolingTemperature: clampedTemp,
+        deviceFullState: fullState.copyWith(
+          modeSettings: updatedModeSettings,
         ),
       ));
 
@@ -671,12 +710,20 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     Emitter<ClimateControlState> emit,
   ) {
     // Optimistic update - сразу обновляем UI + показываем pending
-    if (state.climate != null) {
+    final fullState = state.deviceFullState;
+    if (state.climate != null && fullState != null) {
+      final updatedModeSettings = _updateCurrentModeSettings(
+        supplyFan: event.value.round(),
+      );
+
       emit(state.copyWith(
         isPendingSupplyFan: true,
         climate: state.climate!.copyWith(supplyAirflow: event.value),
+        deviceFullState: fullState.copyWith(
+          modeSettings: updatedModeSettings,
+        ),
       ));
-      
+
       add(ClimateSupplyAirflowCommit(event.value));
     }
   }
@@ -706,12 +753,20 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     Emitter<ClimateControlState> emit,
   ) {
     // Optimistic update - сразу обновляем UI + показываем pending
-    if (state.climate != null) {
+    final fullState = state.deviceFullState;
+    if (state.climate != null && fullState != null) {
+      final updatedModeSettings = _updateCurrentModeSettings(
+        exhaustFan: event.value.round(),
+      );
+
       emit(state.copyWith(
         isPendingExhaustFan: true,
         climate: state.climate!.copyWith(exhaustAirflow: event.value),
+        deviceFullState: fullState.copyWith(
+          modeSettings: updatedModeSettings,
+        ),
       ));
-      
+
       add(ClimateExhaustAirflowCommit(event.value));
     }
   }

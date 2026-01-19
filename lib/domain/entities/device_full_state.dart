@@ -18,10 +18,6 @@ class DeviceFullState extends Equatable {
     this.humidity = 50.0,
     this.targetHumidity = 50.0,
     this.operatingMode = 'basic',
-    this.heatingTemperature,
-    this.coolingTemperature,
-    this.supplyFan,
-    this.exhaustFan,
     this.scheduleIndicator,
     this.devicePower,
     this.isOnline = true,
@@ -55,13 +51,6 @@ class DeviceFullState extends Equatable {
   /// Текущий режим (Basic, Intensive и т.д.)
   final String operatingMode;
 
-  /// Целевая температура нагрева
-  final int? heatingTemperature;
-
-  /// Целевая температура охлаждения
-  final int? coolingTemperature;
-  final String? supplyFan;
-  final String? exhaustFan;
   final int? scheduleIndicator;
   final int? devicePower;
   final bool isOnline;
@@ -133,10 +122,6 @@ class DeviceFullState extends Equatable {
     double? currentTemperature,
     double? targetTemperature,
     double? humidity,
-    int? heatingTemperature,
-    int? coolingTemperature,
-    String? supplyFan,
-    String? exhaustFan,
     int? scheduleIndicator,
     int? devicePower,
     bool? isOnline,
@@ -169,10 +154,6 @@ class DeviceFullState extends Equatable {
       humidity: humidity ?? this.humidity,
       targetHumidity: targetHumidity ?? this.targetHumidity,
       operatingMode: operatingMode ?? this.operatingMode,
-      heatingTemperature: heatingTemperature ?? this.heatingTemperature,
-      coolingTemperature: coolingTemperature ?? this.coolingTemperature,
-      supplyFan: supplyFan ?? this.supplyFan,
-      exhaustFan: exhaustFan ?? this.exhaustFan,
       scheduleIndicator: scheduleIndicator ?? this.scheduleIndicator,
       devicePower: devicePower ?? this.devicePower,
       isOnline: isOnline ?? this.isOnline,
@@ -206,10 +187,6 @@ class DeviceFullState extends Equatable {
         humidity,
         targetHumidity,
         operatingMode,
-        heatingTemperature,
-        coolingTemperature,
-        supplyFan,
-        exhaustFan,
         scheduleIndicator,
         devicePower,
         isOnline,

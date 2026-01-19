@@ -571,16 +571,22 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   UnitState _createUnitState(
     DeviceFullState? fullState,
     ClimateState? climate,
-  ) => UnitState(
+  ) {
+    // Получаем текущий режим и его настройки
+    final currentMode = fullState?.operatingMode ?? climate?.preset ?? '';
+    final modeSettings = fullState?.modeSettings?[currentMode];
+
+    return UnitState(
       id: fullState?.id ?? '',
       name: fullState?.name ?? 'Device',
       power: fullState?.power ?? climate?.isOn ?? false,
       temp: climate?.currentTemperature.toInt() ?? 20,
-      heatingTemp: fullState?.heatingTemperature,
-      coolingTemp: fullState?.coolingTemperature,
-      supplyFan: climate?.supplyAirflow.toInt(),
-      exhaustFan: climate?.exhaustAirflow.toInt(),
-      mode: climate?.mode.toString().split('.').last ?? 'auto',
+      // Берём значения из настроек текущего режима
+      heatingTemp: modeSettings?.heatingTemperature,
+      coolingTemp: modeSettings?.coolingTemperature,
+      supplyFan: modeSettings?.supplyFan,
+      exhaustFan: modeSettings?.exhaustFan,
+      mode: currentMode,
       humidity: climate?.humidity.toInt() ?? 45,
       outsideTemp: fullState?.outdoorTemperature ?? 0.0,
       filterPercent: fullState?.kpdRecuperator ?? 0,
@@ -597,6 +603,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
       ductPressure: fullState?.ductPressure ?? 0,
       isOnline: fullState?.isOnline ?? true,
     );
+  }
 
   List<_SensorInfo> _buildSensorsList(UnitState unit, AppLocalizations l10n) => [
       _SensorInfo(
