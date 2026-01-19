@@ -25,6 +25,7 @@ final class ClimateControlState extends Equatable {
     this.alarmHistory = const [],
     this.errorMessage,
     this.isTogglingPower = false,
+    this.pendingPowerState,
     this.isTogglingSchedule = false,
     this.isPendingHeatingTemperature = false,
     this.isPendingCoolingTemperature = false,
@@ -48,6 +49,10 @@ final class ClimateControlState extends Equatable {
 
   /// Флаг переключения питания (для блокировки кнопки)
   final bool isTogglingPower;
+
+  /// Ожидаемое состояние питания (null = нет ожидания)
+  /// Используется для удержания лоадера пока SignalR не подтвердит
+  final bool? pendingPowerState;
 
   /// Флаг переключения расписания (для блокировки кнопки)
   final bool isTogglingSchedule;
@@ -127,6 +132,8 @@ final class ClimateControlState extends Equatable {
     List<AlarmHistory>? alarmHistory,
     String? errorMessage,
     bool? isTogglingPower,
+    bool? pendingPowerState,
+    bool clearPendingPower = false,
     bool? isTogglingSchedule,
     bool? isPendingHeatingTemperature,
     bool? isPendingCoolingTemperature,
@@ -139,6 +146,7 @@ final class ClimateControlState extends Equatable {
       alarmHistory: alarmHistory ?? this.alarmHistory,
       errorMessage: errorMessage,
       isTogglingPower: isTogglingPower ?? this.isTogglingPower,
+      pendingPowerState: clearPendingPower ? null : (pendingPowerState ?? this.pendingPowerState),
       isTogglingSchedule: isTogglingSchedule ?? this.isTogglingSchedule,
       isPendingHeatingTemperature:
           isPendingHeatingTemperature ?? this.isPendingHeatingTemperature,
@@ -156,6 +164,7 @@ final class ClimateControlState extends Equatable {
         alarmHistory,
         errorMessage,
         isTogglingPower,
+        pendingPowerState,
         isTogglingSchedule,
         isPendingHeatingTemperature,
         isPendingCoolingTemperature,

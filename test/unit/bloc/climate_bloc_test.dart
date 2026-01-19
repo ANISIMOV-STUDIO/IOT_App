@@ -120,6 +120,9 @@ void main() {
     mockWatchDeviceFullState = MockWatchDeviceFullState();
     mockGetAlarmHistory = MockGetAlarmHistory();
     mockRequestDeviceUpdate = MockRequestDeviceUpdate();
+
+    // Default stub for requestDeviceUpdate (fire-and-forget)
+    when(() => mockRequestDeviceUpdate(any())).thenAnswer((_) async {});
   });
 
   ClimateBloc createBloc() => ClimateBloc(

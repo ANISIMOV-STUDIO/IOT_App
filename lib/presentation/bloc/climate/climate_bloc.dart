@@ -37,6 +37,9 @@ abstract class TemperatureLimits {
   static const int max = 35;
 }
 
+/// Таймаут ожидания подтверждения от устройства
+const _powerToggleTimeout = Duration(seconds: 15);
+
 /// Debounce трансформер для быстрых кликов
 /// Ждёт 500мс после последнего события, затем обрабатывает только последнее
 EventTransformer<E> debounceRestartable<E>({
@@ -164,6 +167,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
 
   StreamSubscription<ClimateState>? _climateSubscription;
   StreamSubscription<DeviceFullState>? _deviceFullStateSubscription;
+  Timer? _powerToggleTimer;
 
   /// Запрос на подписку к состоянию климата
   Future<void> _onSubscriptionRequested(
@@ -269,9 +273,24 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     ClimateStateUpdated event,
     Emitter<ClimateControlState> emit,
   ) {
-    // Backend фильтрует старые значения — просто сбрасываем pending
+    // Проверяем, подтвердилось ли ожидаемое состояние питания
+    final pendingPower = state.pendingPowerState;
+    final powerConfirmed = pendingPower == null || event.climate.isOn == pendingPower;
+
+    if (powerConfirmed && pendingPower != null) {
+      developer.log(
+        'Power state confirmed by SignalR: isOn=${event.climate.isOn}',
+        name: 'ClimateBloc',
+      );
+      _powerToggleTimer?.cancel();
+      _powerToggleTimer = null;
+    }
+
     emit(state.copyWith(
       climate: event.climate,
+      // Сбрасываем лоадер только если power подтверждён
+      isTogglingPower: !powerConfirmed && state.isTogglingPower,
+      clearPendingPower: powerConfirmed,
       isPendingHeatingTemperature: false,
       isPendingCoolingTemperature: false,
       isPendingSupplyFan: false,
@@ -297,8 +316,24 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         ? incoming.copyWith(quickSensors: existing.quickSensors)
         : incoming;
 
+    // Проверяем, подтвердилось ли ожидаемое состояние питания
+    final pendingPower = state.pendingPowerState;
+    final powerConfirmed = pendingPower == null || incoming.power == pendingPower;
+
+    if (powerConfirmed && pendingPower != null) {
+      developer.log(
+        'Power state confirmed by SignalR (full state): power=${incoming.power}',
+        name: 'ClimateBloc',
+      );
+      _powerToggleTimer?.cancel();
+      _powerToggleTimer = null;
+    }
+
     emit(state.copyWith(
       deviceFullState: mergedState,
+      // Сбрасываем лоадер только если power подтверждён
+      isTogglingPower: !powerConfirmed && state.isTogglingPower,
+      clearPendingPower: powerConfirmed,
       isPendingHeatingTemperature: false,
       isPendingCoolingTemperature: false,
       isPendingSupplyFan: false,
@@ -331,6 +366,8 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   }
 
   /// Включение/выключение устройства
+  ///
+  /// Лоадер остаётся до подтверждения от SignalR (pendingPowerState)
   Future<void> _onPowerToggled(
     ClimatePowerToggled event,
     Emitter<ClimateControlState> emit,
@@ -343,17 +380,33 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     developer.log('_onPowerToggled called: isOn=${event.isOn}', name: 'ClimateBloc');
 
     // Optimistic update: сразу показываем новое состояние
+    // pendingPowerState — ожидаемое значение, лоадер останется пока SignalR не подтвердит
     final optimisticClimate = state.climate?.copyWith(isOn: event.isOn);
     emit(state.copyWith(
       isTogglingPower: true,
+      pendingPowerState: event.isOn,
       climate: optimisticClimate,
     ));
 
     try {
       await _setDevicePower(SetDevicePowerParams(isOn: event.isOn));
-      developer.log('_onPowerToggled: command sent successfully', name: 'ClimateBloc');
-      // Разблокируем кнопку после успешной отправки
-      emit(state.copyWith(isTogglingPower: false));
+      developer.log('_onPowerToggled: command sent, waiting for SignalR confirmation', name: 'ClimateBloc');
+
+      // Таймаут на случай если SignalR не пришлёт подтверждение
+      _powerToggleTimer?.cancel();
+      _powerToggleTimer = Timer(_powerToggleTimeout, () {
+        if (!isClosed && state.isTogglingPower) {
+          developer.log(
+            '_onPowerToggled: timeout waiting for SignalR confirmation',
+            name: 'ClimateBloc',
+          );
+          // ignore: invalid_use_of_visible_for_testing_member
+          emit(state.copyWith(
+            isTogglingPower: false,
+            clearPendingPower: true,
+          ));
+        }
+      });
     } catch (e, stackTrace) {
       developer.log(
         '_onPowerToggled ERROR: $e',
@@ -365,6 +418,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       final revertedClimate = state.climate?.copyWith(isOn: !event.isOn);
       emit(state.copyWith(
         isTogglingPower: false,
+        clearPendingPower: true,
         climate: revertedClimate,
         errorMessage: 'Power toggle error: $e',
       ));
@@ -735,6 +789,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   Future<void> close() {
     _climateSubscription?.cancel();
     _deviceFullStateSubscription?.cancel();
+    _powerToggleTimer?.cancel();
     return super.close();
   }
 }

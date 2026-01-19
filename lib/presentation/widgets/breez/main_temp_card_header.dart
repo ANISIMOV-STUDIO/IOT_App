@@ -7,6 +7,7 @@ import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_loader.dart';
 import 'package:intl/intl.dart';
 
 /// Header section of MainTempCard with date, unit name, alarm badge, and controls
@@ -197,12 +198,22 @@ class _ControlsSection extends StatelessWidget {
     
     return Row(
       children: [
-        // Power toggle button (блокируется через overlay на весь виджет)
-        BreezIconButton(
-          icon: Icons.power_settings_new,
-          iconColor: !isOnline ? mutedColor : isPowered ? AppColors.accentGreen : mutedColor,
-          onTap: isPowerLoading ? null : onPowerToggle,
-        ),
+        // Power toggle button
+        if (isPowerLoading)
+          const SizedBox(
+            width: 32,
+            height: 32,
+            child: Padding(
+              padding: EdgeInsets.all(AppSpacing.xs),
+              child: BreezLoader.small(),
+            ),
+          )
+        else
+          BreezIconButton(
+            icon: Icons.power_settings_new,
+            iconColor: !isOnline ? mutedColor : isPowered ? AppColors.accentGreen : mutedColor,
+            onTap: onPowerToggle,
+          ),
         const SizedBox(width: AppSpacing.xs),
         // Schedule toggle button
         if (isScheduleLoading)
@@ -211,10 +222,7 @@ class _ControlsSection extends StatelessWidget {
             height: 32,
             child: Padding(
               padding: EdgeInsets.all(AppSpacing.xs),
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                color: AppColors.accent,
-              ),
+              child: BreezLoader.small(),
             ),
           )
         else
