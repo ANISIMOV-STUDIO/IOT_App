@@ -17,6 +17,7 @@ import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/breakpoints.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/data/api/http/clients/hvac_http_client.dart';
+import 'package:hvac_control/domain/entities/mode_settings.dart';
 import 'package:hvac_control/domain/entities/unit_state.dart';
 import 'package:hvac_control/domain/entities/user.dart';
 import 'package:hvac_control/domain/entities/version_info.dart';
@@ -32,6 +33,7 @@ import 'package:hvac_control/presentation/bloc/schedule/schedule_bloc.dart';
 import 'package:hvac_control/presentation/screens/dashboard/dashboard_bloc_wrapper.dart';
 import 'package:hvac_control/presentation/screens/dashboard/dashboard_empty_state.dart';
 import 'package:hvac_control/presentation/screens/dashboard/dialogs/add_unit_dialog.dart';
+import 'package:hvac_control/presentation/screens/dashboard/dialogs/mode_settings_dialog.dart';
 import 'package:hvac_control/presentation/screens/dashboard/dialogs/unit_settings_dialog.dart';
 import 'package:hvac_control/presentation/screens/dashboard/dialogs/update_available_dialog.dart';
 import 'package:hvac_control/presentation/screens/dashboard/layouts/desktop_layout.dart';
@@ -153,6 +155,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       onExhaustFanChanged: (v) =>
           context.read<ClimateBloc>().add(ClimateExhaustAirflowChanged(v.toDouble())),
       onModeChanged: (m) => context.read<ClimateBloc>().add(ClimateOperatingModeChanged(m)),
+      onModeSettingsTap: _handleModeSettingsTap,
       onPowerToggle: () => _handlePowerToggle(data.climateState),
       onSettingsTap: () => _showUnitSettings(unit),
       isPowerLoading: data.climateState.isTogglingPower,
@@ -212,6 +215,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             onExhaustFanChanged: (v) =>
                 context.read<ClimateBloc>().add(ClimateExhaustAirflowChanged(v.toDouble())),
             onModeChanged: (m) => context.read<ClimateBloc>().add(ClimateOperatingModeChanged(m)),
+            onModeSettingsTap: _handleModeSettingsTap,
             onPowerToggle: () => _handlePowerToggle(data.climateState),
             onSettingsTap: () => _showUnitSettings(unit),
             isPowerLoading: data.climateState.isTogglingPower,
@@ -297,6 +301,33 @@ class _DashboardScreenState extends State<DashboardScreen> {
           );
           ToastService.success(l10n.timeSet);
         }
+    }
+  }
+
+  Future<void> _handleModeSettingsTap(String modeId, String modeDisplayName) async {
+    final climateState = context.read<ClimateBloc>().state;
+    final deviceFullState = climateState.deviceFullState;
+    if (deviceFullState == null) return;
+
+    // Получаем текущие настройки режима или создаём дефолтные
+    final currentSettings = deviceFullState.modeSettings?[modeId] ??
+        const ModeSettings(
+          heatingTemperature: 22,
+          coolingTemperature: 24,
+        );
+
+    final result = await ModeSettingsDialog.show(
+      context,
+      modeName: modeId,
+      modeDisplayName: modeDisplayName,
+      initialSettings: currentSettings,
+    );
+
+    if (result != null && mounted) {
+      context.read<ClimateBloc>().add(ClimateModeSettingsChanged(
+        modeName: modeId,
+        settings: result,
+      ));
     }
   }
 

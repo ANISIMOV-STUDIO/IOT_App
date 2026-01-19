@@ -13,6 +13,7 @@ import 'package:hvac_control/domain/entities/alarm_info.dart';
 import 'package:hvac_control/domain/entities/climate.dart';
 import 'package:hvac_control/domain/entities/device_full_state.dart';
 import 'package:hvac_control/domain/entities/hvac_device.dart';
+import 'package:hvac_control/domain/entities/mode_settings.dart';
 import 'package:hvac_control/domain/repositories/climate_repository.dart';
 
 /// Кеширующий декоратор для ClimateRepository
@@ -290,6 +291,20 @@ class CachedClimateRepository implements ClimateRepository {
   Future<void> requestDeviceUpdate({String? deviceId}) async {
     _ensureOnline('requestDeviceUpdate');
     await _inner.requestDeviceUpdate(deviceId: deviceId);
+  }
+
+  @override
+  Future<void> setModeSettings({
+    required String modeName,
+    required ModeSettings settings,
+    String? deviceId,
+  }) async {
+    _ensureOnline('setModeSettings');
+    await _inner.setModeSettings(
+      modeName: modeName,
+      settings: settings,
+      deviceId: deviceId,
+    );
   }
 
   // ============================================

@@ -39,6 +39,7 @@ class MobileLayout extends StatefulWidget {
     this.onSupplyFanChanged,
     this.onExhaustFanChanged,
     this.onModeChanged,
+    this.onModeSettingsTap,
     this.onPowerToggle,
     this.onSettingsTap,
     this.isPowerLoading = false,
@@ -63,6 +64,7 @@ class MobileLayout extends StatefulWidget {
   final ValueChanged<int>? onSupplyFanChanged;
   final ValueChanged<int>? onExhaustFanChanged;
   final ValueChanged<String>? onModeChanged;
+  final void Function(String modeId, String modeDisplayName)? onModeSettingsTap;
   final VoidCallback? onPowerToggle;
   final VoidCallback? onSettingsTap;
   final bool isPowerLoading;
@@ -177,6 +179,7 @@ class _MobileLayoutState extends State<MobileLayout>
                       ModeGrid(
                         selectedMode: widget.unit.mode,
                         onModeChanged: widget.isOnline ? widget.onModeChanged : null,
+                        onModeSettingsTap: widget.isOnline ? widget.onModeSettingsTap : null,
                         showCard: false,
                         isEnabled: widget.isOnline,
                       ),

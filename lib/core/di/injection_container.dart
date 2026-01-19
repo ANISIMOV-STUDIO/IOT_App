@@ -307,6 +307,7 @@ Future<void> init() async {
   ..registerLazySingleton(() => SetPreset(sl()))
   ..registerLazySingleton(() => SetAirflow(sl()))
   ..registerLazySingleton(() => SetScheduleEnabled(sl<ScheduleRepository>()))
+  ..registerLazySingleton(() => SetModeSettings(sl()))
 
   // Analytics Use Cases
   ..registerLazySingleton(() => GetTodayStats(sl()))
@@ -353,6 +354,7 @@ Future<void> init() async {
       setPreset: sl(),
       setAirflow: sl(),
       setScheduleEnabled: sl(),
+      setModeSettings: sl(),
       watchDeviceFullState: sl(),
       requestDeviceUpdate: sl(),
     ),

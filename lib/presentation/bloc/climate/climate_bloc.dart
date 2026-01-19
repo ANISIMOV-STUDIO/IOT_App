@@ -19,6 +19,7 @@ import 'package:hvac_control/data/api/mappers/device_json_mapper.dart';
 import 'package:hvac_control/domain/entities/alarm_info.dart';
 import 'package:hvac_control/domain/entities/climate.dart';
 import 'package:hvac_control/domain/entities/device_full_state.dart';
+import 'package:hvac_control/domain/entities/mode_settings.dart';
 import 'package:hvac_control/domain/usecases/usecases.dart';
 
 part 'climate_event.dart';
@@ -92,6 +93,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     required SetPreset setPreset,
     required SetAirflow setAirflow,
     required SetScheduleEnabled setScheduleEnabled,
+    required SetModeSettings setModeSettings,
     required WatchDeviceFullState watchDeviceFullState,
     required RequestDeviceUpdate requestDeviceUpdate,
   })  : _getCurrentClimateState = getCurrentClimateState,
@@ -107,6 +109,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         _setPreset = setPreset,
         _setAirflow = setAirflow,
         _setScheduleEnabled = setScheduleEnabled,
+        _setModeSettings = setModeSettings,
         _watchDeviceFullState = watchDeviceFullState,
         _requestDeviceUpdate = requestDeviceUpdate,
         super(const ClimateControlState()) {
@@ -146,6 +149,9 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     // Расписание
     on<ClimateScheduleToggled>(_onScheduleToggled);
 
+    // Настройки режима
+    on<ClimateModeSettingsChanged>(_onModeSettingsChanged);
+
     // Обновление локального состояния
     on<ClimateQuickSensorsUpdated>(_onQuickSensorsUpdated);
   }
@@ -162,6 +168,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   final SetPreset _setPreset;
   final SetAirflow _setAirflow;
   final SetScheduleEnabled _setScheduleEnabled;
+  final SetModeSettings _setModeSettings;
   final WatchDeviceFullState _watchDeviceFullState;
   final RequestDeviceUpdate _requestDeviceUpdate;
 
@@ -781,6 +788,23 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         deviceFullState: state.deviceFullState!.copyWith(
           quickSensors: event.quickSensors,
         ),
+      ));
+    }
+  }
+
+  /// Изменение настроек режима (температуры и скорости вентиляторов)
+  Future<void> _onModeSettingsChanged(
+    ClimateModeSettingsChanged event,
+    Emitter<ClimateControlState> emit,
+  ) async {
+    try {
+      await _setModeSettings(SetModeSettingsParams(
+        modeName: event.modeName,
+        settings: event.settings,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        errorMessage: 'Mode settings error: $e',
       ));
     }
   }

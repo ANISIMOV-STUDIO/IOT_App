@@ -193,6 +193,21 @@ final class ClimateScheduleToggled extends ClimateEvent {
   List<Object?> get props => [enabled];
 }
 
+/// Изменены настройки режима (температуры и скорости вентиляторов)
+final class ClimateModeSettingsChanged extends ClimateEvent {
+
+  const ClimateModeSettingsChanged({
+    required this.modeName,
+    required this.settings,
+  });
+
+  final String modeName;
+  final ModeSettings settings;
+
+  @override
+  List<Object?> get props => [modeName, settings];
+}
+
 // ============================================
 // ВНУТРЕННИЕ СОБЫТИЯ (Debounced API Calls)
 // ============================================

@@ -2,6 +2,7 @@
 library;
 
 import 'package:hvac_control/domain/entities/climate.dart';
+import 'package:hvac_control/domain/entities/mode_settings.dart';
 
 /// Interface for climate control operations
 abstract class ClimateController {
@@ -34,4 +35,11 @@ abstract class ClimateController {
 
   /// Set device time
   Future<void> setDeviceTime(DateTime time, {String? deviceId});
+
+  /// Set mode settings (temperatures and fan speeds)
+  Future<void> setModeSettings({
+    required String modeName,
+    required ModeSettings settings,
+    String? deviceId,
+  });
 }

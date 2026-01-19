@@ -10,6 +10,7 @@ import 'package:hvac_control/domain/entities/alarm_info.dart';
 import 'package:hvac_control/domain/entities/climate.dart';
 import 'package:hvac_control/domain/entities/device_full_state.dart';
 import 'package:hvac_control/domain/entities/hvac_device.dart';
+import 'package:hvac_control/domain/entities/mode_settings.dart';
 import 'package:hvac_control/domain/repositories/climate_repository.dart';
 
 class MockClimateRepository implements ClimateRepository {
@@ -450,6 +451,16 @@ class MockClimateRepository implements ClimateRepository {
   Future<void> requestDeviceUpdate({String? deviceId}) async {
     await Future<void>.delayed(MockData.normalDelay);
     // В моке просто эмулируем успешный запрос - данные уже актуальны
+  }
+
+  @override
+  Future<void> setModeSettings({
+    required String modeName,
+    required ModeSettings settings,
+    String? deviceId,
+  }) async {
+    await Future<void>.delayed(MockData.normalDelay);
+    // В моке просто эмулируем успешную установку настроек режима
   }
 
   void dispose() {

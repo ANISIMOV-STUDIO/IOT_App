@@ -26,6 +26,7 @@ export 'climate/set_climate_mode.dart';
 export 'climate/set_cooling_temperature.dart';
 export 'climate/set_device_power.dart';
 export 'climate/set_humidity.dart';
+export 'climate/set_mode_settings.dart';
 export 'climate/set_operating_mode.dart';
 export 'climate/set_preset.dart';
 export 'climate/set_schedule_enabled.dart';

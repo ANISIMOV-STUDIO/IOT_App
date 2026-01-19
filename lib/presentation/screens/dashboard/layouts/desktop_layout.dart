@@ -25,6 +25,7 @@ class DesktopLayout extends StatefulWidget {
     this.onSupplyFanChanged,
     this.onExhaustFanChanged,
     this.onModeChanged,
+    this.onModeSettingsTap,
     this.onPowerToggle,
     this.onSettingsTap,
     this.isPowerLoading = false,
@@ -61,6 +62,7 @@ class DesktopLayout extends StatefulWidget {
   final ValueChanged<int>? onSupplyFanChanged;
   final ValueChanged<int>? onExhaustFanChanged;
   final ValueChanged<String>? onModeChanged;
+  final void Function(String modeId, String modeDisplayName)? onModeSettingsTap;
   final VoidCallback? onPowerToggle;
   final VoidCallback? onSettingsTap;
   final bool isPowerLoading;
@@ -184,6 +186,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
           child: ModeGrid(
             selectedMode: widget.unit.mode,
             onModeChanged: widget.onModeChanged,
+            onModeSettingsTap: widget.onModeSettingsTap,
           ),
         ),
       ],

@@ -12,6 +12,7 @@ import 'package:hvac_control/domain/entities/alarm_info.dart';
 import 'package:hvac_control/domain/entities/climate.dart';
 import 'package:hvac_control/domain/entities/device_full_state.dart';
 import 'package:hvac_control/domain/entities/hvac_device.dart';
+import 'package:hvac_control/domain/entities/mode_settings.dart';
 import 'package:hvac_control/domain/repositories/climate_repository.dart';
 
 class RealClimateRepository implements ClimateRepository {
@@ -623,6 +624,26 @@ class RealClimateRepository implements ClimateRepository {
       throw StateError('No device selected');
     }
     await _httpClient.requestUpdate(targetDeviceId);
+  }
+
+  @override
+  Future<void> setModeSettings({
+    required String modeName,
+    required ModeSettings settings,
+    String? deviceId,
+  }) async {
+    final targetDeviceId = deviceId ?? _selectedDeviceId;
+    if (targetDeviceId.isEmpty) {
+      throw StateError('No device selected');
+    }
+    await _httpClient.setModeSettings(
+      targetDeviceId,
+      modeName: modeName,
+      supplyFan: settings.supplyFan,
+      exhaustFan: settings.exhaustFan,
+      heatingTemperature: settings.heatingTemperature,
+      coolingTemperature: settings.coolingTemperature,
+    );
   }
 
   void dispose() {

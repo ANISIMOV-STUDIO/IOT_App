@@ -10,6 +10,7 @@ import 'package:hvac_control/domain/entities/alarm_info.dart';
 import 'package:hvac_control/domain/entities/climate.dart';
 import 'package:hvac_control/domain/entities/device_full_state.dart';
 import 'package:hvac_control/domain/entities/hvac_device.dart';
+import 'package:hvac_control/domain/entities/mode_settings.dart';
 import 'package:hvac_control/domain/repositories/climate_controller.dart';
 import 'package:hvac_control/domain/repositories/climate_state_provider.dart';
 import 'package:hvac_control/domain/repositories/hvac_device_provider.dart';

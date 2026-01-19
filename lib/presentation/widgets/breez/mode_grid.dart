@@ -46,6 +46,7 @@ class ModeGrid extends StatelessWidget {
   const ModeGrid({
     required this.selectedMode, super.key,
     this.onModeChanged,
+    this.onModeSettingsTap,
     this.isEnabled = true,
     this.modes,
     this.columns = _ModeGridConstants.defaultColumns,
@@ -53,6 +54,11 @@ class ModeGrid extends StatelessWidget {
   });
   final String selectedMode;
   final ValueChanged<String>? onModeChanged;
+
+  /// Callback для открытия настроек режима
+  /// Передаёт ID режима (modeId)
+  final void Function(String modeId, String modeDisplayName)? onModeSettingsTap;
+
   final bool isEnabled;
   final List<OperatingModeData>? modes;
   final int columns;
@@ -102,6 +108,9 @@ class ModeGrid extends StatelessWidget {
               isSelected: isSelected,
               isEnabled: isEnabled,
               onTap: isEnabled ? () => onModeChanged?.call(mode.id) : null,
+              onSettingsTap: onModeSettingsTap != null
+                  ? () => onModeSettingsTap!(mode.id, mode.name)
+                  : null,
             );
           },
         );

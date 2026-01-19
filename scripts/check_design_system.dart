@@ -39,6 +39,8 @@ const List<String> excludedFiles = [
   'lib/presentation/bloc/',
   // Design system components (they define their own styles)
   'lib/presentation/widgets/breez/',
+  // Infrastructure code (computed network retry delays, not UI animations)
+  'lib/core/services/retry_service.dart',
 ];
 
 /// Violation types
