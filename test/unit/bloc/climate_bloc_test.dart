@@ -448,6 +448,9 @@ void main() {
           isA<ClimateControlState>()
               .having((s) => s.isPendingSupplyFan, 'isPendingSupplyFan', true)
               .having((s) => s.deviceFullState?.modeSettings?['basic']?.supplyFan, 'supplyFan', 80),
+          // 2. После успешного API ответа — pending сбрасывается
+          isA<ClimateControlState>()
+              .having((s) => s.isPendingSupplyFan, 'isPendingSupplyFan', false),
         ],
         verify: (_) {
           verify(() => mockSetAirflow(any())).called(1);
@@ -484,6 +487,9 @@ void main() {
           isA<ClimateControlState>()
               .having((s) => s.isPendingExhaustFan, 'isPendingExhaustFan', true)
               .having((s) => s.deviceFullState?.modeSettings?['basic']?.exhaustFan, 'exhaustFan', 70),
+          // 2. После успешного API ответа — pending сбрасывается
+          isA<ClimateControlState>()
+              .having((s) => s.isPendingExhaustFan, 'isPendingExhaustFan', false),
         ],
         verify: (_) {
           verify(() => mockSetAirflow(any())).called(1);
@@ -519,6 +525,9 @@ void main() {
           isA<ClimateControlState>()
               .having((s) => s.isPendingHeatingTemperature, 'isPendingHeatingTemperature', true)
               .having((s) => s.deviceFullState?.modeSettings?['basic']?.heatingTemperature, 'heatingTemperature', 21),
+          // 2. После успешного API ответа — pending сбрасывается
+          isA<ClimateControlState>()
+              .having((s) => s.isPendingHeatingTemperature, 'isPendingHeatingTemperature', false),
         ],
         verify: (_) {
           verify(() => mockSetTemperature(any())).called(1);
@@ -554,6 +563,9 @@ void main() {
           isA<ClimateControlState>()
               .having((s) => s.isPendingCoolingTemperature, 'isPendingCoolingTemperature', true)
               .having((s) => s.deviceFullState?.modeSettings?['basic']?.coolingTemperature, 'coolingTemperature', 25),
+          // 2. После успешного API ответа — pending сбрасывается
+          isA<ClimateControlState>()
+              .having((s) => s.isPendingCoolingTemperature, 'isPendingCoolingTemperature', false),
         ],
         verify: (_) {
           verify(() => mockSetCoolingTemperature(any())).called(1);

@@ -296,10 +296,8 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       // Сбрасываем лоадер только если power подтверждён
       isTogglingPower: !powerConfirmed && state.isTogglingPower,
       clearPendingPower: powerConfirmed,
-      isPendingHeatingTemperature: false,
-      isPendingCoolingTemperature: false,
-      isPendingSupplyFan: false,
-      isPendingExhaustFan: false,
+      // Pending температуры/вентиляторов НЕ сбрасываем здесь —
+      // они сбрасываются после успешного API ответа в *Commit handlers
     ));
   }
 
@@ -348,10 +346,8 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       // Сбрасываем лоадер только если power подтверждён
       isTogglingPower: !powerConfirmed && state.isTogglingPower,
       clearPendingPower: powerConfirmed,
-      isPendingHeatingTemperature: false,
-      isPendingCoolingTemperature: false,
-      isPendingSupplyFan: false,
-      isPendingExhaustFan: false,
+      // Pending температуры/вентиляторов НЕ сбрасываем здесь —
+      // они сбрасываются после успешного API ответа в *Commit handlers
     ));
   }
 
@@ -572,7 +568,8 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     
     try {
       await _setTemperature(SetTemperatureParams(temperature: event.temperature.toDouble()));
-      // pending сбросится когда придёт SignalR update
+      // Сбрасываем pending после успешного API ответа
+      emit(state.copyWith(isPendingHeatingTemperature: false));
     } catch (e) {
       emit(state.copyWith(
         isPendingHeatingTemperature: false,
@@ -618,7 +615,8 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   ) async {
     try {
       await _setCoolingTemperature(SetCoolingTemperatureParams(temperature: event.temperature));
-      // pending сбросится когда придёт SignalR update
+      // Сбрасываем pending после успешного API ответа
+      emit(state.copyWith(isPendingCoolingTemperature: false));
     } catch (e) {
       emit(state.copyWith(
         isPendingCoolingTemperature: false,
@@ -777,7 +775,8 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         type: AirflowType.supply,
         value: event.value,
       ));
-      // pending сбросится когда придёт SignalR update
+      // Сбрасываем pending после успешного API ответа
+      emit(state.copyWith(isPendingSupplyFan: false));
     } catch (e) {
       emit(state.copyWith(
         isPendingSupplyFan: false,
@@ -820,7 +819,8 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         type: AirflowType.exhaust,
         value: event.value,
       ));
-      // pending сбросится когда придёт SignalR update
+      // Сбрасываем pending после успешного API ответа
+      emit(state.copyWith(isPendingExhaustFan: false));
     } catch (e) {
       emit(state.copyWith(
         isPendingExhaustFan: false,
