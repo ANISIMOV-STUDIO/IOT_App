@@ -232,6 +232,7 @@ class BreezLabeledSlider extends StatelessWidget {
     this.semanticLabel,
     this.suffix,
     this.valueFormat,
+    this.valueOverride,
   });
   final String label;
   final double value;
@@ -246,7 +247,14 @@ class BreezLabeledSlider extends StatelessWidget {
   final String? suffix;
   final String Function(double)? valueFormat;
 
+  /// Переопределение отображаемого значения (например, "—" когда данных нет)
+  final String? valueOverride;
+
   String _formatDisplay() {
+    // Если есть переопределение — используем его (например, "—")
+    if (valueOverride != null) {
+      return valueOverride!;
+    }
     if (valueFormat != null) {
       return valueFormat!(value);
     }

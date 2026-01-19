@@ -14,15 +14,15 @@ class UnitState extends Equatable {        // Текущее время устр
     required this.name,
     required this.power,
     required this.temp,
-    required this.supplyFan,
-    required this.exhaustFan,
     required this.mode,
     required this.humidity,
     required this.outsideTemp,
     required this.filterPercent,
     required this.airflowRate,
-    this.heatingTemp = 21,
-    this.coolingTemp = 24,
+    this.heatingTemp,
+    this.coolingTemp,
+    this.supplyFan,
+    this.exhaustFan,
     this.indoorTemp = 22.0,
     this.supplyTemp = 20.0,
     this.supplyTempAfterRecup = 18.0,
@@ -40,10 +40,10 @@ class UnitState extends Equatable {        // Текущее время устр
   final String name;
   final bool power;
   final int temp;
-  final int heatingTemp;
-  final int coolingTemp;
-  final int supplyFan;
-  final int exhaustFan;
+  final int? heatingTemp;
+  final int? coolingTemp;
+  final int? supplyFan;
+  final int? exhaustFan;
   final String mode;
   final int humidity;
   final double outsideTemp;

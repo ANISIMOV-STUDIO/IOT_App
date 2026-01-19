@@ -142,14 +142,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
           context.read<ClimateBloc>().add(ClimateTemperatureChanged(v.toDouble())),
       onTemperatureDecrease: (v) =>
           context.read<ClimateBloc>().add(ClimateTemperatureChanged(v.toDouble())),
-      onHeatingTempIncrease: () =>
-          context.read<ClimateBloc>().add(ClimateHeatingTempChanged(unit.heatingTemp + 1)),
-      onHeatingTempDecrease: () =>
-          context.read<ClimateBloc>().add(ClimateHeatingTempChanged(unit.heatingTemp - 1)),
-      onCoolingTempIncrease: () =>
-          context.read<ClimateBloc>().add(ClimateCoolingTempChanged(unit.coolingTemp + 1)),
-      onCoolingTempDecrease: () =>
-          context.read<ClimateBloc>().add(ClimateCoolingTempChanged(unit.coolingTemp - 1)),
+      onHeatingTempIncrease: unit.heatingTemp != null
+          ? () => context.read<ClimateBloc>().add(ClimateHeatingTempChanged(unit.heatingTemp! + 1))
+          : null,
+      onHeatingTempDecrease: unit.heatingTemp != null
+          ? () => context.read<ClimateBloc>().add(ClimateHeatingTempChanged(unit.heatingTemp! - 1))
+          : null,
+      onCoolingTempIncrease: unit.coolingTemp != null
+          ? () => context.read<ClimateBloc>().add(ClimateCoolingTempChanged(unit.coolingTemp! + 1))
+          : null,
+      onCoolingTempDecrease: unit.coolingTemp != null
+          ? () => context.read<ClimateBloc>().add(ClimateCoolingTempChanged(unit.coolingTemp! - 1))
+          : null,
       onSupplyFanChanged: (v) =>
           context.read<ClimateBloc>().add(ClimateSupplyAirflowChanged(v.toDouble())),
       onExhaustFanChanged: (v) =>
@@ -201,14 +205,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
         Expanded(
           child: MobileLayout(
             unit: unit,
-            onHeatingTempIncrease: () =>
-                context.read<ClimateBloc>().add(ClimateHeatingTempChanged(unit.heatingTemp + 1)),
-            onHeatingTempDecrease: () =>
-                context.read<ClimateBloc>().add(ClimateHeatingTempChanged(unit.heatingTemp - 1)),
-            onCoolingTempIncrease: () =>
-                context.read<ClimateBloc>().add(ClimateCoolingTempChanged(unit.coolingTemp + 1)),
-            onCoolingTempDecrease: () =>
-                context.read<ClimateBloc>().add(ClimateCoolingTempChanged(unit.coolingTemp - 1)),
+            onHeatingTempIncrease: unit.heatingTemp != null
+                ? () => context.read<ClimateBloc>().add(ClimateHeatingTempChanged(unit.heatingTemp! + 1))
+                : null,
+            onHeatingTempDecrease: unit.heatingTemp != null
+                ? () => context.read<ClimateBloc>().add(ClimateHeatingTempChanged(unit.heatingTemp! - 1))
+                : null,
+            onCoolingTempIncrease: unit.coolingTemp != null
+                ? () => context.read<ClimateBloc>().add(ClimateCoolingTempChanged(unit.coolingTemp! + 1))
+                : null,
+            onCoolingTempDecrease: unit.coolingTemp != null
+                ? () => context.read<ClimateBloc>().add(ClimateCoolingTempChanged(unit.coolingTemp! - 1))
+                : null,
             onSupplyFanChanged: (v) =>
                 context.read<ClimateBloc>().add(ClimateSupplyAirflowChanged(v.toDouble())),
             onExhaustFanChanged: (v) =>

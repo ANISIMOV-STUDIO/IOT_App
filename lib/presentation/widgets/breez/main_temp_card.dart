@@ -50,8 +50,8 @@ class MainTempCard extends StatelessWidget {
 
   const MainTempCard({
     required this.unitName, required this.temperature, super.key,
-    this.heatingTemp = 21,
-    this.coolingTemp = 24,
+    this.heatingTemp,
+    this.coolingTemp,
     this.status,
     this.humidity = 45,
     this.outsideTemp = 0.0,
@@ -60,8 +60,8 @@ class MainTempCard extends StatelessWidget {
     this.filterPercent = 88,
     this.isPowered = true,
     this.isLoading = false,
-    this.supplyFan = 50,
-    this.exhaustFan = 50,
+    this.supplyFan,
+    this.exhaustFan,
     this.onPowerToggle,
     this.onSupplyFanChanged,
     this.onExhaustFanChanged,
@@ -90,8 +90,8 @@ class MainTempCard extends StatelessWidget {
   final String unitName;
   final String? status;
   final int temperature;
-  final int heatingTemp;
-  final int coolingTemp;
+  final int? heatingTemp;
+  final int? coolingTemp;
   final int humidity;
   final double outsideTemp;
   final double indoorTemp;
@@ -99,8 +99,8 @@ class MainTempCard extends StatelessWidget {
   final int filterPercent;
   final bool isPowered;
   final bool isLoading;
-  final int supplyFan;
-  final int exhaustFan;
+  final int? supplyFan;
+  final int? exhaustFan;
   final VoidCallback? onPowerToggle;
   final ValueChanged<int>? onSupplyFanChanged;
   final ValueChanged<int>? onExhaustFanChanged;
@@ -333,8 +333,8 @@ class _TemperatureSection extends StatelessWidget {
     this.isPendingHeatingTemperature = false,
     this.isPendingCoolingTemperature = false,
   });
-  final int heatingTemp;
-  final int coolingTemp;
+  final int? heatingTemp;
+  final int? coolingTemp;
   final bool isPowered;
   final BreezColors colors;
   final AppLocalizations l10n;
@@ -464,8 +464,8 @@ class _FanSlidersSection extends StatelessWidget {
     this.isPendingSupplyFan = false,
     this.isPendingExhaustFan = false,
   });
-  final int supplyFan;
-  final int exhaustFan;
+  final int? supplyFan;
+  final int? exhaustFan;
   final ValueChanged<int>? onSupplyFanChanged;
   final ValueChanged<int>? onExhaustFanChanged;
   final BreezColors colors;

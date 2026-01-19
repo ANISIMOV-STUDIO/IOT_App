@@ -59,7 +59,7 @@ class TemperatureColumn extends StatelessWidget {
     this.maxTemp,
   });
   final String label;
-  final int temperature;
+  final int? temperature;
   final IconData icon;
   final Color color;
   final bool isPowered;
@@ -99,12 +99,17 @@ class TemperatureColumn extends StatelessWidget {
     final spacing = compact ? AppSpacing.xxs + 2 : AppSpacing.xs;
 
     // Проверка достижения границ температуры
-    // Блокируем кнопки если ожидаем ответа от сервера
-    final canDecrease = !isPending && (minTemp == null || temperature > minTemp!);
-    final canIncrease = !isPending && (maxTemp == null || temperature < maxTemp!);
+    // Блокируем кнопки если ожидаем ответа от сервера или температура неизвестна
+    final hasTemperature = temperature != null;
+    final canDecrease = hasTemperature && !isPending && (minTemp == null || temperature! > minTemp!);
+    final canIncrease = hasTemperature && !isPending && (maxTemp == null || temperature! < maxTemp!);
+
+    final temperatureLabel = temperature != null
+        ? '$label: $temperature градусов'
+        : '$label: нет данных';
 
     return Semantics(
-      label: '$label: $temperature градусов',
+      label: temperatureLabel,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
@@ -157,11 +162,13 @@ class TemperatureColumn extends StatelessWidget {
                   child: isPending
                       ? BreezLoader.small(color: color)
                       : Text(
-                          '$temperature°C',
+                          temperature != null ? '$temperature°C' : '—',
                           style: TextStyle(
                             fontSize: fontSize,
                             fontWeight: FontWeight.w700,
-                            color: isPowered ? colors.text : colors.textMuted,
+                            color: isPowered && temperature != null
+                                ? colors.text
+                                : colors.textMuted,
                           ),
                         ),
                 ),
