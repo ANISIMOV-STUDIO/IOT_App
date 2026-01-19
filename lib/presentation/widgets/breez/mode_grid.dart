@@ -35,6 +35,9 @@ List<OperatingModeData> getOperatingModes(AppLocalizations l10n) => [
   OperatingModeData(id: 'custom', name: l10n.modeCustom, icon: Icons.tune, color: Colors.purple),
 ];
 
+/// Callback для нажатия на режим
+typedef ModeCallback = void Function(OperatingModeData mode);
+
 /// Сетка режимов работы установки
 ///
 /// Адаптивная сетка с автоматическим расчётом aspect ratio
@@ -45,19 +48,17 @@ class ModeGrid extends StatelessWidget {
 
   const ModeGrid({
     required this.selectedMode, super.key,
-    this.onModeChanged,
-    this.onModeSettingsTap,
+    this.onModeTap,
     this.isEnabled = true,
     this.modes,
     this.columns = _ModeGridConstants.defaultColumns,
     this.showCard = true,
   });
   final String selectedMode;
-  final ValueChanged<String>? onModeChanged;
 
-  /// Callback для открытия настроек режима
-  /// Передаёт ID режима (modeId)
-  final void Function(String modeId, String modeDisplayName)? onModeSettingsTap;
+  /// Callback при нажатии на режим
+  /// Передаёт полные данные режима (id, name, icon, color)
+  final ModeCallback? onModeTap;
 
   final bool isEnabled;
   final List<OperatingModeData>? modes;
@@ -107,10 +108,7 @@ class ModeGrid extends StatelessWidget {
               mode: mode,
               isSelected: isSelected,
               isEnabled: isEnabled,
-              onTap: isEnabled ? () => onModeChanged?.call(mode.id) : null,
-              onSettingsTap: onModeSettingsTap != null
-                  ? () => onModeSettingsTap!(mode.id, mode.name)
-                  : null,
+              onTap: isEnabled ? () => onModeTap?.call(mode) : null,
             );
           },
         );

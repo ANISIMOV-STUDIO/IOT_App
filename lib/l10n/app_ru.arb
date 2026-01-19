@@ -350,6 +350,10 @@
   "@save": {
     "description": "Save button"
   },
+  "enable": "Включить",
+  "@enable": {
+    "description": "Enable/activate button"
+  },
   "cancel": "Отмена",
   "@cancel": {
     "description": "Cancel button"

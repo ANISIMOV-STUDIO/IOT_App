@@ -38,8 +38,7 @@ class MobileLayout extends StatefulWidget {
     this.onCoolingTempDecrease,
     this.onSupplyFanChanged,
     this.onExhaustFanChanged,
-    this.onModeChanged,
-    this.onModeSettingsTap,
+    this.onModeTap,
     this.onPowerToggle,
     this.onSettingsTap,
     this.isPowerLoading = false,
@@ -63,8 +62,10 @@ class MobileLayout extends StatefulWidget {
   final VoidCallback? onCoolingTempDecrease;
   final ValueChanged<int>? onSupplyFanChanged;
   final ValueChanged<int>? onExhaustFanChanged;
-  final ValueChanged<String>? onModeChanged;
-  final void Function(String modeId, String modeDisplayName)? onModeSettingsTap;
+
+  /// Callback при нажатии на режим (открывает модалку настроек)
+  final ModeCallback? onModeTap;
+
   final VoidCallback? onPowerToggle;
   final VoidCallback? onSettingsTap;
   final bool isPowerLoading;
@@ -178,8 +179,7 @@ class _MobileLayoutState extends State<MobileLayout>
                       // Режимы работы
                       ModeGrid(
                         selectedMode: widget.unit.mode,
-                        onModeChanged: widget.isOnline ? widget.onModeChanged : null,
-                        onModeSettingsTap: widget.isOnline ? widget.onModeSettingsTap : null,
+                        onModeTap: widget.isOnline ? widget.onModeTap : null,
                         showCard: false,
                         isEnabled: widget.isOnline,
                       ),

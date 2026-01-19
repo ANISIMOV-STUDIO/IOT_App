@@ -24,8 +24,7 @@ class DesktopLayout extends StatefulWidget {
     this.onCoolingTempDecrease,
     this.onSupplyFanChanged,
     this.onExhaustFanChanged,
-    this.onModeChanged,
-    this.onModeSettingsTap,
+    this.onModeTap,
     this.onPowerToggle,
     this.onSettingsTap,
     this.isPowerLoading = false,
@@ -61,8 +60,10 @@ class DesktopLayout extends StatefulWidget {
   final VoidCallback? onCoolingTempDecrease;
   final ValueChanged<int>? onSupplyFanChanged;
   final ValueChanged<int>? onExhaustFanChanged;
-  final ValueChanged<String>? onModeChanged;
-  final void Function(String modeId, String modeDisplayName)? onModeSettingsTap;
+
+  /// Callback при нажатии на режим (открывает модалку настроек)
+  final ModeCallback? onModeTap;
+
   final VoidCallback? onPowerToggle;
   final VoidCallback? onSettingsTap;
   final bool isPowerLoading;
@@ -180,13 +181,12 @@ class _DesktopLayoutState extends State<DesktopLayout> {
         const SizedBox(height: AppSpacing.sm),
 
         // Режимы работы (единый виджет с мобильной версией)
-        // Режимы всегда кликабельны - можно выбрать режим до включения
+        // При tap открывается модалка настроек режима
         Expanded(
           flex: 2,
           child: ModeGrid(
             selectedMode: widget.unit.mode,
-            onModeChanged: widget.onModeChanged,
-            onModeSettingsTap: widget.onModeSettingsTap,
+            onModeTap: widget.onModeTap,
           ),
         ),
       ],

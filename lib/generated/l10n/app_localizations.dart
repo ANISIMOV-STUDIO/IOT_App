@@ -578,6 +578,12 @@ abstract class AppLocalizations {
   /// **'Сохранить'**
   String get save;
 
+  /// Enable/activate button
+  ///
+  /// In ru, this message translates to:
+  /// **'Включить'**
+  String get enable;
+
   /// Cancel button
   ///
   /// In ru, this message translates to:

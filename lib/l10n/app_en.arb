@@ -350,6 +350,10 @@
   "@save": {
     "description": "Save button"
   },
+  "enable": "Enable",
+  "@enable": {
+    "description": "Enable/activate button"
+  },
   "cancel": "Cancel",
   "@cancel": {
     "description": "Cancel button"

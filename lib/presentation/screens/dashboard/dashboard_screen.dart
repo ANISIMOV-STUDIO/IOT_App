@@ -154,8 +154,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           context.read<ClimateBloc>().add(ClimateSupplyAirflowChanged(v.toDouble())),
       onExhaustFanChanged: (v) =>
           context.read<ClimateBloc>().add(ClimateExhaustAirflowChanged(v.toDouble())),
-      onModeChanged: (m) => context.read<ClimateBloc>().add(ClimateOperatingModeChanged(m)),
-      onModeSettingsTap: _handleModeSettingsTap,
+      onModeTap: _handleModeTap,
       onPowerToggle: () => _handlePowerToggle(data.climateState),
       onSettingsTap: () => _showUnitSettings(unit),
       isPowerLoading: data.climateState.isTogglingPower,
@@ -214,8 +213,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 context.read<ClimateBloc>().add(ClimateSupplyAirflowChanged(v.toDouble())),
             onExhaustFanChanged: (v) =>
                 context.read<ClimateBloc>().add(ClimateExhaustAirflowChanged(v.toDouble())),
-            onModeChanged: (m) => context.read<ClimateBloc>().add(ClimateOperatingModeChanged(m)),
-            onModeSettingsTap: _handleModeSettingsTap,
+            onModeTap: _handleModeTap,
             onPowerToggle: () => _handlePowerToggle(data.climateState),
             onSettingsTap: () => _showUnitSettings(unit),
             isPowerLoading: data.climateState.isTogglingPower,
@@ -304,15 +302,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
   }
 
-  Future<void> _handleModeSettingsTap(String modeId, String modeDisplayName) async {
+  Future<void> _handleModeTap(OperatingModeData mode) async {
     final climateState = context.read<ClimateBloc>().state;
     final deviceFullState = climateState.deviceFullState;
     if (deviceFullState == null) {
       return;
     }
 
+    final currentMode = deviceFullState.operatingMode;
+    final isSelected = currentMode.toLowerCase() == mode.id.toLowerCase();
+
     // Получаем текущие настройки режима или создаём дефолтные
-    final currentSettings = deviceFullState.modeSettings?[modeId] ??
+    final currentSettings = deviceFullState.modeSettings?[mode.id] ??
         const ModeSettings(
           heatingTemperature: 22,
           coolingTemperature: 24,
@@ -320,16 +321,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     final result = await ModeSettingsDialog.show(
       context,
-      modeName: modeId,
-      modeDisplayName: modeDisplayName,
+      modeName: mode.id,
+      modeDisplayName: mode.name,
+      modeIcon: mode.icon,
+      modeColor: mode.color,
       initialSettings: currentSettings,
+      isSelected: isSelected,
     );
 
     if (result != null && mounted) {
+      // Сохраняем настройки режима
       context.read<ClimateBloc>().add(ClimateModeSettingsChanged(
-        modeName: modeId,
-        settings: result,
+        modeName: mode.id,
+        settings: result.settings,
       ));
+
+      // Если пользователь нажал "Включить" — активируем режим
+      if (result.activate) {
+        context.read<ClimateBloc>().add(ClimateOperatingModeChanged(mode.id));
+      }
     }
   }
 

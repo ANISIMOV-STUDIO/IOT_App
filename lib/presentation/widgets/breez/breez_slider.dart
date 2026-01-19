@@ -265,36 +265,43 @@ class BreezLabeledSlider extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  if (icon != null) ...[
-                    Icon(icon, size: _LabeledSliderConstants.iconSize, color: effectiveColor),
-                    const SizedBox(width: AppSpacing.xxs),
-                  ],
-                  Text(
-                    label,
-                    style: TextStyle(
-                      fontSize: _LabeledSliderConstants.labelFontSize,
-                      fontWeight: FontWeight.w500,
-                      color: colors.textMuted,
+          // Label row with value aligned to slider bounds
+          Padding(
+            padding: const EdgeInsets.only(
+              left: _SliderConstants.defaultThumbRadius,
+              right: _SliderConstants.defaultThumbRadius * 2,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    if (icon != null) ...[
+                      Icon(icon, size: _LabeledSliderConstants.iconSize, color: effectiveColor),
+                      const SizedBox(width: AppSpacing.xxs),
+                    ],
+                    Text(
+                      label,
+                      style: TextStyle(
+                        fontSize: _LabeledSliderConstants.labelFontSize,
+                        fontWeight: FontWeight.w500,
+                        color: colors.textMuted,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              Text(
-                _formatDisplay(),
-                style: TextStyle(
-                  fontSize: _LabeledSliderConstants.valueFontSize,
-                  fontWeight: FontWeight.w700,
-                  color: effectiveColor,
+                  ],
                 ),
-              ),
-            ],
+                Text(
+                  _formatDisplay(),
+                  style: TextStyle(
+                    fontSize: _LabeledSliderConstants.valueFontSize,
+                    fontWeight: FontWeight.w700,
+                    color: effectiveColor,
+                  ),
+                ),
+              ],
+            ),
           ),
-          const SizedBox(height: AppSpacing.xxs + 2), // 6px
+          const SizedBox(height: AppSpacing.xxs),
           BreezSlider(
             value: value,
             min: min,
