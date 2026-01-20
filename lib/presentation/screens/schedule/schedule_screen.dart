@@ -12,6 +12,7 @@ import 'package:hvac_control/presentation/screens/schedule/widgets/schedule_empt
 import 'package:hvac_control/presentation/screens/schedule/widgets/schedule_entry_dialog.dart';
 import 'package:hvac_control/presentation/screens/schedule/widgets/schedule_list.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_icon_button.dart';
 import 'package:hvac_control/presentation/widgets/breez/schedule_widget.dart';
 
 /// Экран управления расписанием устройства
@@ -92,15 +93,19 @@ class ScheduleScreen extends StatelessWidget {
           ),
         ],
       ),
-      leading: IconButton(
-        icon: Icon(Icons.arrow_back, color: colors.text),
-        onPressed: () => Navigator.of(context).pop(),
+      leading: BreezIconButton(
+        icon: Icons.arrow_back,
+        iconColor: colors.text,
+        onTap: () => Navigator.of(context).pop(),
+        showBorder: false,
       ),
       actions: [
-        IconButton(
-          icon: const Icon(Icons.add, color: AppColors.accent),
-          onPressed: () => _showAddDialog(context),
+        BreezIconButton(
+          icon: Icons.add,
+          iconColor: AppColors.accent,
+          onTap: () => _showAddDialog(context),
           tooltip: l10n.tooltipAdd,
+          showBorder: false,
         ),
       ],
     );

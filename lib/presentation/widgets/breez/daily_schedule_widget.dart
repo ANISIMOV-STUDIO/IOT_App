@@ -20,7 +20,6 @@ import 'package:hvac_control/presentation/widgets/breez/breez_time_picker.dart';
 /// Константы виджета расписания
 abstract class _ScheduleConstants {
   static const double borderRadius = 10;
-  static const Duration animationDuration = Duration(milliseconds: 150);
   static const double timeFontSize = 22;
   static const double powerButtonWidth = 44;
   static const double powerIconSize = 16;
@@ -484,42 +483,33 @@ class _TimeColumn extends StatelessWidget {
 // SCHEDULE TIME BLOCK
 // =============================================================================
 
-/// Компактный блок времени (только цифры)
-class _ScheduleTimeBlock extends StatefulWidget {
-
+/// Компактный блок времени (на базе BreezButton)
+class _ScheduleTimeBlock extends StatelessWidget {
   const _ScheduleTimeBlock({
     required this.hour,
     required this.minute,
     this.onTimeChanged,
   });
+
   final int hour;
   final int minute;
   final void Function(int hour, int minute)? onTimeChanged;
 
-  @override
-  State<_ScheduleTimeBlock> createState() => _ScheduleTimeBlockState();
-}
-
-class _ScheduleTimeBlockState extends State<_ScheduleTimeBlock> {
-  bool _isHovered = false;
-
   String get _formattedTime =>
-      '${widget.hour.toString().padLeft(2, '0')}:${widget.minute.toString().padLeft(2, '0')}';
+      '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
 
-  bool get _isEnabled => widget.onTimeChanged != null;
-
-  Future<void> _showTimePicker() async {
-    if (!_isEnabled) {
+  Future<void> _showTimePicker(BuildContext context) async {
+    if (onTimeChanged == null) {
       return;
     }
 
     final time = await showBreezTimePicker(
       context: context,
-      initialTime: TimeOfDay(hour: widget.hour, minute: widget.minute),
+      initialTime: TimeOfDay(hour: hour, minute: minute),
     );
 
-    if (time != null && mounted) {
-      widget.onTimeChanged?.call(time.hour, time.minute);
+    if (time != null) {
+      onTimeChanged?.call(time.hour, time.minute);
     }
   }
 
@@ -527,39 +517,25 @@ class _ScheduleTimeBlockState extends State<_ScheduleTimeBlock> {
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
 
-    return Semantics(
-      button: true,
-      label: _formattedTime,
-      child: MouseRegion(
-        cursor: _isEnabled ? SystemMouseCursors.click : SystemMouseCursors.basic,
-        onEnter: (_) => setState(() => _isHovered = true),
-        onExit: (_) => setState(() => _isHovered = false),
-        child: GestureDetector(
-          onTap: _showTimePicker,
-          child: AnimatedContainer(
-            duration: _ScheduleConstants.animationDuration,
-            decoration: BoxDecoration(
-              color: _isHovered && _isEnabled
-                  ? AppColors.accent.withValues(alpha: 0.15)
-                  : AppColors.accent.withValues(alpha: 0.08),
-              borderRadius: BorderRadius.circular(_ScheduleConstants.borderRadius),
-              border: Border.all(
-                color: _isHovered && _isEnabled
-                    ? AppColors.accent.withValues(alpha: 0.5)
-                    : AppColors.accent.withValues(alpha: 0.2),
-              ),
-            ),
-            child: Center(
-              child: Text(
-                _formattedTime,
-                style: TextStyle(
-                  fontSize: _ScheduleConstants.timeFontSize,
-                  fontWeight: FontWeight.w700,
-                  color: _isEnabled ? colors.text : colors.textMuted,
-                ),
-              ),
-            ),
-          ),
+    return BreezButton(
+      onTap: onTimeChanged != null ? () => _showTimePicker(context) : null,
+      backgroundColor: AppColors.accent.withValues(alpha: 0.08),
+      hoverColor: AppColors.accent.withValues(alpha: AppColors.opacitySubtle),
+      border: Border.all(
+        color: AppColors.accent.withValues(alpha: AppColors.opacityLow),
+      ),
+      borderRadius: _ScheduleConstants.borderRadius,
+      padding: EdgeInsets.zero,
+      enforceMinTouchTarget: false,
+      enableScale: false,
+      showBorder: false,
+      semanticLabel: _formattedTime,
+      child: Text(
+        _formattedTime,
+        style: TextStyle(
+          fontSize: _ScheduleConstants.timeFontSize,
+          fontWeight: FontWeight.w700,
+          color: onTimeChanged != null ? colors.text : colors.textMuted,
         ),
       ),
     );
