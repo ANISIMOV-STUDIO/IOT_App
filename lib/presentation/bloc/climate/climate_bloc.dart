@@ -314,17 +314,6 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     final existing = state.deviceFullState;
     final incoming = event.fullState;
 
-    // DEBUG: логируем что приходит от SignalR
-    final incomingMode = incoming.operatingMode;
-    final incomingSettings = incoming.modeSettings?[incomingMode];
-    final existingSettings = existing?.modeSettings?[incomingMode];
-    developer.log(
-      '[SignalR] incoming modeSettings[$incomingMode]: '
-      'supplyFan=${incomingSettings?.supplyFan}, exhaustFan=${incomingSettings?.exhaustFan} | '
-      'existing: supplyFan=${existingSettings?.supplyFan}, exhaustFan=${existingSettings?.exhaustFan}',
-      name: 'ClimateBloc',
-    );
-
     // Мержим modeSettings: если в incoming null, берём из existing
     final mergedModeSettings = _mergeModeSettings(
       existing?.modeSettings,
