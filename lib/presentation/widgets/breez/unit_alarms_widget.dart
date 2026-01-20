@@ -2,8 +2,6 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:hvac_control/core/theme/app_radius.dart';
-import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/domain/entities/alarm_info.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
@@ -16,9 +14,6 @@ import 'package:hvac_control/presentation/widgets/breez/breez_list_card.dart';
 
 /// Константы для UnitAlarmsWidget
 abstract class _AlarmWidgetConstants {
-  static const double iconSize = 18;
-  static const double titleFontSize = 16;
-  static const double badgeFontSize = 11;
   static const int maxVisibleAlarms = 3;
 }
 
@@ -40,18 +35,19 @@ class UnitAlarmsWidget extends StatelessWidget {
     super.key,
     this.onSeeHistory,
     this.onAlarmTap,
+    this.onResetAlarms,
     this.compact = false,
     this.showCard = true,
   });
   final Map<String, AlarmInfo> alarms;
   final VoidCallback? onSeeHistory;
   final ValueChanged<String>? onAlarmTap;
+  final VoidCallback? onResetAlarms;
   final bool compact;
   final bool showCard;
 
   @override
   Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     final alarmsList = alarms.entries.toList();
 
@@ -60,53 +56,11 @@ class UnitAlarmsWidget extends StatelessWidget {
           children: [
             // Заголовок (скрыт в компактном режиме)
             if (!compact) ...[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Icon(
-                        alarmsList.isEmpty
-                            ? Icons.check_circle_outline
-                            : Icons.warning_amber_rounded,
-                        size: _AlarmWidgetConstants.iconSize,
-                        color: alarmsList.isEmpty
-                            ? AppColors.accentGreen
-                            : AppColors.accentRed,
-                      ),
-                      const SizedBox(width: AppSpacing.xs),
-                      Text(
-                        l10n.alarms,
-                        style: TextStyle(
-                          fontSize: _AlarmWidgetConstants.titleFontSize,
-                          fontWeight: FontWeight.w700,
-                          color: colors.text,
-                        ),
-                      ),
-                    ],
-                  ),
-                  if (alarmsList.isNotEmpty)
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.xs,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.accentRed.withValues(alpha: 0.15),
-                        borderRadius: BorderRadius.circular(AppRadius.button),
-                      ),
-                      child: Text(
-                        '${alarmsList.length}',
-                        style: const TextStyle(
-                          fontSize: _AlarmWidgetConstants.badgeFontSize,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.accentRed,
-                        ),
-                      ),
-                    ),
-                ],
+              BreezSectionHeader.alarms(
+                title: l10n.alarms,
+                count: alarmsList.length,
               ),
-              const SizedBox(height: AppSpacing.md),
+              const SizedBox(height: AppSpacing.sm),
             ],
 
             // Список аварий
@@ -114,35 +68,52 @@ class UnitAlarmsWidget extends StatelessWidget {
               child: alarmsList.isEmpty
                   ? BreezEmptyState.noAlarms(l10n, compact: compact)
                   : Column(
-                      children: alarmsList
-                          .take(_AlarmWidgetConstants.maxVisibleAlarms)
-                          .toList()
-                          .asMap()
-                          .entries
-                          .map((entry) {
-                        final index = entry.key;
-                        final alarm = entry.value;
-                        return Padding(
-                          padding: EdgeInsets.only(
-                            bottom: index < _AlarmWidgetConstants.maxVisibleAlarms - 1
-                                ? (compact ? AppSpacing.xxs : AppSpacing.xs)
-                                : 0,
+                      children: [
+                        ...alarmsList
+                            .take(_AlarmWidgetConstants.maxVisibleAlarms)
+                            .toList()
+                            .asMap()
+                            .entries
+                            .map((entry) {
+                          final index = entry.key;
+                          final alarm = entry.value;
+                          return Padding(
+                            padding: EdgeInsets.only(
+                              bottom: index < _AlarmWidgetConstants.maxVisibleAlarms - 1
+                                  ? (compact ? AppSpacing.xxs : AppSpacing.xs)
+                                  : 0,
+                            ),
+                            child: BreezListCard.alarm(
+                              code: alarm.value.code.toString(),
+                              description: alarm.value.description,
+                              l10n: l10n,
+                              onTap: () => onAlarmTap?.call(alarm.key),
+                              compact: compact,
+                            ),
+                          );
+                        }),
+                        // Кнопка сброса в компактном режиме (внизу, на всю ширину)
+                        if (compact && onResetAlarms != null) ...[
+                          const Spacer(),
+                          BreezResetButton(
+                            label: l10n.alarmReset,
+                            onTap: onResetAlarms,
                           ),
-                          child: BreezListCard.alarm(
-                            code: alarm.value.code.toString(),
-                            description: alarm.value.description,
-                            l10n: l10n,
-                            onTap: () => onAlarmTap?.call(alarm.key),
-                            compact: compact,
-                          ),
-                        );
-                      }).toList(),
+                        ],
+                      ],
                     ),
             ),
 
-            // Кнопка истории (скрыта в компактном режиме)
+            // Кнопки внизу (скрыты в компактном режиме)
             if (!compact) ...[
               const SizedBox(height: AppSpacing.sm),
+              if (alarmsList.isNotEmpty && onResetAlarms != null) ...[
+                BreezResetButton(
+                  label: l10n.alarmReset,
+                  onTap: onResetAlarms,
+                ),
+                const SizedBox(height: AppSpacing.xs),
+              ],
               BreezSeeMoreButton(
                 label: alarmsList.isEmpty ? l10n.alarmHistory : l10n.allAlarms,
                 extraCount: alarmsList.length > _AlarmWidgetConstants.maxVisibleAlarms

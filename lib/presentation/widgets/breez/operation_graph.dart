@@ -8,6 +8,7 @@ import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/domain/entities/graph_data.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_list_card.dart';
 import 'package:hvac_control/presentation/widgets/breez/operation_graph_painter.dart';
 import 'package:hvac_control/presentation/widgets/breez/operation_graph_widgets.dart';
 
@@ -24,7 +25,6 @@ abstract class _GraphConstants {
   static const double xAxisHeight = 30;
 
   // Шрифты
-  static const double labelFontSize = 9;
   static const double valueFontSize = 32;
   static const double unitFontSize = 16;
   static const double axisFontSize = 9;
@@ -189,7 +189,7 @@ class _GraphStats {
   final double avg;
 }
 
-/// Header with current value and metric tabs
+/// Header with title and metric tabs
 class _GraphHeader extends StatelessWidget {
 
   const _GraphHeader({
@@ -197,7 +197,9 @@ class _GraphHeader extends StatelessWidget {
     required this.metricLabel,
     required this.metricUnit,
     required this.selectedMetric,
-    required this.l10n, required this.colors, this.onMetricChanged,
+    required this.l10n,
+    required this.colors,
+    this.onMetricChanged,
   });
   final double currentValue;
   final String metricLabel;
@@ -207,76 +209,74 @@ class _GraphHeader extends StatelessWidget {
   final AppLocalizations l10n;
   final BreezColors colors;
 
+  IconData _getMetricIcon() {
+    const iconMap = <GraphMetric, IconData>{
+      GraphMetric.temperature: Icons.thermostat_outlined,
+      GraphMetric.humidity: Icons.water_drop_outlined,
+      GraphMetric.airflow: Icons.air,
+    };
+    return iconMap[selectedMetric] ?? Icons.thermostat_outlined;
+  }
+
   @override
   Widget build(BuildContext context) => Semantics(
       label: '$metricLabel: ${currentValue.toStringAsFixed(1)} $metricUnit',
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          // Section header with tabs
+          BreezSectionHeader(
+            icon: _getMetricIcon(),
+            title: metricLabel,
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  metricLabel,
-                  style: TextStyle(
-                    fontSize: _GraphConstants.labelFontSize,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: 1.5,
-                    color: colors.textMuted,
-                  ),
+                GraphMetricTab(
+                  icon: Icons.thermostat_outlined,
+                  label: l10n.tempShort,
+                  isSelected: selectedMetric == GraphMetric.temperature,
+                  onTap: () => onMetricChanged?.call(GraphMetric.temperature),
                 ),
-                const SizedBox(height: AppSpacing.xxs),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.baseline,
-                  textBaseline: TextBaseline.alphabetic,
-                  children: [
-                    Text(
-                      currentValue.toStringAsFixed(1),
-                      style: TextStyle(
-                        fontSize: _GraphConstants.valueFontSize,
-                        fontWeight: FontWeight.w900,
-                        height: 1,
-                        color: colors.text,
-                      ),
-                    ),
-                    const SizedBox(width: AppSpacing.xxs),
-                    Text(
-                      metricUnit,
-                      style: TextStyle(
-                        fontSize: _GraphConstants.unitFontSize,
-                        fontWeight: FontWeight.w600,
-                        color: colors.textMuted,
-                      ),
-                    ),
-                  ],
+                const SizedBox(width: AppSpacing.xs),
+                GraphMetricTab(
+                  icon: Icons.water_drop_outlined,
+                  label: l10n.humidShort,
+                  isSelected: selectedMetric == GraphMetric.humidity,
+                  onTap: () => onMetricChanged?.call(GraphMetric.humidity),
+                ),
+                const SizedBox(width: AppSpacing.xs),
+                GraphMetricTab(
+                  icon: Icons.air,
+                  label: l10n.airflowShort,
+                  isSelected: selectedMetric == GraphMetric.airflow,
+                  onTap: () => onMetricChanged?.call(GraphMetric.airflow),
                 ),
               ],
             ),
           ),
-          // Metric tabs
+          const SizedBox(height: AppSpacing.sm),
+          // Current value
           Row(
-            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
             children: [
-              GraphMetricTab(
-                icon: Icons.thermostat_outlined,
-                label: l10n.tempShort,
-                isSelected: selectedMetric == GraphMetric.temperature,
-                onTap: () => onMetricChanged?.call(GraphMetric.temperature),
+              Text(
+                currentValue.toStringAsFixed(1),
+                style: TextStyle(
+                  fontSize: _GraphConstants.valueFontSize,
+                  fontWeight: FontWeight.w900,
+                  height: 1,
+                  color: colors.text,
+                ),
               ),
-              const SizedBox(width: AppSpacing.xs),
-              GraphMetricTab(
-                icon: Icons.water_drop_outlined,
-                label: l10n.humidShort,
-                isSelected: selectedMetric == GraphMetric.humidity,
-                onTap: () => onMetricChanged?.call(GraphMetric.humidity),
-              ),
-              const SizedBox(width: AppSpacing.xs),
-              GraphMetricTab(
-                icon: Icons.air,
-                label: l10n.airflowShort,
-                isSelected: selectedMetric == GraphMetric.airflow,
-                onTap: () => onMetricChanged?.call(GraphMetric.airflow),
+              const SizedBox(width: AppSpacing.xxs),
+              Text(
+                metricUnit,
+                style: TextStyle(
+                  fontSize: _GraphConstants.unitFontSize,
+                  fontWeight: FontWeight.w600,
+                  color: colors.textMuted,
+                ),
               ),
             ],
           ),

@@ -1004,22 +1004,22 @@ abstract class AppLocalizations {
   /// **'Поток воздуха'**
   String get airflow;
 
-  /// Graph temperature label uppercase
+  /// Graph temperature label
   ///
   /// In ru, this message translates to:
-  /// **'ТЕМПЕРАТУРА'**
+  /// **'Температура'**
   String get graphTemperatureLabel;
 
-  /// Graph humidity label uppercase
+  /// Graph humidity label
   ///
   /// In ru, this message translates to:
-  /// **'ВЛАЖНОСТЬ'**
+  /// **'Влажность'**
   String get graphHumidityLabel;
 
-  /// Graph airflow label uppercase
+  /// Graph airflow label
   ///
   /// In ru, this message translates to:
-  /// **'ПОТОК ВОЗДУХА'**
+  /// **'Поток воздуха'**
   String get graphAirflowLabel;
 
   /// Temperature short label
@@ -1447,6 +1447,12 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Устранена'**
   String get alarmClearedAt;
+
+  /// Reset alarms button label
+  ///
+  /// In ru, this message translates to:
+  /// **'Сброс'**
+  String get alarmReset;
 
   /// No description provided for @janShort.
   ///

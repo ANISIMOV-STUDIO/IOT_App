@@ -495,13 +495,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get airflow => 'Airflow';
 
   @override
-  String get graphTemperatureLabel => 'TEMPERATURE';
+  String get graphTemperatureLabel => 'Temperature';
 
   @override
-  String get graphHumidityLabel => 'HUMIDITY';
+  String get graphHumidityLabel => 'Humidity';
 
   @override
-  String get graphAirflowLabel => 'AIRFLOW';
+  String get graphAirflowLabel => 'Airflow';
 
   @override
   String get tempShort => 'Temp';
@@ -735,6 +735,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get alarmClearedAt => 'Cleared';
+
+  @override
+  String get alarmReset => 'Reset';
 
   @override
   String get janShort => 'Jan';

@@ -10,6 +10,7 @@ import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/domain/entities/mode_settings.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_list_card.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_tab.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_time_picker.dart';
 
@@ -188,15 +189,8 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget>
       children: [
         // Header - только для desktop
         if (!widget.compact) ...[
-          Text(
-            l10n.schedule,
-            style: TextStyle(
-              fontSize: AppFontSizes.h4,
-              fontWeight: FontWeight.w700,
-              color: colors.text,
-            ),
-          ),
-          const SizedBox(height: AppSpacing.xs),
+          BreezSectionHeader.schedule(title: l10n.schedule),
+          const SizedBox(height: AppSpacing.sm),
         ],
 
         // Day tabs

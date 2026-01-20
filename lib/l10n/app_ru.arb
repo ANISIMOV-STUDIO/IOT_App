@@ -674,17 +674,17 @@
   "@airflow": {
     "description": "Airflow metric label"
   },
-  "graphTemperatureLabel": "ТЕМПЕРАТУРА",
+  "graphTemperatureLabel": "Температура",
   "@graphTemperatureLabel": {
-    "description": "Graph temperature label uppercase"
+    "description": "Graph temperature label"
   },
-  "graphHumidityLabel": "ВЛАЖНОСТЬ",
+  "graphHumidityLabel": "Влажность",
   "@graphHumidityLabel": {
-    "description": "Graph humidity label uppercase"
+    "description": "Graph humidity label"
   },
-  "graphAirflowLabel": "ПОТОК ВОЗДУХА",
+  "graphAirflowLabel": "Поток воздуха",
   "@graphAirflowLabel": {
-    "description": "Graph airflow label uppercase"
+    "description": "Graph airflow label"
   },
   "tempShort": "Темп",
   "@tempShort": {
@@ -823,6 +823,10 @@
   },
   "alarmOccurredAt": "Возникла",
   "alarmClearedAt": "Устранена",
+  "alarmReset": "Сброс",
+  "@alarmReset": {
+    "description": "Reset alarms button label"
+  },
   "janShort": "янв",
   "febShort": "фев",
   "marShort": "мар",

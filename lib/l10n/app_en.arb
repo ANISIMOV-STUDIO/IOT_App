@@ -674,17 +674,17 @@
   "@airflow": {
     "description": "Airflow metric label"
   },
-  "graphTemperatureLabel": "TEMPERATURE",
+  "graphTemperatureLabel": "Temperature",
   "@graphTemperatureLabel": {
-    "description": "Graph temperature label uppercase"
+    "description": "Graph temperature label"
   },
-  "graphHumidityLabel": "HUMIDITY",
+  "graphHumidityLabel": "Humidity",
   "@graphHumidityLabel": {
-    "description": "Graph humidity label uppercase"
+    "description": "Graph humidity label"
   },
-  "graphAirflowLabel": "AIRFLOW",
+  "graphAirflowLabel": "Airflow",
   "@graphAirflowLabel": {
-    "description": "Graph airflow label uppercase"
+    "description": "Graph airflow label"
   },
   "tempShort": "Temp",
   "@tempShort": {
@@ -823,6 +823,10 @@
   },
   "alarmOccurredAt": "Occurred",
   "alarmClearedAt": "Cleared",
+  "alarmReset": "Reset",
+  "@alarmReset": {
+    "description": "Reset alarms button label"
+  },
   "janShort": "Jan",
   "febShort": "Feb",
   "marShort": "Mar",

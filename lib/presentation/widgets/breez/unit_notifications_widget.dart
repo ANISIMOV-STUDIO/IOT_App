@@ -2,8 +2,6 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:hvac_control/core/theme/app_radius.dart';
-import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/domain/entities/unit_notification.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
@@ -18,9 +16,6 @@ export '../../../domain/entities/unit_notification.dart';
 
 /// Константы для UnitNotificationsWidget
 abstract class _NotificationWidgetConstants {
-  static const double iconSize = 18;
-  static const double titleFontSize = 16;
-  static const double badgeFontSize = 11;
   static const int maxVisibleNotifications = 3;
 }
 
@@ -45,7 +40,6 @@ class UnitNotificationsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     const maxVisible = _NotificationWidgetConstants.maxVisibleNotifications;
 
@@ -57,50 +51,12 @@ class UnitNotificationsWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Header
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    const Icon(
-                      Icons.notifications_outlined,
-                      size: _NotificationWidgetConstants.iconSize,
-                      color: AppColors.accent,
-                    ),
-                    const SizedBox(width: AppSpacing.xs),
-                    Text(
-                      l10n.notifications,
-                      style: TextStyle(
-                        fontSize: _NotificationWidgetConstants.titleFontSize,
-                        fontWeight: FontWeight.w700,
-                        color: colors.text,
-                      ),
-                    ),
-                  ],
-                ),
-                if (notifications.isNotEmpty)
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.xs,
-                      vertical: AppSpacing.xxs / 2,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.accentRed.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(AppRadius.button),
-                    ),
-                    child: Text(
-                      '${notifications.length}',
-                      style: const TextStyle(
-                        fontSize: _NotificationWidgetConstants.badgeFontSize,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.accentRed,
-                      ),
-                    ),
-                  ),
-              ],
+            BreezSectionHeader.notifications(
+              title: l10n.notifications,
+              count: notifications.length,
             ),
 
-            const SizedBox(height: AppSpacing.md),
+            const SizedBox(height: AppSpacing.sm),
 
             // Notifications list (no scroll, max 3 visible)
             Expanded(

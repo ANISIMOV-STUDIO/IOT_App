@@ -8,6 +8,7 @@ import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/domain/entities/schedule_entry.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_list_card.dart';
 
 export '../../../domain/entities/schedule_entry.dart';
 
@@ -16,8 +17,6 @@ export '../../../domain/entities/schedule_entry.dart';
 // =============================================================================
 
 abstract class _ScheduleWidgetConstants {
-  // Title font size
-  static const double titleFontSize = 16;
 
   // Button icons
   static const double addIconSize = 16;
@@ -162,67 +161,57 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
         children: [
           // Header with title, "See All" and "Add" buttons
           if (!widget.compact) ...[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  l10n.schedule,
-                  style: TextStyle(
-                    fontSize: _ScheduleWidgetConstants.titleFontSize,
-                    fontWeight: FontWeight.w700,
-                    color: colors.text,
-                  ),
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // Add button
-                    if (widget.onAddEntry != null)
-                      Padding(
-                        padding: const EdgeInsets.only(right: AppSpacing.xs),
-                        child: BreezButton(
-                          onTap: widget.onAddEntry,
-                          padding: const EdgeInsets.all(
-                            _ScheduleWidgetConstants.buttonPaddingVertical,
-                          ),
-                          backgroundColor: AppColors.accent,
-                          hoverColor: AppColors.accentLight,
-                          showBorder: false,
-                          enforceMinTouchTarget: false,
-                          child: const Icon(
-                            Icons.add,
-                            size: _ScheduleWidgetConstants.addIconSize,
-                            color: AppColors.white,
-                          ),
+            BreezSectionHeader.schedule(
+              title: l10n.schedule,
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Add button
+                  if (widget.onAddEntry != null)
+                    Padding(
+                      padding: const EdgeInsets.only(right: AppSpacing.xs),
+                      child: BreezButton(
+                        onTap: widget.onAddEntry,
+                        padding: const EdgeInsets.all(
+                          _ScheduleWidgetConstants.buttonPaddingVertical,
                         ),
-                      ),
-                    // See all button
-                    BreezButton(
-                      onTap: widget.onSeeAll ?? () {},
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.xs,
-                        vertical: _ScheduleWidgetConstants.buttonPaddingVertical,
-                      ),
-                      backgroundColor: AppColors.accent.withValues(alpha: 0.1),
-                      hoverColor: AppColors.accent.withValues(alpha: 0.15),
-                      showBorder: false,
-                      enforceMinTouchTarget: false,
-                      child: Center(
-                        child: Text(
-                          l10n.seeAll,
-                          style: const TextStyle(
-                            fontSize: _ScheduleWidgetConstants.seeAllFontSize,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.accent,
-                          ),
+                        backgroundColor: AppColors.accent,
+                        hoverColor: AppColors.accentLight,
+                        showBorder: false,
+                        enforceMinTouchTarget: false,
+                        child: const Icon(
+                          Icons.add,
+                          size: _ScheduleWidgetConstants.addIconSize,
+                          color: AppColors.white,
                         ),
                       ),
                     ),
-                  ],
-                ),
-              ],
+                  // See all button
+                  BreezButton(
+                    onTap: widget.onSeeAll ?? () {},
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.xs,
+                      vertical: _ScheduleWidgetConstants.buttonPaddingVertical,
+                    ),
+                    backgroundColor: AppColors.accent.withValues(alpha: 0.1),
+                    hoverColor: AppColors.accent.withValues(alpha: 0.15),
+                    showBorder: false,
+                    enforceMinTouchTarget: false,
+                    child: Center(
+                      child: Text(
+                        l10n.seeAll,
+                        style: const TextStyle(
+                          fontSize: _ScheduleWidgetConstants.seeAllFontSize,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.accent,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: AppSpacing.xs),
+            const SizedBox(height: AppSpacing.sm),
           ],
 
           // Day selector

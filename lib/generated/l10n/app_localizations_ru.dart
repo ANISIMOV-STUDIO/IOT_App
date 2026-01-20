@@ -497,13 +497,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get airflow => 'Поток воздуха';
 
   @override
-  String get graphTemperatureLabel => 'ТЕМПЕРАТУРА';
+  String get graphTemperatureLabel => 'Температура';
 
   @override
-  String get graphHumidityLabel => 'ВЛАЖНОСТЬ';
+  String get graphHumidityLabel => 'Влажность';
 
   @override
-  String get graphAirflowLabel => 'ПОТОК ВОЗДУХА';
+  String get graphAirflowLabel => 'Поток воздуха';
 
   @override
   String get tempShort => 'Темп';
@@ -737,6 +737,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get alarmClearedAt => 'Устранена';
+
+  @override
+  String get alarmReset => 'Сброс';
 
   @override
   String get janShort => 'янв';

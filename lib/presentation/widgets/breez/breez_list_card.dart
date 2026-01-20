@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_control/core/theme/app_radius.dart';
+import 'package:hvac_control/core/theme/app_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/domain/entities/device_event_log.dart';
@@ -57,11 +58,6 @@ abstract class _EmptyStateConstants {
   static const double subtitleAlpha = 0.7;
 }
 
-/// Константы для BreezSeeMoreButton
-abstract class _SeeMoreConstants {
-  static const double height = 48;
-  static const double fontSize = 12;
-}
 
 // =============================================================================
 // TYPES
@@ -340,17 +336,214 @@ class BreezSeeMoreButton extends StatelessWidget {
     return BreezButton(
       onTap: onTap,
       width: double.infinity,
-      height: _SeeMoreConstants.height,
+      height: AppSizes.buttonHeightSmall,
       backgroundColor: colors.buttonBg,
       hoverColor: colors.buttonHover,
       child: Center(
         child: Text(
           _text,
           style: const TextStyle(
-            fontSize: _SeeMoreConstants.fontSize,
+            fontSize: AppFontSizes.caption,
             fontWeight: FontWeight.w600,
             color: AppColors.accent,
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Компактная кнопка-действие (chip) для inline-использования в заголовках
+///
+/// Поддерживает обычный (accent) и danger (red) стили.
+class BreezActionChip extends StatelessWidget {
+  const BreezActionChip({
+    required this.label,
+    required this.onTap,
+    super.key,
+    this.isDanger = false,
+  });
+
+  final String label;
+  final VoidCallback? onTap;
+  final bool isDanger;
+
+  @override
+  Widget build(BuildContext context) {
+    final accentColor = isDanger ? AppColors.accentRed : AppColors.accent;
+
+    return BreezButton(
+      onTap: onTap,
+      backgroundColor: accentColor.withValues(alpha: 0.1),
+      hoverColor: accentColor.withValues(alpha: 0.2),
+      borderRadius: AppRadius.nested,
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.sm,
+        vertical: AppSpacing.xxs,
+      ),
+      showBorder: false,
+      child: Text(
+        label,
+        style: TextStyle(
+          fontSize: AppFontSizes.captionSmall,
+          fontWeight: FontWeight.w600,
+          color: accentColor,
+        ),
+      ),
+    );
+  }
+}
+
+/// Кнопка сброса/опасного действия на всю ширину (аналог BreezSeeMoreButton)
+///
+/// Используется внизу списков для danger-действий.
+class BreezResetButton extends StatelessWidget {
+  const BreezResetButton({
+    required this.label,
+    super.key,
+    this.onTap,
+  });
+
+  final String label;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+    return BreezButton(
+      onTap: onTap,
+      width: double.infinity,
+      height: AppSizes.buttonHeightSmall,
+      backgroundColor: colors.buttonBg,
+      hoverColor: AppColors.accentRed.withValues(alpha: 0.15),
+      child: Center(
+        child: Text(
+          label,
+          style: const TextStyle(
+            fontSize: AppFontSizes.caption,
+            fontWeight: FontWeight.w600,
+            color: AppColors.accentRed,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Заголовок секции с иконкой и опциональным trailing (счётчик, бейдж)
+///
+/// Высота определяется контентом. Используется для заголовков списков
+/// (аварии, уведомления, расписание, график и т.д.)
+class BreezSectionHeader extends StatelessWidget {
+  const BreezSectionHeader({
+    required this.icon,
+    required this.title,
+    super.key,
+    this.iconColor,
+    this.trailing,
+  });
+
+  /// Фабрика для заголовка секции аварий
+  factory BreezSectionHeader.alarms({
+    required String title,
+    required int count,
+    Key? key,
+  }) => BreezSectionHeader(
+      key: key,
+      icon: count == 0 ? Icons.check_circle_outline : Icons.warning_amber_rounded,
+      title: title,
+      iconColor: count == 0 ? AppColors.accentGreen : AppColors.accentRed,
+      trailing: count > 0 ? _CountBadge(count: count, color: AppColors.accentRed) : null,
+    );
+
+  /// Фабрика для заголовка секции уведомлений
+  factory BreezSectionHeader.notifications({
+    required String title,
+    required int count,
+    Key? key,
+  }) => BreezSectionHeader(
+      key: key,
+      icon: Icons.notifications_outlined,
+      title: title,
+      iconColor: AppColors.accent,
+      trailing: count > 0 ? _CountBadge(count: count, color: AppColors.accentRed) : null,
+    );
+
+  /// Фабрика для заголовка секции расписания
+  factory BreezSectionHeader.schedule({
+    required String title,
+    Key? key,
+    Widget? trailing,
+  }) => BreezSectionHeader(
+      key: key,
+      icon: Icons.schedule_outlined,
+      title: title,
+      iconColor: AppColors.accent,
+      trailing: trailing,
+    );
+
+  final IconData icon;
+  final String title;
+  final Color? iconColor;
+  final Widget? trailing;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+    final color = iconColor ?? AppColors.accent;
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(
+          icon,
+          size: AppFontSizes.h4,
+          color: color,
+        ),
+        const SizedBox(width: AppSpacing.xs),
+        Expanded(
+          child: Text(
+            title,
+            style: TextStyle(
+              fontSize: AppFontSizes.h4,
+              fontWeight: FontWeight.w700,
+              color: colors.text,
+            ),
+          ),
+        ),
+        if (trailing != null) trailing!,
+      ],
+    );
+  }
+}
+
+/// Бейдж со счётчиком для BreezSectionHeader
+class _CountBadge extends StatelessWidget {
+  const _CountBadge({
+    required this.count,
+    required this.color,
+  });
+
+  final int count;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.xs,
+        vertical: AppSpacing.xxs,
+      ),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: AppColors.opacitySubtle),
+        borderRadius: BorderRadius.circular(AppRadius.nested),
+      ),
+      child: Text(
+        '$count',
+        style: TextStyle(
+          fontSize: AppFontSizes.captionSmall,
+          fontWeight: FontWeight.w700,
+          color: color,
         ),
       ),
     );
