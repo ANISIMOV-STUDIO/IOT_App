@@ -495,20 +495,28 @@ class BreezSectionHeader extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(
-          icon,
-          size: AppFontSizes.h4,
-          color: color,
-        ),
-        const SizedBox(width: AppSpacing.xs),
+        // Иконка + заголовок центрированы между собой
         Expanded(
-          child: Text(
-            title,
-            style: TextStyle(
-              fontSize: AppFontSizes.h4,
-              fontWeight: FontWeight.w700,
-              color: colors.text,
-            ),
+          child: Row(
+            children: [
+              Icon(
+                icon,
+                size: AppFontSizes.h4,
+                color: color,
+              ),
+              const SizedBox(width: AppSpacing.xs),
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: AppFontSizes.h4,
+                    fontWeight: FontWeight.w700,
+                    height: 1,
+                    color: colors.text,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         if (trailing != null) trailing!,
