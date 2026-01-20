@@ -140,7 +140,8 @@ class DashboardBlocBuilder extends StatelessWidget {
               previous.isPendingHeatingTemperature != current.isPendingHeatingTemperature ||
               previous.isPendingCoolingTemperature != current.isPendingCoolingTemperature ||
               previous.isPendingSupplyFan != current.isPendingSupplyFan ||
-              previous.isPendingExhaustFan != current.isPendingExhaustFan,
+              previous.isPendingExhaustFan != current.isPendingExhaustFan ||
+              previous.isPendingOperatingMode != current.isPendingOperatingMode,
           builder: (context, climateState) => BlocBuilder<ConnectivityBloc, ConnectivityState>(
               buildWhen: (previous, current) =>
                   previous.showBanner != current.showBanner ||

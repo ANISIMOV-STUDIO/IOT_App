@@ -35,6 +35,8 @@ final class ClimateControlState extends Equatable {
     this.pendingCoolingTemp,
     this.pendingSupplyFan,
     this.pendingExhaustFan,
+    this.isPendingOperatingMode = false,
+    this.pendingOperatingMode,
   });
   /// Статус загрузки
   final ClimateControlStatus status;
@@ -84,6 +86,12 @@ final class ClimateControlState extends Equatable {
 
   /// Ожидаемое значение вытяжного вентилятора (null = нет ожидания)
   final int? pendingExhaustFan;
+
+  /// Ожидание подтверждения смены режима работы
+  final bool isPendingOperatingMode;
+
+  /// Ожидаемый режим работы (null = нет ожидания)
+  final String? pendingOperatingMode;
 
   // ============================================
   // ГЕТТЕРЫ ДЛЯ УДОБСТВА
@@ -163,6 +171,9 @@ final class ClimateControlState extends Equatable {
     bool clearPendingSupplyFan = false,
     int? pendingExhaustFanValue,
     bool clearPendingExhaustFan = false,
+    bool? isPendingOperatingMode,
+    String? pendingOperatingMode,
+    bool clearPendingOperatingMode = false,
   }) => ClimateControlState(
       status: status ?? this.status,
       climate: climate ?? this.climate,
@@ -182,6 +193,8 @@ final class ClimateControlState extends Equatable {
       pendingCoolingTemp: clearPendingCoolingTemp ? null : (pendingCoolingTemp ?? this.pendingCoolingTemp),
       pendingSupplyFan: clearPendingSupplyFan ? null : (pendingSupplyFanValue ?? this.pendingSupplyFan),
       pendingExhaustFan: clearPendingExhaustFan ? null : (pendingExhaustFanValue ?? this.pendingExhaustFan),
+      isPendingOperatingMode: isPendingOperatingMode ?? this.isPendingOperatingMode,
+      pendingOperatingMode: clearPendingOperatingMode ? null : (pendingOperatingMode ?? this.pendingOperatingMode),
     );
 
   @override
@@ -202,5 +215,7 @@ final class ClimateControlState extends Equatable {
         pendingCoolingTemp,
         pendingSupplyFan,
         pendingExhaustFan,
+        isPendingOperatingMode,
+        pendingOperatingMode,
       ];
 }

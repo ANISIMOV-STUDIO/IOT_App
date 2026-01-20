@@ -177,6 +177,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       isPendingCoolingTemperature: data.climateState.isPendingCoolingTemperature,
       isPendingSupplyFan: data.climateState.isPendingSupplyFan,
       isPendingExhaustFan: data.climateState.isPendingExhaustFan,
+      isPendingOperatingMode: data.climateState.isPendingOperatingMode,
     );
   }
 
@@ -236,6 +237,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             isPendingCoolingTemperature: data.climateState.isPendingCoolingTemperature,
             isPendingSupplyFan: data.climateState.isPendingSupplyFan,
             isPendingExhaustFan: data.climateState.isPendingExhaustFan,
+            isPendingOperatingMode: data.climateState.isPendingOperatingMode,
           ),
         ),
       ],

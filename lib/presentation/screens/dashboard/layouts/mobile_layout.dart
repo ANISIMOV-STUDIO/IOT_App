@@ -49,6 +49,7 @@ class MobileLayout extends StatefulWidget {
     this.isPendingCoolingTemperature = false,
     this.isPendingSupplyFan = false,
     this.isPendingExhaustFan = false,
+    this.isPendingOperatingMode = false,
     this.timerSettings,
     this.onTimerSettingsChanged,
     this.activeAlarms = const {},
@@ -81,6 +82,8 @@ class MobileLayout extends StatefulWidget {
   final bool isPendingSupplyFan;
   /// Ожидание подтверждения изменения вытяжного вентилятора
   final bool isPendingExhaustFan;
+  /// Ожидание подтверждения смены режима работы
+  final bool isPendingOperatingMode;
 
   final Map<String, TimerSettings>? timerSettings;
   final DaySettingsCallback? onTimerSettingsChanged;
@@ -184,6 +187,7 @@ class _MobileLayoutState extends State<MobileLayout>
                         onModeTap: widget.isOnline ? widget.onModeTap : null,
                         showCard: false,
                         isEnabled: widget.isOnline,
+                        isPending: widget.isPendingOperatingMode,
                       ),
                       // Schedule
                       DailyScheduleWidget(

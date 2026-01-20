@@ -35,6 +35,7 @@ class DesktopLayout extends StatefulWidget {
     this.isPendingCoolingTemperature = false,
     this.isPendingSupplyFan = false,
     this.isPendingExhaustFan = false,
+    this.isPendingOperatingMode = false,
     this.onMasterOff,
     this.onUnitSelected,
     this.onThemeToggle,
@@ -79,6 +80,8 @@ class DesktopLayout extends StatefulWidget {
   final bool isPendingSupplyFan;
   /// Ожидание подтверждения изменения вытяжного вентилятора
   final bool isPendingExhaustFan;
+  /// Ожидание подтверждения смены режима работы
+  final bool isPendingOperatingMode;
   final VoidCallback? onMasterOff;
   final ValueChanged<int>? onUnitSelected;
   final VoidCallback? onThemeToggle;
@@ -189,6 +192,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
           child: ModeGrid(
             selectedMode: widget.unit.mode,
             onModeTap: widget.onModeTap,
+            isPending: widget.isPendingOperatingMode,
           ),
         ),
       ],

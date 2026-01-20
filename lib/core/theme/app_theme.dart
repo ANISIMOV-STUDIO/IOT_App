@@ -12,6 +12,7 @@ import 'package:hvac_control/core/theme/app_radius.dart';
 // Re-export theme components for convenience
 export 'app_colors.dart';
 export 'app_font_sizes.dart';
+export 'app_radius.dart';
 
 /// Theme-aware colors accessible via BreezColors.of(context)
 class BreezColors extends ThemeExtension<BreezColors> {

@@ -196,6 +196,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   Timer? _coolingTempTimer;
   Timer? _supplyFanTimer;
   Timer? _exhaustFanTimer;
+  Timer? _operatingModeTimer;
 
   /// ID устройства на которое уже подписан SignalR (для предотвращения дублей)
   String? _subscribedDeviceId;
@@ -445,6 +446,10 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     final exhaustConfirmed = state.pendingExhaustFan != null &&
         incomingExhaust == state.pendingExhaustFan;
 
+    // Проверяем подтверждение режима работы
+    final operatingModeConfirmed = state.pendingOperatingMode != null &&
+        currentMode.toLowerCase() == state.pendingOperatingMode!.toLowerCase();
+
     // Отменяем таймеры при подтверждении
     if (heatingConfirmed) {
       _heatingTempTimer?.cancel();
@@ -462,6 +467,10 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       _exhaustFanTimer?.cancel();
       _exhaustFanTimer = null;
     }
+    if (operatingModeConfirmed) {
+      _operatingModeTimer?.cancel();
+      _operatingModeTimer = null;
+    }
 
     emit(state.copyWith(
       deviceFullState: mergedState,
@@ -477,6 +486,8 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       clearPendingSupplyFan: supplyConfirmed,
       isPendingExhaustFan: exhaustConfirmed ? false : null,
       clearPendingExhaustFan: exhaustConfirmed,
+      isPendingOperatingMode: operatingModeConfirmed ? false : null,
+      clearPendingOperatingMode: operatingModeConfirmed,
     ));
   }
 
@@ -903,44 +914,40 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     ClimateOperatingModeChanged event,
     Emitter<ClimateControlState> emit,
   ) async {
-    developer.log(
-      '_onOperatingModeChanged called: mode=${event.mode}',
-      name: 'ClimateBloc',
-    );
-
     final previousPreset = state.climate?.preset;
 
-    // Optimistic update - сразу обновляем UI
-    if (state.climate != null) {
-      emit(state.copyWith(
-        climate: state.climate!.copyWith(preset: event.mode),
-      ));
-    }
+    // Лоадер + ожидаемый режим для сверки с SignalR
+    // Optimistic update - сразу обновляем UI с новым режимом
+    emit(state.copyWith(
+      isPendingOperatingMode: true,
+      pendingOperatingMode: event.mode,
+      climate: state.climate?.copyWith(preset: event.mode),
+    ));
 
     try {
-      developer.log(
-        '_onOperatingModeChanged: calling _setOperatingMode with mode=${event.mode}',
-        name: 'ClimateBloc',
-      );
-      final result = await _setOperatingMode(SetOperatingModeParams(mode: event.mode));
-      developer.log(
-        '_onOperatingModeChanged: success, result preset=${result.preset}',
-        name: 'ClimateBloc',
-      );
+      await _setOperatingMode(SetOperatingModeParams(mode: event.mode));
+
+      // Таймаут: если SignalR не подтвердит за 10 секунд, сбросить pending
+      _operatingModeTimer?.cancel();
+      _operatingModeTimer = Timer(_paramChangeTimeout, () {
+        if (!isClosed && state.isPendingOperatingMode) {
+          // ignore: invalid_use_of_visible_for_testing_member
+          emit(state.copyWith(
+            isPendingOperatingMode: false,
+            clearPendingOperatingMode: true,
+          ));
+        }
+      });
     } catch (e) {
-      developer.log(
-        '_onOperatingModeChanged: error $e',
-        name: 'ClimateBloc',
-      );
       // Откат при ошибке
-      if (state.climate != null && previousPreset != null) {
-        emit(state.copyWith(
-          climate: state.climate!.copyWith(preset: previousPreset),
-          errorMessage: 'Operating mode error: $e',
-        ));
-      } else {
-        emit(state.copyWith(errorMessage: 'Operating mode error: $e'));
-      }
+      emit(state.copyWith(
+        isPendingOperatingMode: false,
+        clearPendingOperatingMode: true,
+        climate: previousPreset != null
+            ? state.climate?.copyWith(preset: previousPreset)
+            : state.climate,
+        errorMessage: 'Operating mode error: $e',
+      ));
     }
   }
 
@@ -1211,6 +1218,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     _coolingTempTimer?.cancel();
     _supplyFanTimer?.cancel();
     _exhaustFanTimer?.cancel();
+    _operatingModeTimer?.cancel();
     _subscribedDeviceId = null;
     return super.close();
   }

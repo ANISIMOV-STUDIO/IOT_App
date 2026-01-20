@@ -454,13 +454,14 @@ void main() {
           await Future<void>.delayed(const Duration(milliseconds: 600));
         },
         expect: () => [
-          // 1. Мгновенное обновление UI + pending
+          // 1. Мгновенное обновление UI (optimistic) БЕЗ pending
           isA<ClimateControlState>()
-              .having((s) => s.isPendingSupplyFan, 'isPendingSupplyFan', true)
+              .having((s) => s.isPendingSupplyFan, 'isPendingSupplyFan', false)
               .having((s) => s.deviceFullState?.modeSettings?['basic']?.supplyFan, 'supplyFan', 80),
-          // 2. После успешного API ответа — pending сбрасывается
+          // 2. После debounce — pending становится true (API запущен)
+          // Примечание: isPending сбрасывается SignalR подтверждением, не тестируем здесь
           isA<ClimateControlState>()
-              .having((s) => s.isPendingSupplyFan, 'isPendingSupplyFan', false),
+              .having((s) => s.isPendingSupplyFan, 'isPendingSupplyFan', true),
         ],
         verify: (_) {
           verify(() => mockSetAirflow(any())).called(1);
@@ -493,13 +494,14 @@ void main() {
           await Future<void>.delayed(const Duration(milliseconds: 600));
         },
         expect: () => [
-           // 1. Мгновенное обновление UI + pending
+          // 1. Мгновенное обновление UI (optimistic) БЕЗ pending
           isA<ClimateControlState>()
-              .having((s) => s.isPendingExhaustFan, 'isPendingExhaustFan', true)
+              .having((s) => s.isPendingExhaustFan, 'isPendingExhaustFan', false)
               .having((s) => s.deviceFullState?.modeSettings?['basic']?.exhaustFan, 'exhaustFan', 70),
-          // 2. После успешного API ответа — pending сбрасывается
+          // 2. После debounce — pending становится true (API запущен)
+          // Примечание: isPending сбрасывается SignalR подтверждением, не тестируем здесь
           isA<ClimateControlState>()
-              .having((s) => s.isPendingExhaustFan, 'isPendingExhaustFan', false),
+              .having((s) => s.isPendingExhaustFan, 'isPendingExhaustFan', true),
         ],
         verify: (_) {
           verify(() => mockSetAirflow(any())).called(1);
@@ -531,13 +533,14 @@ void main() {
           await Future<void>.delayed(const Duration(milliseconds: 600));
         },
         expect: () => [
-          // 1. Мгновенное обновление UI + pending
+          // 1. Мгновенное обновление UI (optimistic) БЕЗ pending
           isA<ClimateControlState>()
-              .having((s) => s.isPendingHeatingTemperature, 'isPendingHeatingTemperature', true)
+              .having((s) => s.isPendingHeatingTemperature, 'isPendingHeatingTemperature', false)
               .having((s) => s.deviceFullState?.modeSettings?['basic']?.heatingTemperature, 'heatingTemperature', 21),
-          // 2. После успешного API ответа — pending сбрасывается
+          // 2. После debounce — pending становится true (API запущен)
+          // Примечание: isPending сбрасывается SignalR подтверждением, не тестируем здесь
           isA<ClimateControlState>()
-              .having((s) => s.isPendingHeatingTemperature, 'isPendingHeatingTemperature', false),
+              .having((s) => s.isPendingHeatingTemperature, 'isPendingHeatingTemperature', true),
         ],
         verify: (_) {
           verify(() => mockSetTemperature(any())).called(1);
@@ -569,13 +572,14 @@ void main() {
           await Future<void>.delayed(const Duration(milliseconds: 600));
         },
         expect: () => [
-          // 1. Мгновенное обновление UI + pending
+          // 1. Мгновенное обновление UI (optimistic) БЕЗ pending
           isA<ClimateControlState>()
-              .having((s) => s.isPendingCoolingTemperature, 'isPendingCoolingTemperature', true)
+              .having((s) => s.isPendingCoolingTemperature, 'isPendingCoolingTemperature', false)
               .having((s) => s.deviceFullState?.modeSettings?['basic']?.coolingTemperature, 'coolingTemperature', 25),
-          // 2. После успешного API ответа — pending сбрасывается
+          // 2. После debounce — pending становится true (API запущен)
+          // Примечание: isPending сбрасывается SignalR подтверждением, не тестируем здесь
           isA<ClimateControlState>()
-              .having((s) => s.isPendingCoolingTemperature, 'isPendingCoolingTemperature', false),
+              .having((s) => s.isPendingCoolingTemperature, 'isPendingCoolingTemperature', true),
         ],
         verify: (_) {
           verify(() => mockSetCoolingTemperature(any())).called(1);

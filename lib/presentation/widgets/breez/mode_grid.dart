@@ -6,6 +6,7 @@ import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_loader.dart';
 import 'package:hvac_control/presentation/widgets/breez/mode_grid_item.dart';
 
 // =============================================================================
@@ -50,6 +51,7 @@ class ModeGrid extends StatelessWidget {
     required this.selectedMode, super.key,
     this.onModeTap,
     this.isEnabled = true,
+    this.isPending = false,
     this.modes,
     this.columns = _ModeGridConstants.defaultColumns,
     this.showCard = true,
@@ -61,6 +63,10 @@ class ModeGrid extends StatelessWidget {
   final ModeCallback? onModeTap;
 
   final bool isEnabled;
+
+  /// Показывать лоадер поверх сетки (режим переключается)
+  final bool isPending;
+
   final List<OperatingModeData>? modes;
   final int columns;
   final bool showCard;
@@ -122,9 +128,31 @@ class ModeGrid extends StatelessWidget {
           )
         : grid;
 
+    // Оборачиваем в Stack для overlay при isPending
+    final wrappedContent = isPending
+        ? Stack(
+            children: [
+              content,
+              Positioned.fill(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).scaffoldBackgroundColor.withValues(
+                      alpha: AppColors.opacityHigh,
+                    ),
+                    borderRadius: showCard
+                        ? BorderRadius.circular(AppRadius.card)
+                        : BorderRadius.zero,
+                  ),
+                  child: const Center(child: BreezLoader()),
+                ),
+              ),
+            ],
+          )
+        : content;
+
     return Semantics(
       label: '${l10n.operatingMode}: $selectedModeName',
-      child: content,
+      child: wrappedContent,
     );
   }
 }
