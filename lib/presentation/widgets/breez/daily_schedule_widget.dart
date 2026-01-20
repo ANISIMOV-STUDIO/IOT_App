@@ -19,10 +19,11 @@ import 'package:hvac_control/presentation/widgets/breez/breez_time_picker.dart';
 
 /// Константы виджета расписания
 abstract class _ScheduleConstants {
-  static const double desktopTimeBlockHeight = 80;
   static const double borderRadius = 10;
   static const Duration animationDuration = Duration(milliseconds: 150);
   static const double timeFontSize = 22;
+  static const double powerButtonWidth = 44;
+  static const double powerIconSize = 16;
 }
 
 // =============================================================================
@@ -160,18 +161,17 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget>
     );
   }
 
-  /// Toggle enabled state for a day via long-press
-  void _handleDayLongPress(int index) {
-    final day = DailyScheduleWidget.daysOrder[index];
-    final settings = _getSettings(day);
+  /// Toggle enabled state for a day
+  void _handleDayToggle(bool enabled) {
+    final settings = _getSettings(_selectedDay);
     _updateSettings(
-      day,
+      _selectedDay,
       TimerSettings(
         onHour: settings.onHour,
         onMinute: settings.onMinute,
         offHour: settings.offHour,
         offMinute: settings.offMinute,
-        enabled: !settings.enabled,
+        enabled: enabled,
       ),
     );
   }
@@ -200,35 +200,18 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget>
           const SizedBox(height: AppSpacing.xs),
         ],
 
-        // Hint for long-press (only in compact mode, above tabs)
-        if (widget.compact) ...[
-          Center(
-            child: Text(
-              l10n.holdToToggle,
-              style: TextStyle(
-                fontSize: AppFontSizes.captionSmall,
-                color: colors.textMuted,
-              ),
-            ),
-          ),
-          const SizedBox(height: AppSpacing.xxs),
-        ],
-
-        // Day tabs with long-press to toggle
+        // Day tabs
         BreezTabGroup(
           labels: _DayNameResolver.getShortNames(l10n),
           selectedIndex: _selectedIndex,
           activeIndices: _activeIndices,
           compact: widget.compact,
           onTabSelected: (index) => setState(() => _selectedIndex = index),
-          onTabLongPress: widget.onDaySettingsChanged != null
-              ? _handleDayLongPress
-              : null,
         ),
 
         const SizedBox(height: AppSpacing.xs),
 
-        // Time inputs (without day header)
+        // Time inputs with toggle
         Expanded(
           child: _DaySettingsPanel(
             dayKey: _selectedDay,
@@ -236,6 +219,7 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget>
             compact: widget.compact,
             onSettingsChanged:
                 widget.onDaySettingsChanged != null ? _handleSettingsChanged : null,
+            onToggle: widget.onDaySettingsChanged != null ? _handleDayToggle : null,
           ),
         ),
       ],
@@ -294,6 +278,7 @@ class _DaySettingsPanel extends StatelessWidget {
     required this.settings,
     required this.compact,
     this.onSettingsChanged,
+    this.onToggle,
   });
   final String dayKey;
   final TimerSettings settings;
@@ -305,6 +290,7 @@ class _DaySettingsPanel extends StatelessWidget {
     int offMinute,
     bool enabled,
   )? onSettingsChanged;
+  final void Function(bool enabled)? onToggle;
 
   void _onStartTimeChanged(int hour, int minute) {
     onSettingsChanged?.call(
@@ -330,56 +316,118 @@ class _DaySettingsPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    // Only time inputs - header moved to parent for compact mode
-    return _buildTimeInputs(l10n);
-  }
-
-  Widget _buildTimeInputs(AppLocalizations l10n) {
-    final content = Row(
-      children: [
-        // Start time column
-        Expanded(
-          child: _TimeColumn(
-            label: l10n.scheduleStartLabel,
-            hour: settings.onHour,
-            minute: settings.onMinute,
-            onTimeChanged: onSettingsChanged != null && settings.enabled
-                ? _onStartTimeChanged
-                : null,
+    // IntrinsicHeight ensures all children have the same height
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Start time column
+          Expanded(
+            child: Opacity(
+              opacity: settings.enabled ? 1.0 : 0.4,
+              child: IgnorePointer(
+                ignoring: !settings.enabled,
+                child: _TimeColumn(
+                  label: l10n.scheduleStartLabel,
+                  hour: settings.onHour,
+                  minute: settings.onMinute,
+                  onTimeChanged: onSettingsChanged != null && settings.enabled
+                      ? _onStartTimeChanged
+                      : null,
+                ),
+              ),
+            ),
           ),
-        ),
-        const SizedBox(width: AppSpacing.sm),
-        // End time column
-        Expanded(
-          child: _TimeColumn(
-            label: l10n.scheduleEndLabel,
-            hour: settings.offHour,
-            minute: settings.offMinute,
-            onTimeChanged: onSettingsChanged != null && settings.enabled
-                ? _onEndTimeChanged
-                : null,
+          // Power toggle button between time columns
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxs),
+            child: _PowerToggleButton(
+              enabled: settings.enabled,
+              onToggle: onToggle,
+            ),
           ),
-        ),
-      ],
-    );
-
-    // Обёртка с opacity и ignore pointer для disabled состояния
-    final wrappedContent = Opacity(
-      opacity: settings.enabled ? 1.0 : 0.4,
-      child: IgnorePointer(
-        ignoring: !settings.enabled,
-        child: content,
+          // End time column
+          Expanded(
+            child: Opacity(
+              opacity: settings.enabled ? 1.0 : 0.4,
+              child: IgnorePointer(
+                ignoring: !settings.enabled,
+                child: _TimeColumn(
+                  label: l10n.scheduleEndLabel,
+                  hour: settings.offHour,
+                  minute: settings.offMinute,
+                  onTimeChanged: onSettingsChanged != null && settings.enabled
+                      ? _onEndTimeChanged
+                      : null,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
+  }
+}
 
-    if (compact) {
-      // Parent already wraps in Expanded, just return content
-      return wrappedContent;
-    }
+// =============================================================================
+// POWER TOGGLE BUTTON
+// =============================================================================
+
+/// Кнопка включения/выключения дня (на базе BreezButton)
+class _PowerToggleButton extends StatelessWidget {
+  const _PowerToggleButton({
+    required this.enabled,
+    this.onToggle,
+  });
+
+  final bool enabled;
+  final void Function(bool)? onToggle;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
 
     return SizedBox(
-      height: _ScheduleConstants.desktopTimeBlockHeight,
-      child: wrappedContent,
+      width: _ScheduleConstants.powerButtonWidth,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Spacer to align with time column labels
+          const Text(
+            '',
+            style: TextStyle(fontSize: AppFontSizes.captionSmall),
+          ),
+          const SizedBox(height: AppSpacing.xxs),
+          // Button - uses BreezButton as base
+          Expanded(
+            child: BreezButton(
+              onTap: onToggle != null ? () => onToggle!(!enabled) : null,
+              backgroundColor: enabled
+                  ? AppColors.accent.withValues(alpha: 0.08)
+                  : colors.buttonBg.withValues(alpha: AppColors.opacityMedium),
+              hoverColor: enabled
+                  ? AppColors.accent.withValues(alpha: AppColors.opacitySubtle)
+                  : colors.buttonBg.withValues(alpha: AppColors.opacityHigh),
+              border: Border.all(
+                color: enabled
+                    ? AppColors.accent.withValues(alpha: AppColors.opacityLow)
+                    : colors.border,
+              ),
+              borderRadius: _ScheduleConstants.borderRadius,
+              padding: EdgeInsets.zero,
+              enforceMinTouchTarget: false,
+              enableScale: false,
+              showBorder: false,
+              semanticLabel: enabled ? 'Выключить расписание' : 'Включить расписание',
+              child: Icon(
+                Icons.power_settings_new_rounded,
+                size: _ScheduleConstants.powerIconSize,
+                color: enabled ? AppColors.accent : colors.textMuted,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -420,7 +468,7 @@ class _TimeColumn extends StatelessWidget {
         ),
         const SizedBox(height: AppSpacing.xxs),
         // Time block - takes remaining space
-        Flexible(
+        Expanded(
           child: _ScheduleTimeBlock(
             hour: hour,
             minute: minute,
