@@ -445,8 +445,16 @@ class RealClimateRepository implements ClimateRepository {
   @override
   Future<ClimateState> setOperatingMode(String mode, {String? deviceId}) async {
     final id = deviceId ?? _selectedDeviceId;
+    developer.log(
+      'setOperatingMode called: mode=$mode, deviceId=$id',
+      name: 'ClimateRepository',
+    );
     // String mode передаётся напрямую без конвертации
     final jsonDevice = await _httpClient.setMode(id, mode);
+    developer.log(
+      'setOperatingMode: response received, preset=${jsonDevice['preset'] ?? jsonDevice['mode']}',
+      name: 'ClimateRepository',
+    );
     final state = DeviceJsonMapper.climateStateFromJson(jsonDevice);
     _safeAddToController(_climateController, state);
     return state;

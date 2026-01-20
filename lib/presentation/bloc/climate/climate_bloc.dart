@@ -709,6 +709,11 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     ClimateOperatingModeChanged event,
     Emitter<ClimateControlState> emit,
   ) async {
+    developer.log(
+      '_onOperatingModeChanged called: mode=${event.mode}',
+      name: 'ClimateBloc',
+    );
+
     final previousPreset = state.climate?.preset;
 
     // Optimistic update - сразу обновляем UI
@@ -719,8 +724,20 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     }
 
     try {
-      await _setOperatingMode(SetOperatingModeParams(mode: event.mode));
+      developer.log(
+        '_onOperatingModeChanged: calling _setOperatingMode with mode=${event.mode}',
+        name: 'ClimateBloc',
+      );
+      final result = await _setOperatingMode(SetOperatingModeParams(mode: event.mode));
+      developer.log(
+        '_onOperatingModeChanged: success, result preset=${result.preset}',
+        name: 'ClimateBloc',
+      );
     } catch (e) {
+      developer.log(
+        '_onOperatingModeChanged: error $e',
+        name: 'ClimateBloc',
+      );
       // Откат при ошибке
       if (state.climate != null && previousPreset != null) {
         emit(state.copyWith(
