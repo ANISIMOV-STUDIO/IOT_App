@@ -248,6 +248,16 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         status: ClimateControlStatus.success,
         climate: climate,
         deviceFullState: fullState,
+        // Сбрасываем ВСЕ pending флаги при смене/перезагрузке устройства.
+        // Это критично для page refresh: debounce события могут потеряться,
+        // но pending флаги останутся true навсегда.
+        isPendingHeatingTemperature: false,
+        isPendingCoolingTemperature: false,
+        isPendingSupplyFan: false,
+        isPendingExhaustFan: false,
+        isTogglingPower: false,
+        isTogglingSchedule: false,
+        clearPendingPower: true,
       ));
 
       // Подписываемся на real-time обновления DeviceFullState (SignalR)
