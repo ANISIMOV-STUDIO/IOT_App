@@ -244,10 +244,32 @@ abstract class AppColors {
   // ═══════════════════════════════════════════════════════════════════════════
 
   /// Standard opacity values for consistent transparency
-  static const double opacityLow = 0.3;
-  static const double opacityMedium = 0.5;
-  static const double opacityHigh = 0.7;
+  /// Очень тонкий - для graph fill, минимальных эффектов
+  static const double opacityVerySubtle = 0.08;
+
+  /// Тонкий - для базовых фонов
+  static const double opacityLight = 0.1;
+
+  /// Сверхтонкий - для hover эффектов
+  static const double opacityExtraLight = 0.12;
+
+  /// Subtle - стандартный тонкий фон (15%)
   static const double opacitySubtle = 0.15;
+
+  /// Средне-тонкий - для borders, splash
+  static const double opacityMediumLight = 0.2;
+
+  /// Low - легкие оверлеи, рамки (30%)
+  static const double opacityLow = 0.3;
+
+  /// Strong - для selected borders
+  static const double opacityStrong = 0.4;
+
+  /// Medium - стандартные оверлеи (50%)
+  static const double opacityMedium = 0.5;
+
+  /// High - сильные оверлеи (70%)
+  static const double opacityHigh = 0.7;
 
   // ═══════════════════════════════════════════════════════════════════════════
   // LEGACY ALIASES (для совместимости)

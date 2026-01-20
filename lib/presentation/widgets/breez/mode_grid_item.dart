@@ -15,10 +15,6 @@ abstract class _ModeGridItemConstants {
   static const double iconSize = 20;
   static const double labelFontSize = 8;
   static const double letterSpacing = 0.3;
-  static const double selectedAlpha = 0.15;
-  static const double pressedAlpha = 0.2;
-  static const double hoverAlpha = 0.1;
-  static const double borderSelectedAlpha = 0.4;
 }
 
 // =============================================================================
@@ -74,13 +70,13 @@ class ModeGridItem extends StatelessWidget {
         onTap: isEnabled ? onTap : null,
         padding: const EdgeInsets.all(AppSpacing.xs),
         backgroundColor: isSelected
-            ? color.withValues(alpha: _ModeGridItemConstants.selectedAlpha)
+            ? color.withValues(alpha: AppColors.opacitySubtle)
             : Colors.transparent,
-        pressedColor: color.withValues(alpha: _ModeGridItemConstants.pressedAlpha),
-        hoverColor: color.withValues(alpha: _ModeGridItemConstants.hoverAlpha),
+        pressedColor: color.withValues(alpha: AppColors.opacityMediumLight),
+        hoverColor: color.withValues(alpha: AppColors.opacityLight),
         border: Border.all(
           color: isSelected
-              ? color.withValues(alpha: _ModeGridItemConstants.borderSelectedAlpha)
+              ? color.withValues(alpha: AppColors.opacityStrong)
               : colors.border,
         ),
         child: Column(

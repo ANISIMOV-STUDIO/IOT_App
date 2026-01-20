@@ -180,7 +180,6 @@ class _DailyScheduleWidgetState extends State<DailyScheduleWidget>
   Widget build(BuildContext context) {
     super.build(context); // Required for AutomaticKeepAliveClientMixin
 
-    final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
     final selectedSettings = _getSettings(_selectedDay);
 
@@ -396,7 +395,7 @@ class _PowerToggleButton extends StatelessWidget {
             child: BreezButton(
               onTap: onToggle != null ? () => onToggle!(!enabled) : null,
               backgroundColor: enabled
-                  ? AppColors.accent.withValues(alpha: 0.08)
+                  ? AppColors.accent.withValues(alpha: AppColors.opacityVerySubtle)
                   : colors.buttonBg.withValues(alpha: AppColors.opacityMedium),
               hoverColor: enabled
                   ? AppColors.accent.withValues(alpha: AppColors.opacitySubtle)
@@ -513,7 +512,7 @@ class _ScheduleTimeBlock extends StatelessWidget {
 
     return BreezButton(
       onTap: onTimeChanged != null ? () => _showTimePicker(context) : null,
-      backgroundColor: AppColors.accent.withValues(alpha: 0.08),
+      backgroundColor: AppColors.accent.withValues(alpha: AppColors.opacityVerySubtle),
       hoverColor: AppColors.accent.withValues(alpha: AppColors.opacitySubtle),
       border: Border.all(
         color: AppColors.accent.withValues(alpha: AppColors.opacityLow),

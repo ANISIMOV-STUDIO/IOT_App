@@ -558,6 +558,139 @@ class _CountBadge extends StatelessWidget {
   }
 }
 
+// =============================================================================
+// BREEZ BADGE
+// =============================================================================
+
+/// Универсальный badge с цветным фоном и рамкой
+///
+/// Используется для статусов, меток, счётчиков.
+/// Автоматически применяет opacity к цвету для фона и рамки.
+class BreezBadge extends StatelessWidget {
+  const BreezBadge({
+    required this.color,
+    required this.child,
+    super.key,
+    this.padding,
+    this.backgroundOpacity = AppColors.opacitySubtle,
+    this.borderOpacity = AppColors.opacityLow,
+    this.borderRadius = AppRadius.button,
+    this.showBorder = true,
+  });
+
+  /// Фабрика для статус-badge (иконка + текст)
+  factory BreezBadge.status({
+    required Color color,
+    required IconData icon,
+    required String label,
+    Key? key,
+    double iconSize = AppFontSizes.caption,
+    double fontSize = AppFontSizes.captionSmall,
+  }) => BreezBadge(
+      key: key,
+      color: color,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: iconSize, color: color),
+          const SizedBox(width: AppSpacing.xxs),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: fontSize,
+              fontWeight: FontWeight.w600,
+              color: color,
+            ),
+          ),
+        ],
+      ),
+    );
+
+  /// Фабрика для простого текстового badge
+  factory BreezBadge.text({
+    required Color color,
+    required String text,
+    Key? key,
+    double fontSize = AppFontSizes.captionSmall,
+    FontWeight fontWeight = FontWeight.w600,
+  }) => BreezBadge(
+      key: key,
+      color: color,
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: fontSize,
+          fontWeight: fontWeight,
+          color: color,
+        ),
+      ),
+    );
+
+  /// Фабрика для badge с точкой-индикатором
+  factory BreezBadge.dot({
+    required Color color,
+    required String label,
+    Key? key,
+    double dotSize = 6,
+    double fontSize = AppFontSizes.captionSmall,
+  }) => BreezBadge(
+      key: key,
+      color: color,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: dotSize,
+            height: dotSize,
+            decoration: BoxDecoration(
+              color: color,
+              shape: BoxShape.circle,
+            ),
+          ),
+          const SizedBox(width: AppSpacing.xxs),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: fontSize,
+              fontWeight: FontWeight.w600,
+              color: color,
+            ),
+          ),
+        ],
+      ),
+    );
+
+  final Color color;
+  final Widget child;
+  final EdgeInsets? padding;
+  final double backgroundOpacity;
+  final double borderOpacity;
+  final double borderRadius;
+  final bool showBorder;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: padding ?? const EdgeInsets.symmetric(
+        horizontal: AppSpacing.xs,
+        vertical: AppSpacing.xxs,
+      ),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: backgroundOpacity),
+        borderRadius: BorderRadius.circular(borderRadius),
+        border: showBorder
+            ? Border.all(color: color.withValues(alpha: borderOpacity))
+            : null,
+      ),
+      child: child,
+    );
+  }
+}
+
+// =============================================================================
+// EMPTY STATE
+// =============================================================================
+
 /// Виджет пустого состояния для списков
 class BreezEmptyState extends StatelessWidget {
 

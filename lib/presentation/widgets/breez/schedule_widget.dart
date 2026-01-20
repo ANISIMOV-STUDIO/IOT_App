@@ -151,7 +151,6 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
     return BreezCard(
@@ -193,8 +192,8 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
                       horizontal: AppSpacing.xs,
                       vertical: _ScheduleWidgetConstants.buttonPaddingVertical,
                     ),
-                    backgroundColor: AppColors.accent.withValues(alpha: 0.1),
-                    hoverColor: AppColors.accent.withValues(alpha: 0.15),
+                    backgroundColor: AppColors.accent.withValues(alpha: AppColors.opacityLight),
+                    hoverColor: AppColors.accent.withValues(alpha: AppColors.opacitySubtle),
                     showBorder: false,
                     enforceMinTouchTarget: false,
                     child: Center(
@@ -308,12 +307,12 @@ class _DaySelector extends StatelessWidget {
             backgroundColor: isSelected
                 ? AppColors.accent
                 : hasEntries
-                    ? AppColors.accent.withValues(alpha: 0.1)
+                    ? AppColors.accent.withValues(alpha: AppColors.opacityLight)
                     : colors.buttonBg,
             hoverColor: isSelected
                 ? AppColors.accent
                 : hasEntries
-                    ? AppColors.accent.withValues(alpha: 0.2)
+                    ? AppColors.accent.withValues(alpha: AppColors.opacityMediumLight)
                     : colors.buttonHover,
             showBorder: false,
             enableScale: false,
@@ -391,8 +390,8 @@ class _EmptyDayState extends StatelessWidget {
                   ? _ScheduleWidgetConstants.emptyIconSizeCompact
                   : _ScheduleWidgetConstants.emptyIconSizeNormal,
               color: showAddHint
-                  ? AppColors.accent.withValues(alpha: 0.6)
-                  : colors.textMuted.withValues(alpha: 0.5),
+                  ? AppColors.accent.withValues(alpha: AppColors.opacityMedium)
+                  : colors.textMuted.withValues(alpha: AppColors.opacityMedium),
             ),
             SizedBox(height: compact ? AppSpacing.xs : AppSpacing.sm),
             Text(
@@ -411,7 +410,7 @@ class _EmptyDayState extends StatelessWidget {
                 showAddHint ? l10n.tapToAdd : l10n.addFirstEntry,
                 style: TextStyle(
                   fontSize: _ScheduleWidgetConstants.hintFontSize,
-                  color: AppColors.accent.withValues(alpha: 0.8),
+                  color: AppColors.accent.withValues(alpha: AppColors.opacityHigh),
                 ),
               ),
             ],
@@ -468,14 +467,14 @@ class _ScheduleRow extends StatelessWidget {
       onTap: onTap,
       padding: const EdgeInsets.all(AppSpacing.xs),
       backgroundColor: entry.isActive
-          ? AppColors.accent.withValues(alpha: 0.08)
+          ? AppColors.accent.withValues(alpha: AppColors.opacityVerySubtle)
           : colors.buttonBg,
       hoverColor: entry.isActive
-          ? AppColors.accent.withValues(alpha: 0.15)
+          ? AppColors.accent.withValues(alpha: AppColors.opacitySubtle)
           : colors.buttonHover,
       showBorder: entry.isActive,
       border: entry.isActive
-          ? Border.all(color: AppColors.accent.withValues(alpha: 0.3))
+          ? Border.all(color: AppColors.accent.withValues(alpha: AppColors.opacityLow))
           : null,
       enableScale: false,
       child: Row(
@@ -489,7 +488,7 @@ class _ScheduleRow extends StatelessWidget {
                   : _ScheduleWidgetConstants.timePaddingVerticalNormal,
             ),
             decoration: BoxDecoration(
-              color: AppColors.accent.withValues(alpha: 0.1),
+              color: AppColors.accent.withValues(alpha: AppColors.opacityLight),
               borderRadius: BorderRadius.circular(AppRadius.button),
             ),
             child: Text(
@@ -511,7 +510,7 @@ class _ScheduleRow extends StatelessWidget {
             width: iconSize,
             height: iconSize,
             decoration: BoxDecoration(
-              color: AppColors.accent.withValues(alpha: 0.1),
+              color: AppColors.accent.withValues(alpha: AppColors.opacityLight),
               borderRadius: BorderRadius.circular(AppRadius.card),
             ),
             child: Icon(

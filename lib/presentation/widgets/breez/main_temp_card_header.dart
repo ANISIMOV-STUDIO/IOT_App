@@ -138,10 +138,10 @@ class _AlarmBadge extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs, vertical: AppSpacing.xxs),
           decoration: BoxDecoration(
-            color: AppColors.accentRed.withValues(alpha: 0.15),
+            color: AppColors.accentRed.withValues(alpha: AppColors.opacitySubtle),
             borderRadius: BorderRadius.circular(AppRadius.button),
             border: Border.all(
-              color: AppColors.accentRed.withValues(alpha: 0.3),
+              color: AppColors.accentRed.withValues(alpha: AppColors.opacityLow),
             ),
           ),
           child: Row(
@@ -261,10 +261,10 @@ class _StatusBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs, vertical: AppSpacing.xxs),
       decoration: BoxDecoration(
-        color: statusColor.withValues(alpha: 0.15),
+        color: statusColor.withValues(alpha: AppColors.opacitySubtle),
         borderRadius: BorderRadius.circular(AppRadius.button),
         border: Border.all(
-          color: statusColor.withValues(alpha: 0.3),
+          color: statusColor.withValues(alpha: AppColors.opacityLow),
         ),
       ),
       child: Row(

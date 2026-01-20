@@ -45,10 +45,10 @@ class GraphStatBadge extends StatelessWidget {
         vertical: _GraphWidgetConstants.badgePaddingV,
       ),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
+        color: color.withValues(alpha: AppColors.opacityLight),
         borderRadius: BorderRadius.circular(AppRadius.indicator),
         border: Border.all(
-          color: color.withValues(alpha: 0.3),
+          color: color.withValues(alpha: AppColors.opacityLow),
         ),
       ),
       child: Row(
@@ -101,18 +101,18 @@ class GraphMetricTab extends StatelessWidget {
         vertical: _GraphWidgetConstants.tabPaddingV,
       ),
       backgroundColor: isSelected
-          ? AppColors.accent.withValues(alpha: 0.15)
+          ? AppColors.accent.withValues(alpha: AppColors.opacitySubtle)
           : Colors.transparent,
       hoverColor: isSelected
-          ? AppColors.accent.withValues(alpha: 0.25)
+          ? AppColors.accent.withValues(alpha: AppColors.opacityLow)
           : colors.buttonBg,
       border: Border.all(
-        color: isSelected ? AppColors.accent.withValues(alpha: 0.4) : colors.border,
+        color: isSelected ? AppColors.accent.withValues(alpha: AppColors.opacityStrong) : colors.border,
       ),
       shadows: isSelected
           ? [
               BoxShadow(
-                color: AppColors.accent.withValues(alpha: 0.3),
+                color: AppColors.accent.withValues(alpha: AppColors.opacityLow),
                 blurRadius: AppSpacing.xs,
                 offset: const Offset(0, 2),
               ),

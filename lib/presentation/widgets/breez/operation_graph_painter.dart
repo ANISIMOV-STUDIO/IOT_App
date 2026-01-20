@@ -53,7 +53,7 @@ class OperationGraphPainter extends CustomPainter {
 
   void _drawGridLines(Canvas canvas, Size size) {
     final gridPaint = Paint()
-      ..color = AppColors.white.withValues(alpha: 0.08)
+      ..color = AppColors.white.withValues(alpha: AppColors.opacityVerySubtle)
       ..strokeWidth = 1
       ..style = PaintingStyle.stroke;
 
@@ -83,7 +83,7 @@ class OperationGraphPainter extends CustomPainter {
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
       colors: [
-        color.withValues(alpha: 0.3),
+        color.withValues(alpha: AppColors.opacityLow),
         color.withValues(alpha: 0),
       ],
     );
@@ -125,7 +125,7 @@ class OperationGraphPainter extends CustomPainter {
 
     // Vertical line
     final linePaint = Paint()
-      ..color = color.withValues(alpha: 0.3)
+      ..color = color.withValues(alpha: AppColors.opacityLow)
       ..strokeWidth = 1;
     canvas.drawLine(
       Offset(point.dx, 0),
@@ -135,13 +135,13 @@ class OperationGraphPainter extends CustomPainter {
 
     // Outer glow
     final glowPaint = Paint()
-      ..color = color.withValues(alpha: 0.2)
+      ..color = color.withValues(alpha: AppColors.opacityMediumLight)
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8);
     canvas.drawCircle(point, 12, glowPaint);
 
     // Outer circle
     final outerPaint = Paint()
-      ..color = color.withValues(alpha: 0.3)
+      ..color = color.withValues(alpha: AppColors.opacityLow)
       ..style = PaintingStyle.fill;
     canvas.drawCircle(point, 8, outerPaint);
 
