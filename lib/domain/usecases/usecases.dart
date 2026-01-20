@@ -29,6 +29,7 @@ export 'climate/set_humidity.dart';
 export 'climate/set_mode_settings.dart';
 export 'climate/set_operating_mode.dart';
 export 'climate/set_preset.dart';
+export 'climate/set_quick_mode.dart';
 export 'climate/set_schedule_enabled.dart';
 export 'climate/set_temperature.dart';
 export 'climate/watch_current_climate.dart';

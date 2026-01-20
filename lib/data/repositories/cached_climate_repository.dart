@@ -313,6 +313,24 @@ class CachedClimateRepository implements ClimateRepository {
     );
   }
 
+  @override
+  Future<void> setQuickMode({
+    required int heatingTemperature,
+    required int coolingTemperature,
+    required int supplyFan,
+    required int exhaustFan,
+    String? deviceId,
+  }) async {
+    _ensureOnline('setQuickMode');
+    await _inner.setQuickMode(
+      heatingTemperature: heatingTemperature,
+      coolingTemperature: coolingTemperature,
+      supplyFan: supplyFan,
+      exhaustFan: exhaustFan,
+      deviceId: deviceId,
+    );
+  }
+
   // ============================================
   // HELPERS
   // ============================================

@@ -469,6 +469,18 @@ class MockClimateRepository implements ClimateRepository {
     // В моке просто эмулируем успешную установку настроек режима
   }
 
+  @override
+  Future<void> setQuickMode({
+    required int heatingTemperature,
+    required int coolingTemperature,
+    required int supplyFan,
+    required int exhaustFan,
+    String? deviceId,
+  }) async {
+    await Future<void>.delayed(MockData.normalDelay);
+    // В моке просто эмулируем успешную установку quick mode
+  }
+
   void dispose() {
     _climateController.close();
     _devicesController.close();

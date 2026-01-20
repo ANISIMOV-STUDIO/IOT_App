@@ -146,4 +146,20 @@ abstract class ClimateRepository
   /// Отправляет команду устройству опубликовать актуальные данные.
   /// Вызывается при загрузке страницы для получения свежих данных с пульта.
   Future<void> requestDeviceUpdate({String? deviceId});
+
+  // ============================================
+  // QUICK MODE
+  // ============================================
+
+  /// Установить быстрый режим (все настройки одним запросом)
+  ///
+  /// Вызывается при изменении любого параметра в главном виджете управления.
+  /// Отправляет текущие значения всех настроек включая изменённый параметр.
+  Future<void> setQuickMode({
+    required int heatingTemperature,
+    required int coolingTemperature,
+    required int supplyFan,
+    required int exhaustFan,
+    String? deviceId,
+  });
 }

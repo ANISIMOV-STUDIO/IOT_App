@@ -311,6 +311,30 @@ class HvacHttpClient extends BaseHttpClient implements IHvacDataSource {
   }
 
   // ===========================================================================
+  // QUICK MODE
+  // ===========================================================================
+
+  @override
+  Future<void> setQuickMode(
+    String deviceId, {
+    required int heatingTemperature,
+    required int coolingTemperature,
+    required int supplyFan,
+    required int exhaustFan,
+  }) async {
+    _validateDeviceId(deviceId);
+    await postVoid(
+      '$_baseUrl/$deviceId/quick-mode',
+      {
+        'heatingTemperature': heatingTemperature,
+        'coolingTemperature': coolingTemperature,
+        'supplyFan': supplyFan,
+        'exhaustFan': exhaustFan,
+      },
+    );
+  }
+
+  // ===========================================================================
   // PRIVATE HELPERS
   // ===========================================================================
 

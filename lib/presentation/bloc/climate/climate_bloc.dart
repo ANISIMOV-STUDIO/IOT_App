@@ -96,6 +96,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     required SetModeSettings setModeSettings,
     required WatchDeviceFullState watchDeviceFullState,
     required RequestDeviceUpdate requestDeviceUpdate,
+    required SetQuickMode setQuickMode,
   })  : _getCurrentClimateState = getCurrentClimateState,
         _getDeviceFullState = getDeviceFullState,
         _getAlarmHistory = getAlarmHistory,
@@ -113,6 +114,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         _setModeSettings = setModeSettings,
         _watchDeviceFullState = watchDeviceFullState,
         _requestDeviceUpdate = requestDeviceUpdate,
+        _setQuickMode = setQuickMode,
         super(const ClimateControlState()) {
     // События жизненного цикла
     on<ClimateSubscriptionRequested>(_onSubscriptionRequested);
@@ -174,10 +176,43 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   final SetModeSettings _setModeSettings;
   final WatchDeviceFullState _watchDeviceFullState;
   final RequestDeviceUpdate _requestDeviceUpdate;
+  final SetQuickMode _setQuickMode;
 
   StreamSubscription<ClimateState>? _climateSubscription;
   StreamSubscription<DeviceFullState>? _deviceFullStateSubscription;
   Timer? _powerToggleTimer;
+
+  /// Получить текущие параметры quick mode из состояния
+  ///
+  /// Возвращает null если состояние недоступно или неполное
+  SetQuickModeParams? _getCurrentQuickModeParams() {
+    final fullState = state.deviceFullState;
+    if (fullState == null) return null;
+
+    final currentMode = fullState.operatingMode;
+    final modeSettings = fullState.modeSettings?[currentMode];
+    if (modeSettings == null) return null;
+
+    final heatingTemp = modeSettings.heatingTemperature;
+    final coolingTemp = modeSettings.coolingTemperature;
+    final supplyFan = modeSettings.supplyFan;
+    final exhaustFan = modeSettings.exhaustFan;
+
+    // Все параметры должны быть доступны
+    if (heatingTemp == null ||
+        coolingTemp == null ||
+        supplyFan == null ||
+        exhaustFan == null) {
+      return null;
+    }
+
+    return SetQuickModeParams(
+      heatingTemperature: heatingTemp,
+      coolingTemperature: coolingTemp,
+      supplyFan: supplyFan,
+      exhaustFan: exhaustFan,
+    );
+  }
 
   /// Запрос на подписку к состоянию климата
   Future<void> _onSubscriptionRequested(
@@ -608,19 +643,20 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     }
   }
 
-  /// API call: Отправка температуры нагрева
+  /// API call: Отправка температуры нагрева через quick-mode
   Future<void> _onHeatingTempCommit(
     ClimateHeatingTempCommit event,
     Emitter<ClimateControlState> emit,
   ) async {
-    // Запоминаем текущее состояние для возможного отката
-    // ВАЖНО: берем значение, которое было ДО начала всей серии изменений, если возможно
-    // Но здесь у нас нет доступа к истории, поэтому если API упадет - вернем то, что сейчас в UI (что неверно)
-    // НО, так как мы используем optimistic UI, пользователь уже видит новое значение.
-    // Если ошибка - лучше показать тоаст ошибки, чем ломать UI
-    
     try {
-      await _setTemperature(SetTemperatureParams(temperature: event.temperature.toDouble()));
+      final params = _getCurrentQuickModeParams();
+      if (params != null) {
+        // Отправляем все текущие значения через quick-mode
+        await _setQuickMode(params);
+      } else {
+        // Fallback на старый метод если нет полного состояния
+        await _setTemperature(SetTemperatureParams(temperature: event.temperature.toDouble()));
+      }
       // Сбрасываем pending после успешного API ответа
       emit(state.copyWith(isPendingHeatingTemperature: false));
     } catch (e) {
@@ -661,13 +697,20 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     }
   }
 
-  /// API call: Отправка температуры охлаждения
+  /// API call: Отправка температуры охлаждения через quick-mode
   Future<void> _onCoolingTempCommit(
     ClimateCoolingTempCommit event,
     Emitter<ClimateControlState> emit,
   ) async {
     try {
-      await _setCoolingTemperature(SetCoolingTemperatureParams(temperature: event.temperature));
+      final params = _getCurrentQuickModeParams();
+      if (params != null) {
+        // Отправляем все текущие значения через quick-mode
+        await _setQuickMode(params);
+      } else {
+        // Fallback на старый метод если нет полного состояния
+        await _setCoolingTemperature(SetCoolingTemperatureParams(temperature: event.temperature));
+      }
       // Сбрасываем pending после успешного API ответа
       emit(state.copyWith(isPendingCoolingTemperature: false));
     } catch (e) {
@@ -835,16 +878,23 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     }
   }
 
-  /// API call: Отправка притока воздуха
+  /// API call: Отправка притока воздуха через quick-mode
   Future<void> _onSupplyAirflowCommit(
     ClimateSupplyAirflowCommit event,
     Emitter<ClimateControlState> emit,
   ) async {
     try {
-      await _setAirflow(SetAirflowParams(
-        type: AirflowType.supply,
-        value: event.value,
-      ));
+      final params = _getCurrentQuickModeParams();
+      if (params != null) {
+        // Отправляем все текущие значения через quick-mode
+        await _setQuickMode(params);
+      } else {
+        // Fallback на старый метод если нет полного состояния
+        await _setAirflow(SetAirflowParams(
+          type: AirflowType.supply,
+          value: event.value,
+        ));
+      }
       // Сбрасываем pending после успешного API ответа
       emit(state.copyWith(isPendingSupplyFan: false));
     } catch (e) {
@@ -879,16 +929,23 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     }
   }
 
-  /// API call: Отправка вытяжки воздуха
+  /// API call: Отправка вытяжки воздуха через quick-mode
   Future<void> _onExhaustAirflowCommit(
     ClimateExhaustAirflowCommit event,
     Emitter<ClimateControlState> emit,
   ) async {
     try {
-      await _setAirflow(SetAirflowParams(
-        type: AirflowType.exhaust,
-        value: event.value,
-      ));
+      final params = _getCurrentQuickModeParams();
+      if (params != null) {
+        // Отправляем все текущие значения через quick-mode
+        await _setQuickMode(params);
+      } else {
+        // Fallback на старый метод если нет полного состояния
+        await _setAirflow(SetAirflowParams(
+          type: AirflowType.exhaust,
+          value: event.value,
+        ));
+      }
       // Сбрасываем pending после успешного API ответа
       emit(state.copyWith(isPendingExhaustFan: false));
     } catch (e) {

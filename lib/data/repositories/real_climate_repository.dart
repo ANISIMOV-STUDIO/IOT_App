@@ -662,6 +662,32 @@ class RealClimateRepository implements ClimateRepository {
     );
   }
 
+  // ============================================
+  // QUICK MODE
+  // ============================================
+
+  @override
+  Future<void> setQuickMode({
+    required int heatingTemperature,
+    required int coolingTemperature,
+    required int supplyFan,
+    required int exhaustFan,
+    String? deviceId,
+  }) async {
+    final id = deviceId ?? _selectedDeviceId;
+    if (id.isEmpty) {
+      throw StateError('No device selected for quick mode');
+    }
+
+    await _httpClient.setQuickMode(
+      id,
+      heatingTemperature: heatingTemperature,
+      coolingTemperature: coolingTemperature,
+      supplyFan: supplyFan,
+      exhaustFan: exhaustFan,
+    );
+  }
+
   void dispose() {
     // Сначала помечаем как disposed чтобы остановить все операции
     _isDisposed = true;

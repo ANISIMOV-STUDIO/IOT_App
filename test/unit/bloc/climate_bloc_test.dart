@@ -50,6 +50,8 @@ class MockSetModeSettings extends Mock implements SetModeSettings {}
 
 class MockResetAlarm extends Mock implements ResetAlarm {}
 
+class MockSetQuickMode extends Mock implements SetQuickMode {}
+
 void main() {
   late MockGetCurrentClimateState mockGetCurrentClimateState;
   late MockGetDeviceState mockGetDeviceState;
@@ -69,6 +71,7 @@ void main() {
   late MockRequestDeviceUpdate mockRequestDeviceUpdate;
   late MockSetModeSettings mockSetModeSettings;
   late MockResetAlarm mockResetAlarm;
+  late MockSetQuickMode mockSetQuickMode;
 
   // Test data
   const testClimate = ClimateState(
@@ -134,6 +137,7 @@ void main() {
     mockRequestDeviceUpdate = MockRequestDeviceUpdate();
     mockSetModeSettings = MockSetModeSettings();
     mockResetAlarm = MockResetAlarm();
+    mockSetQuickMode = MockSetQuickMode();
 
     // Default stub for requestDeviceUpdate (fire-and-forget)
     when(() => mockRequestDeviceUpdate(any())).thenAnswer((_) async {});
@@ -157,6 +161,7 @@ void main() {
         watchDeviceFullState: mockWatchDeviceFullState,
         requestDeviceUpdate: mockRequestDeviceUpdate,
         setModeSettings: mockSetModeSettings,
+        setQuickMode: mockSetQuickMode,
       );
 
   group('ClimateBloc', () {
