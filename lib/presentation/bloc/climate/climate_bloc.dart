@@ -314,6 +314,17 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     final existing = state.deviceFullState;
     final incoming = event.fullState;
 
+    // DEBUG: логируем что приходит от SignalR
+    final incomingMode = incoming.operatingMode;
+    final incomingSettings = incoming.modeSettings?[incomingMode];
+    final existingSettings = existing?.modeSettings?[incomingMode];
+    developer.log(
+      '[SignalR] incoming modeSettings[$incomingMode]: '
+      'supplyFan=${incomingSettings?.supplyFan}, exhaustFan=${incomingSettings?.exhaustFan} | '
+      'existing: supplyFan=${existingSettings?.supplyFan}, exhaustFan=${existingSettings?.exhaustFan}',
+      name: 'ClimateBloc',
+    );
+
     // Мержим modeSettings: если в incoming null, берём из existing
     final mergedModeSettings = _mergeModeSettings(
       existing?.modeSettings,
@@ -351,7 +362,9 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     ));
   }
 
-  /// Мержит modeSettings: incoming значения приоритетнее, но null не перезаписывает
+  /// Мержит modeSettings: incoming значения приоритетнее, но null не перезаписывает.
+  /// Также не перезаписываем поля, которые сейчас в pending состоянии —
+  /// иначе SignalR может вернуть старое значение и затереть локальное изменение.
   Map<String, ModeSettings>? _mergeModeSettings(
     Map<String, ModeSettings>? existing,
     Map<String, ModeSettings>? incoming,
@@ -369,12 +382,21 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       if (existingSettings == null) {
         merged[entry.key] = entry.value;
       } else {
-        // Мержим отдельные поля: incoming приоритетнее, но null не перезаписывает
+        // Мержим отдельные поля: incoming приоритетнее, но null не перезаписывает.
+        // Если поле в pending состоянии — сохраняем existing (локальное изменение).
         merged[entry.key] = ModeSettings(
-          heatingTemperature: entry.value.heatingTemperature ?? existingSettings.heatingTemperature,
-          coolingTemperature: entry.value.coolingTemperature ?? existingSettings.coolingTemperature,
-          supplyFan: entry.value.supplyFan ?? existingSettings.supplyFan,
-          exhaustFan: entry.value.exhaustFan ?? existingSettings.exhaustFan,
+          heatingTemperature: state.isPendingHeatingTemperature
+              ? existingSettings.heatingTemperature
+              : (entry.value.heatingTemperature ?? existingSettings.heatingTemperature),
+          coolingTemperature: state.isPendingCoolingTemperature
+              ? existingSettings.coolingTemperature
+              : (entry.value.coolingTemperature ?? existingSettings.coolingTemperature),
+          supplyFan: state.isPendingSupplyFan
+              ? existingSettings.supplyFan
+              : (entry.value.supplyFan ?? existingSettings.supplyFan),
+          exhaustFan: state.isPendingExhaustFan
+              ? existingSettings.exhaustFan
+              : (entry.value.exhaustFan ?? existingSettings.exhaustFan),
         );
       }
     }
