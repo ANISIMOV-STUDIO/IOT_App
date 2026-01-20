@@ -79,6 +79,16 @@ final class ClimateAlarmHistoryLoaded extends ClimateEvent {
   List<Object?> get props => [history];
 }
 
+/// Запрос на сброс активных аварий
+final class ClimateAlarmResetRequested extends ClimateEvent {
+
+  const ClimateAlarmResetRequested(this.deviceId);
+  final String deviceId;
+
+  @override
+  List<Object?> get props => [deviceId];
+}
+
 // ============================================
 // УПРАВЛЕНИЕ УСТРОЙСТВОМ
 // ============================================

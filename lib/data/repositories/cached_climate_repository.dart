@@ -277,6 +277,12 @@ class CachedClimateRepository implements ClimateRepository {
     // История аварий — делегируем во inner (требует сети)
     _inner.getAlarmHistory(deviceId, limit: limit);
 
+  @override
+  Future<void> resetAlarm(String deviceId) async {
+    _ensureOnline('resetAlarm');
+    await _inner.resetAlarm(deviceId);
+  }
+
   // ============================================
   // DEVICE TIME SETTING
   // ============================================

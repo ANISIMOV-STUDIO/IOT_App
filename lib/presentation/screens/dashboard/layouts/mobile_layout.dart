@@ -53,6 +53,7 @@ class MobileLayout extends StatefulWidget {
     this.onTimerSettingsChanged,
     this.activeAlarms = const {},
     this.onAlarmsSeeHistory,
+    this.onAlarmsReset,
     this.isOnline = true,
   });
   final UnitState unit;
@@ -85,6 +86,7 @@ class MobileLayout extends StatefulWidget {
   final DaySettingsCallback? onTimerSettingsChanged;
   final Map<String, AlarmInfo> activeAlarms;
   final VoidCallback? onAlarmsSeeHistory;
+  final VoidCallback? onAlarmsReset;
   final bool isOnline;
 
   @override
@@ -195,6 +197,7 @@ class _MobileLayoutState extends State<MobileLayout>
                       UnitAlarmsWidget(
                         alarms: widget.isOnline ? widget.activeAlarms : const {},
                         onSeeHistory: widget.onAlarmsSeeHistory,
+                        onResetAlarms: widget.isOnline ? widget.onAlarmsReset : null,
                         compact: true,
                         showCard: false,
                       ),

@@ -292,6 +292,7 @@ Future<void> init() async {
   ..registerLazySingleton(() => RequestDeviceUpdate(sl()))
   ..registerLazySingleton(() => GetDeviceFullState(sl()))
   ..registerLazySingleton(() => GetAlarmHistory(sl()))
+  ..registerLazySingleton(() => ResetAlarm(sl()))
   ..registerLazySingleton(() => WatchDeviceFullState(sl<ClimateRepository>()))
 
   // Climate Use Cases
@@ -344,6 +345,7 @@ Future<void> init() async {
       getCurrentClimateState: sl(),
       getDeviceFullState: sl(),
       getAlarmHistory: sl(),
+      resetAlarm: sl(),
       watchCurrentClimate: sl(),
       setDevicePower: sl(),
       setTemperature: sl(),

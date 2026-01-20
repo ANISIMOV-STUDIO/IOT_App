@@ -433,6 +433,12 @@ class MockClimateRepository implements ClimateRepository {
   }
 
   @override
+  Future<void> resetAlarm(String deviceId) async {
+    await Future<void>.delayed(MockData.normalDelay);
+    // В моке просто эмулируем успешный сброс аварий
+  }
+
+  @override
   Future<void> setDeviceTime(DateTime time, {String? deviceId}) async {
     await Future<void>.delayed(MockData.normalDelay);
 

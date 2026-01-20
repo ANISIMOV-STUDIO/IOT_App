@@ -175,6 +175,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       timerSettings: data.climateState.deviceFullState?.timerSettings,
       onTimerSettingsChanged: _handleTimerSettingsChanged,
       activeAlarms: data.climateState.activeAlarms,
+      onAlarmsReset: () => _handleAlarmsReset(data.currentUnit!.id),
       isPendingHeatingTemperature: data.climateState.isPendingHeatingTemperature,
       isPendingCoolingTemperature: data.climateState.isPendingCoolingTemperature,
       isPendingSupplyFan: data.climateState.isPendingSupplyFan,
@@ -232,6 +233,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             onTimerSettingsChanged: _handleTimerSettingsChanged,
             activeAlarms: data.climateState.activeAlarms,
             onAlarmsSeeHistory: () => context.goToAlarmHistory(unit.id, unit.name),
+            onAlarmsReset: () => _handleAlarmsReset(unit.id),
             isOnline: unit.isOnline,
             isPendingHeatingTemperature: data.climateState.isPendingHeatingTemperature,
             isPendingCoolingTemperature: data.climateState.isPendingCoolingTemperature,
@@ -398,5 +400,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ToastService.error('Ошибка сохранения расписания: $e');
       }
     });
+  }
+
+  void _handleAlarmsReset(String deviceId) {
+    context.read<ClimateBloc>().add(ClimateAlarmResetRequested(deviceId));
   }
 }

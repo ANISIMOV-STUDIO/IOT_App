@@ -45,6 +45,7 @@ class DesktopLayout extends StatefulWidget {
     this.timerSettings,
     this.onTimerSettingsChanged,
     this.activeAlarms = const {},
+    this.onAlarmsReset,
   });
   final UnitState unit;
   final List<UnitState> allUnits;
@@ -90,6 +91,7 @@ class DesktopLayout extends StatefulWidget {
   final Map<String, TimerSettings>? timerSettings;
   final DaySettingsCallback? onTimerSettingsChanged;
   final Map<String, AlarmInfo> activeAlarms;
+  final VoidCallback? onAlarmsReset;
 
   @override
   State<DesktopLayout> createState() => _DesktopLayoutState();
@@ -233,6 +235,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                 child: UnitAlarmsWidget(
                   alarms: widget.activeAlarms,
                   onSeeHistory: () {},
+                  onResetAlarms: widget.onAlarmsReset,
                 ),
               ),
             ],

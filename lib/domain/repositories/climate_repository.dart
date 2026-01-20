@@ -126,6 +126,9 @@ abstract class ClimateRepository
   /// Получить историю аварий устройства
   Future<List<AlarmHistory>> getAlarmHistory(String deviceId, {int limit = 100});
 
+  /// Сбросить активные аварии устройства
+  Future<void> resetAlarm(String deviceId);
+
   // ============================================
   // DEVICE TIME SETTING
   // ============================================

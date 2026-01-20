@@ -82,6 +82,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     required GetCurrentClimateState getCurrentClimateState,
     required GetDeviceFullState getDeviceFullState,
     required GetAlarmHistory getAlarmHistory,
+    required ResetAlarm resetAlarm,
     required WatchCurrentClimate watchCurrentClimate,
     required SetDevicePower setDevicePower,
     required SetTemperature setTemperature,
@@ -98,6 +99,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   })  : _getCurrentClimateState = getCurrentClimateState,
         _getDeviceFullState = getDeviceFullState,
         _getAlarmHistory = getAlarmHistory,
+        _resetAlarm = resetAlarm,
         _watchCurrentClimate = watchCurrentClimate,
         _setDevicePower = setDevicePower,
         _setTemperature = setTemperature,
@@ -123,6 +125,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     // История аварий
     on<ClimateAlarmHistoryRequested>(_onAlarmHistoryRequested);
     on<ClimateAlarmHistoryLoaded>(_onAlarmHistoryLoaded);
+    on<ClimateAlarmResetRequested>(_onAlarmResetRequested);
 
     // Управление устройством
     on<ClimatePowerToggled>(_onPowerToggled);
@@ -157,6 +160,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   final GetCurrentClimateState _getCurrentClimateState;
   final GetDeviceFullState _getDeviceFullState;
   final GetAlarmHistory _getAlarmHistory;
+  final ResetAlarm _resetAlarm;
   final WatchCurrentClimate _watchCurrentClimate;
   final SetDevicePower _setDevicePower;
   final SetTemperature _setTemperature;
@@ -424,6 +428,23 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     Emitter<ClimateControlState> emit,
   ) {
     emit(state.copyWith(alarmHistory: event.history));
+  }
+
+  /// Сброс активных аварий
+  Future<void> _onAlarmResetRequested(
+    ClimateAlarmResetRequested event,
+    Emitter<ClimateControlState> emit,
+  ) async {
+    try {
+      await _resetAlarm(event.deviceId);
+      // После сброса аварий очищаем локальный список
+      final updatedDeviceState = state.deviceFullState?.copyWith(
+        activeAlarms: const {},
+      );
+      emit(state.copyWith(deviceFullState: updatedDeviceState));
+    } catch (e) {
+      developer.log('Failed to reset alarms: $e', name: 'ClimateBloc');
+    }
   }
 
   /// Включение/выключение устройства

@@ -605,6 +605,14 @@ class RealClimateRepository implements ClimateRepository {
     return jsonList.map(AlarmHistory.fromJson).toList();
   }
 
+  @override
+  Future<void> resetAlarm(String deviceId) async {
+    if (deviceId.isEmpty) {
+      throw StateError('No device selected');
+    }
+    await _httpClient.resetAlarm(deviceId);
+  }
+
   // ============================================
   // DEVICE TIME SETTING
   // ============================================
