@@ -339,7 +339,7 @@ class _DaySettingsPanel extends StatelessWidget {
           ),
           // Power toggle button between time columns
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxs),
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs),
             child: _PowerToggleButton(
               enabled: settings.enabled,
               onToggle: onToggle,
