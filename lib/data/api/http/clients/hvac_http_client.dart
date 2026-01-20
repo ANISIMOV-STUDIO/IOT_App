@@ -99,7 +99,7 @@ class HvacHttpClient extends BaseHttpClient implements IHvacDataSource {
       if (heatingTemperature != null) 'heatingTemperature': heatingTemperature,
       if (coolingTemperature != null) 'coolingTemperature': coolingTemperature,
     };
-    await postVoid('$_baseUrl/$deviceId/mode-settings', body);
+    await patchVoid('$_baseUrl/$deviceId/mode-settings', body);
   }
 
   // ===========================================================================
