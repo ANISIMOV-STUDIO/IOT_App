@@ -454,11 +454,15 @@ void main() {
           await Future<void>.delayed(const Duration(milliseconds: 600));
         },
         expect: () => [
-          // 1. Мгновенное обновление UI + pending
+          // 1. Мгновенное обновление UI БЕЗ pending (позволяет плавно двигать слайдер)
+          isA<ClimateControlState>()
+              .having((s) => s.isPendingSupplyFan, 'isPendingSupplyFan', false)
+              .having((s) => s.deviceFullState?.modeSettings?['basic']?.supplyFan, 'supplyFan', 80),
+          // 2. После debounce — pending с ожидаемым значением
           isA<ClimateControlState>()
               .having((s) => s.isPendingSupplyFan, 'isPendingSupplyFan', true)
-              .having((s) => s.deviceFullState?.modeSettings?['basic']?.supplyFan, 'supplyFan', 80),
-          // 2. После успешного API ответа — pending сбрасывается
+              .having((s) => s.pendingSupplyFan, 'pendingSupplyFan', 80),
+          // 3. После успешного API ответа — pending сбрасывается
           isA<ClimateControlState>()
               .having((s) => s.isPendingSupplyFan, 'isPendingSupplyFan', false),
         ],
@@ -493,11 +497,15 @@ void main() {
           await Future<void>.delayed(const Duration(milliseconds: 600));
         },
         expect: () => [
-           // 1. Мгновенное обновление UI + pending
+          // 1. Мгновенное обновление UI БЕЗ pending (позволяет плавно двигать слайдер)
+          isA<ClimateControlState>()
+              .having((s) => s.isPendingExhaustFan, 'isPendingExhaustFan', false)
+              .having((s) => s.deviceFullState?.modeSettings?['basic']?.exhaustFan, 'exhaustFan', 70),
+          // 2. После debounce — pending с ожидаемым значением
           isA<ClimateControlState>()
               .having((s) => s.isPendingExhaustFan, 'isPendingExhaustFan', true)
-              .having((s) => s.deviceFullState?.modeSettings?['basic']?.exhaustFan, 'exhaustFan', 70),
-          // 2. После успешного API ответа — pending сбрасывается
+              .having((s) => s.pendingExhaustFan, 'pendingExhaustFan', 70),
+          // 3. После успешного API ответа — pending сбрасывается
           isA<ClimateControlState>()
               .having((s) => s.isPendingExhaustFan, 'isPendingExhaustFan', false),
         ],
@@ -531,11 +539,15 @@ void main() {
           await Future<void>.delayed(const Duration(milliseconds: 600));
         },
         expect: () => [
-          // 1. Мгновенное обновление UI + pending
+          // 1. Мгновенное обновление UI БЕЗ pending (позволяет быстро кликать)
+          isA<ClimateControlState>()
+              .having((s) => s.isPendingHeatingTemperature, 'isPendingHeatingTemperature', false)
+              .having((s) => s.deviceFullState?.modeSettings?['basic']?.heatingTemperature, 'heatingTemperature', 21),
+          // 2. После debounce — pending с ожидаемым значением
           isA<ClimateControlState>()
               .having((s) => s.isPendingHeatingTemperature, 'isPendingHeatingTemperature', true)
-              .having((s) => s.deviceFullState?.modeSettings?['basic']?.heatingTemperature, 'heatingTemperature', 21),
-          // 2. После успешного API ответа — pending сбрасывается
+              .having((s) => s.pendingHeatingTemperature, 'pendingHeatingTemperature', 21),
+          // 3. После успешного API ответа — pending сбрасывается
           isA<ClimateControlState>()
               .having((s) => s.isPendingHeatingTemperature, 'isPendingHeatingTemperature', false),
         ],
@@ -569,11 +581,15 @@ void main() {
           await Future<void>.delayed(const Duration(milliseconds: 600));
         },
         expect: () => [
-          // 1. Мгновенное обновление UI + pending
+          // 1. Мгновенное обновление UI БЕЗ pending (позволяет быстро кликать)
+          isA<ClimateControlState>()
+              .having((s) => s.isPendingCoolingTemperature, 'isPendingCoolingTemperature', false)
+              .having((s) => s.deviceFullState?.modeSettings?['basic']?.coolingTemperature, 'coolingTemperature', 25),
+          // 2. После debounce — pending с ожидаемым значением
           isA<ClimateControlState>()
               .having((s) => s.isPendingCoolingTemperature, 'isPendingCoolingTemperature', true)
-              .having((s) => s.deviceFullState?.modeSettings?['basic']?.coolingTemperature, 'coolingTemperature', 25),
-          // 2. После успешного API ответа — pending сбрасывается
+              .having((s) => s.pendingCoolingTemperature, 'pendingCoolingTemperature', 25),
+          // 3. После успешного API ответа — pending сбрасывается
           isA<ClimateControlState>()
               .having((s) => s.isPendingCoolingTemperature, 'isPendingCoolingTemperature', false),
         ],
