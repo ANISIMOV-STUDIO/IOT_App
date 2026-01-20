@@ -288,6 +288,8 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
 
   /// Обновление состояния климата из стрима
   /// Приходит через SignalR когда устройство подтверждает изменения
+  ///
+  /// ВАЖНО: Сбрасываем ВСЕ pending флаги — SignalR ответ подтверждает изменения.
   void _onStateUpdated(
     ClimateStateUpdated event,
     Emitter<ClimateControlState> emit,
@@ -310,8 +312,13 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       // Сбрасываем лоадер только если power подтверждён
       isTogglingPower: !powerConfirmed && state.isTogglingPower,
       clearPendingPower: powerConfirmed,
-      // Pending температуры/вентиляторов НЕ сбрасываем здесь —
-      // они сбрасываются после успешного API ответа в *Commit handlers
+      // Сбрасываем ВСЕ pending флаги — SignalR ответ подтверждает изменения.
+      // Это критично: debounceRestartable() может отменить Commit handler,
+      // и без этого pending останется true навсегда.
+      isPendingHeatingTemperature: false,
+      isPendingCoolingTemperature: false,
+      isPendingSupplyFan: false,
+      isPendingExhaustFan: false,
     ));
   }
 
@@ -321,6 +328,11 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   /// ВАЖНО: quickSensors - это пользовательская настройка, не телеметрия.
   /// SignalR обновления могут не содержать quickSensors, поэтому сохраняем
   /// существующее значение. Обновление через ClimateQuickSensorsUpdated event.
+  ///
+  /// ВАЖНО: Сбрасываем ВСЕ pending флаги здесь, потому что:
+  /// 1. SignalR ответ означает, что устройство подтвердило изменения
+  /// 2. debounceRestartable() может отменить Commit handler до его завершения,
+  ///    оставив pending=true навсегда. SignalR — надёжный источник истины.
   void _onFullStateLoaded(
     ClimateFullStateLoaded event,
     Emitter<ClimateControlState> emit,
@@ -360,14 +372,20 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       // Сбрасываем лоадер только если power подтверждён
       isTogglingPower: !powerConfirmed && state.isTogglingPower,
       clearPendingPower: powerConfirmed,
-      // Pending температуры/вентиляторов НЕ сбрасываем здесь —
-      // они сбрасываются после успешного API ответа в *Commit handlers
+      // Сбрасываем ВСЕ pending флаги — SignalR ответ подтверждает изменения.
+      // Это критично: debounceRestartable() может отменить Commit handler,
+      // и без этого pending останется true навсегда.
+      isPendingHeatingTemperature: false,
+      isPendingCoolingTemperature: false,
+      isPendingSupplyFan: false,
+      isPendingExhaustFan: false,
     ));
   }
 
   /// Мержит modeSettings: incoming значения приоритетнее, но null не перезаписывает.
-  /// Также не перезаписываем поля, которые сейчас в pending состоянии —
-  /// иначе SignalR может вернуть старое значение и затереть локальное изменение.
+  ///
+  /// SignalR ответ — источник истины. Мы доверяем входящим данным и обновляем UI.
+  /// Optimistic update уже показал пользователю изменение, а SignalR подтверждает его.
   Map<String, ModeSettings>? _mergeModeSettings(
     Map<String, ModeSettings>? existing,
     Map<String, ModeSettings>? incoming,
@@ -386,20 +404,13 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         merged[entry.key] = entry.value;
       } else {
         // Мержим отдельные поля: incoming приоритетнее, но null не перезаписывает.
-        // Если поле в pending состоянии — сохраняем existing (локальное изменение).
         merged[entry.key] = ModeSettings(
-          heatingTemperature: state.isPendingHeatingTemperature
-              ? existingSettings.heatingTemperature
-              : (entry.value.heatingTemperature ?? existingSettings.heatingTemperature),
-          coolingTemperature: state.isPendingCoolingTemperature
-              ? existingSettings.coolingTemperature
-              : (entry.value.coolingTemperature ?? existingSettings.coolingTemperature),
-          supplyFan: state.isPendingSupplyFan
-              ? existingSettings.supplyFan
-              : (entry.value.supplyFan ?? existingSettings.supplyFan),
-          exhaustFan: state.isPendingExhaustFan
-              ? existingSettings.exhaustFan
-              : (entry.value.exhaustFan ?? existingSettings.exhaustFan),
+          heatingTemperature:
+              entry.value.heatingTemperature ?? existingSettings.heatingTemperature,
+          coolingTemperature:
+              entry.value.coolingTemperature ?? existingSettings.coolingTemperature,
+          supplyFan: entry.value.supplyFan ?? existingSettings.supplyFan,
+          exhaustFan: entry.value.exhaustFan ?? existingSettings.exhaustFan,
         );
       }
     }
