@@ -83,19 +83,9 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) =>
-      // BlocListener для синхронизации DevicesBloc → ClimateBloc
-      // Когда выбрано устройство, обновляем ClimateBloc
-      BlocListener<DevicesBloc, DevicesState>(
-        listenWhen: (previous, current) =>
-            previous.selectedDeviceId != current.selectedDeviceId,
-        listener: (context, state) {
-          if (state.selectedDeviceId != null) {
-            context.read<ClimateBloc>().add(
-                  ClimateDeviceChanged(state.selectedDeviceId!),
-                );
-          }
-        },
-        child: Scaffold(
+      // Device selection sync теперь в DashboardBlocListeners
+      // чтобы избежать дублирования событий ClimateDeviceChanged
+      Scaffold(
           body: IndexedStack(
             index: _currentIndex,
             children: _screens,
@@ -114,6 +104,5 @@ class _MainScreenState extends State<MainScreen> {
               );
             },
           ),
-        ),
       );
 }

@@ -8,6 +8,7 @@ library;
 
 import 'dart:async';
 
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hvac_control/domain/entities/unit_notification.dart';
@@ -31,7 +32,8 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
         super(const NotificationsState()) {
     // События жизненного цикла
     on<NotificationsSubscriptionRequested>(_onSubscriptionRequested);
-    on<NotificationsDeviceChanged>(_onDeviceChanged);
+    // restartable: отменяет предыдущий запрос при быстром переключении устройств
+    on<NotificationsDeviceChanged>(_onDeviceChanged, transformer: restartable());
     on<NotificationsListUpdated>(_onListUpdated);
 
     // Действия с уведомлениями

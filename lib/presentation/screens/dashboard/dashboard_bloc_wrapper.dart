@@ -136,7 +136,11 @@ class DashboardBlocBuilder extends StatelessWidget {
               previous.climate != current.climate ||
               previous.isTogglingPower != current.isTogglingPower ||
               previous.deviceFullState != current.deviceFullState ||
-              previous.activeAlarms != current.activeAlarms,
+              previous.activeAlarms != current.activeAlarms ||
+              previous.isPendingHeatingTemperature != current.isPendingHeatingTemperature ||
+              previous.isPendingCoolingTemperature != current.isPendingCoolingTemperature ||
+              previous.isPendingSupplyFan != current.isPendingSupplyFan ||
+              previous.isPendingExhaustFan != current.isPendingExhaustFan,
           builder: (context, climateState) => BlocBuilder<ConnectivityBloc, ConnectivityState>(
               buildWhen: (previous, current) =>
                   previous.showBanner != current.showBanner ||
@@ -182,7 +186,8 @@ class DashboardBlocBuilder extends StatelessWidget {
       final isSelected = device.id == devicesState.selectedDeviceId;
       final climate = isSelected ? climateState.climate : null;
       final fullState = isSelected ? climateState.deviceFullState : null;
-      return _createUnitState(device, climate, fullState);
+      // Передаём climateState только для выбранного устройства (для pending значений)
+      return _createUnitState(device, climate, fullState, isSelected ? climateState : null);
     }).toList();
 
     final selectedIndex = devicesState.selectedDeviceId != null
@@ -216,21 +221,34 @@ class DashboardBlocBuilder extends StatelessWidget {
     HvacDevice device,
     ClimateState? climate,
     DeviceFullState? fullState,
+    ClimateControlState? climateControlState,
   ) {
     // Получаем текущий режим и его настройки
     final currentMode = fullState?.operatingMode ?? climate?.preset ?? '';
     final modeSettings = fullState?.modeSettings?[currentMode];
+
+    // Приоритет pending значений над modeSettings:
+    // Если пользователь изменил значение, показываем его даже если SignalR
+    // ещё не подтвердил (или перезаписал на старое значение)
+    final heatingTemp = climateControlState?.pendingHeatingTemp
+        ?? modeSettings?.heatingTemperature;
+    final coolingTemp = climateControlState?.pendingCoolingTemp
+        ?? modeSettings?.coolingTemperature;
+    final supplyFan = climateControlState?.pendingSupplyFan
+        ?? modeSettings?.supplyFan;
+    final exhaustFan = climateControlState?.pendingExhaustFan
+        ?? modeSettings?.exhaustFan;
 
     return UnitState(
       id: device.id,
       name: device.name,
       power: fullState?.power ?? climate?.isOn ?? device.isActive,
       temp: climate?.currentTemperature.toInt() ?? 20,
-      // Берём значения из настроек текущего режима
-      heatingTemp: modeSettings?.heatingTemperature,
-      coolingTemp: modeSettings?.coolingTemperature,
-      supplyFan: modeSettings?.supplyFan,
-      exhaustFan: modeSettings?.exhaustFan,
+      // Используем pending значения если есть, иначе из настроек режима
+      heatingTemp: heatingTemp,
+      coolingTemp: coolingTemp,
+      supplyFan: supplyFan,
+      exhaustFan: exhaustFan,
       mode: currentMode, // Пустая строка = ничего не выбрано
       humidity: climate?.humidity.toInt() ?? 45,
       outsideTemp: fullState?.outdoorTemperature ?? 0.0,

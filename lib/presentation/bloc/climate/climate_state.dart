@@ -31,6 +31,10 @@ final class ClimateControlState extends Equatable {
     this.isPendingCoolingTemperature = false,
     this.isPendingSupplyFan = false,
     this.isPendingExhaustFan = false,
+    this.pendingHeatingTemp,
+    this.pendingCoolingTemp,
+    this.pendingSupplyFan,
+    this.pendingExhaustFan,
   });
   /// Статус загрузки
   final ClimateControlStatus status;
@@ -68,6 +72,18 @@ final class ClimateControlState extends Equatable {
 
   /// Ожидание подтверждения изменения вытяжного вентилятора
   final bool isPendingExhaustFan;
+
+  /// Ожидаемое значение температуры нагрева (null = нет ожидания)
+  final int? pendingHeatingTemp;
+
+  /// Ожидаемое значение температуры охлаждения (null = нет ожидания)
+  final int? pendingCoolingTemp;
+
+  /// Ожидаемое значение приточного вентилятора (null = нет ожидания)
+  final int? pendingSupplyFan;
+
+  /// Ожидаемое значение вытяжного вентилятора (null = нет ожидания)
+  final int? pendingExhaustFan;
 
   // ============================================
   // ГЕТТЕРЫ ДЛЯ УДОБСТВА
@@ -139,6 +155,14 @@ final class ClimateControlState extends Equatable {
     bool? isPendingCoolingTemperature,
     bool? isPendingSupplyFan,
     bool? isPendingExhaustFan,
+    int? pendingHeatingTemp,
+    bool clearPendingHeatingTemp = false,
+    int? pendingCoolingTemp,
+    bool clearPendingCoolingTemp = false,
+    int? pendingSupplyFanValue,
+    bool clearPendingSupplyFan = false,
+    int? pendingExhaustFanValue,
+    bool clearPendingExhaustFan = false,
   }) => ClimateControlState(
       status: status ?? this.status,
       climate: climate ?? this.climate,
@@ -154,6 +178,10 @@ final class ClimateControlState extends Equatable {
           isPendingCoolingTemperature ?? this.isPendingCoolingTemperature,
       isPendingSupplyFan: isPendingSupplyFan ?? this.isPendingSupplyFan,
       isPendingExhaustFan: isPendingExhaustFan ?? this.isPendingExhaustFan,
+      pendingHeatingTemp: clearPendingHeatingTemp ? null : (pendingHeatingTemp ?? this.pendingHeatingTemp),
+      pendingCoolingTemp: clearPendingCoolingTemp ? null : (pendingCoolingTemp ?? this.pendingCoolingTemp),
+      pendingSupplyFan: clearPendingSupplyFan ? null : (pendingSupplyFanValue ?? this.pendingSupplyFan),
+      pendingExhaustFan: clearPendingExhaustFan ? null : (pendingExhaustFanValue ?? this.pendingExhaustFan),
     );
 
   @override
@@ -170,5 +198,9 @@ final class ClimateControlState extends Equatable {
         isPendingCoolingTemperature,
         isPendingSupplyFan,
         isPendingExhaustFan,
+        pendingHeatingTemp,
+        pendingCoolingTemp,
+        pendingSupplyFan,
+        pendingExhaustFan,
       ];
 }

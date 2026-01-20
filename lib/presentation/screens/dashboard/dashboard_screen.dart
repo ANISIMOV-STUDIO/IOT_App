@@ -22,14 +22,11 @@ import 'package:hvac_control/domain/entities/unit_state.dart';
 import 'package:hvac_control/domain/entities/user.dart';
 import 'package:hvac_control/domain/entities/version_info.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
-import 'package:hvac_control/presentation/bloc/analytics/analytics_bloc.dart';
 import 'package:hvac_control/presentation/bloc/auth/auth_bloc.dart';
 import 'package:hvac_control/presentation/bloc/auth/auth_event.dart';
 import 'package:hvac_control/presentation/bloc/auth/auth_state.dart';
 import 'package:hvac_control/presentation/bloc/climate/climate_bloc.dart';
 import 'package:hvac_control/presentation/bloc/devices/devices_bloc.dart';
-import 'package:hvac_control/presentation/bloc/notifications/notifications_bloc.dart';
-import 'package:hvac_control/presentation/bloc/schedule/schedule_bloc.dart';
 import 'package:hvac_control/presentation/screens/dashboard/dashboard_bloc_wrapper.dart';
 import 'package:hvac_control/presentation/screens/dashboard/dashboard_empty_state.dart';
 import 'package:hvac_control/presentation/screens/dashboard/dialogs/add_unit_dialog.dart';
@@ -249,11 +246,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void _onUnitSelected(List<UnitState> units, int index) {
     if (index < units.length) {
       final deviceId = units[index].id;
+      // Только DevicesDeviceSelected - остальные события диспатчит
+      // BlocListener в DashboardBlocListeners при изменении selectedDeviceId
       context.read<DevicesBloc>().add(DevicesDeviceSelected(deviceId));
-      context.read<ClimateBloc>().add(ClimateDeviceChanged(deviceId));
-      context.read<AnalyticsBloc>().add(AnalyticsDeviceChanged(deviceId));
-      context.read<NotificationsBloc>().add(NotificationsDeviceChanged(deviceId));
-      context.read<ScheduleBloc>().add(ScheduleDeviceChanged(deviceId));
     }
   }
 

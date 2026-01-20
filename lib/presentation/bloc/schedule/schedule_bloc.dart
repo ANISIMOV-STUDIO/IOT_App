@@ -9,6 +9,7 @@ library;
 
 import 'dart:async';
 
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hvac_control/core/error/api_exception.dart';
@@ -26,7 +27,8 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
   })  : _repository = repository,
         super(const ScheduleState()) {
     // События жизненного цикла
-    on<ScheduleDeviceChanged>(_onDeviceChanged);
+    // restartable: отменяет предыдущий запрос при быстром переключении устройств
+    on<ScheduleDeviceChanged>(_onDeviceChanged, transformer: restartable());
     on<ScheduleEntriesUpdated>(_onEntriesUpdated);
 
     // События управления расписанием

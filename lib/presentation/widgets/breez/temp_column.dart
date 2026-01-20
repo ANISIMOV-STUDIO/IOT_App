@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
-import 'package:hvac_control/presentation/widgets/breez/breez_loader.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -159,18 +158,16 @@ class TemperatureColumn extends StatelessWidget {
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: spacing),
-                  child: isPending
-                      ? BreezLoader.small(color: color)
-                      : Text(
-                          temperature != null ? '$temperature°C' : '—',
-                          style: TextStyle(
-                            fontSize: fontSize,
-                            fontWeight: FontWeight.w700,
-                            color: isPowered && temperature != null
-                                ? colors.text
-                                : colors.textMuted,
-                          ),
-                        ),
+                  child: Text(
+                    temperature != null ? '$temperature°C' : '—',
+                    style: TextStyle(
+                      fontSize: fontSize,
+                      fontWeight: FontWeight.w700,
+                      color: isPowered && temperature != null
+                          ? colors.text
+                          : colors.textMuted,
+                    ),
+                  ),
                 ),
                 Semantics(
                   button: true,

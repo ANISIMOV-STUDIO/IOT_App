@@ -205,7 +205,6 @@ class MainTempCard extends StatelessWidget {
                   isPowered: isPowered,
                   showControls: showControls,
                   alarmCount: alarmCount,
-                  isPowerLoading: isPowerLoading,
                   isScheduleEnabled: isScheduleEnabled,
                   isScheduleLoading: isScheduleLoading,
                   onPowerToggle: isOnline ? onPowerToggle : null,
@@ -297,12 +296,16 @@ class MainTempCard extends StatelessWidget {
                 ),
                   ],
                 ),
-                // Overlay блокировки при переключении питания
-                if (isPowerLoading)
+                // Overlay блокировки при ожидании ответа от устройства
+                if (isPowerLoading ||
+                    isPendingHeatingTemperature ||
+                    isPendingCoolingTemperature ||
+                    isPendingSupplyFan ||
+                    isPendingExhaustFan)
                   Positioned.fill(
                     child: DecoratedBox(
                       decoration: BoxDecoration(
-                        color: colors.card.withValues(alpha: 0.7),
+                        color: colors.card.withValues(alpha: AppColors.opacityHigh),
                         borderRadius: BorderRadius.circular(AppRadius.nested),
                       ),
                       child: const Center(

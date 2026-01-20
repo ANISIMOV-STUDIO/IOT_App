@@ -20,7 +20,6 @@ class MainTempCardHeader extends StatelessWidget {
     this.status,
     this.showControls = false,
     this.alarmCount = 0,
-    this.isPowerLoading = false,
     this.isScheduleEnabled = false,
     this.isScheduleLoading = false,
     this.onPowerToggle,
@@ -35,7 +34,6 @@ class MainTempCardHeader extends StatelessWidget {
   final bool isPowered;
   final bool showControls;
   final int alarmCount;
-  final bool isPowerLoading;
   final bool isScheduleEnabled;
   final bool isScheduleLoading;
   final VoidCallback? onPowerToggle;
@@ -70,7 +68,6 @@ class MainTempCardHeader extends StatelessWidget {
         if (showControls)
           _ControlsSection(
             isPowered: isPowered,
-            isPowerLoading: isPowerLoading,
             isScheduleEnabled: isScheduleEnabled,
             isScheduleLoading: isScheduleLoading,
             onSettingsTap: onSettingsTap,
@@ -173,7 +170,6 @@ class _ControlsSection extends StatelessWidget {
 
   const _ControlsSection({
     required this.isPowered,
-    required this.isPowerLoading,
     this.isScheduleEnabled = false,
     this.isScheduleLoading = false,
     this.onSettingsTap,
@@ -182,7 +178,6 @@ class _ControlsSection extends StatelessWidget {
     this.isOnline = true,
   });
   final bool isPowered;
-  final bool isPowerLoading;
   final bool isScheduleEnabled;
   final bool isScheduleLoading;
   final VoidCallback? onSettingsTap;
@@ -199,21 +194,11 @@ class _ControlsSection extends StatelessWidget {
     return Row(
       children: [
         // Power toggle button
-        if (isPowerLoading)
-          const SizedBox(
-            width: 32,
-            height: 32,
-            child: Padding(
-              padding: EdgeInsets.all(AppSpacing.xs),
-              child: BreezLoader.small(),
-            ),
-          )
-        else
-          BreezIconButton(
-            icon: Icons.power_settings_new,
-            iconColor: !isOnline ? mutedColor : isPowered ? AppColors.accentGreen : mutedColor,
-            onTap: onPowerToggle,
-          ),
+        BreezIconButton(
+          icon: Icons.power_settings_new,
+          iconColor: !isOnline ? mutedColor : isPowered ? AppColors.accentGreen : mutedColor,
+          onTap: onPowerToggle,
+        ),
         const SizedBox(width: AppSpacing.xs),
         // Schedule toggle button
         if (isScheduleLoading)

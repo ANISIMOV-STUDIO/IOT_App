@@ -8,6 +8,7 @@ library;
 
 import 'dart:async';
 
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hvac_control/domain/entities/energy_stats.dart';
@@ -35,7 +36,8 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
     // События жизненного цикла
     on<AnalyticsSubscriptionRequested>(_onSubscriptionRequested);
     on<AnalyticsRefreshRequested>(_onRefreshRequested);
-    on<AnalyticsDeviceChanged>(_onDeviceChanged);
+    // restartable: отменяет предыдущий запрос при быстром переключении устройств
+    on<AnalyticsDeviceChanged>(_onDeviceChanged, transformer: restartable());
 
     // Обновления из стрима
     on<AnalyticsEnergyStatsUpdated>(_onEnergyStatsUpdated);
