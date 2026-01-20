@@ -290,10 +290,10 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         // Сбрасываем ВСЕ pending флаги при смене/перезагрузке устройства.
         // Это критично для page refresh: debounce события могут потеряться,
         // но pending флаги останутся true навсегда.
-        clearPendingHeatingTemperature: true,
-        clearPendingCoolingTemperature: true,
-        clearPendingSupplyFan: true,
-        clearPendingExhaustFan: true,
+        isPendingHeatingTemperature: false,
+        isPendingCoolingTemperature: false,
+        isPendingSupplyFan: false,
+        isPendingExhaustFan: false,
         isTogglingPower: false,
         isTogglingSchedule: false,
         clearPendingPower: true,
@@ -324,8 +324,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   /// Обновление состояния климата из стрима
   /// Приходит через SignalR когда устройство подтверждает изменения
   ///
-  /// ВАЖНО: Сбрасываем pending флаги только если значение совпадает с ожидаемым.
-  /// Это предотвращает преждевременный сброс pending от чужих SignalR сообщений.
+  /// ВАЖНО: Сбрасываем ВСЕ pending флаги — SignalR ответ подтверждает изменения.
   void _onStateUpdated(
     ClimateStateUpdated event,
     Emitter<ClimateControlState> emit,
@@ -343,13 +342,18 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       _powerToggleTimer = null;
     }
 
-    // ClimateState не содержит modeSettings, поэтому не можем проверить
-    // pending температуры и вентиляторов здесь — только в _onFullStateLoaded
     emit(state.copyWith(
       climate: event.climate,
       // Сбрасываем лоадер только если power подтверждён
       isTogglingPower: !powerConfirmed && state.isTogglingPower,
       clearPendingPower: powerConfirmed,
+      // Сбрасываем ВСЕ pending флаги — SignalR ответ подтверждает изменения.
+      // Это критично: debounceRestartable() может отменить Commit handler,
+      // и без этого pending останется true навсегда.
+      isPendingHeatingTemperature: false,
+      isPendingCoolingTemperature: false,
+      isPendingSupplyFan: false,
+      isPendingExhaustFan: false,
     ));
   }
 
@@ -360,8 +364,10 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   /// SignalR обновления могут не содержать quickSensors, поэтому сохраняем
   /// существующее значение. Обновление через ClimateQuickSensorsUpdated event.
   ///
-  /// ВАЖНО: Сбрасываем pending флаги только если значение совпадает с ожидаемым.
-  /// Это предотвращает преждевременный сброс pending от чужих SignalR сообщений.
+  /// ВАЖНО: Сбрасываем ВСЕ pending флаги здесь, потому что:
+  /// 1. SignalR ответ означает, что устройство подтвердило изменения
+  /// 2. debounceRestartable() может отменить Commit handler до его завершения,
+  ///    оставив pending=true навсегда. SignalR — надёжный источник истины.
   void _onFullStateLoaded(
     ClimateFullStateLoaded event,
     Emitter<ClimateControlState> emit,
@@ -396,33 +402,18 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       _powerToggleTimer = null;
     }
 
-    // Проверяем подтверждение каждого параметра отдельно
-    // Сбрасываем pending только если входящее значение совпадает с ожидаемым
-    final currentMode = incoming.operatingMode;
-    final incomingSettings = mergedModeSettings?[currentMode];
-
-    final heatingConfirmed = state.pendingHeatingTemperature == null ||
-        incomingSettings?.heatingTemperature == state.pendingHeatingTemperature;
-
-    final coolingConfirmed = state.pendingCoolingTemperature == null ||
-        incomingSettings?.coolingTemperature == state.pendingCoolingTemperature;
-
-    final supplyConfirmed = state.pendingSupplyFan == null ||
-        incomingSettings?.supplyFan == state.pendingSupplyFan;
-
-    final exhaustConfirmed = state.pendingExhaustFan == null ||
-        incomingSettings?.exhaustFan == state.pendingExhaustFan;
-
     emit(state.copyWith(
       deviceFullState: mergedState,
       // Сбрасываем лоадер только если power подтверждён
       isTogglingPower: !powerConfirmed && state.isTogglingPower,
       clearPendingPower: powerConfirmed,
-      // Сбрасываем pending только для подтверждённых параметров
-      clearPendingHeatingTemperature: heatingConfirmed,
-      clearPendingCoolingTemperature: coolingConfirmed,
-      clearPendingSupplyFan: supplyConfirmed,
-      clearPendingExhaustFan: exhaustConfirmed,
+      // Сбрасываем ВСЕ pending флаги — SignalR ответ подтверждает изменения.
+      // Это критично: debounceRestartable() может отменить Commit handler,
+      // и без этого pending останется true навсегда.
+      isPendingHeatingTemperature: false,
+      isPendingCoolingTemperature: false,
+      isPendingSupplyFan: false,
+      isPendingExhaustFan: false,
     ));
   }
 
@@ -623,9 +614,6 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   }
 
   /// UI update: Изменение температуры нагрева
-  ///
-  /// НЕ устанавливает pending — это делает Commit handler после debounce.
-  /// Позволяет пользователю быстро кликать +/- без блокировки UI.
   void _onHeatingTempChanged(
     ClimateHeatingTempChanged event,
     Emitter<ClimateControlState> emit,
@@ -636,8 +624,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       TemperatureLimits.max,
     );
 
-    // Optimistic update - сразу обновляем UI БЕЗ pending
-    // Pending устанавливается только в Commit handler после debounce
+    // Optimistic update - сразу обновляем UI + показываем pending
     final fullState = state.deviceFullState;
     if (fullState != null) {
       final updatedModeSettings = _updateCurrentModeSettings(
@@ -645,6 +632,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       );
 
       emit(state.copyWith(
+        isPendingHeatingTemperature: true,
         deviceFullState: fullState.copyWith(
           modeSettings: updatedModeSettings,
         ),
@@ -656,16 +644,10 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   }
 
   /// API call: Отправка температуры нагрева через quick-mode
-  ///
-  /// Устанавливает pending с ожидаемым значением перед отправкой.
-  /// Сбрасывается либо после HTTP успеха, либо когда SignalR подтвердит значение.
   Future<void> _onHeatingTempCommit(
     ClimateHeatingTempCommit event,
     Emitter<ClimateControlState> emit,
   ) async {
-    // Устанавливаем pending с ожидаемым значением
-    emit(state.copyWith(pendingHeatingTemperature: event.temperature));
-
     try {
       final params = _getCurrentQuickModeParams();
       if (params != null) {
@@ -676,19 +658,16 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         await _setTemperature(SetTemperatureParams(temperature: event.temperature.toDouble()));
       }
       // Сбрасываем pending после успешного API ответа
-      emit(state.copyWith(clearPendingHeatingTemperature: true));
+      emit(state.copyWith(isPendingHeatingTemperature: false));
     } catch (e) {
       emit(state.copyWith(
-        clearPendingHeatingTemperature: true,
+        isPendingHeatingTemperature: false,
         errorMessage: 'Heating temperature error: $e',
       ));
     }
   }
 
   /// UI update: Изменение температуры охлаждения
-  ///
-  /// НЕ устанавливает pending — это делает Commit handler после debounce.
-  /// Позволяет пользователю быстро кликать +/- без блокировки UI.
   void _onCoolingTempChanged(
     ClimateCoolingTempChanged event,
     Emitter<ClimateControlState> emit,
@@ -699,8 +678,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       TemperatureLimits.max,
     );
 
-    // Optimistic update - сразу обновляем UI БЕЗ pending
-    // Pending устанавливается только в Commit handler после debounce
+    // Optimistic update - сразу обновляем UI + показываем pending
     final fullState = state.deviceFullState;
     if (fullState != null) {
       final updatedModeSettings = _updateCurrentModeSettings(
@@ -708,6 +686,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       );
 
       emit(state.copyWith(
+        isPendingCoolingTemperature: true,
         deviceFullState: fullState.copyWith(
           modeSettings: updatedModeSettings,
         ),
@@ -719,16 +698,10 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   }
 
   /// API call: Отправка температуры охлаждения через quick-mode
-  ///
-  /// Устанавливает pending с ожидаемым значением перед отправкой.
-  /// Сбрасывается либо после HTTP успеха, либо когда SignalR подтвердит значение.
   Future<void> _onCoolingTempCommit(
     ClimateCoolingTempCommit event,
     Emitter<ClimateControlState> emit,
   ) async {
-    // Устанавливаем pending с ожидаемым значением
-    emit(state.copyWith(pendingCoolingTemperature: event.temperature));
-
     try {
       final params = _getCurrentQuickModeParams();
       if (params != null) {
@@ -739,10 +712,10 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         await _setCoolingTemperature(SetCoolingTemperatureParams(temperature: event.temperature));
       }
       // Сбрасываем pending после успешного API ответа
-      emit(state.copyWith(clearPendingCoolingTemperature: true));
+      emit(state.copyWith(isPendingCoolingTemperature: false));
     } catch (e) {
       emit(state.copyWith(
-        clearPendingCoolingTemperature: true,
+        isPendingCoolingTemperature: false,
         errorMessage: 'Cooling temperature error: $e',
       ));
     }
@@ -882,15 +855,11 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   }
 
   /// UI update: Изменение притока воздуха
-  ///
-  /// НЕ устанавливает pending — это делает Commit handler после debounce.
-  /// Позволяет пользователю плавно двигать слайдер без блокировки.
   void _onSupplyAirflowChanged(
     ClimateSupplyAirflowChanged event,
     Emitter<ClimateControlState> emit,
   ) {
-    // Optimistic update - сразу обновляем UI БЕЗ pending
-    // Pending устанавливается только в Commit handler после debounce
+    // Optimistic update - сразу обновляем UI + показываем pending
     final fullState = state.deviceFullState;
     if (state.climate != null && fullState != null) {
       final updatedModeSettings = _updateCurrentModeSettings(
@@ -898,6 +867,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       );
 
       emit(state.copyWith(
+        isPendingSupplyFan: true,
         climate: state.climate!.copyWith(supplyAirflow: event.value),
         deviceFullState: fullState.copyWith(
           modeSettings: updatedModeSettings,
@@ -909,16 +879,10 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   }
 
   /// API call: Отправка притока воздуха через quick-mode
-  ///
-  /// Устанавливает pending с ожидаемым значением перед отправкой.
-  /// Сбрасывается либо после HTTP успеха, либо когда SignalR подтвердит значение.
   Future<void> _onSupplyAirflowCommit(
     ClimateSupplyAirflowCommit event,
     Emitter<ClimateControlState> emit,
   ) async {
-    // Устанавливаем pending с ожидаемым значением
-    emit(state.copyWith(pendingSupplyFan: event.value.round()));
-
     try {
       final params = _getCurrentQuickModeParams();
       if (params != null) {
@@ -932,25 +896,21 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         ));
       }
       // Сбрасываем pending после успешного API ответа
-      emit(state.copyWith(clearPendingSupplyFan: true));
+      emit(state.copyWith(isPendingSupplyFan: false));
     } catch (e) {
       emit(state.copyWith(
-        clearPendingSupplyFan: true,
+        isPendingSupplyFan: false,
         errorMessage: 'Supply airflow error: $e',
       ));
     }
   }
 
   /// UI update: Изменение вытяжки воздуха
-  ///
-  /// НЕ устанавливает pending — это делает Commit handler после debounce.
-  /// Позволяет пользователю плавно двигать слайдер без блокировки.
   void _onExhaustAirflowChanged(
     ClimateExhaustAirflowChanged event,
     Emitter<ClimateControlState> emit,
   ) {
-    // Optimistic update - сразу обновляем UI БЕЗ pending
-    // Pending устанавливается только в Commit handler после debounce
+    // Optimistic update - сразу обновляем UI + показываем pending
     final fullState = state.deviceFullState;
     if (state.climate != null && fullState != null) {
       final updatedModeSettings = _updateCurrentModeSettings(
@@ -958,6 +918,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       );
 
       emit(state.copyWith(
+        isPendingExhaustFan: true,
         climate: state.climate!.copyWith(exhaustAirflow: event.value),
         deviceFullState: fullState.copyWith(
           modeSettings: updatedModeSettings,
@@ -969,16 +930,10 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   }
 
   /// API call: Отправка вытяжки воздуха через quick-mode
-  ///
-  /// Устанавливает pending с ожидаемым значением перед отправкой.
-  /// Сбрасывается либо после HTTP успеха, либо когда SignalR подтвердит значение.
   Future<void> _onExhaustAirflowCommit(
     ClimateExhaustAirflowCommit event,
     Emitter<ClimateControlState> emit,
   ) async {
-    // Устанавливаем pending с ожидаемым значением
-    emit(state.copyWith(pendingExhaustFan: event.value.round()));
-
     try {
       final params = _getCurrentQuickModeParams();
       if (params != null) {
@@ -992,10 +947,10 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         ));
       }
       // Сбрасываем pending после успешного API ответа
-      emit(state.copyWith(clearPendingExhaustFan: true));
+      emit(state.copyWith(isPendingExhaustFan: false));
     } catch (e) {
       emit(state.copyWith(
-        clearPendingExhaustFan: true,
+        isPendingExhaustFan: false,
         errorMessage: 'Exhaust airflow error: $e',
       ));
     }
