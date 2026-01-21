@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
@@ -12,7 +13,6 @@ import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
 
 /// Константы для BreezSettingsTile
 abstract class _SettingsTileConstants {
-  static const double iconSize = 20;
   static const double titleFontSize = 14;
   static const double subtitleFontSize = 12;
   static const double tileVerticalPadding = 10;
@@ -69,7 +69,7 @@ class BreezSettingsTile extends StatelessWidget {
       tooltip: tooltip,
       child: Row(
         children: [
-          Icon(icon, size: _SettingsTileConstants.iconSize, color: AppColors.accent),
+          Icon(icon, size: AppIconSizes.standard, color: AppColors.accent),
           const SizedBox(width: AppSpacing.sm),
           Expanded(
             child: Text(
@@ -83,7 +83,7 @@ class BreezSettingsTile extends StatelessWidget {
           ),
           if (trailing != null) trailing!,
           const SizedBox(width: AppSpacing.xxs),
-          Icon(Icons.chevron_right, size: _SettingsTileConstants.iconSize, color: colors.textMuted),
+          Icon(Icons.chevron_right, size: AppIconSizes.standard, color: colors.textMuted),
         ],
       ),
     );
@@ -131,7 +131,7 @@ class BreezSwitchTile extends StatelessWidget {
       isButton: false, // This is a toggle, not a button
       child: Row(
         children: [
-          Icon(icon, size: _SettingsTileConstants.iconSize, color: AppColors.accent),
+          Icon(icon, size: AppIconSizes.standard, color: AppColors.accent),
           const SizedBox(width: AppSpacing.sm),
           Expanded(
             child: Column(

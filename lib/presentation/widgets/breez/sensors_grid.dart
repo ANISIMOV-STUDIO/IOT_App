@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/domain/entities/unit_state.dart';
@@ -13,7 +14,6 @@ import 'package:hvac_control/generated/l10n/app_localizations.dart';
 
 /// Константы для SensorsGrid
 abstract class _SensorGridConstants {
-  static const double iconSize = 20;
   static const double valueFontSize = 13;
   static const double labelFontSize = 9;
   static const double labelLineHeight = 1.2;
@@ -96,7 +96,7 @@ class SensorsGrid extends StatelessWidget {
         children: [
           Icon(
             sensor.icon,
-            size: _SensorGridConstants.iconSize,
+            size: AppIconSizes.standard,
             color: AppColors.accent,
           ),
           const SizedBox(height: AppSpacing.xxs),

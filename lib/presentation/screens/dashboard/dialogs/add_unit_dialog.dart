@@ -5,6 +5,7 @@ import 'dart:math' show min;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_control/core/constants/auth_constants.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
@@ -16,9 +17,7 @@ import 'package:hvac_control/presentation/widgets/breez/breez_list_card.dart';
 // =============================================================================
 
 abstract class _DialogConstants {
-  static const double closeIconSize = 18;
   static const double closeButtonPadding = 6;
-  static const double helpIconSize = 16;
 }
 
 // =============================================================================
@@ -147,7 +146,7 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
         semanticLabel: 'Закрыть',
         child: Icon(
           Icons.close,
-          size: _DialogConstants.closeIconSize,
+          size: AppIconSizes.standard,
           color: colors.textMuted,
         ),
       ),
@@ -186,7 +185,7 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
         children: [
           Icon(
             Icons.info_outline,
-            size: _DialogConstants.helpIconSize,
+            size: AppIconSizes.standard,
             color: colors.textMuted,
           ),
           const SizedBox(width: AppSpacing.xxs),

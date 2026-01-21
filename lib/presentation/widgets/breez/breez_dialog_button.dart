@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
@@ -13,8 +14,6 @@ import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
 abstract class _DialogButtonConstants {
   static const double fontSize = 14;
   static const double fontSizeSmall = 12;
-  static const double iconSize = 18;
-  static const double iconSizeMedium = 20;
   static const double verticalPadding = 12;
   static const double horizontalPadding = 20;
   static const double subtitleGap = 2;
@@ -127,7 +126,7 @@ class BreezActionButton extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, size: _DialogButtonConstants.iconSize, color: AppColors.accent),
+          Icon(icon, size: AppIconSizes.standard, color: AppColors.accent),
           const SizedBox(width: AppSpacing.xs),
           Text(
             label,
@@ -183,7 +182,7 @@ class BreezSettingsButton extends StatelessWidget {
       tooltip: tooltip,
       child: Row(
         children: [
-          Icon(icon, size: _DialogButtonConstants.iconSizeMedium, color: iconColor),
+          Icon(icon, size: AppIconSizes.standard, color: iconColor),
           const SizedBox(width: AppSpacing.md),
           Expanded(
             child: Column(
@@ -212,7 +211,7 @@ class BreezSettingsButton extends StatelessWidget {
           ),
           Icon(
             Icons.chevron_right,
-            size: _DialogButtonConstants.iconSizeMedium,
+            size: AppIconSizes.standard,
             color: colors.textMuted,
           ),
         ],

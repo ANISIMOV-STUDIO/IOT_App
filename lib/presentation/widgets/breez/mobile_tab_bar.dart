@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_control/core/theme/app_animations.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
@@ -13,7 +14,6 @@ import 'package:hvac_control/core/theme/spacing.dart';
 
 /// Константы для MobileTabBar
 abstract class _MobileTabConstants {
-  static const double iconSize = 14;
   static const double fontSize = 11;
   static const double badgeSize = 16;
   static const double badgeFontSize = 9;
@@ -175,7 +175,7 @@ class _SegmentButton extends StatelessWidget {
               children: [
                 Icon(
                   tab.icon,
-                  size: _MobileTabConstants.iconSize,
+                  size: AppIconSizes.standard,
                   color: iconColor,
                 ),
                 const SizedBox(width: AppSpacing.xxs),

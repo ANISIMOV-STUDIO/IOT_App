@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 
@@ -11,10 +12,8 @@ import 'package:hvac_control/core/theme/spacing.dart';
 
 /// Константы для BreezTextField
 abstract class _TextFieldConstants {
-  static const double iconSize = 20;
   static const double labelFontSize = 12;
   static const double inputFontSize = 14;
-  static const double errorIconSize = 12;
   static const double errorFontSize = 11;
   static const double errorPositionLeft = 12;
   static const double errorPositionBottom = -7;
@@ -127,7 +126,7 @@ class _BreezTextFieldState extends State<BreezTextField> {
               ? Icons.visibility_outlined
               : Icons.visibility_off_outlined,
           color: colors.textMuted,
-          size: _TextFieldConstants.iconSize,
+          size: AppIconSizes.standard,
         ),
         onPressed: () {
           setState(() {
@@ -205,7 +204,7 @@ class _BreezTextFieldState extends State<BreezTextField> {
                             child: Icon(
                               widget.prefixIcon,
                               color: colors.textMuted,
-                              size: _TextFieldConstants.iconSize,
+                              size: AppIconSizes.standard,
                             ),
                           )
                         : null,
@@ -250,7 +249,7 @@ class _BreezTextFieldState extends State<BreezTextField> {
                     children: [
                       const Icon(
                         Icons.error_outline,
-                        size: _TextFieldConstants.errorIconSize,
+                        size: AppIconSizes.standard,
                         color: AppColors.accentRed,
                       ),
                       const SizedBox(width: AppSpacing.xxs),

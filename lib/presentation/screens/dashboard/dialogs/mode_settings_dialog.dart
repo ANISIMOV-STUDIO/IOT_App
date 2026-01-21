@@ -4,6 +4,7 @@ library;
 import 'dart:math' show min;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/domain/entities/mode_settings.dart';
@@ -35,9 +36,7 @@ class ModeSettingsResult {
 
 abstract class _DialogConstants {
   static const double maxWidth = 340;
-  static const double headerIconSize = 32;
   static const double headerIconContainerSize = 56;
-  static const double closeIconSize = 18;
   static const double closeButtonPadding = 6;
   static const double titleFontSize = 16;
   static const double selectedBadgeSize = 18;
@@ -264,7 +263,7 @@ class _ModeHeader extends StatelessWidget {
                     ),
                     child: Icon(
                       modeIcon,
-                      size: _DialogConstants.headerIconSize,
+                      size: AppIconSizes.standard,
                       color: modeColor,
                     ),
                   ),
@@ -333,7 +332,7 @@ class _CloseButton extends StatelessWidget {
       semanticLabel: 'Закрыть',
       child: Icon(
         Icons.close,
-        size: _DialogConstants.closeIconSize,
+        size: AppIconSizes.standard,
         color: colors.textMuted,
       ),
     );

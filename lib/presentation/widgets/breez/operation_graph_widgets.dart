@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
@@ -18,7 +19,6 @@ abstract class _GraphWidgetConstants {
   static const double badgePaddingV = 4;
 
   // Metric tab
-  static const double tabIconSize = 20;
   static const double tabLabelFontSize = 8;
   static const double tabPaddingH = 14;
   static const double tabPaddingV = 4;
@@ -123,7 +123,7 @@ class GraphMetricTab extends StatelessWidget {
         children: [
           Icon(
             icon,
-            size: _GraphWidgetConstants.tabIconSize,
+            size: AppIconSizes.standard,
             color: isSelected ? AppColors.accent : colors.textMuted,
           ),
           const SizedBox(height: _GraphWidgetConstants.tabIconLabelGap),

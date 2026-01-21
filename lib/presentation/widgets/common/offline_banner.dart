@@ -7,6 +7,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:hvac_control/core/services/connectivity_service.dart';
 import 'package:hvac_control/core/theme/app_animations.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
@@ -56,7 +57,7 @@ class OfflineBanner extends StatelessWidget {
             const Icon(
               Icons.cloud_off,
               color: AppColors.white,
-              size: 18,
+              size: AppIconSizes.standard,
             ),
             const SizedBox(width: AppSpacing.xs),
             Text(

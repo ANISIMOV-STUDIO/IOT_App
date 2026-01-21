@@ -6,6 +6,7 @@ import 'dart:math' show min;
 import 'package:flutter/material.dart';
 import 'package:hvac_control/core/constants/auth_constants.dart';
 import 'package:hvac_control/core/services/language_service.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/core/utils/validators.dart';
@@ -19,7 +20,6 @@ import 'package:hvac_control/presentation/widgets/breez/breez_list_card.dart';
 
 abstract class _ProfileDialogsConstants {
   static const double flagFontSize = 20;
-  static const double checkIconSize = 18;
 }
 
 /// Language option widget for language picker dialog
@@ -72,7 +72,7 @@ class LanguageOption extends StatelessWidget {
             const Icon(
               Icons.check_circle,
               color: AppColors.accent,
-              size: _ProfileDialogsConstants.checkIconSize,
+              size: AppIconSizes.standard,
             ),
         ],
       ),

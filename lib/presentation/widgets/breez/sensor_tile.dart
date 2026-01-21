@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
@@ -54,7 +55,7 @@ class SensorTile extends StatelessWidget {
         children: [
           Icon(
             sensor.icon,
-            size: compact ? 18 : 22,
+            size: AppIconSizes.standard,
             color: accentColor,
           ),
           SizedBox(height: compact ? 4 : 6),
@@ -118,7 +119,7 @@ class SensorTile extends StatelessWidget {
                         ),
                         child: Icon(
                           sensor.icon,
-                          size: 28,
+                          size: AppIconSizes.standard,
                           color: accentColor,
                         ),
                       ),
@@ -173,7 +174,7 @@ class SensorTile extends StatelessWidget {
                       ),
                       child: Icon(
                         Icons.close,
-                        size: 18,
+                        size: AppIconSizes.standard,
                         color: colors.textMuted,
                       ),
                     ),

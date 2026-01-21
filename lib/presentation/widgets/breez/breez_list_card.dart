@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
@@ -17,14 +18,12 @@ import 'package:hvac_control/presentation/widgets/breez/breez_card.dart'; // Bre
 abstract class _ListCardConstants {
   // Размеры для нормального режима
   static const double iconContainerSizeNormal = 32;
-  static const double iconSizeNormal = 16;
   static const double paddingNormal = 12;
   static const double titleFontSizeNormal = 12;
   static const double subtitleFontSizeNormal = 11;
 
   // Размеры для компактного режима
   static const double iconContainerSizeCompact = 24;
-  static const double iconSizeCompact = 12;
   static const double paddingCompact = 8;
   static const double titleFontSizeCompact = 11;
   static const double subtitleFontSizeCompact = 10;
@@ -48,8 +47,6 @@ abstract class _ListCardConstants {
 
 /// Константы для BreezEmptyState
 abstract class _EmptyStateConstants {
-  static const double iconSizeNormal = 40;
-  static const double iconSizeCompact = 28;
   static const double titleFontSizeNormal = 13;
   static const double titleFontSizeCompact = 11;
   static const double subtitleFontSize = 11;
@@ -173,9 +170,7 @@ class BreezListCard extends StatelessWidget {
     final iconContainerSize = compact
         ? _ListCardConstants.iconContainerSizeCompact
         : _ListCardConstants.iconContainerSizeNormal;
-    final iconSize = compact
-        ? _ListCardConstants.iconSizeCompact
-        : _ListCardConstants.iconSizeNormal;
+    const iconSize = AppIconSizes.standard;
     final padding = compact
         ? _ListCardConstants.paddingCompact
         : _ListCardConstants.paddingNormal;
@@ -527,7 +522,7 @@ class BreezSectionHeader extends StatelessWidget {
     final colors = BreezColors.of(context);
     final color = iconColor ?? AppColors.accent;
     final fontSize = large ? AppFontSizes.h2 : AppFontSizes.h4;
-    final iconSize = large ? AppFontSizes.h3 : AppFontSizes.h4;
+    const iconSize = AppIconSizes.standard;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -604,7 +599,6 @@ class _DialogCloseButton extends StatelessWidget {
     required this.label,
   });
 
-  static const double _iconSize = 18;
   static const double _padding = 6;
 
   final VoidCallback onClose;
@@ -623,7 +617,7 @@ class _DialogCloseButton extends StatelessWidget {
       semanticLabel: label,
       child: Icon(
         Icons.close,
-        size: _iconSize,
+        size: AppIconSizes.standard,
         color: colors.textMuted,
       ),
     );
@@ -656,7 +650,6 @@ class BreezBadge extends StatelessWidget {
     required IconData icon,
     required String label,
     Key? key,
-    double iconSize = AppFontSizes.caption,
     double fontSize = AppFontSizes.captionSmall,
   }) => BreezBadge(
       key: key,
@@ -664,7 +657,7 @@ class BreezBadge extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: iconSize, color: color),
+          Icon(icon, size: AppIconSizes.standard, color: color),
           const SizedBox(width: AppSpacing.xxs),
           Text(
             label,
@@ -815,9 +808,7 @@ class BreezEmptyState extends StatelessWidget {
           children: [
             Icon(
               icon,
-              size: compact
-                  ? _EmptyStateConstants.iconSizeCompact
-                  : _EmptyStateConstants.iconSizeNormal,
+              size: AppIconSizes.standard,
               color: color.withValues(alpha: _EmptyStateConstants.iconAlpha),
             ),
             SizedBox(height: compact ? AppSpacing.xs : AppSpacing.sm),

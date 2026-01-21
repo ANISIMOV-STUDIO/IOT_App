@@ -2,7 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
-
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
@@ -25,7 +25,7 @@ class ScheduleEmptyState extends StatelessWidget {
         children: [
           Icon(
             Icons.calendar_today_outlined,
-            size: 64,
+            size: AppIconSizes.standard,
             color: AppColors.accent.withValues(alpha: 0.5),
           ),
           const SizedBox(height: AppSpacing.md),

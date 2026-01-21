@@ -6,6 +6,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
@@ -66,7 +67,7 @@ class ErrorWidget extends StatelessWidget {
           ),
           child: Icon(
             icon,
-            size: 40,
+            size: AppIconSizes.standard,
             color: iconColor,
           ),
         ),
@@ -117,7 +118,7 @@ class ErrorWidget extends StatelessWidget {
                 children: [
                   const Icon(
                     Icons.refresh,
-                    size: 20,
+                    size: AppIconSizes.standard,
                     color: AppColors.white,
                   ),
                   const SizedBox(width: AppSpacing.xs),
@@ -520,7 +521,7 @@ class RetryButton extends StatelessWidget {
         children: [
           const Icon(
             Icons.refresh,
-            size: 20,
+            size: AppIconSizes.standard,
             color: AppColors.white,
           ),
           const SizedBox(width: AppSpacing.xs),

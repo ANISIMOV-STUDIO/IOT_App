@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 // ignore: directives_ordering
 import 'package:hvac_control/core/navigation/app_router.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/data/api/http/clients/hvac_http_client.dart';
@@ -25,7 +26,6 @@ import 'package:intl/intl.dart';
 
 abstract class _LogsScreenConstants {
   static const double labelColumnWidth = 100;
-  static const double smallIconSize = 18;
   static const double closeButtonPadding = 6;
   static const int pageSize = 50;
 }
@@ -197,7 +197,7 @@ class _EventLogsScreenState extends State<EventLogsScreen> {
                   semanticLabel: l10n.close,
                   child: Icon(
                     Icons.close,
-                    size: _LogsScreenConstants.smallIconSize,
+                    size: AppIconSizes.standard,
                     color: colors.textMuted,
                   ),
                 ),
@@ -248,12 +248,12 @@ class _EventLogsScreenState extends State<EventLogsScreen> {
                 backButton: BreezIconButton(
                   icon: Icons.arrow_back,
                   onTap: () => context.goToHomeTab(MainTab.profile),
-                  size: 24,
+                  size: AppIconSizes.standard,
                 ),
                 trailing: BreezIconButton(
                   icon: Icons.refresh,
                   onTap: _isLoading ? null : _loadLogs,
-                  size: 24,
+                  size: AppIconSizes.standard,
                 ),
               ),
             ),
@@ -500,7 +500,7 @@ class _PaginationFooter extends StatelessWidget {
                       children: [
                         const Icon(
                           Icons.expand_more,
-                          size: _LogsScreenConstants.smallIconSize,
+                          size: AppIconSizes.standard,
                           color: AppColors.accent,
                         ),
                         const SizedBox(width: AppSpacing.xxs),

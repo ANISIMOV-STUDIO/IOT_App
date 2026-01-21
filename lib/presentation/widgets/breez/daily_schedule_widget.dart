@@ -5,6 +5,7 @@ library;
 // ignore_for_file: avoid_positional_boolean_parameters
 
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/domain/entities/mode_settings.dart';
@@ -23,7 +24,6 @@ abstract class _ScheduleConstants {
   static const double borderRadius = 10;
   static const double timeFontSize = 22;
   static const double powerButtonWidth = 44;
-  static const double powerIconSize = 16;
 }
 
 // =============================================================================
@@ -412,8 +412,8 @@ class _PowerToggleButton extends StatelessWidget {
               showBorder: false,
               semanticLabel: enabled ? 'Выключить расписание' : 'Включить расписание',
               child: Icon(
-                Icons.power_settings_new_rounded,
-                size: _ScheduleConstants.powerIconSize,
+                enabled ? Icons.event_available : Icons.event_busy,
+                size: AppIconSizes.standard,
                 color: enabled ? AppColors.accent : colors.textMuted,
               ),
             ),

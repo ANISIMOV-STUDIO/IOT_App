@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 
@@ -11,7 +12,6 @@ import 'package:hvac_control/core/theme/spacing.dart';
 
 /// Константы для StatItem
 abstract class _StatItemConstants {
-  static const double iconSize = 18;
   static const double valueFontSize = 12;
   static const double labelFontSize = 10;
 }
@@ -45,7 +45,7 @@ class StatItem extends StatelessWidget {
         children: [
           Icon(
             icon,
-            size: _StatItemConstants.iconSize,
+            size: AppIconSizes.standard,
             color: iconColor ?? AppColors.accent,
           ),
           const SizedBox(height: AppSpacing.xxs + 2), // 6px

@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/domain/entities/hvac_device.dart';
@@ -114,7 +115,7 @@ class DevicesScreen extends StatelessWidget {
                                   child: Icon(
                                     device.icon, // Использует extension из device_icon_helper
                                     color: device.isOnline ? AppColors.accent : colors.textMuted,
-                                    size: 24,
+                                    size: AppIconSizes.standard,
                                   ),
                                 ),
                                 const SizedBox(width: AppSpacing.md),
@@ -198,7 +199,7 @@ class DevicesScreen extends StatelessWidget {
                 ),
                 child: const Icon(
                   Icons.devices_outlined,
-                  size: 40,
+                  size: AppIconSizes.standard,
                   color: AppColors.accent,
                 ),
               ),

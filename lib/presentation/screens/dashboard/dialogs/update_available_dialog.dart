@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
@@ -70,9 +71,9 @@ class _UpdateAvailableDialogState extends State<UpdateAvailableDialog> {
                   color: AppColors.accent.withValues(alpha: 0.15),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.system_update,
-                  size: 32,
+                  size: AppIconSizes.standard,
                   color: AppColors.accent,
                 ),
               ),
@@ -131,9 +132,9 @@ class _UpdateAvailableDialogState extends State<UpdateAvailableDialog> {
                           ),
                         ),
                         const SizedBox(width: AppSpacing.xxs),
-                        const Icon(
+                        Icon(
                           Icons.arrow_drop_down,
-                          size: 20,
+                          size: AppIconSizes.standard,
                           color: AppColors.accent,
                         ),
                       ],
@@ -182,7 +183,7 @@ class _UpdateAvailableDialogState extends State<UpdateAvailableDialog> {
                         const SizedBox(width: AppSpacing.xxs),
                         Icon(
                           Icons.arrow_drop_up,
-                          size: 20,
+                          size: AppIconSizes.standard,
                           color: colors.textMuted,
                         ),
                       ],

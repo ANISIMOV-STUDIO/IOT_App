@@ -4,6 +4,7 @@ library;
 import 'dart:math' show min;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/domain/entities/unit_state.dart';
@@ -17,7 +18,6 @@ import 'package:hvac_control/presentation/widgets/breez/breez_time_picker.dart';
 
 abstract class _DialogConstants {
   static const double maxWidth = 360;
-  static const double headerIconSize = 18;
   static const double closeButtonSize = 28;
   static const double titleFontSize = 16;
 }
@@ -140,7 +140,7 @@ class _UnitSettingsDialogState extends State<UnitSettingsDialog> {
               children: [
                 Icon(
                   Icons.settings_outlined,
-                  size: _DialogConstants.headerIconSize,
+                  size: AppIconSizes.standard,
                   color: colors.textMuted,
                 ),
                 const SizedBox(width: AppSpacing.xs),
@@ -213,7 +213,7 @@ class _CloseButton extends StatelessWidget {
         ),
         child: Icon(
           Icons.close,
-          size: 16,
+          size: AppIconSizes.standard,
           color: colors.textMuted,
         ),
       ),
@@ -251,7 +251,7 @@ class _CompactDeviceInfo extends StatelessWidget {
           // ID and Status in one row
           Row(
             children: [
-              Icon(Icons.tag, size: 14, color: colors.textMuted),
+              Icon(Icons.tag, size: AppIconSizes.standard, color: colors.textMuted),
               const SizedBox(width: AppSpacing.xxs),
               Expanded(
                 child: Text(
@@ -313,7 +313,7 @@ class _InfoRow extends StatelessWidget {
 
     return Row(
       children: [
-        Icon(icon, size: 14, color: colors.textMuted),
+        Icon(icon, size: AppIconSizes.standard, color: colors.textMuted),
         const SizedBox(width: AppSpacing.xxs),
         Text(
           label,
@@ -423,7 +423,7 @@ class _ActionButton extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 16, color: color),
+              Icon(icon, size: AppIconSizes.standard, color: color),
               const SizedBox(width: AppSpacing.xxs),
               Flexible(
                 child: Text(
@@ -542,7 +542,7 @@ class _PrimaryButton extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.check, size: 16, color: AppColors.black),
+              Icon(Icons.check, size: AppIconSizes.standard, color: AppColors.black),
               const SizedBox(width: AppSpacing.xxs),
               Flexible(
                 child: Text(

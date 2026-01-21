@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
@@ -15,7 +16,6 @@ abstract class _ScheduleFormConstants {
   static const double labelFontSize = 12;
   static const double valueFontSize = 14;
   static const double headerFontSize = 18;
-  static const double iconSize = 18;
 }
 
 /// Dropdown selector with label
@@ -107,7 +107,7 @@ class ScheduleTimeButton extends StatelessWidget {
             children: [
               Icon(
                 Icons.access_time,
-                size: _ScheduleFormConstants.iconSize,
+                size: AppIconSizes.standard,
                 color: colors.textMuted,
               ),
               const SizedBox(width: AppSpacing.xs),

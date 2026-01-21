@@ -2,8 +2,8 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
-import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
 
 // =============================================================================
@@ -13,7 +13,6 @@ import 'package:hvac_control/generated/l10n/app_localizations.dart';
 abstract class _SegmentedControlConstants {
   static const double defaultHeight = 36;
   static const double fontSize = 11;
-  static const double iconSize = 14;
   static const double iconTextGap = 4;
   static const double containerPadding = 3;
   static const Duration animationDuration = Duration(milliseconds: 150);
@@ -165,7 +164,7 @@ class _SegmentButton<T> extends StatelessWidget {
                 if (segment.icon != null) ...[
                   Icon(
                     segment.icon,
-                    size: _SegmentedControlConstants.iconSize,
+                    size: AppIconSizes.standard,
                     color: textColor,
                   ),
                   if (segment.label.isNotEmpty)

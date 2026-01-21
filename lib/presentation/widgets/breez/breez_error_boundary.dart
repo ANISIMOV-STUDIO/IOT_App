@@ -6,6 +6,7 @@ library;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
@@ -16,8 +17,6 @@ import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
 
 /// Константы для ErrorBoundary
 abstract class _ErrorBoundaryConstants {
-  static const double iconSize = 48;
-  static const double compactIconSize = 32;
   static const double titleFontSize = 16;
   static const double messageFontSize = 13;
   static const double buttonFontSize = 13;
@@ -166,8 +165,8 @@ class _DefaultErrorWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
     final iconSize = compact
-        ? _ErrorBoundaryConstants.compactIconSize
-        : _ErrorBoundaryConstants.iconSize;
+        ? AppIconSizes.standard
+        : AppIconSizes.standard;
 
     return Container(
       padding: const EdgeInsets.all(AppSpacing.xs),
@@ -234,7 +233,7 @@ class _DefaultErrorWidget extends StatelessWidget {
                 children: [
                   Icon(
                     Icons.refresh_rounded,
-                    size: 16,
+                    size: AppIconSizes.standard,
                     color: AppColors.critical,
                   ),
                   SizedBox(width: AppSpacing.xs),
@@ -281,7 +280,7 @@ void setupGlobalErrorHandler({
         child: const Icon(
           Icons.error_outline,
           color: AppColors.critical,
-          size: 32,
+          size: AppIconSizes.standard,
         ),
       );
     }
@@ -298,7 +297,7 @@ void setupGlobalErrorHandler({
             const Icon(
               Icons.error_outline,
               color: AppColors.critical,
-              size: 32,
+              size: AppIconSizes.standard,
             ),
             const SizedBox(height: AppSpacing.xs),
             Text(

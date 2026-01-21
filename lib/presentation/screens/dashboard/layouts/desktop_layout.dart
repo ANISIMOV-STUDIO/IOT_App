@@ -11,6 +11,16 @@ import 'package:hvac_control/presentation/bloc/analytics/analytics_bloc.dart';
 import 'package:hvac_control/presentation/screens/dashboard/widgets/desktop_header.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez.dart';
 
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+/// Константы для DesktopLayout
+abstract class _DesktopLayoutConstants {
+  /// Фиксированная высота ModeGrid
+  static const double modeGridHeight = 200;
+}
+
 /// Desktop layout (grid with header)
 class DesktopLayout extends StatefulWidget {
 
@@ -187,8 +197,8 @@ class _DesktopLayoutState extends State<DesktopLayout> {
 
         // Режимы работы (единый виджет с мобильной версией)
         // При tap открывается модалка настроек режима
-        Expanded(
-          flex: 2,
+        SizedBox(
+          height: _DesktopLayoutConstants.modeGridHeight,
           child: ModeGrid(
             selectedMode: widget.unit.mode,
             onModeTap: widget.onModeTap,

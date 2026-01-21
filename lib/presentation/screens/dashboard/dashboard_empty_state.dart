@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_control/core/constants/auth_constants.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
@@ -25,7 +26,7 @@ class DashboardEmptyState extends StatelessWidget {
         children: [
           Icon(
             Icons.ac_unit_outlined,
-            size: 80,
+            size: AppIconSizes.standard,
             color: colors.textMuted.withValues(alpha: 0.3),
           ),
           const SizedBox(height: AppSpacing.lgx),

@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/domain/entities/schedule_entry.dart';
@@ -18,7 +19,6 @@ export '../../../domain/entities/schedule_entry.dart';
 abstract class _ScheduleWidgetConstants {
 
   // Button icons
-  static const double addIconSize = 16;
   static const double seeAllFontSize = 12;
 
   // Day selector
@@ -179,7 +179,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
                         enforceMinTouchTarget: false,
                         child: const Icon(
                           Icons.add,
-                          size: _ScheduleWidgetConstants.addIconSize,
+                          size: AppIconSizes.standard,
                           color: AppColors.white,
                         ),
                       ),

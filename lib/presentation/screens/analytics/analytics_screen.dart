@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hvac_control/core/theme/app_animations.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/data/api/http/clients/hvac_http_client.dart';
@@ -27,7 +28,6 @@ abstract class _AnalyticsConstants {
   static const int maxSelectedSensors = 3;
 
   // Tile sizes
-  static const double tileIconSize = 24;
   static const double tileValueFontSize = 16;
   static const double tileLabelFontSize = 10;
   static const double tileLabelSpacing = 2;
@@ -36,12 +36,10 @@ abstract class _AnalyticsConstants {
   static const double checkBadgeTop = 4;
   static const double checkBadgeRight = 4;
   static const double checkBadgePadding = 2;
-  static const double checkIconSize = 10;
   static const double selectedBorderWidth = 2;
   static const double defaultBorderWidth = 1;
 
   // Dialog
-  static const double dialogIconSize = 48;
   static const double dialogValueFontSize = 28;
   static const double dialogLabelFontSize = 16;
   static const double dialogDescFontSize = 14;
@@ -51,7 +49,6 @@ abstract class _AnalyticsConstants {
   static const double graphHeight = 280;
 
   // Indicator
-  static const double indicatorIconSize = 16;
   static const double indicatorFontSize = 13;
 }
 
@@ -158,7 +155,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                     ),
                     child: Icon(
                       sensor.icon,
-                      size: _AnalyticsConstants.dialogIconSize,
+                      size: AppIconSizes.standard,
                       color: sensor.color,
                     ),
                   ),
@@ -174,7 +171,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                         ),
                         child: const Icon(
                           Icons.check,
-                          size: 12,
+                          size: AppIconSizes.standard,
                           color: AppColors.black,
                         ),
                       ),
@@ -259,7 +256,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                                 isSelected
                                     ? Icons.remove_circle_outline
                                     : Icons.add_circle_outline,
-                                size: 18,
+                                size: AppIconSizes.standard,
                                 color: isSelected
                                     ? colors.textMuted
                                     : buttonColor,
@@ -551,7 +548,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
         else
           Icon(
             count == max ? Icons.check_circle : Icons.radio_button_unchecked,
-            size: _AnalyticsConstants.indicatorIconSize,
+            size: AppIconSizes.standard,
             color: count == max ? AppColors.accent : colors.textMuted,
           ),
         const SizedBox(width: AppSpacing.xxs),
@@ -693,7 +690,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
       child: Center(
         child: Column(
           children: [
-            Icon(Icons.sensors_off_outlined, size: 48, color: colors.textMuted),
+            Icon(Icons.sensors_off_outlined, size: AppIconSizes.standard, color: colors.textMuted),
             const SizedBox(height: AppSpacing.md),
             Text(
               l10n.noDeviceSelected,
@@ -713,9 +710,9 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
       child: Center(
         child: Column(
           children: [
-            const Icon(
+            Icon(
               Icons.error_outline,
-              size: 48,
+              size: AppIconSizes.standard,
               color: AppColors.critical,
             ),
             const SizedBox(height: AppSpacing.md),
@@ -768,7 +765,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.show_chart, size: 48, color: AppColors.critical),
+              Icon(Icons.show_chart, size: AppIconSizes.standard, color: AppColors.critical),
               const SizedBox(height: AppSpacing.md),
               Text(
                 errorMessage ?? l10n.errorLoadingFailed,
@@ -870,7 +867,7 @@ class _SensorTile extends StatelessWidget {
               children: [
                 Icon(
                   sensor.icon,
-                  size: _AnalyticsConstants.tileIconSize,
+                  size: AppIconSizes.standard,
                   color: isSelected ? AppColors.accent : sensor.color,
                 ),
                 const SizedBox(height: AppSpacing.xxs),
@@ -909,7 +906,7 @@ class _SensorTile extends StatelessWidget {
                 ),
                 child: const Icon(
                   Icons.check,
-                  size: _AnalyticsConstants.checkIconSize,
+                  size: AppIconSizes.standard,
                   color: AppColors.white,
                 ),
               ),

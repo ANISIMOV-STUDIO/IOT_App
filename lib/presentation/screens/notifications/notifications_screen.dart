@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hvac_control/core/services/toast_service.dart';
 import 'package:hvac_control/core/theme/app_animations.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/domain/entities/unit_notification.dart';
@@ -225,7 +226,7 @@ class _NotificationTile extends StatelessWidget {
                   color: _typeColor.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(AppRadius.button),
                 ),
-                child: Icon(_typeIcon, size: 20, color: _typeColor),
+                child: Icon(_typeIcon, size: AppIconSizes.standard, color: _typeColor),
               ),
               const SizedBox(width: AppSpacing.md),
 

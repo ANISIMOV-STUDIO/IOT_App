@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_control/core/config/app_constants.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 
@@ -18,7 +19,7 @@ class SplashScreen extends StatelessWidget {
             // Логотип приложения
             const Icon(
               Icons.air,
-              size: 80,
+              size: AppIconSizes.standard,
               color: AppColors.accent,
             ),
             const SizedBox(height: AppSpacing.lgx),

@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
@@ -146,7 +147,7 @@ class _AlarmBadge extends StatelessWidget {
             children: [
               const Icon(
                 Icons.warning_amber_rounded,
-                size: 12,
+                size: AppIconSizes.standard,
                 color: AppColors.accentRed,
               ),
               const SizedBox(width: AppSpacing.xxs),

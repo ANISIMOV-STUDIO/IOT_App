@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
@@ -12,7 +13,6 @@ import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
 
 /// Константы для BreezIconButton
 abstract class _IconButtonConstants {
-  static const double defaultIconSize = 20;
   static const double paddingNormal = 12;
   static const double paddingCompact = 4;
 }
@@ -30,7 +30,7 @@ class BreezIconButton extends StatelessWidget {
     this.iconColor,
     this.backgroundColor,
     this.isActive = false,
-    this.size = _IconButtonConstants.defaultIconSize,
+    this.size = AppIconSizes.standard,
     this.badge,
     this.showBorder = true,
     this.compact = false,

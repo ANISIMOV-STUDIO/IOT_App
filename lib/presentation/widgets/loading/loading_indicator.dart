@@ -5,6 +5,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
@@ -26,7 +27,7 @@ class LoadingIndicator extends StatelessWidget {
 
   /// Фабричный метод для маленького индикатора
   factory LoadingIndicator.small({Color? color}) => LoadingIndicator(
-      size: 20,
+      size: AppIconSizes.standard,
       strokeWidth: 2.5,
       color: color,
     );
@@ -36,7 +37,7 @@ class LoadingIndicator extends StatelessWidget {
     required String message,
     Color? color,
   }) => LoadingIndicator(
-      size: 60,
+      size: AppIconSizes.standard,
       strokeWidth: 5,
       message: message,
       color: color,
@@ -262,7 +263,7 @@ class LoadingState<T> extends StatelessWidget {
             children: [
               const Icon(
                 Icons.error_outline,
-                size: 48,
+                size: AppIconSizes.standard,
                 color: AppColors.critical,
               ),
               const SizedBox(height: AppSpacing.md),
@@ -281,7 +282,7 @@ class LoadingState<T> extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(Icons.refresh, size: 20),
+                      const Icon(Icons.refresh, size: AppIconSizes.standard),
                       const SizedBox(width: AppSpacing.xs),
                       Text(l10n.retry),
                     ],

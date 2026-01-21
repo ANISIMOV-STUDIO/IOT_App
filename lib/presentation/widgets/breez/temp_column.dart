@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
@@ -14,17 +15,13 @@ import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
 abstract class _TempColumnConstants {
   // Размеры - обычный режим
   static const double fontSizeNormal = 28;
-  static const double iconSizeNormal = 14;
   static const double labelSizeNormal = 10;
   static const double buttonPaddingNormal = 6;
-  static const double buttonIconSizeNormal = 18;
 
   // Размеры - компактный режим
   static const double fontSizeCompact = 22;
-  static const double iconSizeCompact = 12;
   static const double labelSizeCompact = 9;
   static const double buttonPaddingCompact = 4;
-  static const double buttonIconSizeCompact = 16;
 
   // Отступы
   static const double iconTextGap = 4;
@@ -83,18 +80,12 @@ class TemperatureColumn extends StatelessWidget {
     final fontSize = compact
         ? _TempColumnConstants.fontSizeCompact
         : _TempColumnConstants.fontSizeNormal;
-    final iconSize = compact
-        ? _TempColumnConstants.iconSizeCompact
-        : _TempColumnConstants.iconSizeNormal;
     final labelSize = compact
         ? _TempColumnConstants.labelSizeCompact
         : _TempColumnConstants.labelSizeNormal;
     final buttonPadding = compact
         ? _TempColumnConstants.buttonPaddingCompact
         : _TempColumnConstants.buttonPaddingNormal;
-    final buttonIconSize = compact
-        ? _TempColumnConstants.buttonIconSizeCompact
-        : _TempColumnConstants.buttonIconSizeNormal;
     final spacing = compact ? AppSpacing.xxs + 2 : AppSpacing.xs;
 
     // Проверка достижения границ температуры
@@ -118,7 +109,7 @@ class TemperatureColumn extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(icon, size: iconSize, color: isPowered ? color : colors.textMuted),
+              Icon(icon, size: AppIconSizes.standard, color: isPowered ? color : colors.textMuted),
               const SizedBox(width: _TempColumnConstants.iconTextGap),
               Text(
                 label.toUpperCase(),
@@ -151,7 +142,7 @@ class TemperatureColumn extends StatelessWidget {
                     padding: EdgeInsets.all(buttonPadding),
                     child: Icon(
                       Icons.remove,
-                      size: buttonIconSize,
+                      size: AppIconSizes.standard,
                       color: isPowered && canDecrease ? color : colors.textMuted,
                     ),
                   ),
@@ -181,7 +172,7 @@ class TemperatureColumn extends StatelessWidget {
                     padding: EdgeInsets.all(buttonPadding),
                     child: Icon(
                       Icons.add,
-                      size: buttonIconSize,
+                      size: AppIconSizes.standard,
                       color: isPowered && canIncrease ? color : colors.textMuted,
                     ),
                   ),

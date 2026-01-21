@@ -6,6 +6,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_control/core/theme/app_animations.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 
@@ -83,7 +84,7 @@ class SkeletonDeviceCard extends StatelessWidget {
       child: Row(
         children: [
           // Иконка устройства
-          SkeletonBox.circle(size: 48),
+          SkeletonBox.circle(size: AppIconSizes.standard),
           const SizedBox(width: AppSpacing.md),
 
           // Текстовая информация

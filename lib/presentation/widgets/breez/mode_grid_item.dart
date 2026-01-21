@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
@@ -12,7 +13,6 @@ import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
 
 /// Константы для ModeGridItem
 abstract class _ModeGridItemConstants {
-  static const double iconSize = 20;
   static const double labelFontSize = 8;
   static const double letterSpacing = 0.3;
 }
@@ -85,7 +85,7 @@ class ModeGridItem extends StatelessWidget {
             Flexible(
               child: Icon(
                 mode.icon,
-                size: _ModeGridItemConstants.iconSize,
+                size: AppIconSizes.standard,
                 color: isSelected ? color : colors.textMuted,
               ),
             ),

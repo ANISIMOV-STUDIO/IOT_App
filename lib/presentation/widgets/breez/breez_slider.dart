@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 
@@ -21,7 +22,6 @@ abstract class _SliderConstants {
 
 /// Константы для BreezLabeledSlider
 abstract class _LabeledSliderConstants {
-  static const double iconSize = 12;
   static const double labelFontSize = 11;
   static const double valueFontSize = 11;
 }
@@ -285,7 +285,7 @@ class BreezLabeledSlider extends StatelessWidget {
                 Row(
                   children: [
                     if (icon != null) ...[
-                      Icon(icon, size: _LabeledSliderConstants.iconSize, color: effectiveColor),
+                      Icon(icon, size: AppIconSizes.standard, color: effectiveColor),
                       const SizedBox(width: AppSpacing.xxs),
                     ],
                     Text(

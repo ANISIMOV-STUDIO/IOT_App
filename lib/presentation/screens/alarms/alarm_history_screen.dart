@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/domain/entities/alarm_info.dart';
@@ -23,7 +24,6 @@ abstract class _AlarmHistoryConstants {
   static const double smallFontSize = 14;
   static const double tinyFontSize = 10;
   static const double valueFontSize = 12;
-  static const double iconSize = 20;
   static const double iconContainerSize = 40;
   static const double dividerHeight = 30;
   static const double textGap = 2;
@@ -209,7 +209,7 @@ class _AlarmHistoryCard extends StatelessWidget {
                 ),
                 child: Icon(
                   isCleared ? Icons.check_circle_outline : Icons.error_outline,
-                  size: _AlarmHistoryConstants.iconSize,
+                  size: AppIconSizes.standard,
                   color: isCleared
                       ? AppColors.accentGreen
                       : AppColors.accentRed,

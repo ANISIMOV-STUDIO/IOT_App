@@ -8,6 +8,7 @@ import 'package:hvac_control/core/di/injection_container.dart' as di;
 import 'package:hvac_control/core/navigation/app_router.dart';
 import 'package:hvac_control/core/services/language_service.dart';
 import 'package:hvac_control/core/services/theme_service.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/core/utils/snackbar_utils.dart';
@@ -26,7 +27,6 @@ import 'package:hvac_control/presentation/widgets/breez/breez.dart';
 abstract class _ProfileScreenConstants {
   static const double avatarSize = 56;
   static const double initialsFontSize = 20;
-  static const double iconSize = 20;
   static const double buttonPaddingVertical = 14;
 }
 
@@ -492,7 +492,7 @@ class _LogoutButton extends StatelessWidget {
         children: [
           const Icon(
             Icons.logout,
-            size: _ProfileScreenConstants.iconSize,
+            size: AppIconSizes.standard,
             color: AppColors.critical,
           ),
           const SizedBox(width: AppSpacing.xs),

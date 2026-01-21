@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 
@@ -15,7 +16,6 @@ abstract class _DropdownConstants {
   static const double textFontSize = 14;
   static const double subtitleFontSize = 12;
   static const double helperFontSize = 11;
-  static const double iconSize = 18;
   static const double disabledAlpha = 0.5;
 }
 
@@ -141,7 +141,7 @@ class BreezDropdown<T> extends StatelessWidget {
                   selectedItemBuilder: (context) => items.map((item) => Row(
                         children: [
                           if (prefixIcon != null) ...[
-                            Icon(prefixIcon, size: _DropdownConstants.iconSize, color: colors.textMuted),
+                            Icon(prefixIcon, size: AppIconSizes.standard, color: colors.textMuted),
                             const SizedBox(width: AppSpacing.xs),
                           ],
                           Expanded(
@@ -165,7 +165,7 @@ class BreezDropdown<T> extends StatelessWidget {
                           if (item.icon != null) ...[
                             Icon(
                               item.icon,
-                              size: _DropdownConstants.iconSize,
+                              size: AppIconSizes.standard,
                               color: isSelected ? AppColors.accent : colors.textMuted,
                             ),
                             const SizedBox(width: AppSpacing.sm),
@@ -197,7 +197,7 @@ class BreezDropdown<T> extends StatelessWidget {
                           if (isSelected)
                             const Icon(
                               Icons.check,
-                              size: _DropdownConstants.iconSize,
+                              size: AppIconSizes.standard,
                               color: AppColors.accent,
                             ),
                         ],
