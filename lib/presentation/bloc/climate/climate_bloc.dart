@@ -80,8 +80,6 @@ extension DebounceExtension<T> on Stream<T> {
 
 /// BLoC для управления климатом текущего устройства
 class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
-  /// Уникальный ID для отладки (последние 4 цифры timestamp)
-  late final String _blocId;
 
   ClimateBloc({
     required GetCurrentClimateState getCurrentClimateState,
@@ -170,6 +168,8 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     // Обновление локального состояния
     on<ClimateQuickSensorsUpdated>(_onQuickSensorsUpdated);
   }
+  /// Уникальный ID для отладки (последние 4 цифры timestamp)
+  late final String _blocId;
   final GetCurrentClimateState _getCurrentClimateState;
   final GetDeviceFullState _getDeviceFullState;
   final GetAlarmHistory _getAlarmHistory;
@@ -206,11 +206,15 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   /// Возвращает null если состояние недоступно или неполное
   SetQuickModeParams? _getCurrentQuickModeParams() {
     final fullState = state.deviceFullState;
-    if (fullState == null) return null;
+    if (fullState == null) {
+      return null;
+    }
 
     final currentMode = fullState.operatingMode;
     final modeSettings = fullState.modeSettings?[currentMode];
-    if (modeSettings == null) return null;
+    if (modeSettings == null) {
+      return null;
+    }
 
     final heatingTemp = modeSettings.heatingTemperature;
     final coolingTemp = modeSettings.coolingTemperature;
@@ -361,6 +365,11 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     ClimateStateUpdated event,
     Emitter<ClimateControlState> emit,
   ) {
+    developer.log(
+      '[$_blocId] _onStateUpdated: preset=${event.climate.preset}, '
+      'pendingMode=${state.pendingOperatingMode} at ${DateTime.now()}',
+      name: 'ClimateBloc',
+    );
     // Проверяем, подтвердилось ли ожидаемое состояние питания
     final pendingPower = state.pendingPowerState;
     final powerConfirmed = pendingPower == null || event.climate.isOn == pendingPower;
@@ -449,6 +458,12 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     // Проверяем подтверждение режима работы
     final operatingModeConfirmed = state.pendingOperatingMode != null &&
         currentMode.toLowerCase() == state.pendingOperatingMode!.toLowerCase();
+
+    developer.log(
+      '[$_blocId] SIGNALR MODE: $currentMode, pending: ${state.pendingOperatingMode}, '
+      'confirmed: $operatingModeConfirmed at ${DateTime.now()}',
+      name: 'ClimateBloc',
+    );
 
     // Отменяем таймеры при подтверждении
     if (heatingConfirmed) {
@@ -916,6 +931,11 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   ) async {
     final previousPreset = state.climate?.preset;
 
+    developer.log(
+      '[$_blocId] MODE CHANGE START: ${event.mode} at ${DateTime.now()}',
+      name: 'ClimateBloc',
+    );
+
     // Лоадер + ожидаемый режим для сверки с SignalR
     // Optimistic update - сразу обновляем UI с новым режимом
     emit(state.copyWith(
@@ -924,8 +944,20 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       climate: state.climate?.copyWith(preset: event.mode),
     ));
 
+    developer.log(
+      '[$_blocId] MODE PENDING SET: isPending=${state.isPendingOperatingMode}, '
+      'pending=${state.pendingOperatingMode} at ${DateTime.now()}',
+      name: 'ClimateBloc',
+    );
+
     try {
       await _setOperatingMode(SetOperatingModeParams(mode: event.mode));
+
+      developer.log(
+        '[$_blocId] AFTER API: isPending=${state.isPendingOperatingMode}, '
+        'pending=${state.pendingOperatingMode} at ${DateTime.now()}',
+        name: 'ClimateBloc',
+      );
 
       // Таймаут: если SignalR не подтвердит за 10 секунд, сбросить pending
       _operatingModeTimer?.cancel();
@@ -939,6 +971,10 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         }
       });
     } catch (e) {
+      developer.log(
+        '[$_blocId] MODE CHANGE ERROR: $e at ${DateTime.now()}',
+        name: 'ClimateBloc',
+      );
       // Откат при ошибке
       emit(state.copyWith(
         isPendingOperatingMode: false,
@@ -948,6 +984,12 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
             : state.climate,
         errorMessage: 'Operating mode error: $e',
       ));
+    } finally {
+      developer.log(
+        '[$_blocId] MODE HANDLER DONE: isPending=${state.isPendingOperatingMode}, '
+        'pending=${state.pendingOperatingMode} at ${DateTime.now()}',
+        name: 'ClimateBloc',
+      );
     }
   }
 

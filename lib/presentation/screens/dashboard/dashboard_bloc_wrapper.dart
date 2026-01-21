@@ -141,7 +141,8 @@ class DashboardBlocBuilder extends StatelessWidget {
               previous.isPendingCoolingTemperature != current.isPendingCoolingTemperature ||
               previous.isPendingSupplyFan != current.isPendingSupplyFan ||
               previous.isPendingExhaustFan != current.isPendingExhaustFan ||
-              previous.isPendingOperatingMode != current.isPendingOperatingMode,
+              previous.isPendingOperatingMode != current.isPendingOperatingMode ||
+              previous.pendingOperatingMode != current.pendingOperatingMode,
           builder: (context, climateState) => BlocBuilder<ConnectivityBloc, ConnectivityState>(
               buildWhen: (previous, current) =>
                   previous.showBanner != current.showBanner ||
@@ -224,8 +225,12 @@ class DashboardBlocBuilder extends StatelessWidget {
     DeviceFullState? fullState,
     ClimateControlState? climateControlState,
   ) {
-    // Получаем текущий режим и его настройки
-    final currentMode = fullState?.operatingMode ?? climate?.preset ?? '';
+    // Получаем текущий режим: приоритет pending режима над SignalR данными
+    // Если пользователь изменил режим, показываем его даже если SignalR ещё не подтвердил
+    final currentMode = climateControlState?.pendingOperatingMode
+        ?? fullState?.operatingMode
+        ?? climate?.preset
+        ?? '';
     final modeSettings = fullState?.modeSettings?[currentMode];
 
     // Приоритет pending значений над modeSettings:

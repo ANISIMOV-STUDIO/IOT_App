@@ -46,7 +46,7 @@ class DeviceJsonMapper {
 
   /// JSON → Domain ClimateState
   static ClimateState climateStateFromJson(Map<String, dynamic> json) => ClimateState(
-      roomId: json['id'] as String? ?? json['deviceId'] as String,
+      roomId: json['id'] as String? ?? json['deviceId'] as String? ?? '',
       deviceName: json['name'] as String? ?? 'Unknown Device',
       currentTemperature:
           (json['currentTemp'] as num?)?.toDouble() ?? 20.0,

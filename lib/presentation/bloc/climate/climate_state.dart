@@ -191,8 +191,8 @@ final class ClimateControlState extends Equatable {
       isPendingExhaustFan: isPendingExhaustFan ?? this.isPendingExhaustFan,
       pendingHeatingTemp: clearPendingHeatingTemp ? null : (pendingHeatingTemp ?? this.pendingHeatingTemp),
       pendingCoolingTemp: clearPendingCoolingTemp ? null : (pendingCoolingTemp ?? this.pendingCoolingTemp),
-      pendingSupplyFan: clearPendingSupplyFan ? null : (pendingSupplyFanValue ?? this.pendingSupplyFan),
-      pendingExhaustFan: clearPendingExhaustFan ? null : (pendingExhaustFanValue ?? this.pendingExhaustFan),
+      pendingSupplyFan: clearPendingSupplyFan ? null : (pendingSupplyFanValue ?? pendingSupplyFan),
+      pendingExhaustFan: clearPendingExhaustFan ? null : (pendingExhaustFanValue ?? pendingExhaustFan),
       isPendingOperatingMode: isPendingOperatingMode ?? this.isPendingOperatingMode,
       pendingOperatingMode: clearPendingOperatingMode ? null : (pendingOperatingMode ?? this.pendingOperatingMode),
     );

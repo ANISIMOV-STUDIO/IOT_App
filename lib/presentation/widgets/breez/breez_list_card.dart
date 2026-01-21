@@ -2,7 +2,6 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:hvac_control/core/theme/app_radius.dart';
 import 'package:hvac_control/core/theme/app_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
@@ -536,8 +535,7 @@ class _CountBadge extends StatelessWidget {
   final Color color;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(BuildContext context) => Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.xs,
         vertical: AppSpacing.xxs,
@@ -555,7 +553,6 @@ class _CountBadge extends StatelessWidget {
         ),
       ),
     );
-  }
 }
 
 // =============================================================================
@@ -669,8 +666,7 @@ class BreezBadge extends StatelessWidget {
   final bool showBorder;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(BuildContext context) => Container(
       padding: padding ?? const EdgeInsets.symmetric(
         horizontal: AppSpacing.xs,
         vertical: AppSpacing.xxs,
@@ -684,7 +680,6 @@ class BreezBadge extends StatelessWidget {
       ),
       child: child,
     );
-  }
 }
 
 // =============================================================================

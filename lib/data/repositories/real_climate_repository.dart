@@ -450,14 +450,22 @@ class RealClimateRepository implements ClimateRepository {
       name: 'ClimateRepository',
     );
     // String mode передаётся напрямую без конвертации
-    final jsonDevice = await _httpClient.setMode(id, mode);
+    await _httpClient.setMode(id, mode);
     developer.log(
-      'setOperatingMode: response received, preset=${jsonDevice['preset'] ?? jsonDevice['mode']}',
+      'setOperatingMode: request completed, waiting for SignalR update',
       name: 'ClimateRepository',
     );
-    final state = DeviceJsonMapper.climateStateFromJson(jsonDevice);
-    _safeAddToController(_climateController, state);
-    return state;
+    // Не парсим ответ API - он может быть неполным
+    // Полное состояние придёт через SignalR
+    // Возвращаем кэшированное состояние для обратной совместимости
+    return _lastClimateState ?? ClimateState(
+      roomId: id,
+      currentTemperature: 20,
+      targetTemperature: 22,
+      humidity: 50,
+      mode: ClimateMode.auto,
+      airQuality: AirQualityLevel.good,
+    );
   }
 
   @override

@@ -3,7 +3,6 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_control/core/services/quick_sensors_service.dart';
-import 'package:hvac_control/core/theme/app_radius.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/domain/entities/unit_state.dart';
