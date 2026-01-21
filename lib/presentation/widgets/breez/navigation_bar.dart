@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/breakpoints.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
@@ -16,12 +17,10 @@ abstract class _NavBarConstants {
   // Размеры - компактный режим (mobile)
   static const double barHeightCompact = 64;
   static const double buttonSizeCompact = 48;
-  static const double iconSizeCompact = 24;
 
   // Размеры - полный режим (tablet/desktop)
   static const double barHeightNormal = 64;
   static const double buttonSizeNormal = 48;
-  static const double iconSizeNormal = 24;
 
   // Тень
   static const double shadowBlur = 16;
@@ -77,9 +76,7 @@ class BreezNavigationBar extends StatelessWidget {
         final buttonSize = isCompact
             ? _NavBarConstants.buttonSizeCompact
             : _NavBarConstants.buttonSizeNormal;
-        final iconSize = isCompact
-            ? _NavBarConstants.iconSizeCompact
-            : _NavBarConstants.iconSizeNormal;
+        const iconSize = AppIconSizes.standard;
 
         return Semantics(
           label: 'Панель навигации',

@@ -6,6 +6,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_control/core/config/app_constants.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 
@@ -63,7 +64,7 @@ class ToastService {
         content: Row(
           children: [
             if (showIcon) ...[
-              Icon(icon, color: AppColors.white, size: 20),
+              Icon(icon, color: AppColors.white, size: AppIconSizes.standard),
               const SizedBox(width: AppSpacing.sm),
             ],
             Expanded(

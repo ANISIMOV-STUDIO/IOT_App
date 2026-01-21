@@ -28,23 +28,17 @@ abstract class _ScheduleWidgetConstants {
   static const double indicatorSize = 4;
 
   // Empty state
-  static const double emptyIconSizeCompact = 28;
-  static const double emptyIconSizeNormal = 36;
   static const double emptyFontSizeCompact = 11;
   static const double emptyFontSizeNormal = 12;
   static const double hintFontSize = 11;
 
   // Schedule row
-  static const double rowIconSizeCompact = 24;
-  static const double rowIconSizeNormal = 32;
   static const double rowFontSizeCompact = 11;
   static const double rowFontSizeNormal = 13;
   static const double rowSmallFontSizeCompact = 10;
   static const double rowSmallFontSizeNormal = 12;
   static const double timeRangeFontSizeCompact = 9;
   static const double timeRangeFontSizeNormal = 10;
-  static const double modeIconSizeCompact = 12;
-  static const double modeIconSizeNormal = 16;
   static const double activeIndicatorSize = 6;
 
   // Padding values
@@ -385,9 +379,7 @@ class _EmptyDayState extends StatelessWidget {
           children: [
             Icon(
               showAddHint ? Icons.add_circle_outline : Icons.event_busy_outlined,
-              size: compact
-                  ? _ScheduleWidgetConstants.emptyIconSizeCompact
-                  : _ScheduleWidgetConstants.emptyIconSizeNormal,
+              size: AppIconSizes.standard,
               color: showAddHint
                   ? AppColors.accent.withValues(alpha: AppColors.opacityMedium)
                   : colors.textMuted.withValues(alpha: AppColors.opacityMedium),
@@ -452,9 +444,7 @@ class _ScheduleRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
-    final iconSize = compact
-        ? _ScheduleWidgetConstants.rowIconSizeCompact
-        : _ScheduleWidgetConstants.rowIconSizeNormal;
+    const iconSize = AppIconSizes.standard;
     final fontSize = compact
         ? _ScheduleWidgetConstants.rowFontSizeCompact
         : _ScheduleWidgetConstants.rowFontSizeNormal;
@@ -514,9 +504,7 @@ class _ScheduleRow extends StatelessWidget {
             ),
             child: Icon(
               _getModeIcon(),
-              size: compact
-                  ? _ScheduleWidgetConstants.modeIconSizeCompact
-                  : _ScheduleWidgetConstants.modeIconSizeNormal,
+              size: AppIconSizes.standard,
               color: AppColors.accent,
             ),
           ),

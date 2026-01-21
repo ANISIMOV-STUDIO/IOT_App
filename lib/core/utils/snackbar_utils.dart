@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 
@@ -18,7 +19,7 @@ class SnackBarUtils {
       SnackBar(
         content: Row(
           children: [
-            Icon(icon, color: AppColors.white, size: 24),
+            Icon(icon, color: AppColors.white, size: AppIconSizes.standard),
             const SizedBox(width: AppSpacing.sm),
             Expanded(
               child: Text(

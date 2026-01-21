@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hvac_control/core/navigation/app_routes.dart';
 import 'package:hvac_control/core/navigation/router_refresh_stream.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/presentation/bloc/auth/auth_bloc.dart';
 import 'package:hvac_control/presentation/bloc/auth/auth_state.dart';
@@ -115,7 +116,7 @@ GoRouter createRouter(AuthBloc authBloc) => GoRouter(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline, size: 48, color: Colors.red),
+            Icon(Icons.error_outline, size: AppIconSizes.standard, color: Colors.red),
             const SizedBox(height: AppSpacing.md),
             Text('Страница не найдена: ${state.matchedLocation}'),
             const SizedBox(height: AppSpacing.lgx),
