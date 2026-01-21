@@ -53,6 +53,14 @@ class BreezLogo extends StatelessWidget {
   })  : iconSize = 40,
         titleSize = 24,
         subtitleSize = 10;
+
+  /// Compact size logo for auth forms (40px icon, 22/9 text)
+  const BreezLogo.compact({
+    super.key,
+    this.spacing = 6,
+  })  : iconSize = 40,
+        titleSize = 22,
+        subtitleSize = 9;
   final double? iconSize;
   final double? titleSize;
   final double? subtitleSize;

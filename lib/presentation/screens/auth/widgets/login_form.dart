@@ -4,7 +4,6 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hvac_control/core/constants/auth_constants.dart';
 import 'package:hvac_control/core/navigation/app_router.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
@@ -69,17 +68,12 @@ class _LoginFormState extends State<LoginForm> {
         mainAxisSize: MainAxisSize.min,
         children: [
         // Логотип
-        const BreezLogo(
-          iconSize: 56,
-          titleSize: 28,
-          subtitleSize: 10,
-          spacing: 12,
-        ),
-        const SizedBox(height: AppSpacing.xl),
+        const BreezLogo.compact(),
+        const SizedBox(height: AppSpacing.md),
 
         // Карточка с формой
         BreezCard(
-          padding: const EdgeInsets.all(AppSpacing.xl),
+          padding: const EdgeInsets.all(AppSpacing.xs),
           child: AutofillGroup(
             child: Form(
               key: _formKey,
@@ -100,7 +94,7 @@ class _LoginFormState extends State<LoginForm> {
                     autofillHints: const [AutofillHints.username, AutofillHints.email],
                     onFieldSubmitted: (_) => _passwordFocusNode.requestFocus(),
                   ),
-                  const SizedBox(height: AppSpacing.md),
+                  const SizedBox(height: AppSpacing.xs),
 
                   // Пароль
                   BreezTextField(
@@ -121,7 +115,8 @@ class _LoginFormState extends State<LoginForm> {
                 // Восстановить пароль
                 Align(
                   alignment: Alignment.centerRight,
-                  child: BreezButton(
+                  child: BreezLink(
+                    text: l10n.forgotPassword,
                     onTap: () {
                       final email = _emailController.text.trim();
                       if (email.isNotEmpty) {
@@ -130,22 +125,9 @@ class _LoginFormState extends State<LoginForm> {
                         context.go(AppRoutes.forgotPassword);
                       }
                     },
-                    backgroundColor: Colors.transparent,
-                    showBorder: false,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.xs,
-                      vertical: AppSpacing.xxs,
-                    ),
-                    child: Text(
-                      l10n.forgotPassword,
-                      style: const TextStyle(
-                        color: AppColors.accent,
-                        fontSize: AppFontSizes.caption,
-                      ),
-                    ),
                   ),
                 ),
-                const SizedBox(height: AppSpacing.lg),
+                const SizedBox(height: AppSpacing.xs),
 
                 // Кнопка входа
                 BlocBuilder<AuthBloc, AuthState>(
@@ -157,22 +139,33 @@ class _LoginFormState extends State<LoginForm> {
                       isLoading: isLoading,
                       backgroundColor: AppColors.accent,
                       hoverColor: AppColors.accentLight,
-                      height: AuthConstants.buttonHeight,
-                      border: Border.all(color: Colors.transparent),
-                      child: Center(
-                        child: Text(
-                          l10n.login,
-                          style: const TextStyle(
-                            fontSize: AppFontSizes.body,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.white,
+                      showBorder: false,
+                      borderRadius: AppRadius.nested,
+                      padding: const EdgeInsets.all(AppSpacing.xs),
+                      enableGlow: true,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.login,
+                            size: AppSpacing.md,
+                            color: AppColors.black,
                           ),
-                        ),
+                          const SizedBox(width: AppSpacing.xxs),
+                          Text(
+                            l10n.login,
+                            style: const TextStyle(
+                              fontSize: AppFontSizes.caption,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.black,
+                            ),
+                          ),
+                        ],
                       ),
                     );
                   },
                 ),
-                const SizedBox(height: AppSpacing.md),
+                const SizedBox(height: AppSpacing.xs),
 
                 // Регистрация
                 AuthActionLink(

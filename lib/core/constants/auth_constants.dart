@@ -4,7 +4,7 @@ library;
 /// Константы для страниц авторизации
 class AuthConstants {
   /// Максимальная ширина формы авторизации
-  static const double formMaxWidth = 480;
+  static const double formMaxWidth = 350;
 
   /// Высота кнопок авторизации
   static const double buttonHeight = 52;

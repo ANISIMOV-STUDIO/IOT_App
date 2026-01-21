@@ -164,23 +164,23 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        AuthHeader(title: l10n.passwordRecovery),
-        const SizedBox(height: AppSpacing.xl),
+        const Center(child: BreezLogo.compact()),
+        const SizedBox(height: AppSpacing.xs),
 
         // Описание
         Text(
           l10n.enterEmailForReset,
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: AppFontSizes.body,
+            fontSize: AppFontSizes.caption,
             color: colors.textMuted,
           ),
         ),
-        const SizedBox(height: AppSpacing.xxl),
+        const SizedBox(height: AppSpacing.md),
 
         // Форма email
         BreezCard(
-          padding: const EdgeInsets.all(AppSpacing.xl),
+          padding: const EdgeInsets.all(AppSpacing.xs),
           child: Form(
             key: _emailFormKey,
             autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -200,17 +200,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   onFieldSubmitted: (_) => _handleRequestCode(),
                 ),
                 if (_errorText != null) ...[
-                  const SizedBox(height: AppSpacing.md),
+                  const SizedBox(height: AppSpacing.xs),
                   Text(
                     _errorText!,
                     style: const TextStyle(
-                      color: Colors.red,
+                      color: AppColors.accentRed,
                       fontSize: AppFontSizes.caption,
                     ),
                     textAlign: TextAlign.center,
                   ),
                 ],
-                const SizedBox(height: AppSpacing.lg),
+                const SizedBox(height: AppSpacing.xs),
 
                 BlocBuilder<AuthBloc, AuthState>(
                   buildWhen: (prev, curr) =>
@@ -222,17 +222,28 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       isLoading: isLoading,
                       backgroundColor: AppColors.accent,
                       hoverColor: AppColors.accentLight,
-                      height: AuthConstants.buttonHeight,
-                      border: Border.all(color: Colors.transparent),
-                      child: Center(
-                        child: Text(
-                          l10n.sendCode,
-                          style: const TextStyle(
-                            fontSize: AppFontSizes.body,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.white,
+                      showBorder: false,
+                      borderRadius: AppRadius.nested,
+                      padding: const EdgeInsets.all(AppSpacing.xs),
+                      enableGlow: true,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.send,
+                            size: AppSpacing.md,
+                            color: AppColors.black,
                           ),
-                        ),
+                          const SizedBox(width: AppSpacing.xxs),
+                          Text(
+                            l10n.sendCode,
+                            style: const TextStyle(
+                              fontSize: AppFontSizes.caption,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.black,
+                            ),
+                          ),
+                        ],
                       ),
                     );
                   },
@@ -254,14 +265,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         AuthHeader(title: l10n.newPassword),
-        const SizedBox(height: AppSpacing.xl),
+        const SizedBox(height: AppSpacing.xs),
 
         // Описание
         Text(
           l10n.enterCodeSentTo,
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: AppFontSizes.body,
+            fontSize: AppFontSizes.caption,
             color: colors.textMuted,
           ),
         ),
@@ -270,12 +281,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           _email,
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: AppFontSizes.body,
+            fontSize: AppFontSizes.caption,
             fontWeight: FontWeight.w600,
             color: colors.text,
           ),
         ),
-        const SizedBox(height: AppSpacing.xl),
+        const SizedBox(height: AppSpacing.md),
 
         // Поле для кода
         BreezPinCodeField(
@@ -285,11 +296,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           onChanged: _onCodeChanged,
           errorText: _errorText,
         ),
-        const SizedBox(height: AppSpacing.lg),
+        const SizedBox(height: AppSpacing.xs),
 
         // Форма нового пароля
         BreezCard(
-          padding: const EdgeInsets.all(AppSpacing.xl),
+          padding: const EdgeInsets.all(AppSpacing.xs),
           child: Form(
             key: _passwordFormKey,
             autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -306,7 +317,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   validateOnChange: true,
                   textInputAction: TextInputAction.next,
                 ),
-                const SizedBox(height: AppSpacing.md),
+                const SizedBox(height: AppSpacing.xs),
 
                 BreezTextField(
                   controller: _confirmPasswordController,
@@ -322,7 +333,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   textInputAction: TextInputAction.done,
                   onFieldSubmitted: (_) => _handleResetPassword(l10n),
                 ),
-                const SizedBox(height: AppSpacing.lg),
+                const SizedBox(height: AppSpacing.xs),
 
                 BlocBuilder<AuthBloc, AuthState>(
                   buildWhen: (prev, curr) =>
@@ -336,17 +347,28 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       isLoading: isLoading,
                       backgroundColor: AppColors.accent,
                       hoverColor: AppColors.accentLight,
-                      height: AuthConstants.buttonHeight,
-                      border: Border.all(color: Colors.transparent),
-                      child: Center(
-                        child: Text(
-                          l10n.changePassword,
-                          style: const TextStyle(
-                            fontSize: AppFontSizes.body,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.white,
+                      showBorder: false,
+                      borderRadius: AppRadius.nested,
+                      padding: const EdgeInsets.all(AppSpacing.xs),
+                      enableGlow: true,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.lock_reset,
+                            size: AppSpacing.md,
+                            color: AppColors.black,
                           ),
-                        ),
+                          const SizedBox(width: AppSpacing.xxs),
+                          Text(
+                            l10n.changePassword,
+                            style: const TextStyle(
+                              fontSize: AppFontSizes.caption,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.black,
+                            ),
+                          ),
+                        ],
                       ),
                     );
                   },
@@ -355,19 +377,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             ),
           ),
         ),
-        const SizedBox(height: AppSpacing.md),
+        const SizedBox(height: AppSpacing.xs),
 
         // Кнопка повторной отправки
-        BlocBuilder<AuthBloc, AuthState>(
-          buildWhen: (prev, curr) =>
-              (prev is AuthLoading) != (curr is AuthLoading),
-          builder: (context, state) {
-            final isLoading = state is AuthLoading;
-            return BreezTextButton(
-              text: l10n.resendCode,
-              onPressed: isLoading ? null : _handleResendCode,
-            );
-          },
+        Center(
+          child: BreezLink(
+            text: l10n.resendCode,
+            onTap: () {
+              final bloc = context.read<AuthBloc>();
+              if (bloc.state is! AuthLoading) {
+                _handleResendCode();
+              }
+            },
+          ),
         ),
       ],
     );

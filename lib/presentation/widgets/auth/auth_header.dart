@@ -21,22 +21,16 @@ class AuthHeader extends StatelessWidget {
     return Column(
       children: [
         // Логотип
-        const BreezLogo(
-          iconSize: 56,
-          titleSize: 28,
-          subtitleSize: 10,
-          spacing: 12,
-        ),
-        const SizedBox(height: AppSpacing.xl),
+        const BreezLogo.compact(),
+        const SizedBox(height: AppSpacing.sm),
 
         // Подзаголовок
         Text(
           title,
           style: TextStyle(
-            fontSize: AppFontSizes.body,
+            fontSize: AppFontSizes.caption,
             fontWeight: FontWeight.w600,
             color: colors.textMuted,
-            letterSpacing: 0.5,
           ),
         ),
       ],

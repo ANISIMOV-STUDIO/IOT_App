@@ -3,7 +3,6 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hvac_control/core/constants/auth_constants.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/core/utils/snackbar_utils.dart';
@@ -92,17 +91,12 @@ class _RegisterFormState extends State<RegisterForm> {
       mainAxisSize: MainAxisSize.min,
       children: [
         // Логотип
-        const BreezLogo(
-          iconSize: 56,
-          titleSize: 28,
-          subtitleSize: 10,
-          spacing: 12,
-        ),
-        const SizedBox(height: AppSpacing.xl),
+        const BreezLogo.compact(),
+        const SizedBox(height: AppSpacing.xs),
 
         // Карточка с формой
         BreezCard(
-          padding: const EdgeInsets.all(AppSpacing.xl),
+          padding: const EdgeInsets.all(AppSpacing.xs),
           child: AutofillGroup(
             child: Form(
               key: _formKey,
@@ -122,7 +116,7 @@ class _RegisterFormState extends State<RegisterForm> {
                     textInputAction: TextInputAction.next,
                     onFieldSubmitted: (_) => _lastNameFocus.requestFocus(),
                   ),
-                  const SizedBox(height: AppSpacing.md),
+                  const SizedBox(height: AppSpacing.xs),
 
                   // Фамилия
                   BreezTextField(
@@ -137,7 +131,7 @@ class _RegisterFormState extends State<RegisterForm> {
                     textInputAction: TextInputAction.next,
                     onFieldSubmitted: (_) => _emailFocus.requestFocus(),
                   ),
-                  const SizedBox(height: AppSpacing.md),
+                  const SizedBox(height: AppSpacing.xs),
 
                   // Email
                   BreezTextField(
@@ -153,7 +147,7 @@ class _RegisterFormState extends State<RegisterForm> {
                     textInputAction: TextInputAction.next,
                     onFieldSubmitted: (_) => _passwordFocus.requestFocus(),
                   ),
-                  const SizedBox(height: AppSpacing.md),
+                  const SizedBox(height: AppSpacing.xs),
 
                   // Пароль
                   BreezTextField(
@@ -170,7 +164,7 @@ class _RegisterFormState extends State<RegisterForm> {
                     textInputAction: TextInputAction.next,
                     onFieldSubmitted: (_) => _confirmPasswordFocus.requestFocus(),
                   ),
-                  const SizedBox(height: AppSpacing.md),
+                  const SizedBox(height: AppSpacing.xs),
 
                   // Подтверждение пароля
                   BreezTextField(
@@ -189,7 +183,7 @@ class _RegisterFormState extends State<RegisterForm> {
                     textInputAction: TextInputAction.done,
                     onFieldSubmitted: (_) => _handleRegister(l10n),
                   ),
-                const SizedBox(height: AppSpacing.lg),
+                const SizedBox(height: AppSpacing.xs),
 
                 // Согласие на обработку ПД
                 BreezCheckbox(
@@ -199,7 +193,7 @@ class _RegisterFormState extends State<RegisterForm> {
                   },
                   label: l10n.consentLabel,
                 ),
-                const SizedBox(height: AppSpacing.xl),
+                const SizedBox(height: AppSpacing.xs),
 
                 // Кнопка регистрации
                 BlocBuilder<AuthBloc, AuthState>(
@@ -212,22 +206,33 @@ class _RegisterFormState extends State<RegisterForm> {
                       isLoading: isLoading,
                       backgroundColor: AppColors.accent,
                       hoverColor: AppColors.accentLight,
-                      height: AuthConstants.buttonHeight,
-                      border: Border.all(color: Colors.transparent),
-                      child: Center(
-                        child: Text(
-                          l10n.register,
-                          style: const TextStyle(
-                            fontSize: AppFontSizes.body,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.white,
+                      showBorder: false,
+                      borderRadius: AppRadius.nested,
+                      padding: const EdgeInsets.all(AppSpacing.xs),
+                      enableGlow: true,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.person_add,
+                            size: AppSpacing.md,
+                            color: AppColors.black,
                           ),
-                        ),
+                          const SizedBox(width: AppSpacing.xxs),
+                          Text(
+                            l10n.register,
+                            style: const TextStyle(
+                              fontSize: AppFontSizes.caption,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.black,
+                            ),
+                          ),
+                        ],
                       ),
                     );
                   },
                 ),
-                const SizedBox(height: AppSpacing.md),
+                const SizedBox(height: AppSpacing.xs),
 
                 // Уже есть аккаунт
                 AuthActionLink(

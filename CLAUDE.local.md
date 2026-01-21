@@ -159,26 +159,39 @@ padding: EdgeInsets.all(16)
 
 ### Padding Convention
 
-```dart
-// Внешние отступы (между виджетами) — всегда sm
-Padding(
-  padding: EdgeInsets.all(AppSpacing.sm),  // 12px
-  child: MyWidget(),
-)
+**ВАЖНО:** Внутри виджетов (карточки, диалоги, формы) **ВСЕГДА** используй `AppSpacing.xs` (8px).
 
-// Внутренние отступы — всегда xs (единообразно)
+```dart
+// Внутренние отступы виджета — ВСЕГДА xs
 BreezCard(
   padding: EdgeInsets.all(AppSpacing.xs),  // 8px
   child: content,
+)
+
+// Диалоги — ВСЕГДА xs
+Dialog(
+  child: Container(
+    padding: EdgeInsets.all(AppSpacing.xs),  // 8px
+    ...
+  ),
+)
+
+// Между элементами внутри виджета — ВСЕГДА xs
+Column(
+  children: [
+    Widget1(),
+    SizedBox(height: AppSpacing.xs),  // 8px
+    Widget2(),
+  ],
 )
 ```
 
 | Контекст | Отступ | Значение |
 |----------|--------|----------|
-| Между виджетами (внешний) | `AppSpacing.sm` | 12px |
 | Внутри виджета (padding) | `AppSpacing.xs` | 8px |
 | Между элементами внутри | `AppSpacing.xs` | 8px |
 | Микро-отступы (иконка-текст) | `AppSpacing.xxs` | 4px |
+| Между виджетами (внешний) | `AppSpacing.sm` | 12px |
 
 ### Component Sizes (AppSizes)
 

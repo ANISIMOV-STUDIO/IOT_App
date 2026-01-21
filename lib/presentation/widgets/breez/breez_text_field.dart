@@ -12,8 +12,7 @@ import 'package:hvac_control/core/theme/spacing.dart';
 /// Константы для BreezTextField
 abstract class _TextFieldConstants {
   static const double iconSize = 20;
-  static const double labelFontSize = 10;
-  static const double labelLetterSpacing = 2;
+  static const double labelFontSize = 12;
   static const double inputFontSize = 14;
   static const double errorIconSize = 12;
   static const double errorFontSize = 11;
@@ -143,16 +142,19 @@ class _BreezTextFieldState extends State<BreezTextField> {
       mainAxisSize: MainAxisSize.min,
       children: [
         if (widget.label != null) ...[
-          Text(
-            (widget.label ?? '').toUpperCase(),
-            style: TextStyle(
-              fontSize: _TextFieldConstants.labelFontSize,
-              fontWeight: FontWeight.w900,
-              letterSpacing: _TextFieldConstants.labelLetterSpacing,
-              color: colors.textMuted,
+          Padding(
+            padding: const EdgeInsets.only(left: AppSpacing.xs),
+            child: Text(
+              widget.label ?? '',
+              style: TextStyle(
+                fontSize: _TextFieldConstants.labelFontSize,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 0,
+                color: colors.textMuted,
+              ),
             ),
           ),
-          const SizedBox(height: AppSpacing.xs),
+          const SizedBox(height: AppSpacing.xxs),
         ],
         Stack(
           clipBehavior: Clip.none,
@@ -225,7 +227,7 @@ class _BreezTextFieldState extends State<BreezTextField> {
                     disabledBorder: InputBorder.none,
                     contentPadding: EdgeInsets.symmetric(
                       horizontal: widget.prefixIcon != null ? 0 : AppSpacing.md,
-                      vertical: AppSpacing.md,
+                      vertical: AppSpacing.sm,
                     ),
                     helperText: ' ', // Резервирует место для ошибки
                     helperStyle: const TextStyle(height: 0, fontSize: 0),

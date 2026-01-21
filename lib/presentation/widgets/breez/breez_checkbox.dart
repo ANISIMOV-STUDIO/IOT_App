@@ -14,8 +14,6 @@ import 'package:hvac_control/core/theme/spacing.dart';
 /// Константы для BreezCheckbox
 abstract class _CheckboxConstants {
   static const double borderRadius = 4;
-  static const double topMargin = 2;
-  static const double lineHeight = 1.4;
 }
 
 // =============================================================================
@@ -46,12 +44,11 @@ class BreezCheckbox extends StatelessWidget {
         onTap: onChanged != null ? () => onChanged!(!value) : null,
         behavior: HitTestBehavior.opaque,
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
               width: AuthConstants.checkboxSize,
               height: AuthConstants.checkboxSize,
-              margin: const EdgeInsets.only(top: _CheckboxConstants.topMargin),
               decoration: BoxDecoration(
                 color: value ? AppColors.accent : colors.card,
                 borderRadius: BorderRadius.circular(_CheckboxConstants.borderRadius),
@@ -75,7 +72,6 @@ class BreezCheckbox extends StatelessWidget {
                 style: TextStyle(
                   fontSize: fontSize ?? AppFontSizes.bodySmall,
                   color: colors.text,
-                  height: _CheckboxConstants.lineHeight,
                 ),
               ),
             ),
