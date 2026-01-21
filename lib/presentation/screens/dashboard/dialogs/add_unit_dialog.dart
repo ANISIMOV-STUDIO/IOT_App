@@ -4,11 +4,26 @@ library;
 import 'dart:math' show min;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:hvac_control/core/constants/auth_constants.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
-import 'package:hvac_control/presentation/widgets/breez/breez_card.dart'; // BreezDialogButton, BreezIconButton
+import 'package:hvac_control/presentation/widgets/breez/breez.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_list_card.dart';
+
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+abstract class _DialogConstants {
+  static const double closeIconSize = 18;
+  static const double closeButtonPadding = 6;
+  static const double helpIconSize = 16;
+}
+
+// =============================================================================
+// RESULT CLASS
+// =============================================================================
 
 /// Результат диалога добавления устройства
 class AddUnitResult {
@@ -81,8 +96,8 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
     final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
-    // Адаптивная ширина: максимум 420, но не больше экра минус отступы
-    final maxWidth = min(MediaQuery.of(context).size.width - 48, 420).toDouble();
+    // Адаптивная ширина: максимум как форма регистрации
+    final maxWidth = min(MediaQuery.of(context).size.width - 48, AuthConstants.formMaxWidth).toDouble();
 
     return Dialog(
       backgroundColor: colors.card,
@@ -92,22 +107,22 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
       ),
       child: Container(
         width: maxWidth,
-        padding: const EdgeInsets.all(AppSpacing.lgx),
+        padding: const EdgeInsets.all(AppSpacing.xs),
         child: Form(
           key: _formKey,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildHeader(colors, l10n),
-              const SizedBox(height: AppSpacing.lgx),
-              _buildMacField(colors, l10n),
-              const SizedBox(height: AppSpacing.md),
-              _buildNameField(colors, l10n),
+              _buildHeader(l10n),
+              const SizedBox(height: AppSpacing.xs),
+              _buildMacField(l10n),
+              const SizedBox(height: AppSpacing.xs),
+              _buildNameField(l10n),
               const SizedBox(height: AppSpacing.xs),
               _buildHelpText(colors, l10n),
-              const SizedBox(height: AppSpacing.lgx),
-              _buildActions(colors, l10n),
+              const SizedBox(height: AppSpacing.xs),
+              _buildActions(l10n),
             ],
           ),
         ),
@@ -115,152 +130,71 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
     );
   }
 
-  Widget _buildHeader(BreezColors colors, AppLocalizations l10n) => Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          l10n.addUnit,
-          style: TextStyle(
-            fontSize: AppFontSizes.h3,
-            fontWeight: FontWeight.w700,
-            color: colors.text,
-          ),
-        ),
-        BreezIconButton(
-          icon: Icons.close,
-          onTap: () => Navigator.of(context).pop(),
-          size: 32,
-          showBorder: false,
-        ),
-      ],
-    );
+  Widget _buildHeader(AppLocalizations l10n) {
+    final colors = BreezColors.of(context);
 
-  Widget _buildMacField(BreezColors colors, AppLocalizations l10n) => Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          l10n.deviceMacAddress,
-          style: TextStyle(
-            fontSize: AppFontSizes.bodySmall,
-            fontWeight: FontWeight.w500,
-            color: colors.textMuted,
-          ),
+    return BreezSectionHeader(
+      icon: Icons.router,
+      title: l10n.addUnit,
+      iconColor: AppColors.accent,
+      trailing: BreezButton(
+        onTap: () => Navigator.of(context).pop(),
+        enforceMinTouchTarget: false,
+        showBorder: false,
+        backgroundColor: colors.buttonBg.withValues(alpha: AppColors.opacityMedium),
+        hoverColor: colors.text.withValues(alpha: AppColors.opacitySubtle),
+        padding: const EdgeInsets.all(_DialogConstants.closeButtonPadding),
+        semanticLabel: 'Закрыть',
+        child: Icon(
+          Icons.close,
+          size: _DialogConstants.closeIconSize,
+          color: colors.textMuted,
         ),
-        const SizedBox(height: AppSpacing.xs),
-        TextFormField(
-          controller: _macController,
-          autofocus: true,
-          textCapitalization: TextCapitalization.characters,
-          inputFormatters: [
-            FilteringTextInputFormatter.allow(RegExp(r'[0-9A-Fa-f:\-\s]')),
-            LengthLimitingTextInputFormatter(17), // XX:XX:XX:XX:XX:XX
-          ],
-          style: TextStyle(
-            color: colors.text,
-            fontFamily: 'monospace',
-            fontSize: AppFontSizes.h4,
-            letterSpacing: 1.5,
-          ),
-          decoration: InputDecoration(
-            hintText: 'AA:BB:CC:DD:EE:FF',
-            hintStyle: TextStyle(color: colors.textMuted),
-            filled: true,
-            fillColor: colors.bg,
-            prefixIcon: Icon(Icons.router, color: colors.textMuted, size: 20),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(AppRadius.button),
-              borderSide: BorderSide(color: colors.border),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(AppRadius.button),
-              borderSide: BorderSide(color: colors.border),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(AppRadius.button),
-              borderSide: const BorderSide(color: AppColors.accent),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(AppRadius.button),
-              borderSide: const BorderSide(color: AppColors.accentRed),
-            ),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 14,
-            ),
-          ),
-          validator: (value) => _validateMacAddress(value, l10n),
-        ),
-      ],
-    );
-
-  Widget _buildNameField(BreezColors colors, AppLocalizations l10n) => Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          l10n.deviceName,
-          style: TextStyle(
-            fontSize: AppFontSizes.bodySmall,
-            fontWeight: FontWeight.w500,
-            color: colors.textMuted,
-          ),
-        ),
-        const SizedBox(height: AppSpacing.xs),
-        TextFormField(
-          controller: _nameController,
-          style: TextStyle(color: colors.text),
-          keyboardType: TextInputType.text,
-          textCapitalization: TextCapitalization.sentences,
-          maxLength: 50,
-          decoration: InputDecoration(
-            hintText: l10n.deviceNameExample,
-            hintStyle: TextStyle(color: colors.textMuted),
-            filled: true,
-            fillColor: colors.bg,
-            prefixIcon: Icon(Icons.label_outline, color: colors.textMuted, size: 20),
-            counterText: '', // Скрываем счётчик символов
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(AppRadius.button),
-              borderSide: BorderSide(color: colors.border),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(AppRadius.button),
-              borderSide: BorderSide(color: colors.border),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(AppRadius.button),
-              borderSide: const BorderSide(color: AppColors.accent),
-            ),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 14,
-            ),
-          ),
-          validator: (value) {
-            if (value == null || value.trim().isEmpty) {
-              return l10n.enterDeviceName;
-            }
-            return null;
-          },
-          onFieldSubmitted: (_) => _submit(),
-        ),
-      ],
-    );
-
-  Widget _buildHelpText(BreezColors colors, AppLocalizations l10n) => Container(
-      padding: const EdgeInsets.all(AppSpacing.sm),
-      decoration: BoxDecoration(
-        color: colors.cardLight,
-        borderRadius: BorderRadius.circular(AppRadius.card),
       ),
+    );
+  }
+
+  Widget _buildMacField(AppLocalizations l10n) => BreezTextField(
+      controller: _macController,
+      label: l10n.deviceMacAddress,
+      hint: 'AA:BB:CC:DD:EE:FF',
+      prefixIcon: Icons.router,
+      validator: (value) => _validateMacAddress(value, l10n),
+      validateOnChange: true,
+      textInputAction: TextInputAction.next,
+    );
+
+  Widget _buildNameField(AppLocalizations l10n) => BreezTextField(
+      controller: _nameController,
+      label: l10n.deviceName,
+      hint: 'например ПВ-1',
+      prefixIcon: Icons.label_outline,
+      validator: (value) {
+        if (value == null || value.trim().isEmpty) {
+          return l10n.enterDeviceName;
+        }
+        return null;
+      },
+      validateOnChange: true,
+      textInputAction: TextInputAction.done,
+      onFieldSubmitted: (_) => _submit(),
+    );
+
+  Widget _buildHelpText(BreezColors colors, AppLocalizations l10n) => Padding(
+      padding: const EdgeInsets.only(left: AppSpacing.xs),
       child: Row(
         children: [
-          Icon(Icons.info_outline, size: 16, color: colors.textMuted),
-          const SizedBox(width: AppSpacing.xs),
+          Icon(
+            Icons.info_outline,
+            size: _DialogConstants.helpIconSize,
+            color: colors.textMuted,
+          ),
+          const SizedBox(width: AppSpacing.xxs),
           Expanded(
             child: Text(
               l10n.macAddressDisplayedOnRemote,
               style: TextStyle(
-                fontSize: AppFontSizes.caption,
+                fontSize: AppFontSizes.captionSmall,
                 color: colors.textMuted,
               ),
             ),
@@ -269,21 +203,29 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
       ),
     );
 
-  Widget _buildActions(BreezColors colors, AppLocalizations l10n) => Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        // Cancel button
-        BreezDialogButton(
-          label: l10n.cancelButton,
-          onTap: () => Navigator.of(context).pop(),
-        ),
-        const SizedBox(width: AppSpacing.sm),
-        // Create button
-        BreezDialogButton(
-          label: l10n.addButton,
-          isPrimary: true,
-          onTap: _submit,
-        ),
-      ],
+  Widget _buildActions(AppLocalizations l10n) => BreezButton(
+      onTap: _submit,
+      backgroundColor: AppColors.accent,
+      hoverColor: AppColors.accentLight,
+      showBorder: false,
+      borderRadius: AppRadius.nested,
+      padding: const EdgeInsets.all(AppSpacing.xs),
+      enableGlow: true,
+      semanticLabel: l10n.addButton,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.add, size: AppSpacing.md, color: AppColors.black),
+          const SizedBox(width: AppSpacing.xxs),
+          Text(
+            l10n.addButton,
+            style: const TextStyle(
+              fontSize: AppFontSizes.caption,
+              fontWeight: FontWeight.w600,
+              color: AppColors.black,
+            ),
+          ),
+        ],
+      ),
     );
 }

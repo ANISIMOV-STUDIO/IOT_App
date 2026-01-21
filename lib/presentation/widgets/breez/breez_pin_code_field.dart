@@ -128,7 +128,7 @@ class _BreezPinCodeFieldState extends State<BreezPinCodeField> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(widget.length, (index) => Container(
-              width: 56,
+              width: 48,
               margin: EdgeInsets.only(
                 left: index == 0 ? 0 : AppSpacing.xs / 2,
                 right: index == widget.length - 1 ? 0 : AppSpacing.xs / 2,

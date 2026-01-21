@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/constants/auth_constants.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
@@ -42,26 +43,32 @@ class DashboardEmptyState extends StatelessWidget {
             style: TextStyle(fontSize: AppFontSizes.body, color: colors.textMuted),
           ),
           const SizedBox(height: AppSpacing.xl),
-          BreezButton(
-            onTap: onAddUnit,
-            backgroundColor: AppColors.accent,
-            hoverColor: AppColors.accentLight,
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lgx, vertical: AppSpacing.md),
-            enableGlow: true,
-            semanticLabel: l10n.addUnit,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(Icons.add, color: AppColors.white),
-                const SizedBox(width: AppSpacing.xs),
-                Text(
-                  l10n.addUnit,
-                  style: const TextStyle(
-                    color: AppColors.white,
-                    fontWeight: FontWeight.w600,
+          ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: AuthConstants.formMaxWidth),
+            child: BreezButton(
+              onTap: onAddUnit,
+              backgroundColor: AppColors.accent,
+              hoverColor: AppColors.accentLight,
+              showBorder: false,
+              borderRadius: AppRadius.nested,
+              padding: const EdgeInsets.all(AppSpacing.xs),
+              enableGlow: true,
+              semanticLabel: l10n.addUnit,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.add, size: AppSpacing.md, color: AppColors.black),
+                  const SizedBox(width: AppSpacing.xxs),
+                  Text(
+                    l10n.addUnit,
+                    style: const TextStyle(
+                      fontSize: AppFontSizes.caption,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.black,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],

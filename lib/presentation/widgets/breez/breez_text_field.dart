@@ -200,9 +200,8 @@ class _BreezTextFieldState extends State<BreezTextField> {
                       fontSize: _TextFieldConstants.inputFontSize,
                     ),
                     prefixIcon: widget.prefixIcon != null
-                        ? Align(
-                            widthFactor: 1,
-                            heightFactor: 1,
+                        ? Padding(
+                            padding: const EdgeInsets.only(left: AppSpacing.sm, right: AppSpacing.xs),
                             child: Icon(
                               widget.prefixIcon,
                               color: colors.textMuted,
@@ -210,13 +209,9 @@ class _BreezTextFieldState extends State<BreezTextField> {
                             ),
                           )
                         : null,
-                    suffixIcon: effectiveSuffixIcon != null
-                        ? Align(
-                            widthFactor: 1,
-                            heightFactor: 1,
-                            child: effectiveSuffixIcon,
-                          )
-                        : null,
+                    prefixIconConstraints: const BoxConstraints(minWidth: 0),
+                    suffixIcon: effectiveSuffixIcon,
+                    suffixIconConstraints: const BoxConstraints(minWidth: 0),
                     // Убираем фон и все бордеры
                     filled: false,
                     border: InputBorder.none,
