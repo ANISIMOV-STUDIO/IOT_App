@@ -16,6 +16,7 @@ import 'package:hvac_control/domain/entities/device_event_log.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
 import 'package:hvac_control/presentation/bloc/devices/devices_bloc.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_list_card.dart';
 import 'package:intl/intl.dart';
 
 // =============================================================================
@@ -25,6 +26,7 @@ import 'package:intl/intl.dart';
 abstract class _LogsScreenConstants {
   static const double labelColumnWidth = 100;
   static const double smallIconSize = 18;
+  static const double closeButtonPadding = 6;
   static const int pageSize = 50;
 }
 
@@ -142,11 +144,12 @@ class _EventLogsScreenState extends State<EventLogsScreen> {
     showModalBottomSheet<void>(
       context: context,
       backgroundColor: colors.card,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      shape: RoundedRectangleBorder(
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(AppRadius.cardSmall)),
+        side: BorderSide(color: colors.border),
       ),
       builder: (context) => Padding(
-        padding: const EdgeInsets.all(AppSpacing.lg),
+        padding: const EdgeInsets.all(AppSpacing.sm),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -161,8 +164,8 @@ class _EventLogsScreenState extends State<EventLogsScreen> {
                     vertical: AppSpacing.xxs,
                   ),
                   decoration: BoxDecoration(
-                    color: typeColor.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(AppSpacing.xxs),
+                    color: typeColor.withValues(alpha: AppColors.opacitySubtle),
+                    borderRadius: BorderRadius.circular(AppRadius.chip),
                   ),
                   child: Text(
                     typeText,
@@ -183,9 +186,24 @@ class _EventLogsScreenState extends State<EventLogsScreen> {
                     ),
                   ),
                 ),
+                // Close button
+                BreezButton(
+                  onTap: () => Navigator.pop(context),
+                  enforceMinTouchTarget: false,
+                  showBorder: false,
+                  backgroundColor: colors.buttonBg.withValues(alpha: AppColors.opacityMedium),
+                  hoverColor: colors.text.withValues(alpha: AppColors.opacitySubtle),
+                  padding: const EdgeInsets.all(_LogsScreenConstants.closeButtonPadding),
+                  semanticLabel: l10n.close,
+                  child: Icon(
+                    Icons.close,
+                    size: _LogsScreenConstants.smallIconSize,
+                    color: colors.textMuted,
+                  ),
+                ),
               ],
             ),
-            const SizedBox(height: AppSpacing.md),
+            const SizedBox(height: AppSpacing.sm),
 
             // Details
             _DetailRow(l10n.logColumnCategory, _getCategoryName(log.category, l10n), colors),
@@ -195,17 +213,6 @@ class _EventLogsScreenState extends State<EventLogsScreen> {
             _DetailRow(l10n.logColumnNewValue, log.newValue, colors),
             if (log.description.isNotEmpty)
               _DetailRow(l10n.logColumnDescription, log.description, colors),
-
-            const SizedBox(height: AppSpacing.lg),
-
-            // Close button
-            SizedBox(
-              width: double.infinity,
-              child: BreezButton(
-                onTap: () => Navigator.pop(context),
-                child: Text(l10n.close),
-              ),
-            ),
           ],
         ),
       ),
@@ -232,33 +239,22 @@ class _EventLogsScreenState extends State<EventLogsScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // Header (кастомный, как в profile_screen)
+            // Header
             Padding(
               padding: const EdgeInsets.all(AppSpacing.sm),
-              child: Row(
-                children: [
-                  BreezIconButton(
-                    icon: Icons.arrow_back,
-                    onTap: () => context.goToHomeTab(MainTab.profile),
-                    size: 24,
-                  ),
-                  const SizedBox(width: AppSpacing.sm),
-                  Expanded(
-                    child: Text(
-                      l10n.eventLogs,
-                      style: TextStyle(
-                        fontSize: AppFontSizes.h2,
-                        fontWeight: FontWeight.bold,
-                        color: colors.text,
-                      ),
-                    ),
-                  ),
-                  BreezIconButton(
-                    icon: Icons.refresh,
-                    onTap: _isLoading ? null : _loadLogs,
-                    size: 24,
-                  ),
-                ],
+              child: BreezSectionHeader.screen(
+                title: l10n.eventLogs,
+                icon: Icons.history,
+                backButton: BreezIconButton(
+                  icon: Icons.arrow_back,
+                  onTap: () => context.goToHomeTab(MainTab.profile),
+                  size: 24,
+                ),
+                trailing: BreezIconButton(
+                  icon: Icons.refresh,
+                  onTap: _isLoading ? null : _loadLogs,
+                  size: 24,
+                ),
               ),
             ),
 
@@ -271,7 +267,6 @@ class _EventLogsScreenState extends State<EventLogsScreen> {
               ),
               child: BreezSegmentedControl<DeviceEventType?>(
                 value: _filterType,
-                height: 36,
                 segments: [
                   BreezSegment(
                     value: null,
@@ -311,17 +306,44 @@ class _EventLogsScreenState extends State<EventLogsScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline, size: 48, color: AppColors.critical),
-            const SizedBox(height: AppSpacing.md),
+            Icon(
+              Icons.error_outline,
+              size: AppSpacing.xxl,
+              color: AppColors.critical.withValues(alpha: AppColors.opacityMedium),
+            ),
+            const SizedBox(height: AppSpacing.sm),
             Text(
               _error!,
               style: TextStyle(color: colors.textMuted),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: AppSpacing.md),
+            const SizedBox(height: AppSpacing.sm),
             BreezButton(
               onTap: _loadLogs,
-              child: Text(l10n.retry),
+              backgroundColor: AppColors.accent,
+              hoverColor: AppColors.accentLight,
+              showBorder: false,
+              borderRadius: AppRadius.nested,
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.md,
+                vertical: AppSpacing.xs,
+              ),
+              enableGlow: true,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.refresh, size: AppSpacing.md, color: AppColors.black),
+                  const SizedBox(width: AppSpacing.xxs),
+                  Text(
+                    l10n.retry,
+                    style: const TextStyle(
+                      fontSize: AppFontSizes.caption,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.black,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -441,7 +463,7 @@ class _PaginationFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-      padding: const EdgeInsets.all(AppSpacing.md),
+      padding: const EdgeInsets.all(AppSpacing.sm),
       decoration: BoxDecoration(
         color: colors.card,
         border: Border(
@@ -466,7 +488,9 @@ class _PaginationFooter extends StatelessWidget {
                 ? const BreezLoader.small()
                 : BreezButton(
                     onTap: onLoadMore,
-                    backgroundColor: Colors.transparent,
+                    backgroundColor: AppColors.accent.withValues(alpha: AppColors.opacitySubtle),
+                    hoverColor: AppColors.accent.withValues(alpha: AppColors.opacityLow),
+                    showBorder: false,
                     padding: const EdgeInsets.symmetric(
                       horizontal: AppSpacing.sm,
                       vertical: AppSpacing.xs,
@@ -482,7 +506,11 @@ class _PaginationFooter extends StatelessWidget {
                         const SizedBox(width: AppSpacing.xxs),
                         Text(
                           l10n.logLoadMore,
-                          style: const TextStyle(color: AppColors.accent),
+                          style: const TextStyle(
+                            fontSize: AppFontSizes.caption,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.accent,
+                          ),
                         ),
                       ],
                     ),

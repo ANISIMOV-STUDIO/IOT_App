@@ -440,6 +440,8 @@ class BreezSectionHeader extends StatelessWidget {
     super.key,
     this.iconColor,
     this.trailing,
+    this.leading,
+    this.large = false,
   });
 
   /// Фабрика для заголовка секции аварий
@@ -481,26 +483,66 @@ class BreezSectionHeader extends StatelessWidget {
       trailing: trailing,
     );
 
+  /// Фабрика для заголовка экрана с кнопкой назад
+  factory BreezSectionHeader.screen({
+    required String title,
+    required IconData icon,
+    required Widget backButton,
+    Key? key,
+    Widget? trailing,
+  }) => BreezSectionHeader(
+      key: key,
+      icon: icon,
+      title: title,
+      iconColor: AppColors.accent,
+      leading: backButton,
+      trailing: trailing,
+      large: true,
+    );
+
+  /// Фабрика для заголовка диалога с кнопкой закрытия
+  factory BreezSectionHeader.dialog({
+    required String title,
+    required IconData icon,
+    required VoidCallback onClose,
+    required String closeLabel,
+    Key? key,
+  }) => BreezSectionHeader(
+      key: key,
+      icon: icon,
+      title: title,
+      iconColor: AppColors.accent,
+      trailing: _DialogCloseButton(onClose: onClose, label: closeLabel),
+    );
+
   final IconData icon;
   final String title;
   final Color? iconColor;
   final Widget? trailing;
+  final Widget? leading;
+  final bool large;
 
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
     final color = iconColor ?? AppColors.accent;
+    final fontSize = large ? AppFontSizes.h2 : AppFontSizes.h4;
+    final iconSize = large ? AppFontSizes.h3 : AppFontSizes.h4;
 
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        if (leading != null) ...[
+          leading!,
+          const SizedBox(width: AppSpacing.xs),
+        ],
         // Иконка + заголовок центрированы между собой
         Expanded(
           child: Row(
             children: [
               Icon(
                 icon,
-                size: AppFontSizes.h4,
+                size: iconSize,
                 color: color,
               ),
               const SizedBox(width: AppSpacing.xs),
@@ -508,7 +550,7 @@ class BreezSectionHeader extends StatelessWidget {
                 child: Text(
                   title,
                   style: TextStyle(
-                    fontSize: AppFontSizes.h4,
+                    fontSize: fontSize,
                     fontWeight: FontWeight.w700,
                     height: 1,
                     color: colors.text,
@@ -553,6 +595,39 @@ class _CountBadge extends StatelessWidget {
         ),
       ),
     );
+}
+
+/// Кнопка закрытия для заголовка диалога
+class _DialogCloseButton extends StatelessWidget {
+  const _DialogCloseButton({
+    required this.onClose,
+    required this.label,
+  });
+
+  static const double _iconSize = 18;
+  static const double _padding = 6;
+
+  final VoidCallback onClose;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+    return BreezButton(
+      onTap: onClose,
+      enforceMinTouchTarget: false,
+      showBorder: false,
+      backgroundColor: colors.buttonBg.withValues(alpha: AppColors.opacityMedium),
+      hoverColor: colors.text.withValues(alpha: AppColors.opacitySubtle),
+      padding: const EdgeInsets.all(_padding),
+      semanticLabel: label,
+      child: Icon(
+        Icons.close,
+        size: _iconSize,
+        color: colors.textMuted,
+      ),
+    );
+  }
 }
 
 // =============================================================================

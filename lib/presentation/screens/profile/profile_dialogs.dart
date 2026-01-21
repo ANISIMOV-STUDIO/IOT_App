@@ -4,12 +4,14 @@ library;
 import 'dart:math' show min;
 
 import 'package:flutter/material.dart';
+import 'package:hvac_control/core/constants/auth_constants.dart';
 import 'package:hvac_control/core/services/language_service.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/core/utils/validators.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_list_card.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -17,8 +19,6 @@ import 'package:hvac_control/presentation/widgets/breez/breez.dart';
 
 abstract class _ProfileDialogsConstants {
   static const double flagFontSize = 20;
-  static const double bodyFontSize = AppFontSizes.body;
-  static const double headerFontSize = AppFontSizes.h3;
   static const double checkIconSize = 18;
 }
 
@@ -62,7 +62,7 @@ class LanguageOption extends StatelessWidget {
             child: Text(
               language.nativeName,
               style: TextStyle(
-                fontSize: _ProfileDialogsConstants.bodyFontSize,
+                fontSize: AppFontSizes.body,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                 color: isSelected ? AppColors.accent : colors.text,
               ),
@@ -126,53 +126,78 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final maxWidth = min(MediaQuery.of(context).size.width - 48, 400).toDouble();
+    final maxWidth = min(
+      MediaQuery.of(context).size.width - AppSpacing.xxl,
+      AuthConstants.formMaxWidth,
+    ).toDouble();
 
     return Dialog(
       backgroundColor: colors.card,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppRadius.card),
+        borderRadius: BorderRadius.circular(AppRadius.cardSmall),
+        side: BorderSide(color: colors.border),
       ),
       child: Container(
         width: maxWidth,
-        padding: const EdgeInsets.all(AppSpacing.xl),
+        padding: const EdgeInsets.all(AppSpacing.xs),
         child: Form(
           key: _formKey,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _DialogHeader(
-                icon: Icons.edit,
+              BreezSectionHeader.dialog(
                 title: l10n.editProfile,
-                colors: colors,
+                icon: Icons.edit,
+                onClose: () => Navigator.of(context).pop(),
+                closeLabel: l10n.close,
               ),
-              const SizedBox(height: AppSpacing.xl),
+              const SizedBox(height: AppSpacing.xs),
               BreezTextField(
                 controller: _firstNameController,
                 label: l10n.firstName,
                 prefixIcon: Icons.person_outlined,
                 validator: (v) =>
                     Validators.of(context).name(v, fieldName: l10n.firstName),
+                validateOnChange: true,
                 textInputAction: TextInputAction.next,
               ),
-              const SizedBox(height: AppSpacing.md),
+              const SizedBox(height: AppSpacing.xs),
               BreezTextField(
                 controller: _lastNameController,
                 label: l10n.lastName,
                 prefixIcon: Icons.person_outlined,
                 validator: (v) =>
                     Validators.of(context).name(v, fieldName: l10n.lastName),
+                validateOnChange: true,
                 textInputAction: TextInputAction.done,
                 onFieldSubmitted: (_) => _save(),
               ),
-              const SizedBox(height: AppSpacing.xl),
-              _DialogActions(
-                onCancel: () => Navigator.of(context).pop(),
-                onSave: _save,
-                saveLabel: l10n.save,
-                colors: colors,
-                l10n: l10n,
+              const SizedBox(height: AppSpacing.xs),
+              BreezButton(
+                onTap: _save,
+                backgroundColor: AppColors.accent,
+                hoverColor: AppColors.accentLight,
+                showBorder: false,
+                borderRadius: AppRadius.nested,
+                padding: const EdgeInsets.all(AppSpacing.xs),
+                enableGlow: true,
+                semanticLabel: l10n.save,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.save_outlined, size: AppSpacing.md, color: AppColors.black),
+                    const SizedBox(width: AppSpacing.xxs),
+                    Text(
+                      l10n.save,
+                      style: const TextStyle(
+                        fontSize: AppFontSizes.caption,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.black,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -180,6 +205,7 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
       ),
     );
   }
+
 }
 
 /// Change password dialog
@@ -219,28 +245,33 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final maxWidth = min(MediaQuery.of(context).size.width - 48, 400).toDouble();
+    final maxWidth = min(
+      MediaQuery.of(context).size.width - AppSpacing.xxl,
+      AuthConstants.formMaxWidth,
+    ).toDouble();
 
     return Dialog(
       backgroundColor: colors.card,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppRadius.card),
+        borderRadius: BorderRadius.circular(AppRadius.cardSmall),
+        side: BorderSide(color: colors.border),
       ),
       child: Container(
         width: maxWidth,
-        padding: const EdgeInsets.all(AppSpacing.xl),
+        padding: const EdgeInsets.all(AppSpacing.xs),
         child: Form(
           key: _formKey,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _DialogHeader(
-                icon: Icons.lock,
+              BreezSectionHeader.dialog(
                 title: l10n.changePassword,
-                colors: colors,
+                icon: Icons.lock,
+                onClose: () => Navigator.of(context).pop(),
+                closeLabel: l10n.close,
               ),
-              const SizedBox(height: AppSpacing.xl),
+              const SizedBox(height: AppSpacing.xs),
               BreezTextField(
                 controller: _currentPasswordController,
                 label: l10n.currentPassword,
@@ -248,9 +279,10 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
                 obscureText: true,
                 showPasswordToggle: true,
                 validator: Validators.of(context).loginPassword,
+                validateOnChange: true,
                 textInputAction: TextInputAction.next,
               ),
-              const SizedBox(height: AppSpacing.md),
+              const SizedBox(height: AppSpacing.xs),
               BreezTextField(
                 controller: _newPasswordController,
                 label: l10n.newPassword,
@@ -258,9 +290,10 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
                 obscureText: true,
                 showPasswordToggle: true,
                 validator: Validators.of(context).password,
+                validateOnChange: true,
                 textInputAction: TextInputAction.next,
               ),
-              const SizedBox(height: AppSpacing.md),
+              const SizedBox(height: AppSpacing.xs),
               BreezTextField(
                 controller: _confirmPasswordController,
                 label: l10n.passwordConfirmation,
@@ -270,16 +303,35 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
                 validator: (value) => Validators.of(
                   context,
                 ).confirmPassword(value, _newPasswordController.text),
+                validateOnChange: true,
                 textInputAction: TextInputAction.done,
                 onFieldSubmitted: (_) => _save(),
               ),
-              const SizedBox(height: AppSpacing.xl),
-              _DialogActions(
-                onCancel: () => Navigator.of(context).pop(),
-                onSave: _save,
-                saveLabel: l10n.change,
-                colors: colors,
-                l10n: l10n,
+              const SizedBox(height: AppSpacing.xs),
+              BreezButton(
+                onTap: _save,
+                backgroundColor: AppColors.accent,
+                hoverColor: AppColors.accentLight,
+                showBorder: false,
+                borderRadius: AppRadius.nested,
+                padding: const EdgeInsets.all(AppSpacing.xs),
+                enableGlow: true,
+                semanticLabel: l10n.change,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.lock_reset, size: AppSpacing.md, color: AppColors.black),
+                    const SizedBox(width: AppSpacing.xxs),
+                    Text(
+                      l10n.change,
+                      style: const TextStyle(
+                        fontSize: AppFontSizes.caption,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.black,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -289,83 +341,6 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
   }
 }
 
-/// Dialog header with icon and title
-class _DialogHeader extends StatelessWidget {
-
-  const _DialogHeader({
-    required this.icon,
-    required this.title,
-    required this.colors,
-  });
-  final IconData icon;
-  final String title;
-  final BreezColors colors;
-
-  @override
-  Widget build(BuildContext context) => Row(
-      children: [
-        Icon(icon, color: AppColors.accent),
-        const SizedBox(width: AppSpacing.sm),
-        Text(
-          title,
-          style: TextStyle(
-            fontSize: _ProfileDialogsConstants.headerFontSize,
-            fontWeight: FontWeight.w600,
-            color: colors.text,
-          ),
-        ),
-      ],
-    );
-}
-
-/// Dialog action buttons (Cancel + Save)
-class _DialogActions extends StatelessWidget {
-
-  const _DialogActions({
-    required this.onCancel,
-    required this.onSave,
-    required this.saveLabel,
-    required this.colors,
-    required this.l10n,
-  });
-  final VoidCallback onCancel;
-  final VoidCallback onSave;
-  final String saveLabel;
-  final BreezColors colors;
-  final AppLocalizations l10n;
-
-  @override
-  Widget build(BuildContext context) => Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        BreezButton(
-          onTap: onCancel,
-          backgroundColor: Colors.transparent,
-          hoverColor: colors.cardLight,
-          pressedColor: colors.buttonBg,
-          showBorder: false,
-          semanticLabel: l10n.cancel,
-          child: Text(l10n.cancel, style: TextStyle(color: colors.textMuted)),
-        ),
-        const SizedBox(width: AppSpacing.md),
-        BreezButton(
-          onTap: onSave,
-          backgroundColor: AppColors.accent,
-          hoverColor: AppColors.accentLight,
-          enableGlow: true,
-          semanticLabel: saveLabel,
-          child: Text(
-            saveLabel,
-            style: const TextStyle(
-              color: AppColors.white,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
-      ],
-    );
-}
-
 /// Shows language picker dialog
 Future<void> showLanguagePickerDialog(
   BuildContext context,
@@ -373,61 +348,47 @@ Future<void> showLanguagePickerDialog(
 ) async {
   final colors = BreezColors.of(context);
   final l10n = AppLocalizations.of(context)!;
+  final maxWidth = min(
+    MediaQuery.of(context).size.width - AppSpacing.xxl,
+    AuthConstants.formMaxWidth,
+  ).toDouble();
 
   await showDialog<void>(
     context: context,
-    builder: (dialogContext) => AlertDialog(
+    builder: (dialogContext) => Dialog(
       backgroundColor: colors.card,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppRadius.card),
+        borderRadius: BorderRadius.circular(AppRadius.cardSmall),
+        side: BorderSide(color: colors.border),
       ),
-      titlePadding: const EdgeInsets.fromLTRB(
-        AppSpacing.sm,
-        AppSpacing.sm,
-        AppSpacing.sm,
-        0,
-      ),
-      contentPadding: const EdgeInsets.all(AppSpacing.sm),
-      actionsPadding: const EdgeInsets.fromLTRB(
-        AppSpacing.sm,
-        0,
-        AppSpacing.sm,
-        AppSpacing.sm,
-      ),
-      title: Text(
-        l10n.language,
-        style: TextStyle(
-          fontSize: _ProfileDialogsConstants.bodyFontSize,
-          fontWeight: FontWeight.w600,
-          color: colors.textMuted,
-        ),
-      ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        spacing: AppSpacing.sm,
-        children: [
-          for (final language in languageService.availableLanguages)
-            LanguageOption(
-              language: language,
-              isSelected: languageService.currentLanguage == language,
-              onTap: () {
-                languageService.setLanguage(language);
-                Navigator.of(dialogContext).pop();
-              },
+      child: Container(
+        width: maxWidth,
+        padding: const EdgeInsets.all(AppSpacing.xs),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            BreezSectionHeader.dialog(
+              title: l10n.language,
+              icon: Icons.language,
+              onClose: () => Navigator.of(dialogContext).pop(),
+              closeLabel: l10n.close,
             ),
-        ],
-      ),
-      actions: [
-        BreezButton(
-          onTap: () => Navigator.of(dialogContext).pop(),
-          backgroundColor: Colors.transparent,
-          hoverColor: colors.cardLight,
-          pressedColor: colors.buttonBg,
-          showBorder: false,
-          semanticLabel: l10n.cancel,
-          child: Text(l10n.cancel, style: TextStyle(color: colors.textMuted)),
+            const SizedBox(height: AppSpacing.xs),
+            for (final language in languageService.availableLanguages) ...[
+              LanguageOption(
+                language: language,
+                isSelected: languageService.currentLanguage == language,
+                onTap: () {
+                  languageService.setLanguage(language);
+                  Navigator.of(dialogContext).pop();
+                },
+              ),
+              if (language != languageService.availableLanguages.last)
+                const SizedBox(height: AppSpacing.xs),
+            ],
+          ],
         ),
-      ],
+      ),
     ),
   );
 }

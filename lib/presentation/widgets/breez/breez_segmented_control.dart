@@ -5,17 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
-import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
 
 // =============================================================================
 // CONSTANTS
 // =============================================================================
 
 abstract class _SegmentedControlConstants {
-  static const double defaultHeight = 40;
-  static const double fontSize = 13;
-  static const double iconSize = 16;
-  static const double iconTextGap = 6;
+  static const double defaultHeight = 36;
+  static const double fontSize = 11;
+  static const double iconSize = 14;
+  static const double iconTextGap = 4;
+  static const double containerPadding = 3;
   static const Duration animationDuration = Duration(milliseconds: 150);
 }
 
@@ -69,11 +69,10 @@ class BreezSegmentedControl<T> extends StatelessWidget {
       enabled: enabled,
       child: Container(
         height: height,
-        padding: const EdgeInsets.all(AppSpacing.xxs),
+        padding: const EdgeInsets.all(_SegmentedControlConstants.containerPadding),
         decoration: BoxDecoration(
-          color: colors.buttonBg,
-          borderRadius: BorderRadius.circular(AppRadius.button),
-          border: Border.all(color: colors.border),
+          color: colors.buttonBg.withValues(alpha: AppColors.opacityMedium),
+          borderRadius: BorderRadius.circular(AppRadius.chip),
         ),
         child: expanded
             ? Row(
@@ -140,48 +139,51 @@ class _SegmentButton<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     final textColor = _getTextColor();
 
-    return BreezButton(
-      onTap: onTap,
-      backgroundColor: isSelected
-          ? AppColors.accent.withValues(alpha: 0.15)
-          : Colors.transparent,
-      hoverColor: isSelected
-          ? AppColors.accent.withValues(alpha: 0.25)
-          : colors.buttonHover,
-      border: isSelected
-          ? Border.all(color: AppColors.accent.withValues(alpha: 0.3))
-          : null,
-      showBorder: false,
-      enableScale: false,
-      borderRadius: AppRadius.nested,
-      semanticLabel: segment.semanticLabel ?? segment.label,
-      tooltip: segment.tooltip,
-      child: AnimatedDefaultTextStyle(
-        duration: _SegmentedControlConstants.animationDuration,
-        style: TextStyle(
-          fontSize: _SegmentedControlConstants.fontSize,
-          fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-          color: textColor,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (segment.icon != null) ...[
-              Icon(
-                segment.icon,
-                size: _SegmentedControlConstants.iconSize,
-                color: textColor,
-              ),
-              if (segment.label.isNotEmpty)
-                const SizedBox(width: _SegmentedControlConstants.iconTextGap),
-            ],
-            if (segment.label.isNotEmpty)
-              Text(
-                segment.label,
-                overflow: TextOverflow.ellipsis,
-              ),
-          ],
+    return Semantics(
+      label: segment.semanticLabel ?? segment.label,
+      selected: isSelected,
+      button: true,
+      child: GestureDetector(
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: _SegmentedControlConstants.animationDuration,
+          curve: Curves.easeOutCubic,
+          decoration: BoxDecoration(
+            color: isSelected
+                ? AppColors.accent.withValues(alpha: AppColors.opacitySubtle)
+                : colors.bg.withValues(alpha: 0),
+            borderRadius: BorderRadius.circular(AppRadius.chip),
+            border: isSelected
+                ? Border.all(color: AppColors.accent.withValues(alpha: AppColors.opacityLow))
+                : null,
+          ),
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (segment.icon != null) ...[
+                  Icon(
+                    segment.icon,
+                    size: _SegmentedControlConstants.iconSize,
+                    color: textColor,
+                  ),
+                  if (segment.label.isNotEmpty)
+                    const SizedBox(width: _SegmentedControlConstants.iconTextGap),
+                ],
+                if (segment.label.isNotEmpty)
+                  Text(
+                    segment.label,
+                    style: TextStyle(
+                      fontSize: _SegmentedControlConstants.fontSize,
+                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                      color: textColor,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+              ],
+            ),
+          ),
         ),
       ),
     );
