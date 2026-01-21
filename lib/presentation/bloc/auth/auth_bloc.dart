@@ -2,13 +2,16 @@
 library;
 
 import 'dart:async';
+import 'dart:developer' as developer;
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hvac_control/core/services/auth_storage_service.dart';
 import 'package:hvac_control/core/services/token_refresh_service.dart';
+import 'package:hvac_control/data/api/http/clients/user_http_client.dart';
 import 'package:hvac_control/data/api/http/interceptors/auth_http_interceptor.dart';
 import 'package:hvac_control/data/models/auth_models.dart';
 import 'package:hvac_control/data/services/auth_service.dart';
+import 'package:hvac_control/domain/entities/user_preferences.dart';
 import 'package:hvac_control/presentation/bloc/auth/auth_event.dart';
 import 'package:hvac_control/presentation/bloc/auth/auth_state.dart';
 
@@ -18,9 +21,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required AuthService authService,
     required AuthStorageService storageService,
     TokenRefreshService? tokenRefreshService,
+    UserHttpClient? userHttpClient,
   })  : _authService = authService,
         _storageService = storageService,
         _tokenRefreshService = tokenRefreshService,
+        _userHttpClient = userHttpClient,
         super(const AuthInitial()) {
     on<AuthCheckRequested>(_onCheckRequested);
     on<AuthLoginRequested>(_onLoginRequested);
@@ -34,6 +39,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthChangePasswordRequested>(_onChangePasswordRequested);
     on<AuthUpdateProfileRequested>(_onUpdateProfileRequested);
     on<AuthSessionExpired>(_onSessionExpired);
+    on<AuthUpdatePreferencesRequested>(_onUpdatePreferencesRequested);
 
     // Подписка на события истечения сессии от TokenRefreshService
     _sessionExpiredSubscription = _tokenRefreshService?.onSessionExpired.listen((_) {
@@ -44,6 +50,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthService _authService;
   final AuthStorageService _storageService;
   final TokenRefreshService? _tokenRefreshService;
+  final UserHttpClient? _userHttpClient;
   StreamSubscription<void>? _sessionExpiredSubscription;
 
   @override
@@ -76,10 +83,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         // Запустить фоновое обновление токенов
         _tokenRefreshService?.start();
 
+        // Загрузить настройки пользователя
+        final preferences = await _loadPreferences();
+
         emit(AuthAuthenticated(
           user: user,
           accessToken: accessToken,
           refreshToken: refreshToken,
+          preferences: preferences,
         ));
       } else {
         emit(const AuthUnauthenticated());
@@ -118,10 +129,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       // Запустить фоновое обновление токенов
       _tokenRefreshService?.start();
 
+      // Загрузить настройки пользователя
+      final preferences = await _loadPreferences();
+
       emit(AuthAuthenticated(
         user: response.user,
         accessToken: response.accessToken,
         refreshToken: response.refreshToken,
+        preferences: preferences,
       ));
     } catch (e) {
       emit(AuthError(e.toString()));
@@ -365,11 +380,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       final updatedUser = await _authService.updateProfile(request, accessToken);
 
+      // Сохраняем preferences из текущего состояния
+      final currentPreferences = currentState is AuthAuthenticated
+          ? currentState.preferences
+          : null;
+
       // Возвращаем AuthAuthenticated с обновленным пользователем
       emit(AuthAuthenticated(
         user: updatedUser,
         accessToken: accessToken,
         refreshToken: refreshToken ?? '',
+        preferences: currentPreferences,
       ));
 
       // Также эмитим событие успеха для UI
@@ -381,10 +402,75 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           user: updatedUser,
           accessToken: accessToken,
           refreshToken: refreshToken ?? '',
+          preferences: currentPreferences,
         ));
       }
     } catch (e) {
       emit(AuthError(e.toString()));
+    }
+  }
+
+  /// Обновление настроек пользователя
+  Future<void> _onUpdatePreferencesRequested(
+    AuthUpdatePreferencesRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    final currentState = state;
+    if (currentState is! AuthAuthenticated) {
+      emit(const AuthError('Not authenticated'));
+      return;
+    }
+
+    final oldPreferences = currentState.preferences ?? const UserPreferences();
+
+    // Оптимистичное обновление UI
+    final optimisticPreferences = oldPreferences.copyWith(
+      pushNotificationsEnabled: event.pushNotificationsEnabled,
+      emailNotificationsEnabled: event.emailNotificationsEnabled,
+      theme: event.theme != null
+          ? PreferenceTheme.fromString(event.theme!)
+          : null,
+      language: event.language != null
+          ? PreferenceLanguage.fromString(event.language!)
+          : null,
+    );
+    emit(currentState.copyWith(preferences: optimisticPreferences));
+
+    try {
+      final updatedPreferences = await _userHttpClient?.updatePreferences(
+        pushNotificationsEnabled: event.pushNotificationsEnabled,
+        emailNotificationsEnabled: event.emailNotificationsEnabled,
+        theme: event.theme,
+        language: event.language,
+      );
+
+      // Обновляем состояние данными с сервера (могут отличаться)
+      if (updatedPreferences != null) {
+        emit(currentState.copyWith(preferences: updatedPreferences));
+      }
+    } catch (e) {
+      developer.log(
+        'Failed to update preferences: $e',
+        name: 'AuthBloc',
+        error: e,
+      );
+      // Откат к предыдущим настройкам при ошибке
+      emit(currentState.copyWith(preferences: oldPreferences));
+    }
+  }
+
+  /// Загрузить настройки пользователя с сервера
+  Future<UserPreferences?> _loadPreferences() async {
+    try {
+      return await _userHttpClient?.getPreferences();
+    } catch (e) {
+      developer.log(
+        'Failed to load preferences: $e',
+        name: 'AuthBloc',
+        error: e,
+      );
+      // Возвращаем дефолтные настройки при ошибке
+      return const UserPreferences();
     }
   }
 }

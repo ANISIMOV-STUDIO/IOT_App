@@ -11,6 +11,7 @@ import 'package:hvac_control/core/services/theme_service.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/core/utils/snackbar_utils.dart';
+import 'package:hvac_control/domain/entities/user_preferences.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
 import 'package:hvac_control/presentation/bloc/auth/auth_bloc.dart';
 import 'package:hvac_control/presentation/bloc/auth/auth_event.dart';
@@ -38,9 +39,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  bool _pushNotifications = true;
-  bool _emailNotifications = false;
-
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
@@ -109,11 +107,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(height: AppSpacing.sm),
 
                   // Notifications Card
-                  _NotificationsCard(
-                    pushNotifications: _pushNotifications,
-                    emailNotifications: _emailNotifications,
-                    onPushChanged: (v) => setState(() => _pushNotifications = v),
-                    onEmailChanged: (v) => setState(() => _emailNotifications = v),
+                  BlocBuilder<AuthBloc, AuthState>(
+                    buildWhen: (prev, curr) =>
+                        prev is AuthAuthenticated &&
+                        curr is AuthAuthenticated &&
+                        prev.preferences != curr.preferences,
+                    builder: (context, state) {
+                      final prefs = state is AuthAuthenticated
+                          ? state.preferences
+                          : null;
+                      return _NotificationsCard(
+                        pushNotifications: prefs?.pushNotificationsEnabled ?? true,
+                        emailNotifications: prefs?.emailNotificationsEnabled ?? true,
+                        onPushChanged: (v) => context.read<AuthBloc>().add(
+                              AuthUpdatePreferencesRequested(
+                                pushNotificationsEnabled: v,
+                              ),
+                            ),
+                        onEmailChanged: (v) => context.read<AuthBloc>().add(
+                              AuthUpdatePreferencesRequested(
+                                emailNotificationsEnabled: v,
+                              ),
+                            ),
+                      );
+                    },
                   ),
                   const SizedBox(height: AppSpacing.sm),
 
@@ -382,7 +399,18 @@ class _SettingsCard extends StatelessWidget {
                 title: l10n.theme,
                 subtitle: isDark ? l10n.darkThemeLabel : l10n.lightThemeLabel,
                 value: isDark,
-                onChanged: (_) => themeService.toggleTheme(),
+                onChanged: (_) {
+                  themeService.toggleTheme();
+                  // Синхронизация с бэкендом
+                  final newTheme = themeService.isDark
+                      ? PreferenceTheme.dark
+                      : PreferenceTheme.light;
+                  context.read<AuthBloc>().add(
+                        AuthUpdatePreferencesRequested(
+                          theme: newTheme.toApiString(),
+                        ),
+                      );
+                },
               );
             },
           ),
@@ -412,13 +440,34 @@ class _SettingsCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                onTap: () => showLanguagePickerDialog(context, languageService),
+                onTap: () => _showLanguagePickerAndSync(context, languageService),
               );
             },
           ),
         ],
       ),
     );
+  }
+
+  /// Показать диалог выбора языка и синхронизировать с бэкендом
+  Future<void> _showLanguagePickerAndSync(
+    BuildContext context,
+    LanguageService service,
+  ) async {
+    final previousLang = service.currentLanguage;
+    await showLanguagePickerDialog(context, service);
+
+    // Если язык изменился - синхронизируем с бэкендом
+    if (service.currentLanguage != previousLang && context.mounted) {
+      final newLang = service.currentLanguage.code == 'ru'
+          ? PreferenceLanguage.russian
+          : PreferenceLanguage.english;
+      context.read<AuthBloc>().add(
+            AuthUpdatePreferencesRequested(
+              language: newLang.toApiString(),
+            ),
+          );
+    }
   }
 }
 

@@ -18,6 +18,7 @@ import 'package:hvac_control/core/services/token_refresh_service.dart';
 import 'package:hvac_control/core/services/version_check_service.dart';
 // Data - HTTP Clients (для DI в repositories)
 import 'package:hvac_control/data/api/http/clients/hvac_http_client.dart';
+import 'package:hvac_control/data/api/http/clients/user_http_client.dart';
 // Data - API Client (Platform-specific)
 import 'package:hvac_control/data/api/platform/api_client.dart';
 import 'package:hvac_control/data/api/platform/api_client_factory.dart';
@@ -108,11 +109,6 @@ Future<void> init() async {
           authStorage: sl(),
           authService: sl(),
         ))
-    ..registerLazySingleton(() => AuthBloc(
-          authService: sl(),
-          storageService: sl(),
-          tokenRefreshService: sl(),
-        ))
 
     //! Offline Support - Сервисы кеширования и мониторинга сети
     ..registerLazySingleton(ConnectivityService.new)
@@ -175,9 +171,14 @@ Future<void> init() async {
 
   // HVAC HTTP Client (для прямых вызовов API)
   if (useRealApi) {
-    sl.registerLazySingleton<HvacHttpClient>(
-      () => HvacHttpClient(sl<ApiClient>()),
-    );
+    sl
+      ..registerLazySingleton<HvacHttpClient>(
+        () => HvacHttpClient(sl<ApiClient>()),
+      )
+      // User HTTP Client (настройки пользователя)
+      ..registerLazySingleton<UserHttpClient>(
+        () => UserHttpClient(sl<ApiClient>()),
+      );
   }
 
   // Climate Repository (Управление климатом HVAC)
@@ -325,6 +326,16 @@ Future<void> init() async {
   ..registerLazySingleton(() => DismissNotification(sl()))
 
   //! Presentation - BLoCs
+
+  // AuthBloc (Аутентификация - регистрируется здесь чтобы иметь доступ к UserHttpClient)
+  ..registerLazySingleton(
+    () => AuthBloc(
+      authService: sl(),
+      storageService: sl(),
+      tokenRefreshService: sl(),
+      userHttpClient: useRealApi ? sl<UserHttpClient>() : null,
+    ),
+  )
 
   // DevicesBloc (Управление списком HVAC устройств)
   ..registerLazySingleton(

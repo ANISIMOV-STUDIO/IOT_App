@@ -367,14 +367,14 @@ class _DialogActions extends StatelessWidget {
 }
 
 /// Shows language picker dialog
-void showLanguagePickerDialog(
+Future<void> showLanguagePickerDialog(
   BuildContext context,
   LanguageService languageService,
-) {
+) async {
   final colors = BreezColors.of(context);
   final l10n = AppLocalizations.of(context)!;
 
-  showDialog<void>(
+  await showDialog<void>(
     context: context,
     builder: (dialogContext) => AlertDialog(
       backgroundColor: colors.card,

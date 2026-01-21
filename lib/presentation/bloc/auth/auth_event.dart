@@ -152,3 +152,26 @@ class AuthUpdateProfileRequested extends AuthEvent {
 class AuthSessionExpired extends AuthEvent {
   const AuthSessionExpired();
 }
+
+/// Обновление настроек пользователя
+class AuthUpdatePreferencesRequested extends AuthEvent {
+  const AuthUpdatePreferencesRequested({
+    this.pushNotificationsEnabled,
+    this.emailNotificationsEnabled,
+    this.theme,
+    this.language,
+  });
+
+  final bool? pushNotificationsEnabled;
+  final bool? emailNotificationsEnabled;
+  final String? theme;
+  final String? language;
+
+  @override
+  List<Object?> get props => [
+        pushNotificationsEnabled,
+        emailNotificationsEnabled,
+        theme,
+        language,
+      ];
+}

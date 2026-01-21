@@ -3,6 +3,7 @@ library;
 
 import 'package:equatable/equatable.dart';
 import 'package:hvac_control/domain/entities/user.dart';
+import 'package:hvac_control/domain/entities/user_preferences.dart';
 
 /// Базовое состояние аутентификации
 sealed class AuthState extends Equatable {
@@ -34,16 +35,31 @@ class AuthAuthenticated extends AuthState {
     required this.user,
     required this.accessToken,
     required this.refreshToken,
+    this.preferences,
   });
   final User user;
   final String accessToken;
   final String refreshToken;
+  final UserPreferences? preferences;
 
   /// Для обратной совместимости
   String get token => accessToken;
 
+  /// Копирование с изменениями
+  AuthAuthenticated copyWith({
+    User? user,
+    String? accessToken,
+    String? refreshToken,
+    UserPreferences? preferences,
+  }) => AuthAuthenticated(
+        user: user ?? this.user,
+        accessToken: accessToken ?? this.accessToken,
+        refreshToken: refreshToken ?? this.refreshToken,
+        preferences: preferences ?? this.preferences,
+      );
+
   @override
-  List<Object?> get props => [user, accessToken, refreshToken];
+  List<Object?> get props => [user, accessToken, refreshToken, preferences];
 }
 
 /// Ошибка аутентификации

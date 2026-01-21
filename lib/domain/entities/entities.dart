@@ -17,4 +17,5 @@ export 'temperature_reading.dart';
 export 'unit_notification.dart';
 export 'unit_state.dart';
 export 'user.dart';
+export 'user_preferences.dart';
 export 'version_info.dart';
