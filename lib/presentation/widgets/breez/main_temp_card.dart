@@ -84,7 +84,7 @@ class MainTempCard extends StatelessWidget {
     this.isPendingCoolingTemperature = false,
     this.isPendingSupplyFan = false,
     this.isPendingExhaustFan = false,
-    this.deviceTime,
+    this.updatedAt,
   });
   final String unitName;
   final String? status;
@@ -132,8 +132,8 @@ class MainTempCard extends StatelessWidget {
   /// Ожидание подтверждения изменения вытяжного вентилятора
   final bool isPendingExhaustFan;
 
-  /// Время устройства (если null, используется системное время)
-  final DateTime? deviceTime;
+  /// Время последней синхронизации с сервером
+  final DateTime? updatedAt;
 
   @override
   Widget build(BuildContext context) {
@@ -211,7 +211,7 @@ class MainTempCard extends StatelessWidget {
                   onSettingsTap: isOnline ? onSettingsTap : null,
                   onAlarmsTap: onAlarmsTap,
                   isOnline: isOnline,
-                  deviceTime: deviceTime,
+                  updatedAt: updatedAt,
                 ),
 
                 // Temperature display - Two columns: Heating & Cooling

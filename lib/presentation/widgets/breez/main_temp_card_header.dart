@@ -26,7 +26,7 @@ class MainTempCardHeader extends StatelessWidget {
     this.onSettingsTap,
     this.onAlarmsTap,
     this.isOnline = true,
-    this.deviceTime,
+    this.updatedAt,
   });
   final String unitName;
   final String? status;
@@ -40,8 +40,8 @@ class MainTempCardHeader extends StatelessWidget {
   final VoidCallback? onSettingsTap;
   final VoidCallback? onAlarmsTap;
   final bool isOnline;
-  /// Время устройства (если null, используется системное время)
-  final DateTime? deviceTime;
+  /// Время последней синхронизации с сервером
+  final DateTime? updatedAt;
 
   @override
   Widget build(BuildContext context) {
@@ -52,10 +52,10 @@ class MainTempCardHeader extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Date and time
-        _DateUnitSection(
+        // Sync time
+        _SyncTimeSection(
           colors: colors,
-          deviceTime: deviceTime,
+          updatedAt: updatedAt,
         ),
         // Alarm badge (if any)
         if (alarmCount > 0)
@@ -85,34 +85,35 @@ class MainTempCardHeader extends StatelessWidget {
   }
 }
 
-/// Date and time section
-class _DateUnitSection extends StatelessWidget {
+/// Sync time section - показывает время последней синхронизации
+class _SyncTimeSection extends StatelessWidget {
 
-  const _DateUnitSection({
+  const _SyncTimeSection({
     required this.colors,
-    this.deviceTime,
+    this.updatedAt,
   });
   final BreezColors colors;
-  final DateTime? deviceTime;
+  final DateTime? updatedAt;
 
   @override
   Widget build(BuildContext context) {
-    final locale = Localizations.localeOf(context).languageCode;
-    final time = deviceTime ?? DateTime.now();
-    final dateFormat = DateFormat('d MMM', locale);
-    final timeFormat = DateFormat('HH:mm', locale);
+    final l10n = AppLocalizations.of(context)!;
+    final timeFormat = DateFormat('HH:mm');
 
-    // Единый стиль для даты и времени
-    final textStyle = TextStyle(
-      fontSize: AppFontSizes.caption,
-      fontWeight: FontWeight.w500,
-      color: colors.textMuted,
-    );
+    // Если есть время синхронизации - показываем его
+    if (updatedAt != null) {
+      return Text(
+        '${l10n.syncedAt} ${timeFormat.format(updatedAt!)}',
+        style: TextStyle(
+          fontSize: AppFontSizes.bodySmall,
+          fontWeight: FontWeight.w500,
+          color: colors.textMuted,
+        ),
+      );
+    }
 
-    return Text(
-      '${dateFormat.format(time)}  ·  ${timeFormat.format(time)}',
-      style: textStyle,
-    );
+    // Fallback - ничего не показываем
+    return const SizedBox.shrink();
   }
 }
 

@@ -283,7 +283,16 @@ class DeviceJsonMapper {
       isScheduleEnabled: json['scheduleEnabled'] as bool? ?? false,
       quickSensors: _parseQuickSensors(json['quickSensors']),
       deviceTime: _parseDeviceTime(json),
+      updatedAt: _parseDateTime(json['updatedAt'] as String?),
     );
+
+  /// Парсинг ISO DateTime строки
+  static DateTime? _parseDateTime(String? dateTimeStr) {
+    if (dateTimeStr == null) {
+      return null;
+    }
+    return DateTime.tryParse(dateTimeStr);
+  }
 
   /// Парсинг времени устройства из JSON
   static DateTime? _parseDeviceTime(Map<String, dynamic> json) {

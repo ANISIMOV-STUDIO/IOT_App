@@ -1364,6 +1364,12 @@ abstract class AppLocalizations {
   /// **'Выключен'**
   String get statusStopped;
 
+  /// No description provided for @syncedAt.
+  ///
+  /// In ru, this message translates to:
+  /// **'Обновлено:'**
+  String get syncedAt;
+
   /// No description provided for @statusEnabled.
   ///
   /// In ru, this message translates to:

@@ -102,7 +102,7 @@ class UnitControlCard extends StatelessWidget {
       isPendingExhaustFan: isPendingExhaustFan,
       selectedSensors: selectedSensors,
       sensorUnit: unit,
-      deviceTime: unit.deviceTime,
+      updatedAt: unit.updatedAt,
     );
   }
 }

@@ -802,6 +802,7 @@
   "statusOffline": "Оффлайн",
   "statusRunning": "В работе",
   "statusStopped": "Выключен",
+  "syncedAt": "Обновлено:",
   "statusEnabled": "Включено",
   "statusDisabled": "Выключено",
   "holdToToggle": "Удерживайте для активации дня",

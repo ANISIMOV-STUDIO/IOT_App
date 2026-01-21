@@ -34,6 +34,7 @@ class UnitState extends Equatable {        // Текущее время устр
     this.isOnline = true,
     this.quickSensors = const ['outside_temp', 'indoor_temp', 'humidity'],
     this.deviceTime,
+    this.updatedAt,
   });
   final String id;
   final String name;
@@ -60,7 +61,8 @@ class UnitState extends Equatable {        // Текущее время устр
   final int ductPressure;            // Давление в воздуховоде (Па)
   final bool isOnline;                // Устройство онлайн
   final List<String> quickSensors;   // Быстрые показатели на главном экране
-  final DateTime? deviceTime;
+  final DateTime? deviceTime;        // Текущее время устройства
+  final DateTime? updatedAt;         // Время последней синхронизации
 
   UnitState copyWith({
     String? id,
@@ -87,6 +89,7 @@ class UnitState extends Equatable {        // Текущее время устр
     bool? isOnline,
     List<String>? quickSensors,
     DateTime? deviceTime,
+    DateTime? updatedAt,
   }) => UnitState(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -112,6 +115,7 @@ class UnitState extends Equatable {        // Текущее время устр
       isOnline: isOnline ?? this.isOnline,
       quickSensors: quickSensors ?? this.quickSensors,
       deviceTime: deviceTime ?? this.deviceTime,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
 
   @override
@@ -140,5 +144,6 @@ class UnitState extends Equatable {        // Текущее время устр
         isOnline,
         quickSensors,
         deviceTime,
+        updatedAt,
       ];
 }

@@ -36,6 +36,7 @@ class DeviceFullState extends Equatable {
     this.isScheduleEnabled = false,
     this.quickSensors = const ['outside_temp', 'indoor_temp', 'humidity'],
     this.deviceTime,
+    this.updatedAt,
   });
   final String id;
   final String name;
@@ -105,6 +106,9 @@ class DeviceFullState extends Equatable {
   /// Текущее время устройства
   final DateTime? deviceTime;
 
+  /// Время последней синхронизации с сервером
+  final DateTime? updatedAt;
+
   /// Есть ли активные аварии
   bool get hasAlarms => activeAlarms != null && activeAlarms!.isNotEmpty;
 
@@ -140,6 +144,7 @@ class DeviceFullState extends Equatable {
     String? operatingMode,
     List<String>? quickSensors,
     DateTime? deviceTime,
+    DateTime? updatedAt,
   }) => DeviceFullState(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -169,6 +174,7 @@ class DeviceFullState extends Equatable {
       isScheduleEnabled: isScheduleEnabled ?? this.isScheduleEnabled,
       quickSensors: quickSensors ?? this.quickSensors,
       deviceTime: deviceTime ?? this.deviceTime,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
 
   @override
@@ -201,5 +207,6 @@ class DeviceFullState extends Equatable {
         isScheduleEnabled,
         quickSensors,
         deviceTime,
+        updatedAt,
       ];
 }

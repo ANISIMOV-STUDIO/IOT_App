@@ -802,6 +802,7 @@
   "statusOffline": "Offline",
   "statusRunning": "Running",
   "statusStopped": "Stopped",
+  "syncedAt": "Synced:",
   "statusEnabled": "Enabled",
   "statusDisabled": "Disabled",
   "holdToToggle": "Hold to activate day",

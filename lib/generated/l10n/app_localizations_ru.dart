@@ -695,6 +695,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get statusStopped => 'Выключен';
 
   @override
+  String get syncedAt => 'Обновлено:';
+
+  @override
   String get statusEnabled => 'Включено';
 
   @override

@@ -693,6 +693,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get statusStopped => 'Stopped';
 
   @override
+  String get syncedAt => 'Synced:';
+
+  @override
   String get statusEnabled => 'Enabled';
 
   @override
