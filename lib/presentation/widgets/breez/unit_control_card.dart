@@ -8,18 +8,17 @@ import 'package:hvac_control/generated/l10n/app_localizations.dart';
 import 'package:hvac_control/presentation/widgets/breez/main_temp_card.dart';
 
 /// Унифицированная карточка управления для всех layout-ов
+///
+/// Отображает readonly данные с устройства:
+/// - temperatureSetpoint — уставка температуры с пульта
+/// - actualSupplyFan — актуальные обороты приточного вентилятора
+/// - actualExhaustFan — актуальные обороты вытяжного вентилятора
+///
+/// Изменение параметров происходит через режимы (Settings → Modes)
 class UnitControlCard extends StatelessWidget {
 
   const UnitControlCard({
     required this.unit, super.key,
-    this.onTemperatureIncrease,
-    this.onTemperatureDecrease,
-    this.onHeatingTempIncrease,
-    this.onHeatingTempDecrease,
-    this.onCoolingTempIncrease,
-    this.onCoolingTempDecrease,
-    this.onSupplyFanChanged,
-    this.onExhaustFanChanged,
     this.onPowerToggle,
     this.onSettingsTap,
     this.isPowerLoading = false,
@@ -27,20 +26,8 @@ class UnitControlCard extends StatelessWidget {
     this.isScheduleLoading = false,
     this.onScheduleToggle,
     this.isOnline = true,
-    this.isPendingHeatingTemperature = false,
-    this.isPendingCoolingTemperature = false,
-    this.isPendingSupplyFan = false,
-    this.isPendingExhaustFan = false,
   });
   final UnitState unit;
-  final VoidCallback? onTemperatureIncrease;
-  final VoidCallback? onTemperatureDecrease;
-  final VoidCallback? onHeatingTempIncrease;
-  final VoidCallback? onHeatingTempDecrease;
-  final VoidCallback? onCoolingTempIncrease;
-  final VoidCallback? onCoolingTempDecrease;
-  final ValueChanged<int>? onSupplyFanChanged;
-  final ValueChanged<int>? onExhaustFanChanged;
   final VoidCallback? onPowerToggle;
   final VoidCallback? onSettingsTap;
   final bool isPowerLoading;
@@ -48,18 +35,6 @@ class UnitControlCard extends StatelessWidget {
   final bool isScheduleLoading;
   final VoidCallback? onScheduleToggle;
   final bool isOnline;
-
-  /// Ожидание подтверждения изменения температуры нагрева
-  final bool isPendingHeatingTemperature;
-
-  /// Ожидание подтверждения изменения температуры охлаждения
-  final bool isPendingCoolingTemperature;
-
-  /// Ожидание подтверждения изменения приточного вентилятора
-  final bool isPendingSupplyFan;
-
-  /// Ожидание подтверждения изменения вытяжного вентилятора
-  final bool isPendingExhaustFan;
 
   @override
   Widget build(BuildContext context) {
@@ -71,8 +46,10 @@ class UnitControlCard extends StatelessWidget {
     return MainTempCard(
       unitName: unit.name,
       temperature: unit.temp,
-      heatingTemp: unit.heatingTemp,
-      coolingTemp: unit.coolingTemp,
+      // Уставка температуры с пульта (readonly)
+      temperatureSetpoint: unit.temperatureSetpoint,
+      // Текущий режим работы
+      currentMode: unit.mode,
       status: unit.power ? l10n.statusRunning : l10n.statusStopped,
       humidity: unit.humidity,
       outsideTemp: unit.outsideTemp,
@@ -80,15 +57,10 @@ class UnitControlCard extends StatelessWidget {
       airflow: 0,
       filterPercent: unit.filterPercent,
       isPowered: unit.power,
-      supplyFan: unit.supplyFan,
-      exhaustFan: unit.exhaustFan,
+      // Актуальные обороты вентиляторов (readonly)
+      supplyFan: unit.actualSupplyFan,
+      exhaustFan: unit.actualExhaustFan,
       onPowerToggle: onPowerToggle,
-      onHeatingTempIncrease: onHeatingTempIncrease,
-      onHeatingTempDecrease: onHeatingTempDecrease,
-      onCoolingTempIncrease: onCoolingTempIncrease,
-      onCoolingTempDecrease: onCoolingTempDecrease,
-      onSupplyFanChanged: onSupplyFanChanged,
-      onExhaustFanChanged: onExhaustFanChanged,
       onSettingsTap: onSettingsTap,
       showControls: true,
       isPowerLoading: isPowerLoading,
@@ -96,10 +68,6 @@ class UnitControlCard extends StatelessWidget {
       isScheduleLoading: isScheduleLoading,
       onScheduleToggle: onScheduleToggle,
       isOnline: isOnline,
-      isPendingHeatingTemperature: isPendingHeatingTemperature,
-      isPendingCoolingTemperature: isPendingCoolingTemperature,
-      isPendingSupplyFan: isPendingSupplyFan,
-      isPendingExhaustFan: isPendingExhaustFan,
       selectedSensors: selectedSensors,
       sensorUnit: unit,
       updatedAt: unit.updatedAt,

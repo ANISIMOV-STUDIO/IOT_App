@@ -32,6 +32,9 @@ class UnitState extends Equatable {        // Текущее время устр
     this.heaterPower = 0,
     this.coolerStatus = 'Н/Д',
     this.ductPressure = 120,
+    this.actualSupplyFan,
+    this.actualExhaustFan,
+    this.temperatureSetpoint,
     this.isOnline = true,
     this.quickSensors = const ['outside_temp', 'indoor_temp', 'humidity'],
     this.deviceTime,
@@ -61,6 +64,9 @@ class UnitState extends Equatable {        // Текущее время устр
   final int heaterPower;             // Мощность работы нагревателя (%)
   final String coolerStatus;            // Статус охладителя
   final int ductPressure;            // Давление в воздуховоде (Па)
+  final int? actualSupplyFan;        // Фактические обороты приточного (0-100%)
+  final int? actualExhaustFan;       // Фактические обороты вытяжного (0-100%)
+  final double? temperatureSetpoint; // Уставка температуры с пульта
   final bool isOnline;                // Устройство онлайн
   final List<String> quickSensors;   // Быстрые показатели на главном экране
   final DateTime? deviceTime;        // Текущее время устройства
@@ -89,6 +95,9 @@ class UnitState extends Equatable {        // Текущее время устр
     int? heaterPower,
     String? coolerStatus,
     int? ductPressure,
+    int? actualSupplyFan,
+    int? actualExhaustFan,
+    double? temperatureSetpoint,
     bool? isOnline,
     List<String>? quickSensors,
     DateTime? deviceTime,
@@ -116,6 +125,9 @@ class UnitState extends Equatable {        // Текущее время устр
       heaterPower: heaterPower ?? this.heaterPower,
       coolerStatus: coolerStatus ?? this.coolerStatus,
       ductPressure: ductPressure ?? this.ductPressure,
+      actualSupplyFan: actualSupplyFan ?? this.actualSupplyFan,
+      actualExhaustFan: actualExhaustFan ?? this.actualExhaustFan,
+      temperatureSetpoint: temperatureSetpoint ?? this.temperatureSetpoint,
       isOnline: isOnline ?? this.isOnline,
       quickSensors: quickSensors ?? this.quickSensors,
       deviceTime: deviceTime ?? this.deviceTime,
@@ -146,6 +158,9 @@ class UnitState extends Equatable {        // Текущее время устр
         heaterPower,
         coolerStatus,
         ductPressure,
+        actualSupplyFan,
+        actualExhaustFan,
+        temperatureSetpoint,
         isOnline,
         quickSensors,
         deviceTime,

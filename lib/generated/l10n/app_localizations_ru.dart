@@ -692,6 +692,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get statusOffline => 'Оффлайн';
 
   @override
+  String get deviceOffline => 'Устройство не в сети';
+
+  @override
   String get statusRunning => 'В работе';
 
   @override
@@ -1136,4 +1139,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get sessionExpired => 'Сессия истекла. Выполняется выход...';
+
+  @override
+  String get temperatureSetpoint => 'Уставка';
 }

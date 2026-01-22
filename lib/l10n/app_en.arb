@@ -804,6 +804,7 @@
   "modeVentilation": "Ventilation",
   "statusOnline": "Online",
   "statusOffline": "Offline",
+  "deviceOffline": "Device offline",
   "statusRunning": "Running",
   "statusStopped": "Stopped",
   "syncedAt": "Synced:",
@@ -996,5 +997,9 @@
   "sessionExpired": "Session expired. Logging out...",
   "@sessionExpired": {
     "description": "Session expired toast message"
+  },
+  "temperatureSetpoint": "Setpoint",
+  "@temperatureSetpoint": {
+    "description": "Temperature setpoint label for main card"
   }
 }

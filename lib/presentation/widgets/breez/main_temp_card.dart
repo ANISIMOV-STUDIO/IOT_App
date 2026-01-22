@@ -3,17 +3,16 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_control/core/services/quick_sensors_service.dart';
+import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/domain/entities/unit_state.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
-import 'package:hvac_control/presentation/bloc/climate/climate_bloc.dart' show TemperatureLimits;
 import 'package:hvac_control/presentation/widgets/breez/breez_loader.dart';
-import 'package:hvac_control/presentation/widgets/breez/fan_slider.dart';
 import 'package:hvac_control/presentation/widgets/breez/main_temp_card_header.dart';
 import 'package:hvac_control/presentation/widgets/breez/main_temp_card_shimmer.dart';
+import 'package:hvac_control/presentation/widgets/breez/mode_grid.dart';
 import 'package:hvac_control/presentation/widgets/breez/stat_item.dart';
-import 'package:hvac_control/presentation/widgets/breez/temp_column.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -21,36 +20,39 @@ import 'package:hvac_control/presentation/widgets/breez/temp_column.dart';
 
 /// Константы для MainTempCard
 abstract class _MainTempCardConstants {
-  static const double borderWidthOn = 1.5;
-  static const double borderWidthOff = 1;
-  static const double borderOpacity = 0.5;
+  // Shadow
   static const double shadowBlurPrimary = 24;
   static const double shadowBlurGlow = 40;
   static const double shadowSpread = 4;
   static const double shadowOffsetY = 8;
   static const double shadowOpacityPrimary = 0.2;
   static const double shadowOpacityGlow = 0.1;
-  static const double dividerHeight = 80;
-  static const double dividerWidth = 1;
+
+  // Typography
+  static const double modeLabelLetterSpacing = 0.5;
+
+  // Offline state
+  static const double offlineOverlayOpacity = 0.95;
 }
 
 // =============================================================================
 // MAIN WIDGET
 // =============================================================================
 
-/// Main temperature display card with gradient background
+/// Main temperature display card with mode-colored background
 ///
 /// Поддерживает:
-/// - Градиентный фон когда устройство включено
-/// - Glow эффект
+/// - Цветной overlay на основе текущего режима (как ModeGridItem)
+/// - Glow эффект с цветом режима
 /// - Shimmer loading state
+/// - Offline состояние с затемнением
 /// - Accessibility через Semantics
 class MainTempCard extends StatelessWidget {
 
   const MainTempCard({
     required this.unitName, required this.temperature, super.key,
-    this.heatingTemp,
-    this.coolingTemp,
+    this.temperatureSetpoint,
+    this.currentMode,
     this.status,
     this.humidity = 45,
     this.outsideTemp = 0.0,
@@ -62,13 +64,7 @@ class MainTempCard extends StatelessWidget {
     this.supplyFan,
     this.exhaustFan,
     this.onPowerToggle,
-    this.onSupplyFanChanged,
-    this.onExhaustFanChanged,
     this.onSettingsTap,
-    this.onHeatingTempIncrease,
-    this.onHeatingTempDecrease,
-    this.onCoolingTempIncrease,
-    this.onCoolingTempDecrease,
     this.showControls = false,
     this.alarmCount = 0,
     this.onAlarmsTap,
@@ -80,17 +76,17 @@ class MainTempCard extends StatelessWidget {
     this.showStats = true,
     this.isOnline = true,
     this.selectedSensors = QuickSensorsService.defaultSensors,
-    this.isPendingHeatingTemperature = false,
-    this.isPendingCoolingTemperature = false,
-    this.isPendingSupplyFan = false,
-    this.isPendingExhaustFan = false,
     this.updatedAt,
   });
   final String unitName;
   final String? status;
   final int temperature;
-  final int? heatingTemp;
-  final int? coolingTemp;
+
+  /// Уставка температуры с пульта (readonly)
+  final double? temperatureSetpoint;
+
+  /// Текущий режим работы (basic, intensive, etc.)
+  final String? currentMode;
   final int humidity;
   final double outsideTemp;
   final double indoorTemp;
@@ -98,16 +94,14 @@ class MainTempCard extends StatelessWidget {
   final int filterPercent;
   final bool isPowered;
   final bool isLoading;
+
+  /// Актуальные обороты приточного вентилятора (0-100%) - readonly
   final int? supplyFan;
+
+  /// Актуальные обороты вытяжного вентилятора (0-100%) - readonly
   final int? exhaustFan;
   final VoidCallback? onPowerToggle;
-  final ValueChanged<int>? onSupplyFanChanged;
-  final ValueChanged<int>? onExhaustFanChanged;
   final VoidCallback? onSettingsTap;
-  final VoidCallback? onHeatingTempIncrease;
-  final VoidCallback? onHeatingTempDecrease;
-  final VoidCallback? onCoolingTempIncrease;
-  final VoidCallback? onCoolingTempDecrease;
   final bool showControls;
   final int alarmCount;
   final VoidCallback? onAlarmsTap;
@@ -120,17 +114,6 @@ class MainTempCard extends StatelessWidget {
   final bool isOnline;
   /// Выбранные показатели для отображения
   final List<QuickSensorType> selectedSensors;
-  /// Ожидание подтверждения изменения температуры нагрева
-  final bool isPendingHeatingTemperature;
-
-  /// Ожидание подтверждения изменения температуры охлаждения
-  final bool isPendingCoolingTemperature;
-
-  /// Ожидание подтверждения изменения приточного вентилятора
-  final bool isPendingSupplyFan;
-
-  /// Ожидание подтверждения изменения вытяжного вентилятора
-  final bool isPendingExhaustFan;
 
   /// Время последней синхронизации с сервером
   final DateTime? updatedAt;
@@ -138,40 +121,41 @@ class MainTempCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     final l10n = AppLocalizations.of(context)!;
 
     // Устройство активно только если включено И онлайн
     final isActive = isPowered && isOnline;
 
-    final poweredGradient = isDark
-        ? AppColors.darkCardGradientColors
-        : AppColors.lightCardGradientColors;
-    final offGradient = [colors.card, colors.card];
+    // Найти данные текущего режима для цвета
+    final modes = getOperatingModes(l10n);
+    final modeData = currentMode != null && currentMode!.isNotEmpty
+        ? modes.where((m) => m.id.toLowerCase() == currentMode!.toLowerCase()).firstOrNull
+        : null;
+    final modeColor = modeData?.color ?? AppColors.accent;
+
+    // Overlay цвет режима поверх базового фона (как в ModeGridItem)
+    final modeOverlay = modeColor.withValues(alpha: AppColors.opacitySubtle);
 
     return Semantics(
       label: '$unitName: ${isActive ? status ?? 'включено' : isOnline ? 'выключено' : 'не в сети'}',
       child: Container(
+        // Clip чтобы overlay не выходил за границы borderRadius
+        clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: isActive ? poweredGradient : offGradient,
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+          // Базовый фон карточки (как BreezCard)
+          color: colors.card,
           borderRadius: BorderRadius.circular(AppRadius.card),
+          // Border как в ModeGridItem
           border: Border.all(
             color: isActive
-                ? AppColors.accent.withValues(alpha: _MainTempCardConstants.borderOpacity)
+                ? modeColor.withValues(alpha: AppColors.opacityStrong)
                 : colors.border,
-            width: isActive
-                ? _MainTempCardConstants.borderWidthOn
-                : _MainTempCardConstants.borderWidthOff,
           ),
           boxShadow: isActive
               ? [
                   // Основная тень
                   BoxShadow(
-                    color: AppColors.accent.withValues(
+                    color: modeColor.withValues(
                       alpha: _MainTempCardConstants.shadowOpacityPrimary,
                     ),
                     blurRadius: _MainTempCardConstants.shadowBlurPrimary,
@@ -179,7 +163,7 @@ class MainTempCard extends StatelessWidget {
                   ),
                   // Glow эффект
                   BoxShadow(
-                    color: AppColors.accent.withValues(
+                    color: modeColor.withValues(
                       alpha: _MainTempCardConstants.shadowOpacityGlow,
                     ),
                     blurRadius: _MainTempCardConstants.shadowBlurGlow,
@@ -188,13 +172,24 @@ class MainTempCard extends StatelessWidget {
                 ]
               : null,
         ),
-        padding: const EdgeInsets.all(AppSpacing.xs),
+        // Padding убран отсюда - добавлен к содержимому, чтобы overlay покрывал всю карточку
       child: isLoading
-          ? const MainTempCardShimmer()
+          ? const Padding(
+              padding: EdgeInsets.all(AppSpacing.xs),
+              child: MainTempCardShimmer(),
+            )
           : Stack(
               children: [
-                // Основной контент
-                Column(
+                // Overlay цвета режима (как в ModeGridItem)
+                // borderRadius не нужен - Container с clipBehavior обрежет
+                if (isActive)
+                  Positioned.fill(
+                    child: ColoredBox(color: modeOverlay),
+                  ),
+                // Основной контент с padding
+                Padding(
+                  padding: const EdgeInsets.all(AppSpacing.xs),
+                  child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Header
@@ -214,27 +209,23 @@ class MainTempCard extends StatelessWidget {
                   updatedAt: updatedAt,
                 ),
 
-                // Temperature display - Two columns: Heating & Cooling
+                // Temperature display - Single setpoint (readonly)
                 // Expanded чтобы занять центр карточки
                 Expanded(
                   child: Stack(
                     children: [
-                      // Температурные колонки (с opacity если offline)
+                      // Уставка температуры (с opacity если offline)
                       Opacity(
-                        opacity: isOnline ? 1.0 : 0.4,
+                        opacity: isOnline ? 1.0 : AppColors.opacityStrong,
                         child: Center(
-                          child: _TemperatureSection(
-                            heatingTemp: heatingTemp,
-                            coolingTemp: coolingTemp,
+                          child: _TemperatureSetpointSection(
+                            temperatureSetpoint: temperatureSetpoint,
+                            modeColor: modeColor,
+                            modeIcon: modeData?.icon,
+                            modeName: modeData?.name,
                             isPowered: isActive,
                             colors: colors,
                             l10n: l10n,
-                            onHeatingTempIncrease: isActive ? onHeatingTempIncrease : null,
-                            onHeatingTempDecrease: isActive ? onHeatingTempDecrease : null,
-                            onCoolingTempIncrease: isActive ? onCoolingTempIncrease : null,
-                            onCoolingTempDecrease: isActive ? onCoolingTempDecrease : null,
-                            isPendingHeatingTemperature: isPendingHeatingTemperature,
-                            isPendingCoolingTemperature: isPendingCoolingTemperature,
                           ),
                         ),
                       ),
@@ -247,12 +238,12 @@ class MainTempCard extends StatelessWidget {
                               vertical: AppSpacing.sm,
                             ),
                             decoration: BoxDecoration(
-                              color: colors.card.withValues(alpha: 0.95),
+                              color: colors.card.withValues(alpha: _MainTempCardConstants.offlineOverlayOpacity),
                               borderRadius: BorderRadius.circular(AppRadius.nested),
                               border: Border.all(color: colors.border),
                             ),
                             child: Text(
-                              'Устройство не в сети',
+                              l10n.deviceOffline,
                               style: TextStyle(
                                 fontSize: AppFontSizes.body,
                                 fontWeight: FontWeight.w600,
@@ -279,34 +270,24 @@ class MainTempCard extends StatelessWidget {
                     l10n: l10n,
                   ),
 
-                // Fan sliders - всегда видимы, но отключены когда устройство выключено или offline
+                // Fan display - readonly показатели актуальных оборотов
                 Opacity(
-                  opacity: isOnline ? 1.0 : 0.4,
-                  child: _FanSlidersSection(
+                  opacity: isOnline ? 1.0 : AppColors.opacityStrong,
+                  child: _FanDisplaySection(
                     supplyFan: supplyFan,
                     exhaustFan: exhaustFan,
-                    onSupplyFanChanged: isActive ? onSupplyFanChanged : null,
-                    onExhaustFanChanged: isActive ? onExhaustFanChanged : null,
                     colors: colors,
                     l10n: l10n,
-                    isPendingSupplyFan: isPendingSupplyFan,
-                    isPendingExhaustFan: isPendingExhaustFan,
                   ),
                 ),
-                  ],
+                    ],
+                  ),
                 ),
-                // Overlay блокировки при ожидании ответа от устройства
-                if (isPowerLoading ||
-                    isPendingHeatingTemperature ||
-                    isPendingCoolingTemperature ||
-                    isPendingSupplyFan ||
-                    isPendingExhaustFan)
+                // Overlay блокировки при переключении питания
+                if (isPowerLoading)
                   Positioned.fill(
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: colors.card.withValues(alpha: AppColors.opacityHigh),
-                        borderRadius: BorderRadius.circular(AppRadius.nested),
-                      ),
+                    child: ColoredBox(
+                      color: colors.card.withValues(alpha: AppColors.opacityHigh),
                       child: const Center(
                         child: BreezLoader.large(),
                       ),
@@ -319,77 +300,80 @@ class MainTempCard extends StatelessWidget {
   }
 }
 
-/// Temperature section with heating and cooling columns
-class _TemperatureSection extends StatelessWidget {
+/// Temperature setpoint display section - readonly
+class _TemperatureSetpointSection extends StatelessWidget {
 
-  const _TemperatureSection({
-    required this.heatingTemp,
-    required this.coolingTemp,
+  const _TemperatureSetpointSection({
+    required this.temperatureSetpoint,
+    required this.modeColor,
     required this.isPowered,
     required this.colors,
     required this.l10n,
-    this.onHeatingTempIncrease,
-    this.onHeatingTempDecrease,
-    this.onCoolingTempIncrease,
-    this.onCoolingTempDecrease,
-    this.isPendingHeatingTemperature = false,
-    this.isPendingCoolingTemperature = false,
+    this.modeIcon,
+    this.modeName,
   });
-  final int? heatingTemp;
-  final int? coolingTemp;
+  final double? temperatureSetpoint;
+  final Color modeColor;
+  final IconData? modeIcon;
+  final String? modeName;
   final bool isPowered;
   final BreezColors colors;
   final AppLocalizations l10n;
-  final VoidCallback? onHeatingTempIncrease;
-  final VoidCallback? onHeatingTempDecrease;
-  final VoidCallback? onCoolingTempIncrease;
-  final VoidCallback? onCoolingTempDecrease;
-  final bool isPendingHeatingTemperature;
-  final bool isPendingCoolingTemperature;
 
   @override
-  Widget build(BuildContext context) => Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        // Heating temperature
-        Expanded(
-          child: TemperatureColumn(
-            label: l10n.heating,
-            temperature: heatingTemp,
-            icon: Icons.whatshot,
-            color: AppColors.accentOrange,
-            isPowered: isPowered,
-            onIncrease: onHeatingTempIncrease,
-            onDecrease: onHeatingTempDecrease,
-            isPending: isPendingHeatingTemperature,
-            minTemp: TemperatureLimits.min,
-            maxTemp: TemperatureLimits.max,
+  Widget build(BuildContext context) {
+    final displayTemp = temperatureSetpoint != null
+        ? '${temperatureSetpoint!.toStringAsFixed(0)}°C'
+        : '—';
+
+    // Fallback для иконки и названия
+    final effectiveIcon = modeIcon ?? Icons.thermostat;
+    final effectiveName = modeName ?? l10n.temperatureSetpoint;
+
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Label with mode icon and name
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                effectiveIcon,
+                size: AppIconSizes.standard,
+                color: isPowered ? modeColor : colors.textMuted,
+              ),
+              const SizedBox(width: AppSpacing.xxs),
+              Text(
+                effectiveName.toUpperCase(),
+                style: TextStyle(
+                  fontSize: AppFontSizes.captionSmall,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: _MainTempCardConstants.modeLabelLetterSpacing,
+                  color: isPowered ? modeColor : colors.textMuted,
+                ),
+              ),
+            ],
           ),
-        ),
-        // Divider
-        Container(
-          width: _MainTempCardConstants.dividerWidth,
-          height: _MainTempCardConstants.dividerHeight,
-          color: colors.border,
-          margin: const EdgeInsets.symmetric(horizontal: AppSpacing.xs),
-        ),
-        // Cooling temperature
-        Expanded(
-          child: TemperatureColumn(
-            label: l10n.cooling,
-            temperature: coolingTemp,
-            icon: Icons.ac_unit,
-            color: AppColors.accent,
-            isPowered: isPowered,
-            onIncrease: onCoolingTempIncrease,
-            onDecrease: onCoolingTempDecrease,
-            isPending: isPendingCoolingTemperature,
-            minTemp: TemperatureLimits.min,
-            maxTemp: TemperatureLimits.max,
+          const SizedBox(height: AppSpacing.xs),
+          // Temperature value (увеличенный размер)
+          Text(
+            displayTemp,
+            style: TextStyle(
+              fontSize: AppFontSizes.display,
+              fontWeight: FontWeight.w700,
+              color: isPowered && temperatureSetpoint != null
+                  ? colors.text
+                  : colors.textMuted,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
+  }
 }
 
 /// Stats section - Динамически отображает выбранные показатели
@@ -442,36 +426,31 @@ class _StatsSection extends StatelessWidget {
         ),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: selectedSensors.map((sensor) => StatItem(
-            icon: sensor.icon,
-            value: _getSensorValue(sensor),
-            label: sensor.getLabel(l10n),
-            iconColor: sensor.color,
+        children: selectedSensors.map((sensor) => Expanded(
+            child: StatItem(
+              icon: sensor.icon,
+              value: _getSensorValue(sensor),
+              label: sensor.getLabel(l10n),
+              iconColor: sensor.color,
+            ),
           )).toList(),
       ),
     );
 }
 
-/// Fan sliders section
-class _FanSlidersSection extends StatelessWidget {
+/// Fan display section - readonly показатели актуальных оборотов
+class _FanDisplaySection extends StatelessWidget {
 
-  const _FanSlidersSection({
+  const _FanDisplaySection({
     required this.supplyFan,
     required this.exhaustFan,
-    required this.colors, required this.l10n, this.onSupplyFanChanged,
-    this.onExhaustFanChanged,
-    this.isPendingSupplyFan = false,
-    this.isPendingExhaustFan = false,
+    required this.colors,
+    required this.l10n,
   });
   final int? supplyFan;
   final int? exhaustFan;
-  final ValueChanged<int>? onSupplyFanChanged;
-  final ValueChanged<int>? onExhaustFanChanged;
   final BreezColors colors;
   final AppLocalizations l10n;
-  final bool isPendingSupplyFan;
-  final bool isPendingExhaustFan;
 
   @override
   Widget build(BuildContext context) => Column(
@@ -487,24 +466,20 @@ class _FanSlidersSection extends StatelessWidget {
           child: Row(
             children: [
               Expanded(
-                child: FanSlider(
+                child: _FanIndicator(
                   label: l10n.intake,
                   value: supplyFan,
                   color: AppColors.accent,
                   icon: Icons.arrow_downward_rounded,
-                  onChanged: onSupplyFanChanged,
-                  isPending: isPendingSupplyFan,
                 ),
               ),
               const SizedBox(width: AppSpacing.xs),
               Expanded(
-                child: FanSlider(
+                child: _FanIndicator(
                   label: l10n.exhaust,
                   value: exhaustFan,
                   color: AppColors.accentOrange,
                   icon: Icons.arrow_upward_rounded,
-                  onChanged: onExhaustFanChanged,
-                  isPending: isPendingExhaustFan,
                 ),
               ),
             ],
@@ -512,4 +487,59 @@ class _FanSlidersSection extends StatelessWidget {
         ),
       ],
     );
+}
+
+/// Readonly индикатор оборотов вентилятора
+class _FanIndicator extends StatelessWidget {
+
+  const _FanIndicator({
+    required this.label,
+    required this.value,
+    required this.color,
+    required this.icon,
+  });
+  final String label;
+  final int? value;
+  final Color color;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+    final displayValue = value != null ? '$value%' : '—';
+
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.sm,
+        vertical: AppSpacing.xs,
+      ),
+      decoration: BoxDecoration(
+        color: colors.buttonBg.withValues(alpha: AppColors.opacityLow),
+        borderRadius: BorderRadius.circular(AppRadius.chip),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, size: AppIconSizes.standard, color: color),
+          const SizedBox(width: AppSpacing.xxs),
+          Expanded(
+            child: Text(
+              label,
+              style: TextStyle(
+                fontSize: AppFontSizes.caption,
+                color: colors.textMuted,
+              ),
+            ),
+          ),
+          Text(
+            displayValue,
+            style: TextStyle(
+              fontSize: AppFontSizes.body,
+              fontWeight: FontWeight.w600,
+              color: value != null ? colors.text : colors.textMuted,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

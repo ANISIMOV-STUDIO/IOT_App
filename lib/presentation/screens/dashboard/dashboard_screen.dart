@@ -5,12 +5,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hvac_control/core/di/injection_container.dart' as di;
 import 'package:hvac_control/core/navigation/app_router.dart';
 import 'package:hvac_control/core/services/dialog_service.dart';
 import 'package:hvac_control/core/services/native_loading_service.dart';
-import 'package:hvac_control/core/services/theme_service.dart';
 import 'package:hvac_control/core/services/toast_service.dart';
 import 'package:hvac_control/core/services/version_check_service.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
@@ -48,14 +46,12 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  late final ThemeService _themeService;
   late final VersionCheckService _versionCheckService;
   StreamSubscription<VersionInfo>? _versionSubscription;
 
   @override
   void initState() {
     super.initState();
-    _themeService = di.sl<ThemeService>();
     _versionCheckService = di.sl<VersionCheckService>();
     _initializeVersionCheck();
   }
@@ -115,7 +111,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       : data.currentUnit == null
                           ? DashboardEmptyState(onAddUnit: _showAddUnitDialog)
                           : isDesktop
-                              ? _buildDesktopLayout(data, user, isDark)
+                              ? _buildDesktopLayout(data, user)
                               : _buildMobileLayout(data, isDark, width),
                 ),
               ],
@@ -126,35 +122,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildDesktopLayout(DashboardData data, User? user, bool isDark) {
+  Widget _buildDesktopLayout(DashboardData data, User? user) {
     final unit = data.currentUnit!;
     return DesktopLayout(
       unit: unit,
       allUnits: data.units,
       selectedUnitIndex: data.activeIndex,
-      isDark: isDark,
       userName: user?.fullName ?? AppLocalizations.of(context)!.defaultUserName,
       userRole: user?.role ?? 'User',
-      onTemperatureIncrease: (v) =>
-          context.read<ClimateBloc>().add(ClimateTemperatureChanged(v.toDouble())),
-      onTemperatureDecrease: (v) =>
-          context.read<ClimateBloc>().add(ClimateTemperatureChanged(v.toDouble())),
-      onHeatingTempIncrease: unit.heatingTemp != null
-          ? () => context.read<ClimateBloc>().add(ClimateHeatingTempChanged(unit.heatingTemp! + 1))
-          : null,
-      onHeatingTempDecrease: unit.heatingTemp != null
-          ? () => context.read<ClimateBloc>().add(ClimateHeatingTempChanged(unit.heatingTemp! - 1))
-          : null,
-      onCoolingTempIncrease: unit.coolingTemp != null
-          ? () => context.read<ClimateBloc>().add(ClimateCoolingTempChanged(unit.coolingTemp! + 1))
-          : null,
-      onCoolingTempDecrease: unit.coolingTemp != null
-          ? () => context.read<ClimateBloc>().add(ClimateCoolingTempChanged(unit.coolingTemp! - 1))
-          : null,
-      onSupplyFanChanged: (v) =>
-          context.read<ClimateBloc>().add(ClimateSupplyAirflowChanged(v.toDouble())),
-      onExhaustFanChanged: (v) =>
-          context.read<ClimateBloc>().add(ClimateExhaustAirflowChanged(v.toDouble())),
       onModeTap: _handleModeTap,
       onPowerToggle: () => _handlePowerToggle(data.climateState),
       onSettingsTap: () => _showUnitSettings(unit),
@@ -164,19 +139,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
       onScheduleToggle: () => _handleScheduleToggle(data.climateState),
       onMasterOff: _masterPowerOff,
       onUnitSelected: (index) => _onUnitSelected(data.units, index),
-      onThemeToggle: _toggleTheme,
       onAddUnit: _showAddUnitDialog,
       onLogoutTap: _handleLogout,
-      onNotificationsTap: _showNotifications,
-      unreadNotificationsCount: data.notificationsState.unreadCount,
       timerSettings: data.climateState.deviceFullState?.timerSettings,
       onTimerSettingsChanged: _handleTimerSettingsChanged,
       activeAlarms: data.climateState.activeAlarms,
       onAlarmsReset: () => _handleAlarmsReset(data.currentUnit!.id),
-      isPendingHeatingTemperature: data.climateState.isPendingHeatingTemperature,
-      isPendingCoolingTemperature: data.climateState.isPendingCoolingTemperature,
-      isPendingSupplyFan: data.climateState.isPendingSupplyFan,
-      isPendingExhaustFan: data.climateState.isPendingExhaustFan,
       isPendingOperatingMode: data.climateState.isPendingOperatingMode,
     );
   }
@@ -204,22 +172,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
         Expanded(
           child: MobileLayout(
             unit: unit,
-            onHeatingTempIncrease: unit.heatingTemp != null
-                ? () => context.read<ClimateBloc>().add(ClimateHeatingTempChanged(unit.heatingTemp! + 1))
-                : null,
-            onHeatingTempDecrease: unit.heatingTemp != null
-                ? () => context.read<ClimateBloc>().add(ClimateHeatingTempChanged(unit.heatingTemp! - 1))
-                : null,
-            onCoolingTempIncrease: unit.coolingTemp != null
-                ? () => context.read<ClimateBloc>().add(ClimateCoolingTempChanged(unit.coolingTemp! + 1))
-                : null,
-            onCoolingTempDecrease: unit.coolingTemp != null
-                ? () => context.read<ClimateBloc>().add(ClimateCoolingTempChanged(unit.coolingTemp! - 1))
-                : null,
-            onSupplyFanChanged: (v) =>
-                context.read<ClimateBloc>().add(ClimateSupplyAirflowChanged(v.toDouble())),
-            onExhaustFanChanged: (v) =>
-                context.read<ClimateBloc>().add(ClimateExhaustAirflowChanged(v.toDouble())),
             onModeTap: _handleModeTap,
             onPowerToggle: () => _handlePowerToggle(data.climateState),
             onSettingsTap: () => _showUnitSettings(unit),
@@ -233,10 +185,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
             onAlarmsSeeHistory: () => context.goToAlarmHistory(unit.id, unit.name),
             onAlarmsReset: () => _handleAlarmsReset(unit.id),
             isOnline: unit.isOnline,
-            isPendingHeatingTemperature: data.climateState.isPendingHeatingTemperature,
-            isPendingCoolingTemperature: data.climateState.isPendingCoolingTemperature,
-            isPendingSupplyFan: data.climateState.isPendingSupplyFan,
-            isPendingExhaustFan: data.climateState.isPendingExhaustFan,
             isPendingOperatingMode: data.climateState.isPendingOperatingMode,
           ),
         ),
@@ -350,21 +298,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
   }
 
-  void _toggleTheme() {
-    _themeService.toggleTheme();
-    // setState не нужен - MaterialApp перестроится через ListenableBuilder в main.dart
-    // и Theme.of(context) обновится автоматически
-  }
-
   Future<void> _handleLogout() async {
     final confirmed = await DialogService.confirmLogout(context);
     if (confirmed && mounted) {
       context.read<AuthBloc>().add(const AuthLogoutRequested());
     }
-  }
-
-  void _showNotifications() {
-    context.push(AppRoutes.notifications);
   }
 
   void _handleTimerSettingsChanged(

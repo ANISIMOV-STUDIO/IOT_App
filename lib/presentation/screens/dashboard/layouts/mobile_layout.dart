@@ -32,12 +32,6 @@ class MobileLayout extends StatefulWidget {
   const MobileLayout({
     required this.unit,
     super.key,
-    this.onHeatingTempIncrease,
-    this.onHeatingTempDecrease,
-    this.onCoolingTempIncrease,
-    this.onCoolingTempDecrease,
-    this.onSupplyFanChanged,
-    this.onExhaustFanChanged,
     this.onModeTap,
     this.onPowerToggle,
     this.onSettingsTap,
@@ -45,10 +39,6 @@ class MobileLayout extends StatefulWidget {
     this.isScheduleEnabled = false,
     this.isScheduleLoading = false,
     this.onScheduleToggle,
-    this.isPendingHeatingTemperature = false,
-    this.isPendingCoolingTemperature = false,
-    this.isPendingSupplyFan = false,
-    this.isPendingExhaustFan = false,
     this.isPendingOperatingMode = false,
     this.timerSettings,
     this.onTimerSettingsChanged,
@@ -58,12 +48,6 @@ class MobileLayout extends StatefulWidget {
     this.isOnline = true,
   });
   final UnitState unit;
-  final VoidCallback? onHeatingTempIncrease;
-  final VoidCallback? onHeatingTempDecrease;
-  final VoidCallback? onCoolingTempIncrease;
-  final VoidCallback? onCoolingTempDecrease;
-  final ValueChanged<int>? onSupplyFanChanged;
-  final ValueChanged<int>? onExhaustFanChanged;
 
   /// Callback при нажатии на режим (открывает модалку настроек)
   final ModeCallback? onModeTap;
@@ -74,14 +58,6 @@ class MobileLayout extends StatefulWidget {
   final bool isScheduleEnabled;
   final bool isScheduleLoading;
   final VoidCallback? onScheduleToggle;
-  /// Ожидание подтверждения изменения температуры нагрева
-  final bool isPendingHeatingTemperature;
-  /// Ожидание подтверждения изменения температуры охлаждения
-  final bool isPendingCoolingTemperature;
-  /// Ожидание подтверждения изменения приточного вентилятора
-  final bool isPendingSupplyFan;
-  /// Ожидание подтверждения изменения вытяжного вентилятора
-  final bool isPendingExhaustFan;
   /// Ожидание подтверждения смены режима работы
   final bool isPendingOperatingMode;
 
@@ -130,12 +106,6 @@ class _MobileLayoutState extends State<MobileLayout>
           Expanded(
             child: UnitControlCard(
               unit: widget.unit,
-              onHeatingTempIncrease: widget.isOnline ? widget.onHeatingTempIncrease : null,
-              onHeatingTempDecrease: widget.isOnline ? widget.onHeatingTempDecrease : null,
-              onCoolingTempIncrease: widget.isOnline ? widget.onCoolingTempIncrease : null,
-              onCoolingTempDecrease: widget.isOnline ? widget.onCoolingTempDecrease : null,
-              onSupplyFanChanged: widget.isOnline ? widget.onSupplyFanChanged : null,
-              onExhaustFanChanged: widget.isOnline ? widget.onExhaustFanChanged : null,
               onPowerToggle: widget.isOnline ? widget.onPowerToggle : null,
               onSettingsTap: widget.onSettingsTap,
               isPowerLoading: widget.isPowerLoading,
@@ -143,10 +113,6 @@ class _MobileLayoutState extends State<MobileLayout>
               isScheduleLoading: widget.isScheduleLoading,
               onScheduleToggle: widget.isOnline ? widget.onScheduleToggle : null,
               isOnline: widget.isOnline,
-              isPendingHeatingTemperature: widget.isPendingHeatingTemperature,
-              isPendingCoolingTemperature: widget.isPendingCoolingTemperature,
-              isPendingSupplyFan: widget.isPendingSupplyFan,
-              isPendingExhaustFan: widget.isPendingExhaustFan,
             ),
           ),
 

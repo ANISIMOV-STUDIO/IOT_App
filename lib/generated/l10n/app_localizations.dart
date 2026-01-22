@@ -1358,6 +1358,12 @@ abstract class AppLocalizations {
   /// **'Оффлайн'**
   String get statusOffline;
 
+  /// No description provided for @deviceOffline.
+  ///
+  /// In ru, this message translates to:
+  /// **'Устройство не в сети'**
+  String get deviceOffline;
+
   /// No description provided for @statusRunning.
   ///
   /// In ru, this message translates to:
@@ -2203,6 +2209,12 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Сессия истекла. Выполняется выход...'**
   String get sessionExpired;
+
+  /// Temperature setpoint label for main card
+  ///
+  /// In ru, this message translates to:
+  /// **'Уставка'**
+  String get temperatureSetpoint;
 }
 
 class _AppLocalizationsDelegate

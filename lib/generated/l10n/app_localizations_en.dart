@@ -690,6 +690,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get statusOffline => 'Offline';
 
   @override
+  String get deviceOffline => 'Device offline';
+
+  @override
   String get statusRunning => 'Running';
 
   @override
@@ -1127,4 +1130,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sessionExpired => 'Session expired. Logging out...';
+
+  @override
+  String get temperatureSetpoint => 'Setpoint';
 }

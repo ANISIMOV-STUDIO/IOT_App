@@ -15,28 +15,20 @@ class DesktopHeader extends StatelessWidget {
   const DesktopHeader({
     required this.units,
     required this.selectedUnitIndex,
-    required this.isDark,
     super.key,
     this.onUnitSelected,
     this.onAddUnit,
-    this.onThemeToggle,
     this.showMenuButton = false,
     this.onMenuTap,
     this.showLogo = false,
-    this.onNotificationsTap,
-    this.unreadNotificationsCount = 0,
   });
   final List<UnitState> units;
   final int selectedUnitIndex;
   final ValueChanged<int>? onUnitSelected;
   final VoidCallback? onAddUnit;
-  final bool isDark;
-  final VoidCallback? onThemeToggle;
   final bool showMenuButton;
   final VoidCallback? onMenuTap;
   final bool showLogo;
-  final VoidCallback? onNotificationsTap;
-  final int unreadNotificationsCount;
 
   @override
   Widget build(BuildContext context) => Row(
@@ -51,19 +43,6 @@ class DesktopHeader extends StatelessWidget {
         ],
         // Unit tabs (with logo inside if requested)
         Expanded(child: _buildUnitTabs(context)),
-        const SizedBox(width: AppSpacing.xs),
-        // Theme toggle
-        BreezIconButton(
-          icon: isDark ? Icons.light_mode_outlined : Icons.dark_mode_outlined,
-          onTap: onThemeToggle,
-        ),
-        const SizedBox(width: AppSpacing.xs),
-        // Notifications
-        BreezIconButton(
-          icon: Icons.notifications_outlined,
-          badge: unreadNotificationsCount > 0 ? '$unreadNotificationsCount' : null,
-          onTap: onNotificationsTap,
-        ),
       ],
     );
 

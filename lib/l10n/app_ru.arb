@@ -804,6 +804,7 @@
   "modeVentilation": "Вентиляция",
   "statusOnline": "Онлайн",
   "statusOffline": "Оффлайн",
+  "deviceOffline": "Устройство не в сети",
   "statusRunning": "В работе",
   "statusStopped": "Выключен",
   "syncedAt": "Обновлено:",
@@ -996,5 +997,9 @@
   "sessionExpired": "Сессия истекла. Выполняется выход...",
   "@sessionExpired": {
     "description": "Session expired toast message"
+  },
+  "temperatureSetpoint": "Уставка",
+  "@temperatureSetpoint": {
+    "description": "Temperature setpoint label for main card"
   }
 }

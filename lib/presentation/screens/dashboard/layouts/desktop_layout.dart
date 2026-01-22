@@ -26,15 +26,7 @@ abstract class _DesktopLayoutConstants {
 class DesktopLayout extends StatefulWidget {
 
   const DesktopLayout({
-    required this.unit, required this.allUnits, required this.selectedUnitIndex, required this.isDark, required this.userName, required this.userRole, super.key,
-    this.onTemperatureIncrease,
-    this.onTemperatureDecrease,
-    this.onHeatingTempIncrease,
-    this.onHeatingTempDecrease,
-    this.onCoolingTempIncrease,
-    this.onCoolingTempDecrease,
-    this.onSupplyFanChanged,
-    this.onExhaustFanChanged,
+    required this.unit, required this.allUnits, required this.selectedUnitIndex, required this.userName, required this.userRole, super.key,
     this.onModeTap,
     this.onPowerToggle,
     this.onSettingsTap,
@@ -42,18 +34,11 @@ class DesktopLayout extends StatefulWidget {
     this.isScheduleEnabled = false,
     this.isScheduleLoading = false,
     this.onScheduleToggle,
-    this.isPendingHeatingTemperature = false,
-    this.isPendingCoolingTemperature = false,
-    this.isPendingSupplyFan = false,
-    this.isPendingExhaustFan = false,
     this.isPendingOperatingMode = false,
     this.onMasterOff,
     this.onUnitSelected,
-    this.onThemeToggle,
     this.onAddUnit,
     this.onLogoutTap,
-    this.onNotificationsTap,
-    this.unreadNotificationsCount = 0,
     this.timerSettings,
     this.onTimerSettingsChanged,
     this.activeAlarms = const {},
@@ -62,17 +47,8 @@ class DesktopLayout extends StatefulWidget {
   final UnitState unit;
   final List<UnitState> allUnits;
   final int selectedUnitIndex;
-  final bool isDark;
   final String userName;
   final String userRole;
-  final ValueChanged<int>? onTemperatureIncrease;
-  final ValueChanged<int>? onTemperatureDecrease;
-  final VoidCallback? onHeatingTempIncrease;
-  final VoidCallback? onHeatingTempDecrease;
-  final VoidCallback? onCoolingTempIncrease;
-  final VoidCallback? onCoolingTempDecrease;
-  final ValueChanged<int>? onSupplyFanChanged;
-  final ValueChanged<int>? onExhaustFanChanged;
 
   /// Callback при нажатии на режим (открывает модалку настроек)
   final ModeCallback? onModeTap;
@@ -83,23 +59,12 @@ class DesktopLayout extends StatefulWidget {
   final bool isScheduleEnabled;
   final bool isScheduleLoading;
   final VoidCallback? onScheduleToggle;
-  /// Ожидание подтверждения изменения температуры нагрева
-  final bool isPendingHeatingTemperature;
-  /// Ожидание подтверждения изменения температуры охлаждения
-  final bool isPendingCoolingTemperature;
-  /// Ожидание подтверждения изменения приточного вентилятора
-  final bool isPendingSupplyFan;
-  /// Ожидание подтверждения изменения вытяжного вентилятора
-  final bool isPendingExhaustFan;
   /// Ожидание подтверждения смены режима работы
   final bool isPendingOperatingMode;
   final VoidCallback? onMasterOff;
   final ValueChanged<int>? onUnitSelected;
-  final VoidCallback? onThemeToggle;
   final VoidCallback? onAddUnit;
   final VoidCallback? onLogoutTap;
-  final VoidCallback? onNotificationsTap;
-  final int unreadNotificationsCount;
 
   // Data from repositories
   final Map<String, TimerSettings>? timerSettings;
@@ -132,11 +97,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                 selectedUnitIndex: widget.selectedUnitIndex,
                 onUnitSelected: widget.onUnitSelected,
                 onAddUnit: widget.onAddUnit,
-                isDark: widget.isDark,
-                onThemeToggle: widget.onThemeToggle,
                 showLogo: true,
-                onNotificationsTap: widget.onNotificationsTap,
-                unreadNotificationsCount: widget.unreadNotificationsCount,
               ),
               const SizedBox(height: AppSpacing.sm),
             ],
@@ -169,28 +130,12 @@ class _DesktopLayoutState extends State<DesktopLayout> {
           flex: 5,
           child: UnitControlCard(
             unit: widget.unit,
-            onTemperatureIncrease: widget.onTemperatureIncrease != null
-                ? () => widget.onTemperatureIncrease!(widget.unit.temp + 1)
-                : null,
-            onTemperatureDecrease: widget.onTemperatureDecrease != null
-                ? () => widget.onTemperatureDecrease!(widget.unit.temp - 1)
-                : null,
-            onHeatingTempIncrease: widget.onHeatingTempIncrease,
-            onHeatingTempDecrease: widget.onHeatingTempDecrease,
-            onCoolingTempIncrease: widget.onCoolingTempIncrease,
-            onCoolingTempDecrease: widget.onCoolingTempDecrease,
-            onSupplyFanChanged: widget.onSupplyFanChanged,
-            onExhaustFanChanged: widget.onExhaustFanChanged,
             onPowerToggle: widget.onPowerToggle,
             onSettingsTap: widget.onSettingsTap,
             isPowerLoading: widget.isPowerLoading,
             isScheduleEnabled: widget.isScheduleEnabled,
             isScheduleLoading: widget.isScheduleLoading,
             onScheduleToggle: widget.onScheduleToggle,
-            isPendingHeatingTemperature: widget.isPendingHeatingTemperature,
-            isPendingCoolingTemperature: widget.isPendingCoolingTemperature,
-            isPendingSupplyFan: widget.isPendingSupplyFan,
-            isPendingExhaustFan: widget.isPendingExhaustFan,
           ),
         ),
 
@@ -217,10 +162,6 @@ class _DesktopLayoutState extends State<DesktopLayout> {
           selectedUnitIndex: widget.selectedUnitIndex,
           onUnitSelected: widget.onUnitSelected,
           onAddUnit: widget.onAddUnit,
-          isDark: widget.isDark,
-          onThemeToggle: widget.onThemeToggle,
-          onNotificationsTap: widget.onNotificationsTap,
-          unreadNotificationsCount: widget.unreadNotificationsCount,
         ),
 
         const SizedBox(height: AppSpacing.sm),

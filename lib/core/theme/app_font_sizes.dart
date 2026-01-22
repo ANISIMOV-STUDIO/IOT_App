@@ -3,6 +3,9 @@ library;
 
 /// Стандартные размеры шрифтов приложения
 class AppFontSizes {
+  // Display (hero-элементы: температура на главном экране)
+  static const double display = 48;
+
   // Заголовки
   static const double h1 = 28;
   static const double h2 = 24;

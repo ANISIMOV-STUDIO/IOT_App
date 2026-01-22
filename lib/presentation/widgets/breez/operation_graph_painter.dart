@@ -217,11 +217,12 @@ class OperationGraphPainter extends CustomPainter {
     canvas.drawCircle(point, _PainterConstants.highlightCenterRadius, centerPaint);
 
     // Value tooltip - draw tooltip using series color and data
-    _drawTooltipWithColor(canvas, point, activeIndex, highlightColor, seriesData);
+    _drawTooltipWithColor(canvas, size, point, activeIndex, highlightColor, seriesData);
   }
 
   void _drawTooltipWithColor(
     Canvas canvas,
+    Size size,
     Offset point,
     int index,
     Color tooltipColor,
@@ -243,9 +244,19 @@ class OperationGraphPainter extends CustomPainter {
     final tooltipWidth = textPainter.width + _PainterConstants.tooltipPaddingH * 2;
     const tooltipOffset = _PainterConstants.tooltipHeight + AppSpacing.xxs;
 
+    // Check if tooltip would go beyond top edge — if so, draw below the point
+    final drawAbove = point.dy - tooltipOffset - _PainterConstants.tooltipHeight / 2 > 0;
+    final tooltipCenterY = drawAbove
+        ? point.dy - tooltipOffset
+        : point.dy + tooltipOffset;
+
+    // Clamp horizontal position to stay within bounds
+    final halfWidth = tooltipWidth / 2;
+    final clampedX = point.dx.clamp(halfWidth, size.width - halfWidth);
+
     final tooltipRect = RRect.fromRectAndRadius(
       Rect.fromCenter(
-        center: Offset(point.dx, point.dy - tooltipOffset),
+        center: Offset(clampedX, tooltipCenterY),
         width: tooltipWidth,
         height: _PainterConstants.tooltipHeight,
       ),
@@ -258,8 +269,8 @@ class OperationGraphPainter extends CustomPainter {
     textPainter.paint(
       canvas,
       Offset(
-        point.dx - textPainter.width / 2,
-        point.dy - tooltipOffset - textPainter.height / 2,
+        clampedX - textPainter.width / 2,
+        tooltipCenterY - textPainter.height / 2,
       ),
     );
   }

@@ -25,15 +25,16 @@ abstract class _ModeGridConstants {
 // =============================================================================
 
 /// Получить локализованные режимы работы установки
+/// Каждый режим имеет уникальный цвет из AppColors
 List<OperatingModeData> getOperatingModes(AppLocalizations l10n) => [
   OperatingModeData(id: 'basic', name: l10n.modeBasic, icon: Icons.air, color: AppColors.accent),
-  OperatingModeData(id: 'intensive', name: l10n.modeIntensive, icon: Icons.speed, color: AppColors.accentOrange),
+  OperatingModeData(id: 'intensive', name: l10n.modeIntensive, icon: Icons.speed, color: AppColors.yellow),
   OperatingModeData(id: 'economy', name: l10n.modeEconomy, icon: Icons.eco, color: AppColors.accentGreen),
-  OperatingModeData(id: 'max_performance', name: l10n.modeMaxPerformance, icon: Icons.bolt, color: AppColors.accentOrange),
-  OperatingModeData(id: 'kitchen', name: l10n.modeKitchen, icon: Icons.restaurant, color: Colors.brown),
-  OperatingModeData(id: 'fireplace', name: l10n.modeFireplace, icon: Icons.fireplace, color: Colors.deepOrange),
-  OperatingModeData(id: 'vacation', name: l10n.modeVacation, icon: Icons.flight_takeoff, color: Colors.teal),
-  OperatingModeData(id: 'custom', name: l10n.modeCustom, icon: Icons.tune, color: Colors.purple),
+  OperatingModeData(id: 'max_performance', name: l10n.modeMaxPerformance, icon: Icons.bolt, color: AppColors.pink),
+  OperatingModeData(id: 'kitchen', name: l10n.modeKitchen, icon: Icons.restaurant, color: AppColors.brown),
+  OperatingModeData(id: 'fireplace', name: l10n.modeFireplace, icon: Icons.fireplace, color: AppColors.deepOrange),
+  OperatingModeData(id: 'vacation', name: l10n.modeVacation, icon: Icons.flight_takeoff, color: AppColors.blue),
+  OperatingModeData(id: 'custom', name: l10n.modeCustom, icon: Icons.tune, color: AppColors.purple),
 ];
 
 /// Callback для нажатия на режим
@@ -130,23 +131,23 @@ class ModeGrid extends StatelessWidget {
 
     // Оборачиваем в Stack для overlay при isPending
     final wrappedContent = isPending
-        ? Stack(
-            children: [
-              content,
-              Positioned.fill(
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
+        ? ClipRRect(
+            borderRadius: showCard
+                ? BorderRadius.circular(AppRadius.card)
+                : BorderRadius.zero,
+            child: Stack(
+              children: [
+                content,
+                Positioned.fill(
+                  child: ColoredBox(
                     color: Theme.of(context).scaffoldBackgroundColor.withValues(
                       alpha: AppColors.opacityHigh,
                     ),
-                    borderRadius: showCard
-                        ? BorderRadius.circular(AppRadius.card)
-                        : BorderRadius.zero,
+                    child: const Center(child: BreezLoader()),
                   ),
-                  child: const Center(child: BreezLoader()),
                 ),
-              ),
-            ],
+              ],
+            ),
           )
         : content;
 

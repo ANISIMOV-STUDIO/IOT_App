@@ -272,7 +272,28 @@ abstract class AppColors {
   static const double opacityHigh = 0.7;
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // LEGACY ALIASES (для совместимости)
+  // MODE COLORS (уникальные цвета для режимов работы)
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// Фиолетовый - для кастомного режима
+  static const Color purple = Color(0xFF9B59B6);
+
+  /// Коричневый - для режима кухни
+  static const Color brown = Color(0xFF8D6E63);
+
+  /// Глубокий оранжевый - для режима камина
+  static const Color deepOrange = Color(0xFFFF5722);
+
+  /// Синий - для режима отпуска
+  static const Color blue = Color(0xFF3498DB);
+
+  /// Жёлтый - для интенсивного режима
+  static const Color yellow = Color(0xFFF1C40F);
+
+  /// Розовый - для максимальной производительности
+  static const Color pink = Color(0xFFE91E63);
+
+  // SEMANTIC ALIASES (семантические псевдонимы)
   // ═══════════════════════════════════════════════════════════════════════════
 
   static const Color accentRed = critical;

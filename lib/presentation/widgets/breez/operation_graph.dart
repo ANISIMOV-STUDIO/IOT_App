@@ -24,7 +24,7 @@ export 'operation_graph_controller.dart';
 /// Константы для OperationGraph
 abstract class _GraphConstants {
   // Размеры осей
-  static const double yAxisWidth = AppSpacing.lg; // 20 — компактнее
+  static const double yAxisWidth = AppSpacing.xl; // 32 — для 3-значных чисел
   static const double xAxisHeight = 30;
 
   // Шрифты - используем дизайн-систему

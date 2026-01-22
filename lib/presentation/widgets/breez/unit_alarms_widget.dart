@@ -104,22 +104,12 @@ class UnitAlarmsWidget extends StatelessWidget {
                     ),
             ),
 
-            // Кнопки внизу (скрыты в компактном режиме)
-            if (!compact) ...[
+            // Кнопка сброса внизу (скрыта в компактном режиме)
+            if (!compact && alarmsList.isNotEmpty && onResetAlarms != null) ...[
               const SizedBox(height: AppSpacing.sm),
-              if (alarmsList.isNotEmpty && onResetAlarms != null) ...[
-                BreezResetButton(
-                  label: l10n.alarmReset,
-                  onTap: onResetAlarms,
-                ),
-                const SizedBox(height: AppSpacing.xs),
-              ],
-              BreezSeeMoreButton(
-                label: alarmsList.isEmpty ? l10n.alarmHistory : l10n.allAlarms,
-                extraCount: alarmsList.length > _AlarmWidgetConstants.maxVisibleAlarms
-                    ? alarmsList.length - _AlarmWidgetConstants.maxVisibleAlarms
-                    : null,
-                onTap: onSeeHistory,
+              BreezResetButton(
+                label: l10n.alarmReset,
+                onTap: onResetAlarms,
               ),
             ],
           ],
