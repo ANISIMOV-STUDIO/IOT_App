@@ -265,12 +265,15 @@ class DeviceJsonMapper {
       // Новые датчики с бэкенда
       indoorTemperature: (json['roomTemperature'] as num?)?.toDouble(),
       supplyTemperature: (json['supplyTemperature'] as num?)?.toDouble(),
-      supplyTempAfterRecup: (json['temperatureSetpoint'] as num?)?.toDouble(),
       co2Level: json['coIndicator'] as int?,
       freeCooling: json['freeCooling'] as bool? ?? false,
       heaterPower: json['power'] as int?,
       coolerStatus: json['coolerStatusLabel'] as String?,
       ductPressure: json['pressure'] as int?,
+      // Фактические обороты вентиляторов и уставка температуры
+      actualSupplyFan: json['actualSupplyFan'] as int?,
+      actualExhaustFan: json['actualExhaustFan'] as int?,
+      temperatureSetpoint: (json['temperatureSetpoint'] as num?)?.toDouble(),
       modeSettings: json['modeSettings'] != null
           ? modeSettingsFromJson(json['modeSettings'] as Map<String, dynamic>)
           : null,

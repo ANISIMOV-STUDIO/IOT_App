@@ -30,6 +30,9 @@ class DeviceFullState extends Equatable {
     this.heaterPower,
     this.coolerStatus,
     this.ductPressure,
+    this.actualSupplyFan,
+    this.actualExhaustFan,
+    this.temperatureSetpoint,
     this.modeSettings,
     this.timerSettings,
     this.activeAlarms,
@@ -88,6 +91,15 @@ class DeviceFullState extends Equatable {
   /// Давление в воздуховоде (Па)
   final int? ductPressure;
 
+  /// Фактические обороты приточного вентилятора (0-100%)
+  final int? actualSupplyFan;
+
+  /// Фактические обороты вытяжного вентилятора (0-100%)
+  final int? actualExhaustFan;
+
+  /// Текущая уставка температуры с пульта
+  final double? temperatureSetpoint;
+
   /// Настройки режимов (basic, intensive, economy и т.д.)
   final Map<String, ModeSettings>? modeSettings;
 
@@ -136,6 +148,9 @@ class DeviceFullState extends Equatable {
     int? heaterPower,
     String? coolerStatus,
     int? ductPressure,
+    int? actualSupplyFan,
+    int? actualExhaustFan,
+    double? temperatureSetpoint,
     Map<String, ModeSettings>? modeSettings,
     Map<String, TimerSettings>? timerSettings,
     Map<String, AlarmInfo>? activeAlarms,
@@ -168,6 +183,9 @@ class DeviceFullState extends Equatable {
       heaterPower: heaterPower ?? this.heaterPower,
       coolerStatus: coolerStatus ?? this.coolerStatus,
       ductPressure: ductPressure ?? this.ductPressure,
+      actualSupplyFan: actualSupplyFan ?? this.actualSupplyFan,
+      actualExhaustFan: actualExhaustFan ?? this.actualExhaustFan,
+      temperatureSetpoint: temperatureSetpoint ?? this.temperatureSetpoint,
       modeSettings: modeSettings ?? this.modeSettings,
       timerSettings: timerSettings ?? this.timerSettings,
       activeAlarms: activeAlarms ?? this.activeAlarms,
@@ -201,6 +219,9 @@ class DeviceFullState extends Equatable {
         heaterPower,
         coolerStatus,
         ductPressure,
+        actualSupplyFan,
+        actualExhaustFan,
+        temperatureSetpoint,
         modeSettings,
         timerSettings,
         activeAlarms,
