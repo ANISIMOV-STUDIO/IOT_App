@@ -309,7 +309,7 @@ class _ServiceCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          BreezSectionTitle(title: l10n.serviceEngineer),
+          BreezSectionHeader.settings(title: l10n.serviceEngineer),
           BreezSettingsTile(
             icon: Icons.history,
             title: l10n.eventLogs,
@@ -344,7 +344,7 @@ class _NotificationsCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          BreezSectionTitle(title: l10n.notifications),
+          BreezSectionHeader.settings(title: l10n.notifications),
           BreezSwitchTile(
             icon: Icons.notifications_outlined,
             title: l10n.pushNotifications,
@@ -384,7 +384,7 @@ class _SettingsCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          BreezSectionTitle(title: l10n.settings),
+          BreezSectionHeader.settings(title: l10n.settings),
           // Theme Toggle
           ListenableBuilder(
             listenable: themeService,

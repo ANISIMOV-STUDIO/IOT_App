@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:hvac_control/core/theme/app_icon_sizes.dart';
+import 'package:hvac_control/core/theme/app_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
@@ -14,18 +15,28 @@ import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
 abstract class _DialogButtonConstants {
   static const double fontSize = 14;
   static const double fontSizeSmall = 12;
-  static const double verticalPadding = 12;
-  static const double horizontalPadding = 20;
   static const double subtitleGap = 2;
 }
 
-/// Dialog action button (primary/secondary/danger)
+/// Компактная кнопка действия для диалогов (primary/secondary/danger)
 ///
-/// Использует базовый BreezButton для единообразия анимаций и accessibility.
+/// Стандартная высота: `AppSizes.buttonHeightSmall` (36px)
+/// Используется в модалках для действий: Сохранить, Удалить, Отмена и т.д.
+///
+/// Для размещения в Row с равной шириной оберните в Expanded:
+/// ```dart
+/// Row(children: [
+///   Expanded(child: BreezDialogButton(label: 'Cancel', onTap: ...)),
+///   SizedBox(width: AppSpacing.xs),
+///   Expanded(child: BreezDialogButton(label: 'Save', isPrimary: true, onTap: ...)),
+/// ])
+/// ```
 class BreezDialogButton extends StatelessWidget {
 
   const BreezDialogButton({
-    required this.label, super.key,
+    required this.label,
+    super.key,
+    this.icon,
     this.onTap,
     this.isPrimary = false,
     this.isLoading = false,
@@ -33,7 +44,9 @@ class BreezDialogButton extends StatelessWidget {
     this.semanticLabel,
     this.tooltip,
   });
+
   final String label;
+  final IconData? icon;
   final VoidCallback? onTap;
   final bool isPrimary;
   final bool isLoading;
@@ -50,43 +63,57 @@ class BreezDialogButton extends StatelessWidget {
     final colors = BreezColors.of(context);
 
     final Color bgColor;
-    final Color textColor;
+    final Color contentColor;
     final Color hoverColor;
 
     if (isDanger) {
-      bgColor = AppColors.accentRed;
-      textColor = AppColors.white;
-      hoverColor = AppColors.accentRed.withValues(alpha: 0.8);
+      // Danger: прозрачный красный фон, красный текст
+      bgColor = AppColors.accentRed.withValues(alpha: AppColors.opacityVerySubtle);
+      contentColor = AppColors.accentRed;
+      hoverColor = AppColors.accentRed.withValues(alpha: AppColors.opacitySubtle);
     } else if (isPrimary) {
+      // Primary: залитый accent фон, черный текст
       bgColor = AppColors.accent;
-      textColor = AppColors.white;
+      contentColor = AppColors.black;
       hoverColor = AppColors.accentLight;
     } else {
-      bgColor = Colors.transparent;
-      textColor = colors.textMuted;
-      hoverColor = colors.text.withValues(alpha: 0.05);
+      // Secondary: cardLight фон, muted текст
+      bgColor = colors.cardLight;
+      contentColor = colors.textMuted;
+      hoverColor = colors.buttonHover;
     }
 
     return BreezButton(
       onTap: onTap,
       isLoading: isLoading,
+      height: AppSizes.buttonHeightSmall,
       backgroundColor: bgColor,
       hoverColor: hoverColor,
-      showBorder: !isPrimary && !isDanger,
-      enableGlow: isPrimary || isDanger,
-      padding: const EdgeInsets.symmetric(
-        horizontal: _DialogButtonConstants.horizontalPadding,
-        vertical: _DialogButtonConstants.verticalPadding,
-      ),
+      borderRadius: AppRadius.nested,
+      showBorder: false,
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
       semanticLabel: semanticLabel ?? label,
       tooltip: tooltip,
-      child: Text(
-        label,
-        style: TextStyle(
-          fontSize: _DialogButtonConstants.fontSize,
-          fontWeight: (isPrimary || isDanger) ? FontWeight.w600 : FontWeight.w500,
-          color: textColor,
-        ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (icon != null) ...[
+            Icon(icon, size: AppIconSizes.standard, color: contentColor),
+            const SizedBox(width: AppSpacing.xxs),
+          ],
+          Flexible(
+            child: Text(
+              label,
+              style: TextStyle(
+                fontSize: AppFontSizes.caption,
+                fontWeight: (isPrimary || isDanger) ? FontWeight.w600 : FontWeight.w500,
+                color: contentColor,
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -113,13 +140,14 @@ class BreezActionButton extends StatelessWidget {
   final String? tooltip;
 
   @override
-  Widget build(BuildContext context) => BreezButton(
+  Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+    return BreezButton(
       onTap: onTap,
-      backgroundColor: Colors.transparent,
-      hoverColor: AppColors.accent.withValues(alpha: 0.1),
-      padding: const EdgeInsets.symmetric(
-        vertical: _DialogButtonConstants.verticalPadding,
-      ),
+      height: AppSizes.buttonHeightSmall,
+      backgroundColor: colors.cardLight,
+      hoverColor: AppColors.accent.withValues(alpha: AppColors.opacityLight),
+      borderRadius: AppRadius.nested,
       border: Border.all(color: AppColors.accent),
       semanticLabel: semanticLabel ?? label,
       tooltip: tooltip,
@@ -127,11 +155,11 @@ class BreezActionButton extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(icon, size: AppIconSizes.standard, color: AppColors.accent),
-          const SizedBox(width: AppSpacing.xs),
+          const SizedBox(width: AppSpacing.xxs),
           Text(
             label,
             style: const TextStyle(
-              fontSize: _DialogButtonConstants.fontSize,
+              fontSize: AppFontSizes.caption,
               fontWeight: FontWeight.w600,
               color: AppColors.accent,
             ),
@@ -139,6 +167,7 @@ class BreezActionButton extends StatelessWidget {
         ],
       ),
     );
+  }
 }
 
 /// Settings list button with icon, label and optional subtitle
@@ -173,7 +202,7 @@ class BreezSettingsButton extends StatelessWidget {
       onTap: onTap,
       backgroundColor: colors.buttonBg,
       hoverColor: isDanger
-          ? AppColors.accentRed.withValues(alpha: 0.1)
+          ? AppColors.accentRed.withValues(alpha: AppColors.opacityLight)
           : colors.buttonHover,
       showBorder: false,
       enableScale: false,

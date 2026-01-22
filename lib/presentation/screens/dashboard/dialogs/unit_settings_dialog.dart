@@ -10,6 +10,8 @@ import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/domain/entities/unit_state.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
 import 'package:hvac_control/presentation/screens/dashboard/dialogs/unit_settings_widgets.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_dialog_button.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_list_card.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_time_picker.dart';
 
 // =============================================================================
@@ -18,8 +20,7 @@ import 'package:hvac_control/presentation/widgets/breez/breez_time_picker.dart';
 
 abstract class _DialogConstants {
   static const double maxWidth = 360;
-  static const double closeButtonSize = 28;
-  static const double titleFontSize = 16;
+  static const double statusBadgeVerticalPadding = 2;
 }
 
 // =============================================================================
@@ -120,7 +121,10 @@ class _UnitSettingsDialogState extends State<UnitSettingsDialog> {
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final maxWidth = min(MediaQuery.of(context).size.width - 32, _DialogConstants.maxWidth);
+    final maxWidth = min(
+      MediaQuery.of(context).size.width - AppSpacing.xxl,
+      _DialogConstants.maxWidth,
+    );
 
     return Dialog(
       backgroundColor: colors.card,
@@ -130,43 +134,24 @@ class _UnitSettingsDialogState extends State<UnitSettingsDialog> {
       ),
       child: Container(
         width: maxWidth,
-        padding: const EdgeInsets.all(AppSpacing.sm),
+        padding: const EdgeInsets.all(AppSpacing.xs),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Header
-            Row(
-              children: [
-                Icon(
-                  Icons.settings_outlined,
-                  size: AppIconSizes.standard,
-                  color: colors.textMuted,
-                ),
-                const SizedBox(width: AppSpacing.xs),
-                Expanded(
-                  child: Text(
-                    l10n.unitSettingsTitle,
-                    style: TextStyle(
-                      fontSize: _DialogConstants.titleFontSize,
-                      fontWeight: FontWeight.w600,
-                      color: colors.text,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                _CloseButton(
-                  onTap: () => Navigator.of(context).pop(),
-                ),
-              ],
+            BreezSectionHeader.dialog(
+              title: l10n.unitSettingsTitle,
+              icon: Icons.settings_outlined,
+              onClose: () => Navigator.of(context).pop(),
+              closeLabel: l10n.close,
             ),
-
-            const SizedBox(height: AppSpacing.sm),
+            const SizedBox(height: AppSpacing.xs),
 
             // Device info
             _CompactDeviceInfo(unit: widget.unit),
 
-            const SizedBox(height: AppSpacing.sm),
+            const SizedBox(height: AppSpacing.xs),
 
             // Actions or rename field
             if (_isRenaming)
@@ -191,35 +176,6 @@ class _UnitSettingsDialogState extends State<UnitSettingsDialog> {
 // =============================================================================
 // PRIVATE WIDGETS
 // =============================================================================
-
-/// Компактная кнопка закрытия
-class _CloseButton extends StatelessWidget {
-
-  const _CloseButton({required this.onTap});
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
-
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: _DialogConstants.closeButtonSize,
-        height: _DialogConstants.closeButtonSize,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: colors.buttonBg.withValues(alpha: 0.5),
-        ),
-        child: Icon(
-          Icons.close,
-          size: AppIconSizes.standard,
-          color: colors.textMuted,
-        ),
-      ),
-    );
-  }
-}
 
 /// Компактная информация об устройстве
 class _CompactDeviceInfo extends StatelessWidget {
@@ -248,14 +204,14 @@ class _CompactDeviceInfo extends StatelessWidget {
             isBold: true,
           ),
           const SizedBox(height: AppSpacing.xs),
-          // ID and Status in one row
+          // MAC and Status in one row
           Row(
             children: [
-              Icon(Icons.tag, size: AppIconSizes.standard, color: colors.textMuted),
+              Icon(Icons.router_outlined, size: AppIconSizes.standard, color: colors.textMuted),
               const SizedBox(width: AppSpacing.xxs),
               Expanded(
                 child: Text(
-                  unit.id,
+                  unit.macAddress.isNotEmpty ? unit.macAddress : unit.id,
                   style: TextStyle(
                     fontSize: AppFontSizes.captionSmall,
                     fontFamily: 'monospace',
@@ -268,7 +224,7 @@ class _CompactDeviceInfo extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: AppSpacing.xs,
-                  vertical: 2,
+                  vertical: _DialogConstants.statusBadgeVerticalPadding,
                 ),
                 decoration: BoxDecoration(
                   color: unit.power
@@ -357,7 +313,7 @@ class _CompactActions extends StatelessWidget {
         Row(
           children: [
             Expanded(
-              child: _ActionButton(
+              child: BreezDialogButton(
                 icon: Icons.edit_outlined,
                 label: l10n.unitSettingsRename,
                 onTap: onRename,
@@ -365,7 +321,7 @@ class _CompactActions extends StatelessWidget {
             ),
             const SizedBox(width: AppSpacing.xs),
             Expanded(
-              child: _ActionButton(
+              child: BreezDialogButton(
                 icon: Icons.delete_outline,
                 label: l10n.unitSettingsDelete,
                 onTap: onDelete,
@@ -375,71 +331,12 @@ class _CompactActions extends StatelessWidget {
           ],
         ),
         const SizedBox(height: AppSpacing.xs),
-        _ActionButton(
+        BreezDialogButton(
           icon: Icons.access_time,
           label: l10n.unitSettingsSetTime,
           onTap: onSetTime,
         ),
       ],
-    );
-  }
-}
-
-/// Компактная кнопка действия
-class _ActionButton extends StatelessWidget {
-
-  const _ActionButton({
-    required this.icon,
-    required this.label,
-    required this.onTap,
-    this.isDanger = false,
-  });
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-  final bool isDanger;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
-    final color = isDanger ? AppColors.accentRed : colors.text;
-
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(AppRadius.nested),
-        child: Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.xs,
-            vertical: AppSpacing.xs,
-          ),
-          decoration: BoxDecoration(
-            color: isDanger
-                ? AppColors.accentRed.withValues(alpha: 0.08)
-                : colors.cardLight,
-            borderRadius: BorderRadius.circular(AppRadius.nested),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, size: AppIconSizes.standard, color: color),
-              const SizedBox(width: AppSpacing.xxs),
-              Flexible(
-                child: Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: AppFontSizes.caption,
-                    fontWeight: FontWeight.w500,
-                    color: color,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }
@@ -465,36 +362,36 @@ class _CompactRenameField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Input field
-        SizedBox(
-          height: 40,
-          child: TextFormField(
-            controller: controller,
-            autofocus: true,
-            style: TextStyle(fontSize: AppFontSizes.bodySmall, color: colors.text),
-            decoration: InputDecoration(
-              hintText: l10n.unitSettingsEnterName,
-              hintStyle: TextStyle(fontSize: AppFontSizes.bodySmall, color: colors.textMuted),
-              filled: true,
-              fillColor: colors.cardLight,
-              contentPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(AppRadius.nested),
-                borderSide: BorderSide.none,
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(AppRadius.nested),
-                borderSide: const BorderSide(color: AppColors.accent),
-              ),
+        TextFormField(
+          controller: controller,
+          autofocus: true,
+          style: TextStyle(fontSize: AppFontSizes.bodySmall, color: colors.text),
+          decoration: InputDecoration(
+            hintText: l10n.unitSettingsEnterName,
+            hintStyle: TextStyle(fontSize: AppFontSizes.bodySmall, color: colors.textMuted),
+            filled: true,
+            fillColor: colors.cardLight,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.sm,
+              vertical: AppSpacing.xs,
             ),
-            onFieldSubmitted: (_) => onSave(),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(AppRadius.nested),
+              borderSide: BorderSide.none,
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(AppRadius.nested),
+              borderSide: const BorderSide(color: AppColors.accent),
+            ),
           ),
+          onFieldSubmitted: (_) => onSave(),
         ),
         const SizedBox(height: AppSpacing.xs),
         // Buttons
         Row(
           children: [
             Expanded(
-              child: _ActionButton(
+              child: BreezDialogButton(
                 icon: Icons.close,
                 label: l10n.cancel,
                 onTap: onCancel,
@@ -502,9 +399,11 @@ class _CompactRenameField extends StatelessWidget {
             ),
             const SizedBox(width: AppSpacing.xs),
             Expanded(
-              child: _PrimaryButton(
+              child: BreezDialogButton(
+                icon: Icons.check,
                 label: l10n.save,
                 onTap: onSave,
+                isPrimary: true,
               ),
             ),
           ],
@@ -512,52 +411,4 @@ class _CompactRenameField extends StatelessWidget {
       ],
     );
   }
-}
-
-/// Основная кнопка (акцентная)
-class _PrimaryButton extends StatelessWidget {
-
-  const _PrimaryButton({
-    required this.label,
-    required this.onTap,
-  });
-  final String label;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) => Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(AppRadius.nested),
-        child: Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.xs,
-            vertical: AppSpacing.xs,
-          ),
-          decoration: BoxDecoration(
-            color: AppColors.accent,
-            borderRadius: BorderRadius.circular(AppRadius.nested),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.check, size: AppIconSizes.standard, color: AppColors.black),
-              const SizedBox(width: AppSpacing.xxs),
-              Flexible(
-                child: Text(
-                  label,
-                  style: const TextStyle(
-                    fontSize: AppFontSizes.caption,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.black,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
 }

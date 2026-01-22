@@ -248,6 +248,7 @@ class DashboardBlocBuilder extends StatelessWidget {
     return UnitState(
       id: device.id,
       name: device.name,
+      macAddress: fullState?.macAddress ?? '',
       power: fullState?.power ?? climate?.isOn ?? device.isActive,
       temp: climate?.currentTemperature.toInt() ?? 20,
       // Используем pending значения если есть, иначе из настроек режима

@@ -814,7 +814,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get unitSettingsRenameSubtitle => 'Изменить название установки';
 
   @override
-  String get unitSettingsDelete => 'Удалить установку';
+  String get unitSettingsDelete => 'Удалить';
 
   @override
   String get unitSettingsDeleteSubtitle => 'Отвязать устройство от аккаунта';

@@ -854,7 +854,7 @@
   "unitSettingsEnterName": "Введите название",
   "unitSettingsRename": "Переименовать",
   "unitSettingsRenameSubtitle": "Изменить название установки",
-  "unitSettingsDelete": "Удалить установку",
+  "unitSettingsDelete": "Удалить",
   "unitSettingsDeleteSubtitle": "Отвязать устройство от аккаунта",
   "unitSettingsDeleteConfirm": "Удалить установку?",
   "unitSettingsDeleteMessage": "Установка «{name}» будет отвязана от вашего аккаунта. Вы сможете снова добавить её по MAC-адресу.",

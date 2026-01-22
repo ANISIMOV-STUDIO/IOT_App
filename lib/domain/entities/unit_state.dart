@@ -18,6 +18,7 @@ class UnitState extends Equatable {        // Текущее время устр
     required this.humidity,
     required this.outsideTemp,
     required this.filterPercent,
+    this.macAddress = '',
     this.heatingTemp,
     this.coolingTemp,
     this.supplyFan,
@@ -38,6 +39,7 @@ class UnitState extends Equatable {        // Текущее время устр
   });
   final String id;
   final String name;
+  final String macAddress;
   final bool power;
   final int temp;
   final int? heatingTemp;
@@ -67,6 +69,7 @@ class UnitState extends Equatable {        // Текущее время устр
   UnitState copyWith({
     String? id,
     String? name,
+    String? macAddress,
     bool? power,
     int? temp,
     int? heatingTemp,
@@ -93,6 +96,7 @@ class UnitState extends Equatable {        // Текущее время устр
   }) => UnitState(
       id: id ?? this.id,
       name: name ?? this.name,
+      macAddress: macAddress ?? this.macAddress,
       power: power ?? this.power,
       temp: temp ?? this.temp,
       heatingTemp: heatingTemp ?? this.heatingTemp,
@@ -122,6 +126,7 @@ class UnitState extends Equatable {        // Текущее время устр
   List<Object?> get props => [
         id,
         name,
+        macAddress,
         power,
         temp,
         heatingTemp,

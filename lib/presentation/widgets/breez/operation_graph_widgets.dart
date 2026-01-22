@@ -87,7 +87,7 @@ class GraphSeriesLegend extends StatelessWidget {
   final List<GraphSeries> series;
 
   /// Callback when a series visibility is toggled
-  final void Function(String seriesId, bool isVisible) onToggleVisibility;
+  final void Function(String seriesId, {required bool isVisible}) onToggleVisibility;
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +100,7 @@ class GraphSeriesLegend extends StatelessWidget {
         label: s.label ?? _getDefaultLabel(s.metric),
         color: s.color,
         isVisible: s.isVisible,
-        onTap: () => onToggleVisibility(s.id, !s.isVisible),
+        onTap: () => onToggleVisibility(s.id, isVisible: !s.isVisible),
         colors: colors,
       )).toList(),
     );

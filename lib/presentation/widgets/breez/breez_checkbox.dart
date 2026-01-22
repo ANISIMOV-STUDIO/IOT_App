@@ -44,7 +44,6 @@ class BreezCheckbox extends StatelessWidget {
         onTap: onChanged != null ? () => onChanged!(!value) : null,
         behavior: HitTestBehavior.opaque,
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
               width: AuthConstants.checkboxSize,

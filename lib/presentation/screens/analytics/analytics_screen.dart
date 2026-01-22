@@ -27,6 +27,9 @@ abstract class _AnalyticsConstants {
   // Selection
   static const int maxSelectedSensors = 3;
 
+  // Dialog
+  static const double dialogIconContainerSize = 72;
+
   // Tile sizes
   static const double tileValueFontSize = 16;
   static const double tileLabelFontSize = 10;
@@ -144,8 +147,8 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                 alignment: Alignment.center,
                 children: [
                   Container(
-                    width: 72,
-                    height: 72,
+                    width: _AnalyticsConstants.dialogIconContainerSize,
+                    height: _AnalyticsConstants.dialogIconContainerSize,
                     decoration: BoxDecoration(
                       color: sensor.color.withValues(alpha: 0.1),
                       shape: BoxShape.circle,
@@ -701,7 +704,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
       child: Center(
         child: Column(
           children: [
-            Icon(
+            const Icon(
               Icons.error_outline,
               size: AppIconSizes.standard,
               color: AppColors.critical,
@@ -719,9 +722,9 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                   const ClimateSubscriptionRequested(),
                 );
               },
-              backgroundColor: Colors.transparent,
-              hoverColor: AppColors.accent.withValues(alpha: 0.1),
-              pressedColor: AppColors.accent.withValues(alpha: 0.15),
+              backgroundColor: colors.card.withValues(alpha: 0),
+              hoverColor: AppColors.accent.withValues(alpha: AppColors.opacityLight),
+              pressedColor: AppColors.accent.withValues(alpha: AppColors.opacitySubtle),
               showBorder: false,
               semanticLabel: l10n.retry,
               child: Row(
@@ -756,7 +759,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.show_chart, size: AppIconSizes.standard, color: AppColors.critical),
+              const Icon(Icons.show_chart, size: AppIconSizes.standard, color: AppColors.critical),
               const SizedBox(height: AppSpacing.md),
               Text(
                 errorMessage ?? l10n.errorLoadingFailed,
@@ -770,9 +773,9 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                     const AnalyticsRefreshRequested(),
                   );
                 },
-                backgroundColor: Colors.transparent,
-                hoverColor: AppColors.accent.withValues(alpha: 0.1),
-                pressedColor: AppColors.accent.withValues(alpha: 0.15),
+                backgroundColor: colors.card.withValues(alpha: 0),
+                hoverColor: AppColors.accent.withValues(alpha: AppColors.opacityLight),
+                pressedColor: AppColors.accent.withValues(alpha: AppColors.opacitySubtle),
                 showBorder: false,
                 semanticLabel: l10n.retry,
                 child: Row(

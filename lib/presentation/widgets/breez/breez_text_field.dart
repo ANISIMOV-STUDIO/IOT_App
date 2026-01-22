@@ -208,9 +208,9 @@ class _BreezTextFieldState extends State<BreezTextField> {
                             ),
                           )
                         : null,
-                    prefixIconConstraints: const BoxConstraints(minWidth: 0),
+                    prefixIconConstraints: const BoxConstraints(),
                     suffixIcon: effectiveSuffixIcon,
-                    suffixIconConstraints: const BoxConstraints(minWidth: 0),
+                    suffixIconConstraints: const BoxConstraints(),
                     // Убираем фон и все бордеры
                     filled: false,
                     border: InputBorder.none,

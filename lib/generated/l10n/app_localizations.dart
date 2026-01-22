@@ -1601,7 +1601,7 @@ abstract class AppLocalizations {
   /// No description provided for @unitSettingsDelete.
   ///
   /// In ru, this message translates to:
-  /// **'Удалить установку'**
+  /// **'Удалить'**
   String get unitSettingsDelete;
 
   /// No description provided for @unitSettingsDeleteSubtitle.

@@ -87,7 +87,7 @@ class OperationGraph extends StatefulWidget {
   final List<GraphSeries>? multiSeries;
 
   /// Callback when series visibility changes
-  final void Function(String seriesId, bool isVisible)? onSeriesVisibilityChanged;
+  final void Function(String seriesId, {required bool isVisible})? onSeriesVisibilityChanged;
 
   @override
   State<OperationGraph> createState() => _OperationGraphState();
@@ -324,7 +324,6 @@ class _GraphHeader extends StatelessWidget {
               ),
             ],
             onChanged: onMetricChanged,
-            expanded: true,
             height: 32,
           ),
           const SizedBox(height: AppSpacing.sm),

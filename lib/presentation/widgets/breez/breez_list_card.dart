@@ -439,6 +439,16 @@ class BreezSectionHeader extends StatelessWidget {
     this.large = false,
   });
 
+  /// Внутренний конструктор для вариантов без иконки
+  const BreezSectionHeader._internal({
+    required this.title,
+    super.key,
+  })  : icon = null,
+        iconColor = null,
+        trailing = null,
+        leading = null,
+        large = false;
+
   /// Фабрика для заголовка секции аварий
   factory BreezSectionHeader.alarms({
     required String title,
@@ -519,15 +529,28 @@ class BreezSectionHeader extends StatelessWidget {
     required VoidCallback onClose,
     required String closeLabel,
     Key? key,
+    Color? iconColor,
   }) => BreezSectionHeader(
       key: key,
       icon: icon,
       title: title,
-      iconColor: AppColors.accent,
+      iconColor: iconColor ?? AppColors.accent,
       trailing: _DialogCloseButton(onClose: onClose, label: closeLabel),
     );
 
-  final IconData icon;
+  /// Фабрика для заголовка секции настроек (без иконки)
+  ///
+  /// Используется в списках настроек как разделитель категорий.
+  /// Стиль: мелкий muted текст без иконки.
+  factory BreezSectionHeader.settings({
+    required String title,
+    Key? key,
+  }) => BreezSectionHeader._internal(
+      key: key,
+      title: title,
+    );
+
+  final IconData? icon;
   final String title;
   final Color? iconColor;
   final Widget? trailing;
@@ -537,12 +560,28 @@ class BreezSectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
+
+    // Вариант без иконки (settings style)
+    if (icon == null) {
+      return Padding(
+        padding: const EdgeInsets.only(left: AppSpacing.xxs, bottom: AppSpacing.xs),
+        child: Text(
+          title,
+          style: TextStyle(
+            fontSize: AppFontSizes.bodySmall,
+            fontWeight: FontWeight.w600,
+            color: colors.textMuted,
+          ),
+        ),
+      );
+    }
+
+    // Вариант с иконкой (стандартный)
     final color = iconColor ?? AppColors.accent;
     final fontSize = large ? AppFontSizes.h2 : AppFontSizes.h4;
     const iconSize = AppIconSizes.standard;
 
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         if (leading != null) ...[
           leading!,

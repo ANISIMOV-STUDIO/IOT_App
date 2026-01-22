@@ -812,7 +812,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get unitSettingsRenameSubtitle => 'Change unit name';
 
   @override
-  String get unitSettingsDelete => 'Delete unit';
+  String get unitSettingsDelete => 'Delete';
 
   @override
   String get unitSettingsDeleteSubtitle => 'Unlink device from account';

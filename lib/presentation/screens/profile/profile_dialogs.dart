@@ -12,7 +12,6 @@ import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/core/utils/validators.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez.dart';
-import 'package:hvac_control/presentation/widgets/breez/breez_list_card.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -129,7 +128,7 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
     final maxWidth = min(
       MediaQuery.of(context).size.width - AppSpacing.xxl,
       AuthConstants.formMaxWidth,
-    ).toDouble();
+    );
 
     return Dialog(
       backgroundColor: colors.card,
@@ -248,7 +247,7 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
     final maxWidth = min(
       MediaQuery.of(context).size.width - AppSpacing.xxl,
       AuthConstants.formMaxWidth,
-    ).toDouble();
+    );
 
     return Dialog(
       backgroundColor: colors.card,
@@ -351,7 +350,7 @@ Future<void> showLanguagePickerDialog(
   final maxWidth = min(
     MediaQuery.of(context).size.width - AppSpacing.xxl,
     AuthConstants.formMaxWidth,
-  ).toDouble();
+  );
 
   await showDialog<void>(
     context: context,

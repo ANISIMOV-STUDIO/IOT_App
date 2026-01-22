@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/domain/entities/alarm_info.dart';
 import 'package:hvac_control/domain/entities/mode_settings.dart';
@@ -119,7 +120,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
     final showLogoInHeader = isPortrait;
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: BreezColors.of(context).bg.withValues(alpha: 0),
       body: Padding(
         padding: const EdgeInsets.all(AppSpacing.sm),
         child: Column(

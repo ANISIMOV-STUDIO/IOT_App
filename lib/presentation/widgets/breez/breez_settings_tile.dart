@@ -177,31 +177,4 @@ class BreezSwitchTile extends StatelessWidget {
   }
 }
 
-/// Section title for settings groups
-///
-/// Use above a group of related settings tiles
-class BreezSectionTitle extends StatelessWidget {
-
-  const BreezSectionTitle({
-    required this.title,
-    super.key,
-  });
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
-
-    return Padding(
-      padding: const EdgeInsets.only(left: AppSpacing.xxs, bottom: AppSpacing.xs),
-      child: Text(
-        title,
-        style: TextStyle(
-          fontSize: AppFontSizes.bodySmall,
-          fontWeight: FontWeight.w600,
-          color: colors.textMuted,
-        ),
-      ),
-    );
-  }
-}
+// BreezSectionTitle removed - use BreezSectionHeader.settings() instead

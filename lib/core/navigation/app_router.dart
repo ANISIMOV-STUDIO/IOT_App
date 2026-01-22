@@ -116,7 +116,7 @@ GoRouter createRouter(AuthBloc authBloc) => GoRouter(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.error_outline, size: AppIconSizes.standard, color: Colors.red),
+            const Icon(Icons.error_outline, size: AppIconSizes.standard, color: Colors.red),
             const SizedBox(height: AppSpacing.md),
             Text('Страница не найдена: ${state.matchedLocation}'),
             const SizedBox(height: AppSpacing.lgx),

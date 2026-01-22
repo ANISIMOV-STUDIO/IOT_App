@@ -854,7 +854,7 @@
   "unitSettingsEnterName": "Enter name",
   "unitSettingsRename": "Rename",
   "unitSettingsRenameSubtitle": "Change unit name",
-  "unitSettingsDelete": "Delete unit",
+  "unitSettingsDelete": "Delete",
   "unitSettingsDeleteSubtitle": "Unlink device from account",
   "unitSettingsDeleteConfirm": "Delete unit?",
   "unitSettingsDeleteMessage": "Unit \"{name}\" will be unlinked from your account. You can add it again using MAC address.",

@@ -4,6 +4,7 @@ library;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:hvac_control/core/theme/app_icon_sizes.dart';
+import 'package:hvac_control/core/theme/app_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
@@ -11,6 +12,14 @@ import 'package:hvac_control/generated/l10n/app_localizations.dart';
 import 'package:hvac_control/presentation/screens/dashboard/dialogs/update_available_dialog_stub.dart'
     if (dart.library.html) 'update_available_dialog_web.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
+
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+abstract class _UpdateDialogConstants {
+  static const double iconContainerSize = 64;
+}
 
 class UpdateAvailableDialog extends StatefulWidget {
 
@@ -55,7 +64,7 @@ class _UpdateAvailableDialogState extends State<UpdateAvailableDialog> {
     final colors = BreezColors.of(context);
 
     return Dialog(
-      backgroundColor: Colors.transparent,
+      backgroundColor: colors.card.withValues(alpha: 0),
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 400),
         child: BreezCard(
@@ -65,13 +74,13 @@ class _UpdateAvailableDialogState extends State<UpdateAvailableDialog> {
             children: [
               // Icon
               Container(
-                width: 64,
-                height: 64,
+                width: _UpdateDialogConstants.iconContainerSize,
+                height: _UpdateDialogConstants.iconContainerSize,
                 decoration: BoxDecoration(
-                  color: AppColors.accent.withValues(alpha: 0.15),
+                  color: AppColors.accent.withValues(alpha: AppColors.opacitySubtle),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
+                child: const Icon(
                   Icons.system_update,
                   size: AppIconSizes.standard,
                   color: AppColors.accent,
@@ -117,8 +126,8 @@ class _UpdateAvailableDialogState extends State<UpdateAvailableDialog> {
                       horizontal: AppSpacing.sm,
                       vertical: AppSpacing.xs,
                     ),
-                    backgroundColor: Colors.transparent,
-                    hoverColor: AppColors.accent.withValues(alpha: 0.1),
+                    backgroundColor: colors.card.withValues(alpha: 0),
+                    hoverColor: AppColors.accent.withValues(alpha: AppColors.opacityLight),
                     showBorder: false,
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -132,7 +141,7 @@ class _UpdateAvailableDialogState extends State<UpdateAvailableDialog> {
                           ),
                         ),
                         const SizedBox(width: AppSpacing.xxs),
-                        Icon(
+                        const Icon(
                           Icons.arrow_drop_down,
                           size: AppIconSizes.standard,
                           color: AppColors.accent,
@@ -166,7 +175,7 @@ class _UpdateAvailableDialogState extends State<UpdateAvailableDialog> {
                       horizontal: AppSpacing.sm,
                       vertical: AppSpacing.xs,
                     ),
-                    backgroundColor: Colors.transparent,
+                    backgroundColor: colors.card.withValues(alpha: 0),
                     hoverColor: colors.buttonBg,
                     showBorder: false,
                     child: Row(
@@ -194,7 +203,7 @@ class _UpdateAvailableDialogState extends State<UpdateAvailableDialog> {
 
               const SizedBox(height: AppSpacing.lg),
 
-              // Buttons - ИСПРАВЛЕНО
+              // Buttons
               Row(
                 children: [
                   // Кнопка "Позже"
@@ -202,8 +211,8 @@ class _UpdateAvailableDialogState extends State<UpdateAvailableDialog> {
                     child: BreezButton(
                       onTap: () => Navigator.of(context).pop(),
                       backgroundColor: colors.buttonBg,
-                      hoverColor: colors.card,
-                      height: 48,
+                      hoverColor: colors.buttonHover,
+                      height: AppSizes.buttonHeight,
                       child: Center(
                         child: Text(
                           l10n.later,
@@ -224,14 +233,14 @@ class _UpdateAvailableDialogState extends State<UpdateAvailableDialog> {
                       onTap: _reloadPage,
                       backgroundColor: AppColors.accent,
                       hoverColor: AppColors.accentLight,
-                      height: 48,
+                      height: AppSizes.buttonHeight,
                       child: Center(
                         child: Text(
                           l10n.updateNow,
                           style: const TextStyle(
                             fontSize: AppFontSizes.body,
                             fontWeight: FontWeight.w700,
-                            color: AppColors.white,
+                            color: AppColors.black,
                           ),
                         ),
                       ),

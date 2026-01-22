@@ -11,8 +11,9 @@ import 'package:hvac_control/presentation/bloc/schedule/schedule_bloc.dart';
 import 'package:hvac_control/presentation/screens/schedule/widgets/schedule_empty_state.dart';
 import 'package:hvac_control/presentation/screens/schedule/widgets/schedule_entry_dialog.dart';
 import 'package:hvac_control/presentation/screens/schedule/widgets/schedule_list.dart';
-import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_dialog_button.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_icon_button.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_list_card.dart';
 import 'package:hvac_control/presentation/widgets/breez/schedule_widget.dart';
 
 /// Экран управления расписанием устройства
@@ -143,47 +144,47 @@ class ScheduleScreen extends StatelessWidget {
 
     showDialog<void>(
       context: context,
-      builder: (dialogContext) => AlertDialog(
+      builder: (dialogContext) => Dialog(
         backgroundColor: colors.card,
-        title: Text(
-          l10n.scheduleDeleteConfirm,
-          style: TextStyle(color: colors.text),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.cardSmall),
+          side: BorderSide(color: colors.border),
         ),
-        content: Text(
-          l10n.scheduleDeleteMessage('${ScheduleWidget.translateDayName(entry.day, l10n)} - ${entry.mode}'),
-          style: TextStyle(color: colors.textMuted),
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 360),
+          padding: const EdgeInsets.all(AppSpacing.xs),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              BreezSectionHeader.dialog(
+                title: l10n.scheduleDeleteConfirm,
+                icon: Icons.warning_amber_rounded,
+                iconColor: AppColors.accentRed,
+                onClose: () => Navigator.of(dialogContext).pop(),
+                closeLabel: l10n.cancel,
+              ),
+              const SizedBox(height: AppSpacing.xs),
+              Text(
+                l10n.scheduleDeleteMessage('${ScheduleWidget.translateDayName(entry.day, l10n)} - ${entry.mode}'),
+                style: TextStyle(
+                  fontSize: AppFontSizes.bodySmall,
+                  color: colors.textMuted,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.xs),
+              BreezDialogButton(
+                label: l10n.delete,
+                icon: Icons.delete_outline,
+                isDanger: true,
+                onTap: () {
+                  context.read<ScheduleBloc>().add(ScheduleEntryDeleted(entry.id));
+                  Navigator.of(dialogContext).pop();
+                },
+              ),
+            ],
+          ),
         ),
-        actions: [
-          BreezButton(
-            onTap: () => Navigator.of(dialogContext).pop(),
-            backgroundColor: Colors.transparent,
-            showBorder: false,
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.md,
-              vertical: AppSpacing.sm,
-            ),
-            child: Text(
-              l10n.cancel,
-              style: TextStyle(color: colors.textMuted),
-            ),
-          ),
-          BreezButton(
-            onTap: () {
-              context.read<ScheduleBloc>().add(ScheduleEntryDeleted(entry.id));
-              Navigator.of(dialogContext).pop();
-            },
-            backgroundColor: Colors.transparent,
-            showBorder: false,
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.md,
-              vertical: AppSpacing.sm,
-            ),
-            child: Text(
-              l10n.delete,
-              style: const TextStyle(color: Colors.red),
-            ),
-          ),
-        ],
       ),
     );
   }

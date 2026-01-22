@@ -17,7 +17,6 @@ import 'package:hvac_control/domain/entities/device_event_log.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
 import 'package:hvac_control/presentation/bloc/devices/devices_bloc.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez.dart';
-import 'package:hvac_control/presentation/widgets/breez/breez_list_card.dart';
 import 'package:intl/intl.dart';
 
 // =============================================================================
@@ -248,12 +247,10 @@ class _EventLogsScreenState extends State<EventLogsScreen> {
                 backButton: BreezIconButton(
                   icon: Icons.arrow_back,
                   onTap: () => context.goToHomeTab(MainTab.profile),
-                  size: AppIconSizes.standard,
                 ),
                 trailing: BreezIconButton(
                   icon: Icons.refresh,
                   onTap: _isLoading ? null : _loadLogs,
-                  size: AppIconSizes.standard,
                 ),
               ),
             ),

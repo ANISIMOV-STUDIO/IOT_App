@@ -8,9 +8,6 @@ library;
 // БАЗОВЫЕ КНОПКИ И КОНТРОЛЫ
 // ═══════════════════════════════════════════════════════════════════════════
 export 'breez_button.dart';
-export 'breez_icon_button.dart';
-export 'breez_link.dart';
-export 'breez_text_button.dart';
 // ═══════════════════════════════════════════════════════════════════════════
 // КАРТОЧКИ И КОНТЕЙНЕРЫ
 // ═══════════════════════════════════════════════════════════════════════════
@@ -22,6 +19,8 @@ export 'breez_dropdown.dart';
 // УТИЛИТЫ И ОБРАБОТКА ОШИБОК
 // ═══════════════════════════════════════════════════════════════════════════
 export 'breez_error_boundary.dart';
+export 'breez_icon_button.dart';
+export 'breez_link.dart';
 export 'breez_list_card.dart';
 // ═══════════════════════════════════════════════════════════════════════════
 // ЛОАДЕРЫ И ИНДИКАТОРЫ
@@ -36,6 +35,7 @@ export 'breez_segmented_control.dart';
 export 'breez_settings_tile.dart';
 export 'breez_slider.dart';
 export 'breez_tab.dart';
+export 'breez_text_button.dart';
 // ═══════════════════════════════════════════════════════════════════════════
 // ПОЛЯ ВВОДА
 // ═══════════════════════════════════════════════════════════════════════════

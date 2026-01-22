@@ -1,11 +1,26 @@
 /// Unit Settings Widgets - Reusable components for unit settings dialog
 library;
 
+import 'dart:math' show min;
+
 import 'package:flutter/material.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
-import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_dialog_button.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_list_card.dart';
+
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+abstract class _DeleteDialogConstants {
+  static const double maxWidth = 360;
+}
+
+// =============================================================================
+// DELETE CONFIRMATION DIALOG
+// =============================================================================
 
 /// Delete confirmation dialog
 class DeleteConfirmDialog extends StatelessWidget {
@@ -23,55 +38,54 @@ class DeleteConfirmDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
+    final maxWidth = min(
+      MediaQuery.of(context).size.width - AppSpacing.xxl,
+      _DeleteDialogConstants.maxWidth,
+    );
 
-    return AlertDialog(
+    return Dialog(
       backgroundColor: colors.card,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppRadius.cardSmall),
         side: BorderSide(color: colors.border),
       ),
-      title: Row(
-        children: [
-          const Icon(Icons.warning_amber_rounded, color: AppColors.accentRed),
-          const SizedBox(width: AppSpacing.sm),
-          Expanded(
-            child: Text(
-              l10n.unitSettingsDeleteConfirm,
-              style: TextStyle(fontSize: AppFontSizes.h4, color: colors.text),
+      child: Container(
+        width: maxWidth,
+        padding: const EdgeInsets.all(AppSpacing.xs),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Header
+            BreezSectionHeader.dialog(
+              title: l10n.unitSettingsDeleteConfirm,
+              icon: Icons.warning_amber_rounded,
+              iconColor: AppColors.accentRed,
+              onClose: () => Navigator.of(context).pop(false),
+              closeLabel: l10n.cancel,
             ),
-          ),
-        ],
-      ),
-      content: Text(
-        l10n.unitSettingsDeleteMessage(unitName),
-        style: TextStyle(fontSize: AppFontSizes.bodySmall, color: colors.textMuted),
-      ),
-      actions: [
-        BreezButton(
-          onTap: () => Navigator.of(context).pop(false),
-          backgroundColor: Colors.transparent,
-          hoverColor: colors.cardLight,
-          pressedColor: colors.buttonBg,
-          showBorder: false,
-          semanticLabel: l10n.cancel,
-          child: Text(l10n.cancel, style: TextStyle(color: colors.textMuted)),
-        ),
-        const SizedBox(width: AppSpacing.sm),
-        BreezButton(
-          onTap: () => Navigator.of(context).pop(true),
-          backgroundColor: AppColors.accentRed.withValues(alpha: 0.1),
-          hoverColor: AppColors.accentRed.withValues(alpha: 0.2),
-          border: Border.all(color: AppColors.accentRed.withValues(alpha: 0.3)),
-          semanticLabel: l10n.unitSettingsDelete,
-          child: Text(
-            l10n.unitSettingsDelete,
-            style: const TextStyle(
-              color: AppColors.accentRed,
-              fontWeight: FontWeight.w600,
+            const SizedBox(height: AppSpacing.xs),
+
+            // Warning message
+            Text(
+              l10n.unitSettingsDeleteMessage(unitName),
+              style: TextStyle(
+                fontSize: AppFontSizes.bodySmall,
+                color: colors.textMuted,
+              ),
             ),
-          ),
+            const SizedBox(height: AppSpacing.xs),
+
+            // Delete button
+            BreezDialogButton(
+              label: l10n.unitSettingsDelete,
+              icon: Icons.delete_outline,
+              isDanger: true,
+              onTap: () => Navigator.of(context).pop(true),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

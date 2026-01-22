@@ -10,7 +10,6 @@ import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez.dart';
-import 'package:hvac_control/presentation/widgets/breez/breez_list_card.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -96,7 +95,7 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
     final l10n = AppLocalizations.of(context)!;
 
     // Адаптивная ширина: максимум как форма регистрации
-    final maxWidth = min(MediaQuery.of(context).size.width - 48, AuthConstants.formMaxWidth).toDouble();
+    final maxWidth = min(MediaQuery.of(context).size.width - 48, AuthConstants.formMaxWidth);
 
     return Dialog(
       backgroundColor: colors.card,
