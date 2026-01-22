@@ -10,6 +10,7 @@ import 'package:hvac_control/domain/entities/hvac_device.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
 import 'package:hvac_control/presentation/bloc/devices/devices_bloc.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_list_card.dart';
 import 'package:hvac_control/presentation/widgets/common/device_icon_helper.dart';
 import 'package:hvac_control/presentation/widgets/error/error_widgets.dart';
 import 'package:hvac_control/presentation/widgets/loading/loading_indicator.dart';
@@ -36,13 +37,9 @@ class DevicesScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    l10n.devices,
-                    style: TextStyle(
-                      fontSize: AppFontSizes.h2,
-                      fontWeight: FontWeight.bold,
-                      color: colors.text,
-                    ),
+                  BreezSectionHeader.pageTitle(
+                    title: l10n.devices,
+                    icon: Icons.devices,
                   ),
                   const SizedBox(height: AppSpacing.xs),
                   BlocBuilder<DevicesBloc, DevicesState>(

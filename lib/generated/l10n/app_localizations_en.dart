@@ -432,6 +432,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get analytics => 'Analytics';
 
   @override
+  String get analyticsHint => 'Tap on a sensor to select';
+
+  @override
   String get devicesWillAppear => 'Devices will appear here\nafter connecting';
 
   @override

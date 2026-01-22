@@ -166,7 +166,7 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
   Widget _buildNameField(AppLocalizations l10n) => BreezTextField(
       controller: _nameController,
       label: l10n.deviceName,
-      hint: 'например ПВ-1',
+      hint: 'Например: ПВ-1',
       prefixIcon: Icons.label_outline,
       validator: (value) {
         if (value == null || value.trim().isEmpty) {

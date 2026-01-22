@@ -381,23 +381,14 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              l10n.analytics,
-                              style: TextStyle(
-                                fontSize: AppFontSizes.h2,
-                                fontWeight: FontWeight.bold,
-                                color: colors.text,
-                              ),
-                            ),
-                            _buildSelectionIndicator(colors, l10n),
-                          ],
+                        BreezSectionHeader.pageTitle(
+                          title: l10n.analytics,
+                          icon: Icons.bar_chart,
+                          trailing: _buildSelectionIndicator(colors, l10n),
                         ),
                         const SizedBox(height: AppSpacing.xxs),
                         Text(
-                          'Нажмите на показатель для выбора',
+                          l10n.analyticsHint,
                           style: TextStyle(
                             fontSize: AppFontSizes.captionSmall,
                             color: colors.textMuted,

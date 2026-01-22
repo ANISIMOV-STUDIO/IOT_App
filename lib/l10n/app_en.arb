@@ -583,6 +583,10 @@
   "@analytics": {
     "description": "Analytics tab label"
   },
+  "analyticsHint": "Tap on a sensor to select",
+  "@analyticsHint": {
+    "description": "Hint text on analytics screen"
+  },
   "devicesWillAppear": "Devices will appear here\nafter connecting",
   "@devicesWillAppear": {
     "description": "Empty devices message"

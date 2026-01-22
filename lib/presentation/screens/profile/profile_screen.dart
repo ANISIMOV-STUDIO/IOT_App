@@ -68,13 +68,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   // Header
-                  Text(
-                    l10n.profile,
-                    style: TextStyle(
-                      fontSize: AppFontSizes.h2,
-                      fontWeight: FontWeight.bold,
-                      color: colors.text,
-                    ),
+                  BreezSectionHeader.pageTitle(
+                    title: l10n.profile,
+                    icon: Icons.person_outline,
                   ),
                   const SizedBox(height: AppSpacing.lg),
 

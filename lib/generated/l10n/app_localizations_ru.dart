@@ -433,6 +433,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get analytics => 'Аналитика';
 
   @override
+  String get analyticsHint => 'Нажмите на показатель для выбора';
+
+  @override
   String get devicesWillAppear =>
       'Устройства появятся здесь\nпосле подключения';
 

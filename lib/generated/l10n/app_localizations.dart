@@ -890,6 +890,12 @@ abstract class AppLocalizations {
   /// **'Аналитика'**
   String get analytics;
 
+  /// Hint text on analytics screen
+  ///
+  /// In ru, this message translates to:
+  /// **'Нажмите на показатель для выбора'**
+  String get analyticsHint;
+
   /// Empty devices message
   ///
   /// In ru, this message translates to:

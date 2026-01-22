@@ -495,6 +495,23 @@ class BreezSectionHeader extends StatelessWidget {
       large: true,
     );
 
+  /// Фабрика для заголовка главной вкладки (без кнопки назад)
+  ///
+  /// Используется для Analytics, Devices, Profile и других главных табов.
+  factory BreezSectionHeader.pageTitle({
+    required String title,
+    required IconData icon,
+    Key? key,
+    Widget? trailing,
+  }) => BreezSectionHeader(
+      key: key,
+      icon: icon,
+      title: title,
+      iconColor: AppColors.accent,
+      trailing: trailing,
+      large: true,
+    );
+
   /// Фабрика для заголовка диалога с кнопкой закрытия
   factory BreezSectionHeader.dialog({
     required String title,
