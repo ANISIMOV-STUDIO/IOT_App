@@ -142,9 +142,11 @@ class _SegmentButton<T> extends StatelessWidget {
       label: segment.semanticLabel ?? segment.label,
       selected: isSelected,
       button: true,
-      child: GestureDetector(
-        onTap: onTap,
-        child: AnimatedContainer(
+      child: MouseRegion(
+        cursor: enabled ? SystemMouseCursors.click : SystemMouseCursors.basic,
+        child: GestureDetector(
+          onTap: onTap,
+          child: AnimatedContainer(
           duration: _SegmentedControlConstants.animationDuration,
           curve: Curves.easeOutCubic,
           decoration: BoxDecoration(
@@ -183,6 +185,7 @@ class _SegmentButton<T> extends StatelessWidget {
               ],
             ),
           ),
+        ),
         ),
       ),
     );

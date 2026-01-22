@@ -4,9 +4,32 @@ library;
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/domain/entities/graph_data.dart';
 
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+/// Painter constants for graph rendering
+abstract class _PainterConstants {
+  static const double lineWidth = 1.5;
+  static const double gridLineWidth = 0.5;
+  static const double gridOpacity = AppColors.opacityVerySubtle;
+  static const double highlightOuterRadius = 6;
+  static const double highlightInnerRadius = 4;
+  static const double highlightCenterRadius = 2;
+  static const double tooltipHeight = 22;
+  static const double tooltipPaddingH = AppSpacing.xs;
+}
+
+// =============================================================================
+// PAINTER
+// =============================================================================
+
 /// Custom painter for the graph curve with smooth bezier interpolation
+///
+/// Supports both single-line (legacy) and multi-line modes.
 class OperationGraphPainter extends CustomPainter {
 
   OperationGraphPainter({
@@ -14,37 +37,88 @@ class OperationGraphPainter extends CustomPainter {
     required this.color,
     this.hoveredIndex,
     this.highlightIndex,
+    this.drawProgress = 1.0,
+    this.multiSeries,
   });
+
+  /// Single series data (legacy API)
   final List<GraphDataPoint> data;
+
+  /// Primary color for single series
   final Color color;
+
+  /// Hovered point index
   final int? hoveredIndex;
+
+  /// Highlighted point index
   final int? highlightIndex;
+
+  /// Draw animation progress (0.0 - 1.0)
+  final double drawProgress;
+
+  /// Multiple series for multi-line mode
+  final List<GraphSeries>? multiSeries;
+
+  /// Check if using multi-series mode
+  bool get _isMultiSeries => multiSeries != null && multiSeries!.isNotEmpty;
+
+  /// Get all data points for range calculation (from all visible series)
+  List<GraphDataPoint> get _allDataPoints {
+    if (_isMultiSeries) {
+      return multiSeries!
+          .where((s) => s.isVisible)
+          .expand((s) => s.data)
+          .toList();
+    }
+    return data;
+  }
 
   @override
   void paint(Canvas canvas, Size size) {
-    if (data.isEmpty) {
+    final allPoints = _allDataPoints;
+    if (allPoints.isEmpty) {
       return;
     }
 
-    final points = _calculatePoints(size);
-    final stepX = size.width / (data.length - 1);
-
     _drawGridLines(canvas, size);
-    _drawGradientFill(canvas, size, points, stepX);
-    _drawCurve(canvas, points, stepX);
-    _drawHighlightPoint(canvas, size, points);
+
+    if (_isMultiSeries) {
+      // Draw each visible series
+      for (final series in multiSeries!) {
+        if (series.isVisible && series.data.isNotEmpty) {
+          final points = _calculatePointsForData(size, series.data);
+          final stepX = size.width / (series.data.length - 1);
+          _drawCurveWithColor(canvas, points, stepX, series.color);
+        }
+      }
+      // Draw highlight for first visible series with data
+      final firstVisible = multiSeries!.where((s) => s.isVisible && s.data.isNotEmpty).firstOrNull;
+      if (firstVisible != null) {
+        final points = _calculatePointsForData(size, firstVisible.data);
+        _drawHighlightPointWithColor(canvas, size, points, firstVisible.color, firstVisible.data);
+      }
+    } else {
+      // Legacy single series mode
+      final points = _calculatePoints(size);
+      final stepX = size.width / (data.length - 1);
+      _drawCurve(canvas, points, stepX);
+      _drawHighlightPoint(canvas, size, points);
+    }
   }
 
-  List<Offset> _calculatePoints(Size size) {
-    final maxValue = data.map((e) => e.value).reduce(math.max) + 4;
-    final minValue = math.max(0, data.map((e) => e.value).reduce(math.min) - 4);
+  List<Offset> _calculatePoints(Size size) => _calculatePointsForData(size, data);
+
+  List<Offset> _calculatePointsForData(Size size, List<GraphDataPoint> seriesData) {
+    final allPoints = _allDataPoints;
+    final maxValue = allPoints.map((e) => e.value).reduce(math.max) + 4;
+    final minValue = math.max(0, allPoints.map((e) => e.value).reduce(math.min) - 4);
     final range = maxValue - minValue;
-    final stepX = size.width / (data.length - 1);
+    final stepX = size.width / (seriesData.length - 1);
 
     final points = <Offset>[];
-    for (var i = 0; i < data.length; i++) {
+    for (var i = 0; i < seriesData.length; i++) {
       final x = i * stepX;
-      final y = size.height - ((data[i].value - minValue) / range * size.height);
+      final y = size.height - ((seriesData[i].value - minValue) / range * size.height);
       points.add(Offset(x, y));
     }
     return points;
@@ -52,8 +126,8 @@ class OperationGraphPainter extends CustomPainter {
 
   void _drawGridLines(Canvas canvas, Size size) {
     final gridPaint = Paint()
-      ..color = AppColors.white.withValues(alpha: AppColors.opacityVerySubtle)
-      ..strokeWidth = 1
+      ..color = AppColors.white.withValues(alpha: _PainterConstants.gridOpacity)
+      ..strokeWidth = _PainterConstants.gridLineWidth
       ..style = PaintingStyle.stroke;
 
     for (var i = 0; i <= 4; i++) {
@@ -62,39 +136,11 @@ class OperationGraphPainter extends CustomPainter {
     }
   }
 
-  void _drawGradientFill(Canvas canvas, Size size, List<Offset> points, double stepX) {
-    final fillPath = Path()
-    ..moveTo(0, size.height);
-
-    for (var i = 0; i < points.length; i++) {
-      if (i == 0) {
-        fillPath.lineTo(points[i].dx, points[i].dy);
-      } else {
-        final cp1 = Offset(points[i - 1].dx + stepX / 3, points[i - 1].dy);
-        final cp2 = Offset(points[i].dx - stepX / 3, points[i].dy);
-        fillPath.cubicTo(cp1.dx, cp1.dy, cp2.dx, cp2.dy, points[i].dx, points[i].dy);
-      }
-    }
-    fillPath..lineTo(size.width, size.height)
-    ..close();
-
-    final fillGradient = LinearGradient(
-      begin: Alignment.topCenter,
-      end: Alignment.bottomCenter,
-      colors: [
-        color.withValues(alpha: AppColors.opacityLow),
-        color.withValues(alpha: 0),
-      ],
-    );
-
-    final fillPaint = Paint()
-      ..shader = fillGradient.createShader(
-        Rect.fromLTWH(0, 0, size.width, size.height),
-      );
-    canvas.drawPath(fillPath, fillPaint);
+  void _drawCurve(Canvas canvas, List<Offset> points, double stepX) {
+    _drawCurveWithColor(canvas, points, stepX, color);
   }
 
-  void _drawCurve(Canvas canvas, List<Offset> points, double stepX) {
+  void _drawCurveWithColor(Canvas canvas, List<Offset> points, double stepX, Color lineColor) {
     final curvePath = Path();
     for (var i = 0; i < points.length; i++) {
       if (i == 0) {
@@ -107,14 +153,34 @@ class OperationGraphPainter extends CustomPainter {
     }
 
     final curvePaint = Paint()
-      ..color = color
-      ..strokeWidth = 2.5
+      ..color = lineColor
+      ..strokeWidth = _PainterConstants.lineWidth
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
-    canvas.drawPath(curvePath, curvePaint);
+
+    // Apply draw animation progress
+    if (drawProgress < 1.0) {
+      final pathMetrics = curvePath.computeMetrics().first;
+      final extractPath = pathMetrics.extractPath(
+        0,
+        pathMetrics.length * drawProgress,
+      );
+      canvas.drawPath(extractPath, curvePaint);
+    } else {
+      canvas.drawPath(curvePath, curvePaint);
+    }
   }
 
-  void _drawHighlightPoint(Canvas canvas, Size size, List<Offset> points) {
+  void _drawHighlightPoint(Canvas canvas, Size size, List<Offset> points) =>
+      _drawHighlightPointWithColor(canvas, size, points, color, data);
+
+  void _drawHighlightPointWithColor(
+    Canvas canvas,
+    Size size,
+    List<Offset> points,
+    Color highlightColor,
+    List<GraphDataPoint> seriesData,
+  ) {
     final activeIndex = hoveredIndex ?? highlightIndex;
     if (activeIndex == null || activeIndex >= points.length) {
       return;
@@ -122,46 +188,46 @@ class OperationGraphPainter extends CustomPainter {
 
     final point = points[activeIndex];
 
-    // Vertical line
+    // Vertical line - minimalist dashed style
     final linePaint = Paint()
-      ..color = color.withValues(alpha: AppColors.opacityLow)
-      ..strokeWidth = 1;
+      ..color = highlightColor.withValues(alpha: AppColors.opacitySubtle)
+      ..strokeWidth = _PainterConstants.gridLineWidth;
     canvas.drawLine(
       Offset(point.dx, 0),
       Offset(point.dx, size.height),
       linePaint,
     );
 
-    // Outer glow
-    final glowPaint = Paint()
-      ..color = color.withValues(alpha: AppColors.opacityMediumLight)
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8);
-    canvas.drawCircle(point, 12, glowPaint);
-
-    // Outer circle
+    // Outer circle - simple border
     final outerPaint = Paint()
-      ..color = color.withValues(alpha: AppColors.opacityLow)
+      ..color = highlightColor.withValues(alpha: AppColors.opacityLow)
       ..style = PaintingStyle.fill;
-    canvas.drawCircle(point, 8, outerPaint);
+    canvas.drawCircle(point, _PainterConstants.highlightOuterRadius, outerPaint);
 
-    // Inner circle
+    // Inner circle - solid color
     final innerPaint = Paint()
-      ..color = color
+      ..color = highlightColor
       ..style = PaintingStyle.fill;
-    canvas.drawCircle(point, 5, innerPaint);
+    canvas.drawCircle(point, _PainterConstants.highlightInnerRadius, innerPaint);
 
-    // Center dot
+    // Center dot - white accent
     final centerPaint = Paint()
       ..color = AppColors.white
       ..style = PaintingStyle.fill;
-    canvas.drawCircle(point, 2, centerPaint);
+    canvas.drawCircle(point, _PainterConstants.highlightCenterRadius, centerPaint);
 
-    // Value tooltip
-    _drawTooltip(canvas, point, activeIndex);
+    // Value tooltip - draw tooltip using series color and data
+    _drawTooltipWithColor(canvas, point, activeIndex, highlightColor, seriesData);
   }
 
-  void _drawTooltip(Canvas canvas, Offset point, int index) {
-    final value = data[index].value.round();
+  void _drawTooltipWithColor(
+    Canvas canvas,
+    Offset point,
+    int index,
+    Color tooltipColor,
+    List<GraphDataPoint> seriesData,
+  ) {
+    final value = seriesData[index].value.round();
     final textPainter = TextPainter(
       text: TextSpan(
         text: '$value°',
@@ -172,32 +238,37 @@ class OperationGraphPainter extends CustomPainter {
         ),
       ),
       textDirection: TextDirection.ltr,
-    )
-    ..layout();
+    )..layout();
+
+    final tooltipWidth = textPainter.width + _PainterConstants.tooltipPaddingH * 2;
+    const tooltipOffset = _PainterConstants.tooltipHeight + AppSpacing.xxs;
 
     final tooltipRect = RRect.fromRectAndRadius(
       Rect.fromCenter(
-        center: Offset(point.dx, point.dy - 28),
-        width: textPainter.width + 16,
-        height: 24,
+        center: Offset(point.dx, point.dy - tooltipOffset),
+        width: tooltipWidth,
+        height: _PainterConstants.tooltipHeight,
       ),
-      const Radius.circular(AppRadius.button),
+      const Radius.circular(AppRadius.chip),
     );
 
-    final tooltipPaint = Paint()..color = color;
+    final tooltipPaint = Paint()..color = tooltipColor;
     canvas.drawRRect(tooltipRect, tooltipPaint);
 
     textPainter.paint(
       canvas,
       Offset(
         point.dx - textPainter.width / 2,
-        point.dy - 28 - textPainter.height / 2,
+        point.dy - tooltipOffset - textPainter.height / 2,
       ),
     );
   }
 
   @override
-  bool shouldRepaint(covariant OperationGraphPainter oldDelegate) => oldDelegate.hoveredIndex != hoveredIndex ||
-        oldDelegate.data != data ||
-        oldDelegate.highlightIndex != highlightIndex;
+  bool shouldRepaint(covariant OperationGraphPainter oldDelegate) =>
+      oldDelegate.hoveredIndex != hoveredIndex ||
+      oldDelegate.data != data ||
+      oldDelegate.highlightIndex != highlightIndex ||
+      oldDelegate.drawProgress != drawProgress ||
+      oldDelegate.multiSeries != multiSeries;
 }

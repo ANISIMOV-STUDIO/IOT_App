@@ -8,7 +8,6 @@ import 'package:hvac_control/presentation/bloc/analytics/analytics_bloc.dart';
 import 'package:hvac_control/presentation/bloc/climate/climate_bloc.dart';
 import 'package:hvac_control/presentation/bloc/connectivity/connectivity_bloc.dart';
 import 'package:hvac_control/presentation/bloc/devices/devices_bloc.dart';
-import 'package:hvac_control/presentation/bloc/notifications/notifications_bloc.dart';
 import 'package:hvac_control/presentation/screens/analytics/analytics_screen.dart';
 import 'package:hvac_control/presentation/screens/dashboard/dashboard_screen.dart';
 import 'package:hvac_control/presentation/screens/devices/devices_screen.dart';
@@ -46,8 +45,7 @@ class _MainScreenState extends State<MainScreen> {
       context.read<DevicesBloc>().add(const DevicesSubscriptionRequested());
       // ClimateBloc — загрузка состояния климата
       context.read<ClimateBloc>().add(const ClimateSubscriptionRequested());
-      // NotificationsBloc — загрузка уведомлений
-      context.read<NotificationsBloc>().add(const NotificationsSubscriptionRequested());
+      // NotificationsBloc — загружается через DashboardBlocListeners при выборе устройства
       // AnalyticsBloc — статистика и графики
       context.read<AnalyticsBloc>().add(const AnalyticsSubscriptionRequested());
       // ConnectivityBloc — мониторинг соединения

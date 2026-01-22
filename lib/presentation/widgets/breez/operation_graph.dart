@@ -9,10 +9,13 @@ import 'package:hvac_control/domain/entities/graph_data.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_list_card.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_segmented_control.dart';
+import 'package:hvac_control/presentation/widgets/breez/operation_graph_controller.dart';
 import 'package:hvac_control/presentation/widgets/breez/operation_graph_painter.dart';
 import 'package:hvac_control/presentation/widgets/breez/operation_graph_widgets.dart';
 
 export '../../../domain/entities/graph_data.dart';
+export 'operation_graph_controller.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -20,15 +23,15 @@ export '../../../domain/entities/graph_data.dart';
 
 /// Константы для OperationGraph
 abstract class _GraphConstants {
-  // Размеры
-  static const double yAxisWidth = 28;
+  // Размеры осей
+  static const double yAxisWidth = AppSpacing.lg; // 20 — компактнее
   static const double xAxisHeight = 30;
 
-  // Шрифты
-  static const double valueFontSize = 32;
-  static const double unitFontSize = 16;
-  static const double axisFontSize = 9;
-  static const double xAxisFontSize = 10;
+  // Шрифты - используем дизайн-систему
+  static const double valueFontSize = AppFontSizes.h1 + AppSpacing.xxs; // 32
+  static const double unitFontSize = AppFontSizes.h4; // 16
+  static const double axisFontSize = AppFontSizes.captionSmall; // 11 — читаемее
+  static const double xAxisFontSize = AppFontSizes.captionSmall; // 11
 
   // Отступы
   static const int maxXAxisLabels = 6;
@@ -45,29 +48,84 @@ abstract class _GraphConstants {
 /// - Hover эффекты
 /// - Кэширование статистики
 /// - Accessibility через Semantics
+/// - Анимация появления кривой
+/// - Множественные линии (multiSeries)
+/// - Zoom/pan
 class OperationGraph extends StatefulWidget {
 
   const OperationGraph({
-    required this.data, super.key,
+    required this.data,
+    super.key,
     this.selectedMetric = GraphMetric.temperature,
     this.onMetricChanged,
     this.highlightValue,
     this.highlightIndex,
+    this.animateOnDataChange = true,
+    this.multiSeries,
+    this.onSeriesVisibilityChanged,
   });
+
+  /// Single series data (legacy API)
   final List<GraphDataPoint> data;
+
+  /// Selected metric type
   final GraphMetric selectedMetric;
+
+  /// Callback when metric selection changes
   final ValueChanged<GraphMetric>? onMetricChanged;
+
+  /// Value to highlight
   final double? highlightValue;
+
+  /// Index to highlight
   final int? highlightIndex;
+
+  /// Whether to animate curve drawing when data changes
+  final bool animateOnDataChange;
+
+  /// Multiple series for multi-line mode (new API)
+  final List<GraphSeries>? multiSeries;
+
+  /// Callback when series visibility changes
+  final void Function(String seriesId, bool isVisible)? onSeriesVisibilityChanged;
 
   @override
   State<OperationGraph> createState() => _OperationGraphState();
 }
 
-class _OperationGraphState extends State<OperationGraph> {
+class _OperationGraphState extends State<OperationGraph>
+    with SingleTickerProviderStateMixin {
   int? _hoveredIndex;
   _GraphStats? _cachedStats;
   List<GraphDataPoint>? _lastData;
+  late final OperationGraphController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = OperationGraphController(vsync: this);
+    // Start with animation if data is present
+    if (widget.data.isNotEmpty && widget.animateOnDataChange) {
+      _controller.animateDrawCurve();
+    }
+  }
+
+  @override
+  void didUpdateWidget(OperationGraph oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Animate when data changes
+    if (widget.animateOnDataChange &&
+        widget.data != oldWidget.data &&
+        widget.data.isNotEmpty) {
+      _controller.animateDrawCurve();
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,46 +139,61 @@ class _OperationGraphState extends State<OperationGraph> {
     }
     final stats = _cachedStats ?? _calculateStats();
 
-    return BreezCard(
-      padding: const EdgeInsets.all(AppSpacing.xs),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Header with title and metric tabs
-          _GraphHeader(
-            currentValue: stats.current,
-            metricLabel: _getMetricLabel(l10n),
-            metricUnit: _getMetricUnit(l10n),
-            selectedMetric: widget.selectedMetric,
-            onMetricChanged: widget.onMetricChanged,
-            l10n: l10n,
-            colors: colors,
-          ),
-
-          const SizedBox(height: AppSpacing.xs),
-
-          // Statistics row
-          _StatisticsRow(
-            minValue: stats.min,
-            maxValue: stats.max,
-            avgValue: stats.avg,
-            unit: _getMetricUnit(l10n),
-            l10n: l10n,
-          ),
-
-          const SizedBox(height: AppSpacing.xs),
-
-          // Graph area
-          Expanded(
-            child: _GraphArea(
-              data: widget.data,
-              hoveredIndex: _hoveredIndex,
-              highlightIndex: widget.highlightIndex,
-              onHoverChanged: (index) => setState(() => _hoveredIndex = index),
+    return ListenableBuilder(
+      listenable: _controller,
+      builder: (context, _) => BreezCard(
+        padding: const EdgeInsets.all(AppSpacing.xs),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header with title and metric tabs
+            _GraphHeader(
+              currentValue: stats.current,
+              metricLabel: _getMetricLabel(l10n),
+              metricUnit: _getMetricUnit(l10n),
+              selectedMetric: widget.selectedMetric,
+              onMetricChanged: widget.onMetricChanged,
+              l10n: l10n,
               colors: colors,
             ),
-          ),
-        ],
+
+            const SizedBox(height: AppSpacing.xs),
+
+            // Statistics row
+            _StatisticsRow(
+              minValue: stats.min,
+              maxValue: stats.max,
+              avgValue: stats.avg,
+              unit: _getMetricUnit(l10n),
+              l10n: l10n,
+            ),
+
+            const SizedBox(height: AppSpacing.xs),
+
+            // Graph area
+            Expanded(
+              child: _GraphArea(
+                data: widget.data,
+                hoveredIndex: _hoveredIndex,
+                highlightIndex: widget.highlightIndex,
+                onHoverChanged: (index) => setState(() => _hoveredIndex = index),
+                colors: colors,
+                drawProgress: _controller.drawProgress,
+                controller: _controller,
+                multiSeries: widget.multiSeries,
+              ),
+            ),
+
+            // Multi-series legend (if multiSeries provided)
+            if (widget.multiSeries != null && widget.onSeriesVisibilityChanged != null) ...[
+              const SizedBox(height: AppSpacing.xs),
+              GraphSeriesLegend(
+                series: widget.multiSeries!,
+                onToggleVisibility: widget.onSeriesVisibilityChanged!,
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }
@@ -224,35 +297,35 @@ class _GraphHeader extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Section header with tabs
+          // Section header
           BreezSectionHeader(
             icon: _getMetricIcon(),
             title: metricLabel,
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                GraphMetricTab(
-                  icon: Icons.thermostat_outlined,
-                  label: l10n.tempShort,
-                  isSelected: selectedMetric == GraphMetric.temperature,
-                  onTap: () => onMetricChanged?.call(GraphMetric.temperature),
-                ),
-                const SizedBox(width: AppSpacing.xs),
-                GraphMetricTab(
-                  icon: Icons.water_drop_outlined,
-                  label: l10n.humidShort,
-                  isSelected: selectedMetric == GraphMetric.humidity,
-                  onTap: () => onMetricChanged?.call(GraphMetric.humidity),
-                ),
-                const SizedBox(width: AppSpacing.xs),
-                GraphMetricTab(
-                  icon: Icons.air,
-                  label: l10n.airflowShort,
-                  isSelected: selectedMetric == GraphMetric.airflow,
-                  onTap: () => onMetricChanged?.call(GraphMetric.airflow),
-                ),
-              ],
-            ),
+          ),
+          const SizedBox(height: AppSpacing.xs),
+          // Metric selector - full width
+          BreezSegmentedControl<GraphMetric>(
+            value: selectedMetric,
+            segments: [
+              BreezSegment(
+                value: GraphMetric.temperature,
+                label: l10n.tempShort,
+                icon: Icons.thermostat_outlined,
+              ),
+              BreezSegment(
+                value: GraphMetric.humidity,
+                label: l10n.humidShort,
+                icon: Icons.water_drop_outlined,
+              ),
+              BreezSegment(
+                value: GraphMetric.airflow,
+                label: l10n.airflowShort,
+                icon: Icons.air,
+              ),
+            ],
+            onChanged: onMetricChanged,
+            expanded: true,
+            height: 32,
           ),
           const SizedBox(height: AppSpacing.sm),
           // Current value
@@ -330,52 +403,76 @@ class _GraphArea extends StatelessWidget {
 
   const _GraphArea({
     required this.data,
-    required this.onHoverChanged, required this.colors, this.hoveredIndex,
+    required this.onHoverChanged,
+    required this.colors,
+    required this.drawProgress,
+    required this.controller,
+    this.hoveredIndex,
     this.highlightIndex,
+    this.multiSeries,
   });
   final List<GraphDataPoint> data;
   final int? hoveredIndex;
   final int? highlightIndex;
   final ValueChanged<int?> onHoverChanged;
   final BreezColors colors;
+  final double drawProgress;
+  final OperationGraphController controller;
+  final List<GraphSeries>? multiSeries;
 
   @override
   Widget build(BuildContext context) => LayoutBuilder(
       builder: (context, constraints) => Row(
           children: [
-            // Y-axis labels
-            _YAxis(data: data, colors: colors),
+            // Y-axis labels (fixed, not affected by zoom)
+            _YAxis(data: data, colors: colors, multiSeries: multiSeries),
 
-            // Graph
+            // Graph with zoom/pan
             Expanded(
               child: Column(
                 children: [
                   Expanded(
-                    child: MouseRegion(
-                      onHover: (event) {
-                        final index = _getIndexFromPosition(
-                          event.localPosition.dx,
-                          constraints.maxWidth - _GraphConstants.yAxisWidth,
-                        );
-                        onHoverChanged(index);
-                      },
-                      onExit: (_) => onHoverChanged(null),
-                      child: CustomPaint(
-                        size: Size(
-                          constraints.maxWidth - _GraphConstants.yAxisWidth,
-                          constraints.maxHeight - _GraphConstants.xAxisHeight,
-                        ),
-                        painter: OperationGraphPainter(
-                          data: data,
-                          color: AppColors.accent,
-                          hoveredIndex: hoveredIndex,
-                          highlightIndex: highlightIndex,
+                    child: GestureDetector(
+                      // Double-tap to reset zoom
+                      onDoubleTap: controller.resetZoom,
+                      child: InteractiveViewer(
+                        transformationController: controller.transformController,
+                        minScale: controller.minScale,
+                        maxScale: controller.maxScale,
+                        onInteractionUpdate: (details) {
+                          controller.updateTransform(
+                            controller.transformController.value,
+                          );
+                        },
+                        child: MouseRegion(
+                          onHover: (event) {
+                            final index = _getIndexFromPosition(
+                              event.localPosition.dx,
+                              constraints.maxWidth - _GraphConstants.yAxisWidth,
+                            );
+                            onHoverChanged(index);
+                          },
+                          onExit: (_) => onHoverChanged(null),
+                          child: CustomPaint(
+                            size: Size(
+                              constraints.maxWidth - _GraphConstants.yAxisWidth,
+                              constraints.maxHeight - _GraphConstants.xAxisHeight,
+                            ),
+                            painter: OperationGraphPainter(
+                              data: data,
+                              color: AppColors.accent,
+                              hoveredIndex: hoveredIndex,
+                              highlightIndex: highlightIndex,
+                              drawProgress: drawProgress,
+                              multiSeries: multiSeries,
+                            ),
+                          ),
                         ),
                       ),
                     ),
                   ),
                   const SizedBox(height: AppSpacing.xs),
-                  // X-axis labels
+                  // X-axis labels (fixed, not affected by zoom)
                   _XAxis(data: data, colors: colors),
                 ],
               ),
@@ -403,29 +500,45 @@ class _YAxis extends StatelessWidget {
   const _YAxis({
     required this.data,
     required this.colors,
+    this.multiSeries,
   });
   final List<GraphDataPoint> data;
   final BreezColors colors;
+  final List<GraphSeries>? multiSeries;
+
+  List<GraphDataPoint> get _allDataPoints {
+    if (multiSeries != null && multiSeries!.isNotEmpty) {
+      return multiSeries!
+          .where((s) => s.isVisible)
+          .expand((s) => s.data)
+          .toList();
+    }
+    return data;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final maxValue = data.isEmpty
+    final allPoints = _allDataPoints;
+    final maxValue = allPoints.isEmpty
         ? 30
-        : data.map((e) => e.value).reduce(math.max).ceil();
-    final minValue = data.isEmpty
+        : allPoints.map((e) => e.value).reduce(math.max).ceil();
+    final minValue = allPoints.isEmpty
         ? 0
-        : data.map((e) => e.value).reduce(math.min).floor();
+        : allPoints.map((e) => e.value).reduce(math.min).floor();
 
     return SizedBox(
       width: _GraphConstants.yAxisWidth,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          _buildLabel('${maxValue + 2}', colors),
-          _buildLabel('${((maxValue + minValue) / 2).round()}', colors),
-          _buildLabel('${minValue - 2 < 0 ? 0 : minValue - 2}', colors),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.only(right: AppSpacing.xxs),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            _buildLabel('${maxValue + 2}', colors),
+            _buildLabel('${((maxValue + minValue) / 2).round()}', colors),
+            _buildLabel('${minValue - 2 < 0 ? 0 : minValue - 2}', colors),
+          ],
+        ),
       ),
     );
   }
@@ -435,7 +548,7 @@ class _YAxis extends StatelessWidget {
       style: TextStyle(
         fontSize: _GraphConstants.axisFontSize,
         fontWeight: FontWeight.w500,
-        color: colors.textMuted.withValues(alpha: 0.6),
+        color: colors.textMuted,
       ),
     );
 }

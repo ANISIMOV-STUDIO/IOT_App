@@ -86,9 +86,12 @@ class NotificationsScreen extends StatelessWidget {
           return RefreshIndicator(
             color: AppColors.accent,
             onRefresh: () async {
-              context.read<NotificationsBloc>().add(
-                const NotificationsSubscriptionRequested(),
-              );
+              final deviceId = state.currentDeviceId;
+              if (deviceId != null) {
+                context.read<NotificationsBloc>().add(
+                  NotificationsDeviceChanged(deviceId),
+                );
+              }
               await Future<void>.delayed(AppDurations.long);
             },
             child: ListView.separated(
