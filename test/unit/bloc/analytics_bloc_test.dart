@@ -191,6 +191,8 @@ void main() {
         build: () {
           when(() => mockGetGraphData(any()))
               .thenAnswer((_) async => testGraphData);
+          when(() => mockWatchGraphData(any()))
+              .thenAnswer((_) => const Stream.empty());
           return createBloc();
         },
         seed: () => const AnalyticsState(

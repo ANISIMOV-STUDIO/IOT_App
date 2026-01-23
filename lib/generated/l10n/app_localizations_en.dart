@@ -278,6 +278,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get today => 'Today';
 
   @override
+  String get yesterday => 'Yesterday';
+
+  @override
   String get devices => 'Devices';
 
   @override
@@ -702,7 +705,32 @@ class AppLocalizationsEn extends AppLocalizations {
   String get statusStopped => 'Stopped';
 
   @override
-  String get syncedAt => 'Synced:';
+  String get syncedJustNow => 'Just now';
+
+  @override
+  String syncedMinutesAgo(int count) {
+    return '$count min ago';
+  }
+
+  @override
+  String syncedHoursAgo(int count) {
+    return '$count h ago';
+  }
+
+  @override
+  String syncedYesterdayAt(String time) {
+    return 'Yesterday at $time';
+  }
+
+  @override
+  String syncedDaysAgoAt(int count, String time) {
+    return '$count days ago, $time';
+  }
+
+  @override
+  String syncedAt(String date, String time) {
+    return '$date, $time';
+  }
 
   @override
   String get statusEnabled => 'Enabled';

@@ -370,6 +370,10 @@
   "@today": {
     "description": "Today label"
   },
+  "yesterday": "Вчера",
+  "@yesterday": {
+    "description": "Yesterday label"
+  },
   "devices": "Устройства",
   "@devices": {
     "description": "Devices tab label"
@@ -811,7 +815,39 @@
   "deviceOffline": "Устройство не в сети",
   "statusRunning": "В работе",
   "statusStopped": "Выключен",
-  "syncedAt": "Обновлено:",
+  "syncedJustNow": "Только что",
+  "syncedMinutesAgo": "{count} мин назад",
+  "@syncedMinutesAgo": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "syncedHoursAgo": "{count} ч назад",
+  "@syncedHoursAgo": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "syncedYesterdayAt": "Вчера в {time}",
+  "@syncedYesterdayAt": {
+    "placeholders": {
+      "time": {"type": "String"}
+    }
+  },
+  "syncedDaysAgoAt": "{count} дн назад, {time}",
+  "@syncedDaysAgoAt": {
+    "placeholders": {
+      "count": {"type": "int"},
+      "time": {"type": "String"}
+    }
+  },
+  "syncedAt": "{date}, {time}",
+  "@syncedAt": {
+    "placeholders": {
+      "date": {"type": "String"},
+      "time": {"type": "String"}
+    }
+  },
   "statusEnabled": "Включено",
   "statusDisabled": "Выключено",
   "holdToToggle": "Удерживайте для активации дня",

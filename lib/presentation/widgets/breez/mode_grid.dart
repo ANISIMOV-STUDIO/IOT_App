@@ -130,11 +130,12 @@ class ModeGrid extends StatelessWidget {
         : grid;
 
     // Оборачиваем в Stack для overlay при isPending
+    // Если showCard — используем AppRadius.card, иначе AppRadius.nested (вложенный в карточку)
     final wrappedContent = isPending
         ? ClipRRect(
-            borderRadius: showCard
-                ? BorderRadius.circular(AppRadius.card)
-                : BorderRadius.zero,
+            borderRadius: BorderRadius.circular(
+              showCard ? AppRadius.card : AppRadius.nested,
+            ),
             child: Stack(
               children: [
                 content,

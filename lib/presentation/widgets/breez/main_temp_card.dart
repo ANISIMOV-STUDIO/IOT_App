@@ -135,6 +135,10 @@ class MainTempCard extends StatelessWidget {
 
     // Overlay цвет режима поверх базового фона (как в ModeGridItem)
     final modeOverlay = modeColor.withValues(alpha: AppColors.opacitySubtle);
+    // Цвет границы (для внутренних разделителей)
+    final borderColor = isActive
+        ? modeColor.withValues(alpha: AppColors.opacityStrong)
+        : colors.border;
 
     return Semantics(
       label: '$unitName: ${isActive ? status ?? 'включено' : isOnline ? 'выключено' : 'не в сети'}',
@@ -268,6 +272,7 @@ class MainTempCard extends StatelessWidget {
                     selectedSensors: selectedSensors,
                     colors: colors,
                     l10n: l10n,
+                    borderColor: borderColor,
                   ),
 
                 // Fan display - readonly показатели актуальных оборотов
@@ -278,6 +283,7 @@ class MainTempCard extends StatelessWidget {
                     exhaustFan: exhaustFan,
                     colors: colors,
                     l10n: l10n,
+                    borderColor: borderColor,
                   ),
                 ),
                     ],
@@ -380,7 +386,16 @@ class _TemperatureSetpointSection extends StatelessWidget {
 class _StatsSection extends StatelessWidget {
 
   const _StatsSection({
-    required this.outsideTemp, required this.indoorTemp, required this.humidity, required this.airflow, required this.filterPercent, required this.selectedSensors, required this.colors, required this.l10n, this.sensorUnit,
+    required this.outsideTemp,
+    required this.indoorTemp,
+    required this.humidity,
+    required this.airflow,
+    required this.filterPercent,
+    required this.selectedSensors,
+    required this.colors,
+    required this.l10n,
+    required this.borderColor,
+    this.sensorUnit,
   });
   final UnitState? sensorUnit;
   final double outsideTemp;
@@ -391,6 +406,7 @@ class _StatsSection extends StatelessWidget {
   final List<QuickSensorType> selectedSensors;
   final BreezColors colors;
   final AppLocalizations l10n;
+  final Color borderColor;
 
   /// Получить значение для типа сенсора
   String _getSensorValue(QuickSensorType type) {
@@ -422,7 +438,7 @@ class _StatsSection extends StatelessWidget {
       padding: const EdgeInsets.only(top: AppSpacing.xs),
       decoration: BoxDecoration(
         border: Border(
-          top: BorderSide(color: colors.border),
+          top: BorderSide(color: borderColor),
         ),
       ),
       child: Row(
@@ -446,11 +462,13 @@ class _FanDisplaySection extends StatelessWidget {
     required this.exhaustFan,
     required this.colors,
     required this.l10n,
+    required this.borderColor,
   });
   final int? supplyFan;
   final int? exhaustFan;
   final BreezColors colors;
   final AppLocalizations l10n;
+  final Color borderColor;
 
   @override
   Widget build(BuildContext context) => Column(
@@ -460,7 +478,7 @@ class _FanDisplaySection extends StatelessWidget {
           padding: const EdgeInsets.only(top: AppSpacing.xs),
           decoration: BoxDecoration(
             border: Border(
-              top: BorderSide(color: colors.border),
+              top: BorderSide(color: borderColor),
             ),
           ),
           child: Row(

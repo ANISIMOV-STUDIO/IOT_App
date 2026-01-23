@@ -98,23 +98,83 @@ class _SyncTimeSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    final timeFormat = DateFormat('HH:mm');
-
-    // Если есть время синхронизации - показываем его
-    if (updatedAt != null) {
-      return Text(
-        '${l10n.syncedAt} ${timeFormat.format(updatedAt!)}',
-        style: TextStyle(
-          fontSize: AppFontSizes.bodySmall,
-          fontWeight: FontWeight.w500,
-          color: colors.textMuted,
-        ),
-      );
+    if (updatedAt == null) {
+      return const SizedBox.shrink();
     }
 
-    // Fallback - ничего не показываем
-    return const SizedBox.shrink();
+    final l10n = AppLocalizations.of(context)!;
+    final formattedDateTime = _formatRelativeDateTime(updatedAt!, l10n);
+
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.sm,
+        vertical: AppSpacing.xs,
+      ),
+      decoration: BoxDecoration(
+        color: colors.buttonBg.withValues(alpha: AppColors.opacityLow),
+        borderRadius: BorderRadius.circular(AppRadius.chip),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.sync,
+            size: AppIconSizes.small,
+            color: colors.textMuted,
+          ),
+          const SizedBox(width: AppSpacing.xxs),
+          Text(
+            formattedDateTime,
+            style: TextStyle(
+              fontSize: AppFontSizes.captionSmall,
+              fontWeight: FontWeight.w500,
+              color: colors.textMuted,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Форматирует дату относительно: X мин назад, вчера в 13:20, 2 дня назад
+  String _formatRelativeDateTime(DateTime dateTime, AppLocalizations l10n) {
+    final now = DateTime.now();
+    final difference = now.difference(dateTime);
+    final timeFormat = DateFormat('HH:mm');
+    final time = timeFormat.format(dateTime);
+
+    // Менее минуты назад
+    if (difference.inMinutes < 1) {
+      return l10n.syncedJustNow;
+    }
+
+    // Менее часа назад
+    if (difference.inHours < 1) {
+      return l10n.syncedMinutesAgo(difference.inMinutes);
+    }
+
+    // Сегодня (менее 24 часов и тот же день)
+    final today = DateTime(now.year, now.month, now.day);
+    final dateDay = DateTime(dateTime.year, dateTime.month, dateTime.day);
+
+    if (dateDay == today) {
+      return l10n.syncedHoursAgo(difference.inHours);
+    }
+
+    // Вчера
+    final yesterday = today.subtract(const Duration(days: 1));
+    if (dateDay == yesterday) {
+      return l10n.syncedYesterdayAt(time);
+    }
+
+    // До 7 дней назад
+    if (difference.inDays <= 7) {
+      return l10n.syncedDaysAgoAt(difference.inDays, time);
+    }
+
+    // Старше недели - показываем дату
+    final dateFormat = DateFormat('dd.MM');
+    return l10n.syncedAt(dateFormat.format(dateTime), time);
   }
 }
 

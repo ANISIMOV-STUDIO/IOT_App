@@ -280,6 +280,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get today => 'Сегодня';
 
   @override
+  String get yesterday => 'Вчера';
+
+  @override
   String get devices => 'Устройства';
 
   @override
@@ -704,7 +707,32 @@ class AppLocalizationsRu extends AppLocalizations {
   String get statusStopped => 'Выключен';
 
   @override
-  String get syncedAt => 'Обновлено:';
+  String get syncedJustNow => 'Только что';
+
+  @override
+  String syncedMinutesAgo(int count) {
+    return '$count мин назад';
+  }
+
+  @override
+  String syncedHoursAgo(int count) {
+    return '$count ч назад';
+  }
+
+  @override
+  String syncedYesterdayAt(String time) {
+    return 'Вчера в $time';
+  }
+
+  @override
+  String syncedDaysAgoAt(int count, String time) {
+    return '$count дн назад, $time';
+  }
+
+  @override
+  String syncedAt(String date, String time) {
+    return '$date, $time';
+  }
 
   @override
   String get statusEnabled => 'Включено';

@@ -608,6 +608,12 @@ abstract class AppLocalizations {
   /// **'Сегодня'**
   String get today;
 
+  /// Yesterday label
+  ///
+  /// In ru, this message translates to:
+  /// **'Вчера'**
+  String get yesterday;
+
   /// Devices tab label
   ///
   /// In ru, this message translates to:
@@ -1382,11 +1388,41 @@ abstract class AppLocalizations {
   /// **'Выключен'**
   String get statusStopped;
 
+  /// No description provided for @syncedJustNow.
+  ///
+  /// In ru, this message translates to:
+  /// **'Только что'**
+  String get syncedJustNow;
+
+  /// No description provided for @syncedMinutesAgo.
+  ///
+  /// In ru, this message translates to:
+  /// **'{count} мин назад'**
+  String syncedMinutesAgo(int count);
+
+  /// No description provided for @syncedHoursAgo.
+  ///
+  /// In ru, this message translates to:
+  /// **'{count} ч назад'**
+  String syncedHoursAgo(int count);
+
+  /// No description provided for @syncedYesterdayAt.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вчера в {time}'**
+  String syncedYesterdayAt(String time);
+
+  /// No description provided for @syncedDaysAgoAt.
+  ///
+  /// In ru, this message translates to:
+  /// **'{count} дн назад, {time}'**
+  String syncedDaysAgoAt(int count, String time);
+
   /// No description provided for @syncedAt.
   ///
   /// In ru, this message translates to:
-  /// **'Обновлено:'**
-  String get syncedAt;
+  /// **'{date}, {time}'**
+  String syncedAt(String date, String time);
 
   /// No description provided for @statusEnabled.
   ///

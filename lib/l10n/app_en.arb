@@ -370,6 +370,10 @@
   "@today": {
     "description": "Today label"
   },
+  "yesterday": "Yesterday",
+  "@yesterday": {
+    "description": "Yesterday label"
+  },
   "devices": "Devices",
   "@devices": {
     "description": "Devices tab label"
@@ -811,7 +815,39 @@
   "deviceOffline": "Device offline",
   "statusRunning": "Running",
   "statusStopped": "Stopped",
-  "syncedAt": "Synced:",
+  "syncedJustNow": "Just now",
+  "syncedMinutesAgo": "{count} min ago",
+  "@syncedMinutesAgo": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "syncedHoursAgo": "{count} h ago",
+  "@syncedHoursAgo": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "syncedYesterdayAt": "Yesterday at {time}",
+  "@syncedYesterdayAt": {
+    "placeholders": {
+      "time": {"type": "String"}
+    }
+  },
+  "syncedDaysAgoAt": "{count} days ago, {time}",
+  "@syncedDaysAgoAt": {
+    "placeholders": {
+      "count": {"type": "int"},
+      "time": {"type": "String"}
+    }
+  },
+  "syncedAt": "{date}, {time}",
+  "@syncedAt": {
+    "placeholders": {
+      "date": {"type": "String"},
+      "time": {"type": "String"}
+    }
+  },
   "statusEnabled": "Enabled",
   "statusDisabled": "Disabled",
   "holdToToggle": "Hold to activate day",
