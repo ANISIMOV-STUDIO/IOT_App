@@ -114,7 +114,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get targetTemperature => 'Target temperature';
 
   @override
-  String get intake => 'Intake';
+  String get supply => 'Supply';
 
   @override
   String get exhaust => 'Exhaust';
@@ -124,6 +124,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get filter => 'Filter';
+
+  @override
+  String get filterDesc => 'Remaining filter capacity';
 
   @override
   String todayDate(String date) {
@@ -919,9 +922,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get afterRecup => 'After recup.';
 
   @override
-  String get supply => 'Supply';
-
-  @override
   String get efficiency => 'Efficiency';
 
   @override
@@ -1133,4 +1133,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get temperatureSetpoint => 'Setpoint';
+
+  @override
+  String get sensorRemove => 'Remove';
+
+  @override
+  String get sensorToMain => 'To main';
+
+  @override
+  String get sensorMaxSelected => 'Max 3';
 }

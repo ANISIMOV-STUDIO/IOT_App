@@ -179,7 +179,7 @@ class _ModeSettingsDialogState extends State<ModeSettingsDialog> {
               children: [
                 Expanded(
                   child: FanSlider(
-                    label: l10n.intake,
+                    label: l10n.supply,
                     value: _supplyFan,
                     color: AppColors.accent,
                     icon: Icons.arrow_downward_rounded,

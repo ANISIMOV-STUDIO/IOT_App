@@ -115,7 +115,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get targetTemperature => 'Целевая температура';
 
   @override
-  String get intake => 'Приток';
+  String get supply => 'Приток';
 
   @override
   String get exhaust => 'Вытяжка';
@@ -125,6 +125,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get filter => 'Фильтр';
+
+  @override
+  String get filterDesc => 'Оставшийся ресурс фильтра';
 
   @override
   String todayDate(String date) {
@@ -924,9 +927,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get afterRecup => 'После рекуп.';
 
   @override
-  String get supply => 'Приток';
-
-  @override
   String get efficiency => 'КПД';
 
   @override
@@ -1142,4 +1142,13 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get temperatureSetpoint => 'Уставка';
+
+  @override
+  String get sensorRemove => 'Убрать';
+
+  @override
+  String get sensorToMain => 'На главную';
+
+  @override
+  String get sensorMaxSelected => 'Максимум 3';
 }

@@ -112,20 +112,8 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
   ) async {
     emit(state.copyWith(currentDeviceId: event.deviceId));
 
-    // Загружаем график для нового устройства
     await _loadGraphData(event.deviceId, state.selectedMetric, emit);
-
-    // Переподписываемся на графики для нового устройства
-    await _graphDataSubscription?.cancel();
-    _graphDataSubscription = _watchGraphData(WatchGraphDataParams(
-      deviceId: event.deviceId,
-      metric: state.selectedMetric,
-    )).listen(
-      (data) => add(AnalyticsGraphDataUpdated(data)),
-      onError: (error) {
-        // Игнорируем ошибки стрима - данные уже загружены
-      },
-    );
+    await _subscribeToGraphData(event.deviceId, state.selectedMetric);
   }
 
   /// Обновление статистики энергопотребления из стрима
@@ -151,11 +139,25 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
   ) async {
     emit(state.copyWith(selectedMetric: event.metric));
 
-    // Перезагружаем график для новой метрики
     final deviceId = state.currentDeviceId;
     if (deviceId != null) {
       await _loadGraphData(deviceId, event.metric, emit);
+      await _subscribeToGraphData(deviceId, event.metric);
     }
+  }
+
+  /// Подписка на обновления данных графика
+  Future<void> _subscribeToGraphData(String deviceId, GraphMetric metric) async {
+    await _graphDataSubscription?.cancel();
+    _graphDataSubscription = _watchGraphData(WatchGraphDataParams(
+      deviceId: deviceId,
+      metric: metric,
+    )).listen(
+      (data) => add(AnalyticsGraphDataUpdated(data)),
+      onError: (error) {
+        // Игнорируем ошибки стрима - данные уже загружены
+      },
+    );
   }
 
   /// Вспомогательный метод для загрузки графика

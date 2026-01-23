@@ -141,9 +141,9 @@
   "@targetTemperature": {
     "description": "Target temperature label"
   },
-  "intake": "Intake",
-  "@intake": {
-    "description": "Intake airflow label"
+  "supply": "Supply",
+  "@supply": {
+    "description": "Supply airflow label"
   },
   "exhaust": "Exhaust",
   "@exhaust": {
@@ -156,6 +156,10 @@
   "filter": "Filter",
   "@filter": {
     "description": "Filter button"
+  },
+  "filterDesc": "Remaining filter capacity",
+  "@filterDesc": {
+    "description": "Filter status description"
   },
   "todayDate": "Today, {date}",
   "@todayDate": {
@@ -1001,5 +1005,17 @@
   "temperatureSetpoint": "Setpoint",
   "@temperatureSetpoint": {
     "description": "Temperature setpoint label for main card"
+  },
+  "sensorRemove": "Remove",
+  "@sensorRemove": {
+    "description": "Remove sensor from main screen button"
+  },
+  "sensorToMain": "To main",
+  "@sensorToMain": {
+    "description": "Add sensor to main screen button"
+  },
+  "sensorMaxSelected": "Max 3",
+  "@sensorMaxSelected": {
+    "description": "Maximum sensors selected message"
   }
 }

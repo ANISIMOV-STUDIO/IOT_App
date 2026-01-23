@@ -141,9 +141,9 @@
   "@targetTemperature": {
     "description": "Target temperature label"
   },
-  "intake": "Приток",
-  "@intake": {
-    "description": "Intake airflow label"
+  "supply": "Приток",
+  "@supply": {
+    "description": "Supply airflow label"
   },
   "exhaust": "Вытяжка",
   "@exhaust": {
@@ -156,6 +156,10 @@
   "filter": "Фильтр",
   "@filter": {
     "description": "Filter button"
+  },
+  "filterDesc": "Оставшийся ресурс фильтра",
+  "@filterDesc": {
+    "description": "Filter status description"
   },
   "todayDate": "Сегодня, {date}",
   "@todayDate": {
@@ -1001,5 +1005,17 @@
   "temperatureSetpoint": "Уставка",
   "@temperatureSetpoint": {
     "description": "Temperature setpoint label for main card"
+  },
+  "sensorRemove": "Убрать",
+  "@sensorRemove": {
+    "description": "Remove sensor from main screen button"
+  },
+  "sensorToMain": "На главную",
+  "@sensorToMain": {
+    "description": "Add sensor to main screen button"
+  },
+  "sensorMaxSelected": "Максимум 3",
+  "@sensorMaxSelected": {
+    "description": "Maximum sensors selected message"
   }
 }

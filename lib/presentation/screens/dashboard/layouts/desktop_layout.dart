@@ -8,6 +8,7 @@ import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/domain/entities/alarm_info.dart';
 import 'package:hvac_control/domain/entities/mode_settings.dart';
 import 'package:hvac_control/domain/entities/unit_state.dart';
+import 'package:hvac_control/generated/l10n/app_localizations.dart';
 import 'package:hvac_control/presentation/bloc/analytics/analytics_bloc.dart';
 import 'package:hvac_control/presentation/screens/dashboard/widgets/desktop_header.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez.dart';
@@ -170,28 +171,153 @@ class _DesktopLayoutState extends State<DesktopLayout> {
       ],
     );
 
-  Widget _buildRightColumnContent() => Column(
+  Widget _buildRightColumnContent() {
+    final l10n = AppLocalizations.of(context)!;
+    final unit = widget.unit;
+
+    // Показатели (короткие лейблы, как на мобильной аналитике)
+    final sensors = [
+      SensorData(
+        key: 'outside_temp',
+        icon: Icons.thermostat_outlined,
+        value: '${unit.outsideTemp.toStringAsFixed(1)}°',
+        label: l10n.outdoor,
+        description: l10n.outdoorTempDesc,
+        color: AppColors.accent,
+      ),
+      SensorData(
+        key: 'indoor_temp',
+        icon: Icons.home_outlined,
+        value: '${unit.indoorTemp.toStringAsFixed(1)}°',
+        label: l10n.indoor,
+        description: l10n.indoorTempDesc,
+        color: AppColors.accentGreen,
+      ),
+      SensorData(
+        key: 'supply_temp',
+        icon: Icons.air,
+        value: '${unit.supplyTemp.toStringAsFixed(1)}°',
+        label: l10n.supply,
+        description: l10n.supplyTempDesc,
+        color: AppColors.accentOrange,
+      ),
+      SensorData(
+        key: 'supply_temp_after_recup',
+        icon: Icons.air,
+        value: '${unit.supplyTempAfterRecup.toStringAsFixed(1)}°',
+        label: l10n.afterRecup,
+        description: l10n.supplyTempAfterRecupDesc,
+        color: AppColors.accentGreen,
+      ),
+      SensorData(
+        key: 'humidity',
+        icon: Icons.water_drop_outlined,
+        value: '${unit.humidity}%',
+        label: l10n.humidity,
+        description: l10n.humidityDesc,
+        color: AppColors.accent,
+      ),
+      SensorData(
+        key: 'co2_level',
+        icon: Icons.cloud_outlined,
+        value: '${unit.co2Level}',
+        label: 'CO₂',
+        description: l10n.co2LevelDesc,
+        color: AppColors.accentGreen,
+      ),
+      SensorData(
+        key: 'recuperator_eff',
+        icon: Icons.recycling,
+        value: '${unit.recuperatorEfficiency}%',
+        label: l10n.efficiency,
+        description: l10n.recuperatorEfficiencyDesc,
+        color: AppColors.accent,
+      ),
+      SensorData(
+        key: 'heater_perf',
+        icon: Icons.local_fire_department_outlined,
+        value: '${unit.heaterPower}%',
+        label: l10n.heater,
+        description: l10n.heaterPerformanceDesc,
+        color: AppColors.accentOrange,
+      ),
+      SensorData(
+        key: 'cooler_status',
+        icon: Icons.ac_unit,
+        value: unit.coolerStatus,
+        label: l10n.cooler,
+        description: l10n.coolerStatusDesc,
+        color: AppColors.accent,
+      ),
+      SensorData(
+        key: 'duct_pressure',
+        icon: Icons.speed,
+        value: '${unit.ductPressure}',
+        label: l10n.pressure,
+        description: l10n.ductPressureDesc,
+        color: AppColors.darkTextMuted,
+      ),
+      SensorData(
+        key: 'free_cooling',
+        icon: Icons.ac_unit,
+        value: unit.freeCooling ? l10n.on : l10n.off,
+        label: l10n.freeCool,
+        description: l10n.freeCoolingDesc,
+        color: unit.freeCooling ? AppColors.accentGreen : AppColors.darkTextMuted,
+      ),
+      SensorData(
+        key: 'filter_percent',
+        icon: Icons.filter_alt_outlined,
+        value: '${unit.filterPercent}%',
+        label: l10n.filter,
+        description: l10n.filterDesc,
+        color: AppColors.accent,
+      ),
+    ];
+
+    return Column(
       children: [
-        // Schedule + Alarms row
+        // Sensors (4 per row) + (Schedule/Alarms) row
         Expanded(
           child: Row(
             children: [
-              // Daily schedule widget
+              // All sensors in grid (4 per row, expand to fill height)
               Expanded(
-                child: DailyScheduleWidget(
-                  timerSettings: widget.timerSettings,
-                  onDaySettingsChanged: widget.onTimerSettingsChanged,
+                child: BreezCard(
+                  padding: const EdgeInsets.all(AppSpacing.xs),
+                  child: AnalyticsSensorsGrid(
+                    sensors: sensors,
+                    expandHeight: true,
+                    selectable: true,
+                  ),
                 ),
               ),
 
               const SizedBox(width: AppSpacing.sm),
 
-              // Unit alarms widget
+              // Schedule + Alarms stacked vertically
               Expanded(
-                child: UnitAlarmsWidget(
-                  alarms: widget.activeAlarms,
-                  onSeeHistory: () {},
-                  onResetAlarms: widget.onAlarmsReset,
+                child: Column(
+                  children: [
+                    // Daily schedule widget
+                    Expanded(
+                      child: DailyScheduleWidget(
+                        timerSettings: widget.timerSettings,
+                        onDaySettingsChanged: widget.onTimerSettingsChanged,
+                      ),
+                    ),
+
+                    const SizedBox(height: AppSpacing.sm),
+
+                    // Unit alarms widget
+                    Expanded(
+                      child: UnitAlarmsWidget(
+                        alarms: widget.activeAlarms,
+                        onSeeHistory: () {},
+                        onResetAlarms: widget.onAlarmsReset,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -200,7 +326,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
 
         const SizedBox(height: AppSpacing.sm),
 
-        // OperationGraph row (same height as Schedule/Notifications)
+        // OperationGraph row
         // Использует BlocBuilder для прямого доступа к AnalyticsBloc
         Expanded(
           child: BlocBuilder<AnalyticsBloc, AnalyticsState>(
@@ -220,4 +346,5 @@ class _DesktopLayoutState extends State<DesktopLayout> {
         ),
       ],
     );
+  }
 }

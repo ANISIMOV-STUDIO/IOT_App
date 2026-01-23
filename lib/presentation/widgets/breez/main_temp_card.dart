@@ -467,7 +467,7 @@ class _FanDisplaySection extends StatelessWidget {
             children: [
               Expanded(
                 child: _FanIndicator(
-                  label: l10n.intake,
+                  label: l10n.supply,
                   value: supplyFan,
                   color: AppColors.accent,
                   icon: Icons.arrow_downward_rounded,

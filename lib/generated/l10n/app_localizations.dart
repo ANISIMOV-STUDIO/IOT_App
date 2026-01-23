@@ -302,11 +302,11 @@ abstract class AppLocalizations {
   /// **'Целевая температура'**
   String get targetTemperature;
 
-  /// Intake airflow label
+  /// Supply airflow label
   ///
   /// In ru, this message translates to:
   /// **'Приток'**
-  String get intake;
+  String get supply;
 
   /// Exhaust airflow label
   ///
@@ -325,6 +325,12 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Фильтр'**
   String get filter;
+
+  /// Filter status description
+  ///
+  /// In ru, this message translates to:
+  /// **'Оставшийся ресурс фильтра'**
+  String get filterDesc;
 
   /// Today with date
   ///
@@ -1802,12 +1808,6 @@ abstract class AppLocalizations {
   /// **'После рекуп.'**
   String get afterRecup;
 
-  /// No description provided for @supply.
-  ///
-  /// In ru, this message translates to:
-  /// **'Приток'**
-  String get supply;
-
   /// No description provided for @efficiency.
   ///
   /// In ru, this message translates to:
@@ -2215,6 +2215,24 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Уставка'**
   String get temperatureSetpoint;
+
+  /// Remove sensor from main screen button
+  ///
+  /// In ru, this message translates to:
+  /// **'Убрать'**
+  String get sensorRemove;
+
+  /// Add sensor to main screen button
+  ///
+  /// In ru, this message translates to:
+  /// **'На главную'**
+  String get sensorToMain;
+
+  /// Maximum sensors selected message
+  ///
+  /// In ru, this message translates to:
+  /// **'Максимум 3'**
+  String get sensorMaxSelected;
 }
 
 class _AppLocalizationsDelegate
