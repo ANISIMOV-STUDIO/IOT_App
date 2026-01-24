@@ -124,10 +124,14 @@ class _BreezPinCodeFieldState extends State<BreezPinCodeField> {
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(widget.length, (index) => Container(
+        // Фиксированная высота для предотвращения дёргания при смене фокуса
+        SizedBox(
+          height: 64, // Высота поля + padding
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(widget.length, (index) => Container(
               width: 48,
               margin: EdgeInsets.only(
                 left: index == 0 ? 0 : AppSpacing.xs / 2,
@@ -180,6 +184,7 @@ class _BreezPinCodeFieldState extends State<BreezPinCodeField> {
                   ),
                 ),
               )),
+          ),
         ),
         if (hasError) ...[
           const SizedBox(height: AppSpacing.xs),

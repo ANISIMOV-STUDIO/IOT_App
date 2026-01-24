@@ -204,6 +204,35 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     _credentialsTimeoutTimer = Timer(_credentialsTimeout, _clearPendingCredentials);
   }
 
+  /// Обработка успешной авторизации (общий код для login и verify)
+  Future<void> _handleAuthResponse(
+    AuthResponse response,
+    Emitter<AuthState> emit,
+  ) async {
+    // Сохранить токены
+    await _storageService.saveTokens(
+      response.accessToken,
+      response.refreshToken,
+    );
+    await _storageService.saveUserId(response.user.id);
+
+    // Сбросить состояние сессии
+    AuthHttpInterceptor.resetSessionState();
+
+    // Запустить фоновое обновление токенов
+    _tokenRefreshService?.start();
+
+    // Загрузить настройки пользователя
+    final preferences = await _loadPreferences();
+
+    emit(AuthAuthenticated(
+      user: response.user,
+      accessToken: response.accessToken,
+      refreshToken: response.refreshToken,
+      preferences: preferences,
+    ));
+  }
+
   /// Выход
   Future<void> _onLogoutRequested(
     AuthLogoutRequested event,
@@ -299,9 +328,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         code: event.code,
       );
 
-      await _authService.verifyEmail(request);
+      // Верификация — бэкенд может вернуть токены сразу
+      final verifyResponse = await _authService.verifyEmail(request);
 
-      // Авто-логин если есть сохранённые credentials
+      // Если бэкенд вернул токены — используем их напрямую
+      if (verifyResponse != null) {
+        _clearPendingCredentials();
+        await _handleAuthResponse(verifyResponse, emit);
+        return;
+      }
+
+      // Fallback: авто-логин если есть сохранённые credentials
       if (_pendingEmail != null && _pendingPassword != null) {
         try {
           final loginRequest = LoginRequest(
@@ -314,28 +351,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           // Очищаем временные credentials
           _clearPendingCredentials();
 
-          // Сохранить токены
-          await _storageService.saveTokens(
-            response.accessToken,
-            response.refreshToken,
-          );
-          await _storageService.saveUserId(response.user.id);
-
-          // Сбросить состояние сессии
-          AuthHttpInterceptor.resetSessionState();
-
-          // Запустить фоновое обновление токенов
-          _tokenRefreshService?.start();
-
-          // Загрузить настройки пользователя
-          final preferences = await _loadPreferences();
-
-          emit(AuthAuthenticated(
-            user: response.user,
-            accessToken: response.accessToken,
-            refreshToken: response.refreshToken,
-            preferences: preferences,
-          ));
+          await _handleAuthResponse(response, emit);
           return;
         } catch (loginError) {
           // Если авто-логин не удался, показываем что email подтверждён

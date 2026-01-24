@@ -308,7 +308,7 @@ void main() {
       'эмитит [AuthLoading, AuthEmailVerified] при успешной верификации',
       build: () {
         when(() => mockAuthService.verifyEmail(any()))
-            .thenAnswer((_) async {});
+            .thenAnswer((_) async => null);
         return createBloc();
       },
       act: (bloc) => bloc.add(const AuthVerifyEmailRequested(

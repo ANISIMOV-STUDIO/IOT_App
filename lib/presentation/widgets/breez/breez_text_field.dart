@@ -181,13 +181,19 @@ class _BreezTextFieldState extends State<BreezTextField> {
                   controller: widget.controller,
                   focusNode: _effectiveFocusNode,
                   obscureText: widget.showPasswordToggle ? _obscureTextInternal : widget.obscureText,
-                  keyboardType: widget.keyboardType,
+                  // Для пароля: visiblePassword когда показан, иначе обычный тип
+                  keyboardType: widget.showPasswordToggle && !_obscureTextInternal
+                      ? TextInputType.visiblePassword
+                      : widget.keyboardType,
                   maxLines: widget.maxLines,
                   enabled: widget.enabled,
                   autofillHints: widget.autofillHints,
                   textInputAction: widget.textInputAction,
                   onFieldSubmitted: widget.onFieldSubmitted,
                   textAlignVertical: TextAlignVertical.center,
+                  // Отключаем системные подсказки для паролей
+                  enableSuggestions: !widget.obscureText,
+                  autocorrect: !widget.obscureText,
                   style: TextStyle(
                     color: colors.text,
                     fontSize: _TextFieldConstants.inputFontSize,

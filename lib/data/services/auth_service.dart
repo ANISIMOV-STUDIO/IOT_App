@@ -114,7 +114,8 @@ class AuthService {
   }
 
   /// Подтверждение email по коду
-  Future<void> verifyEmail(VerifyEmailRequest request) async {
+  /// Возвращает AuthResponse если бэкенд возвращает токены, иначе null
+  Future<AuthResponse?> verifyEmail(VerifyEmailRequest request) async {
     try {
       final response = await _client.post(
         Uri.parse('$_baseUrl/auth/verify-email'),
@@ -125,7 +126,19 @@ class AuthService {
       );
 
       if (response.statusCode == 200) {
-        return;
+        // Пробуем распарсить токены из ответа
+        if (response.body.isNotEmpty) {
+          try {
+            final data = json.decode(response.body) as Map<String, dynamic>;
+            // Проверяем есть ли токены в ответе
+            if (data.containsKey('accessToken') && data.containsKey('user')) {
+              return AuthResponse.fromJson(data);
+            }
+          } catch (_) {
+            // Ответ не содержит токенов — это нормально
+          }
+        }
+        return null;
       } else {
         final error = json.decode(response.body) as Map<String, dynamic>;
         throw AuthException(

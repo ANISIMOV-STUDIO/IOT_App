@@ -4,6 +4,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hvac_control/core/theme/app_icon_sizes.dart';
+import 'package:hvac_control/core/theme/app_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/domain/entities/climate.dart';
@@ -100,18 +101,16 @@ class AnalyticsScreen extends StatelessWidget {
                       prev.deviceFullState != curr.deviceFullState ||
                       prev.climate != curr.climate,
                   builder: (context, state) {
-                    if (state.status == ClimateControlStatus.loading) {
+                    // При загрузке или ошибке показываем скелетон (без ненужных ошибок)
+                    if (state.status == ClimateControlStatus.loading ||
+                        state.status == ClimateControlStatus.failure) {
                       return const _SensorsCardSkeleton();
-                    }
-
-                    if (state.status == ClimateControlStatus.failure) {
-                      return _ErrorState(errorMessage: state.errorMessage);
                     }
 
                     final fullState = state.deviceFullState;
                     final climate = state.climate;
                     if (fullState == null && climate == null) {
-                      return const _NoDeviceState();
+                      return const _SensorsCardSkeleton();
                     }
 
                     final unit = _createUnitState(fullState, climate);
@@ -139,21 +138,12 @@ class AnalyticsScreen extends StatelessWidget {
                       prev.graphData != curr.graphData ||
                       prev.selectedMetric != curr.selectedMetric,
                   builder: (context, state) {
+                    // Скелетон при загрузке, ошибке или пустых данных
                     if (state.status == AnalyticsStatus.loading ||
-                        state.status == AnalyticsStatus.initial) {
-                      return const BreezCard(
-                        padding: EdgeInsets.all(AppSpacing.xs),
-                        child: SkeletonGraph(),
-                      );
-                    }
-
-                    if (state.status == AnalyticsStatus.failure) {
-                      return BreezCard(
-                        padding: const EdgeInsets.all(AppSpacing.xs),
-                        child: _GraphError(
-                          errorMessage: state.errorMessage,
-                        ),
-                      );
+                        state.status == AnalyticsStatus.initial ||
+                        state.status == AnalyticsStatus.failure ||
+                        state.graphData.isEmpty) {
+                      return const _GraphSkeleton();
                     }
 
                     return OperationGraph(
@@ -369,183 +359,102 @@ class _SelectionIndicator extends StatelessWidget {
   }
 }
 
-// =============================================================================
-// ERROR STATES
-// =============================================================================
-
-class _NoDeviceState extends StatelessWidget {
-  const _NoDeviceState();
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
-    final l10n = AppLocalizations.of(context)!;
-
-    return BreezCard(
-      padding: const EdgeInsets.all(AppSpacing.xl),
-      child: Center(
-        child: Column(
-          children: [
-            Icon(
-              Icons.sensors_off_outlined,
-              size: AppIconSizes.standard,
-              color: colors.textMuted,
-            ),
-            const SizedBox(height: AppSpacing.md),
-            Text(
-              l10n.noDeviceSelected,
-              style: TextStyle(
-                fontSize: AppFontSizes.body,
-                color: colors.textMuted,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ErrorState extends StatelessWidget {
-  const _ErrorState({this.errorMessage});
-
-  final String? errorMessage;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
-    final l10n = AppLocalizations.of(context)!;
-
-    return BreezCard(
-      padding: const EdgeInsets.all(AppSpacing.xl),
-      child: Center(
-        child: Column(
-          children: [
-            const Icon(
-              Icons.error_outline,
-              size: AppIconSizes.standard,
-              color: AppColors.critical,
-            ),
-            const SizedBox(height: AppSpacing.md),
-            Text(
-              errorMessage ?? l10n.errorLoadingFailed,
-              style: TextStyle(
-                fontSize: AppFontSizes.body,
-                color: colors.textMuted,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: AppSpacing.md),
-            BreezButton(
-              onTap: () {
-                context.read<ClimateBloc>().add(
-                  const ClimateSubscriptionRequested(),
-                );
-              },
-              backgroundColor: colors.card.withValues(alpha: 0),
-              hoverColor: AppColors.accent.withValues(
-                alpha: AppColors.opacityLight,
-              ),
-              pressedColor: AppColors.accent.withValues(
-                alpha: AppColors.opacitySubtle,
-              ),
-              showBorder: false,
-              semanticLabel: l10n.retry,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(Icons.refresh, color: AppColors.accent),
-                  const SizedBox(width: AppSpacing.xs),
-                  Text(
-                    l10n.retry,
-                    style: const TextStyle(
-                      color: AppColors.accent,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-/// Ошибка графика (компактная версия для вставки внутрь карточки)
-class _GraphError extends StatelessWidget {
-  const _GraphError({this.errorMessage});
-
-  final String? errorMessage;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = BreezColors.of(context);
-    final l10n = AppLocalizations.of(context)!;
-
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.show_chart,
-            size: AppIconSizes.standard,
-            color: colors.textMuted,
-          ),
-          const SizedBox(height: AppSpacing.xs),
-          Text(
-            errorMessage ?? l10n.errorLoadingFailed,
-            style: TextStyle(
-              fontSize: AppFontSizes.caption,
-              color: colors.textMuted,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: AppSpacing.xs),
-          GestureDetector(
-            onTap: () {
-              context.read<AnalyticsBloc>().add(
-                const AnalyticsRefreshRequested(),
-              );
-            },
-            child: Text(
-              l10n.retry,
-              style: const TextStyle(
-                fontSize: AppFontSizes.caption,
-                color: AppColors.accent,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 // =============================================================================
 // SKELETON
 // =============================================================================
 
-/// Скелетон для карточки с датчиками (Expanded)
+/// Скелетон для карточки с датчиками (Expanded, адаптивная высота)
 class _SensorsCardSkeleton extends StatelessWidget {
   const _SensorsCardSkeleton();
+
+  static const int _crossAxisCount = 4;
+  static const int _itemCount = 12;
 
   @override
   Widget build(BuildContext context) => BreezCard(
       padding: const EdgeInsets.all(AppSpacing.xs),
-      child: GridView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 4,
-          mainAxisSpacing: AppSpacing.xs,
-          crossAxisSpacing: AppSpacing.xs,
-          childAspectRatio: 0.85,
-        ),
-        itemCount: 12,
-        itemBuilder: (context, index) =>
-            const SkeletonBox(height: 80, borderRadius: AppRadius.cardSmall),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final rowCount = (_itemCount / _crossAxisCount).ceil();
+          const totalSpacingH = AppSpacing.xs * (_crossAxisCount - 1);
+          final totalSpacingV = AppSpacing.xs * (rowCount - 1);
+
+          final cellWidth = (constraints.maxWidth - totalSpacingH) / _crossAxisCount;
+          final cellHeight = (constraints.maxHeight - totalSpacingV) / rowCount;
+          final aspectRatio = (cellWidth / cellHeight).clamp(0.5, 2.5);
+
+          return GridView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: _crossAxisCount,
+              mainAxisSpacing: AppSpacing.xs,
+              crossAxisSpacing: AppSpacing.xs,
+              childAspectRatio: aspectRatio,
+            ),
+            itemCount: _itemCount,
+            itemBuilder: (context, index) =>
+                const SkeletonBox(borderRadius: AppRadius.cardSmall),
+          );
+        },
+      ),
+    );
+}
+
+/// Скелетон для графика (Expanded - заполняет всё доступное пространство)
+class _GraphSkeleton extends StatelessWidget {
+  const _GraphSkeleton();
+
+  @override
+  Widget build(BuildContext context) => const BreezCard(
+      padding: EdgeInsets.all(AppSpacing.xs),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Табы
+          SkeletonBox(
+            width: double.infinity,
+            height: AppSizes.tabHeight,
+            borderRadius: AppRadius.chip,
+          ),
+          SizedBox(height: AppSpacing.xs),
+          // Заголовок с бейджами
+          Row(
+            children: [
+              SkeletonBox(
+                width: 60,
+                height: AppFontSizes.h2,
+                borderRadius: AppRadius.indicator,
+              ),
+              SizedBox(width: AppSpacing.sm),
+              SkeletonBox(
+                width: 50,
+                height: 20,
+                borderRadius: AppRadius.indicator,
+              ),
+              SizedBox(width: AppSpacing.xs),
+              SkeletonBox(
+                width: 50,
+                height: 20,
+                borderRadius: AppRadius.indicator,
+              ),
+              SizedBox(width: AppSpacing.xs),
+              SkeletonBox(
+                width: 50,
+                height: 20,
+                borderRadius: AppRadius.indicator,
+              ),
+            ],
+          ),
+          SizedBox(height: AppSpacing.sm),
+          // Область графика
+          Expanded(
+            child: SkeletonBox(
+              width: double.infinity,
+              borderRadius: AppRadius.button,
+            ),
+          ),
+        ],
       ),
     );
 }
