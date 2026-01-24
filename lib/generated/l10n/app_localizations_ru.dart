@@ -889,6 +889,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get verifyEmailCodeSent => 'Код отправлен на email';
 
   @override
+  String get verifyEmailSuccess => 'Email подтверждён! Добро пожаловать!';
+
+  @override
+  String get verifyEmailSuccessLogin => 'Email подтверждён. Войдите в аккаунт.';
+
+  @override
   String get tooltipEdit => 'Редактировать';
 
   @override

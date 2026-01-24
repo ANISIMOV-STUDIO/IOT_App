@@ -66,9 +66,11 @@ openssl s_client -servername hvac.anisimovstudio.ru -connect hvac.anisimovstudio
 - [ ] Hive: миграция старых данных работает
 - [ ] Hive: данные читаются после перезапуска
 - [ ] Auth: регистрация работает
-- [ ] Auth: после верификации email → редирект на логин
+- [ ] Auth: после верификации email → авто-логин и редирект на dashboard
+- [ ] Auth: fallback: если авто-логин не сработал → редирект на логин
 - [ ] Auth: пользователь может войти
 - [ ] Auth: пароль НЕ виден в BLoC логах (flutter run --verbose)
+- [ ] Auth: временные credentials очищаются через 15 минут (таймаут)
 
 ---
 

@@ -55,8 +55,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final UserHttpClient? _userHttpClient;
   StreamSubscription<void>? _sessionExpiredSubscription;
 
+  /// Временное хранение credentials для авто-логина после верификации email
+  /// Очищается сразу после использования, при logout, или по таймауту
+  String? _pendingEmail;
+  String? _pendingPassword;
+  Timer? _credentialsTimeoutTimer;
+
+  /// Таймаут для автоматической очистки credentials (15 минут)
+  static const _credentialsTimeout = Duration(minutes: 15);
+
   @override
   Future<void> close() {
+    _clearPendingCredentials();
     _sessionExpiredSubscription?.cancel();
     _tokenRefreshService?.dispose();
     return super.close();
@@ -163,12 +173,35 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       final response = await _authService.register(request);
 
+      // Сохраняем credentials для авто-логина после верификации (с таймаутом)
+      _setPendingCredentials(event.email, event.password);
+
       // Регистрация успешна, требуется подтверждение email
-      // password НЕ передаётся в состояние для безопасности
       emit(AuthRegistered(email: response.email));
     } catch (e) {
+      _clearPendingCredentials();
       emit(AuthError(e.toString()));
     }
+  }
+
+  /// Очистка временных credentials
+  void _clearPendingCredentials() {
+    _credentialsTimeoutTimer?.cancel();
+    _credentialsTimeoutTimer = null;
+    _pendingEmail = null;
+    _pendingPassword = null;
+  }
+
+  /// Сохранение credentials с автоматическим таймаутом
+  void _setPendingCredentials(String email, String password) {
+    // Очищаем предыдущие credentials и таймер
+    _clearPendingCredentials();
+
+    _pendingEmail = email;
+    _pendingPassword = password;
+
+    // Запускаем таймер для автоматической очистки
+    _credentialsTimeoutTimer = Timer(_credentialsTimeout, _clearPendingCredentials);
   }
 
   /// Выход
@@ -176,6 +209,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthLogoutRequested event,
     Emitter<AuthState> emit,
   ) async {
+    // Очистить временные credentials
+    _clearPendingCredentials();
+
     // Остановить фоновое обновление токенов
     _tokenRefreshService?.stop();
 
@@ -197,6 +233,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthLogoutAllRequested event,
     Emitter<AuthState> emit,
   ) async {
+    // Очистить временные credentials
+    _clearPendingCredentials();
+
     // Остановить фоновое обновление токенов
     _tokenRefreshService?.stop();
 
@@ -218,6 +257,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthSessionExpired event,
     Emitter<AuthState> emit,
   ) async {
+    // Очистить временные credentials
+    _clearPendingCredentials();
+
     // Остановить фоновое обновление токенов
     _tokenRefreshService?.stop();
 
@@ -244,7 +286,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(const AuthUnauthenticated());
   }
 
-  /// Подтверждение email
+  /// Подтверждение email с авто-логином
   Future<void> _onVerifyEmailRequested(
     AuthVerifyEmailRequested event,
     Emitter<AuthState> emit,
@@ -259,6 +301,52 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       await _authService.verifyEmail(request);
 
+      // Авто-логин если есть сохранённые credentials
+      if (_pendingEmail != null && _pendingPassword != null) {
+        try {
+          final loginRequest = LoginRequest(
+            email: _pendingEmail!,
+            password: _pendingPassword!,
+          );
+
+          final response = await _authService.login(loginRequest);
+
+          // Очищаем временные credentials
+          _clearPendingCredentials();
+
+          // Сохранить токены
+          await _storageService.saveTokens(
+            response.accessToken,
+            response.refreshToken,
+          );
+          await _storageService.saveUserId(response.user.id);
+
+          // Сбросить состояние сессии
+          AuthHttpInterceptor.resetSessionState();
+
+          // Запустить фоновое обновление токенов
+          _tokenRefreshService?.start();
+
+          // Загрузить настройки пользователя
+          final preferences = await _loadPreferences();
+
+          emit(AuthAuthenticated(
+            user: response.user,
+            accessToken: response.accessToken,
+            refreshToken: response.refreshToken,
+            preferences: preferences,
+          ));
+          return;
+        } catch (loginError) {
+          // Если авто-логин не удался, показываем что email подтверждён
+          // и пользователь войдёт вручную
+          _clearPendingCredentials();
+          emit(const AuthEmailVerified());
+          return;
+        }
+      }
+
+      // Нет сохранённых credentials — обычный flow
       emit(const AuthEmailVerified());
     } catch (e) {
       emit(AuthError(e.toString()));

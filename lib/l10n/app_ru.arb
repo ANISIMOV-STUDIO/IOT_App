@@ -921,6 +921,8 @@
   "verifyEmailSent": "Мы отправили 6-значный код подтверждения на",
   "verifyEmailResend": "Отправить код повторно",
   "verifyEmailCodeSent": "Код отправлен на email",
+  "verifyEmailSuccess": "Email подтверждён! Добро пожаловать!",
+  "verifyEmailSuccessLogin": "Email подтверждён. Войдите в аккаунт.",
   "tooltipEdit": "Редактировать",
   "tooltipDelete": "Удалить",
   "tooltipAdd": "Добавить",

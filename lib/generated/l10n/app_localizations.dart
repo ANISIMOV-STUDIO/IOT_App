@@ -1718,6 +1718,18 @@ abstract class AppLocalizations {
   /// **'Код отправлен на email'**
   String get verifyEmailCodeSent;
 
+  /// No description provided for @verifyEmailSuccess.
+  ///
+  /// In ru, this message translates to:
+  /// **'Email подтверждён! Добро пожаловать!'**
+  String get verifyEmailSuccess;
+
+  /// No description provided for @verifyEmailSuccessLogin.
+  ///
+  /// In ru, this message translates to:
+  /// **'Email подтверждён. Войдите в аккаунт.'**
+  String get verifyEmailSuccessLogin;
+
   /// No description provided for @tooltipEdit.
   ///
   /// In ru, this message translates to:

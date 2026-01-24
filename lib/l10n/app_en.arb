@@ -921,6 +921,8 @@
   "verifyEmailSent": "We sent a 6-digit verification code to",
   "verifyEmailResend": "Resend code",
   "verifyEmailCodeSent": "Code sent to email",
+  "verifyEmailSuccess": "Email verified! Welcome!",
+  "verifyEmailSuccessLogin": "Email verified. Please log in.",
   "tooltipEdit": "Edit",
   "tooltipDelete": "Delete",
   "tooltipAdd": "Add",

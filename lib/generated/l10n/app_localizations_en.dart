@@ -887,6 +887,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get verifyEmailCodeSent => 'Code sent to email';
 
   @override
+  String get verifyEmailSuccess => 'Email verified! Welcome!';
+
+  @override
+  String get verifyEmailSuccessLogin => 'Email verified. Please log in.';
+
+  @override
   String get tooltipEdit => 'Edit';
 
   @override

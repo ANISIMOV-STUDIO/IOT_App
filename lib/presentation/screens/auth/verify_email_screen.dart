@@ -59,10 +59,15 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
 
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
-        if (state is AuthEmailVerified) {
-          // Email подтверждён - редирект на страницу входа
-          // ignore: lines_longer_than_80_chars
-          SnackBarUtils.showSuccess(context, 'Email успешно подтверждён. Войдите в аккаунт.');
+        if (state is AuthAuthenticated) {
+          // Авто-логин успешен — переход на главный экран
+          SnackBarUtils.showSuccess(context, l10n.verifyEmailSuccess);
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            rootNavigatorKey.currentContext?.go(AppRoutes.home);
+          });
+        } else if (state is AuthEmailVerified) {
+          // Email подтверждён, но авто-логин не сработал — на страницу входа
+          SnackBarUtils.showSuccess(context, l10n.verifyEmailSuccessLogin);
           WidgetsBinding.instance.addPostFrameCallback((_) {
             rootNavigatorKey.currentContext?.go(AppRoutes.login);
           });
