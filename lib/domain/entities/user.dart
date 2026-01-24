@@ -5,6 +5,7 @@
 library;
 
 import 'package:equatable/equatable.dart';
+import 'package:hvac_control/domain/entities/user_preferences.dart';
 
 /// Пользователь системы
 class User extends Equatable {
@@ -16,6 +17,7 @@ class User extends Equatable {
     required this.lastName,
     required this.role,
     required this.emailConfirmed,
+    this.preferences,
   });
   /// Уникальный идентификатор
   final String id;
@@ -35,6 +37,9 @@ class User extends Equatable {
   /// Email подтверждён
   final bool emailConfirmed;
 
+  /// Настройки пользователя (тема, язык, уведомления)
+  final UserPreferences? preferences;
+
   /// Полное имя
   String get fullName => '$firstName $lastName';
 
@@ -46,6 +51,7 @@ class User extends Equatable {
     String? lastName,
     String? role,
     bool? emailConfirmed,
+    UserPreferences? preferences,
   }) => User(
       id: id ?? this.id,
       email: email ?? this.email,
@@ -53,8 +59,9 @@ class User extends Equatable {
       lastName: lastName ?? this.lastName,
       role: role ?? this.role,
       emailConfirmed: emailConfirmed ?? this.emailConfirmed,
+      preferences: preferences ?? this.preferences,
     );
 
   @override
-  List<Object?> get props => [id, email, firstName, lastName, role, emailConfirmed];
+  List<Object?> get props => [id, email, firstName, lastName, role, emailConfirmed, preferences];
 }

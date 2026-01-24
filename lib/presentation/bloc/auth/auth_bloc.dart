@@ -95,14 +95,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         // Запустить фоновое обновление токенов
         _tokenRefreshService?.start();
 
-        // Загрузить настройки пользователя
-        final preferences = await _loadPreferences();
-
+        // Используем preferences из ответа /auth/me (уже включены в user)
         emit(AuthAuthenticated(
           user: user,
           accessToken: accessToken,
           refreshToken: refreshToken,
-          preferences: preferences,
+          preferences: user.preferences ?? const UserPreferences(),
         ));
       } else {
         emit(const AuthUnauthenticated());
@@ -141,14 +139,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       // Запустить фоновое обновление токенов
       _tokenRefreshService?.start();
 
-      // Загрузить настройки пользователя
-      final preferences = await _loadPreferences();
-
+      // Используем preferences из ответа login (уже включены в user)
       emit(AuthAuthenticated(
         user: response.user,
         accessToken: response.accessToken,
         refreshToken: response.refreshToken,
-        preferences: preferences,
+        preferences: response.user.preferences ?? const UserPreferences(),
       ));
     } catch (e) {
       emit(AuthError(e.toString()));
@@ -222,14 +218,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     // Запустить фоновое обновление токенов
     _tokenRefreshService?.start();
 
-    // Загрузить настройки пользователя
-    final preferences = await _loadPreferences();
-
+    // Используем preferences из ответа (уже включены в user)
     emit(AuthAuthenticated(
       user: response.user,
       accessToken: response.accessToken,
       refreshToken: response.refreshToken,
-      preferences: preferences,
+      preferences: response.user.preferences ?? const UserPreferences(),
     ));
   }
 
@@ -565,18 +559,4 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  /// Загрузить настройки пользователя с сервера
-  Future<UserPreferences?> _loadPreferences() async {
-    try {
-      return await _userHttpClient?.getPreferences();
-    } catch (e) {
-      developer.log(
-        'Failed to load preferences: $e',
-        name: 'AuthBloc',
-        error: e,
-      );
-      // Возвращаем дефолтные настройки при ошибке
-      return const UserPreferences();
-    }
-  }
 }
