@@ -218,7 +218,7 @@ class TestData {
   static HvacDevice get testHvacDevice => const HvacDevice(
         id: 'hvac-device-1',
         name: 'Бризер Гостиная',
-        brand: 'Breez',
+        macAddress: 'AA:BB:CC:DD:EE:01',
         isActive: true,
       );
 
@@ -226,7 +226,7 @@ class TestData {
   static HvacDevice get testHvacDevice2 => const HvacDevice(
         id: 'hvac-device-2',
         name: 'Бризер Спальня',
-        brand: 'Breez',
+        macAddress: 'AA:BB:CC:DD:EE:02',
       );
 
   /// Список HVAC устройств

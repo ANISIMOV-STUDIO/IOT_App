@@ -27,34 +27,45 @@ class HvacDevice extends Equatable {
   const HvacDevice({
     required this.id,
     required this.name,
-    required this.brand,
+    this.macAddress = '',
     this.deviceType = HvacDeviceType.ventilation,
     this.isOnline = true,
     this.isActive = false,
+    this.operatingMode = 'basic',
+    this.isScheduleEnabled = false,
   });
   final String id;
   final String name;
-  final String brand;
+  /// MAC-адрес устройства
+  final String macAddress;
   final HvacDeviceType deviceType;
   final bool isOnline;
   final bool isActive;
+  /// Текущий режим работы (basic, intensive, economy, etc.)
+  final String operatingMode;
+  /// Включено ли расписание
+  final bool isScheduleEnabled;
 
   HvacDevice copyWith({
     String? id,
     String? name,
-    String? brand,
+    String? macAddress,
     HvacDeviceType? deviceType,
     bool? isOnline,
     bool? isActive,
+    String? operatingMode,
+    bool? isScheduleEnabled,
   }) => HvacDevice(
       id: id ?? this.id,
       name: name ?? this.name,
-      brand: brand ?? this.brand,
+      macAddress: macAddress ?? this.macAddress,
       deviceType: deviceType ?? this.deviceType,
       isOnline: isOnline ?? this.isOnline,
       isActive: isActive ?? this.isActive,
+      operatingMode: operatingMode ?? this.operatingMode,
+      isScheduleEnabled: isScheduleEnabled ?? this.isScheduleEnabled,
     );
 
   @override
-  List<Object?> get props => [id, name, brand, deviceType, isOnline, isActive];
+  List<Object?> get props => [id, name, macAddress, deviceType, isOnline, isActive, operatingMode, isScheduleEnabled];
 }

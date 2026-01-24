@@ -48,7 +48,7 @@ class MockClimateRepository implements ClimateRepository {
       );
 
       _deviceMeta[id] = _DeviceMeta(
-        brand: device['brand'] as String,
+        macAddress: device['macAddress'] as String? ?? '',
         deviceType: _parseDeviceType(device['type'] as String?),
         isOnline: device['isOnline'] as bool,
       );
@@ -128,7 +128,7 @@ class MockClimateRepository implements ClimateRepository {
       return HvacDevice(
         id: entry.key,
         name: state.deviceName,
-        brand: meta.brand,
+        macAddress: meta.macAddress,
         deviceType: meta.deviceType,
         isOnline: meta.isOnline,
         isActive: state.isOn,
@@ -336,8 +336,8 @@ class MockClimateRepository implements ClimateRepository {
       airQuality: AirQualityLevel.good,
     );
     _deviceStates[newId] = newState;
-    _deviceMeta[newId] = const _DeviceMeta(
-      brand: 'Breez',
+    _deviceMeta[newId] = _DeviceMeta(
+      macAddress: macAddress,
       deviceType: HvacDeviceType.ventilation,
       isOnline: true,
     );
@@ -345,7 +345,7 @@ class MockClimateRepository implements ClimateRepository {
     return HvacDevice(
       id: newId,
       name: name,
-      brand: 'Breez',
+      macAddress: macAddress,
     );
   }
 
@@ -490,11 +490,11 @@ class MockClimateRepository implements ClimateRepository {
 class _DeviceMeta {
 
   const _DeviceMeta({
-    required this.brand,
+    required this.macAddress,
     required this.deviceType,
     required this.isOnline,
   });
-  final String brand;
+  final String macAddress;
   final HvacDeviceType deviceType;
   final bool isOnline;
 }

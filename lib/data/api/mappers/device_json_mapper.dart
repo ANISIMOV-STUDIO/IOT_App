@@ -16,10 +16,12 @@ class DeviceJsonMapper {
   static HvacDevice hvacDeviceFromJson(Map<String, dynamic> json) => HvacDevice(
       id: json['id'] as String,
       name: json['name'] as String? ?? 'Unknown Device',
-      brand: json['brand'] as String? ?? 'ZILON',
+      macAddress: json['macAddress'] as String? ?? '',
       deviceType: _stringToDeviceType(json['type'] as String?),
       isOnline: json['isOnline'] as bool? ?? true,
       isActive: json['running'] as bool? ?? false, // running = фактически работает
+      operatingMode: _modeToOperatingMode(json['mode'] as String?),
+      isScheduleEnabled: json['scheduleEnabled'] as bool? ?? false,
     );
 
   /// Преобразование строки типа в enum

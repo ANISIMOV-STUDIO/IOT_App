@@ -26,6 +26,8 @@ class MockSetDevicePower extends Mock implements SetDevicePower {}
 
 class MockSetDeviceTime extends Mock implements SetDeviceTime {}
 
+class MockSetScheduleEnabled extends Mock implements SetScheduleEnabled {}
+
 void main() {
   late MockGetAllHvacDevices mockGetAllHvacDevices;
   late MockWatchHvacDevices mockWatchHvacDevices;
@@ -34,6 +36,7 @@ void main() {
   late MockRenameDevice mockRenameDevice;
   late MockSetDevicePower mockSetDevicePower;
   late MockSetDeviceTime mockSetDeviceTime;
+  late MockSetScheduleEnabled mockSetScheduleEnabled;
   late void Function(String) mockSetSelectedDevice;
   late List<String> selectedDeviceCalls;
 
@@ -41,13 +44,13 @@ void main() {
   const testDevice1 = HvacDevice(
     id: 'device-1',
     name: 'Бризер Гостиная',
-    brand: 'Breez',
+    macAddress: 'AA:BB:CC:DD:EE:01',
   );
 
   const testDevice2 = HvacDevice(
     id: 'device-2',
     name: 'Бризер Спальня',
-    brand: 'Breez',
+    macAddress: 'AA:BB:CC:DD:EE:02',
     isOnline: false,
   );
 
@@ -58,6 +61,7 @@ void main() {
     registerFallbackValue(const DeleteDeviceParams(deviceId: ''));
     registerFallbackValue(const RenameDeviceParams(deviceId: '', newName: ''));
     registerFallbackValue(SetDeviceTimeParams(deviceId: '', time: DateTime(2024)));
+    registerFallbackValue(const SetScheduleEnabledParams(deviceId: '', enabled: false));
   });
 
   setUp(() {
@@ -68,6 +72,7 @@ void main() {
     mockRenameDevice = MockRenameDevice();
     mockSetDevicePower = MockSetDevicePower();
     mockSetDeviceTime = MockSetDeviceTime();
+    mockSetScheduleEnabled = MockSetScheduleEnabled();
     selectedDeviceCalls = [];
     mockSetSelectedDevice = (deviceId) => selectedDeviceCalls.add(deviceId);
   });
@@ -80,6 +85,7 @@ void main() {
         renameDevice: mockRenameDevice,
         setDevicePower: mockSetDevicePower,
         setDeviceTime: mockSetDeviceTime,
+        setScheduleEnabled: mockSetScheduleEnabled,
         setSelectedDevice: mockSetSelectedDevice,
       );
 

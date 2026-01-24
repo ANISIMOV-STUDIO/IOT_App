@@ -29,6 +29,7 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
     required RenameDevice renameDevice,
     required SetDevicePower setDevicePower,
     required SetDeviceTime setDeviceTime,
+    required SetScheduleEnabled setScheduleEnabled,
     required void Function(String) setSelectedDevice,
   })  : _getAllHvacDevices = getAllHvacDevices,
         _watchHvacDevices = watchHvacDevices,
@@ -37,6 +38,7 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
         _renameDevice = renameDevice,
         _setDevicePower = setDevicePower,
         _setDeviceTime = setDeviceTime,
+        _setScheduleEnabled = setScheduleEnabled,
         _setSelectedDevice = setSelectedDevice,
         super(const DevicesState()) {
     // События жизненного цикла
@@ -54,6 +56,8 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
     on<DevicesRenameRequested>(_onRenameRequested);
     on<DevicesMasterPowerOffRequested>(_onMasterPowerOffRequested);
     on<DevicesTimeSetRequested>(_onTimeSetRequested);
+    on<DevicesOrderChanged>(_onOrderChanged);
+    on<DevicesScheduleToggled>(_onScheduleToggled);
   }
   final GetAllHvacDevices _getAllHvacDevices;
   final WatchHvacDevices _watchHvacDevices;
@@ -62,6 +66,7 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
   final RenameDevice _renameDevice;
   final SetDevicePower _setDevicePower;
   final SetDeviceTime _setDeviceTime;
+  final SetScheduleEnabled _setScheduleEnabled;
   final void Function(String) _setSelectedDevice;
 
   StreamSubscription<List<HvacDevice>>? _devicesSubscription;
@@ -295,6 +300,64 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
         errorMessage = 'Failed to set device time';
       }
       emit(state.copyWith(operationError: errorMessage));
+    }
+  }
+
+  /// Изменение порядка устройств
+  void _onOrderChanged(
+    DevicesOrderChanged event,
+    Emitter<DevicesState> emit,
+  ) {
+    final devices = List<HvacDevice>.from(state.devices);
+    final item = devices.removeAt(event.oldIndex);
+
+    // ReorderableListView передаёт newIndex с учётом удаления
+    final newIndex = event.newIndex > event.oldIndex
+        ? event.newIndex - 1
+        : event.newIndex;
+    devices.insert(newIndex, item);
+
+    emit(state.copyWith(devices: devices));
+  }
+
+  /// Переключение расписания устройства
+  Future<void> _onScheduleToggled(
+    DevicesScheduleToggled event,
+    Emitter<DevicesState> emit,
+  ) async {
+    // Оптимистичное обновление UI
+    final updatedDevices = state.devices.map((d) {
+      if (d.id == event.deviceId) {
+        return d.copyWith(isScheduleEnabled: event.enabled);
+      }
+      return d;
+    }).toList();
+    emit(state.copyWith(devices: updatedDevices));
+
+    try {
+      await _setScheduleEnabled(SetScheduleEnabledParams(
+        deviceId: event.deviceId,
+        enabled: event.enabled,
+      ));
+    } catch (e) {
+      // Откат при ошибке
+      final rolledBackDevices = state.devices.map((d) {
+        if (d.id == event.deviceId) {
+          return d.copyWith(isScheduleEnabled: !event.enabled);
+        }
+        return d;
+      }).toList();
+
+      String errorMessage;
+      if (e is ApiException) {
+        errorMessage = e.message;
+      } else {
+        errorMessage = 'Failed to toggle schedule';
+      }
+      emit(state.copyWith(
+        devices: rolledBackDevices,
+        operationError: errorMessage,
+      ));
     }
   }
 

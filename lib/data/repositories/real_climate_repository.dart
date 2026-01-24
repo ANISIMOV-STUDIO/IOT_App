@@ -94,6 +94,9 @@ class RealClimateRepository implements ClimateRepository {
                 'SignalR: received full state update for device $selectedId',
                 name: 'ClimateRepository',
               );
+
+              // Синхронизируем состояние в списке устройств
+              _syncDeviceFromFullState(fullState);
             } catch (e) {
               developer.log(
                 'SignalR: failed to parse DeviceFullState: $e',
@@ -192,6 +195,35 @@ class RealClimateRepository implements ClimateRepository {
       }
     }
     return true;
+  }
+
+  /// Синхронизация состояния устройства из DeviceFullState в список HvacDevice
+  void _syncDeviceFromFullState(DeviceFullState fullState) {
+    final currentDevices = List<HvacDevice>.from(_cachedDevices);
+    var updated = false;
+
+    final updatedDevices = currentDevices.map((device) {
+      if (device.id == fullState.id) {
+        final newDevice = device.copyWith(
+          name: fullState.name,
+          macAddress: fullState.macAddress,
+          isOnline: fullState.isOnline,
+          isActive: fullState.power,
+          operatingMode: fullState.operatingMode,
+          isScheduleEnabled: fullState.isScheduleEnabled,
+        );
+        if (newDevice != device) {
+          updated = true;
+        }
+        return newDevice;
+      }
+      return device;
+    }).toList();
+
+    if (updated) {
+      _cachedDevices = updatedDevices;
+      _safeAddToController(_devicesController, updatedDevices);
+    }
   }
 
   // In-flight requests for deduplication

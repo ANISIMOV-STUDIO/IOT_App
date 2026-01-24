@@ -347,6 +347,7 @@ Future<void> init() async {
       renameDevice: sl(),
       setDevicePower: sl(),
       setDeviceTime: sl(),
+      setScheduleEnabled: sl(),
       setSelectedDevice: sl<ClimateRepository>().setSelectedDevice,
     ),
   )

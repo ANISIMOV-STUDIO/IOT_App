@@ -445,7 +445,7 @@ class _BreezDateTimePickerDialogState extends State<_BreezDateTimePickerDialog> 
       ),
       child: Container(
         width: 340,
-        padding: const EdgeInsets.all(AppSpacing.md),
+        padding: const EdgeInsets.all(AppSpacing.xs),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -458,7 +458,7 @@ class _BreezDateTimePickerDialogState extends State<_BreezDateTimePickerDialog> 
                 color: colors.textMuted,
               ),
             ),
-            const SizedBox(height: AppSpacing.sm),
+            const SizedBox(height: AppSpacing.xxs),
 
             // Date wheels (Day / Month / Year)
             SizedBox(
@@ -534,7 +534,7 @@ class _BreezDateTimePickerDialogState extends State<_BreezDateTimePickerDialog> 
               ),
             ),
 
-            const SizedBox(height: AppSpacing.sm),
+            const SizedBox(height: AppSpacing.xxs),
 
             // Time wheels (Hour : Minute)
             SizedBox(
@@ -576,7 +576,7 @@ class _BreezDateTimePickerDialogState extends State<_BreezDateTimePickerDialog> 
               ),
             ),
 
-            const SizedBox(height: AppSpacing.md),
+            const SizedBox(height: AppSpacing.xs),
 
             // Buttons
             Row(

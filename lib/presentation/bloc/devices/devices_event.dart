@@ -104,3 +104,31 @@ final class DevicesTimeSetRequested extends DevicesEvent {
   @override
   List<Object?> get props => [deviceId, time];
 }
+
+/// Изменён порядок устройств (drag & drop)
+final class DevicesOrderChanged extends DevicesEvent {
+
+  const DevicesOrderChanged({
+    required this.oldIndex,
+    required this.newIndex,
+  });
+  final int oldIndex;
+  final int newIndex;
+
+  @override
+  List<Object?> get props => [oldIndex, newIndex];
+}
+
+/// Переключение расписания устройства
+final class DevicesScheduleToggled extends DevicesEvent {
+
+  const DevicesScheduleToggled({
+    required this.deviceId,
+    required this.enabled,
+  });
+  final String deviceId;
+  final bool enabled;
+
+  @override
+  List<Object?> get props => [deviceId, enabled];
+}

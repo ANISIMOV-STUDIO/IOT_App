@@ -389,7 +389,7 @@ abstract class MockData {
   static const List<Map<String, dynamic>> hvacDevices = [
     {
       'id': 'pv_1',
-      'brand': 'BREEZ',
+      'macAddress': 'AA:BB:CC:DD:EE:01',
       'type': 'ventilation',
       'icon': 'air',
       'isOnline': true,
@@ -412,7 +412,7 @@ abstract class MockData {
     },
     {
       'id': 'pv_2',
-      'brand': 'BREEZ',
+      'macAddress': 'AA:BB:CC:DD:EE:02',
       'type': 'ventilation',
       'icon': 'air',
       'isOnline': true,

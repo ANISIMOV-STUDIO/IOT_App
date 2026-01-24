@@ -515,7 +515,7 @@ class CacheService {
   Map<String, dynamic> _hvacDeviceToMap(HvacDevice d) => {
         'id': d.id,
         'name': d.name,
-        'brand': d.brand,
+        'macAddress': d.macAddress,
         'deviceType': d.deviceType.index,
         'isOnline': d.isOnline,
         'isActive': d.isActive,
@@ -524,7 +524,7 @@ class CacheService {
   HvacDevice _hvacDeviceFromMap(Map<String, dynamic> m) => HvacDevice(
         id: m['id'] as String,
         name: m['name'] as String,
-        brand: m['brand'] as String,
+        macAddress: m['macAddress'] as String? ?? '',
         deviceType: HvacDeviceType.values[m['deviceType'] as int? ?? 0],
         isOnline: m['isOnline'] as bool? ?? true,
         isActive: m['isActive'] as bool? ?? false,
