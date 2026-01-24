@@ -2267,7 +2267,7 @@ abstract class AppLocalizations {
   /// Maximum sensors selected message
   ///
   /// In ru, this message translates to:
-  /// **'Максимум 3'**
+  /// **'Сначала уберите один'**
   String get sensorMaxSelected;
 }
 

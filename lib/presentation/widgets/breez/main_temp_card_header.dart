@@ -119,7 +119,7 @@ class _SyncTimeSection extends StatelessWidget {
         children: [
           Icon(
             Icons.sync,
-            size: AppIconSizes.small,
+            size: AppIconSizes.standard,
             color: colors.textMuted,
           ),
           const SizedBox(width: AppSpacing.xxs),

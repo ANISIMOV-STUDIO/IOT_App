@@ -1178,5 +1178,5 @@ class AppLocalizationsRu extends AppLocalizations {
   String get sensorToMain => 'На главную';
 
   @override
-  String get sensorMaxSelected => 'Максимум 3';
+  String get sensorMaxSelected => 'Сначала уберите один';
 }

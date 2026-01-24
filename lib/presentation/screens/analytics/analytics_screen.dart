@@ -3,7 +3,6 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hvac_control/core/theme/app_animations.dart';
 import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
@@ -13,6 +12,7 @@ import 'package:hvac_control/domain/entities/unit_state.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
 import 'package:hvac_control/presentation/bloc/analytics/analytics_bloc.dart';
 import 'package:hvac_control/presentation/bloc/climate/climate_bloc.dart';
+import 'package:hvac_control/presentation/bloc/devices/devices_bloc.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez.dart';
 import 'package:hvac_control/presentation/widgets/loading/skeleton.dart';
 
@@ -22,7 +22,6 @@ import 'package:hvac_control/presentation/widgets/loading/skeleton.dart';
 
 abstract class _AnalyticsConstants {
   static const int maxSelectedSensors = 3;
-  static const double graphHeight = 280;
   static const double indicatorFontSize = 13;
 }
 
@@ -37,157 +36,137 @@ class AnalyticsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
-    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: colors.bg,
       body: SafeArea(
-        child: RefreshIndicator(
-          color: AppColors.accent,
-          onRefresh: () async {
-            context.read<AnalyticsBloc>().add(
-              const AnalyticsRefreshRequested(),
-            );
-            await Future<void>.delayed(AppDurations.long);
-          },
-          child: CustomScrollView(
-            slivers: [
-              // Заголовок с счётчиком
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                    AppSpacing.lg,
-                    AppSpacing.lg,
-                    AppSpacing.lg,
-                    0,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      BreezSectionHeader.pageTitle(
-                        title: l10n.analytics,
-                        icon: Icons.bar_chart,
-                        trailing: const _SelectionIndicator(),
-                      ),
-                      const SizedBox(height: AppSpacing.xxs),
-                      Text(
-                        l10n.analyticsHint,
-                        style: TextStyle(
-                          fontSize: AppFontSizes.captionSmall,
-                          color: colors.textMuted,
-                        ),
-                      ),
-                    ],
-                  ),
+        child: Padding(
+          padding: const EdgeInsets.only(
+            left: AppSpacing.sm,
+            right: AppSpacing.sm,
+            bottom: AppSpacing.sm,
+          ),
+          child: Column(
+            children: [
+              // Селектор устройств
+              Padding(
+                padding: const EdgeInsets.only(top: AppSpacing.sm),
+                child: BlocBuilder<DevicesBloc, DevicesState>(
+                  buildWhen: (prev, curr) =>
+                      prev.devices != curr.devices ||
+                      prev.selectedDeviceId != curr.selectedDeviceId,
+                  builder: (context, devicesState) {
+                    final units = devicesState.devices
+                        .map((d) => UnitState(
+                              id: d.id,
+                              name: d.name,
+                              power: d.isActive,
+                              temp: 0,
+                              mode: '',
+                              humidity: 0,
+                              outsideTemp: 0,
+                              filterPercent: 0,
+                              isOnline: d.isOnline,
+                            ))
+                        .toList();
+                    final selectedIndex = units.indexWhere(
+                      (u) => u.id == devicesState.selectedDeviceId,
+                    );
+
+                    return UnitTabsContainer(
+                      units: units,
+                      selectedIndex: selectedIndex >= 0 ? selectedIndex : 0,
+                      onUnitSelected: (index) {
+                        if (index < units.length) {
+                          context.read<DevicesBloc>().add(
+                            DevicesDeviceSelected(units[index].id),
+                          );
+                        }
+                      },
+                      leading: const BreezLogo.small(),
+                      trailing: const _SelectionIndicator(),
+                    );
+                  },
                 ),
               ),
 
-              const SliverToBoxAdapter(
-                child: SizedBox(height: AppSpacing.sm),
-              ),
+              const SizedBox(height: AppSpacing.sm),
 
-              // Сетка датчиков
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.lg,
-                ),
-                sliver: BlocBuilder<ClimateBloc, ClimateControlState>(
+              // Сетка датчиков (50%)
+              Expanded(
+                child: BlocBuilder<ClimateBloc, ClimateControlState>(
                   buildWhen: (prev, curr) =>
                       prev.status != curr.status ||
                       prev.deviceFullState != curr.deviceFullState ||
                       prev.climate != curr.climate,
                   builder: (context, state) {
                     if (state.status == ClimateControlStatus.loading) {
-                      return const SliverToBoxAdapter(
-                        child: _SensorsSkeletonGrid(),
-                      );
+                      return const _SensorsCardSkeleton();
                     }
 
                     if (state.status == ClimateControlStatus.failure) {
-                      return SliverToBoxAdapter(
-                        child: _ErrorState(
-                          errorMessage: state.errorMessage,
-                        ),
-                      );
+                      return _ErrorState(errorMessage: state.errorMessage);
                     }
 
                     final fullState = state.deviceFullState;
                     final climate = state.climate;
                     if (fullState == null && climate == null) {
-                      return const SliverToBoxAdapter(
-                        child: _NoDeviceState(),
-                      );
+                      return const _NoDeviceState();
                     }
 
                     final unit = _createUnitState(fullState, climate);
                     final sensors = _buildSensorsList(context, unit);
 
-                    return SliverGrid(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 4,
-                            mainAxisSpacing: AppSpacing.xs,
-                            crossAxisSpacing: AppSpacing.xs,
-                            childAspectRatio: 0.85,
-                          ),
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) => SensorTile(
-                          sensor: sensors[index],
-                          selectable: true,
-                        ),
-                        childCount: sensors.length,
+                    return BreezCard(
+                      padding: const EdgeInsets.all(AppSpacing.xs),
+                      child: AnalyticsSensorsGrid(
+                        sensors: sensors,
+                        selectable: true,
+                        expandHeight: true,
                       ),
                     );
                   },
                 ),
               ),
 
-              const SliverToBoxAdapter(
-                child: SizedBox(height: AppSpacing.lg),
-              ),
+              const SizedBox(height: AppSpacing.sm),
 
-              // График
-              SliverPadding(
-                padding: const EdgeInsets.fromLTRB(
-                  AppSpacing.lg,
-                  0,
-                  AppSpacing.lg,
-                  AppSpacing.lg,
-                ),
-                sliver: SliverToBoxAdapter(
-                  child: BlocBuilder<AnalyticsBloc, AnalyticsState>(
-                    buildWhen: (prev, curr) =>
-                        prev.status != curr.status ||
-                        prev.graphData != curr.graphData ||
-                        prev.selectedMetric != curr.selectedMetric,
-                    builder: (context, state) {
-                      if (state.status == AnalyticsStatus.loading ||
-                          state.status == AnalyticsStatus.initial) {
-                        return const SkeletonGraph(
-                          height: _AnalyticsConstants.graphHeight,
-                        );
-                      }
+              // График (50%)
+              Expanded(
+                child: BlocBuilder<AnalyticsBloc, AnalyticsState>(
+                  buildWhen: (prev, curr) =>
+                      prev.status != curr.status ||
+                      prev.graphData != curr.graphData ||
+                      prev.selectedMetric != curr.selectedMetric,
+                  builder: (context, state) {
+                    if (state.status == AnalyticsStatus.loading ||
+                        state.status == AnalyticsStatus.initial) {
+                      return const BreezCard(
+                        padding: EdgeInsets.all(AppSpacing.xs),
+                        child: SkeletonGraph(),
+                      );
+                    }
 
-                      if (state.status == AnalyticsStatus.failure) {
-                        return _GraphErrorState(
+                    if (state.status == AnalyticsStatus.failure) {
+                      return BreezCard(
+                        padding: const EdgeInsets.all(AppSpacing.xs),
+                        child: _GraphError(
                           errorMessage: state.errorMessage,
-                        );
-                      }
-
-                      return SizedBox(
-                        height: _AnalyticsConstants.graphHeight,
-                        child: OperationGraph(
-                          data: state.graphData,
-                          selectedMetric: state.selectedMetric,
-                          onMetricChanged: (metric) {
-                            context.read<AnalyticsBloc>().add(
-                              AnalyticsGraphMetricChanged(metric),
-                            );
-                          },
                         ),
                       );
-                    },
-                  ),
+                    }
+
+                    return OperationGraph(
+                      data: state.graphData,
+                      selectedMetric: state.selectedMetric,
+                      onMetricChanged: (metric) {
+                        context.read<AnalyticsBloc>().add(
+                          AnalyticsGraphMetricChanged(metric),
+                        );
+                      },
+                      compact: true,
+                    );
+                  },
                 ),
               ),
             ],
@@ -494,8 +473,9 @@ class _ErrorState extends StatelessWidget {
   }
 }
 
-class _GraphErrorState extends StatelessWidget {
-  const _GraphErrorState({this.errorMessage});
+/// Ошибка графика (компактная версия для вставки внутрь карточки)
+class _GraphError extends StatelessWidget {
+  const _GraphError({this.errorMessage});
 
   final String? errorMessage;
 
@@ -504,62 +484,41 @@ class _GraphErrorState extends StatelessWidget {
     final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
-    return SizedBox(
-      height: _AnalyticsConstants.graphHeight,
-      child: BreezCard(
-        padding: const EdgeInsets.all(AppSpacing.xl),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.show_chart,
-                size: AppIconSizes.standard,
-                color: AppColors.critical,
-              ),
-              const SizedBox(height: AppSpacing.md),
-              Text(
-                errorMessage ?? l10n.errorLoadingFailed,
-                style: TextStyle(
-                  fontSize: AppFontSizes.body,
-                  color: colors.textMuted,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: AppSpacing.md),
-              BreezButton(
-                onTap: () {
-                  context.read<AnalyticsBloc>().add(
-                    const AnalyticsRefreshRequested(),
-                  );
-                },
-                backgroundColor: colors.card.withValues(alpha: 0),
-                hoverColor: AppColors.accent.withValues(
-                  alpha: AppColors.opacityLight,
-                ),
-                pressedColor: AppColors.accent.withValues(
-                  alpha: AppColors.opacitySubtle,
-                ),
-                showBorder: false,
-                semanticLabel: l10n.retry,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(Icons.refresh, color: AppColors.accent),
-                    const SizedBox(width: AppSpacing.xs),
-                    Text(
-                      l10n.retry,
-                      style: const TextStyle(
-                        color: AppColors.accent,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.show_chart,
+            size: AppIconSizes.standard,
+            color: colors.textMuted,
           ),
-        ),
+          const SizedBox(height: AppSpacing.xs),
+          Text(
+            errorMessage ?? l10n.errorLoadingFailed,
+            style: TextStyle(
+              fontSize: AppFontSizes.caption,
+              color: colors.textMuted,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: AppSpacing.xs),
+          GestureDetector(
+            onTap: () {
+              context.read<AnalyticsBloc>().add(
+                const AnalyticsRefreshRequested(),
+              );
+            },
+            child: Text(
+              l10n.retry,
+              style: const TextStyle(
+                fontSize: AppFontSizes.caption,
+                color: AppColors.accent,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -569,21 +528,24 @@ class _GraphErrorState extends StatelessWidget {
 // SKELETON
 // =============================================================================
 
-class _SensorsSkeletonGrid extends StatelessWidget {
-  const _SensorsSkeletonGrid();
+/// Скелетон для карточки с датчиками (Expanded)
+class _SensorsCardSkeleton extends StatelessWidget {
+  const _SensorsCardSkeleton();
 
   @override
-  Widget build(BuildContext context) => GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 4,
-        mainAxisSpacing: AppSpacing.xs,
-        crossAxisSpacing: AppSpacing.xs,
-        childAspectRatio: 0.85,
+  Widget build(BuildContext context) => BreezCard(
+      padding: const EdgeInsets.all(AppSpacing.xs),
+      child: GridView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 4,
+          mainAxisSpacing: AppSpacing.xs,
+          crossAxisSpacing: AppSpacing.xs,
+          childAspectRatio: 0.85,
+        ),
+        itemCount: 12,
+        itemBuilder: (context, index) =>
+            const SkeletonBox(height: 80, borderRadius: AppRadius.cardSmall),
       ),
-      itemCount: 12,
-      itemBuilder: (context, index) =>
-          const SkeletonBox(height: 80, borderRadius: AppRadius.cardSmall),
     );
 }

@@ -1169,5 +1169,5 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sensorToMain => 'To main';
 
   @override
-  String get sensorMaxSelected => 'Max 3';
+  String get sensorMaxSelected => 'Remove one first';
 }

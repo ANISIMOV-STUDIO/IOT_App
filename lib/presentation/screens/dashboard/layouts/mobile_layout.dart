@@ -141,7 +141,7 @@ class _MobileLayoutState extends State<MobileLayout>
 
                 const SizedBox(height: AppSpacing.xs),
 
-                // Tab content
+                // Tab content (свайп между вкладками)
                 SizedBox(
                   height: _MobileLayoutConstants.tabContentHeight,
                   child: TabBarView(

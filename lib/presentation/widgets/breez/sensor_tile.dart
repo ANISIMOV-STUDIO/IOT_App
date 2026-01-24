@@ -23,14 +23,19 @@ import 'package:hvac_control/presentation/widgets/breez/breez_list_card.dart';
 
 abstract class _SensorTileConstants {
   // Tile sizes
-  static const double valueFontSize = 16;
-  static const double labelFontSize = 10;
-  static const double labelSpacing = 2;
+  static const double valueFontSize = 14;
+  static const double labelFontSize = 9;
+
+  // FittedBox content micro-spacings (smaller than AppSpacing.xxs for tight fit)
+  static const double contentPadding = 2;
+  static const double iconValueSpacing = 2;
+  static const double valueLabelSpacing = 1;
 
   // Selection indicator
-  static const double checkBadgeTop = 4;
-  static const double checkBadgeRight = 4;
-  static const double checkBadgePadding = 2;
+  static const double checkBadgeTop = 0;
+  static const double checkBadgeRight = 0;
+  static const double checkBadgePadding = 3;
+  static const double checkIconSize = 12;
   static const double selectedBorderWidth = 2;
   static const double defaultBorderWidth = 1;
 
@@ -251,7 +256,7 @@ class _SensorInfoContent extends StatelessWidget {
                     ),
                     child: const Icon(
                       Icons.check,
-                      size: AppIconSizes.small,
+                      size: _SensorTileConstants.checkIconSize,
                       color: AppColors.black,
                     ),
                   ),
@@ -386,6 +391,7 @@ class _SensorTileState extends State<SensorTile> {
 
   Widget _buildTile(BreezColors colors, Color accentColor) {
     final isSelected = widget.selectable && _isSelected;
+    final effectiveColor = isSelected ? AppColors.accent : accentColor;
 
     return BreezButton(
       onTap: _handleTap,
@@ -401,46 +407,53 @@ class _SensorTileState extends State<SensorTile> {
                   : _SensorTileConstants.defaultBorderWidth,
             )
           : null,
-      padding: const EdgeInsets.all(AppSpacing.xs),
+      padding: const EdgeInsets.all(AppSpacing.xxs),
       semanticLabel: '${widget.sensor.label}: ${widget.sensor.value}',
       tooltip: widget.sensor.description != null
           ? 'Нажмите для подробностей'
           : null,
       child: Stack(
         children: [
-          // Основной контент
-          Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  widget.sensor.icon,
-                  size: AppIconSizes.standard,
-                  color: isSelected ? AppColors.accent : accentColor,
+          // Основной контент - масштабируется под размер
+          Positioned.fill(
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Padding(
+                padding: const EdgeInsets.all(_SensorTileConstants.contentPadding),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Иконка
+                    Icon(
+                      widget.sensor.icon,
+                      size: AppIconSizes.standard,
+                      color: effectiveColor,
+                    ),
+                    const SizedBox(height: _SensorTileConstants.iconValueSpacing),
+                    // Значение
+                    Text(
+                      widget.sensor.value,
+                      style: TextStyle(
+                        fontSize: _SensorTileConstants.valueFontSize,
+                        fontWeight: FontWeight.w700,
+                        color: colors.text,
+                      ),
+                    ),
+                    const SizedBox(height: _SensorTileConstants.valueLabelSpacing),
+                    // Подпись
+                    Text(
+                      widget.sensor.label,
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: _SensorTileConstants.labelFontSize,
+                        color: colors.textMuted,
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(
-                  height: widget.compact ? AppSpacing.xxs : AppSpacing.xxs + 2,
-                ),
-                Text(
-                  widget.sensor.value,
-                  style: TextStyle(
-                    fontSize: _SensorTileConstants.valueFontSize,
-                    fontWeight: FontWeight.w700,
-                    color: colors.text,
-                  ),
-                ),
-                const SizedBox(height: _SensorTileConstants.labelSpacing),
-                Text(
-                  widget.sensor.label,
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: _SensorTileConstants.labelFontSize,
-                    color: colors.textMuted,
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
           // Галочка выбора
@@ -458,8 +471,8 @@ class _SensorTileState extends State<SensorTile> {
                 ),
                 child: const Icon(
                   Icons.check,
-                  size: AppIconSizes.small,
-                  color: AppColors.white,
+                  size: _SensorTileConstants.checkIconSize,
+                  color: AppColors.black,
                 ),
               ),
             ),

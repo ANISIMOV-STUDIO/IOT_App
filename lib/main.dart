@@ -6,6 +6,7 @@ library;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart' show PointerDeviceKind;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -130,6 +131,12 @@ class _HvacControlAppState extends State<HvacControlApp> {
             routerConfig: _router,
             title: AppInfo.appName,
             debugShowCheckedModeBanner: false,
+
+            // Включаем drag для всех типов указателей (включая мышь на Web)
+            // Это позволяет свайпать TabBarView на десктопе/web
+            scrollBehavior: const MaterialScrollBehavior().copyWith(
+              dragDevices: PointerDeviceKind.values.toSet(),
+            ),
 
             // Material theme with smooth transition
             theme: AppTheme.materialLight,

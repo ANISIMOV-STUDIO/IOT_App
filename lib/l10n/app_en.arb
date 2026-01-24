@@ -1050,7 +1050,7 @@
   "@sensorToMain": {
     "description": "Add sensor to main screen button"
   },
-  "sensorMaxSelected": "Max 3",
+  "sensorMaxSelected": "Remove one first",
   "@sensorMaxSelected": {
     "description": "Maximum sensors selected message"
   }

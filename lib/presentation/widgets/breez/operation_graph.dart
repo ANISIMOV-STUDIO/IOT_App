@@ -8,7 +8,6 @@ import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/domain/entities/graph_data.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
-import 'package:hvac_control/presentation/widgets/breez/breez_list_card.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_segmented_control.dart';
 import 'package:hvac_control/presentation/widgets/breez/operation_graph_controller.dart';
 import 'package:hvac_control/presentation/widgets/breez/operation_graph_painter.dart';
@@ -35,6 +34,13 @@ abstract class _GraphConstants {
 
   // Отступы
   static const int maxXAxisLabels = 6;
+
+  // Порядок метрик для табов и свайпа
+  static const metrics = [
+    GraphMetric.temperature,
+    GraphMetric.humidity,
+    GraphMetric.airflow,
+  ];
 }
 
 // =============================================================================
@@ -63,6 +69,8 @@ class OperationGraph extends StatefulWidget {
     this.animateOnDataChange = true,
     this.multiSeries,
     this.onSeriesVisibilityChanged,
+    this.showCard = true,
+    this.compact = false,
   });
 
   /// Single series data (legacy API)
@@ -89,21 +97,35 @@ class OperationGraph extends StatefulWidget {
   /// Callback when series visibility changes
   final void Function(String seriesId, {required bool isVisible})? onSeriesVisibilityChanged;
 
+  /// Whether to show the card wrapper
+  final bool showCard;
+
+  /// Compact mode for smaller spaces (smaller fonts)
+  final bool compact;
+
   @override
   State<OperationGraph> createState() => _OperationGraphState();
 }
 
 class _OperationGraphState extends State<OperationGraph>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   int? _hoveredIndex;
   _GraphStats? _cachedStats;
   List<GraphDataPoint>? _lastData;
   late final OperationGraphController _controller;
+  late final TabController _tabController;
 
   @override
   void initState() {
     super.initState();
     _controller = OperationGraphController(vsync: this);
+    _tabController = TabController(
+      length: _GraphConstants.metrics.length,
+      vsync: this,
+      initialIndex: _GraphConstants.metrics.indexOf(widget.selectedMetric),
+    );
+    _tabController.addListener(_onTabChanged);
+
     // Start with animation if data is present
     if (widget.data.isNotEmpty && widget.animateOnDataChange) {
       _controller.animateDrawCurve();
@@ -113,6 +135,15 @@ class _OperationGraphState extends State<OperationGraph>
   @override
   void didUpdateWidget(OperationGraph oldWidget) {
     super.didUpdateWidget(oldWidget);
+
+    // Sync tab controller with external selectedMetric changes
+    if (widget.selectedMetric != oldWidget.selectedMetric) {
+      final newIndex = _GraphConstants.metrics.indexOf(widget.selectedMetric);
+      if (_tabController.index != newIndex) {
+        _tabController.animateTo(newIndex);
+      }
+    }
+
     // Animate when data changes
     if (widget.animateOnDataChange &&
         widget.data != oldWidget.data &&
@@ -121,10 +152,44 @@ class _OperationGraphState extends State<OperationGraph>
     }
   }
 
+  void _onTabChanged() {
+    // Only trigger callback when animation settles (not during swipe)
+    if (!_tabController.indexIsChanging) {
+      final newMetric = _GraphConstants.metrics[_tabController.index];
+      if (newMetric != widget.selectedMetric) {
+        widget.onMetricChanged?.call(newMetric);
+      }
+    }
+  }
+
   @override
   void dispose() {
+    _tabController
+      ..removeListener(_onTabChanged)
+      ..dispose();
     _controller.dispose();
     super.dispose();
+  }
+
+  void _onHorizontalSwipe(DragEndDetails details) {
+    if (details.primaryVelocity == null) {
+      return;
+    }
+
+    final currentIndex = _GraphConstants.metrics.indexOf(widget.selectedMetric);
+    int newIndex;
+
+    if (details.primaryVelocity! < 0) {
+      // Swipe left -> next metric
+      newIndex = (currentIndex + 1).clamp(0, _GraphConstants.metrics.length - 1);
+    } else {
+      // Swipe right -> previous metric
+      newIndex = (currentIndex - 1).clamp(0, _GraphConstants.metrics.length - 1);
+    }
+
+    if (newIndex != currentIndex) {
+      _tabController.animateTo(newIndex);
+    }
   }
 
   @override
@@ -141,46 +206,43 @@ class _OperationGraphState extends State<OperationGraph>
 
     return ListenableBuilder(
       listenable: _controller,
-      builder: (context, _) => BreezCard(
-        padding: const EdgeInsets.all(AppSpacing.xs),
-        child: Column(
+      builder: (context, _) {
+        // Content must be inside builder to react to animation changes
+        final content = Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header with title and metric tabs
+            // Header with metric tabs (synced with TabController)
             _GraphHeader(
               currentValue: stats.current,
               metricLabel: _getMetricLabel(l10n),
               metricUnit: _getMetricUnit(l10n),
               selectedMetric: widget.selectedMetric,
-              onMetricChanged: widget.onMetricChanged,
-              l10n: l10n,
-              colors: colors,
-            ),
-
-            const SizedBox(height: AppSpacing.xs),
-
-            // Statistics row
-            _StatisticsRow(
+              tabController: _tabController,
               minValue: stats.min,
               maxValue: stats.max,
               avgValue: stats.avg,
-              unit: _getMetricUnit(l10n),
               l10n: l10n,
+              colors: colors,
+              compact: widget.compact,
             ),
 
             const SizedBox(height: AppSpacing.xs),
 
-            // Graph area
+            // Swipeable graph area
             Expanded(
-              child: _GraphArea(
-                data: widget.data,
-                hoveredIndex: _hoveredIndex,
-                highlightIndex: widget.highlightIndex,
-                onHoverChanged: (index) => setState(() => _hoveredIndex = index),
-                colors: colors,
-                drawProgress: _controller.drawProgress,
-                controller: _controller,
-                multiSeries: widget.multiSeries,
+              child: GestureDetector(
+                onHorizontalDragEnd: _onHorizontalSwipe,
+                behavior: HitTestBehavior.opaque,
+                child: _GraphArea(
+                  data: widget.data,
+                  hoveredIndex: _hoveredIndex,
+                  highlightIndex: widget.highlightIndex,
+                  onHoverChanged: (index) => setState(() => _hoveredIndex = index),
+                  colors: colors,
+                  drawProgress: _controller.drawProgress,
+                  controller: _controller,
+                  multiSeries: widget.multiSeries,
+                ),
               ),
             ),
 
@@ -193,8 +255,15 @@ class _OperationGraphState extends State<OperationGraph>
               ),
             ],
           ],
-        ),
-      ),
+        );
+
+        return widget.showCard
+            ? BreezCard(
+                padding: const EdgeInsets.all(AppSpacing.xs),
+                child: content,
+              )
+            : content;
+      },
     );
   }
 
@@ -262,7 +331,7 @@ class _GraphStats {
   final double avg;
 }
 
-/// Header with title and metric tabs
+/// Header with metric tabs, value, and statistics in one row
 class _GraphHeader extends StatelessWidget {
 
   const _GraphHeader({
@@ -270,73 +339,75 @@ class _GraphHeader extends StatelessWidget {
     required this.metricLabel,
     required this.metricUnit,
     required this.selectedMetric,
+    required this.tabController,
+    required this.minValue,
+    required this.maxValue,
+    required this.avgValue,
     required this.l10n,
     required this.colors,
-    this.onMetricChanged,
+    this.compact = false,
   });
   final double currentValue;
   final String metricLabel;
   final String metricUnit;
   final GraphMetric selectedMetric;
-  final ValueChanged<GraphMetric>? onMetricChanged;
+  final TabController tabController;
+  final double minValue;
+  final double maxValue;
+  final double avgValue;
   final AppLocalizations l10n;
   final BreezColors colors;
-
-  IconData _getMetricIcon() {
-    const iconMap = <GraphMetric, IconData>{
-      GraphMetric.temperature: Icons.thermostat_outlined,
-      GraphMetric.humidity: Icons.water_drop_outlined,
-      GraphMetric.airflow: Icons.air,
-    };
-    return iconMap[selectedMetric] ?? Icons.thermostat_outlined;
-  }
+  final bool compact;
 
   @override
-  Widget build(BuildContext context) => Semantics(
+  Widget build(BuildContext context) {
+    // Compact mode: меньше шрифт значения
+    final valueFontSize = compact ? AppFontSizes.h2 : _GraphConstants.valueFontSize;
+    final unitFontSize = compact ? AppFontSizes.body : _GraphConstants.unitFontSize;
+
+    return Semantics(
       label: '$metricLabel: ${currentValue.toStringAsFixed(1)} $metricUnit',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Section header
-          BreezSectionHeader(
-            icon: _getMetricIcon(),
-            title: metricLabel,
+          // Metric selector - synced with TabController for swipe support
+          AnimatedBuilder(
+            animation: tabController,
+            builder: (context, _) => BreezSegmentedControl<GraphMetric>(
+              value: _GraphConstants.metrics[tabController.index],
+              segments: [
+                BreezSegment(
+                  value: GraphMetric.temperature,
+                  label: l10n.tempShort,
+                  icon: Icons.thermostat_outlined,
+                ),
+                BreezSegment(
+                  value: GraphMetric.humidity,
+                  label: l10n.humidShort,
+                  icon: Icons.water_drop_outlined,
+                ),
+                BreezSegment(
+                  value: GraphMetric.airflow,
+                  label: l10n.airflowShort,
+                  icon: Icons.air,
+                ),
+              ],
+              onChanged: (metric) {
+                final index = _GraphConstants.metrics.indexOf(metric);
+                tabController.animateTo(index);
+              },
+            ),
           ),
           const SizedBox(height: AppSpacing.xs),
-          // Metric selector - full width
-          BreezSegmentedControl<GraphMetric>(
-            value: selectedMetric,
-            segments: [
-              BreezSegment(
-                value: GraphMetric.temperature,
-                label: l10n.tempShort,
-                icon: Icons.thermostat_outlined,
-              ),
-              BreezSegment(
-                value: GraphMetric.humidity,
-                label: l10n.humidShort,
-                icon: Icons.water_drop_outlined,
-              ),
-              BreezSegment(
-                value: GraphMetric.airflow,
-                label: l10n.airflowShort,
-                icon: Icons.air,
-              ),
-            ],
-            onChanged: onMetricChanged,
-            height: 32,
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          // Current value
+          // Current value + statistics in one row
           Row(
-            crossAxisAlignment: CrossAxisAlignment.baseline,
-            textBaseline: TextBaseline.alphabetic,
             children: [
+              // Current value
               Text(
                 currentValue.toStringAsFixed(1),
                 style: TextStyle(
-                  fontSize: _GraphConstants.valueFontSize,
-                  fontWeight: FontWeight.w900,
+                  fontSize: valueFontSize,
+                  fontWeight: FontWeight.w700,
                   height: 1,
                   color: colors.text,
                 ),
@@ -345,56 +416,36 @@ class _GraphHeader extends StatelessWidget {
               Text(
                 metricUnit,
                 style: TextStyle(
-                  fontSize: _GraphConstants.unitFontSize,
+                  fontSize: unitFontSize,
                   fontWeight: FontWeight.w600,
                   color: colors.textMuted,
                 ),
+              ),
+              const SizedBox(width: AppSpacing.sm),
+              // Statistics badges
+              GraphStatBadge(
+                label: l10n.minShort,
+                value: '${minValue.toStringAsFixed(1)}$metricUnit',
+                color: AppColors.accent,
+              ),
+              const SizedBox(width: AppSpacing.xs),
+              GraphStatBadge(
+                label: l10n.maxShort,
+                value: '${maxValue.toStringAsFixed(1)}$metricUnit',
+                color: AppColors.accentRed,
+              ),
+              const SizedBox(width: AppSpacing.xs),
+              GraphStatBadge(
+                label: l10n.avgShort,
+                value: '${avgValue.toStringAsFixed(1)}$metricUnit',
+                color: AppColors.accentGreen,
               ),
             ],
           ),
         ],
       ),
     );
-}
-
-/// Statistics row with min/max/avg badges
-class _StatisticsRow extends StatelessWidget {
-
-  const _StatisticsRow({
-    required this.minValue,
-    required this.maxValue,
-    required this.avgValue,
-    required this.unit,
-    required this.l10n,
-  });
-  final double minValue;
-  final double maxValue;
-  final double avgValue;
-  final String unit;
-  final AppLocalizations l10n;
-
-  @override
-  Widget build(BuildContext context) => Row(
-      children: [
-        GraphStatBadge(
-          label: l10n.minShort,
-          value: '${minValue.toStringAsFixed(1)}$unit',
-          color: AppColors.accent,
-        ),
-        const SizedBox(width: AppSpacing.xs),
-        GraphStatBadge(
-          label: l10n.maxShort,
-          value: '${maxValue.toStringAsFixed(1)}$unit',
-          color: AppColors.accentRed,
-        ),
-        const SizedBox(width: AppSpacing.xs),
-        GraphStatBadge(
-          label: l10n.avgShort,
-          value: '${avgValue.toStringAsFixed(1)}$unit',
-          color: AppColors.accentGreen,
-        ),
-      ],
-    );
+  }
 }
 
 /// Graph area with Y-axis, canvas, and X-axis
@@ -434,6 +485,31 @@ class _GraphArea extends StatelessWidget {
                     child: GestureDetector(
                       // Double-tap to reset zoom
                       onDoubleTap: controller.resetZoom,
+                      // Touch support for mobile
+                      onTapDown: (details) {
+                        final index = _getIndexFromPosition(
+                          details.localPosition.dx,
+                          constraints.maxWidth - _GraphConstants.yAxisWidth,
+                        );
+                        onHoverChanged(index);
+                      },
+                      onTapUp: (_) => onHoverChanged(null),
+                      onTapCancel: () => onHoverChanged(null),
+                      onLongPressStart: (details) {
+                        final index = _getIndexFromPosition(
+                          details.localPosition.dx,
+                          constraints.maxWidth - _GraphConstants.yAxisWidth,
+                        );
+                        onHoverChanged(index);
+                      },
+                      onLongPressMoveUpdate: (details) {
+                        final index = _getIndexFromPosition(
+                          details.localPosition.dx,
+                          constraints.maxWidth - _GraphConstants.yAxisWidth,
+                        );
+                        onHoverChanged(index);
+                      },
+                      onLongPressEnd: (_) => onHoverChanged(null),
                       child: InteractiveViewer(
                         transformationController: controller.transformController,
                         minScale: controller.minScale,
