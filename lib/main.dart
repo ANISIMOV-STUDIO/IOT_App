@@ -21,11 +21,13 @@ import 'package:hvac_control/core/services/push_notification_service.dart';
 import 'package:hvac_control/core/services/theme_service.dart';
 import 'package:hvac_control/core/services/toast_service.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
+import 'package:hvac_control/domain/entities/user_preferences.dart';
 import 'package:hvac_control/firebase_options.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
 import 'package:hvac_control/presentation/bloc/analytics/analytics_bloc.dart';
 import 'package:hvac_control/presentation/bloc/auth/auth_bloc.dart';
 import 'package:hvac_control/presentation/bloc/auth/auth_event.dart';
+import 'package:hvac_control/presentation/bloc/auth/auth_state.dart';
 import 'package:hvac_control/presentation/bloc/climate/climate_bloc.dart';
 import 'package:hvac_control/presentation/bloc/connectivity/connectivity_bloc.dart';
 import 'package:hvac_control/presentation/bloc/devices/devices_bloc.dart';
@@ -117,16 +119,32 @@ class _HvacControlAppState extends State<HvacControlApp> {
           create: (context) => di.sl<ScheduleBloc>(),
         ),
       ],
-      child: ListenableBuilder(
-        listenable: Listenable.merge([
-          di.sl<LanguageService>(),
-          di.sl<ThemeService>(),
-        ]),
-        builder: (context, child) {
-          final languageService = di.sl<LanguageService>();
-          final themeService = di.sl<ThemeService>();
+      child: BlocListener<AuthBloc, AuthState>(
+        // Синхронизируем только при первом входе (не при каждом обновлении preferences)
+        listenWhen: (prev, curr) =>
+            curr is AuthAuthenticated && prev is! AuthAuthenticated,
+        listener: (context, state) {
+          if (state is AuthAuthenticated && state.preferences != null) {
+            final prefs = state.preferences!;
+            // Синхронизируем тему из бэкенда
+            final themeMode = prefs.theme == PreferenceTheme.dark
+                ? ThemeMode.dark
+                : ThemeMode.light;
+            di.sl<ThemeService>().setThemeMode(themeMode);
+            // Синхронизируем язык из бэкенда
+            di.sl<LanguageService>().setLocale(prefs.language.localeCode);
+          }
+        },
+        child: ListenableBuilder(
+          listenable: Listenable.merge([
+            di.sl<LanguageService>(),
+            di.sl<ThemeService>(),
+          ]),
+          builder: (context, child) {
+            final languageService = di.sl<LanguageService>();
+            final themeService = di.sl<ThemeService>();
 
-          return MaterialApp.router(
+            return MaterialApp.router(
             scaffoldMessengerKey: scaffoldMessengerKey,
             routerConfig: _router,
             title: AppInfo.appName,
@@ -176,5 +194,6 @@ class _HvacControlAppState extends State<HvacControlApp> {
           );
         },
       ),
-    );
+    ),
+  );
 }
