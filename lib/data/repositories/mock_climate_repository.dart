@@ -481,9 +481,10 @@ class MockClimateRepository implements ClimateRepository {
     // В моке просто эмулируем успешную установку quick mode
   }
 
-  void dispose() {
-    _climateController.close();
-    _devicesController.close();
+  @override
+  Future<void> dispose() async {
+    await _climateController.close();
+    await _devicesController.close();
   }
 }
 

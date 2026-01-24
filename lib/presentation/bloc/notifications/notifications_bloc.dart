@@ -71,7 +71,11 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
       _notificationsSubscription = _watchNotifications(
         const WatchNotificationsParams(),
       ).listen(
-        (notifications) => add(NotificationsListUpdated(notifications)),
+        (notifications) {
+          if (!isClosed) {
+            add(NotificationsListUpdated(notifications));
+          }
+        },
         onError: (error) {
           // Игнорируем ошибки стрима - данные уже загружены
         },
@@ -107,7 +111,11 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
       _notificationsSubscription = _watchNotifications(
         WatchNotificationsParams(deviceId: event.deviceId),
       ).listen(
-        (notifications) => add(NotificationsListUpdated(notifications)),
+        (notifications) {
+          if (!isClosed) {
+            add(NotificationsListUpdated(notifications));
+          }
+        },
         onError: (error) {
           // Игнорируем ошибки стрима - данные уже загружены
         },
@@ -231,8 +239,8 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   }
 
   @override
-  Future<void> close() {
-    _notificationsSubscription?.cancel();
+  Future<void> close() async {
+    await _notificationsSubscription?.cancel();
     return super.close();
   }
 }

@@ -256,7 +256,11 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       // Подписываемся на обновления через Use Case
       await _climateSubscription?.cancel();
       _climateSubscription = _watchCurrentClimate().listen(
-        (climate) => add(ClimateStateUpdated(climate)),
+        (climate) {
+          if (!isClosed) {
+            add(ClimateStateUpdated(climate));
+          }
+        },
         onError: (error) {
           // Игнорируем ошибки стрима - данные уже загружены
         },
@@ -334,7 +338,11 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         _deviceFullStateSubscription = _watchDeviceFullState(
           WatchDeviceFullStateParams(deviceId: event.deviceId),
         ).listen(
-          (fullState) => add(ClimateFullStateLoaded(fullState)),
+          (fullState) {
+            if (!isClosed) {
+              add(ClimateFullStateLoaded(fullState));
+            }
+          },
           onError: (Object error) {
             // Не критично, если SignalR не работает
             ApiLogger.warning('[ClimateBloc] DeviceFullState stream error', error);
@@ -1251,17 +1259,23 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   }
 
   @override
-  Future<void> close() {
+  Future<void> close() async {
     developer.log('ClimateBloc CLOSED: blocId=$_blocId', name: 'ClimateBloc');
-    _climateSubscription?.cancel();
-    _deviceFullStateSubscription?.cancel();
+
+    // Сначала отменяем все подписки и ждём их завершения
+    await _climateSubscription?.cancel();
+    await _deviceFullStateSubscription?.cancel();
+
+    // Таймеры можно отменять синхронно
     _powerToggleTimer?.cancel();
     _heatingTempTimer?.cancel();
     _coolingTempTimer?.cancel();
     _supplyFanTimer?.cancel();
     _exhaustFanTimer?.cancel();
     _operatingModeTimer?.cancel();
+
     _subscribedDeviceId = null;
+
     return super.close();
   }
 }

@@ -85,8 +85,11 @@ class OperationGraphPainter extends CustomPainter {
     if (_isMultiSeries) {
       // Draw each visible series
       for (final series in multiSeries!) {
-        if (series.isVisible && series.data.isNotEmpty) {
+        if (series.isVisible && series.data.length >= 2) {
           final points = _calculatePointsForData(size, series.data);
+          if (points.length < 2) {
+            continue;
+          }
           final stepX = size.width / (series.data.length - 1);
           _drawCurveWithColor(canvas, points, stepX, series.color);
         }
@@ -100,8 +103,10 @@ class OperationGraphPainter extends CustomPainter {
     } else {
       // Legacy single series mode
       final points = _calculatePoints(size);
-      final stepX = size.width / (data.length - 1);
-      _drawCurve(canvas, points, stepX);
+      if (points.length >= 2 && data.length >= 2) {
+        final stepX = size.width / (data.length - 1);
+        _drawCurve(canvas, points, stepX);
+      }
       _drawHighlightPoint(canvas, size, points);
     }
   }
@@ -109,22 +114,48 @@ class OperationGraphPainter extends CustomPainter {
   List<Offset> _calculatePoints(Size size) => _calculatePointsForData(size, data);
 
   List<Offset> _calculatePointsForData(Size size, List<GraphDataPoint> seriesData) {
+    // Нужна хотя бы одна точка
+    if (seriesData.isEmpty) {
+      return [];
+    }
+
     final allPoints = _allDataPoints;
+    if (allPoints.isEmpty) {
+      return [];
+    }
+
     final maxValue = allPoints.map((e) => e.value).reduce(math.max) + 4;
     final minValue = math.max(0, allPoints.map((e) => e.value).reduce(math.min) - 4);
     final range = maxValue - minValue;
-    final stepX = size.width / (seriesData.length - 1);
+
+    // Защита от деления на ноль
+    if (range == 0 || size.width <= 0 || size.height <= 0) {
+      return [];
+    }
+
+    // Для одной точки - рисуем её по центру
+    final stepX = seriesData.length > 1 ? size.width / (seriesData.length - 1) : 0.0;
 
     final points = <Offset>[];
     for (var i = 0; i < seriesData.length; i++) {
-      final x = i * stepX;
+      final x = seriesData.length > 1 ? i * stepX : size.width / 2;
       final y = size.height - ((seriesData[i].value - minValue) / range * size.height);
+
+      // Проверка на NaN/infinity
+      if (x.isNaN || x.isInfinite || y.isNaN || y.isInfinite) {
+        continue;
+      }
       points.add(Offset(x, y));
     }
     return points;
   }
 
   void _drawGridLines(Canvas canvas, Size size) {
+    // Проверка валидности размеров
+    if (size.width <= 0 || size.height <= 0) {
+      return;
+    }
+
     final gridPaint = Paint()
       ..color = AppColors.white.withValues(alpha: _PainterConstants.gridOpacity)
       ..strokeWidth = _PainterConstants.gridLineWidth
@@ -141,6 +172,11 @@ class OperationGraphPainter extends CustomPainter {
   }
 
   void _drawCurveWithColor(Canvas canvas, List<Offset> points, double stepX, Color lineColor) {
+    // Нужно минимум 2 точки для отрисовки кривой
+    if (points.length < 2) {
+      return;
+    }
+
     final curvePath = Path();
     for (var i = 0; i < points.length; i++) {
       if (i == 0) {
@@ -158,17 +194,11 @@ class OperationGraphPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
 
-    // Apply draw animation progress
-    if (drawProgress < 1.0) {
-      final pathMetrics = curvePath.computeMetrics().first;
-      final extractPath = pathMetrics.extractPath(
-        0,
-        pathMetrics.length * drawProgress,
-      );
-      canvas.drawPath(extractPath, curvePaint);
-    } else {
-      canvas.drawPath(curvePath, curvePaint);
-    }
+    // Always draw the curve - animation is optional enhancement
+    canvas.drawPath(curvePath, curvePaint);
+
+    // If animation in progress, overdraw with partial path (clip effect)
+    // Skip this complexity for now - the full curve is more important than animation
   }
 
   void _drawHighlightPoint(Canvas canvas, Size size, List<Offset> points) =>
@@ -181,12 +211,23 @@ class OperationGraphPainter extends CustomPainter {
     Color highlightColor,
     List<GraphDataPoint> seriesData,
   ) {
+    // Нужны точки для отрисовки
+    if (points.isEmpty) {
+      return;
+    }
+
     final activeIndex = hoveredIndex ?? highlightIndex;
-    if (activeIndex == null || activeIndex >= points.length) {
+    if (activeIndex == null || activeIndex < 0 || activeIndex >= points.length) {
       return;
     }
 
     final point = points[activeIndex];
+
+    // Проверка на NaN/infinity координат
+    if (point.dx.isNaN || point.dx.isInfinite ||
+        point.dy.isNaN || point.dy.isInfinite) {
+      return;
+    }
 
     // Vertical line - minimalist dashed style
     final linePaint = Paint()
@@ -228,6 +269,11 @@ class OperationGraphPainter extends CustomPainter {
     Color tooltipColor,
     List<GraphDataPoint> seriesData,
   ) {
+    // Проверка границ индекса
+    if (index < 0 || index >= seriesData.length) {
+      return;
+    }
+
     final value = seriesData[index].value.round();
     final textPainter = TextPainter(
       text: TextSpan(

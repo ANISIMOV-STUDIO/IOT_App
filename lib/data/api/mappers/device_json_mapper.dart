@@ -51,8 +51,8 @@ class DeviceJsonMapper {
       roomId: json['id'] as String? ?? json['deviceId'] as String? ?? '',
       deviceName: json['name'] as String? ?? 'Unknown Device',
       currentTemperature:
-          (json['currentTemp'] as num?)?.toDouble() ?? 20.0,
-      targetTemperature: (json['temp'] as num?)?.toDouble() ?? 22.0,
+          (json['roomTemperature'] as num?)?.toDouble() ?? 20.0,
+      targetTemperature: (json['temperatureSetpoint'] as num?)?.toDouble() ?? 22.0,
       humidity: (json['humidity'] as num?)?.toDouble() ?? 50.0,
       targetHumidity: (json['targetHumidity'] as num?)?.toDouble() ?? 50.0,
       supplyAirflow: parseFanValue(json['supplyFan']),
@@ -213,39 +213,73 @@ class DeviceJsonMapper {
     return 'high'; // 66-100
   }
 
-  /// Парсинг настроек режимов из JSON объекта
-  static Map<String, ModeSettings>? modeSettingsFromJson(
-      Map<String, dynamic>? json) {
-    if (json == null) {
+  /// Безопасная конвертация любого Map в Map<String, dynamic>
+  static Map<String, dynamic>? _safeMapCast(Object? value) {
+    if (value == null) {
       return null;
     }
-    return json.map((key, value) =>
-        MapEntry(key, ModeSettings.fromJson(value as Map<String, dynamic>)));
+    if (value is Map<String, dynamic>) {
+      return value;
+    }
+    if (value is Map) {
+      return Map<String, dynamic>.from(
+        value.map((k, v) => MapEntry(k?.toString() ?? '', v)),
+      );
+    }
+    return null;
+  }
+
+  /// Парсинг настроек режимов из JSON объекта
+  static Map<String, ModeSettings>? modeSettingsFromJson(Object? json) {
+    final map = _safeMapCast(json);
+    if (map == null) {
+      return null;
+    }
+    return map.map((key, value) {
+      final valueMap = _safeMapCast(value);
+      return MapEntry(
+        key,
+        ModeSettings.fromJson(valueMap ?? <String, dynamic>{}),
+      );
+    });
   }
 
   /// Парсинг настроек таймера из JSON объекта
-  static Map<String, TimerSettings>? timerSettingsFromJson(
-      Map<String, dynamic>? json) {
-    if (json == null) {
+  static Map<String, TimerSettings>? timerSettingsFromJson(Object? json) {
+    final map = _safeMapCast(json);
+    if (map == null) {
       return null;
     }
-    return json.map((key, value) => MapEntry(
-        key.toLowerCase(), TimerSettings.fromJson(value as Map<String, dynamic>)));
+    return map.map((key, value) {
+      final valueMap = _safeMapCast(value);
+      return MapEntry(
+        key.toLowerCase(),
+        TimerSettings.fromJson(valueMap ?? <String, dynamic>{}),
+      );
+    });
   }
 
   /// Парсинг активных аварий из JSON объекта
-  static Map<String, AlarmInfo>? activeAlarmsFromJson(
-      Map<String, dynamic>? json) {
-    if (json == null) {
+  static Map<String, AlarmInfo>? activeAlarmsFromJson(Object? json) {
+    final map = _safeMapCast(json);
+    if (map == null) {
       return null;
     }
-    return json.map((key, value) =>
-        MapEntry(key, AlarmInfo.fromJson(value as Map<String, dynamic>)));
+    return map.map((key, value) {
+      final valueMap = _safeMapCast(value);
+      return MapEntry(
+        key,
+        AlarmInfo.fromJson(valueMap ?? <String, dynamic>{}),
+      );
+    });
   }
 
   /// Парсинг истории аварий из JSON списка
   static List<AlarmHistory> alarmHistoryListFromJson(List<dynamic> json) => json
-        .map((item) => AlarmHistory.fromJson(item as Map<String, dynamic>))
+        .map((item) {
+          final itemMap = _safeMapCast(item);
+          return AlarmHistory.fromJson(itemMap ?? <String, dynamic>{});
+        })
         .toList();
 
   /// JSON → DeviceFullState (полное состояние с настройками и авариями)
@@ -255,15 +289,16 @@ class DeviceJsonMapper {
       macAddress: json['macAddress'] as String? ?? '',
       power: json['running'] as bool? ?? false,
       mode: _stringToClimateMode(json['mode'] as String?),
-      currentTemperature: (json['currentTemp'] as num?)?.toDouble() ?? 20.0,
-      targetTemperature: (json['temp'] as num?)?.toDouble() ?? 22.0,
+      currentTemperature: (json['roomTemperature'] as num?)?.toDouble() ?? 20.0,
+      targetTemperature: (json['temperatureSetpoint'] as num?)?.toDouble() ?? 22.0,
       humidity: (json['humidity'] as num?)?.toDouble() ?? 50.0,
       targetHumidity: (json['targetHumidity'] as num?)?.toDouble() ?? 50.0,
       operatingMode: _modeToOperatingMode(json['mode'] as String?),
-      scheduleIndicator: json['scheduleIndicator'] as int?,
+      scheduleIndicator: json['scheduleEnabled'] == true ? 1 : 0,
       isOnline: json['isOnline'] as bool? ?? true,
       outdoorTemperature: (json['outdoorTemperature'] as num?)?.toDouble(),
       kpdRecuperator: json['kpdRecuperator'] as int?,
+      recuperatorTemperature: (json['recuperatorTemperature'] as num?)?.toDouble(),
       // Новые датчики с бэкенда
       indoorTemperature: (json['roomTemperature'] as num?)?.toDouble(),
       supplyTemperature: (json['supplyTemperature'] as num?)?.toDouble(),
@@ -276,15 +311,9 @@ class DeviceJsonMapper {
       actualSupplyFan: json['actualSupplyFan'] as int?,
       actualExhaustFan: json['actualExhaustFan'] as int?,
       temperatureSetpoint: (json['temperatureSetpoint'] as num?)?.toDouble(),
-      modeSettings: json['modeSettings'] != null
-          ? modeSettingsFromJson(json['modeSettings'] as Map<String, dynamic>)
-          : null,
-      timerSettings: json['timerSettings'] != null
-          ? timerSettingsFromJson(json['timerSettings'] as Map<String, dynamic>)
-          : null,
-      activeAlarms: json['activeAlarms'] != null
-          ? activeAlarmsFromJson(json['activeAlarms'] as Map<String, dynamic>)
-          : null,
+      modeSettings: modeSettingsFromJson(json['modeSettings']),
+      timerSettings: timerSettingsFromJson(json['timerSettings']),
+      activeAlarms: activeAlarmsFromJson(json['activeAlarms']),
       isScheduleEnabled: json['scheduleEnabled'] as bool? ?? false,
       quickSensors: _parseQuickSensors(json['quickSensors']),
       deviceTime: _parseDeviceTime(json),
@@ -358,6 +387,9 @@ class DeviceJsonMapper {
 
   /// JSON List → List<SensorHistory>
   static List<SensorHistory> sensorHistoryListFromJson(List<dynamic> json) => json
-        .map((item) => sensorHistoryFromJson(item as Map<String, dynamic>))
+        .map((item) {
+          final itemMap = _safeMapCast(item);
+          return sensorHistoryFromJson(itemMap ?? <String, dynamic>{});
+        })
         .toList();
 }

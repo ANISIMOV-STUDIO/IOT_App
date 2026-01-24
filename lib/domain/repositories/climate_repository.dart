@@ -162,4 +162,11 @@ abstract class ClimateRepository
     required int exhaustFan,
     String? deviceId,
   });
+
+  // ============================================
+  // LIFECYCLE
+  // ============================================
+
+  /// Освободить ресурсы (подписки, соединения)
+  Future<void> dispose();
 }

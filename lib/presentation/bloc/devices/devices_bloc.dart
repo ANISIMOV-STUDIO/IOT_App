@@ -97,7 +97,11 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
       // Подписываемся на обновления через Use Case
       await _devicesSubscription?.cancel();
       _devicesSubscription = _watchHvacDevices().listen(
-        (devices) => add(DevicesListUpdated(devices)),
+        (devices) {
+          if (!isClosed) {
+            add(DevicesListUpdated(devices));
+          }
+        },
         onError: (error) {
           // Игнорируем ошибки стрима - данные уже загружены
         },
@@ -142,6 +146,10 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
 
       // Обновляем список устройств и выбираем новое
       final updatedDevices = [...state.devices, device];
+
+      // Уведомляем ClimateBloc о новом выбранном устройстве
+      _setSelectedDevice(device.id);
+
       emit(state.copyWith(
         isRegistering: false,
         devices: updatedDevices,
@@ -362,8 +370,8 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
   }
 
   @override
-  Future<void> close() {
-    _devicesSubscription?.cancel();
+  Future<void> close() async {
+    await _devicesSubscription?.cancel();
     return super.close();
   }
 }

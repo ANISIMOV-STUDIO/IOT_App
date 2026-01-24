@@ -6,6 +6,7 @@
 /// - Поддержка deep links через кастомную схему и Universal Links
 library;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hvac_control/core/navigation/app_routes.dart';
@@ -43,7 +44,7 @@ GlobalKey<NavigatorState> get rootNavigatorKey => _rootNavigatorKey;
 /// - redirect: решает куда направить пользователя
 GoRouter createRouter(AuthBloc authBloc) => GoRouter(
     navigatorKey: _rootNavigatorKey,
-    debugLogDiagnostics: true,
+    debugLogDiagnostics: kDebugMode,
 
     // Начинаем со splash - пока AuthBloc не определит состояние
     initialLocation: AppRoutes.splash,

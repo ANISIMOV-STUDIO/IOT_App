@@ -22,6 +22,7 @@ class DeviceFullState extends Equatable {
     this.isOnline = true,
     this.outdoorTemperature,
     this.kpdRecuperator,
+    this.recuperatorTemperature,
     this.indoorTemperature,
     this.supplyTemperature,
     this.supplyTempAfterRecup,
@@ -62,6 +63,9 @@ class DeviceFullState extends Equatable {
 
   /// КПД рекуператора (0-100%)
   final int? kpdRecuperator;
+
+  /// Температура рекуператора (°C)
+  final double? recuperatorTemperature;
 
   // ============================================
   // НОВЫЕ ДАТЧИКИ ДЛЯ SENSORS GRID
@@ -140,6 +144,7 @@ class DeviceFullState extends Equatable {
     bool? isOnline,
     double? outdoorTemperature,
     int? kpdRecuperator,
+    double? recuperatorTemperature,
     double? indoorTemperature,
     double? supplyTemperature,
     double? supplyTempAfterRecup,
@@ -175,6 +180,7 @@ class DeviceFullState extends Equatable {
       isOnline: isOnline ?? this.isOnline,
       outdoorTemperature: outdoorTemperature ?? this.outdoorTemperature,
       kpdRecuperator: kpdRecuperator ?? this.kpdRecuperator,
+      recuperatorTemperature: recuperatorTemperature ?? this.recuperatorTemperature,
       indoorTemperature: indoorTemperature ?? this.indoorTemperature,
       supplyTemperature: supplyTemperature ?? this.supplyTemperature,
       supplyTempAfterRecup: supplyTempAfterRecup ?? this.supplyTempAfterRecup,
@@ -211,6 +217,7 @@ class DeviceFullState extends Equatable {
         isOnline,
         outdoorTemperature,
         kpdRecuperator,
+        recuperatorTemperature,
         indoorTemperature,
         supplyTemperature,
         supplyTempAfterRecup,

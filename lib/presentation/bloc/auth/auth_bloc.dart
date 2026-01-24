@@ -43,7 +43,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     // Подписка на события истечения сессии от TokenRefreshService
     _sessionExpiredSubscription = _tokenRefreshService?.onSessionExpired.listen((_) {
-      add(const AuthSessionExpired());
+      if (!isClosed) {
+        add(const AuthSessionExpired());
+      }
     });
   }
 

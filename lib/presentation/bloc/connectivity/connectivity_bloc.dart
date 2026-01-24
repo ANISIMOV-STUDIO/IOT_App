@@ -40,10 +40,16 @@ class ConnectivityBloc extends Bloc<ConnectivityEvent, ConnectivityState> {
     // Подписываемся на изменения
     await _statusSubscription?.cancel();
     _statusSubscription = _connectivityService.onStatusChange.listen(
-      (status) => add(ConnectivityStatusChanged(status)),
+      (status) {
+        if (!isClosed) {
+          add(ConnectivityStatusChanged(status));
+        }
+      },
       onError: (error) {
         // При ошибке стрима считаем что сеть недоступна
-        add(const ConnectivityStatusChanged(NetworkStatus.offline));
+        if (!isClosed) {
+          add(const ConnectivityStatusChanged(NetworkStatus.offline));
+        }
       },
     );
   }
@@ -64,8 +70,8 @@ class ConnectivityBloc extends Bloc<ConnectivityEvent, ConnectivityState> {
     );
 
   @override
-  Future<void> close() {
-    _statusSubscription?.cancel();
+  Future<void> close() async {
+    await _statusSubscription?.cancel();
     return super.close();
   }
 }

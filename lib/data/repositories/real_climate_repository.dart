@@ -728,23 +728,25 @@ class RealClimateRepository implements ClimateRepository {
     );
   }
 
-  void dispose() {
+  @override
+  Future<void> dispose() async {
     // Сначала помечаем как disposed чтобы остановить все операции
     _isDisposed = true;
 
-    // Отменяем подписки
-    _deviceUpdatesSubscription?.cancel();
-    _statusChangesSubscription?.cancel();
+    // Отменяем подписки и ждём их завершения
+    await _deviceUpdatesSubscription?.cancel();
+    await _statusChangesSubscription?.cancel();
 
     // Очищаем inflight requests
     _inflightRequests.clear();
 
     // Закрываем контроллеры
-    _climateController.close();
-    _devicesController.close();
-    _deviceFullStateController.close();
+    await _climateController.close();
+    await _devicesController.close();
+    await _deviceFullStateController.close();
 
-    // Dispose SignalR
-    _signalR?.dispose();
+    // НЕ вызываем _signalR?.dispose() здесь!
+    // SignalR управляется отдельно через DI container (_resetStatefulSingletons).
+    // Двойной dispose вызовет проблемы на hot restart.
   }
 }

@@ -80,6 +80,10 @@ const bool useRealApi = true;
 
 /// Инициализация всех зависимостей
 Future<void> init() async {
+  // Hot restart cleanup: сбрасываем stateful singletons
+  // чтобы старые BLoC не продолжали получать события
+  await _resetStatefulSingletons();
+
   //! Внешние зависимости (External Dependencies)
   final sharedPreferences = await SharedPreferences.getInstance();
   sl.registerLazySingleton(() => sharedPreferences);
@@ -128,7 +132,10 @@ Future<void> init() async {
     )
 
     //! Push Notifications - FCM сервисы
-    ..registerLazySingleton(PushNotificationService.new)
+    ..registerLazySingleton(
+      PushNotificationService.new,
+      dispose: (s) => s.dispose(),
+    )
     ..registerLazySingleton(() => FcmTokenService(
           apiClient: sl<ApiClient>(),
           pushService: sl<PushNotificationService>(),
@@ -137,15 +144,20 @@ Future<void> init() async {
     //! SignalR - Real-time соединение (общий для всех репозиториев)
     ..registerLazySingleton<SignalRHubConnection>(
       () => SignalRHubConnection(sl<ApiClient>()),
+      dispose: (s) => s.dispose(),
     )
 
     //! VersionCheckService - с SignalR для real-time обновлений
     ..registerLazySingleton(
       () => VersionCheckService(sl<http.Client>(), sl<SignalRHubConnection>()),
+      dispose: (s) => s.dispose(),
     );
   } else {
     //! VersionCheckService - только HTTP polling (без SignalR)
-    sl.registerLazySingleton(() => VersionCheckService(sl<http.Client>()));
+    sl.registerLazySingleton(
+      () => VersionCheckService(sl<http.Client>()),
+      dispose: (s) => s.dispose(),
+    );
   }
 
   //! Dashboard Feature - Главный экран
@@ -335,6 +347,7 @@ Future<void> init() async {
       tokenRefreshService: sl(),
       userHttpClient: useRealApi ? sl<UserHttpClient>() : null,
     ),
+    dispose: (b) => b.close(),
   )
 
   // DevicesBloc (Управление списком HVAC устройств)
@@ -350,6 +363,7 @@ Future<void> init() async {
       setScheduleEnabled: sl(),
       setSelectedDevice: sl<ClimateRepository>().setSelectedDevice,
     ),
+    dispose: (b) => b.close(),
   )
 
   // ClimateBloc (Управление климатом текущего устройства)
@@ -374,6 +388,7 @@ Future<void> init() async {
       requestDeviceUpdate: sl(),
       setQuickMode: sl(),
     ),
+    dispose: (b) => b.close(),
   )
 
   // NotificationsBloc (Уведомления устройств)
@@ -384,6 +399,7 @@ Future<void> init() async {
       markNotificationAsRead: sl(),
       dismissNotification: sl(),
     ),
+    dispose: (b) => b.close(),
   )
 
   // AnalyticsBloc (Статистика и графики)
@@ -395,15 +411,63 @@ Future<void> init() async {
       getGraphData: sl(),
       watchGraphData: sl(),
     ),
+    dispose: (b) => b.close(),
   )
 
   // ConnectivityBloc (Мониторинг сетевого соединения)
   ..registerLazySingleton(
     () => ConnectivityBloc(connectivityService: sl()),
+    dispose: (b) => b.close(),
   )
 
   // ScheduleBloc (Расписание устройств)
   ..registerLazySingleton(
     () => ScheduleBloc(repository: sl()),
+    dispose: (b) => b.close(),
   );
+}
+
+/// Сброс stateful singletons при hot restart
+///
+/// При hot restart старые BLoC не получают dispose и продолжают
+/// получать события от SignalR, что приводит к ошибкам рендеринга.
+Future<void> _resetStatefulSingletons() async {
+  // Сбрасываем BLoC с подписками на streams
+  if (sl.isRegistered<ClimateBloc>()) {
+    final bloc = sl<ClimateBloc>();
+    await bloc.close();
+    await sl.resetLazySingleton<ClimateBloc>();
+  }
+
+  if (sl.isRegistered<NotificationsBloc>()) {
+    final bloc = sl<NotificationsBloc>();
+    await bloc.close();
+    await sl.resetLazySingleton<NotificationsBloc>();
+  }
+
+  if (sl.isRegistered<AnalyticsBloc>()) {
+    final bloc = sl<AnalyticsBloc>();
+    await bloc.close();
+    await sl.resetLazySingleton<AnalyticsBloc>();
+  }
+
+  if (sl.isRegistered<ScheduleBloc>()) {
+    final bloc = sl<ScheduleBloc>();
+    await bloc.close();
+    await sl.resetLazySingleton<ScheduleBloc>();
+  }
+
+  // Сбрасываем ClimateRepository (содержит подписки на SignalR)
+  if (sl.isRegistered<ClimateRepository>()) {
+    final repo = sl<ClimateRepository>();
+    await repo.dispose();
+    await sl.resetLazySingleton<ClimateRepository>();
+  }
+
+  // Сбрасываем SignalR соединение
+  if (sl.isRegistered<SignalRHubConnection>()) {
+    final signalR = sl<SignalRHubConnection>();
+    await signalR.dispose();
+    await sl.resetLazySingleton<SignalRHubConnection>();
+  }
 }

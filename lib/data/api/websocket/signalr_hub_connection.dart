@@ -12,6 +12,7 @@ import 'dart:async';
 import 'package:hvac_control/core/config/api_config.dart';
 import 'package:hvac_control/core/logging/api_logger.dart';
 import 'package:hvac_control/data/api/platform/api_client.dart';
+import 'package:hvac_control/data/api/websocket/js_converter.dart';
 import 'package:signalr_netcore/signalr_client.dart';
 
 class SignalRHubConnection {
@@ -182,20 +183,13 @@ class SignalRHubConnection {
 
     try {
       final data = arguments?.first;
-      if (data != null) {
-        Map<String, dynamic> deviceData;
+      final deviceData = convertSignalRData(data);
 
-        if (data is Map<String, dynamic>) {
-          deviceData = data;
-        } else if (data is Map) {
-          deviceData = Map<String, dynamic>.from(data);
-        } else {
-          ApiLogger.logWebSocketError('Unknown device data format: ${data.runtimeType}');
-          return;
-        }
-
+      if (deviceData != null) {
         ApiLogger.logWebSocketMessage('DeviceUpdated', deviceData);
         _safeAddToController(_deviceUpdatesController, deviceData);
+      } else if (data != null) {
+        ApiLogger.logWebSocketError('Unknown device data format: ${data.runtimeType}');
       }
     } catch (e) {
       ApiLogger.logWebSocketError('Error handling device update: $e');
@@ -210,20 +204,13 @@ class SignalRHubConnection {
 
     try {
       final data = arguments?.first;
-      if (data != null) {
-        Map<String, dynamic> notificationData;
+      final notificationData = convertSignalRData(data);
 
-        if (data is Map<String, dynamic>) {
-          notificationData = data;
-        } else if (data is Map) {
-          notificationData = Map<String, dynamic>.from(data);
-        } else {
-          ApiLogger.logWebSocketError('Unknown notification data format: ${data.runtimeType}');
-          return;
-        }
-
+      if (notificationData != null) {
         ApiLogger.logWebSocketMessage('NotificationReceived', notificationData);
         _safeAddToController(_notificationController, notificationData);
+      } else if (data != null) {
+        ApiLogger.logWebSocketError('Unknown notification data format: ${data.runtimeType}');
       }
     } catch (e) {
       ApiLogger.logWebSocketError('Error handling notification: $e');
@@ -238,20 +225,13 @@ class SignalRHubConnection {
 
     try {
       final data = arguments?.first;
-      if (data != null) {
-        Map<String, dynamic> releaseData;
+      final releaseData = convertSignalRData(data);
 
-        if (data is Map<String, dynamic>) {
-          releaseData = data;
-        } else if (data is Map) {
-          releaseData = Map<String, dynamic>.from(data);
-        } else {
-          ApiLogger.logWebSocketError('Unknown release data format: ${data.runtimeType}');
-          return;
-        }
-
+      if (releaseData != null) {
         ApiLogger.logWebSocketMessage('NewReleaseAvailable', releaseData);
         _safeAddToController(_releaseController, releaseData);
+      } else if (data != null) {
+        ApiLogger.logWebSocketError('Unknown release data format: ${data.runtimeType}');
       }
     } catch (e) {
       ApiLogger.logWebSocketError('Error handling release: $e');
@@ -266,20 +246,13 @@ class SignalRHubConnection {
 
     try {
       final data = arguments?.first;
-      if (data != null) {
-        Map<String, dynamic> statusData;
+      final statusData = convertSignalRData(data);
 
-        if (data is Map<String, dynamic>) {
-          statusData = data;
-        } else if (data is Map) {
-          statusData = Map<String, dynamic>.from(data);
-        } else {
-          ApiLogger.logWebSocketError('Unknown status data format: ${data.runtimeType}');
-          return;
-        }
-
+      if (statusData != null) {
         ApiLogger.logWebSocketMessage('DeviceStatusChanged', statusData);
         _safeAddToController(_statusChangeController, statusData);
+      } else if (data != null) {
+        ApiLogger.logWebSocketError('Unknown status data format: ${data.runtimeType}');
       }
     } catch (e) {
       ApiLogger.logWebSocketError('Error handling status change: $e');
@@ -368,6 +341,16 @@ class SignalRHubConnection {
 
     if (connection != null) {
       try {
+        // Отписка от всех событий перед остановкой соединения
+        // Это критически важно для hot restart на Flutter Web,
+        // чтобы JavaScript callbacks не продолжали работать
+        connection
+          ..off('DeviceUpdated')
+          ..off('DeviceStateChanged')
+          ..off('NotificationReceived')
+          ..off('NewReleaseAvailable')
+          ..off('DeviceStatusChanged');
+
         await connection.stop();
       } catch (e) {
         ApiLogger.logWebSocketError('Error stopping connection: $e');

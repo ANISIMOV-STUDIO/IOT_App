@@ -344,4 +344,13 @@ class CachedClimateRepository implements ClimateRepository {
       );
     }
   }
+
+  // ============================================
+  // LIFECYCLE
+  // ============================================
+
+  @override
+  Future<void> dispose() async {
+    await _inner.dispose();
+  }
 }

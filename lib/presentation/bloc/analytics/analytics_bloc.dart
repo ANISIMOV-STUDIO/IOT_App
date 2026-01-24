@@ -84,7 +84,11 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
       // Подписываемся на обновления через Use Case
       await _energySubscription?.cancel();
       _energySubscription = _watchEnergyStats().listen(
-        (stats) => add(AnalyticsEnergyStatsUpdated(stats)),
+        (stats) {
+          if (!isClosed) {
+            add(AnalyticsEnergyStatsUpdated(stats));
+          }
+        },
         onError: (error) {
           // Игнорируем ошибки стрима - данные уже загружены
         },
@@ -153,7 +157,11 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
       deviceId: deviceId,
       metric: metric,
     )).listen(
-      (data) => add(AnalyticsGraphDataUpdated(data)),
+      (data) {
+        if (!isClosed) {
+          add(AnalyticsGraphDataUpdated(data));
+        }
+      },
       onError: (error) {
         // Игнорируем ошибки стрима - данные уже загружены
       },
@@ -180,9 +188,9 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
   }
 
   @override
-  Future<void> close() {
-    _energySubscription?.cancel();
-    _graphDataSubscription?.cancel();
+  Future<void> close() async {
+    await _energySubscription?.cancel();
+    await _graphDataSubscription?.cancel();
     return super.close();
   }
 }
