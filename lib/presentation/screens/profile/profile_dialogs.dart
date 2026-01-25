@@ -38,13 +38,13 @@ class LanguageOption extends StatelessWidget {
     return BreezButton(
       onTap: onTap,
       backgroundColor: isSelected
-          ? AppColors.accent.withValues(alpha: 0.1)
+          ? colors.accent.withValues(alpha: 0.1)
           : colors.cardLight,
       hoverColor: isSelected
-          ? AppColors.accent.withValues(alpha: 0.15)
+          ? colors.accent.withValues(alpha: 0.15)
           : colors.card,
       border: isSelected
-          ? Border.all(color: AppColors.accent.withValues(alpha: 0.3))
+          ? Border.all(color: colors.accent.withValues(alpha: 0.3))
           : null,
       padding: const EdgeInsets.all(AppSpacing.sm),
       semanticLabel: '${language.nativeName}${isSelected ? ' (выбран)' : ''}',
@@ -63,14 +63,14 @@ class LanguageOption extends StatelessWidget {
               style: TextStyle(
                 fontSize: AppFontSizes.body,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                color: isSelected ? AppColors.accent : colors.text,
+                color: isSelected ? colors.accent : colors.text,
               ),
             ),
           ),
           if (isSelected)
-            const Icon(
+            Icon(
               Icons.check_circle,
-              color: AppColors.accent,
+              color: colors.accent,
               size: AppIconSizes.standard,
             ),
         ],
@@ -175,8 +175,8 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
               const SizedBox(height: AppSpacing.xs),
               BreezButton(
                 onTap: _save,
-                backgroundColor: AppColors.accent,
-                hoverColor: AppColors.accentLight,
+                backgroundColor: colors.accent,
+                hoverColor: colors.accentLight,
                 showBorder: false,
                 borderRadius: AppRadius.nested,
                 padding: const EdgeInsets.all(AppSpacing.xs),
@@ -309,8 +309,8 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
               const SizedBox(height: AppSpacing.xs),
               BreezButton(
                 onTap: _save,
-                backgroundColor: AppColors.accent,
-                hoverColor: AppColors.accentLight,
+                backgroundColor: colors.accent,
+                hoverColor: colors.accentLight,
                 showBorder: false,
                 borderRadius: AppRadius.nested,
                 padding: const EdgeInsets.all(AppSpacing.xs),

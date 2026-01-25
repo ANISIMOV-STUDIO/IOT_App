@@ -77,13 +77,13 @@ class _UpdateAvailableDialogState extends State<UpdateAvailableDialog> {
                 width: _UpdateDialogConstants.iconContainerSize,
                 height: _UpdateDialogConstants.iconContainerSize,
                 decoration: BoxDecoration(
-                  color: AppColors.accent.withValues(alpha: AppColors.opacitySubtle),
+                  color: colors.accent.withValues(alpha: AppColors.opacitySubtle),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.system_update,
                   size: AppIconSizes.standard,
-                  color: AppColors.accent,
+                  color: colors.accent,
                 ),
               ),
 
@@ -127,24 +127,24 @@ class _UpdateAvailableDialogState extends State<UpdateAvailableDialog> {
                       vertical: AppSpacing.xs,
                     ),
                     backgroundColor: colors.card.withValues(alpha: 0),
-                    hoverColor: AppColors.accent.withValues(alpha: AppColors.opacityLight),
+                    hoverColor: colors.accent.withValues(alpha: AppColors.opacityLight),
                     showBorder: false,
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
                           l10n.whatsNew,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: AppFontSizes.bodySmall,
-                            color: AppColors.accent,
+                            color: colors.accent,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                         const SizedBox(width: AppSpacing.xxs),
-                        const Icon(
+                        Icon(
                           Icons.arrow_drop_down,
                           size: AppIconSizes.standard,
-                          color: AppColors.accent,
+                          color: colors.accent,
                         ),
                       ],
                     ),
@@ -231,8 +231,8 @@ class _UpdateAvailableDialogState extends State<UpdateAvailableDialog> {
                   Expanded(
                     child: BreezButton(
                       onTap: _reloadPage,
-                      backgroundColor: AppColors.accent,
-                      hoverColor: AppColors.accentLight,
+                      backgroundColor: colors.accent,
+                      hoverColor: colors.accentLight,
                       height: AppSizes.buttonHeight,
                       child: Center(
                         child: Text(

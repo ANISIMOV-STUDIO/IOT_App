@@ -103,7 +103,8 @@ class _BreezLoaderState extends State<BreezLoader>
 
   @override
   Widget build(BuildContext context) {
-    final color = widget.color ?? AppColors.accent;
+    final colors = BreezColors.of(context);
+    final color = widget.color ?? colors.accent;
 
     return Semantics(
       label: 'Loading',

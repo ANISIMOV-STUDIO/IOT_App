@@ -181,7 +181,7 @@ class _ModeSettingsDialogState extends State<ModeSettingsDialog> {
                   child: FanSlider(
                     label: l10n.supply,
                     value: _supplyFan,
-                    color: AppColors.accent,
+                    color: colors.accent,
                     icon: Icons.arrow_downward_rounded,
                     onChanged: _supplyFan != null
                         ? (value) => setState(() => _supplyFan = value)
@@ -258,7 +258,7 @@ class _ModeHeader extends StatelessWidget {
                       color: modeColor.withValues(alpha: AppColors.opacitySubtle),
                       shape: BoxShape.circle,
                       border: isSelected
-                          ? Border.all(color: AppColors.accent, width: 2)
+                          ? Border.all(color: colors.accent, width: 2)
                           : null,
                     ),
                     child: Icon(
@@ -274,8 +274,8 @@ class _ModeHeader extends StatelessWidget {
                       child: Container(
                         width: _DialogConstants.selectedBadgeSize,
                         height: _DialogConstants.selectedBadgeSize,
-                        decoration: const BoxDecoration(
-                          color: AppColors.accent,
+                        decoration: BoxDecoration(
+                          color: colors.accent,
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(
@@ -355,6 +355,7 @@ class _TemperatureRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
     return Row(
@@ -391,7 +392,7 @@ class _TemperatureRow extends StatelessWidget {
             label: l10n.cooling,
             temperature: coolingTemp,
             icon: Icons.ac_unit,
-            color: AppColors.accent,
+            color: colors.accent,
             isPowered: true,
             minTemp: TemperatureLimits.min,
             maxTemp: TemperatureLimits.max,
@@ -471,7 +472,7 @@ class _ActionButtons extends StatelessWidget {
         Expanded(
           child: BreezButton(
             onTap: isSelected ? null : onActivate,
-            backgroundColor: isSelected ? colors.buttonBg : AppColors.accent,
+            backgroundColor: isSelected ? colors.buttonBg : colors.accent,
             showBorder: false,
             borderRadius: AppRadius.nested,
             padding: const EdgeInsets.all(AppSpacing.xs),

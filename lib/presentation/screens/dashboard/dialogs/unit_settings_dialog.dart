@@ -381,7 +381,7 @@ class _CompactRenameField extends StatelessWidget {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppRadius.nested),
-              borderSide: const BorderSide(color: AppColors.accent),
+              borderSide: BorderSide(color: colors.accent),
             ),
           ),
           onFieldSubmitted: (_) => onSave(),

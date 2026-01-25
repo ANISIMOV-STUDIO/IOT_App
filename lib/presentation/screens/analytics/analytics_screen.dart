@@ -205,6 +205,7 @@ class AnalyticsScreen extends StatelessWidget {
     UnitState unit,
   ) {
     final l10n = AppLocalizations.of(context)!;
+    final colors = BreezColors.of(context);
 
     return [
       SensorData(
@@ -213,7 +214,7 @@ class AnalyticsScreen extends StatelessWidget {
         value: '${unit.outsideTemp.toStringAsFixed(1)}°',
         label: l10n.outdoor,
         description: l10n.outdoorTempDesc,
-        color: AppColors.accent,
+        color: colors.accent,
       ),
       SensorData(
         key: 'indoor_temp',
@@ -245,7 +246,7 @@ class AnalyticsScreen extends StatelessWidget {
         value: '${unit.humidity}%',
         label: l10n.humidity,
         description: l10n.humidityDesc,
-        color: AppColors.accent,
+        color: colors.accent,
       ),
       SensorData(
         key: 'co2_level',
@@ -261,7 +262,7 @@ class AnalyticsScreen extends StatelessWidget {
         value: '${unit.recuperatorEfficiency}%',
         label: l10n.efficiency,
         description: l10n.recuperatorEfficiencyDesc,
-        color: AppColors.accent,
+        color: colors.accent,
       ),
       SensorData(
         key: 'heater_perf',
@@ -277,7 +278,7 @@ class AnalyticsScreen extends StatelessWidget {
         value: unit.coolerStatus,
         label: l10n.cooler,
         description: l10n.coolerStatusDesc,
-        color: AppColors.accent,
+        color: colors.accent,
       ),
       SensorData(
         key: 'duct_pressure',
@@ -285,7 +286,7 @@ class AnalyticsScreen extends StatelessWidget {
         value: '${unit.ductPressure}',
         label: l10n.pressure,
         description: l10n.ductPressureDesc,
-        color: AppColors.darkTextMuted,
+        color: colors.textMuted,
       ),
       SensorData(
         key: 'free_cooling',
@@ -295,7 +296,7 @@ class AnalyticsScreen extends StatelessWidget {
         description: l10n.freeCoolingDesc,
         color: unit.freeCooling
             ? AppColors.accentGreen
-            : AppColors.darkTextMuted,
+            : colors.textMuted,
       ),
       SensorData(
         key: 'filter_percent',
@@ -303,7 +304,7 @@ class AnalyticsScreen extends StatelessWidget {
         value: '${unit.filterPercent}%',
         label: l10n.filter,
         description: l10n.filterDesc,
-        color: AppColors.accent,
+        color: colors.accent,
       ),
     ];
   }
@@ -341,7 +342,7 @@ class _SelectionIndicator extends StatelessWidget {
             Icon(
               count == max ? Icons.check_circle : Icons.radio_button_unchecked,
               size: AppIconSizes.standard,
-              color: count == max ? AppColors.accent : colors.textMuted,
+              color: count == max ? colors.accent : colors.textMuted,
             ),
             const SizedBox(width: AppSpacing.xxs),
             Text(
@@ -349,7 +350,7 @@ class _SelectionIndicator extends StatelessWidget {
               style: TextStyle(
                 fontSize: _AnalyticsConstants.indicatorFontSize,
                 fontWeight: FontWeight.w500,
-                color: count == max ? AppColors.accent : colors.textMuted,
+                color: count == max ? colors.accent : colors.textMuted,
               ),
             ),
           ],

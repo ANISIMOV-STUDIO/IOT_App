@@ -175,7 +175,7 @@ class _BreezPinCodeFieldState extends State<BreezPinCodeField> {
                         borderSide: BorderSide(
                           color: hasError
                               ? AppColors.critical
-                              : AppColors.accent,
+                              : colors.accent,
                           width: 2,
                         ),
                       ),

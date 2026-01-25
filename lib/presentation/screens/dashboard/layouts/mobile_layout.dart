@@ -46,6 +46,8 @@ class MobileLayout extends StatefulWidget {
     this.onAlarmsSeeHistory,
     this.onAlarmsReset,
     this.isOnline = true,
+    this.onSyncTap,
+    this.isSyncing = false,
   });
   final UnitState unit;
 
@@ -67,6 +69,10 @@ class MobileLayout extends StatefulWidget {
   final VoidCallback? onAlarmsSeeHistory;
   final VoidCallback? onAlarmsReset;
   final bool isOnline;
+  /// Callback для принудительного обновления данных
+  final VoidCallback? onSyncTap;
+  /// Флаг синхронизации (для анимации вращения иконки)
+  final bool isSyncing;
 
   @override
   State<MobileLayout> createState() => _MobileLayoutState();
@@ -108,6 +114,8 @@ class _MobileLayoutState extends State<MobileLayout>
               unit: widget.unit,
               onPowerToggle: widget.isOnline ? widget.onPowerToggle : null,
               onSettingsTap: widget.onSettingsTap,
+              onSyncTap: widget.onSyncTap,
+              isSyncing: widget.isSyncing,
               isPowerLoading: widget.isPowerLoading,
               isScheduleEnabled: widget.isScheduleEnabled,
               isScheduleLoading: widget.isScheduleLoading,

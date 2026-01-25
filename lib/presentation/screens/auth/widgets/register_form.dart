@@ -80,6 +80,7 @@ class _RegisterFormState extends State<RegisterForm> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final validators = Validators.of(context);
+    final colors = BreezColors.of(context);
 
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
@@ -204,8 +205,8 @@ class _RegisterFormState extends State<RegisterForm> {
                     return BreezButton(
                       onTap: isLoading ? null : () => _handleRegister(l10n),
                       isLoading: isLoading,
-                      backgroundColor: AppColors.accent,
-                      hoverColor: AppColors.accentLight,
+                      backgroundColor: colors.accent,
+                      hoverColor: colors.accentLight,
                       showBorder: false,
                       borderRadius: AppRadius.nested,
                       padding: const EdgeInsets.all(AppSpacing.xs),

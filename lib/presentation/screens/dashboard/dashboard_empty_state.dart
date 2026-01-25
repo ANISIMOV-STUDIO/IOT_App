@@ -48,8 +48,8 @@ class DashboardEmptyState extends StatelessWidget {
             constraints: const BoxConstraints(maxWidth: AuthConstants.formMaxWidth),
             child: BreezButton(
               onTap: onAddUnit,
-              backgroundColor: AppColors.accent,
-              hoverColor: AppColors.accentLight,
+              backgroundColor: colors.accent,
+              hoverColor: colors.accentLight,
               showBorder: false,
               borderRadius: AppRadius.nested,
               padding: const EdgeInsets.all(AppSpacing.xs),

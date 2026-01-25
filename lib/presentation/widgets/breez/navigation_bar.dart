@@ -119,20 +119,20 @@ class BreezNavigationBar extends StatelessWidget {
                           height: buttonSize,
                           padding: EdgeInsets.zero,
                           backgroundColor: isSelected
-                              ? AppColors.accent.withValues(alpha: 0.15)
+                              ? colors.accent.withValues(alpha: 0.15)
                               : Colors.transparent,
                           hoverColor: isSelected
-                              ? AppColors.accent.withValues(alpha: 0.25)
+                              ? colors.accent.withValues(alpha: 0.25)
                               : colors.buttonBg,
                           border: Border.all(
                             color: isSelected
-                                ? AppColors.accent.withValues(alpha: 0.3)
+                                ? colors.accent.withValues(alpha: 0.3)
                                 : Colors.transparent,
                           ),
                           child: Icon(
                             item.icon,
                             size: iconSize,
-                            color: isSelected ? AppColors.accent : colors.textMuted,
+                            color: isSelected ? colors.accent : colors.textMuted,
                           ),
                         ),
                       );

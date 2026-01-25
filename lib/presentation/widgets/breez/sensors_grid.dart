@@ -97,7 +97,7 @@ class SensorsGrid extends StatelessWidget {
           Icon(
             sensor.icon,
             size: AppIconSizes.standard,
-            color: AppColors.accent,
+            color: colors.accent,
           ),
           const SizedBox(height: AppSpacing.xxs),
           Text(

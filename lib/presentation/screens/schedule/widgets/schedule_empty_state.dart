@@ -26,7 +26,7 @@ class ScheduleEmptyState extends StatelessWidget {
           Icon(
             Icons.calendar_today_outlined,
             size: AppIconSizes.standard,
-            color: AppColors.accent.withValues(alpha: 0.5),
+            color: colors.accent.withValues(alpha: 0.5),
           ),
           const SizedBox(height: AppSpacing.md),
           Text(
@@ -46,8 +46,8 @@ class ScheduleEmptyState extends StatelessWidget {
           const SizedBox(height: AppSpacing.lgx),
           BreezButton(
             onTap: onAdd,
-            backgroundColor: AppColors.accent,
-            hoverColor: AppColors.accentLight,
+            backgroundColor: colors.accent,
+            hoverColor: colors.accentLight,
             padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lgx, vertical: AppSpacing.sm),
             enableGlow: true,
             semanticLabel: l10n.scheduleAdd,

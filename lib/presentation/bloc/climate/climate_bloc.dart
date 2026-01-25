@@ -126,6 +126,8 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
 
     // События жизненного цикла
     on<ClimateSubscriptionRequested>(_onSubscriptionRequested);
+    on<ClimateRefreshRequested>(_onRefreshRequested);
+    on<ClimateSyncTimeout>(_onSyncTimeout);
     // restartable: отменяет предыдущий запрос при быстром переключении устройств
     on<ClimateDeviceChanged>(_onDeviceChanged, transformer: restartable());
 
@@ -192,11 +194,15 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   StreamSubscription<ClimateState>? _climateSubscription;
   StreamSubscription<DeviceFullState>? _deviceFullStateSubscription;
   Timer? _powerToggleTimer;
+  Timer? _syncTimer;
   Timer? _heatingTempTimer;
   Timer? _coolingTempTimer;
   Timer? _supplyFanTimer;
   Timer? _exhaustFanTimer;
   Timer? _operatingModeTimer;
+
+  /// Таймаут ожидания синхронизации (15 секунд)
+  static const _syncTimeout = Duration(seconds: 15);
 
   /// ID устройства на которое уже подписан SignalR (для предотвращения дублей)
   String? _subscribedDeviceId;
@@ -277,6 +283,54 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         errorMessage: e.toString(),
       ));
     }
+  }
+
+  /// Принудительное обновление данных устройства (по нажатию кнопки синхронизации)
+  Future<void> _onRefreshRequested(
+    ClimateRefreshRequested event,
+    Emitter<ClimateControlState> emit,
+  ) async {
+    // Предотвращаем повторные нажатия пока идёт синхронизация
+    if (state.isSyncing) {
+      return;
+    }
+
+    final deviceId = state.climate?.roomId ?? state.deviceFullState?.id;
+    if (deviceId == null || deviceId.isEmpty) {
+      return;
+    }
+
+    // Включаем индикатор синхронизации
+    emit(state.copyWith(isSyncing: true));
+
+    // Таймаут на случай если данные не придут
+    _syncTimer?.cancel();
+    _syncTimer = Timer(_syncTimeout, () {
+      if (!isClosed && state.isSyncing) {
+        add(const ClimateSyncTimeout());
+      }
+    });
+
+    // Запрашиваем актуальные данные от устройства
+    // Устройство опубликует свежие данные в MQTT, которые придут через SignalR
+    try {
+      await _requestDeviceUpdate(deviceId);
+    } catch (e) {
+      _syncTimer?.cancel();
+      emit(state.copyWith(isSyncing: false));
+    }
+  }
+
+  /// Обработчик таймаута синхронизации
+  void _onSyncTimeout(
+    ClimateSyncTimeout event,
+    Emitter<ClimateControlState> emit,
+  ) {
+    developer.log(
+      '_onRefreshRequested: timeout waiting for device update',
+      name: 'ClimateBloc',
+    );
+    emit(state.copyWith(isSyncing: false));
   }
 
   /// Смена устройства — загружаем его состояние
@@ -391,11 +445,19 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       _powerToggleTimer = null;
     }
 
+    // Сбрасываем индикатор синхронизации — данные пришли
+    if (state.isSyncing) {
+      _syncTimer?.cancel();
+      _syncTimer = null;
+    }
+
     emit(state.copyWith(
       climate: event.climate,
       // Сбрасываем лоадер только если power подтверждён
       isTogglingPower: !powerConfirmed && state.isTogglingPower,
       clearPendingPower: powerConfirmed,
+      // Сбрасываем индикатор синхронизации
+      isSyncing: false,
       // НЕ сбрасываем pending флаги здесь — SignalR приходит слишком быстро,
       // до того как UI успевает показать лоадер. Pending сбрасывается в Commit handlers.
     ));
@@ -495,11 +557,19 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       _operatingModeTimer = null;
     }
 
+    // Сбрасываем индикатор синхронизации — данные пришли
+    if (state.isSyncing) {
+      _syncTimer?.cancel();
+      _syncTimer = null;
+    }
+
     emit(state.copyWith(
       deviceFullState: mergedState,
       // Сбрасываем лоадер только если power подтверждён
       isTogglingPower: !powerConfirmed && state.isTogglingPower,
       clearPendingPower: powerConfirmed,
+      // Сбрасываем индикатор синхронизации
+      isSyncing: false,
       // Сбрасываем pending флаги только когда SignalR подтвердил наше значение
       isPendingHeatingTemperature: heatingConfirmed ? false : null,
       clearPendingHeatingTemp: heatingConfirmed,

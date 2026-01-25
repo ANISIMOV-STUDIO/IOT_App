@@ -67,7 +67,7 @@ class BreezIconButton extends StatelessWidget {
         : (size + padding * 2);
     final iconPadding = (buttonSize - size) / 2;
 
-    final bg = backgroundColor ?? (isActive ? AppColors.accent : colors.card);
+    final bg = backgroundColor ?? (isActive ? colors.accent : colors.card);
     final effectiveIconColor =
         iconColor ?? (isActive ? AppColors.white : colors.textMuted);
 
@@ -81,7 +81,7 @@ class BreezIconButton extends StatelessWidget {
           height: buttonSize,
           padding: EdgeInsets.all(iconPadding),
           backgroundColor: bg,
-          hoverColor: isActive ? AppColors.accentLight : colors.cardLight,
+          hoverColor: isActive ? colors.accentLight : colors.cardLight,
           showBorder: showBorder,
           enableGlow: isActive,
           semanticLabel: semanticLabel,
@@ -143,6 +143,7 @@ class BreezCircleButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
     final buttonSize = size < AppSizes.minTouchTarget ? AppSizes.minTouchTarget : size;
 
     return BreezButton(
@@ -151,12 +152,12 @@ class BreezCircleButton extends StatelessWidget {
       height: buttonSize,
       padding: EdgeInsets.zero,
       borderRadius: buttonSize / 2,
-      backgroundColor: AppColors.accent,
-      hoverColor: AppColors.accentLight,
+      backgroundColor: colors.accent,
+      hoverColor: colors.accentLight,
       border: Border.all(color: Colors.transparent),
       shadows: [
         BoxShadow(
-          color: AppColors.accent.withValues(alpha: 0.4),
+          color: colors.accent.withValues(alpha: 0.4),
           blurRadius: 16,
           offset: const Offset(0, 4),
         ),

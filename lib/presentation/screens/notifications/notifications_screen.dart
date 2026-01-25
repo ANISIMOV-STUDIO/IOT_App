@@ -61,14 +61,14 @@ class NotificationsScreen extends StatelessWidget {
                   ToastService.success(l10n.notificationsReadAll);
                 },
                 backgroundColor: Colors.transparent,
-                hoverColor: AppColors.accent.withValues(alpha: 0.1),
-                pressedColor: AppColors.accent.withValues(alpha: 0.15),
+                hoverColor: colors.accent.withValues(alpha: 0.1),
+                pressedColor: colors.accent.withValues(alpha: 0.15),
                 showBorder: false,
                 semanticLabel: l10n.readAll,
                 child: Text(
                   l10n.readAll,
-                  style: const TextStyle(
-                    color: AppColors.accent,
+                  style: TextStyle(
+                    color: colors.accent,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -84,7 +84,7 @@ class NotificationsScreen extends StatelessWidget {
           }
 
           return RefreshIndicator(
-            color: AppColors.accent,
+            color: colors.accent,
             onRefresh: () async {
               final deviceId = state.currentDeviceId;
               if (deviceId != null) {

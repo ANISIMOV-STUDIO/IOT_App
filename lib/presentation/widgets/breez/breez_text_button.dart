@@ -39,7 +39,7 @@ class BreezTextButton extends StatelessWidget {
     return BreezButton(
       onTap: onPressed,
       backgroundColor: Colors.transparent,
-      hoverColor: AppColors.accent.withValues(alpha: 0.1),
+      hoverColor: colors.accent.withValues(alpha: 0.1),
       showBorder: false,
       enableScale: false,
       enforceMinTouchTarget: false,
@@ -50,11 +50,11 @@ class BreezTextButton extends StatelessWidget {
         text,
         textAlign: TextAlign.center,
         style: TextStyle(
-          color: isDisabled ? colors.textMuted : AppColors.accent,
+          color: isDisabled ? colors.textMuted : colors.accent,
           fontSize: fontSize,
           fontWeight: fontWeight,
           decoration: underline ? TextDecoration.underline : TextDecoration.none,
-          decorationColor: isDisabled ? colors.textMuted : AppColors.accent,
+          decorationColor: isDisabled ? colors.textMuted : colors.accent,
         ),
       ),
     );

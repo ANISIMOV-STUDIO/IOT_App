@@ -44,6 +44,8 @@ class DesktopLayout extends StatefulWidget {
     this.onTimerSettingsChanged,
     this.activeAlarms = const {},
     this.onAlarmsReset,
+    this.onSyncTap,
+    this.isSyncing = false,
   });
   final UnitState unit;
   final List<UnitState> allUnits;
@@ -72,6 +74,10 @@ class DesktopLayout extends StatefulWidget {
   final DaySettingsCallback? onTimerSettingsChanged;
   final Map<String, AlarmInfo> activeAlarms;
   final VoidCallback? onAlarmsReset;
+  /// Callback для принудительного обновления данных
+  final VoidCallback? onSyncTap;
+  /// Флаг синхронизации (для анимации вращения иконки)
+  final bool isSyncing;
 
   @override
   State<DesktopLayout> createState() => _DesktopLayoutState();
@@ -133,6 +139,8 @@ class _DesktopLayoutState extends State<DesktopLayout> {
             unit: widget.unit,
             onPowerToggle: widget.onPowerToggle,
             onSettingsTap: widget.onSettingsTap,
+            onSyncTap: widget.onSyncTap,
+            isSyncing: widget.isSyncing,
             isPowerLoading: widget.isPowerLoading,
             isScheduleEnabled: widget.isScheduleEnabled,
             isScheduleLoading: widget.isScheduleLoading,
@@ -173,6 +181,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
 
   Widget _buildRightColumnContent() {
     final l10n = AppLocalizations.of(context)!;
+    final colors = BreezColors.of(context);
     final unit = widget.unit;
 
     // Показатели (короткие лейблы, как на мобильной аналитике)
@@ -183,7 +192,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
         value: '${unit.outsideTemp.toStringAsFixed(1)}°',
         label: l10n.outdoor,
         description: l10n.outdoorTempDesc,
-        color: AppColors.accent,
+        color: colors.accent,
       ),
       SensorData(
         key: 'indoor_temp',
@@ -215,7 +224,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
         value: '${unit.humidity}%',
         label: l10n.humidity,
         description: l10n.humidityDesc,
-        color: AppColors.accent,
+        color: colors.accent,
       ),
       SensorData(
         key: 'co2_level',
@@ -231,7 +240,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
         value: '${unit.recuperatorEfficiency}%',
         label: l10n.efficiency,
         description: l10n.recuperatorEfficiencyDesc,
-        color: AppColors.accent,
+        color: colors.accent,
       ),
       SensorData(
         key: 'heater_perf',
@@ -247,7 +256,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
         value: unit.coolerStatus,
         label: l10n.cooler,
         description: l10n.coolerStatusDesc,
-        color: AppColors.accent,
+        color: colors.accent,
       ),
       SensorData(
         key: 'duct_pressure',
@@ -255,7 +264,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
         value: '${unit.ductPressure}',
         label: l10n.pressure,
         description: l10n.ductPressureDesc,
-        color: AppColors.darkTextMuted,
+        color: colors.textMuted,
       ),
       SensorData(
         key: 'free_cooling',
@@ -263,7 +272,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
         value: unit.freeCooling ? l10n.on : l10n.off,
         label: l10n.freeCool,
         description: l10n.freeCoolingDesc,
-        color: unit.freeCooling ? AppColors.accentGreen : AppColors.darkTextMuted,
+        color: unit.freeCooling ? AppColors.accentGreen : colors.textMuted,
       ),
       SensorData(
         key: 'filter_percent',
@@ -271,7 +280,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
         value: '${unit.filterPercent}%',
         label: l10n.filter,
         description: l10n.filterDesc,
-        color: AppColors.accent,
+        color: colors.accent,
       ),
     ];
 

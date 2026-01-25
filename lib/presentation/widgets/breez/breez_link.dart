@@ -44,7 +44,8 @@ class _BreezLinkState extends State<BreezLink> {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveColor = widget.color ?? AppColors.accent;
+    final colors = BreezColors.of(context);
+    final effectiveColor = widget.color ?? colors.accent;
     final effectiveFontSize = widget.fontSize ?? AppFontSizes.caption;
     final effectiveFontWeight = widget.fontWeight ?? FontWeight.w600;
 

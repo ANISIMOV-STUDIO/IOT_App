@@ -29,6 +29,10 @@ class BreezColors extends ThemeExtension<BreezColors> {
     required this.buttonHover,
     required this.hoverOverlay,
     required this.pressedOverlay,
+    required this.accent,
+    required this.accentLight,
+    required this.accentDark,
+    required this.accentGlow,
   });
   final Color bg;
   final Color card;
@@ -41,6 +45,11 @@ class BreezColors extends ThemeExtension<BreezColors> {
   final Color buttonHover;
   final Color hoverOverlay;
   final Color pressedOverlay;
+  /// Theme-aware accent color (тёмный для светлой темы, яркий для тёмной)
+  final Color accent;
+  final Color accentLight;
+  final Color accentDark;
+  final Color accentGlow;
 
   /// Get colors from context
   static BreezColors of(BuildContext context) => Theme.of(context).extension<BreezColors>()!;
@@ -58,9 +67,13 @@ class BreezColors extends ThemeExtension<BreezColors> {
     buttonHover: AppColors.darkButtonHover,
     hoverOverlay: AppColors.darkHoverOverlay,
     pressedOverlay: AppColors.darkPressedOverlay,
+    accent: AppColors.accent,
+    accentLight: AppColors.accentLight,
+    accentDark: AppColors.accentDark,
+    accentGlow: AppColors.accentGlow,
   );
 
-  /// Light theme colors - Clean Premium
+  /// Light theme colors - Soft Premium
   static const light = BreezColors(
     bg: AppColors.lightBg,
     card: AppColors.lightCard,
@@ -73,6 +86,10 @@ class BreezColors extends ThemeExtension<BreezColors> {
     buttonHover: AppColors.lightButtonHover,
     hoverOverlay: AppColors.lightHoverOverlay,
     pressedOverlay: AppColors.lightPressedOverlay,
+    accent: AppColors.lightAccent,
+    accentLight: AppColors.lightAccentLight,
+    accentDark: AppColors.lightAccentDark,
+    accentGlow: AppColors.lightAccentGlow,
   );
 
   @override
@@ -88,6 +105,10 @@ class BreezColors extends ThemeExtension<BreezColors> {
     Color? buttonHover,
     Color? hoverOverlay,
     Color? pressedOverlay,
+    Color? accent,
+    Color? accentLight,
+    Color? accentDark,
+    Color? accentGlow,
   }) => BreezColors(
       bg: bg ?? this.bg,
       card: card ?? this.card,
@@ -100,6 +121,10 @@ class BreezColors extends ThemeExtension<BreezColors> {
       buttonHover: buttonHover ?? this.buttonHover,
       hoverOverlay: hoverOverlay ?? this.hoverOverlay,
       pressedOverlay: pressedOverlay ?? this.pressedOverlay,
+      accent: accent ?? this.accent,
+      accentLight: accentLight ?? this.accentLight,
+      accentDark: accentDark ?? this.accentDark,
+      accentGlow: accentGlow ?? this.accentGlow,
     );
 
   @override
@@ -119,6 +144,10 @@ class BreezColors extends ThemeExtension<BreezColors> {
       buttonHover: Color.lerp(buttonHover, other.buttonHover, t)!,
       hoverOverlay: Color.lerp(hoverOverlay, other.hoverOverlay, t)!,
       pressedOverlay: Color.lerp(pressedOverlay, other.pressedOverlay, t)!,
+      accent: Color.lerp(accent, other.accent, t)!,
+      accentLight: Color.lerp(accentLight, other.accentLight, t)!,
+      accentDark: Color.lerp(accentDark, other.accentDark, t)!,
+      accentGlow: Color.lerp(accentGlow, other.accentGlow, t)!,
     );
   }
 }
@@ -140,6 +169,12 @@ class AppTheme {
   Color get textMuted => colors.textMuted;
   Color get buttonBg => colors.buttonBg;
 
+  // Theme-aware accent colors (тёмный акцент для светлой темы, яркий для тёмной)
+  Color get accentColor => isDark ? AppColors.accent : AppColors.lightAccent;
+  Color get accentLightColor => isDark ? AppColors.accentLight : AppColors.lightAccentLight;
+  Color get accentDarkColor => isDark ? AppColors.accentDark : AppColors.lightAccentDark;
+  Color get accentGlowColor => isDark ? AppColors.accentGlow : AppColors.lightAccentGlow;
+
   /// Material theme with premium styling
   ThemeData get materialTheme => ThemeData(
         useMaterial3: true,
@@ -150,10 +185,10 @@ class AppTheme {
         // Color Scheme
         colorScheme: ColorScheme(
           brightness: isDark ? Brightness.dark : Brightness.light,
-          primary: AppColors.accent,
-          onPrimary: isDark ? AppColors.darkBg : AppColors.white,
-          secondary: AppColors.accentLight,
-          onSecondary: isDark ? AppColors.darkBg : AppColors.white,
+          primary: accentColor,
+          onPrimary: AppColors.white, // Белый текст на тёмном акценте хорошо контрастирует
+          secondary: accentLightColor,
+          onSecondary: AppColors.white,
           tertiary: AppColors.warning,
           onTertiary: AppColors.darkBg,
           error: AppColors.critical,
@@ -184,15 +219,15 @@ class AppTheme {
           style: ButtonStyle(
             backgroundColor: WidgetStateProperty.resolveWith((states) {
               if (states.contains(WidgetState.disabled)) {
-                return AppColors.accent.withValues(alpha: 0.5);
+                return accentColor.withValues(alpha: 0.5);
               }
               if (states.contains(WidgetState.pressed)) {
-                return AppColors.accentDark;
+                return accentDarkColor;
               }
               if (states.contains(WidgetState.hovered)) {
-                return AppColors.accentLight;
+                return accentLightColor;
               }
-              return AppColors.accent;
+              return accentColor;
             }),
             foregroundColor: WidgetStateProperty.resolveWith((states) {
               if (states.contains(WidgetState.disabled)) {
@@ -218,7 +253,7 @@ class AppTheme {
               }
               return 0;
             }),
-            shadowColor: WidgetStateProperty.all(AppColors.accentGlow),
+            shadowColor: WidgetStateProperty.all(accentGlowColor),
             padding: WidgetStateProperty.all(
               const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
             ),
@@ -248,13 +283,13 @@ class AppTheme {
                 return textMuted.withValues(alpha: 0.5);
               }
               if (states.contains(WidgetState.hovered)) {
-                return AppColors.accent;
+                return accentColor;
               }
               return text;
             }),
             side: WidgetStateProperty.resolveWith((states) {
               if (states.contains(WidgetState.hovered)) {
-                return const BorderSide(color: AppColors.accent, width: 1.5);
+                return BorderSide(color: accentColor, width: 1.5);
               }
               return BorderSide(color: border);
             }),
@@ -275,10 +310,10 @@ class AppTheme {
           style: ButtonStyle(
             backgroundColor: WidgetStateProperty.resolveWith((states) {
               if (states.contains(WidgetState.pressed)) {
-                return AppColors.accent.withValues(alpha: 0.15);
+                return accentColor.withValues(alpha: 0.15);
               }
               if (states.contains(WidgetState.hovered)) {
-                return AppColors.accent.withValues(alpha: 0.08);
+                return accentColor.withValues(alpha: 0.08);
               }
               return Colors.transparent;
             }),
@@ -286,7 +321,7 @@ class AppTheme {
               if (states.contains(WidgetState.disabled)) {
                 return textMuted.withValues(alpha: 0.5);
               }
-              return AppColors.accent;
+              return accentColor;
             }),
             overlayColor: WidgetStateProperty.all(Colors.transparent),
             padding: WidgetStateProperty.all(
@@ -315,7 +350,7 @@ class AppTheme {
             }),
             foregroundColor: WidgetStateProperty.resolveWith((states) {
               if (states.contains(WidgetState.hovered)) {
-                return AppColors.accent;
+                return accentColor;
               }
               return textMuted;
             }),
@@ -325,12 +360,12 @@ class AppTheme {
 
         // Slider
         sliderTheme: SliderThemeData(
-          activeTrackColor: AppColors.accent,
+          activeTrackColor: accentColor,
           inactiveTrackColor: isDark
               ? AppColors.white.withValues(alpha: 0.1)
-              : AppColors.black.withValues(alpha: 0.1),
+              : AppColors.black.withValues(alpha: 0.15),
           thumbColor: AppColors.white,
-          overlayColor: AppColors.accent.withValues(alpha: 0.2),
+          overlayColor: accentColor.withValues(alpha: 0.2),
           trackHeight: 8,
           thumbShape: const RoundSliderThumbShape(
             elevation: 4,
@@ -347,7 +382,7 @@ class AppTheme {
           }),
           trackColor: WidgetStateProperty.resolveWith((states) {
             if (states.contains(WidgetState.selected)) {
-              return AppColors.accent;
+              return accentColor;
             }
             return border;
           }),
@@ -358,7 +393,7 @@ class AppTheme {
         checkboxTheme: CheckboxThemeData(
           fillColor: WidgetStateProperty.resolveWith((states) {
             if (states.contains(WidgetState.selected)) {
-              return AppColors.accent;
+              return accentColor;
             }
             return Colors.transparent;
           }),
@@ -421,7 +456,7 @@ class AppTheme {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(AppRadius.button),
-            borderSide: const BorderSide(color: AppColors.accent, width: 2),
+            borderSide: BorderSide(color: accentColor, width: 2),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(AppRadius.button),

@@ -146,9 +146,9 @@ class _SegmentButton extends StatelessWidget {
     final hasBadge = tab.badgeCount != null && tab.badgeCount! > 0;
 
     // Цвета: выбранный — акцентный текст на прозрачном фоне с подсветкой
-    final textColor = isSelected ? AppColors.accent : colors.textMuted;
+    final textColor = isSelected ? colors.accent : colors.textMuted;
     final iconColor = isSelected
-        ? (tab.iconColor ?? AppColors.accent)
+        ? (tab.iconColor ?? colors.accent)
         : (tab.iconColor ?? colors.textMuted);
 
     return Semantics(
@@ -162,11 +162,11 @@ class _SegmentButton extends StatelessWidget {
           curve: Curves.easeOutCubic,
           decoration: BoxDecoration(
             color: isSelected
-                ? AppColors.accent.withValues(alpha: AppColors.opacitySubtle)
+                ? colors.accent.withValues(alpha: AppColors.opacitySubtle)
                 : colors.bg.withValues(alpha: 0),
             borderRadius: BorderRadius.circular(AppRadius.chip),
             border: isSelected
-                ? Border.all(color: AppColors.accent.withValues(alpha: AppColors.opacityLow))
+                ? Border.all(color: colors.accent.withValues(alpha: AppColors.opacityLow))
                 : null,
           ),
           child: Center(

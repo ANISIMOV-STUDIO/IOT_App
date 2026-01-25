@@ -45,17 +45,17 @@ enum QuickSensorType {
       QuickSensorType.filterPercent => l10n.filter,
     };
 
-  /// Цвет иконки
-  Color get color => switch (this) {
-      QuickSensorType.outsideTemp => AppColors.accent,
+  /// Цвет иконки (темозависимый)
+  Color getColor(BreezColors colors) => switch (this) {
+      QuickSensorType.outsideTemp => colors.accent,
       QuickSensorType.indoorTemp => AppColors.accentGreen,
-      QuickSensorType.humidity => AppColors.accent,
+      QuickSensorType.humidity => colors.accent,
       QuickSensorType.co2Level => AppColors.accentGreen,
       QuickSensorType.supplyTemp => AppColors.accentOrange,
-      QuickSensorType.recuperatorEfficiency => AppColors.accent,
+      QuickSensorType.recuperatorEfficiency => colors.accent,
       QuickSensorType.heaterPower => AppColors.accentOrange,
-      QuickSensorType.ductPressure => AppColors.darkTextMuted,
-      QuickSensorType.filterPercent => AppColors.accent,
+      QuickSensorType.ductPressure => colors.textMuted,
+      QuickSensorType.filterPercent => colors.accent,
     };
 
   /// Найти тип по ключу

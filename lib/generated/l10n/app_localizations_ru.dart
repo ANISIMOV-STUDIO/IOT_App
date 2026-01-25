@@ -710,6 +710,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get syncedJustNow => 'Только что';
 
   @override
+  String get syncRefresh => 'Обновить данные';
+
+  @override
   String syncedMinutesAgo(int count) {
     return '$count мин назад';
   }

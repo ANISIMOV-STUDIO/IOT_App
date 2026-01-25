@@ -159,10 +159,10 @@ class ScheduleTemperatureSlider extends StatelessWidget {
             ),
             Text(
               '$value°C',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: _ScheduleFormConstants.valueFontSize,
                 fontWeight: FontWeight.w600,
-                color: AppColors.accent,
+                color: colors.accent,
               ),
             ),
           ],
@@ -172,7 +172,7 @@ class ScheduleTemperatureSlider extends StatelessWidget {
           min: min,
           max: max,
           divisions: (max - min).toInt(),
-          activeColor: AppColors.accent,
+          activeColor: colors.accent,
           inactiveColor: colors.buttonBg,
           onChanged: onChanged,
         ),
@@ -217,7 +217,7 @@ class ScheduleActiveToggle extends StatelessWidget {
           Switch(
             value: value,
             onChanged: onChanged,
-            activeTrackColor: AppColors.accent,
+            activeTrackColor: colors.accent,
             thumbColor: WidgetStateProperty.resolveWith((states) {
               if (states.contains(WidgetState.selected)) {
                 return AppColors.white;
@@ -246,7 +246,7 @@ class ScheduleDialogHeader extends StatelessWidget {
 
     return Row(
       children: [
-        Icon(icon, color: AppColors.accent),
+        Icon(icon, color: colors.accent),
         const SizedBox(width: AppSpacing.sm),
         Text(
           title,
@@ -291,8 +291,8 @@ class ScheduleDialogActions extends StatelessWidget {
         const SizedBox(width: AppSpacing.md),
         BreezButton(
           onTap: onSave,
-          backgroundColor: AppColors.accent,
-          hoverColor: AppColors.accentLight,
+          backgroundColor: colors.accent,
+          hoverColor: colors.accentLight,
           padding: const EdgeInsets.symmetric(
             horizontal: AppSpacing.lgx,
             vertical: AppSpacing.sm,
@@ -316,16 +316,19 @@ class ScheduleDialogActions extends StatelessWidget {
 Future<TimeOfDay?> showScheduleTimePicker(
   BuildContext context,
   TimeOfDay initialTime,
-) => showTimePicker(
+) {
+  final colors = BreezColors.of(context);
+  return showTimePicker(
     context: context,
     initialTime: initialTime,
     builder: (context, child) => Theme(
         data: Theme.of(context).copyWith(
           colorScheme: ColorScheme.dark(
-            primary: AppColors.accent,
-            surface: BreezColors.of(context).card,
+            primary: colors.accent,
+            surface: colors.card,
           ),
         ),
         child: child!,
       ),
   );
+}

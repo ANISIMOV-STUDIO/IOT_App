@@ -70,7 +70,7 @@ class BreezSegmentedControl<T> extends StatelessWidget {
         height: height,
         padding: const EdgeInsets.all(_SegmentedControlConstants.containerPadding),
         decoration: BoxDecoration(
-          color: colors.buttonBg.withValues(alpha: AppColors.opacityMedium),
+          color: colors.buttonBg.withValues(alpha: AppColors.opacityHigh),
           borderRadius: BorderRadius.circular(AppRadius.chip),
         ),
         child: expanded
@@ -151,11 +151,11 @@ class _SegmentButton<T> extends StatelessWidget {
           curve: Curves.easeOutCubic,
           decoration: BoxDecoration(
             color: isSelected
-                ? AppColors.accent.withValues(alpha: AppColors.opacitySubtle)
+                ? colors.accent.withValues(alpha: AppColors.opacityLow)
                 : colors.bg.withValues(alpha: 0),
             borderRadius: BorderRadius.circular(AppRadius.chip),
             border: isSelected
-                ? Border.all(color: AppColors.accent.withValues(alpha: AppColors.opacityLow))
+                ? Border.all(color: colors.accent.withValues(alpha: AppColors.opacityMedium))
                 : null,
           ),
           child: Center(
@@ -196,7 +196,7 @@ class _SegmentButton<T> extends StatelessWidget {
       return colors.textMuted.withValues(alpha: 0.5);
     }
     if (isSelected) {
-      return AppColors.accent;
+      return colors.accent;
     }
     return colors.textMuted;
   }

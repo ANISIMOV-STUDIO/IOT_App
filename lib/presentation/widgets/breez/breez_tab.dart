@@ -168,7 +168,7 @@ class _BreezTabState extends State<BreezTab> {
 
   Color _buildBackgroundColor(BreezColors colors) {
     if (widget.isSelected) {
-      return AppColors.accent.withValues(alpha: AppColors.opacitySubtle);
+      return colors.accent.withValues(alpha: AppColors.opacitySubtle);
     }
     if (_isHovered && _isEnabled) {
       return colors.border.withValues(alpha: AppColors.opacityLow);
@@ -178,7 +178,7 @@ class _BreezTabState extends State<BreezTab> {
 
   Color _buildBorderColor(BreezColors colors) {
     if (widget.isSelected) {
-      return AppColors.accent;
+      return colors.accent;
     }
     if (widget.isActive) {
       return _indicatorColor.withValues(alpha: AppColors.opacityMedium);
@@ -188,7 +188,7 @@ class _BreezTabState extends State<BreezTab> {
 
   Color _buildTextColor(BreezColors colors) {
     if (widget.isSelected) {
-      return AppColors.accent;
+      return colors.accent;
     }
     if (widget.isActive) {
       return colors.text;

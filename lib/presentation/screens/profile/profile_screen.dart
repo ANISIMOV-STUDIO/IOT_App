@@ -222,12 +222,12 @@ class _UserCard extends StatelessWidget {
               Container(
                 width: _ProfileScreenConstants.avatarSize,
                 height: _ProfileScreenConstants.avatarSize,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [AppColors.accent, AppColors.accentLight],
+                    colors: [colors.accent, colors.accentLight],
                   ),
                 ),
                 child: Center(

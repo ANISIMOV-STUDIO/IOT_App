@@ -220,8 +220,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     return BreezButton(
                       onTap: isLoading ? null : _handleRequestCode,
                       isLoading: isLoading,
-                      backgroundColor: AppColors.accent,
-                      hoverColor: AppColors.accentLight,
+                      backgroundColor: colors.accent,
+                      hoverColor: colors.accentLight,
                       showBorder: false,
                       borderRadius: AppRadius.nested,
                       padding: const EdgeInsets.all(AppSpacing.xs),
@@ -345,8 +345,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           ? null
                           : () => _handleResetPassword(l10n),
                       isLoading: isLoading,
-                      backgroundColor: AppColors.accent,
-                      hoverColor: AppColors.accentLight,
+                      backgroundColor: colors.accent,
+                      hoverColor: colors.accentLight,
                       showBorder: false,
                       borderRadius: AppRadius.nested,
                       padding: const EdgeInsets.all(AppSpacing.xs),

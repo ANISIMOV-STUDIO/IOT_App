@@ -708,6 +708,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get syncedJustNow => 'Just now';
 
   @override
+  String get syncRefresh => 'Refresh data';
+
+  @override
   String syncedMinutesAgo(int count) {
     return '$count min ago';
   }

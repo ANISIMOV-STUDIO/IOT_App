@@ -77,6 +77,8 @@ class MainTempCard extends StatelessWidget {
     this.isOnline = true,
     this.selectedSensors = QuickSensorsService.defaultSensors,
     this.updatedAt,
+    this.onSyncTap,
+    this.isSyncing = false,
   });
   final String unitName;
   final String? status;
@@ -118,6 +120,12 @@ class MainTempCard extends StatelessWidget {
   /// Время последней синхронизации с сервером
   final DateTime? updatedAt;
 
+  /// Callback для принудительного обновления данных
+  final VoidCallback? onSyncTap;
+
+  /// Флаг синхронизации (для анимации вращения иконки)
+  final bool isSyncing;
+
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
@@ -131,7 +139,7 @@ class MainTempCard extends StatelessWidget {
     final modeData = currentMode != null && currentMode!.isNotEmpty
         ? modes.where((m) => m.id.toLowerCase() == currentMode!.toLowerCase()).firstOrNull
         : null;
-    final modeColor = modeData?.color ?? AppColors.accent;
+    final modeColor = modeData?.color ?? colors.accent;
 
     // Overlay цвет режима поверх базового фона (как в ModeGridItem)
     final modeOverlay = modeColor.withValues(alpha: AppColors.opacitySubtle);
@@ -209,6 +217,8 @@ class MainTempCard extends StatelessWidget {
                   onScheduleToggle: isOnline ? onScheduleToggle : null,
                   onSettingsTap: isOnline ? onSettingsTap : null,
                   onAlarmsTap: onAlarmsTap,
+                  onSyncTap: onSyncTap,
+                  isSyncing: isSyncing,
                   isOnline: isOnline,
                   updatedAt: updatedAt,
                 ),
@@ -447,7 +457,7 @@ class _StatsSection extends StatelessWidget {
               icon: sensor.icon,
               value: _getSensorValue(sensor),
               label: sensor.getLabel(l10n),
-              iconColor: sensor.color,
+              iconColor: sensor.getColor(colors),
             ),
           )).toList(),
       ),
@@ -487,7 +497,7 @@ class _FanDisplaySection extends StatelessWidget {
                 child: _FanIndicator(
                   label: l10n.supply,
                   value: supplyFan,
-                  color: AppColors.accent,
+                  color: colors.accent,
                   icon: Icons.arrow_downward_rounded,
                 ),
               ),

@@ -1394,6 +1394,12 @@ abstract class AppLocalizations {
   /// **'Только что'**
   String get syncedJustNow;
 
+  /// No description provided for @syncRefresh.
+  ///
+  /// In ru, this message translates to:
+  /// **'Обновить данные'**
+  String get syncRefresh;
+
   /// No description provided for @syncedMinutesAgo.
   ///
   /// In ru, this message translates to:

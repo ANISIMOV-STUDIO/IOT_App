@@ -162,43 +162,53 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
                   if (widget.onAddEntry != null)
                     Padding(
                       padding: const EdgeInsets.only(right: AppSpacing.xs),
-                      child: BreezButton(
-                        onTap: widget.onAddEntry,
-                        padding: const EdgeInsets.all(
-                          _ScheduleWidgetConstants.buttonPaddingVertical,
-                        ),
-                        backgroundColor: AppColors.accent,
-                        hoverColor: AppColors.accentLight,
-                        showBorder: false,
-                        enforceMinTouchTarget: false,
-                        child: const Icon(
-                          Icons.add,
-                          size: AppIconSizes.standard,
-                          color: AppColors.white,
-                        ),
+                      child: Builder(
+                        builder: (context) {
+                          final colors = BreezColors.of(context);
+                          return BreezButton(
+                            onTap: widget.onAddEntry,
+                            padding: const EdgeInsets.all(
+                              _ScheduleWidgetConstants.buttonPaddingVertical,
+                            ),
+                            backgroundColor: colors.accent,
+                            hoverColor: colors.accentLight,
+                            showBorder: false,
+                            enforceMinTouchTarget: false,
+                            child: const Icon(
+                              Icons.add,
+                              size: AppIconSizes.standard,
+                              color: AppColors.white,
+                            ),
+                          );
+                        },
                       ),
                     ),
                   // See all button
-                  BreezButton(
-                    onTap: widget.onSeeAll ?? () {},
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.xs,
-                      vertical: _ScheduleWidgetConstants.buttonPaddingVertical,
-                    ),
-                    backgroundColor: AppColors.accent.withValues(alpha: AppColors.opacityLight),
-                    hoverColor: AppColors.accent.withValues(alpha: AppColors.opacitySubtle),
-                    showBorder: false,
-                    enforceMinTouchTarget: false,
-                    child: Center(
-                      child: Text(
-                        l10n.seeAll,
-                        style: const TextStyle(
-                          fontSize: _ScheduleWidgetConstants.seeAllFontSize,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.accent,
+                  Builder(
+                    builder: (context) {
+                      final colors = BreezColors.of(context);
+                      return BreezButton(
+                        onTap: widget.onSeeAll ?? () {},
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppSpacing.xs,
+                          vertical: _ScheduleWidgetConstants.buttonPaddingVertical,
                         ),
-                      ),
-                    ),
+                        backgroundColor: colors.accent.withValues(alpha: AppColors.opacityLight),
+                        hoverColor: colors.accent.withValues(alpha: AppColors.opacitySubtle),
+                        showBorder: false,
+                        enforceMinTouchTarget: false,
+                        child: Center(
+                          child: Text(
+                            l10n.seeAll,
+                            style: TextStyle(
+                              fontSize: _ScheduleWidgetConstants.seeAllFontSize,
+                              fontWeight: FontWeight.w600,
+                              color: colors.accent,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -298,14 +308,14 @@ class _DaySelector extends StatelessWidget {
                   : AppSpacing.xs,
             ),
             backgroundColor: isSelected
-                ? AppColors.accent
+                ? colors.accent
                 : hasEntries
-                    ? AppColors.accent.withValues(alpha: AppColors.opacityLight)
+                    ? colors.accent.withValues(alpha: AppColors.opacityLight)
                     : colors.buttonBg,
             hoverColor: isSelected
-                ? AppColors.accent
+                ? colors.accent
                 : hasEntries
-                    ? AppColors.accent.withValues(alpha: AppColors.opacityMediumLight)
+                    ? colors.accent.withValues(alpha: AppColors.opacityMediumLight)
                     : colors.buttonHover,
             showBorder: false,
             enableScale: false,
@@ -325,7 +335,7 @@ class _DaySelector extends StatelessWidget {
                     color: isSelected
                         ? AppColors.white
                         : hasEntries
-                            ? AppColors.accent
+                            ? colors.accent
                             : colors.textMuted,
                   ),
                 ),
@@ -336,8 +346,8 @@ class _DaySelector extends StatelessWidget {
                   height: _ScheduleWidgetConstants.indicatorSize,
                   child: (hasEntries && !isSelected)
                       ? Container(
-                          decoration: const BoxDecoration(
-                            color: AppColors.accent,
+                          decoration: BoxDecoration(
+                            color: colors.accent,
                             shape: BoxShape.circle,
                           ),
                         )
@@ -381,7 +391,7 @@ class _EmptyDayState extends StatelessWidget {
               showAddHint ? Icons.add_circle_outline : Icons.event_busy_outlined,
               size: AppIconSizes.standard,
               color: showAddHint
-                  ? AppColors.accent.withValues(alpha: AppColors.opacityMedium)
+                  ? colors.accent.withValues(alpha: AppColors.opacityMedium)
                   : colors.textMuted.withValues(alpha: AppColors.opacityMedium),
             ),
             SizedBox(height: compact ? AppSpacing.xs : AppSpacing.sm),
@@ -401,7 +411,7 @@ class _EmptyDayState extends StatelessWidget {
                 showAddHint ? l10n.tapToAdd : l10n.addFirstEntry,
                 style: TextStyle(
                   fontSize: _ScheduleWidgetConstants.hintFontSize,
-                  color: AppColors.accent.withValues(alpha: AppColors.opacityHigh),
+                  color: colors.accent.withValues(alpha: AppColors.opacityHigh),
                 ),
               ),
             ],
@@ -456,14 +466,14 @@ class _ScheduleRow extends StatelessWidget {
       onTap: onTap,
       padding: const EdgeInsets.all(AppSpacing.xs),
       backgroundColor: entry.isActive
-          ? AppColors.accent.withValues(alpha: AppColors.opacityVerySubtle)
+          ? colors.accent.withValues(alpha: AppColors.opacityVerySubtle)
           : colors.buttonBg,
       hoverColor: entry.isActive
-          ? AppColors.accent.withValues(alpha: AppColors.opacitySubtle)
+          ? colors.accent.withValues(alpha: AppColors.opacitySubtle)
           : colors.buttonHover,
       showBorder: entry.isActive,
       border: entry.isActive
-          ? Border.all(color: AppColors.accent.withValues(alpha: AppColors.opacityLow))
+          ? Border.all(color: colors.accent.withValues(alpha: AppColors.opacityLow))
           : null,
       enableScale: false,
       child: Row(
@@ -477,7 +487,7 @@ class _ScheduleRow extends StatelessWidget {
                   : _ScheduleWidgetConstants.timePaddingVerticalNormal,
             ),
             decoration: BoxDecoration(
-              color: AppColors.accent.withValues(alpha: AppColors.opacityLight),
+              color: colors.accent.withValues(alpha: AppColors.opacityLight),
               borderRadius: BorderRadius.circular(AppRadius.button),
             ),
             child: Text(
@@ -487,7 +497,7 @@ class _ScheduleRow extends StatelessWidget {
                     ? _ScheduleWidgetConstants.timeRangeFontSizeCompact
                     : _ScheduleWidgetConstants.timeRangeFontSizeNormal,
                 fontWeight: FontWeight.w600,
-                color: AppColors.accent,
+                color: colors.accent,
               ),
             ),
           ),
@@ -499,13 +509,13 @@ class _ScheduleRow extends StatelessWidget {
             width: iconSize,
             height: iconSize,
             decoration: BoxDecoration(
-              color: AppColors.accent.withValues(alpha: AppColors.opacityLight),
+              color: colors.accent.withValues(alpha: AppColors.opacityLight),
               borderRadius: BorderRadius.circular(AppRadius.card),
             ),
             child: Icon(
               _getModeIcon(),
               size: AppIconSizes.standard,
-              color: AppColors.accent,
+              color: colors.accent,
             ),
           ),
 

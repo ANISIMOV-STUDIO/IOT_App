@@ -163,13 +163,13 @@ class DevicesScreen extends StatelessWidget {
                 width: _DevicesScreenConstants.emptyStateIconSize,
                 height: _DevicesScreenConstants.emptyStateIconSize,
                 decoration: BoxDecoration(
-                  color: AppColors.accent.withValues(alpha: AppColors.opacitySubtle),
+                  color: colors.accent.withValues(alpha: AppColors.opacitySubtle),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.devices_outlined,
                   size: AppIconSizes.standard,
-                  color: AppColors.accent,
+                  color: colors.accent,
                 ),
               ),
               const SizedBox(height: AppSpacing.lg),

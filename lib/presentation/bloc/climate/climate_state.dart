@@ -27,6 +27,7 @@ final class ClimateControlState extends Equatable {
     this.isTogglingPower = false,
     this.pendingPowerState,
     this.isTogglingSchedule = false,
+    this.isSyncing = false,
     this.isPendingHeatingTemperature = false,
     this.isPendingCoolingTemperature = false,
     this.isPendingSupplyFan = false,
@@ -62,6 +63,9 @@ final class ClimateControlState extends Equatable {
 
   /// Флаг переключения расписания (для блокировки кнопки)
   final bool isTogglingSchedule;
+
+  /// Флаг синхронизации данных (для анимации иконки)
+  final bool isSyncing;
 
   /// Ожидание подтверждения изменения температуры нагрева
   final bool isPendingHeatingTemperature;
@@ -159,6 +163,7 @@ final class ClimateControlState extends Equatable {
     bool? pendingPowerState,
     bool clearPendingPower = false,
     bool? isTogglingSchedule,
+    bool? isSyncing,
     bool? isPendingHeatingTemperature,
     bool? isPendingCoolingTemperature,
     bool? isPendingSupplyFan,
@@ -183,6 +188,7 @@ final class ClimateControlState extends Equatable {
       isTogglingPower: isTogglingPower ?? this.isTogglingPower,
       pendingPowerState: clearPendingPower ? null : (pendingPowerState ?? this.pendingPowerState),
       isTogglingSchedule: isTogglingSchedule ?? this.isTogglingSchedule,
+      isSyncing: isSyncing ?? this.isSyncing,
       isPendingHeatingTemperature:
           isPendingHeatingTemperature ?? this.isPendingHeatingTemperature,
       isPendingCoolingTemperature:
@@ -207,6 +213,7 @@ final class ClimateControlState extends Equatable {
         isTogglingPower,
         pendingPowerState,
         isTogglingSchedule,
+        isSyncing,
         isPendingHeatingTemperature,
         isPendingCoolingTemperature,
         isPendingSupplyFan,

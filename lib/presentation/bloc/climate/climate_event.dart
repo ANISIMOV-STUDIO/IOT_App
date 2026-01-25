@@ -25,6 +25,11 @@ final class ClimateSubscriptionRequested extends ClimateEvent {
   const ClimateSubscriptionRequested();
 }
 
+/// Запрос на принудительное обновление данных устройства
+final class ClimateRefreshRequested extends ClimateEvent {
+  const ClimateRefreshRequested();
+}
+
 /// Смена текущего устройства — перезагрузить состояние
 final class ClimateDeviceChanged extends ClimateEvent {
 
@@ -260,6 +265,11 @@ final class ClimateExhaustAirflowCommit extends ClimateEvent {
 
   @override
   List<Object?> get props => [value];
+}
+
+/// Внутреннее событие: таймаут синхронизации
+final class ClimateSyncTimeout extends ClimateEvent {
+  const ClimateSyncTimeout();
 }
 
 // ============================================

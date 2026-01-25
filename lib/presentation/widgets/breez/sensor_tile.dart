@@ -131,7 +131,7 @@ class SensorTile extends StatefulWidget {
   }) {
     final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final accentColor = sensor.color ?? AppColors.accent;
+    final accentColor = sensor.color ?? colors.accent;
     final isEnabled = isSelected || canAddMore;
     final maxWidth = min(
       MediaQuery.of(context).size.width - AppSpacing.xxl,
@@ -374,7 +374,7 @@ class _SensorTileState extends State<SensorTile> {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
-    final accentColor = widget.sensor.color ?? AppColors.accent;
+    final accentColor = widget.sensor.color ?? colors.accent;
 
     // Для selectable режима слушаем изменения в ClimateBloc
     if (widget.selectable) {
@@ -391,17 +391,17 @@ class _SensorTileState extends State<SensorTile> {
 
   Widget _buildTile(BreezColors colors, Color accentColor) {
     final isSelected = widget.selectable && _isSelected;
-    final effectiveColor = isSelected ? AppColors.accent : accentColor;
+    final effectiveColor = isSelected ? colors.accent : accentColor;
 
     return BreezButton(
       onTap: _handleTap,
       backgroundColor: colors.card,
       hoverColor: isSelected
-          ? AppColors.accent.withValues(alpha: 0.15)
+          ? colors.accent.withValues(alpha: 0.15)
           : colors.cardLight,
       border: widget.showBorder
           ? Border.all(
-              color: isSelected ? AppColors.accent : colors.border,
+              color: isSelected ? colors.accent : colors.border,
               width: isSelected
                   ? _SensorTileConstants.selectedBorderWidth
                   : _SensorTileConstants.defaultBorderWidth,

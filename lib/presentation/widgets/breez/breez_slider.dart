@@ -136,7 +136,7 @@ class _BreezSliderState extends State<BreezSlider> {
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final activeColor = widget.activeColor ?? AppColors.accent;
+    final activeColor = widget.activeColor ?? colors.accent;
     final inactiveColor = widget.inactiveColor ??
         (isDark ? AppColors.darkHoverOverlay : AppColors.lightHoverOverlay);
 
@@ -265,7 +265,7 @@ class BreezLabeledSlider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
-    final effectiveColor = color ?? AppColors.accent;
+    final effectiveColor = color ?? colors.accent;
 
     return Semantics(
       label: semanticLabel ?? '$label: ${_formatDisplay()}',

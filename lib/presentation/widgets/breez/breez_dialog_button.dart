@@ -73,9 +73,9 @@ class BreezDialogButton extends StatelessWidget {
       hoverColor = AppColors.accentRed.withValues(alpha: AppColors.opacitySubtle);
     } else if (isPrimary) {
       // Primary: залитый accent фон, черный текст
-      bgColor = AppColors.accent;
+      bgColor = colors.accent;
       contentColor = AppColors.black;
-      hoverColor = AppColors.accentLight;
+      hoverColor = colors.accentLight;
     } else {
       // Secondary: cardLight фон, muted текст
       bgColor = colors.cardLight;
@@ -146,22 +146,22 @@ class BreezActionButton extends StatelessWidget {
       onTap: onTap,
       height: AppSizes.buttonHeightSmall,
       backgroundColor: colors.cardLight,
-      hoverColor: AppColors.accent.withValues(alpha: AppColors.opacityLight),
+      hoverColor: colors.accent.withValues(alpha: AppColors.opacityLight),
       borderRadius: AppRadius.nested,
-      border: Border.all(color: AppColors.accent),
+      border: Border.all(color: colors.accent),
       semanticLabel: semanticLabel ?? label,
       tooltip: tooltip,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, size: AppIconSizes.standard, color: AppColors.accent),
+          Icon(icon, size: AppIconSizes.standard, color: colors.accent),
           const SizedBox(width: AppSpacing.xxs),
           Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: AppFontSizes.caption,
               fontWeight: FontWeight.w600,
-              color: AppColors.accent,
+              color: colors.accent,
             ),
           ),
         ],

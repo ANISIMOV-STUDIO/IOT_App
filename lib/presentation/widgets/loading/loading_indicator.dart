@@ -55,7 +55,9 @@ class LoadingIndicator extends StatelessWidget {
   final double strokeWidth;
 
   @override
-  Widget build(BuildContext context) => Column(
+  Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+    return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         SizedBox(
@@ -64,7 +66,7 @@ class LoadingIndicator extends StatelessWidget {
           child: CircularProgressIndicator(
             strokeWidth: strokeWidth,
             valueColor: AlwaysStoppedAnimation<Color>(
-              color ?? AppColors.accent,
+              color ?? colors.accent,
             ),
           ),
         ),
@@ -74,13 +76,14 @@ class LoadingIndicator extends StatelessWidget {
             message!,
             style: TextStyle(
               fontSize: AppFontSizes.body,
-              color: BreezColors.of(context).textMuted,
+              color: colors.textMuted,
             ),
             textAlign: TextAlign.center,
           ),
         ],
       ],
     );
+  }
 }
 
 /// Полноэкранный overlay с индикатором загрузки
@@ -180,7 +183,7 @@ class LoadingProgressBar extends StatelessWidget {
             minHeight: height,
             backgroundColor: backgroundColor ?? colors.border,
             valueColor: AlwaysStoppedAnimation<Color>(
-              color ?? AppColors.accent,
+              color ?? colors.accent,
             ),
           ),
         ),
@@ -327,10 +330,13 @@ class PullToRefreshWrapper extends StatelessWidget {
   final Color? color;
 
   @override
-  Widget build(BuildContext context) => RefreshIndicator(
+  Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+    return RefreshIndicator(
       onRefresh: onRefresh,
-      color: color ?? AppColors.accent,
-      backgroundColor: BreezColors.of(context).card,
+      color: color ?? colors.accent,
+      backgroundColor: colors.card,
       child: child,
     );
+  }
 }

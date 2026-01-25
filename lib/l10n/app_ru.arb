@@ -816,6 +816,7 @@
   "statusRunning": "В работе",
   "statusStopped": "Выключен",
   "syncedJustNow": "Только что",
+  "syncRefresh": "Обновить данные",
   "syncedMinutesAgo": "{count} мин назад",
   "@syncedMinutesAgo": {
     "placeholders": {

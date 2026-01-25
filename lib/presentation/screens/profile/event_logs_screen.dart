@@ -137,7 +137,7 @@ class _EventLogsScreenState extends State<EventLogsScreen> {
     final dateFormat = DateFormat('dd.MM.yyyy HH:mm:ss', locale);
 
     final isAlarm = log.eventType == DeviceEventType.alarm;
-    final typeColor = isAlarm ? AppColors.accentRed : AppColors.accent;
+    final typeColor = isAlarm ? AppColors.accentRed : colors.accent;
     final typeText = isAlarm ? l10n.logTypeAlarm : l10n.logTypeSettings;
 
     showModalBottomSheet<void>(
@@ -317,8 +317,8 @@ class _EventLogsScreenState extends State<EventLogsScreen> {
             const SizedBox(height: AppSpacing.sm),
             BreezButton(
               onTap: _loadLogs,
-              backgroundColor: AppColors.accent,
-              hoverColor: AppColors.accentLight,
+              backgroundColor: colors.accent,
+              hoverColor: colors.accentLight,
               showBorder: false,
               borderRadius: AppRadius.nested,
               padding: const EdgeInsets.symmetric(
@@ -485,8 +485,8 @@ class _PaginationFooter extends StatelessWidget {
                 ? const BreezLoader.small()
                 : BreezButton(
                     onTap: onLoadMore,
-                    backgroundColor: AppColors.accent.withValues(alpha: AppColors.opacitySubtle),
-                    hoverColor: AppColors.accent.withValues(alpha: AppColors.opacityLow),
+                    backgroundColor: colors.accent.withValues(alpha: AppColors.opacitySubtle),
+                    hoverColor: colors.accent.withValues(alpha: AppColors.opacityLow),
                     showBorder: false,
                     padding: const EdgeInsets.symmetric(
                       horizontal: AppSpacing.sm,
@@ -495,18 +495,18 @@ class _PaginationFooter extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.expand_more,
                           size: AppIconSizes.standard,
-                          color: AppColors.accent,
+                          color: colors.accent,
                         ),
                         const SizedBox(width: AppSpacing.xxs),
                         Text(
                           l10n.logLoadMore,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: AppFontSizes.caption,
                             fontWeight: FontWeight.w600,
-                            color: AppColors.accent,
+                            color: colors.accent,
                           ),
                         ),
                       ],

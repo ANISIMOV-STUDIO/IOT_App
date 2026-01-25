@@ -166,7 +166,7 @@ class BreezDropdown<T> extends StatelessWidget {
                             Icon(
                               item.icon,
                               size: AppIconSizes.standard,
-                              color: isSelected ? AppColors.accent : colors.textMuted,
+                              color: isSelected ? colors.accent : colors.textMuted,
                             ),
                             const SizedBox(width: AppSpacing.sm),
                           ],
@@ -180,7 +180,7 @@ class BreezDropdown<T> extends StatelessWidget {
                                   style: TextStyle(
                                     fontSize: _DropdownConstants.textFontSize,
                                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                                    color: isSelected ? AppColors.accent : colors.text,
+                                    color: isSelected ? colors.accent : colors.text,
                                   ),
                                 ),
                                 if (item.subtitle != null)
@@ -195,10 +195,10 @@ class BreezDropdown<T> extends StatelessWidget {
                             ),
                           ),
                           if (isSelected)
-                            const Icon(
+                            Icon(
                               Icons.check,
                               size: AppIconSizes.standard,
-                              color: AppColors.accent,
+                              color: colors.accent,
                             ),
                         ],
                       ),

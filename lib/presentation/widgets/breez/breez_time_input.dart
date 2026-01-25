@@ -78,8 +78,8 @@ class _BreezTimeInputState extends State<BreezTimeInput> {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
-    final bgColor = widget.backgroundColor ?? AppColors.accent.withValues(alpha: 0.1);
-    final brColor = widget.borderColor ?? AppColors.accent.withValues(alpha: 0.3);
+    final bgColor = widget.backgroundColor ?? colors.accent.withValues(alpha: 0.1);
+    final brColor = widget.borderColor ?? colors.accent.withValues(alpha: 0.3);
 
     final input = MouseRegion(
       cursor: _isEnabled ? SystemMouseCursors.click : SystemMouseCursors.basic,
@@ -100,7 +100,7 @@ class _BreezTimeInputState extends State<BreezTimeInput> {
             borderRadius: BorderRadius.circular(AppRadius.chip),
             border: Border.all(
               color: _isHovered && _isEnabled
-                  ? AppColors.accent.withValues(alpha: 0.5)
+                  ? colors.accent.withValues(alpha: 0.5)
                   : brColor,
             ),
           ),

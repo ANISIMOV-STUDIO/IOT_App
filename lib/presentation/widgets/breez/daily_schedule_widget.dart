@@ -395,14 +395,14 @@ class _PowerToggleButton extends StatelessWidget {
             child: BreezButton(
               onTap: onToggle != null ? () => onToggle!(!enabled) : null,
               backgroundColor: enabled
-                  ? AppColors.accent.withValues(alpha: AppColors.opacityVerySubtle)
+                  ? colors.accent.withValues(alpha: AppColors.opacityVerySubtle)
                   : colors.buttonBg.withValues(alpha: AppColors.opacityMedium),
               hoverColor: enabled
-                  ? AppColors.accent.withValues(alpha: AppColors.opacitySubtle)
+                  ? colors.accent.withValues(alpha: AppColors.opacitySubtle)
                   : colors.buttonBg.withValues(alpha: AppColors.opacityHigh),
               border: Border.all(
                 color: enabled
-                    ? AppColors.accent.withValues(alpha: AppColors.opacityLow)
+                    ? colors.accent.withValues(alpha: AppColors.opacityLow)
                     : colors.border,
               ),
               borderRadius: _ScheduleConstants.borderRadius,
@@ -414,7 +414,7 @@ class _PowerToggleButton extends StatelessWidget {
               child: Icon(
                 enabled ? Icons.event_available : Icons.event_busy,
                 size: AppIconSizes.standard,
-                color: enabled ? AppColors.accent : colors.textMuted,
+                color: enabled ? colors.accent : colors.textMuted,
               ),
             ),
           ),
@@ -512,10 +512,10 @@ class _ScheduleTimeBlock extends StatelessWidget {
 
     return BreezButton(
       onTap: onTimeChanged != null ? () => _showTimePicker(context) : null,
-      backgroundColor: AppColors.accent.withValues(alpha: AppColors.opacityVerySubtle),
-      hoverColor: AppColors.accent.withValues(alpha: AppColors.opacitySubtle),
+      backgroundColor: colors.accent.withValues(alpha: AppColors.opacityVerySubtle),
+      hoverColor: colors.accent.withValues(alpha: AppColors.opacitySubtle),
       border: Border.all(
-        color: AppColors.accent.withValues(alpha: AppColors.opacityLow),
+        color: colors.accent.withValues(alpha: AppColors.opacityLow),
       ),
       borderRadius: _ScheduleConstants.borderRadius,
       padding: EdgeInsets.zero,

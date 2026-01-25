@@ -15,7 +15,6 @@ import 'package:hvac_control/domain/entities/graph_data.dart';
 abstract class _PainterConstants {
   static const double lineWidth = 1.5;
   static const double gridLineWidth = 0.5;
-  static const double gridOpacity = AppColors.opacityVerySubtle;
   static const double highlightOuterRadius = 6;
   static const double highlightInnerRadius = 4;
   static const double highlightCenterRadius = 2;
@@ -35,6 +34,7 @@ class OperationGraphPainter extends CustomPainter {
   OperationGraphPainter({
     required this.data,
     required this.color,
+    required this.gridColor,
     this.hoveredIndex,
     this.highlightIndex,
     this.drawProgress = 1.0,
@@ -46,6 +46,9 @@ class OperationGraphPainter extends CustomPainter {
 
   /// Primary color for single series
   final Color color;
+
+  /// Grid line color (theme-aware)
+  final Color gridColor;
 
   /// Hovered point index
   final int? hoveredIndex;
@@ -124,8 +127,11 @@ class OperationGraphPainter extends CustomPainter {
       return [];
     }
 
-    final maxValue = allPoints.map((e) => e.value).reduce(math.max) + 4;
-    final minValue = math.max(0, allPoints.map((e) => e.value).reduce(math.min) - 4);
+    // Синхронизировано с _YAxis — используем ceil/floor для точного совпадения
+    final rawMax = allPoints.map((e) => e.value).reduce(math.max);
+    final rawMin = allPoints.map((e) => e.value).reduce(math.min);
+    final maxValue = (rawMax + 4).ceilToDouble();
+    final minValue = math.max<double>(0, (rawMin - 4).floorToDouble());
     final range = maxValue - minValue;
 
     // Защита от деления на ноль
@@ -157,7 +163,7 @@ class OperationGraphPainter extends CustomPainter {
     }
 
     final gridPaint = Paint()
-      ..color = AppColors.white.withValues(alpha: _PainterConstants.gridOpacity)
+      ..color = gridColor
       ..strokeWidth = _PainterConstants.gridLineWidth
       ..style = PaintingStyle.stroke;
 
@@ -327,5 +333,6 @@ class OperationGraphPainter extends CustomPainter {
       oldDelegate.data != data ||
       oldDelegate.highlightIndex != highlightIndex ||
       oldDelegate.drawProgress != drawProgress ||
-      oldDelegate.multiSeries != multiSeries;
+      oldDelegate.multiSeries != multiSeries ||
+      oldDelegate.gridColor != gridColor;
 }

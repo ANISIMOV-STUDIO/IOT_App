@@ -46,7 +46,7 @@ class StatItem extends StatelessWidget {
           Icon(
             icon,
             size: AppIconSizes.standard,
-            color: iconColor ?? AppColors.accent,
+            color: iconColor ?? colors.accent,
           ),
           const SizedBox(height: AppSpacing.xxs + 2), // 6px
           Text(

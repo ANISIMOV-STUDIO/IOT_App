@@ -49,10 +49,10 @@ class BreezCheckbox extends StatelessWidget {
               width: AuthConstants.checkboxSize,
               height: AuthConstants.checkboxSize,
               decoration: BoxDecoration(
-                color: value ? AppColors.accent : colors.card,
+                color: value ? colors.accent : colors.card,
                 borderRadius: BorderRadius.circular(_CheckboxConstants.borderRadius),
                 border: Border.all(
-                  color: value ? AppColors.accent : colors.border,
+                  color: value ? colors.accent : colors.border,
                   width: value ? 0 : 1,
                 ),
               ),

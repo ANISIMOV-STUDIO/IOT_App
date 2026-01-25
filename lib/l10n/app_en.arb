@@ -816,6 +816,7 @@
   "statusRunning": "Running",
   "statusStopped": "Stopped",
   "syncedJustNow": "Just now",
+  "syncRefresh": "Refresh data",
   "syncedMinutesAgo": "{count} min ago",
   "@syncedMinutesAgo": {
     "placeholders": {

@@ -21,6 +21,8 @@ class UnitControlCard extends StatelessWidget {
     required this.unit, super.key,
     this.onPowerToggle,
     this.onSettingsTap,
+    this.onSyncTap,
+    this.isSyncing = false,
     this.isPowerLoading = false,
     this.isScheduleEnabled = false,
     this.isScheduleLoading = false,
@@ -30,6 +32,10 @@ class UnitControlCard extends StatelessWidget {
   final UnitState unit;
   final VoidCallback? onPowerToggle;
   final VoidCallback? onSettingsTap;
+  /// Callback для принудительного обновления данных
+  final VoidCallback? onSyncTap;
+  /// Флаг синхронизации (для анимации вращения иконки)
+  final bool isSyncing;
   final bool isPowerLoading;
   final bool isScheduleEnabled;
   final bool isScheduleLoading;
@@ -71,6 +77,8 @@ class UnitControlCard extends StatelessWidget {
       selectedSensors: selectedSensors,
       sensorUnit: unit,
       updatedAt: unit.updatedAt,
+      onSyncTap: onSyncTap,
+      isSyncing: isSyncing,
     );
   }
 }

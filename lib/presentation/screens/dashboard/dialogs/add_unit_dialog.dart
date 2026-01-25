@@ -134,7 +134,7 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
     return BreezSectionHeader(
       icon: Icons.router,
       title: l10n.addUnit,
-      iconColor: AppColors.accent,
+      iconColor: colors.accent,
       trailing: BreezButton(
         onTap: () => Navigator.of(context).pop(),
         enforceMinTouchTarget: false,
@@ -201,10 +201,12 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
       ),
     );
 
-  Widget _buildActions(AppLocalizations l10n) => BreezButton(
+  Widget _buildActions(AppLocalizations l10n) {
+    final colors = BreezColors.of(context);
+    return BreezButton(
       onTap: _submit,
-      backgroundColor: AppColors.accent,
-      hoverColor: AppColors.accentLight,
+      backgroundColor: colors.accent,
+      hoverColor: colors.accentLight,
       showBorder: false,
       borderRadius: AppRadius.nested,
       padding: const EdgeInsets.all(AppSpacing.xs),
@@ -226,4 +228,5 @@ class _AddUnitDialogState extends State<AddUnitDialog> {
         ],
       ),
     );
+  }
 }

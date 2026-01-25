@@ -80,7 +80,7 @@ class UnitTabButton extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     // Цвета: выбранный — акцентный текст на прозрачном фоне с подсветкой
-    final textColor = isSelected ? AppColors.accent : colors.textMuted;
+    final textColor = isSelected ? colors.accent : colors.textMuted;
     // Зелёный если устройство онлайн, серый если офлайн
     final indicatorColor = unit.isOnline ? AppColors.success : colors.textMuted;
 
@@ -89,13 +89,13 @@ class UnitTabButton extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs),
       borderRadius: AppRadius.nested,
       backgroundColor: isSelected
-          ? AppColors.accent.withValues(alpha: 0.15)
+          ? colors.accent.withValues(alpha: 0.15)
           : Colors.transparent,
       hoverColor: isSelected
-          ? AppColors.accent.withValues(alpha: 0.25)
+          ? colors.accent.withValues(alpha: 0.25)
           : colors.buttonBg,
       border: isSelected
-          ? Border.all(color: AppColors.accent.withValues(alpha: 0.3))
+          ? Border.all(color: colors.accent.withValues(alpha: 0.3))
           : null,
       showBorder: false,
       semanticLabel: semanticLabel ?? _buildSemanticLabel(l10n),

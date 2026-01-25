@@ -151,20 +151,20 @@ class BreezListCard extends StatelessWidget {
     return iconMap[type] ?? Icons.info_outline;
   }
 
-  Color _colorForType() {
-    const colorMap = <ListCardType, Color>{
-      ListCardType.info: AppColors.accent,
+  Color _colorForType(BreezColors colors) {
+    final colorMap = <ListCardType, Color>{
+      ListCardType.info: colors.accent,
       ListCardType.warning: AppColors.accentOrange,
       ListCardType.error: AppColors.accentRed,
       ListCardType.success: AppColors.accentGreen,
     };
-    return colorMap[type] ?? AppColors.accent;
+    return colorMap[type] ?? colors.accent;
   }
 
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
-    final typeColor = _colorForType();
+    final typeColor = _colorForType(colors);
 
     // Размеры для компактного режима
     final iconContainerSize = compact
@@ -336,10 +336,10 @@ class BreezSeeMoreButton extends StatelessWidget {
       child: Center(
         child: Text(
           _text,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: AppFontSizes.caption,
             fontWeight: FontWeight.w600,
-            color: AppColors.accent,
+            color: colors.accent,
           ),
         ),
       ),
@@ -364,7 +364,8 @@ class BreezActionChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final accentColor = isDanger ? AppColors.accentRed : AppColors.accent;
+    final colors = BreezColors.of(context);
+    final accentColor = isDanger ? AppColors.accentRed : colors.accent;
 
     return BreezButton(
       onTap: onTap,
@@ -463,6 +464,7 @@ class BreezSectionHeader extends StatelessWidget {
     );
 
   /// Фабрика для заголовка секции уведомлений
+  /// Note: iconColor not specified - will use accent from build method
   factory BreezSectionHeader.notifications({
     required String title,
     required int count,
@@ -471,11 +473,11 @@ class BreezSectionHeader extends StatelessWidget {
       key: key,
       icon: Icons.notifications_outlined,
       title: title,
-      iconColor: AppColors.accent,
       trailing: count > 0 ? _CountBadge(count: count, color: AppColors.accentRed) : null,
     );
 
   /// Фабрика для заголовка секции расписания
+  /// Note: iconColor not specified - will use accent from build method
   factory BreezSectionHeader.schedule({
     required String title,
     Key? key,
@@ -484,11 +486,11 @@ class BreezSectionHeader extends StatelessWidget {
       key: key,
       icon: Icons.schedule_outlined,
       title: title,
-      iconColor: AppColors.accent,
       trailing: trailing,
     );
 
   /// Фабрика для заголовка экрана с кнопкой назад
+  /// Note: iconColor not specified - will use accent from build method
   factory BreezSectionHeader.screen({
     required String title,
     required IconData icon,
@@ -499,7 +501,6 @@ class BreezSectionHeader extends StatelessWidget {
       key: key,
       icon: icon,
       title: title,
-      iconColor: AppColors.accent,
       leading: backButton,
       trailing: trailing,
       large: true,
@@ -508,6 +509,7 @@ class BreezSectionHeader extends StatelessWidget {
   /// Фабрика для заголовка главной вкладки (без кнопки назад)
   ///
   /// Используется для Analytics, Devices, Profile и других главных табов.
+  /// Note: iconColor not specified - will use accent from build method
   factory BreezSectionHeader.pageTitle({
     required String title,
     required IconData icon,
@@ -517,12 +519,12 @@ class BreezSectionHeader extends StatelessWidget {
       key: key,
       icon: icon,
       title: title,
-      iconColor: AppColors.accent,
       trailing: trailing,
       large: true,
     );
 
   /// Фабрика для заголовка диалога с кнопкой закрытия
+  /// Note: iconColor defaults to null as factory cannot access context - will use accent from build
   factory BreezSectionHeader.dialog({
     required String title,
     required IconData icon,
@@ -534,7 +536,7 @@ class BreezSectionHeader extends StatelessWidget {
       key: key,
       icon: icon,
       title: title,
-      iconColor: iconColor ?? AppColors.accent,
+      iconColor: iconColor, // Will use accent from build method if null
       trailing: _DialogCloseButton(onClose: onClose, label: closeLabel),
     );
 
@@ -577,7 +579,7 @@ class BreezSectionHeader extends StatelessWidget {
     }
 
     // Вариант с иконкой (стандартный)
-    final color = iconColor ?? AppColors.accent;
+    final color = iconColor ?? colors.accent;
     final fontSize = large ? AppFontSizes.h2 : AppFontSizes.h4;
     const iconSize = AppIconSizes.standard;
 
@@ -838,11 +840,11 @@ class BreezEmptyState extends StatelessWidget {
     );
 
   /// Фабрика для пустого расписания
+  /// Note: iconColor not specified - will use accent from build method
   factory BreezEmptyState.noSchedule(AppLocalizations l10n, {bool compact = false}) => BreezEmptyState(
       icon: Icons.schedule_outlined,
       title: l10n.noSchedule,
       subtitle: l10n.addFirstEntry,
-      iconColor: AppColors.accent,
       compact: compact,
     );
   final IconData icon;
@@ -854,7 +856,7 @@ class BreezEmptyState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
-    final color = iconColor ?? AppColors.accentGreen;
+    final color = iconColor ?? colors.accent;
 
     return Semantics(
       label: '$title. $subtitle',

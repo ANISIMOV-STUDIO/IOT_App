@@ -472,15 +472,18 @@ class EmptyState extends StatelessWidget {
   final bool showCard;
 
   @override
-  Widget build(BuildContext context) => ErrorWidget(
+  Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+    return ErrorWidget(
       icon: icon,
-      iconColor: iconColor ?? AppColors.accent,
+      iconColor: iconColor ?? colors.accent,
       title: title,
       message: message,
       actionLabel: actionLabel,
       onAction: onAction,
       showCard: showCard,
     );
+  }
 }
 
 // OfflineBanner удалён - используется версия из common/offline_banner.dart

@@ -69,7 +69,7 @@ class BreezSettingsTile extends StatelessWidget {
       tooltip: tooltip,
       child: Row(
         children: [
-          Icon(icon, size: AppIconSizes.standard, color: AppColors.accent),
+          Icon(icon, size: AppIconSizes.standard, color: colors.accent),
           const SizedBox(width: AppSpacing.sm),
           Expanded(
             child: Text(
@@ -131,7 +131,7 @@ class BreezSwitchTile extends StatelessWidget {
       isButton: false, // This is a toggle, not a button
       child: Row(
         children: [
-          Icon(icon, size: AppIconSizes.standard, color: AppColors.accent),
+          Icon(icon, size: AppIconSizes.standard, color: colors.accent),
           const SizedBox(width: AppSpacing.sm),
           Expanded(
             child: Column(
@@ -163,10 +163,10 @@ class BreezSwitchTile extends StatelessWidget {
               child: Switch(
                 value: value,
                 onChanged: onChanged,
-                activeTrackColor: AppColors.accent.withValues(
+                activeTrackColor: colors.accent.withValues(
                   alpha: _SettingsTileConstants.switchActiveTrackAlpha,
                 ),
-                activeThumbColor: AppColors.accent,
+                activeThumbColor: colors.accent,
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
             ),

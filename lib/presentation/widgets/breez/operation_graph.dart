@@ -426,7 +426,7 @@ class _GraphHeader extends StatelessWidget {
               GraphStatBadge(
                 label: l10n.minShort,
                 value: '${minValue.toStringAsFixed(1)}$metricUnit',
-                color: AppColors.accent,
+                color: colors.accent,
               ),
               const SizedBox(width: AppSpacing.xs),
               GraphStatBadge(
@@ -535,7 +535,8 @@ class _GraphArea extends StatelessWidget {
                             ),
                             painter: OperationGraphPainter(
                               data: data,
-                              color: AppColors.accent,
+                              color: colors.accent,
+                              gridColor: colors.textMuted.withValues(alpha: AppColors.opacityLow),
                               hoveredIndex: hoveredIndex,
                               highlightIndex: highlightIndex,
                               drawProgress: drawProgress,
@@ -594,25 +595,59 @@ class _YAxis extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final allPoints = _allDataPoints;
-    final maxValue = allPoints.isEmpty
-        ? 30
-        : allPoints.map((e) => e.value).reduce(math.max).ceil();
-    final minValue = allPoints.isEmpty
-        ? 0
-        : allPoints.map((e) => e.value).reduce(math.min).floor();
 
+    // Синхронизировано с OperationGraphPainter._calculatePointsForData
+    // Painter использует +4/-4 для padding
+    final rawMax = allPoints.isEmpty
+        ? 30.0
+        : allPoints.map((e) => e.value).reduce(math.max);
+    final rawMin = allPoints.isEmpty
+        ? 0.0
+        : allPoints.map((e) => e.value).reduce(math.min);
+
+    final maxValue = (rawMax + 4).ceil();
+    final minValue = math.max(0, (rawMin - 4).floor());
+    final midValue = ((maxValue + minValue) / 2).round();
+
+    // Учитываем высоту X-оси, чтобы Y-ось совпадала с canvas графика
+    // (SizedBox.xs между графиком и X-осью не влияет на размер canvas)
+    const bottomPadding = _GraphConstants.xAxisHeight;
+
+    // Используем Stack для точного позиционирования меток по центру линий
     return SizedBox(
       width: _GraphConstants.yAxisWidth,
       child: Padding(
-        padding: const EdgeInsets.only(right: AppSpacing.xxs),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            _buildLabel('${maxValue + 2}', colors),
-            _buildLabel('${((maxValue + minValue) / 2).round()}', colors),
-            _buildLabel('${minValue - 2 < 0 ? 0 : minValue - 2}', colors),
-          ],
+        padding: const EdgeInsets.only(right: AppSpacing.xxs, bottom: bottomPadding),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final height = constraints.maxHeight;
+            // Половина высоты текста для центрирования
+            const halfText = _GraphConstants.axisFontSize / 2;
+
+            return Stack(
+              clipBehavior: Clip.none,
+              children: [
+                // Верхняя метка (maxValue) - центр на y=0
+                Positioned(
+                  top: -halfText,
+                  right: 0,
+                  child: _buildLabel('$maxValue', colors),
+                ),
+                // Средняя метка (midValue) - центр на y=height/2
+                Positioned(
+                  top: height / 2 - halfText,
+                  right: 0,
+                  child: _buildLabel('$midValue', colors),
+                ),
+                // Нижняя метка (minValue) - центр на y=height
+                Positioned(
+                  top: height - halfText,
+                  right: 0,
+                  child: _buildLabel('$minValue', colors),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );

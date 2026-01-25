@@ -26,6 +26,8 @@ class MainTempCardHeader extends StatelessWidget {
     this.onScheduleToggle,
     this.onSettingsTap,
     this.onAlarmsTap,
+    this.onSyncTap,
+    this.isSyncing = false,
     this.isOnline = true,
     this.updatedAt,
   });
@@ -40,6 +42,10 @@ class MainTempCardHeader extends StatelessWidget {
   final VoidCallback? onScheduleToggle;
   final VoidCallback? onSettingsTap;
   final VoidCallback? onAlarmsTap;
+  /// Callback для принудительного обновления данных
+  final VoidCallback? onSyncTap;
+  /// Флаг синхронизации (для анимации вращения иконки)
+  final bool isSyncing;
   final bool isOnline;
   /// Время последней синхронизации с сервером
   final DateTime? updatedAt;
@@ -53,10 +59,12 @@ class MainTempCardHeader extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Sync time
+        // Sync time (кликабельная кнопка для обновления)
         _SyncTimeSection(
           colors: colors,
           updatedAt: updatedAt,
+          onTap: onSyncTap,
+          isSyncing: isSyncing,
         ),
         // Alarm badge (if any)
         if (alarmCount > 0)
@@ -87,51 +95,110 @@ class MainTempCardHeader extends StatelessWidget {
 }
 
 /// Sync time section - показывает время последней синхронизации
-class _SyncTimeSection extends StatelessWidget {
+/// При нажатии запрашивает принудительное обновление данных
+class _SyncTimeSection extends StatefulWidget {
 
   const _SyncTimeSection({
     required this.colors,
     this.updatedAt,
+    this.onTap,
+    this.isSyncing = false,
   });
   final BreezColors colors;
   final DateTime? updatedAt;
+  final VoidCallback? onTap;
+  /// Флаг синхронизации (для анимации вращения иконки)
+  final bool isSyncing;
+
+  @override
+  State<_SyncTimeSection> createState() => _SyncTimeSectionState();
+}
+
+class _SyncTimeSectionState extends State<_SyncTimeSection>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    );
+    if (widget.isSyncing) {
+      _animationController.repeat();
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant _SyncTimeSection oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.isSyncing && !oldWidget.isSyncing) {
+      _animationController.repeat();
+    } else if (!widget.isSyncing && oldWidget.isSyncing) {
+      _animationController
+        ..stop()
+        ..reset();
+    }
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    if (updatedAt == null) {
+    if (widget.updatedAt == null) {
       return const SizedBox.shrink();
     }
 
     final l10n = AppLocalizations.of(context)!;
-    final formattedDateTime = _formatRelativeDateTime(updatedAt!, l10n);
+    final formattedDateTime = _formatRelativeDateTime(widget.updatedAt!, l10n);
 
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.sm,
-        vertical: AppSpacing.xs,
-      ),
-      decoration: BoxDecoration(
-        color: colors.buttonBg.withValues(alpha: AppColors.opacityLow),
-        borderRadius: BorderRadius.circular(AppRadius.chip),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            Icons.sync,
-            size: AppIconSizes.standard,
-            color: colors.textMuted,
-          ),
-          const SizedBox(width: AppSpacing.xxs),
-          Text(
-            formattedDateTime,
-            style: TextStyle(
-              fontSize: AppFontSizes.captionSmall,
-              fontWeight: FontWeight.w500,
-              color: colors.textMuted,
+    return Semantics(
+      button: true,
+      label: l10n.syncRefresh,
+      child: MouseRegion(
+        cursor: widget.onTap != null ? SystemMouseCursors.click : SystemMouseCursors.basic,
+        child: GestureDetector(
+          onTap: widget.isSyncing ? null : widget.onTap,
+          child: Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.sm,
+              vertical: AppSpacing.xs,
+            ),
+            decoration: BoxDecoration(
+              color: widget.colors.buttonBg.withValues(alpha: AppColors.opacityLow),
+              borderRadius: BorderRadius.circular(AppRadius.chip),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                RotationTransition(
+                  turns: _animationController,
+                  child: Icon(
+                    Icons.sync,
+                    size: AppIconSizes.standard,
+                    color: widget.isSyncing
+                        ? widget.colors.accent
+                        : widget.colors.textMuted,
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.xxs),
+                Text(
+                  formattedDateTime,
+                  style: TextStyle(
+                    fontSize: AppFontSizes.captionSmall,
+                    fontWeight: FontWeight.w500,
+                    color: widget.colors.textMuted,
+                  ),
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }

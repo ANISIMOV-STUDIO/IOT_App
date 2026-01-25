@@ -316,10 +316,10 @@ class _LoopingWheelItem extends StatelessWidget {
           alignment: Alignment.center,
           decoration: selected
               ? BoxDecoration(
-                  color: AppColors.accent.withValues(alpha: 0.1),
+                  color: colors.accent.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(AppRadius.chip),
                   border: Border.all(
-                    color: AppColors.accent.withValues(alpha: 0.3),
+                    color: colors.accent.withValues(alpha: 0.3),
                   ),
                 )
               : null,
@@ -330,7 +330,7 @@ class _LoopingWheelItem extends StatelessWidget {
                   ? _TimePickerConstants.selectedFontSize
                   : _TimePickerConstants.unselectedFontSize,
               fontWeight: selected ? FontWeight.w700 : FontWeight.w400,
-              color: selected ? AppColors.accent : colors.textMuted,
+              color: selected ? colors.accent : colors.textMuted,
             ),
           ),
         );
@@ -732,10 +732,10 @@ class _LoopingDateWheelItem extends StatelessWidget {
           alignment: Alignment.center,
           decoration: selected
               ? BoxDecoration(
-                  color: AppColors.accent.withValues(alpha: 0.1),
+                  color: colors.accent.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(AppRadius.chip),
                   border: Border.all(
-                    color: AppColors.accent.withValues(alpha: 0.3),
+                    color: colors.accent.withValues(alpha: 0.3),
                   ),
                 )
               : null,
@@ -746,7 +746,7 @@ class _LoopingDateWheelItem extends StatelessWidget {
                   ? _TimePickerConstants.selectedFontSize - 6
                   : _TimePickerConstants.unselectedFontSize - 4,
               fontWeight: selected ? FontWeight.w700 : FontWeight.w400,
-              color: selected ? AppColors.accent : colors.textMuted,
+              color: selected ? colors.accent : colors.textMuted,
             ),
           ),
         );
@@ -782,7 +782,7 @@ class _DialogButton extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
           decoration: BoxDecoration(
-            color: isPrimary ? AppColors.accent : colors.buttonBg.withValues(alpha: 0.5),
+            color: isPrimary ? colors.accent : colors.buttonBg.withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(AppRadius.button),
           ),
           child: Center(

@@ -65,7 +65,7 @@ class ScheduleScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showAddDialog(context),
-        backgroundColor: AppColors.accent,
+        backgroundColor: colors.accent,
         child: const Icon(Icons.add, color: AppColors.white),
       ),
     );
@@ -103,7 +103,7 @@ class ScheduleScreen extends StatelessWidget {
       actions: [
         BreezIconButton(
           icon: Icons.add,
-          iconColor: AppColors.accent,
+          iconColor: colors.accent,
           onTap: () => _showAddDialog(context),
           tooltip: l10n.tooltipAdd,
           showBorder: false,

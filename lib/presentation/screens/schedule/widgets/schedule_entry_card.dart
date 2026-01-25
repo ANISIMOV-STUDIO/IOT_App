@@ -148,7 +148,7 @@ class _DayBadge extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: isActive
-            ? AppColors.accent.withValues(alpha: 0.15)
+            ? colors.accent.withValues(alpha: 0.15)
             : colors.buttonBg,
         borderRadius: BorderRadius.circular(AppRadius.button),
       ),
@@ -157,7 +157,7 @@ class _DayBadge extends StatelessWidget {
         style: TextStyle(
           fontSize: _ScheduleEntryCardConstants.fontSizeMedium,
           fontWeight: FontWeight.w600,
-          color: isActive ? AppColors.accent : colors.text,
+          color: isActive ? colors.accent : colors.text,
         ),
       ),
     );
@@ -203,10 +203,12 @@ class _ActiveSwitch extends StatelessWidget {
   final ValueChanged<bool> onToggle;
 
   @override
-  Widget build(BuildContext context) => Switch(
+  Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+    return Switch(
       value: isActive,
       onChanged: onToggle,
-      activeTrackColor: AppColors.accent,
+      activeTrackColor: colors.accent,
       thumbColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.selected)) {
           return AppColors.white;
@@ -214,6 +216,7 @@ class _ActiveSwitch extends StatelessWidget {
         return null;
       }),
     );
+  }
 }
 
 /// Mode icon container
@@ -223,17 +226,20 @@ class _ModeIcon extends StatelessWidget {
   final IconData icon;
 
   @override
-  Widget build(BuildContext context) => Container(
+  Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+    return Container(
       width: _ScheduleEntryCardConstants.modeIconContainerSize,
       height: _ScheduleEntryCardConstants.modeIconContainerSize,
       decoration: BoxDecoration(
-        color: AppColors.accent.withValues(alpha: 0.1),
+        color: colors.accent.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(AppRadius.card),
       ),
       child: Icon(
         icon,
         size: _ScheduleEntryCardConstants.iconSizeMedium,
-        color: AppColors.accent,
+        color: colors.accent,
       ),
     );
+  }
 }

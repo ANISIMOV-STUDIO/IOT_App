@@ -167,7 +167,7 @@ class _BreezTextFieldState extends State<BreezTextField> {
                   color: _hasError
                       ? AppColors.accentRed
                       : _isFocused
-                          ? AppColors.accent
+                          ? colors.accent
                           : colors.border,
                 ),
               ),

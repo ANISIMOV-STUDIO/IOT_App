@@ -146,6 +146,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       activeAlarms: data.climateState.activeAlarms,
       onAlarmsReset: () => _handleAlarmsReset(data.currentUnit!.id),
       isPendingOperatingMode: data.climateState.isPendingOperatingMode,
+      onSyncTap: _handleSyncTap,
+      isSyncing: data.climateState.isSyncing,
     );
   }
 
@@ -186,6 +188,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
             onAlarmsReset: () => _handleAlarmsReset(unit.id),
             isOnline: unit.isOnline,
             isPendingOperatingMode: data.climateState.isPendingOperatingMode,
+            onSyncTap: _handleSyncTap,
+            isSyncing: data.climateState.isSyncing,
           ),
         ),
       ],
@@ -208,6 +212,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   void _handleScheduleToggle(ClimateControlState climateState) {
     context.read<ClimateBloc>().add(ClimateScheduleToggled(!climateState.isScheduleEnabled));
+  }
+
+  void _handleSyncTap() {
+    context.read<ClimateBloc>().add(const ClimateRefreshRequested());
   }
 
   Future<void> _masterPowerOff() async {

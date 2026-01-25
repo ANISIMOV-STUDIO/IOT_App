@@ -25,6 +25,22 @@ abstract class AppColors {
   static const Color accentGlow = Color(0x4D00D9C4); // 30% opacity
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // LIGHT THEME ACCENT - Более тёмный для контраста на белом фоне
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// Primary accent для светлой темы - тёмный teal (контрастирует с белым)
+  static const Color lightAccent = Color(0xFF00897B);
+
+  /// Light accent - hover
+  static const Color lightAccentLight = Color(0xFF26A69A);
+
+  /// Light accent - pressed
+  static const Color lightAccentDark = Color(0xFF00695C);
+
+  /// Light accent glow
+  static const Color lightAccentGlow = Color(0x4D00897B);
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // DARK THEME - Premium Dark
   // ═══════════════════════════════════════════════════════════════════════════
 
@@ -56,35 +72,35 @@ abstract class AppColors {
   static const Color darkButtonHover = Color(0xFF232F3E);
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // LIGHT THEME - Clean Premium
+  // LIGHT THEME - Soft Premium (менее яркий, больше контраста)
   // ═══════════════════════════════════════════════════════════════════════════
 
-  /// Основной фон - тёплый белый
-  static const Color lightBg = Color(0xFFF8FAFB);
+  /// Основной фон - мягкий серо-голубой (не ослепительно белый)
+  static const Color lightBg = Color(0xFFF1F5F9);
 
-  /// Карточки - чистый белый
-  static const Color lightCard = Color(0xFFFFFFFF);
+  /// Карточки - тёплый белый с лёгким оттенком
+  static const Color lightCard = Color(0xFFFAFCFF);
 
-  /// Карточки - hover
-  static const Color lightCardLight = Color(0xFFF1F5F8);
+  /// Карточки - hover (чуть темнее)
+  static const Color lightCardLight = Color(0xFFEDF2F7);
 
-  /// Границы - более заметные
-  static const Color lightBorder = Color(0xFFCBD5E1);
+  /// Границы - заметные, но не резкие
+  static const Color lightBorder = Color(0xFFD1D9E6);
 
   /// Границы акцентные - для hover состояний
-  static const Color lightBorderAccent = Color(0xFF94A3B8);
+  static const Color lightBorderAccent = Color(0xFFB0BEC5);
 
-  /// Основной текст
-  static const Color lightText = Color(0xFF0F172A);
+  /// Основной текст - тёмно-серый (не чёрный)
+  static const Color lightText = Color(0xFF1E293B);
 
-  /// Вторичный текст
+  /// Вторичный текст - приглушённый
   static const Color lightTextMuted = Color(0xFF64748B);
 
-  /// Фон кнопок
-  static const Color lightButtonBg = Color(0xFFE2E8F0);
+  /// Фон кнопок - мягкий серый
+  static const Color lightButtonBg = Color(0xFFE8EDF2);
 
   /// Hover кнопок
-  static const Color lightButtonHover = Color(0xFFCBD5E1);
+  static const Color lightButtonHover = Color(0xFFDDE4EC);
 
   // ═══════════════════════════════════════════════════════════════════════════
   // STATUS COLORS - Насыщенные
@@ -210,8 +226,8 @@ abstract class AppColors {
 
   static const Color darkShimmerBase = Color(0xFF1A232D);
   static const Color darkShimmerHighlight = Color(0xFF232F3E);
-  static const Color lightShimmerBase = Color(0xFFE2E8F0);
-  static const Color lightShimmerHighlight = Color(0xFFF1F5F9);
+  static const Color lightShimmerBase = Color(0xFFDDE4EC);
+  static const Color lightShimmerHighlight = Color(0xFFEDF2F7);
 
   // ═══════════════════════════════════════════════════════════════════════════
   // CARD GRADIENTS

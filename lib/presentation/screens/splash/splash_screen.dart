@@ -11,16 +11,18 @@ class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
 
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(BuildContext context) {
+    final colors = BreezColors.of(context);
+    return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Логотип приложения
-            const Icon(
+            Icon(
               Icons.air,
               size: AppIconSizes.standard,
-              color: AppColors.accent,
+              color: colors.accent,
             ),
             const SizedBox(height: AppSpacing.lgx),
             Text(
@@ -35,4 +37,5 @@ class SplashScreen extends StatelessWidget {
         ),
       ),
     );
+  }
 }

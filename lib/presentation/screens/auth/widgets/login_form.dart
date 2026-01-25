@@ -57,6 +57,7 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final validators = Validators.of(context);
+    final colors = BreezColors.of(context);
 
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
@@ -137,8 +138,8 @@ class _LoginFormState extends State<LoginForm> {
                     return BreezButton(
                       onTap: isLoading ? null : _handleLogin,
                       isLoading: isLoading,
-                      backgroundColor: AppColors.accent,
-                      hoverColor: AppColors.accentLight,
+                      backgroundColor: colors.accent,
+                      hoverColor: colors.accentLight,
                       showBorder: false,
                       borderRadius: AppRadius.nested,
                       padding: const EdgeInsets.all(AppSpacing.xs),

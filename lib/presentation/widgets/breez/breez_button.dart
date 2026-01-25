@@ -161,7 +161,7 @@ class _BreezButtonState extends State<BreezButton>
     final glowShadows = widget.enableGlow && _isHovered
         ? [
             BoxShadow(
-              color: (widget.backgroundColor ?? AppColors.accent)
+              color: (widget.backgroundColor ?? colors.accent)
                   .withValues(alpha: 0.4),
               blurRadius: 16,
               spreadRadius: -2,
