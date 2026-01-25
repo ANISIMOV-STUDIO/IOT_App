@@ -679,7 +679,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String scheduleDayNightTemp(int day, int night) {
-    return 'День: $day° / Ночь: $night°';
+    return 'День: $day°C / Ночь: $night°C';
   }
 
   @override
@@ -925,14 +925,14 @@ class AppLocalizationsRu extends AppLocalizations {
   String get indoorTemp => 'Температура воздуха в помещении';
 
   @override
-  String get supplyTempAfterRecup =>
+  String get recuperatorTemperature =>
       'Температура приточного воздуха после рекуператора';
 
   @override
   String get supplyTemp => 'Температура приточного воздуха';
 
   @override
-  String get co2Level => 'Концентрация CO2';
+  String get coIndicator => 'Индикатор CO';
 
   @override
   String get recuperatorEfficiency =>
@@ -1039,7 +1039,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get indoorTempDesc => 'Температура воздуха внутри помещения';
 
   @override
-  String get supplyTempAfterRecupDesc =>
+  String get recuperatorTemperatureDesc =>
       'Температура приточного воздуха после теплообмена в рекуператоре';
 
   @override
@@ -1047,8 +1047,7 @@ class AppLocalizationsRu extends AppLocalizations {
       'Температура воздуха на выходе из вентиляционной установки';
 
   @override
-  String get co2LevelDesc =>
-      'Уровень углекислого газа в помещении. Норма: до 1000 ppm';
+  String get coIndicatorDesc => 'Индикатор угарного газа (CO)';
 
   @override
   String get recuperatorEfficiencyDesc =>

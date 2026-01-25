@@ -13,8 +13,6 @@ import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
 
 /// Константы для BreezSettingsTile
 abstract class _SettingsTileConstants {
-  static const double titleFontSize = 14;
-  static const double subtitleFontSize = 12;
   static const double tileVerticalPadding = 10;
   static const double switchTileVerticalPadding = 6;
   static const double switchActiveTrackAlpha = 0.5;
@@ -75,7 +73,7 @@ class BreezSettingsTile extends StatelessWidget {
             child: Text(
               title,
               style: TextStyle(
-                fontSize: _SettingsTileConstants.titleFontSize,
+                fontSize: AppFontSizes.body,
                 fontWeight: FontWeight.w500,
                 color: colors.text,
               ),
@@ -140,7 +138,7 @@ class BreezSwitchTile extends StatelessWidget {
                 Text(
                   title,
                   style: TextStyle(
-                    fontSize: _SettingsTileConstants.titleFontSize,
+                    fontSize: AppFontSizes.body,
                     fontWeight: FontWeight.w500,
                     color: colors.text,
                   ),
@@ -149,7 +147,7 @@ class BreezSwitchTile extends StatelessWidget {
                   Text(
                     subtitle!,
                     style: TextStyle(
-                      fontSize: _SettingsTileConstants.subtitleFontSize,
+                      fontSize: AppFontSizes.caption,
                       color: colors.textMuted,
                     ),
                   ),

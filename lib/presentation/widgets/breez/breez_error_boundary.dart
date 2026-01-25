@@ -12,17 +12,6 @@ import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
 
 // =============================================================================
-// CONSTANTS
-// =============================================================================
-
-/// Константы для ErrorBoundary
-abstract class _ErrorBoundaryConstants {
-  static const double titleFontSize = 16;
-  static const double messageFontSize = 13;
-  static const double buttonFontSize = 13;
-}
-
-// =============================================================================
 // ERROR BOUNDARY WIDGET
 // =============================================================================
 
@@ -194,7 +183,7 @@ class _DefaultErrorWidget extends StatelessWidget {
           Text(
             'Что-то пошло не так',
             style: TextStyle(
-              fontSize: _ErrorBoundaryConstants.titleFontSize,
+              fontSize: AppFontSizes.bodyLarge,
               fontWeight: FontWeight.w600,
               color: colors.text,
             ),
@@ -207,7 +196,7 @@ class _DefaultErrorWidget extends StatelessWidget {
             Text(
               error!.exceptionAsString(),
               style: TextStyle(
-                fontSize: _ErrorBoundaryConstants.messageFontSize,
+                fontSize: AppFontSizes.bodySmall,
                 color: colors.textMuted,
               ),
               textAlign: TextAlign.center,
@@ -240,7 +229,7 @@ class _DefaultErrorWidget extends StatelessWidget {
                   Text(
                     'Повторить',
                     style: TextStyle(
-                      fontSize: _ErrorBoundaryConstants.buttonFontSize,
+                      fontSize: AppFontSizes.bodySmall,
                       fontWeight: FontWeight.w600,
                       color: AppColors.critical,
                     ),

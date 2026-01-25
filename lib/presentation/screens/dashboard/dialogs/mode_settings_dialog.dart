@@ -38,7 +38,6 @@ abstract class _DialogConstants {
   static const double maxWidth = 340;
   static const double headerIconContainerSize = 56;
   static const double closeButtonPadding = 6;
-  static const double titleFontSize = 16;
   static const double selectedBadgeSize = 18;
   static const double selectedCheckSize = 12;
 }
@@ -292,7 +291,7 @@ class _ModeHeader extends StatelessWidget {
               Text(
                 modeName,
                 style: TextStyle(
-                  fontSize: _DialogConstants.titleFontSize,
+                  fontSize: AppFontSizes.bodyLarge,
                   fontWeight: FontWeight.w600,
                   color: colors.text,
                 ),

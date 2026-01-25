@@ -16,7 +16,6 @@ import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
 abstract class _UnitTabConstants {
   static const double containerHeight = 48;
   static const double statusIndicatorSize = 8;
-  static const double nameFontSize = 13;
   static const double textLineHeight = 1;
 }
 
@@ -119,7 +118,7 @@ class UnitTabButton extends StatelessWidget {
           Text(
             unit.name,
             style: TextStyle(
-              fontSize: _UnitTabConstants.nameFontSize,
+              fontSize: AppFontSizes.bodySmall,
               fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
               height: _UnitTabConstants.textLineHeight,
               color: textColor,

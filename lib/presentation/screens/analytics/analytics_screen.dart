@@ -23,7 +23,6 @@ import 'package:hvac_control/presentation/widgets/loading/skeleton.dart';
 
 abstract class _AnalyticsConstants {
   static const int maxSelectedSensors = 3;
-  static const double indicatorFontSize = 13;
 }
 
 // =============================================================================
@@ -177,25 +176,24 @@ class AnalyticsScreen extends StatelessWidget {
       id: fullState?.id ?? '',
       name: fullState?.name ?? 'Device',
       power: fullState?.power ?? climate?.isOn ?? false,
-      temp: climate?.currentTemperature.toInt() ?? 20,
+      temp: climate?.currentTemperature.toInt(),
       heatingTemp: modeSettings?.heatingTemperature,
       coolingTemp: modeSettings?.coolingTemperature,
       supplyFan: modeSettings?.supplyFan,
       exhaustFan: modeSettings?.exhaustFan,
       mode: currentMode,
-      humidity: climate?.humidity.toInt() ?? 45,
-      outsideTemp: fullState?.outdoorTemperature ?? 0.0,
-      filterPercent: fullState?.kpdRecuperator ?? 0,
-      indoorTemp:
-          fullState?.indoorTemperature ?? climate?.currentTemperature ?? 22.0,
-      supplyTemp: fullState?.supplyTemperature ?? 20.0,
-      supplyTempAfterRecup: fullState?.supplyTempAfterRecup ?? 18.0,
-      co2Level: fullState?.co2Level ?? 0,
-      recuperatorEfficiency: fullState?.kpdRecuperator ?? 0,
+      humidity: climate?.humidity.toInt(),
+      outsideTemp: fullState?.outdoorTemperature,
+      filterPercent: fullState?.kpdRecuperator,
+      indoorTemp: fullState?.indoorTemperature,
+      supplyTemp: fullState?.supplyTemperature,
+      recuperatorTemperature: fullState?.recuperatorTemperature,
+      coIndicator: fullState?.coIndicator,
+      recuperatorEfficiency: fullState?.kpdRecuperator,
       freeCooling: fullState?.freeCooling ?? false,
-      heaterPower: fullState?.heaterPower ?? 0,
-      coolerStatus: fullState?.coolerStatus ?? 'Н/Д',
-      ductPressure: fullState?.ductPressure ?? 0,
+      heaterPower: fullState?.heaterPower,
+      coolerStatus: fullState?.coolerStatus,
+      ductPressure: fullState?.ductPressure,
       isOnline: fullState?.isOnline ?? true,
     );
   }
@@ -211,7 +209,7 @@ class AnalyticsScreen extends StatelessWidget {
       SensorData(
         key: 'outside_temp',
         icon: Icons.thermostat_outlined,
-        value: '${unit.outsideTemp.toStringAsFixed(1)}°',
+        value: unit.outsideTemp != null ? '${unit.outsideTemp!.toStringAsFixed(1)}°C' : '—',
         label: l10n.outdoor,
         description: l10n.outdoorTempDesc,
         color: colors.accent,
@@ -219,7 +217,7 @@ class AnalyticsScreen extends StatelessWidget {
       SensorData(
         key: 'indoor_temp',
         icon: Icons.home_outlined,
-        value: '${unit.indoorTemp.toStringAsFixed(1)}°',
+        value: unit.indoorTemp != null ? '${unit.indoorTemp!.toStringAsFixed(1)}°C' : '—',
         label: l10n.indoor,
         description: l10n.indoorTempDesc,
         color: AppColors.accentGreen,
@@ -227,7 +225,7 @@ class AnalyticsScreen extends StatelessWidget {
       SensorData(
         key: 'supply_temp',
         icon: Icons.air,
-        value: '${unit.supplyTemp.toStringAsFixed(1)}°',
+        value: unit.supplyTemp != null ? '${unit.supplyTemp!.toStringAsFixed(1)}°C' : '—',
         label: l10n.supply,
         description: l10n.supplyTempDesc,
         color: AppColors.accentOrange,
@@ -235,31 +233,31 @@ class AnalyticsScreen extends StatelessWidget {
       SensorData(
         key: 'supply_temp_after_recup',
         icon: Icons.air,
-        value: '${unit.supplyTempAfterRecup.toStringAsFixed(1)}°',
+        value: unit.recuperatorTemperature != null ? '${unit.recuperatorTemperature!.toStringAsFixed(1)}°C' : '—',
         label: l10n.afterRecup,
-        description: l10n.supplyTempAfterRecupDesc,
+        description: l10n.recuperatorTemperatureDesc,
         color: AppColors.accentGreen,
       ),
       SensorData(
         key: 'humidity',
         icon: Icons.water_drop_outlined,
-        value: '${unit.humidity}%',
+        value: unit.humidity != null ? '${unit.humidity}%' : '—',
         label: l10n.humidity,
         description: l10n.humidityDesc,
         color: colors.accent,
       ),
       SensorData(
-        key: 'co2_level',
+        key: 'co_indicator',
         icon: Icons.cloud_outlined,
-        value: '${unit.co2Level}',
-        label: 'CO₂',
-        description: l10n.co2LevelDesc,
+        value: unit.coIndicator != null ? '${unit.coIndicator}' : '—',
+        label: 'CO',
+        description: l10n.coIndicatorDesc,
         color: AppColors.accentGreen,
       ),
       SensorData(
         key: 'recuperator_eff',
         icon: Icons.recycling,
-        value: '${unit.recuperatorEfficiency}%',
+        value: unit.recuperatorEfficiency != null ? '${unit.recuperatorEfficiency}%' : '—',
         label: l10n.efficiency,
         description: l10n.recuperatorEfficiencyDesc,
         color: colors.accent,
@@ -267,7 +265,7 @@ class AnalyticsScreen extends StatelessWidget {
       SensorData(
         key: 'heater_perf',
         icon: Icons.local_fire_department_outlined,
-        value: '${unit.heaterPower}%',
+        value: unit.heaterPower != null ? '${unit.heaterPower}%' : '—',
         label: l10n.heater,
         description: l10n.heaterPerformanceDesc,
         color: AppColors.accentOrange,
@@ -275,7 +273,7 @@ class AnalyticsScreen extends StatelessWidget {
       SensorData(
         key: 'cooler_status',
         icon: Icons.ac_unit,
-        value: unit.coolerStatus,
+        value: unit.coolerStatus ?? '—',
         label: l10n.cooler,
         description: l10n.coolerStatusDesc,
         color: colors.accent,
@@ -283,7 +281,7 @@ class AnalyticsScreen extends StatelessWidget {
       SensorData(
         key: 'duct_pressure',
         icon: Icons.speed,
-        value: '${unit.ductPressure}',
+        value: unit.ductPressure != null ? '${unit.ductPressure}' : '—',
         label: l10n.pressure,
         description: l10n.ductPressureDesc,
         color: colors.textMuted,
@@ -301,7 +299,7 @@ class AnalyticsScreen extends StatelessWidget {
       SensorData(
         key: 'filter_percent',
         icon: Icons.filter_alt_outlined,
-        value: '${unit.filterPercent}%',
+        value: unit.filterPercent != null ? '${unit.filterPercent}%' : '—',
         label: l10n.filter,
         description: l10n.filterDesc,
         color: colors.accent,
@@ -348,7 +346,7 @@ class _SelectionIndicator extends StatelessWidget {
             Text(
               '$count/$max',
               style: TextStyle(
-                fontSize: _AnalyticsConstants.indicatorFontSize,
+                fontSize: AppFontSizes.bodySmall,
                 fontWeight: FontWeight.w500,
                 color: count == max ? colors.accent : colors.textMuted,
               ),

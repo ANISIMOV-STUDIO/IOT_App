@@ -12,10 +12,6 @@ import 'package:hvac_control/core/theme/spacing.dart';
 
 /// Константы для BreezDropdown
 abstract class _DropdownConstants {
-  static const double labelFontSize = 12;
-  static const double textFontSize = 14;
-  static const double subtitleFontSize = 12;
-  static const double helperFontSize = 11;
   static const double disabledAlpha = 0.5;
 }
 
@@ -89,7 +85,7 @@ class BreezDropdown<T> extends StatelessWidget {
             Text(
               label!,
               style: TextStyle(
-                fontSize: _DropdownConstants.labelFontSize,
+                fontSize: AppFontSizes.caption,
                 fontWeight: FontWeight.w500,
                 color: hasError ? AppColors.accentRed : colors.textMuted,
               ),
@@ -122,13 +118,13 @@ class BreezDropdown<T> extends StatelessWidget {
                       ? Text(
                           hint!,
                           style: TextStyle(
-                            fontSize: _DropdownConstants.textFontSize,
+                            fontSize: AppFontSizes.body,
                             color: colors.textMuted,
                           ),
                         )
                       : null,
                   style: TextStyle(
-                    fontSize: _DropdownConstants.textFontSize,
+                    fontSize: AppFontSizes.body,
                     color: colors.text,
                   ),
                   dropdownColor: colors.card,
@@ -148,7 +144,7 @@ class BreezDropdown<T> extends StatelessWidget {
                             child: Text(
                               item.label,
                               style: TextStyle(
-                                fontSize: _DropdownConstants.textFontSize,
+                                fontSize: AppFontSizes.body,
                                 color: enabled ? colors.text : colors.textMuted,
                               ),
                               overflow: TextOverflow.ellipsis,
@@ -178,7 +174,7 @@ class BreezDropdown<T> extends StatelessWidget {
                                 Text(
                                   item.label,
                                   style: TextStyle(
-                                    fontSize: _DropdownConstants.textFontSize,
+                                    fontSize: AppFontSizes.body,
                                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                                     color: isSelected ? colors.accent : colors.text,
                                   ),
@@ -187,7 +183,7 @@ class BreezDropdown<T> extends StatelessWidget {
                                   Text(
                                     item.subtitle!,
                                     style: TextStyle(
-                                      fontSize: _DropdownConstants.subtitleFontSize,
+                                      fontSize: AppFontSizes.caption,
                                       color: colors.textMuted,
                                     ),
                                   ),
@@ -215,7 +211,7 @@ class BreezDropdown<T> extends StatelessWidget {
             Text(
               errorText ?? helperText ?? '',
               style: TextStyle(
-                fontSize: _DropdownConstants.helperFontSize,
+                fontSize: AppFontSizes.captionSmall,
                 color: hasError ? AppColors.accentRed : colors.textMuted,
               ),
             ),

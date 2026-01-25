@@ -7,6 +7,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:hvac_control/core/theme/app_animations.dart';
 import 'package:hvac_control/core/theme/app_colors.dart';
+import 'package:hvac_control/core/theme/app_font_sizes.dart';
 import 'package:hvac_control/core/theme/app_radius.dart';
 
 // Re-export theme components for convenience
@@ -435,7 +436,7 @@ class AppTheme {
           centerTitle: false,
           titleTextStyle: TextStyle(
             fontFamily: 'Inter',
-            fontSize: 20,
+            fontSize: AppFontSizes.h3,
             fontWeight: FontWeight.w600,
             color: text,
           ),

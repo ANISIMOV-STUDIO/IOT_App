@@ -13,7 +13,6 @@ import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
 
 /// Константы для ModeGridItem
 abstract class _ModeGridItemConstants {
-  static const double labelFontSize = 8;
   static const double letterSpacing = 0.3;
 }
 
@@ -93,7 +92,7 @@ class ModeGridItem extends StatelessWidget {
             Text(
               mode.name.toUpperCase(),
               style: TextStyle(
-                fontSize: _ModeGridItemConstants.labelFontSize,
+                fontSize: AppFontSizes.micro,
                 fontWeight: FontWeight.w700,
                 letterSpacing: _ModeGridItemConstants.letterSpacing,
                 color: isSelected ? color : colors.textMuted,

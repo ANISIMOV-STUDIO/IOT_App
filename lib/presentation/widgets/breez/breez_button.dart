@@ -174,7 +174,9 @@ class _BreezButtonState extends State<BreezButton>
     Widget button = MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
-      cursor: isEnabled ? SystemMouseCursors.click : SystemMouseCursors.basic,
+      cursor: isEnabled
+          ? SystemMouseCursors.click
+          : (widget.onTap == null ? SystemMouseCursors.forbidden : SystemMouseCursors.basic),
       child: GestureDetector(
         onTapDown: _handleTapDown,
         onTapUp: _handleTapUp,

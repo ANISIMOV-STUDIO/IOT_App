@@ -13,14 +13,8 @@ import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
 
 /// Константы для TemperatureColumn
 abstract class _TempColumnConstants {
-  // Размеры - обычный режим
-  static const double fontSizeNormal = 28;
-  static const double labelSizeNormal = 10;
+  // Размеры → AppFontSizes: h1 (28), displaySmall (22), tiny (10), badge (9)
   static const double buttonPaddingNormal = 6;
-
-  // Размеры - компактный режим
-  static const double fontSizeCompact = 22;
-  static const double labelSizeCompact = 9;
   static const double buttonPaddingCompact = 4;
 
   // Отступы
@@ -78,11 +72,11 @@ class TemperatureColumn extends StatelessWidget {
 
     // Выбор размеров на основе режима
     final fontSize = compact
-        ? _TempColumnConstants.fontSizeCompact
-        : _TempColumnConstants.fontSizeNormal;
+        ? AppFontSizes.displaySmall
+        : AppFontSizes.h1;
     final labelSize = compact
-        ? _TempColumnConstants.labelSizeCompact
-        : _TempColumnConstants.labelSizeNormal;
+        ? AppFontSizes.badge
+        : AppFontSizes.tiny;
     final buttonPadding = compact
         ? _TempColumnConstants.buttonPaddingCompact
         : _TempColumnConstants.buttonPaddingNormal;

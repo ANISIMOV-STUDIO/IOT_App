@@ -1337,7 +1337,7 @@ abstract class AppLocalizations {
   /// No description provided for @scheduleDayNightTemp.
   ///
   /// In ru, this message translates to:
-  /// **'День: {day}° / Ночь: {night}°'**
+  /// **'День: {day}°C / Ночь: {night}°C'**
   String scheduleDayNightTemp(int day, int night);
 
   /// No description provided for @modeCooling.
@@ -1790,11 +1790,11 @@ abstract class AppLocalizations {
   /// **'Температура воздуха в помещении'**
   String get indoorTemp;
 
-  /// No description provided for @supplyTempAfterRecup.
+  /// No description provided for @recuperatorTemperature.
   ///
   /// In ru, this message translates to:
   /// **'Температура приточного воздуха после рекуператора'**
-  String get supplyTempAfterRecup;
+  String get recuperatorTemperature;
 
   /// No description provided for @supplyTemp.
   ///
@@ -1802,11 +1802,11 @@ abstract class AppLocalizations {
   /// **'Температура приточного воздуха'**
   String get supplyTemp;
 
-  /// No description provided for @co2Level.
+  /// No description provided for @coIndicator.
   ///
   /// In ru, this message translates to:
-  /// **'Концентрация CO2'**
-  String get co2Level;
+  /// **'Индикатор CO'**
+  String get coIndicator;
 
   /// No description provided for @recuperatorEfficiency.
   ///
@@ -2012,11 +2012,11 @@ abstract class AppLocalizations {
   /// **'Температура воздуха внутри помещения'**
   String get indoorTempDesc;
 
-  /// No description provided for @supplyTempAfterRecupDesc.
+  /// No description provided for @recuperatorTemperatureDesc.
   ///
   /// In ru, this message translates to:
   /// **'Температура приточного воздуха после теплообмена в рекуператоре'**
-  String get supplyTempAfterRecupDesc;
+  String get recuperatorTemperatureDesc;
 
   /// No description provided for @supplyTempDesc.
   ///
@@ -2024,11 +2024,11 @@ abstract class AppLocalizations {
   /// **'Температура воздуха на выходе из вентиляционной установки'**
   String get supplyTempDesc;
 
-  /// No description provided for @co2LevelDesc.
+  /// No description provided for @coIndicatorDesc.
   ///
   /// In ru, this message translates to:
-  /// **'Уровень углекислого газа в помещении. Норма: до 1000 ppm'**
-  String get co2LevelDesc;
+  /// **'Индикатор угарного газа (CO)'**
+  String get coIndicatorDesc;
 
   /// No description provided for @recuperatorEfficiencyDesc.
   ///

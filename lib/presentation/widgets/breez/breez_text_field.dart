@@ -12,9 +12,6 @@ import 'package:hvac_control/core/theme/spacing.dart';
 
 /// Константы для BreezTextField
 abstract class _TextFieldConstants {
-  static const double labelFontSize = 12;
-  static const double inputFontSize = 14;
-  static const double errorFontSize = 11;
   static const double errorPositionLeft = 12;
   static const double errorPositionBottom = -7;
 }
@@ -146,7 +143,7 @@ class _BreezTextFieldState extends State<BreezTextField> {
             child: Text(
               widget.label ?? '',
               style: TextStyle(
-                fontSize: _TextFieldConstants.labelFontSize,
+                fontSize: AppFontSizes.caption,
                 fontWeight: FontWeight.w600,
                 letterSpacing: 0,
                 color: colors.textMuted,
@@ -196,13 +193,13 @@ class _BreezTextFieldState extends State<BreezTextField> {
                   autocorrect: !widget.obscureText,
                   style: TextStyle(
                     color: colors.text,
-                    fontSize: _TextFieldConstants.inputFontSize,
+                    fontSize: AppFontSizes.body,
                   ),
                   decoration: InputDecoration(
                     hintText: widget.hint,
                     hintStyle: TextStyle(
                       color: colors.textMuted,
-                      fontSize: _TextFieldConstants.inputFontSize,
+                      fontSize: AppFontSizes.body,
                     ),
                     prefixIcon: widget.prefixIcon != null
                         ? Padding(
@@ -262,7 +259,7 @@ class _BreezTextFieldState extends State<BreezTextField> {
                       Text(
                         _errorText ?? '',
                         style: const TextStyle(
-                          fontSize: _TextFieldConstants.errorFontSize,
+                          fontSize: AppFontSizes.captionSmall,
                           color: AppColors.accentRed,
                         ),
                       ),

@@ -14,9 +14,7 @@ import 'package:hvac_control/core/theme/spacing.dart';
 
 /// Константы для MobileTabBar
 abstract class _MobileTabConstants {
-  static const double fontSize = 11;
   static const double badgeSize = 16;
-  static const double badgeFontSize = 9;
   static const double segmentPadding = 3; // Slightly less than xxs (4px) for tighter fit
 }
 
@@ -182,7 +180,7 @@ class _SegmentButton extends StatelessWidget {
                 Text(
                   tab.label,
                   style: TextStyle(
-                    fontSize: _MobileTabConstants.fontSize,
+                    fontSize: AppFontSizes.captionSmall,
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                     color: textColor,
                   ),
@@ -200,7 +198,7 @@ class _SegmentButton extends StatelessWidget {
                       child: Text(
                         '${tab.badgeCount}',
                         style: const TextStyle(
-                          fontSize: _MobileTabConstants.badgeFontSize,
+                          fontSize: AppFontSizes.badge,
                           fontWeight: FontWeight.w700,
                           color: AppColors.white,
                         ),

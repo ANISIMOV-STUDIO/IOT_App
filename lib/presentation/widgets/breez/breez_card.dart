@@ -21,8 +21,6 @@ abstract class _CardConstants {
   static const double defaultPadding = AppSpacing.lgx; // 24px
   static const Duration animationDuration = Duration(milliseconds: 300);
   static const double disabledOpacity = 0.3;
-  static const double titleFontSize = 10;
-  static const double descriptionFontSize = 12;
   static const double titleLetterSpacing = 2;
   static const double shimmerHeight = 100;
 }
@@ -87,7 +85,7 @@ class BreezCard extends StatelessWidget {
                               child: Text(
                                 (title ?? '').toUpperCase(),
                                 style: TextStyle(
-                                  fontSize: _CardConstants.titleFontSize,
+                                  fontSize: AppFontSizes.tiny,
                                   fontWeight: FontWeight.w900,
                                   letterSpacing: _CardConstants.titleLetterSpacing,
                                   color: colors.text,
@@ -100,7 +98,7 @@ class BreezCard extends StatelessWidget {
                               child: Text(
                                 description ?? '',
                                 style: TextStyle(
-                                  fontSize: _CardConstants.descriptionFontSize,
+                                  fontSize: AppFontSizes.caption,
                                   color: colors.textMuted,
                                 ),
                               ),
@@ -124,7 +122,7 @@ class BreezCard extends StatelessWidget {
           if (title != null)
             Container(
               width: 80,
-              height: _CardConstants.titleFontSize,
+              height: AppFontSizes.tiny,
               decoration: BoxDecoration(
                 color: isDark ? AppColors.darkShimmerBase : AppColors.lightShimmerBase,
                 borderRadius: BorderRadius.circular(AppRadius.indicator),
@@ -134,7 +132,7 @@ class BreezCard extends StatelessWidget {
           if (description != null)
             Container(
               width: 120,
-              height: _CardConstants.descriptionFontSize,
+              height: AppFontSizes.caption,
               decoration: BoxDecoration(
                 color: isDark ? AppColors.darkShimmerBase : AppColors.lightShimmerBase,
                 borderRadius: BorderRadius.circular(AppRadius.indicator),

@@ -25,8 +25,7 @@ class DeviceFullState extends Equatable {
     this.recuperatorTemperature,
     this.indoorTemperature,
     this.supplyTemperature,
-    this.supplyTempAfterRecup,
-    this.co2Level,
+    this.coIndicator,
     this.freeCooling = false,
     this.heaterPower,
     this.coolerStatus,
@@ -77,11 +76,8 @@ class DeviceFullState extends Equatable {
   /// Температура приточного воздуха
   final double? supplyTemperature;
 
-  /// Температура приточного воздуха после рекуператора (setpoint)
-  final double? supplyTempAfterRecup;
-
-  /// Концентрация CO2 (ppm)
-  final int? co2Level;
+  /// Индикатор угарного газа CO
+  final int? coIndicator;
 
   /// Свободное охлаждение рекуператора (Вкл/Выкл)
   final bool freeCooling;
@@ -147,8 +143,7 @@ class DeviceFullState extends Equatable {
     double? recuperatorTemperature,
     double? indoorTemperature,
     double? supplyTemperature,
-    double? supplyTempAfterRecup,
-    int? co2Level,
+    int? coIndicator,
     bool? freeCooling,
     int? heaterPower,
     String? coolerStatus,
@@ -183,8 +178,7 @@ class DeviceFullState extends Equatable {
       recuperatorTemperature: recuperatorTemperature ?? this.recuperatorTemperature,
       indoorTemperature: indoorTemperature ?? this.indoorTemperature,
       supplyTemperature: supplyTemperature ?? this.supplyTemperature,
-      supplyTempAfterRecup: supplyTempAfterRecup ?? this.supplyTempAfterRecup,
-      co2Level: co2Level ?? this.co2Level,
+      coIndicator: coIndicator ?? this.coIndicator,
       freeCooling: freeCooling ?? this.freeCooling,
       heaterPower: heaterPower ?? this.heaterPower,
       coolerStatus: coolerStatus ?? this.coolerStatus,
@@ -220,8 +214,8 @@ class DeviceFullState extends Equatable {
         recuperatorTemperature,
         indoorTemperature,
         supplyTemperature,
-        supplyTempAfterRecup,
-        co2Level,
+        recuperatorTemperature,
+        coIndicator,
         freeCooling,
         heaterPower,
         coolerStatus,

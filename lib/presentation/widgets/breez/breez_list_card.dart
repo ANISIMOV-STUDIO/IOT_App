@@ -16,24 +16,15 @@ import 'package:hvac_control/presentation/widgets/breez/breez_card.dart'; // Bre
 
 /// Константы для BreezListCard
 abstract class _ListCardConstants {
-  // Размеры для нормального режима
-  static const double iconContainerSizeNormal = 32;
-  static const double paddingNormal = 12;
-  static const double titleFontSizeNormal = 12;
-  static const double subtitleFontSizeNormal = 11;
-
-  // Размеры для компактного режима
-  static const double iconContainerSizeCompact = 24;
-  static const double paddingCompact = 8;
-  static const double titleFontSizeCompact = 11;
-  static const double subtitleFontSizeCompact = 10;
+  // Унифицированные размеры (высота = minTouchTarget 48px)
+  static const double cardHeight = 48;
+  static const double iconContainerSize = 28;
+  static const double padding = 12;
 
   // Общие
-  static const double badgeFontSize = 9;
   static const double badgePaddingH = 6;
   static const double badgePaddingV = 2;
   static const double badgeRadius = 4;
-  static const double trailingFontSize = 10;
   static const double unreadIndicatorSize = 8;
 
   // Прозрачности
@@ -47,9 +38,6 @@ abstract class _ListCardConstants {
 
 /// Константы для BreezEmptyState
 abstract class _EmptyStateConstants {
-  static const double titleFontSizeNormal = 13;
-  static const double titleFontSizeCompact = 11;
-  static const double subtitleFontSize = 11;
   static const double iconAlpha = 0.5;
   static const double subtitleAlpha = 0.7;
 }
@@ -166,20 +154,10 @@ class BreezListCard extends StatelessWidget {
     final colors = BreezColors.of(context);
     final typeColor = _colorForType(colors);
 
-    // Размеры для компактного режима
-    final iconContainerSize = compact
-        ? _ListCardConstants.iconContainerSizeCompact
-        : _ListCardConstants.iconContainerSizeNormal;
+    // Унифицированные размеры для высоты 36px
+    const iconContainerSize = _ListCardConstants.iconContainerSize;
     const iconSize = AppIconSizes.standard;
-    final padding = compact
-        ? _ListCardConstants.paddingCompact
-        : _ListCardConstants.paddingNormal;
-    final titleSize = compact
-        ? _ListCardConstants.titleFontSizeCompact
-        : _ListCardConstants.titleFontSizeNormal;
-    final subtitleSize = compact
-        ? _ListCardConstants.subtitleFontSizeCompact
-        : _ListCardConstants.subtitleFontSizeNormal;
+    const padding = _ListCardConstants.padding;
 
     return Semantics(
       label: '$title: $subtitle${showUnreadIndicator ? ', непрочитано' : ''}',
@@ -193,7 +171,8 @@ class BreezListCard extends StatelessWidget {
           splashColor: typeColor.withValues(alpha: _ListCardConstants.splashAlpha),
           highlightColor: typeColor.withValues(alpha: _ListCardConstants.highlightAlpha),
           child: Ink(
-            padding: EdgeInsets.all(padding),
+            height: _ListCardConstants.cardHeight,
+            padding: const EdgeInsets.symmetric(horizontal: padding),
             decoration: BoxDecoration(
               color: typeColor.withValues(alpha: _ListCardConstants.bgAlpha),
               borderRadius: BorderRadius.circular(AppRadius.card),
@@ -202,7 +181,6 @@ class BreezListCard extends StatelessWidget {
               ),
             ),
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Иконка
                 Container(
@@ -210,7 +188,7 @@ class BreezListCard extends StatelessWidget {
                   height: iconContainerSize,
                   decoration: BoxDecoration(
                     color: typeColor.withValues(alpha: _ListCardConstants.badgeAlpha),
-                    borderRadius: BorderRadius.circular(AppRadius.card),
+                    borderRadius: BorderRadius.circular(AppRadius.chip),
                   ),
                   child: Icon(
                     icon,
@@ -219,70 +197,78 @@ class BreezListCard extends StatelessWidget {
                   ),
                 ),
 
-                SizedBox(width: compact ? AppSpacing.xs : AppSpacing.xs + 2),
+                const SizedBox(width: AppSpacing.xs),
 
-                // Контент
+                // Title + Subtitle в одну строку
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              title,
-                              style: TextStyle(
-                                fontSize: titleSize,
-                                fontWeight: FontWeight.w600,
-                                color: colors.text,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+                  child: Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: title,
+                          style: TextStyle(
+                            fontSize: AppFontSizes.caption,
+                            fontWeight: FontWeight.w600,
+                            color: colors.text,
+                          ),
+                        ),
+                        if (subtitle.isNotEmpty) ...[
+                          TextSpan(
+                            text: '  ·  ',
+                            style: TextStyle(
+                              fontSize: AppFontSizes.caption,
+                              color: colors.textMuted,
                             ),
                           ),
-                          if (badge != null)
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: _ListCardConstants.badgePaddingH,
-                                vertical: _ListCardConstants.badgePaddingV,
-                              ),
-                              decoration: BoxDecoration(
-                                color: typeColor.withValues(alpha: _ListCardConstants.badgeAlpha),
-                                borderRadius: BorderRadius.circular(_ListCardConstants.badgeRadius),
-                              ),
-                              child: Text(
-                                badge!,
-                                style: TextStyle(
-                                  fontSize: _ListCardConstants.badgeFontSize,
-                                  fontWeight: FontWeight.w700,
-                                  color: typeColor,
-                                ),
-                              ),
+                          TextSpan(
+                            text: subtitle,
+                            style: TextStyle(
+                              fontSize: AppFontSizes.captionSmall,
+                              color: colors.textMuted,
                             ),
-                          if (trailing != null)
-                            Text(
-                              trailing!,
-                              style: TextStyle(
-                                fontSize: _ListCardConstants.trailingFontSize,
-                                color: colors.textMuted,
-                              ),
-                            ),
+                          ),
                         ],
-                      ),
-                      SizedBox(height: compact ? AppSpacing.xxs / 2 : AppSpacing.xxs),
-                      Text(
-                        subtitle,
-                        style: TextStyle(
-                          fontSize: subtitleSize,
-                          color: colors.textMuted,
-                        ),
-                        maxLines: compact ? 1 : 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
+                      ],
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
+
+                // Badge
+                if (badge != null) ...[
+                  const SizedBox(width: AppSpacing.xs),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: _ListCardConstants.badgePaddingH,
+                      vertical: _ListCardConstants.badgePaddingV,
+                    ),
+                    decoration: BoxDecoration(
+                      color: typeColor.withValues(alpha: _ListCardConstants.badgeAlpha),
+                      borderRadius: BorderRadius.circular(_ListCardConstants.badgeRadius),
+                    ),
+                    child: Text(
+                      badge!,
+                      style: TextStyle(
+                        fontSize: AppFontSizes.badge,
+                        fontWeight: FontWeight.w700,
+                        color: typeColor,
+                      ),
+                    ),
+                  ),
+                ],
+
+                // Trailing (time)
+                if (trailing != null) ...[
+                  const SizedBox(width: AppSpacing.xs),
+                  Text(
+                    trailing!,
+                    style: TextStyle(
+                      fontSize: AppFontSizes.tiny,
+                      color: colors.textMuted,
+                    ),
+                  ),
+                ],
 
                 // Индикатор непрочитанного
                 if (showUnreadIndicator) ...[
@@ -874,8 +860,8 @@ class BreezEmptyState extends StatelessWidget {
               title,
               style: TextStyle(
                 fontSize: compact
-                    ? _EmptyStateConstants.titleFontSizeCompact
-                    : _EmptyStateConstants.titleFontSizeNormal,
+                    ? AppFontSizes.captionSmall
+                    : AppFontSizes.bodySmall,
                 fontWeight: FontWeight.w600,
                 color: colors.textMuted,
               ),
@@ -885,7 +871,7 @@ class BreezEmptyState extends StatelessWidget {
               Text(
                 subtitle,
                 style: TextStyle(
-                  fontSize: _EmptyStateConstants.subtitleFontSize,
+                  fontSize: AppFontSizes.captionSmall,
                   color: colors.textMuted.withValues(alpha: _EmptyStateConstants.subtitleAlpha),
                 ),
               ),

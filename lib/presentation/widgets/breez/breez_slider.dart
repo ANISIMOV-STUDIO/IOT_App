@@ -20,12 +20,6 @@ abstract class _SliderConstants {
   static const double disabledInactiveAlpha = 0.2;
 }
 
-/// Константы для BreezLabeledSlider
-abstract class _LabeledSliderConstants {
-  static const double labelFontSize = 11;
-  static const double valueFontSize = 11;
-}
-
 // =============================================================================
 // SCROLL BEHAVIOR
 // =============================================================================
@@ -291,7 +285,7 @@ class BreezLabeledSlider extends StatelessWidget {
                     Text(
                       label,
                       style: TextStyle(
-                        fontSize: _LabeledSliderConstants.labelFontSize,
+                        fontSize: AppFontSizes.captionSmall,
                         fontWeight: FontWeight.w500,
                         color: colors.textMuted,
                       ),
@@ -301,7 +295,7 @@ class BreezLabeledSlider extends StatelessWidget {
                 Text(
                   _formatDisplay(),
                   style: TextStyle(
-                    fontSize: _LabeledSliderConstants.valueFontSize,
+                    fontSize: AppFontSizes.captionSmall,
                     fontWeight: FontWeight.w700,
                     color: effectiveColor,
                   ),

@@ -14,8 +14,6 @@ import 'package:hvac_control/generated/l10n/app_localizations.dart';
 
 /// Константы для SensorsGrid
 abstract class _SensorGridConstants {
-  static const double valueFontSize = 13;
-  static const double labelFontSize = 9;
   static const double labelLineHeight = 1.2;
 }
 
@@ -44,20 +42,20 @@ class SensorsGrid extends StatelessWidget {
 
     final sensors = [
       // Row 1
-      _SensorData(Icons.thermostat_outlined, '${unit.outsideTemp.toStringAsFixed(1)}°', l10n.outdoorTemp),
-      _SensorData(Icons.home_outlined, '${unit.indoorTemp.toStringAsFixed(1)}°', l10n.indoorTemp),
-      _SensorData(Icons.air, '${unit.supplyTempAfterRecup.toStringAsFixed(1)}°', l10n.supplyTempAfterRecup),
+      _SensorData(Icons.thermostat_outlined, unit.outsideTemp != null ? '${unit.outsideTemp!.toStringAsFixed(1)}°C' : '—', l10n.outdoorTemp),
+      _SensorData(Icons.home_outlined, unit.indoorTemp != null ? '${unit.indoorTemp!.toStringAsFixed(1)}°C' : '—', l10n.indoorTemp),
+      _SensorData(Icons.air, unit.recuperatorTemperature != null ? '${unit.recuperatorTemperature!.toStringAsFixed(1)}°C' : '—', l10n.recuperatorTemperature),
       // Row 2
-      _SensorData(Icons.thermostat, '${unit.supplyTemp.toStringAsFixed(1)}°', l10n.supplyTemp),
-      _SensorData(Icons.cloud_outlined, '${unit.co2Level} ppm', l10n.co2Level),
-      _SensorData(Icons.recycling, '${unit.recuperatorEfficiency}%', l10n.recuperatorEfficiency),
+      _SensorData(Icons.thermostat, unit.supplyTemp != null ? '${unit.supplyTemp!.toStringAsFixed(1)}°C' : '—', l10n.supplyTemp),
+      _SensorData(Icons.cloud_outlined, unit.coIndicator != null ? '${unit.coIndicator}' : '—', l10n.coIndicator),
+      _SensorData(Icons.recycling, unit.recuperatorEfficiency != null ? '${unit.recuperatorEfficiency}%' : '—', l10n.recuperatorEfficiency),
       // Row 3
       _SensorData(Icons.ac_unit, unit.freeCooling ? 'ON' : 'OFF', l10n.freeCooling),
-      _SensorData(Icons.local_fire_department_outlined, '${unit.heaterPower}%', l10n.heater),
-      _SensorData(Icons.severe_cold, unit.coolerStatus, l10n.coolerStatus),
+      _SensorData(Icons.local_fire_department_outlined, unit.heaterPower != null ? '${unit.heaterPower}%' : '—', l10n.heater),
+      _SensorData(Icons.severe_cold, unit.coolerStatus ?? '—', l10n.coolerStatus),
       // Row 4
-      _SensorData(Icons.speed, '${unit.ductPressure} Па', l10n.ductPressure),
-      _SensorData(Icons.water_drop_outlined, '${unit.humidity}%', l10n.relativeHumidity),
+      _SensorData(Icons.speed, unit.ductPressure != null ? '${unit.ductPressure} Па' : '—', l10n.ductPressure),
+      _SensorData(Icons.water_drop_outlined, unit.humidity != null ? '${unit.humidity}%' : '—', l10n.relativeHumidity),
     ];
 
     return Column(
@@ -103,7 +101,7 @@ class SensorsGrid extends StatelessWidget {
           Text(
             sensor.value,
             style: TextStyle(
-              fontSize: _SensorGridConstants.valueFontSize,
+              fontSize: AppFontSizes.bodySmall,
               fontWeight: FontWeight.w700,
               color: colors.text,
             ),
@@ -115,7 +113,7 @@ class SensorsGrid extends StatelessWidget {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              fontSize: _SensorGridConstants.labelFontSize,
+              fontSize: AppFontSizes.badge,
               color: colors.textMuted,
               height: _SensorGridConstants.labelLineHeight,
             ),

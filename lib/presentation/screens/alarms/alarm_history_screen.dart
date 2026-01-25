@@ -16,14 +16,7 @@ import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
 // =============================================================================
 
 abstract class _AlarmHistoryConstants {
-  static const double headerFontSize = 18;
-  static const double subtitleFontSize = 12;
   static const double emptyIconSize = 64;
-  static const double bodyFontSize = 16;
-  static const double captionFontSize = 13;
-  static const double smallFontSize = 14;
-  static const double tinyFontSize = 10;
-  static const double valueFontSize = 12;
   static const double iconContainerSize = 40;
   static const double dividerHeight = 30;
   static const double textGap = 2;
@@ -81,7 +74,7 @@ class _AlarmHistoryScreenState extends State<AlarmHistoryScreen> {
             Text(
               l10n.alarmHistoryTitle,
               style: TextStyle(
-                fontSize: _AlarmHistoryConstants.headerFontSize,
+                fontSize: AppFontSizes.h3Small,
                 fontWeight: FontWeight.w700,
                 color: colors.text,
               ),
@@ -89,7 +82,7 @@ class _AlarmHistoryScreenState extends State<AlarmHistoryScreen> {
             Text(
               widget.deviceName,
               style: TextStyle(
-                fontSize: _AlarmHistoryConstants.subtitleFontSize,
+                fontSize: AppFontSizes.caption,
                 color: colors.textMuted,
               ),
             ),
@@ -141,7 +134,7 @@ class _AlarmHistoryScreenState extends State<AlarmHistoryScreen> {
           Text(
             l10n.alarmHistoryEmpty,
             style: TextStyle(
-              fontSize: _AlarmHistoryConstants.bodyFontSize,
+              fontSize: AppFontSizes.bodyLarge,
               fontWeight: FontWeight.w600,
               color: colors.textMuted,
             ),
@@ -150,7 +143,7 @@ class _AlarmHistoryScreenState extends State<AlarmHistoryScreen> {
           Text(
             l10n.alarmNoAlarms,
             style: TextStyle(
-              fontSize: _AlarmHistoryConstants.captionFontSize,
+              fontSize: AppFontSizes.bodySmall,
               color: colors.textMuted.withValues(alpha: 0.7),
             ),
           ),
@@ -224,7 +217,7 @@ class _AlarmHistoryCard extends StatelessWidget {
                     Text(
                       l10n.alarmCodeLabel(alarm.alarmCode),
                       style: TextStyle(
-                        fontSize: _AlarmHistoryConstants.smallFontSize,
+                        fontSize: AppFontSizes.body,
                         fontWeight: FontWeight.w600,
                         color: colors.text,
                       ),
@@ -233,7 +226,7 @@ class _AlarmHistoryCard extends StatelessWidget {
                     Text(
                       alarm.description,
                       style: TextStyle(
-                        fontSize: _AlarmHistoryConstants.valueFontSize,
+                        fontSize: AppFontSizes.caption,
                         color: colors.textMuted,
                       ),
                       maxLines: 2,
@@ -257,7 +250,7 @@ class _AlarmHistoryCard extends StatelessWidget {
                 child: Text(
                   isCleared ? l10n.statusResolved : l10n.statusActive,
                   style: TextStyle(
-                    fontSize: _AlarmHistoryConstants.tinyFontSize,
+                    fontSize: AppFontSizes.tiny,
                     fontWeight: FontWeight.w700,
                     color: isCleared
                         ? AppColors.accentGreen
@@ -287,7 +280,7 @@ class _AlarmHistoryCard extends StatelessWidget {
                       Text(
                         l10n.alarmOccurredAt,
                         style: TextStyle(
-                          fontSize: _AlarmHistoryConstants.tinyFontSize,
+                          fontSize: AppFontSizes.tiny,
                           color: colors.textMuted,
                         ),
                       ),
@@ -295,7 +288,7 @@ class _AlarmHistoryCard extends StatelessWidget {
                       Text(
                         _formatDateTime(alarm.occurredAt, l10n),
                         style: TextStyle(
-                          fontSize: _AlarmHistoryConstants.valueFontSize,
+                          fontSize: AppFontSizes.caption,
                           fontWeight: FontWeight.w600,
                           color: colors.text,
                         ),
@@ -318,7 +311,7 @@ class _AlarmHistoryCard extends StatelessWidget {
                         Text(
                           l10n.alarmClearedAt,
                           style: TextStyle(
-                            fontSize: _AlarmHistoryConstants.tinyFontSize,
+                            fontSize: AppFontSizes.tiny,
                             color: colors.textMuted,
                           ),
                         ),
@@ -326,7 +319,7 @@ class _AlarmHistoryCard extends StatelessWidget {
                         Text(
                           _formatDateTime(alarm.clearedAt!, l10n),
                           style: const TextStyle(
-                            fontSize: _AlarmHistoryConstants.valueFontSize,
+                            fontSize: AppFontSizes.caption,
                             fontWeight: FontWeight.w600,
                             color: AppColors.accentGreen,
                           ),

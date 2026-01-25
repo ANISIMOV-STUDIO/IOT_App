@@ -13,14 +13,6 @@ import 'package:hvac_control/core/utils/validators.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez.dart';
 
-// =============================================================================
-// CONSTANTS
-// =============================================================================
-
-abstract class _ProfileDialogsConstants {
-  static const double flagFontSize = 20;
-}
-
 /// Language option widget for language picker dialog
 class LanguageOption extends StatelessWidget {
 
@@ -53,7 +45,7 @@ class LanguageOption extends StatelessWidget {
           Text(
             language.flag,
             style: const TextStyle(
-              fontSize: _ProfileDialogsConstants.flagFontSize,
+              fontSize: AppFontSizes.h3,
             ),
           ),
           const SizedBox(width: AppSpacing.sm),

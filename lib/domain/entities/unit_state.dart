@@ -13,25 +13,25 @@ class UnitState extends Equatable {        // Текущее время устр
     required this.id,
     required this.name,
     required this.power,
-    required this.temp,
     required this.mode,
-    required this.humidity,
-    required this.outsideTemp,
-    required this.filterPercent,
+    this.temp,
+    this.humidity,
+    this.outsideTemp,
+    this.filterPercent,
     this.macAddress = '',
     this.heatingTemp,
     this.coolingTemp,
     this.supplyFan,
     this.exhaustFan,
-    this.indoorTemp = 22.0,
-    this.supplyTemp = 20.0,
-    this.supplyTempAfterRecup = 18.0,
-    this.co2Level = 450,
-    this.recuperatorEfficiency = 85,
+    this.indoorTemp,
+    this.supplyTemp,
+    this.recuperatorTemperature,
+    this.coIndicator,
+    this.recuperatorEfficiency,
     this.freeCooling = false,
-    this.heaterPower = 0,
-    this.coolerStatus = 'Н/Д',
-    this.ductPressure = 120,
+    this.heaterPower,
+    this.coolerStatus,
+    this.ductPressure,
     this.actualSupplyFan,
     this.actualExhaustFan,
     this.temperatureSetpoint,
@@ -44,33 +44,33 @@ class UnitState extends Equatable {        // Текущее время устр
   final String name;
   final String macAddress;
   final bool power;
-  final int temp;
+  final int? temp;                        // Текущая температура
   final int? heatingTemp;
   final int? coolingTemp;
   final int? supplyFan;
   final int? exhaustFan;
   final String mode;
-  final int humidity;
-  final double outsideTemp;
-  final int filterPercent;
+  final int? humidity;                    // Влажность (%)
+  final double? outsideTemp;              // Уличная температура
+  final int? filterPercent;               // Состояние фильтра (%)
 
-  // Новые датчики
-  final double indoorTemp;              // Температура воздуха в помещении
-  final double supplyTemp;              // Температура приточного воздуха
-  final double supplyTempAfterRecup;    // Температура приточного воздуха после рекуператора
-  final int co2Level;                // Концентрация CO2 (ppm)
-  final int recuperatorEfficiency;   // Температурная эффективность рекуператора (%)
-  final bool freeCooling;            // Свободное охлаждение рекуператора (Вкл/Выкл)
-  final int heaterPower;             // Мощность работы нагревателя (%)
-  final String coolerStatus;            // Статус охладителя
-  final int ductPressure;            // Давление в воздуховоде (Па)
-  final int? actualSupplyFan;        // Фактические обороты приточного (0-100%)
-  final int? actualExhaustFan;       // Фактические обороты вытяжного (0-100%)
-  final double? temperatureSetpoint; // Уставка температуры с пульта
-  final bool isOnline;                // Устройство онлайн
-  final List<String> quickSensors;   // Быстрые показатели на главном экране
-  final DateTime? deviceTime;        // Текущее время устройства
-  final DateTime? updatedAt;         // Время последней синхронизации
+  // Новые датчики (nullable — показываем "—" если нет данных)
+  final double? indoorTemp;              // Температура воздуха в помещении
+  final double? supplyTemp;              // Температура приточного воздуха
+  final double? recuperatorTemperature;  // Температура после рекуператора
+  final int? coIndicator;                   // Индикатор угарного газа CO
+  final int? recuperatorEfficiency;      // Эффективность рекуператора (%)
+  final bool freeCooling;                // Свободное охлаждение (Вкл/Выкл)
+  final int? heaterPower;                // Мощность нагревателя (%)
+  final String? coolerStatus;            // Статус охладителя
+  final int? ductPressure;               // Давление в воздуховоде (Па)
+  final int? actualSupplyFan;            // Фактические обороты приточного (0-100%)
+  final int? actualExhaustFan;           // Фактические обороты вытяжного (0-100%)
+  final double? temperatureSetpoint;     // Уставка температуры с пульта
+  final bool isOnline;                   // Устройство онлайн
+  final List<String> quickSensors;       // Быстрые показатели на главном экране
+  final DateTime? deviceTime;            // Текущее время устройства
+  final DateTime? updatedAt;             // Время последней синхронизации
 
   UnitState copyWith({
     String? id,
@@ -88,8 +88,8 @@ class UnitState extends Equatable {        // Текущее время устр
     int? filterPercent,
     double? indoorTemp,
     double? supplyTemp,
-    double? supplyTempAfterRecup,
-    int? co2Level,
+    double? recuperatorTemperature,
+    int? coIndicator,
     int? recuperatorEfficiency,
     bool? freeCooling,
     int? heaterPower,
@@ -118,8 +118,8 @@ class UnitState extends Equatable {        // Текущее время устр
       filterPercent: filterPercent ?? this.filterPercent,
       indoorTemp: indoorTemp ?? this.indoorTemp,
       supplyTemp: supplyTemp ?? this.supplyTemp,
-      supplyTempAfterRecup: supplyTempAfterRecup ?? this.supplyTempAfterRecup,
-      co2Level: co2Level ?? this.co2Level,
+      recuperatorTemperature: recuperatorTemperature ?? this.recuperatorTemperature,
+      coIndicator: coIndicator ?? this.coIndicator,
       recuperatorEfficiency: recuperatorEfficiency ?? this.recuperatorEfficiency,
       freeCooling: freeCooling ?? this.freeCooling,
       heaterPower: heaterPower ?? this.heaterPower,
@@ -151,8 +151,8 @@ class UnitState extends Equatable {        // Текущее время устр
         filterPercent,
         indoorTemp,
         supplyTemp,
-        supplyTempAfterRecup,
-        co2Level,
+        recuperatorTemperature,
+        coIndicator,
         recuperatorEfficiency,
         freeCooling,
         heaterPower,

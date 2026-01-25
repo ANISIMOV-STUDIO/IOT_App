@@ -360,7 +360,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         mode: fullState.mode,
         preset: fullState.operatingMode,
         airQuality: AirQualityLevel.good, // В DeviceFullState нет явного airQuality, используем default
-        co2Ppm: fullState.co2Level ?? 400,
+        co2Ppm: fullState.coIndicator ?? 0,
         isOn: fullState.power,
       );
 

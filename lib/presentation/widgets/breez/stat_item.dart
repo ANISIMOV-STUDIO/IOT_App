@@ -7,16 +7,6 @@ import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 
 // =============================================================================
-// CONSTANTS
-// =============================================================================
-
-/// Константы для StatItem
-abstract class _StatItemConstants {
-  static const double valueFontSize = 12;
-  static const double labelFontSize = 10;
-}
-
-// =============================================================================
 // WIDGET
 // =============================================================================
 
@@ -52,7 +42,7 @@ class StatItem extends StatelessWidget {
           Text(
             value,
             style: TextStyle(
-              fontSize: _StatItemConstants.valueFontSize,
+              fontSize: AppFontSizes.caption,
               fontWeight: FontWeight.w700,
               color: colors.text,
             ),
@@ -61,7 +51,7 @@ class StatItem extends StatelessWidget {
           Text(
             label,
             style: TextStyle(
-              fontSize: _StatItemConstants.labelFontSize,
+              fontSize: AppFontSizes.tiny,
               color: colors.textMuted,
             ),
           ),

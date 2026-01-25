@@ -135,6 +135,7 @@ class DashboardBlocBuilder extends StatelessWidget {
           buildWhen: (previous, current) =>
               previous.climate != current.climate ||
               previous.isTogglingPower != current.isTogglingPower ||
+              previous.isSyncing != current.isSyncing ||
               previous.deviceFullState != current.deviceFullState ||
               previous.activeAlarms != current.activeAlarms ||
               previous.isPendingHeatingTemperature != current.isPendingHeatingTemperature ||
@@ -250,25 +251,25 @@ class DashboardBlocBuilder extends StatelessWidget {
       name: device.name,
       macAddress: fullState?.macAddress ?? '',
       power: fullState?.power ?? climate?.isOn ?? device.isActive,
-      temp: climate?.currentTemperature.toInt() ?? 20,
+      temp: climate?.currentTemperature.toInt(),
       // Используем pending значения если есть, иначе из настроек режима
       heatingTemp: heatingTemp,
       coolingTemp: coolingTemp,
       supplyFan: supplyFan,
       exhaustFan: exhaustFan,
       mode: currentMode, // Пустая строка = ничего не выбрано
-      humidity: climate?.humidity.toInt() ?? 45,
-      outsideTemp: fullState?.outdoorTemperature ?? 0.0,
-      filterPercent: fullState?.kpdRecuperator ?? 0,
-      indoorTemp: fullState?.indoorTemperature ?? climate?.currentTemperature ?? 22.0,
-      supplyTemp: fullState?.supplyTemperature ?? 20.0,
-      supplyTempAfterRecup: fullState?.supplyTempAfterRecup ?? 18.0,
-      co2Level: fullState?.co2Level ?? 450,
-      recuperatorEfficiency: fullState?.kpdRecuperator ?? 85,
+      humidity: climate?.humidity.toInt(),
+      outsideTemp: fullState?.outdoorTemperature,
+      filterPercent: fullState?.kpdRecuperator,
+      indoorTemp: fullState?.indoorTemperature,
+      supplyTemp: fullState?.supplyTemperature,
+      recuperatorTemperature: fullState?.recuperatorTemperature,
+      coIndicator: fullState?.coIndicator,
+      recuperatorEfficiency: fullState?.kpdRecuperator,
       freeCooling: fullState?.freeCooling ?? false,
-      heaterPower: fullState?.heaterPower ?? 0,
-      coolerStatus: fullState?.coolerStatus ?? 'Н/Д',
-      ductPressure: fullState?.ductPressure ?? 120,
+      heaterPower: fullState?.heaterPower,
+      coolerStatus: fullState?.coolerStatus,
+      ductPressure: fullState?.ductPressure,
       actualSupplyFan: fullState?.actualSupplyFan,
       actualExhaustFan: fullState?.actualExhaustFan,
       temperatureSetpoint: fullState?.temperatureSetpoint,

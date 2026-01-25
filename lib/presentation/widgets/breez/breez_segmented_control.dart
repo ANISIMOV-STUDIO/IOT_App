@@ -12,7 +12,7 @@ import 'package:hvac_control/generated/l10n/app_localizations.dart';
 
 abstract class _SegmentedControlConstants {
   static const double defaultHeight = 36;
-  static const double fontSize = 11;
+  // fontSize → AppFontSizes.captionSmall (11)
   static const double iconTextGap = 4;
   static const double containerPadding = 3;
   static const Duration animationDuration = Duration(milliseconds: 150);
@@ -176,7 +176,7 @@ class _SegmentButton<T> extends StatelessWidget {
                   Text(
                     segment.label,
                     style: TextStyle(
-                      fontSize: _SegmentedControlConstants.fontSize,
+                      fontSize: AppFontSizes.captionSmall,
                       fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                       color: textColor,
                     ),

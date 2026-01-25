@@ -26,7 +26,6 @@ import 'package:hvac_control/presentation/widgets/breez/breez.dart';
 
 abstract class _ProfileScreenConstants {
   static const double avatarSize = 56;
-  static const double initialsFontSize = 20;
   static const double buttonPaddingVertical = 14;
 }
 
@@ -234,7 +233,7 @@ class _UserCard extends StatelessWidget {
                   child: Text(
                     _getInitials(firstName, lastName),
                     style: const TextStyle(
-                      fontSize: _ProfileScreenConstants.initialsFontSize,
+                      fontSize: AppFontSizes.h3,
                       fontWeight: FontWeight.bold,
                       color: AppColors.white,
                     ),

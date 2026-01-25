@@ -22,7 +22,6 @@ import 'package:hvac_control/presentation/widgets/breez/breez_time_picker.dart';
 /// Константы виджета расписания
 abstract class _ScheduleConstants {
   static const double borderRadius = 10;
-  static const double timeFontSize = 22;
   static const double powerButtonWidth = 44;
 }
 
@@ -526,7 +525,7 @@ class _ScheduleTimeBlock extends StatelessWidget {
       child: Text(
         _formattedTime,
         style: TextStyle(
-          fontSize: _ScheduleConstants.timeFontSize,
+          fontSize: AppFontSizes.displaySmall,
           fontWeight: FontWeight.w700,
           color: onTimeChanged != null ? colors.text : colors.textMuted,
         ),

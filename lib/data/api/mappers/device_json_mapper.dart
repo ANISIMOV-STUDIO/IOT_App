@@ -302,7 +302,7 @@ class DeviceJsonMapper {
       // Новые датчики с бэкенда
       indoorTemperature: (json['roomTemperature'] as num?)?.toDouble(),
       supplyTemperature: (json['supplyTemperature'] as num?)?.toDouble(),
-      co2Level: json['coIndicator'] as int?,
+      coIndicator: json['coIndicator'] as int?,
       freeCooling: json['freeCooling'] as bool? ?? false,
       heaterPower: json['power'] as int?,
       coolerStatus: json['coolerStatusLabel'] as String?,

@@ -796,7 +796,7 @@
   "scheduleDayTemp": "Day temperature",
   "scheduleNightTemp": "Night temperature",
   "scheduleActive": "Active",
-  "scheduleDayNightTemp": "Day: {day}° / Night: {night}°",
+  "scheduleDayNightTemp": "Day: {day}°C / Night: {night}°C",
   "@scheduleDayNightTemp": {
     "placeholders": {
       "day": {
@@ -939,9 +939,9 @@
   },
   "outdoorTemp": "Outdoor air temperature",
   "indoorTemp": "Indoor air temperature",
-  "supplyTempAfterRecup": "Supply air temp after recuperator",
+  "recuperatorTemperature": "Supply air temp after recuperator",
   "supplyTemp": "Supply air temperature",
-  "co2Level": "CO2 concentration",
+  "coIndicator": "CO indicator",
   "recuperatorEfficiency": "Recuperator temp efficiency",
   "freeCooling": "Recuperator free cooling",
   "heaterPerformance": "Electric heater performance",
@@ -977,9 +977,9 @@
   "seeAll": "See all",
   "outdoorTempDesc": "Outdoor air temperature",
   "indoorTempDesc": "Indoor air temperature",
-  "supplyTempAfterRecupDesc": "Supply air temperature after heat exchange in recuperator",
+  "recuperatorTemperatureDesc": "Supply air temperature after heat exchange in recuperator",
   "supplyTempDesc": "Air temperature at ventilation unit outlet",
-  "co2LevelDesc": "CO2 level in the room. Normal: up to 1000 ppm",
+  "coIndicatorDesc": "Carbon monoxide (CO) indicator",
   "recuperatorEfficiencyDesc": "Heat exchange efficiency in recuperator",
   "freeCoolingDesc": "Free cooling mode using outdoor air via recuperator",
   "heaterPerformanceDesc": "Current electric heater power",

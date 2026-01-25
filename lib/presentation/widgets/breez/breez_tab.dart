@@ -23,9 +23,7 @@ abstract class _TabConstants {
   // Анимации
   static const Duration animationDuration = Duration(milliseconds: 150);
 
-  // Типографика
-  static const double fontSizeCompact = 10;
-  static const double fontSizeNormal = 11;
+  // Типографика → AppFontSizes.tiny (10), AppFontSizes.captionSmall (11)
 }
 
 // =============================================================================
@@ -140,8 +138,8 @@ class _BreezTabState extends State<BreezTab> {
                   widget.label,
                   style: TextStyle(
                     fontSize: widget.compact
-                        ? _TabConstants.fontSizeCompact
-                        : _TabConstants.fontSizeNormal,
+                        ? AppFontSizes.tiny
+                        : AppFontSizes.captionSmall,
                     fontWeight: FontWeight.w600,
                     color: _buildTextColor(colors),
                   ),

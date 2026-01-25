@@ -17,28 +17,11 @@ export '../../../domain/entities/schedule_entry.dart';
 // =============================================================================
 
 abstract class _ScheduleWidgetConstants {
-
-  // Button icons
-  static const double seeAllFontSize = 12;
-
   // Day selector
-  static const double dayFontSizeCompact = 10;
-  static const double dayFontSizeNormal = 11;
   static const double indicatorGap = 2;
   static const double indicatorSize = 4;
 
-  // Empty state
-  static const double emptyFontSizeCompact = 11;
-  static const double emptyFontSizeNormal = 12;
-  static const double hintFontSize = 11;
-
   // Schedule row
-  static const double rowFontSizeCompact = 11;
-  static const double rowFontSizeNormal = 13;
-  static const double rowSmallFontSizeCompact = 10;
-  static const double rowSmallFontSizeNormal = 12;
-  static const double timeRangeFontSizeCompact = 9;
-  static const double timeRangeFontSizeNormal = 10;
   static const double activeIndicatorSize = 6;
 
   // Padding values
@@ -201,7 +184,7 @@ class _ScheduleWidgetState extends State<ScheduleWidget> {
                           child: Text(
                             l10n.seeAll,
                             style: TextStyle(
-                              fontSize: _ScheduleWidgetConstants.seeAllFontSize,
+                              fontSize: AppFontSizes.caption,
                               fontWeight: FontWeight.w600,
                               color: colors.accent,
                             ),
@@ -328,8 +311,8 @@ class _DaySelector extends StatelessWidget {
                   shortName,
                   style: TextStyle(
                     fontSize: compact
-                        ? _ScheduleWidgetConstants.dayFontSizeCompact
-                        : _ScheduleWidgetConstants.dayFontSizeNormal,
+                        ? AppFontSizes.tiny
+                        : AppFontSizes.captionSmall,
                     // Фиксированный fontWeight для предотвращения layout shift
                     fontWeight: FontWeight.w600,
                     color: isSelected
@@ -399,8 +382,8 @@ class _EmptyDayState extends StatelessWidget {
               l10n.noEntriesForDay(ScheduleWidget.translateDayName(day, l10n).toLowerCase()),
               style: TextStyle(
                 fontSize: compact
-                    ? _ScheduleWidgetConstants.emptyFontSizeCompact
-                    : _ScheduleWidgetConstants.emptyFontSizeNormal,
+                    ? AppFontSizes.captionSmall
+                    : AppFontSizes.caption,
                 color: colors.textMuted,
               ),
               textAlign: TextAlign.center,
@@ -410,7 +393,7 @@ class _EmptyDayState extends StatelessWidget {
               Text(
                 showAddHint ? l10n.tapToAdd : l10n.addFirstEntry,
                 style: TextStyle(
-                  fontSize: _ScheduleWidgetConstants.hintFontSize,
+                  fontSize: AppFontSizes.captionSmall,
                   color: colors.accent.withValues(alpha: AppColors.opacityHigh),
                 ),
               ),
@@ -456,11 +439,11 @@ class _ScheduleRow extends StatelessWidget {
     final colors = BreezColors.of(context);
     const iconSize = AppIconSizes.standard;
     final fontSize = compact
-        ? _ScheduleWidgetConstants.rowFontSizeCompact
-        : _ScheduleWidgetConstants.rowFontSizeNormal;
+        ? AppFontSizes.captionSmall
+        : AppFontSizes.bodySmall;
     final smallFontSize = compact
-        ? _ScheduleWidgetConstants.rowSmallFontSizeCompact
-        : _ScheduleWidgetConstants.rowSmallFontSizeNormal;
+        ? AppFontSizes.tiny
+        : AppFontSizes.caption;
 
     return BreezButton(
       onTap: onTap,
@@ -494,8 +477,8 @@ class _ScheduleRow extends StatelessWidget {
               entry.timeRange,
               style: TextStyle(
                 fontSize: compact
-                    ? _ScheduleWidgetConstants.timeRangeFontSizeCompact
-                    : _ScheduleWidgetConstants.timeRangeFontSizeNormal,
+                    ? AppFontSizes.badge
+                    : AppFontSizes.tiny,
                 fontWeight: FontWeight.w600,
                 color: colors.accent,
               ),
@@ -539,7 +522,7 @@ class _ScheduleRow extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                '${entry.tempDay}°',
+                '${entry.tempDay}°C',
                 style: TextStyle(
                   fontSize: fontSize,
                   fontWeight: FontWeight.w700,
@@ -547,7 +530,7 @@ class _ScheduleRow extends StatelessWidget {
                 ),
               ),
               Text(
-                '${entry.tempNight}°',
+                '${entry.tempNight}°C',
                 style: TextStyle(
                   fontSize: smallFontSize,
                   color: colors.textMuted,

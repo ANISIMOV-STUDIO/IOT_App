@@ -17,9 +17,6 @@ abstract class _TimePickerConstants {
   static const double dialogWidth = 280;
   static const double wheelHeight = 150;
   static const double itemExtent = 50;
-  static const double selectedFontSize = 32;
-  static const double unselectedFontSize = 20;
-  static const double colonFontSize = 32;
   static const double separatorPadding = 2; // Микро-отступ для разделителей
 }
 
@@ -142,7 +139,7 @@ class _BreezTimePickerDialogState extends State<_BreezTimePickerDialog> {
                     child: Text(
                       ':',
                       style: TextStyle(
-                        fontSize: _TimePickerConstants.colonFontSize,
+                        fontSize: AppFontSizes.displayMedium,
                         fontWeight: FontWeight.w700,
                         color: colors.text,
                       ),
@@ -327,8 +324,8 @@ class _LoopingWheelItem extends StatelessWidget {
             value.toString().padLeft(2, '0'),
             style: TextStyle(
               fontSize: selected
-                  ? _TimePickerConstants.selectedFontSize
-                  : _TimePickerConstants.unselectedFontSize,
+                  ? AppFontSizes.displayMedium
+                  : AppFontSizes.h3,
               fontWeight: selected ? FontWeight.w700 : FontWeight.w400,
               color: selected ? colors.accent : colors.textMuted,
             ),
@@ -485,7 +482,7 @@ class _BreezDateTimePickerDialogState extends State<_BreezDateTimePickerDialog> 
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: _TimePickerConstants.separatorPadding),
                     child: Text('.', style: TextStyle(
-                      fontSize: _TimePickerConstants.colonFontSize,
+                      fontSize: AppFontSizes.displayMedium,
                       fontWeight: FontWeight.w700,
                       color: colors.text,
                     )),
@@ -509,7 +506,7 @@ class _BreezDateTimePickerDialogState extends State<_BreezDateTimePickerDialog> 
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: _TimePickerConstants.separatorPadding),
                     child: Text('.', style: TextStyle(
-                      fontSize: _TimePickerConstants.colonFontSize,
+                      fontSize: AppFontSizes.displayMedium,
                       fontWeight: FontWeight.w700,
                       color: colors.text,
                     )),
@@ -556,7 +553,7 @@ class _BreezDateTimePickerDialogState extends State<_BreezDateTimePickerDialog> 
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs),
                     child: Text(':', style: TextStyle(
-                      fontSize: _TimePickerConstants.colonFontSize,
+                      fontSize: AppFontSizes.displayMedium,
                       fontWeight: FontWeight.w700,
                       color: colors.text,
                     )),
@@ -743,8 +740,8 @@ class _LoopingDateWheelItem extends StatelessWidget {
             displayValue.toString().padLeft(displayValue >= 100 ? 4 : 2, '0'),
             style: TextStyle(
               fontSize: selected
-                  ? _TimePickerConstants.selectedFontSize - 6
-                  : _TimePickerConstants.unselectedFontSize - 4,
+                  ? AppFontSizes.displayMedium - 6
+                  : AppFontSizes.h3 - 4,
               fontWeight: selected ? FontWeight.w700 : FontWeight.w400,
               color: selected ? colors.accent : colors.textMuted,
             ),

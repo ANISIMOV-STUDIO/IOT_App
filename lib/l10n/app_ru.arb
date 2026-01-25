@@ -796,7 +796,7 @@
   "scheduleDayTemp": "Дневная температура",
   "scheduleNightTemp": "Ночная температура",
   "scheduleActive": "Активно",
-  "scheduleDayNightTemp": "День: {day}° / Ночь: {night}°",
+  "scheduleDayNightTemp": "День: {day}°C / Ночь: {night}°C",
   "@scheduleDayNightTemp": {
     "placeholders": {
       "day": {
@@ -939,9 +939,9 @@
   },
   "outdoorTemp": "Температура уличного воздуха",
   "indoorTemp": "Температура воздуха в помещении",
-  "supplyTempAfterRecup": "Температура приточного воздуха после рекуператора",
+  "recuperatorTemperature": "Температура приточного воздуха после рекуператора",
   "supplyTemp": "Температура приточного воздуха",
-  "co2Level": "Концентрация CO2",
+  "coIndicator": "Индикатор CO",
   "recuperatorEfficiency": "Температурная эффективность рекуператора",
   "freeCooling": "Свободное охлаждение рекуператора",
   "heaterPerformance": "Текущая производительность электрического нагревателя",
@@ -977,9 +977,9 @@
   "seeAll": "Показать всё",
   "outdoorTempDesc": "Температура воздуха снаружи здания",
   "indoorTempDesc": "Температура воздуха внутри помещения",
-  "supplyTempAfterRecupDesc": "Температура приточного воздуха после теплообмена в рекуператоре",
+  "recuperatorTemperatureDesc": "Температура приточного воздуха после теплообмена в рекуператоре",
   "supplyTempDesc": "Температура воздуха на выходе из вентиляционной установки",
-  "co2LevelDesc": "Уровень углекислого газа в помещении. Норма: до 1000 ppm",
+  "coIndicatorDesc": "Индикатор угарного газа (CO)",
   "recuperatorEfficiencyDesc": "Эффективность теплообмена в рекуператоре",
   "freeCoolingDesc": "Режим бесплатного охлаждения наружным воздухом через рекуператор",
   "heaterPerformanceDesc": "Текущая мощность электрического нагревателя",

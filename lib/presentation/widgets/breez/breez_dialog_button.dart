@@ -13,8 +13,6 @@ import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
 // =============================================================================
 
 abstract class _DialogButtonConstants {
-  static const double fontSize = 14;
-  static const double fontSizeSmall = 12;
   static const double subtitleGap = 2;
 }
 
@@ -220,7 +218,7 @@ class BreezSettingsButton extends StatelessWidget {
                 Text(
                   label,
                   style: TextStyle(
-                    fontSize: _DialogButtonConstants.fontSize,
+                    fontSize: AppFontSizes.body,
                     fontWeight: FontWeight.w500,
                     color: labelColor,
                   ),
@@ -230,7 +228,7 @@ class BreezSettingsButton extends StatelessWidget {
                   Text(
                     subtitle!,
                     style: TextStyle(
-                      fontSize: _DialogButtonConstants.fontSizeSmall,
+                      fontSize: AppFontSizes.bodySmall,
                       color: colors.textMuted,
                     ),
                   ),

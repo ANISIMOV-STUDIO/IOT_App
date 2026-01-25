@@ -8,16 +8,6 @@ import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
 
-// =============================================================================
-// CONSTANTS
-// =============================================================================
-
-abstract class _ScheduleFormConstants {
-  static const double labelFontSize = 12;
-  static const double valueFontSize = 14;
-  static const double headerFontSize = 18;
-}
-
 /// Dropdown selector with label
 class ScheduleDropdown extends StatelessWidget {
 
@@ -39,7 +29,7 @@ class ScheduleDropdown extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-            fontSize: _ScheduleFormConstants.labelFontSize,
+            fontSize: AppFontSizes.caption,
             color: colors.textMuted,
           ),
         ),
@@ -56,7 +46,7 @@ class ScheduleDropdown extends StatelessWidget {
             underline: const SizedBox(),
             dropdownColor: colors.card,
             style: TextStyle(
-              fontSize: _ScheduleFormConstants.valueFontSize,
+              fontSize: AppFontSizes.body,
               color: colors.text,
             ),
             items: items.map((item) => DropdownMenuItem(value: item, child: Text(item))).toList(),
@@ -90,7 +80,7 @@ class ScheduleTimeButton extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-            fontSize: _ScheduleFormConstants.labelFontSize,
+            fontSize: AppFontSizes.caption,
             color: colors.textMuted,
           ),
         ),
@@ -99,7 +89,7 @@ class ScheduleTimeButton extends StatelessWidget {
           onTap: onTap,
           padding: const EdgeInsets.symmetric(
             horizontal: AppSpacing.sm,
-            vertical: _ScheduleFormConstants.valueFontSize,
+            vertical: AppFontSizes.body,
           ),
           backgroundColor: colors.buttonBg,
           hoverColor: colors.buttonHover,
@@ -114,7 +104,7 @@ class ScheduleTimeButton extends StatelessWidget {
               Text(
                 _formatTime(time),
                 style: TextStyle(
-                  fontSize: _ScheduleFormConstants.valueFontSize,
+                  fontSize: AppFontSizes.body,
                   color: colors.text,
                 ),
               ),
@@ -153,14 +143,14 @@ class ScheduleTemperatureSlider extends StatelessWidget {
             Text(
               label,
               style: TextStyle(
-                fontSize: _ScheduleFormConstants.labelFontSize,
+                fontSize: AppFontSizes.caption,
                 color: colors.textMuted,
               ),
             ),
             Text(
               '$value°C',
               style: TextStyle(
-                fontSize: _ScheduleFormConstants.valueFontSize,
+                fontSize: AppFontSizes.body,
                 fontWeight: FontWeight.w600,
                 color: colors.accent,
               ),
@@ -210,7 +200,7 @@ class ScheduleActiveToggle extends StatelessWidget {
           Text(
             label,
             style: TextStyle(
-              fontSize: _ScheduleFormConstants.valueFontSize,
+              fontSize: AppFontSizes.body,
               color: colors.text,
             ),
           ),
@@ -251,7 +241,7 @@ class ScheduleDialogHeader extends StatelessWidget {
         Text(
           title,
           style: TextStyle(
-            fontSize: _ScheduleFormConstants.headerFontSize,
+            fontSize: AppFontSizes.h3Small,
             fontWeight: FontWeight.w600,
             color: colors.text,
           ),

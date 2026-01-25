@@ -23,8 +23,6 @@ import 'package:hvac_control/presentation/widgets/breez/breez_list_card.dart';
 
 abstract class _SensorTileConstants {
   // Tile sizes
-  static const double valueFontSize = 14;
-  static const double labelFontSize = 9;
 
   // FittedBox content micro-spacings (smaller than AppSpacing.xxs for tight fit)
   static const double contentPadding = 2;
@@ -43,8 +41,6 @@ abstract class _SensorTileConstants {
   static const double dialogMaxWidth = 360;
   static const double dialogIconContainerSize = 56;
   static const double dialogIconSize = 28;
-  static const double dialogValueFontSize = 24;
-  static const double dialogDescFontSize = 13;
   static const double dialogDescLineHeight = 1.4;
 
   // Selection
@@ -272,7 +268,7 @@ class _SensorInfoContent extends StatelessWidget {
                 Text(
                   sensor.value,
                   style: TextStyle(
-                    fontSize: _SensorTileConstants.dialogValueFontSize,
+                    fontSize: AppFontSizes.h2,
                     fontWeight: FontWeight.bold,
                     color: colors.text,
                   ),
@@ -282,7 +278,7 @@ class _SensorInfoContent extends StatelessWidget {
                   Text(
                     sensor.description!,
                     style: TextStyle(
-                      fontSize: _SensorTileConstants.dialogDescFontSize,
+                      fontSize: AppFontSizes.bodySmall,
                       color: colors.textMuted,
                       height: _SensorTileConstants.dialogDescLineHeight,
                     ),
@@ -434,7 +430,7 @@ class _SensorTileState extends State<SensorTile> {
                     Text(
                       widget.sensor.value,
                       style: TextStyle(
-                        fontSize: _SensorTileConstants.valueFontSize,
+                        fontSize: AppFontSizes.body,
                         fontWeight: FontWeight.w700,
                         color: colors.text,
                       ),
@@ -447,7 +443,7 @@ class _SensorTileState extends State<SensorTile> {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        fontSize: _SensorTileConstants.labelFontSize,
+                        fontSize: AppFontSizes.badge,
                         color: colors.textMuted,
                       ),
                     ),

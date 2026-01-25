@@ -677,7 +677,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String scheduleDayNightTemp(int day, int night) {
-    return 'Day: $day° / Night: $night°';
+    return 'Day: $day°C / Night: $night°C';
   }
 
   @override
@@ -923,13 +923,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get indoorTemp => 'Indoor air temperature';
 
   @override
-  String get supplyTempAfterRecup => 'Supply air temp after recuperator';
+  String get recuperatorTemperature => 'Supply air temp after recuperator';
 
   @override
   String get supplyTemp => 'Supply air temperature';
 
   @override
-  String get co2Level => 'CO2 concentration';
+  String get coIndicator => 'CO indicator';
 
   @override
   String get recuperatorEfficiency => 'Recuperator temp efficiency';
@@ -1034,14 +1034,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get indoorTempDesc => 'Indoor air temperature';
 
   @override
-  String get supplyTempAfterRecupDesc =>
+  String get recuperatorTemperatureDesc =>
       'Supply air temperature after heat exchange in recuperator';
 
   @override
   String get supplyTempDesc => 'Air temperature at ventilation unit outlet';
 
   @override
-  String get co2LevelDesc => 'CO2 level in the room. Normal: up to 1000 ppm';
+  String get coIndicatorDesc => 'Carbon monoxide (CO) indicator';
 
   @override
   String get recuperatorEfficiencyDesc =>

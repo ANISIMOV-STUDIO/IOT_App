@@ -13,9 +13,6 @@ import 'package:hvac_control/presentation/widgets/breez/schedule_widget.dart';
 // =============================================================================
 
 abstract class _ScheduleEntryCardConstants {
-  static const double fontSize = 14;
-  static const double fontSizeSmall = 12;
-  static const double fontSizeMedium = 13;
   static const double iconSizeSmall = 16;
   static const double iconSizeMedium = 18;
   static const double modeIconContainerSize = 36;
@@ -90,7 +87,7 @@ class ScheduleEntryCard extends StatelessWidget {
               Text(
                 entry.mode,
                 style: TextStyle(
-                  fontSize: _ScheduleEntryCardConstants.fontSize,
+                  fontSize: AppFontSizes.body,
                   fontWeight: FontWeight.w500,
                   color: colors.text,
                 ),
@@ -98,7 +95,7 @@ class ScheduleEntryCard extends StatelessWidget {
               Text(
                 l10n.scheduleDayNightTemp(entry.tempDay, entry.tempNight),
                 style: TextStyle(
-                  fontSize: _ScheduleEntryCardConstants.fontSizeSmall,
+                  fontSize: AppFontSizes.bodySmall,
                   color: colors.textMuted,
                 ),
               ),
@@ -155,7 +152,7 @@ class _DayBadge extends StatelessWidget {
       child: Text(
         ScheduleWidget.translateDayName(day, l10n),
         style: TextStyle(
-          fontSize: _ScheduleEntryCardConstants.fontSizeMedium,
+          fontSize: AppFontSizes.bodySmall,
           fontWeight: FontWeight.w600,
           color: isActive ? colors.accent : colors.text,
         ),
@@ -186,7 +183,7 @@ class _TimeRange extends StatelessWidget {
         Text(
           timeRange,
           style: TextStyle(
-            fontSize: _ScheduleEntryCardConstants.fontSizeMedium,
+            fontSize: AppFontSizes.bodySmall,
             color: colors.textMuted,
           ),
         ),

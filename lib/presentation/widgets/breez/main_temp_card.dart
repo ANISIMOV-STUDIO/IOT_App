@@ -50,15 +50,15 @@ abstract class _MainTempCardConstants {
 class MainTempCard extends StatelessWidget {
 
   const MainTempCard({
-    required this.unitName, required this.temperature, super.key,
+    required this.unitName, this.temperature, super.key,
     this.temperatureSetpoint,
     this.currentMode,
     this.status,
-    this.humidity = 45,
-    this.outsideTemp = 0.0,
-    this.indoorTemp = 22.0,
+    this.humidity,
+    this.outsideTemp,
+    this.indoorTemp,
     this.airflow = 420,
-    this.filterPercent = 88,
+    this.filterPercent,
     this.isPowered = true,
     this.isLoading = false,
     this.supplyFan,
@@ -82,18 +82,18 @@ class MainTempCard extends StatelessWidget {
   });
   final String unitName;
   final String? status;
-  final int temperature;
+  final int? temperature;
 
   /// Уставка температуры с пульта (readonly)
   final double? temperatureSetpoint;
 
   /// Текущий режим работы (basic, intensive, etc.)
   final String? currentMode;
-  final int humidity;
-  final double outsideTemp;
-  final double indoorTemp;
+  final int? humidity;
+  final double? outsideTemp;
+  final double? indoorTemp;
   final int airflow;
-  final int filterPercent;
+  final int? filterPercent;
   final bool isPowered;
   final bool isLoading;
 
@@ -396,23 +396,23 @@ class _TemperatureSetpointSection extends StatelessWidget {
 class _StatsSection extends StatelessWidget {
 
   const _StatsSection({
-    required this.outsideTemp,
-    required this.indoorTemp,
-    required this.humidity,
-    required this.airflow,
-    required this.filterPercent,
     required this.selectedSensors,
     required this.colors,
     required this.l10n,
     required this.borderColor,
+    this.outsideTemp,
+    this.indoorTemp,
+    this.humidity,
+    this.airflow,
+    this.filterPercent,
     this.sensorUnit,
   });
   final UnitState? sensorUnit;
-  final double outsideTemp;
-  final double indoorTemp;
-  final int humidity;
-  final int airflow;
-  final int filterPercent;
+  final double? outsideTemp;
+  final double? indoorTemp;
+  final int? humidity;
+  final int? airflow;
+  final int? filterPercent;
   final List<QuickSensorType> selectedSensors;
   final BreezColors colors;
   final AppLocalizations l10n;
@@ -423,23 +423,23 @@ class _StatsSection extends StatelessWidget {
     final unit = sensorUnit;
     return switch (type) {
       QuickSensorType.outsideTemp =>
-        '${(unit?.outsideTemp ?? outsideTemp).toStringAsFixed(1)}°',
+        (unit?.outsideTemp ?? outsideTemp) != null ? '${(unit?.outsideTemp ?? outsideTemp)!.toStringAsFixed(1)}°C' : '—',
       QuickSensorType.indoorTemp =>
-        '${(unit?.indoorTemp ?? indoorTemp).toStringAsFixed(1)}°',
+        (unit?.indoorTemp ?? indoorTemp) != null ? '${(unit?.indoorTemp ?? indoorTemp)!.toStringAsFixed(1)}°C' : '—',
       QuickSensorType.humidity =>
-        '${unit?.humidity ?? humidity}%',
-      QuickSensorType.co2Level =>
-        '${unit?.co2Level ?? 0}',
+        (unit?.humidity ?? humidity) != null ? '${unit?.humidity ?? humidity}%' : '—',
+      QuickSensorType.coIndicator =>
+        unit?.coIndicator != null ? '${unit!.coIndicator}' : '—',
       QuickSensorType.supplyTemp =>
-        '${(unit?.supplyTemp ?? 0).toStringAsFixed(1)}°',
+        unit?.supplyTemp != null ? '${unit!.supplyTemp!.toStringAsFixed(1)}°C' : '—',
       QuickSensorType.recuperatorEfficiency =>
-        '${unit?.recuperatorEfficiency ?? 0}%',
+        unit?.recuperatorEfficiency != null ? '${unit!.recuperatorEfficiency}%' : '—',
       QuickSensorType.heaterPower =>
-        '${unit?.heaterPower ?? 0}%',
+        unit?.heaterPower != null ? '${unit!.heaterPower}%' : '—',
       QuickSensorType.ductPressure =>
-        '${unit?.ductPressure ?? 0} Па',
+        unit?.ductPressure != null ? '${unit!.ductPressure} Па' : '—',
       QuickSensorType.filterPercent =>
-        '${unit?.filterPercent ?? filterPercent}%',
+        (unit?.filterPercent ?? filterPercent) != null ? '${unit?.filterPercent ?? filterPercent}%' : '—',
     };
   }
 
