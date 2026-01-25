@@ -79,6 +79,7 @@ class MainTempCard extends StatelessWidget {
     this.updatedAt,
     this.onSyncTap,
     this.isSyncing = false,
+    this.errorMessage,
   });
   final String unitName;
   final String? status;
@@ -125,6 +126,9 @@ class MainTempCard extends StatelessWidget {
 
   /// Флаг синхронизации (для анимации вращения иконки)
   final bool isSyncing;
+
+  /// Сообщение об ошибке (таймаут синхронизации и т.д.)
+  final String? errorMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -263,6 +267,43 @@ class MainTempCard extends StatelessWidget {
                                 fontWeight: FontWeight.w600,
                                 color: colors.textMuted,
                               ),
+                            ),
+                          ),
+                        ),
+                      // Плашка ошибки синхронизации
+                      if (isOnline && errorMessage != null)
+                        Center(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: AppSpacing.md,
+                              vertical: AppSpacing.sm,
+                            ),
+                            decoration: BoxDecoration(
+                              color: colors.card.withValues(alpha: _MainTempCardConstants.offlineOverlayOpacity),
+                              borderRadius: BorderRadius.circular(AppRadius.nested),
+                              border: Border.all(color: AppColors.accentRed.withValues(alpha: AppColors.opacityLow)),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(
+                                  Icons.error_outline,
+                                  size: AppIconSizes.standard,
+                                  color: AppColors.accentRed,
+                                ),
+                                const SizedBox(width: AppSpacing.xs),
+                                Text(
+                                  // Локализация по ключу
+                                  errorMessage == 'syncTimeout'
+                                      ? l10n.syncTimeout
+                                      : errorMessage!,
+                                  style: const TextStyle(
+                                    fontSize: AppFontSizes.body,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.accentRed,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),

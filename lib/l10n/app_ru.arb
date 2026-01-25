@@ -813,6 +813,7 @@
   "statusOnline": "Онлайн",
   "statusOffline": "Оффлайн",
   "deviceOffline": "Устройство не в сети",
+  "syncTimeout": "Нет ответа от пульта",
   "statusRunning": "В работе",
   "statusStopped": "Выключен",
   "syncedJustNow": "Только что",

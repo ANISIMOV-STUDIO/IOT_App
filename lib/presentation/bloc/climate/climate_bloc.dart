@@ -725,6 +725,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
     emit(state.copyWith(
       isTogglingPower: false,
       clearPendingPower: true,
+      errorMessage: 'syncTimeout', // Ключ для локализации в UI
     ));
   }
 

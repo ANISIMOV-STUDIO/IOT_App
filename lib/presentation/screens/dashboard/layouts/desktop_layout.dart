@@ -46,6 +46,7 @@ class DesktopLayout extends StatefulWidget {
     this.onAlarmsReset,
     this.onSyncTap,
     this.isSyncing = false,
+    this.errorMessage,
   });
   final UnitState unit;
   final List<UnitState> allUnits;
@@ -78,6 +79,8 @@ class DesktopLayout extends StatefulWidget {
   final VoidCallback? onSyncTap;
   /// Флаг синхронизации (для анимации вращения иконки)
   final bool isSyncing;
+  /// Сообщение об ошибке синхронизации
+  final String? errorMessage;
 
   @override
   State<DesktopLayout> createState() => _DesktopLayoutState();
@@ -145,6 +148,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
             isScheduleEnabled: widget.isScheduleEnabled,
             isScheduleLoading: widget.isScheduleLoading,
             onScheduleToggle: widget.onScheduleToggle,
+            errorMessage: widget.errorMessage,
           ),
         ),
 

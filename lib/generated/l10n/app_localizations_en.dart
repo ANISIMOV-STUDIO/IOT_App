@@ -699,6 +699,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deviceOffline => 'Device offline';
 
   @override
+  String get syncTimeout => 'No response from device';
+
+  @override
   String get statusRunning => 'Running';
 
   @override

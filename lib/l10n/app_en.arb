@@ -813,6 +813,7 @@
   "statusOnline": "Online",
   "statusOffline": "Offline",
   "deviceOffline": "Device offline",
+  "syncTimeout": "No response from device",
   "statusRunning": "Running",
   "statusStopped": "Stopped",
   "syncedJustNow": "Just now",

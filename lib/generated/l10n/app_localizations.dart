@@ -1376,6 +1376,12 @@ abstract class AppLocalizations {
   /// **'Устройство не в сети'**
   String get deviceOffline;
 
+  /// No description provided for @syncTimeout.
+  ///
+  /// In ru, this message translates to:
+  /// **'Нет ответа от пульта'**
+  String get syncTimeout;
+
   /// No description provided for @statusRunning.
   ///
   /// In ru, this message translates to:

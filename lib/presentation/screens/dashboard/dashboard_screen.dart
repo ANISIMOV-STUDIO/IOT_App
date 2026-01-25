@@ -148,6 +148,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       isPendingOperatingMode: data.climateState.isPendingOperatingMode,
       onSyncTap: _handleSyncTap,
       isSyncing: data.climateState.isSyncing,
+      errorMessage: data.climateState.errorMessage,
     );
   }
 
@@ -190,6 +191,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             isPendingOperatingMode: data.climateState.isPendingOperatingMode,
             onSyncTap: _handleSyncTap,
             isSyncing: data.climateState.isSyncing,
+            errorMessage: data.climateState.errorMessage,
           ),
         ),
       ],

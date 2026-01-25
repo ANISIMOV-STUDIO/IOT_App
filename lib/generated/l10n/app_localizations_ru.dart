@@ -701,6 +701,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get deviceOffline => 'Устройство не в сети';
 
   @override
+  String get syncTimeout => 'Нет ответа от пульта';
+
+  @override
   String get statusRunning => 'В работе';
 
   @override

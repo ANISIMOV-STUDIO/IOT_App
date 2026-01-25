@@ -28,6 +28,7 @@ class UnitControlCard extends StatelessWidget {
     this.isScheduleLoading = false,
     this.onScheduleToggle,
     this.isOnline = true,
+    this.errorMessage,
   });
   final UnitState unit;
   final VoidCallback? onPowerToggle;
@@ -41,6 +42,8 @@ class UnitControlCard extends StatelessWidget {
   final bool isScheduleLoading;
   final VoidCallback? onScheduleToggle;
   final bool isOnline;
+  /// Сообщение об ошибке (таймаут синхронизации и т.д.)
+  final String? errorMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -79,6 +82,7 @@ class UnitControlCard extends StatelessWidget {
       updatedAt: unit.updatedAt,
       onSyncTap: onSyncTap,
       isSyncing: isSyncing,
+      errorMessage: errorMessage,
     );
   }
 }
