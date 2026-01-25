@@ -142,6 +142,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
 
     // Управление устройством
     on<ClimatePowerToggled>(_onPowerToggled);
+    on<ClimatePowerToggleTimeout>(_onPowerToggleTimeout);
 
     // Температура (мгновенное обновление UI, отправка через Commit)
     on<ClimateTemperatureChanged>(_onTemperatureChanged, transformer: debounceRestartable());
@@ -691,15 +692,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       _powerToggleTimer?.cancel();
       _powerToggleTimer = Timer(_powerToggleTimeout, () {
         if (!isClosed && state.isTogglingPower) {
-          developer.log(
-            '_onPowerToggled: timeout waiting for SignalR confirmation',
-            name: 'ClimateBloc',
-          );
-          // ignore: invalid_use_of_visible_for_testing_member
-          emit(state.copyWith(
-            isTogglingPower: false,
-            clearPendingPower: true,
-          ));
+          add(const ClimatePowerToggleTimeout());
         }
       });
     } catch (e, stackTrace) {
@@ -718,6 +711,21 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         errorMessage: 'Power toggle error: $e',
       ));
     }
+  }
+
+  /// Таймаут ожидания подтверждения power toggle от SignalR
+  void _onPowerToggleTimeout(
+    ClimatePowerToggleTimeout event,
+    Emitter<ClimateControlState> emit,
+  ) {
+    developer.log(
+      '_onPowerToggleTimeout: timeout waiting for SignalR confirmation',
+      name: 'ClimateBloc',
+    );
+    emit(state.copyWith(
+      isTogglingPower: false,
+      clearPendingPower: true,
+    ));
   }
 
   /// Изменение целевой температуры

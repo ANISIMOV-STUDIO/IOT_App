@@ -7,7 +7,6 @@ import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
-import 'package:hvac_control/presentation/widgets/breez/breez_loader.dart';
 import 'package:intl/intl.dart';
 
 /// Header section of MainTempCard with date, unit name, alarm badge, and controls
@@ -329,21 +328,11 @@ class _ControlsSection extends StatelessWidget {
         ),
         const SizedBox(width: AppSpacing.xs),
         // Schedule toggle button
-        if (isScheduleLoading)
-          const SizedBox(
-            width: 32,
-            height: 32,
-            child: Padding(
-              padding: EdgeInsets.all(AppSpacing.xs),
-              child: BreezLoader.small(),
-            ),
-          )
-        else
-          BreezIconButton(
-            icon: Icons.schedule,
-            iconColor: !isOnline ? mutedColor : isScheduleEnabled ? AppColors.accentGreen : mutedColor,
-            onTap: onScheduleToggle,
-          ),
+        BreezIconButton(
+          icon: Icons.schedule,
+          iconColor: !isOnline ? mutedColor : isScheduleEnabled ? AppColors.accentGreen : mutedColor,
+          onTap: onScheduleToggle,
+        ),
         const SizedBox(width: AppSpacing.xs),
         BreezIconButton(
           icon: Icons.settings_outlined,

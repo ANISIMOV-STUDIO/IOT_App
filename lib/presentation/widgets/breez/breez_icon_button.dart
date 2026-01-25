@@ -6,6 +6,7 @@ import 'package:hvac_control/core/theme/app_icon_sizes.dart';
 import 'package:hvac_control/core/theme/app_sizes.dart';
 import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
+import 'package:hvac_control/presentation/widgets/breez/breez_loader.dart';
 
 // =============================================================================
 // CONSTANTS
@@ -30,6 +31,7 @@ class BreezIconButton extends StatelessWidget {
     this.iconColor,
     this.backgroundColor,
     this.isActive = false,
+    this.isLoading = false,
     this.size = AppIconSizes.standard,
     this.badge,
     this.showBorder = true,
@@ -42,6 +44,9 @@ class BreezIconButton extends StatelessWidget {
   final Color? iconColor;
   final Color? backgroundColor;
   final bool isActive;
+
+  /// Показывать лоадер вместо иконки
+  final bool isLoading;
   final double size;
   final String? badge;
   final bool showBorder;
@@ -76,7 +81,7 @@ class BreezIconButton extends StatelessWidget {
       clipBehavior: Clip.none,
       children: [
         BreezButton(
-          onTap: onTap,
+          onTap: isLoading ? null : onTap,
           width: buttonSize,
           height: buttonSize,
           padding: EdgeInsets.all(iconPadding),
@@ -86,11 +91,13 @@ class BreezIconButton extends StatelessWidget {
           enableGlow: isActive,
           semanticLabel: semanticLabel,
           tooltip: tooltip,
-          child: Icon(
-            icon,
-            size: size,
-            color: effectiveIconColor,
-          ),
+          child: isLoading
+              ? BreezLoader.small(color: effectiveIconColor)
+              : Icon(
+                  icon,
+                  size: size,
+                  color: effectiveIconColor,
+                ),
         ),
         // Badge
         if (badge != null)
