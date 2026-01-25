@@ -277,6 +277,11 @@ final class ClimatePowerToggleTimeout extends ClimateEvent {
   const ClimatePowerToggleTimeout();
 }
 
+/// Внутреннее событие: таймаут ожидания подтверждения schedule toggle
+final class ClimateScheduleToggleTimeout extends ClimateEvent {
+  const ClimateScheduleToggleTimeout();
+}
+
 // ============================================
 // ОБНОВЛЕНИЕ ЛОКАЛЬНОГО СОСТОЯНИЯ
 // ============================================

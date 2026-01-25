@@ -135,7 +135,9 @@ class DashboardBlocBuilder extends StatelessWidget {
           buildWhen: (previous, current) =>
               previous.climate != current.climate ||
               previous.isTogglingPower != current.isTogglingPower ||
+              previous.isTogglingSchedule != current.isTogglingSchedule ||
               previous.isSyncing != current.isSyncing ||
+              previous.errorMessage != current.errorMessage ||
               previous.deviceFullState != current.deviceFullState ||
               previous.activeAlarms != current.activeAlarms ||
               previous.isPendingHeatingTemperature != current.isPendingHeatingTemperature ||

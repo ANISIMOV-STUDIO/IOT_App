@@ -340,8 +340,8 @@ class MainTempCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                // Overlay блокировки при переключении питания
-                if (isPowerLoading)
+                // Overlay блокировки при переключении питания или расписания
+                if (isPowerLoading || isScheduleLoading)
                   Positioned.fill(
                     child: ColoredBox(
                       color: colors.card.withValues(alpha: AppColors.opacityHigh),

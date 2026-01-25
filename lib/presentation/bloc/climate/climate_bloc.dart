@@ -164,6 +164,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
 
     // Расписание
     on<ClimateScheduleToggled>(_onScheduleToggled);
+    on<ClimateScheduleToggleTimeout>(_onScheduleToggleTimeout);
 
     // Настройки режима
     on<ClimateModeSettingsChanged>(_onModeSettingsChanged);
@@ -195,6 +196,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   StreamSubscription<ClimateState>? _climateSubscription;
   StreamSubscription<DeviceFullState>? _deviceFullStateSubscription;
   Timer? _powerToggleTimer;
+  Timer? _scheduleToggleTimer;
   Timer? _syncTimer;
   Timer? _heatingTempTimer;
   Timer? _coolingTempTimer;
@@ -379,6 +381,7 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
         isTogglingPower: false,
         isTogglingSchedule: false,
         clearPendingPower: true,
+        clearPendingSchedule: true,
       ));
 
       // Подписываемся на real-time обновления DeviceFullState (SignalR)
@@ -506,6 +509,19 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       _powerToggleTimer = null;
     }
 
+    // Проверяем, подтвердилось ли ожидаемое состояние расписания
+    final pendingSchedule = state.pendingScheduleState;
+    final scheduleConfirmed = pendingSchedule == null || incoming.isScheduleEnabled == pendingSchedule;
+
+    if (scheduleConfirmed && pendingSchedule != null) {
+      developer.log(
+        'Schedule state confirmed by SignalR (full state): isScheduleEnabled=${incoming.isScheduleEnabled}',
+        name: 'ClimateBloc',
+      );
+      _scheduleToggleTimer?.cancel();
+      _scheduleToggleTimer = null;
+    }
+
     // Получаем текущие значения из incoming modeSettings
     final currentMode = incoming.operatingMode;
     final incomingSettings = incoming.modeSettings?[currentMode];
@@ -569,6 +585,9 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       // Сбрасываем лоадер только если power подтверждён
       isTogglingPower: !powerConfirmed && state.isTogglingPower,
       clearPendingPower: powerConfirmed,
+      // Сбрасываем лоадер только если schedule подтверждён
+      isTogglingSchedule: !scheduleConfirmed && state.isTogglingSchedule,
+      clearPendingSchedule: scheduleConfirmed,
       // Сбрасываем индикатор синхронизации
       isSyncing: false,
       // Сбрасываем pending флаги только когда SignalR подтвердил наше значение
@@ -1264,11 +1283,13 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
   }
 
   /// Включение/выключение расписания
+  ///
+  /// Лоадер остаётся до подтверждения от SignalR (pendingScheduleState)
   Future<void> _onScheduleToggled(
     ClimateScheduleToggled event,
     Emitter<ClimateControlState> emit,
   ) async {
-    // Блокируем кнопку на время запроса
+    // Блокируем кнопку — предотвращаем двойные нажатия
     if (state.isTogglingSchedule) {
       return;
     }
@@ -1279,31 +1300,58 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
       return;
     }
 
-    emit(state.copyWith(isTogglingSchedule: true));
+    developer.log('_onScheduleToggled called: enabled=${event.enabled}', name: 'ClimateBloc');
+
+    // НЕ делаем optimistic update — ждём подтверждения от SignalR
+    // pendingScheduleState — ожидаемое значение, лоадер останется пока SignalR не подтвердит
+    emit(state.copyWith(
+      isTogglingSchedule: true,
+      pendingScheduleState: event.enabled,
+    ));
 
     try {
       await _setScheduleEnabled(SetScheduleEnabledParams(
         deviceId: deviceId,
         enabled: event.enabled,
       ));
-      
-      // Обновляем локальное состояние (optimistic update)
-      if (state.deviceFullState != null) {
-        emit(state.copyWith(
-          isTogglingSchedule: false,
-          deviceFullState: state.deviceFullState!.copyWith(
-            isScheduleEnabled: event.enabled,
-          ),
-        ));
-      } else {
-        emit(state.copyWith(isTogglingSchedule: false));
-      }
-    } catch (e) {
+      developer.log('_onScheduleToggled: command sent, waiting for SignalR confirmation', name: 'ClimateBloc');
+
+      // Таймаут на случай если SignalR не пришлёт подтверждение
+      _scheduleToggleTimer?.cancel();
+      _scheduleToggleTimer = Timer(_powerToggleTimeout, () {
+        if (!isClosed && state.isTogglingSchedule) {
+          add(const ClimateScheduleToggleTimeout());
+        }
+      });
+    } catch (e, stackTrace) {
+      developer.log(
+        '_onScheduleToggled ERROR: $e',
+        name: 'ClimateBloc',
+        error: e,
+        stackTrace: stackTrace,
+      );
       emit(state.copyWith(
         isTogglingSchedule: false,
+        clearPendingSchedule: true,
         errorMessage: 'Schedule toggle error: $e',
       ));
     }
+  }
+
+  /// Таймаут ожидания подтверждения schedule toggle от SignalR
+  void _onScheduleToggleTimeout(
+    ClimateScheduleToggleTimeout event,
+    Emitter<ClimateControlState> emit,
+  ) {
+    developer.log(
+      '_onScheduleToggleTimeout: timeout waiting for SignalR confirmation',
+      name: 'ClimateBloc',
+    );
+    emit(state.copyWith(
+      isTogglingSchedule: false,
+      clearPendingSchedule: true,
+      errorMessage: 'syncTimeout', // Ключ для локализации в UI
+    ));
   }
 
   /// Обновление quickSensors в локальном состоянии (после успешного сохранения)
@@ -1347,6 +1395,8 @@ class ClimateBloc extends Bloc<ClimateEvent, ClimateControlState> {
 
     // Таймеры можно отменять синхронно
     _powerToggleTimer?.cancel();
+    _scheduleToggleTimer?.cancel();
+    _syncTimer?.cancel();
     _heatingTempTimer?.cancel();
     _coolingTempTimer?.cancel();
     _supplyFanTimer?.cancel();
