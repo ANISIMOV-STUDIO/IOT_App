@@ -28,7 +28,10 @@ import 'package:hvac_control/presentation/bloc/analytics/analytics_bloc.dart';
 import 'package:hvac_control/presentation/bloc/auth/auth_bloc.dart';
 import 'package:hvac_control/presentation/bloc/auth/auth_event.dart';
 import 'package:hvac_control/presentation/bloc/auth/auth_state.dart';
-import 'package:hvac_control/presentation/bloc/climate/climate_bloc.dart';
+import 'package:hvac_control/presentation/bloc/climate/alarms/climate_alarms_bloc.dart';
+import 'package:hvac_control/presentation/bloc/climate/core/climate_core_bloc.dart';
+import 'package:hvac_control/presentation/bloc/climate/parameters/climate_parameters_bloc.dart';
+import 'package:hvac_control/presentation/bloc/climate/power/climate_power_bloc.dart';
 import 'package:hvac_control/presentation/bloc/connectivity/connectivity_bloc.dart';
 import 'package:hvac_control/presentation/bloc/devices/devices_bloc.dart';
 import 'package:hvac_control/presentation/bloc/notifications/notifications_bloc.dart';
@@ -98,9 +101,21 @@ class _HvacControlAppState extends State<HvacControlApp> {
         BlocProvider(
           create: (context) => di.sl<DevicesBloc>(),
         ),
-        // ClimateBloc — управление климатом текущего устройства
+        // ClimateCoreBloc — lifecycle, SignalR, deviceFullState
         BlocProvider(
-          create: (context) => di.sl<ClimateBloc>(),
+          create: (context) => di.sl<ClimateCoreBloc>(),
+        ),
+        // ClimatePowerBloc — power + schedule toggle
+        BlocProvider(
+          create: (context) => di.sl<ClimatePowerBloc>(),
+        ),
+        // ClimateParametersBloc — temps, fans, modes
+        BlocProvider(
+          create: (context) => di.sl<ClimateParametersBloc>(),
+        ),
+        // ClimateAlarmsBloc — alarm history and management
+        BlocProvider(
+          create: (context) => di.sl<ClimateAlarmsBloc>(),
         ),
         // NotificationsBloc — уведомления устройств
         BlocProvider(

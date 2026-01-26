@@ -147,7 +147,7 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
       // Обновляем список устройств и выбираем новое
       final updatedDevices = [...state.devices, device];
 
-      // Уведомляем ClimateBloc о новом выбранном устройстве
+      // Уведомляем ClimateCoreBloc о новом выбранном устройстве
       _setSelectedDevice(device.id);
 
       emit(state.copyWith(

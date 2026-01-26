@@ -11,7 +11,7 @@ import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/data/api/http/clients/hvac_http_client.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
-import 'package:hvac_control/presentation/bloc/climate/climate_bloc.dart';
+import 'package:hvac_control/presentation/bloc/climate/core/climate_core_bloc.dart';
 import 'package:hvac_control/presentation/bloc/devices/devices_bloc.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_button.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_dialog_button.dart';
@@ -90,7 +90,7 @@ class SensorData {
 /// - Compact режим для мобильных
 ///
 /// При `selectable: true`:
-/// - Автоматически читает состояние выбора из ClimateBloc
+/// - Автоматически читает состояние выбора из ClimateCoreBloc
 /// - Показывает диалог с кнопками выбора
 /// - Сохраняет изменения на сервер
 class SensorTile extends StatefulWidget {
@@ -297,7 +297,7 @@ class _SensorTileState extends State<SensorTile> {
   bool _isSaving = false;
 
   List<String> get _selectedKeys {
-    final climateState = context.read<ClimateBloc>().state;
+    final climateState = context.read<ClimateCoreBloc>().state;
     return climateState.deviceFullState?.quickSensors ?? [];
   }
 
@@ -337,7 +337,7 @@ class _SensorTileState extends State<SensorTile> {
       await httpClient.setQuickSensors(deviceId, current);
 
       if (mounted) {
-        context.read<ClimateBloc>().add(ClimateQuickSensorsUpdated(current));
+        context.read<ClimateCoreBloc>().add(ClimateCoreQuickSensorsUpdated(current));
       }
     } on Exception catch (e) {
       // Логируем ошибку, но не показываем пользователю -
@@ -372,9 +372,9 @@ class _SensorTileState extends State<SensorTile> {
     final colors = BreezColors.of(context);
     final accentColor = widget.sensor.color ?? colors.accent;
 
-    // Для selectable режима слушаем изменения в ClimateBloc
+    // Для selectable режима слушаем изменения в ClimateCoreBloc
     if (widget.selectable) {
-      return BlocBuilder<ClimateBloc, ClimateControlState>(
+      return BlocBuilder<ClimateCoreBloc, ClimateCoreState>(
         buildWhen: (prev, curr) =>
             prev.deviceFullState?.quickSensors !=
             curr.deviceFullState?.quickSensors,
@@ -488,7 +488,7 @@ class _SensorTileState extends State<SensorTile> {
 /// - `expandHeight: false` (default) — фиксированный aspectRatio 0.85
 /// - `expandHeight: true` — карточки растягиваются по высоте контейнера
 ///
-/// При `selectable: true` каждый тайл автоматически подключается к ClimateBloc
+/// При `selectable: true` каждый тайл автоматически подключается к ClimateCoreBloc
 /// для управления выбором показателей на главный экран.
 class AnalyticsSensorsGrid extends StatelessWidget {
   const AnalyticsSensorsGrid({

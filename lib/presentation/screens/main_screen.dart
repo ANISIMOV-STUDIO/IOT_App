@@ -7,7 +7,7 @@ import 'package:hvac_control/core/theme/app_animations.dart';
 import 'package:hvac_control/core/theme/breakpoints.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
 import 'package:hvac_control/presentation/bloc/analytics/analytics_bloc.dart';
-import 'package:hvac_control/presentation/bloc/climate/climate_bloc.dart';
+import 'package:hvac_control/presentation/bloc/climate/core/climate_core_bloc.dart';
 import 'package:hvac_control/presentation/bloc/connectivity/connectivity_bloc.dart';
 import 'package:hvac_control/presentation/bloc/devices/devices_bloc.dart';
 import 'package:hvac_control/presentation/screens/analytics/analytics_screen.dart';
@@ -83,8 +83,8 @@ class _MainScreenState extends State<MainScreen> {
       _blocsStarted = true;
       // DevicesBloc — загрузка списка устройств
       context.read<DevicesBloc>().add(const DevicesSubscriptionRequested());
-      // ClimateBloc — загрузка состояния климата
-      context.read<ClimateBloc>().add(const ClimateSubscriptionRequested());
+      // ClimateCoreBloc — загрузка состояния климата
+      context.read<ClimateCoreBloc>().add(const ClimateCoreSubscriptionRequested());
       // NotificationsBloc — загружается через DashboardBlocListeners при выборе устройства
       // AnalyticsBloc — статистика и графики
       context.read<AnalyticsBloc>().add(const AnalyticsSubscriptionRequested());

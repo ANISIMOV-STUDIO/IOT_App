@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hvac_control/core/navigation/app_router.dart';
 import 'package:hvac_control/core/services/toast_service.dart';
 import 'package:hvac_control/core/theme/app_animations.dart';
+import 'package:hvac_control/domain/entities/alarm_info.dart';
 import 'package:hvac_control/domain/entities/climate.dart';
 import 'package:hvac_control/domain/entities/device_full_state.dart';
 import 'package:hvac_control/domain/entities/hvac_device.dart';
@@ -15,7 +16,10 @@ import 'package:hvac_control/generated/l10n/app_localizations.dart';
 import 'package:hvac_control/presentation/bloc/analytics/analytics_bloc.dart';
 import 'package:hvac_control/presentation/bloc/auth/auth_bloc.dart';
 import 'package:hvac_control/presentation/bloc/auth/auth_state.dart';
-import 'package:hvac_control/presentation/bloc/climate/climate_bloc.dart';
+import 'package:hvac_control/presentation/bloc/climate/alarms/climate_alarms_bloc.dart';
+import 'package:hvac_control/presentation/bloc/climate/core/climate_core_bloc.dart';
+import 'package:hvac_control/presentation/bloc/climate/parameters/climate_parameters_bloc.dart';
+import 'package:hvac_control/presentation/bloc/climate/power/climate_power_bloc.dart';
 import 'package:hvac_control/presentation/bloc/connectivity/connectivity_bloc.dart';
 import 'package:hvac_control/presentation/bloc/devices/devices_bloc.dart';
 import 'package:hvac_control/presentation/bloc/notifications/notifications_bloc.dart';
@@ -28,7 +32,10 @@ class DashboardData {
     required this.units,
     required this.activeIndex,
     required this.currentUnit,
-    required this.climateState,
+    required this.coreState,
+    required this.powerState,
+    required this.parametersState,
+    required this.alarmsState,
     required this.connectivityState,
     required this.analyticsState,
     required this.notificationsState,
@@ -38,14 +45,67 @@ class DashboardData {
   final List<UnitState> units;
   final int activeIndex;
   final UnitState? currentUnit;
-  final ClimateControlState climateState;
+  final ClimateCoreState coreState;
+  final ClimatePowerState powerState;
+  final ClimateParametersState parametersState;
+  final ClimateAlarmsState alarmsState;
   final ConnectivityState connectivityState;
   final AnalyticsState analyticsState;
   final NotificationsState notificationsState;
   final ScheduleState scheduleState;
 
-  /// Идёт загрузка списка устройств
+  /// Loading devices
   final bool isLoadingDevices;
+
+  // ==========================================================================
+  // CONVENIENCE GETTERS (compatibility with old ClimateControlState)
+  // ==========================================================================
+
+  /// Device full state
+  DeviceFullState? get deviceFullState => coreState.deviceFullState;
+
+  /// Is toggling power
+  bool get isTogglingPower => powerState.isTogglingPower;
+
+  /// Is toggling schedule
+  bool get isTogglingSchedule => powerState.isTogglingSchedule;
+
+  /// Is syncing
+  bool get isSyncing => coreState.isSyncing;
+
+  /// Error message (combined from all blocs)
+  String? get errorMessage =>
+      coreState.errorMessage ??
+      powerState.errorMessage ??
+      parametersState.errorMessage ??
+      alarmsState.errorMessage;
+
+  /// Is pending heating temperature
+  bool get isPendingHeatingTemperature => parametersState.isPendingHeatingTemperature;
+
+  /// Is pending cooling temperature
+  bool get isPendingCoolingTemperature => parametersState.isPendingCoolingTemperature;
+
+  /// Is pending supply fan
+  bool get isPendingSupplyFan => parametersState.isPendingSupplyFan;
+
+  /// Is pending exhaust fan
+  bool get isPendingExhaustFan => parametersState.isPendingExhaustFan;
+
+  /// Is pending operating mode
+  bool get isPendingOperatingMode => parametersState.isPendingOperatingMode;
+
+  /// Pending operating mode
+  String? get pendingOperatingMode => parametersState.pendingOperatingMode;
+
+  /// Active alarms
+  Map<String, AlarmInfo> get activeAlarms => alarmsState.activeAlarms;
+
+  /// Has alarms
+  bool get hasAlarms => alarmsState.hasAlarms;
+
+  /// Alarm count
+  int get alarmCount => alarmsState.alarmCount;
 }
 
 /// Wrapper that combines all BLoC listeners
@@ -89,7 +149,7 @@ class DashboardBlocListeners extends StatelessWidget {
         BlocListener<AuthBloc, AuthState>(
           listener: (context, state) {
             if (state is AuthSessionExpiredState) {
-              // Показать предупреждение о истечении сессии
+              // Show session expired warning
               final l10n = AppLocalizations.of(context)!;
               ToastService.warning(l10n.sessionExpired);
             } else if (state is AuthUnauthenticated) {
@@ -101,17 +161,49 @@ class DashboardBlocListeners extends StatelessWidget {
             }
           },
         ),
-        // Device selection sync
+        // Device selection sync - forward to all climate BLoCs
         BlocListener<DevicesBloc, DevicesState>(
           listenWhen: (previous, current) =>
               previous.selectedDeviceId != current.selectedDeviceId &&
               current.selectedDeviceId != null,
           listener: (context, state) {
             final deviceId = state.selectedDeviceId!;
-            context.read<ClimateBloc>().add(ClimateDeviceChanged(deviceId));
+
+            // Reset all climate BLoCs for new device
+            context.read<ClimatePowerBloc>().add(const ClimatePowerReset());
+            context.read<ClimateParametersBloc>().add(const ClimateParametersReset());
+            context.read<ClimateAlarmsBloc>().add(const ClimateAlarmsReset());
+
+            // Then trigger device change on core bloc
+            context.read<ClimateCoreBloc>().add(ClimateCoreDeviceChanged(deviceId));
             context.read<AnalyticsBloc>().add(AnalyticsDeviceChanged(deviceId));
             context.read<NotificationsBloc>().add(NotificationsDeviceChanged(deviceId));
             context.read<ScheduleBloc>().add(ScheduleDeviceChanged(deviceId));
+          },
+        ),
+        // SignalR coordination: forward deviceFullState updates to feature BLoCs
+        BlocListener<ClimateCoreBloc, ClimateCoreState>(
+          listenWhen: (prev, curr) => prev.deviceFullState != curr.deviceFullState,
+          listener: (context, state) {
+            final fullState = state.deviceFullState;
+            if (fullState == null) {
+              return;
+            }
+
+            // Forward confirmations to feature BLoCs
+            context.read<ClimatePowerBloc>().add(ClimatePowerSignalRReceived(
+              power: fullState.power,
+              isScheduleEnabled: fullState.isScheduleEnabled,
+            ));
+
+            context.read<ClimateParametersBloc>().add(ClimateParametersSignalRReceived(
+              operatingMode: fullState.operatingMode,
+              modeSettings: fullState.modeSettings,
+            ));
+
+            context.read<ClimateAlarmsBloc>().add(
+              ClimateAlarmsActiveUpdated(fullState.activeAlarms ?? {}),
+            );
           },
         ),
       ],
@@ -131,47 +223,65 @@ class DashboardBlocBuilder extends StatelessWidget {
           previous.devices != current.devices ||
           previous.selectedDeviceId != current.selectedDeviceId ||
           previous.status != current.status,
-      builder: (context, devicesState) => BlocBuilder<ClimateBloc, ClimateControlState>(
+      builder: (context, devicesState) => BlocBuilder<ClimateCoreBloc, ClimateCoreState>(
           buildWhen: (previous, current) =>
               previous.climate != current.climate ||
-              previous.isTogglingPower != current.isTogglingPower ||
-              previous.isTogglingSchedule != current.isTogglingSchedule ||
               previous.isSyncing != current.isSyncing ||
               previous.errorMessage != current.errorMessage ||
-              previous.deviceFullState != current.deviceFullState ||
-              previous.activeAlarms != current.activeAlarms ||
-              previous.isPendingHeatingTemperature != current.isPendingHeatingTemperature ||
-              previous.isPendingCoolingTemperature != current.isPendingCoolingTemperature ||
-              previous.isPendingSupplyFan != current.isPendingSupplyFan ||
-              previous.isPendingExhaustFan != current.isPendingExhaustFan ||
-              previous.isPendingOperatingMode != current.isPendingOperatingMode ||
-              previous.pendingOperatingMode != current.pendingOperatingMode,
-          builder: (context, climateState) => BlocBuilder<ConnectivityBloc, ConnectivityState>(
+              previous.deviceFullState != current.deviceFullState,
+          builder: (context, coreState) => BlocBuilder<ClimatePowerBloc, ClimatePowerState>(
               buildWhen: (previous, current) =>
-                  previous.showBanner != current.showBanner ||
-                  previous.status != current.status,
-              builder: (context, connectivityState) => BlocBuilder<AnalyticsBloc, AnalyticsState>(
+                  previous.isTogglingPower != current.isTogglingPower ||
+                  previous.isTogglingSchedule != current.isTogglingSchedule ||
+                  previous.errorMessage != current.errorMessage,
+              builder: (context, powerState) => BlocBuilder<ClimateParametersBloc, ClimateParametersState>(
                   buildWhen: (previous, current) =>
-                      previous.graphData != current.graphData ||
-                      previous.selectedMetric != current.selectedMetric,
-                  builder: (context, analyticsState) => BlocBuilder<NotificationsBloc, NotificationsState>(
+                      previous.isPendingHeatingTemperature != current.isPendingHeatingTemperature ||
+                      previous.isPendingCoolingTemperature != current.isPendingCoolingTemperature ||
+                      previous.isPendingSupplyFan != current.isPendingSupplyFan ||
+                      previous.isPendingExhaustFan != current.isPendingExhaustFan ||
+                      previous.isPendingOperatingMode != current.isPendingOperatingMode ||
+                      previous.pendingOperatingMode != current.pendingOperatingMode ||
+                      previous.pendingHeatingTemp != current.pendingHeatingTemp ||
+                      previous.pendingCoolingTemp != current.pendingCoolingTemp ||
+                      previous.pendingSupplyFan != current.pendingSupplyFan ||
+                      previous.pendingExhaustFan != current.pendingExhaustFan,
+                  builder: (context, parametersState) => BlocBuilder<ClimateAlarmsBloc, ClimateAlarmsState>(
                       buildWhen: (previous, current) =>
-                          previous.notifications != current.notifications ||
-                          previous.unreadCount != current.unreadCount,
-                      builder: (context, notificationsState) => BlocBuilder<ScheduleBloc, ScheduleState>(
+                          previous.activeAlarms != current.activeAlarms ||
+                          previous.alarmHistory != current.alarmHistory,
+                      builder: (context, alarmsState) => BlocBuilder<ConnectivityBloc, ConnectivityState>(
                           buildWhen: (previous, current) =>
-                              previous.entries != current.entries,
-                          builder: (context, scheduleState) {
-                            final data = _buildDashboardData(
-                              devicesState,
-                              climateState,
-                              connectivityState,
-                              analyticsState,
-                              notificationsState,
-                              scheduleState,
-                            );
-                            return builder(context, data);
-                          },
+                              previous.showBanner != current.showBanner ||
+                              previous.status != current.status,
+                          builder: (context, connectivityState) => BlocBuilder<AnalyticsBloc, AnalyticsState>(
+                              buildWhen: (previous, current) =>
+                                  previous.graphData != current.graphData ||
+                                  previous.selectedMetric != current.selectedMetric,
+                              builder: (context, analyticsState) => BlocBuilder<NotificationsBloc, NotificationsState>(
+                                  buildWhen: (previous, current) =>
+                                      previous.notifications != current.notifications ||
+                                      previous.unreadCount != current.unreadCount,
+                                  builder: (context, notificationsState) => BlocBuilder<ScheduleBloc, ScheduleState>(
+                                      buildWhen: (previous, current) =>
+                                          previous.entries != current.entries,
+                                      builder: (context, scheduleState) {
+                                        final data = _buildDashboardData(
+                                          devicesState,
+                                          coreState,
+                                          powerState,
+                                          parametersState,
+                                          alarmsState,
+                                          connectivityState,
+                                          analyticsState,
+                                          notificationsState,
+                                          scheduleState,
+                                        );
+                                        return builder(context, data);
+                                      },
+                                    ),
+                                ),
+                            ),
                         ),
                     ),
                 ),
@@ -181,7 +291,10 @@ class DashboardBlocBuilder extends StatelessWidget {
 
   DashboardData _buildDashboardData(
     DevicesState devicesState,
-    ClimateControlState climateState,
+    ClimateCoreState coreState,
+    ClimatePowerState powerState,
+    ClimateParametersState parametersState,
+    ClimateAlarmsState alarmsState,
     ConnectivityState connectivityState,
     AnalyticsState analyticsState,
     NotificationsState notificationsState,
@@ -189,10 +302,10 @@ class DashboardBlocBuilder extends StatelessWidget {
   ) {
     final units = devicesState.devices.map((device) {
       final isSelected = device.id == devicesState.selectedDeviceId;
-      final climate = isSelected ? climateState.climate : null;
-      final fullState = isSelected ? climateState.deviceFullState : null;
-      // Передаём climateState только для выбранного устройства (для pending значений)
-      return _createUnitState(device, climate, fullState, isSelected ? climateState : null);
+      final climate = isSelected ? coreState.climate : null;
+      final fullState = isSelected ? coreState.deviceFullState : null;
+      // Pass parametersState only for selected device (for pending values)
+      return _createUnitState(device, climate, fullState, isSelected ? parametersState : null);
     }).toList();
 
     final selectedIndex = devicesState.selectedDeviceId != null
@@ -213,7 +326,10 @@ class DashboardBlocBuilder extends StatelessWidget {
       units: units,
       activeIndex: activeIndex,
       currentUnit: currentUnit,
-      climateState: climateState,
+      coreState: coreState,
+      powerState: powerState,
+      parametersState: parametersState,
+      alarmsState: alarmsState,
       connectivityState: connectivityState,
       analyticsState: analyticsState,
       notificationsState: notificationsState,
@@ -226,26 +342,26 @@ class DashboardBlocBuilder extends StatelessWidget {
     HvacDevice device,
     ClimateState? climate,
     DeviceFullState? fullState,
-    ClimateControlState? climateControlState,
+    ClimateParametersState? parametersState,
   ) {
-    // Получаем текущий режим: приоритет pending режима над SignalR данными
-    // Если пользователь изменил режим, показываем его даже если SignalR ещё не подтвердил
-    final currentMode = climateControlState?.pendingOperatingMode
+    // Get current mode: pending mode takes priority over SignalR data
+    // If user changed mode, show it even if SignalR hasn't confirmed yet
+    final currentMode = parametersState?.pendingOperatingMode
         ?? fullState?.operatingMode
         ?? climate?.preset
         ?? '';
     final modeSettings = fullState?.modeSettings?[currentMode];
 
-    // Приоритет pending значений над modeSettings:
-    // Если пользователь изменил значение, показываем его даже если SignalR
-    // ещё не подтвердил (или перезаписал на старое значение)
-    final heatingTemp = climateControlState?.pendingHeatingTemp
+    // Pending values take priority over modeSettings:
+    // If user changed value, show it even if SignalR
+    // hasn't confirmed yet (or overwrote with old value)
+    final heatingTemp = parametersState?.pendingHeatingTemp
         ?? modeSettings?.heatingTemperature;
-    final coolingTemp = climateControlState?.pendingCoolingTemp
+    final coolingTemp = parametersState?.pendingCoolingTemp
         ?? modeSettings?.coolingTemperature;
-    final supplyFan = climateControlState?.pendingSupplyFan
+    final supplyFan = parametersState?.pendingSupplyFan
         ?? modeSettings?.supplyFan;
-    final exhaustFan = climateControlState?.pendingExhaustFan
+    final exhaustFan = parametersState?.pendingExhaustFan
         ?? modeSettings?.exhaustFan;
 
     return UnitState(
@@ -254,12 +370,12 @@ class DashboardBlocBuilder extends StatelessWidget {
       macAddress: fullState?.macAddress ?? '',
       power: fullState?.power ?? climate?.isOn ?? device.isActive,
       temp: climate?.currentTemperature.toInt(),
-      // Используем pending значения если есть, иначе из настроек режима
+      // Use pending values if available, otherwise from mode settings
       heatingTemp: heatingTemp,
       coolingTemp: coolingTemp,
       supplyFan: supplyFan,
       exhaustFan: exhaustFan,
-      mode: currentMode, // Пустая строка = ничего не выбрано
+      mode: currentMode, // Empty string = nothing selected
       humidity: climate?.humidity.toInt(),
       outsideTemp: fullState?.outdoorTemperature,
       filterPercent: fullState?.kpdRecuperator,

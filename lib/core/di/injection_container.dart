@@ -63,7 +63,10 @@ import 'package:hvac_control/domain/usecases/usecases.dart';
 import 'package:hvac_control/presentation/bloc/analytics/analytics_bloc.dart';
 // Presentation - BLoCs
 import 'package:hvac_control/presentation/bloc/auth/auth_bloc.dart';
-import 'package:hvac_control/presentation/bloc/climate/climate_bloc.dart';
+import 'package:hvac_control/presentation/bloc/climate/alarms/climate_alarms_bloc.dart';
+import 'package:hvac_control/presentation/bloc/climate/core/climate_core_bloc.dart';
+import 'package:hvac_control/presentation/bloc/climate/parameters/climate_parameters_bloc.dart';
+import 'package:hvac_control/presentation/bloc/climate/power/climate_power_bloc.dart';
 import 'package:hvac_control/presentation/bloc/connectivity/connectivity_bloc.dart';
 import 'package:hvac_control/presentation/bloc/devices/devices_bloc.dart';
 import 'package:hvac_control/presentation/bloc/notifications/notifications_bloc.dart';
@@ -366,15 +369,30 @@ Future<void> init() async {
     dispose: (b) => b.close(),
   )
 
-  // ClimateBloc (Управление климатом текущего устройства)
+  // ClimateCoreBloc (Lifecycle, SignalR, deviceFullState)
   ..registerLazySingleton(
-    () => ClimateBloc(
+    () => ClimateCoreBloc(
       getCurrentClimateState: sl(),
       getDeviceFullState: sl(),
-      getAlarmHistory: sl(),
-      resetAlarm: sl(),
       watchCurrentClimate: sl(),
+      watchDeviceFullState: sl(),
+      requestDeviceUpdate: sl(),
+    ),
+    dispose: (b) => b.close(),
+  )
+
+  // ClimatePowerBloc (Power + Schedule toggle)
+  ..registerLazySingleton(
+    () => ClimatePowerBloc(
       setDevicePower: sl(),
+      setScheduleEnabled: sl(),
+    ),
+    dispose: (b) => b.close(),
+  )
+
+  // ClimateParametersBloc (Temps, fans, modes)
+  ..registerLazySingleton(
+    () => ClimateParametersBloc(
       setTemperature: sl(),
       setCoolingTemperature: sl(),
       setHumidity: sl(),
@@ -382,11 +400,50 @@ Future<void> init() async {
       setOperatingMode: sl(),
       setPreset: sl(),
       setAirflow: sl(),
-      setScheduleEnabled: sl(),
       setModeSettings: sl(),
-      watchDeviceFullState: sl(),
-      requestDeviceUpdate: sl(),
       setQuickMode: sl(),
+      getQuickModeParams: () {
+        // Get quick mode params from core bloc state
+        final coreBloc = sl<ClimateCoreBloc>();
+        final fullState = coreBloc.state.deviceFullState;
+        if (fullState == null) {
+          return null;
+        }
+
+        final currentMode = fullState.operatingMode;
+        final modeSettings = fullState.modeSettings?[currentMode];
+        if (modeSettings == null) {
+          return null;
+        }
+
+        final heatingTemp = modeSettings.heatingTemperature;
+        final coolingTemp = modeSettings.coolingTemperature;
+        final supplyFan = modeSettings.supplyFan;
+        final exhaustFan = modeSettings.exhaustFan;
+
+        if (heatingTemp == null ||
+            coolingTemp == null ||
+            supplyFan == null ||
+            exhaustFan == null) {
+          return null;
+        }
+
+        return SetQuickModeParams(
+          heatingTemperature: heatingTemp,
+          coolingTemperature: coolingTemp,
+          supplyFan: supplyFan,
+          exhaustFan: exhaustFan,
+        );
+      },
+    ),
+    dispose: (b) => b.close(),
+  )
+
+  // ClimateAlarmsBloc (Alarm history and management)
+  ..registerLazySingleton(
+    () => ClimateAlarmsBloc(
+      getAlarmHistory: sl(),
+      resetAlarm: sl(),
     ),
     dispose: (b) => b.close(),
   )
@@ -432,11 +489,29 @@ Future<void> init() async {
 /// При hot restart старые BLoC не получают dispose и продолжают
 /// получать события от SignalR, что приводит к ошибкам рендеринга.
 Future<void> _resetStatefulSingletons() async {
-  // Сбрасываем BLoC с подписками на streams
-  if (sl.isRegistered<ClimateBloc>()) {
-    final bloc = sl<ClimateBloc>();
+  // Сбрасываем Climate BLoCs с подписками на streams
+  if (sl.isRegistered<ClimateCoreBloc>()) {
+    final bloc = sl<ClimateCoreBloc>();
     await bloc.close();
-    await sl.resetLazySingleton<ClimateBloc>();
+    await sl.resetLazySingleton<ClimateCoreBloc>();
+  }
+
+  if (sl.isRegistered<ClimatePowerBloc>()) {
+    final bloc = sl<ClimatePowerBloc>();
+    await bloc.close();
+    await sl.resetLazySingleton<ClimatePowerBloc>();
+  }
+
+  if (sl.isRegistered<ClimateParametersBloc>()) {
+    final bloc = sl<ClimateParametersBloc>();
+    await bloc.close();
+    await sl.resetLazySingleton<ClimateParametersBloc>();
+  }
+
+  if (sl.isRegistered<ClimateAlarmsBloc>()) {
+    final bloc = sl<ClimateAlarmsBloc>();
+    await bloc.close();
+    await sl.resetLazySingleton<ClimateAlarmsBloc>();
   }
 
   if (sl.isRegistered<NotificationsBloc>()) {

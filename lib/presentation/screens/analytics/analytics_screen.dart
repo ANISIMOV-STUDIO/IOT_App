@@ -12,7 +12,7 @@ import 'package:hvac_control/domain/entities/device_full_state.dart';
 import 'package:hvac_control/domain/entities/unit_state.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
 import 'package:hvac_control/presentation/bloc/analytics/analytics_bloc.dart';
-import 'package:hvac_control/presentation/bloc/climate/climate_bloc.dart';
+import 'package:hvac_control/presentation/bloc/climate/core/climate_core_bloc.dart';
 import 'package:hvac_control/presentation/bloc/devices/devices_bloc.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez.dart';
 import 'package:hvac_control/presentation/widgets/loading/skeleton.dart';
@@ -94,15 +94,15 @@ class AnalyticsScreen extends StatelessWidget {
 
               // Сетка датчиков (50%)
               Expanded(
-                child: BlocBuilder<ClimateBloc, ClimateControlState>(
+                child: BlocBuilder<ClimateCoreBloc, ClimateCoreState>(
                   buildWhen: (prev, curr) =>
                       prev.status != curr.status ||
                       prev.deviceFullState != curr.deviceFullState ||
                       prev.climate != curr.climate,
                   builder: (context, state) {
                     // При загрузке или ошибке показываем скелетон (без ненужных ошибок)
-                    if (state.status == ClimateControlStatus.loading ||
-                        state.status == ClimateControlStatus.failure) {
+                    if (state.status == ClimateCoreStatus.loading ||
+                        state.status == ClimateCoreStatus.failure) {
                       return const _SensorsCardSkeleton();
                     }
 
@@ -319,7 +319,7 @@ class _SelectionIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = BreezColors.of(context);
 
-    return BlocBuilder<ClimateBloc, ClimateControlState>(
+    return BlocBuilder<ClimateCoreBloc, ClimateCoreState>(
       buildWhen: (prev, curr) =>
           prev.deviceFullState?.quickSensors !=
           curr.deviceFullState?.quickSensors,

@@ -8,7 +8,7 @@ import 'package:hvac_control/core/theme/app_theme.dart';
 import 'package:hvac_control/core/theme/spacing.dart';
 import 'package:hvac_control/domain/entities/alarm_info.dart';
 import 'package:hvac_control/generated/l10n/app_localizations.dart';
-import 'package:hvac_control/presentation/bloc/climate/climate_bloc.dart';
+import 'package:hvac_control/presentation/bloc/climate/alarms/climate_alarms_bloc.dart';
 import 'package:hvac_control/presentation/widgets/breez/breez_card.dart';
 
 // =============================================================================
@@ -24,7 +24,7 @@ abstract class _AlarmHistoryConstants {
 
 /// Экран истории аварий
 ///
-/// Загружает историю аварий из ClimateBloc при инициализации.
+/// Загружает историю аварий из ClimateAlarmsBloc при инициализации.
 class AlarmHistoryScreen extends StatefulWidget {
   const AlarmHistoryScreen({
     required this.deviceId,
@@ -44,8 +44,8 @@ class _AlarmHistoryScreenState extends State<AlarmHistoryScreen> {
   void initState() {
     super.initState();
     // Запрос на загрузку истории аварий
-    context.read<ClimateBloc>().add(
-      ClimateAlarmHistoryRequested(widget.deviceId),
+    context.read<ClimateAlarmsBloc>().add(
+      ClimateAlarmsHistoryRequested(widget.deviceId),
     );
   }
 
@@ -97,8 +97,8 @@ class _AlarmHistoryScreenState extends State<AlarmHistoryScreen> {
             showBorder: false,
             compact: true,
             onTap: () {
-              context.read<ClimateBloc>().add(
-                ClimateAlarmHistoryRequested(widget.deviceId),
+              context.read<ClimateAlarmsBloc>().add(
+                ClimateAlarmsHistoryRequested(widget.deviceId),
               );
             },
             semanticLabel: 'Refresh',
@@ -106,7 +106,7 @@ class _AlarmHistoryScreenState extends State<AlarmHistoryScreen> {
           ),
         ],
       ),
-      body: BlocBuilder<ClimateBloc, ClimateControlState>(
+      body: BlocBuilder<ClimateAlarmsBloc, ClimateAlarmsState>(
         buildWhen: (prev, curr) => prev.alarmHistory != curr.alarmHistory,
         builder: (context, state) {
           final history = state.alarmHistory;

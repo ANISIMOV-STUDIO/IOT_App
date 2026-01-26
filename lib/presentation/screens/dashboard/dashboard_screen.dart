@@ -23,7 +23,10 @@ import 'package:hvac_control/generated/l10n/app_localizations.dart';
 import 'package:hvac_control/presentation/bloc/auth/auth_bloc.dart';
 import 'package:hvac_control/presentation/bloc/auth/auth_event.dart';
 import 'package:hvac_control/presentation/bloc/auth/auth_state.dart';
-import 'package:hvac_control/presentation/bloc/climate/climate_bloc.dart';
+import 'package:hvac_control/presentation/bloc/climate/alarms/climate_alarms_bloc.dart';
+import 'package:hvac_control/presentation/bloc/climate/core/climate_core_bloc.dart';
+import 'package:hvac_control/presentation/bloc/climate/parameters/climate_parameters_bloc.dart';
+import 'package:hvac_control/presentation/bloc/climate/power/climate_power_bloc.dart';
 import 'package:hvac_control/presentation/bloc/devices/devices_bloc.dart';
 import 'package:hvac_control/presentation/screens/dashboard/dashboard_bloc_wrapper.dart';
 import 'package:hvac_control/presentation/screens/dashboard/dashboard_empty_state.dart';
@@ -131,24 +134,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
       userName: user?.fullName ?? AppLocalizations.of(context)!.defaultUserName,
       userRole: user?.role ?? 'User',
       onModeTap: _handleModeTap,
-      onPowerToggle: () => _handlePowerToggle(data.climateState),
+      onPowerToggle: () => _handlePowerToggle(data),
       onSettingsTap: () => _showUnitSettings(unit),
-      isPowerLoading: data.climateState.isTogglingPower,
-      isScheduleEnabled: data.climateState.isScheduleEnabled,
-      isScheduleLoading: data.climateState.isTogglingSchedule,
-      onScheduleToggle: () => _handleScheduleToggle(data.climateState),
+      isPowerLoading: data.isTogglingPower,
+      isScheduleEnabled: data.coreState.isScheduleEnabled,
+      isScheduleLoading: data.isTogglingSchedule,
+      onScheduleToggle: () => _handleScheduleToggle(data),
       onMasterOff: _masterPowerOff,
       onUnitSelected: (index) => _onUnitSelected(data.units, index),
       onAddUnit: _showAddUnitDialog,
       onLogoutTap: _handleLogout,
-      timerSettings: data.climateState.deviceFullState?.timerSettings,
+      timerSettings: data.deviceFullState?.timerSettings,
       onTimerSettingsChanged: _handleTimerSettingsChanged,
-      activeAlarms: data.climateState.activeAlarms,
+      activeAlarms: data.activeAlarms,
       onAlarmsReset: () => _handleAlarmsReset(data.currentUnit!.id),
-      isPendingOperatingMode: data.climateState.isPendingOperatingMode,
+      isPendingOperatingMode: data.isPendingOperatingMode,
       onSyncTap: _handleSyncTap,
-      isSyncing: data.climateState.isSyncing,
-      errorMessage: data.climateState.errorMessage,
+      isSyncing: data.isSyncing,
+      errorMessage: data.errorMessage,
     );
   }
 
@@ -176,22 +179,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
           child: MobileLayout(
             unit: unit,
             onModeTap: _handleModeTap,
-            onPowerToggle: () => _handlePowerToggle(data.climateState),
+            onPowerToggle: () => _handlePowerToggle(data),
             onSettingsTap: () => _showUnitSettings(unit),
-            isPowerLoading: data.climateState.isTogglingPower,
-            isScheduleEnabled: data.climateState.isScheduleEnabled,
-            isScheduleLoading: data.climateState.isTogglingSchedule,
-            onScheduleToggle: () => _handleScheduleToggle(data.climateState),
-            timerSettings: data.climateState.deviceFullState?.timerSettings,
+            isPowerLoading: data.isTogglingPower,
+            isScheduleEnabled: data.coreState.isScheduleEnabled,
+            isScheduleLoading: data.isTogglingSchedule,
+            onScheduleToggle: () => _handleScheduleToggle(data),
+            timerSettings: data.deviceFullState?.timerSettings,
             onTimerSettingsChanged: _handleTimerSettingsChanged,
-            activeAlarms: data.climateState.activeAlarms,
+            activeAlarms: data.activeAlarms,
             onAlarmsSeeHistory: () => context.goToAlarmHistory(unit.id, unit.name),
             onAlarmsReset: () => _handleAlarmsReset(unit.id),
             isOnline: unit.isOnline,
-            isPendingOperatingMode: data.climateState.isPendingOperatingMode,
+            isPendingOperatingMode: data.isPendingOperatingMode,
             onSyncTap: _handleSyncTap,
-            isSyncing: data.climateState.isSyncing,
-            errorMessage: data.climateState.errorMessage,
+            isSyncing: data.isSyncing,
+            errorMessage: data.errorMessage,
           ),
         ),
       ],
@@ -208,16 +211,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
   }
 
-  void _handlePowerToggle(ClimateControlState climateState) {
-    context.read<ClimateBloc>().add(ClimatePowerToggled(!climateState.isOn));
+  void _handlePowerToggle(DashboardData data) {
+    context.read<ClimatePowerBloc>().add(
+      ClimatePowerToggleRequested(isOn: !data.coreState.isOn),
+    );
   }
 
-  void _handleScheduleToggle(ClimateControlState climateState) {
-    context.read<ClimateBloc>().add(ClimateScheduleToggled(!climateState.isScheduleEnabled));
+  void _handleScheduleToggle(DashboardData data) {
+    final deviceId = data.deviceFullState?.id;
+    if (deviceId != null) {
+      context.read<ClimatePowerBloc>().add(ClimatePowerScheduleToggleRequested(
+        enabled: !data.coreState.isScheduleEnabled,
+        deviceId: deviceId,
+      ));
+    }
   }
 
   void _handleSyncTap() {
-    context.read<ClimateBloc>().add(const ClimateRefreshRequested());
+    context.read<ClimateCoreBloc>().add(const ClimateCoreRefreshRequested());
   }
 
   Future<void> _masterPowerOff() async {
@@ -268,8 +279,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Future<void> _handleModeTap(OperatingModeData mode) async {
-    final climateState = context.read<ClimateBloc>().state;
-    final deviceFullState = climateState.deviceFullState;
+    final coreState = context.read<ClimateCoreBloc>().state;
+    final deviceFullState = coreState.deviceFullState;
     if (deviceFullState == null) {
       return;
     }
@@ -296,14 +307,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     if (result != null && mounted) {
       // Сохраняем настройки режима
-      context.read<ClimateBloc>().add(ClimateModeSettingsChanged(
+      context.read<ClimateParametersBloc>().add(ClimateParametersModeSettingsChanged(
         modeName: mode.id,
         settings: result.settings,
       ));
 
       // Если пользователь нажал "Включить" — активируем режим
       if (result.activate) {
-        context.read<ClimateBloc>().add(ClimateOperatingModeChanged(mode.id));
+        context.read<ClimateParametersBloc>().add(ClimateParametersOperatingModeChanged(mode.id));
       }
     }
   }
@@ -324,8 +335,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     bool enabled,
   ) {
     // Get current device ID and call HTTP client
-    final climateState = context.read<ClimateBloc>().state;
-    final deviceId = climateState.deviceFullState?.id;
+    final coreState = context.read<ClimateCoreBloc>().state;
+    final deviceId = coreState.deviceFullState?.id;
     if (deviceId == null) {
       return;
     }
@@ -348,6 +359,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void _handleAlarmsReset(String deviceId) {
-    context.read<ClimateBloc>().add(ClimateAlarmResetRequested(deviceId));
+    context.read<ClimateAlarmsBloc>().add(ClimateAlarmsResetRequested(deviceId));
   }
 }
