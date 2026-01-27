@@ -32,6 +32,8 @@ final class DevicesState extends Equatable {
     this.isMasterPowerOffInProgress = false,
     this.masterPowerOffSuccess = false,
     this.masterPowerOffError,
+    this.togglingPowerDeviceIds = const {},
+    this.pendingPowerStates = const {},
   });
   /// Статус загрузки
   final DevicesStatus status;
@@ -62,6 +64,12 @@ final class DevicesState extends Equatable {
 
   /// Ошибка выключения всех устройств
   final String? masterPowerOffError;
+
+  /// ID устройств, для которых идёт переключение питания
+  final Set<String> togglingPowerDeviceIds;
+
+  /// Ожидаемое состояние питания (deviceId → isOn)
+  final Map<String, bool> pendingPowerStates;
 
   /// Получить выбранное устройство
   HvacDevice? get selectedDevice {
@@ -94,6 +102,8 @@ final class DevicesState extends Equatable {
     bool? isMasterPowerOffInProgress,
     bool? masterPowerOffSuccess,
     String? masterPowerOffError,
+    Set<String>? togglingPowerDeviceIds,
+    Map<String, bool>? pendingPowerStates,
   }) =>
       DevicesState(
         status: status ?? this.status,
@@ -109,6 +119,9 @@ final class DevicesState extends Equatable {
             isMasterPowerOffInProgress ?? this.isMasterPowerOffInProgress,
         masterPowerOffSuccess: masterPowerOffSuccess ?? false,
         masterPowerOffError: masterPowerOffError,
+        togglingPowerDeviceIds:
+            togglingPowerDeviceIds ?? this.togglingPowerDeviceIds,
+        pendingPowerStates: pendingPowerStates ?? this.pendingPowerStates,
       );
 
   @override
@@ -123,5 +136,7 @@ final class DevicesState extends Equatable {
         isMasterPowerOffInProgress,
         masterPowerOffSuccess,
         masterPowerOffError,
+        togglingPowerDeviceIds,
+        pendingPowerStates,
       ];
 }

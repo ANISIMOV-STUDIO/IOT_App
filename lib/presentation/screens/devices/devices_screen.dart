@@ -265,106 +265,146 @@ class _DeviceCard extends StatelessWidget {
     final colors = BreezColors.of(context);
     final l10n = AppLocalizations.of(context)!;
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: AppSpacing.xs),
-      child: BreezCard(
-        padding: const EdgeInsets.all(AppSpacing.sm),
-        child: Row(
+    return BlocSelector<DevicesBloc, DevicesState, bool>(
+      selector: (state) => state.togglingPowerDeviceIds.contains(device.id),
+      builder: (context, isToggling) => Padding(
+        padding: const EdgeInsets.only(bottom: AppSpacing.xs),
+        child: Stack(
           children: [
-            // Drag handle
-            ReorderableDragStartListener(
-              index: index,
-              child: Icon(
-                Icons.drag_indicator,
-                color: colors.textMuted,
-                size: AppIconSizes.standard,
-              ),
-            ),
-            const SizedBox(width: AppSpacing.xs),
-            // Name, status & MAC
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            BreezCard(
+              padding: const EdgeInsets.all(AppSpacing.sm),
+              child: Row(
                 children: [
-                  // Name + Status badge
-                  Row(
-                    children: [
-                      Flexible(
-                        child: Text(
-                          device.name,
-                          style: TextStyle(
-                            fontSize: AppFontSizes.body,
-                            fontWeight: FontWeight.w600,
-                            color: colors.text,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      const SizedBox(width: AppSpacing.xs),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: AppSpacing.xs,
-                          vertical: AppSpacing.xxs,
-                        ),
-                        decoration: BoxDecoration(
-                          color: device.isOnline
-                              ? AppColors.success.withValues(alpha: AppColors.opacitySubtle)
-                              : colors.textMuted.withValues(alpha: AppColors.opacitySubtle),
-                          borderRadius: BorderRadius.circular(AppRadius.chip),
-                        ),
-                        child: Text(
-                          device.isOnline ? l10n.statusOnline : l10n.statusOffline,
-                          style: TextStyle(
-                            fontSize: AppFontSizes.captionSmall,
-                            fontWeight: FontWeight.w600,
-                            color: device.isOnline ? AppColors.success : colors.textMuted,
-                          ),
-                        ),
-                      ),
-                    ],
+                  // Drag handle
+                  ReorderableDragStartListener(
+                    index: index,
+                    child: Icon(
+                      Icons.drag_indicator,
+                      color: colors.textMuted,
+                      size: AppIconSizes.standard,
+                    ),
                   ),
-                  const SizedBox(height: AppSpacing.xxs),
-                  // MAC address
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.router_outlined,
-                        size: AppIconSizes.standard,
-                        color: colors.textMuted,
-                      ),
-                      const SizedBox(width: AppSpacing.xxs),
-                      Text(
-                        device.macAddress.isNotEmpty ? device.macAddress : device.id,
-                        style: TextStyle(
-                          fontSize: AppFontSizes.captionSmall,
-                          fontFamily: 'monospace',
-                          color: colors.textMuted,
+                  const SizedBox(width: AppSpacing.xs),
+                  // Name, status & MAC
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Name + Status badge
+                        Row(
+                          children: [
+                            Flexible(
+                              child: Text(
+                                device.name,
+                                style: TextStyle(
+                                  fontSize: AppFontSizes.body,
+                                  fontWeight: FontWeight.w600,
+                                  color: colors.text,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            const SizedBox(width: AppSpacing.xs),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: AppSpacing.xs,
+                                vertical: AppSpacing.xxs,
+                              ),
+                              decoration: BoxDecoration(
+                                color: device.isOnline
+                                    ? AppColors.success.withValues(alpha: AppColors.opacitySubtle)
+                                    : colors.textMuted.withValues(alpha: AppColors.opacitySubtle),
+                                borderRadius: BorderRadius.circular(AppRadius.chip),
+                              ),
+                              child: Text(
+                                device.isOnline ? l10n.statusOnline : l10n.statusOffline,
+                                style: TextStyle(
+                                  fontSize: AppFontSizes.captionSmall,
+                                  fontWeight: FontWeight.w600,
+                                  color: device.isOnline ? AppColors.success : colors.textMuted,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: AppSpacing.xxs),
+                        // MAC address
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.router_outlined,
+                              size: AppIconSizes.standard,
+                              color: colors.textMuted,
+                            ),
+                            const SizedBox(width: AppSpacing.xxs),
+                            Text(
+                              device.macAddress.isNotEmpty ? device.macAddress : device.id,
+                              style: TextStyle(
+                                fontSize: AppFontSizes.captionSmall,
+                                fontFamily: 'monospace',
+                                color: colors.textMuted,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Power button
+                  BreezIconButton(
+                    icon: Icons.power_settings_new,
+                    iconColor: device.isActive
+                        ? AppColors.accentGreen
+                        : colors.textMuted,
+                    onTap: isToggling
+                        ? null
+                        : () {
+                            context.read<DevicesBloc>().add(
+                                  DevicesPowerToggled(
+                                    deviceId: device.id,
+                                    isOn: !device.isActive,
+                                  ),
+                                );
+                          },
+                  ),
+                  const SizedBox(width: AppSpacing.xs),
+                  // Schedule button
+                  BreezIconButton(
+                    icon: Icons.schedule,
+                    iconColor: device.isScheduleEnabled
+                        ? AppColors.accentGreen
+                        : colors.textMuted,
+                    onTap: () {
+                      context.read<DevicesBloc>().add(
+                            DevicesScheduleToggled(
+                              deviceId: device.id,
+                              enabled: !device.isScheduleEnabled,
+                            ),
+                          );
+                    },
+                  ),
+                  const SizedBox(width: AppSpacing.xs),
+                  // Settings button
+                  BreezIconButton(
+                    icon: Icons.settings_outlined,
+                    onTap: () => _showSettingsDialog(context),
                   ),
                 ],
               ),
             ),
-            // Schedule button
-            BreezIconButton(
-              icon: Icons.schedule,
-              iconColor: device.isScheduleEnabled ? AppColors.accentGreen : colors.textMuted,
-              onTap: () {
-                context.read<DevicesBloc>().add(
-                      DevicesScheduleToggled(
-                        deviceId: device.id,
-                        enabled: !device.isScheduleEnabled,
-                      ),
-                    );
-              },
-            ),
-            const SizedBox(width: AppSpacing.xs),
-            // Settings button
-            BreezIconButton(
-              icon: Icons.settings_outlined,
-              onTap: () => _showSettingsDialog(context),
-            ),
+            // Loader overlay при переключении питания
+            if (isToggling)
+              Positioned.fill(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: colors.card.withValues(alpha: AppColors.opacityHigh),
+                    borderRadius: BorderRadius.circular(AppRadius.card),
+                  ),
+                  child: const Center(
+                    child: BreezLoader.large(),
+                  ),
+                ),
+              ),
           ],
         ),
       ),

@@ -109,6 +109,13 @@ class _MainScreenState extends State<MainScreen> {
     _TabId.profile,
   ];
 
+  // Вкладки для mobile без аналитики (нет устройств)
+  static const _mobileTabsNoAnalytics = [
+    _TabId.home,
+    _TabId.devices,
+    _TabId.profile,
+  ];
+
   // Вкладки для desktop (без Analytics - уже на главной)
   static const _desktopTabs = [
     _TabId.home,
@@ -141,7 +148,13 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     final isDesktop = context.isDesktop;
-    final tabs = isDesktop ? _desktopTabs : _mobileTabs;
+
+    // Скрываем аналитику на мобилке если нет устройств
+    // Показываем по умолчанию пока список не загружен (чтобы избежать скачка UI)
+    final showAnalytics = context.select((DevicesBloc bloc) =>
+        bloc.state.status != DevicesStatus.success || bloc.state.hasDevices);
+    final mobileTabs = showAnalytics ? _mobileTabs : _mobileTabsNoAnalytics;
+    final tabs = isDesktop ? _desktopTabs : mobileTabs;
 
     // Если текущая вкладка недоступна (Analytics на desktop), переключаемся на home
     final effectiveTab = tabs.contains(_currentTab) ? _currentTab : _TabId.home;

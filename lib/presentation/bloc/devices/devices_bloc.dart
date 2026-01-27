@@ -14,6 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hvac_control/core/error/api_exception.dart';
 import 'package:hvac_control/domain/entities/hvac_device.dart';
 import 'package:hvac_control/domain/usecases/usecases.dart';
+import 'package:hvac_control/presentation/bloc/climate/climate_shared.dart';
 
 part 'devices_event.dart';
 part 'devices_state.dart';
@@ -58,6 +59,8 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
     on<DevicesTimeSetRequested>(_onTimeSetRequested);
     on<DevicesOrderChanged>(_onOrderChanged);
     on<DevicesScheduleToggled>(_onScheduleToggled);
+    on<DevicesPowerToggled>(_onPowerToggled);
+    on<DevicesPowerToggleTimeout>(_onPowerToggleTimeout);
   }
   final GetAllHvacDevices _getAllHvacDevices;
   final WatchHvacDevices _watchHvacDevices;
@@ -70,6 +73,7 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
   final void Function(String) _setSelectedDevice;
 
   StreamSubscription<List<HvacDevice>>? _devicesSubscription;
+  final Map<String, Timer> _powerToggleTimers = {};
 
   /// Запрос на подписку к списку устройств
   Future<void> _onSubscriptionRequested(
@@ -128,7 +132,30 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
     DevicesListUpdated event,
     Emitter<DevicesState> emit,
   ) {
-    emit(state.copyWith(devices: event.devices));
+    // Проверяем подтверждение ожидаемых состояний питания
+    final updatedTogglingIds = Set<String>.from(state.togglingPowerDeviceIds);
+    final updatedPendingStates = Map<String, bool>.from(state.pendingPowerStates);
+
+    for (final deviceId in state.pendingPowerStates.keys.toList()) {
+      final expectedState = state.pendingPowerStates[deviceId];
+      final device = event.devices
+          .where((d) => d.id == deviceId)
+          .firstOrNull;
+
+      if (device != null && device.isActive == expectedState) {
+        // Состояние подтверждено SignalR
+        updatedTogglingIds.remove(deviceId);
+        updatedPendingStates.remove(deviceId);
+        _powerToggleTimers[deviceId]?.cancel();
+        _powerToggleTimers.remove(deviceId);
+      }
+    }
+
+    emit(state.copyWith(
+      devices: event.devices,
+      togglingPowerDeviceIds: updatedTogglingIds,
+      pendingPowerStates: updatedPendingStates,
+    ));
   }
 
   /// Регистрация нового устройства
@@ -369,9 +396,94 @@ class DevicesBloc extends Bloc<DevicesEvent, DevicesState> {
     }
   }
 
+  /// Переключение питания устройства
+  Future<void> _onPowerToggled(
+    DevicesPowerToggled event,
+    Emitter<DevicesState> emit,
+  ) async {
+    // Блокировка двойного нажатия
+    if (state.togglingPowerDeviceIds.contains(event.deviceId)) {
+      return;
+    }
+
+    // Добавляем в set и сохраняем ожидаемое состояние
+    final updatedTogglingIds = {
+      ...state.togglingPowerDeviceIds,
+      event.deviceId,
+    };
+    final updatedPendingStates = {
+      ...state.pendingPowerStates,
+      event.deviceId: event.isOn,
+    };
+
+    emit(state.copyWith(
+      togglingPowerDeviceIds: updatedTogglingIds,
+      pendingPowerStates: updatedPendingStates,
+    ));
+
+    try {
+      await _setDevicePower(
+        SetDevicePowerParams(isOn: event.isOn, deviceId: event.deviceId),
+      );
+
+      // Запускаем таймер таймаута
+      _powerToggleTimers[event.deviceId]?.cancel();
+      _powerToggleTimers[event.deviceId] = Timer(
+        kPowerToggleTimeout,
+        () {
+          if (!isClosed &&
+              state.togglingPowerDeviceIds.contains(event.deviceId)) {
+            add(DevicesPowerToggleTimeout(event.deviceId));
+          }
+        },
+      );
+    } catch (e) {
+      // Убираем из set при ошибке API
+      final rolledBackIds = Set<String>.from(state.togglingPowerDeviceIds)
+        ..remove(event.deviceId);
+      final rolledBackPending = Map<String, bool>.from(state.pendingPowerStates)
+        ..remove(event.deviceId);
+
+      String errorMessage;
+      if (e is ApiException) {
+        errorMessage = e.message;
+      } else {
+        errorMessage = 'Failed to toggle device power';
+      }
+
+      emit(state.copyWith(
+        togglingPowerDeviceIds: rolledBackIds,
+        pendingPowerStates: rolledBackPending,
+        operationError: errorMessage,
+      ));
+    }
+  }
+
+  /// Таймаут ожидания подтверждения питания
+  void _onPowerToggleTimeout(
+    DevicesPowerToggleTimeout event,
+    Emitter<DevicesState> emit,
+  ) {
+    final updatedTogglingIds = Set<String>.from(state.togglingPowerDeviceIds)
+      ..remove(event.deviceId);
+    final updatedPendingStates = Map<String, bool>.from(state.pendingPowerStates)
+      ..remove(event.deviceId);
+    _powerToggleTimers.remove(event.deviceId);
+
+    emit(state.copyWith(
+      togglingPowerDeviceIds: updatedTogglingIds,
+      pendingPowerStates: updatedPendingStates,
+      operationError: 'syncTimeout',
+    ));
+  }
+
   @override
   Future<void> close() async {
     await _devicesSubscription?.cancel();
+    for (final timer in _powerToggleTimers.values) {
+      timer.cancel();
+    }
+    _powerToggleTimers.clear();
     return super.close();
   }
 }

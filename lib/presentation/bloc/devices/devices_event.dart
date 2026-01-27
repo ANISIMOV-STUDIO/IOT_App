@@ -132,3 +132,27 @@ final class DevicesScheduleToggled extends DevicesEvent {
   @override
   List<Object?> get props => [deviceId, enabled];
 }
+
+/// Переключение питания устройства
+final class DevicesPowerToggled extends DevicesEvent {
+
+  const DevicesPowerToggled({
+    required this.deviceId,
+    required this.isOn,
+  });
+  final String deviceId;
+  final bool isOn;
+
+  @override
+  List<Object?> get props => [deviceId, isOn];
+}
+
+/// Таймаут ожидания подтверждения питания
+final class DevicesPowerToggleTimeout extends DevicesEvent {
+
+  const DevicesPowerToggleTimeout(this.deviceId);
+  final String deviceId;
+
+  @override
+  List<Object?> get props => [deviceId];
+}
